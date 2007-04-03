@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+
+require File.dirname(__FILE__) + '/lib/lib_nanoc.rb'
+
+# Make sure we have at least one argument
+if ARGV.size == 0
+  puts 'Usage: nanoc [command]'
+  exit
+end
+
+# Get command
+command = ARGV[0]
+
+# Handle command
+case command
+  # Create site
+  when 'create_site'
+    if ARGV.size != 2
+      puts 'Usage: nanoc create_site [site_name]'
+      exit
+    end
+    Nanoc.create_site(ARGV[1])
+  
+  # Create page
+  when 'create', 'create_page'
+    if ARGV.size != 2
+      puts 'Usage: nanoc create_page [page_name]'
+      exit
+    end
+    Nanoc.create_page(ARGV[1])
+  
+  # Delete page
+  when 'delete', 'delete_page'
+    if ARGV.size != 2
+      puts 'Usage: nanoc delete_page [page_name]'
+      exit
+    end
+    Nanoc.delete_page(ARGV[1])
+  
+  # Process site and generate output
+  when 'process', 'process_site'
+    if ARGV.size != 1
+      puts 'Usage: nanoc process'
+      exit
+    end
+    Nanoc.process
+  
+  else
+    puts 'Unrecognised command \'' + command + '\''
+end
