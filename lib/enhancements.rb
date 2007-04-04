@@ -73,3 +73,22 @@ class String
     self.replace(self.eruby(a_context))
   end
 end
+
+class Time
+  def format_nicely
+    "#{Date::MONTHNAMES[mon]} #{mday}, #{year}"
+  end
+end
+
+def html_escape(a_string)
+  a_string.gsub('&', '&amp;').gsub('<', '&lt;')
+end
+alias h html_escape
+
+def to_atom_date(a_string)
+  Time.parse(a_string).strftime("%Y-%m-%d")
+end
+
+def to_atom_time(a_string)
+  Time.parse(a_string).strftime("%Y-%m-%dT%H:%M:%SZ")
+end

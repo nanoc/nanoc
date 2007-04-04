@@ -24,7 +24,7 @@ case command
     Nanoc.create_site(ARGV[1])
   
   # Create page
-  when 'create', 'create_page'
+  when 'create_page'
     if ARGV.size != 2
       puts 'Usage: nanoc create_page [page_name]'
       exit
@@ -32,7 +32,7 @@ case command
     Nanoc.create_page(ARGV[1])
   
   # Delete page
-  when 'delete', 'delete_page'
+  when 'delete_page'
     if ARGV.size != 2
       puts 'Usage: nanoc delete_page [page_name]'
       exit

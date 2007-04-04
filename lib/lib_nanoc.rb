@@ -11,7 +11,8 @@ module Nanoc
   DEFAULT_META = {
     :layout           => '<%= @content %>',
     :filters          => [],
-    :has_dependencies => false
+    :has_dependencies => false,
+    :extension        => 'html'
   }
   
   def self.create_site(a_sitename)
@@ -51,6 +52,17 @@ module Nanoc
       io.write("  </body>\n")
       io.write("</html>\n")
     end
+    
+    # Create home page
+    FileManagement.create_file(a_sitename + '/content/index.txt') do |io|
+      io.write("This is a new page. Please edit me!\n")
+    end
+    FileManagement.create_file(a_sitename + '/content/meta.yaml') do |io|
+      io.write("# Built-in\n")
+      io.write("\n")
+      io.write("# Custom\n")
+      io.write("title:  A New Page\n")
+    end
   end
   
   def self.create_page(a_pagename)
@@ -75,17 +87,6 @@ module Nanoc
       io.write("# Custom\n")
       io.write("title:  A New Page\n")
     end
-  end
-  
-  def self.delete_page(a_pagename)
-    # Sanitize page name
-    if a_pagename =~ /^[\/\.]/
-      puts 'Error: page name starts with dots and/or slashes, aborting'
-      return
-    end
-    
-    # Delete file
-    FileManagement.delete('content/' + a_pagename)
   end
   
   def self.process
@@ -121,12 +122,21 @@ module Nanoc
     # Process meta files
     pages_without_dependencies  = process_pages(default_meta, meta_files_without_dependencies, nil)
     pages_with_dependencies     = process_pages(default_meta, meta_files_with_dependencies,    pages_without_dependencies)
-    (pages_without_dependencies + pages_with_dependencies).each do |page|
+    pages = pages_without_dependencies + pages_with_dependencies
+    pages.each do |page|
+      # Get specific layout
+      specific_layout = layout
+      if page[:layout] == 'none'
+        specific_layout = '<%= @content %>'
+      elsif default_meta[:layout] != page[:layout]
+        specific_layout = File.read_file('layout/' + page[:layout] + '.eruby')
+      end
+      
       # Put index file in layout
-      content_with_layout = layout.eruby(page)
+      content_with_layout = specific_layout.eruby(page.merge({ :pages => pages }))
       
       # Write output file
-      file_path = config[:output_dir] + page[:path] + 'index.html'
+      file_path = config[:output_dir] + page[:path] + 'index.' + page[:extension]
       FileManagement.create_file(file_path, :create_dir => true, :recursive => true) do |io|
         io.write(content_with_layout)
       end
