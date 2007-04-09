@@ -23,15 +23,20 @@ end
 class Hash
   def clean
     hash = {}
+    
     self.each_pair do |key, value|
       # Convert all keys to symbols
       hash[key.to_sym] = value
+      
+      # Convert *_on and *_at to Dates and Times
+      if key =~ /_on$/
+        hash[key.to_sym] = Date.parse(value)
+      elsif key =~ /_at$/
+        hash[key.to_sym] = Time.parse(value)
+      end
     end
+    
     hash
-  end
-  
-  def clean!
-    self.replace(self.clean)
   end
 end
 
@@ -85,10 +90,10 @@ def html_escape(a_string)
 end
 alias h html_escape
 
-def to_atom_date(a_string)
-  Time.parse(a_string).strftime("%Y-%m-%d")
+def to_atom_date(a_date)
+  a_date.strftime("%Y-%m-%d")
 end
 
-def to_atom_time(a_string)
-  Time.parse(a_string).strftime("%Y-%m-%dT%H:%M:%SZ")
+def to_atom_time(a_time)
+  a_time.strftime("%Y-%m-%dT%H:%M:%SZ")
 end
