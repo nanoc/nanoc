@@ -111,6 +111,9 @@ module Nanoc
       # Get meta information
       meta = default_meta.merge(File.read_yaml(meta_filename).clean)
       
+      # Skip drafts
+      next if meta[:is_draft] == true
+      
       # Put into the correct meta files array
       if meta[:has_dependencies] == false
         meta_files_without_dependencies << meta_filename
