@@ -2,6 +2,10 @@ class Date
   def format_nicely
     "#{Date::MONTHNAMES[mon]} #{mday}, #{year}"
   end
+  
+  def to_atom_date
+    self.strftime("%Y-%m-%d")
+  end
 end
 
 class File
@@ -83,17 +87,17 @@ class Time
   def format_nicely
     "#{Date::MONTHNAMES[mon]} #{mday}, #{year}"
   end
+  
+  def to_atom_date
+    self.strftime("%Y-%m-%d")
+  end
+  
+  def to_atom_time
+    self.strftime("%Y-%m-%dT%H:%M:%SZ")
+  end
 end
 
 def html_escape(a_string)
   a_string.gsub('&', '&amp;').gsub('<', '&lt;')
 end
 alias h html_escape
-
-def to_atom_date(a_date)
-  a_date.strftime("%Y-%m-%d")
-end
-
-def to_atom_time(a_time)
-  a_time.strftime("%Y-%m-%dT%H:%M:%SZ")
-end
