@@ -89,6 +89,16 @@ module Nanoc
     end
   end
   
+  def self.sync
+    config = File.read_yaml('config.yaml').clean
+    if config[:sync_command].nil?
+      puts 'ERROR: no sync_command found in config.yaml'
+    else
+      puts 'Syncing site...'
+      puts `#{config[:sync_command]}`
+    end
+  end
+  
   def self.process
     config = File.read_yaml('config.yaml').clean
     

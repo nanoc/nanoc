@@ -31,13 +31,13 @@ case command
     end
     Nanoc.create_page(ARGV[1])
   
-  # Delete page
-  when 'delete_page'
-    if ARGV.size != 2
-      puts 'Usage: nanoc delete_page [page_name]'
+  # Sync
+  when 'sync'
+    if ARGV.size != 1
+      puts 'Usage: nanoc sync'
       exit
     end
-    Nanoc.delete_page(ARGV[1])
+    Nanoc.sync
   
   # Process site and generate output
   when 'process', 'process_site'
