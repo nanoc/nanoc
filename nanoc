@@ -1,52 +1,102 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
+# Available options:
+# 
+# -h, --help:
+#   prints the help
+# 
+# -t [path], --template [path]
+#   Uses the specified template when creating a apge
+# 
+# -v, --version:
+#   prints the version information
 
-require File.dirname(__FILE__) + '/lib/lib_nanoc.rb'
+begin
+  require 'rubygems'
+rescue LoadError
+end
+require 'getoptlong'
+
+require File.dirname(__FILE__) + '/lib/nanoc/nanoc.rb'
+
+# Some texts
+version_text = 'nanoc 0.1 (c) 2007 Denis Defreyne.'
+help_text = <<EOT
+usage: nanoc [-h] [-v]
+       nanoc create_site [-o dir]
+       nanoc create_page [-t template]
+       nanoc process [-o dir]
+EOT
+
+def handle_command(a_command, a_opts)
+  case a_command
+    # Create site
+    when 'create_site'
+      if ARGV.size != 2
+        $stderr.puts 'Usage: nanoc create_site [site_name]'
+        exit
+      end
+      Nanoc.create_site(ARGV[1])
+
+    # Create page
+    when 'create_page'
+      if ARGV.size != 2
+        $stderr.puts 'Usage: nanoc create_page [page_name]'
+        exit
+      end
+      Nanoc.create_page(ARGV[1], :template => a_opts['--template'])
+
+    # Create template
+    when 'create_template'
+      if ARGV.size != 2
+        $stderr.puts 'Usage: nanoc create_template [template_name]'
+        exit
+      end
+      Nanoc.create_template(ARGV[1])
+
+    # Process site and generate output
+    when 'process', 'process_site'
+      if ARGV.size != 1
+        $stderr.puts 'Usage: nanoc process'
+        exit
+      end
+      Nanoc.process
+
+    else
+      puts 'Unrecognised command \'' + a_command + '\''
+  end
+end
+
+# Parse options
+opts = GetoptLong.new(
+  [ '--help',       '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--template',   '-t', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--version',    '-v', GetoptLong::NO_ARGUMENT ]
+)
+unprocessed_opts = {}
+begin
+  opts.each do |opt, arg|
+    case opt
+    when '--help'
+      $stderr.puts help_text
+      exit
+    when '--version'
+      $stderr.puts version_text
+      exit
+    else
+      unprocessed_opts[opt] = arg
+    end
+  end
+rescue GetoptLong::InvalidOption
+  exit
+end
 
 # Make sure we have at least one argument
 if ARGV.size == 0
-  puts 'Usage: nanoc [command]'
+  $stderr.puts help_text
   exit
 end
 
 # Get command
 command = ARGV[0]
-
-# Handle command
-case command
-  # Create site
-  when 'create_site'
-    if ARGV.size != 2
-      puts 'Usage: nanoc create_site [site_name]'
-      exit
-    end
-    Nanoc.create_site(ARGV[1])
-  
-  # Create page
-  when 'create_page'
-    if ARGV.size != 2
-      puts 'Usage: nanoc create_page [page_name]'
-      exit
-    end
-    Nanoc.create_page(ARGV[1])
-  
-  # Sync
-  when 'sync'
-    if ARGV.size != 1
-      puts 'Usage: nanoc sync'
-      exit
-    end
-    Nanoc.sync
-  
-  # Process site and generate output
-  when 'process', 'process_site'
-    if ARGV.size != 1
-      puts 'Usage: nanoc process'
-      exit
-    end
-    Nanoc.process
-  
-  else
-    puts 'Unrecognised command \'' + command + '\''
-end
+handle_command(command, unprocessed_opts)
