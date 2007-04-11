@@ -1,8 +1,3 @@
-require 'bluecloth'
-require 'erubis'
-require 'time'
-require 'yaml'
-
 require File.dirname(__FILE__) + '/create.rb'
 require File.dirname(__FILE__) + '/../enhancements.rb'
 require File.dirname(__FILE__) + '/../file_management.rb'
@@ -18,16 +13,11 @@ module Nanoc
   }
 
   def self.process
-    config = File.read_yaml('config.yaml').clean
+    config = File.read_clean_yaml('config.yaml')
 
-    # Get default meta information
-    default_meta = DEFAULT_META.merge(File.read_yaml('meta.yaml').clean)
-
-    # Open layout, or simply use none
-    layout = '<%= @content %>'
-    unless default_meta[:layout].nil?
-      layout = File.read_file('layout/' + default_meta[:layout] + '.eruby')
-    end
+    # Get default stuff
+    default_meta = DEFAULT_META.merge(File.read_clean_yaml('meta.yaml'))
+    default_layout = File.read_file('layout/' + default_meta[:layout] + '.eruby')
 
     # Get all meta files
     meta_filenames = Dir.glob('content/**/meta.yaml')
@@ -37,29 +27,25 @@ module Nanoc
     meta_files_with_dependencies    = []
     meta_filenames.each do |meta_filename|
       # Get meta information
-      meta = default_meta.merge(File.read_yaml(meta_filename).clean)
+      meta = default_meta.merge(File.read_clean_yaml(meta_filename))
 
       # Skip drafts
       next if meta[:is_draft] == true
 
       # Put into the correct meta files array
-      if meta[:has_dependencies] == false
-        meta_files_without_dependencies << meta_filename
-      else
-        meta_files_with_dependencies << meta_filename
-      end
+      (meta[:has_dependencies] ? meta_files_with_dependencies : meta_files_without_dependencies) << meta_filename
     end
 
-    # Process meta files
+    # Process files, stage 1
     pages_without_dependencies  = process_pages(default_meta, meta_files_without_dependencies, nil)
     pages_with_dependencies     = process_pages(default_meta, meta_files_with_dependencies,    pages_without_dependencies)
+
+    # Process files, stage 2
     pages = pages_without_dependencies + pages_with_dependencies
     pages.each do |page|
       # Get specific layout
-      specific_layout = layout
-      if page[:layout] == 'none'
-        specific_layout = '<%= @content %>'
-      elsif default_meta[:layout] != page[:layout]
+      specific_layout = default_layout
+      if page[:layout] != 'none' and default_meta[:layout] != page[:layout]
         specific_layout = File.read_file('layout/' + page[:layout] + '.eruby')
       end
 
@@ -83,18 +69,11 @@ module Nanoc
     # Process dynamic files
     a_meta_filenames.each do |meta_filename|
       # Get meta information
-      meta = a_default_meta.merge(File.read_yaml(meta_filename).clean)
+      meta = a_default_meta.merge(File.read_clean_yaml(meta_filename))
 
       # Get index file
       index_filenames = Dir.glob(File.dirname(meta_filename) + '/index.*')
-
-      # Check whether we have exactly one index file
-      if index_filenames.empty?
-        puts 'ERROR: no index files found'
-        next
-      elsif index_filenames.size != 1
-        puts 'WARNING: multiple index files found'
-      end
+      index_filenames.ensure_single(:noun => 'index files', :context => File.dirname(meta_filename))
       index_filename = index_filenames[0]
 
       # Add path to meta
