@@ -5,7 +5,7 @@
 # -h, --help:
 #   prints the help
 # 
-# -t [path], --template [path]
+# -t <template>, --template <template>
 #   Uses the specified template when creating a apge
 # 
 # -v, --version:
@@ -19,13 +19,13 @@ require 'getoptlong'
 
 require File.dirname(__FILE__) + '/lib/nanoc/nanoc.rb'
 
-# Some texts
+# Define ome texts
 version_text = 'nanoc 0.1 (c) 2007 Denis Defreyne.'
 help_text = <<EOT
-usage: nanoc [-h] [-v]
-       nanoc create_site [-o dir]
-       nanoc create_page [-t template]
-       nanoc process [-o dir]
+usage: nanoc [-hv]
+       nanoc create_site <site_name>
+       nanoc create_page <page_name> [-t template]
+       nanoc process
 EOT
 
 def handle_command(a_command, a_opts)
