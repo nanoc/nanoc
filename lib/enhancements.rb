@@ -1,7 +1,28 @@
-require 'bluecloth'
 require 'erubis'
 require 'time'
 require 'yaml'
+
+begin
+  require 'bluecloth'
+  require 'rubypants'
+rescue
+end
+
+class Array
+  # Ensures that the array contains only one element
+  def ensure_single(a_params={})
+    noun    = a_params[:noun]
+    context = a_params[:context]
+
+    if self.empty?
+      puts 'ERROR: no ' + noun + ' found' + (context.nil? ? '' : " (#{context})")
+      exit
+    elsif self.size != 1
+      puts 'ERROR: multiple ' + noun + ' found' + (context.nil? ? '' : " (#{context})")
+      exit
+    end
+  end
+end
 
 class Date
   # Formats the date in a human-readable format
@@ -29,12 +50,22 @@ class File
 
   # Returns the contents of an entire file interpreted as YAML
   def self.read_yaml(a_filename)
-    YAML::load(self.read_file(a_filename))
+    YAML::load(self.read_file(a_filename)) || {}
   end
 
   # Returns the contents of an entire file interpreted as YAML and cleaned
   def self.read_clean_yaml(a_filename)
     self.read_yaml(a_filename).clean
+  end
+end
+
+class Fixnum
+  def to_mon_s
+    Date::MONTHNAMES[self]
+  end
+  
+  def to_abbr_mon_s
+    Date::ABBR_MONTHNAMES[self]
   end
 end
 
@@ -58,6 +89,16 @@ class Hash
   end
 end
 
+class Numeric
+  def ordinal
+    if (10...20).include?(self) then
+      self.to_s + 'th'
+    else
+      self.to_s + %w{th st nd rd th th th th th th}[self % 10]
+    end
+  end
+end
+
 class String
   # Runs the string through the filters as given by the array of
   # filter names. Available filters include 'markdown' and 'eruby'.
@@ -66,6 +107,8 @@ class String
       case filter
       when 'markdown'
         self.markdown!
+      when 'rubypants'
+        self.rubypants!
       when 'eruby'
         self.eruby!(a_params[:eruby_context])
       end
@@ -80,6 +123,16 @@ class String
   # Converts the string to HTML using Markdown.
   def markdown!
     self.replace(self.markdown)
+  end
+
+  # Styles the string as HTML by converting quotes, dashes, ... using RubyPants
+  def rubypants
+    RubyPants::new(self).to_html
+  end
+
+  # Styles the string as HTML by converting quotes, dashes, ... using RubyPants
+  def rubypants!
+    self.replace(self.rubypants)
   end
 
   # Converts the string using eRuby.
@@ -100,14 +153,16 @@ class Time
   end
 
   # Formats the time as a date in the format required by Atom feeds
-  def to_atom_date
+  def to_iso8601_date
     self.strftime("%Y-%m-%d")
   end
+  alias to_atom_date to_iso8601_date
 
   # Formats the time in the format required by Atom feeds
-  def to_atom_time
-    self.strftime("%Y-%m-%dT%H:%M:%SZ")
+  def to_iso8601_time
+    self.gmtime.strftime("%Y-%m-%dT%H:%M:%SZ")
   end
+  alias to_atom_time to_iso8601_time
 end
 
 # Escapes the given string to make it harmless
@@ -115,19 +170,3 @@ def html_escape(a_string)
   a_string.gsub('&', '&amp;').gsub('<', '&lt;')
 end
 alias h html_escape
-
-class Array
-  # Ensures that the array contains only one element
-  def ensure_single(a_params={})
-    noun    = a_params[:noun]
-    context = a_params[:context]
-
-    if self.empty?
-      puts 'ERROR: no ' + noun + ' found' + (context.nil? ? '' : " (#{context})")
-      exit
-    elsif self.size != 1
-      puts 'ERROR: multiple ' + noun + ' found' + (context.nil? ? '' : " (#{context})")
-      exit
-    end
-  end
-end
