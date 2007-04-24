@@ -1,9 +1,13 @@
-require File.dirname(__FILE__) + '/create.rb'
 require File.dirname(__FILE__) + '/../enhancements.rb'
 require File.dirname(__FILE__) + '/../file_management.rb'
 
 module Nanoc
 
+  # Default configuration values
+  DEFAULT_CONFIG = {
+    :output_dir => 'output'
+  }
+  
   # Default metadata values for built-in keywords
   DEFAULT_META = {
     :layout           => '<%= @content %>',
@@ -12,8 +16,9 @@ module Nanoc
     :extension        => 'html'
   }
 
+  # Filters all non-draft pages and writes them to the output directory
   def self.process
-    config = File.read_clean_yaml('config.yaml')
+    config = DEFAULT_CONFIG.merge(File.read_clean_yaml('config.yaml'))
 
     # Get default stuff
     default_meta = DEFAULT_META.merge(File.read_clean_yaml('meta.yaml'))
@@ -45,7 +50,9 @@ module Nanoc
     pages.each do |page|
       # Get specific layout
       specific_layout = default_layout
-      if page[:layout] != 'none' and default_meta[:layout] != page[:layout]
+      if page[:layout] == 'none'
+        specific_layout = '<%= @content %>'
+      elsif default_meta[:layout] != page[:layout]
         specific_layout = File.read_file('layout/' + page[:layout] + '.eruby')
       end
 
