@@ -9,10 +9,7 @@ require 'erubis'
 class Array
   # Ensures that the array contains only one element
   def ensure_single(a_noun, a_context)
-    if self.size != 1
-      puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})"
-      exit
-    end
+    raise "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" if self.size != 1
   end
 end
 

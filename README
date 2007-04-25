@@ -1,5 +1,3 @@
-nanoc
-
 == Overview
 
 nanoc is a simple but very flexible content management system written in Ruby.
@@ -13,18 +11,27 @@ source files into HTML (usually), by evaluating eRuby, Markdown, etc.
 
 To create a nanoc-powered site, do this:
 
- % nanoc create_site my_site
+	% nanoc create_site my_site
 
 This will create a directory named 'my_site' in the current working directory,
 filled with other directories and files needed by nanoc. Here's what nanoc
 says:
 
- create my_site create my_site/output create my_site/config.yaml create
-my_site/meta.yaml create my_site/layout create my_site/layout/default.rhtml
-create my_site/lib create my_site/lib/default.rb create my_site/templates
-create my_site/templates/default create my_site/templates/default/index.txt
-create my_site/templates/default/meta.yaml create my_site/content create
-my_site/content/index.txt create my_site/content/meta.yaml
+	create my_site
+	create my_site/output
+	create my_site/config.yaml
+	create my_site/meta.yaml
+	create my_site/layout
+	create my_site/layout/default.rhtml
+	create my_site/lib
+	create my_site/lib/default.rb
+	create my_site/templates
+	create my_site/templates/default
+	create my_site/templates/default/index.txt
+	create my_site/templates/default/meta.yaml
+	create my_site/content
+	create my_site/content/index.txt
+	create my_site/content/meta.yaml
 
 For more information about what these directories are about, read the
 'Directory Structure' section.
@@ -33,13 +40,14 @@ For more information about what these directories are about, read the
 
 cd into the newly created directory and create a page, like this:
 
- % cd my_site % nanoc create_page about
+	% cd my_site % nanoc create_page about
 
 This will create a directory 'about' in the 'content' directory of the current
 working directory. Here's what nanoc says:
 
- create content/about create content/about/index.txt create
-content/about/meta.yaml
+	create content/about
+	create content/about/index.txt
+	create content/about/meta.yaml
 
 The 'about' directory contains a metafile as well as a content file. Open the
 metafile.
@@ -60,7 +68,13 @@ This will process all pages and put them in their layout.
 
 The general directory structure looks like this:
 
-* / * config.yaml * content/ * layout/ * lib/ * output/ * templates/
+* /
+	* config.yaml
+	* content/
+	* layout/
+	* lib/
+	* output/
+	* templates/
 
 The 'config.yaml' file contains general configuration details. Read the
 'Configuration' section for more information.
@@ -100,9 +114,12 @@ keywords for your custom metadata.
 
 Here's a list of built-in keywords and what they do:
 
-- layout: The name of the layout to use for this page. - filters: A list of
-filters to use for this page. Available filters are "markdown", "eruby" and
-"rubypants". - has_dependencies: See next section. - extension - custom_path
+- layout: The name of the layout to use for this page.
+- filters: A list of filters to use for this page. Available filters are
+  "markdown", "eruby" and "rubypants".
+- has_dependencies: See next section.
+- extension
+- custom_path
 
 === Dependencies
 
@@ -142,7 +159,9 @@ set to a path to which nanoc will write its output.
 nanoc isn't finished, and probably never will be. Here's a list of stuff which
 hasn't been implemented yet.
 
-* Nested layouts * Chained dependencies * Custom Rake tasks
+* Nested layouts
+* Chained dependencies
+* Custom Rake tasks
 
 == Contact
 
