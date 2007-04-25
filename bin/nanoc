@@ -11,18 +11,15 @@
 # -v, --version:
 #   prints the version information
 
-begin
-  require 'rubygems'
-rescue LoadError
-end
+require 'rubygems' rescue nil
 require 'getoptlong'
 
-require File.dirname(__FILE__) + '/lib/nanoc/create.rb'
-require File.dirname(__FILE__) + '/lib/nanoc/process.rb'
+require File.dirname(__FILE__) + '/../lib/nanoc/create.rb'
+require File.dirname(__FILE__) + '/../lib/nanoc/process.rb'
 
-# Define ome texts
+# Define some texts
 version_text = 'nanoc 0.1 (c) 2007 Denis Defreyne.'
-help_text = <<EOT
+help_text    = <<EOT
 usage: nanoc [-hv]
        nanoc create_site <name>
        nanoc create_page <name> [-t template]
