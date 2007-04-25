@@ -1,6 +1,7 @@
-History.txt
+CHANGELOG
+LICENSE
 Manifest.txt
-README.txt
+README
 Rakefile
 bin/nanoc
 lib/nanoc.rb
