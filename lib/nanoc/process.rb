@@ -18,11 +18,17 @@ module Nanoc
 
   # Filters all non-draft pages and writes them to the output directory
   def self.process
+    # Require files in lib/
+    Dir.glob('lib/*.rb').each do |filename|
+      require filename
+    end
+    
+    # Load config
     config = DEFAULT_CONFIG.merge(File.read_clean_yaml('config.yaml'))
 
     # Get default stuff
     default_meta = DEFAULT_META.merge(File.read_clean_yaml('meta.yaml'))
-    default_layout = File.read_file('layout/' + default_meta[:layout] + '.eruby')
+    default_layout = File.read_file('layout/' + default_meta[:layout] + '.rhtml')
 
     # Get all meta files
     meta_filenames = Dir.glob('content/**/meta.yaml')
@@ -53,7 +59,7 @@ module Nanoc
       if page[:layout] == 'none'
         specific_layout = '<%= @content %>'
       elsif default_meta[:layout] != page[:layout]
-        specific_layout = File.read_file('layout/' + page[:layout] + '.eruby')
+        specific_layout = File.read_file('layout/' + page[:layout] + '.rhtml')
       end
 
       # Put index file in layout
@@ -80,7 +86,7 @@ module Nanoc
 
       # Get index file
       index_filenames = Dir.glob(File.dirname(meta_filename) + '/index.*')
-      index_filenames.ensure_single(:noun => 'index files', :context => File.dirname(meta_filename))
+      index_filenames.ensure_single('index files', File.dirname(meta_filename))
       index_filename = index_filenames[0]
 
       # Add path to meta

@@ -3,63 +3,71 @@ require File.dirname(__FILE__) + '/../file_management.rb'
 module Nanoc
 
   def self.create_site(a_sitename)
-    FileManagement.create_dir(a_sitename)
-    FileManagement.create_dir(a_sitename + '/output')
+    create_directory a_sitename do
+      create_directory 'output'
 
-    # Create configuration
-    FileManagement.create_file(a_sitename + '/config.yaml') do |io|
-      io.write("output_dir: output\n")
-    end
+      create_file 'config.yaml' do
+        "output_dir: output\n"
+      end
 
-    # Create default meta
-    FileManagement.create_file(a_sitename + '/meta.yaml') do |io|
-      io.write("# This file contains the default values for all metafiles.\n")
-      io.write("# Other metafiles can override the contents of this one.\n")
-      io.write("\n")
-      io.write("# Built-in\n")
-      io.write("layout: default\n")
-      io.write("has_dependencies: false\n")
-      io.write("filters:\n")
-      io.write("  - markdown\n")
-      io.write("\n")
-      io.write("# Custom\n")
-    end
+      create_file 'meta.yaml' do
+        "# This file contains the default values for all metafiles.\n" +
+        "# Other metafiles can override the contents of this one.\n" +
+        "\n" +
+        "# Built-in\n" +
+        "layout: default\n" +
+        "has_dependencies: false\n" +
+        "filters:\n" +
+        "  - markdown\n" +
+        "\n" +
+        "# Custom\n"
+      end
 
-    # Create layouts
-    FileManagement.create_dir(a_sitename + '/layout')
-    FileManagement.create_file(a_sitename + '/layout/default.eruby') do |io|
-      io.write("<html>\n")
-      io.write("  <head>\n")
-      io.write("    <title><%= @title %></title>\n")
-      io.write("  </head>\n")
-      io.write("  <body>\n")
-      io.write("<%= @content %>\n")
-      io.write("  </body>\n")
-      io.write("</html>\n")
-    end
+      create_directory 'layout' do
+        create_file 'default.rhtml' do
+          "<html>\n" +
+          "  <head>\n" +
+          "    <title><%= @title %></title>\n" +
+          "  </head>\n" +
+          "  <body>\n" +
+          "<%= @content %>\n" +
+          "  </body>\n" +
+          "</html>\n"
+        end
+      end
 
-    # Create templates
-    FileManagement.create_dir(a_sitename + '/templates')
-    FileManagement.create_dir(a_sitename + '/templates/default')
-    FileManagement.create_file(a_sitename + '/templates/default/index.txt') do |io|
-      io.write("This is a new page. Please edit me!\n")
-    end
-    FileManagement.create_file(a_sitename + '/templates/default/meta.yaml') do |io|
-      io.write("# Built-in\n")
-      io.write("\n")
-      io.write("# Custom\n")
-      io.write("title: A New Page\n")
-    end
+      create_directory 'lib' do
+        create_file 'default.rb' do
+          "\# All files in the 'lib' directory will be loaded\n" +
+          "\# before nanoc starts processing.\n"
+        end
+      end
 
-    # Create content
-    template_meta = File.read_file(a_sitename + '/templates/default/meta.yaml')
-    template_index = File.read_file(a_sitename + '/templates/default/index.txt')
-    FileManagement.create_dir(a_sitename + '/content')
-    FileManagement.create_file(a_sitename + '/content/index.txt') do |io|
-      io.write(template_index)
-    end
-    FileManagement.create_file(a_sitename + '/content/meta.yaml') do |io|
-      io.write(template_meta)
+      create_directory 'templates' do
+        create_directory 'default' do
+          create_file 'index.txt' do
+            "This is a new page. Please edit me!\n"
+          end
+          create_file 'meta.yaml' do
+            "# Built-in\n" +
+            "\n" +
+            "# Custom\n" +
+            "title: A New Page\n"
+          end
+        end
+      end
+
+      create_directory 'content' do
+        create_file 'index.txt' do
+          "This is a sample root page. Please edit me!\n"
+        end
+        create_file 'meta.yaml' do
+          "# Built-in\n" +
+          "\n" +
+          "# Custom\n" +
+          "title: My New Homepage\n"
+        end
+      end
     end
   end
 
@@ -71,7 +79,7 @@ module Nanoc
     end
 
     # Create directory
-    FileManagement.create_dir('content/' + a_pagename, :recursive => true)
+    FileManagement.create_dir('content/' + a_pagename)
 
     # Read template
     template_index = nil
@@ -96,17 +104,18 @@ module Nanoc
   end
 
   def self.create_template(a_templatename)
-    # Create template
-    FileManagement.create_dir('templates')
-    FileManagement.create_dir('templates/' + a_templatename)
-    FileManagement.create_file('templates/' + a_templatename + '/index.txt') do |io|
-      io.write("This is a new page. Please edit me!\n")
-    end
-    FileManagement.create_file('templates/' + a_templatename + '/meta.yaml') do |io|
-      io.write("# Built-in\n")
-      io.write("\n")
-      io.write("# Custom\n")
-      io.write("title: A New Page\n")
+    create_directory 'templates' do
+      create_directory a_templatename do
+        create_file 'index.txt' do
+          "This is a new page. Please edit me!\n"
+        end
+        create_file 'meta.yaml' do
+          "# Built-in\n" +
+          "\n"  +
+          "# Custom\n"  +
+          "title: A New Page\n"
+        end
+      end
     end
   end
 
