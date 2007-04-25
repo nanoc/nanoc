@@ -98,6 +98,18 @@ Content
 
 A page is represented by a directory in the 'content'. Each page has two files: a content file, and a meta file. The content file is usually named index.html, but can have any extension. The meta file can contain metadata about the page, as well as instructions on how to format the page.
 
+### Meta files
+
+A meta file is a YAML file consisting of key-value pairs. You can put virtually anything in the meta file, as long as you don't use the built-in keywords for your custom metadata.
+
+Here's a list of built-in keywords and what they do:
+
+- layout: The name of the layout to use for this page.
+- filters: A list of filters to use for this page. Available filters are "markdown", "eruby" and "rubypants".
+- has_dependencies: See next section.
+- extension
+- custom_path
+
 ### Dependencies
 
 Pages can have dependencies on other pages. Such a page can only be processed _after_ the pages it depends on have been processed. For example, a list of all articles on your site depends on all articles.
@@ -109,7 +121,7 @@ Note that dependencies cannot be chained: pages cannot have dependencies on page
 Layouts
 -------
 
-...
+A layout (not to be confused with a template) is a file in which pages will be embedded. Layouts usually contains a header, a footer, etc. For a page to be embeddable in a layout, the layout must print the `@content` variable (something like `<%= @content %>` or so).
 
 Templates
 ---------
@@ -128,6 +140,7 @@ nanoc isn't finished, and probably never will be. Here's a list of stuff which h
 
 * Nested layouts
 * Chained dependencies
+* Custom Rake tasks
 
 Contact
 -------
