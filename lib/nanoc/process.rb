@@ -66,8 +66,8 @@ module Nanoc
       content_with_layout = specific_layout.eruby(page.merge({ :pages => pages }))
 
       # Write output file
-      file_path = config[:output_dir] + page[:path] + 'index.' + page[:extension]
-      FileManagement.create_file(file_path, :create_dir => true, :recursive => true) do |io|
+      file_path = page[:custom_path].nil? ? config[:output_dir] + page[:path] + 'index.' + page[:extension] : config[:output_dir] + page[:custom_path]
+      FileManagement.create_file(file_path) do |io|
         io.write(content_with_layout)
       end
     end
