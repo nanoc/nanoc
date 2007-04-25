@@ -1,0 +1,11 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/nanoc
+lib/nanoc.rb
+lib/nanoc/create.rb
+lib/nanoc/enhancements.rb
+lib/nanoc/file_management.rb
+lib/nanoc/process.rb
+test/test_nanoc.rb

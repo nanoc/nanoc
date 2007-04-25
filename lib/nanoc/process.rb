@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../enhancements.rb'
-require File.dirname(__FILE__) + '/../file_management.rb'
+require File.dirname(__FILE__) + '/enhancements.rb'
+require File.dirname(__FILE__) + '/file_management.rb'
 
 module Nanoc
 
