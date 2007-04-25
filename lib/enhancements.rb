@@ -4,6 +4,8 @@ try { require 'rubygems' }
 try { require 'bluecloth' }
 try { require 'rubypants' }
 
+require 'erubis'
+
 class Array
   # Ensures that the array contains only one element
   def ensure_single(a_noun, a_context)
