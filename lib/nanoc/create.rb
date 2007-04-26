@@ -39,7 +39,7 @@ module Nanoc
       create_directory 'lib' do
         create_file 'default.rb' do
           "\# All files in the 'lib' directory will be loaded\n" +
-          "\# before nanoc starts processing.\n"
+          "\# before nanoc starts compiling.\n"
         end
       end
 

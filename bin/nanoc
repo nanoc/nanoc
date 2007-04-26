@@ -15,7 +15,7 @@ require 'rubygems' rescue nil
 require 'getoptlong'
 
 require File.dirname(__FILE__) + '/../lib/nanoc/create.rb'
-require File.dirname(__FILE__) + '/../lib/nanoc/process.rb'
+require File.dirname(__FILE__) + '/../lib/nanoc/compile.rb'
 
 # Define some texts
 version_text = 'nanoc 0.1 (c) 2007 Denis Defreyne.'
@@ -24,7 +24,7 @@ usage: nanoc [-hv]
        nanoc create_site <name>
        nanoc create_page <name> [-t template]
        nanoc create_template <name>
-       nanoc process
+       nanoc compile
 EOT
 
 # Parse options
@@ -33,7 +33,7 @@ opts = GetoptLong.new(
   [ '--template',   '-t', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--version',    '-v', GetoptLong::NO_ARGUMENT ]
 )
-unprocessed_opts = {}
+uncompileed_opts = {}
 begin
   opts.each do |opt, arg|
     case opt
@@ -44,7 +44,7 @@ begin
       puts version_text
       exit
     else
-      unprocessed_opts[opt] = arg
+      uncompileed_opts[opt] = arg
     end
   end
 rescue GetoptLong::InvalidOption
@@ -75,7 +75,7 @@ case command
       $stderr.puts 'Usage: nanoc create_page [page_name]'
       exit
     end
-    Nanoc.create_page(ARGV[1], :template => unprocessed_opts['--template'])
+    Nanoc.create_page(ARGV[1], :template => uncompileed_opts['--template'])
 
   # Create template
   when 'create_template'
@@ -86,12 +86,12 @@ case command
     Nanoc.create_template(ARGV[1])
 
   # Process site and generate output
-  when 'process', 'process_site'
+  when 'compile', 'compile_site'
     if ARGV.size != 1
-      $stderr.puts 'Usage: nanoc process'
+      $stderr.puts 'Usage: nanoc compile'
       exit
     end
-    Nanoc.process
+    Nanoc.compile
 
   else
     puts 'Unrecognised command \'' + command + '\''
