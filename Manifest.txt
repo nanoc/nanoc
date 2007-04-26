@@ -8,5 +8,5 @@ lib/nanoc.rb
 lib/nanoc/create.rb
 lib/nanoc/enhancements.rb
 lib/nanoc/file_management.rb
-lib/nanoc/process.rb
+lib/nanoc/compile.rb
 test/test_nanoc.rb

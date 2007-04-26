@@ -17,7 +17,7 @@ module Nanoc
   }
 
   # Filters all non-draft pages and writes them to the output directory
-  def self.process
+  def self.compile
     # Require files in lib/
     Dir.glob('lib/*.rb').each do |filename|
       require filename
@@ -48,8 +48,8 @@ module Nanoc
     end
 
     # Process files, stage 1
-    pages_without_dependencies  = process_pages(default_meta, meta_files_without_dependencies, nil)
-    pages_with_dependencies     = process_pages(default_meta, meta_files_with_dependencies,    pages_without_dependencies)
+    pages_without_dependencies  = compile_pages(default_meta, meta_files_without_dependencies, nil)
+    pages_with_dependencies     = compile_pages(default_meta, meta_files_with_dependencies,    pages_without_dependencies)
 
     # Process files, stage 2
     pages = pages_without_dependencies + pages_with_dependencies
@@ -76,7 +76,7 @@ module Nanoc
 
   private
 
-  def self.process_pages(a_default_meta, a_meta_filenames, a_pages_without_dependencies)
+  def self.compile_pages(a_default_meta, a_meta_filenames, a_pages_without_dependencies)
     pages = []
 
     # Process dynamic files
