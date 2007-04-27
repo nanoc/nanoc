@@ -79,7 +79,7 @@ class String
   end
 
   # Converts the string using eRuby.
-  def eruby(a_context)
+  def eruby(a_context={})
     Erubis::Eruby.new(self).evaluate(a_context)
   end
 end
