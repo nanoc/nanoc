@@ -23,7 +23,7 @@ module Nanoc
         "# Custom\n"
       end
 
-      create_directory 'layout' do
+      create_directory 'layouts' do
         create_file 'default.rhtml' do
           "<html>\n" +
           "  <head>\n" +

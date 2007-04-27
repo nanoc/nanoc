@@ -28,7 +28,7 @@ module Nanoc
 
     # Get default stuff
     default_meta = DEFAULT_META.merge(File.read_clean_yaml('meta.yaml'))
-    default_layout = File.read_file('layout/' + default_meta[:layout] + '.rhtml')
+    default_layout = File.read_file('layouts/' + default_meta[:layout] + '.rhtml')
 
     # Get all meta files
     meta_filenames = Dir.glob('content/**/meta.yaml')
@@ -59,7 +59,7 @@ module Nanoc
       if page[:layout] == 'none'
         specific_layout = '<%= @content %>'
       elsif default_meta[:layout] != page[:layout]
-        specific_layout = File.read_file('layout/' + page[:layout] + '.rhtml')
+        specific_layout = File.read_file('layouts/' + page[:layout] + '.rhtml')
       end
 
       # Put index file in layout
