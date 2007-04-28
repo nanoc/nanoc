@@ -1,3 +1,6 @@
 * Nested layouts
 * Chained dependencies
 * Custom Rake tasks
+* Improve error handling
+	* Check for a valid site
+* Merge file_management in enhancements

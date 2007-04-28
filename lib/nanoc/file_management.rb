@@ -21,7 +21,7 @@ end
 
 $dirs = []
 
-def create_directory(a_name)
+def create_dir(a_name)
   $dirs.push(a_name)
   
   FileManagement.create_dir($dirs.join('/'))
