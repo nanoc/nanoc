@@ -3,8 +3,8 @@ require File.dirname(__FILE__) + '/file_management.rb'
 module Nanoc
 
   def self.create_site(a_sitename)
-    create_directory a_sitename do
-      create_directory 'output'
+    create_dir a_sitename do
+      create_dir 'output'
 
       create_file 'config.yaml' do
         "output_dir: output\n"
@@ -23,7 +23,7 @@ module Nanoc
         "# Custom\n"
       end
 
-      create_directory 'layouts' do
+      create_dir 'layouts' do
         create_file 'default.rhtml' do
           "<html>\n" +
           "  <head>\n" +
@@ -36,15 +36,15 @@ module Nanoc
         end
       end
 
-      create_directory 'lib' do
+      create_dir 'lib' do
         create_file 'default.rb' do
           "\# All files in the 'lib' directory will be loaded\n" +
           "\# before nanoc starts compiling.\n"
         end
       end
 
-      create_directory 'templates' do
-        create_directory 'default' do
+      create_dir 'templates' do
+        create_dir 'default' do
           create_file 'index.txt' do
             "This is a new page. Please edit me!\n"
           end
@@ -57,7 +57,7 @@ module Nanoc
         end
       end
 
-      create_directory 'content' do
+      create_dir 'content' do
         create_file 'index.txt' do
           "This is a sample root page. Please edit me!\n"
         end
@@ -79,7 +79,9 @@ module Nanoc
     end
 
     # Create directory
-    FileManagement.create_dir('content/' + a_pagename)
+    create_dir 'content/' do
+      create_dir a_pagename
+    end
 
     # Read template
     template_index = nil
@@ -104,8 +106,8 @@ module Nanoc
   end
 
   def self.create_template(a_templatename)
-    create_directory 'templates' do
-      create_directory a_templatename do
+    create_dir 'templates' do
+      create_dir a_templatename do
         create_file 'index.txt' do
           "This is a new page. Please edit me!\n"
         end
