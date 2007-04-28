@@ -20,6 +20,7 @@ class CreateTest < Test::Unit::TestCase
     
     assert File.file?('tmp/site/config.yaml')
     assert File.file?('tmp/site/meta.yaml')
+    assert File.file?('tmp/site/Rakefile')
     
     assert File.directory?('tmp/site/content/')
     assert File.file?('tmp/site/content/index.txt')
@@ -37,6 +38,9 @@ class CreateTest < Test::Unit::TestCase
     assert File.directory?('tmp/site/templates/default/')
     assert File.file?('tmp/site/templates/default/index.txt')
     assert File.file?('tmp/site/templates/default/meta.yaml')
+    
+    assert File.directory?('tmp/site/tasks/')
+    assert File.file?('tmp/site/tasks/default.rake')
   end
   
   def test_create_page
