@@ -3,14 +3,14 @@ require File.dirname(__FILE__) + '/file_management.rb'
 module Nanoc
 
   def self.create_site(a_sitename)
-    create_dir a_sitename do
-      create_dir 'output'
+    FileManager.create_dir a_sitename do
+      FileManager.create_dir 'output'
 
-      create_file 'config.yaml' do
+      FileManager.create_file 'config.yaml' do
         "output_dir: output\n"
       end
 
-      create_file 'meta.yaml' do
+      FileManager.create_file 'meta.yaml' do
         "# This file contains the default values for all metafiles.\n" +
         "# Other metafiles can override the contents of this one.\n" +
         "\n" +
@@ -23,8 +23,8 @@ module Nanoc
         "# Custom\n"
       end
 
-      create_dir 'layouts' do
-        create_file 'default.rhtml' do
+      FileManager.create_dir 'layouts' do
+        FileManager.create_file 'default.rhtml' do
           "<html>\n" +
           "  <head>\n" +
           "    <title><%= @title %></title>\n" +
@@ -36,19 +36,19 @@ module Nanoc
         end
       end
 
-      create_dir 'lib' do
-        create_file 'default.rb' do
+      FileManager.create_dir 'lib' do
+        FileManager.create_file 'default.rb' do
           "\# All files in the 'lib' directory will be loaded\n" +
           "\# before nanoc starts compiling.\n"
         end
       end
 
-      create_dir 'templates' do
-        create_dir 'default' do
-          create_file 'index.txt' do
+      FileManager.create_dir 'templates' do
+        FileManager.create_dir 'default' do
+          FileManager.create_file 'index.txt' do
             "This is a new page. Please edit me!\n"
           end
-          create_file 'meta.yaml' do
+          FileManager.create_file 'meta.yaml' do
             "# Built-in\n" +
             "\n" +
             "# Custom\n" +
@@ -57,11 +57,11 @@ module Nanoc
         end
       end
 
-      create_dir 'content' do
-        create_file 'index.txt' do
+      FileManager.create_dir 'content' do
+        FileManager.create_file 'index.txt' do
           "This is a sample root page. Please edit me!\n"
         end
-        create_file 'meta.yaml' do
+        FileManager.create_file 'meta.yaml' do
           "# Built-in\n" +
           "\n" +
           "# Custom\n" +
@@ -78,11 +78,6 @@ module Nanoc
       return
     end
 
-    # Create directory
-    create_dir 'content/' do
-      create_dir a_pagename
-    end
-
     # Read template
     template_index = nil
     template_meta = nil
@@ -97,21 +92,25 @@ module Nanoc
     end
 
     # Create index and yaml file
-    FileManagement.create_file('content/' + a_pagename + '/index.txt') do |io|
-      io.write(template_index)
-    end
-    FileManagement.create_file('content/' + a_pagename + '/meta.yaml') do |io|
-      io.write(template_meta)
+    FileManager.create_dir 'content/' do
+      FileManager.create_dir a_pagename do
+        FileManager.create_file 'index.txt' do
+          template_index
+        end
+        FileManager.create_file 'meta.yaml' do
+          template_meta
+        end
+      end
     end
   end
 
   def self.create_template(a_templatename)
-    create_dir 'templates' do
-      create_dir a_templatename do
-        create_file 'index.txt' do
+    FileManager.create_dir 'templates' do
+      FileManager.create_dir a_templatename do
+        FileManager.create_file 'index.txt' do
           "This is a new page. Please edit me!\n"
         end
-        create_file 'meta.yaml' do
+        FileManager.create_file 'meta.yaml' do
           "# Built-in\n" +
           "\n"  +
           "# Custom\n"  +
