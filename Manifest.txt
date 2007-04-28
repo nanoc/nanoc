@@ -5,8 +5,11 @@ README
 Rakefile
 bin/nanoc
 lib/nanoc.rb
+lib/nanoc/compile.rb
 lib/nanoc/create.rb
 lib/nanoc/enhancements.rb
 lib/nanoc/file_management.rb
-lib/nanoc/compile.rb
-test/test_nanoc.rb
+test/test_compile.rb
+test/test_create.rb
+test/test_enhancements.rb
+test/test_file_management.rb
