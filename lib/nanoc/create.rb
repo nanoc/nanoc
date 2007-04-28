@@ -23,6 +23,10 @@ module Nanoc
         "# Custom\n"
       end
 
+      FileManager.create_file 'Rakefile' do
+        "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n"
+      end
+
       FileManager.create_dir 'layouts' do
         FileManager.create_file 'default.rhtml' do
           "<html>\n" +
@@ -40,6 +44,15 @@ module Nanoc
         FileManager.create_file 'default.rb' do
           "\# All files in the 'lib' directory will be loaded\n" +
           "\# before nanoc starts compiling.\n"
+        end
+      end
+      
+      FileManager.create_dir 'tasks' do
+        FileManager.create_file 'default.rake' do
+          "  task :example do\n" +
+          "    puts 'This is an example rake task, invoked'\n" +
+          "    puts 'with \"rake example\"'\n" +
+          "  end\n"
         end
       end
 
