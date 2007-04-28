@@ -8,8 +8,8 @@ class FileManagementTest < Test::Unit::TestCase
   end
   
   def test_create_dir
-    create_dir 'tmp' do
-      create_dir 'foo'
+    FileManager.create_dir 'tmp' do
+      FileManager.create_dir 'foo'
     end
     
     assert File.exist?('tmp')
@@ -22,8 +22,8 @@ class FileManagementTest < Test::Unit::TestCase
   end
   
   def test_create_file
-    create_dir 'tmp' do
-      create_file 'bar' do
+    FileManager.create_dir 'tmp' do
+      FileManager.create_file 'bar' do
         "asdf"
       end
     end

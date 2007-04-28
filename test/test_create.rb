@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../lib/nanoc/create.rb'
 
 class CreateTest < Test::Unit::TestCase
   def setup
-    create_dir 'tmp'
+    FileManager.create_dir 'tmp'
   end
   
   def teardown

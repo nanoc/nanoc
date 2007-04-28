@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../lib/nanoc/compile.rb'
 
 class CompileTest < Test::Unit::TestCase
   def setup
-    create_dir 'tmp'
+    FileManager.create_dir 'tmp'
   end
   
   def teardown
@@ -20,7 +20,7 @@ class CompileTest < Test::Unit::TestCase
     FileUtils.cd('..')
     FileUtils.cd('..')
     
-    assert File.file?('tmp/site/content/moo/index.txt')
-    assert File.file?('tmp/site/content/moo/meta.yaml')
+    assert File.file?('tmp/site/output/index.html')
+    assert File.file?('tmp/site/output/moo/index.html')
   end
 end
