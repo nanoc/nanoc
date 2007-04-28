@@ -24,7 +24,15 @@ module Nanoc
       end
 
       FileManager.create_file 'Rakefile' do
-        "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n"
+        "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n" +
+        "\n" +
+        "task :compile do\n" +
+        "  puts 'Compiling site...'\n" +
+        "  puts `nanoc compile`\n" +
+        "  puts 'Site compiled.'\n" +
+        "end\n" +
+        "\n" +
+        "task :default => :compile\n"
       end
 
       FileManager.create_dir 'layouts' do
@@ -43,16 +51,20 @@ module Nanoc
       FileManager.create_dir 'lib' do
         FileManager.create_file 'default.rb' do
           "\# All files in the 'lib' directory will be loaded\n" +
-          "\# before nanoc starts compiling.\n"
+          "\# before nanoc starts compiling.\n" +
+          "\n" +
+          "def html_escape(a_string)\n" +
+          "  a_string.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\'', '&apos;').gsub('\"', '&quot;')\n" +
+          "end\n" +
+          "alias h html_escape\n"
         end
       end
-      
+
       FileManager.create_dir 'tasks' do
         FileManager.create_file 'default.rake' do
-          "  task :example do\n" +
-          "    puts 'This is an example rake task, invoked'\n" +
-          "    puts 'with \"rake example\"'\n" +
-          "  end\n"
+          "task :example do\n" +
+          "  puts 'This is an example rake task in tasks/default.rake.'\n" +
+          "end\n"
         end
       end
 
