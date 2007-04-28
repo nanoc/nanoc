@@ -13,6 +13,7 @@ class FileManager
   
   def self.create_file(a_name)
     path = @@stack.empty? ? a_name : @@stack.join('/') + '/' + a_name
+    FileManager.create_dir(path.sub(/\/[^\/]+$/, ''))
     puts "     #{File.exist?(a_name) ? 'update' : 'create'} " + path
     if block_given?
       open(path, 'w') { |io| io.write(yield) }
