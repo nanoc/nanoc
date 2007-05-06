@@ -16,10 +16,10 @@ class EnhancementsTest < Test::Unit::TestCase
   end
 
   def test_array_ensure_single
-    assert_raise RuntimeError do
+    assert_raise SystemExit do
       [ ].ensure_single('moofs', 'blargh')
     end
-    assert_raise RuntimeError do
+    assert_raise SystemExit do
       [ 1, 2 ].ensure_single('moofs', 'blargh')
     end
     assert_nothing_raised do
