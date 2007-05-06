@@ -105,9 +105,9 @@ module Nanoc
       template_meta = nil
       template = a_params[:template] || 'default'
       begin
-        template_meta = File.read_file('templates/' + template + '/meta.yaml')
+        template_meta = File.read('templates/' + template + '/meta.yaml')
         template_index_filename = Dir.glob('templates/' + template + '/index.*')[0]
-        template_index = File.read_file(template_index_filename)
+        template_index = File.read(template_index_filename)
       rescue
         $stderr.puts 'ERROR: no such template'
         exit

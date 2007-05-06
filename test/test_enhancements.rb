@@ -27,8 +27,8 @@ class EnhancementsTest < Test::Unit::TestCase
     end
   end
 
-  def test_file_read_file
-    assert_equal 'created_at: 12/07/04', File.read_file('test.yaml')
+  def test_file_read
+    assert_equal 'created_at: 12/07/04', File.read('test.yaml')
   end
 
   def test_file_read_yaml
@@ -109,6 +109,6 @@ class EnhancementsTest < Test::Unit::TestCase
 
     assert File.exist?('tmp/bar')
     assert File.file?('tmp/bar')
-    assert_equal 'asdf', File.read_file('tmp/bar')
+    assert_equal 'asdf', File.read('tmp/bar')
   end
 end

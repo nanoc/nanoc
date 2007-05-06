@@ -17,7 +17,7 @@ end
 
 class File
   # Reads the contents of the entire file
-  def self.read_file(a_filename)
+  def self.read(a_filename)
     content = ''
     File.open(a_filename) { |io| content = io.read }
     content
@@ -25,7 +25,7 @@ class File
 
   # Returns the contents of an entire file interpreted as YAML
   def self.read_yaml(a_filename)
-    YAML::load(self.read_file(a_filename)) || {}
+    YAML::load(self.read(a_filename)) || {}
   end
 
   # Returns the contents of an entire file interpreted as YAML and cleaned
@@ -62,14 +62,20 @@ class String
   # Runs the string through the filters as given by the array of
   # filter names. Available filters include 'markdown', 'smartypants' and 'eruby'.
   def filter!(a_filters, a_params={})
-    a_filters.each do |filter|
+    self.replace(self.filter(a_filters, a_params))
+  end
+
+  # Runs the string through the filters as given by the array of
+  # filter names. Available filters include 'markdown', 'smartypants' and 'eruby'.
+  def filter(a_filters, a_params={})
+    a_filters.inject(self) do |result, filter|
       case filter
       when 'markdown'
-        self.replace(self.markdown)
+        result.replace(result.markdown)
       when 'smartypants'
-        self.replace(self.smartypants)
+        result.replace(result.smartypants)
       when 'eruby'
-        self.replace(self.eruby(a_params[:eruby_context]))
+        result.replace(result.eruby(a_params[:eruby_context]))
       end
     end
   end
