@@ -95,6 +95,8 @@ class FileManager
   COLORS = {
     :reset   => "\e[0m",
     
+    :bold    => "\e[1m",
+    
     :black   => "\e[30m",
     :red     => "\e[31m",
     :green   => "\e[32m",
@@ -105,9 +107,9 @@ class FileManager
     :white   => "\e[37m"
   }
   ACTION_COLORS = {
-    :create     => COLORS[:green],
-    :update     => COLORS[:yellow],
-    :identical  => COLORS[:reset]
+    :create     => COLORS[:bold] + COLORS[:green],
+    :update     => COLORS[:bold] + COLORS[:yellow],
+    :identical  => COLORS[:bold]
   }
   
   def self.create_dir(a_name)
