@@ -1,12 +1,2 @@
-* Nested layouts
-  * meta file should contain a list of layouts in order
-  * fo example, a list of layouts like [ "foo", "bar" ] will render the page,
-    then render the result in foo, then render the result in bar
-* Cleanup instance variables
-  * @pages - for all pages that have been compiled so far
-  * @page - the current page
-  * @content - the content of the current page or layout
-  * all other instance variables are deprecated
 * Create a real Nanoc::Page class
   * attributes accessed like "@page.title", "@page.tags", ...
-* Embedded Ruby-filtered index files should have access to their meta data
