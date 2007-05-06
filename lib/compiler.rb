@@ -24,6 +24,7 @@ module Nanoc
 
     def run
       Dir.glob('lib/*.rb').each { |f| require f }
+
       pages = compile_pages(uncompiled_pages.sort { |x,y| x[:order].to_i <=> y[:order].to_i })
       pages.each do |page|
         content = page[:layouts].collect { |name| File.read('layouts/' + name + '.erb') }.inject(page[:content]) do |content, layout|

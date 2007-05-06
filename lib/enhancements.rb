@@ -105,9 +105,10 @@ class FileManager
   def self.create_file(a_name)
     path = @@stack.empty? ? a_name : @@stack.join('/') + '/' + a_name
     FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
-    puts "     #{File.exist?(a_name) ? 'update' : 'create'} " + path
+    content = yield
+    puts "     #{File.exist?(a_name) ? ( File.read(a_name) == content ? 'exists' : 'update' ) : 'create'} " + path
     if block_given?
-      open(path, 'w') { |io| io.write(yield) }
+      open(path, 'w') { |io| io.write(content) }
     else
       open(path, 'w') { |io| }
     end
