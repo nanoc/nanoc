@@ -93,7 +93,7 @@ module Nanoc
 
     def self.create_page(a_pagename, a_params={})
       Nanoc.ensure_in_site
-      
+
       # Sanitize page name
       if a_pagename =~ /^[\/\.]+/
         $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting'
@@ -130,7 +130,7 @@ module Nanoc
 
     def self.create_template(a_templatename)
       Nanoc.ensure_in_site
-      
+
       FileManager.create_dir 'templates' do
         FileManager.create_dir a_templatename do
           FileManager.create_file 'index.txt' do
