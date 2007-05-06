@@ -50,16 +50,14 @@ class EnhancementsTest < Test::Unit::TestCase
     assert_equal hash2_cleaned, hash2.clean
   end
 
-  def test_string_filter!
+  def test_string_filter
     text = '<%= @foo %>'
     context = { :foo => 'Te\'st' }
 
-    text.filter!([ 'eruby' ], :eruby_context => context)
-    assert_equal 'Te\'st', text
+    assert_equal 'Te\'st', text.filter([ 'eruby' ], :eruby_context => context)
 
     begin
-      text.filter!([ 'markdown', 'smartypants' ])
-      assert_equal '<p>Te&#8217;st</p>', text
+      assert_equal '<p>Te&#8217;st</p>', text.filter([ 'eruby', 'markdown', 'smartypants' ], :eruby_context => context)
     rescue NameError
       $stderr.puts 'WARNING: Unable to test String#filter! (BlueCloth or RubyPants not installed)'
     end

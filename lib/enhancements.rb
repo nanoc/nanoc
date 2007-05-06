@@ -61,12 +61,6 @@ end
 class String
   # Runs the string through the filters as given by the array of
   # filter names. Available filters include 'markdown', 'smartypants' and 'eruby'.
-  def filter!(a_filters, a_params={})
-    self.replace(self.filter(a_filters, a_params))
-  end
-
-  # Runs the string through the filters as given by the array of
-  # filter names. Available filters include 'markdown', 'smartypants' and 'eruby'.
   def filter(a_filters, a_params={})
     a_filters.inject(self) do |result, filter|
       case filter
