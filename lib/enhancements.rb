@@ -11,18 +11,14 @@ require 'yaml'
 class Array
   # Ensures that the array contains only one element
   def ensure_single(a_noun, a_context)
-    raise "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" if self.size != 1
+    if self.size != 1
+      $stderr.puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})"
+      exit
+    end
   end
 end
 
 class File
-  # Reads the contents of the entire file
-  def self.read(a_filename)
-    content = ''
-    File.open(a_filename) { |io| content = io.read }
-    content
-  end
-
   # Returns the contents of an entire file interpreted as YAML
   def self.read_yaml(a_filename)
     YAML::load(self.read(a_filename)) || {}
@@ -38,9 +34,7 @@ class Hash
   # Converts all keys to symbols, and converts *_at and *_on
   # keys to Times and Dates, respectively
   def clean
-    hash = {}
-
-    self.each_pair do |key, value|
+    inject({}) do |hash, (key, value)|
       if key =~ /_on$/
         hash[key.to_sym] = Date.parse(value)
       elsif key =~ /_at$/
@@ -52,9 +46,8 @@ class Hash
       else
         hash[key.to_sym] = value
       end
+      hash
     end
-
-    hash
   end
 end
 
