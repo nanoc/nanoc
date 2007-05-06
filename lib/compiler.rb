@@ -1,5 +1,4 @@
 module Nanoc
-
   class Compiler
 
     DEFAULT_CONFIG = {
@@ -7,47 +6,29 @@ module Nanoc
     }
 
     DEFAULT_PAGE = {
-      :layouts   => [ '<%= @content %>' ],
-      :filters   => [],
+      :layouts   => [ 'default' ],
+      :filters   => [ ],
       :order     => 0,
       :extension => 'html'
     }
 
     def initialize
       Nanoc.ensure_in_site
-      
+
       @config = DEFAULT_CONFIG.merge(File.read_clean_yaml('config.yaml'))
-      
       @global_page = DEFAULT_PAGE.merge(File.read_clean_yaml('meta.yaml'))
-      unless @global_page[:layout].nil? 
-        if @global_page[:layout] == 'none'
-          @global_page[:layouts] = [ DEFAULT_PAGE[:layouts] ]
-        else
-          @global_page[:layouts] = [ @global_page[:layout] ]
-        end
+      unless @global_page[:layout].nil?
+        @global_page[:layouts] = ( @global_page[:layout] == 'none' ? [ DEFAULT_PAGE[:layouts] ] : [ @global_page[:layout] ] )
       end
-      
-      @default_layouts = @global_page[:layouts].collect { |l| File.read_file('layouts/' + l + '.erb') }
     end
 
     def run
-      # Require files in lib/
       Dir.glob('lib/*.rb').each { |f| require f }
-
-      # Compile pages
-      pages = uncompiled_pages.sort { |x,y| x[:order].to_i <=> y[:order].to_i }
-      pages = compile_pages(pages)
-
-      # Put pages in their layouts
+      pages = compile_pages(uncompiled_pages.sort { |x,y| x[:order].to_i <=> y[:order].to_i })
       pages.each do |page|
-        # Compile layouts
-        layouts = layouts_for_page(page)
-        content = page[:content]
-        layouts.each do |layout|
-          content = layout.eruby(page.merge({ :page => page, :pages => pages, :content => content }))
+        content = page[:layouts].collect { |name| File.read('layouts/' + name + '.erb') }.inject(page[:content]) do |content, layout|
+          layout.eruby(page.merge({ :page => page, :pages => pages, :content => content }))
         end
-        
-        # Write content
         FileManager.create_file(path_for_page(page)) { content }
       end
     end
@@ -55,16 +36,10 @@ module Nanoc
     private
 
     def uncompiled_pages
-      # Get all meta file names
-      meta_filenames = Dir.glob('content/**/meta.yaml')
-
-      # Read all meta files
-      pages = meta_filenames.collect do |filename|
-        # Get meta file
+      Dir.glob('content/**/meta.yaml').collect do |filename|
         page = @global_page.merge(File.read_clean_yaml(filename))
         page = page.merge({:path => filename.sub(/^content/, '').sub('meta.yaml', '')})
 
-        # Get index filename
         index_filenames = Dir.glob(File.dirname(filename) + '/index.*')
         index_filenames.ensure_single('index files', File.dirname(filename))
         page[:_index_filename] = index_filenames[0]
@@ -74,36 +49,15 @@ module Nanoc
     end
 
     def path_for_page(a_page)
-      if a_page[:custom_path].nil?
-        @config[:output_dir] + a_page[:path] + 'index.' + a_page[:extension]
-      else
-        @config[:output_dir] + a_page[:custom_path]
-      end
-    end
-
-    def layouts_for_page(a_page)
-      if a_page[:layouts] == @global_page[:layouts]
-        @default_layouts
-      else
-        a_page[:layouts].collect { |l| File.read_file('layouts/' + l + '.erb') }
-      end
+      @config[:output_dir] + ( a_page[:custom_path].nil? ? a_page[:path] + 'index.' + a_page[:extension] : a_page[:custom_path] )
     end
 
     def compile_pages(a_pages)
-      pages = []
-
-      a_pages.each do |page|
-        # Read and filter page
-        content = File.read_file(page[:_index_filename])
-        content.filter!(page[:filters], :eruby_context => { :page => page, :pages => pages }) unless page[:filters].nil?
-
-        # Store page
-        pages << page.merge( { :content => content })
+      a_pages.inject([]) do |pages, page|
+        content = File.read(page[:_index_filename]).filter(page[:filters], :eruby_context => { :page => page, :pages => pages })
+        pages + [ page.merge( { :content => content }) ]
       end
-
-      pages
     end
 
   end
-
 end
