@@ -94,24 +94,21 @@ class FileManager
 
   def self.create_dir(a_name)
     @@stack.push(a_name)
-    unless File.directory?(File.join(@@stack))
-      puts '     create ' + @@stack.join('/')
-      FileUtils.mkdir_p(@@stack.join('/'))
+    path = File.join(@@stack)
+    unless File.directory?(path)
+      FileUtils.mkdir_p(path)
+      puts '      create ' + path
     end
     yield if block_given?
     @@stack.pop
   end
 
   def self.create_file(a_name)
-    path = @@stack.empty? ? a_name : @@stack.join('/') + '/' + a_name
+    path = @@stack.empty? ? a_name : File.join(@@stack + [ a_name ])
     FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
-    content = yield
-    puts "     #{File.exist?(a_name) ? ( File.read(a_name) == content ? 'exists' : 'update' ) : 'create'} " + path
-    if block_given?
-      open(path, 'w') { |io| io.write(content) }
-    else
-      open(path, 'w') { |io| }
-    end
+    content = block_given? ? yield : nil
+    puts "   #{File.exist?(path) ? ( block_given? and File.read(path) == content ? 'identical' : '   update' ) : '   create'} " + path
+    open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
 
 end
