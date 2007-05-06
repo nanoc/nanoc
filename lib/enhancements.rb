@@ -91,13 +91,31 @@ end
 
 class FileManager
   @@stack = []
-
+  
+  COLORS = {
+    :reset   => "\e[0m",
+    
+    :black   => "\e[30m",
+    :red     => "\e[31m",
+    :green   => "\e[32m",
+    :yellow  => "\e[33m",
+    :blue    => "\e[34m",
+    :magenta => "\e[35m",
+    :cyan    => "\e[36m",
+    :white   => "\e[37m"
+  }
+  ACTION_COLORS = {
+    :create     => COLORS[:green],
+    :update     => COLORS[:yellow],
+    :identical  => COLORS[:reset]
+  }
+  
   def self.create_dir(a_name)
     @@stack.push(a_name)
     path = File.join(@@stack)
     unless File.directory?(path)
       FileUtils.mkdir_p(path)
-      puts '      create ' + path
+      log('create', path)
     end
     yield if block_given?
     @@stack.pop
@@ -107,8 +125,11 @@ class FileManager
     path = @@stack.empty? ? a_name : File.join(@@stack + [ a_name ])
     FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
     content = block_given? ? yield : nil
-    puts "   #{File.exist?(path) ? ( block_given? and File.read(path) == content ? 'identical' : '   update' ) : '   create'} " + path
+    File.exist?(path) ? ( block_given? and File.read(path) == content ? log('identical', path) : log('update', path) ) : log('create', path)
     open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
-
+  
+  def self.log(a_action, a_path)
+    puts format('%s%12s%s %s', ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path)
+  end
 end
