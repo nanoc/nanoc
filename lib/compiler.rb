@@ -7,7 +7,7 @@ module Nanoc
     }
 
     DEFAULT_PAGE = {
-      :layout    => '<%= @content %>',
+      :layouts   => [ '<%= @content %>' ],
       :filters   => [],
       :order     => 0,
       :extension => 'html'
@@ -16,14 +16,21 @@ module Nanoc
     def initialize
       Nanoc.ensure_in_site
       
-      @config         = DEFAULT_CONFIG.merge(File.read_clean_yaml('config.yaml'))
-      @global_page    = DEFAULT_PAGE.merge(File.read_clean_yaml('meta.yaml'))
-      @default_layout = File.read_file('layouts/' + @global_page[:layout] + '.erb')
+      @config = DEFAULT_CONFIG.merge(File.read_clean_yaml('config.yaml'))
+      
+      @global_page = DEFAULT_PAGE.merge(File.read_clean_yaml('meta.yaml'))
+      unless @global_page[:layout].nil? 
+        if @global_page[:layout] == 'none'
+          @global_page[:layouts] = [ DEFAULT_PAGE[:layouts] ]
+        else
+          @global_page[:layouts] = [ @global_page[:layout] ]
+        end
+      end
+      
+      @default_layouts = @global_page[:layouts].collect { |l| File.read_file('layouts/' + l + '.erb') }
     end
 
     def run
-      Nanoc.ensure_in_site
-      
       # Require files in lib/
       Dir.glob('lib/*.rb').each { |f| require f }
 
@@ -31,10 +38,17 @@ module Nanoc
       pages = uncompiled_pages.sort { |x,y| x[:order].to_i <=> y[:order].to_i }
       pages = compile_pages(pages)
 
-      # Put pages in their layout
+      # Put pages in their layouts
       pages.each do |page|
-        content_with_layout = layout_for_page(page).eruby(page.merge({ :pages => pages }))
-        FileManager.create_file(path_for_page(page)) { content_with_layout }
+        # Compile layouts
+        layouts = layouts_for_page(page)
+        content = page[:content]
+        layouts.each do |layout|
+          content = layout.eruby(page.merge({ :page => page, :pages => pages, :content => content }))
+        end
+        
+        # Write content
+        FileManager.create_file(path_for_page(page)) { content }
       end
     end
 
@@ -47,7 +61,8 @@ module Nanoc
       # Read all meta files
       pages = meta_filenames.collect do |filename|
         # Get meta file
-        page = @global_page.merge(File.read_clean_yaml(filename)).merge({:path => filename.sub(/^content/, '').sub('meta.yaml', '')})
+        page = @global_page.merge(File.read_clean_yaml(filename))
+        page = page.merge({:path => filename.sub(/^content/, '').sub('meta.yaml', '')})
 
         # Get index filename
         index_filenames = Dir.glob(File.dirname(filename) + '/index.*')
@@ -66,13 +81,11 @@ module Nanoc
       end
     end
 
-    def layout_for_page(a_page)
-      if a_page[:layout] == 'none'
-        '<%= @content %>'
-      elsif @global_page[:layout] != a_page[:layout]
-        File.read_file('layouts/' + a_page[:layout] + '.erb')
+    def layouts_for_page(a_page)
+      if a_page[:layouts] == @global_page[:layouts]
+        @default_layouts
       else
-        @default_layout
+        a_page[:layouts].collect { |l| File.read_file('layouts/' + l + '.erb') }
       end
     end
 
@@ -82,7 +95,7 @@ module Nanoc
       a_pages.each do |page|
         # Read and filter page
         content = File.read_file(page[:_index_filename])
-        content.filter!(page[:filters], :eruby_context => { :pages => pages }) unless page[:filters].nil?
+        content.filter!(page[:filters], :eruby_context => { :page => page, :pages => pages }) unless page[:filters].nil?
 
         # Store page
         pages << page.merge( { :content => content })
