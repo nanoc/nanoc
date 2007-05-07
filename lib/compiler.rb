@@ -6,7 +6,7 @@ module Nanoc
     }
 
     DEFAULT_PAGE = {
-      :layouts   => [ 'default' ],
+      :layout    => 'default',
       :filters   => [ ],
       :order     => 0,
       :extension => 'html'
@@ -15,21 +15,17 @@ module Nanoc
     def initialize
       Nanoc.ensure_in_site
 
-      @config = DEFAULT_CONFIG.merge(File.read_clean_yaml('config.yaml'))
-      @global_page = DEFAULT_PAGE.merge(File.read_clean_yaml('meta.yaml'))
-      unless @global_page[:layout].nil?
-        @global_page[:layouts] = ( @global_page[:layout] == 'none' ? [ DEFAULT_PAGE[:layouts] ] : [ @global_page[:layout] ] )
-      end
+      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
+      @global_page = DEFAULT_PAGE.merge(YAML.load_file_and_clean('meta.yaml'))
+      @global_page[:layout] = DEFAULT_PAGE[:layout] if @global_page[:layout] == 'none'
     end
 
     def run
       Dir.glob('lib/*.rb').each { |f| require f }
 
-      pages = compile_pages(uncompiled_pages.sort { |x,y| x[:order].to_i == y[:order].to_i ? x[:path] <=> y[:path] : x[:order].to_i <=> y[:order].to_i })
+      pages = compile_pages(uncompiled_pages)
       pages.each do |page|
-        content = page[:layouts].collect { |name| File.read('layouts/' + name + '.erb') }.inject(page[:content]) do |content, layout|
-          layout.eruby(page.merge({ :page => page, :pages => pages, :content => content }))
-        end
+        content = File.read('layouts/' + page[:layout] + '.erb').eruby(page.merge({ :page => page, :pages => pages, :content => page[:content] }))
         FileManager.create_file(path_for_page(page)) { content }
       end
     end
@@ -38,15 +34,16 @@ module Nanoc
 
     def uncompiled_pages
       Dir.glob('content/**/meta.yaml').collect do |filename|
-        page = @global_page.merge(File.read_clean_yaml(filename))
+        page = @global_page.merge(YAML.load_file_and_clean(filename))
         page = page.merge({:path => filename.sub(/^content/, '').sub('meta.yaml', '')})
+        page[:layout] = DEFAULT_PAGE[:layout] if page[:layout] == 'none'
 
         index_filenames = Dir.glob(File.dirname(filename) + '/index.*')
         index_filenames.ensure_single('index files', File.dirname(filename))
         page[:_index_filename] = index_filenames[0]
 
         page
-      end
+      end.sort { |x,y| x[:order].to_i == y[:order].to_i ? x[:path] <=> y[:path] : x[:order].to_i <=> y[:order].to_i }
     end
 
     def path_for_page(a_page)
