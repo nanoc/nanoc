@@ -133,6 +133,6 @@ class FileManager
   end
 end
 
-def render(a_name)
-  File.read('layouts/' + a_name + '.erb').eruby({ :page => @page, :pages => @pages })
+def render(a_name, a_context={})
+  File.read('layouts/' + a_name + '.erb').eruby(a_context.merge({ :page => @page, :pages => @pages }))
 end
