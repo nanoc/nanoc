@@ -9,10 +9,12 @@ class EnhancementsTest < Test::Unit::TestCase
     open('test.yaml', 'w') do |io|
       io.write('created_at: 12/07/04')
     end
+    $quiet = true
   end
 
   def teardown
     FileUtils.rm('test.yaml')
+    $quiet = false
   end
 
   def test_array_ensure_single

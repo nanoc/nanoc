@@ -1,22 +1,11 @@
 module Nanoc
   class Compiler
 
-    DEFAULT_CONFIG = {
-      :output_dir => 'output'
-    }
-
-    DEFAULT_PAGE = {
-      :layout    => 'default',
-      :filters   => [ ],
-      :order     => 0,
-      :extension => 'html'
-    }
-
     def initialize
       Nanoc.ensure_in_site
 
-      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-      @global_page = DEFAULT_PAGE.merge(YAML.load_file_and_clean('meta.yaml'))
+      @config      = YAML.load_file_and_clean('config.yaml')
+      @global_page = { :filters => [] }.merge(YAML.load_file_and_clean('meta.yaml'))
     end
 
     def run
@@ -34,7 +23,7 @@ module Nanoc
     def uncompiled_pages
       Dir.glob('content/**/meta.yaml').collect do |filename|
         page = @global_page.merge(YAML.load_file_and_clean(filename))
-        page = page.merge({:path => filename.sub(/^content/, '').sub('meta.yaml', '')})
+        page[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
 
         index_filenames = Dir.glob(File.dirname(filename) + '/index.*')
         index_filenames.ensure_single('index files', File.dirname(filename))
