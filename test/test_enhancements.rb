@@ -31,12 +31,8 @@ class EnhancementsTest < Test::Unit::TestCase
     assert_equal 'created_at: 12/07/04', File.read('test.yaml')
   end
 
-  def test_file_read_yaml
-    assert_equal({ 'created_at' => '12/07/04' }, File.read_yaml('test.yaml'))
-  end
-
-  def test_file_read_clean_yaml
-    assert_equal({ :created_at => Time.parse('12/07/04') }, File.read_clean_yaml('test.yaml'))
+  def test_yaml_load_file_and_clean
+    assert_equal({ :created_at => Time.parse('12/07/04') }, YAML.load_file_and_clean('test.yaml'))
   end
 
   def test_hash_clean

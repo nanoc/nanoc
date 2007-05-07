@@ -18,15 +18,10 @@ class Array
   end
 end
 
-class File
-  # Returns the contents of an entire file interpreted as YAML
-  def self.read_yaml(a_filename)
-    YAML::load(self.read(a_filename)) || {}
-  end
-
+module YAML
   # Returns the contents of an entire file interpreted as YAML and cleaned
-  def self.read_clean_yaml(a_filename)
-    self.read_yaml(a_filename).clean
+  def self.load_file_and_clean(a_filename)
+    (YAML.load_file(a_filename) || {}).clean
   end
 end
 
@@ -134,4 +129,8 @@ class FileManager
   def self.log(a_action, a_path)
     puts format('%s%12s%s %s', ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path)
   end
+end
+
+def render(a_name)
+  File.read('layouts/' + a_name + '.erb').eruby({ :page => @page, :pages => @pages, :content => @content })
 end
