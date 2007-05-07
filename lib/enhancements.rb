@@ -12,7 +12,7 @@ class Array
   # Ensures that the array contains only one element
   def ensure_single(a_noun, a_context)
     if self.size != 1
-      $stderr.puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})"
+      $stderr.puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" unless $quiet == true
       exit
     end
   end
@@ -68,7 +68,7 @@ class String
   def markdown
     BlueCloth::new(self).to_html
   rescue NameError
-    $stderr.puts 'ERROR: String#markdown failed: BlueCloth not installed'
+    $stderr.puts 'ERROR: String#markdown failed: BlueCloth not installed' unless $quiet == true
     exit
   end
 
@@ -76,7 +76,7 @@ class String
   def smartypants
     RubyPants::new(self).to_html
   rescue NameError
-    $stderr.puts 'ERROR: String#smartypants failed: RubyPants not installed'
+    $stderr.puts 'ERROR: String#smartypants failed: RubyPants not installed' unless $quiet == true
     exit
   end
 
@@ -129,7 +129,7 @@ class FileManager
   end
 
   def self.log(a_action, a_path)
-    puts format('%s%12s%s %s', ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path)
+    puts format('%s%12s%s %s', ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path) unless $quiet == true
   end
 end
 

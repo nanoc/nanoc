@@ -7,7 +7,7 @@ module Nanoc
         FileManager.create_dir 'output'
 
         FileManager.create_file 'config.yaml' do
-          "output_dir: output\n"
+          "output_dir: \"output\"\n"
         end
 
         FileManager.create_file 'meta.yaml' do
@@ -15,9 +15,10 @@ module Nanoc
           "# Other metafiles can override the contents of this one.\n" +
           "\n" +
           "# Built-in\n" +
-          "layout:  default\n" +
-          "order:   0\n" +
-          "filters: []\n" +
+          "layout:    \"default\"\n" +
+          "order:     0\n" +
+          "filters:   []\n" +
+          "extension: \"html\"\n" +
           "\n" +
           "# Custom\n"
         end
@@ -96,7 +97,7 @@ module Nanoc
 
       # Sanitize page name
       if a_pagename =~ /^[\/\.]+/
-        $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting'
+        $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting' unless $quiet == true
         return
       end
 
@@ -109,7 +110,7 @@ module Nanoc
         template_index_filename = Dir.glob('templates/' + template + '/index.*')[0]
         template_index = File.read(template_index_filename)
       rescue
-        $stderr.puts 'ERROR: no such template'
+        $stderr.puts 'ERROR: no such template' unless $quiet == true
         exit
       end
       template_meta = template_meta.eruby

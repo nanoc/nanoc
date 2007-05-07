@@ -4,11 +4,13 @@ require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 
 class CreateTest < Test::Unit::TestCase
   def setup
+    $quiet = true
     FileManager.create_dir 'tmp'
   end
 
   def teardown
     FileUtils.rm_rf 'tmp'
+    $quiet = false
   end
 
   def test_create_site
