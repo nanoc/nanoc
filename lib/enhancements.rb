@@ -38,6 +38,8 @@ class Hash
         hash[key.to_sym] = true
       elsif value == 'false'
         hash[key.to_sym] = false
+      elsif value == 'none'
+        hash[key.to_sym] = nil
       else
         hash[key.to_sym] = value
       end
@@ -86,12 +88,12 @@ end
 
 class FileManager
   @@stack = []
-  
+
   COLORS = {
     :reset   => "\e[0m",
-    
+
     :bold    => "\e[1m",
-    
+
     :black   => "\e[30m",
     :red     => "\e[31m",
     :green   => "\e[32m",
@@ -106,7 +108,7 @@ class FileManager
     :update     => COLORS[:bold] + COLORS[:yellow],
     :identical  => COLORS[:bold]
   }
-  
+
   def self.create_dir(a_name)
     @@stack.push(a_name)
     path = File.join(@@stack)
@@ -125,12 +127,12 @@ class FileManager
     File.exist?(path) ? ( block_given? and File.read(path) == content ? log('identical', path) : log('update', path) ) : log('create', path)
     open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
-  
+
   def self.log(a_action, a_path)
     puts format('%s%12s%s %s', ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path)
   end
 end
 
 def render(a_name)
-  File.read('layouts/' + a_name + '.erb').eruby({ :page => @page, :pages => @pages, :content => @content })
+  File.read('layouts/' + a_name + '.erb').eruby({ :page => @page, :pages => @pages })
 end
