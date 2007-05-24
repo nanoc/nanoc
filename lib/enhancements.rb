@@ -3,6 +3,7 @@ def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
 try_require 'rubygems'
 try_require 'bluecloth'
 try_require 'rubypants'
+try_require 'active_support'
 
 require 'erubis'
 require 'fileutils'
