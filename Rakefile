@@ -51,7 +51,7 @@ task :default => [ :test ]
 
 task :install_gem do
   sh %{rake package}
-  sh %{sudo gem install pkg/#{NAME}-#{VERS}}
+  sh %{sudo gem install pkg/#{NAME}-#{Nanoc::VERSION}}
 end
 
 task :uninstall_gem do
