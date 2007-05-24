@@ -106,6 +106,7 @@ class FileLogger
   ACTION_COLORS = {
     :create     => COLORS[:bold] + COLORS[:green],
     :update     => COLORS[:bold] + COLORS[:yellow],
+    :move       => COLORS[:bold] + COLORS[:blue],
     :identical  => COLORS[:bold]
   }
 
@@ -135,7 +136,8 @@ class FileManager
     path = File.join(@@stack)
     unless File.directory?(path)
       FileUtils.mkdir_p(path)
-      @@logger.create path
+      system('svn', 'add', path) if $use_svn
+      @@logger.create(path)
     end
     yield if block_given?
     @@stack.pop
@@ -147,14 +149,31 @@ class FileManager
     content = block_given? ? yield : nil
     if File.exist?(path)
       if block_given? and File.read(path) == content
-        @@logger.identical path
+        @@logger.identical(path)
       else
-        @@logger.update path
+        @@logger.update(path)
       end
     else
-      @@logger.create path
+      @@logger.create(path)
     end
     open(path, 'w') { |io| io.write(content) unless content.nil? }
+    system('svn', 'add', path) if $use_svn
+  end
+
+  def self.rename_file(a_old_name, a_new_name)
+    old_path = File.join(@@stack + [ a_old_name ])
+    new_path = File.join(@@stack + [ a_new_name ])
+    return if old_path == new_path
+    if File.exist?(new_path)
+      $stderr.puts 'ERROR: File ' + old_path + ' already exists.'
+      return
+    end
+    if $use_svn
+      system('svn', 'mv', old_path, new_path)
+    else
+      FileUtils.mv(old_path, new_path, :force => true)
+    end
+    @@logger.move(old_path + "\n              => " + new_path)
   end
 end
 

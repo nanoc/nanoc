@@ -1,5 +1,16 @@
+require File.dirname(__FILE__) + '/creator.rb'
+require File.dirname(__FILE__) + '/compiler.rb'
+require File.dirname(__FILE__) + '/fixer.rb'
+require File.dirname(__FILE__) + '/enhancements.rb'
+
 module Nanoc
   VERSION = '1.2'
+
+  DEFAULT_CONFIG  = { :output_dir => 'output' }
+
+  def self.config
+    File.file?('config.yaml') ? DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml')) : nil
+  end
 
   def self.ensure_in_site
     unless in_site?
@@ -25,7 +36,3 @@ module Nanoc
     true
   end
 end
-
-require File.dirname(__FILE__) + '/creator.rb'
-require File.dirname(__FILE__) + '/compiler.rb'
-require File.dirname(__FILE__) + '/enhancements.rb'
