@@ -7,6 +7,10 @@ module Nanoc
       reload
     end
     
+    def available?
+      not @configuration.nil?
+    end
+    
     def reload
       @configuration = File.file?(FILENAME) ? DEFAULT_CONFIG.merge(YAML.load_file_and_clean(FILENAME)) : nil
     end
