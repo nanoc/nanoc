@@ -2,3 +2,5 @@
   * attributes accessed like "@page.title", "@page.tags", ...
 * Add support for custom filters
   * HTML validator filter, for example
+* Subversion integration
+  * Automatically perform svn add, svn mv
