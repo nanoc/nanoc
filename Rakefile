@@ -8,10 +8,8 @@ require File.dirname(__FILE__) + '/lib/nanoc.rb'
 
 #####
 
-NAME    = 'nanoc'
-VERS    = Nanoc::VERSION
-SUMMARY = 'a CMS that doesn\'t run on your server'
-
+NAME      = 'nanoc'
+SUMMARY   = 'a CMS that doesn\'t run on your server'
 HOMEPAGE  = 'http://stoneship.org/software/nanoc'
 EMAIL     = 'denis.defreyne@stoneship.org'
 
@@ -21,7 +19,7 @@ CLEAN.include [ '*.gem', 'pkg', 'tmp', 'test/fixtures/*/output/*' ]
 
 spec = Gem::Specification.new do |s|
   s.name        = NAME
-  s.version     = VERS
+  s.version     = Nanoc::VERSION
   s.platform    = Gem::Platform::RUBY
   s.summary     = SUMMARY
   s.description = s.summary

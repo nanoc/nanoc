@@ -4,7 +4,8 @@ module Nanoc
     DEFAULT_PAGE    = { :filters => [], :extension => 'html', :order => 0, :layout => "default" }
 
     def initialize
-      Nanoc.ensure_in_site
+      Nanoc::Application.ensure_in_site
+      Nanoc::Application.config.reload
 
       @global_page = DEFAULT_PAGE.merge(YAML.load_file_and_clean('meta.yaml'))
     end
@@ -38,7 +39,7 @@ module Nanoc
     end
 
     def path_for_page(a_page)
-      Nanoc.config[:output_dir] + ( a_page[:custom_path].nil? ? a_page[:path] + 'index.' + a_page[:extension] : a_page[:custom_path] )
+      Nanoc::Application.config[:output_dir] + ( a_page[:custom_path].nil? ? a_page[:path] + 'index.' + a_page[:extension] : a_page[:custom_path] )
     end
 
     def compile_pages(a_pages)
