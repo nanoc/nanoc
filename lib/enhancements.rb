@@ -87,15 +87,55 @@ class String
   end
 end
 
+class FileLogger
+  COLORS = {
+    :reset   => "\e[0m",
+
+    :bold    => "\e[1m",
+
+    :black   => "\e[30m",
+    :red     => "\e[31m",
+    :green   => "\e[32m",
+    :yellow  => "\e[33m",
+    :blue    => "\e[34m",
+    :magenta => "\e[35m",
+    :cyan    => "\e[36m",
+    :white   => "\e[37m"
+  }
+
+  ACTION_COLORS = {
+    :create     => COLORS[:bold] + COLORS[:green],
+    :update     => COLORS[:bold] + COLORS[:yellow],
+    :identical  => COLORS[:bold]
+  }
+
+  attr_reader :out
+
+  def initialize(a_out = $stdout)
+    @out = a_out
+  end
+
+  def log(a_action, a_path)
+    @out.puts('%s%12s%s  %s' % [ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path]) unless $quiet
+  end
+  
+  private
+  
+  def method_missing(a_method, *a_args)
+    log(a_method.to_s, a_args.first)
+  end
+end
+
 class FileManager
   @@stack = []
+  @@logger = FileLogger.new
 
   def self.create_dir(a_name)
     @@stack.push(a_name)
     path = File.join(@@stack)
     unless File.directory?(path)
       FileUtils.mkdir_p(path)
-      log('create', path)
+      @@logger.create path
     end
     yield if block_given?
     @@stack.pop
@@ -105,33 +145,17 @@ class FileManager
     path = File.join(@@stack + [ a_name ])
     FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
     content = block_given? ? yield : nil
-    File.exist?(path) ? ( block_given? and File.read(path) == content ? log('identical', path) : log('update', path) ) : log('create', path)
+    if File.exist?(path)
+      if block_given? and File.read(path) == content
+        @@logger.identical path
+      else
+        @@logger.update path
+      end
+    else
+      @@logger.create path
+    end
     open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
-end
-
-COLORS = {
-  :reset   => "\e[0m",
-
-  :bold    => "\e[1m",
-
-  :black   => "\e[30m",
-  :red     => "\e[31m",
-  :green   => "\e[32m",
-  :yellow  => "\e[33m",
-  :blue    => "\e[34m",
-  :magenta => "\e[35m",
-  :cyan    => "\e[36m",
-  :white   => "\e[37m"
-}
-ACTION_COLORS = {
-  :create     => COLORS[:bold] + COLORS[:green],
-  :update     => COLORS[:bold] + COLORS[:yellow],
-  :identical  => COLORS[:bold]
-}
-
-def log(a_action, a_path)
-  puts format('%s%12s%s %s', ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path) unless $quiet == true
 end
 
 def render(a_name, a_context={})
