@@ -1,0 +1,97 @@
+#!/usr/bin/env ruby
+
+# Available options:
+# 
+# -h, --help:
+#   prints the help
+# 
+# -t <template>, --template <template>
+#   Uses the specified template when creating a page
+# 
+# -v, --version:
+#   prints the version information
+
+require 'rubygems' rescue nil
+require 'getoptlong'
+
+require File.dirname(__FILE__) + '/../lib/nanoc.rb'
+
+# Define some texts
+version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
+help_text    = <<EOT
+usage: nanoc [-hv]
+       nanoc create_site <name>
+       nanoc create_page <name> [-t template]
+       nanoc create_template <name>
+       nanoc compile
+EOT
+
+# Parse options
+opts = GetoptLong.new(
+  [ '--help',       '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--template',   '-t', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--version',    '-v', GetoptLong::NO_ARGUMENT ]
+)
+unprocessed_opts = {}
+begin
+  opts.each do |opt, arg|
+    case opt
+    when '--help'
+      $stderr.puts help_text
+      exit
+    when '--version'
+      puts version_text
+      exit
+    else
+      unprocessed_opts[opt] = arg
+    end
+  end
+rescue GetoptLong::InvalidOption
+  $stderr.puts help_text
+  exit
+end
+
+# Make sure we have at least one argument
+if ARGV.size == 0
+  $stderr.puts help_text
+  exit
+end
+
+# Handle command
+command = ARGV[0]
+case command
+  # Create site
+  when 'create_site', 'cs'
+    if ARGV.size != 2
+      $stderr.puts 'Usage: nanoc create_site [site_name]'
+      exit
+    end
+    Nanoc::Creator.create_site(ARGV[1])
+
+  # Create page
+  when 'create_page', 'cp'
+    if ARGV.size != 2
+      $stderr.puts 'Usage: nanoc create_page [page_name]'
+      exit
+    end
+    Nanoc::Creator.create_page(ARGV[1], :template => unprocessed_opts['--template'])
+
+  # Create template
+  when 'create_template', 'ct'
+    if ARGV.size != 2
+      $stderr.puts 'Usage: nanoc create_template [template_name]'
+      exit
+    end
+    Nanoc::Creator.create_template(ARGV[1])
+
+  # Process site and generate output
+  when 'compile', 'compile_site', 'co'
+    if ARGV.size != 1
+      $stderr.puts 'Usage: nanoc compile'
+      exit
+    end
+    Nanoc::Compiler.new.run
+
+  else
+    puts 'Unrecognised command \'' + command + '\''
+end

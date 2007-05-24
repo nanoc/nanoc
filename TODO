@@ -1,0 +1,4 @@
+* Create a real Nanoc::Page class
+  * attributes accessed like "@page.title", "@page.tags", ...
+* Add support for custom filters
+  * HTML validator filter, for example
