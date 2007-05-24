@@ -15,24 +15,24 @@ class NanocTest < Test::Unit::TestCase
 
   def test_in_site?
     in_dir %w{ tmp } do
-      assert !Nanoc.in_site?
+      assert !Nanoc::Application.in_site?
     end
 
     with_fixture 'empty_site' do
-      assert Nanoc.in_site?
+      assert Nanoc::Application.in_site?
     end
   end
 
   def test_ensure_in_site
     in_dir %w{ tmp } do
       assert_raise SystemExit do
-        Nanoc.ensure_in_site
+        Nanoc::Application.ensure_in_site
       end
     end
 
     with_fixture 'empty_site' do
       assert_nothing_raised do
-        Nanoc.ensure_in_site
+        Nanoc::Application.ensure_in_site
       end
     end
   end
