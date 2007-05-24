@@ -1,0 +1,7 @@
+# Built-in
+order: 10
+filters:
+  - "eruby"
+
+# Custom
+title: My New Homepage

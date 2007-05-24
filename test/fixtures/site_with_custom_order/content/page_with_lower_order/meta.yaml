@@ -1,0 +1,7 @@
+# Built-in
+order: 5
+filters:
+  - "eruby"
+
+# Custom
+title: A New Page
