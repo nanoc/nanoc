@@ -11,7 +11,7 @@
 # -v, --version:
 #   prints the version information
 
-require 'rubygems' rescue nil
+begin ; require 'rubygems' ; rescue LoadError ; end
 require 'getoptlong'
 
 require File.dirname(__FILE__) + '/../lib/nanoc.rb'
@@ -19,11 +19,24 @@ require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 # Define some texts
 version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
 help_text    = <<EOT
-usage: nanoc [-hsv]
+Usage: nanoc [-chv]
        nanoc create_site <name>
        nanoc create_page <name> [-t template]
        nanoc create_template <name>
        nanoc compile
+
+Options:
+    -h, --help        Show this help message and quit.
+    -v, --version     Show the nanoc version number and quit.
+    -c, --svn         Modify files with subversion.
+    -t, --template    Template that should be used when creating a page.
+                      (can only be used with create_page)
+
+Description:
+    The 'nanoc' command is used for creating nanoc-powered sites, as well as
+    managing them: creating pages and templates and compiling the site.
+    
+    Read more about nanoc on the site: <http://stoneship.org/software/nanoc/>
 EOT
 
 # Set defaults
@@ -35,8 +48,7 @@ opts = GetoptLong.new(
   [ '--help',           '-h', GetoptLong::NO_ARGUMENT ],
   [ '--template',       '-t', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--version',        '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--subversion',     '-s', GetoptLong::NO_ARGUMENT ],
-  [ '--no-subversion',  '-S', GetoptLong::NO_ARGUMENT ]
+  [ '--svn',            '-c', GetoptLong::NO_ARGUMENT ]
 )
 unprocessed_opts = {}
 begin
