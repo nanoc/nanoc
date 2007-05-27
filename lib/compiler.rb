@@ -25,7 +25,7 @@ module Nanoc
       # Put pages in their layouts
       pages.each do |page|
         # Prepare layout content
-        context = page.merge({ :page => page, :pages => pages }) # fallback for nanoc 1.0
+        context = { :page => page, :pages => pages }
         content = layout_for_page(page).eruby(context)
 
         # Write page with layout
