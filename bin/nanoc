@@ -27,7 +27,8 @@ usage: nanoc [-hsv]
 EOT
 
 # Set defaults
-$use_subversion = (Nanoc::Application.config.available? ? Nanoc::Application.config[:use_subversion] : false)
+Nanoc::Configuration.reload
+$use_subversion = (Nanoc::Configuration.available? ? Nanoc::Configuration[:use_subversion] : false)
 
 # Parse options
 opts = GetoptLong.new(
