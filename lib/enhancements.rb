@@ -12,7 +12,7 @@ class Array
   # Ensures that the array contains only one element
   def ensure_single(a_noun, a_context)
     if self.size != 1
-      $stderr.puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" unless $quiet == true
+      $stderr.puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" unless $quiet
       exit
     end
   end
@@ -70,7 +70,7 @@ class String
   def markdown
     BlueCloth::new(self).to_html
   rescue NameError
-    $stderr.puts 'ERROR: String#markdown failed: BlueCloth not installed' unless $quiet == true
+    $stderr.puts 'ERROR: String#markdown failed: BlueCloth not installed' unless $quiet
     exit
   end
 
@@ -78,7 +78,7 @@ class String
   def smartypants
     RubyPants::new(self).to_html
   rescue NameError
-    $stderr.puts 'ERROR: String#smartypants failed: RubyPants not installed' unless $quiet == true
+    $stderr.puts 'ERROR: String#smartypants failed: RubyPants not installed' unless $quiet
     exit
   end
 

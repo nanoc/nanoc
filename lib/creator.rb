@@ -97,7 +97,7 @@ module Nanoc
 
       # Sanitize page name
       if a_pagename =~ /^[\/\.]+/
-        $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting' unless $quiet == true
+        $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting' unless $quiet
         return
       end
 
@@ -113,7 +113,7 @@ module Nanoc
         template_content_filename = template_content_filenames[0]
         template_index = File.read(template_content_filename)
       rescue
-        $stderr.puts 'ERROR: no such template' unless $quiet == true
+        $stderr.puts 'ERROR: no such template' unless $quiet
         exit
       end
       template_meta = template_meta.eruby
