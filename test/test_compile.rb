@@ -16,7 +16,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_empty_site
     with_fixture 'empty_site' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 1
       assert File.file?('output/index.html')
@@ -26,7 +26,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_one_page
     with_fixture 'site_with_one_page' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 2
       assert File.file?('output/index.html')
@@ -36,7 +36,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_nested_layouts
     with_fixture 'site_with_nested_layouts' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 1
       assert File.file?('output/index.html')
@@ -47,7 +47,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_paths
     with_fixture 'site_with_custom_paths' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 2
       assert File.file?('output/index.html')
@@ -59,7 +59,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_extensions
     with_fixture 'site_with_custom_extensions' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 1
       assert !File.file?('output/index.html')
@@ -69,7 +69,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_orders
     with_fixture 'site_with_custom_order' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert File.file?('output/index.html')
       assert File.file?('output/page_with_lower_order/index.html')
@@ -80,7 +80,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_output_dir
     with_fixture 'site_with_custom_output_dir' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert !File.file?('output/index.html')
       assert File.file?('tmp/custom_output/index.html')
@@ -91,7 +91,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_cool_content_file_names
     with_fixture 'site_with_cool_content_file_names' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 2
       assert File.file?('output/index.html')
@@ -101,7 +101,7 @@ class CompileTest < Test::Unit::TestCase
 
   def test_compile_site_with_draft_pages
     with_fixture 'site_with_draft_pages' do
-      Nanoc::Compiler.new.run
+      assert_nothing_raised { Nanoc::Compiler.new.run }
 
       assert Dir["output/*"].size == 1
       assert File.file?('output/index.html')
