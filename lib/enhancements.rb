@@ -4,10 +4,9 @@ try_require 'rubygems'
 try_require 'bluecloth'
 try_require 'rubypants'
 try_require 'active_support'
-
-require 'erubis'
-require 'fileutils'
-require 'yaml'
+require     'erubis'
+require     'fileutils'
+require     'yaml'
 
 class Array
   # Ensures that the array contains only one element
@@ -27,8 +26,10 @@ module YAML
 end
 
 class Hash
-  # Converts all keys to symbols, and converts *_at and *_on
-  # keys to Times and Dates, respectively
+  # Converts all keys to symbols,
+  # converts *_at and *_on to Times and Dates, respectively,
+  # converts 'true' and 'false' strings to booleans,
+  # converts 'none' to nil
   def clean
     inject({}) do |hash, (key, value)|
       if key =~ /_on$/
@@ -119,9 +120,9 @@ class FileLogger
   def log(a_action, a_path)
     @out.puts('%s%12s%s  %s' % [ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path]) unless $quiet
   end
-  
+
   private
-  
+
   def method_missing(a_method, *a_args)
     log(a_method.to_s, a_args.first)
   end
