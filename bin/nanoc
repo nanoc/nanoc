@@ -82,6 +82,22 @@ end
 # Handle command
 command = ARGV[0]
 case command
+  # Check site
+  when 'check_site'
+    if ARGV.size != 1
+      $stderr.puts 'Usage: nanoc check_site'
+      exit
+    end
+    Nanoc::Fixer.check_site
+
+  # Fix site
+  when 'fix_site'
+    if ARGV.size != 1
+      $stderr.puts 'Usage: nanoc fix_site'
+      exit
+    end
+    Nanoc::Fixer.fix_site
+
   # Create site
   when 'create_site', 'cs'
     if ARGV.size != 2
@@ -89,14 +105,6 @@ case command
       exit
     end
     Nanoc::Creator.create_site(ARGV[1])
-
-  # Fix site
-  when 'fix_site', 'fs'
-    if ARGV.size != 1
-      $stderr.puts 'Usage: nanoc fix_site'
-      exit
-    end
-    Nanoc::Fixer.fix_site
 
   # Create page
   when 'create_page', 'cp'
