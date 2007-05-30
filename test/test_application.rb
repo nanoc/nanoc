@@ -2,7 +2,7 @@ require 'test/unit'
 
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-class NanocTest < Test::Unit::TestCase
+class ApplicationTest < Test::Unit::TestCase
   def setup
     $quiet = true
     FileManager.create_dir 'tmp'
