@@ -24,6 +24,8 @@ class CreateTest < Test::Unit::TestCase
     assert File.file?('tmp/site/meta.yaml')
     assert File.file?('tmp/site/Rakefile')
 
+    assert File.directory?('tmp/site/assets/')
+
     assert File.directory?('tmp/site/content/')
     assert File.file?('tmp/site/content/content.txt')
     assert File.file?('tmp/site/content/meta.yaml')

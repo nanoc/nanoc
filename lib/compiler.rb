@@ -19,6 +19,9 @@ module Nanoc
       # Require all Ruby source files in lib/
       Dir['lib/*.rb'].each { |f| require f }
 
+      # Copy assets to output directory
+      copy_assets
+
       # Compile all pages
       pages = compile_pages(uncompiled_pages)
 
@@ -34,6 +37,10 @@ module Nanoc
     end
 
     private
+
+    def copy_assets
+      `cp -R assets/* output/` if File.directory?('assets') and !Dir['assets/*'].empty?
+    end
 
     # Returns a list of uncompiled pages
     def uncompiled_pages

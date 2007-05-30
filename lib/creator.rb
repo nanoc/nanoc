@@ -4,6 +4,7 @@ module Nanoc
 
     def self.create_site(a_sitename)
       FileManager.create_dir a_sitename do
+        FileManager.create_dir 'assets'
         FileManager.create_dir 'output'
 
         FileManager.create_file 'config.yaml' do
