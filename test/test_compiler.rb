@@ -161,4 +161,14 @@ class CompileTest < Test::Unit::TestCase
       end
     end
   end
+
+  def test_compile_site_with_cooler_file_names
+    with_fixture 'site_with_cooler_file_names' do
+      assert_nothing_raised { Nanoc::Compiler.new.run }
+      assert File.file?('output/index.html')
+      assert File.file?('output/about/index.html')
+      assert !File.file?('output/index/index.html')
+      assert Dir["output/*"].size == 2
+    end
+  end
 end

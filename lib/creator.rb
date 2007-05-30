@@ -80,10 +80,10 @@ module Nanoc
         end
 
         FileManager.create_dir 'content' do
-          FileManager.create_file 'content.txt' do
+          FileManager.create_file 'index.txt' do
             "This is a sample root page. Please edit me!\n"
           end
-          FileManager.create_file 'meta.yaml' do
+          FileManager.create_file 'index.yaml' do
             "# Built-in\n" +
             "\n" +
             "# Custom\n" +
@@ -120,15 +120,19 @@ module Nanoc
       template_meta = template_meta.eruby
       template_index = template_index.eruby
 
-      # Create index and yaml file
+      # Create content and meta file
       FileManager.create_dir 'content' do
-        FileManager.create_dir a_pagename do
-          FileManager.create_file "#{a_pagename.sub(/.*\/([^\/]+)/, '\1')}#{File.extname(template_content_filename)}" do
-            template_index
-          end
-          FileManager.create_file 'meta.yaml' do
-            template_meta
-          end
+        # Create directory for files
+        if a_pagename =~ /\//
+          FileManager.create_dir a_pagename.sub(/\/[^\/]+$/, '')
+        end
+
+        # Create files
+        FileManager.create_file(a_pagename + File.extname(template_content_filename)) do
+          template_index
+        end
+        FileManager.create_file(a_pagename + '.yaml') do
+          template_meta
         end
       end
     end
