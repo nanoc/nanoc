@@ -132,6 +132,16 @@ class CompileTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_assets
+    with_fixture 'site_with_assets' do
+      assert_nothing_raised { Nanoc::Compiler.new.run }
+      assert File.file?('output/index.html')
+      assert File.file?('output/style.css')
+      assert Dir["output/*"].size == 2
+      assert_match('body { background: #f00; }', File.read('output/style.css'))
+    end
+  end
+
   def test_compile_outside_site
     in_dir %w{ tmp } do
       assert_raise SystemExit do
