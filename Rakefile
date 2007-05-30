@@ -15,7 +15,8 @@ EMAIL     = 'denis.defreyne@stoneship.org'
 
 #####
 
-CLEAN.include [ '*.gem', 'pkg', 'tmp', 'test/fixtures/*/output/*', 'test/fixtures/*/tmp' ]
+CLEAN.include [ 'tmp', 'test/fixtures/*/output/*', 'test/fixtures/*/tmp' ]
+CLOBBER.include [ 'pkg' ]
 
 spec = Gem::Specification.new do |s|
   s.name        = NAME
