@@ -171,4 +171,20 @@ class CompileTest < Test::Unit::TestCase
       assert Dir["output/*"].size == 2
     end
   end
+
+  def test_compile_site_with_bad_eruby_in_content
+    with_fixture 'site_with_bad_eruby_in_content' do
+      assert_raise SystemExit do
+        Nanoc::Compiler.new.run
+      end
+    end
+  end
+
+  def test_compile_site_with_bad_eruby_in_layout
+    with_fixture 'site_with_bad_eruby_in_layout' do
+      assert_raise SystemExit do
+        Nanoc::Compiler.new.run
+      end
+    end
+  end
 end

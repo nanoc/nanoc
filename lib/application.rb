@@ -23,6 +23,6 @@ module Nanoc
 
       true
     end
-    
+
   end
 end
