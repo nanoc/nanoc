@@ -17,9 +17,9 @@ module Nanoc
       return false unless File.directory?('tasks')
       return false unless File.directory?('templates')
 
-      return false unless File.exist?('config.yaml')
-      return false unless File.exist?('meta.yaml')
-      return false unless File.exist?('Rakefile')
+      return false unless File.file?('config.yaml')
+      return false unless File.file?('meta.yaml')
+      return false unless File.file?('Rakefile')
 
       true
     end
