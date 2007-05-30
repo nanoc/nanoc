@@ -28,8 +28,15 @@ module Nanoc
       # Put pages in their layouts
       pages.each do |page|
         # Prepare layout content
-        context = { :page => page, :pages => pages }
-        content = layout_for_page(page).eruby(context)
+        content = nil
+        begin
+          context = { :page => page.merge(:_content_filename => nil), :pages => pages }
+          content = layout_for_page(page).eruby(context)
+        rescue Exception => e
+          $stderr.puts "Exception occured while layouting page '#{page[:_content_filename]}' in layout '#{page[:layout]}':" unless $quiet
+          $stderr.puts e.backtrace.join("\n") unless $quiet
+          exit
+        end
 
         # Write page with layout
         FileManager.create_file(path_for_page(page)) { content }
@@ -64,19 +71,18 @@ module Nanoc
       pages_new_style = Dir['content/**/*.yaml'].reject { |p| p =~ /\/meta\.yaml$/ }.collect do |filename|
         # Read the meta file
         page = @global_page.merge(YAML.load_file_and_clean(filename))
-        page[:path] = filename.sub(/^content/, '').sub(/\/(.+?)\.yaml$/, '/\1/')
 
-        # Get the content filename
-        content_filenames = Dir[filename.sub('.yaml', '.*')]
-        content_filenames.reject! { |f| f =~ /\.yaml$/ }
-        content_filenames.reject! { |f| f =~ /~$/ } # Ignore backup files
-        content_filenames.ensure_single('content files', File.dirname(filename))
-        page[:_content_filename] = content_filenames[0]
-
-        # Treat index.* specially
+        # Get the page path
         if filename =~ /index\.yaml$/
           page[:path] = filename.sub(/^content/, '').sub(/index.yaml$/, '')
+        else
+          page[:path] = filename.sub(/^content/, '').sub(/\/(.+?)\.yaml$/, '/\1/')
         end
+
+        # Get the content filename
+        content_filenames = Dir[filename.sub('.yaml', '.*')].reject { |f| f =~ /\.yaml$|~$/ }
+        content_filenames.ensure_single('content files', File.dirname(filename))
+        page[:_content_filename] = content_filenames[0]
 
         page
       end
@@ -124,10 +130,16 @@ module Nanoc
         content = File.read(page[:_content_filename])
 
         # Filter page
-        content = content.filter(page[:filters], :eruby_context => { :page => page, :pages => pages })
+        begin
+          content = content.filter(page[:filters], :eruby_context => { :page => page, :pages => pages })
+        rescue Exception => e
+          $stderr.puts 'Exception occured while compiling ' + page[:_content_filename] + ':' unless $quiet
+          $stderr.puts e.backtrace.join("\n") unless $quiet
+          exit
+        end
 
         # Create compiled page
-        compiled_page = page.merge( { :content => content, :_content_filename => nil })
+        compiled_page = page.merge( :content => content )
 
         # Remember page
         pages + [ compiled_page ]

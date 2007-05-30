@@ -1,0 +1,1 @@
+<%= @non_existant_thing.some_method %>
