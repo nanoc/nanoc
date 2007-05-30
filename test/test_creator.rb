@@ -27,8 +27,8 @@ class CreatorTest < Test::Unit::TestCase
     assert File.directory?('tmp/site/assets/')
 
     assert File.directory?('tmp/site/content/')
-    assert File.file?('tmp/site/content/content.txt')
-    assert File.file?('tmp/site/content/meta.yaml')
+    assert File.file?('tmp/site/content/index.txt')
+    assert File.file?('tmp/site/content/index.yaml')
 
     assert File.directory?('tmp/site/layouts/')
     assert File.file?('tmp/site/layouts/default.erb')
@@ -47,7 +47,7 @@ class CreatorTest < Test::Unit::TestCase
     assert File.file?('tmp/site/tasks/default.rake')
   end
 
-  def test_create_page
+  def test_create_page_simple
     FileUtils.cd('tmp')
     Nanoc::Creator.create_site('site')
     FileUtils.cd('site')
@@ -55,9 +55,24 @@ class CreatorTest < Test::Unit::TestCase
     FileUtils.cd('..')
     FileUtils.cd('..')
 
-    assert File.directory?('tmp/site/content/moo/')
-    assert File.file?('tmp/site/content/moo/moo.txt')
-    assert File.file?('tmp/site/content/moo/meta.yaml')
+    assert !File.directory?('tmp/site/content/moo/')
+    assert File.file?('tmp/site/content/moo.txt')
+    assert File.file?('tmp/site/content/moo.yaml')
+  end
+
+  def test_create_page_nested
+    FileUtils.cd('tmp')
+    Nanoc::Creator.create_site('site')
+    FileUtils.cd('site')
+    Nanoc::Creator.create_page('foo/bar/baz')
+    FileUtils.cd('..')
+    FileUtils.cd('..')
+
+    assert File.directory?('tmp/site/content/foo/')
+    assert File.directory?('tmp/site/content/foo/bar/')
+    assert !File.directory?('tmp/site/content/foo/bar/baz/')
+    assert File.file?('tmp/site/content/foo/bar/baz.txt')
+    assert File.file?('tmp/site/content/foo/bar/baz.yaml')
   end
 
   def test_create_template

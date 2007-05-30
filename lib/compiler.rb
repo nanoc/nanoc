@@ -44,8 +44,8 @@ module Nanoc
 
     # Returns a list of uncompiled pages
     def uncompiled_pages
-      # Get all meta files
-      pages = meta_files.collect do |filename|
+      # Read all old style meta files
+      pages_old_style = Dir['content/**/meta.yaml'].collect do |filename|
         # Read the meta file
         page = @global_page.merge(YAML.load_file_and_clean(filename))
         page[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
@@ -60,6 +60,30 @@ module Nanoc
         page
       end
 
+      # Read all new style meta files
+      pages_new_style = Dir['content/**/*.yaml'].reject { |p| p =~ /\/meta\.yaml$/ }.collect do |filename|
+        # Read the meta file
+        page = @global_page.merge(YAML.load_file_and_clean(filename))
+        page[:path] = filename.sub(/^content/, '').sub(/\/(.+?)\.yaml$/, '/\1/')
+
+        # Get the content filename
+        content_filenames = Dir[filename.sub('.yaml', '.*')]
+        content_filenames.reject! { |f| f =~ /\.yaml$/ }
+        content_filenames.reject! { |f| f =~ /~$/ } # Ignore backup files
+        content_filenames.ensure_single('content files', File.dirname(filename))
+        page[:_content_filename] = content_filenames[0]
+
+        # Treat index.* specially
+        if filename =~ /index\.yaml$/
+          page[:path] = filename.sub(/^content/, '').sub(/index.yaml$/, '')
+        end
+
+        page
+      end
+
+      # Combine pages
+      pages = pages_old_style + pages_new_style
+
       # Ignore drafts
       pages.reject! { |page| page[:is_draft] }
 
@@ -73,11 +97,6 @@ module Nanoc
       end
 
       pages
-    end
-
-    # Returns an array of all meta files
-    def meta_files
-      Dir['content/**/meta.yaml']
     end
 
     # Returns the layout for the given page
