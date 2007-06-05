@@ -1,6 +1,0 @@
-* Create a real Nanoc::Page class
-  * attributes accessed like "@page.title", "@page.tags", ...
-* Add support for custom filters
-  * HTML validator filter, for example
-* Make nanoc more robust
-  * Currently compiling file should be mentioned when an exception occurs
