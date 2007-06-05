@@ -132,21 +132,23 @@ class FileManager
   @@stack = []
   @@logger = FileLogger.new
 
+  # Creates a new directory with the given name
   def self.create_dir(a_name)
     @@stack.push(a_name)
     path = File.join(@@stack)
     unless File.directory?(path)
-      FileUtils.mkdir_p(path)
-      system('svn', 'add', path) if $use_svn
+      FileUtils.mkdir_p(path) unless $pretend
+      system('svn', 'add', path) if $use_svn and !$pretend
       @@logger.create(path)
     end
     yield if block_given?
     @@stack.pop
   end
 
+  # Creates a new file with the given name
   def self.create_file(a_name)
     path = File.join(@@stack + [ a_name ])
-    FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
+    FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty? and !$pretend
     content = block_given? ? yield : nil
     if File.exist?(path)
       if block_given? and File.read(path) == content
@@ -157,10 +159,11 @@ class FileManager
     else
       @@logger.create(path)
     end
-    open(path, 'w') { |io| io.write(content) unless content.nil? }
-    system('svn', 'add', path) if $use_svn
+    open(path, 'w') { |io| io.write(content) unless content.nil? } unless $pretend
+    system('svn', 'add', path) if $use_svn and !$pretend
   end
 
+  # Renames the given file
   def self.rename_file(a_old_name, a_new_name)
     old_path = File.join(@@stack + [ a_old_name ])
     new_path = File.join(@@stack + [ a_new_name ])
@@ -170,9 +173,9 @@ class FileManager
       return
     end
     if $use_svn
-      system('svn', 'mv', old_path, new_path)
+      system('svn', 'mv', old_path, new_path) unless $pretend
     else
-      FileUtils.mv(old_path, new_path, :force => true)
+      FileUtils.mv(old_path, new_path, :force => true) unless $pretend
     end
     @@logger.move(old_path + "\n              => " + new_path)
   end

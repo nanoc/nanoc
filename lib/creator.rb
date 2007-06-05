@@ -94,7 +94,7 @@ module Nanoc
     end
 
     def self.create_page(a_pagename, a_params={})
-      Nanoc::Application.ensure_in_site
+      Nanoc::Application.ensure_in_1_dot_2_site
 
       # Sanitize page name
       if a_pagename =~ /^[\/\.]+/
@@ -138,7 +138,8 @@ module Nanoc
     end
 
     def self.create_template(a_templatename)
-      Nanoc::Application.ensure_in_site
+      # TODO use new-style directory layout
+      Nanoc::Application.ensure_in_1_dot_2_site
 
       FileManager.create_dir 'templates' do
         FileManager.create_dir a_templatename do
