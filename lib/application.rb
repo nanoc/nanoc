@@ -9,6 +9,14 @@ module Nanoc
       end
     end
 
+    def self.ensure_in_1_dot_2_site
+      unless in_1_dot_2_site?
+        $stderr.puts 'ERROR: The current working directory is outdated ' +
+          'and needs to be updated (nanoc update_site); aborting.' unless $quiet
+        exit
+      end
+    end
+
     def self.in_site?
       return false unless File.directory?('content')
       return false unless File.directory?('layouts')
@@ -21,6 +29,14 @@ module Nanoc
       return false unless File.file?('meta.yaml')
       return false unless File.file?('Rakefile')
 
+      true
+    end
+
+    def self.in_1_dot_2_site?
+      return false unless self.in_site?
+
+      return false unless Dir['content/**/meta.yaml'].empty?
+      
       true
     end
 

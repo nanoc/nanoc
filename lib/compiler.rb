@@ -9,7 +9,7 @@ module Nanoc
     }
 
     def initialize
-      Nanoc::Application.ensure_in_site
+      Nanoc::Application.ensure_in_1_dot_2_site
       Nanoc::Configuration.reload
 
       @global_page = PAGE_DEFAULTS.merge(YAML.load_file_and_clean('meta.yaml'))
@@ -33,7 +33,8 @@ module Nanoc
           context = { :page => page.merge(:_content_filename => nil), :pages => pages }
           content = layout_for_page(page).eruby(context)
         rescue Exception => e
-          $stderr.puts "Exception occured while layouting page '#{page[:_content_filename]}' in layout '#{page[:layout]}':" unless $quiet
+          $stderr.puts "Exception occured while layouting page" +
+            "'#{page[:_content_filename]}' in layout '#{page[:layout]}':" unless $quiet
           $stderr.puts e.backtrace.join("\n") unless $quiet
           exit
         end
@@ -51,24 +52,8 @@ module Nanoc
 
     # Returns a list of uncompiled pages
     def uncompiled_pages
-      # Read all old style meta files
-      pages_old_style = Dir['content/**/meta.yaml'].collect do |filename|
-        # Read the meta file
-        page = @global_page.merge(YAML.load_file_and_clean(filename))
-        page[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
-
-        # Get the content filename
-        content_filenames = Dir[filename.sub('meta.yaml', File.basename(File.dirname(filename)) + '.*')]
-        content_filenames += Dir["#{File.dirname(filename)}/index.*"] # fallback for nanoc 1.0
-        content_filenames.reject! { |f| f =~ /~$/ } # Ignore backup files
-        content_filenames.ensure_single('content files', File.dirname(filename))
-        page[:_content_filename] = content_filenames[0]
-
-        page
-      end
-
-      # Read all new style meta files
-      pages_new_style = Dir['content/**/*.yaml'].reject { |p| p =~ /\/meta\.yaml$/ }.collect do |filename|
+      # Read all meta files
+      pages = Dir['content/**/*.yaml'].reject { |p| p =~ /\/meta\.yaml$/ }.collect do |filename|
         # Read the meta file
         page = @global_page.merge(YAML.load_file_and_clean(filename))
 
@@ -86,9 +71,6 @@ module Nanoc
 
         page
       end
-
-      # Combine pages
-      pages = pages_old_style + pages_new_style
 
       # Ignore drafts
       pages.reject! { |page| page[:is_draft] }
@@ -133,7 +115,8 @@ module Nanoc
         begin
           content = content.filter(page[:filters], :eruby_context => { :page => page, :pages => pages })
         rescue Exception => e
-          $stderr.puts 'Exception occured while compiling ' + page[:_content_filename] + ':' unless $quiet
+          $stderr.puts "Exception occured while compiling page" +
+            "'#{page[:_content_filename]}':" unless $quiet
           $stderr.puts e.backtrace.join("\n") unless $quiet
           exit
         end

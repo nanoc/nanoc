@@ -18,6 +18,7 @@ require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 
 # Define some texts
 version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
+usage_text   = "Usage: nanoc [options] [command] [parameters]"
 help_text    = <<EOT
 Usage: nanoc [-chv]
        nanoc create_site <name>
@@ -28,6 +29,7 @@ Usage: nanoc [-chv]
 Options:
     -h, --help        Show this help message and quit.
     -v, --version     Show the nanoc version number and quit.
+    -p, --pretend     Run but do not make any changes.
     -c, --svn         Modify files with subversion.
     -t, --template    Template that should be used when creating a page.
                       (can only be used with create_page)
@@ -35,7 +37,7 @@ Options:
 Description:
     The 'nanoc' command is used for creating nanoc-powered sites, as well as
     managing them: creating pages and templates and compiling the site.
-    
+
     Read more about nanoc on the site: <http://stoneship.org/software/nanoc/>
 EOT
 
@@ -48,6 +50,7 @@ opts = GetoptLong.new(
   [ '--help',           '-h', GetoptLong::NO_ARGUMENT ],
   [ '--template',       '-t', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--version',        '-v', GetoptLong::NO_ARGUMENT ],
+  [ '--pretend',        '-p', GetoptLong::NO_ARGUMENT ],
   [ '--svn',            '-c', GetoptLong::NO_ARGUMENT ]
 )
 unprocessed_opts = {}
@@ -60,16 +63,16 @@ begin
     when '--version'
       puts version_text
       exit
-    when '--subversion'
+    when '--pretend'
+      $pretend = true
+    when '--svn'
       $use_svn = true
-    when '--no-subversion'
-      $use_svn = false
     else
       unprocessed_opts[opt] = arg
     end
   end
 rescue GetoptLong::InvalidOption
-  $stderr.puts help_text
+  $stderr.puts usage_text
   exit
 end
 
@@ -82,14 +85,6 @@ end
 # Handle command
 command = ARGV[0]
 case command
-  # Check site
-  when 'check_site'
-    if ARGV.size != 1
-      $stderr.puts 'Usage: nanoc check_site'
-      exit
-    end
-    Nanoc::Fixer.check_site
-
   # Fix site
   when 'fix_site'
     if ARGV.size != 1
