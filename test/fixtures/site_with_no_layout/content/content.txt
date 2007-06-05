@@ -1,2 +1,0 @@
-<h1>Layoutless Page</h1>
-<p>This is a page without layout.</p>
