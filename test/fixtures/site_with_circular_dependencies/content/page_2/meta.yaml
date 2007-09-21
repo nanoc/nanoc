@@ -1,0 +1,7 @@
+# Built-in
+filters:
+  - "eruby"
+
+# Custom
+title:    "A New Page"
+page_id:  "two"
