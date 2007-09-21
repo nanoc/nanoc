@@ -1,0 +1,8 @@
+html do
+  head do
+    title @page[:title]
+  end
+  body do
+    self << @page[:content]
+  end
+end

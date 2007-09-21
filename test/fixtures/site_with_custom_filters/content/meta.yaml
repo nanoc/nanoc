@@ -1,0 +1,6 @@
+# Built-in
+filters:
+  - 'censor'
+
+# Custom
+title: My New Homepage
