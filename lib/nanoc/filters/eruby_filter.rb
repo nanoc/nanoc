@@ -1,10 +1,3 @@
-def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
-
-try_require 'rubygems'
-
-require 'erb'
-try_require 'erubis'
-
 class ERBContext
 
   def initialize(hash)
@@ -28,11 +21,13 @@ class String
 
   # Converts the string using Erubis
   def erubis(params={})
+    nanoc_require 'erubis'
     Erubis::Eruby.new(self).evaluate(params[:assigns] || {})
   end
 
   # Converts the string using ERB
   def erb(params={})
+    nanoc_require 'erb'
     ERB.new(self).result(ERBContext.new(params[:assigns] || {}).get_binding)
   end
 

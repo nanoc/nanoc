@@ -1,20 +1,21 @@
-def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
-
-try_require 'rubygems'
-
-try_require 'liquid'
+# Filter
 
 class String
 
-  # Converts the string using Liquid
   def liquid(params={})
+    nanoc_require 'liquid'
+
     Liquid::Template.parse(self).render((params[:assigns] || {}).stringify_keys)
-  rescue NameError
-    $stderr.puts 'ERROR: String#liquid failed (Liquid not installed?)' unless $quiet
-    exit
   end
 
 end
+
+register_filter 'liquid' do |page, pages, config|
+  assigns = { :page => page, :pages => pages }
+  page.content.liquid(:assigns => assigns)
+end
+
+# Render tag
 
 begin
   class Nanoc::LiquidRenderTag < ::Liquid::Tag
@@ -43,9 +44,4 @@ begin
 
   Liquid::Template.register_tag('render', Nanoc::LiquidRenderTag)
 rescue NameError
-end
-
-register_filter 'liquid' do |page, pages, config|
-  assigns = { :page => page, :pages => pages }
-  page.content.liquid(:assigns => assigns)
 end

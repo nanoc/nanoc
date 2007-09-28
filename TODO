@@ -16,6 +16,9 @@ nanoc-specific
 * Add support for evaluating Ruby in meta files. For example, something like
   'last_updated_at: "<%= Time.now %>"' should work.
 
+* Make nanoc return a proper exit code, so that `nanoc co && heel` works as
+  expected (i.e. only open heel if compiling does not fail)
+
 Web Site
 --------
 

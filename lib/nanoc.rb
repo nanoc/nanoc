@@ -27,6 +27,8 @@ module Nanoc
 
 end
 
+require File.dirname(__FILE__) + '/nanoc/enhancements.rb'
+
 require File.dirname(__FILE__) + '/nanoc/creator.rb'
 require File.dirname(__FILE__) + '/nanoc/compiler.rb'
 
@@ -34,6 +36,5 @@ $nanoc_creator  = Nanoc::Creator.new
 $nanoc_compiler = Nanoc::Compiler.new
 
 require File.dirname(__FILE__) + '/nanoc/core_ext.rb'
-require File.dirname(__FILE__) + '/nanoc/enhancements.rb'
 require File.dirname(__FILE__) + '/nanoc/filters.rb'
 require File.dirname(__FILE__) + '/nanoc/page.rb'

@@ -1,17 +1,9 @@
-def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
-
-try_require 'rubygems'
-
-try_require 'redcloth'
-
 class String
 
   # Converts the string using RedCloth/Textile
   def textile
+    nanoc_require 'redcloth'
     RedCloth.new(self).to_html
-  rescue NameError
-    $stderr.puts 'ERROR: String#textile failed (RedCloth not installed?)' unless $quiet
-    exit
   end
 
 end

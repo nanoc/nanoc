@@ -11,3 +11,11 @@ def with_fixture(a_fixture)
     yield
   end
 end
+
+def test_require(s)
+  require s
+  true
+rescue LoadError
+  $stderr.print "[ WARNING: #{s} not installed -- cannot test ]"
+  false
+end

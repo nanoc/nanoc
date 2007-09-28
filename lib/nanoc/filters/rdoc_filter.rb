@@ -1,14 +1,10 @@
-def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
-
-try_require 'rubygems'
-
-try_require 'rdoc/markup/simple_markup'
-try_require 'rdoc/markup/simple_markup/to_html'
-
 class String
 
   # Converts the string using RDoc
   def rdoc
+    nanoc_require 'rdoc/markup/simple_markup'
+    nanoc_require 'rdoc/markup/simple_markup/to_html'
+
     SM::SimpleMarkup.new.convert(self, SM::ToHtml.new)
   end
 
