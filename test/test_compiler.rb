@@ -125,31 +125,27 @@ class CompilerTest < Test::Unit::TestCase
   end
 
   def test_compile_site_with_markaby_layout
-    foo = Markaby::Builder.new
+    return unless test_require 'markaby'
     with_fixture 'site_with_markaby_layout' do
       assert_nothing_raised() { $nanoc_compiler.run }
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert_match(/<html><head>/, File.read('output/index.html'))
     end
-  rescue NameError
-    $stderr.puts 'WARNING: test_compile_site_with_markaby_layout failed (Markaby not installed?)'
   end
 
   def test_compile_site_with_liquid_layout
-    foo = Liquid::Template.new
+    return unless test_require 'liquid'
     with_fixture 'site_with_liquid_layout' do
       assert_nothing_raised() { $nanoc_compiler.run }
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert_match(/<p>This is a Liquid-powered site.<\/p>/, File.read('output/index.html'))
     end
-  rescue NameError
-    $stderr.puts 'WARNING: test_compile_site_with_liquid_layout failed (Liquid not installed?)'
   end
 
   def test_compile_site_with_haml_layout
-    foo = Haml::Engine.new('...')
+    return unless test_require 'haml'
     with_fixture 'site_with_haml_layout' do
       assert_nothing_raised() { $nanoc_compiler.run }
       assert(File.file?('output/index.html'))
@@ -157,8 +153,6 @@ class CompilerTest < Test::Unit::TestCase
       assert_match(/<html>\n  <head>\n    <title>My New Homepage<\/title>/, File.read('output/index.html'))
       assert_match(/<p strange=\*attrs\*>heh<\/p>/, File.read('output/index.html'))
     end
-  rescue NameError
-    $stderr.puts 'WARNING: test_compile_site_with_haml_layout failed (Haml not installed?)'
   end
 
   def test_compile_site_with_page_dot_notation

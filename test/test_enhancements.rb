@@ -15,6 +15,10 @@ class EnhancementsTest < Test::Unit::TestCase
     assert_nothing_raised() { try_require 'askjdfdsldjlfksljakfjlkdsasd' }
   end
 
+  def test_nanoc_require
+    assert_raise(SystemExit) { nanoc_require 'askjdfdsldjlfksljakfjlkdsasd' }
+  end
+
   def test_filemanager_create_dir_without_block
     FileManager.create_dir 'tmp'
 

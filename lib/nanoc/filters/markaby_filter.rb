@@ -1,20 +1,10 @@
-def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
-
-try_require 'rubygems'
-
-require 'erb'
-
-try_require 'markaby'
-
 class String
 
   # Converts the string using Markaby
   # TODO perhaps add support for helpers
   def markaby(params={})
+    nanoc_require 'markaby'
     Markaby::Builder.new((params[:assigns] || {})).instance_eval(self).to_s
-  rescue NameError
-    $stderr.puts 'ERROR: String#markaby failed (Markaby not installed?)' unless $quiet
-    exit
   end
 
 end

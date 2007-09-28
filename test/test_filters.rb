@@ -28,28 +28,24 @@ class FiltersTest < Test::Unit::TestCase
   end
 
   def test_string_haml
+    return unless test_require 'haml'
     assert_equal("<p>Test</p>\n", '%p Test'.haml)
     assert_equal("<p>bar</p>\n", '%p= foo'.haml(:assigns => { :foo => 'bar' }))
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#haml (Haml not installed?)'
   end
 
   def test_string_liquid
+    return unless test_require 'liquid'
     assert_equal('<p>bar</p>', '<p>{{foo}}</p>'.liquid(:assigns => { :foo => 'bar' }))
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#liquid (Liquid not installed?)'
   end
 
   def test_string_markaby
+    return unless test_require 'markaby'
     assert_match(/<h1>Hello<\/h1>/, 'html { body { h1 "Hello" }}'.markaby)
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#markaby (Markaby not installed?)'
   end
 
   def test_string_markdown
+    return unless test_require 'bluecloth'
     assert_equal('<p>Hello!</p>', 'Hello!'.markdown)
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#markdown (BlueCloth not installed?)'
   end
 
   def test_string_rdoc
@@ -57,24 +53,21 @@ class FiltersTest < Test::Unit::TestCase
   end
 
   def test_string_sass
+    return unless test_require 'haml'
     assert_equal(
       "#main p {\n  color: #00ff00;\n  width: 97%; }\n",
       "#main p\n  :color #00ff00\n  :width 97%".sass
     )
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#sass (Sass not installed?)'
   end
 
   def test_string_smartypants
+    return unless test_require 'rubypants'
     assert_equal('Te&#8217;st', 'Te\'st'.smartypants)
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#smartypants (RubyPants not installed?)'
   end
 
   def test_string_textile
+    return unless test_require 'redcloth'
     assert_equal('<p><em>foo</em> and <strong>bar</strong></p>', '<em>foo</em> and <strong>bar</strong>'.textile)
-  rescue SystemExit
-    $stderr.print 'WARNING: Unable to test String#textile (RedCloth not installed?)'
   end
 
 end

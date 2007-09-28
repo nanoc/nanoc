@@ -1,4 +1,20 @@
-def try_require(s) ; begin ; require s ; rescue LoadError ; end ; end
+def try_require(s)
+  begin
+    require s
+  rescue LoadError
+  end
+end
+
+def nanoc_require(s)
+  begin
+    require s
+  rescue LoadError
+    $stderr.puts "ERROR: You need '#{s}' to compile this site." unless $quiet
+    exit
+  end
+end
+
+try_require 'rubygems'
 
 require 'fileutils'
 

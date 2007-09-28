@@ -109,7 +109,8 @@ module Nanoc
     end
 
     def compile(page_hashes)
-      Page.compile(page_hashes.map { |h| Page.new(h) })
+      pages = page_hashes.map { |h| Page.new(h) }
+      Page.compile(pages)
     end
 
     def layouted_page(page, pages)
