@@ -2,7 +2,7 @@ module Nanoc
 
   class Page
 
-    attr_accessor :stage
+    attr_accessor :stage, :is_filtered
 
     def initialize(hash={})
       @attributes = hash
@@ -14,7 +14,7 @@ module Nanoc
     end
 
     def content
-      filter
+      filter!
       @attributes[:content]
     end
 
@@ -37,8 +37,9 @@ module Nanoc
 
       # Filter all pages
       pages.each do |page|
-        page.stage = :pre
-        page.filter
+        page.stage        = :pre
+        page.is_filtered  = false
+        page.filter!
       end
     end
 
@@ -48,12 +49,13 @@ module Nanoc
 
       # Filter all pages
       pages.each do |page|
-        page.stage = :post
-        page.filter
+        page.stage        = :post
+        page.is_filtered  = false
+        page.filter!
       end
     end
 
-    def filter
+    def filter!
       # Check for recursive call
       if @@stack.include?(self)
         # Print stack
@@ -67,16 +69,16 @@ module Nanoc
 
       # Get filters
       if @stage == :pre
-        filters = @attributes[:filters] || @attributes[:filters_pre]
+        filters = @attributes[:filters_pre] || @attributes[:filters] || []
       elsif @stage == :post
-        filters = @attributes[:filters_post]
+        filters = @attributes[:filters_post] || []
       end
 
       # Filter if not yet filtered
-      if @attributes[:content].nil?
+      unless @is_filtered
         @@stack.pushing(self) do
           # Read page
-          content = File.read(@attributes[:_content_filename])
+          content = @attributes[:content] || File.read(@attributes[:_content_filename])
 
           begin
             # Get params
@@ -92,6 +94,7 @@ module Nanoc
                 $stderr.puts 'WARNING: Unknown filter: ' + filter_name unless $quiet
               else
                 @attributes[:content] = filter.call(page, pages, config)
+                @is_filtered = true
               end
             end
           rescue Exception => exception
