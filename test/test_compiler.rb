@@ -202,12 +202,21 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_page_id_links
+  def test_compile_site_with_custom_filters
     with_fixture 'site_with_custom_filters' do
       assert_nothing_raised() { $nanoc_compiler.run }
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert_match(/nanoc rocks/, File.read('output/index.html'))
+    end
+  end
+
+  def test_compile_site_with_post_filters
+    with_fixture 'site_with_post_filters' do
+      assert_nothing_raised() { $nanoc_compiler.run }
+      assert(File.file?('output/index.html'))
+      assert_equal(1, Dir["output/*"].size)
+      #assert_match(/nanoc rocks/, File.read('output/index.html'))
     end
   end
 

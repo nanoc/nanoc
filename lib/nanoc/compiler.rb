@@ -45,13 +45,12 @@ module Nanoc
       pages = find_uncompiled_pages
 
       # Filter, layout, and filter again
-      pages = filter_pre(pages)
-      pages = layout(pages)
-      #pages = filter_post(pages)
+      filter_pre(pages)
+      layout(pages)
+      filter_post(pages)
 
-      # Compile and layout pages
-      #pages = find_uncompiled_pages
-      #pages = layout(compile(pages))
+      # Save pages
+      save_pages(pages)
     end
 
     def register_filter(name, &block)
@@ -68,16 +67,7 @@ module Nanoc
 
   private
 
-    def filter_pre(pages)
-      Page.filter_pre(pages)
-    end
-
-    #def layout(pages)
-    #end
-
-    def filter_post(pages)
-      #Page.filter_post(pages)
-    end
+    # Main methods
 
     def find_uncompiled_pages
       # Read all meta files
@@ -101,25 +91,37 @@ module Nanoc
       pages.map { |h| Page.new(h) }
     end
 
-    def compile(pages)
-      Page.compile(pages)
+    def filter_pre(pages)
+      Page.filter_pre(pages)
+    end
+
+    def filter_post(pages)
+      Page.filter_post(pages)
     end
 
     def layout(pages)
       pages.reject { |page| page.attributes[:skip_output] }.each do |page|
         begin
-          # Prepare layout content
-          content = layouted_page(page, pages)
-
-          # Write page with layout
-          FileManager.create_file(path_for_page(page)) { content }
+          # Layout page
+          page.attributes[:content] = layouted_page(page, pages)
         rescue => exception
           p = page.attributes[:_content_filename]
           l = page.attributes[:layout]
           handle_exception(exception, "layouting page '#{p}' in layout '#{l}'")
         end
       end
+
+      pages
     end
+
+    def save_pages(pages)
+      pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+        # Write page with layout
+        FileManager.create_file(path_for_page(page)) { page.content }
+      end
+    end
+
+    # Helper methods
 
     def content_filename_for_meta_filename(filename)
       # Find all files with base name of parent directory
