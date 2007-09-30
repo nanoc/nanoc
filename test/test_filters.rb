@@ -18,6 +18,7 @@ class FiltersTest < Test::Unit::TestCase
   end
 
   def test_string_erubis
+    return unless test_require 'erubis'
     assert_equal('moo', '<%= "moo" %>'.erubis)
     assert_equal('bar', '<%= @foo %>'.erubis(:assigns => { :foo => 'bar' }))
   end

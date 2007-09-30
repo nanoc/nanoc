@@ -19,7 +19,7 @@ module Nanoc
           "# Built-in\n" +
           "layout:    \"default\"\n" +
           "filters:   []\n" +
-          "filename:  \"index\"\n" + 
+          "filename:  \"index\"\n" +
           "extension: \"html\"\n" +
           "\n" +
           "# Custom\n"
