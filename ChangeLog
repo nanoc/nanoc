@@ -4,6 +4,7 @@ nanoc Release Notes
 1.6
 ---
 
+* Added support for post-layout filters
 * Removed deprecated asset-copying functionality
 
 1.5
