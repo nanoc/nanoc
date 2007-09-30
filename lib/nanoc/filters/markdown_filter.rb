@@ -8,6 +8,6 @@ class String
 
 end
 
-register_filter 'markaby' do |page, pages, config|
+register_filter 'markdown', 'bluecloth' do |page, pages, config|
   page.content.markdown
 end

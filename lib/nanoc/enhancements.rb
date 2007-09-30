@@ -1,17 +1,13 @@
 def try_require(s)
-  begin
-    require s
-  rescue LoadError
-  end
+  require s
+rescue LoadError
 end
 
 def nanoc_require(s)
-  begin
-    require s
-  rescue LoadError
-    $stderr.puts "ERROR: You need '#{s}' to compile this site." unless $quiet
-    exit
-  end
+  require s
+rescue LoadError
+  $stderr.puts "ERROR: You need '#{s}' to compile this site." unless $quiet
+  exit
 end
 
 try_require 'rubygems'

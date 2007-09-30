@@ -41,9 +41,17 @@ module Nanoc
       # Create output directory if necessary
       FileUtils.mkdir_p(@config[:output_dir])
 
-      # Compile and layout pages
+      # Get all pages
       pages = find_uncompiled_pages
-      pages = layout(compile(pages))
+
+      # Filter, layout, and filter again
+      pages = filter_pre(pages)
+      pages = layout(pages)
+      #pages = filter_post(pages)
+
+      # Compile and layout pages
+      #pages = find_uncompiled_pages
+      #pages = layout(compile(pages))
     end
 
     def register_filter(name, &block)
@@ -59,6 +67,76 @@ module Nanoc
     end
 
   private
+
+    def filter_pre(pages)
+      Page.filter_pre(pages)
+    end
+
+    #def layout(pages)
+    #end
+
+    def filter_post(pages)
+      #Page.filter_post(pages)
+    end
+
+    def find_uncompiled_pages
+      # Read all meta files
+      pages = Dir['content/**/meta.yaml'].collect do |filename|
+        # Read the meta file
+        page = @global_page.merge(YAML.load_file_and_clean(filename))
+
+        # Fix the path
+        page[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
+
+        # Get the content filename
+        page[:_content_filename] = content_filename_for_meta_filename(filename)
+
+        page
+      end
+
+      # Ignore drafts
+      pages.reject! { |page| page[:is_draft] }
+
+      # Convert to Page instances
+      pages.map { |h| Page.new(h) }
+    end
+
+    def compile(pages)
+      Page.compile(pages)
+    end
+
+    def layout(pages)
+      pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+        begin
+          # Prepare layout content
+          content = layouted_page(page, pages)
+
+          # Write page with layout
+          FileManager.create_file(path_for_page(page)) { content }
+        rescue => exception
+          p = page.attributes[:_content_filename]
+          l = page.attributes[:layout]
+          handle_exception(exception, "layouting page '#{p}' in layout '#{l}'")
+        end
+      end
+    end
+
+    def content_filename_for_meta_filename(filename)
+      # Find all files with base name of parent directory
+      content_filenames = Dir[filename.sub('meta.yaml', File.basename(File.dirname(filename)) + '.*')]
+
+      # Find all index.* files (used to be a fallback for nanoc 1.0, kinda...)
+      content_filenames += Dir["#{File.dirname(filename)}/index.*"]
+
+      # Reject backups
+      content_filenames.reject! { |f| f =~ /~$/ }
+
+      # Make sure there is only one content file
+      content_filenames.ensure_single('content files', File.dirname(filename))
+
+      # Return the first (and only one)
+      content_filenames[0]
+    end
 
     # Returns the path for the given page
     def path_for_page(page)
@@ -81,36 +159,6 @@ module Nanoc
 
         { :type => FILE_TYPES[File.extname(filename)], :content => File.read(filename) }
       end
-    end
-
-    def find_uncompiled_pages
-      # Read all meta files
-      pages = Dir['content/**/meta.yaml'].collect do |filename|
-        # Read the meta file
-        page = @global_page.merge(YAML.load_file_and_clean(filename))
-
-        # Fix the path
-        page[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
-
-        # Get the content filename
-        content_filenames = Dir[filename.sub('meta.yaml', File.basename(File.dirname(filename)) + '.*')]
-        content_filenames += Dir["#{File.dirname(filename)}/index.*"] # fallback for nanoc 1.0
-        content_filenames.reject! { |f| f =~ /~$/ }
-        content_filenames.ensure_single('content files', File.dirname(filename))
-        page[:_content_filename] = content_filenames[0]
-
-        page
-      end
-
-      # Ignore drafts
-      pages.reject! { |page| page[:is_draft] }
-
-      pages
-    end
-
-    def compile(page_hashes)
-      pages = page_hashes.map { |h| Page.new(h) }
-      Page.compile(pages)
     end
 
     def layouted_page(page, pages)
@@ -143,22 +191,6 @@ module Nanoc
       end
 
       content
-    end
-
-    def layout(pages)
-      pages.reject { |page| page.attributes[:skip_output] }.each do |page|
-        begin
-          # Prepare layout content
-          content = layouted_page(page, pages)
-
-          # Write page with layout
-          FileManager.create_file(path_for_page(page)) { content }
-        rescue => exception
-          p = page.attributes[:_content_filename]
-          l = page.attributes[:layout]
-          handle_exception(exception, "layouting page '#{p}' in layout '#{l}'")
-        end
-      end
     end
 
   end
