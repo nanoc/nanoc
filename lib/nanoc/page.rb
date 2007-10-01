@@ -2,10 +2,11 @@ module Nanoc
 
   class Page
 
-    attr_accessor :stage, :is_filtered
+    attr_accessor :stage, :is_filtered, :content_filename
 
-    def initialize(hash={})
+    def initialize(hash, compiler)
       @attributes = hash
+      @compiler   = compiler
       @stage      = nil
     end
 
@@ -29,23 +30,42 @@ module Nanoc
       PageDrop.new(self)
     end
 
-    # Filtering
+    # Helper methods
 
-    def self.filter(pages, stage)
-      @@stack = []
-      @@pages = pages
-
-      # Filter all pages
-      pages.each do |page|
-        page.stage        = stage
-        page.is_filtered  = false
-        page.filter!
+    def path
+      if @attributes[:custom_path].nil?
+        @compiler.config[:output_dir] + @attributes[:path] +
+          @attributes[:filename] + '.' + @attributes[:extension]
+      else
+        @compiler.config[:output_dir] + @attributes[:custom_path]
       end
     end
 
+    def file
+      File.new(@content_filename)
+    end
+
+    def layout
+      if @attributes[:layout].nil?
+        { :type => :eruby, :content => "<%= @page.content %>" }
+      else
+        filenames = Dir["layouts/#{@attributes[:layout]}.*"]
+        filenames.ensure_single('layout files', @attributes[:layout])
+        filename = filenames[0]
+
+        { :type => Nanoc::Compiler::FILE_TYPES[File.extname(filename)], :content => File.read(filename) }
+      end
+    end
+
+    # Filtering
+
     def filter!
+      # Get stack and list of other pages
+      stack       = @compiler.stack
+      other_pages = @compiler.pages
+
       # Check for recursive call
-      if @@stack.include?(self)
+      if stack.include?(self)
         # Print stack
         unless $quiet
           $stderr.puts 'ERROR: Recursive call to page content.'
@@ -64,14 +84,14 @@ module Nanoc
 
       # Filter if not yet filtered
       unless @is_filtered
-        @@stack.pushing(self) do
+        stack.pushing(self) do
           # Read page
-          content = @attributes[:content] || File.read(@attributes[:_content_filename])
+          content = @attributes[:content] || File.read(@content_filename)
 
           begin
             # Get params
             page   = self.to_proxy(:filter => false)
-            pages  = @@pages.map { |p| p.to_proxy }
+            pages  = other_pages.map { |p| p.to_proxy }
             config = $nanoc_compiler.config
 
             # Filter page
@@ -86,7 +106,7 @@ module Nanoc
               end
             end
           rescue Exception => exception
-            handle_exception(exception, "filter page '#{@attributes[:_content_filename]}'")
+            handle_exception(exception, "filter page '#{@content_filename}'")
           end
         end
       end
@@ -94,14 +114,14 @@ module Nanoc
 
     def print_stack
       # Determine relevant part of stack
-      stack_begin = @@stack.index(self)
-      stack_end   = @@stack.size
-      relevant_stack_part = @@stack.last(stack_end - stack_begin)
+      stack_begin = @compiler.stack.index(self)
+      stack_end   = @compiler.stack.size
+      relevant_stack_part = @compiler.stack.last(stack_end - stack_begin)
 
       # Print relevant part of stack
       $stderr.puts 'Page filter stack:'
       relevant_stack_part.each_with_index do |page, i|
-        $stderr.puts "#{i}  #{page.attributes[:_content_filename]}"
+        $stderr.puts "#{i}  #{page.content_filename}"
       end
     end
 
