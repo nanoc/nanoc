@@ -23,6 +23,8 @@ module Nanoc
       :layout       => 'default'
     }
 
+    attr_reader :config, :stack, :pages
+
     def initialize
       @filters = {}
     end
@@ -53,6 +55,8 @@ module Nanoc
       save_pages(pages)
     end
 
+    # Filter management
+
     def register_filter(name, &block)
       @filters[name.to_sym] = block
     end
@@ -61,47 +65,53 @@ module Nanoc
       @filters[name.to_sym]
     end
 
-    def config
-      @config
-    end
-
   private
 
     # Main methods
 
     def find_uncompiled_pages
       # Read all meta files
-      pages = Dir['content/**/meta.yaml'].collect do |filename|
+      Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
         # Read the meta file
-        page = @global_page.merge(YAML.load_file_and_clean(filename))
+        hash = @global_page.merge(YAML.load_file_and_clean(filename))
 
         # Fix the path
-        page[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
+        hash[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
+
+        # Convert to a P age instance
+        page = Page.new(hash, self)
 
         # Get the content filename
-        page[:_content_filename] = content_filename_for_meta_filename(filename)
+        page.content_filename = content_filename_for_meta_filename(filename)
 
-        page
+        # Skip drafts
+        if hash[:is_draft]
+          pages
+        else
+          pages + [ page ]
+        end
       end
-
-      # Ignore drafts
-      pages.reject! { |page| page[:is_draft] }
-
-      # Convert to Page instances
-      pages.map { |h| Page.new(h) }
     end
 
     def filter(pages, stage)
-      Page.filter(pages, stage)
+      # Reset filter stack and list of pages
+      @stack = []
+      @pages = pages
+
+      # Filter every page
+      pages.each do |page|
+        page.stage        = stage
+        page.is_filtered  = false
+        page.filter!
+      end
     end
 
     def layout(pages)
       pages.reject { |page| page.attributes[:skip_output] }.each do |page|
         begin
-          # Layout page
           page.attributes[:content] = layouted_page(page, pages)
         rescue => exception
-          p = page.attributes[:_content_filename]
+          p = page.content_filename
           l = page.attributes[:layout]
           handle_exception(exception, "layouting page '#{p}' in layout '#{l}'")
         end
@@ -113,7 +123,7 @@ module Nanoc
     def save_pages(pages)
       pages.reject { |page| page.attributes[:skip_output] }.each do |page|
         # Write page with layout
-        FileManager.create_file(path_for_page(page)) { page.content }
+        FileManager.create_file(page.path) { page.content }
       end
     end
 
@@ -136,32 +146,9 @@ module Nanoc
       content_filenames[0]
     end
 
-    # Returns the path for the given page
-    def path_for_page(page)
-      if page.attributes[:custom_path].nil?
-        @config[:output_dir] + page.attributes[:path] +
-          page.attributes[:filename] + '.' + page.attributes[:extension]
-      else
-        @config[:output_dir] + page.attributes[:custom_path]
-      end
-    end
-
-    # Returns the layout for the given page
-    def layout_for_page(page)
-      if page.attributes[:layout].nil?
-        { :type => :eruby, :content => "<%= @page.content %>" }
-      else
-        filenames = Dir["layouts/#{page.attributes[:layout]}.*"]
-        filenames.ensure_single('layout files', page.attributes[:layout])
-        filename = filenames[0]
-
-        { :type => FILE_TYPES[File.extname(filename)], :content => File.read(filename) }
-      end
-    end
-
     def layouted_page(page, pages)
       # Find layout
-      layout = layout_for_page(page)
+      layout = page.layout
 
       # Build params
       if layout[:type] == :liquid
