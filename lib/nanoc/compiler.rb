@@ -44,15 +44,15 @@ module Nanoc
       FileUtils.mkdir_p(@config[:output_dir])
 
       # Get all pages
-      pages = find_uncompiled_pages
+      @pages = find_uncompiled_pages
 
       # Filter, layout, and filter again
-      filter(pages, :pre)
-      layout(pages)
-      filter(pages, :post)
+      filter(:pre)
+      layout
+      filter(:post)
 
       # Save pages
-      save_pages(pages)
+      save_pages
     end
 
     # Filter management
@@ -85,43 +85,36 @@ module Nanoc
         page.content_filename = content_filename_for_meta_filename(filename)
 
         # Skip drafts
-        if hash[:is_draft]
-          pages
-        else
-          pages + [ page ]
-        end
+        hash[:is_draft] ? pages : pages + [ page ]
       end
     end
 
-    def filter(pages, stage)
-      # Reset filter stack and list of pages
+    def filter(stage)
+      # Reset filter stack
       @stack = []
-      @pages = pages
 
       # Filter every page
-      pages.each do |page|
+      @pages.each do |page|
         page.stage        = stage
         page.is_filtered  = false
         page.filter!
       end
     end
 
-    def layout(pages)
-      pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+    def layout
+      # For each page (ignoring drafts)
+      @pages.reject { |page| page.attributes[:skip_output] }.each do |page|
         begin
-          page.attributes[:content] = layouted_page(page, pages)
+          # Layout the page
+          page.layout!
         rescue => exception
-          p = page.content_filename
-          l = page.attributes[:layout]
-          handle_exception(exception, "layouting page '#{p}' in layout '#{l}'")
+          handle_exception(exception, "layouting page '#{page.content_filename}' in layout '#{page.attributes[:layout]}'")
         end
       end
-
-      pages
     end
 
-    def save_pages(pages)
-      pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+    def save_pages
+      @pages.reject { |page| page.attributes[:skip_output] }.each do |page|
         # Write page with layout
         FileManager.create_file(page.path) { page.content }
       end
@@ -144,38 +137,6 @@ module Nanoc
 
       # Return the first (and only one)
       content_filenames[0]
-    end
-
-    def layouted_page(page, pages)
-      # Find layout
-      layout = page.layout
-
-      # Build params
-      if layout[:type] == :liquid
-        public_page   = page.to_liquid
-        public_pages  = pages.map { |p| p.to_liquid }
-      else
-        public_page   = page.to_proxy
-        public_pages  = pages.map { |p| p.to_proxy }
-      end
-      params = { :assigns => { :page => public_page, :pages => public_pages } }
-      params[:haml_options] = (page.attributes[:haml_options] || {}).symbolize_keys
-
-      # Layout
-      case layout[:type]
-      when :eruby
-        content = layout[:content].eruby(params)
-      when :haml
-        content = layout[:content].haml(params)
-      when :markaby
-        content = layout[:content].markaby(params)
-      when :liquid
-        content = layout[:content].liquid(params)
-      else
-        content = nil
-      end
-
-      content
     end
 
   end

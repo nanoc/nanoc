@@ -45,7 +45,7 @@ module Nanoc
       File.new(@content_filename)
     end
 
-    def layout
+    def find_layout
       if @attributes[:layout].nil?
         { :type => :eruby, :content => "<%= @page.content %>" }
       else
@@ -109,6 +109,39 @@ module Nanoc
             handle_exception(exception, "filter page '#{@content_filename}'")
           end
         end
+      end
+    end
+
+    def layout!
+      # Get list of other pages
+      other_pages = @compiler.pages
+
+      # Find layout
+      layout = self.find_layout
+
+      # Build params
+      if layout[:type] == :liquid
+        public_page   = self.to_liquid
+        public_pages  = other_pages.map { |p| p.to_liquid }
+      else
+        public_page   = self.to_proxy
+        public_pages  = other_pages.map { |p| p.to_proxy }
+      end
+      params = { :assigns => { :page => public_page, :pages => public_pages } }
+      params[:haml_options] = (@attributes[:haml_options] || {}).symbolize_keys
+
+      # Layout
+      case layout[:type]
+      when :eruby
+        @attributes[:content] = layout[:content].eruby(params)
+      when :haml
+        @attributes[:content] = layout[:content].haml(params)
+      when :markaby
+        @attributes[:content] = layout[:content].markaby(params)
+      when :liquid
+        @attributes[:content] = layout[:content].liquid(params)
+      else
+        @attributes[:content] = nil
       end
     end
 
