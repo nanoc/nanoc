@@ -45,9 +45,9 @@ module Nanoc
       pages = find_uncompiled_pages
 
       # Filter, layout, and filter again
-      filter_pre(pages)
+      filter(pages, :pre)
       layout(pages)
-      filter_post(pages)
+      filter(pages, :post)
 
       # Save pages
       save_pages(pages)
@@ -91,12 +91,8 @@ module Nanoc
       pages.map { |h| Page.new(h) }
     end
 
-    def filter_pre(pages)
-      Page.filter_pre(pages)
-    end
-
-    def filter_post(pages)
-      Page.filter_post(pages)
+    def filter(pages, stage)
+      Page.filter(pages, stage)
     end
 
     def layout(pages)

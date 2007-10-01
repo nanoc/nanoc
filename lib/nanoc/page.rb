@@ -31,25 +31,13 @@ module Nanoc
 
     # Filtering
 
-    def self.filter_pre(pages)
+    def self.filter(pages, stage)
       @@stack = []
       @@pages = pages
 
       # Filter all pages
       pages.each do |page|
-        page.stage        = :pre
-        page.is_filtered  = false
-        page.filter!
-      end
-    end
-
-    def self.filter_post(pages)
-      @@stack = []
-      @@pages = pages
-
-      # Filter all pages
-      pages.each do |page|
-        page.stage        = :post
+        page.stage        = stage
         page.is_filtered  = false
         page.filter!
       end
