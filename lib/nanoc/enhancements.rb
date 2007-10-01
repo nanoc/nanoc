@@ -20,7 +20,7 @@ def handle_exception(exception, text)
     $stderr.puts exception
     $stderr.puts exception.backtrace.join("\n")
   end
-  exit
+  exit(1)
 end
 
 class FileLogger

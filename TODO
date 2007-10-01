@@ -4,20 +4,10 @@ To Do
 nanoc-specific
 --------------
 
-* Make layouts and page compilation a bit more uniform. A page should have
-  'pre_layout_filters' and 'post_layout_filters' or something. Don't rely on
-  the layout file extension anymore.
-
 * Put nanoc built-in keywords in a namespace in the meta file.
-
-* Add ability to get the filesystem path of the page. Or maybe add ability to
-  get a File object representing the current page?
 
 * Add support for evaluating Ruby in meta files. For example, something like
   'last_updated_at: "<%= Time.now %>"' should work.
-
-* Make nanoc return a proper exit code, so that `nanoc co && heel` works as
-  expected (i.e. only open heel if compiling does not fail)
 
 Web Site
 --------
