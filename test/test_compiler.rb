@@ -216,7 +216,16 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { $nanoc_compiler.run }
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
-      #assert_match(/nanoc rocks/, File.read('output/index.html'))
+      assert_match(/This is a &#8220;sample&#8221; paragraph./, File.read('output/index.html'))
+    end
+  end
+
+  def test_compile_site_with_file_object
+    with_fixture 'site_with_file_object' do
+      assert_nothing_raised() { $nanoc_compiler.run }
+      assert(File.file?('output/index.html'))
+      assert_equal(1, Dir["output/*"].size)
+      assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))
     end
   end
 

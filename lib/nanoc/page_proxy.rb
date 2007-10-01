@@ -1,6 +1,6 @@
 module Nanoc
-
   class PageProxy
+
     def initialize(page, params={})
       @page       = page
       @do_filter  = (params[:filter] != false)
@@ -11,18 +11,16 @@ module Nanoc
         @page.content
       elsif key.to_sym == :file
         @page.file
+      elsif key.to_s.ends_with?('?')
+        @page.attributes[key.to_s[0..-2].to_sym]
       else
-        if key.to_s.ends_with?('?')
-          @page.attributes[key.to_s[0..-2].to_sym]
-        else
-          @page.attributes[key]
-        end
+        @page.attributes[key]
       end
     end
 
     def method_missing(method, *args)
       self[method]
     end
-  end
 
+  end
 end
