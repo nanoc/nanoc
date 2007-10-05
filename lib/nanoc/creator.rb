@@ -100,7 +100,7 @@ module Nanoc
 
       # Sanitize page name
       if a_pagename =~ /^[\/\.]+/
-        $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting' unless $quiet == true
+        $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting' unless $quiet
         return
       end
 
@@ -108,12 +108,26 @@ module Nanoc
       template = a_params[:template] || 'default'
       begin
         template_meta = File.read("templates/#{template}/meta.yaml")
+
+        # Find all files
         template_content_filenames = Dir["templates/#{template}/#{template}.*"]
+
+        # Find all index.* files (used to be a fallback for nanoc 1.0, kinda...)
         template_content_filenames += Dir["templates/#{template}/index.*"]
+
+        # Reject backups
+        template_content_filenames.reject! { |f| f =~ /~$/ }
+
+        # Make sure there is only one content file
+        template_content_filenames.ensure_single('template files', template)
+
+        # Get the first (and only one)
         template_content_filename = template_content_filenames[0]
+
         template_index = File.read(template_content_filename)
-      rescue
-        $stderr.puts 'ERROR: no such template' unless $quiet == true
+      rescue => e
+        puts e.inspect
+        $stderr.puts 'ERROR: no such template' unless $quiet
         exit
       end
       template_meta = template_meta.eruby
