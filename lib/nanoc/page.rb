@@ -49,8 +49,16 @@ module Nanoc
       if @attributes[:layout].nil?
         { :type => :eruby, :content => "<%= @page.content %>" }
       else
+        # Find all layouts
         filenames = Dir["layouts/#{@attributes[:layout]}.*"]
+
+        # Reject backups
+        filenames.reject! { |f| f =~ /~$/ }
+
+        # Make sure there is only one content file
         filenames.ensure_single('layout files', @attributes[:layout])
+
+        # Get the first (and only one)
         filename = filenames[0]
 
         { :type => Nanoc::Compiler::FILE_TYPES[File.extname(filename)], :content => File.read(filename) }
