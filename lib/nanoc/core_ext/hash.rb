@@ -1,5 +1,7 @@
 class Hash
-  # Cleans up the hash by performing the following operations:
+  # Cleans up the hash and returns the result. It performs the following
+  # operations:
+  #
   # * Values with keys ending in _at and _on are converted into Times and
   #   Dates, respectively
   # * All keys are converted to symbols

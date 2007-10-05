@@ -103,7 +103,11 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_backup_files
     with_fixture 'site_with_backup_files' do
+      FileManager.create_file('content/content.txt~') { '' }
+      FileManager.create_file('layouts/default.erb~') { '' }
       assert_nothing_raised() { $nanoc_compiler.run }
+      FileUtils.remove_entry_secure 'content/content.txt~'
+      FileUtils.remove_entry_secure 'layouts/default.erb~'
     end
   end
 
