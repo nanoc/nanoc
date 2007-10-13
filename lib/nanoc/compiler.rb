@@ -78,7 +78,7 @@ module Nanoc
         # Fix the path
         hash[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
 
-        # Convert to a P age instance
+        # Convert to a Page instance
         page = Page.new(hash, self)
 
         # Get the content filename
