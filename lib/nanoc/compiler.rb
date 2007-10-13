@@ -93,12 +93,14 @@ module Nanoc
       # Reset filter stack
       @stack = []
 
-      # Filter every page
+      # Prepare pages
       @pages.each do |page|
         page.stage        = stage
         page.is_filtered  = false
-        page.filter!
       end
+
+      # Filter pages
+      @pages.each { |page| page.filter! }
     end
 
     def layout
