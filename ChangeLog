@@ -1,12 +1,17 @@
 nanoc Release Notes
 ===================
 
+1.6.1
+-----
+
+* Removed a stray debug message
+
 1.6
 ---
 
 * Added support for post-layout filters
 * Added support for getting a File object for the page, so you can now e.g.
-  easily get the modification time for a given page (`@page.file.mtime`).
+  easily get the modification time for a given page (`@page.file.mtime`)
 * Cleaned up the source code a lot
 * Removed deprecated asset-copying functionality
 

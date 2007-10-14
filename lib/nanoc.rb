@@ -1,6 +1,6 @@
 module Nanoc
 
-  VERSION = '1.6'
+  VERSION = '1.6.1'
 
   def self.ensure_in_site
     unless in_site?
