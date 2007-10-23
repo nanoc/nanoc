@@ -18,6 +18,10 @@ module Nanoc
       end
     end
 
+    def []=(key, value)
+      @page.attributes[key.to_sym] = value
+    end
+
     def method_missing(method, *args)
       self[method]
     end
