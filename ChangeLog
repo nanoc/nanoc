@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+1.6.2
+-----
+
+* Fixed an issue which prevented the content capturing plugin from working
+
 1.6.1
 -----
 
