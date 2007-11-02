@@ -96,5 +96,5 @@ case command
     $nanoc_compiler.run
 
   else
-    puts 'Unrecognised command \'' + command + '\''
+    $stderr.puts 'Unrecognised command \'' + command + '\''
 end

@@ -142,7 +142,7 @@ module Nanoc
           print_stack
         end
 
-        exit
+        exit(1)
       end
 
       # Get filters
@@ -173,7 +173,7 @@ module Nanoc
             filters.each do |filter_name|
               filter = $nanoc_compiler.filter_named(filter_name)
               if filter.nil?
-                $stderr.puts 'WARNING: Unknown filter: ' + filter_name unless $quiet
+                $delayed_errors << 'WARNING: Unknown filter: ' + filter_name unless $quiet
               else
                 @attributes[:builtin][:content] = filter.call(page, pages, config)
                 @is_filtered = true
