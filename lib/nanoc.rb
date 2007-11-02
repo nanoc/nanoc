@@ -27,6 +27,8 @@ module Nanoc
 
 end
 
+$delayed_errors = []
+
 require File.dirname(__FILE__) + '/nanoc/enhancements.rb'
 require File.dirname(__FILE__) + '/nanoc/dot_notation_hash.rb'
 
