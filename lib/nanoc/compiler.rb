@@ -99,32 +99,44 @@ module Nanoc
         page.is_filtered  = false
       end
 
-      # Filter pages
+      # Give feedback
       print_immediately "Filtering pages #{stage == :pre ? '(first pass) ' : '(second pass)'} "
       time_before = Time.now
+
+      # Filter pages
       @pages.each do |page|
+        # Give feedback
         print_immediately '.'
+
+        # Filter
         page.filter!
       end
-      time_after = Time.now
-      print_immediately " [#{format('%.2f', time_after - time_before)}s]\n"
+
+      # Give feedback
+      print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
     end
 
     def layout
-      # For each page (ignoring drafts)
+      # Give feedback
       print_immediately 'Layouting pages               '
       time_before = Time.now
+
+      # For each page (ignoring drafts)
       @pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+        # Give feedback
         print_immediately '.'
+
+        # Layout the page
         begin
-          # Layout the page
           page.layout!
         rescue => exception
           handle_exception(exception, "layouting page '#{page.content_filename}' in layout '#{page.attributes[:layout]}'")
         end
       end
-      time_after = Time.now
-      print_immediately " [#{format('%.2f', time_after - time_before)}s]\n"
+
+      # Give feedback
+      print_immediately ' ' * @pages.select { |page| page.attributes[:skip_output] }.size
+      print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
     end
 
     def save_pages
