@@ -110,7 +110,7 @@ module Nanoc
       template_content_filename = content_filename_for_dir("templates/#{template}", 'template files', template)
       unless File.exist?(template_content_filename) and File.exist?(template_meta_filename)
         $stderr.puts 'ERROR: no such template' unless $quiet
-        exit
+        exit(1)
       else
         template_meta = File.read(template_meta_filename).eruby
         template_index = File.read(template_content_filename).eruby
@@ -155,7 +155,7 @@ module Nanoc
     def ensure_nonexistant(filename)
       if File.exist?(filename)
         $stderr.puts "ERROR: A file or directory named #{filename} already exists." unless $quiet
-        exit
+        exit(1)
       end
     end
 

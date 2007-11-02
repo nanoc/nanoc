@@ -51,13 +51,13 @@ begin
   end
 rescue GetoptLong::InvalidOption
   $stderr.puts usage_text
-  exit
+  exit(1)
 end
 
 # Make sure we have at least one argument
 if ARGV.size == 0
   $stderr.puts usage_text
-  exit
+  exit(1)
 end
 
 # Handle command
@@ -67,7 +67,7 @@ case command
   when 'create_site', 'cs'
     if ARGV.size != 2
       $stderr.puts 'Usage: nanoc create_site [site_name]'
-      exit
+      exit(1)
     end
     $nanoc_creator.create_site(ARGV[1])
 
@@ -75,7 +75,7 @@ case command
   when 'create_page', 'cp'
     if ARGV.size != 2
       $stderr.puts 'Usage: nanoc create_page [page_name]'
-      exit
+      exit(1)
     end
     $nanoc_creator.create_page(ARGV[1], :template => unprocessed_opts['--template'])
 
@@ -83,7 +83,7 @@ case command
   when 'create_template', 'ct'
     if ARGV.size != 2
       $stderr.puts 'Usage: nanoc create_template [template_name]'
-      exit
+      exit(1)
     end
     $nanoc_creator.create_template(ARGV[1])
 
@@ -91,7 +91,7 @@ case command
   when 'compile', 'compile_site', 'co'
     if ARGV.size != 1
       $stderr.puts 'Usage: nanoc compile'
-      exit
+      exit(1)
     end
     $nanoc_compiler.run
 
