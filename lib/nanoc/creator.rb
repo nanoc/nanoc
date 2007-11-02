@@ -106,32 +106,15 @@ module Nanoc
 
       # Read template
       template = a_params[:template] || 'default'
-      begin
-        template_meta = File.read("templates/#{template}/meta.yaml")
-
-        # Find all files
-        template_content_filenames = Dir["templates/#{template}/#{template}.*"]
-
-        # Find all index.* files (used to be a fallback for nanoc 1.0, kinda...)
-        template_content_filenames += Dir["templates/#{template}/index.*"]
-
-        # Reject backups
-        template_content_filenames.reject! { |f| f =~ /~$/ }
-
-        # Make sure there is only one content file
-        template_content_filenames.ensure_single('template files', template)
-
-        # Get the first (and only one)
-        template_content_filename = template_content_filenames[0]
-
-        template_index = File.read(template_content_filename)
-      rescue => e
-        puts e.inspect
+      template_meta_filename    = "templates/#{template}/meta.yaml"
+      template_content_filename = content_filename_for_dir("templates/#{template}", 'template files', template)
+      unless File.exist?(template_content_filename) and File.exist?(template_meta_filename)
         $stderr.puts 'ERROR: no such template' unless $quiet
         exit
+      else
+        template_meta = File.read(template_meta_filename).eruby
+        template_index = File.read(template_content_filename).eruby
       end
-      template_meta = template_meta.eruby
-      template_index = template_index.eruby
 
       # Create index and yaml file
       FileManager.create_dir 'content' do

@@ -125,20 +125,7 @@ module Nanoc
     # Helper methods
 
     def content_filename_for_meta_filename(filename)
-      # Find all files with base name of parent directory
-      content_filenames = Dir[filename.sub('meta.yaml', File.basename(File.dirname(filename)) + '.*')]
-
-      # Find all index.* files (used to be a fallback for nanoc 1.0, kinda...)
-      content_filenames += Dir["#{File.dirname(filename)}/index.*"]
-
-      # Reject backups
-      content_filenames.reject! { |f| f =~ /~$/ }
-
-      # Make sure there is only one content file
-      content_filenames.ensure_single('content files', File.dirname(filename))
-
-      # Return the first (and only one)
-      content_filenames[0]
+      content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
     end
 
   end
