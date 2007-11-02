@@ -9,6 +9,7 @@ module Nanoc
       end
 
       def before_method(name)
+        # FIXME add support for file, and make sure builtin stuff works
         name == 'content' ? @page.content : @page.attributes[name.to_sym]
       end
     end

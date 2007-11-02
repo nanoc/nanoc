@@ -36,24 +36,14 @@ module Nanoc
 
     attr_accessor :stage, :is_filtered, :content_filename
 
-    def initialize(hash, compiler)
+    def initialize(hash, path, compiler)
       @compiler   = compiler
       @stage      = nil
       @attributes = hash
 
-      # Move built-in properties into the builtin sub-hash
+      # Set path
       @attributes[:builtin] ||= {}
-      BUILTIN_KEYS.each do |key|
-        if @attributes[:builtin][key].nil? and @attributes[key]
-          @attributes[:builtin][key] = @attributes[key]
-        end
-        @attributes.delete(key)
-      end
-
-      # Add missing properties
-      PAGE_DEFAULTS.each_pair do |key, value|
-        @attributes[:builtin][key] = value if @attributes[:builtin][key].nil?
-      end
+      @attributes[:builtin][:path] = path
     end
 
     # Proxy/Liquid support
@@ -67,15 +57,25 @@ module Nanoc
       PageDrop.new(self)
     end
 
-    # Accessors
+    # Attributes
 
     def attributes
       @attributes
     end
 
+    def custom_attribute_named(name)
+      @attributes[name] || @compiler.default_attributes[name]
+    end
+
+    def builtin_attribute_named(name)
+      @attributes[:builtin][name] || @attributes[name] || @compiler.default_attributes[name] || PAGE_DEFAULTS[name]
+    end
+
+    # Helper functions
+
     def content
       filter!
-      @attributes[:builtin][:content]
+      builtin_attribute_named(:content)
     end
 
     def path=(path)
@@ -83,23 +83,23 @@ module Nanoc
     end
 
     def skip_output?
-      @attributes[:builtin][:skip_output]
+      builtin_attribute_named(:skip_output)
     end
 
     def is_draft?
-      @attributes[:builtin][:is_draft]
+      builtin_attribute_named(:is_draft)
     end
 
     def layout
-      @attributes[:builtin][:layout]
+      builtin_attribute_named(:layout)
     end
 
     def path_on_filesystem
-      if @attributes[:builtin][:custom_path].nil?
-        @compiler.config[:output_dir] + @attributes[:builtin][:path] +
-          @attributes[:builtin][:filename] + '.' + @attributes[:builtin][:extension]
+      if builtin_attribute_named(:custom_path).nil?
+        @compiler.config[:output_dir] + builtin_attribute_named(:path) +
+          builtin_attribute_named(:filename) + '.' + builtin_attribute_named(:extension)
       else
-        @compiler.config[:output_dir] + @attributes[:builtin][:custom_path]
+        @compiler.config[:output_dir] + builtin_attribute_named(:custom_path)
       end
     end
 
@@ -108,17 +108,17 @@ module Nanoc
     end
 
     def find_layout
-      if @attributes[:builtin][:layout].nil?
+      if builtin_attribute_named(:layout).nil?
         { :type => :eruby, :content => "<%= @page.content %>" }
       else
         # Find all layouts
-        filenames = Dir["layouts/#{@attributes[:builtin][:layout]}.*"]
+        filenames = Dir["layouts/#{builtin_attribute_named(:layout)}.*"]
 
         # Reject backups
         filenames.reject! { |f| f =~ /~$/ }
 
         # Make sure there is only one content file
-        filenames.ensure_single('layout files', @attributes[:builtin][:layout])
+        filenames.ensure_single('layout files', builtin_attribute_named(:layout))
 
         # Get the first (and only one)
         filename = filenames[0]
@@ -146,10 +146,14 @@ module Nanoc
       end
 
       # Get filters
+      # FIXME
       if @stage == :pre
-        filters = @attributes[:builtin][:filters_pre] || @attributes[:builtin][:filters] || []
+        filters   = attributes[:builtin][:filters_pre] || attributes[:builtin][:filters]
+        filters ||= attributes[:filters_pre] || attributes[:filters]
+        filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
+        filters ||= []
       elsif @stage == :post
-        filters = @attributes[:builtin][:filters_post] || []
+        filters = builtin_attribute_named(:filters_post) || []
       end
 
       # Filter if not yet filtered
@@ -198,7 +202,7 @@ module Nanoc
         public_pages  = other_pages.map { |p| p.to_proxy }
       end
       params = { :assigns => { :page => public_page, :pages => public_pages } }
-      params[:haml_options] = (@attributes[:builtin][:haml_options] || {}).symbolize_keys
+      params[:haml_options] = (builtin_attribute_named(:haml_options) || {}).symbolize_keys
 
       # Layout
       case layout[:type]
