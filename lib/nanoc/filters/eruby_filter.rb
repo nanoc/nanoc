@@ -33,6 +33,15 @@ class String
 
 end
 
+register_filter 'erb' do |page, pages, config|
+  page.content.erb(:assigns => { :page => page, :pages => pages })
+end
+
+register_filter 'erubis' do |page, pages, config|
+  page.content.erubis(:assigns => { :page => page, :pages => pages })
+end
+
+# Deprecated
 register_filter 'eruby' do |page, pages, config|
   assigns = { :page => page, :pages => pages }
   page.content.eruby(:assigns => assigns, :eruby_engine => config[:eruby_engine])
