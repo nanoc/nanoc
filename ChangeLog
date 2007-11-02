@@ -1,6 +1,17 @@
 nanoc Release Notes
 ===================
 
+1.7
+---
+
+* The 'eruby' filter has been split in two filters, 'erb' and 'erubis', which
+  no longer use the config file. The 'eruby' filter has been deprecated, and
+  will be removed in 1.8.
+* Progress indicators are now displayed while the site is compiling.
+* Nested hashes in meta files can now be accessed using 'dot notation', e.g.
+  `@page.foo.bar.baz`. Previously this would have to be
+  `@page.foo[:bar][:baz]` instead.
+
 1.6.2
 -----
 
