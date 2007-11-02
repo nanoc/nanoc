@@ -112,7 +112,7 @@ module Nanoc
     end
 
     def find_layout
-      if has_builtin_attribute_named?(:layout)
+      if has_builtin_attribute_named?(:layout) and builtin_attribute_named(:layout) == nil
         { :type => :eruby, :content => "<%= @page.content %>" }
       else
         # Find all layouts
