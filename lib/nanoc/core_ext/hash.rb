@@ -8,19 +8,19 @@ class Hash
   # * Value strings 'true', 'false', and 'none' are converted into
   #   true, false, and nil, respectively
   def clean
-    symbolize_keys.inject({}) do |hash, (key, value)|
-      if key.to_s =~ /_on$/
-        hash.merge(key => Date.parse(value))
-      elsif key.to_s =~ /_at$/
-        hash.merge(key => Time.parse(value))
+    stringify_keys.inject({}) do |hash, (key, value)|
+      if key =~ /_on$/
+        hash.merge(key.to_sym => Date.parse(value))
+      elsif key =~ /_at$/
+        hash.merge(key.to_sym => Time.parse(value))
       elsif value == 'true'
-        hash.merge(key => true)
+        hash.merge(key.to_sym => true)
       elsif value == 'false'
-        hash.merge(key => false)
+        hash.merge(key.to_sym => false)
       elsif value == 'none'
-        hash.merge(key => nil)
+        hash.merge(key.to_sym => nil)
       else
-        hash.merge(key => value)
+        hash.merge(key.to_sym => value)
       end
     end
   end
