@@ -106,8 +106,8 @@ class CompilerTest < Test::Unit::TestCase
       FileManager.create_file('content/content.txt~') { '' }
       FileManager.create_file('layouts/default.erb~') { '' }
       assert_nothing_raised() { $nanoc_compiler.run }
-      FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('tmp')
-      FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('tmp')
+      FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('content/content.txt~')
+      FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
     end
   end
 
