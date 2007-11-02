@@ -3,8 +3,8 @@ class Array
   # Ensures that the array contains only one element
   def ensure_single(a_noun, a_context)
     if self.size != 1
-      $delayed_errors << "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" unless $quiet
-      exit
+      $stderr.puts "ERROR: expected 1 #{a_noun}, found #{self.size} (#{a_context})" unless $quiet
+      exit(1)
     end
   end
 
