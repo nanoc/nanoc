@@ -9,8 +9,8 @@ class CompilerTest < Test::Unit::TestCase
   end
 
   def teardown
-    FileUtils.remove_entry_secure 'tmp'
-    Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f }
+    FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
+    Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f if File.exist?(f)}
     $quiet = false
   end
 
@@ -77,7 +77,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_equal(1, Dir["tmp/custom_output/*"].size)
       assert(File.file?('tmp/custom_output/index.html'))
 
-      FileUtils.remove_entry_secure 'tmp'
+      FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
     end
   end
 
@@ -106,8 +106,8 @@ class CompilerTest < Test::Unit::TestCase
       FileManager.create_file('content/content.txt~') { '' }
       FileManager.create_file('layouts/default.erb~') { '' }
       assert_nothing_raised() { $nanoc_compiler.run }
-      FileUtils.remove_entry_secure 'content/content.txt~'
-      FileUtils.remove_entry_secure 'layouts/default.erb~'
+      FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('tmp')
+      FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('tmp')
     end
   end
 
@@ -242,6 +242,14 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_builtin_paths
+    with_fixture 'site_with_builtin_paths' do
+      assert_nothing_raised() { $nanoc_compiler.run }
+      assert(File.file?('output/index.html'))
+      assert_equal(4, Dir["output/*"].size)
+    end
+  end
+
   def test_compile_outside_site
     in_dir %w{ tmp } do
       assert_raise(SystemExit) { $nanoc_compiler.run }
@@ -257,7 +265,7 @@ class CompilerTest < Test::Unit::TestCase
         assert_equal(1, Dir["output/*"].size)
         assert(File.file?('output/index.html'))
       end
-      FileUtils.remove_entry_secure 'tmp_site'
+      FileUtils.remove_entry_secure 'tmp_site' if File.exist?('tmp')
     end
   end
 end

@@ -1,4 +1,5 @@
 class Hash
+
   # Cleans up the hash and returns the result. It performs the following
   # operations:
   #
@@ -42,4 +43,33 @@ class Hash
       hash.merge({ key.to_s => new_value })
     end
   end
+
+  def merge_recursively(high)
+    (self.keys + high.keys).uniq.inject({}) do |memo, key|
+      if high.has_key?(key)
+        if self.has_key?(key)
+          # high and self
+          if high[key].is_a?(Hash) and self[key].is_a?(Hash)
+            # merge recursively
+            memo.merge(key => self[key].merge_recursively(high[key]))
+          else
+            # use high
+            memo.merge(key => high[key])
+          end
+        else
+          # high only -- use high
+          memo.merge(key => high[key])
+        end
+      else
+        if self.has_key?(key)
+          # self only -- use self
+          memo.merge(key => self[key])
+        else
+          # nothing
+          memo
+        end
+      end
+    end
+  end
+
 end

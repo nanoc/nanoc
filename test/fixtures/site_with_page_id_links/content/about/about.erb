@@ -1,7 +1,7 @@
 <%
 
 def path_for(page_id)
-  @pages.select { |p| p.page_id == page_id.to_s }.first.path
+  @pages.find { |p| p.page_id == page_id.to_s }.path
 end
 
 %><p>This is my about page. Link to my <a href="<%= path_for :home %>">home page</a> or my <a href="<%= path_for :blog %>">blog</a>.</p>

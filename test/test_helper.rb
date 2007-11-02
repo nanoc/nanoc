@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 def in_dir(a_path)
   FileUtils.cd(File.join(a_path))
   yield
+ensure
   FileUtils.cd(File.join(a_path.map { |n| '..' }))
 end
 
