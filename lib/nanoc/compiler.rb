@@ -6,23 +6,6 @@ module Nanoc
       :eruby_engine => 'erb'
     }
 
-    FILE_TYPES = {
-      '.erb'    => :eruby,
-      '.rhtml'  => :eruby,
-      '.haml'   => :haml,
-      '.mab'    => :markaby,
-      '.liquid' => :liquid
-    }
-
-    PAGE_DEFAULTS = {
-      :custom_path  => nil,
-      :filename     => 'index',
-      :extension    => 'html',
-      :filters      => [],
-      :is_draft     => false,
-      :layout       => 'default'
-    }
-
     attr_reader :config, :stack, :pages
 
     def initialize
@@ -33,9 +16,9 @@ module Nanoc
       # Make sure we're in a nanoc site
       Nanoc.ensure_in_site
 
-      # Load some configuration stuff
-      @config      = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-      @global_page = PAGE_DEFAULTS.merge(YAML.load_file_and_clean('meta.yaml'))
+      # Load configuration
+      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
+      @page_defaults = YAML.load_file_and_clean('meta.yaml')
 
       # Require all Ruby source files in lib/
       Dir['lib/*.rb'].each { |f| require f }
@@ -73,19 +56,19 @@ module Nanoc
       # Read all meta files
       Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
         # Read the meta file
-        hash = @global_page.merge(YAML.load_file_and_clean(filename))
-
-        # Fix the path
-        hash[:path] = filename.sub(/^content/, '').sub('meta.yaml', '')
+        hash = @page_defaults.merge_recursively(YAML.load_file_and_clean(filename))
 
         # Convert to a Page instance
         page = Page.new(hash, self)
+
+        # Fix the path
+        page.path = filename.sub(/^content/, '').sub('meta.yaml', '')
 
         # Get the content filename
         page.content_filename = content_filename_for_meta_filename(filename)
 
         # Skip drafts
-        hash[:is_draft] ? pages : pages + [ page ]
+        page.is_draft? ? pages : pages + [ page ]
       end
     end
 
@@ -122,7 +105,7 @@ module Nanoc
       time_before = Time.now
 
       # For each page (ignoring drafts)
-      @pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+      @pages.reject { |page| page.skip_output? }.each do |page|
         # Give feedback
         print_immediately '.'
 
@@ -130,19 +113,19 @@ module Nanoc
         begin
           page.layout!
         rescue => exception
-          handle_exception(exception, "layouting page '#{page.content_filename}' in layout '#{page.attributes[:layout]}'")
+          handle_exception(exception, "layouting page '#{page.content_filename}' in layout '#{page.layout}'")
         end
       end
 
       # Give feedback
-      print_immediately ' ' * @pages.select { |page| page.attributes[:skip_output] }.size
+      print_immediately ' ' * @pages.select { |page| page.skip_output? }.size
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
     end
 
     def save_pages
-      @pages.reject { |page| page.attributes[:skip_output] }.each do |page|
+      @pages.reject { |page| page.skip_output? }.each do |page|
         # Write page with layout
-        FileManager.create_file(page.path) { page.content }
+        FileManager.create_file(page.path_on_filesystem) { page.content }
       end
     end
 

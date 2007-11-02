@@ -28,6 +28,7 @@ module Nanoc
 end
 
 require File.dirname(__FILE__) + '/nanoc/enhancements.rb'
+require File.dirname(__FILE__) + '/nanoc/dot_notation_hash.rb'
 
 require File.dirname(__FILE__) + '/nanoc/creator.rb'
 require File.dirname(__FILE__) + '/nanoc/compiler.rb'
