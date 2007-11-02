@@ -2,8 +2,9 @@
 # Other metafiles can override the contents of this one.
 
 # Built-in
-#filters:   [ 'erb' ]
-#filename:  "index"
-#extension: "html"
+builtin:
+  filters:   [ 'erb' ]
+  filename:  "index"
+  extension: "html"
 
 # Custom

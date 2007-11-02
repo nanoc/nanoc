@@ -6,7 +6,7 @@ module Nanoc
       :eruby_engine => 'erb'
     }
 
-    attr_reader :config, :stack, :pages
+    attr_reader :config, :stack, :pages, :default_attributes
 
     def initialize
       @filters = {}
@@ -18,7 +18,7 @@ module Nanoc
 
       # Load configuration
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-      @page_defaults = YAML.load_file_and_clean('meta.yaml')
+      @default_attributes = YAML.load_file_and_clean('meta.yaml')
 
       # Require all Ruby source files in lib/
       Dir['lib/*.rb'].each { |f| require f }
@@ -56,13 +56,13 @@ module Nanoc
       # Read all meta files
       Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
         # Read the meta file
-        hash = @page_defaults.merge_recursively(YAML.load_file_and_clean(filename))
-
-        # Convert to a Page instance
-        page = Page.new(hash, self)
+        hash = YAML.load_file_and_clean(filename)
 
         # Fix the path
-        page.path = filename.sub(/^content/, '').sub('meta.yaml', '')
+        path = filename.sub(/^content/, '').sub('meta.yaml', '')
+
+        # Convert to a Page instance
+        page = Page.new(hash, path, self)
 
         # Get the content filename
         page.content_filename = content_filename_for_meta_filename(filename)

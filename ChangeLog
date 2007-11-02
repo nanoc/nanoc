@@ -11,6 +11,7 @@ nanoc Release Notes
 * Nested hashes in meta files can now be accessed using 'dot notation', e.g.
   `@page.foo.bar.baz`. Previously this would have to be
   `@page.foo[:bar][:baz]` instead.
+* Added `builtin` namespace.
 
 1.6.2
 -----
