@@ -23,6 +23,11 @@ def handle_exception(exception, text)
   exit(1)
 end
 
+def print_immediately(text)
+  print text unless $quiet
+  $stdout.flush
+end
+
 def content_filename_for_dir(dir, noun, context)
   # Find all files
   filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
