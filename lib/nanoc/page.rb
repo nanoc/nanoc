@@ -71,6 +71,10 @@ module Nanoc
       @attributes[:builtin][name] || @attributes[name] || @compiler.default_attributes[name] || PAGE_DEFAULTS[name]
     end
 
+    def has_builtin_attribute_named?(name)
+      @attributes[:builtin].has_key?(name) || @attributes.has_key?(name) || @compiler.default_attributes.has_key?(name)
+    end
+
     # Helper functions
 
     def content
@@ -108,7 +112,7 @@ module Nanoc
     end
 
     def find_layout
-      if builtin_attribute_named(:layout).nil?
+      if has_builtin_attribute_named?(:layout)
         { :type => :eruby, :content => "<%= @page.content %>" }
       else
         # Find all layouts
