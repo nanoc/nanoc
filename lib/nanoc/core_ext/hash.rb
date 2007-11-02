@@ -19,6 +19,8 @@ class Hash
         hash.merge(key.to_sym => false)
       elsif value == 'none'
         hash.merge(key.to_sym => nil)
+      elsif value.is_a?(Hash)
+        hash.merge(key.to_sym => value.clean)
       else
         hash.merge(key.to_sym => value)
       end

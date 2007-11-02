@@ -1,0 +1,8 @@
+# Built-in
+filters: [ 'erb' ]
+
+# Custom
+title: My New Homepage
+foo:
+  bar:
+    baz: "quux"

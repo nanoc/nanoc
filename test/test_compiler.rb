@@ -233,6 +233,15 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_nested_hashes_in_meta_files
+    with_fixture 'site_with_nested_hashes_in_meta_files' do
+      assert_nothing_raised() { $nanoc_compiler.run }
+      assert(File.file?('output/index.html'))
+      assert_equal(1, Dir["output/*"].size)
+      assert(File.read('output/index.html').include?('<p>foo.bar.baz is quux</p>'))
+    end
+  end
+
   def test_compile_outside_site
     in_dir %w{ tmp } do
       assert_raise(SystemExit) { $nanoc_compiler.run }
