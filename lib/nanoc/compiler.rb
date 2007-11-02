@@ -99,7 +99,7 @@ module Nanoc
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
 
       # Print delayed error messages
-      $delayed_errors.each { |error| $stderr.puts error } unless $quiet
+      $delayed_errors.uniq.each { |error| $stderr.puts error } unless $quiet
     end
 
     def layout
@@ -125,7 +125,7 @@ module Nanoc
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
 
       # Print delayed error messages
-      $delayed_errors.each { |error| $stderr.puts error } unless $quiet
+      $delayed_errors.uniq.each { |error| $stderr.puts error } unless $quiet
     end
 
     def save_pages
