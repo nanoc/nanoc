@@ -6,7 +6,7 @@ module Nanoc
     unless in_site?
       $stderr.puts 'ERROR: The current working directory does not seem to ' +
         'be a valid/complete nanoc site directory; aborting.' unless $quiet
-      exit
+      exit(1)
     end
   end
 
