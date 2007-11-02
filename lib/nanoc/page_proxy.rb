@@ -18,9 +18,9 @@ module Nanoc
         @page.file
       else
         if Nanoc::Page::BUILTIN_KEYS.include?(real_key)
-          res = @page.attributes[:builtin][real_key]
+          res = @page.builtin_attribute_named(real_key)
         else
-          res = @page.attributes[real_key]
+          res = @page.custom_attribute_named(real_key)
         end
 
         res.is_a?(Hash) ? DotNotationHash.new(res) : res
