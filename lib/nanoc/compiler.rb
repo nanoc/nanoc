@@ -18,7 +18,7 @@ module Nanoc
 
       # Load configuration
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-      @default_attributes = YAML.load_file_and_clean('meta.yaml')
+      @default_attributes = { :builtin => {} }.merge(YAML.load_file_and_clean('meta.yaml'))
 
       # Require all Ruby source files in lib/
       Dir['lib/*.rb'].each { |f| require f }
