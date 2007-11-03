@@ -64,11 +64,25 @@ module Nanoc
     end
 
     def custom_attribute_named(name)
-      @attributes[name] || @compiler.default_attributes[name]
+      if @attributes.has_key?(name)
+        @attributes[name]
+      elsif @compiler.default_attributes.has_key?(name)
+        @compiler.default_attributes[name]
+      else
+        nil
+      end
     end
 
     def builtin_attribute_named(name)
-      @attributes[:builtin][name] || @attributes[name] || @compiler.default_attributes[name] || PAGE_DEFAULTS[name]
+      if @attributes[:builtin].has_key?(name)
+        @attributes[:builtin][name]
+      elsif @attributes.has_key?(name)
+        @attributes[name]
+      elsif @compiler.default_attributes.has_key?(name)
+        @compiler.default_attributes[name]
+      else
+        PAGE_DEFAULTS[name]
+      end
     end
 
     def has_builtin_attribute_named?(name)
@@ -112,7 +126,7 @@ module Nanoc
     end
 
     def find_layout
-      if has_builtin_attribute_named?(:layout) and builtin_attribute_named(:layout) == nil
+      if builtin_attribute_named(:layout).nil?
         { :type => :eruby, :content => "<%= @page.content %>" }
       else
         # Find all layouts
@@ -150,10 +164,10 @@ module Nanoc
       end
 
       # Get filters
-      # FIXME
       if @stage == :pre
         filters   = attributes[:builtin][:filters_pre] || attributes[:builtin][:filters]
         filters ||= attributes[:filters_pre] || attributes[:filters]
+        filters ||= @compiler.default_attributes[:builtin][:filters_pre] || @compiler.default_attributes[:builtin][:filters]
         filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
         filters ||= []
       elsif @stage == :post
