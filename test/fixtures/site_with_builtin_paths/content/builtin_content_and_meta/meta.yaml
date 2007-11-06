@@ -1,6 +1,6 @@
 # Built-in
 builtin:
-  layout: "default"
+  layout: "other"
 
 # Custom
 title: "Built-in Content and Meta"

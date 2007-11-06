@@ -23,7 +23,11 @@ module Nanoc
           res = @page.custom_attribute_named(real_key)
         end
 
-        res.is_a?(Hash) ? DotNotationHash.new(res) : res
+        if real_key == :builtin
+          DotNotationHash.new(res, :is_builtin => true, :page_proxy => self)
+        else
+          res.is_a?(Hash) ? DotNotationHash.new(res) : res
+        end
       end
     end
 

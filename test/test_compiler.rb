@@ -247,6 +247,18 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { $nanoc_compiler.run }
       assert(File.file?('output/index.html'))
       assert_equal(4, Dir["output/*"].size)
+
+      assert(File.read('output/index.html').include?('<p>This page\'s layout is other.</p>'))
+      assert(File.read('output/index.html').include?('<p>This is the other layout.</p>'))
+
+      assert(File.read('output/builtin_content/index.html').include?('<p>This page\'s layout is other.</p>'))
+      assert(File.read('output/builtin_content/index.html').include?('<p>This is the other layout.</p>'))
+
+      assert(File.read('output/builtin_content_and_meta/index.html').include?('<p>This page\'s layout is other.</p>'))
+      assert(File.read('output/builtin_content_and_meta/index.html').include?('<p>This is the other layout.</p>'))
+
+      assert(File.read('output/builtin_meta/index.html').include?('<p>This page\'s layout is other.</p>'))
+      assert(File.read('output/builtin_meta/index.html').include?('<p>This is the other layout.</p>'))
     end
   end
 
