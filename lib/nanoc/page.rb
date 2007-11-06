@@ -44,15 +44,10 @@ module Nanoc
       @attributes[:builtin] = (@attributes[:builtin] || {}).merge(extra_hash)
     end
 
-    # Proxy/Liquid support
+    # Proxy support
 
     def to_proxy(params={})
       PageProxy.new(self, :filter => params[:filter])
-    end
-
-    def to_liquid
-      nanoc_require 'liquid'
-      PageDrop.new(self)
     end
 
     # Attributes
@@ -81,10 +76,6 @@ module Nanoc
       else
         PAGE_DEFAULTS[name]
       end
-    end
-
-    def has_builtin_attribute_named?(name)
-      @attributes[:builtin].has_key?(name) || @attributes.has_key?(name) || @compiler.default_attributes.has_key?(name)
     end
 
     # Helper methods
@@ -159,12 +150,15 @@ module Nanoc
 
       # Get filters
       if @stage == :pre
+        # FIXME this will likely not work if filters are explicitly set to nil
         filters   = attributes[:builtin][:filters_pre] || attributes[:builtin][:filters]
         filters ||= attributes[:filters_pre] || attributes[:filters]
         filters ||= @compiler.default_attributes[:builtin][:filters_pre] || @compiler.default_attributes[:builtin][:filters]
         filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
         filters ||= []
       elsif @stage == :post
+        # FIXME this will likely not work if filters are explicitly set to nil
+        # FIXME use builtin_attribute_named instead
         filters   = attributes[:builtin][:filters_post]
         filters ||= attributes[:filters_post]
         filters ||= @compiler.default_attributes[:builtin][:filters_post]
@@ -210,14 +204,7 @@ module Nanoc
       layout = self.find_layout
 
       # Build params
-      if layout[:type] == :liquid
-        public_page   = self.to_liquid
-        public_pages  = other_pages.map { |p| p.to_liquid }
-      else
-        public_page   = self.to_proxy
-        public_pages  = other_pages.map { |p| p.to_proxy }
-      end
-      params = { :assigns => { :page => public_page, :pages => public_pages } }
+      params = { :assigns => { :page => self.to_proxy, :pages => other_pages.map { |p| p.to_proxy } } }
       params[:haml_options] = (builtin_attribute_named(:haml_options) || {}).symbolize_keys
 
       # Layout

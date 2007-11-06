@@ -41,5 +41,4 @@ $nanoc_compiler = Nanoc::Compiler.new
 require File.dirname(__FILE__) + '/nanoc/core_ext.rb'
 require File.dirname(__FILE__) + '/nanoc/filters.rb'
 require File.dirname(__FILE__) + '/nanoc/page.rb'
-require File.dirname(__FILE__) + '/nanoc/page_drop.rb'
 require File.dirname(__FILE__) + '/nanoc/page_proxy.rb'
