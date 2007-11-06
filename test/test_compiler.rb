@@ -138,16 +138,6 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_liquid_layout
-    return unless test_require 'liquid'
-    with_fixture 'site_with_liquid_layout' do
-      assert_nothing_raised() { $nanoc_compiler.run }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert_match(/<p>This is a Liquid-powered site.<\/p>/, File.read('output/index.html'))
-    end
-  end
-
   def test_compile_site_with_haml_layout
     return unless test_require 'haml'
     with_fixture 'site_with_haml_layout' do

@@ -34,11 +34,6 @@ class FiltersTest < Test::Unit::TestCase
     assert_equal("<p>bar</p>\n", '%p= foo'.haml(:assigns => { :foo => 'bar' }))
   end
 
-  def test_string_liquid
-    return unless test_require 'liquid'
-    assert_equal('<p>bar</p>', '<p>{{foo}}</p>'.liquid(:assigns => { :foo => 'bar' }))
-  end
-
   def test_string_markaby
     return unless test_require 'markaby'
     assert_match(/<h1>Hello<\/h1>/, 'html { body { h1 "Hello" }}'.markaby)
