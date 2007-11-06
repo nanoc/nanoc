@@ -99,6 +99,10 @@ module Nanoc
       builtin_attribute_named(:is_draft)
     end
 
+    def path
+      builtin_attribute_named(:path)
+    end
+
     def layout
       builtin_attribute_named(:layout)
     end
@@ -159,7 +163,11 @@ module Nanoc
         filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
         filters ||= []
       elsif @stage == :post
-        filters = builtin_attribute_named(:filters_post) || []
+        filters   = attributes[:builtin][:filters_post]
+        filters ||= attributes[:filters_post]
+        filters ||= @compiler.default_attributes[:builtin][:filters_post]
+        filters ||= @compiler.default_attributes[:filters_post]
+        filters ||= []
       end
 
       # Filter if not yet filtered

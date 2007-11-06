@@ -80,7 +80,7 @@ module Nanoc
     end
 
     def filter(stage)
-      # Reset filter stack
+      # Reinit
       @stack = []
 
       # Prepare pages
@@ -104,9 +104,7 @@ module Nanoc
 
       # Give feedback
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
-
-      # Print delayed error messages
-      $delayed_errors.sort.uniq.each { |error| $stderr.puts error } unless $quiet
+      print_delayed_errors
     end
 
     def layout
@@ -130,15 +128,20 @@ module Nanoc
       # Give feedback
       print_immediately ' ' * @pages.select { |page| page.skip_output? }.size
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
-
-      # Print delayed error messages
-      $delayed_errors.sort.uniq.each { |error| $stderr.puts error } unless $quiet
+      print_delayed_errors
     end
 
     def write_pages
       @pages.reject { |page| page.skip_output? }.each do |page|
         FileManager.create_file(page.path_on_filesystem) { page.content }
       end
+    end
+
+    # Helper functions
+
+    def print_delayed_errors
+      $delayed_errors.sort.uniq.each { |error| $stderr.puts error } unless $quiet
+      $delayed_errors = []
     end
 
   end
