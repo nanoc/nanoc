@@ -5,8 +5,7 @@ module Nanoc
       '.erb'    => :eruby,
       '.rhtml'  => :eruby,
       '.haml'   => :haml,
-      '.mab'    => :markaby,
-      '.liquid' => :liquid
+      '.mab'    => :markaby
     }
 
     BUILTIN_KEYS = [
@@ -157,13 +156,7 @@ module Nanoc
         filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
         filters ||= []
       elsif @stage == :post
-        # FIXME this will likely not work if filters are explicitly set to nil
-        # FIXME use builtin_attribute_named instead
-        filters   = attributes[:builtin][:filters_post]
-        filters ||= attributes[:filters_post]
-        filters ||= @compiler.default_attributes[:builtin][:filters_post]
-        filters ||= @compiler.default_attributes[:filters_post]
-        filters ||= []
+        filters = builtin_attribute_named(:filters_post) || []
       end
 
       # Filter if not yet filtered
@@ -215,8 +208,6 @@ module Nanoc
         @attributes[:builtin][:content] = layout[:content].haml(params)
       when :markaby
         @attributes[:builtin][:content] = layout[:content].markaby(params)
-      when :liquid
-        @attributes[:builtin][:content] = layout[:content].liquid(params)
       else
         @attributes[:builtin][:content] = nil
       end
