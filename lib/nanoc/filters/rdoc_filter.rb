@@ -11,5 +11,5 @@ class String
 end
 
 register_filter 'rdoc' do |page, pages, config|
-  page.content.rdoc
+  page.builtin.content.rdoc
 end

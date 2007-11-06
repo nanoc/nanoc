@@ -3,7 +3,8 @@ module Nanoc
 
     DEFAULT_CONFIG = {
       :output_dir   => 'output',
-      :eruby_engine => 'erb'
+      :eruby_engine => 'erb',
+      :data_source  => :filesystem
     }
 
     attr_reader :config, :stack, :pages, :default_attributes
@@ -54,21 +55,27 @@ module Nanoc
 
     def find_uncompiled_pages
       # Read all meta files
-      Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
-        # Read the meta file
-        hash = YAML.load_file_and_clean(filename)
+      case @config[:data_source]
+      when :filesystem
+        Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
+          # Read the meta file
+          hash = YAML.load_file_and_clean(filename)
 
-        # Get extra info
-        path                = filename.sub(/^content/, '').sub('meta.yaml', '')
-        content_filename    = content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
-        file                = File.new(content_filename)
-        extras = { :path => path, :file => file, :uncompiled_content => file.read }
+          # Get extra info
+          path                = filename.sub(/^content/, '').sub('meta.yaml', '')
+          content_filename    = content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
+          file                = File.new(content_filename)
+          extras = { :path => path, :file => file, :uncompiled_content => file.read }
 
-        # Convert to a Page instance
-        page = Page.new(hash, self, extras)
+          # Convert to a Page instance
+          page = Page.new(hash, self, extras)
 
-        # Skip drafts
-        page.is_draft? ? pages : pages + [ page ]
+          # Skip drafts
+          page.is_draft? ? pages : pages + [ page ]
+        end
+      else
+        $stderr.puts "ERROR: Unrecognised datasource: #{@config[:data_source]}"
+        exit(1)
       end
     end
 
@@ -99,7 +106,7 @@ module Nanoc
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
 
       # Print delayed error messages
-      $delayed_errors.uniq.each { |error| $stderr.puts error } unless $quiet
+      $delayed_errors.sort.uniq.each { |error| $stderr.puts error } unless $quiet
     end
 
     def layout
@@ -125,7 +132,7 @@ module Nanoc
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
 
       # Print delayed error messages
-      $delayed_errors.uniq.each { |error| $stderr.puts error } unless $quiet
+      $delayed_errors.sort.uniq.each { |error| $stderr.puts error } unless $quiet
     end
 
     def write_pages

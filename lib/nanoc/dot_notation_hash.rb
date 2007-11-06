@@ -4,7 +4,7 @@ module Nanoc
     def initialize(hash, params={})
       @hash       = hash
       @is_builtin = params[:is_builtin]
-      @page_proxy = params[:page_proxy]
+      @page       = params[:page]
     end
 
     def [](key)
@@ -15,7 +15,7 @@ module Nanoc
 
       # Get value
       res = @hash[real_key]
-      res = @page_proxy[real_key] if res.nil? and @is_builtin
+      res = @page.builtin_attribute_named(real_key) if res.nil? and @is_builtin
 
       # Return (dotnotationized if necessary) hash
       res.is_a?(Hash) ? DotNotationHash.new(res) : res
