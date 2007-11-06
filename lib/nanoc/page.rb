@@ -34,16 +34,14 @@ module Nanoc
       :layout       => 'default'
     }
 
-    attr_accessor :stage, :is_filtered, :content_filename
+    attr_accessor :stage, :is_filtered
 
-    def initialize(hash, path, compiler)
-      @compiler   = compiler
-      @stage      = nil
-      @attributes = hash
-
-      # Set path
-      @attributes[:builtin] ||= {}
-      @attributes[:builtin][:path] = path
+    def initialize(hash, compiler, extra_hash)
+      @compiler             = compiler
+      @stage                = nil
+      @attributes           = hash
+      @file                 = nil
+      @attributes[:builtin] = (@attributes[:builtin] || {}).merge(extra_hash)
     end
 
     # Proxy/Liquid support
@@ -89,15 +87,15 @@ module Nanoc
       @attributes[:builtin].has_key?(name) || @attributes.has_key?(name) || @compiler.default_attributes.has_key?(name)
     end
 
-    # Helper functions
+    # Helper methods
 
     def content
       filter!
       builtin_attribute_named(:content)
     end
 
-    def path=(path)
-      @attributes[:builtin][:path] = path
+    def file
+      builtin_attribute_named(:file)
     end
 
     def skip_output?
@@ -119,10 +117,6 @@ module Nanoc
       else
         @compiler.config[:output_dir] + builtin_attribute_named(:custom_path)
       end
-    end
-
-    def file
-      File.new(@content_filename)
     end
 
     def find_layout
@@ -182,7 +176,7 @@ module Nanoc
       unless @is_filtered
         stack.pushing(self) do
           # Read page
-          content = @attributes[:builtin][:content] || File.read(@content_filename)
+          content = builtin_attribute_named(:content) || builtin_attribute_named(:uncompiled_content)
 
           begin
             # Get params
@@ -202,7 +196,7 @@ module Nanoc
               end
             end
           rescue Exception => exception
-            handle_exception(exception, "filter page '#{@content_filename}'")
+            handle_exception(exception, "filter page '#{builtin_attribute_named(:path)}'")
           end
         end
       end
@@ -250,7 +244,7 @@ module Nanoc
       # Print relevant part of stack
       $stderr.puts 'Page filter stack:'
       relevant_stack_part.each_with_index do |page, i|
-        $stderr.puts "#{i}  #{page.content_filename}"
+        $stderr.puts "#{i}  #{page.builtin_attribute_named(:path)}"
       end
     end
 

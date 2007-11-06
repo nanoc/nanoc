@@ -21,7 +21,7 @@ module Nanoc
       @default_attributes = { :builtin => {} }.merge(YAML.load_file_and_clean('meta.yaml'))
 
       # Require all Ruby source files in lib/
-      Dir['lib/*.rb'].each { |f| require f }
+      Dir['lib/**/*.rb'].sort.each { |f| require f }
 
       # Create output directory if necessary
       FileUtils.mkdir_p(@config[:output_dir])
@@ -35,7 +35,7 @@ module Nanoc
       filter(:post)
 
       # Save pages
-      save_pages
+      write_pages
     end
 
     # Filter management
@@ -58,14 +58,14 @@ module Nanoc
         # Read the meta file
         hash = YAML.load_file_and_clean(filename)
 
-        # Fix the path
-        path = filename.sub(/^content/, '').sub('meta.yaml', '')
+        # Get extra info
+        path                = filename.sub(/^content/, '').sub('meta.yaml', '')
+        content_filename    = content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
+        file                = File.new(content_filename)
+        extras = { :path => path, :file => file, :uncompiled_content => file.read }
 
         # Convert to a Page instance
-        page = Page.new(hash, path, self)
-
-        # Get the content filename
-        page.content_filename = content_filename_for_meta_filename(filename)
+        page = Page.new(hash, self, extras)
 
         # Skip drafts
         page.is_draft? ? pages : pages + [ page ]
@@ -116,7 +116,7 @@ module Nanoc
         begin
           page.layout!
         rescue => exception
-          handle_exception(exception, "layouting page '#{page.content_filename}' in layout '#{page.layout}'")
+          handle_exception(exception, "layouting page '#{page.path}' in layout '#{page.layout}'")
         end
       end
 
@@ -128,17 +128,10 @@ module Nanoc
       $delayed_errors.uniq.each { |error| $stderr.puts error } unless $quiet
     end
 
-    def save_pages
+    def write_pages
       @pages.reject { |page| page.skip_output? }.each do |page|
-        # Write page with layout
         FileManager.create_file(page.path_on_filesystem) { page.content }
       end
-    end
-
-    # Helper methods
-
-    def content_filename_for_meta_filename(filename)
-      content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
     end
 
   end
