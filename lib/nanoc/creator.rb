@@ -40,7 +40,7 @@ module Nanoc
             "    <title><%= @page.title %></title>\n" +
             "  </head>\n" +
             "  <body>\n" +
-            "<%= @page.content %>\n" +
+            "<%= @page.builtin.content %>\n" +
             "  </body>\n" +
             "</html>\n"
           end

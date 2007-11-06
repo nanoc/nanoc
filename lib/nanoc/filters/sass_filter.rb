@@ -9,5 +9,5 @@ class String
 end
 
 register_filter 'sass' do |page, pages, config|
-  page.content.sass
+  page.builtin.content.sass
 end

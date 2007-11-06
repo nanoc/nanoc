@@ -69,6 +69,9 @@ module Nanoc
       if @attributes[:builtin].has_key?(name)
         @attributes[:builtin][name]
       elsif @attributes.has_key?(name)
+        $delayed_errors << "WARNING: the '#{name}' key is a built-in property and should\n" +
+                           "         be put into the 'builtin' namespace -- this will be a hard error in\n" +
+                           "         the future (page: #{builtin_attribute_named(:path)})" unless $quiet
         @attributes[name]
       elsif @compiler.default_attributes.has_key?(name)
         @compiler.default_attributes[name]
@@ -111,7 +114,7 @@ module Nanoc
 
     def find_layout
       if builtin_attribute_named(:layout).nil?
-        { :type => :eruby, :content => "<%= @page.content %>" }
+        { :type => :eruby, :content => "<%= @page.builtin.content %>" }
       else
         # Find all layouts
         filenames = Dir["layouts/#{builtin_attribute_named(:layout)}.*"]
