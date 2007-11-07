@@ -34,16 +34,16 @@ class String
 end
 
 register_filter 'erb' do |page, pages, config|
-  page.builtin.content.erb(:assigns => { :page => page, :pages => pages })
+  page.content.erb(:assigns => { :page => page, :pages => pages })
 end
 
 register_filter 'erubis' do |page, pages, config|
-  page.builtin.content.erubis(:assigns => { :page => page, :pages => pages })
+  page.content.erubis(:assigns => { :page => page, :pages => pages })
 end
 
 register_filter 'eruby' do |page, pages, config|
   $delayed_errors << "WARNING: The 'eruby' filter has been deprecated, and will be removed in 1.8." unless $quiet
   $delayed_errors << "         Please use the 'erb' or 'erubis' filters instead." unless $quiet
   assigns = { :page => page, :pages => pages }
-  page.builtin.content.eruby(:assigns => assigns, :eruby_engine => config[:eruby_engine])
+  page.content.eruby(:assigns => assigns, :eruby_engine => config[:eruby_engine])
 end

@@ -9,5 +9,5 @@ class String
 end
 
 register_filter 'textile', 'redcloth' do |page, pages, config|
-  page.builtin.content.textile
+  page.content.textile
 end

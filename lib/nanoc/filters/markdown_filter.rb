@@ -9,5 +9,5 @@ class String
 end
 
 register_filter 'markdown', 'bluecloth' do |page, pages, config|
-  page.builtin.content.markdown
+  page.content.markdown
 end

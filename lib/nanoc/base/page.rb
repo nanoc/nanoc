@@ -8,39 +8,28 @@ module Nanoc
       '.mab'    => :markaby
     }
 
-    BUILTIN_KEYS = [
-      :content,
-      :custom_path,
-      :extension,
-      :file,
-      :filename,
-      :filters,
-      :filters_post,
-      :filters_pre,
-      :haml_options,
-      :is_draft,
-      :layout,
-      :path,
-      :skip_output
-    ]
-
     PAGE_DEFAULTS = {
+      :content      => nil,
       :custom_path  => nil,
-      :filename     => 'index',
       :extension    => 'html',
+      :file         => nil,
+      :filename     => 'index',
       :filters      => [],
+      :filters_pre  => [],
+      :filters_post => [],
+      :haml_options => {},
       :is_draft     => false,
-      :layout       => 'default'
+      :layout       => 'default',
+      :path         => nil,
+      :skip_output  => false
     }
 
     attr_accessor :stage, :is_filtered
 
-    def initialize(hash, compiler, extra_hash)
-      @compiler             = compiler
-      @stage                = nil
-      @attributes           = hash
-      @file                 = nil
-      @attributes[:builtin] = (@attributes[:builtin] || {}).merge(extra_hash)
+    def initialize(hash, compiler)
+      @compiler   = compiler
+      @stage      = nil
+      @attributes = hash
     end
 
     # Proxy support
@@ -55,79 +44,60 @@ module Nanoc
       @attributes
     end
 
-    def custom_attribute_named(name)
-      if @attributes.has_key?(name)
-        @attributes[name]
-      elsif @compiler.default_attributes.has_key?(name)
-        @compiler.default_attributes[name]
-      else
-        nil
-      end
-    end
-
-    def builtin_attribute_named(name)
-      if @attributes[:builtin].has_key?(name)
-        @attributes[:builtin][name]
-      elsif @attributes.has_key?(name)
-        $delayed_errors << "WARNING: the '#{name}' key is a built-in property and should\n" +
-                           "         be put into the 'builtin' namespace -- this will be a hard error in\n" +
-                           "         the future (page: #{builtin_attribute_named(:path)})" unless $quiet
-        @attributes[name]
-      elsif @compiler.default_attributes.has_key?(name)
-        @compiler.default_attributes[name]
-      else
-        PAGE_DEFAULTS[name]
-      end
+    def attribute_named(name)
+      return @attributes[name]                  if @attributes.has_key?(name)
+      return @compiler.default_attributes[name] if @compiler.default_attributes.has_key?(name)
+      return PAGE_DEFAULTS[name]
     end
 
     # Helper methods
 
     def content
       filter!
-      builtin_attribute_named(:content)
+      attribute_named(:content)
     end
 
     def file
-      builtin_attribute_named(:file)
+      attribute_named(:file)
     end
 
     def skip_output?
-      builtin_attribute_named(:skip_output)
+      attribute_named(:skip_output)
     end
 
     def is_draft?
-      builtin_attribute_named(:is_draft)
+      attribute_named(:is_draft)
     end
 
     def path
-      builtin_attribute_named(:path)
+      attribute_named(:path)
     end
 
     def layout
-      builtin_attribute_named(:layout)
+      attribute_named(:layout)
     end
 
     def path_on_filesystem
-      if builtin_attribute_named(:custom_path).nil?
-        @compiler.config[:output_dir] + builtin_attribute_named(:path) +
-          builtin_attribute_named(:filename) + '.' + builtin_attribute_named(:extension)
+      if attribute_named(:custom_path).nil?
+        @compiler.config[:output_dir] + attribute_named(:path) +
+          attribute_named(:filename) + '.' + attribute_named(:extension)
       else
-        @compiler.config[:output_dir] + builtin_attribute_named(:custom_path)
+        @compiler.config[:output_dir] + attribute_named(:custom_path)
       end
     end
 
     def find_layout
-      if builtin_attribute_named(:layout).nil?
-        { :type => :eruby, :content => "<%= @page.builtin.content %>" }
+      if attribute_named(:layout).nil?
+        { :type => :eruby, :content => "<%= @page.content %>" }
       else
         # Find all layouts
-        filenames = Dir["layouts/#{builtin_attribute_named(:layout)}.*"]
+        filenames = Dir["layouts/#{attribute_named(:layout)}.*"]
 
         # Reject backups
         filenames.reject! { |f| f =~ /~$/ }
 
         # Make sure there is only one content file
-        filenames.ensure_single('layout files', builtin_attribute_named(:layout))
+        filenames.ensure_single('layout files', attribute_named(:layout))
 
         # Get the first (and only one)
         filename = filenames[0]
@@ -156,16 +126,11 @@ module Nanoc
 
       # Get filters
       if @stage == :pre
-        # FIXME this will likely not work if filters are explicitly set to nil
-        filters   = attributes[:builtin][:filters_pre] || attributes[:builtin][:filters]
         filters ||= attributes[:filters_pre] || attributes[:filters]
-        filters ||= @compiler.default_attributes[:builtin][:filters_pre] || @compiler.default_attributes[:builtin][:filters]
         filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
         filters ||= []
       elsif @stage == :post
-        filters   = attributes[:builtin][:filters_post]
         filters ||= attributes[:filters_post]
-        filters ||= @compiler.default_attributes[:builtin][:filters_post]
         filters ||= @compiler.default_attributes[:filters_post]
         filters ||= []
       end
@@ -174,7 +139,7 @@ module Nanoc
       unless @is_filtered
         stack.pushing(self) do
           # Read page
-          content = builtin_attribute_named(:content) || builtin_attribute_named(:uncompiled_content)
+          content = attribute_named(:content) || attribute_named(:uncompiled_content)
 
           begin
             # Get params
@@ -183,18 +148,18 @@ module Nanoc
             config = $nanoc_compiler.config
 
             # Filter page
-            @attributes[:builtin][:content] = content
+            @attributes[:content] = content
             filters.each do |filter_name|
               filter = $nanoc_compiler.filter_named(filter_name)
               if filter.nil?
                 $delayed_errors << 'WARNING: Unknown filter: ' + filter_name unless $quiet
               else
-                @attributes[:builtin][:content] = filter.call(page, pages, config)
+                @attributes[:content] = filter.call(page, pages, config)
                 @is_filtered = true
               end
             end
           rescue Exception => exception
-            handle_exception(exception, "filter page '#{builtin_attribute_named(:path)}'")
+            handle_exception(exception, "filter page '#{attribute_named(:path)}'")
           end
         end
       end
@@ -209,18 +174,18 @@ module Nanoc
 
       # Build params
       params = { :assigns => { :page => self.to_proxy, :pages => other_pages.map { |p| p.to_proxy } } }
-      params[:haml_options] = (builtin_attribute_named(:haml_options) || {}).symbolize_keys
+      params[:haml_options] = attribute_named(:haml_options).symbolize_keys
 
       # Layout
       case layout[:type]
       when :eruby
-        @attributes[:builtin][:content] = layout[:content].eruby(params)
+        @attributes[:content] = layout[:content].eruby(params)
       when :haml
-        @attributes[:builtin][:content] = layout[:content].haml(params)
+        @attributes[:content] = layout[:content].haml(params)
       when :markaby
-        @attributes[:builtin][:content] = layout[:content].markaby(params)
+        @attributes[:content] = layout[:content].markaby(params)
       else
-        @attributes[:builtin][:content] = nil
+        @attributes[:content] = nil
       end
     end
 
@@ -233,7 +198,7 @@ module Nanoc
       # Print relevant part of stack
       $stderr.puts 'Page filter stack:'
       relevant_stack_part.each_with_index do |page, i|
-        $stderr.puts "#{i}  #{page.builtin_attribute_named(:path)}"
+        $stderr.puts "#{i}  #{page.attribute_named(:path)}"
       end
     end
 

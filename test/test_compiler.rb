@@ -223,35 +223,6 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_nested_hashes_in_meta_files
-    with_fixture 'site_with_nested_hashes_in_meta_files' do
-      assert_nothing_raised() { $nanoc_compiler.run }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert(File.read('output/index.html').include?('<p>foo.bar.baz is quux</p>'))
-    end
-  end
-
-  def test_compile_site_with_builtin_paths
-    with_fixture 'site_with_builtin_paths' do
-      assert_nothing_raised() { $nanoc_compiler.run }
-      assert(File.file?('output/index.html'))
-      assert_equal(4, Dir["output/*"].size)
-
-      assert(File.read('output/index.html').include?('<p>This page\'s layout is other.</p>'))
-      assert(File.read('output/index.html').include?('<p>This is the other layout.</p>'))
-
-      assert(File.read('output/builtin_content/index.html').include?('<p>This page\'s layout is other.</p>'))
-      assert(File.read('output/builtin_content/index.html').include?('<p>This is the other layout.</p>'))
-
-      assert(File.read('output/builtin_content_and_meta/index.html').include?('<p>This page\'s layout is other.</p>'))
-      assert(File.read('output/builtin_content_and_meta/index.html').include?('<p>This is the other layout.</p>'))
-
-      assert(File.read('output/builtin_meta/index.html').include?('<p>This page\'s layout is other.</p>'))
-      assert(File.read('output/builtin_meta/index.html').include?('<p>This is the other layout.</p>'))
-    end
-  end
-
   def test_compile_outside_site
     in_dir %w{ tmp } do
       assert_raise(SystemExit) { $nanoc_compiler.run }
