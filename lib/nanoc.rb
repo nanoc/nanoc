@@ -29,16 +29,18 @@ end
 
 $delayed_errors = []
 
-require File.dirname(__FILE__) + '/nanoc/enhancements.rb'
-require File.dirname(__FILE__) + '/nanoc/dot_notation_hash.rb'
+require File.dirname(__FILE__) + '/nanoc/base/core_ext.rb'
+require File.dirname(__FILE__) + '/nanoc/base/enhancements.rb'
+require File.dirname(__FILE__) + '/nanoc/base/dot_notation_hash.rb'
 
-require File.dirname(__FILE__) + '/nanoc/creator.rb'
-require File.dirname(__FILE__) + '/nanoc/compiler.rb'
+require File.dirname(__FILE__) + '/nanoc/base/creator.rb'
+require File.dirname(__FILE__) + '/nanoc/base/compiler.rb'
 
 $nanoc_creator  = Nanoc::Creator.new
 $nanoc_compiler = Nanoc::Compiler.new
 
-require File.dirname(__FILE__) + '/nanoc/core_ext.rb'
 require File.dirname(__FILE__) + '/nanoc/filters.rb'
-require File.dirname(__FILE__) + '/nanoc/page.rb'
-require File.dirname(__FILE__) + '/nanoc/page_proxy.rb'
+require File.dirname(__FILE__) + '/nanoc/layout_processors.rb'
+
+require File.dirname(__FILE__) + '/nanoc/base/page.rb'
+require File.dirname(__FILE__) + '/nanoc/base/page_proxy.rb'
