@@ -19,7 +19,7 @@ module Nanoc
 
       # Load configuration
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-      @default_attributes = { :builtin => {} }.merge(YAML.load_file_and_clean('meta.yaml'))
+      @default_attributes = YAML.load_file_and_clean('meta.yaml')
 
       # Require all Ruby source files in lib/
       Dir['lib/**/*.rb'].sort.each { |f| require f }
@@ -62,13 +62,13 @@ module Nanoc
           hash = YAML.load_file_and_clean(filename)
 
           # Get extra info
-          path                = filename.sub(/^content/, '').sub('meta.yaml', '')
-          content_filename    = content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
-          file                = File.new(content_filename)
-          extras = { :path => path, :file => file, :uncompiled_content => file.read }
+          path              = filename.sub(/^content/, '').sub('meta.yaml', '')
+          content_filename  = content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
+          file              = File.new(content_filename)
+          extras            = { :path => path, :file => file, :uncompiled_content => file.read }
 
           # Convert to a Page instance
-          page = Page.new(hash, self, extras)
+          page = Page.new(hash.merge(extras), self)
 
           # Skip drafts
           page.is_draft? ? pages : pages + [ page ]

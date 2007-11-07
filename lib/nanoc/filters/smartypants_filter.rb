@@ -9,5 +9,5 @@ class String
 end
 
 register_filter 'smartypants', 'rubypants' do |page, pages, config|
-  page.builtin.content.smartypants
+  page.content.smartypants
 end

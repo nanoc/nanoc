@@ -31,7 +31,6 @@ $delayed_errors = []
 
 require File.dirname(__FILE__) + '/nanoc/base/core_ext.rb'
 require File.dirname(__FILE__) + '/nanoc/base/enhancements.rb'
-require File.dirname(__FILE__) + '/nanoc/base/dot_notation_hash.rb'
 
 require File.dirname(__FILE__) + '/nanoc/base/creator.rb'
 require File.dirname(__FILE__) + '/nanoc/base/compiler.rb'

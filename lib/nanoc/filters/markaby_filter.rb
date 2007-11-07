@@ -11,5 +11,5 @@ end
 
 register_filter 'markaby' do |page, pages, config|
   assigns = { :page => page, :pages => pages }
-  page.builtin.content.markaby(:assigns => assigns)
+  page.content.markaby(:assigns => assigns)
 end

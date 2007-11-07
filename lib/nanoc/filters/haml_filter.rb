@@ -14,6 +14,5 @@ end
 
 register_filter 'haml' do |page, pages, config|
   assigns = { :page => page, :pages => pages }
-  put '==> ' + page.builtin.haml_options.inspect
-  page.builtin.content.haml(:assigns => assigns, :haml_options => page.builtin.haml_options)
+  page.content.haml(:assigns => assigns, :haml_options => page.haml_options)
 end
