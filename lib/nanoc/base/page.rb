@@ -88,7 +88,7 @@ module Nanoc
 
     def find_layout
       if attribute_named(:layout).nil?
-        { :type => :eruby, :content => "<%= @page.content %>" }
+        { :type => :nothing, :content => self.content }
       else
         # Find all layouts
         filenames = Dir["layouts/#{attribute_named(:layout)}.*"]
@@ -178,6 +178,8 @@ module Nanoc
 
       # Layout
       case layout[:type]
+      when :nothing
+        @attributes[:content] = layout[:content]
       when :eruby
         @attributes[:content] = layout[:content].eruby(params)
       when :haml
