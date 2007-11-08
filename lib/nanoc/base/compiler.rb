@@ -10,7 +10,8 @@ module Nanoc
     attr_reader :config, :stack, :pages, :default_attributes
 
     def initialize
-      @filters = {}
+      @filters            = {}
+      @layout_processors  = {}
     end
 
     def run
@@ -47,6 +48,14 @@ module Nanoc
 
     def filter_named(name)
       @filters[name.to_sym]
+    end
+
+    def register_layout_processor(extension, &block)
+      @layout_processors[extension.to_s.sub(/^\./, '').to_sym] = block
+    end
+
+    def layout_processor_for_extension(extension)
+      @layout_processors[extension.to_s.sub(/^\./, '').to_sym]
     end
 
   private

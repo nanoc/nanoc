@@ -4,4 +4,4 @@ def register_filter(*names, &block)
 end
 
 # Load all filters
-Dir[File.join(File.dirname(__FILE__), 'filters', '*_filter.rb')].each { |f| require f }
+Dir[File.join(File.dirname(__FILE__), 'filters', '*.rb')].each { |f| require f }

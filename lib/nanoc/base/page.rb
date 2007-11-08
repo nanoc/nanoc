@@ -1,13 +1,6 @@
 module Nanoc
   class Page
 
-    FILE_TYPES = {
-      '.erb'    => :eruby,
-      '.rhtml'  => :eruby,
-      '.haml'   => :haml,
-      '.mab'    => :markaby
-    }
-
     PAGE_DEFAULTS = {
       :content      => nil,
       :custom_path  => nil,
@@ -88,7 +81,7 @@ module Nanoc
 
     def find_layout
       if attribute_named(:layout).nil?
-        { :type => :nothing, :content => self.content }
+        nil
       else
         # Find all layouts
         filenames = Dir["layouts/#{attribute_named(:layout)}.*"]
@@ -102,7 +95,7 @@ module Nanoc
         # Get the first (and only one)
         filename = filenames[0]
 
-        { :type => FILE_TYPES[File.extname(filename)], :content => File.read(filename) }
+        { :extension => File.extname(filename), :content => File.read(filename) }
       end
     end
 
@@ -166,29 +159,24 @@ module Nanoc
     end
 
     def layout!
-      # Get list of other pages
-      other_pages = @compiler.pages
-
       # Find layout
       layout = self.find_layout
+      return if layout.nil?
 
-      # Build params
-      params = { :assigns => { :page => self.to_proxy, :pages => other_pages.map { |p| p.to_proxy } } }
-      params[:haml_options] = attribute_named(:haml_options).symbolize_keys
+      # Find layout processor
+      layout_processor = $nanoc_compiler.layout_processor_for_extension(layout[:extension])
+      if layout_processor.nil?
+        $delayed_errors << 'WARNING: Unknown layout processor: ' + layout[:extension] unless $quiet
+        return
+      end
+
+      # Get some useful stuff
+      page   = self.to_proxy(:filter => false)
+      pages  = @compiler.pages.map { |p| p.to_proxy }
+      config = $nanoc_compiler.config
 
       # Layout
-      case layout[:type]
-      when :nothing
-        @attributes[:content] = layout[:content]
-      when :eruby
-        @attributes[:content] = layout[:content].eruby(params)
-      when :haml
-        @attributes[:content] = layout[:content].haml(params)
-      when :markaby
-        @attributes[:content] = layout[:content].markaby(params)
-      else
-        @attributes[:content] = nil
-      end
+      @attributes[:content] = layout_processor.call(page, pages, layout[:content], config)
     end
 
     def print_stack

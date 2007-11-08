@@ -11,6 +11,7 @@ nanoc Release Notes
 * Removed support for Liquid -- it seems to be barely used, probably because
   it is not easy to use and aimed mostly to be a secure templating language,
   which nanoc does not need
+* Added support for custom layout processors
 
 1.6.2
 -----
