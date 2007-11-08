@@ -50,16 +50,8 @@ module Nanoc
       attribute_named(:content)
     end
 
-    def file
-      attribute_named(:file)
-    end
-
     def skip_output?
       attribute_named(:skip_output)
-    end
-
-    def is_draft?
-      attribute_named(:is_draft)
     end
 
     def path
@@ -79,39 +71,28 @@ module Nanoc
       end
     end
 
-    def find_layout
-      if attribute_named(:layout).nil?
-        nil
-      else
-        # Find all layouts
-        filenames = Dir["layouts/#{attribute_named(:layout)}.*"]
-
-        # Reject backups
-        filenames.reject! { |f| f =~ /~$/ }
-
-        # Make sure there is only one content file
-        filenames.ensure_single('layout files', attribute_named(:layout))
-
-        # Get the first (and only one)
-        filename = filenames[0]
-
-        { :extension => File.extname(filename), :content => File.read(filename) }
-      end
-    end
-
     # Filtering
 
     def filter!
-      # Get stack and list of other pages
-      stack       = @compiler.stack
-      other_pages = @compiler.pages
+      # Get stack
+      stack  = @compiler.stack
 
       # Check for recursive call
       if stack.include?(self)
         # Print stack
         unless $quiet
           $stderr.puts 'ERROR: Recursive call to page content.'
-          print_stack
+
+          # Determine relevant part of stack
+          stack_begin = @compiler.stack.index(self)
+          stack_end   = @compiler.stack.size
+          relevant_stack_part = @compiler.stack.last(stack_end - stack_begin)
+
+          # Print relevant part of stack
+          $stderr.puts 'Page filter stack:'
+          relevant_stack_part.each_with_index do |page, i|
+            $stderr.puts "#{i}  #{page.attribute_named(:path)}"
+          end
         end
 
         exit(1)
@@ -134,39 +115,46 @@ module Nanoc
           # Read page
           content = attribute_named(:content) || attribute_named(:uncompiled_content)
 
-          begin
-            # Get params
-            page   = self.to_proxy(:filter => false)
-            pages  = other_pages.map { |p| p.to_proxy }
-            config = $nanoc_compiler.config
+          # Get params
+          page   = self.to_proxy(:filter => false)
+          pages  = @compiler.pages.map { |p| p.to_proxy }
+          config = $nanoc_compiler.config
 
-            # Filter page
-            @attributes[:content] = content
-            filters.each do |filter_name|
-              filter = $nanoc_compiler.filter_named(filter_name)
-              if filter.nil?
-                $delayed_errors << 'WARNING: Unknown filter: ' + filter_name unless $quiet
-              else
-                @attributes[:content] = filter.call(page, pages, config)
-                @is_filtered = true
-              end
+          # Filter page
+          @attributes[:content] = content
+          filters.each do |filter_name|
+            # Find filter
+            filter = $nanoc_compiler.filter_named(filter_name)
+            if filter.nil?
+              $delayed_errors << 'WARNING: Unknown filter: ' + filter_name unless $quiet
+              next
             end
-          rescue Exception => exception
-            handle_exception(exception, "filter page '#{attribute_named(:path)}'")
+
+            # Run filter
+            @attributes[:content] = filter.call(page, pages, config)
+            @is_filtered = true
           end
         end
       end
     end
 
     def layout!
+      # Don't layout if not necessary
+      if attribute_named(:layout).nil?
+        return
+      end
+
       # Find layout
-      layout = self.find_layout
-      return if layout.nil?
+      filenames = Dir["layouts/#{attribute_named(:layout)}.*"].reject { |f| f =~ /~$/ }
+      filenames.ensure_single('layout files', attribute_named(:layout))
+      filename  = filenames[0]
+      extension = File.extname(filename)
+      layout    = File.read(filename)
 
       # Find layout processor
-      layout_processor = $nanoc_compiler.layout_processor_for_extension(layout[:extension])
+      layout_processor = $nanoc_compiler.layout_processor_for_extension(extension)
       if layout_processor.nil?
-        $delayed_errors << 'WARNING: Unknown layout processor: ' + layout[:extension] unless $quiet
+        $delayed_errors << 'WARNING: Unknown layout processor: ' + extension unless $quiet
         return
       end
 
@@ -176,20 +164,7 @@ module Nanoc
       config = $nanoc_compiler.config
 
       # Layout
-      @attributes[:content] = layout_processor.call(page, pages, layout[:content], config)
-    end
-
-    def print_stack
-      # Determine relevant part of stack
-      stack_begin = @compiler.stack.index(self)
-      stack_end   = @compiler.stack.size
-      relevant_stack_part = @compiler.stack.last(stack_end - stack_begin)
-
-      # Print relevant part of stack
-      $stderr.puts 'Page filter stack:'
-      relevant_stack_part.each_with_index do |page, i|
-        $stderr.puts "#{i}  #{page.attribute_named(:path)}"
-      end
+      @attributes[:content] = layout_processor.call(page, pages, layout, config)
     end
 
   end

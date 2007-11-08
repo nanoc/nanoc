@@ -14,8 +14,6 @@ module Nanoc
 
       if real_key == :content and @do_filter
         @page.content
-      elsif real_key == :file
-        @page.file
       else
         @page.attribute_named(real_key)
       end
