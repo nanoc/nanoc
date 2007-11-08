@@ -28,7 +28,8 @@ class String
   # Converts the string using ERB
   def erb(params={})
     nanoc_require 'erb'
-    ERB.new(self).result(ERBContext.new(params[:assigns] || {}).get_binding)
+    context = ERBContext.new(params[:assigns] || {})
+    ERB.new(self).result(context.get_binding)
   end
 
 end
