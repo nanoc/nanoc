@@ -40,7 +40,7 @@ module Nanoc
       write_pages
     end
 
-    # Filter management
+    # Filter and layout processor management
 
     def register_filter(name, &block)
       @filters[name.to_sym] = block
@@ -80,7 +80,7 @@ module Nanoc
           page = Page.new(hash.merge(extras), self)
 
           # Skip drafts
-          page.is_draft? ? pages : pages + [ page ]
+          hash[:is_draft] ? pages : pages + [ page ]
         end
       else
         $stderr.puts "ERROR: Unrecognised datasource: #{@config[:data_source]}"
@@ -108,7 +108,11 @@ module Nanoc
         print_immediately '.'
 
         # Filter
-        page.filter!
+        begin
+          page.filter!
+        rescue => exception
+          handle_exception(exception, "filtering page '#{page.path}'")
+        end
       end
 
       # Give feedback
@@ -126,7 +130,7 @@ module Nanoc
         # Give feedback
         print_immediately '.'
 
-        # Layout the page
+        # Layout
         begin
           page.layout!
         rescue => exception
