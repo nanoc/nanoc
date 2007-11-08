@@ -42,4 +42,5 @@ require File.dirname(__FILE__) + '/nanoc/filters.rb'
 require File.dirname(__FILE__) + '/nanoc/layout_processors.rb'
 
 require File.dirname(__FILE__) + '/nanoc/base/page.rb'
+require File.dirname(__FILE__) + '/nanoc/base/db_page.rb'
 require File.dirname(__FILE__) + '/nanoc/base/page_proxy.rb'

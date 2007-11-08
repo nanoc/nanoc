@@ -2,10 +2,10 @@ module Nanoc
 
   class Creator
 
-    def create_site(a_sitename)
-      ensure_nonexistant(a_sitename)
+    def create_site(sitename)
+      ensure_nonexistant(sitename)
 
-      FileManager.create_dir a_sitename do
+      FileManager.create_dir sitename do
         FileManager.create_dir 'output'
 
         FileManager.create_file 'config.yaml' do
@@ -51,8 +51,8 @@ module Nanoc
             "\# All files in the 'lib' directory will be loaded\n" +
             "\# before nanoc starts compiling.\n" +
             "\n" +
-            "def html_escape(a_string)\n" +
-            "  a_string.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n" +
+            "def html_escape(str)\n" +
+            "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
             "end\n" +
             "alias h html_escape\n"
           end
@@ -94,18 +94,40 @@ module Nanoc
       end
     end
 
-    def create_page(a_pagename, a_params={})
+    def setup_database
+      # FIXME the compiler shouldn't be involved in this
+      nanoc_require 'active_record'
+      $nanoc_compiler.prepare
+
+      # Create table
+      ActiveRecord::Schema.define do
+        create_table :pages, :force => true do |t|
+          t.column :content, :text
+          t.column :path,    :string
+          t.column :meta,    :text
+        end
+      end
+
+      # Create first page
+      Nanoc::DBPage.create(
+        :path    => '/',
+        :content => 'This is a sample root page. Please edit me!',
+        :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
+      )
+    end
+
+    def create_page(pagename, params={})
       Nanoc.ensure_in_site
-      ensure_nonexistant(File.join(['content', a_pagename]))
+      ensure_nonexistant(File.join(['content', pagename]))
 
       # Sanitize page name
-      if a_pagename =~ /^[\/\.]+/
+      if pagename =~ /^[\/\.]+/
         $stderr.puts 'ERROR: page name starts with dots and/or slashes, aborting' unless $quiet
         return
       end
 
       # Read template
-      template = a_params[:template] || 'default'
+      template = params[:template] || 'default'
       template_meta_filename    = "templates/#{template}/meta.yaml"
       template_content_filename = content_filename_for_dir("templates/#{template}", 'template files', template)
       unless File.exist?(template_content_filename) and File.exist?(template_meta_filename)
@@ -118,8 +140,8 @@ module Nanoc
 
       # Create index and yaml file
       FileManager.create_dir 'content' do
-        FileManager.create_dir a_pagename do
-          page_name = a_pagename.sub(/.*\/([^\/]+)/, '\1')
+        FileManager.create_dir pagename do
+          page_name = pagename.sub(/.*\/([^\/]+)/, '\1')
           extension = File.extname(template_content_filename)
           FileManager.create_file "#{page_name}#{extension}" do
             template_index
@@ -131,13 +153,13 @@ module Nanoc
       end
     end
 
-    def create_template(a_templatename)
+    def create_template(templatename)
       Nanoc.ensure_in_site
-      ensure_nonexistant(File.join(['templates', a_templatename]))
+      ensure_nonexistant(File.join(['templates', templatename]))
 
       FileManager.create_dir 'templates' do
-        FileManager.create_dir a_templatename do
-          FileManager.create_file "#{a_templatename}.txt" do
+        FileManager.create_dir templatename do
+          FileManager.create_file "#{templatename}.txt" do
             "This is a new page. Please edit me!\n"
           end
           FileManager.create_file 'meta.yaml' do
