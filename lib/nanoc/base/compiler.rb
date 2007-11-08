@@ -4,7 +4,7 @@ module Nanoc
     DEFAULT_CONFIG = {
       :output_dir   => 'output',
       :eruby_engine => 'erb',
-      :data_source  => :filesystem
+      :datasource   => 'filesystem'
     }
 
     attr_reader :config, :stack, :pages, :default_attributes
@@ -14,13 +14,25 @@ module Nanoc
       @layout_processors  = {}
     end
 
+    def prepare
+      # Load configuration
+      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
+
+      # Open database
+      if @config[:datasource] == 'database'
+        ActiveRecord::Base.establish_connection(config[:database])
+      end
+
+      # Load default metadata
+      @default_attributes = YAML.load_file_and_clean('meta.yaml')
+    end
+
     def run
       # Make sure we're in a nanoc site
       Nanoc.ensure_in_site
 
-      # Load configuration
-      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-      @default_attributes = YAML.load_file_and_clean('meta.yaml')
+      # Prepare nanoc for usage
+      prepare
 
       # Require all Ruby source files in lib/
       Dir['lib/**/*.rb'].sort.each { |f| require f }
@@ -64,8 +76,8 @@ module Nanoc
 
     def find_uncompiled_pages
       # Read all meta files
-      case @config[:data_source]
-      when :filesystem
+      case @config[:datasource]
+      when 'filesystem'
         Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
           # Read the meta file
           hash = YAML.load_file_and_clean(filename)
@@ -82,8 +94,17 @@ module Nanoc
           # Skip drafts
           hash[:is_draft] ? pages : pages + [ page ]
         end
+      when 'database'
+        nanoc_require 'active_record'
+
+        # Create Pages for each database object
+        DBPage.find(:all).map do |page|
+          hash    = (YAML.load(page.meta || '') || {}).clean
+          extras  = { :path => page.path, :uncompiled_content => page.content }
+          Page.new(hash.merge(extras), self)
+        end
       else
-        $stderr.puts "ERROR: Unrecognised datasource: #{@config[:data_source]}"
+        $stderr.puts "ERROR: Unrecognised datasource: #{@config[:datasource]}"
         exit(1)
       end
     end
