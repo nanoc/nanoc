@@ -4,14 +4,21 @@ nanoc Release Notes
 1.7
 ---
 
+New:
+
+* Progress indicators are now displayed while the site is compiling
+* Added support for custom layout processors
+* Added support for custom data sources
+* Added database data source
+
+Changed:
+
 * The 'eruby' filter has been split in two filters, 'erb' and 'erubis', which
   no longer use the config file. The 'eruby' filter has been deprecated, and
   will be removed in 1.8
-* Progress indicators are now displayed while the site is compiling.
 * Removed support for Liquid -- it seems to be barely used, probably because
   it is not easy to use and aimed mostly to be a secure templating language,
   which nanoc does not need
-* Added support for custom layout processors
 
 1.6.2
 -----
