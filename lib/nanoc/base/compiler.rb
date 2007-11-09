@@ -1,47 +1,24 @@
 module Nanoc
   class Compiler
 
-    DEFAULT_CONFIG = {
-      :output_dir   => 'output',
-      :eruby_engine => 'erb',
-      :datasource   => 'filesystem'
-    }
-
-    attr_reader :config, :stack, :pages, :default_attributes
+    attr_reader :stack, :config, :pages, :page_defaults
 
     def initialize
       @filters            = {}
       @layout_processors  = {}
     end
 
-    def prepare
-      # Load configuration
-      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
-
-      # Open database
-      if @config[:datasource] == 'database'
-        ActiveRecord::Base.establish_connection(config[:database])
-      end
-
-      # Load default metadata
-      @default_attributes = YAML.load_file_and_clean('meta.yaml')
-    end
-
-    def run
-      # Make sure we're in a nanoc site
-      Nanoc.ensure_in_site
-
-      # Prepare nanoc for usage
-      prepare
+    def run!(pages, page_defaults, config)
+      # Store what's necessary
+      @page_defaults = page_defaults
+      @config        = config
+      @pages         = pages
 
       # Require all Ruby source files in lib/
       Dir['lib/**/*.rb'].sort.each { |f| require f }
 
       # Create output directory if necessary
       FileUtils.mkdir_p(@config[:output_dir])
-
-      # Get all pages
-      @pages = find_uncompiled_pages
 
       # Filter, layout, and filter again
       filter(:pre)
@@ -74,41 +51,6 @@ module Nanoc
 
     # Main methods
 
-    def find_uncompiled_pages
-      # Read all meta files
-      case @config[:datasource]
-      when 'filesystem'
-        Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
-          # Read the meta file
-          hash = YAML.load_file_and_clean(filename)
-
-          # Get extra info
-          path              = filename.sub(/^content/, '').sub('meta.yaml', '')
-          content_filename  = content_filename_for_dir(File.dirname(filename), 'content files', File.dirname(filename))
-          file              = File.new(content_filename)
-          extras            = { :path => path, :file => file, :uncompiled_content => file.read }
-
-          # Convert to a Page instance
-          page = Page.new(hash.merge(extras), self)
-
-          # Skip drafts
-          hash[:is_draft] ? pages : pages + [ page ]
-        end
-      when 'database'
-        nanoc_require 'active_record'
-
-        # Create Pages for each database object
-        DBPage.find(:all).map do |page|
-          hash    = (YAML.load(page.meta || '') || {}).clean
-          extras  = { :path => page.path, :uncompiled_content => page.content }
-          Page.new(hash.merge(extras), self)
-        end
-      else
-        $stderr.puts "ERROR: Unrecognised datasource: #{@config[:datasource]}"
-        exit(1)
-      end
-    end
-
     def filter(stage)
       # Reinit
       @stack = []
@@ -138,7 +80,6 @@ module Nanoc
 
       # Give feedback
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
-      print_delayed_errors
     end
 
     def layout
@@ -162,20 +103,12 @@ module Nanoc
       # Give feedback
       print_immediately ' ' * @pages.select { |page| page.skip_output? }.size
       print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
-      print_delayed_errors
     end
 
     def write_pages
       @pages.reject { |page| page.skip_output? }.each do |page|
         FileManager.create_file(page.path_on_filesystem) { page.content }
       end
-    end
-
-    # Helper functions
-
-    def print_delayed_errors
-      $delayed_errors.sort.uniq.each { |error| $stderr.puts error } unless $quiet
-      $delayed_errors = []
     end
 
   end

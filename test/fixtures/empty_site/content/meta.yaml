@@ -1,4 +1,6 @@
 # Built-in
+filters_pre:
+  - 'eruby'
 
 # Custom
 title: My New Homepage

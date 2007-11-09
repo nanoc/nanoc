@@ -43,8 +43,8 @@ register_filter 'erubis' do |page, pages, config|
 end
 
 register_filter 'eruby' do |page, pages, config|
-  $delayed_errors << "WARNING: The 'eruby' filter has been deprecated, and will be removed in 1.8." unless $quiet
-  $delayed_errors << "         Please use the 'erb' or 'erubis' filters instead." unless $quiet
+  $stderr.puts "[ WARNING: The 'eruby' filter has been deprecated, and will be removed in 1.8. Please use the 'erb' or 'erubis' filters instead. ]" unless $quiet
+
   assigns = { :page => page, :pages => pages }
   page.content.eruby(:assigns => assigns, :eruby_engine => config[:eruby_engine])
 end

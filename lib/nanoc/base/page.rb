@@ -19,8 +19,9 @@ module Nanoc
 
     attr_accessor :stage, :is_filtered
 
-    def initialize(hash, compiler)
-      @compiler   = compiler
+    def initialize(hash, site)
+      @site       = site
+      @compiler   = site.compiler
       @stage      = nil
       @attributes = hash
     end
@@ -38,8 +39,8 @@ module Nanoc
     end
 
     def attribute_named(name)
-      return @attributes[name]                  if @attributes.has_key?(name)
-      return @compiler.default_attributes[name] if @compiler.default_attributes.has_key?(name)
+      return @attributes[name]             if @attributes.has_key?(name)
+      return @compiler.page_defaults[name] if @compiler.page_defaults.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
 
@@ -64,10 +65,10 @@ module Nanoc
 
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
-        @compiler.config[:output_dir] + attribute_named(:path) +
+        @site.config[:output_dir] + attribute_named(:path) +
           attribute_named(:filename) + '.' + attribute_named(:extension)
       else
-        @compiler.config[:output_dir] + attribute_named(:custom_path)
+        @site.config[:output_dir] + attribute_named(:custom_path)
       end
     end
 
@@ -75,7 +76,7 @@ module Nanoc
 
     def filter!
       # Get stack
-      stack  = @compiler.stack
+      stack = @compiler.stack
 
       # Check for recursive call
       if stack.include?(self)
@@ -100,12 +101,12 @@ module Nanoc
 
       # Get filters
       if @stage == :pre
-        filters ||= attributes[:filters_pre] || attributes[:filters]
-        filters ||= @compiler.default_attributes[:filters_pre] || @compiler.default_attributes[:filters]
+        filters ||= @attributes[:filters_pre] || @attributes[:filters]
+        filters ||= @site.page_defaults[:filters_pre] || @compiler.page_defaults[:filters]
         filters ||= []
       elsif @stage == :post
-        filters ||= attributes[:filters_post]
-        filters ||= @compiler.default_attributes[:filters_post]
+        filters ||= @attributes[:filters_post]
+        filters ||= @site.page_defaults[:filters_post]
         filters ||= []
       end
 
@@ -117,17 +118,17 @@ module Nanoc
 
           # Get params
           page   = self.to_proxy(:filter => false)
-          pages  = @compiler.pages.map { |p| p.to_proxy }
-          config = $nanoc_compiler.config
+          pages  = @site.pages.map { |p| p.to_proxy }
+          config = @site.config
 
           # Filter page
           @attributes[:content] = content
           filters.each do |filter_name|
             # Find filter
-            filter = $nanoc_compiler.filter_named(filter_name)
+            filter = @compiler.filter_named(filter_name)
             if filter.nil?
-              $delayed_errors << 'WARNING: Unknown filter: ' + filter_name unless $quiet
-              next
+              $stderr.puts 'ERROR: Unknown filter: ' + filter_name unless $quiet
+              exit(1)
             end
 
             # Run filter
@@ -140,31 +141,29 @@ module Nanoc
 
     def layout!
       # Don't layout if not necessary
-      if attribute_named(:layout).nil?
-        return
-      end
+      return if attribute_named(:layout).nil?
 
       # Find layout
-      filenames = Dir["layouts/#{attribute_named(:layout)}.*"].reject { |f| f =~ /~$/ }
-      filenames.ensure_single('layout files', attribute_named(:layout))
-      filename  = filenames[0]
-      extension = File.extname(filename)
-      layout    = File.read(filename)
+      layout = @site.layouts.find { |layout| layout[:name] == attribute_named(:layout) }
+      if layout.nil?
+        $stderr.puts 'ERROR: Unknown layout: ' + attribute_named(:layout) unless $quiet
+        exit(1)
+      end
 
       # Find layout processor
-      layout_processor = $nanoc_compiler.layout_processor_for_extension(extension)
+      layout_processor = @compiler.layout_processor_for_extension(layout[:extension])
       if layout_processor.nil?
-        $delayed_errors << 'WARNING: Unknown layout processor: ' + extension unless $quiet
-        return
+        $stderr.puts 'ERROR: Unknown layout processor: ' + layout[:extension] unless $quiet
+        exit(1)
       end
 
       # Get some useful stuff
       page   = self.to_proxy(:filter => false)
       pages  = @compiler.pages.map { |p| p.to_proxy }
-      config = $nanoc_compiler.config
+      config = @compiler.config
 
       # Layout
-      @attributes[:content] = layout_processor.call(page, pages, layout, config)
+      @attributes[:content] = layout_processor.call(page, pages, layout[:content], config)
     end
 
   end
