@@ -7,7 +7,7 @@ module Nanoc
       :data_source  => 'filesystem'
     }
 
-    attr_reader :config,  :page_defaults
+    attr_reader :config, :page_defaults
     attr_reader :compiler, :creator
     attr_reader :pages, :layouts, :templates
 
@@ -37,54 +37,60 @@ module Nanoc
       # Create compiler
       @compiler = Nanoc::Compiler.new
 
-      # Load page defaults
-      @page_defaults = YAML.load_file_and_clean('meta.yaml')
+      # Set not loaded
+      @data_loaded = false
     end
 
-    # Data
+    def load_data_if_necessary
+      return if @data_loaded
 
-    def load_data
-      # Find data source class
+      # Create data source
       data_source_class = $nanoc_extras_manager.data_source_named(@config[:data_source])
       if data_source_class.nil?
         $stderr.puts "ERROR: Unrecognised data source: #{@config[:data_source]}"
         exit(1)
       end
-
-      # Create data source
       @data_source = data_source_class.new(self)
 
       # Start data source
       @data_source.up
 
       # Load data
-      @pages      = @data_source.pages.map { |p| Page.new(p, self) }
-      @layouts    = @data_source.layouts
-      @templates  = @data_source.templates
+      @pages          = @data_source.pages.map { |p| Page.new(p, self) }
+      @page_defaults  = @data_source.page_defaults
+      @layouts        = @data_source.layouts
+      @templates      = @data_source.templates
 
       # Stop data source
       @data_source.down
+
+      # Set loaded
+      @data_loaded = true
     end
 
     # Compiling
 
     def compile!
-      load_data
+      load_data_if_necessary
       @compiler.run!(@pages, @page_defaults, @config)
     end
 
     # Creating
 
-    def create_page
+    def create_page(name, template_name='default')
+      load_data_if_necessary
+      template = @templates.find { |t| t[:name] == template_name }
+      @data_source.create_page(name, template)
     end
 
-    def create_template
+    def create_template(name)
+      load_data_if_necessary
+      @data_source.create_template(name)
     end
 
-    def create_layout
-    end
-
-    def create_database
+    def create_layout(name)
+      load_data_if_necessary
+      @data_source.create_layout(name)
     end
 
   end

@@ -11,10 +11,11 @@ version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
 usage_text   = "Usage: nanoc [options] [command] [parameters]"
 help_text    = <<EOT
 Usage: nanoc [-chv]
-       nanoc create_site <name>
-       nanoc create_page <name> [-t template]
-       nanoc create_template <name>
        nanoc compile
+       nanoc create_layout <name>
+       nanoc create_page <name> [-t template]
+       nanoc create_site <name>
+       nanoc create_template <name>
 
 Options:
     -h, --help        Show this help message and quit.
@@ -79,7 +80,38 @@ case command
       $stderr.puts 'Usage: nanoc create_page [page_name]'
       exit(1)
     end
-    $nanoc_creator.create_page(ARGV[1], :template => unprocessed_opts['--template'])
+
+    # Make sure we are in a nanoc site directory
+    unless $nanoc_site
+      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+        'be a valid/complete nanoc site directory; aborting.'
+      exit(1)
+    end
+
+    # Create page
+    if unprocessed_opts['--template'].nil?
+      $nanoc_site.create_page(ARGV[1])
+    else
+      $nanoc_site.create_page(ARGV[1], unprocessed_opts['--template'])
+    end
+
+  # Create layout
+  when 'create_layout', 'cl'
+
+    if ARGV.size != 2
+      $stderr.puts 'Usage: nanoc create_layout [layout_name]'
+      exit(1)
+    end
+
+    # Make sure we are in a nanoc site directory
+    unless $nanoc_site
+      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+        'be a valid/complete nanoc site directory; aborting.'
+      exit(1)
+    end
+
+    # Create template
+    $nanoc_site.create_layout(ARGV[1])
 
   # Create template
   when 'create_template', 'ct'
@@ -88,7 +120,16 @@ case command
       $stderr.puts 'Usage: nanoc create_template [template_name]'
       exit(1)
     end
-    $nanoc_creator.create_template(ARGV[1])
+
+    # Make sure we are in a nanoc site directory
+    unless $nanoc_site
+      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+        'be a valid/complete nanoc site directory; aborting.'
+      exit(1)
+    end
+
+    # Create template
+    $nanoc_site.create_template(ARGV[1])
 
   # Process site and generate output
   when 'compile', 'compile_site', 'co'
@@ -98,13 +139,14 @@ case command
       exit(1)
     end
 
-    # FIXME
+    # Make sure we are in a nanoc site directory
     unless $nanoc_site
       $stderr.puts 'ERROR: The current working directory does not seem to ' +
         'be a valid/complete nanoc site directory; aborting.'
       exit(1)
     end
 
+    # Compile site
     $nanoc_site.compile!
 
   else
