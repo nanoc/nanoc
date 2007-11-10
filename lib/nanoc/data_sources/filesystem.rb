@@ -114,8 +114,8 @@ module Nanoc::DataSource::Filesystem
 
     def create_template(name)
       # Get paths
-      meta_file_path    = 'content/' + name + '/meta.yaml'
-      content_file_path = 'content/' + name + '/' + name + '.txt'
+      meta_file_path    = 'templates/' + name + '/meta.yaml'
+      content_file_path = 'templates/' + name + '/' + name + '.txt'
 
       # Make sure the template doesn't exist yet
       if File.exist?(meta_file_path)
