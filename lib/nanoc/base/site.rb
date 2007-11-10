@@ -41,33 +41,26 @@ module Nanoc
       @page_defaults = YAML.load_file_and_clean('meta.yaml')
     end
 
-    # Data source stuff
-
-    def register_data_source(name, klass)
-      @data_sources ||= {}
-      @data_sources[name.to_sym] = klass
-    end
+    # Data
 
     def load_data
-      if @data_source.nil?
-        # Find data source class
-        data_source_class = @data_sources[@config[:data_source].to_sym]
-        if data_source_class.nil?
-          $stderr.puts "ERROR: Unrecognised data source: #{@config[:data_source]}"
-          exit(1)
-        end
-
-        # Create data source
-        @data_source = data_source_class.new(self)
+      # Find data source class
+      data_source_class = $nanoc_extras_manager.data_source_named(@config[:data_source])
+      if data_source_class.nil?
+        $stderr.puts "ERROR: Unrecognised data source: #{@config[:data_source]}"
+        exit(1)
       end
+
+      # Create data source
+      @data_source = data_source_class.new(self)
 
       # Start data source
       @data_source.up
 
       # Load data
-      @pages      = @data_source.pages.map { |p| Page.new(p, self) } if @pages.nil?
-      @layouts    = @data_source.layouts   if @layouts.nil?
-      @templates  = @data_source.templates if @templates.nil?
+      @pages      = @data_source.pages.map { |p| Page.new(p, self) }
+      @layouts    = @data_source.layouts
+      @templates  = @data_source.templates
 
       # Stop data source
       @data_source.down
