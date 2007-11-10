@@ -3,11 +3,6 @@ module Nanoc
 
     attr_reader :stack, :config, :pages, :page_defaults
 
-    def initialize
-      @filters            = {}
-      @layout_processors  = {}
-    end
-
     def run!(pages, page_defaults, config)
       # Store what's necessary
       @page_defaults = page_defaults
@@ -27,24 +22,6 @@ module Nanoc
 
       # Save pages
       write_pages
-    end
-
-    # Filter and layout processor management
-
-    def register_filter(name, &block)
-      @filters[name.to_sym] = block
-    end
-
-    def filter_named(name)
-      @filters[name.to_sym]
-    end
-
-    def register_layout_processor(extension, &block)
-      @layout_processors[extension.to_s.sub(/^\./, '').to_sym] = block
-    end
-
-    def layout_processor_for_extension(extension)
-      @layout_processors[extension.to_s.sub(/^\./, '').to_sym]
     end
 
   private
@@ -109,6 +86,13 @@ module Nanoc
       @pages.reject { |page| page.skip_output? }.each do |page|
         FileManager.create_file(page.path_on_filesystem) { page.content }
       end
+    end
+
+    # Helper methods
+
+    def print_immediately(text)
+      print text unless $quiet
+      $stdout.flush
     end
 
   end

@@ -23,26 +23,6 @@ def handle_exception(exception, text)
   exit(1)
 end
 
-# Convenience function for registering filters
-def register_filter(*names, &block)
-  names.each { |name| $nanoc_site.compiler.register_filter(name, &block) } unless $nanoc_site.nil?
-end
-
-# Convenience function for registering layout procesors
-def register_layout_processor(*extensions, &block)
-  extensions.each { |extension| $nanoc_site.compiler.register_layout_processor(extension, &block) } unless $nanoc_site.nil?
-end
-
-# Convenience function for registering layout procesors
-def register_data_source(name, klass)
-  $nanoc_site.register_data_source(name, klass) unless $nanoc_site.nil?
-end
-
-def print_immediately(text)
-  print text unless $quiet
-  $stdout.flush
-end
-
 def content_filename_for_dir(dir, noun, context)
   # Find all files
   filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')

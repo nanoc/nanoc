@@ -125,7 +125,7 @@ module Nanoc
           @attributes[:content] = content
           filters.each do |filter_name|
             # Find filter
-            filter = @compiler.filter_named(filter_name)
+            filter = $nanoc_extras_manager.filter_named(filter_name)
             if filter.nil?
               $stderr.puts 'ERROR: Unknown filter: ' + filter_name unless $quiet
               exit(1)
@@ -151,7 +151,7 @@ module Nanoc
       end
 
       # Find layout processor
-      layout_processor = @compiler.layout_processor_for_extension(layout[:extension])
+      layout_processor = $nanoc_extras_manager.layout_processor_for_extension(layout[:extension])
       if layout_processor.nil?
         $stderr.puts 'ERROR: Unknown layout processor: ' + layout[:extension] unless $quiet
         exit(1)
