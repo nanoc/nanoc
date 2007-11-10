@@ -2,7 +2,7 @@ module Nanoc::DataSource::Filesystem
 
   class FilesystemDataSource < Nanoc::DataSource
 
-    # Loading data
+    ########## Loading data ##########
 
     def pages
       Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
@@ -73,7 +73,7 @@ module Nanoc::DataSource::Filesystem
       end
     end
 
-    # Creating data
+    ########## Creating data ##########
 
     def create_page(path, template)
       # Make sure path does not start or end with a slash
@@ -127,6 +127,27 @@ module Nanoc::DataSource::Filesystem
       FileManager.create_file(meta_file_path)    { "title: \"A New Page\"\n" }
       FileManager.create_file(content_file_path) { "Hi, I'm new here!\n" }
     end
+
+  private
+
+    ########## Custom functions ##########
+
+    def content_filename_for_dir(dir, noun, context)
+      # Find all files
+      filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
+      filename_glob_2 = dir.sub(/([^\/]+)$/, '\1/index.*')
+      filenames = Dir[filename_glob_1] + Dir[filename_glob_2]
+
+      # Reject backups
+      filenames.reject! { |f| f =~ /~$/ }
+
+      # Make sure there is only one content file
+      filenames.ensure_single(noun, context)
+
+      # Get the first (and only one)
+      filenames.first
+    end
+
   end
 
   register_data_source :filesystem, FilesystemDataSource

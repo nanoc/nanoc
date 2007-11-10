@@ -125,27 +125,6 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_markaby_layout
-    return unless test_require 'markaby'
-    with_site_fixture 'site_with_markaby_layout' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert_match(/<html><head>/, File.read('output/index.html'))
-    end
-  end
-
-  def test_compile_site_with_haml_layout
-    return unless test_require 'haml'
-    with_site_fixture 'site_with_haml_layout' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert_match(/<html>\n  <head>\n    <title>My New Homepage<\/title>/, File.read('output/index.html'))
-      assert_match(/<p strange=\*attrs\*>heh<\/p>/, File.read('output/index.html'))
-    end
-  end
-
   def test_compile_site_with_page_dot_notation
     with_site_fixture 'site_with_page_dot_notation' do |site|
       assert_nothing_raised() { site.compile! }
@@ -207,7 +186,8 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile! }
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
-      assert_match(/This is a &#8220;sample&#8221; paragraph./, File.read('output/index.html'))
+      assert_match(/<p>First pass<\/p>/, File.read('output/index.html'))
+      assert_match(/<p>Second pass<\/p>/, File.read('output/index.html'))
     end
   end
 

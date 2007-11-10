@@ -1,15 +1,24 @@
 module Nanoc
-  VERSION = '1.7'
+
+  VERSION = '2.0'
+
+  def self.load_file(*path_components)
+    full_path_components = [ File.dirname(__FILE__), 'nanoc' ] + path_components
+    Dir[File.join(full_path_components)].each { |f| require f }
+  end
+
 end
 
+
 # Load base
-require File.dirname(__FILE__) + '/nanoc/base/enhancements.rb'
-Dir[File.join(File.dirname(__FILE__), 'nanoc', 'base', '*.rb')].each { |f| require f }
+Nanoc.load_file('base', 'enhancements.rb')
+Nanoc.load_file('base', 'core_ext', '*.rb')
+Nanoc.load_file('base', '*.rb')
 
 # Load extras
-require File.dirname(__FILE__) + '/nanoc/data_sources.rb'
-require File.dirname(__FILE__) + '/nanoc/filters.rb'
-require File.dirname(__FILE__) + '/nanoc/layout_processors.rb'
+Nanoc.load_file('data_sources', '*.rb')
+Nanoc.load_file('filters', '*.rb')
+Nanoc.load_file('layout_processors', '*.rb')
 
 # Create globals
 $nanoc_site    = Nanoc::Site.from_cwd

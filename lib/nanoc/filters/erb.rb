@@ -14,18 +14,6 @@ end
 
 class String
 
-  # Converts the string using eRuby
-  def eruby(params={})
-    params[:eruby_engine] == :erubis ? erubis(params) : erb(params)
-  end
-
-  # Converts the string using Erubis
-  def erubis(params={})
-    nanoc_require 'erubis'
-    Erubis::Eruby.new(self).evaluate(params[:assigns] || {})
-  end
-
-  # Converts the string using ERB
   def erb(params={})
     nanoc_require 'erb'
     context = ERBContext.new(params[:assigns] || {})
@@ -34,17 +22,6 @@ class String
 
 end
 
-register_filter 'erb' do |page, pages, config|
+register_filter 'eruby', 'erb' do |page, pages, config|
   page.content.erb(:assigns => { :page => page, :pages => pages })
-end
-
-register_filter 'erubis' do |page, pages, config|
-  page.content.erubis(:assigns => { :page => page, :pages => pages })
-end
-
-register_filter 'eruby' do |page, pages, config|
-  $stderr.puts "[ WARNING: The 'eruby' filter has been deprecated, and will be removed in 1.8. Please use the 'erb' or 'erubis' filters instead. ]" unless $quiet
-
-  assigns = { :page => page, :pages => pages }
-  page.content.eruby(:assigns => assigns, :eruby_engine => config[:eruby_engine])
 end

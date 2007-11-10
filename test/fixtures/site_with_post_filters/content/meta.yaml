@@ -1,8 +1,8 @@
 # Built-in
 filters_pre:
-  - 'markdown'
+  - 'erb'
 filters_post:
-  - 'smartypants'
+  - 'erb'
 
 # Custom
 title: My New Homepage
