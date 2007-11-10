@@ -1,6 +1,8 @@
-module Nanoc::DataSource::FileSystem
-  
-  class FileSystemDataSource < Nanoc::DataSource
+module Nanoc::DataSource::Filesystem
+
+  class FilesystemDataSource < Nanoc::DataSource
+
+    # Loading data
 
     def pages
       Dir['content/**/meta.yaml'].inject([]) do |pages, filename|
@@ -23,6 +25,10 @@ module Nanoc::DataSource::FileSystem
       end
     end
 
+    def page_defaults
+      YAML.load_file_and_clean('meta.yaml')
+    end
+
     def layouts
       Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
         # Get layout details
@@ -36,11 +42,93 @@ module Nanoc::DataSource::FileSystem
     end
 
     def templates
-      []
+      Dir['templates/*/meta.yaml'].inject([]) do |templates, filename|
+        # Get template name
+        name = filename.sub(/^templates\/(.*)\/meta\.yaml$/, '\1')
+
+        # Get file names
+        meta_filename       = filename
+        content_filenames_1 = 'templates/' + name + '/' + name + '.*'
+        content_filenames_2 = 'templates/' + name + '/index.*'
+        content_filenames   = Dir[content_filenames_1] + Dir[content_filenames_2]
+
+        # Read files
+        extension = nil
+        content   = nil
+        content_filenames.each do |filename|
+          if File.exist?(filename)
+            content   = File.read(filename)
+            extension = File.extname(filename)
+          end
+        end
+        meta = File.read(meta_filename)
+
+        # Add it to the list of templates
+        content.nil? ? templates : templates + [{
+          :name       => name,
+          :extension  => extension,
+          :content    => content.erb,
+          :meta       => meta.erb
+        }]
+      end
     end
 
+    # Creating data
+
+    def create_page(path, template)
+      # Make sure path does not start or end with a slash
+      sanitized_path = path.gsub(/^\/+|\/+$/, '')
+
+      # Get paths
+      dir_path            = 'content/' + sanitized_path
+      last_path_component = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
+      meta_file_path      = dir_path + '/meta.yaml'
+      content_file_path   = dir_path + '/' + last_path_component + template[:extension]
+
+      # Make sure the page doesn't exist yet
+      if File.exist?(meta_file_path)
+        $stderr.puts "ERROR: A page named '#{path}' already exists." unless $quiet
+        exit(1)
+      end
+
+      # Create index and meta file
+      FileManager.create_file(meta_file_path)    { template[:meta] }
+      FileManager.create_file(content_file_path) { template[:content] }
+    end
+
+    def create_layout(name)
+      # Get details
+      path = 'layouts/' + name + '.erb'
+
+      # Make sure the layout doesn't exist yet
+      if File.exist?(path)
+        $stderr.puts "ERROR: A layout named '#{name}' already exists." unless $quiet
+        exit(1)
+      end
+
+      # Create layout file
+      FileManager.create_file(path) do
+        "<html>\n\t<head>\n\t\t<title><%= @page.title %></title>\n\t<body>\n<%= @page.content %>\n\t</body>\n</html>\n"
+      end
+    end
+
+    def create_template(name)
+      # Get paths
+      meta_file_path    = 'content/' + name + '/meta.yaml'
+      content_file_path = 'content/' + name + '/' + name + '.txt'
+
+      # Make sure the template doesn't exist yet
+      if File.exist?(meta_file_path)
+        $stderr.puts "ERROR: A template named '#{name}' already exists." unless $quiet
+        exit(1)
+      end
+
+      # Create index and meta file
+      FileManager.create_file(meta_file_path)    { "title: \"A New Page\"\n" }
+      FileManager.create_file(content_file_path) { "Hi, I'm new here!\n" }
+    end
   end
 
-  register_data_source :filesystem, FileSystemDataSource
+  register_data_source :filesystem, FilesystemDataSource
 
 end

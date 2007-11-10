@@ -24,6 +24,8 @@ module Nanoc::DataSource::Database
 
   class DatabaseDataSource < Nanoc::DataSource
 
+    # Initialization
+
     def up
       nanoc_require 'active_record'
 
@@ -36,6 +38,50 @@ module Nanoc::DataSource::Database
       ActiveRecord::Base.remove_connection
     end
 
+    def setup
+      nanoc_require 'active_record'
+
+      # Create tables
+      ActiveRecord::Schema.define do
+
+        create_table :pages, :force => true do |t|
+          t.column :content, :text
+          t.column :path,    :string
+          t.column :meta,    :text
+        end
+
+        create_table :layouts, :force => true do |t|
+          t.column :name,       :string
+          t.column :content,    :text
+          t.column :extension,  :string
+        end
+
+        create_table :templates, :force => true do |t|
+        end
+
+      end
+
+      # Create first page
+      DatabasePage.create(
+        :path    => '/',
+        :content => 'This is a sample root page. Please edit me!',
+        :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
+      )
+
+      # Create default layout
+      DatabaseLayout.create(
+        :name       => 'default',
+        :content    => '<html><head><title><%= @page.title %></title>' +
+                       '</head><body><%= @page.content %></body></html>',
+        :extension  => '.erb'
+      )
+
+      # Create default template
+      #TODO
+    end
+
+    # Loading data
+
     def pages
       # Create Pages for each database object
       DBPage.find(:all).inject([]) do |pages, page|
@@ -47,12 +93,17 @@ module Nanoc::DataSource::Database
           pages
         else
           # Get extra info
-          extras  = { :path => page.path, :uncompiled_content => page.content }
+          extras = { :path => page.path, :uncompiled_content => page.content }
 
           # Add to list of pages
           pages + [ hash.merge(extras) ]
         end
       end
+    end
+
+    # TODO implement
+    def page_defaults
+      {}
     end
 
     # TODO implement
@@ -63,6 +114,20 @@ module Nanoc::DataSource::Database
     # TODO implement
     def templates
       []
+    end
+
+    # Creating data
+
+    # TODO: implement
+    def create_page(name, template_name)
+    end
+
+    # TODO: implement
+    def create_layout(name)
+    end
+
+    # TODO: implement
+    def create_template(name)
     end
 
   end
