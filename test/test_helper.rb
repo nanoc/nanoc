@@ -7,9 +7,9 @@ ensure
   FileUtils.cd(File.join(a_path.map { |n| '..' }))
 end
 
-def with_fixture(a_fixture)
+def with_site_fixture(a_fixture)
   in_dir(['test', 'fixtures', a_fixture]) do
-    yield
+    yield(Nanoc::Site.from_cwd)
   end
 end
 

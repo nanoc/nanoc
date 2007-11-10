@@ -8,10 +8,8 @@ end
 require File.dirname(__FILE__) + '/nanoc/base/enhancements.rb'
 Dir[File.join(File.dirname(__FILE__), 'nanoc', 'base', '*.rb')].each { |f| require f }
 
-# Create site
-$nanoc_site = Nanoc::Site.from_cwd
-
-# Create creator
+# Create globals
+$nanoc_site    = Nanoc::Site.from_cwd
 $nanoc_creator = Nanoc::Creator.new
 
 # Load extras
