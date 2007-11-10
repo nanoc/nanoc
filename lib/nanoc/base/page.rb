@@ -7,7 +7,6 @@ module Nanoc
       :extension    => 'html',
       :file         => nil,
       :filename     => 'index',
-      :filters      => [],
       :filters_pre  => [],
       :filters_post => [],
       :haml_options => {},
@@ -39,8 +38,8 @@ module Nanoc
     end
 
     def attribute_named(name)
-      return @attributes[name]             if @attributes.has_key?(name)
-      return @compiler.page_defaults[name] if @compiler.page_defaults.has_key?(name)
+      return @attributes[name]         if @attributes.has_key?(name)
+      return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
 

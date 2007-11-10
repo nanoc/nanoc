@@ -1,7 +1,7 @@
 nanoc Release Notes
 ===================
 
-1.7
+2.0
 ---
 
 New:
@@ -13,9 +13,17 @@ New:
 
 Changed:
 
-* The 'eruby' filter has been split in two filters, 'erb' and 'erubis', which
-  no longer use the config file. The 'eruby' filter has been deprecated, and
-  will be removed in 1.8
+* The 'eruby' filter is now a synonym for 'erb'. If you want to use Erubis
+  instead of ERB, install the Erubis filter and use the 'erubis' filter name
+
+Removed:
+
+* You can no longer use the 'filters' keyword; please use 'filters_pre'
+  instead
+* nanoc no longer includes Erubis, Haml, Liquid, Markaby, Markdown, RDoc,
+  Sass, Smartypants, and Textile filters and layout processors. nanoc only
+  comes with ERB now -- don't worry; the removed filters and layout processors
+  are now available as plugins instead (except for Liquid)
 * Removed support for Liquid -- it seems to be barely used, probably because
   it is not easy to use and aimed mostly to be a secure templating language,
   which nanoc does not need

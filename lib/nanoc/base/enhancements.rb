@@ -23,22 +23,6 @@ def handle_exception(exception, text)
   exit(1)
 end
 
-def content_filename_for_dir(dir, noun, context)
-  # Find all files
-  filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
-  filename_glob_2 = dir.sub(/([^\/]+)$/, '\1/index.*')
-  filenames = Dir[filename_glob_1] + Dir[filename_glob_2]
-
-  # Reject backups
-  filenames.reject! { |f| f =~ /~$/ }
-
-  # Make sure there is only one content file
-  filenames.ensure_single(noun, context)
-
-  # Get the first (and only one)
-  filenames.first
-end
-
 class FileLogger
   COLORS = {
     :reset   => "\e[0m",
@@ -113,5 +97,5 @@ end
 
 def render(a_name, a_context={})
   assigns = a_context.merge({ :page => @page, :pages => @pages })
-  File.read('layouts/' + a_name.to_s + '.erb').eruby(:assigns => assigns)
+  File.read('layouts/' + a_name.to_s + '.erb').erb(:assigns => assigns)
 end

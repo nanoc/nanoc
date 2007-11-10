@@ -1,1 +1,2 @@
-This is a "sample" paragraph.
+<p><%= 'First pass' %></p>
+<p><%%= 'Second pass' %></p>
