@@ -220,6 +220,17 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_trivial_backend
+    with_site_fixture 'site_with_trivial_backend' do |site|
+      assert_nothing_raised() { site.compile! }
+      assert(File.file?('output/index.html'))
+      assert(File.file?('output/about/index.html'))
+      assert_equal(2, Dir["output/*"].size)
+      assert_match(/<body>Hi!<\/body>/, File.read('output/index.html'))
+      assert_match(/<body>Hello there.<\/body>/, File.read('output/about/index.html'))
+    end
+  end
+
   def test_compile_outside_site
     in_dir %w{ tmp } do
       assert(Nanoc::Site.from_cwd.nil?)
