@@ -56,25 +56,22 @@ class CreatorTest < Test::Unit::TestCase
     FileUtils.cd('tmp')
     $nanoc_creator.create_site('site')
     FileUtils.cd('site')
-    $nanoc_creator.create_page('moo')
-    FileUtils.cd('..')
-    FileUtils.cd('..')
 
-    assert(File.directory?('tmp/site/content/moo/'))
-    assert(File.file?('tmp/site/content/moo/moo.txt'))
-    assert(File.file?('tmp/site/content/moo/meta.yaml'))
-  end
+    assert_nothing_raised()   { $nanoc_site = Nanoc::Site.from_cwd }
 
-  def test_create_page_with_existing_name
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
+    assert_nothing_raised()   { $nanoc_site.create_page('test') }
+    assert_raise(SystemExit)  { $nanoc_site.create_page('test') }
 
-    assert_nothing_raised()   { $nanoc_creator.create_page('test') }
-    assert_raise(SystemExit)  { $nanoc_creator.create_page('test') }
+    assert_nothing_raised()   { $nanoc_site.create_page('foo/bar') }
+    assert_raise(SystemExit)  { $nanoc_site.create_page('foo/bar') }
 
-    assert_nothing_raised()   { $nanoc_creator.create_page('foo/bar') }
-    assert_raise(SystemExit)  { $nanoc_creator.create_page('foo/bar') }
+    assert(File.directory?('content/test/'))
+    assert(File.file?('content/test/test.txt'))
+    assert(File.file?('content/test/meta.yaml'))
+
+    assert(File.directory?('content/foo/bar/'))
+    assert(File.file?('content/foo/bar/bar.txt'))
+    assert(File.file?('content/foo/bar/meta.yaml'))
 
     FileUtils.cd('..')
     FileUtils.cd('..')
@@ -84,24 +81,17 @@ class CreatorTest < Test::Unit::TestCase
     FileUtils.cd('tmp')
     $nanoc_creator.create_site('site')
     FileUtils.cd('site')
-    $nanoc_creator.create_template('moo')
-    FileUtils.cd('..')
-    FileUtils.cd('..')
+  
+    assert_nothing_raised()   { $nanoc_site = Nanoc::Site.from_cwd }
+    assert_nothing_raised()   { $nanoc_site.create_template('test') }
+    assert_raise(SystemExit)  { $nanoc_site.create_template('test') }
 
-    assert(File.directory?('tmp/site/templates/moo/'))
-    assert(File.file?('tmp/site/templates/moo/moo.txt'))
-    assert(File.file?('tmp/site/templates/moo/meta.yaml'))
-  end
-
-  def test_create_template_with_existing_name
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
-
-    assert_nothing_raised()   { $nanoc_creator.create_template('test') }
-    assert_raise(SystemExit)  { $nanoc_creator.create_template('test') }
+    assert(File.directory?('templates/test/'))
+    assert(File.file?('templates/test/test.txt'))
+    assert(File.file?('templates/test/meta.yaml'))
 
     FileUtils.cd('..')
     FileUtils.cd('..')
   end
+
 end
