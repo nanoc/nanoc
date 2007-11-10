@@ -2,9 +2,9 @@ module Nanoc
 
   VERSION = '2.0'
 
-  def self.load_file(*path_components)
-    full_path_components = [ File.dirname(__FILE__), 'nanoc' ] + path_components
-    Dir[File.join(full_path_components)].each { |f| require f }
+  def self.load_file(*path)
+    full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
+    Dir[File.join(full_path)].each { |f| require f }
   end
 
 end

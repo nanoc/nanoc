@@ -37,10 +37,19 @@ module Nanoc
       @attributes
     end
 
-    def attribute_named(name)
-      return @attributes[name]         if @attributes.has_key?(name)
-      return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
-      return PAGE_DEFAULTS[name]
+    def attribute_named(*names)
+      # Try page attributes first
+      names.each do |name|
+        return @attributes[name] if @attributes.has_key?(name)
+      end
+
+      # Fall back to page defaults
+      names.each do |name|
+        return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
+      end
+
+      # Fall back to compiler page defaults as a last resort
+      return PAGE_DEFAULTS[names.first]
     end
 
     # Helper methods
@@ -100,13 +109,9 @@ module Nanoc
 
       # Get filters
       if @stage == :pre
-        filters ||= @attributes[:filters_pre] || @attributes[:filters]
-        filters ||= @site.page_defaults[:filters_pre] || @compiler.page_defaults[:filters]
-        filters ||= []
-      elsif @stage == :post
-        filters ||= @attributes[:filters_post]
-        filters ||= @site.page_defaults[:filters_post]
-        filters ||= []
+        filters = attribute_named(:filters_pre, :filters)
+      else
+        filters = attribute_named(:filters_post)
       end
 
       # Filter if not yet filtered
