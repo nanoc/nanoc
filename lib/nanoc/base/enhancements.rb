@@ -1,8 +1,7 @@
-def try_require(s)
-  require s
-rescue LoadError
-end
+# Try loading Rubygems
+begin ; require 'rubygems' ; rescue LoadError ; end
 
+# Convenience function for requiring something a plugin needs
 def nanoc_require(s)
   require s
 rescue LoadError
@@ -10,10 +9,7 @@ rescue LoadError
   exit(1)
 end
 
-try_require 'rubygems'
-
-require 'fileutils'
-
+# Convenience function for handling exceptions
 def handle_exception(exception, text)
   unless $quiet or exception.class == SystemExit
     $stderr.puts "ERROR: Exception occured while #{text}:\n"
@@ -22,6 +18,8 @@ def handle_exception(exception, text)
   end
   exit(1)
 end
+
+require 'fileutils'
 
 class FileLogger
   COLORS = {

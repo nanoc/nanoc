@@ -11,10 +11,6 @@ class EnhancementsTest < Test::Unit::TestCase
     $quiet = false
   end
 
-  def test_try_require
-    assert_nothing_raised() { try_require 'askjdfdsldjlfksljakfjlkdsasd' }
-  end
-
   def test_nanoc_require
     assert_raise(SystemExit) { nanoc_require 'askjdfdsldjlfksljakfjlkdsasd' }
   end
