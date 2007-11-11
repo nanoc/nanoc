@@ -1,6 +1,6 @@
 class CensorFilter < Nanoc::Filter
 
-  names :censor
+  name :censor
 
   def run(content)
     content.gsub('sucks', 'rocks')
