@@ -35,7 +35,7 @@ module Nanoc
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
 
       # Create compiler
-      @compiler = Nanoc::Compiler.new
+      @compiler = Nanoc::Compiler.new(self)
 
       # Set not loaded
       @data_loaded = false
@@ -50,9 +50,27 @@ module Nanoc
         $stderr.puts "ERROR: Unrecognised data source: #{@config[:data_source]}"
         exit(1)
       end
-      @data_source = data_source_class.new(self)
+
+      # Load data source requirements
+      missing_requirements = []
+      data_source_class.requirements.each do |req|
+        begin
+          require req
+        rescue LoadError
+          missing_requirements << req
+        end
+      end
+
+      # Print missing requirements, if any
+      unless missing_requirements.empty?
+        $stderr.puts 'ERROR: The data source for this site has the following unmet requirements:' unless $quiet
+        missing_requirements.each { |req| $stderr.puts "  - #{req}" unless $quiet }
+        $stderr.puts 'Please install the above requirements and compile again.' unless $quiet
+        exit(1)
+      end
 
       # Start data source
+      @data_source = data_source_class.new(self)
       @data_source.up
 
       # Load data
@@ -72,7 +90,7 @@ module Nanoc
 
     def compile!
       load_data_if_necessary
-      @compiler.run!(@pages, @page_defaults, @config)
+      @compiler.run!
     end
 
     # Creating

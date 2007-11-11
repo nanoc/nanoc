@@ -1,3 +1,8 @@
+# This is the module where the trivial data source will live in. It's not
+# really _necessary_ to create a separate module/namespace for each data
+# source, but it can be useful, especially when the data source needs extra
+# classes (for example, the database data source defines uses ActiveRecord, so
+# it needs classes for each table).
 module Nanoc::DataSource::Trivial
 
   # This is the implementation of a trivial data source. It doesn't do much
@@ -5,6 +10,17 @@ module Nanoc::DataSource::Trivial
   # data source, and it should be quite useful for those who want to write
   # their own data sources.
   class TrivialDataSource < Nanoc::DataSource
+
+    ########## Attributes ##########
+
+    # DataSource.name defines the name for this data source. The first and
+    # only argument is the datasource name as a symbol.
+    name :trivial
+
+    # DataSource.requires defines the list of requirements (i.e. the external
+    # libraries you'd usually load using Ruby's 'require' function). In this
+    # case, there are no requirements, so it's commented out.
+#   requires 'super_special_requirement', 'active_record'
 
     ########## Initialization ##########
 
@@ -68,7 +84,7 @@ module Nanoc::DataSource::Trivial
     # templates. These page templates are used used by DataSource#create_page
     # to create pages using a template. Each hash must have the :name key for
     # identifying the template. Apart from that, you can structure the hash
-    # like you desire. We recommend having :content (for the page content) and
+    # like you desire. I recommend having :content (for the page content) and
     # :meta (for the page metadata) keys. Note that in this example, the value
     # corresponding to the :meta key is a hash, but it could just as well have
     # been a YAML-formatted string. Just make sure that what
@@ -116,8 +132,7 @@ module Nanoc::DataSource::Trivial
   end
 
   # The register_data_source method lets nanoc know that this is a data source
-  # that can be used. The first argument is a symbol identifying the data
-  # source; the second argument is the class name.
-  register_data_source :trivial, TrivialDataSource
+  # that can be used. The only argument is the data source class.
+  register_data_source TrivialDataSource
 
 end

@@ -2,6 +2,8 @@ try_require 'active_record'
 
 module Nanoc::DataSource::Database
 
+  ########## Helper classes ##########
+
   begin
 
     # Represents a page in the database
@@ -24,7 +26,13 @@ module Nanoc::DataSource::Database
 
   class DatabaseDataSource < Nanoc::DataSource
 
-    # Initialization
+    ########## Attributes ##########
+
+    name     :database
+
+    requires 'active_record'
+
+    ########## Initialization ##########
 
     def up
       nanoc_require 'active_record'
@@ -80,7 +88,7 @@ module Nanoc::DataSource::Database
       #TODO
     end
 
-    # Loading data
+    ########## Loading data ##########
 
     def pages
       # Create Pages for each database object
@@ -116,7 +124,7 @@ module Nanoc::DataSource::Database
       []
     end
 
-    # Creating data
+    ########## Creating data ##########
 
     # TODO: implement
     def create_page(name, template_name)
@@ -132,6 +140,6 @@ module Nanoc::DataSource::Database
 
   end
 
-  register_data_source :database, DatabaseDataSource
+  register_data_source DatabaseDataSource
 
 end

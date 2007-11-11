@@ -67,6 +67,14 @@ module Nanoc
       attribute_named(:path)
     end
 
+    def filters_pre
+      attribute_named(:filters_pre, :filters)
+    end
+
+    def filters_post
+      attribute_named(:filters_post)
+    end
+
     def layout
       attribute_named(:layout)
     end
@@ -130,10 +138,6 @@ module Nanoc
           filters.each do |filter_name|
             # Find filter
             filter = $nanoc_extras_manager.filter_named(filter_name)
-            if filter.nil?
-              $stderr.puts 'ERROR: Unknown filter: ' + filter_name unless $quiet
-              exit(1)
-            end
 
             # Run filter
             @attributes[:content] = filter.call(page, pages, config)
@@ -163,8 +167,8 @@ module Nanoc
 
       # Get some useful stuff
       page   = self.to_proxy(:filter => false)
-      pages  = @compiler.pages.map { |p| p.to_proxy }
-      config = @compiler.config
+      pages  = @site.pages.map { |p| p.to_proxy }
+      config = @site.config
 
       # Layout
       @attributes[:content] = layout_processor.call(page, pages, layout[:content], config)
