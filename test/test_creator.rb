@@ -3,6 +3,7 @@ require 'test/unit'
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class CreatorTest < Test::Unit::TestCase
+
   def setup
     $quiet = true unless ENV['QUIET'] == 'false'
     FileManager.create_dir 'tmp'

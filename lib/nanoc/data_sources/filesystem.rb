@@ -2,6 +2,10 @@ module Nanoc::DataSource::Filesystem
 
   class FilesystemDataSource < Nanoc::DataSource
 
+    ########## Attributes ##########
+
+    name :filesystem
+
     ########## Loading data ##########
 
     def pages
@@ -150,6 +154,6 @@ module Nanoc::DataSource::Filesystem
 
   end
 
-  register_data_source :filesystem, FilesystemDataSource
+  register_data_source FilesystemDataSource
 
 end
