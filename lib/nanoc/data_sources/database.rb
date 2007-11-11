@@ -1,4 +1,4 @@
-module Nanoc::DataSource::Database
+module Nanoc::DataSource::DatabaseDataSource
 
   ########## Helper classes ##########
 
@@ -30,7 +30,7 @@ module Nanoc::DataSource::Database
 
     requires 'active_record'
 
-    ########## Initialization ##########
+    ########## Preparation ##########
 
     def up
       # Connect to the database
@@ -133,7 +133,5 @@ module Nanoc::DataSource::Database
     end
 
   end
-
-  register_data_source DatabaseDataSource
 
 end

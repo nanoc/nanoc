@@ -7,7 +7,22 @@ module Nanoc
       @site = site
     end
 
-    # Initialization
+    # Attributes
+
+    class << self
+      attr_accessor :_name
+    end
+
+    def self.name(name=nil)
+      if name.nil?
+        self._name
+      else
+        self._name = name
+        $nanoc_extras_manager.register_data_source(name, self)
+      end
+    end
+
+    # Preparation
 
     def up
     end

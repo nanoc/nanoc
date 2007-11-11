@@ -1,27 +1,32 @@
-class ERBContext
+module Nanoc::Filter::ERBFilter
 
-  def initialize(hash)
-    hash.each_pair do |key, value|
-      instance_variable_set('@' + key.to_s, value)
+  class ERBContext
+
+    def initialize(hash)
+      hash.each_pair do |key, value|
+        instance_variable_set('@' + key.to_s, value)
+      end
     end
+
+    def get_binding
+      binding
+    end
+
   end
 
-  def get_binding
-    binding
+  class ERBFilter < Nanoc::Filter
+
+    names     :erb, :eruby
+    requires  'erb'
+
+    def run(content)
+      # Create context
+      context = ERBContext.new({ :page => @page, :pages => @pages })
+
+      # Get result
+      ERB.new(content).result(context.get_binding)
+    end
+
   end
 
-end
-
-class String
-
-  def erb(params={})
-    nanoc_require 'erb'
-    context = ERBContext.new(params[:assigns] || {})
-    ERB.new(self).result(context.get_binding)
-  end
-
-end
-
-register_filter 'eruby', 'erb' do |page, pages, config|
-  page.content.erb(:assigns => { :page => page, :pages => pages })
 end

@@ -45,32 +45,17 @@ module Nanoc
       return if @data_loaded
 
       # Create data source
-      data_source_class = $nanoc_extras_manager.data_source_named(@config[:data_source])
-      if data_source_class.nil?
+      @data_source_class = $nanoc_extras_manager.data_source_named(@config[:data_source])
+      if @data_source_class.nil?
         $stderr.puts "ERROR: Unrecognised data source: #{@config[:data_source]}"
         exit(1)
       end
 
-      # Load data source requirements
-      missing_requirements = []
-      data_source_class.requirements.each do |req|
-        begin
-          require req
-        rescue LoadError
-          missing_requirements << req
-        end
-      end
-
-      # Print missing requirements, if any
-      unless missing_requirements.empty?
-        $stderr.puts 'ERROR: The data source for this site has the following unmet requirements:' unless $quiet
-        missing_requirements.each { |req| $stderr.puts "  - #{req}" unless $quiet }
-        $stderr.puts 'Please install the above requirements and compile again.' unless $quiet
-        exit(1)
-      end
+      # Make sure we have everything we need for loading data
+      load_data_source_requirements
 
       # Start data source
-      @data_source = data_source_class.new(self)
+      @data_source = @data_source_class.new(self)
       @data_source.up
 
       # Load data
@@ -86,10 +71,35 @@ module Nanoc
       @data_loaded = true
     end
 
+    # Managing requirements
+
+    def load_data_source_requirements
+      # Try requiring all requirements
+      missing_requirements = []
+      @data_source_class.requirements.each do |req|
+        begin
+          require req
+        rescue LoadError
+          missing_requirements << req
+        end
+      end
+      missing_requirements.uniq!
+
+      # Print missing requirements, if any
+      unless missing_requirements.empty?
+        $stderr.puts 'ERROR: This site requires the following Ruby libraries to be installed:' unless $quiet
+        missing_requirements.each { |req| $stderr.puts "  - #{req}" unless $quiet }
+        exit(1)
+      end
+    end
+
     # Compiling
 
     def compile!
+      # Get the data we need
       load_data_if_necessary
+
+      # Compile
       @compiler.run!
     end
 
