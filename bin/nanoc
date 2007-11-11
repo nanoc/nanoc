@@ -4,8 +4,6 @@ require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 
 require 'getoptlong'
 
-try_require 'rubygems'
-
 # Define some texts
 version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
 usage_text   = "Usage: nanoc [options] [command] [parameters]"

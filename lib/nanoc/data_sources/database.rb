@@ -1,5 +1,3 @@
-try_require 'active_record'
-
 module Nanoc::DataSource::Database
 
   ########## Helper classes ##########
@@ -35,8 +33,6 @@ module Nanoc::DataSource::Database
     ########## Initialization ##########
 
     def up
-      nanoc_require 'active_record'
-
       # Connect to the database
       ActiveRecord::Base.establish_connection(@site.config[:database])
     end
@@ -47,8 +43,6 @@ module Nanoc::DataSource::Database
     end
 
     def setup
-      nanoc_require 'active_record'
-
       # Create tables
       ActiveRecord::Schema.define do
 
