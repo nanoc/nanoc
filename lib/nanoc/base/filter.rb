@@ -10,7 +10,7 @@ module Nanoc
     end
 
     def self.name(name=nil)
-      self.names([name])
+      self.names(name)
     end
 
     def self.names(*names)
