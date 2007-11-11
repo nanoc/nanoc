@@ -18,8 +18,6 @@ Changed:
 
 Removed:
 
-* You can no longer use the 'filters' keyword; please use 'filters_pre'
-  instead
 * nanoc no longer includes Erubis, Haml, Liquid, Markaby, Markdown, RDoc,
   Sass, Smartypants, and Textile filters and layout processors. nanoc only
   comes with ERB now -- don't worry; the removed filters and layout processors

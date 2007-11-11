@@ -9,8 +9,8 @@ module Nanoc
 
     # Data sources
 
-    def register_data_source(klass)
-      @data_sources[klass.name.to_sym] = klass
+    def register_data_source(name, klass)
+      @data_sources[name.to_sym] = klass
     end
 
     def data_source_named(name)
@@ -19,8 +19,8 @@ module Nanoc
 
     # Filters
 
-    def register_filter(name, &block)
-      @filters[name.to_sym] = block
+    def register_filter(name, klass)
+      @filters[name.to_sym] = klass
     end
 
     def filter_named(name)
@@ -41,19 +41,9 @@ module Nanoc
 end
 
 # Global extras manager (there can be only one)
-
 $nanoc_extras_manager = Nanoc::ExtrasManager.new
 
-# Convenience functions for registering extras
-
-def register_filter(*names, &block)
-  names.each { |name| $nanoc_extras_manager.register_filter(name, &block) }
-end
-
+# Convenience functions for registering extras (will disappear)
 def register_layout_processor(*extensions, &block)
   extensions.each { |extension| $nanoc_extras_manager.register_layout_processor(extension, &block) }
-end
-
-def register_data_source(klass)
-  $nanoc_extras_manager.register_data_source(klass)
 end

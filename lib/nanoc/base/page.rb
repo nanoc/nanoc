@@ -136,11 +136,12 @@ module Nanoc
           # Filter page
           @attributes[:content] = content
           filters.each do |filter_name|
-            # Find filter
-            filter = $nanoc_extras_manager.filter_named(filter_name)
+            # Create filter
+            filter_klass = $nanoc_extras_manager.filter_named(filter_name)
+            filter = filter_klass.new(page, pages, config)
 
             # Run filter
-            @attributes[:content] = filter.call(page, pages, config)
+            @attributes[:content] = filter.run(content)
             @is_filtered = true
           end
         end

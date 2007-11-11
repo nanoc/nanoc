@@ -3,7 +3,7 @@
 # source, but it can be useful, especially when the data source needs extra
 # classes (for example, the database data source defines uses ActiveRecord, so
 # it needs classes for each table).
-module Nanoc::DataSource::Trivial
+module Nanoc::DataSource::TrivialDataSource
 
   # This is the implementation of a trivial data source. It doesn't do much
   # except return bogus data. It is meant to be a very simple example of a
@@ -22,7 +22,7 @@ module Nanoc::DataSource::Trivial
     # case, there are no requirements, so it's commented out.
 #   requires 'super_special_requirement', 'active_record'
 
-    ########## Initialization ##########
+    ########## Preparation ##########
 
     # DataSource#up is run before compiling. This is the place where you
     # should initialize the data source, if necessary. You don't need to
@@ -130,9 +130,5 @@ module Nanoc::DataSource::Trivial
     end
 
   end
-
-  # The register_data_source method lets nanoc know that this is a data source
-  # that can be used. The only argument is the data source class.
-  register_data_source TrivialDataSource
 
 end

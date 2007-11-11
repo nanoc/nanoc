@@ -1,4 +1,4 @@
-module Nanoc::DataSource::Filesystem
+module Nanoc::DataSource::FilesystemDataSource
 
   class FilesystemDataSource < Nanoc::DataSource
 
@@ -71,8 +71,8 @@ module Nanoc::DataSource::Filesystem
         content.nil? ? templates : templates + [{
           :name       => name,
           :extension  => extension,
-          :content    => content.erb,
-          :meta       => meta.erb
+          :content    => content,
+          :meta       => meta
         }]
       end
     end
@@ -153,7 +153,5 @@ module Nanoc::DataSource::Filesystem
     end
 
   end
-
-  register_data_source FilesystemDataSource
 
 end

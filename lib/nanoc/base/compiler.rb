@@ -14,8 +14,8 @@ module Nanoc
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Check requirements
-      check_requirements
+      # Make sure we have the requirements we need
+      load_requirements
 
       # Filter, layout, and filter again
       filter(:pre)
@@ -30,43 +30,49 @@ module Nanoc
 
     # Main methods
 
-    def check_requirements
-      # Give feedback
-      print_immediately 'Analysing requirements        '
-      time_before = Time.now
+    def load_requirements
+      # TODO do something like this for layout processors
 
       # Initialize
-      missing_filters = []
+      missing_libraries = []
+      missing_filters   = []
 
       # For each page
       @site.pages.each do |page|
-        # Give feedback
-        print_immediately '.'
-
-        # Check pre-filters
-        page.filters_pre.each do |filter|
-          missing_filters << filter.to_sym if $nanoc_extras_manager.filter_named(filter).nil?
-        end
-
-        # Check post-filters
-        page.filters_post.each do |filter|
-          missing_filters << filter.to_sym if $nanoc_extras_manager.filter_named(filter).nil?
+        # Check filters
+        (page.filters_pre + page.filters_post).each do |filter|
+          filter_klass = $nanoc_extras_manager.filter_named(filter)
+          # Check whether filter exists
+          if filter_klass.nil?
+            missing_filters << filter.to_sym
+          else
+            # Check whether filter requirements exist
+            filter_klass.requirements.each do |req|
+              begin
+                require req
+              rescue LoadError
+                missing_libraries << req
+              end
+            end
+          end
         end
 
         # Get rid of duplicates
+        missing_libraries.uniq!
         missing_filters.uniq!
       end
-
-      # Give feedback
-      print_immediately " [#{format('%.2f', Time.now - time_before)}s]\n"
 
       # Print missing filters, if any
       unless missing_filters.empty?
         $stderr.puts 'ERROR: This site requires the following filters to be installed:' unless $quiet 
         missing_filters.each { |filter| $stderr.puts "  - #{filter}" unless $quiet }
-        $stderr.puts 'nanoc 2.0 only comes with the \'erb\' filter, but you can find all plugins that'
-        $stderr.puts 'are no longer included in the standard nanoc distribution on the nanoc wiki,'
-        $stderr.puts 'at <http://nanoc.stoneship.org/wiki/>.'
+        exit(1) if missing_libraries.empty?
+      end
+
+      # Print missing libraries, if any
+      unless missing_libraries.empty?
+        $stderr.puts 'ERROR: This site requires the following Ruby libraries to be installed:' unless $quiet 
+        missing_libraries.each { |lib| $stderr.puts "  - #{lib}" unless $quiet }
         exit(1)
       end
     end

@@ -1,3 +1,9 @@
-register_filter 'censor' do |page, pages, config|
-  page.content.gsub('sucks', 'rocks')
+class CensorFilter < Nanoc::Filter
+
+  names :censor
+
+  def run(content)
+    content.gsub('sucks', 'rocks')
+  end
+
 end
