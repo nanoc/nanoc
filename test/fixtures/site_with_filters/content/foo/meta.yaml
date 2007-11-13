@@ -1,0 +1,5 @@
+# Built-in
+filters: [ 'erb', 'erb' ]
+
+# Custom
+title: My New Homepage

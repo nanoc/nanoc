@@ -32,6 +32,17 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_filters
+    with_site_fixture 'site_with_filters' do |site|
+      assert_nothing_raised() { site.compile! }
+      assert_equal(2, Dir["output/*"].size)
+      assert(File.file?('output/index.html'))
+      assert(File.file?('output/foo/index.html'))
+      assert_match(/This is Sparta./, File.read('output/index.html'))
+      assert_match(/This is Sparta./, File.read('output/foo/index.html'))
+    end
+  end
+
   def test_compile_site_with_nested_layouts
     with_site_fixture 'site_with_nested_layouts' do |site|
       assert_nothing_raised() { site.compile! }

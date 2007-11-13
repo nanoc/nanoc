@@ -109,14 +109,15 @@ module Nanoc
       unless @is_filtered
         @compiler.stack.pushing(self) do
           # Read page
-          content = attribute_named(:content) || attribute_named(:uncompiled_content)
+          if attribute_named(:content).nil?
+            @attributes[:content] = attribute_named(:uncompiled_content)
+          end
 
           # Get params
           page   = self.to_proxy
           pages  = @site.pages.map { |p| p.to_proxy }
 
           # Filter page
-          @attributes[:content] = content
           filters.each do |filter_name|
             # Create filter
             filter_class = ExtrasManager.filter_named(filter_name)
@@ -124,7 +125,7 @@ module Nanoc
             filter = filter_class.new(page, pages, @site.config)
 
             # Run filter
-            @attributes[:content] = filter.run(content)
+            @attributes[:content] = filter.run(@attributes[:content])
             @is_filtered = true
           end
         end
