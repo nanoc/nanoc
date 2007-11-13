@@ -27,8 +27,8 @@ module Nanoc
 
     # Proxy support
 
-    def to_proxy(params={})
-      PageProxy.new(self, :filter => params[:filter])
+    def to_proxy
+      PageProxy.new(self)
     end
 
     # Attributes
@@ -52,31 +52,24 @@ module Nanoc
       return PAGE_DEFAULTS[names.first]
     end
 
-    # Helper methods
+    # Accessors
 
     def content
       filter!
       attribute_named(:content)
     end
 
-    def skip_output?
-      attribute_named(:skip_output)
-    end
-
-    def path
-      attribute_named(:path)
-    end
-
-    def filters_pre
-      attribute_named(:filters_pre, :filters)
-    end
-
-    def filters_post
-      attribute_named(:filters_post)
-    end
+    def skip_output? ; attribute_named(:skip_output)            ; end
+    def path         ; attribute_named(:path)                   ; end
+    def filters_pre  ; attribute_named(:filters_pre, :filters)  ; end
+    def filters_post ; attribute_named(:filters_post)           ; end
 
     def layout
-      attribute_named(:layout)
+      @site.layouts.find { |layout| layout[:name] == attribute_named(:layout) }
+    end
+
+    def layout_processor
+      ExtrasManager.layout_processor_for_extension(layout[:extension])
     end
 
     def path_on_filesystem
@@ -91,24 +84,14 @@ module Nanoc
     # Filtering
 
     def filter!
-      # Get stack
-      stack = @compiler.stack
-
       # Check for recursive call
-      if stack.include?(self)
-        # Print stack
+      if @compiler.stack.include?(self)
+        # Print error
         unless $quiet
-          $stderr.puts 'ERROR: Recursive call to page content.'
-
-          # Determine relevant part of stack
-          stack_begin = @compiler.stack.index(self)
-          stack_end   = @compiler.stack.size
-          relevant_stack_part = @compiler.stack.last(stack_end - stack_begin)
-
-          # Print relevant part of stack
+          $stderr.puts "\n" + 'ERROR: Recursive call to page content.'
           $stderr.puts 'Page filter stack:'
-          relevant_stack_part.each_with_index do |page, i|
-            $stderr.puts "#{i}  #{page.attribute_named(:path)}"
+          @compiler.stack.each_with_index do |page, i|
+            $stderr.puts "  #{format('%3s', i.to_s + '.')} #{page.attribute_named(:path)}"
           end
         end
 
@@ -124,21 +107,21 @@ module Nanoc
 
       # Filter if not yet filtered
       unless @is_filtered
-        stack.pushing(self) do
+        @compiler.stack.pushing(self) do
           # Read page
           content = attribute_named(:content) || attribute_named(:uncompiled_content)
 
           # Get params
-          page   = self.to_proxy(:filter => false)
+          page   = self.to_proxy
           pages  = @site.pages.map { |p| p.to_proxy }
-          config = @site.config
 
           # Filter page
           @attributes[:content] = content
           filters.each do |filter_name|
             # Create filter
-            filter_klass = $nanoc_extras_manager.filter_named(filter_name)
-            filter = filter_klass.new(page, pages, config)
+            filter_class = ExtrasManager.filter_named(filter_name)
+            error "Unknown filter: '#{filter_name}'" if filter_class.nil?
+            filter = filter_class.new(page, pages, @site.config)
 
             # Run filter
             @attributes[:content] = filter.run(content)
@@ -159,20 +142,17 @@ module Nanoc
         exit(1)
       end
 
-      # Find layout processor
-      layout_processor = $nanoc_extras_manager.layout_processor_for_extension(layout[:extension])
-      if layout_processor.nil?
-        $stderr.puts 'ERROR: Unknown layout processor: ' + layout[:extension] unless $quiet
-        exit(1)
-      end
-
       # Get some useful stuff
-      page   = self.to_proxy(:filter => false)
+      page   = self.to_proxy
       pages  = @site.pages.map { |p| p.to_proxy }
-      config = @site.config
+
+      # Find layout processor
+      layout_processor_class = ExtrasManager.layout_processor_for_extension(layout[:extension])
+      error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
+      layout_processor = layout_processor_class.new(page, pages, @site.config)
 
       # Layout
-      @attributes[:content] = layout_processor.call(page, pages, layout[:content], config)
+      @attributes[:content] = layout_processor.run(layout[:content])
     end
 
   end

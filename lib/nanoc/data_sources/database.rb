@@ -26,13 +26,13 @@ module Nanoc::DataSource::DatabaseDataSource
 
     ########## Attributes ##########
 
-    name     :database
-
-    requires 'active_record'
+    identifier  :database
 
     ########## Preparation ##########
 
     def up
+      nanoc_require 'active_record'
+
       # Connect to the database
       ActiveRecord::Base.establish_connection(@site.config[:database])
     end

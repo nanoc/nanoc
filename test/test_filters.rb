@@ -13,8 +13,6 @@ class FiltersTest < Test::Unit::TestCase
   end
 
   def test_string_erb
-    assert_equal('moo', '<%= "moo" %>'.erb)
-    assert_equal('bar', '<%= @foo %>'.erb(:assigns => { :foo => 'bar' }))
   end
 
 end

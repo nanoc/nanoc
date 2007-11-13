@@ -13,9 +13,9 @@ module Nanoc::DataSource::TrivialDataSource
 
     ########## Attributes ##########
 
-    # DataSource.name defines the name for this data source. The first and
-    # only argument is the datasource name as a symbol.
-    name :trivial
+    # DataSource.identifier defines the name for this data source. The first
+    # and only argument is the datasource name as a symbol.
+    identifier :trivial
 
     # DataSource.requires defines the list of requirements (i.e. the external
     # libraries you'd usually load using Ruby's 'require' function). In this

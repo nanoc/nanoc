@@ -4,7 +4,7 @@ module Nanoc::DataSource::FilesystemDataSource
 
     ########## Attributes ##########
 
-    name :filesystem
+    identifier :filesystem
 
     ########## Loading data ##########
 

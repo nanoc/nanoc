@@ -7,24 +7,19 @@ nanoc Release Notes
 New:
 
 * Progress indicators are now displayed while the site is compiling
-* Added support for custom layout processors
-* Added support for custom data sources
-* Added database data source
+* Support for custom layout processors
+* Support for custom data sources
+* Database data source
 
 Changed:
 
-* The 'eruby' filter is now a synonym for 'erb'. If you want to use Erubis
-  instead of ERB, install the Erubis filter and use the 'erubis' filter name
+* The source has been restructured and cleaned up a great deal
 
 Removed:
 
-* nanoc no longer includes Erubis, Haml, Liquid, Markaby, Markdown, RDoc,
-  Sass, Smartypants, and Textile filters and layout processors. nanoc only
-  comes with ERB now -- don't worry; the removed filters and layout processors
-  are now available as plugins instead (except for Liquid)
-* Removed support for Liquid -- it seems to be barely used, probably because
-  it is not easy to use and aimed mostly to be a secure templating language,
-  which nanoc does not need
+* All filters and layout processors except for 'erb' -- the missing ones are
+  now available as plugins available on the nanoc web site
+* Support for Liquid
 
 1.6.2
 -----

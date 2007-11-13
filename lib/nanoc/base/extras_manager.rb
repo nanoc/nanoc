@@ -1,49 +1,26 @@
 module Nanoc
   class ExtrasManager
 
-    def initialize
-      @data_sources       = {}
-      @filters            = {}
-      @layout_processors  = {}
+    def self.data_source_named(name)
+      ObjectSpace.each_object(Class) do |klass|
+        return klass if klass < Nanoc::DataSource and klass.identifiers.include?(name.to_sym)
+      end
+      nil
     end
 
-    # Data sources
-
-    def register_data_source(name, klass)
-      @data_sources[name.to_sym] = klass
+    def self.filter_named(name)
+      ObjectSpace.each_object(Class) do |klass|
+        return klass if klass < Nanoc::Filter and klass.identifiers.include?(name.to_sym)
+      end
+      nil
     end
 
-    def data_source_named(name)
-      @data_sources[name.to_sym]
-    end
-
-    # Filters
-
-    def register_filter(name, klass)
-      @filters[name.to_sym] = klass
-    end
-
-    def filter_named(name)
-      @filters[name.to_sym]
-    end
-
-    # Layout processors
-
-    def register_layout_processor(extension, &block)
-      @layout_processors[extension.to_s.sub(/^\./, '').to_sym] = block
-    end
-
-    def layout_processor_for_extension(extension)
-      @layout_processors[extension.to_s.sub(/^\./, '').to_sym]
+    def self.layout_processor_for_extension(ext)
+      ObjectSpace.each_object(Class) do |klass|
+        return klass if klass < Nanoc::LayoutProcessor and klass.extensions.include?(ext)
+      end
+      nil
     end
 
   end
-end
-
-# Global extras manager (there can be only one)
-$nanoc_extras_manager = Nanoc::ExtrasManager.new
-
-# Convenience functions for registering extras (will disappear)
-def register_layout_processor(*extensions, &block)
-  extensions.each { |extension| $nanoc_extras_manager.register_layout_processor(extension, &block) }
 end
