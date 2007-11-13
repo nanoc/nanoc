@@ -13,7 +13,7 @@ end
 
 # Convenience function for printing errors
 def error(s)
-  $stderr.puts 'ERROR: ' + s ; exit(1)
+  $stderr.puts 'ERROR: ' + s ; exit(1) unless $quiet
 end
 
 # Convenience function for requiring libraries
