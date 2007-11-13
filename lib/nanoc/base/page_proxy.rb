@@ -1,9 +1,8 @@
 module Nanoc
   class PageProxy
 
-    def initialize(page, params={})
-      @page       = page
-      @do_filter  = (params[:filter] != false)
+    def initialize(page)
+      @page = page
     end
 
     def [](key)
@@ -12,7 +11,7 @@ module Nanoc
       real_key = real_key[0..-2] if real_key.ends_with?('?')
       real_key = real_key.to_sym
 
-      if real_key == :content and @do_filter
+      if real_key == :content
         @page.content
       else
         @page.attribute_named(real_key)

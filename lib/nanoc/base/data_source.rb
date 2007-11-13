@@ -7,21 +7,6 @@ module Nanoc
       @site = site
     end
 
-    # Attributes
-
-    class << self
-      attr_accessor :_name
-    end
-
-    def self.name(name=nil)
-      if name.nil?
-        self._name
-      else
-        self._name = name
-        $nanoc_extras_manager.register_data_source(name, self)
-      end
-    end
-
     # Preparation
 
     def up
@@ -36,40 +21,33 @@ module Nanoc
     # Loading data
 
     def pages
-      $stderr.puts 'ERROR: DataSource#pages must be overridden'
-      exit(1)
+      error 'DataSource#pages must be overridden'
     end
 
     def page_defaults
-      $stderr.puts 'ERROR: DataSource#page_defaults must be overridden'
-      exit(1)
+      error 'DataSource#page_defaults must be overridden'
     end
 
     def layouts
-      $stderr.puts 'ERROR: DataSource#layouts must be overridden'
-      exit(1)
+      error 'DataSource#layouts must be overridden'
     end
 
     def templates
-      $stderr.puts 'ERROR: DataSource#templates must be overridden'
-      exit(1)
+      error 'DataSource#templates must be overridden'
     end
 
     # Creating data
 
     def create_page(name, template_name)
-      $stderr.puts 'ERROR: DataSource#create_page must be overridden'
-      exit(1)
+      error 'ERROR: DataSource#create_page must be overridden'
     end
 
     def create_layout(name)
-      $stderr.puts 'ERROR: DataSource#create_layout must be overridden'
-      exit(1)
+      error 'ERROR: DataSource#create_layout must be overridden'
     end
 
     def create_template(name)
-      $stderr.puts 'ERROR: DataSource#create_template must be overridden'
-      exit(1)
+      error 'ERROR: DataSource#create_template must be overridden'
     end
 
   end

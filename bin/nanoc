@@ -81,9 +81,8 @@ case command
 
     # Make sure we are in a nanoc site directory
     unless $nanoc_site
-      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+      error 'The current working directory does not seem to ' +
         'be a valid/complete nanoc site directory; aborting.'
-      exit(1)
     end
 
     # Create page
@@ -103,9 +102,8 @@ case command
 
     # Make sure we are in a nanoc site directory
     unless $nanoc_site
-      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+      error 'The current working directory does not seem to ' +
         'be a valid/complete nanoc site directory; aborting.'
-      exit(1)
     end
 
     # Create template
@@ -121,9 +119,8 @@ case command
 
     # Make sure we are in a nanoc site directory
     unless $nanoc_site
-      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+      error 'The current working directory does not seem to ' +
         'be a valid/complete nanoc site directory; aborting.'
-      exit(1)
     end
 
     # Create template
@@ -139,9 +136,8 @@ case command
 
     # Make sure we are in a nanoc site directory
     unless $nanoc_site
-      $stderr.puts 'ERROR: The current working directory does not seem to ' +
+      error 'The current working directory does not seem to ' +
         'be a valid/complete nanoc site directory; aborting.'
-      exit(1)
     end
 
     # Compile site

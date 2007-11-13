@@ -1,19 +1,18 @@
 module Nanoc
   class Plugin
 
-    # Attributes
+    # Identifiers
 
     class << self
-      attr_accessor :_requirements
+      attr_accessor :_identifiers
     end
 
-    def self.requires(*names)
-      self._requirements ||= []
-      names.each { |name| self._requirements << name }
+    def self.identifiers(*identifiers)
+      identifiers.empty? ? self._identifiers || [] : self._identifiers = (self._identifiers || []) + identifiers
     end
 
-    def self.requirements
-      self._requirements || []
+    def self.identifier(identifier=nil)
+      identifier.nil? ? self.identifiers.first : self.identifiers(identifier)
     end
 
   end

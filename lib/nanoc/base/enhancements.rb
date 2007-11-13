@@ -1,14 +1,6 @@
 # Try loading Rubygems
 begin ; require 'rubygems' ; rescue LoadError ; end
 
-# Convenience function for requiring something a plugin needs
-def nanoc_require(s)
-  require s
-rescue LoadError
-  $stderr.puts "ERROR: You need '#{s}' to compile this site." unless $quiet
-  exit(1)
-end
-
 # Convenience function for handling exceptions
 def handle_exception(exception, text)
   unless $quiet or exception.class == SystemExit
@@ -17,6 +9,18 @@ def handle_exception(exception, text)
     $stderr.puts exception.backtrace.join("\n")
   end
   exit(1)
+end
+
+# Convenience function for printing errors
+def error(s)
+  $stderr.puts 'ERROR: ' + s ; exit(1)
+end
+
+# Convenience function for requiring libraries
+def nanoc_require(x)
+  require x
+rescue LoadError
+  error("This site requires #{x} to be built.")
 end
 
 require 'fileutils'
@@ -91,9 +95,4 @@ class FileManager
     end
     open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
-end
-
-def render(a_name, a_context={})
-  assigns = a_context.merge({ :page => @page, :pages => @pages })
-  File.read('layouts/' + a_name.to_s + '.erb').erb(:assigns => assigns)
 end

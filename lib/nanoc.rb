@@ -9,7 +9,6 @@ module Nanoc
 
 end
 
-
 # Load base
 Nanoc.load_file('base', 'enhancements.rb')
 Nanoc.load_file('base', 'core_ext', '*.rb')
