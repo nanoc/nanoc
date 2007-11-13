@@ -16,11 +16,11 @@ module Nanoc::Filter::ERBFilter
 
   class ERBFilter < Nanoc::Filter
 
-    identifiers  :erb, :eruby
+    identifiers :erb, :eruby
 
     def run(content)
       nanoc_require 'erb'
-      
+
       # Create context
       context = ERBContext.new({ :page => @page, :pages => @pages })
 
