@@ -10,7 +10,7 @@ class CreatorTest < Test::Unit::TestCase
   end
 
   def teardown
-    FileUtils.remove_entry_secure 'tmp'
+    FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
     $quiet = false
   end
 
