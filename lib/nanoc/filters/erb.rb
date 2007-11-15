@@ -22,7 +22,7 @@ module Nanoc::Filter::ERBFilter
       nanoc_require 'erb'
 
       # Create context
-      context = ERBContext.new({ :page => @page, :pages => @pages })
+      context = ERBContext.new({ :page => @page, :pages => @pages, :config => @config, :site => @site })
 
       # Get result
       ERB.new(content).result(context.get_binding)
