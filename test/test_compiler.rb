@@ -3,6 +3,7 @@ require 'test/unit'
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class CompilerTest < Test::Unit::TestCase
+
   def setup
     $quiet = true unless ENV['QUIET'] == 'false'
     FileManager.create_dir 'tmp'
@@ -29,27 +30,6 @@ class CompilerTest < Test::Unit::TestCase
       assert_equal(2, Dir["output/*"].size)
       assert(File.file?('output/index.html'))
       assert(File.file?('output/moo/index.html'))
-    end
-  end
-
-  def test_compile_site_with_filters
-    with_site_fixture 'site_with_filters' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert_equal(2, Dir["output/*"].size)
-      assert(File.file?('output/index.html'))
-      assert(File.file?('output/foo/index.html'))
-      assert_match(/This is Sparta./, File.read('output/index.html'))
-      assert_match(/This is Sparta./, File.read('output/foo/index.html'))
-    end
-  end
-
-  def test_compile_site_with_nested_layouts
-    with_site_fixture 'site_with_nested_layouts' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert_equal(1, Dir["output/*"].size)
-      assert(File.file?('output/index.html'))
-      assert_match(/This is the default layout/, File.read('output/index.html'))
-      assert_match(/This is the page layout/, File.read('output/index.html'))
     end
   end
 
@@ -127,15 +107,6 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_no_layout
-    with_site_fixture 'site_with_no_layout' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert_match(/This is a page without layout/, File.read('output/index.html'))
-    end
-  end
-
   def test_compile_site_with_page_dot_notation
     with_site_fixture 'site_with_page_dot_notation' do |site|
       assert_nothing_raised() { site.compile! }
@@ -183,45 +154,6 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_custom_filters
-    with_site_fixture 'site_with_custom_filters' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert_match(/nanoc rocks/, File.read('output/index.html'))
-    end
-  end
-
-  def test_compile_site_with_post_filters
-    with_site_fixture 'site_with_post_filters' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert_match(/<p>First pass<\/p>/, File.read('output/index.html'))
-      assert_match(/<p>Second pass<\/p>/, File.read('output/index.html'))
-    end
-  end
-
-  def test_compile_site_with_file_object
-    with_site_fixture 'site_with_file_object' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
-      assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))
-    end
-  end
-
-  def test_compile_site_with_trivial_backend
-    with_site_fixture 'site_with_trivial_backend' do |site|
-      assert_nothing_raised() { site.compile! }
-      assert(File.file?('output/index.html'))
-      assert(File.file?('output/about/index.html'))
-      assert_equal(2, Dir["output/*"].size)
-      assert_match(/<body>Hi!<\/body>/, File.read('output/index.html'))
-      assert_match(/<body>Hello there.<\/body>/, File.read('output/about/index.html'))
-    end
-  end
-
   def test_compile_outside_site
     in_dir %w{ tmp } do
       assert(Nanoc::Site.from_cwd.nil?)
@@ -242,4 +174,5 @@ class CompilerTest < Test::Unit::TestCase
       FileUtils.remove_entry_secure 'tmp_site' if File.exist?('tmp')
     end
   end
+
 end
