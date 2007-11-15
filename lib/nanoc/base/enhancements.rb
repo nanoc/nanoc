@@ -13,7 +13,8 @@ end
 
 # Convenience function for printing errors
 def error(s)
-  $stderr.puts 'ERROR: ' + s ; exit(1) unless $quiet
+  $stderr.puts 'ERROR: ' + s unless $quiet
+  exit(1)
 end
 
 # Convenience function for requiring libraries
@@ -26,6 +27,7 @@ end
 require 'fileutils'
 
 class FileLogger
+
   COLORS = {
     :reset   => "\e[0m",
 
@@ -48,29 +50,25 @@ class FileLogger
     :identical  => COLORS[:bold]
   }
 
-  attr_reader :out
-
-  def initialize(a_out = $stdout)
-    @out = a_out
+  def log(action, path)
+    puts('%s%12s%s  %s' % [ACTION_COLORS[action.to_sym], action, COLORS[:reset], path]) unless $quiet
   end
 
-  def log(a_action, a_path)
-    @out.puts('%s%12s%s  %s' % [ACTION_COLORS[a_action.to_sym], a_action, COLORS[:reset], a_path]) unless $quiet
+private
+
+  def method_missing(method, *args)
+    log(method.to_s, args.first)
   end
 
-  private
-
-  def method_missing(a_method, *a_args)
-    log(a_method.to_s, a_args.first)
-  end
 end
 
 class FileManager
+
   @@stack = []
   @@logger = FileLogger.new
 
-  def self.create_dir(a_name)
-    @@stack.pushing(a_name) do
+  def self.create_dir(name)
+    @@stack.pushing(name) do
       path = File.join(@@stack)
       unless File.directory?(path)
         FileUtils.mkdir_p(path)
@@ -80,8 +78,8 @@ class FileManager
     end
   end
 
-  def self.create_file(a_name)
-    path = File.join(@@stack + [ a_name ])
+  def self.create_file(name)
+    path = File.join(@@stack + [ name ])
     FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
     content = block_given? ? yield : nil
     if File.exist?(path)
@@ -95,4 +93,5 @@ class FileManager
     end
     open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
+
 end
