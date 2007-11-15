@@ -2,7 +2,7 @@ require 'test/unit'
 
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-class FiltersTest < Test::Unit::TestCase
+class DatabaseBackendTest < Test::Unit::TestCase
 
   def setup
     $quiet = true unless ENV['QUIET'] == 'false'
@@ -12,7 +12,7 @@ class FiltersTest < Test::Unit::TestCase
     $quiet = false
   end
 
-  def test_string_erb
+  def test_foo
   end
 
 end
