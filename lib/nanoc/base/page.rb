@@ -138,7 +138,7 @@ module Nanoc
 
       # Find layout
       layout = @site.layouts.find { |layout| layout[:name] == attribute_named(:layout) }
-      error 'ERROR: Unknown layout: ' + attribute_named(:layout) if layout.nil?
+      error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Get some useful stuff
       page   = self.to_proxy

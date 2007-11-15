@@ -11,7 +11,7 @@ module Nanoc
     end
 
     def run(content)
-      error 'ERROR: Filter#run must be overridden'
+      error 'Filter#run must be overridden'
     end
 
   end

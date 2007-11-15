@@ -35,7 +35,7 @@ module Nanoc
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
 
       # Create compiler
-      @compiler = Nanoc::Compiler.new(self)
+      @compiler = Compiler.new(self)
 
       # Set not loaded
       @data_loaded = false

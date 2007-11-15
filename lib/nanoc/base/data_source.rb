@@ -39,15 +39,15 @@ module Nanoc
     # Creating data
 
     def create_page(name, template_name)
-      error 'ERROR: DataSource#create_page must be overridden'
+      error 'DataSource#create_page must be overridden'
     end
 
     def create_layout(name)
-      error 'ERROR: DataSource#create_layout must be overridden'
+      error 'DataSource#create_layout must be overridden'
     end
 
     def create_template(name)
-      error 'ERROR: DataSource#create_template must be overridden'
+      error 'DataSource#create_template must be overridden'
     end
 
   end
