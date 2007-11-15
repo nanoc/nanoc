@@ -17,11 +17,6 @@ module Nanoc::DataSource::TrivialDataSource
     # and only argument is the datasource name as a symbol.
     identifier :trivial
 
-    # DataSource.requires defines the list of requirements (i.e. the external
-    # libraries you'd usually load using Ruby's 'require' function). In this
-    # case, there are no requirements, so it's commented out.
-#   requires 'super_special_requirement', 'active_record'
-
     ########## Preparation ##########
 
     # DataSource#up is run before compiling. This is the place where you
