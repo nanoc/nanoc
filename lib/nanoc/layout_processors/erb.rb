@@ -23,7 +23,7 @@ module Nanoc::LayoutProcessor::ERBLayoutProcessor
       nanoc_require 'erb'
       
       # Create context
-      context = ERBContext.new({ :page => @page, :pages => @pages })
+      context = ERBContext.new({ :page => @page, :pages => @pages, :site => @site })
 
       # Get result
       ERB.new(layout).result(context.get_binding)
@@ -34,8 +34,8 @@ module Nanoc::LayoutProcessor::ERBLayoutProcessor
 end
 
 def render(name, context={})
-  layout = $nanoc_site.layouts.find { |l| l[:name] == name }
+  layout = @site.layouts.find { |l| l[:name] == name }
   layout_processor_class = Nanoc::ExtrasManager.layout_processor_for_extension(layout[:extension])
-  layout_processor = layout_processor_class.new(@page, @pages, $nanoc_site.config)
+  layout_processor = layout_processor_class.new(@page, @pages, @site.config, @site)
   layout_processor.run(layout[:content])
 end

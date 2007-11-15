@@ -122,7 +122,7 @@ module Nanoc
             # Create filter
             filter_class = ExtrasManager.filter_named(filter_name)
             error "Unknown filter: '#{filter_name}'" if filter_class.nil?
-            filter = filter_class.new(page, pages, @site.config)
+            filter = filter_class.new(page, pages, @site.config, @site)
 
             # Run filter
             @attributes[:content] = filter.run(@attributes[:content])
@@ -150,7 +150,7 @@ module Nanoc
       # Find layout processor
       layout_processor_class = ExtrasManager.layout_processor_for_extension(layout[:extension])
       error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
-      layout_processor = layout_processor_class.new(page, pages, @site.config)
+      layout_processor = layout_processor_class.new(page, pages, @site.config, @site)
 
       # Layout
       @attributes[:content] = layout_processor.run(layout[:content])

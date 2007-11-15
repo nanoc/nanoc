@@ -3,10 +3,11 @@ Nanoc.load_file('base', 'plugin.rb')
 module Nanoc
   class LayoutProcessor < Plugin
 
-    def initialize(page, pages, config)
+    def initialize(page, pages, config, site)
       @page   = page
       @pages  = pages
       @config = config
+      @site   = site
     end
 
     def run(layout)
