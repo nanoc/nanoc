@@ -171,7 +171,6 @@ class CompilerTest < Test::Unit::TestCase
         assert_equal(1, Dir["output/*"].size)
         assert(File.file?('output/index.html'))
       end
-      FileUtils.remove_entry_secure 'tmp_site' if File.exist?('tmp')
     end
   end
 

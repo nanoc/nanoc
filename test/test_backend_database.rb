@@ -9,6 +9,7 @@ class DatabaseBackendTest < Test::Unit::TestCase
   end
 
   def teardown
+    Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f if File.exist?(f)}
     $quiet = false
   end
 

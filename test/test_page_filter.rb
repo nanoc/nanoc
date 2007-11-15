@@ -6,9 +6,12 @@ class PageFilterTest < Test::Unit::TestCase
 
   def setup
     $quiet = true unless ENV['QUIET'] == 'false'
+    FileManager.create_dir 'tmp'
   end
 
   def teardown
+    FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
+    Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f if File.exist?(f)}
     $quiet = false
   end
 

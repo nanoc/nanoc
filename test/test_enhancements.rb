@@ -20,7 +20,7 @@ class EnhancementsTest < Test::Unit::TestCase
 
     assert(File.exist?('tmp'))
     assert(File.directory?('tmp'))
-
+  ensure
     FileUtils.remove_entry_secure 'tmp'
   end
 
@@ -36,7 +36,7 @@ class EnhancementsTest < Test::Unit::TestCase
     assert(File.directory?('tmp/foo'))
 
     assert(!File.exist?('foo'))
-
+  ensure
     FileUtils.remove_entry_secure('tmp')
   end
 
@@ -50,7 +50,7 @@ class EnhancementsTest < Test::Unit::TestCase
     assert(File.exist?('tmp/bar'))
     assert(File.file?('tmp/bar'))
     assert_equal('asdf', File.read('tmp/bar'))
-
+  ensure
     FileUtils.remove_entry_secure 'tmp'
   end
 end
