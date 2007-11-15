@@ -45,11 +45,8 @@ module Nanoc
       return if @data_loaded
 
       # Create data source
-      @data_source_class = ExtrasManager.data_source_named(@config[:data_source])
-      if @data_source_class.nil?
-        $stderr.puts "ERROR: Unrecognised data source: #{@config[:data_source]}"
-        exit(1)
-      end
+      @data_source_class = PluginManager.data_source_named(@config[:data_source])
+      error "Unrecognised data source: #{@config[:data_source]}" if @data_source_class.nil?
 
       # Start data source
       @data_source = @data_source_class.new(self)
@@ -71,10 +68,7 @@ module Nanoc
     # Compiling
 
     def compile!
-      # Get the data we need
       load_data_if_necessary
-
-      # Compile
       @compiler.run!
     end
 

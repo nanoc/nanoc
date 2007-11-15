@@ -14,7 +14,7 @@ Nanoc.load_file('base', 'enhancements.rb')
 Nanoc.load_file('base', 'core_ext', '*.rb')
 Nanoc.load_file('base', '*.rb')
 
-# Load extras
+# Load plugins
 Nanoc.load_file('data_sources', '*.rb')
 Nanoc.load_file('filters', '*.rb')
 Nanoc.load_file('layout_processors', '*.rb')

@@ -69,7 +69,7 @@ module Nanoc
     end
 
     def layout_processor
-      ExtrasManager.layout_processor_for_extension(layout[:extension])
+      PluginManager.layout_processor_for_extension(layout[:extension])
     end
 
     def path_on_filesystem
@@ -120,7 +120,7 @@ module Nanoc
           # Filter page
           filters.each do |filter_name|
             # Create filter
-            filter_class = ExtrasManager.filter_named(filter_name)
+            filter_class = PluginManager.filter_named(filter_name)
             error "Unknown filter: '#{filter_name}'" if filter_class.nil?
             filter = filter_class.new(page, pages, @site.config, @site)
 
@@ -138,17 +138,14 @@ module Nanoc
 
       # Find layout
       layout = @site.layouts.find { |layout| layout[:name] == attribute_named(:layout) }
-      if layout.nil?
-        $stderr.puts 'ERROR: Unknown layout: ' + attribute_named(:layout) unless $quiet
-        exit(1)
-      end
+      error 'ERROR: Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Get some useful stuff
       page   = self.to_proxy
       pages  = @site.pages.map { |p| p.to_proxy }
 
       # Find layout processor
-      layout_processor_class = ExtrasManager.layout_processor_for_extension(layout[:extension])
+      layout_processor_class = PluginManager.layout_processor_for_extension(layout[:extension])
       error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
       layout_processor = layout_processor_class.new(page, pages, @site.config, @site)
 
