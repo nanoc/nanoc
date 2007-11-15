@@ -11,7 +11,7 @@ module Nanoc
     end
 
     def run(layout)
-      error 'ERROR: LayoutProcessor#run must be overridden'
+      error 'LayoutProcessor#run must be overridden'
     end
 
     # Extensions

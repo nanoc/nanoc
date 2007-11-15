@@ -6,7 +6,7 @@ module Nanoc
     def self.data_sources_named(name)
       objs = []
       ObjectSpace.each_object(Class) do |klass|
-        objs << klass if klass < Nanoc::DataSource and klass.identifiers.include?(name.to_sym)
+        objs << klass if klass < DataSource and klass.identifiers.include?(name.to_sym)
       end
       objs
     end
@@ -18,7 +18,7 @@ module Nanoc
     def self.filters_named(name)
       objs = []
       ObjectSpace.each_object(Class) do |klass|
-        objs << klass if klass < Nanoc::Filter and klass.identifiers.include?(name.to_sym)
+        objs << klass if klass < Filter and klass.identifiers.include?(name.to_sym)
       end
       objs
     end
@@ -30,7 +30,7 @@ module Nanoc
     def self.layout_processors_for_extension(ext)
       objs = []
       ObjectSpace.each_object(Class) do |klass|
-        objs << klass if klass < Nanoc::LayoutProcessor and klass.extensions.include?(ext)
+        objs << klass if klass < LayoutProcessor and klass.extensions.include?(ext)
       end
       objs
     end
