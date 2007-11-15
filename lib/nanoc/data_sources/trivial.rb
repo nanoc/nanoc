@@ -108,16 +108,14 @@ module Nanoc::DataSource::TrivialDataSource
     # returns is what DataSource#create_page expects. This trivial data source
     # doesn't have a permanent storage, so it can't create any pages.
     def create_page(name, template)
-      $stderr.puts "Sorry. The trivial data source isn't competent enough."
-      exit(1)
+      error "Sorry. The trivial data source isn't competent enough."
     end
 
     # DataSource#create_layout is run when a layout is created. This function
     # should create a new layout with the given name. This trivial data source
     # doesn't have a permanent storage, so it can't create any layouts.
     def create_layout(name)
-      $stderr.puts "Sorry. The trivial data source isn't competent enough."
-      exit(1)
+      error "Sorry. The trivial data source isn't competent enough."
     end
 
     # DataSource#create_template is run when a template is created. This
@@ -125,8 +123,7 @@ module Nanoc::DataSource::TrivialDataSource
     # data source doesn't have a permanent storage, so it can't create any
     # templates.
     def create_template(name)
-      $stderr.puts "Sorry. The trivial data source isn't competent enough."
-      exit(1)
+      error "Sorry. The trivial data source isn't competent enough."
     end
 
   end

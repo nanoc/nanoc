@@ -90,10 +90,7 @@ module Nanoc::DataSource::FilesystemDataSource
       content_file_path   = dir_path + '/' + last_path_component + template[:extension]
 
       # Make sure the page doesn't exist yet
-      if File.exist?(meta_file_path)
-        $stderr.puts "ERROR: A page named '#{path}' already exists." unless $quiet
-        exit(1)
-      end
+      error "A page named '#{path}' already exists." if File.exist?(meta_file_path)
 
       # Create index and meta file
       FileManager.create_file(meta_file_path)    { template[:meta] }
@@ -105,10 +102,7 @@ module Nanoc::DataSource::FilesystemDataSource
       path = 'layouts/' + name + '.erb'
 
       # Make sure the layout doesn't exist yet
-      if File.exist?(path)
-        $stderr.puts "ERROR: A layout named '#{name}' already exists." unless $quiet
-        exit(1)
-      end
+      error "A layout named '#{name}' already exists." if File.exist?(path)
 
       # Create layout file
       FileManager.create_file(path) do
@@ -122,10 +116,7 @@ module Nanoc::DataSource::FilesystemDataSource
       content_file_path = 'templates/' + name + '/' + name + '.txt'
 
       # Make sure the template doesn't exist yet
-      if File.exist?(meta_file_path)
-        $stderr.puts "ERROR: A template named '#{name}' already exists." unless $quiet
-        exit(1)
-      end
+      error "A template named '#{name}' already exists." if File.exist?(meta_file_path)
 
       # Create index and meta file
       FileManager.create_file(meta_file_path)    { "title: \"A New Page\"\n" }

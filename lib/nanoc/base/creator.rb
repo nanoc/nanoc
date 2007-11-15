@@ -2,10 +2,7 @@ module Nanoc
   class Creator
 
     def create_site(sitename)
-      if File.exist?(sitename)
-        $stderr.puts "ERROR: A site named #{filename} already exists." unless $quiet
-        exit(1)
-      end
+      error "A site named '#{sitename}' already exists." if File.exist?(sitename)
 
       FileManager.create_dir sitename do
         FileManager.create_dir 'output'
