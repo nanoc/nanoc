@@ -12,8 +12,8 @@ def handle_exception(exception, text)
 end
 
 # Convenience function for printing errors
-def error(s)
-  $stderr.puts 'ERROR: ' + s unless $quiet
+def error(s, pre='ERROR')
+  $stderr.puts pre + ': ' + s unless $quiet
   exit(1)
 end
 

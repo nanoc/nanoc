@@ -1,12 +1,19 @@
 #!/usr/bin/env ruby
 
-require File.dirname(__FILE__) + '/../lib/nanoc.rb'
+# Get what we need
 
+require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 require 'getoptlong'
 
+# Helper functions
+
+def usage(s)
+  error(s, 'Usage')
+end
+
 # Define some texts
+
 version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
-usage_text   = "Usage: nanoc [options] [command] [parameters]"
 help_text    = <<EOT
 Usage: nanoc [-chv]
        nanoc compile
@@ -29,6 +36,7 @@ Description:
 EOT
 
 # Parse options
+
 opts = GetoptLong.new(
   [ '--help',       '-h', GetoptLong::NO_ARGUMENT ],
   [ '--template',   '-t', GetoptLong::REQUIRED_ARGUMENT ],
@@ -54,95 +62,188 @@ rescue GetoptLong::InvalidOption
 end
 
 # Make sure we have at least one argument
-if ARGV.size == 0
-  $stderr.puts usage_text
-  exit(1)
+
+usage 'nanoc [options] [command] [parameters]' if ARGV.size == 0
+
+# Functions for handing commands
+
+def create_site
+  # Check syntax
+  usage 'Usage: nanoc create_site [site_name]' if ARGV.size != 2
+
+  # Create site
+  $nanoc_creator.create_site(ARGV[1])
+end
+
+def create_page
+  # Check syntax
+  usage 'Usage: nanoc create_page [page_name]' if ARGV.size != 2
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Create page
+  if unprocessed_opts['--template'].nil?
+    $nanoc_site.create_page(ARGV[1])
+  else
+    $nanoc_site.create_page(ARGV[1], unprocessed_opts['--template'])
+  end
+end
+
+def create_layout
+  # Check syntax
+  usage 'nanoc create_layout [layout_name]' if ARGV.size != 2
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Create template
+  $nanoc_site.create_layout(ARGV[1])
+end
+
+def create_template
+  # Check syntax
+  usage 'nanoc create_template [template_name]' if ARGV.size != 2
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Create template
+  $nanoc_site.create_template(ARGV[1])
+end
+
+def compile
+  # Check syntax
+  usage 'nanoc compile' if ARGV.size != 1
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Compile site
+  $nanoc_site.compile!
+end
+
+def package_info
+  # Check syntax
+  usage 'nanoc package info [package_name]' if ARGV.size < 3
+
+  # Find package and version
+  package, release = *$nanoc_site.package_manager.package_and_release_with_identifier(ARGV[2])
+
+  # Print info
+  puts package.name
+  puts '=' * package.name.length
+  puts
+  puts '                Name: ' + package.name
+  puts '                Type: ' + package.type.to_s
+  puts '  Available versions: ' + package.releases.map { |r| r[:version] }.join(', ')
+  puts
+end
+
+def package_install
+  # Check syntax
+  usage 'nanoc package info [package_name]' if ARGV.size != 3
+
+  # Install package
+  $nanoc_site.package_manager.install_package_with_identifier(ARGV[2])
+end
+
+def package_list
+  # Check syntax
+  usage 'nanoc package list' if ARGV.size != 2
+
+  # Print filters
+  filters = $nanoc_site.package_manager.packages_of_type(:filter)
+  puts 'Filters:'
+  filters.each { |package| puts '  - ' + package.name }
+  puts '  (none)' if filters.empty?
+  puts
+
+  # Print layout processors
+  layout_processors = $nanoc_site.package_manager.packages_of_type(:layout_processor)
+  puts 'Layout processors:'
+  layout_processors.each { |package| puts '  - ' + package.name }
+  puts '  (none)' if layout_processors.empty?
+  puts
+
+  # Print data sources
+  data_sources = $nanoc_site.package_manager.packages_of_type(:data_source)
+  puts 'Data sources:'
+  data_sources.each { |package| puts '  - ' + package.name }
+  puts '  (none)' if data_sources.empty?
+  puts
+end
+
+def package_update
+  # Check syntax
+  usage 'nanoc package info [package_name]' if ARGV.size != 3
+
+  # Update package
+  $nanoc_site.package_manager.update_package_with_identifier(ARGV[2])
+end
+
+def package_uninstall
+  # Check syntax
+  usage 'nanoc package info [package_name]' if ARGV.size != 3
+
+  # Update package
+  $nanoc_site.package_manager.uninstall_package_with_identifier(ARGV[2])
+end
+
+def package
+  # Check syntax
+  usage 'nanoc package [command] [options ...]' if ARGV.size < 2
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Check sub-command
+  case ARGV[1]
+  when 'info'
+    package_info
+  when 'install'
+    package_install
+  when 'update', 'up'
+    package_update
+  when 'list', 'ls'
+    package_list
+  when 'uninstall', 'rm'
+    package_uninstall
+  else
+    error 'Unrecognised sub-command \'' + ARGV[1] + '\''
+  end
 end
 
 # Handle command
-command = ARGV[0]
-case command
-  # Create site
+
+case ARGV[0]
   when 'create_site', 'cs'
-
-    if ARGV.size != 2
-      $stderr.puts 'Usage: nanoc create_site [site_name]'
-      exit(1)
-    end
-    $nanoc_creator.create_site(ARGV[1])
-
-  # Create page
+    create_site
   when 'create_page', 'cp'
-
-    if ARGV.size != 2
-      $stderr.puts 'Usage: nanoc create_page [page_name]'
-      exit(1)
-    end
-
-    # Make sure we are in a nanoc site directory
-    unless $nanoc_site
-      error 'The current working directory does not seem to ' +
-        'be a valid/complete nanoc site directory; aborting.'
-    end
-
-    # Create page
-    if unprocessed_opts['--template'].nil?
-      $nanoc_site.create_page(ARGV[1])
-    else
-      $nanoc_site.create_page(ARGV[1], unprocessed_opts['--template'])
-    end
-
-  # Create layout
+    create_page
   when 'create_layout', 'cl'
-
-    if ARGV.size != 2
-      $stderr.puts 'Usage: nanoc create_layout [layout_name]'
-      exit(1)
-    end
-
-    # Make sure we are in a nanoc site directory
-    unless $nanoc_site
-      error 'The current working directory does not seem to ' +
-        'be a valid/complete nanoc site directory; aborting.'
-    end
-
-    # Create template
-    $nanoc_site.create_layout(ARGV[1])
-
-  # Create template
+    create_layout
   when 'create_template', 'ct'
-
-    if ARGV.size != 2
-      $stderr.puts 'Usage: nanoc create_template [template_name]'
-      exit(1)
-    end
-
-    # Make sure we are in a nanoc site directory
-    unless $nanoc_site
-      error 'The current working directory does not seem to ' +
-        'be a valid/complete nanoc site directory; aborting.'
-    end
-
-    # Create template
-    $nanoc_site.create_template(ARGV[1])
-
-  # Process site and generate output
-  when 'compile', 'compile_site', 'co'
-
-    if ARGV.size != 1
-      $stderr.puts 'Usage: nanoc compile'
-      exit(1)
-    end
-
-    # Make sure we are in a nanoc site directory
-    unless $nanoc_site
-      error 'The current working directory does not seem to ' +
-        'be a valid/complete nanoc site directory; aborting.'
-    end
-
-    # Compile site
-    $nanoc_site.compile!
-
+    create_template
+  when 'compile_site', 'compile', 'co'
+    compile_site
+  when 'package', 'pkg'
+    package
   else
-    $stderr.puts 'Unrecognised command \'' + command + '\''
+    error 'Unrecognised command \'' + ARGV[0] + '\''
 end
