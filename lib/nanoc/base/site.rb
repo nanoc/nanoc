@@ -8,7 +8,7 @@ module Nanoc
     }
 
     attr_reader :config, :page_defaults
-    attr_reader :compiler, :package_manager
+    attr_reader :compiler
     attr_reader :pages, :layouts, :templates
 
     # Creating a Site object
@@ -34,9 +34,8 @@ module Nanoc
       # Load configuration
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
 
-      # Create stuff we need
-      @compiler        = Compiler.new(self)
-      @package_manager = PackageManagement::PackageManager.new
+      # Create compiler
+      @compiler = Compiler.new(self)
 
       # Set not loaded
       @data_loaded = false
