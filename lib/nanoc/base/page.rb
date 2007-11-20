@@ -55,7 +55,7 @@ module Nanoc
     # Accessors
 
     def content
-      filter!
+      filter
       attribute_named(:content)
     end
 
@@ -75,7 +75,7 @@ module Nanoc
 
     # Filtering
 
-    def filter!
+    def filter
       # Check for recursive call
       if @compiler.stack.include?(self)
         # Print error
@@ -124,7 +124,7 @@ module Nanoc
       end
     end
 
-    def layout!
+    def layout
       # Don't layout if not necessary
       return if attribute_named(:layout).nil?
 

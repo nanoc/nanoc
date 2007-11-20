@@ -7,7 +7,7 @@ module Nanoc
       @site = site
     end
 
-    def run!
+    def run
       # Require all Ruby source files in lib/
       Dir['lib/**/*.rb'].sort.each { |f| require f }
 
@@ -45,7 +45,7 @@ module Nanoc
       @site.pages.each do |page|
         print_immediately '.'
         begin
-          page.filter!
+          page.filter
         rescue => exception
           handle_exception(exception, "filtering page '#{page.path}'")
         end
@@ -64,7 +64,7 @@ module Nanoc
       @site.pages.reject { |page| page.skip_output? }.each do |page|
         print_immediately '.'
         begin
-          page.layout!
+          page.layout
         rescue => exception
           handle_exception(exception, "layouting page '#{page.path}' in layout '#{page.layout[:name]}'")
         end

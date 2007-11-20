@@ -15,7 +15,7 @@ class TrivialBackendTest < Test::Unit::TestCase
 
   def test_compile_site_with_trivial_backend
     with_site_fixture 'site_with_trivial_backend' do |site|
-      assert_nothing_raised() { site.compile! }
+      assert_nothing_raised() { site.compile }
       assert(File.file?('output/index.html'))
       assert(File.file?('output/about/index.html'))
       assert_equal(2, Dir["output/*"].size)
