@@ -121,7 +121,7 @@ def create_template
   $nanoc_site.create_template(ARGV[1])
 end
 
-def compile
+def compile_site
   # Check syntax
   usage 'nanoc compile' if ARGV.size != 1
 
