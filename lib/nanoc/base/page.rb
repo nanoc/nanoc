@@ -2,7 +2,6 @@ module Nanoc
   class Page
 
     PAGE_DEFAULTS = {
-      :content      => nil,
       :custom_path  => nil,
       :extension    => 'html',
       :file         => nil,
@@ -23,6 +22,7 @@ module Nanoc
       @compiler   = site.compiler
       @stage      = nil
       @attributes = hash
+      @content    = nil
     end
 
     # Proxy support
@@ -56,7 +56,7 @@ module Nanoc
 
     def content
       filter
-      attribute_named(:content)
+      @content
     end
 
     def skip_output? ; attribute_named(:skip_output)            ; end
@@ -101,23 +101,17 @@ module Nanoc
       unless @is_filtered
         @compiler.stack.pushing(self) do
           # Read page
-          if attribute_named(:content).nil?
-            @attributes[:content] = attribute_named(:uncompiled_content)
-          end
-
-          # Get params
-          page   = self.to_proxy
-          pages  = @site.pages.map { |p| p.to_proxy }
+          @content = attribute_named(:uncompiled_content) if @content.nil?
 
           # Filter page
           filters.each do |filter_name|
             # Create filter
             filter_class = PluginManager.filter_named(filter_name)
             error "Unknown filter: '#{filter_name}'" if filter_class.nil?
-            filter = filter_class.new(page, pages, @site.config, @site)
+            filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
             # Run filter
-            @attributes[:content] = filter.run(@attributes[:content])
+            @content = filter.run(@content)
             @is_filtered = true
           end
         end
@@ -132,17 +126,13 @@ module Nanoc
       layout = @site.layouts.find { |l| l[:name] == attribute_named(:layout) }
       error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
-      # Get some useful stuff
-      page   = self.to_proxy
-      pages  = @site.pages.map { |p| p.to_proxy }
-
       # Find layout processor
       layout_processor_class = PluginManager.layout_processor_for_extension(layout[:extension])
       error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
-      layout_processor = layout_processor_class.new(page, pages, @site.config, @site)
+      layout_processor = layout_processor_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
       # Layout
-      @attributes[:content] = layout_processor.run(layout[:content])
+      @content = layout_processor.run(layout[:content])
     end
 
   end
