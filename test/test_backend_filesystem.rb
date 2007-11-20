@@ -17,7 +17,7 @@ class FilesystemBackendTest < Test::Unit::TestCase
 
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_file_object' do |site|
-      assert_nothing_raised() { site.compile! }
+      assert_nothing_raised() { site.compile }
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))

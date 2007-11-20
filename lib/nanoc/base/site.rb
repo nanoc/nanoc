@@ -67,9 +67,9 @@ module Nanoc
 
     # Compiling
 
-    def compile!
+    def compile
       load_data_if_necessary
-      @compiler.run!
+      @compiler.run
     end
 
     # Creating

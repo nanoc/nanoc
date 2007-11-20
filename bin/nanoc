@@ -132,7 +132,7 @@ def compile_site
   end
 
   # Compile site
-  $nanoc_site.compile!
+  $nanoc_site.compile
 end
 
 # Handle command
