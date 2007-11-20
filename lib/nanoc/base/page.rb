@@ -4,7 +4,6 @@ module Nanoc
     PAGE_DEFAULTS = {
       :custom_path  => nil,
       :extension    => 'html',
-      :file         => nil,
       :filename     => 'index',
       :filters_pre  => [],
       :filters_post => [],
