@@ -21,10 +21,12 @@ module Nanoc
     end
 
     def self.extensions(*extensions)
+      self._extensions = [] unless instance_variable_defined?(:@_extensions)
       extensions.empty? ? self._extensions || [] : self._extensions = (self._extensions || []) + extensions
     end
 
     def self.extension(extension=nil)
+      self._extensions = [] unless instance_variable_defined?(:@_extensions)
       extension.nil? ? self.extensions.first : self.extensions(extension)
     end
 

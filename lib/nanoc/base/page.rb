@@ -64,14 +64,6 @@ module Nanoc
     def filters_pre  ; attribute_named(:filters_pre, :filters)  ; end
     def filters_post ; attribute_named(:filters_post)           ; end
 
-    def layout
-      @site.layouts.find { |layout| layout[:name] == attribute_named(:layout) }
-    end
-
-    def layout_processor
-      PluginManager.layout_processor_for_extension(layout[:extension])
-    end
-
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
         @site.config[:output_dir] + attribute_named(:path) +
@@ -137,7 +129,7 @@ module Nanoc
       return if attribute_named(:layout).nil?
 
       # Find layout
-      layout = @site.layouts.find { |layout| layout[:name] == attribute_named(:layout) }
+      layout = @site.layouts.find { |l| l[:name] == attribute_named(:layout) }
       error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Get some useful stuff
