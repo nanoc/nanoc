@@ -59,10 +59,10 @@ module Nanoc::DataSource::FilesystemDataSource
         # Read files
         extension = nil
         content   = nil
-        content_filenames.each do |filename|
-          if File.exist?(filename)
-            content   = File.read(filename)
-            extension = File.extname(filename)
+        content_filenames.each do |content_filename|
+          if File.exist?(content_filename)
+            content   = File.read(content_filename)
+            extension = File.extname(content_filename)
           end
         end
         meta = File.read(meta_filename)

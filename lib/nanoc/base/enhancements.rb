@@ -1,6 +1,9 @@
 # Try loading Rubygems
 begin ; require 'rubygems' ; rescue LoadError ; end
 
+# Don't start out quiet
+$quiet = false
+
 # Convenience function for handling exceptions
 def handle_exception(exception, text)
   unless $quiet or exception.class == SystemExit
