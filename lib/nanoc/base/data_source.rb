@@ -3,6 +3,8 @@ Nanoc.load_file('base', 'plugin.rb')
 module Nanoc
   class DataSource < Plugin
 
+    attr_reader :config
+
     def initialize(site, is_new_site=false)
       @site         = site
 
