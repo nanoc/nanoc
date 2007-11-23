@@ -30,11 +30,11 @@ class SiteTest < Test::Unit::TestCase
 
     assert(File.directory?('content/test/'))
     assert(File.file?('content/test/test.txt'))
-    assert(File.file?('content/test/meta.yaml'))
+    assert(File.file?('content/test/test.yaml'))
 
     assert(File.directory?('content/foo/bar/'))
     assert(File.file?('content/foo/bar/bar.txt'))
-    assert(File.file?('content/foo/bar/meta.yaml'))
+    assert(File.file?('content/foo/bar/bar.yaml'))
   ensure
     FileUtils.cd('..')
     FileUtils.cd('..')
@@ -53,7 +53,7 @@ class SiteTest < Test::Unit::TestCase
 
     assert(File.directory?('templates/test/'))
     assert(File.file?('templates/test/test.txt'))
-    assert(File.file?('templates/test/meta.yaml'))
+    assert(File.file?('templates/test/test.yaml'))
   ensure
     FileUtils.cd('..')
     FileUtils.cd('..')

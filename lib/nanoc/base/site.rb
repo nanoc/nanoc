@@ -14,16 +14,11 @@ module Nanoc
     # Creating a Site object
 
     def self.in_site_dir?
-      return false unless File.directory?('content')
-      return false unless File.directory?('layouts')
       return false unless File.directory?('lib')
       return false unless File.directory?('tasks')
-      return false unless File.directory?('templates')
-      return false unless File.exist?('config.yaml')
-      return false unless File.exist?('meta.yaml')
-      return false unless File.exist?('Rakefile')
-
-      true
+      return false unless File.file?('config.yaml')
+      return false unless File.file?('Rakefile')
+      return true
     end
 
     def self.from_cwd
