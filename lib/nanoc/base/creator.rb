@@ -1,16 +1,22 @@
 module Nanoc
   class Creator
 
-    def create_site(sitename)
+    def create_site(sitename, data_source='filesystem')
+      # Check whether site exists
       error "A site named '#{sitename}' already exists." if File.exist?(sitename)
 
+      # Create site
       FileManager.create_dir sitename do
+
+        # Create output
         FileManager.create_dir 'output'
 
+        # Create config
         FileManager.create_file 'config.yaml' do
           "output_dir: \"output\"\n"
         end
 
+        # Create page defaults
         FileManager.create_file 'meta.yaml' do
           "# This file contains the default values for all metafiles.\n" +
           "# Other metafiles can override the contents of this one.\n" +
@@ -24,6 +30,7 @@ module Nanoc
           "# Custom\n"
         end
 
+        # Create rakefile
         FileManager.create_file 'Rakefile' do
           "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n" +
           "\n" +
@@ -32,19 +39,7 @@ module Nanoc
           "end\n"
         end
 
-        FileManager.create_dir 'layouts' do
-          FileManager.create_file 'default.erb' do
-            "<html>\n" +
-            "  <head>\n" +
-            "    <title><%= @page.title %></title>\n" +
-            "  </head>\n" +
-            "  <body>\n" +
-            "<%= @page.content %>\n" +
-            "  </body>\n" +
-            "</html>\n"
-          end
-        end
-
+        # Create lib
         FileManager.create_dir 'lib' do
           FileManager.create_file 'default.rb' do
             "\# All files in the 'lib' directory will be loaded\n" +
@@ -57,6 +52,7 @@ module Nanoc
           end
         end
 
+        # Create tasks
         FileManager.create_dir 'tasks' do
           FileManager.create_file 'default.rake' do
             "task :example do\n" +
@@ -65,32 +61,31 @@ module Nanoc
           end
         end
 
-        FileManager.create_dir 'templates' do
-          FileManager.create_dir 'default' do
-            FileManager.create_file "default.txt" do
-              "This is a new page. Please edit me!\n"
-            end
-            FileManager.create_file 'meta.yaml' do
-              "# Built-in\n" +
-              "\n" +
-              "# Custom\n" +
-              "title: A New Page\n"
-            end
-          end
-        end
-
-        FileManager.create_dir 'content' do
-          FileManager.create_file 'content.txt' do
-            "This is a sample root page. Please edit me!\n"
-          end
-          FileManager.create_file 'meta.yaml' do
-            "# Built-in\n" +
-            "\n" +
-            "# Custom\n" +
-            "title: My New Homepage\n"
-          end
-        end
       end
+
+      in_dir(sitename) do
+        # Create site
+        site = Site.from_cwd
+
+        # Create data source
+        data_source_class = PluginManager.data_source_named(data_source)
+        error "Unrecognised data source: #{data_source}" if data_source_class.nil?
+
+        # Start data source
+        data_source = data_source_class.new(site)
+        data_source.up
+
+        # Create layouts
+        data_source.create_layout('default')
+
+        # Create templates
+        data_source.create_template('default')
+
+        # Create page
+        template = data_source.templates.find { |t| t[:name] == 'default' }
+        data_source.create_page('', template)
+      end
+
     end
 
   end

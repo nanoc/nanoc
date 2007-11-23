@@ -86,10 +86,9 @@ module Nanoc::DataSource::FilesystemDataSource
 
         # Get file names
         meta_filename       = filename
-        content_filenames_1 = 'templates/' + name + '/' + name + '.*'
-        content_filenames_2 = 'templates/' + name + '/index.*'
-        content_filenames   = Dir[content_filenames_1] +
-                              Dir[content_filenames_2]
+        content_filenames   = Dir['templates/' + name + '/' + name + '.*'] +
+                              Dir['templates/' + name + '/index.*'] -
+                              Dir['templates/' + name + '/*.yaml' ]
 
         # Read files
         extension = nil
@@ -120,10 +119,15 @@ module Nanoc::DataSource::FilesystemDataSource
       sanitized_path = path.gsub(/^\/+|\/+$/, '')
 
       # Get paths
-      dir_path      = 'content/' + sanitized_path
-      name          = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
-      meta_path     = dir_path + '/' + name + '.yaml'
-      content_path  = dir_path + '/' + name + template[:extension]
+      if path == ''
+        meta_path     = 'content/content.yaml'
+        content_path  = 'content/content' + template[:extension]
+      else
+        dir_path      = 'content/' + sanitized_path
+        name          = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
+        meta_path     = dir_path + '/' + name + '.yaml'
+        content_path  = dir_path + '/' + name + template[:extension]
+      end
 
       # Make sure the page doesn't exist yet
       error "A page named '#{path}' already exists." if File.exist?(meta_path)
