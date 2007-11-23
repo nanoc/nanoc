@@ -16,10 +16,10 @@ module Nanoc
           "# Other metafiles can override the contents of this one.\n" +
           "\n" +
           "# Built-in\n" +
-          "layout:    \"default\"\n" +
-          "filters:   []\n" +
-          "filename:  \"index\"\n" +
-          "extension: \"html\"\n" +
+          "layout:      \"default\"\n" +
+          "filters_pre: []\n" +
+          "filename:    \"index\"\n" +
+          "extension:   \"html\"\n" +
           "\n" +
           "# Custom\n"
         end

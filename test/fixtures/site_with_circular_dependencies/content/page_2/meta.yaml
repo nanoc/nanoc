@@ -1,5 +1,6 @@
 # Built-in
-filters:
+filters_pre:
+
   - "eruby"
 
 # Custom

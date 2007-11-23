@@ -3,7 +3,8 @@
 
 # Built-in
 layout:    "default"
-filters:   []
+filters_pre:
+   []
 filename:  "index"
 extension: "html"
 
