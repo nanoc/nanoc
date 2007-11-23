@@ -1,3 +1,5 @@
+begin ; require 'active_record' ; rescue NameError ; end
+
 module Nanoc::DataSource::DatabaseDataSource
 
   ########## Helper classes ##########
@@ -34,7 +36,7 @@ module Nanoc::DataSource::DatabaseDataSource
       nanoc_require 'active_record'
 
       # Connect to the database
-      ActiveRecord::Base.establish_connection(@site.config[:database])
+      ActiveRecord::Base.establish_connection(@config[:database])
     end
 
     def down
@@ -86,7 +88,7 @@ module Nanoc::DataSource::DatabaseDataSource
 
     def pages
       # Create Pages for each database object
-      DBPage.find(:all).inject([]) do |pages, page|
+      DatabasePage.find(:all).inject([]) do |pages, page|
         # Read metadata
         hash = (YAML.load(page.meta || '') || {}).clean
 

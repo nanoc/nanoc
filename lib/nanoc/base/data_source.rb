@@ -3,8 +3,14 @@ Nanoc.load_file('base', 'plugin.rb')
 module Nanoc
   class DataSource < Plugin
 
-    def initialize(site)
-      @site = site
+    def initialize(site, is_new_site=false)
+      @site         = site
+
+      if is_new_site
+        @config = YAML.load($unprocessed_opts['--config'] || '{}').clean
+      else
+        @config = @site.config
+      end
     end
 
     # Preparation
