@@ -4,7 +4,8 @@
 # Built-in
 layout:    "default"
 order:     0
-filters:   []
+filters_pre:
+   []
 filename:  "index"
 extension: "html"
 

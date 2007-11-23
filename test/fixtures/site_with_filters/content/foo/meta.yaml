@@ -1,5 +1,6 @@
 # Built-in
-filters: [ 'erb', 'erb' ]
+filters_pre:
+ [ 'erb', 'erb' ]
 
 # Custom
 title: My New Homepage

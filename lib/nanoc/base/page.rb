@@ -36,19 +36,10 @@ module Nanoc
       @attributes
     end
 
-    def attribute_named(*names)
-      # Try page attributes first
-      names.each do |name|
-        return @attributes[name] if @attributes.has_key?(name)
-      end
-
-      # Fall back to page defaults
-      names.each do |name|
-        return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
-      end
-
-      # Fall back to compiler page defaults as a last resort
-      return PAGE_DEFAULTS[names.first]
+    def attribute_named(name)
+      return @attributes[name]         if @attributes.has_key?(name)
+      return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
+      return PAGE_DEFAULTS[name]
     end
 
     # Accessors
@@ -72,7 +63,7 @@ module Nanoc
       end
     end
 
-    # Filtering
+    # Compiling
 
     def filter
       # Check for recursive call
@@ -90,8 +81,9 @@ module Nanoc
       end
 
       # Get filters
+      error 'The `filters` property is no longer supported; please use `filters_pre` instead.' unless attribute_named(:filters).nil?
       if @stage == :pre
-        filters = attribute_named(:filters_pre, :filters)
+        filters = attribute_named(:filters_pre)
       else
         filters = attribute_named(:filters_post)
       end

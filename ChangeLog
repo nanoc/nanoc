@@ -18,6 +18,7 @@ Changed:
 
 Removed:
 
+* The `filters` property; use `filters_pre` instead
 * All filters and layout processors except for 'erb' -- the missing ones are
   now available as plugins available on the nanoc web site
 * Support for Liquid
