@@ -29,6 +29,13 @@ end
 
 require 'fileutils'
 
+def in_dir(a_path)
+  FileUtils.cd(File.join(a_path))
+  yield
+ensure
+  FileUtils.cd(File.join(a_path.map { |n| '..' }))
+end
+
 class FileLogger
 
   COLORS = {

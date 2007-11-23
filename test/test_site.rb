@@ -14,66 +14,10 @@ class SiteTest < Test::Unit::TestCase
     $quiet = false
   end
 
-  def test_create_page
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
-
-    site = Nanoc::Site.from_cwd
-    assert(site)
-
-    assert_nothing_raised()   { site.create_page('test') }
-    assert_raise(SystemExit)  { site.create_page('test') }
-
-    assert_nothing_raised()   { site.create_page('foo/bar') }
-    assert_raise(SystemExit)  { site.create_page('foo/bar') }
-
-    assert(File.directory?('content/test/'))
-    assert(File.file?('content/test/test.txt'))
-    assert(File.file?('content/test/test.yaml'))
-
-    assert(File.directory?('content/foo/bar/'))
-    assert(File.file?('content/foo/bar/bar.txt'))
-    assert(File.file?('content/foo/bar/bar.yaml'))
-  ensure
-    FileUtils.cd('..')
-    FileUtils.cd('..')
+  def test_in_site_dir
   end
 
-  def test_create_template
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
-  
-    site = Nanoc::Site.from_cwd
-    assert(site)
-
-    assert_nothing_raised()   { site.create_template('test') }
-    assert_raise(SystemExit)  { site.create_template('test') }
-
-    assert(File.directory?('templates/test/'))
-    assert(File.file?('templates/test/test.txt'))
-    assert(File.file?('templates/test/test.yaml'))
-  ensure
-    FileUtils.cd('..')
-    FileUtils.cd('..')
-  end
-
-  def test_create_layout
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
-  
-    site = Nanoc::Site.from_cwd
-    assert(site)
-
-    assert_nothing_raised()   { site.create_layout('test') }
-    assert_raise(SystemExit)  { site.create_layout('test') }
-
-    assert(File.file?('layouts/test.erb'))
-  ensure
-    FileUtils.cd('..')
-    FileUtils.cd('..')
+  def test_from_cwd
   end
 
 end

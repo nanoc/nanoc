@@ -23,10 +23,12 @@ Usage: nanoc [-chv]
        nanoc create_template [template_name]
 
 Options:
-    -h, --help        Show this help message and quit.
-    -v, --version     Show the nanoc version number and quit.
-    -t, --template    Template that should be used when creating a page.
-                      (can only be used with create_page)
+    -d, --data-source   Data source that should be used when creating a site.
+                        (can only be used with create_site)
+    -h, --help          Show this help message and quit.
+    -v, --version       Show the nanoc version number and quit.
+    -t, --template      Template that should be used when creating a page.
+                        (can only be used with create_page)
 
 Description:
     The 'nanoc' command is used for creating nanoc-powered sites, as well as
@@ -38,11 +40,12 @@ EOT
 # Parse options
 
 opts = GetoptLong.new(
-  [ '--help',       '-h', GetoptLong::NO_ARGUMENT ],
-  [ '--template',   '-t', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--version',    '-v', GetoptLong::NO_ARGUMENT ]
+  [ '--data-source',  '-d', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--help',         '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--template',     '-t', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--version',      '-v', GetoptLong::NO_ARGUMENT ]
 )
-unprocessed_opts = {}
+$unprocessed_opts = {}
 begin
   opts.each do |opt, arg|
     case opt
@@ -53,7 +56,7 @@ begin
       puts version_text
       exit
     else
-      unprocessed_opts[opt] = arg
+      $unprocessed_opts[opt] = arg
     end
   end
 rescue GetoptLong::InvalidOption
@@ -69,15 +72,19 @@ usage 'nanoc [options] [command] [parameters]' if ARGV.size == 0
 
 def create_site
   # Check syntax
-  usage 'Usage: nanoc create_site [site_name]' if ARGV.size != 2
+  usage 'Usage: nanoc create_site [site_name] [options]' if ARGV.size != 2
 
   # Create site
-  $nanoc_creator.create_site(ARGV[1])
+  if $unprocessed_opts['--data-source'].nil?
+    $nanoc_creator.create_site(ARGV[1])
+  else
+    $nanoc_creator.create_site(ARGV[1], $unprocessed_opts['--data-source'])
+  end
 end
 
 def create_page
   # Check syntax
-  usage 'Usage: nanoc create_page [page_name]' if ARGV.size != 2
+  usage 'Usage: nanoc create_page [page_name] [options]' if ARGV.size != 2
 
   # Make sure we are in a nanoc site directory
   unless $nanoc_site
@@ -86,10 +93,10 @@ def create_page
   end
 
   # Create page
-  if unprocessed_opts['--template'].nil?
+  if $unprocessed_opts['--template'].nil?
     $nanoc_site.create_page(ARGV[1])
   else
-    $nanoc_site.create_page(ARGV[1], unprocessed_opts['--template'])
+    $nanoc_site.create_page(ARGV[1], $unprocessed_opts['--template'])
   end
 end
 
