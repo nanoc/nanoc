@@ -5,6 +5,10 @@ module Nanoc
       # Check whether site exists
       error "A site named '#{sitename}' already exists." if File.exist?(sitename)
 
+      # Create data source
+      data_source_class = PluginManager.data_source_named(data_source)
+      error "Unrecognised data source: #{data_source}" if data_source_class.nil?
+
       # Create site
       FileManager.create_dir sitename do
 
@@ -13,7 +17,8 @@ module Nanoc
 
         # Create config
         FileManager.create_file 'config.yaml' do
-          "output_dir: \"output\"\n"
+          "output_dir:  \"output\"\n" +
+          "data_source: \"#{data_source}\""
         end
 
         # Create page defaults
@@ -67,13 +72,12 @@ module Nanoc
         # Create site
         site = Site.from_cwd
 
-        # Create data source
-        data_source_class = PluginManager.data_source_named(data_source)
-        error "Unrecognised data source: #{data_source}" if data_source_class.nil?
-
         # Start data source
-        data_source = data_source_class.new(site)
+        data_source = data_source_class.new(site, true)
         data_source.up
+
+        # Set up data source
+        data_source.setup
 
         # Create layouts
         data_source.create_layout('default')
@@ -84,9 +88,12 @@ module Nanoc
         # Create page
         template = data_source.templates.find { |t| t[:name] == 'default' }
         data_source.create_page('', template)
+
+        # Stop data source
+        data_source.down
       end
 
-    end
+   end
 
   end
 end
