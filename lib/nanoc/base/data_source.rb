@@ -6,10 +6,10 @@ module Nanoc
     def initialize(site, is_new_site=false)
       @site         = site
 
-      if is_new_site
-        @config = YAML.load($unprocessed_opts['--config'] || '{}').clean
+      @config = if is_new_site
+        YAML.load(($unprocessed_opts || {})['--config'] || '{}').clean
       else
-        @config = @site.config
+        @site.config
       end
     end
 
