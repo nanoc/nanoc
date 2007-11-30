@@ -5,14 +5,8 @@ module Nanoc
 
     attr_reader :config
 
-    def initialize(site, is_new_site=false)
-      @site         = site
-
-      @config = if is_new_site
-        YAML.load(($unprocessed_opts || {})['--config'] || '{}').clean
-      else
-        @site.config
-      end
+    def initialize(site)
+      @site = site
     end
 
     # Preparation

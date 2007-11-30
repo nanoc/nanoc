@@ -1,13 +1,12 @@
 module Nanoc
   class Creator
 
-    def create_site(sitename, data_source_name='filesystem')
+    def create_site(sitename)
       # Check whether site exists
       error "A site named '#{sitename}' already exists." if File.exist?(sitename)
 
       # Create data source
-      data_source_class = PluginManager.data_source_named(data_source_name)
-      error "Unrecognised data source: #{data_source}" if data_source_class.nil?
+      data_source_class = PluginManager.data_source_named('filesystem')
       data_source = nil
 
       # Create site
@@ -19,7 +18,7 @@ module Nanoc
         # Create config
         FileManager.create_file 'config.yaml' do
           "output_dir:  \"output\"\n" +
-          "data_source: \"#{data_source_name}\"\n"
+          "data_source: \"filesystem\"\n"
         end
 
         # Create page defaults
@@ -74,7 +73,7 @@ module Nanoc
         site = Site.from_cwd
 
         # Start data source
-        data_source = data_source_class.new(site, true)
+        data_source = data_source_class.new(site)
         data_source.up
 
         # Set up data source
@@ -92,13 +91,6 @@ module Nanoc
 
         # Stop data source
         data_source.down
-      end
-
-      # Save configuration
-      FileManager.create_file(sitename + '/config.yaml') do
-        "output_dir:  \"output\"\n" +
-        "data_source: \"#{data_source_name}\"\n" +
-        data_source.config.stringify_keys.to_yaml
       end
 
    end

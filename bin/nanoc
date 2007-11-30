@@ -23,8 +23,6 @@ Usage: nanoc [-chv]
        nanoc create_template [template_name]
 
 Options:
-    -d, --data-source   Data source that should be used when creating a site.
-                        (can only be used with create_site)
     -h, --help          Show this help message and quit.
     -v, --version       Show the nanoc version number and quit.
     -t, --template      Template that should be used when creating a page.
@@ -76,11 +74,7 @@ def create_site
   usage 'Usage: nanoc create_site [site_name] [options]' if ARGV.size != 2
 
   # Create site
-  if $unprocessed_opts['--data-source'].nil?
-    $nanoc_creator.create_site(ARGV[1])
-  else
-    $nanoc_creator.create_site(ARGV[1], $unprocessed_opts['--data-source'])
-  end
+  $nanoc_creator.create_site(ARGV[1])
 end
 
 def create_page
