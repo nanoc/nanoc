@@ -66,6 +66,9 @@ module Nanoc
     # Compiling
 
     def filter
+      # Don't filter if unnecessary
+      return if @is_filtered
+
       # Check for recursive call
       if @compiler.stack.include?(self)
         # Print error
@@ -82,29 +85,22 @@ module Nanoc
 
       # Get filters
       error 'The `filters` property is no longer supported; please use `filters_pre` instead.' unless attribute_named(:filters).nil?
-      if @stage == :pre
-        filters = attribute_named(:filters_pre)
-      else
-        filters = attribute_named(:filters_post)
-      end
+      filters = attribute_named(@stage == :pre ? :filters_pre : :filters_post)
 
-      # Filter if not yet filtered
-      unless @is_filtered
-        @compiler.stack.pushing(self) do
-          # Read page
-          @content = attribute_named(:uncompiled_content) if @content.nil?
+      @compiler.stack.pushing(self) do
+        # Read page
+        @content = attribute_named(:uncompiled_content) if @content.nil?
 
-          # Filter page
-          filters.each do |filter_name|
-            # Create filter
-            filter_class = PluginManager.filter_named(filter_name)
-            error "Unknown filter: '#{filter_name}'" if filter_class.nil?
-            filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
+        # Filter page
+        filters.each do |filter_name|
+          # Create filter
+          filter_class = PluginManager.filter_named(filter_name)
+          error "Unknown filter: '#{filter_name}'" if filter_class.nil?
+          filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
-            # Run filter
-            @content = filter.run(@content)
-            @is_filtered = true
-          end
+          # Run filter
+          @content = filter.run(@content)
+          @is_filtered = true
         end
       end
     end
