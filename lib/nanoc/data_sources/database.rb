@@ -36,7 +36,7 @@ module Nanoc::DataSource::DatabaseDataSource
       nanoc_require 'active_record'
 
       # Connect to the database
-      ActiveRecord::Base.establish_connection(@config[:database])
+      ActiveRecord::Base.establish_connection(@site.config[:database])
     end
 
     def down
