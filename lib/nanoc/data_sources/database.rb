@@ -120,6 +120,11 @@ module Nanoc::DataSource::DatabaseDataSource
       []
     end
 
+    # TODO implement
+    def code
+      ''
+    end
+
     ########## Creating data ##########
 
     # TODO: implement

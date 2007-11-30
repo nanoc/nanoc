@@ -9,7 +9,7 @@ module Nanoc
 
     def run
       # Require all Ruby source files in lib/
-      Dir['lib/**/*.rb'].sort.each { |f| require f }
+      eval(@site.code, $nanoc_binding)
 
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
