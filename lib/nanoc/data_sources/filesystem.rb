@@ -109,6 +109,12 @@ module Nanoc::DataSource::FilesystemDataSource
       end
     end
 
+    # Code is stored in '.rb' files in the 'lib' directory. Code can reside
+    # in sub-directories.
+    def code
+      Dir['lib/**/*.rb'].sort.inject('') { |m, f| m + File.read(f) }
+    end
+
     ########## Creating data ##########
 
     # Creating a page creates a page directory with the name of the page in

@@ -94,6 +94,16 @@ module Nanoc::DataSource::TrivialDataSource
       ]
     end
 
+    # DataSource#code returns a string containing custom code which will be
+    # loaded before the site is compiled. This can be code for custom filters
+    # and layout processors, but pretty much any code can be put in there
+    # (global helper functions are very useful). It is possible to override
+    # methods of built-in nanoc classes, but doing so will likely cause
+    # massive breakage, so doing so is not recommended.
+    def code
+      "def foo ; 'bar' ; end"
+    end
+
     ########## Creating data ##########
 
     # DataSource#create_page is run when a page is created. This function

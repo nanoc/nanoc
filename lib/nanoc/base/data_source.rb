@@ -44,6 +44,10 @@ module Nanoc
       error 'DataSource#templates must be overridden'
     end
 
+    def code
+      error 'DataSource#code must be overridden'
+    end
+
     # Creating data
 
     def create_page(name, template_name)

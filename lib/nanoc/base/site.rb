@@ -7,9 +7,9 @@ module Nanoc
       :data_source  => 'filesystem'
     }
 
-    attr_reader :config, :page_defaults
+    attr_reader :config
     attr_reader :compiler
-    attr_reader :pages, :layouts, :templates
+    attr_reader :code, :pages, :page_defaults, :layouts, :templates
 
     # Creating a Site object
 
@@ -48,6 +48,7 @@ module Nanoc
       @data_source.up
 
       # Load data
+      @code           = @data_source.code
       @pages          = @data_source.pages.map { |p| Page.new(p, self) }
       @page_defaults  = @data_source.page_defaults
       @layouts        = @data_source.layouts
