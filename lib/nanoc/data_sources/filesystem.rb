@@ -189,15 +189,10 @@ module Nanoc::DataSource::FilesystemDataSource
       sanitized_path = path.gsub(/^\/+|\/+$/, '')
 
       # Get paths
-      if path == ''
-        meta_path     = 'content/content.yaml'
-        content_path  = 'content/content' + template[:extension]
-      else
-        dir_path      = 'content/' + sanitized_path
-        name          = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
-        meta_path     = dir_path + '/' + name + '.yaml'
-        content_path  = dir_path + '/' + name + template[:extension]
-      end
+      dir_path      = 'content/' + sanitized_path
+      name          = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
+      meta_path     = dir_path + '/' + name + '.yaml'
+      content_path  = dir_path + '/' + name + template[:extension]
 
       # Make sure the page doesn't exist yet
       error "A page named '#{path}' already exists." if File.exist?(meta_path)
