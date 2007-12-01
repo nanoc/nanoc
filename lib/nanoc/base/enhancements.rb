@@ -90,7 +90,9 @@ class FileManager
 
   def self.create_file(name)
     path = File.join(@@stack + [ name ])
-    FileManager.create_dir(path.sub(/\/[^\/]+$/, '')) if @@stack.empty?
+    if @@stack.empty? and name =~ /\//
+      FileManager.create_dir(path.sub(/\/[^\/]+$/, ''))
+    end
     content = block_given? ? yield : nil
     if File.exist?(path)
       if block_given? and File.read(path) == content

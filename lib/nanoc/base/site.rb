@@ -8,13 +8,12 @@ module Nanoc
     }
 
     attr_reader :config
-    attr_reader :compiler
+    attr_reader :compiler, :data_source
     attr_reader :code, :pages, :page_defaults, :layouts, :templates
 
     # Creating a Site object
 
     def self.in_site_dir?
-      return false unless File.directory?('lib')
       return false unless File.directory?('tasks')
       return false unless File.file?('config.yaml')
       return false unless File.file?('Rakefile')
@@ -29,6 +28,11 @@ module Nanoc
       # Load configuration
       @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
 
+      # Create data source
+      @data_source_class = PluginManager.data_source_named(@config[:data_source])
+      error "Unrecognised data source: #{@config[:data_source]}" if @data_source_class.nil?
+      @data_source = @data_source_class.new(self)
+
       # Create compiler
       @compiler = Compiler.new(self)
 
@@ -39,12 +43,7 @@ module Nanoc
     def load_data_if_necessary
       return if @data_loaded
 
-      # Create data source
-      @data_source_class = PluginManager.data_source_named(@config[:data_source])
-      error "Unrecognised data source: #{@config[:data_source]}" if @data_source_class.nil?
-
       # Start data source
-      @data_source = @data_source_class.new(self)
       @data_source.up
 
       # Load data
@@ -69,6 +68,12 @@ module Nanoc
     end
 
     # Creating
+
+    def setup
+      @data_source.up
+      @data_source.setup
+      @data_source.down
+    end
 
     def create_page(name, template_name='default')
       load_data_if_necessary

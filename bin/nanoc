@@ -38,11 +38,11 @@ EOT
 # Parse options
 
 opts = GetoptLong.new(
-  [ '--data-source',  '-d', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--help',         '-h', GetoptLong::NO_ARGUMENT ],
-  [ '--template',     '-t', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--version',      '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--config',       '-c', GetoptLong::REQUIRED_ARGUMENT ]
+  [ '--yes',      '-y', GetoptLong::NO_ARGUMENT ],
+  [ '--help',     '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--template', '-t', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--version',  '-v', GetoptLong::NO_ARGUMENT ],
+  [ '--config',   '-c', GetoptLong::REQUIRED_ARGUMENT ]
 )
 $unprocessed_opts = {}
 begin
@@ -68,6 +68,27 @@ end
 usage 'nanoc [options] [command] [parameters]' if ARGV.size == 0
 
 # Functions for handing commands
+
+def setup
+  # Check syntax
+  usage 'Usage: nanoc setup' if ARGV.size != 1
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Check for -y switch
+  unless $unprocessed_opts.has_key?('--yes')
+    error 'Are you absolutely sure you want to set up the data source for ' +
+          'this site? Setting up the data source will remove existing ' +
+          'data. To continue, use the -y switch, like "nanoc setup -y".'
+  end
+
+  # Setup
+  $nanoc_site.setup
+end
 
 def create_site
   # Check syntax
@@ -140,6 +161,8 @@ end
 # Handle command
 
 case ARGV[0]
+  when 'setup', 's'
+    setup
   when 'create_site', 'cs'
     create_site
   when 'create_page', 'cp'
