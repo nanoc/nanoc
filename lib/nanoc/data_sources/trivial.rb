@@ -23,6 +23,8 @@ module Nanoc::DataSource::TrivialDataSource
     # should initialize the data source, if necessary. You don't need to
     # implement it; you can leave it out if you don't need initialization.
     # This is the ideal place to connect to the database, for example.
+    # If your data source requires any special libraries, require them here
+    # using 'nanoc_require'.
     def up
     end
 
@@ -40,6 +42,7 @@ module Nanoc::DataSource::TrivialDataSource
     # For example, if you're using a database, this is where you should create
     # the necessary tables for the data source to function properly.
     def setup
+      error "Sorry. The trivial data source isn't competent enough."
     end
 
     ########## Loading data ##########
@@ -68,8 +71,14 @@ module Nanoc::DataSource::TrivialDataSource
       [
         {
           :name       => 'quux',
-          :content    => '<html><head><title><%= @page.title %></title>' +
-                         '</head><body><%= @page.content %></body></html>',
+          :content    => "<html>\n" +
+                         "  <head>\n" +
+                         "    <title><%= @page.title %></title>\n" +
+                         "  </head>\n" +
+                         "  <body>\n" +
+                         "<%= @page.content %>\n" +
+                         "  </body>\n" +
+                         "</html>",
           :extension  => '.erb'
         }
       ]
