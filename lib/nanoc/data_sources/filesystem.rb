@@ -20,7 +20,7 @@ module Nanoc::DataSource::FilesystemDataSource
         "I'm a brand new root page. Please edit me!\n"
       end
       FileManager.create_file 'content/content.yaml' do
-        "title: \"A New Page\"\n"
+        "title: \"A New Root Page\"\n"
       end
 
       # Create page defaults
@@ -92,7 +92,7 @@ module Nanoc::DataSource::FilesystemDataSource
     # Content files can also have the 'index' basename. Similarly, meta files
     # can have the 'meta' basename. For example, a parent directory named
     # 'foo' can have an 'index.txt' content file and a 'meta.yaml' meta file.
-    # This is to preserve backward compatibilitys.
+    # This is to preserve backward compatibility.
     def pages
       meta_filenames.inject([]) do |pages, filename|
         # Read metadata
@@ -176,7 +176,7 @@ module Nanoc::DataSource::FilesystemDataSource
     # Code is stored in '.rb' files in the 'lib' directory. Code can reside
     # in sub-directories.
     def code
-      Dir['lib/**/*.rb'].sort.inject('') { |m, f| m + File.read(f) }
+      Dir['lib/**/*.rb'].sort.inject('') { |m, f| m + File.read(f) + "\n" }
     end
 
     ########## Creating data ##########
