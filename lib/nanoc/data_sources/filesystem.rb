@@ -6,6 +6,70 @@ module Nanoc::DataSource::FilesystemDataSource
 
     identifier :filesystem
 
+    ########## Preparation ##########
+
+    def up
+    end
+
+    def down
+    end
+
+    def setup
+      # Create page
+      FileManager.create_file 'content/content.txt' do
+        "I'm a brand new root page. Please edit me!\n"
+      end
+      FileManager.create_file 'content/content.yaml' do
+        "title: \"A New Page\"\n"
+      end
+
+      # Create page defaults
+      FileManager.create_file 'meta.yaml' do
+        "# This file contains the default values for all metafiles.\n" +
+        "# Other metafiles can override the contents of this one.\n" +
+        "\n" +
+        "# Built-in\n" +
+        "layout:      \"default\"\n" +
+        "filters_pre: []\n" +
+        "filename:    \"index\"\n" +
+        "extension:   \"html\"\n" +
+        "\n" +
+        "# Custom\n"
+      end
+
+      # Create template
+      FileManager.create_file 'templates/default/default.txt' do
+        "Hi, I'm new here!\n"
+      end
+      FileManager.create_file 'templates/default/default.yaml' do
+        "title: \"A New Page\"\n"
+      end
+
+      # Create layout
+      FileManager.create_file 'layouts/default.erb'  do
+        "<html>\n" +
+        "  <head>\n" +
+        "    <title><%= @page.title %></title>\n" +
+        "  </head>\n" +
+        "  <body>\n" +
+        "<%= @page.content %>\n" +
+        "  </body>\n" +
+        "</html>\n"
+      end
+
+      # Create code
+      FileManager.create_file 'lib/default.rb' do
+        "\# All files in the 'lib' directory will be loaded\n" +
+        "\# before nanoc starts compiling.\n" +
+        "\n" +
+        "def html_escape(str)\n" +
+        "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
+        "end\n" +
+        "alias h html_escape\n"
+      end
+
+    end
+
     ########## Loading data ##########
 
     # The filesystem data source stores its pages in nested directories. Each
@@ -155,12 +219,12 @@ module Nanoc::DataSource::FilesystemDataSource
       # Create layout file
       FileManager.create_file(path) do
         "<html>\n" +
-        "\t<head>\n" +
-        "\t\t<title><%= @page.title %></title>\n" +
-        "\t</head>\n" +
-        "\t<body>\n" +
+        "  <head>\n" +
+        "    <title><%= @page.title %></title>\n" +
+        "  </head>\n" +
+        "  <body>\n" +
         "<%= @page.content %>\n" +
-        "\t</body>\n" +
+        "  </body>\n" +
         "</html>\n"
       end
     end
