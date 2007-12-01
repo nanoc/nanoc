@@ -77,18 +77,28 @@ module Nanoc
 
     def create_page(name, template_name='default')
       load_data_if_necessary
+
       template = @templates.find { |t| t[:name] == template_name }
+
+      @data_source.up
       @data_source.create_page(name, template)
+      @data_source.down
     end
 
     def create_template(name)
       load_data_if_necessary
+
+      @data_source.up
       @data_source.create_template(name)
+      @data_source.down
     end
 
     def create_layout(name)
       load_data_if_necessary
+
+      @data_source.up
       @data_source.create_layout(name)
+      @data_source.down
     end
 
   end
