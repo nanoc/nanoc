@@ -14,6 +14,7 @@ New:
 Changed:
 
 * The source has been restructured and cleaned up a great deal
+* Filters are defined in a different way now
 * The 'eruby' filter now uses ERB instead of Erubis
 
 Removed:
