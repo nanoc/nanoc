@@ -13,15 +13,12 @@ module Nanoc
 
     # Creating a Site object
 
-    def self.in_site_dir?
-      return false unless File.directory?('tasks')
-      return false unless File.file?('config.yaml')
-      return false unless File.file?('Rakefile')
-      return true
-    end
-
     def self.from_cwd
-      in_site_dir? ? new : nil
+      if File.directory?('tasks') and File.file?('config.yaml') and File.file?('Rakefile')
+        new
+      else
+        nil
+      end
     end
 
     def initialize
