@@ -1,18 +1,11 @@
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
 class CreatorTest < Test::Unit::TestCase
 
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-    FileManager.create_dir 'tmp'
-  end
-
-  def teardown
-    FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
-    $quiet = false
-  end
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
 
   def test_create_site
     FileUtils.cd('tmp')

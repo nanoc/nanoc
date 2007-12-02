@@ -1,19 +1,11 @@
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
 class CompilerTest < Test::Unit::TestCase
 
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-    FileManager.create_dir 'tmp'
-  end
-
-  def teardown
-    FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
-    Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f if File.exist?(f)}
-    $quiet = false
-  end
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
 
   def test_compile_empty_site
     with_site_fixture 'empty_site' do |site|
@@ -151,12 +143,6 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_circular_dependencies
     with_site_fixture 'site_with_circular_dependencies' do |site|
       assert_raise(SystemExit) { site.compile }
-    end
-  end
-
-  def test_compile_outside_site
-    in_dir %w{ tmp } do
-      assert(Nanoc::Site.from_cwd.nil?)
     end
   end
 

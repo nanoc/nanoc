@@ -1,41 +1,46 @@
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
-class TrivialDataSourceTest < Test::Unit::TestCase
+class DataSourceTrivialTest < Test::Unit::TestCase
 
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-  end
-
-  def teardown
-    Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f if File.exist?(f)}
-    $quiet = false
-  end
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
 
   # Test preparation
 
   def test_up
+    # TODO implement
   end
 
   def test_down
+    # TODO implement
   end
 
   def test_setup
+    # TODO implement
   end
 
   # Test loading data
 
   def test_pages
+    # TODO implement
   end
 
   def test_page_defaults
+    # TODO implement
   end
 
   def test_templates
+    # TODO implement
   end
 
   def test_layouts
+    # TODO implement
+  end
+
+  def test_code
+    # TODO implement
   end
 
   # Test creating data

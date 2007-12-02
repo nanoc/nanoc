@@ -1,16 +1,11 @@
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
 class CoreExtHashTest < Test::Unit::TestCase
 
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-  end
-
-  def teardown
-    $quiet = false
-  end
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
 
   def test_hash_clean_simple
     hash         = { 'foo' => 'bar' }
