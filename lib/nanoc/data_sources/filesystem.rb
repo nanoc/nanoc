@@ -1,4 +1,4 @@
-module Nanoc::DataSource::FilesystemDataSource
+module Nanoc::DataSource::Filesystem
 
   class FilesystemDataSource < Nanoc::DataSource
 

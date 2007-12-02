@@ -1,6 +1,6 @@
 begin ; require 'active_record' ; rescue NameError ; end
 
-module Nanoc::DataSource::DatabaseDataSource
+module Nanoc::DataSource::Database
 
   ########## Helper classes ##########
 

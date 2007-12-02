@@ -3,7 +3,7 @@
 # source, but it can be useful, especially when the data source needs extra
 # classes (for example, the database data source defines uses ActiveRecord, so
 # it needs classes for each table).
-module Nanoc::DataSource::TrivialDataSource
+module Nanoc::DataSource::Trivial
 
   # This is the implementation of a trivial data source. It doesn't do much
   # except return bogus data. It is meant to be a very simple example of a
