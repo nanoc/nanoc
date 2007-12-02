@@ -1,16 +1,11 @@
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
 class CoreExtYAMLTest < Test::Unit::TestCase
 
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-  end
-
-  def teardown
-    $quiet = false
-  end
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
 
   def test_yaml_load_file_and_clean
     open('test.yaml', 'w') { |io| io.write('created_at: 12/07/04') }

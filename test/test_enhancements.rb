@@ -1,15 +1,11 @@
 require 'test/unit'
 
-require File.join(File.dirname(__FILE__), 'test_helper.rb')
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
 class EnhancementsTest < Test::Unit::TestCase
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-  end
 
-  def teardown
-    $quiet = false
-  end
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
 
   def test_nanoc_require
     assert_raise(SystemExit) { nanoc_require 'askjdfdsldjlfksljakfjlkdsasd' }
@@ -20,8 +16,6 @@ class EnhancementsTest < Test::Unit::TestCase
 
     assert(File.exist?('tmp'))
     assert(File.directory?('tmp'))
-  ensure
-    FileUtils.remove_entry_secure 'tmp'
   end
 
   def test_filemanager_create_dir_with_block
@@ -36,8 +30,6 @@ class EnhancementsTest < Test::Unit::TestCase
     assert(File.directory?('tmp/foo'))
 
     assert(!File.exist?('foo'))
-  ensure
-    FileUtils.remove_entry_secure('tmp')
   end
 
   def test_filemanager_create_file
@@ -50,7 +42,6 @@ class EnhancementsTest < Test::Unit::TestCase
     assert(File.exist?('tmp/bar'))
     assert(File.file?('tmp/bar'))
     assert_equal('asdf', File.read('tmp/bar'))
-  ensure
-    FileUtils.remove_entry_secure 'tmp'
   end
+
 end

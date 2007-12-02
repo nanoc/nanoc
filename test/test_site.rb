@@ -1,23 +1,29 @@
 require 'test/unit'
 
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.join(File.dirname(__FILE__), 'helper.rb')
 
 class SiteTest < Test::Unit::TestCase
 
-  def setup
-    $quiet = true unless ENV['QUIET'] == 'false'
-    FileManager.create_dir 'tmp'
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
+
+  def test_from_cwd_right
+    # Test presence of site
+    in_dir %w{ tmp } do
+      assert(Nanoc::Site.from_cwd.nil?)
+    end
   end
 
-  def teardown
-    FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
-    $quiet = false
-  end
+  def test_from_cwd_wrong
+    # Create site
+    FileUtils.cd('tmp')
+    $nanoc_creator.create_site('site')
+    FileUtils.cd('..')
 
-  def test_in_site_dir
-  end
-
-  def test_from_cwd
+    # Test presence of site
+    in_dir %w{ tmp site } do
+      assert(!Nanoc::Site.from_cwd.nil?)
+    end
   end
 
 end
