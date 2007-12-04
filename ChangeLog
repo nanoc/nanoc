@@ -6,10 +6,10 @@ nanoc Release Notes
 
 New:
 
-* Progress indicators are now displayed while the site is compiling
 * Support for custom layout processors
 * Support for custom data sources
 * Database data source
+* Auto-compiler
 
 Changed:
 
@@ -20,8 +20,6 @@ Changed:
 Removed:
 
 * The `filters` property; use `filters_pre` instead
-* All filters and layout processors except for 'erb' -- the missing ones are
-  now available as plugins available on the nanoc web site
 * Support for Liquid
 
 1.6.2
