@@ -19,9 +19,12 @@ module Nanoc
     def initialize(hash, site)
       @site       = site
       @compiler   = site.compiler
-      @stage      = nil
       @attributes = hash
       @content    = nil
+
+      @filtered_pre  = false
+      @layouted      = false
+      @filtered_post = false
     end
 
     # Proxy support
@@ -45,7 +48,7 @@ module Nanoc
     # Accessors
 
     def content
-      filter
+      compile
       @content
     end
 
@@ -65,10 +68,24 @@ module Nanoc
 
     # Compiling
 
-    def filter
-      # Don't filter if unnecessary
-      return if @is_filtered
+    def compile
+      unless @filtered_pre
+        @filtered_pre = true
+        filter(:pre)
+      end
 
+      unless @layouted
+        @layouted = true
+        layout
+      end
+
+      unless @filtered_post
+        @filtered_post = true
+        filter(:post)
+      end
+    end
+
+    def filter(stage)
       # Check for recursive call
       if @compiler.stack.include?(self)
         # Print error
@@ -85,7 +102,7 @@ module Nanoc
 
       # Get filters
       error 'The `filters` property is no longer supported; please use `filters_pre` instead.' unless attribute_named(:filters).nil?
-      filters = attribute_named(@stage == :pre ? :filters_pre : :filters_post)
+      filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
       @compiler.stack.pushing(self) do
         # Read page
@@ -100,7 +117,6 @@ module Nanoc
 
           # Run filter
           @content = filter.run(@content)
-          @is_filtered = true
         end
       end
     end
@@ -120,6 +136,10 @@ module Nanoc
 
       # Layout
       @content = layout_processor.run(layout[:content])
+    end
+
+    def write
+      FileManager.create_file(self.path_on_filesystem) { @content }
     end
 
   end

@@ -37,8 +37,8 @@ module Nanoc
       @data_loaded = false
     end
 
-    def load_data_if_necessary
-      return if @data_loaded
+    def load_data(params={})
+      return if @data_loaded and params[:force] != true
 
       # Start data source
       @data_source.up
@@ -60,7 +60,7 @@ module Nanoc
     # Compiling
 
     def compile
-      load_data_if_necessary
+      load_data
       @compiler.run
     end
 
@@ -73,7 +73,7 @@ module Nanoc
     end
 
     def create_page(name, template_name='default')
-      load_data_if_necessary
+      load_data
 
       template = @templates.find { |t| t[:name] == template_name }
 
@@ -83,7 +83,7 @@ module Nanoc
     end
 
     def create_template(name)
-      load_data_if_necessary
+      load_data
 
       @data_source.up
       @data_source.create_template(name)
@@ -91,7 +91,7 @@ module Nanoc
     end
 
     def create_layout(name)
-      load_data_if_necessary
+      load_data
 
       @data_source.up
       @data_source.create_layout(name)
