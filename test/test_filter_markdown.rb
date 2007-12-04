@@ -7,7 +7,7 @@ class FilterMarkdownTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_foo
+  def test_filter
     # TODO implement
   end
 
