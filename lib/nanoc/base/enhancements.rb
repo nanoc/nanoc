@@ -27,6 +27,14 @@ rescue LoadError
   error("This site requires #{x} to be built.")
 end
 
+# Rendering sub-layouts
+def render(name)
+  layout = @site.layouts.find { |l| l[:name] == name }
+  layout_processor_class = Nanoc::PluginManager.layout_processor_for_extension(layout[:extension])
+  layout_processor = layout_processor_class.new(@page, @pages, @site.config, @site)
+  layout_processor.run(layout[:content])
+end
+
 require 'fileutils'
 
 def in_dir(a_path)
