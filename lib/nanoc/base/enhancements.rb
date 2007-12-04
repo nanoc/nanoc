@@ -4,16 +4,6 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 # Don't start out quiet
 $quiet = false
 
-# Convenience function for handling exceptions
-def handle_exception(exception, text)
-  unless $quiet or exception.class == SystemExit
-    $stderr.puts "ERROR: Exception occured while #{text}:\n"
-    $stderr.puts exception
-    $stderr.puts exception.backtrace.join("\n")
-  end
-  exit(1)
-end
-
 # Convenience function for printing errors
 def error(s, pre='ERROR')
   $stderr.puts pre + ': ' + s unless $quiet

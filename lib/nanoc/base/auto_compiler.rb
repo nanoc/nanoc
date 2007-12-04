@@ -17,20 +17,45 @@ module Nanoc
       @site = site
     end
 
-    def start
+    def draw_separator
+      puts
+      puts '-' * 80
+      puts
       puts 'Listening for changes...'
+    end
+
+    def start
+      draw_separator
+
       @watcher.start
       @watcher.join
     end
 
     def updated(*events)
-      @site.load_data(:force => true)
-      events.each do |event|
-        page = @site.pages.find { |page| page.attributes[:file].path == event.path }
-        @site.compiler.run(page)
+      important_events = false
 
-        puts
+      # Reload site data
+      @site.load_data(:force => true)
+
+      events.each do |event|
+        # Find page object for event
+        page = @site.pages.find do |p|
+          event.path == p.attributes[:file].path ||
+          event.path == p.attributes[:file].path.sub(/\.[^.]+$/, '.yaml') ||
+          event.path == p.attributes[:file].path.sub(/\/[^\/]+$/, '/meta.yaml')
+        end
+
+        # Forget about non-important events
+        important_events = true unless page.nil?
+
+        # Skip documents without pages
+        next if page.nil?
+
+        # Compile page
+        begin ; @site.compiler.run(page) ; rescue SystemExit ; end
       end
+
+      draw_separator if important_events
     end
 
   end
