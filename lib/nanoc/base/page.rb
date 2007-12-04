@@ -83,6 +83,13 @@ module Nanoc
         @filtered_post = true
         filter(:post)
       end
+    rescue => exception
+      unless $quiet or exception.class == SystemExit
+        $stderr.puts "ERROR: Exception occured while compiling #{path}:\n"
+        $stderr.puts exception
+        $stderr.puts exception.backtrace.join("\n")
+      end
+      exit(1)
     end
 
     def filter(stage)
@@ -92,8 +99,9 @@ module Nanoc
         unless $quiet
           $stderr.puts "\n" + 'ERROR: Recursive call to page content.'
           $stderr.puts 'Page filter stack:'
+          $stderr.puts "  - #{self.attribute_named(:path)}"
           @compiler.stack.each_with_index do |page, i|
-            $stderr.puts "  #{format('%3s', i.to_s + '.')} #{page.attribute_named(:path)}"
+            $stderr.puts "  - #{page.attribute_named(:path)}"
           end
         end
 
