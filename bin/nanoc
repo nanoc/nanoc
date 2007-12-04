@@ -158,11 +158,34 @@ def compile_site
   $nanoc_site.compile
 end
 
+def autocompile_site
+  # Check syntax
+  usage 'nanoc compile' if ARGV.size != 1
+
+  # Make sure we are in a nanoc site directory
+  unless $nanoc_site
+    error 'The current working directory does not seem to ' +
+      'be a valid/complete nanoc site directory; aborting.'
+  end
+
+  # Make sure we are using the filesystem data source
+  unless $nanoc_site.data_source.class.identifier == :filesystem
+    error 'This nanoc site is not using the filesystem data source, which is' +
+      'required in order for autocompilation to work.'
+  end
+
+  # Compile site
+  $nanoc_site.compile
+
+  # Setup autocompilation
+  Nanoc::AutoCompiler.new($nanoc_site).start
+end
+
 # Handle command
 
 case ARGV[0]
-  when 'setup', 's'
-    setup
+  when 'autocompile_site', 'autocompile', 'aco'
+    autocompile_site
   when 'create_site', 'cs'
     create_site
   when 'create_page', 'cp'
@@ -173,6 +196,8 @@ case ARGV[0]
     create_template
   when 'compile_site', 'compile', 'co'
     compile_site
+  when 'setup', 's'
+    setup
   else
     error 'Unrecognised command \'' + ARGV[0] + '\''
 end
