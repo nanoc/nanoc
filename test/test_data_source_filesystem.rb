@@ -18,7 +18,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   end
 
   def test_setup
-    
+    # TODO implement
   end
 
   # Test loading data
@@ -112,6 +112,16 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))
+    end
+  end
+
+  def test_compile_site_with_backup_files
+    with_site_fixture 'site_with_backup_files' do |site|
+      FileManager.create_file('content/content.txt~') { '' }
+      FileManager.create_file('layouts/default.erb~') { '' }
+      assert_nothing_raised() { site.compile }
+      FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('content/content.txt~')
+      FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
     end
   end
 

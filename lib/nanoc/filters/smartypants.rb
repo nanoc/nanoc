@@ -6,7 +6,7 @@ module Nanoc::Filter::SmartyPants
     def run(content)
       nanoc_require 'rubypants'
 
-      RubyPants.new(content).to_html
+      ::RubyPants.new(content).to_html
     end
 
   end

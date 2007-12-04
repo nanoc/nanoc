@@ -1,4 +1,4 @@
-module Nanoc::Filter::ERBFilter
+module Nanoc::Filter::ERB
 
   class ERBContext
 
@@ -26,7 +26,7 @@ module Nanoc::Filter::ERBFilter
       context = ERBContext.new(assigns)
 
       # Get result
-      ERB.new(content).result(context.get_binding)
+      ::ERB.new(content).result(context.get_binding)
     end
 
   end

@@ -8,10 +8,6 @@ class FilterERBTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    # Get filter
-    erb_filter = Nanoc::PluginManager.filter_named(:erb)
-    assert(!erb_filter.nil?)
-
     # TODO implement
   end
 
