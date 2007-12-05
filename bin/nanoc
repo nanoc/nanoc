@@ -41,8 +41,7 @@ opts = GetoptLong.new(
   [ '--yes',      '-y', GetoptLong::NO_ARGUMENT ],
   [ '--help',     '-h', GetoptLong::NO_ARGUMENT ],
   [ '--template', '-t', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--version',  '-v', GetoptLong::NO_ARGUMENT ],
-  [ '--config',   '-c', GetoptLong::REQUIRED_ARGUMENT ]
+  [ '--version',  '-v', GetoptLong::NO_ARGUMENT ]
 )
 $unprocessed_opts = {}
 begin

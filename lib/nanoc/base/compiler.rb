@@ -1,7 +1,7 @@
 module Nanoc
   class Compiler
 
-    attr_reader :stack, :config, :pages, :page_defaults
+    attr_reader :stack
 
     def initialize(site)
       @site = site
