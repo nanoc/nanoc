@@ -25,7 +25,7 @@ module Nanoc
       time_before = Time.now
 
       # Compile pages
-      pages.each do |p|
+      real_pages.each do |p|
         p.compile
         p.write unless p.skip_output?
       end
