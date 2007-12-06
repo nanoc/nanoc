@@ -53,6 +53,20 @@ module Nanoc
       # Stop data source
       @data_source.down
 
+      # Setup child-parent links
+      @pages.each do |page|
+        # Skip pages without parent
+        next if page.path == '/'
+
+        # Get parent
+        parent_path = page.path.sub(/[^\/]+\/$/, '')
+        parent = @pages.find { |p| p.path == parent_path }
+
+        # Link
+        page.parent = parent
+        parent.children << page
+      end
+
       # Set loaded
       @data_loaded = true
     end
