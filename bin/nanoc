@@ -176,8 +176,8 @@ def autocompile_site
   # Compile site
   begin ; $nanoc_site.compile ; rescue SystemExit ; end
 
-  # Setup autocompilation
-  Nanoc::AutoCompiler.new($nanoc_site).start
+  # Autocompile site
+  $nanoc_site.autocompile
 end
 
 # Handle command

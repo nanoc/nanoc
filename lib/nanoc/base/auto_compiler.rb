@@ -2,60 +2,56 @@ module Nanoc
   class AutoCompiler
 
     def initialize(site)
-      begin
-        require 'directory_watcher'
-      rescue LoadError
-        error 'The auto-compilation feature requires the "directory_watcher" gem to be installed.'
-      end
-
-      # Create watcher
-      @watcher = DirectoryWatcher.new('content', :glob => '**/*', :pre_load => true, :interval => 2)
-      @watcher.add_observer(self, :updated)
-      Signal.trap('INT') { @watcher.stop }
-
       # Get site
       @site = site
+
+      # Stop on SIGINT
+      Signal.trap('INT') { stop }
+
+      # Load specific stuff
+      setup
     end
 
     def draw_separator
       puts
       puts '-' * 80
       puts
-      puts 'Listening for changes...'
     end
 
     def start
-      draw_separator
-
-      @watcher.start
-      @watcher.join
+      puts 'Listening for changes...'
+      run
     end
 
-    def updated(*events)
-      important_events = false
+    def update(pages)
+      # Map to paths
+      paths = pages.map { |p| p.attributes[:path] }
 
       # Reload site data
       @site.load_data(:force => true)
 
-      events.each do |event|
-        # Find page object for event
-        page = @site.pages.find do |p|
-          event.path == p.attributes[:file].path ||
-          event.path == p.attributes[:file].path.sub(/\.[^.]+$/, '.yaml') ||
-          event.path == p.attributes[:file].path.sub(/\/[^\/]+$/, '/meta.yaml')
-        end
+      # Get real pages
+      real_pages = paths.map { |path| @site.pages.find { |page| page.attributes[:path] == path }}
 
-        # Forget about non-important events
-        important_events = true unless page.nil?
+      # Compile page
+      begin ; @site.compiler.run(real_pages) rescue SystemExit ; end
 
-        # Skip documents without pages
-        next if page.nil?
+      draw_separator
+      puts 'Listening for changes...'
+    end
 
-        # Compile page
-        begin ; @site.compiler.run(page) ; rescue SystemExit ; end
-      end
+    # Overridden methods
 
-      draw_separator if important_events
+    def setup
+      error 'AutoCompiler#setup must be overridden'
+    end
+
+    def run
+      error 'AutoCompiler#run must be overridden'
+    end
+
+    def stop
+      error 'AutoCompiler#stop must be overridden'
     end
 
   end

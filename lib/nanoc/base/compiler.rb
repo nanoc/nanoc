@@ -7,7 +7,7 @@ module Nanoc
       @site = site
     end
 
-    def run(page=nil)
+    def run(pages=nil)
       # Require all Ruby source files in lib/
       eval(@site.code, $nanoc_binding)
 
@@ -18,10 +18,10 @@ module Nanoc
       @stack = []
 
       # Get pages
-      pages = page.nil? ? @site.pages : [ page ]
+      real_pages = pages.nil? ? @site.pages : pages
 
       # Give feedback
-      puts "Compiling #{page.nil? ? 'site' : 'page'}..." unless $quiet
+      puts "Compiling #{pages.nil? ? 'site' : 'pages'}..." unless $quiet
       time_before = Time.now
 
       # Compile pages
@@ -31,7 +31,7 @@ module Nanoc
       end
 
       # Give feedback
-      puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s." unless $quiet
+      puts "#{pages.nil? ? 'Site' : 'Pages'} compiled in #{format('%.2f', Time.now - time_before)}s." unless $quiet
     end
 
   end

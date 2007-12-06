@@ -17,6 +17,13 @@ rescue LoadError
   error("This site requires #{x} to be built.")
 end
 
+# Convenience function for requiring autocompilation libraries
+def nanoc_autocompile_require(x)
+  require x
+rescue LoadError
+  error("The auto-compilation feature requires #{x} to be installed.")
+end
+
 # Rendering sub-layouts
 def render(name)
   layout = @site.layouts.find { |l| l[:name] == name }

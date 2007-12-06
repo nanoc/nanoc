@@ -31,7 +31,8 @@ module Nanoc
       @data_source = @data_source_class.new(self)
 
       # Create compiler
-      @compiler = Compiler.new(self)
+      @compiler     = Compiler.new(self)
+      @autocompiler = @data_source.autocompiler_class.nil? ? nil : @data_source.autocompiler_class.new(self)
 
       # Set not loaded
       @data_loaded = false
@@ -62,6 +63,15 @@ module Nanoc
     def compile
       load_data
       @compiler.run
+    end
+
+    def autocompile
+      load_data
+      if @autocompiler.nil?
+        error 'ugh'
+      else
+        @autocompiler.start
+      end
     end
 
     # Creating
