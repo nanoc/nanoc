@@ -13,6 +13,10 @@ module Nanoc
 
       if real_key == :content
         @page.content
+      elsif real_key == :parent
+        @page.parent.nil? ? nil : @page.parent.to_proxy
+      elsif real_key == :children
+        @page.children.map { |page| page.to_proxy }
       else
         @page.attribute_named(real_key)
       end

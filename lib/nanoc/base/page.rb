@@ -14,13 +14,17 @@ module Nanoc
       :skip_output  => false
     }
 
-    attr_accessor :stage, :is_filtered
+    attr_accessor :parent, :children
 
     def initialize(hash, site)
       @site       = site
       @compiler   = site.compiler
+
       @attributes = hash
       @content    = nil
+
+      @parent     = nil
+      @children   = []
 
       @filtered_pre  = false
       @layouted      = false
