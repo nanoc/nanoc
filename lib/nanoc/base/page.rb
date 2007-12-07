@@ -34,7 +34,7 @@ module Nanoc
     # Proxy support
 
     def to_proxy
-      PageProxy.new(self)
+      @proxy ||= PageProxy.new(self)
     end
 
     # Attributes
