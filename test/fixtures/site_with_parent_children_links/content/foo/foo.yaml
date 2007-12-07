@@ -1,0 +1,2 @@
+title: "Foo"
+filters_pre: [ 'erb' ]

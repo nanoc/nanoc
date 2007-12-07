@@ -10,6 +10,7 @@ New:
 * Support for custom data sources
 * Database data source
 * Auto-compiler
+* Pages have `parent` and `children`
 
 Changed:
 
