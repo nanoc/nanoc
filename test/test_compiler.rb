@@ -136,6 +136,22 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_parent_children_links
+    with_site_fixture 'site_with_parent_children_links' do |site|
+      assert_nothing_raised() { site.compile }
+
+      assert(File.file?('output/index.html'))
+      assert(File.file?('output/foo/index.html'))
+      assert_equal(2, Dir["output/*"].size)
+
+      assert_match(/The children of this page are: Foo./, File.read('output/index.html'))
+      assert_match(/This page does not have a parent/, File.read('output/index.html'))
+
+      assert_match(/The title of this page's parent page is A New Root Page./, File.read('output/foo/index.html'))
+      assert_match(/This page does not have any children/, File.read('output/foo/index.html'))
+    end
+  end
+
   def test_compile_newly_created_site
     in_dir %w{ tmp } do
       $nanoc_creator.create_site('tmp_site')

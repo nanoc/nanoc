@@ -1,0 +1,11 @@
+<% if @page.parent.nil? %>
+<p>This page does not have a parent.</p>
+<% else %>
+<p>The title of this page's parent page is <%= @page.parent.title %>.</p>
+<% end %>
+
+<% if @page.children.nil? or @page.children.empty? %>
+<p>This page does not have any children.</p>
+<% else %>
+<p>The children of this page are: <%= @page.children.map { |page| page.title }.join(', ') %>.</p>
+<% end %>
