@@ -167,12 +167,6 @@ def autocompile_site
       'be a valid/complete nanoc site directory; aborting.'
   end
 
-  # Make sure we are using the filesystem data source
-  unless $nanoc_site.data_source.class.identifier == :filesystem
-    error 'This nanoc site is not using the filesystem data source, which is' +
-      'required in order for autocompilation to work.'
-  end
-
   # Compile site
   begin ; $nanoc_site.compile ; rescue SystemExit ; end
 

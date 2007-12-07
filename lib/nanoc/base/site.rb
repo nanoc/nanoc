@@ -82,7 +82,7 @@ module Nanoc
       load_data
       @autocompiler ||= @data_source.autocompiler_class.nil? ? nil : @data_source.autocompiler_class.new(self)
       if @autocompiler.nil?
-        error 'ugh'
+        error 'The data source for this site does not support autocompilation.'
       else
         @autocompiler.start
       end
