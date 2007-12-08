@@ -20,8 +20,9 @@ module Nanoc
       @site       = site
       @compiler   = site.compiler
 
-      @attributes = hash
-      @content    = nil
+      @attributes           = hash
+      @content              = nil
+      @content_after_layout = nil
 
       @parent     = nil
       @children   = []
@@ -52,14 +53,12 @@ module Nanoc
     # Accessors
 
     def content
-      compile
+      compile(false)
       @content
     end
 
-    def skip_output? ; attribute_named(:skip_output)            ; end
-    def path         ; attribute_named(:path)                   ; end
-    def filters_pre  ; attribute_named(:filters_pre, :filters)  ; end
-    def filters_post ; attribute_named(:filters_post)           ; end
+    def skip_output? ; attribute_named(:skip_output)  ; end
+    def path         ; attribute_named(:path)         ; end
 
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
@@ -72,20 +71,22 @@ module Nanoc
 
     # Compiling
 
-    def compile
+    def compile(full=true)
       unless @filtered_pre
         @filtered_pre = true
         filter(:pre)
       end
 
-      unless @layouted
-        @layouted = true
-        layout
-      end
+      if full
+        unless @layouted
+          @layouted = true
+          layout
+        end
 
-      unless @filtered_post
-        @filtered_post = true
-        filter(:post)
+        unless @filtered_post
+          @filtered_post = true
+          filter(:post)
+        end
       end
     rescue => exception
       unless $quiet or exception.class == SystemExit
@@ -128,14 +129,21 @@ module Nanoc
           filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
           # Run filter
-          @content = filter.run(@content)
+          if stage == :post
+            @content_after_layout = filter.run(@content_after_layout)
+          else
+            @content = filter.run(@content)
+          end
         end
       end
     end
 
     def layout
       # Don't layout if not necessary
-      return if attribute_named(:layout).nil?
+      if attribute_named(:layout).nil?
+        @content_after_layout = @content
+        return
+      end
 
       # Find layout
       layout = @site.layouts.find { |l| l[:name] == attribute_named(:layout) }
@@ -147,11 +155,11 @@ module Nanoc
       layout_processor = layout_processor_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
       # Layout
-      @content = layout_processor.run(layout[:content])
+      @content_after_layout = layout_processor.run(layout[:content])
     end
 
     def write
-      FileManager.create_file(self.path_on_filesystem) { @content }
+      FileManager.create_file(self.path_on_filesystem) { @content_after_layout }
     end
 
   end
