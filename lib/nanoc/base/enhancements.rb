@@ -41,7 +41,7 @@ ensure
   FileUtils.cd(File.join(a_path.map { |n| '..' }))
 end
 
-class FileLogger
+class FileManager
 
   COLORS = {
     :reset   => "\e[0m",
@@ -65,49 +65,38 @@ class FileLogger
     :identical  => COLORS[:bold]
   }
 
-  def log(action, path)
+  def self.log(action, path)
     puts('%s%12s%s  %s' % [ACTION_COLORS[action.to_sym], action, COLORS[:reset], path]) unless $quiet
   end
 
-private
-
-  def method_missing(method, *args)
-    log(method.to_s, args.first)
-  end
-
-end
-
-class FileManager
-
-  @@stack = []
-  @@logger = FileLogger.new
-
   def self.create_dir(name)
-    @@stack.pushing(name) do
-      path = File.join(@@stack)
-      unless File.directory?(path)
-        FileUtils.mkdir_p(path)
-        @@logger.create(path)
-      end
-      yield if block_given?
-    end
+    # Check whether directory exists
+    return if File.exist?(name)
+
+    # Create dir
+    FileUtils.mkdir_p(name)
+    log(:create, name)
   end
 
-  def self.create_file(name)
-    path = File.join(@@stack + [ name ])
-    if @@stack.empty? and name =~ /\//
-      FileManager.create_dir(path.sub(/\/[^\/]+$/, ''))
+  def self.create_file(path)
+    # Create parent directory if necessary
+    if path =~ /\//
+      parent_path = path.sub(/\/[^\/]+$/, '')
+      FileManager.create_dir(parent_path)
     end
+
+    # Get content
     content = block_given? ? yield : nil
+    content_changed = (File.exist?(path) and File.read(path) != content)
+
+    # Log
     if File.exist?(path)
-      if block_given? and File.read(path) == content
-        @@logger.identical(path)
-      else
-        @@logger.update(path)
-      end
+      log(content_changed ? :update : :identical, path)
     else
-      @@logger.create(path)
+      log(:create, path)
     end
+
+    # Write
     open(path, 'w') { |io| io.write(content) unless content.nil? }
   end
 

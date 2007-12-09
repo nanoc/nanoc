@@ -11,32 +11,17 @@ class EnhancementsTest < Test::Unit::TestCase
     assert_raise(SystemExit) { nanoc_require 'askjdfdsldjlfksljakfjlkdsasd' }
   end
 
-  def test_filemanager_create_dir_without_block
+  def test_filemanager_create_dir
     FileManager.create_dir 'tmp'
 
     assert(File.exist?('tmp'))
     assert(File.directory?('tmp'))
   end
 
-  def test_filemanager_create_dir_with_block
-    FileManager.create_dir 'tmp' do
-      FileManager.create_dir 'foo'
-    end
-
-    assert(File.exist?('tmp'))
-    assert(File.directory?('tmp'))
-
-    assert(File.exist?('tmp/foo'))
-    assert(File.directory?('tmp/foo'))
-
-    assert(!File.exist?('foo'))
-  end
-
   def test_filemanager_create_file
-    FileManager.create_dir 'tmp' do
-      FileManager.create_file 'bar' do
-        "asdf"
-      end
+    FileManager.create_dir 'tmp'
+    FileManager.create_file 'tmp/bar' do
+      "asdf"
     end
 
     assert(File.exist?('tmp/bar'))
