@@ -14,15 +14,16 @@ module Nanoc
       :skip_output  => false
     }
 
+    attr_reader   :attributes
     attr_accessor :parent, :children
 
     def initialize(hash, site)
       @site       = site
       @compiler   = site.compiler
 
-      @attributes           = hash
-      @content              = nil
-      @content_after_layout = nil
+      @attributes             = hash
+      @content_before_layout  = attribute_named(:uncompiled_content)
+      @content_after_layout   = nil
 
       @parent     = nil
       @children   = []
@@ -38,11 +39,7 @@ module Nanoc
       @proxy ||= PageProxy.new(self)
     end
 
-    # Attributes
-
-    def attributes
-      @attributes
-    end
+    # Accessors, kind of
 
     def attribute_named(name)
       return @attributes[name]         if @attributes.has_key?(name)
@@ -50,11 +47,9 @@ module Nanoc
       return PAGE_DEFAULTS[name]
     end
 
-    # Accessors
-
     def content
-      compile(false)
-      @content
+      compile(false) unless @filtered_pre
+      @content_before_layout
     end
 
     def skip_output? ; attribute_named(:skip_output)  ; end
@@ -72,32 +67,6 @@ module Nanoc
     # Compiling
 
     def compile(full=true)
-      unless @filtered_pre
-        @filtered_pre = true
-        filter(:pre)
-      end
-
-      if full
-        unless @layouted
-          @layouted = true
-          layout
-        end
-
-        unless @filtered_post
-          @filtered_post = true
-          filter(:post)
-        end
-      end
-    rescue => exception
-      unless $quiet or exception.class == SystemExit
-        $stderr.puts "ERROR: Exception occured while compiling #{path}:\n"
-        $stderr.puts exception
-        $stderr.puts exception.backtrace.join("\n")
-      end
-      exit(1)
-    end
-
-    def filter(stage)
       # Check for recursive call
       if @compiler.stack.include?(self)
         # Print error
@@ -113,27 +82,53 @@ module Nanoc
         exit(1)
       end
 
+      @compiler.stack.push(self)
+
+      # Filter pre
+      unless @filtered_pre
+        filter(:pre)
+        @filtered_pre = true
+      end
+
+      # Layout
+      if !@layouted and full
+        layout
+        @layouted = true
+      end
+
+      # Filter post
+      if !@filtered_post and full
+        filter(:post)
+        @filtered_post = true
+      end
+
+      @compiler.stack.pop
+
+    rescue => exception
+      unless $quiet or exception.class == SystemExit
+        $stderr.puts "ERROR: Exception occured while compiling #{path}:\n"
+        $stderr.puts exception
+        $stderr.puts exception.backtrace.join("\n")
+      end
+      exit(1)
+    end
+
+    def filter(stage)
       # Get filters
       error 'The `filters` property is no longer supported; please use `filters_pre` instead.' unless attribute_named(:filters).nil?
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
-      @compiler.stack.pushing(self) do
-        # Read page
-        @content = attribute_named(:uncompiled_content) if @content.nil?
+      filters.each do |filter_name|
+        # Create filter
+        filter_class = PluginManager.filter_named(filter_name)
+        error "Unknown filter: '#{filter_name}'" if filter_class.nil?
+        filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
-        # Filter page
-        filters.each do |filter_name|
-          # Create filter
-          filter_class = PluginManager.filter_named(filter_name)
-          error "Unknown filter: '#{filter_name}'" if filter_class.nil?
-          filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
-
-          # Run filter
-          if stage == :post
-            @content_after_layout = filter.run(@content_after_layout)
-          else
-            @content = filter.run(@content)
-          end
+        # Run filter
+        if stage == :post
+          @content_after_layout = filter.run(@content_after_layout)
+        else
+          @content_before_layout = filter.run(@content_before_layout)
         end
       end
     end
@@ -141,7 +136,7 @@ module Nanoc
     def layout
       # Don't layout if not necessary
       if attribute_named(:layout).nil?
-        @content_after_layout = @content
+        @content_after_layout = @content_before_layout
         return
       end
 
