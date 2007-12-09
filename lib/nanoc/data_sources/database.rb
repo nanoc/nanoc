@@ -1,4 +1,4 @@
-begin ; require 'active_record' ; rescue NameError ; end
+begin ; require 'active_record' ; rescue LoadError ; end
 
 module Nanoc::DataSource::Database
 
