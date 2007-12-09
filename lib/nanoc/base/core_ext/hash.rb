@@ -1,3 +1,5 @@
+require 'time'
+
 class Hash
 
   # Cleans up the hash and returns the result. It performs the following
