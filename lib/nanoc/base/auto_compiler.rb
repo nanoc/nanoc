@@ -42,17 +42,9 @@ module Nanoc
 
     # Overridden methods
 
-    def setup
-      error 'AutoCompiler#setup must be overridden'
-    end
-
-    def run
-      error 'AutoCompiler#run must be overridden'
-    end
-
-    def stop
-      error 'AutoCompiler#stop must be overridden'
-    end
+    def setup ; error 'AutoCompiler#setup must be overridden' ; end
+    def run   ; error 'AutoCompiler#run must be overridden'   ; end
+    def stop  ; error 'AutoCompiler#stop must be overridden'  ; end
 
   end
 end
