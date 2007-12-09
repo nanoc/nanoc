@@ -31,6 +31,7 @@ module Nanoc
       @filtered_pre  = false
       @layouted      = false
       @filtered_post = false
+      @written       = false
     end
 
     # Proxy support
@@ -102,6 +103,12 @@ module Nanoc
         @filtered_post = true
       end
 
+      # Write
+      if !@written and full
+        FileManager.create_file(self.path_on_filesystem) { @content_after_layout } unless skip_output?
+        @written = true
+      end
+
       @compiler.stack.pop
 
     rescue => exception
@@ -151,10 +158,6 @@ module Nanoc
 
       # Layout
       @content_after_layout = layout_processor.run(layout[:content])
-    end
-
-    def write
-      FileManager.create_file(self.path_on_filesystem) { @content_after_layout }
     end
 
   end
