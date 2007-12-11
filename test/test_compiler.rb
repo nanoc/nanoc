@@ -152,6 +152,18 @@ class CompilerTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_content_from_other_page
+    with_site_fixture 'site_with_content_from_other_page' do |site|
+      assert_nothing_raised() { site.compile }
+
+      assert(File.file?('output/index.html'))
+      assert(File.file?('output/foo/index.html'))
+      assert_equal(2, Dir["output/*"].size)
+
+      assert_match(/<p>The content of foo is <q>Hi, I'm the Foo page.<\/q>.<\/p>/, File.read('output/index.html'))
+    end
+  end
+
   def test_compile_newly_created_site
     in_dir %w{ tmp } do
       $nanoc_creator.create_site('tmp_site')
