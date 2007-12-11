@@ -86,12 +86,25 @@ module Nanoc::DataSource::Database
       DatabasePage.create(
         :path    => '/',
         :content => "I'm a brand new root page. Please edit me!\n",
-        :meta    => "# Built-in\n\n# Custom\ntitle: A New Root Page\n"
+        :meta    => "# Built-in\n" +
+                    "\n" +
+                    "# Custom\n" +
+                    "title: \"A New Root Page\"\n"
       )
 
       # Create page defaults
       DatabasePageDefault.create(
-        :meta => "# Built-in\n\n# Custom\nfoo: Bar\n"
+        :meta => "# Built-in\n" +
+                 "custom_path:  none\n" +
+                 "extension:    \"html\"\n" +
+                 "filename:     \"index\"\n" +
+                 "filters_post: []\n" +
+                 "filters_pre:  []\n" +
+                 "is_draft:     false\n" +
+                 "layout:       \"default\"\n" +
+                 "skip_output:  false\n" +
+                 "\n" +
+                 "# Custom\n"
       )
 
       # Create default layout
@@ -111,17 +124,17 @@ module Nanoc::DataSource::Database
       # Create default template
       DatabaseTemplate.create(
         :name    => 'default',
-        :content => 'Hi, I\'m a new page.',
-        :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
+        :content => 'Hi, I\'m a new page!',
+        :meta    => "# Built-in\n" +
+                    "\n" +
+                    "# Custom\n" +
+                    "title: \"A New Page\"\n"
       )
 
       # Create default code piece
       DatabaseCodePiece.create(
         :name => 'default',
-        :code => "\# All files in the 'lib' directory will be loaded\n" +
-                 "\# before nanoc starts compiling.\n" +
-                 "\n" +
-                 "def html_escape(str)\n" +
+        :code => "def html_escape(str)\n" +
                  "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
                  "end\n" +
                  "alias h html_escape\n"

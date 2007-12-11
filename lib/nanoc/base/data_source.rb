@@ -11,42 +11,22 @@ module Nanoc
 
     # Preparation
 
-    def up
-    end
+    def up    ; end
+    def down  ; end
 
-    def down
-    end
-
-    def setup
-    end
+    def setup ; end
 
     # Autocompilation
 
-    def autocompiler_class
-      nil
-    end
+    def autocompiler_class ; nil ; end
 
     # Loading data
 
-    def pages
-      error 'DataSource#pages must be overridden'
-    end
-
-    def page_defaults
-      error 'DataSource#page_defaults must be overridden'
-    end
-
-    def layouts
-      error 'DataSource#layouts must be overridden'
-    end
-
-    def templates
-      error 'DataSource#templates must be overridden'
-    end
-
-    def code
-      error 'DataSource#code must be overridden'
-    end
+    def pages         ; error 'DataSource#pages must be overridden'         ; end
+    def page_defaults ; error 'DataSource#page_defaults must be overridden' ; end
+    def layouts       ; error 'DataSource#layouts must be overridden'       ; end
+    def templates     ; error 'DataSource#templates must be overridden'     ; end
+    def code          ; error 'DataSource#code must be overridden'          ; end
 
     # Creating data
 

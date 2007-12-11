@@ -18,20 +18,19 @@ module Nanoc
     attr_accessor :parent, :children
 
     def initialize(hash, site)
-      @site       = site
-      @compiler   = site.compiler
+      @site                   = site
+      @compiler               = site.compiler
 
       @attributes             = hash
-      @content_before_layout  = attribute_named(:uncompiled_content)
-      @content_after_layout   = nil
+      @content                = { :pre => attribute_named(:uncompiled_content), :post => nil }
 
-      @parent     = nil
-      @children   = []
+      @parent                 = nil
+      @children               = []
 
-      @filtered_pre  = false
-      @layouted      = false
-      @filtered_post = false
-      @written       = false
+      @filtered_pre           = false
+      @layouted               = false
+      @filtered_post          = false
+      @written                = false
     end
 
     # Proxy support
@@ -50,7 +49,7 @@ module Nanoc
 
     def content
       compile(false) unless @filtered_pre
-      @content_before_layout
+      @content[:pre]
     end
 
     def skip_output? ; attribute_named(:skip_output)  ; end
@@ -70,16 +69,13 @@ module Nanoc
     def compile(full=true)
       # Check for recursive call
       if @compiler.stack.include?(self)
-        # Print error
         unless $quiet
-          $stderr.puts "\n" + 'ERROR: Recursive call to page content.'
-          $stderr.puts 'Page filter stack:'
+          $stderr.puts "\n" + 'ERROR: Recursive call to page content. Page filter stack:'
           $stderr.puts "  - #{self.attribute_named(:path)}"
           @compiler.stack.each_with_index do |page, i|
             $stderr.puts "  - #{page.attribute_named(:path)}"
           end
         end
-
         exit(1)
       end
 
@@ -105,7 +101,7 @@ module Nanoc
 
       # Write
       if !@written and full
-        FileManager.create_file(self.path_on_filesystem) { @content_after_layout } unless skip_output?
+        FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless skip_output?
         @written = true
       end
 
@@ -133,18 +129,14 @@ module Nanoc
         filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
         # Run filter
-        if stage == :post
-          @content_after_layout = filter.run(@content_after_layout)
-        else
-          @content_before_layout = filter.run(@content_before_layout)
-        end
+        @content[stage] = filter.run(@content[stage])
       end
     end
 
     def layout
       # Don't layout if not necessary
       if attribute_named(:layout).nil?
-        @content_after_layout = @content_before_layout
+        @content[:post] = @content[:pre]
         return
       end
 
@@ -158,7 +150,7 @@ module Nanoc
       layout_processor = layout_processor_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
 
       # Layout
-      @content_after_layout = layout_processor.run(layout[:content])
+      @content[:post] = layout_processor.run(layout[:content])
     end
 
   end
