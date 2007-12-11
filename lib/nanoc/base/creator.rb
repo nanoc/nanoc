@@ -6,7 +6,7 @@ module Nanoc
       error "A site named '#{sitename}' already exists." if File.exist?(sitename)
 
       FileUtils.mkdir_p sitename
-      in_dir(sitename) do
+      in_dir([sitename]) do
 
         # Create output
         FileManager.create_dir 'output'
