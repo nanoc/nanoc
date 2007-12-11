@@ -11,10 +11,11 @@ class Hash
   # * Value strings 'true', 'false', and 'none' are converted into
   #   true, false, and nil, respectively
   def clean
-    stringify_keys.inject({}) do |hash, (key, value)|
-      if key =~ /_on$/
+    inject({}) do |hash, (key, value)|
+      real_key = key.to_s
+      if real_key =~ /_on$/
         hash.merge(key.to_sym => Date.parse(value))
-      elsif key =~ /_at$/
+      elsif real_key =~ /_at$/
         hash.merge(key.to_sym => Time.parse(value))
       elsif value == 'true'
         hash.merge(key.to_sym => true)
@@ -27,22 +28,6 @@ class Hash
       else
         hash.merge(key.to_sym => value)
       end
-    end
-  end
-
-  # Converts all keys in the hash to symbols and returns the result
-  def symbolize_keys
-    inject({}) do |hash, (key, value)|
-      new_value = value.respond_to?(:symbolize_keys) ? value.symbolize_keys : value
-      hash.merge({ key.to_sym => new_value })
-    end
-  end
-
-  # Converts all keys in the hash to strings and returns the result
-  def stringify_keys
-    inject({}) do |hash, (key, value)|
-      new_value = value.respond_to?(:stringify_keys) ? value.stringify_keys : value
-      hash.merge({ key.to_s => new_value })
     end
   end
 
