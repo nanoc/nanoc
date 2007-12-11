@@ -61,6 +61,9 @@ module Nanoc::DataSource::Filesystem
         "I'm a brand new root page. Please edit me!\n"
       end
       FileManager.create_file 'content/content.yaml' do
+        "# Built-in\n" +
+        "\n" +
+        "# Custom\n" +
         "title: \"A New Root Page\"\n"
       end
 
@@ -70,19 +73,26 @@ module Nanoc::DataSource::Filesystem
         "# Other metafiles can override the contents of this one.\n" +
         "\n" +
         "# Built-in\n" +
-        "layout:      \"default\"\n" +
-        "filters_pre: []\n" +
-        "filename:    \"index\"\n" +
-        "extension:   \"html\"\n" +
+        "custom_path:  none\n" +
+        "extension:    \"html\"\n" +
+        "filename:     \"index\"\n" +
+        "filters_post: []\n" +
+        "filters_pre:  []\n" +
+        "is_draft:     false\n" +
+        "layout:       \"default\"\n" +
+        "skip_output:  false\n" +
         "\n" +
         "# Custom\n"
       end
 
       # Create template
       FileManager.create_file 'templates/default/default.txt' do
-        "Hi, I'm new here!\n"
+        "Hi, I'm a new page!\n"
       end
       FileManager.create_file 'templates/default/default.yaml' do
+        "# Built-in\n" +
+        "\n" +
+        "# Custom\n" +
         "title: \"A New Page\"\n"
       end
 
