@@ -34,11 +34,11 @@ end
 
 require 'fileutils'
 
-def in_dir(a_path)
-  FileUtils.cd(File.join(a_path))
+def in_dir(*path)
+  FileUtils.cd(File.join(path))
   yield
 ensure
-  FileUtils.cd(File.join(a_path.map { |n| '..' }))
+  FileUtils.cd(File.join(path.map { |n| '..' }))
 end
 
 class FileManager
