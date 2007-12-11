@@ -34,7 +34,7 @@ end
 
 require 'fileutils'
 
-def in_dir(*path)
+def in_dir(path)
   FileUtils.cd(File.join(path))
   yield
 ensure
