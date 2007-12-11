@@ -143,7 +143,7 @@ module Nanoc::DataSource::Filesystem
     def pages
       meta_filenames.inject([]) do |pages, filename|
         # Read metadata
-        meta = YAML.load_file_and_clean(filename)
+        meta = (YAML.load_file(filename) || {}).clean
 
         if meta[:is_draft]
           # Skip drafts
@@ -166,7 +166,7 @@ module Nanoc::DataSource::Filesystem
 
     # The page defaults are loaded from a 'meta.yaml' file
     def page_defaults
-      YAML.load_file_and_clean('meta.yaml')
+      (YAML.load_file('meta.yaml') || {}).clean
     end
 
     # Layouts are stored as files in the 'layouts' directory. Each layout has

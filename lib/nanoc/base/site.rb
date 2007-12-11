@@ -23,7 +23,7 @@ module Nanoc
 
     def initialize
       # Load configuration
-      @config = DEFAULT_CONFIG.merge(YAML.load_file_and_clean('config.yaml'))
+      @config = DEFAULT_CONFIG.merge((YAML.load_file('config.yaml') || {}).clean)
 
       # Create data source
       @data_source_class = PluginManager.data_source_named(@config[:data_source])
