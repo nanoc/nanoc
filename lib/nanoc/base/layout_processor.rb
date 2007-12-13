@@ -1,5 +1,3 @@
-Nanoc.load_file('base', 'plugin.rb')
-
 module Nanoc
   class LayoutProcessor < Plugin
 
