@@ -12,6 +12,7 @@ end
 # Load base
 Nanoc.load_file('base', 'enhancements.rb')
 Nanoc.load_file('base', 'core_ext', '*.rb')
+Nanoc.load_file('base', 'plugin.rb')
 Nanoc.load_file('base', '*.rb')
 
 # Load plugins
