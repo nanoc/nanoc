@@ -24,14 +24,14 @@ module Nanoc
     end
 
     def update(pages)
-      # Map to paths
+      # Map pages to paths
       paths = pages.map { |p| p.attributes[:path] }
 
       # Reload site data
       @site.load_data(:force => true)
 
-      # Get real pages
-      real_pages = paths.map { |path| @site.pages.find { |page| page.attributes[:path] == path }}
+      # Map paths to pages
+      real_pages = paths.map { |path| @site.pages.find { |page| page.attributes[:path] == path } }
 
       # Compile page
       begin ; @site.compiler.run(real_pages) rescue SystemExit ; end

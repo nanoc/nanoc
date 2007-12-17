@@ -10,7 +10,8 @@ require File.dirname(__FILE__) + '/lib/nanoc.rb'
 
 NAME    = 'nanoc'
 VERS    = Nanoc::VERSION
-SUMMARY = 'a CMS that doesn\'t run on your server'
+SUMMARY = 'a tool that runs on your local computer and compiles Markdown, ' +
+          'Textile, Haml, ... documents into static web pages'
 
 HOMEPAGE  = 'http://nanoc.stoneship.org/'
 EMAIL     = 'denis.defreyne@stoneship.org'
