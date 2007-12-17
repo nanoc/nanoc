@@ -52,6 +52,11 @@ module Nanoc
       @content[:pre]
     end
 
+    def layouted_content
+      compile(true)
+      @content[:post]
+    end
+
     def skip_output? ; attribute_named(:skip_output)  ; end
     def path         ; attribute_named(:path)         ; end
 

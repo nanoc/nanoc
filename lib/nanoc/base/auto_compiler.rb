@@ -1,50 +1,64 @@
+require 'webrick'
+require 'mime/types'
+
 module Nanoc
+
   class AutoCompiler
 
     def initialize(site)
-      # Get site
+      # Set site
       @site = site
-
-      # Stop on SIGINT
-      Signal.trap('INT') { stop }
-
-      # Load specific stuff
-      setup
-    end
-
-    def draw_separator
-      puts
-      puts '-' * 80
-      puts
     end
 
     def start
-      puts 'Listening for changes...'
-      run
+      # Create server
+      @server = WEBrick::HTTPServer.new(:Port => 2000)
+      @server.mount_proc("/") { |request, response| handle_request(request, response) }
+
+      # Start server
+      trap('INT') { @server.shutdown }
+      @server.start
     end
 
-    def update(pages)
-      # Map pages to paths
-      paths = pages.map { |p| p.attributes[:path] }
-
+    def handle_request(request, response)
       # Reload site data
       @site.load_data(:force => true)
 
-      # Map paths to pages
-      real_pages = paths.map { |path| @site.pages.find { |page| page.attributes[:path] == path } }
-
-      # Compile page
-      begin ; @site.compiler.run(real_pages) rescue SystemExit ; end
-
-      draw_separator
-      puts 'Listening for changes...'
+      # Serve page or file
+      page      = @site.pages.find { |page| page.path == request.path }
+      file_path = @site.config[:output_dir] + request.path
+      if page.nil?
+        if File.exist?(file_path)
+          serve_file(file_path, response)
+        else
+          serve_404(response)
+        end
+      else
+        serve_page(page, response)
+      end
     end
 
-    # Overridden methods
+    def serve_404(response)
+      response.status           = 404
+      response['Content-Type']  = 'text/html'
+      response.body             = '<p>File not found.</p>'
+    end
 
-    def setup ; error 'AutoCompiler#setup must be overridden' ; end
-    def run   ; error 'AutoCompiler#run must be overridden'   ; end
-    def stop  ; error 'AutoCompiler#stop must be overridden'  ; end
+    def serve_file(path, response)
+      response.status           = 200
+      response['Content-Type']  = MIME::Types.of(path).first || 'application/octet-stream'
+      response.body             = File.read(path)
+    end
+
+    def serve_page(page, response)
+      # Recompile page
+      @site.compiler.run(page)
+
+      response.status           = 200
+      response['Content-Type']  = 'text/html'
+      response.body             = page.layouted_content
+    end
 
   end
+
 end

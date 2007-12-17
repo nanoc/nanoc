@@ -14,10 +14,6 @@ module Nanoc
 
     def setup ; end
 
-    # Autocompilation
-
-    def autocompiler_class ; nil ; end
-
     # Loading data
 
     def pages         ; error 'DataSource#pages must be overridden'         ; end

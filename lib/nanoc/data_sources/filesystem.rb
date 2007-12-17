@@ -1,46 +1,5 @@
 module Nanoc::DataSource::Filesystem
 
-  class FilesystemAutoCompiler < Nanoc::AutoCompiler
-
-    def setup
-      nanoc_autocompile_require 'directory_watcher'
-
-      # Create watcher
-      @watcher = DirectoryWatcher.new('content', :glob => '**/*', :pre_load => true, :interval => 2)
-      @watcher.add_observer(self, :updated)
-    end
-
-    def run
-      @watcher.start
-      @watcher.join
-    end
-
-    def stop
-      @watcher.stop
-    end
-
-  protected
-
-    def updated(*events)
-      # Find updated pages
-      pages = events.inject([]) do |memo, event|
-        # Find page object for event
-        page = @site.pages.find do |p|
-          event.path == p.attributes[:file].path ||
-          event.path == p.attributes[:file].path.sub(/\.[^.]+$/, '.yaml') ||
-          event.path == p.attributes[:file].path.sub(/\/[^\/]+$/, '/meta.yaml')
-        end
-
-        # Add
-        page.nil? ? memo : memo + [ page ]
-      end
-
-      # Compile pages
-      update(pages)
-    end
-
-  end
-
   class FilesystemDataSource < Nanoc::DataSource
 
     ########## Attributes ##########
@@ -119,12 +78,6 @@ module Nanoc::DataSource::Filesystem
         "alias h html_escape\n"
       end
 
-    end
-
-    ########## Autocompilation ##########
-
-    def autocompiler_class
-      FilesystemAutoCompiler
     end
 
     ########## Loading data ##########
