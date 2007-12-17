@@ -111,15 +111,6 @@ module Nanoc
       end
 
       @compiler.stack.pop
-
-    rescue => exception
-      unless $quiet or exception.class == SystemExit
-        $stderr.puts "ERROR: Exception occured while compiling #{path}:\n"
-        $stderr.puts '  ' + exception.message
-        $stderr.puts 'Backtrace:'
-        $stderr.puts exception.backtrace.map { |t| '  - ' + t }.join("\n")
-      end
-      exit(1)
     end
 
     def filter(stage)
