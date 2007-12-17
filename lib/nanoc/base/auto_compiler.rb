@@ -33,7 +33,10 @@ END
 	<body>
 		<h1>500 Server Error</h1>
 		<p>An error occurred while compiling the page you requested, <i><%=h path %></i>.</p>
-		<p><%=h exception.message %></p>
+		<p>If you think this is a bug in nanoc, please do <a href="http://nanoc.stoneship.org/trac/newticket">report it</a>&mdash;thanks!</p>
+		<p>Message:</p>
+		<blockquote><p><%=h exception.message %></p></blockquote>
+		<p>Backtrace:</p>
 		<ol>
 <% exception.backtrace.each do |line| %>
 			<li><%= line %></li>
