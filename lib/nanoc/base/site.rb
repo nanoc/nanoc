@@ -31,7 +31,8 @@ module Nanoc
       @data_source = @data_source_class.new(self)
 
       # Create compiler
-      @compiler = Compiler.new(self)
+      @compiler     = Compiler.new(self)
+      @autocompiler = AutoCompiler.new(self)
 
       # Set not loaded
       @data_loaded = false
@@ -75,16 +76,11 @@ module Nanoc
 
     def compile
       load_data
-
       @compiler.run
     end
 
     def autocompile
       load_data
-
-      @autocompiler ||= @data_source.autocompiler_class.nil? ? nil : @data_source.autocompiler_class.new(self)
-      error 'The data source for this site does not support autocompilation.' if @autocompiler.nil?
-
       @autocompiler.start
     end
 

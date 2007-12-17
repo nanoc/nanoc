@@ -167,9 +167,6 @@ def autocompile_site
       'be a valid/complete nanoc site directory; aborting.'
   end
 
-  # Compile site
-  begin ; $nanoc_site.compile ; rescue SystemExit ; end
-
   # Autocompile site
   $nanoc_site.autocompile
 end
