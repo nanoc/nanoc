@@ -1,5 +1,7 @@
-# Try loading Rubygems
+# Get requirements
 begin ; require 'rubygems' ; rescue LoadError ; end
+require 'yaml'
+require 'fileutils'
 
 # Don't start out quiet
 $quiet = false
@@ -31,8 +33,6 @@ def render(name)
   layout_processor = layout_processor_class.new(@page, @pages, @site.config, @site)
   layout_processor.run(layout[:content])
 end
-
-require 'fileutils'
 
 def in_dir(path)
   FileUtils.cd(File.join(path))
