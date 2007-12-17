@@ -48,9 +48,9 @@ END
       @site = site
     end
 
-    def start
+    def start(port)
       # Create server
-      @server = WEBrick::HTTPServer.new(:Port => 8083)
+      @server = WEBrick::HTTPServer.new(:Port => port || 3000)
       @server.mount_proc("/") { |request, response| handle_request(request, response) }
 
       # Start server

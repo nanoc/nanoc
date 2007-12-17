@@ -17,6 +17,7 @@ version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
 help_text    = <<EOT
 Usage: nanoc [-chv]
        nanoc compile
+       nanoc autocompile
        nanoc create_layout [layout_name]
        nanoc create_page [page_name] [-t template]
        nanoc create_site [site_name]
@@ -24,9 +25,10 @@ Usage: nanoc [-chv]
 
 Options:
     -h, --help          Show this help message and quit.
-    -v, --version       Show the nanoc version number and quit.
+    -p, --port          Port the autocompiler should be run on.
     -t, --template      Template that should be used when creating a page.
                         (can only be used with create_page)
+    -v, --version       Show the nanoc version number and quit.
 
 Description:
     The 'nanoc' command is used for creating nanoc-powered sites, as well as
@@ -38,10 +40,11 @@ EOT
 # Parse options
 
 opts = GetoptLong.new(
-  [ '--yes',      '-y', GetoptLong::NO_ARGUMENT ],
   [ '--help',     '-h', GetoptLong::NO_ARGUMENT ],
+  [ '--port',     '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--template', '-t', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--version',  '-v', GetoptLong::NO_ARGUMENT ]
+  [ '--version',  '-v', GetoptLong::NO_ARGUMENT ],
+  [ '--yes',      '-y', GetoptLong::NO_ARGUMENT ]
 )
 $unprocessed_opts = {}
 begin
@@ -168,7 +171,7 @@ def autocompile_site
   end
 
   # Autocompile site
-  $nanoc_site.autocompile
+  $nanoc_site.autocompile($unprocessed_opts['--port'])
 end
 
 # Handle command
