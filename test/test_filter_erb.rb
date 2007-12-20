@@ -8,7 +8,20 @@ class FilterERBTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    # TODO implement
+    assert_nothing_raised do
+      with_site_fixture 'empty_site' do
+        # Get site
+        site = Nanoc::Site.from_cwd
+        site.load_data
+
+        # Get filter
+        filter = ::Nanoc::Filter::ERB::ERBFilter.new(site.pages.first, site.pages, site.config, site)
+
+        # Run filter
+        result = filter.run('<%= "Hello." %>')
+        assert_equal('Hello.', result)
+      end
+    end
   end
 
 end

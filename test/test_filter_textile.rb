@@ -8,7 +8,22 @@ class FilterTextileTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    # TODO implement
+    test_require 'redcloth'
+
+    assert_nothing_raised do
+      with_site_fixture 'empty_site' do
+        # Get site
+        site = Nanoc::Site.from_cwd
+        site.load_data
+
+        # Get filter
+        filter = ::Nanoc::Filter::Textile::TextileFilter.new(site.pages.first, site.pages, site.config, site)
+
+        # Run filter
+        result = filter.run("h1. Foo")
+        assert_equal("<h1>Foo</h1>", result)
+      end
+    end
   end
 
 end
