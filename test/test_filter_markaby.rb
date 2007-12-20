@@ -13,11 +13,13 @@ class FilterMarkabyTest < Test::Unit::TestCase
     assert_nothing_raised do
       with_site_fixture 'empty_site' do
         # Get site
-        site = Nanoc::Site.from_cwd
+        site = ::Nanoc::Site.from_cwd
         site.load_data
 
         # Get filter
-        filter = ::Nanoc::Filter::Markaby::MarkabyFilter.new(site.pages.first, site.pages, site.config, site)
+        page  = site.pages.first.to_proxy
+        pages = site.pages.map { |p| p.to_proxy }
+        filter = ::Nanoc::Filter::Markaby::MarkabyFilter.new(page, pages, site.config, site)
 
         # Run filter
         result = filter.run("html do\nend")
