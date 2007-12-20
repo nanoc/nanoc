@@ -8,7 +8,7 @@ module Nanoc::Filter::Markaby
 
       assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
 
-      Markaby::Builder.new(assigns).instance_eval(content).to_s
+      ::Markaby::Builder.new(assigns).instance_eval(content).to_s
     end
 
   end
