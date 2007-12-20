@@ -121,7 +121,7 @@ module Nanoc::DataSource::Trivial
     # DataSource#templates, so make sure that what DataSource#templates
     # returns is what DataSource#create_page expects. This trivial data source
     # doesn't have a permanent storage, so it can't create any pages.
-    def create_page(name, template)
+    def create_page(path, template)
       error "Sorry. The trivial data source isn't competent enough."
     end
 

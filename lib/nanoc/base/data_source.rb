@@ -24,7 +24,7 @@ module Nanoc
 
     # Creating data
 
-    def create_page(name, template_name)
+    def create_page(name, template)
       error 'DataSource#create_page must be overridden'
     end
 
