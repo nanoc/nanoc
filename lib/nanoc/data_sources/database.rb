@@ -73,7 +73,7 @@ module Nanoc::DataSource::Database
           t.column :content,  :text
           t.column :name,     :string
           t.column :meta,     :text
-         end
+        end
 
         create_table :code_pieces, :force => true do |t|
           t.column :name, :string
