@@ -9,7 +9,7 @@ module Nanoc::LayoutProcessor::Markaby
 
       assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
 
-      Markaby::Builder.new(assigns).instance_eval(layout).to_s
+      ::Markaby::Builder.new(assigns).instance_eval(layout).to_s
     end
 
   end
