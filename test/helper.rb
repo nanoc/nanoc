@@ -24,3 +24,10 @@ def global_teardown
   # Go unquiet
   $quiet = false
 end
+
+def test_require(x)
+  require x
+rescue LoadError
+  $stderr.print "[ skipped -- requiring #{x} failed ]"
+  return
+end

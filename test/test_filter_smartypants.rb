@@ -8,7 +8,22 @@ class FilterSmartyPantsTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    # TODO implement
+    test_require 'rubypants'
+
+    assert_nothing_raised do
+      with_site_fixture 'empty_site' do
+        # Get site
+        site = Nanoc::Site.from_cwd
+        site.load_data
+
+        # Get filter
+        filter = ::Nanoc::Filter::SmartyPants::SmartyPantsFilter.new(site.pages.first, site.pages, site.config, site)
+
+        # Run filter
+        result = filter.run("Wait---what?")
+        assert_equal("Wait&#8212;what?", result)
+      end
+    end
   end
 
 end
