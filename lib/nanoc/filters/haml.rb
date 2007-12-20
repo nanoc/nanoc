@@ -6,7 +6,7 @@ module Nanoc::Filter::Haml
     def run(content)
       nanoc_require 'haml'
 
-      options = @page.attributes[:haml_options] || {}
+      options = @page.haml_options || {}
       options[:locals] = { :page => @page, :pages => @pages, :config => @config, :site => @site }
 
       ::Haml::Engine.new(content, options).to_html
