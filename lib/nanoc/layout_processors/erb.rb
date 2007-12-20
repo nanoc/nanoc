@@ -1,4 +1,4 @@
-module Nanoc::LayoutProcessor::ERBLayoutProcessor
+module Nanoc::LayoutProcessor::ERB
 
   class ERBContext
 
@@ -26,7 +26,7 @@ module Nanoc::LayoutProcessor::ERBLayoutProcessor
       context = ERBContext.new({ :page => @page, :pages => @pages, :config => @config, :site => @site })
 
       # Get result
-      ERB.new(layout).result(context.get_binding)
+      ::ERB.new(layout).result(context.get_binding)
     end
 
   end
