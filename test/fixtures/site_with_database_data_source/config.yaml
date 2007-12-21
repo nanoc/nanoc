@@ -2,4 +2,4 @@ output_dir:   "output"
 data_source:  "database"
 database:
   adapter:    "sqlite3"
-  dbfile:     "content/content.sqlite3db"
+  dbfile:     "content.sqlite3db"
