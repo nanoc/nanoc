@@ -1,0 +1,5 @@
+output_dir:   "output"
+data_source:  "database"
+database:
+  adapter:    "sqlite3"
+  dbfile:     "content/content.db"
