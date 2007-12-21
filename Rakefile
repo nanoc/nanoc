@@ -1,3 +1,5 @@
+##### Requirements
+
 require 'rake'
 
 require 'rake/clean'
@@ -6,7 +8,7 @@ require 'rake/testtask'
 
 require File.dirname(__FILE__) + '/lib/nanoc.rb'
 
-#####
+##### General details
 
 NAME    = 'nanoc'
 VERS    = Nanoc::VERSION
@@ -16,10 +18,12 @@ SUMMARY = 'a tool that runs on your local computer and compiles Markdown, ' +
 HOMEPAGE  = 'http://nanoc.stoneship.org/'
 EMAIL     = 'denis.defreyne@stoneship.org'
 
-#####
+##### Cleaning
 
 CLEAN.include [ 'tmp', 'test/fixtures/*/output/*', 'test/fixtures/*/tmp' ]
 CLOBBER.include [ 'pkg' ]
+
+##### Packaging
 
 spec = Gem::Specification.new do |s|
   s.name        = NAME
@@ -39,18 +43,7 @@ spec = Gem::Specification.new do |s|
   s.bindir        = 'bin'
 end
 
-Rake::GemPackageTask.new(spec) do |task|
-  task.need_tar = true
-  task.gem_spec = spec
-end
-
-Rake::TestTask.new(:test) do |test|
-  test.test_files = Dir['test/test_*.rb']
-end
-
-#####
-
-task :default => [ :test ]
+Rake::GemPackageTask.new(spec) { |task| }
 
 task :install_gem do
   sh %{rake package}
@@ -60,3 +53,11 @@ end
 task :uninstall_gem do
   sh %{sudo gem uninstall #{NAME}}
 end
+
+### Testing
+
+Rake::TestTask.new(:test) do |test|
+  test.test_files = Dir['test/test_*.rb']
+end
+
+task :default => [ :test ]
