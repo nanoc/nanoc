@@ -3,12 +3,15 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 require 'yaml'
 require 'fileutils'
 
-# Don't start out quiet
-$quiet = false
+# Logging (level can be :off, :high, :low)
+$log_level = :high
+def log(log_level, s, io=$stdout)
+  io.puts s if ($log_level == :low or $log_level == log_level) and $log_level != :off
+end
 
 # Convenience function for printing errors
 def error(s, pre='ERROR')
-  $stderr.puts pre + ': ' + s unless $quiet
+  log(:high, pre + ': ' + s, $stderr)
   exit(1)
 end
 
@@ -34,6 +37,7 @@ def render(name, other_assigns={})
   layout_processor.run(layout[:content])
 end
 
+# Convenience function for cd'ing in and out of a directory
 def in_dir(path)
   FileUtils.cd(File.join(path))
   yield
@@ -61,12 +65,11 @@ class FileManager
   ACTION_COLORS = {
     :create     => COLORS[:bold] + COLORS[:green],
     :update     => COLORS[:bold] + COLORS[:yellow],
-    :move       => COLORS[:bold] + COLORS[:blue],
     :identical  => COLORS[:bold]
   }
 
-  def self.log(action, path)
-    puts('%s%12s%s  %s' % [ACTION_COLORS[action.to_sym], action, COLORS[:reset], path]) unless $quiet
+  def self.file_log(log_level, action, path)
+    log(log_level, '%s%12s%s  %s' % [ACTION_COLORS[action.to_sym], action, COLORS[:reset], path])
   end
 
   def self.create_dir(name)
@@ -91,9 +94,9 @@ class FileManager
 
     # Log
     if File.exist?(path)
-      log(content_changed ? :update : :identical, path)
+      file_log(*(content_changed ? [ :high, :update, path ] : [ :low, :identical, path ]))
     else
-      log(:create, path)
+      file_log(:high, :create, path)
     end
 
     # Write
