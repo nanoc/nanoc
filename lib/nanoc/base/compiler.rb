@@ -8,15 +8,16 @@ module Nanoc
     end
 
     def run(page=nil)
-      # Require all Ruby source files in lib/
+      # Give feedback
+      puts "Compiling #{page.nil? ? 'site' : 'page'}..." unless $quiet
+      time_before = Time.now
+
+      # Get the data we need
+      @site.load_data
       eval(@site.code, $nanoc_binding)
 
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
-
-      # Give feedback
-      puts "Compiling #{page.nil? ? 'site' : 'page'}..." unless $quiet
-      time_before = Time.now
 
       # Compile
       @stack = []

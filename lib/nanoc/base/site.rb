@@ -75,12 +75,10 @@ module Nanoc
     # Compiling
 
     def compile
-      load_data
       @compiler.run
     end
 
     def autocompile(port)
-      load_data
       @autocompiler.start(port)
     end
 
