@@ -4,10 +4,23 @@ module Nanoc
     attr_reader :config
 
     def initialize(site)
-      @site = site
+      @site       = site
+      @references = 0
     end
 
     # Preparation
+
+    def loading
+      # Load if necessary
+      up if @references == 0
+      @references += 1
+
+      yield
+    ensure
+      # Unload if necessary
+      @references -= 1
+      down if @references == 0
+    end
 
     def up    ; end
     def down  ; end
