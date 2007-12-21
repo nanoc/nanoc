@@ -1,0 +1,14 @@
+# This file contains the default values for all metafiles.
+# Other metafiles can override the contents of this one.
+
+# Built-in
+custom_path:  none
+extension:    "html"
+filename:     "index"
+filters_post: []
+filters_pre:  []
+is_draft:     false
+layout:       "default"
+skip_output:  false
+
+# Custom
