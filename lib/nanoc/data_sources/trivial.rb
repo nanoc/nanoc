@@ -14,7 +14,7 @@ module Nanoc::DataSource::Trivial
     ########## Attributes ##########
 
     # DataSource.identifier defines the name for this data source. The first
-    # and only argument is the datasource name as a symbol.
+    # and only argument is the data source name as a symbol.
     identifier :trivial
 
     ########## Preparation ##########

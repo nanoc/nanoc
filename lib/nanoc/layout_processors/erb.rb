@@ -21,9 +21,10 @@ module Nanoc::LayoutProcessor::ERB
 
     def run(layout)
       nanoc_require 'erb'
-      
+
       # Create context
-      context = ERBContext.new({ :page => @page, :pages => @pages, :config => @config, :site => @site })
+      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
+      context = ERBContext.new(assigns)
 
       # Get result
       ::ERB.new(layout).result(context.get_binding)
