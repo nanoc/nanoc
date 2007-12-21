@@ -8,9 +8,9 @@ class CreatorTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_create_site
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('..')
+    in_dir %w{ tmp } do
+      $nanoc_creator.create_site('site')
+    end
 
     assert(File.directory?('tmp/site/'))
 
@@ -40,10 +40,10 @@ class CreatorTest < Test::Unit::TestCase
   end
 
   def test_create_site_with_existing_name
-    FileUtils.cd('tmp')
-    assert_nothing_raised()   { $nanoc_creator.create_site('site') }
-    assert_raise(SystemExit)  { $nanoc_creator.create_site('site') }
-    FileUtils.cd('..')
+    in_dir %w{ tmp } do
+      assert_nothing_raised()   { $nanoc_creator.create_site('site') }
+      assert_raise(SystemExit)  { $nanoc_creator.create_site('site') }
+    end
   end
 
 end

@@ -9,99 +9,183 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   # Test preparation
 
-  def test_up
-    # TODO implement
-  end
-
-  def test_down
-    # TODO implement
-  end
-
   def test_setup
-    # TODO implement
+    in_dir %w{ tmp } do
+      $nanoc_creator.create_site('site')
+      in_dir %w{ site } do
+        site = Nanoc::Site.from_cwd
+
+        # Remove files to make sure they are recreated
+
+        FileUtils.remove_entry_secure('content/content.txt')
+        FileUtils.remove_entry_secure('content/content.yaml')
+
+        FileUtils.remove_entry_secure('meta.yaml')
+
+        FileUtils.remove_entry_secure('templates/default/default.txt')
+        FileUtils.remove_entry_secure('templates/default/default.yaml')
+
+        FileUtils.remove_entry_secure('layouts/default.erb')
+
+        FileUtils.remove_entry_secure('lib/default.rb')
+
+        # Recreate files
+
+        site.setup
+
+        # Check whether files have been recreated
+
+        assert(File.directory?('content/'))
+        assert(File.file?('content/content.txt'))
+        assert(File.file?('content/content.yaml'))
+
+        assert(File.file?('meta.yaml'))
+
+        assert(File.directory?('templates/'))
+        assert(File.directory?('templates/default/'))
+        assert(File.file?('templates/default/default.txt'))
+        assert(File.file?('templates/default/default.yaml'))
+
+        assert(File.directory?('layouts/'))
+        assert(File.file?('layouts/default.erb'))
+
+        assert(File.directory?('lib/'))
+        assert(File.file?('lib/default.rb'))
+      end
+    end
   end
 
   # Test loading data
 
   def test_pages
-    # TODO implement
+    with_site_fixture 'empty_site' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal([ 'My New Homepage' ], site.pages.map { |page| page.attribute_named(:title) })
+      end
+    end
   end
 
   def test_page_defaults
-    # TODO implement
+    with_site_fixture 'empty_site' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal('html', site.page_defaults[:extension])
+      end
+    end
   end
 
   def test_templates
-    # TODO implement
+    with_site_fixture 'empty_site' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal(
+          [
+            {
+              :name       => 'default',
+              :content    => "This is a new page. Please edit me!\n",
+              :meta       => "# Built-in\n\n# Custom\ntitle: A New Page\n",
+              :extension  => '.txt'
+            }
+          ],
+          site.templates
+        )
+      end
+    end
   end
 
   def test_layouts
-    # TODO implement
+    with_site_fixture 'empty_site' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal(
+          [
+            {
+              :name       => 'default',
+              :content    => "<html>\n" +
+                             "  <head>\n" +
+                             "    <title><%= @page[:title] %></title>\n" +
+                             "  </head>\n" +
+                             "  <body>\n" +
+                             "<%= @page[:content] %>\n" +
+                             "  </body>\n" +
+                             "</html>\n",
+              :extension  => '.erb'
+            }
+          ],
+          site.layouts
+        )
+      end
+    end
   end
 
   def test_code
-    # TODO implement
+    with_site_fixture 'empty_site' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_match(/# All files in the 'lib' directory will be loaded/, site.code)
+      end
+    end
   end
 
   # Test creating data
 
   def test_create_page
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
+    in_dir %w{ tmp } do
+      $nanoc_creator.create_site('site')
+      in_dir %w{ site } do
+        site = Nanoc::Site.from_cwd
 
-    site = Nanoc::Site.from_cwd
+        assert_nothing_raised()   { site.create_page('test') }
+        assert_raise(SystemExit)  { site.create_page('test') }
 
-    assert_nothing_raised()   { site.create_page('test') }
-    assert_raise(SystemExit)  { site.create_page('test') }
+        assert_nothing_raised()   { site.create_page('foo/bar') }
+        assert_raise(SystemExit)  { site.create_page('foo/bar') }
 
-    assert_nothing_raised()   { site.create_page('foo/bar') }
-    assert_raise(SystemExit)  { site.create_page('foo/bar') }
+        assert(File.directory?('content/test/'))
+        assert(File.file?('content/test/test.txt'))
+        assert(File.file?('content/test/test.yaml'))
 
-    assert(File.directory?('content/test/'))
-    assert(File.file?('content/test/test.txt'))
-    assert(File.file?('content/test/test.yaml'))
-
-    assert(File.directory?('content/foo/bar/'))
-    assert(File.file?('content/foo/bar/bar.txt'))
-    assert(File.file?('content/foo/bar/bar.yaml'))
-  ensure
-    FileUtils.cd('..')
-    FileUtils.cd('..')
+        assert(File.directory?('content/foo/bar/'))
+        assert(File.file?('content/foo/bar/bar.txt'))
+        assert(File.file?('content/foo/bar/bar.yaml'))
+      end
+    end
   end
 
   def test_create_template
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
-  
-    site = Nanoc::Site.from_cwd
+    in_dir %w{ tmp } do
+      $nanoc_creator.create_site('site')
+      in_dir %w{ site }  do
+        site = Nanoc::Site.from_cwd
 
-    assert_nothing_raised()   { site.create_template('test') }
-    assert_raise(SystemExit)  { site.create_template('test') }
+        assert_nothing_raised()   { site.create_template('test') }
+        assert_raise(SystemExit)  { site.create_template('test') }
 
-    assert(File.directory?('templates/test/'))
-    assert(File.file?('templates/test/test.txt'))
-    assert(File.file?('templates/test/test.yaml'))
-  ensure
-    FileUtils.cd('..')
-    FileUtils.cd('..')
+        assert(File.directory?('templates/test/'))
+        assert(File.file?('templates/test/test.txt'))
+        assert(File.file?('templates/test/test.yaml'))
+      end
+    end
   end
 
   def test_create_layout
-    FileUtils.cd('tmp')
-    $nanoc_creator.create_site('site')
-    FileUtils.cd('site')
-  
-    site = Nanoc::Site.from_cwd
+    in_dir %w{ tmp }  do
+      $nanoc_creator.create_site('site')
+      in_dir %w{ site }  do  
+        site = Nanoc::Site.from_cwd
 
-    assert_nothing_raised()   { site.create_layout('test') }
-    assert_raise(SystemExit)  { site.create_layout('test') }
+        assert_nothing_raised()   { site.create_layout('test') }
+        assert_raise(SystemExit)  { site.create_layout('test') }
 
-    assert(File.file?('layouts/test.erb'))
-  ensure
-    FileUtils.cd('..')
-    FileUtils.cd('..')
+        assert(File.file?('layouts/test.erb'))
+      end
+    end
   end
 
   # Miscellaneous

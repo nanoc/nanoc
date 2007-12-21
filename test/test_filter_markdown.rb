@@ -11,9 +11,7 @@ class FilterMarkdownTest < Test::Unit::TestCase
     test_require 'bluecloth'
 
     assert_nothing_raised do
-      with_site_fixture 'empty_site' do
-        # Get site
-        site = ::Nanoc::Site.from_cwd
+      with_site_fixture 'empty_site' do |site|
         site.load_data
 
         # Get filter

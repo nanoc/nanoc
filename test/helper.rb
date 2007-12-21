@@ -6,6 +6,13 @@ def with_site_fixture(a_fixture)
   end
 end
 
+def test_require(x)
+  require x
+rescue LoadError
+  $stderr.print "[ skipped -- requiring #{x} failed ]"
+  return
+end
+
 def global_setup
   # Go quiet
   $quiet = true unless ENV['QUIET'] == 'false'
@@ -19,15 +26,8 @@ def global_teardown
   FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
 
   # Remove output
-  Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure f if File.exist?(f)}
+  Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure(f) if File.exist?(f)}
 
   # Go unquiet
   $quiet = false
-end
-
-def test_require(x)
-  require x
-rescue LoadError
-  $stderr.print "[ skipped -- requiring #{x} failed ]"
-  return
 end
