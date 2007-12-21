@@ -14,11 +14,7 @@ module Nanoc
     # Creating a Site object
 
     def self.from_cwd
-      if File.directory?('tasks') and File.file?('config.yaml') and File.file?('Rakefile')
-        new
-      else
-        nil
-      end
+      File.file?('config.yaml') ? new : nil
     end
 
     def initialize
@@ -41,18 +37,14 @@ module Nanoc
     def load_data(params={})
       return if @data_loaded and params[:force] != true
 
-      # Start data source
-      @data_source.up
-
       # Load data
-      @code           = @data_source.code
-      @pages          = @data_source.pages.map { |p| Page.new(p, self) }
-      @page_defaults  = @data_source.page_defaults
-      @layouts        = @data_source.layouts
-      @templates      = @data_source.templates
-
-      # Stop data source
-      @data_source.down
+      @data_source.loading do
+        @code           = @data_source.code
+        @pages          = @data_source.pages.map { |p| Page.new(p, self) }
+        @page_defaults  = @data_source.page_defaults
+        @layouts        = @data_source.layouts
+        @templates      = @data_source.templates
+      end
 
       # Setup child-parent links
       @pages.each do |page|
@@ -85,9 +77,7 @@ module Nanoc
     # Creating
 
     def setup
-      @data_source.up
-      @data_source.setup
-      @data_source.down
+      @data_source.loading { @data_source.setup }
     end
 
     def create_page(name, template_name='default')
@@ -95,25 +85,19 @@ module Nanoc
 
       template = @templates.find { |t| t[:name] == template_name }
 
-      @data_source.up
-      @data_source.create_page(name, template)
-      @data_source.down
+      @data_source.loading { @data_source.create_page(name, template) }
     end
 
     def create_template(name)
       load_data
 
-      @data_source.up
-      @data_source.create_template(name)
-      @data_source.down
+      @data_source.loading {@data_source.create_template(name) }
     end
 
     def create_layout(name)
       load_data
 
-      @data_source.up
-      @data_source.create_layout(name)
-      @data_source.down
+      @data_source.loading { @data_source.create_layout(name) }
     end
 
   end
