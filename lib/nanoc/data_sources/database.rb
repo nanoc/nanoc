@@ -51,7 +51,9 @@ module Nanoc::DataSource::Database
 
     def setup
       # Create tables
-      ActiveRecord::Schema.define do
+      schema = ActiveRecord::Schema
+      schema.verbose = false
+      schema.define do
 
         create_table :pages, :force => true do |t|
           t.column :content, :text
@@ -139,6 +141,8 @@ module Nanoc::DataSource::Database
                  "end\n" +
                  "alias h html_escape\n"
       )
+
+      puts "Set up database schema." unless $quiet
     end
 
     ########## Loading data ##########
@@ -208,7 +212,7 @@ module Nanoc::DataSource::Database
         :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
       )
 
-      puts "Created page '#{sanitized_path}'."
+      puts "Created page '#{sanitized_path}'." unless $quiet
     end
 
     def create_layout(name)
@@ -231,7 +235,7 @@ module Nanoc::DataSource::Database
         :extension => '.erb'
       )
 
-      puts "Created layout '#{name}'."
+      puts "Created layout '#{name}'." unless $quiet
     end
 
     def create_template(name)
@@ -244,10 +248,10 @@ module Nanoc::DataSource::Database
       DatabaseTemplate.create(
         :name    => name,
         :content => "Hi, I'm a brand new page!\n",
-        :meta    => "title: \"A New Page\"\n"
+        :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
       )
 
-      puts "Created template '#{name}'."
+      puts "Created template '#{name}'." unless $quiet
     end
 
   end

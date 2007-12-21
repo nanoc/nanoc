@@ -247,7 +247,7 @@ module Nanoc::DataSource::Filesystem
       error "A template named '#{name}' already exists." if File.exist?(meta_path)
 
       # Create index and meta file
-      FileManager.create_file(meta_path)    { "title: \"A New Page\"\n" }
+      FileManager.create_file(meta_path)    { "# Built-in\n\n# Custom\ntitle: A New Page\n" }
       FileManager.create_file(content_path) { "Hi, I'm new here!\n" }
     end
 
