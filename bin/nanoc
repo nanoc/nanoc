@@ -15,7 +15,7 @@ end
 
 version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
 help_text    = <<EOT
-Usage: nanoc [-chv]
+Usage: nanoc [-chvV]
        nanoc compile
        nanoc autocompile
        nanoc create_layout [layout_name]
@@ -28,6 +28,7 @@ Options:
     -p, --port          Port the autocompiler should be run on.
     -t, --template      Template that should be used when creating a page.
                         (can only be used with create_page)
+    -V, --verbose       Display more verbose log messages.
     -v, --version       Show the nanoc version number and quit.
 
 Description:
