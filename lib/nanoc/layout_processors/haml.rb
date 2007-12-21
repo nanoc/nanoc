@@ -8,7 +8,8 @@ module Nanoc::LayoutProcessor::Haml
       nanoc_require 'haml'
 
       options = @page[:haml_options] || {}
-      options[:locals] = { :page => @page, :pages => @pages, :config => @config, :site => @site }
+      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
+      options[:locals] = assigns
 
       ::Haml::Engine.new(layout, options).to_html
     end

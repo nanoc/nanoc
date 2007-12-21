@@ -26,4 +26,13 @@ class PageLayoutTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_other_assigns
+    with_site_fixture 'site_with_other_assigns' do |site|
+      assert_nothing_raised() { site.compile }
+      assert_equal(1, Dir["output/*"].size)
+      assert(File.file?('output/index.html'))
+      assert_match(/This page is called "A New Root Page"./, File.read('output/index.html'))
+    end
+  end
+
 end

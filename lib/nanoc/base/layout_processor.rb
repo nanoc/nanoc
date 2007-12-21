@@ -1,11 +1,12 @@
 module Nanoc
   class LayoutProcessor < Plugin
 
-    def initialize(page, pages, config, site)
-      @page   = page
-      @pages  = pages
-      @config = config
-      @site   = site
+    def initialize(page, pages, config, site, other_assigns={})
+      @page          = page
+      @pages         = pages
+      @config        = config
+      @site          = site
+      @other_assigns = other_assigns
     end
 
     def run(layout)
