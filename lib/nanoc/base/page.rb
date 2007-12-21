@@ -41,6 +41,8 @@ module Nanoc
 
     # Accessors, kind of
 
+    def modified? ; @modified ; end
+
     def attribute_named(name)
       return @attributes[name]         if @attributes.has_key?(name)
       return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
@@ -72,6 +74,8 @@ module Nanoc
     # Compiling
 
     def compile(full=true)
+      @modified = false
+
       # Check for recursive call
       if @compiler.stack.include?(self)
         log(:high, "\n" + 'ERROR: Recursive call to page content. Page filter stack:', $stderr)
@@ -104,7 +108,7 @@ module Nanoc
 
       # Write
       if !@written and full
-        FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless skip_output?
+        @modified = FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless skip_output?
         @written = true
       end
 

@@ -21,7 +21,8 @@ module Nanoc
 
       # Compile
       @stack = []
-      (page.nil? ? @site.pages : [ page ]).each do |current_page|
+      pages = (page.nil? ? @site.pages : [ page ])
+      pages.each do |current_page|
         begin
           current_page.compile
         rescue => exception
@@ -30,6 +31,7 @@ module Nanoc
       end
 
       # Give feedback
+      log(:high, "No pages were modified.") unless pages.any? { |page| page.modified? }
       log(:high, "#{page.nil? ? 'Site' : 'Pages'} compiled in #{format('%.2f', Time.now - time_before)}s.")
     end
 

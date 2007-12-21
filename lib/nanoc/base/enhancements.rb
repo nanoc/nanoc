@@ -47,29 +47,14 @@ end
 
 class FileManager
 
-  COLORS = {
-    :reset   => "\e[0m",
-
-    :bold    => "\e[1m",
-
-    :black   => "\e[30m",
-    :red     => "\e[31m",
-    :green   => "\e[32m",
-    :yellow  => "\e[33m",
-    :blue    => "\e[34m",
-    :magenta => "\e[35m",
-    :cyan    => "\e[36m",
-    :white   => "\e[37m"
-  }
-
   ACTION_COLORS = {
-    :create     => COLORS[:bold] + COLORS[:green],
-    :update     => COLORS[:bold] + COLORS[:yellow],
-    :identical  => COLORS[:bold]
+    :create     => "\e[1m" + "\e[32m", # bold + green
+    :update     => "\e[1m" + "\e[33m", # bold + yellow
+    :identical  => "\e[1m"             # bold
   }
 
   def self.file_log(log_level, action, path)
-    log(log_level, '%s%12s%s  %s' % [ACTION_COLORS[action.to_sym], action, COLORS[:reset], path])
+    log(log_level, '%s%12s%s  %s' % [ACTION_COLORS[action.to_sym], action, "\e[0m", path])
   end
 
   def self.create_dir(name)
@@ -90,17 +75,20 @@ class FileManager
 
     # Get content
     content = block_given? ? yield : nil
-    content_changed = (File.exist?(path) and File.read(path) != content)
+    modified = (File.exist?(path) and File.read(path) != content)
 
     # Log
     if File.exist?(path)
-      file_log(*(content_changed ? [ :high, :update, path ] : [ :low, :identical, path ]))
+      file_log(*(modified ? [ :high, :update, path ] : [ :low, :identical, path ]))
     else
       file_log(:high, :create, path)
     end
 
     # Write
     open(path, 'w') { |io| io.write(content) unless content.nil? }
+
+    # Report back
+    modified
   end
 
 end
