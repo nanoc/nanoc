@@ -43,6 +43,7 @@ opts = GetoptLong.new(
   [ '--help',     '-h', GetoptLong::NO_ARGUMENT ],
   [ '--port',     '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--template', '-t', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--verbose',  '-V', GetoptLong::NO_ARGUMENT ],
   [ '--version',  '-v', GetoptLong::NO_ARGUMENT ],
   [ '--yes',      '-y', GetoptLong::NO_ARGUMENT ]
 )
@@ -53,6 +54,8 @@ begin
     when '--help'
       $stderr.puts help_text
       exit
+    when '--verbose'
+      $log_level = :low
     when '--version'
       puts version_text
       exit

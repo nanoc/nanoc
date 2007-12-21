@@ -9,7 +9,7 @@ module Nanoc
 
     def run(page=nil)
       # Give feedback
-      puts "Compiling #{page.nil? ? 'site' : 'page'}..." unless $quiet
+      log(:high, "Compiling #{page.nil? ? 'site' : 'page'}...")
       time_before = Time.now
 
       # Get the data we need
@@ -30,7 +30,7 @@ module Nanoc
       end
 
       # Give feedback
-      puts "#{page.nil? ? 'Site' : 'Pages'} compiled in #{format('%.2f', Time.now - time_before)}s." unless $quiet
+      log(:high, "#{page.nil? ? 'Site' : 'Pages'} compiled in #{format('%.2f', Time.now - time_before)}s.")
     end
 
     def handle_exception(exception, page, single_page)
@@ -39,17 +39,16 @@ module Nanoc
         return
       end
 
-      unless $quiet or exception.class == SystemExit
-        $stderr.puts "ERROR: An exception occured while compiling page #{page.path}."
-        $stderr.puts
-        $stderr.puts "If you think this is a bug in nanoc, please do report it at"
-        $stderr.puts "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
-        $stderr.puts
-        $stderr.puts 'Message:'
-        $stderr.puts '  ' + exception.message
-        $stderr.puts 'Backtrace:'
-        $stderr.puts exception.backtrace.map { |t| '  - ' + t }.join("\n")
-      end
+      log(:high, "ERROR: An exception occured while compiling page #{page.path}.", $stderr)
+      log(:high, "", $stderr)
+      log(:high, "If you think this is a bug in nanoc, please do report it at", $stderr)
+      log(:high, "<http://nanoc.stoneship.org/trac/newticket> -- thanks!", $stderr)
+      log(:high, "", $stderr)
+      log(:high, 'Message:', $stderr)
+      log(:high, '  ' + exception.message, $stderr)
+      log(:high, 'Backtrace:', $stderr)
+      log(:high, exception.backtrace.map { |t| '  - ' + t }.join("\n"), $stderr)
+
       exit(1)
     end
 

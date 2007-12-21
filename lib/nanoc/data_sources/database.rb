@@ -142,7 +142,7 @@ module Nanoc::DataSource::Database
                  "alias h html_escape\n"
       )
 
-      puts "Set up database schema." unless $quiet
+      log(:high, "Set up database schema.")
     end
 
     ########## Loading data ##########
@@ -212,7 +212,7 @@ module Nanoc::DataSource::Database
         :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
       )
 
-      puts "Created page '#{sanitized_path}'." unless $quiet
+      log(:high, "Created page '#{sanitized_path}'.")
     end
 
     def create_layout(name)
@@ -235,7 +235,7 @@ module Nanoc::DataSource::Database
         :extension => '.erb'
       )
 
-      puts "Created layout '#{name}'." unless $quiet
+      log(:high, "Created layout '#{name}'.")
     end
 
     def create_template(name)
@@ -251,7 +251,7 @@ module Nanoc::DataSource::Database
         :meta    => "# Built-in\n\n# Custom\ntitle: A New Page\n"
       )
 
-      puts "Created template '#{name}'." unless $quiet
+      log(:high,"Created template '#{name}'.")
     end
 
   end

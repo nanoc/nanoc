@@ -74,12 +74,10 @@ module Nanoc
     def compile(full=true)
       # Check for recursive call
       if @compiler.stack.include?(self)
-        unless $quiet
-          $stderr.puts "\n" + 'ERROR: Recursive call to page content. Page filter stack:'
-          $stderr.puts "  - #{self.attribute_named(:path)}"
-          @compiler.stack.each_with_index do |page, i|
-            $stderr.puts "  - #{page.attribute_named(:path)}"
-          end
+        log(:high, "\n" + 'ERROR: Recursive call to page content. Page filter stack:', $stderr)
+        log(:high, "  - #{self.attribute_named(:path)}", $stderr)
+        @compiler.stack.each_with_index do |page, i|
+          log(:high, "  - #{page.attribute_named(:path)}", $stderr)
         end
         exit(1)
       end

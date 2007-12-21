@@ -15,7 +15,7 @@ end
 
 def global_setup
   # Go quiet
-  $quiet = true unless ENV['QUIET'] == 'false'
+  $log_level = :off unless ENV['QUIET'] == 'false'
 
   # Create tmp directory
   FileManager.create_dir 'tmp'
@@ -27,7 +27,4 @@ def global_teardown
 
   # Remove output
   Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure(f) if File.exist?(f)}
-
-  # Go unquiet
-  $quiet = false
 end
