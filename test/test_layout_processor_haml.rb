@@ -9,9 +9,7 @@ class LayoutProcessorHamlTest < Test::Unit::TestCase
 
   def test_layout_processor
     assert_nothing_raised do
-      with_site_fixture 'empty_site' do
-        # Get site
-        site = ::Nanoc::Site.from_cwd
+      with_site_fixture 'empty_site' do |site|
         site.load_data
 
         # Get layout processor
