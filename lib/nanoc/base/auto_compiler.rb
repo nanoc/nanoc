@@ -46,13 +46,13 @@ END
 END
 
     def initialize(site)
-      nanoc_require('mime/types', "'mime/types' is required to autocompile sites.")
-      
       # Set site
       @site = site
     end
 
     def start(port)
+      nanoc_require('mime/types', "'mime/types' is required to autocompile sites.")
+      
       # Create server
       @server = WEBrick::HTTPServer.new(:Port => port || 3000)
       @server.mount_proc("/") { |request, response| handle_request(request, response) }
