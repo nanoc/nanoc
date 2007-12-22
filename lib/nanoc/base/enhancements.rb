@@ -16,17 +16,10 @@ def error(s, pre='ERROR')
 end
 
 # Convenience function for requiring libraries
-def nanoc_require(x)
+def nanoc_require(x, message="'#{x}' is required to compile this site.")
   require x
 rescue LoadError
-  error("This site requires #{x} to be built.")
-end
-
-# Convenience function for requiring autocompilation libraries
-def nanoc_autocompile_require(x)
-  require x
-rescue LoadError
-  error("The auto-compilation feature requires #{x} to be installed.")
+  error(message)
 end
 
 # Rendering sub-layouts

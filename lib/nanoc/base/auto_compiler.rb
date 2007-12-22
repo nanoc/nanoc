@@ -1,5 +1,4 @@
 require 'webrick'
-require 'mime/types'
 
 module Nanoc
 
@@ -47,6 +46,8 @@ END
 END
 
     def initialize(site)
+      nanoc_require('mime/types', "'mime/types' is required to autocompile sites.")
+      
       # Set site
       @site = site
     end
