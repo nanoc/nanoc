@@ -84,6 +84,7 @@ module Nanoc
       load_data
 
       template = @templates.find { |t| t[:name] == template_name }
+      error "A template named '#{template_name}' was not found; aborting." if template.nil?
 
       @data_source.loading { @data_source.create_page(name, template) }
     end
