@@ -68,7 +68,7 @@ class FileManager
 
     # Get content
     content = block_given? ? yield : nil
-    modified = (File.exist?(path) and File.read(path) != content)
+    modified = File.exist?(path) ? File.read(path) != content : true
 
     # Log
     if File.exist?(path)
