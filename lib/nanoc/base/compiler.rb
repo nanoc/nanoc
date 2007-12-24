@@ -36,10 +36,7 @@ module Nanoc
     end
 
     def handle_exception(exception, page, single_page)
-      if single_page
-        raise exception
-        return
-      end
+      raise exception if single_page
 
       log(:high, "ERROR: An exception occured while compiling page #{page.path}.", $stderr)
       log(:high, "", $stderr)
