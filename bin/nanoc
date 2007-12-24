@@ -101,7 +101,7 @@ def create_site
   usage 'Usage: nanoc create_site [site_name] [options]' if ARGV.size != 2
 
   # Create site
-  $nanoc_creator.create_site(ARGV[1])
+  Nanoc::Site.create(ARGV[1])
 end
 
 def create_page

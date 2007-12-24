@@ -166,7 +166,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_newly_created_site
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('tmp_site')
+      Nanoc::Site.create('tmp_site')
       in_dir %w{ tmp_site } do
         site = Nanoc::Site.from_cwd
         assert(site)

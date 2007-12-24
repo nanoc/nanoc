@@ -17,7 +17,7 @@ class SiteTest < Test::Unit::TestCase
   def test_from_cwd_wrong
     # Create site
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
     end
 
     # Test presence of site

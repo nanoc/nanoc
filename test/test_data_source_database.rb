@@ -9,7 +9,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
 
   def creating_site
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
       in_dir %w{ site } do
         # Update configuration
         File.open('config.yaml', 'w') do |io|
