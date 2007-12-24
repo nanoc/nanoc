@@ -41,138 +41,156 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
   # doesn't check the database schema for the same reason.
 
   def test_setup
-    creating_site do |site|
-      # Check whether database has been recreated
-      assert(File.file?('content.sqlite3db'))
+    if_have 'active_record' do
+      creating_site do |site|
+        # Check whether database has been recreated
+        assert(File.file?('content.sqlite3db'))
+      end
     end
   end
 
   # Test loading data
 
   def test_pages
-    creating_site do |site|
-      assert_equal(1, Nanoc::DataSource::Database::DatabasePage.count)
-      assert_equal(
-        "# Built-in\n" +
-        "\n" +
-        "# Custom\n" +
-        "title: \"A New Root Page\"\n",
-        Nanoc::DataSource::Database::DatabasePage.find(:first).attributes['meta']
-      )
+    if_have 'active_record' do
+      creating_site do |site|
+        assert_equal(1, Nanoc::DataSource::Database::DatabasePage.count)
+        assert_equal(
+          "# Built-in\n" +
+          "\n" +
+          "# Custom\n" +
+          "title: \"A New Root Page\"\n",
+          Nanoc::DataSource::Database::DatabasePage.find(:first).attributes['meta']
+        )
+      end
     end
   end
 
   def test_page_defaults
-    creating_site do |site|
-      assert_equal(1, Nanoc::DataSource::Database::DatabasePageDefault.count)
-      assert_equal(
-        "# Built-in\n" +
-        "custom_path:  none\n" +
-        "extension:    \"html\"\n" +
-        "filename:     \"index\"\n" +
-        "filters_post: []\n" +
-        "filters_pre:  []\n" +
-        "is_draft:     false\n" +
-        "layout:       \"default\"\n" +
-        "skip_output:  false\n" +
-        "\n" +
-        "# Custom\n",
-        Nanoc::DataSource::Database::DatabasePageDefault.find(:first).attributes['meta']
-      )
+    if_have 'active_record' do
+      creating_site do |site|
+        assert_equal(1, Nanoc::DataSource::Database::DatabasePageDefault.count)
+        assert_equal(
+          "# Built-in\n" +
+          "custom_path:  none\n" +
+          "extension:    \"html\"\n" +
+          "filename:     \"index\"\n" +
+          "filters_post: []\n" +
+          "filters_pre:  []\n" +
+          "is_draft:     false\n" +
+          "layout:       \"default\"\n" +
+          "skip_output:  false\n" +
+          "\n" +
+          "# Custom\n",
+          Nanoc::DataSource::Database::DatabasePageDefault.find(:first).attributes['meta']
+        )
+      end
     end
   end
 
   def test_templates
-    creating_site do |site|
-      assert_equal(1, Nanoc::DataSource::Database::DatabaseTemplate.count)
-      assert_equal(
-        "# Built-in\n" +
-        "\n" +
-        "# Custom\n" +
-        "title: \"A New Page\"\n",
-        Nanoc::DataSource::Database::DatabaseTemplate.find(:first).attributes['meta']
-      )
+    if_have 'active_record' do
+      creating_site do |site|
+        assert_equal(1, Nanoc::DataSource::Database::DatabaseTemplate.count)
+        assert_equal(
+          "# Built-in\n" +
+          "\n" +
+          "# Custom\n" +
+          "title: \"A New Page\"\n",
+          Nanoc::DataSource::Database::DatabaseTemplate.find(:first).attributes['meta']
+        )
+      end
     end
   end
 
   def test_layouts
-    creating_site do |site|
-      assert_equal(1, Nanoc::DataSource::Database::DatabaseLayout.count)
-      assert_equal(
-        "<html>\n" +
-        "  <head>\n" +
-        "    <title><%= @page.title %></title>\n" +
-        "  </head>\n" +
-        "  <body>\n" +
-        "<%= @page.content %>\n" +
-        "  </body>\n" +
-        "</html>",
-        Nanoc::DataSource::Database::DatabaseLayout.find(:first).attributes['content']
-      )
+    if_have 'active_record' do
+      creating_site do |site|
+        assert_equal(1, Nanoc::DataSource::Database::DatabaseLayout.count)
+        assert_equal(
+          "<html>\n" +
+          "  <head>\n" +
+          "    <title><%= @page.title %></title>\n" +
+          "  </head>\n" +
+          "  <body>\n" +
+          "<%= @page.content %>\n" +
+          "  </body>\n" +
+          "</html>",
+          Nanoc::DataSource::Database::DatabaseLayout.find(:first).attributes['content']
+        )
+      end
     end
   end
 
   def test_code
-    creating_site do |site|
-      assert_equal(1, Nanoc::DataSource::Database::DatabaseCodePiece.count)
-      assert_equal(
-        "def html_escape(str)\n" +
-        "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
-        "end\n" +
-        "alias h html_escape\n",
-        Nanoc::DataSource::Database::DatabaseCodePiece.find(:first).attributes['code']
-      )
+    if_have 'active_record' do
+      creating_site do |site|
+        assert_equal(1, Nanoc::DataSource::Database::DatabaseCodePiece.count)
+        assert_equal(
+          "def html_escape(str)\n" +
+          "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
+          "end\n" +
+          "alias h html_escape\n",
+          Nanoc::DataSource::Database::DatabaseCodePiece.find(:first).attributes['code']
+        )
+      end
     end
   end
 
   # Test creating data
 
   def test_create_page
-    creating_site do |site|
-      site.create_page('foo')
+    if_have 'active_record' do
+      creating_site do |site|
+        site.create_page('foo')
 
-      assert_equal(2, Nanoc::DataSource::Database::DatabasePage.count)
-      assert_equal(
-        "# Built-in\n" +
-        "\n" +
-        "# Custom\n" +
-        "title: A New Page\n",
-        Nanoc::DataSource::Database::DatabasePage.find(:all).last.attributes['meta']
-      )
+        assert_equal(2, Nanoc::DataSource::Database::DatabasePage.count)
+        assert_equal(
+          "# Built-in\n" +
+          "\n" +
+          "# Custom\n" +
+          "title: A New Page\n",
+          Nanoc::DataSource::Database::DatabasePage.find(:all).last.attributes['meta']
+        )
+      end
     end
   end
 
   def test_create_template
-    creating_site do |site|
-      site.create_template('bar')
+    if_have 'active_record' do
+      creating_site do |site|
+        site.create_template('bar')
 
-      assert_equal(2, Nanoc::DataSource::Database::DatabaseTemplate.count)
-      assert_equal(
-        "# Built-in\n" +
-        "\n" +
-        "# Custom\n" +
-        "title: A New Page\n",
-        Nanoc::DataSource::Database::DatabaseTemplate.find(:all).last.attributes['meta']
-      )
+        assert_equal(2, Nanoc::DataSource::Database::DatabaseTemplate.count)
+        assert_equal(
+          "# Built-in\n" +
+          "\n" +
+          "# Custom\n" +
+          "title: A New Page\n",
+          Nanoc::DataSource::Database::DatabaseTemplate.find(:all).last.attributes['meta']
+        )
+      end
     end
   end
 
   def test_create_layout
-    creating_site do |site|
-      site.create_layout('baz')
+    if_have 'active_record' do
+      creating_site do |site|
+        site.create_layout('baz')
 
-      assert_equal(2, Nanoc::DataSource::Database::DatabaseLayout.count)
-      assert_equal(
-        "<html>\n" +
-        "  <head>\n" +
-        "    <title><%= @page.title %></title>\n" +
-        "  </head>\n" +
-        "  <body>\n" +
-        "<%= @page.content %>\n" +
-        "  </body>\n" +
-        "</html>",
-        Nanoc::DataSource::Database::DatabaseLayout.find(:all).last.attributes['content']
-      )
+        assert_equal(2, Nanoc::DataSource::Database::DatabaseLayout.count)
+        assert_equal(
+          "<html>\n" +
+          "  <head>\n" +
+          "    <title><%= @page.title %></title>\n" +
+          "  </head>\n" +
+          "  <body>\n" +
+          "<%= @page.content %>\n" +
+          "  </body>\n" +
+          "</html>",
+          Nanoc::DataSource::Database::DatabaseLayout.find(:all).last.attributes['content']
+        )
+      end
     end
   end
 

@@ -8,20 +8,20 @@ class FilterMarkabyTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    test_require 'markaby'
+    if_have 'markaby' do
+      assert_nothing_raised do
+        with_site_fixture 'empty_site' do |site|
+          site.load_data
 
-    assert_nothing_raised do
-      with_site_fixture 'empty_site' do |site|
-        site.load_data
+          # Get filter
+          page  = site.pages.first.to_proxy
+          pages = site.pages.map { |p| p.to_proxy }
+          filter = ::Nanoc::Filter::Markaby::MarkabyFilter.new(page, pages, site.config, site)
 
-        # Get filter
-        page  = site.pages.first.to_proxy
-        pages = site.pages.map { |p| p.to_proxy }
-        filter = ::Nanoc::Filter::Markaby::MarkabyFilter.new(page, pages, site.config, site)
-
-        # Run filter
-        result = filter.run("html do\nend")
-        assert_equal("<html></html>", result)
+          # Run filter
+          result = filter.run("html do\nend")
+          assert_equal("<html></html>", result)
+        end
       end
     end
   end
