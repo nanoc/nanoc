@@ -14,8 +14,9 @@ NAME    = 'nanoc'
 VERS    = Nanoc::VERSION
 SUMMARY = 'a tool that runs on your local computer and compiles Markdown, ' +
           'Textile, Haml, ... documents into static web pages'
-
 HOMEPAGE  = 'http://nanoc.stoneship.org/'
+
+AUTHOR    = 'Denis Defreyne'
 EMAIL     = 'denis.defreyne@stoneship.org'
 
 ##### Cleaning
@@ -26,21 +27,25 @@ CLOBBER.include [ 'pkg' ]
 ##### Packaging
 
 spec = Gem::Specification.new do |s|
-  s.name        = NAME
-  s.version     = VERS
-  s.platform    = Gem::Platform::RUBY
-  s.summary     = SUMMARY
-  s.description = s.summary
-  s.homepage    = HOMEPAGE
-  s.email       = EMAIL
+  s.name                  = NAME
+  s.version               = VERS
+  s.platform              = Gem::Platform::RUBY
+  s.summary               = SUMMARY
+  s.description           = s.summary
+  s.homepage              = HOMEPAGE
+
+  s.author                = AUTHOR
+  s.email                 = EMAIL
+
+  s.rubyforge_project     = 'nanoc'
 
   s.required_ruby_version = '>= 1.8.2'
 
-  s.has_rdoc      = false
-  s.files         = %w( README LICENSE ChangeLog Rakefile ) + Dir['{bin,lib}/**/*']
-  s.executables   = [ 'nanoc' ]
-  s.require_path  = 'lib'
-  s.bindir        = 'bin'
+  s.has_rdoc              = false
+  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir['{bin,lib}/**/*']
+  s.executables           = [ 'nanoc' ]
+  s.require_path          = 'lib'
+  s.bindir                = 'bin'
 end
 
 Rake::GemPackageTask.new(spec) { |task| }
