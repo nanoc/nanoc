@@ -72,7 +72,7 @@ class FileManager
 
     # Fix for Ruby 1.9
     if String.method_defined?(:force_encoding)
-      content_old = content_old.force_encoding('UTF-8')
+      content_old = content_old.force_encoding('UTF-8') unless content_old.nil?
       content_new = content_new.force_encoding('UTF-8')
     end
     modified = (content_old != content_new)
