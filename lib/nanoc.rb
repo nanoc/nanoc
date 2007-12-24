@@ -20,6 +20,5 @@ Nanoc.load_file('data_sources', '*.rb')
 Nanoc.load_file('filters', '*.rb')
 Nanoc.load_file('layout_processors', '*.rb')
 
-# Create globals
+# Get global binding
 $nanoc_binding = binding
-$nanoc_site    = Nanoc::Site.from_cwd

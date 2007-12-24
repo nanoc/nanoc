@@ -38,6 +38,10 @@ Description:
     Read more about nanoc on the site: <http://nanoc.stoneship.org/>
 EOT
 
+# Create site
+
+$nanoc_site = Nanoc::Site.from_cwd
+
 # Parse options
 
 opts = GetoptLong.new(
