@@ -8,20 +8,20 @@ class FilterHamlTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    test_require 'haml'
+    if_have 'haml' do
+      assert_nothing_raised do
+        with_site_fixture 'empty_site' do |site|
+          site.load_data
 
-    assert_nothing_raised do
-      with_site_fixture 'empty_site' do |site|
-        site.load_data
+          # Get filter
+          page  = site.pages.first.to_proxy
+          pages = site.pages.map { |p| p.to_proxy }
+          filter = ::Nanoc::Filter::Haml::HamlFilter.new(page, pages, site.config, site)
 
-        # Get filter
-        page  = site.pages.first.to_proxy
-        pages = site.pages.map { |p| p.to_proxy }
-        filter = ::Nanoc::Filter::Haml::HamlFilter.new(page, pages, site.config, site)
-
-        # Run filter
-        result = filter.run('%html')
-        assert_equal("<html>\n</html>\n", result)
+          # Run filter
+          result = filter.run('%html')
+          assert_equal("<html>\n</html>\n", result)
+        end
       end
     end
   end

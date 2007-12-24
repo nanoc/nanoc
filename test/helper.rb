@@ -6,11 +6,11 @@ def with_site_fixture(a_fixture)
   end
 end
 
-def test_require(x)
+def if_have(x)
   require x
+  yield
 rescue LoadError
   $stderr.print "[ skipped -- requiring #{x} failed ]"
-  return
 end
 
 def global_setup

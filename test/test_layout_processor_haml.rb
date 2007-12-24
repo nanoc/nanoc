@@ -8,18 +8,20 @@ class LayoutProcessorHamlTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_layout_processor
-    assert_nothing_raised do
-      with_site_fixture 'empty_site' do |site|
-        site.load_data
+    if_have 'haml' do
+      assert_nothing_raised do
+        with_site_fixture 'empty_site' do |site|
+          site.load_data
 
-        # Get layout processor
-        page  = site.pages.first.to_proxy
-        pages = site.pages.map { |p| p.to_proxy }
-        layout_processor = ::Nanoc::LayoutProcessor::Haml::HamlLayoutProcessor.new(page, pages, site.config, site)
+          # Get layout processor
+          page  = site.pages.first.to_proxy
+          pages = site.pages.map { |p| p.to_proxy }
+          layout_processor = ::Nanoc::LayoutProcessor::Haml::HamlLayoutProcessor.new(page, pages, site.config, site)
 
-        # Run layout processor
-        result = layout_processor.run('%h1= page.title')
-        assert_equal("<h1>My New Homepage</h1>\n", result)
+          # Run layout processor
+          result = layout_processor.run('%h1= page.title')
+          assert_equal("<h1>My New Homepage</h1>\n", result)
+        end
       end
     end
   end
