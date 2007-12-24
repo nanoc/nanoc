@@ -64,7 +64,7 @@ END
 
     def handle_request(request, response)
       # Reload site data
-      @site.load_data(:force => true)
+      @site.load_data(true)
 
       # Get page or file
       page      = @site.pages.find { |page| page.path == request.path }

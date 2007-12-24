@@ -34,8 +34,8 @@ module Nanoc
       @data_loaded = false
     end
 
-    def load_data(params={})
-      return if @data_loaded and params[:force] != true
+    def load_data(force=false)
+      return if @data_loaded and !force
 
       # Load data
       @data_source.loading do
