@@ -23,4 +23,3 @@ Nanoc.load_file('layout_processors', '*.rb')
 # Create globals
 $nanoc_binding = binding
 $nanoc_site    = Nanoc::Site.from_cwd
-$nanoc_creator = Nanoc::Creator.new

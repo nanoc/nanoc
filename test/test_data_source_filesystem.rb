@@ -11,7 +11,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_setup
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
       in_dir %w{ site } do
         site = Nanoc::Site.from_cwd
 
@@ -137,7 +137,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_create_page
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
       in_dir %w{ site } do
         site = Nanoc::Site.from_cwd
 
@@ -160,7 +160,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_create_template
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
       in_dir %w{ site }  do
         site = Nanoc::Site.from_cwd
 
@@ -176,7 +176,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_create_layout
     in_dir %w{ tmp }  do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
       in_dir %w{ site }  do  
         site = Nanoc::Site.from_cwd
 

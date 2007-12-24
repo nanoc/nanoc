@@ -9,7 +9,7 @@ class CreatorTest < Test::Unit::TestCase
 
   def test_create_site
     in_dir %w{ tmp } do
-      $nanoc_creator.create_site('site')
+      Nanoc::Site.create('site')
     end
 
     assert(File.directory?('tmp/site/'))
@@ -41,8 +41,8 @@ class CreatorTest < Test::Unit::TestCase
 
   def test_create_site_with_existing_name
     in_dir %w{ tmp } do
-      assert_nothing_raised()   { $nanoc_creator.create_site('site') }
-      assert_raise(SystemExit)  { $nanoc_creator.create_site('site') }
+      assert_nothing_raised()   { Nanoc::Site.create('site') }
+      assert_raise(SystemExit)  { Nanoc::Site.create('site') }
     end
   end
 
