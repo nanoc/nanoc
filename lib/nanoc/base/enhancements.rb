@@ -66,9 +66,16 @@ class FileManager
       FileManager.create_dir(parent_path)
     end
 
-    # Get content
-    content = block_given? ? yield : nil
-    modified = File.exist?(path) ? File.read(path) != content : true
+    # Get contents
+    content_old = File.exist?(path) ? File.read(path) : nil
+    content_new = yield
+
+    # Fix for Ruby 1.9
+    if String.method_defined?(:force_encoding)
+      content_old = content_old.force_encoding('UTF-8')
+      content_new = content_new.force_encoding('UTF-8')
+    end
+    modified = (content_old != content_new)
 
     # Log
     if File.exist?(path)
@@ -78,7 +85,7 @@ class FileManager
     end
 
     # Write
-    open(path, 'w') { |io| io.write(content) unless content.nil? }
+    open(path, 'w') { |io| io.write(content_new) }
 
     # Report back
     modified
