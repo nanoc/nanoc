@@ -8,7 +8,7 @@ class FilterMarukuTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    if_have 'redcloth' do
+    if_have 'maruku' do
       assert_nothing_raised do
         with_site_fixture 'empty_site' do |site|
           site.load_data
