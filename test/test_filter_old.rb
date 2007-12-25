@@ -2,7 +2,7 @@ require 'test/unit'
 
 require File.join(File.dirname(__FILE__), 'helper.rb')
 
-class FilterMarukuTest < Test::Unit::TestCase
+class FilterOldTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
