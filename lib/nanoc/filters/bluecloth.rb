@@ -1,7 +1,7 @@
-module Nanoc::Filter::Markdown
-  class MarkdownFilter < Nanoc::Filter
+module Nanoc::Filter::BlueCloth
+  class BlueClothFilter < Nanoc::Filter
 
-    identifiers :markdown, :bluecloth
+    identifiers :bluecloth
 
     def run(content)
       nanoc_require 'bluecloth'
