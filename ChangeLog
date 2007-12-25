@@ -1,6 +1,18 @@
 nanoc Release Notes
 ===================
 
+2.1
+---
+
+New:
+
+* Maruku filter
+
+Removed:
+
+* The `markdown` and `textile` filters no longer exist; instead, use
+  `bluecloth` (for Markdown) and `redcloth` (for Markdown and Textile).
+
 2.0
 ---
 
