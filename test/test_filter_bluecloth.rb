@@ -2,13 +2,13 @@ require 'test/unit'
 
 require File.join(File.dirname(__FILE__), 'helper.rb')
 
-class FilterTextileTest < Test::Unit::TestCase
+class FilterBlueClothTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
-    if_have 'redcloth' do
+    if_have 'bluecloth' do
       assert_nothing_raised do
         with_site_fixture 'empty_site' do |site|
           site.load_data
@@ -16,11 +16,11 @@ class FilterTextileTest < Test::Unit::TestCase
           # Get filter
           page  = site.pages.first.to_proxy
           pages = site.pages.map { |p| p.to_proxy }
-          filter = ::Nanoc::Filter::Textile::TextileFilter.new(page, pages, site.config, site)
+          filter = ::Nanoc::Filter::BlueCloth::BlueClothFilter.new(page, pages, site.config, site)
 
           # Run filter
-          result = filter.run("h1. Foo")
-          assert_equal("<h1>Foo</h1>", result)
+          result = filter.run("> Quote")
+          assert_equal("<blockquote>\n    <p>Quote</p>\n</blockquote>", result)
         end
       end
     end
