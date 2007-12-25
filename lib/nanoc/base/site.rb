@@ -22,7 +22,7 @@ module Nanoc
       @config = DEFAULT_CONFIG.merge((YAML.load_file('config.yaml') || {}).clean)
 
       # Create data source
-      @data_source_class = PluginManager.data_source_named(@config[:data_source])
+      @data_source_class = PluginManager.instance.data_source(@config[:data_source].to_sym)
       error "Unrecognised data source: #{@config[:data_source]}" if @data_source_class.nil?
       @data_source = @data_source_class.new(self)
 
