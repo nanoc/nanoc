@@ -126,7 +126,7 @@ module Nanoc
         # Create filter
         filter_class = PluginManager.instance.filter(filter_name.to_sym)
         error "Unknown filter: '#{filter_name}'" if filter_class.nil?
-        filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
+        filter = filter_class.new(self.to_proxy, @site)
 
         # Run filter
         @content[stage] = filter.run(@content[stage])
@@ -147,7 +147,7 @@ module Nanoc
       # Find layout processor
       layout_processor_class = PluginManager.instance.layout_processor(layout[:extension])
       error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
-      layout_processor = layout_processor_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
+      layout_processor = layout_processor_class.new(self.to_proxy, @site)
 
       # Layout
       @content[:post] = layout_processor.run(layout[:content])

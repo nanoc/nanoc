@@ -14,9 +14,7 @@ class FilterHamlTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          page  = site.pages.first.to_proxy
-          pages = site.pages.map { |p| p.to_proxy }
-          filter = ::Nanoc::Filter::Haml::HamlFilter.new(page, pages, site.config, site)
+          filter = ::Nanoc::Filters::HamlFilter.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run('%html')

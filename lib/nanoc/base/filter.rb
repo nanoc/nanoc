@@ -1,10 +1,10 @@
 module Nanoc
   class Filter < Plugin
 
-    def initialize(page, pages, config, site)
+    def initialize(page, site)
       @page   = page
-      @pages  = pages
-      @config = config
+      @pages  = site.pages.map { |p| p.to_proxy }
+      @config = site.config
       @site   = site
     end
 

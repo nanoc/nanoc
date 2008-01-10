@@ -26,7 +26,7 @@ end
 def render(name, other_assigns={})
   layout = @site.layouts.find { |l| l[:name] == name }
   layout_processor_class = Nanoc::PluginManager.instance.layout_processor(layout[:extension])
-  layout_processor = layout_processor_class.new(@page, @pages, @site.config, @site, other_assigns)
+  layout_processor = layout_processor_class.new(@page, @site, other_assigns)
   layout_processor.run(layout[:content])
 end
 

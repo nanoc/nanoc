@@ -1,4 +1,4 @@
-module Nanoc::LayoutProcessor::Haml
+module Nanoc::LayoutProcessors
   class HamlLayoutProcessor < Nanoc::LayoutProcessor
 
     identifiers :haml

@@ -1,4 +1,4 @@
-module Nanoc::Filter::ERB
+module Nanoc::Filters
 
   class ERBContext
 

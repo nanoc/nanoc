@@ -1,4 +1,4 @@
-module Nanoc::Filter::SmartyPants
+module Nanoc::Filters
   class SmartyPantsFilter < Nanoc::Filter
 
     identifiers :smartypants, :rubypants

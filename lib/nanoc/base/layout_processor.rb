@@ -1,10 +1,10 @@
 module Nanoc
   class LayoutProcessor < Plugin
 
-    def initialize(page, pages, config, site, other_assigns={})
+    def initialize(page, site, other_assigns={})
       @page          = page
-      @pages         = pages
-      @config        = config
+      @pages         = site.pages.map { |p| p.to_proxy }
+      @config        = site.config
       @site          = site
       @other_assigns = other_assigns
     end

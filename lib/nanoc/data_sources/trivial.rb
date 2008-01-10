@@ -1,9 +1,4 @@
-# This is the module where the trivial data source will live in. It's not
-# really _necessary_ to create a separate module/namespace for each data
-# source, but it can be useful, especially when the data source needs extra
-# classes (for example, the database data source defines uses ActiveRecord, so
-# it needs classes for each table).
-module Nanoc::DataSource::Trivial
+module Nanoc::DataSources
 
   # This is the implementation of a trivial data source. It doesn't do much
   # except return bogus data. It is meant to be a very simple example of a

@@ -1,4 +1,4 @@
-module Nanoc::Filter::Markaby
+module Nanoc::Filters
   class MarkabyFilter < Nanoc::Filter
 
     identifiers :markaby
