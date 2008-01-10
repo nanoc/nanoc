@@ -1,4 +1,4 @@
-module Nanoc::LayoutProcessor::ERB
+module Nanoc::LayoutProcessors
 
   class ERBContext
 

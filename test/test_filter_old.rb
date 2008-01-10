@@ -13,9 +13,7 @@ class FilterOldTest < Test::Unit::TestCase
         site.load_data
 
         # Get filter
-        page  = site.pages.first.to_proxy
-        pages = site.pages.map { |p| p.to_proxy }
-        filter = ::Nanoc::Filter::Old::OldFilter.new(page, pages, site.config, site)
+        filter = ::Nanoc::Filters::OldFilter.new(site.pages.first.to_proxy, site)
 
         # Run filter
         result = filter.run("blah")

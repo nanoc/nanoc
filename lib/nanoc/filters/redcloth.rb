@@ -1,4 +1,4 @@
-module Nanoc::Filter::RedCloth
+module Nanoc::Filters
   class RedClothFilter < Nanoc::Filter
 
     identifiers :redcloth

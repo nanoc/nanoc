@@ -1,4 +1,4 @@
-module Nanoc::Filter::Haml
+module Nanoc::Filters
   class HamlFilter < Nanoc::Filter
 
     identifiers :haml

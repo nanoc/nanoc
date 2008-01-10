@@ -1,4 +1,4 @@
-module Nanoc::Filter::Maruku
+module Nanoc::Filters
   class MarukuFilter < Nanoc::Filter
 
     identifiers :maruku

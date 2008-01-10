@@ -54,13 +54,13 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
   def test_pages
     if_have 'active_record' do
       creating_site do |site|
-        assert_equal(1, Nanoc::DataSource::Database::DatabasePage.count)
+        assert_equal(1, Nanoc::DataSources::Database::DatabasePage.count)
         assert_equal(
           "# Built-in\n" +
           "\n" +
           "# Custom\n" +
           "title: \"A New Root Page\"\n",
-          Nanoc::DataSource::Database::DatabasePage.find(:first).attributes['meta']
+          Nanoc::DataSources::Database::DatabasePage.find(:first).attributes['meta']
         )
       end
     end
@@ -69,7 +69,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
   def test_page_defaults
     if_have 'active_record' do
       creating_site do |site|
-        assert_equal(1, Nanoc::DataSource::Database::DatabasePageDefault.count)
+        assert_equal(1, Nanoc::DataSources::Database::DatabasePageDefault.count)
         assert_equal(
           "# Built-in\n" +
           "custom_path:  none\n" +
@@ -82,7 +82,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
           "skip_output:  false\n" +
           "\n" +
           "# Custom\n",
-          Nanoc::DataSource::Database::DatabasePageDefault.find(:first).attributes['meta']
+          Nanoc::DataSources::Database::DatabasePageDefault.find(:first).attributes['meta']
         )
       end
     end
@@ -91,13 +91,13 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
   def test_templates
     if_have 'active_record' do
       creating_site do |site|
-        assert_equal(1, Nanoc::DataSource::Database::DatabaseTemplate.count)
+        assert_equal(1, Nanoc::DataSources::Database::DatabaseTemplate.count)
         assert_equal(
           "# Built-in\n" +
           "\n" +
           "# Custom\n" +
           "title: \"A New Page\"\n",
-          Nanoc::DataSource::Database::DatabaseTemplate.find(:first).attributes['meta']
+          Nanoc::DataSources::Database::DatabaseTemplate.find(:first).attributes['meta']
         )
       end
     end
@@ -106,7 +106,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
   def test_layouts
     if_have 'active_record' do
       creating_site do |site|
-        assert_equal(1, Nanoc::DataSource::Database::DatabaseLayout.count)
+        assert_equal(1, Nanoc::DataSources::Database::DatabaseLayout.count)
         assert_equal(
           "<html>\n" +
           "  <head>\n" +
@@ -116,7 +116,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
           "<%= @page.content %>\n" +
           "  </body>\n" +
           "</html>",
-          Nanoc::DataSource::Database::DatabaseLayout.find(:first).attributes['content']
+          Nanoc::DataSources::Database::DatabaseLayout.find(:first).attributes['content']
         )
       end
     end
@@ -125,13 +125,13 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
   def test_code
     if_have 'active_record' do
       creating_site do |site|
-        assert_equal(1, Nanoc::DataSource::Database::DatabaseCodePiece.count)
+        assert_equal(1, Nanoc::DataSources::Database::DatabaseCodePiece.count)
         assert_equal(
           "def html_escape(str)\n" +
           "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
           "end\n" +
           "alias h html_escape\n",
-          Nanoc::DataSource::Database::DatabaseCodePiece.find(:first).attributes['code']
+          Nanoc::DataSources::Database::DatabaseCodePiece.find(:first).attributes['code']
         )
       end
     end
@@ -144,13 +144,13 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
       creating_site do |site|
         site.create_page('foo')
 
-        assert_equal(2, Nanoc::DataSource::Database::DatabasePage.count)
+        assert_equal(2, Nanoc::DataSources::Database::DatabasePage.count)
         assert_equal(
           "# Built-in\n" +
           "\n" +
           "# Custom\n" +
           "title: A New Page\n",
-          Nanoc::DataSource::Database::DatabasePage.find(:all).last.attributes['meta']
+          Nanoc::DataSources::Database::DatabasePage.find(:all).last.attributes['meta']
         )
       end
     end
@@ -161,13 +161,13 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
       creating_site do |site|
         site.create_template('bar')
 
-        assert_equal(2, Nanoc::DataSource::Database::DatabaseTemplate.count)
+        assert_equal(2, Nanoc::DataSources::Database::DatabaseTemplate.count)
         assert_equal(
           "# Built-in\n" +
           "\n" +
           "# Custom\n" +
           "title: A New Page\n",
-          Nanoc::DataSource::Database::DatabaseTemplate.find(:all).last.attributes['meta']
+          Nanoc::DataSources::Database::DatabaseTemplate.find(:all).last.attributes['meta']
         )
       end
     end
@@ -178,7 +178,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
       creating_site do |site|
         site.create_layout('baz')
 
-        assert_equal(2, Nanoc::DataSource::Database::DatabaseLayout.count)
+        assert_equal(2, Nanoc::DataSources::Database::DatabaseLayout.count)
         assert_equal(
           "<html>\n" +
           "  <head>\n" +
@@ -188,7 +188,7 @@ class DataSourceDatabaseTest < Test::Unit::TestCase
           "<%= @page.content %>\n" +
           "  </body>\n" +
           "</html>",
-          Nanoc::DataSource::Database::DatabaseLayout.find(:all).last.attributes['content']
+          Nanoc::DataSources::Database::DatabaseLayout.find(:all).last.attributes['content']
         )
       end
     end

@@ -1,4 +1,4 @@
-module Nanoc::LayoutProcessor::Markaby
+module Nanoc::LayoutProcessors
   class MarkabyLayoutProcessor < Nanoc::LayoutProcessor
 
     identifiers :markaby

@@ -14,9 +14,7 @@ class LayoutProcessorHamlTest < Test::Unit::TestCase
           site.load_data
 
           # Get layout processor
-          page  = site.pages.first.to_proxy
-          pages = site.pages.map { |p| p.to_proxy }
-          layout_processor = ::Nanoc::LayoutProcessor::Haml::HamlLayoutProcessor.new(page, pages, site.config, site)
+          layout_processor = ::Nanoc:: LayoutProcessors::HamlLayoutProcessor.new(site.pages.first.to_proxy, site)
 
           # Run layout processor
           result = layout_processor.run('%h1= page.title')
