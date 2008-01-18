@@ -12,10 +12,6 @@ module Nanoc
       log(:high, "Compiling #{page.nil? ? 'site' : 'page'}...")
       time_before = Time.now
 
-      # Get the data we need
-      @site.load_data
-      eval(@site.code, $nanoc_binding)
-
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 

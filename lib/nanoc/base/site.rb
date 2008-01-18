@@ -55,6 +55,8 @@ module Nanoc
     def load_data(force=false)
       return if @data_loaded and !force
 
+      log(:low, "Loading data...")
+
       # Load data
       @data_source.loading do
         @code           = @data_source.code
@@ -63,6 +65,9 @@ module Nanoc
         @layouts        = @data_source.layouts
         @templates      = @data_source.templates
       end
+
+      # Load code
+      eval(@code, $nanoc_binding)
 
       # Setup child-parent links
       @pages.each do |page|
@@ -124,8 +129,18 @@ module Nanoc
     # Compiles the site (calls Nanoc::Compiler#run for the site's compiler)
     # and writes the compiled site to the output directory specified in the
     # site configuration file.
-    def compile
-      @compiler.run
+    def compile(path=nil)
+      load_data
+
+      # Find page with given path
+      if path.nil?
+        page = nil
+      else
+        page = @pages.find { |page| page.path == "/#{path.gsub(/^\/|\/$/, '')}/" }
+        error "The '/#{path.gsub(/^\/|\/$/, '')}/' page was not found; aborting." if page.nil?
+      end
+
+      @compiler.run(page)
     end
 
     # Starts the autocompiler (calls Nanoc::AutoCompiler#start) on the
