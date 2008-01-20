@@ -7,11 +7,15 @@ module Nanoc::LayoutProcessors
     def run(layout)
       nanoc_require 'haml'
 
-      options = @page[:haml_options] || {}
-      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
-      options[:locals] = assigns
+      # Get options
+      options = @page.haml_options || {}
 
-      ::Haml::Engine.new(layout, options).to_html
+      # Get assigns/locals
+      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
+      context = ::Nanoc::Context.new(assigns)
+
+      # Get result
+      ::Haml::Engine.new(layout, options).render(context, assigns)
     end
 
   end

@@ -16,9 +16,17 @@ class LayoutProcessorHamlTest < Test::Unit::TestCase
           # Get layout processor
           layout_processor = ::Nanoc:: LayoutProcessors::HamlLayoutProcessor.new(site.pages.first.to_proxy, site)
 
-          # Run layout processor
-          result = layout_processor.run('%h1= page.title')
-          assert_equal("<h1>My New Homepage</h1>\n", result)
+          # Run layout processor (no assigns)
+          result = layout_processor.run('%html')
+          assert_equal("<html>\n</html>\n", result)
+
+          # Run layout processor (assigns without @)
+          result = layout_processor.run('%p= page.title')
+          assert_equal("<p>My New Homepage</p>\n", result)
+
+          # Run layout processor (assigns with @)
+          result = layout_processor.run('%p= @page.title')
+          assert_equal("<p>My New Homepage</p>\n", result)
         end
       end
     end
