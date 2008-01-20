@@ -6,10 +6,15 @@ module Nanoc::Filters
     def run(content)
       nanoc_require 'haml'
 
+      # Get options
       options = @page.haml_options || {}
-      options[:locals] = { :page => @page, :pages => @pages, :config => @config, :site => @site }
 
-      ::Haml::Engine.new(content, options).to_html
+      # Get assigns/locals
+      assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
+      context = ::Nanoc::Context.new(assigns)
+
+      # Get result
+      ::Haml::Engine.new(content, options).render(context, assigns)
     end
 
   end
