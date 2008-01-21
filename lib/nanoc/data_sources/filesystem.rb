@@ -1,5 +1,19 @@
 module Nanoc::DataSource::Filesystem
 
+  class FileProxy
+
+    instance_methods.each { |m| undef_method m unless m =~ /^__/ }
+
+    def initialize(path)
+      @path = path
+    end
+
+    def method_missing(sym, *args, &block)
+      File.new(@path).__send__(sym, *args, &block)
+    end
+
+  end
+
   class FilesystemDataSource < Nanoc::DataSource
 
     ########## Attributes ##########
@@ -117,7 +131,7 @@ module Nanoc::DataSource::Filesystem
           file    = content_file_for_dir(File.dirname(filename))
           extras  = {
             :path => path,
-            :file => file,
+            :file => FileProxy.new(file.path),
             :uncompiled_content => file.read
           }
 
