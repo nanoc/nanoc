@@ -13,7 +13,7 @@ end
 
 # Define some texts
 
-version_text = "nanoc #{Nanoc::VERSION} (c) 2007 Denis Defreyne."
+version_text = "nanoc #{Nanoc::VERSION} (c) 2007-2008 Denis Defreyne."
 help_text    = <<EOT
 Usage: nanoc [-chvV]
        nanoc compile
