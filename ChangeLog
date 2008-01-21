@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+2.0.1
+-----
+
+* Fixed a "too many open files" error that could appear during (auto)compiling
+
 2.0
 ---
 
