@@ -7,11 +7,22 @@ nanoc Release Notes
 New:
 
 * Maruku filter
+* The Haml filter now provides @page, @pages and @config variables
 
 Removed:
 
-* The `markdown` and `textile` filters no longer exist; instead, use
-  `bluecloth` (for Markdown) and `redcloth` (for Markdown and Textile).
+* The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
+  `erb` (for embedded Ruby), `bluecloth` (for Markdown) and `redcloth` (for
+  Markdown and Textile).
+
+Changed:
+
+* Updated Haml filter so it uses Haml 1.8.0 now (older versions will not work)
+
+2.0.1
+-----
+
+* Fixed a "too many open files" error that could appear during (auto)compiling
 
 2.0
 ---
