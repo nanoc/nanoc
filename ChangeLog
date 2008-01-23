@@ -7,6 +7,7 @@ nanoc Release Notes
 New:
 
 * Maruku filter
+* Erubis filter
 * The Haml filter now provides @page, @pages and @config variables
 
 Removed:
