@@ -1,6 +1,7 @@
 module Nanoc
   class Page
 
+    # Default values for pages.
     PAGE_DEFAULTS = {
       :custom_path  => nil,
       :extension    => 'html',
@@ -17,6 +18,7 @@ module Nanoc
     attr_reader   :attributes
     attr_accessor :parent, :children
 
+    # Creates a new page.
     def initialize(hash, site)
       @site                   = site
       @compiler               = site.compiler
@@ -33,35 +35,42 @@ module Nanoc
       @written                = false
     end
 
-    # Proxy support
-
+    # Returns a proxy for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
     end
 
-    # Accessors, kind of
+    # Returns true if the page has been modified during the last compilation
+    # session, false otherwise.
+    def modified?
+      @modified
+    end
 
-    def modified? ; @modified ; end
-
+    # Returns the attribute with the given name.
     def attribute_named(name)
       return @attributes[name]         if @attributes.has_key?(name)
       return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
 
+    # Returns the page's pre-filtered but not yet layouted content.
     def content
       compile(false) unless @filtered_pre
       @content[:pre]
     end
 
+    # Returns the page's pre-filtered, layouted and post-filtered content.
     def layouted_content
       compile(true)
       @content[:post]
     end
 
-    def skip_output? ; attribute_named(:skip_output)  ; end
-    def path         ; attribute_named(:path)         ; end
+    # Returns the page's path relative to the web root.
+    def path
+      attribute_named(:path)
+    end
 
+    # Returns the path to the compiled page on the filesystem.
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
         @site.config[:output_dir] + attribute_named(:path) +
@@ -71,8 +80,8 @@ module Nanoc
       end
     end
 
-    # Compiling
-
+    # Compiles the page. Will layout and post-filter the page, unless +full+
+    # is false.
     def compile(full=true)
       @modified = false
 
@@ -108,7 +117,7 @@ module Nanoc
 
       # Write
       if !@written and full
-        @modified = FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless skip_output?
+        @modified = FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless attribute_named(:skip_output)
         @written = true
       end
 

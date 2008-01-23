@@ -1,12 +1,17 @@
 module Nanoc
+
+  # Nanoc::Compiler is responsible for compiling a site.
   class Compiler
 
     attr_reader :stack
 
+    # Creates a new compiler for the given site.
     def initialize(site)
       @site = site
     end
 
+    # Compiles the site. When the +page+ argument is nil, compiles the entire
+    # site; compiles only the specified page (and dependencies) otherwise.
     def run(page=nil)
       # Give feedback
       log(:high, "Compiling #{page.nil? ? 'site' : 'page'}...")
@@ -28,8 +33,10 @@ module Nanoc
 
       # Give feedback
       log(:high, "No pages were modified.") unless pages.any? { |page| page.modified? }
-      log(:high, "#{page.nil? ? 'Site' : 'Pages'} compiled in #{format('%.2f', Time.now - time_before)}s.")
+      log(:high, "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s.")
     end
+
+  private
 
     def handle_exception(exception, page, single_page)
       raise exception if single_page

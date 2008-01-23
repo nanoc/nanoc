@@ -1,3 +1,6 @@
+# This file is a large mess. It's basically the place where everything gets
+# dumped if it doesn't belong elsewhere. Embarrassing, really.
+
 # Get requirements
 begin ; require 'rubygems' ; rescue LoadError ; end
 require 'yaml'
@@ -38,7 +41,7 @@ ensure
   FileUtils.cd(File.join(path.map { |n| '..' }))
 end
 
-class FileManager
+class FileManager # :nodoc:
 
   ACTION_COLORS = {
     :create     => "\e[1m" + "\e[32m", # bold + green
