@@ -1,10 +1,12 @@
 module Nanoc
+
   # Nanoc::Site is the in-memory representation of a nanoc site directory.
   # 
   # It holds references to the following site data:
   # 
   # * pages (represented by the Nanoc::Page class)
-  # * page defaults (global meta.yaml file when using the filesystem data source)
+  # * page defaults (global meta.yaml file when using the filesystem data
+  #   source)
   # * layouts
   # * templates
   # * code (in the lib directory when using the filesystem data source)
@@ -23,8 +25,9 @@ module Nanoc
     attr_reader :compiler, :data_source
     attr_reader :code, :pages, :page_defaults, :layouts, :templates
 
-    # Returns a Nanoc::Site object for the site in the current working directory.
-    # Returns nil if the current working directory is not a valid site.
+    # Returns a Nanoc::Site object for the site in the current working
+    # directory. Returns nil if the current working directory is not a valid
+    # site.
     def self.from_cwd
       File.file?('config.yaml') ? new : nil
     end
@@ -183,4 +186,5 @@ module Nanoc
     end
 
   end
+
 end

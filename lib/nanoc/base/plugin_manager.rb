@@ -1,19 +1,33 @@
 require 'singleton'
 
 module Nanoc
+
+  # Nanoc::PluginManager is a singleton class that is responsible for
+  # finding plugins such as data sources, filters and layout processors.
   class PluginManager
 
     include Singleton
 
-    def initialize
+    def initialize # :nodoc:
       @data_sources       = {}
       @filters            = {}
       @layout_processors  = {}
     end
 
-    def data_source(name)     ; @data_sources[name]     ||= find(DataSource, :identifiers, name)    ; end
-    def filter(name)          ; @filters[name]          ||= find(Filter, :identifiers, name)        ; end
-    def layout_processor(ext) ; @layout_processors[ext] ||= find(LayoutProcessor, :extensions, ext) ; end
+    # Returns the data source class with the given identifier
+    def data_source(identifier)
+      @data_sources[identifier] ||= find(DataSource, :identifiers, identifier)
+    end
+
+    # Returns the filter class with the given identifier
+    def filter(identifier)
+      @filters[identifier] ||= find(Filter, :identifiers, identifier)
+    end
+
+    # Returns the layout processor class with the given file extension
+    def layout_processor(ext)
+      @layout_processors[ext] ||= find(LayoutProcessor, :extensions, ext)
+    end
 
   private
 
@@ -24,4 +38,5 @@ module Nanoc
     end
 
   end
+
 end
