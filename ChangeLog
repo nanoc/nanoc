@@ -10,15 +10,15 @@ New:
 * Erubis filter
 * The Haml filter now provides @page, @pages and @config variables
 
+Changed:
+
+* Updated Haml filter so it uses Haml 1.8.0 now (older versions will not work)
+
 Removed:
 
 * The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
   `erb` (for embedded Ruby), `bluecloth` (for Markdown) and `redcloth` (for
   Markdown and Textile).
-
-Changed:
-
-* Updated Haml filter so it uses Haml 1.8.0 now (older versions will not work)
 
 2.0.1
 -----
