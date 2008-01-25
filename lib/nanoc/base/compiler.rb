@@ -32,7 +32,7 @@ module Nanoc
       end
 
       # Give feedback
-      log(:high, "No pages were modified.") unless pages.any? { |page| page.modified? }
+      log(:high, "No pages were modified.") unless pages.any? { |p| p.modified? }
       log(:high, "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s.")
     end
 
