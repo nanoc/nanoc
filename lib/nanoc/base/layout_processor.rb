@@ -32,7 +32,7 @@ module Nanoc
       # this layout processor. When given nothing, returns an array of
       # extension symbols.
       def extensions(*exts)
-        @extensions = [] unless instance_variable_defined?(:@extensions)
+        @extensions = [] unless instance_variables.include?('@extensions')
         exts.empty? ? @extensions : @extensions = exts
       end
 
@@ -41,7 +41,7 @@ module Nanoc
       # When given an extension symbols, sets the extension for this layout
       # processor. When given nothing, returns the extension.
       def extension(ext=nil)
-        @extensions = [] unless instance_variable_defined?(:@extensions)
+        @extensions = [] unless instance_variables.include?('@extensions')
         ext.nil? ? @extensions.first : extensions(ext)
       end
 
