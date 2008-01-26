@@ -39,7 +39,7 @@ spec = Gem::Specification.new do |s|
 
   s.rubyforge_project     = 'nanoc'
 
-  s.required_ruby_version = '>= 1.8.2'
+  s.required_ruby_version = '>= 1.8.5'
 
   s.has_rdoc              = false
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir['{bin,lib}/**/*']
