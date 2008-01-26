@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+2.0.2
+-----
+
+* nanoc now requires Ruby 1.8.5 instead of 1.8.6
+
 2.0.1
 -----
 
