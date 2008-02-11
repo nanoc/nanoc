@@ -12,31 +12,30 @@ class CreatorTest < Test::Unit::TestCase
       Nanoc::Site.create('site')
     end
 
-    assert(File.directory?('tmp/site'))
+    assert(File.directory?('tmp/site/'))
 
     assert(File.file?('tmp/site/config.yaml'))
     assert(File.file?('tmp/site/meta.yaml'))
     assert(File.file?('tmp/site/Rakefile'))
 
-    assert(File.directory?('tmp/site/pages'))
-    assert(!File.directory?('tmp/site/content'))
-    assert(File.file?('tmp/site/pages/index.txt'))
-    assert(File.file?('tmp/site/pages/meta.yaml'))
+    assert(File.directory?('tmp/site/content/'))
+    assert(File.file?('tmp/site/content/content.txt'))
+    assert(File.file?('tmp/site/content/content.yaml'))
 
-    assert(File.directory?('tmp/site/layouts'))
+    assert(File.directory?('tmp/site/layouts/'))
     assert(File.file?('tmp/site/layouts/default.erb'))
 
-    assert(File.directory?('tmp/site/lib'))
+    assert(File.directory?('tmp/site/lib/'))
     assert(File.file?('tmp/site/lib/default.rb'))
 
-    assert(File.directory?('tmp/site/output'))
+    assert(File.directory?('tmp/site/output/'))
 
-    assert(File.directory?('tmp/site/templates'))
-    assert(File.directory?('tmp/site/templates/default'))
+    assert(File.directory?('tmp/site/templates/'))
+    assert(File.directory?('tmp/site/templates/default/'))
     assert(File.file?('tmp/site/templates/default/default.txt'))
     assert(File.file?('tmp/site/templates/default/default.yaml'))
 
-    assert(File.directory?('tmp/site/tasks'))
+    assert(File.directory?('tmp/site/tasks/'))
     assert(File.file?('tmp/site/tasks/default.rake'))
   end
 

@@ -158,10 +158,10 @@ module Nanoc::DataSources
             # Skip drafts
             nil
           else
-            # Get page info
+            # Get extra info
             extras = { :path => page.path, :uncompiled_content => page.content }
 
-            # Return page hash
+            # Add to list of pages
             hash.merge(extras)
           end
         end.compact
