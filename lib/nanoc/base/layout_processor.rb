@@ -17,7 +17,7 @@ module Nanoc
     end
 
     # Runs the layout processor. Subclasses should override this method. This
-    # method returns the layouted content.
+    # method returns the laid out content.
     def run(layout)
       error 'LayoutProcessor#run must be overridden'
     end

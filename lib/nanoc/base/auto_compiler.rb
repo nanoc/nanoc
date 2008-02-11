@@ -123,7 +123,7 @@ END
 
       response.status           = 200
       response['Content-Type']  = 'text/html'
-      response.body             = page.layouted_content
+      response.body             = page.laid_out_content
     end
 
   end
