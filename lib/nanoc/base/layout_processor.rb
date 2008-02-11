@@ -3,24 +3,7 @@ module Nanoc
   # Nanoc::LayoutProcessor is responsible for layouting pages. It is the
   # (abstract) superclass for all layout processors. Subclasses should
   # override the +run+ method.
-  class LayoutProcessor < Plugin
-
-    # Creates a new layout processor for the given page and site.
-    # +other_assigns+ is a hash for which the pairs will be available
-    # as instance variables when compiling.
-    def initialize(page, site, other_assigns={})
-      @page          = page
-      @pages         = site.pages.map { |p| p.to_proxy }
-      @config        = site.config
-      @site          = site
-      @other_assigns = other_assigns
-    end
-
-    # Runs the layout processor. Subclasses should override this method. This
-    # method returns the laid out content.
-    def run(layout)
-      error 'LayoutProcessor#run must be overridden'
-    end
+  class LayoutProcessor < Filter
 
     class << self
 
