@@ -31,10 +31,10 @@ module Nanoc::DataSources
 
       def setup
         # Create page
-        FileManager.create_file 'content/content.txt' do
+        FileManager.create_file 'pages/index.txt' do
           "I'm a brand new root page. Please edit me!\n"
         end
-        FileManager.create_file 'content/content.yaml' do
+        FileManager.create_file 'pages/meta.yaml' do
           "# Built-in\n" +
           "\n" +
           "# Custom\n" +
@@ -98,8 +98,8 @@ module Nanoc::DataSources
       ########## Loading data ##########
 
       # The filesystem data source stores its pages in nested directories. Each
-      # directory represents a single page. The root directory is the 'content'
-      # directory.
+      # directory represents a single page. The root directory is the 'pages'
+      # or 'content' directory.
       # 
       # Every directory has a content file and a meta file. The content file
       # contains the actual page content, while the meta file contains the
@@ -119,27 +119,28 @@ module Nanoc::DataSources
       # 'foo' can have an 'index.txt' content file and a 'meta.yaml' meta file.
       # This is to preserve backward compatibility.
       def pages
-        meta_filenames.inject([]) do |pages, filename|
+        # Read all page filenames and map them to page hashes
+        meta_filenames(page_directory_name).map do |filename|
           # Read metadata
           meta = (YAML.load_file(filename) || {}).clean
 
           if meta[:is_draft]
             # Skip drafts
-            pages
+            nil
           else
-            # Get extra info
-            path    = filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
-            file    = content_file_for_dir(File.dirname(filename))
-            extras  = {
+            # Get page info
+            path              = filename.sub(/^(content|pages)/, '').sub(/[^\/]+\.yaml$/, '')
+            content_filename  = content_filename_for_dir(File.dirname(filename))
+            extras            = {
               :path => path,
-              :file => FileProxy.new(file.path),
-              :uncompiled_content => file.read
+              :file => FileProxy.new(content_filename),
+              :uncompiled_content => File.read(content_filename)
             }
 
-            # Add to list of pages
-            pages + [ meta.merge(extras) ]
+            # Return page hash
+            meta.merge(extras)
           end
-        end
+        end.compact
       end
 
       # The page defaults are loaded from a 'meta.yaml' file
@@ -169,7 +170,8 @@ module Nanoc::DataSources
       # the template. This is very similar to the way pages are stored, except
       # that templates cannot be nested.
       def templates
-        meta_filenames('templates').inject([]) do |templates, filename|
+        # Read all page filenames and map them to page hashes
+        meta_filenames('templates').map do |filename|
           # Get template name
           name = filename.sub(/^templates\/(.*)\/[^\/]+\.yaml$/, '\1')
 
@@ -188,33 +190,33 @@ module Nanoc::DataSources
           end
           meta = File.read(meta_filename)
 
-          # Add it to the list of templates
-          templates + [{
+          # Return template hash
+          {
             :name       => name,
             :extension  => extension,
             :content    => content,
             :meta       => meta
-          }]
+          }
         end
       end
 
       # Code is stored in '.rb' files in the 'lib' directory. Code can reside
       # in sub-directories.
       def code
-        Dir['lib/**/*.rb'].sort.inject('') { |m, f| m + File.read(f) + "\n" }
+        Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
       end
 
       ########## Creating data ##########
 
       # Creating a page creates a page directory with the name of the page in
-      # the 'content' directory, as well as a content file named xxx.txt and a
+      # the pages directory, as well as a content file named xxx.txt and a
       # meta file named xxx.yaml (with xxx being the name of the page).
       def create_page(path, template)
         # Make sure path does not start or end with a slash
         sanitized_path = path.gsub(/^\/+|\/+$/, '')
 
         # Get paths
-        dir_path      = 'content/' + sanitized_path
+        dir_path      = page_directory_name + '/' + sanitized_path
         name          = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
         meta_path     = dir_path + '/' + name + '.yaml'
         content_path  = dir_path + '/' + name + template[:extension]
@@ -270,8 +272,14 @@ module Nanoc::DataSources
 
       ########## Custom functions ##########
 
+      # Returns the name of the pages directory ('pages' for nanoc 2.1,
+      # 'content' for nanoc 2.0.x and below)
+      def page_directory_name
+        File.directory?('content') ? 'content' : 'pages'
+      end
+
       # Returns the list of meta files in the given (optional) base directory.
-      def meta_filenames(base='content')
+      def meta_filenames(base)
         # Find all possible meta file names
         filenames = Dir[base + '/**/*.yaml']
 
@@ -296,8 +304,8 @@ module Nanoc::DataSources
         good_filenames
       end
 
-      # Returns a File object for the content file in the given directory
-      def content_file_for_dir(dir)
+      # Returns the filename of the content file in the given directory
+      def content_filename_for_dir(dir)
         # Find all files
         filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
         filename_glob_2 = dir.sub(/([^\/]+)$/, '\1/index.*')
@@ -314,8 +322,8 @@ module Nanoc::DataSources
           error "Expected 1 content file in #{dir} but found #{filenames.size}"
         end
 
-        # Read content file
-        File.new(filenames.first)
+        # Return first filename
+        filenames.first
       end
 
     end

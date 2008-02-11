@@ -17,8 +17,8 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
         # Remove files to make sure they are recreated
 
-        FileUtils.remove_entry_secure('content/content.txt')
-        FileUtils.remove_entry_secure('content/content.yaml')
+        FileUtils.remove_entry_secure('pages/index.txt')
+        FileUtils.remove_entry_secure('pages/meta.yaml')
 
         FileUtils.remove_entry_secure('meta.yaml')
 
@@ -35,9 +35,10 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
         # Check whether files have been recreated
 
-        assert(File.directory?('content/'))
-        assert(File.file?('content/content.txt'))
-        assert(File.file?('content/content.yaml'))
+        assert(File.directory?('pages'))
+        assert(!File.directory?('content'))
+        assert(File.file?('pages/index.txt'))
+        assert(File.file?('pages/meta.yaml'))
 
         assert(File.file?('meta.yaml'))
 
@@ -57,8 +58,18 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   # Test loading data
 
-  def test_pages
+  def test_pages_with_old_pages_dir_name
     with_site_fixture 'empty_site' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal([ 'My New Homepage' ], site.pages.map { |page| page.attribute_named(:title) })
+      end
+    end
+  end
+
+  def test_pages_with_new_pages_dir_name
+    with_site_fixture 'site_with_new_pages_dir_name' do |site|
       site.load_data
 
       assert_nothing_raised do
@@ -147,13 +158,15 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         assert_nothing_raised()   { site.create_page('foo/bar') }
         assert_raise(SystemExit)  { site.create_page('foo/bar') }
 
-        assert(File.directory?('content/test/'))
-        assert(File.file?('content/test/test.txt'))
-        assert(File.file?('content/test/test.yaml'))
+        assert(!File.directory?('content'))
 
-        assert(File.directory?('content/foo/bar/'))
-        assert(File.file?('content/foo/bar/bar.txt'))
-        assert(File.file?('content/foo/bar/bar.yaml'))
+        assert(File.directory?('pages/test'))
+        assert(File.file?('pages/test/test.txt'))
+        assert(File.file?('pages/test/test.yaml'))
+
+        assert(File.directory?('pages/foo/bar'))
+        assert(File.file?('pages/foo/bar/bar.txt'))
+        assert(File.file?('pages/foo/bar/bar.yaml'))
       end
     end
   end
