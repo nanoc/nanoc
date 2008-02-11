@@ -1,0 +1,6 @@
+# Built-in
+filters_pre:
+  - "erb"
+
+# Custom
+title: My New Homepage

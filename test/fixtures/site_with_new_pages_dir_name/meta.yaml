@@ -1,0 +1,11 @@
+# This file contains the default values for all metafiles.
+# Other metafiles can override the contents of this one.
+
+# Built-in
+layout:    "default"
+order:     0
+filters_pre:
+   []
+extension: "html"
+
+# Custom

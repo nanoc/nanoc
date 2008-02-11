@@ -150,21 +150,21 @@ module Nanoc::DataSources
 
       def pages
         # Create Pages for each database object
-        DatabasePage.find(:all).inject([]) do |pages, page|
+        DatabasePage.find(:all).map do |page|
           # Read metadata
           hash = (YAML.load(page.meta || '') || {}).clean
 
           if hash[:is_draft]
             # Skip drafts
-            pages
+            nil
           else
-            # Get extra info
+            # Get page info
             extras = { :path => page.path, :uncompiled_content => page.content }
 
-            # Add to list of pages
-            pages + [ hash.merge(extras) ]
+            # Return page hash
+            hash.merge(extras)
           end
-        end
+        end.compact
       end
 
       def page_defaults
