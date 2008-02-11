@@ -9,6 +9,8 @@ New:
 * Maruku filter
 * Erubis filter
 * The Haml filter now provides @page, @pages and @config variables
+* The `compile` command now takes an optional path, so you can compile
+  a single page instead of the entire site if you want
 
 Changed:
 
@@ -18,7 +20,7 @@ Removed:
 
 * The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
   `erb` (for embedded Ruby), `bluecloth` (for Markdown) and `redcloth` (for
-  Markdown and Textile).
+  Markdown and Textile)
 
 2.0.2
 -----
