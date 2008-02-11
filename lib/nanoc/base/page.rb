@@ -30,7 +30,7 @@ module Nanoc
       @children               = []
 
       @filtered_pre           = false
-      @layouted               = false
+      @laid_out               = false
       @filtered_post          = false
       @written                = false
     end
@@ -53,14 +53,14 @@ module Nanoc
       return PAGE_DEFAULTS[name]
     end
 
-    # Returns the page's pre-filtered but not yet layouted content.
+    # Returns the page's pre-filtered but not yet laid out content.
     def content
       compile(false) unless @filtered_pre
       @content[:pre]
     end
 
-    # Returns the page's pre-filtered, layouted and post-filtered content.
-    def layouted_content
+    # Returns the page's pre-filtered, laid out and post-filtered content.
+    def laid_out_content
       compile(true)
       @content[:post]
     end
@@ -104,9 +104,9 @@ module Nanoc
       end
 
       # Layout
-      if !@layouted and full
+      if !@laid_out and full
         layout
-        @layouted = true
+        @laid_out = true
       end
 
       # Filter post
