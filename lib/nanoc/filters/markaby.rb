@@ -1,12 +1,13 @@
 module Nanoc::Filters
-  class MarkabyFilter < Nanoc::Filter
+  class Markaby < Nanoc::Filter
 
     identifiers :markaby
+    extensions  '.mab'
 
     def run(content)
       nanoc_require 'markaby'
 
-      assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
+      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
 
       ::Markaby::Builder.new(assigns).instance_eval(content).to_s
     end

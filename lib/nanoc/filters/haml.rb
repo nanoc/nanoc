@@ -1,7 +1,8 @@
 module Nanoc::Filters
-  class HamlFilter < Nanoc::Filter
+  class Haml < Nanoc::Filter
 
     identifiers :haml
+    extensions  '.haml'
 
     def run(content)
       nanoc_require 'haml'
@@ -10,7 +11,7 @@ module Nanoc::Filters
       options = @page.haml_options || {}
 
       # Get assigns/locals
-      assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
+      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
       context = ::Nanoc::Context.new(assigns)
 
       # Get result

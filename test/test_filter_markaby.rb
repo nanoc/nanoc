@@ -14,7 +14,7 @@ class FilterMarkabyTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::MarkabyFilter.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::Markaby.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run("html do\nend")

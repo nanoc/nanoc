@@ -14,7 +14,7 @@ class LayoutProcessorHamlTest < Test::Unit::TestCase
           site.load_data
 
           # Get layout processor
-          layout_processor = ::Nanoc:: LayoutProcessors::HamlLayoutProcessor.new(site.pages.first.to_proxy, site)
+          layout_processor = ::Nanoc::Filters::Haml.new(site.pages.first.to_proxy, site)
 
           # Run layout processor (no assigns)
           result = layout_processor.run('%html')

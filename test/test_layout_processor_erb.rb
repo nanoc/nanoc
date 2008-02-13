@@ -13,7 +13,7 @@ class LayoutProcessorERBTest < Test::Unit::TestCase
         site.load_data
 
         # Get layout processor
-        layout_processor = ::Nanoc:: LayoutProcessors::ERBLayoutProcessor.new(site.pages.first.to_proxy, site)
+        layout_processor = ::Nanoc::Filters::ERB.new(site.pages.first.to_proxy, site)
 
         # Run layout processor
         result = layout_processor.run('<%= @page.title %>')
