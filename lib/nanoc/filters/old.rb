@@ -1,5 +1,5 @@
 module Nanoc::Filters
-  class OldFilter < Nanoc::Filter
+  class Old < Nanoc::Filter
 
     identifiers :markdown, :textile, :eruby
 
