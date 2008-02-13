@@ -26,7 +26,7 @@ module Nanoc
 
     # Returns the layout processor class with the given file extension
     def layout_processor(ext)
-      @layout_processors[ext] ||= find(LayoutProcessor, :extensions, ext)
+      @layout_processors[ext] ||= find(Filter, :extensions, ext)
     end
 
   private

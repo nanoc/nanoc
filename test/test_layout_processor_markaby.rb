@@ -14,7 +14,7 @@ class LayoutProcessorMarkabyTest < Test::Unit::TestCase
           site.load_data
 
           # Get layout processor
-          layout_processor = ::Nanoc:: LayoutProcessors::MarkabyLayoutProcessor.new(site.pages.first.to_proxy, site)
+          layout_processor = ::Nanoc::Filters::Markaby.new(site.pages.first.to_proxy, site)
 
           # Run layout processor
           result = layout_processor.run('h1 { page.title }')

@@ -13,7 +13,7 @@ class FilterERBTest < Test::Unit::TestCase
         site.load_data
 
         # Get filter
-        filter = ::Nanoc::Filters::ERBFilter.new(site.pages.first.to_proxy, site)
+        filter = ::Nanoc::Filters::ERB.new(site.pages.first.to_proxy, site)
 
         # Run filter
         result = filter.run('<%= "Hello." %>')

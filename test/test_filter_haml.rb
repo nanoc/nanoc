@@ -14,7 +14,7 @@ class FilterHamlTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::HamlFilter.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::Haml.new(site.pages.first.to_proxy, site)
 
           # Run filter (no assigns)
           result = filter.run('%html')
