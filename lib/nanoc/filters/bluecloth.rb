@@ -1,5 +1,5 @@
 module Nanoc::Filters
-  class BlueClothFilter < Nanoc::Filter
+  class BlueCloth < Nanoc::Filter
 
     identifiers :bluecloth
 

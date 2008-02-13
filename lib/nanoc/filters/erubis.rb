@@ -1,5 +1,5 @@
 module Nanoc::Filters
-  class ErubisFilter < Nanoc::Filter
+  class Erubis < Nanoc::Filter
 
     identifiers :eruby
 

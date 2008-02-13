@@ -1,5 +1,5 @@
 module Nanoc::Filters
-  class MarukuFilter < Nanoc::Filter
+  class Maruku < Nanoc::Filter
 
     identifiers :maruku
 
