@@ -14,7 +14,7 @@ class FilterRedClothTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::RedClothFilter.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::RedCloth.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run("h1. Foo")

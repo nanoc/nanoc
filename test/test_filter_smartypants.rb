@@ -14,7 +14,7 @@ class FilterSmartyPantsTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::SmartyPantsFilter.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::SmartyPants.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run("Wait---what?")

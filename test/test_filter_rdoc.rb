@@ -13,7 +13,7 @@ class FilterRDocTest < Test::Unit::TestCase
         site.load_data
 
         # Get filter
-        filter = ::Nanoc::Filters::RDocFilter.new(site.pages.first.to_proxy, site)
+        filter = ::Nanoc::Filters::RDoc.new(site.pages.first.to_proxy, site)
 
         # Run filter
         result = filter.run("= Foo")
