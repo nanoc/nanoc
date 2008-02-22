@@ -14,7 +14,7 @@ class FilterMarukuTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::MarukuFilter.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::Maruku.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run("This is _so_ *cool*!")

@@ -13,7 +13,7 @@ class FilterOldTest < Test::Unit::TestCase
         site.load_data
 
         # Get filter
-        filter = ::Nanoc::Filters::OldFilter.new(site.pages.first.to_proxy, site)
+        filter = ::Nanoc::Filters::Old.new(site.pages.first.to_proxy, site)
 
         # Run filter
         result = filter.run("blah")

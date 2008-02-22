@@ -14,7 +14,7 @@ class FilterBlueClothTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::BlueClothFilter.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::BlueCloth.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run("> Quote")
