@@ -11,10 +11,13 @@ New:
 * The Haml filter now provides @page, @pages and @config variables
 * The `compile` command now takes an optional path, so you can compile
   a single page instead of the entire site if you want
+* Better source code documentation
 
 Changed:
 
 * Updated Haml filter so it uses Haml 1.8.0 now (older versions will not work)
+* Layouts no longer rely on file extensions to determine the layout processor
+  used, and layouts are now stored in directories instead of simple files.
 
 Removed:
 

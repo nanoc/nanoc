@@ -71,7 +71,7 @@ module Nanoc::DataSources
         end
 
         # Create layout
-        FileManager.create_file 'layouts/default.erb'  do
+        FileManager.create_file 'layouts/default/default.erb'  do
           "<html>\n" +
           "  <head>\n" +
           "    <title><%= @page.title %></title>\n" +
@@ -80,6 +80,9 @@ module Nanoc::DataSources
           "<%= @page.content %>\n" +
           "  </body>\n" +
           "</html>\n"
+        end
+        FileManager.create_file 'layouts/default/default.yaml'  do
+          "filter: 'erb'\n"
         end
 
         # Create code
@@ -119,7 +122,7 @@ module Nanoc::DataSources
       # 'foo' can have an 'index.txt' content file and a 'meta.yaml' meta file.
       # This is to preserve backward compatibility.
       def pages
-        meta_filenames.map do |filename|
+        meta_filenames('content').map do |filename|
           # Read metadata
           meta = (YAML.load_file(filename) || {}).clean
 
@@ -153,14 +156,39 @@ module Nanoc::DataSources
       # processor; which extension maps to which layout processor is defined in
       # the layout processors.
       def layouts
-        Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
-          # Get layout details
-          extension = File.extname(filename)
-          name      = File.basename(filename, extension)
-          content   = File.read(filename)
+        # Determine what layout directory structure is being used
+        dir_count = Dir["layouts/*"].select { |f| File.directory?(f) }.size
+        is_old_school = (dir_count == 0)
 
-          # Build hash for layout
-          { :name => name, :content => content, :extension => extension }
+        if is_old_school
+          # Warn about deprecation
+          # TODO fix URL
+          warn('nanoc 2.1 changes the way layouts are stored. Please see XXX' +
+               'for details on how to adjust your site.')
+
+          Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
+            # Get layout details
+            extension = File.extname(filename)
+            name      = File.basename(filename, extension)
+            content   = File.read(filename)
+
+            # Build hash for layout
+            { :name => name, :content => content, :extension => extension }
+          end
+        else
+          meta_filenames('layouts').map do |filename|
+            # Read metadata
+            meta = (YAML.load_file(filename) || {}).clean
+ 
+            # Get extra info
+            extras      = {
+              :name     => filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, ''),
+              :content  => File.read(content_filename_for_dir(File.dirname(filename)))
+            }
+
+            # Add to list of pages
+            meta.merge(extras)
+          end
         end
       end
 
@@ -174,26 +202,15 @@ module Nanoc::DataSources
           name = filename.sub(/^templates\/(.*)\/[^\/]+\.yaml$/, '\1')
 
           # Get file names
-          meta_filename       = filename
-          content_filenames   = Dir['templates/' + name + '/' + name + '.*'] +
-                                Dir['templates/' + name + '/index.*'] -
-                                Dir['templates/' + name + '/*.yaml' ]
-
-          # Read files
-          extension = nil
-          content   = nil
-          content_filenames.each do |content_filename|
-            content   = File.read(content_filename)
-            extension = File.extname(content_filename)
-          end
-          meta = File.read(meta_filename)
+          meta_filename     = filename
+          content_filename  = content_filename_for_dir(File.dirname(filename))
 
           # Add it to the list of templates
           {
             :name       => name,
-            :extension  => extension,
-            :content    => content,
-            :meta       => meta
+            :extension  => File.extname(content_filename),
+            :content    => File.read(content_filename),
+            :meta       => File.read(meta_filename)
           }
         end
       end
@@ -231,13 +248,13 @@ module Nanoc::DataSources
       # named xxx.erb (with xxx being the name of the layout).
       def create_layout(name)
         # Get details
-        path = 'layouts/' + name + '.erb'
+        path = 'layouts/' + name
 
         # Make sure the layout doesn't exist yet
         error "A layout named '#{name}' already exists." if File.exist?(path)
 
         # Create layout file
-        FileManager.create_file(path) do
+        FileManager.create_file(path + '/' + name + '.erb') do
           "<html>\n" +
           "  <head>\n" +
           "    <title><%= @page.title %></title>\n" +
@@ -246,6 +263,9 @@ module Nanoc::DataSources
           "<%= @page.content %>\n" +
           "  </body>\n" +
           "</html>\n"
+        end
+        FileManager.create_file(path + '/' + name + '.yaml') do
+          "filter: 'erb'\n"
         end
       end
 
@@ -271,7 +291,7 @@ module Nanoc::DataSources
       ########## Custom functions ##########
 
       # Returns the list of meta files in the given (optional) base directory.
-      def meta_filenames(base='content')
+      def meta_filenames(base)
         # Find all possible meta file names
         filenames = Dir[base + '/**/*.yaml']
 

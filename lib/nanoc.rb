@@ -18,7 +18,6 @@ Nanoc.load('base', '*.rb')
 # Load plugins
 Nanoc.load('data_sources', '*.rb')
 Nanoc.load('filters', '*.rb')
-Nanoc.load('layout_processors', '*.rb')
 
 # Get global binding
 $nanoc_binding = binding
