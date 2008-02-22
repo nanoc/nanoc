@@ -18,6 +18,11 @@ def error(s, pre='ERROR')
   exit(1)
 end
 
+# Convenience function for printing warnings
+def warn(s, pre='WARNING')
+  log(:high, pre + ': ' + s, $stderr)
+end
+
 # Convenience function for requiring libraries
 def nanoc_require(x, message="'#{x}' is required to compile this site.")
   require x

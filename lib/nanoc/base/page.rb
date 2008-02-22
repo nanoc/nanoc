@@ -154,7 +154,11 @@ module Nanoc
       error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Find layout processor
-      layout_processor_class = PluginManager.instance.layout_processor(layout[:extension])
+      if layout[:extension].nil?
+        layout_processor_class = PluginManager.instance.filter(layout[:filter].to_sym)
+      else
+        layout_processor_class = PluginManager.instance.layout_processor(layout[:extension])
+      end
       error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
       layout_processor = layout_processor_class.new(self.to_proxy, @site)
 

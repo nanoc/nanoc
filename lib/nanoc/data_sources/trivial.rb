@@ -59,9 +59,8 @@ module Nanoc::DataSources
     end
 
     # DataSource#layouts returns an array of hashes that represent layouts.
-    # Each hash must have the :name, :content and :extension keys. The
-    # :extension key determines the layout processor that will be used (they
-    # are defined in layout_processors/*.rb).
+    # Each hash must have the :name, :content and :filter keys. The :filter
+    # key determines the filter that will be used for processing the layout.
     def layouts
       [
         {
@@ -74,7 +73,7 @@ module Nanoc::DataSources
                          "<%= @page.content %>\n" +
                          "  </body>\n" +
                          "</html>",
-          :extension  => '.erb'
+          :filter     => 'erb'
         }
       ]
     end

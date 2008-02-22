@@ -23,7 +23,9 @@ class CreatorTest < Test::Unit::TestCase
     assert(File.file?('tmp/site/content/content.yaml'))
 
     assert(File.directory?('tmp/site/layouts/'))
-    assert(File.file?('tmp/site/layouts/default.erb'))
+    assert(File.directory?('tmp/site/layouts/default/'))
+    assert(File.file?('tmp/site/layouts/default/default.erb'))
+    assert(File.file?('tmp/site/layouts/default/default.yaml'))
 
     assert(File.directory?('tmp/site/lib/'))
     assert(File.file?('tmp/site/lib/default.rb'))
