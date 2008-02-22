@@ -10,7 +10,7 @@ module Nanoc::Filters
       assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
 
       # Get result
-      Erubis::Eruby.new(content).evaluate(assigns)
+      ::Erubis::Eruby.new(content).evaluate(assigns)
     end
 
   end
