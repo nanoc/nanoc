@@ -5,6 +5,8 @@ nanoc Release Notes
 -----
 
 * autocompiler now honors custom paths
+* autocompiler now attempts to serve pages with the most appropriate MIME
+  type, instead of always serving everything as "text/html"
 
 2.0.2
 -----

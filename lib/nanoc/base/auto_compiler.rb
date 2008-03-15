@@ -114,8 +114,12 @@ END
         return
       end
 
+      # Determine most likely MIME type
+      mime_type = MIME::Types.of(page.path).first
+      mime_type = mime_type.nil? ? 'text/html' : mime_type.simplified
+
       response.status           = 200
-      response['Content-Type']  = 'text/html'
+      response['Content-Type']  = mime_type
       response.body             = page.layouted_content
     end
 
