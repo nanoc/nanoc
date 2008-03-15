@@ -79,7 +79,7 @@ END
 
       if page.nil?
         # Serve file
-        if File.exist?(file_path)
+        if File.file?(file_path)
           serve_file(file_path, response)
         else
           serve_404(request.path, response)
