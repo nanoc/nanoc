@@ -59,8 +59,13 @@ module Nanoc
       @content[:post]
     end
 
-    def skip_output? ; attribute_named(:skip_output)  ; end
-    def path         ; attribute_named(:path)         ; end
+    def skip_output?
+      attribute_named(:skip_output)
+    end
+
+    def path
+      attribute_named(:custom_path) || attribute_named(:path)
+    end
 
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
