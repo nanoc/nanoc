@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+2.0.3
+-----
+
+* autocompiler now honors custom paths
+
 2.0.2
 -----
 
