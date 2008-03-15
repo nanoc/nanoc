@@ -67,7 +67,7 @@ module Nanoc
 
     # Returns the page's path relative to the web root.
     def path
-      attribute_named(:path)
+      attribute_named(:custom_path) || attribute_named(:path)
     end
 
     # Returns the path to the compiled page on the filesystem.
