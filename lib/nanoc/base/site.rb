@@ -27,7 +27,7 @@ module Nanoc
 
     # Returns a Nanoc::Site object for the site specified by the given
     # configuration hash.
-    def initialize(config) # :nodoc:
+    def initialize(config)
       # Load configuration
       @config = DEFAULT_CONFIG.merge(config.clean)
 
