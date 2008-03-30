@@ -13,7 +13,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
       in_dir %w{ site } do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files to make sure they are recreated
 
@@ -142,7 +142,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
       in_dir %w{ site } do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_page('test') }
         assert_raise(SystemExit)  { site.create_page('test') }
@@ -165,7 +165,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
       in_dir %w{ site }  do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_template('test') }
         assert_raise(SystemExit)  { site.create_template('test') }
@@ -181,7 +181,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp }  do
       Nanoc::Site.create('site')
       in_dir %w{ site }  do  
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_layout('test') }
         assert_raise(SystemExit)  { site.create_layout('test') }
