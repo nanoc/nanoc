@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 
 def with_site_fixture(a_fixture)
   in_dir(['test', 'fixtures', a_fixture]) do
-    yield(Nanoc::Site.from_cwd)
+    yield(Nanoc::Site.new(YAML.load_file('config.yaml')))
   end
 end
 

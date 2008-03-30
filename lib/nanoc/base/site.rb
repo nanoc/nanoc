@@ -25,18 +25,11 @@ module Nanoc
     attr_reader :compiler, :data_source
     attr_reader :code, :pages, :page_defaults, :layouts, :templates
 
-    # Returns a Nanoc::Site object for the site in the current working
-    # directory. Returns nil if the current working directory is not a valid
-    # site.
-    def self.from_cwd
-      File.file?('config.yaml') ? new : nil
-    end
-
-  private
-
-    def initialize # :nodoc:
+    # Returns a Nanoc::Site object for the site specified by the given
+    # configuration hash.
+    def initialize(config) # :nodoc:
       # Load configuration
-      @config = DEFAULT_CONFIG.merge((YAML.load_file('config.yaml') || {}).clean)
+      @config = DEFAULT_CONFIG.merge(config.clean)
 
       # Create data source
       @data_source_class = PluginManager.instance.data_source(@config[:data_source].to_sym)
@@ -50,8 +43,6 @@ module Nanoc
       # Set not loaded
       @data_loaded = false
     end
-
-  public
 
     # Loads the site data. The site data is cached, so calling this method
     # will not have any effect the second time, unless +force+ is true.
@@ -125,7 +116,7 @@ module Nanoc
         end
 
         # Setup site
-        Site.from_cwd.setup
+        Site.new(YAML.load_file('config.yaml')).setup
       end
     end
 
