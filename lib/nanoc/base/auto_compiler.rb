@@ -2,6 +2,9 @@ require 'webrick'
 
 module Nanoc
 
+  # Nanoc::AutoCompiler is a web server that will automatically compile pages
+  # as they are requested. It also serves static files such as stylesheets and
+  # images.
   class AutoCompiler
 
     ERROR_404 = <<END
@@ -45,11 +48,13 @@ END
 </html>
 END
 
+    # Creates a new autocompiler for the given site.
     def initialize(site)
       # Set site
       @site = site
     end
 
+    # Starts the server on the given port.
     def start(port)
       nanoc_require('mime/types', "'mime/types' is required to autocompile sites.")
       
@@ -61,6 +66,8 @@ END
       trap('INT') { @server.shutdown }
       @server.start
     end
+
+  private
 
     def handle_request(request, response)
       # Reload site data
@@ -120,7 +127,7 @@ END
 
       response.status           = 200
       response['Content-Type']  = mime_type
-      response.body             = page.layouted_content
+      response.body             = page.laid_out_content
     end
 
   end

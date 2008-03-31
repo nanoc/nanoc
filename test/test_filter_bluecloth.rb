@@ -2,7 +2,7 @@ require 'test/unit'
 
 require File.join(File.dirname(__FILE__), 'helper.rb')
 
-class FilterMarkdownTest < Test::Unit::TestCase
+class FilterBlueClothTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -14,9 +14,7 @@ class FilterMarkdownTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          page  = site.pages.first.to_proxy
-          pages = site.pages.map { |p| p.to_proxy }
-          filter = ::Nanoc::Filter::Markdown::MarkdownFilter.new(page, pages, site.config, site)
+          filter = ::Nanoc::Filters::BlueCloth.new(site.pages.first.to_proxy, site)
 
           # Run filter
           result = filter.run("> Quote")

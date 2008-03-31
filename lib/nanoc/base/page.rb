@@ -1,6 +1,7 @@
 module Nanoc
   class Page
 
+    # Default values for pages.
     PAGE_DEFAULTS = {
       :custom_path  => nil,
       :extension    => 'html',
@@ -17,6 +18,7 @@ module Nanoc
     attr_reader   :attributes
     attr_accessor :parent, :children
 
+    # Creates a new page.
     def initialize(hash, site)
       @site                   = site
       @compiler               = site.compiler
@@ -28,45 +30,47 @@ module Nanoc
       @children               = []
 
       @filtered_pre           = false
-      @layouted               = false
+      @laid_out               = false
       @filtered_post          = false
       @written                = false
     end
 
-    # Proxy support
-
+    # Returns a proxy for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
     end
 
-    # Accessors, kind of
+    # Returns true if the page has been modified during the last compilation
+    # session, false otherwise.
+    def modified?
+      @modified
+    end
 
-    def modified? ; @modified ; end
-
+    # Returns the attribute with the given name.
     def attribute_named(name)
       return @attributes[name]         if @attributes.has_key?(name)
       return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
 
+    # Returns the page's pre-filtered but not yet laid out content.
     def content
       compile(false) unless @filtered_pre
       @content[:pre]
     end
 
-    def layouted_content
+    # Returns the page's pre-filtered, laid out and post-filtered content.
+    def laid_out_content
       compile(true)
       @content[:post]
     end
 
-    def skip_output?
-      attribute_named(:skip_output)
-    end
-
+    # Returns the page's path relative to the web root.
     def path
       attribute_named(:custom_path) || attribute_named(:path)
     end
 
+    # Returns the path to the compiled page on the filesystem.
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
         @site.config[:output_dir] + attribute_named(:path) +
@@ -76,8 +80,8 @@ module Nanoc
       end
     end
 
-    # Compiling
-
+    # Compiles the page. Will layout and post-filter the page, unless +full+
+    # is false.
     def compile(full=true)
       @modified = false
 
@@ -100,9 +104,9 @@ module Nanoc
       end
 
       # Layout
-      if !@layouted and full
+      if !@laid_out and full
         layout
-        @layouted = true
+        @laid_out = true
       end
 
       # Filter post
@@ -113,12 +117,14 @@ module Nanoc
 
       # Write
       if !@written and full
-        @modified = FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless skip_output?
+        @modified = FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless attribute_named(:skip_output)
         @written = true
       end
 
       @compiler.stack.pop
     end
+
+  private
 
     def filter(stage)
       # Get filters
@@ -127,9 +133,9 @@ module Nanoc
 
       filters.each do |filter_name|
         # Create filter
-        filter_class = PluginManager.filter_named(filter_name)
+        filter_class = PluginManager.instance.filter(filter_name.to_sym)
         error "Unknown filter: '#{filter_name}'" if filter_class.nil?
-        filter = filter_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
+        filter = filter_class.new(self.to_proxy, @site)
 
         # Run filter
         @content[stage] = filter.run(@content[stage])
@@ -148,9 +154,13 @@ module Nanoc
       error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Find layout processor
-      layout_processor_class = PluginManager.layout_processor_for_extension(layout[:extension])
+      if layout[:extension].nil?
+        layout_processor_class = PluginManager.instance.filter(layout[:filter].to_sym)
+      else
+        layout_processor_class = PluginManager.instance.layout_processor(layout[:extension])
+      end
       error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
-      layout_processor = layout_processor_class.new(self.to_proxy, @site.pages.map { |p| p.to_proxy }, @site.config, @site)
+      layout_processor = layout_processor_class.new(self.to_proxy, @site)
 
       # Layout
       @content[:post] = layout_processor.run(layout[:content])

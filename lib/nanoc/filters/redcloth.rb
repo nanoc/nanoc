@@ -1,7 +1,7 @@
-module Nanoc::Filter::Textile
-  class TextileFilter < Nanoc::Filter
+module Nanoc::Filters
+  class RedCloth < Nanoc::Filter
 
-    identifiers :textile, :redcloth
+    identifiers :redcloth
 
     def run(content)
       nanoc_require 'redcloth'

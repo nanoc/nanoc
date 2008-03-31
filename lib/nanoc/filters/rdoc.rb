@@ -1,5 +1,5 @@
-module Nanoc::Filter::RDoc
-  class RDocFilter < Nanoc::Filter
+module Nanoc::Filters
+  class RDoc < Nanoc::Filter
 
     identifiers :rdoc
 

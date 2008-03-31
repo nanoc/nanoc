@@ -1,5 +1,5 @@
-module Nanoc::Filter::SmartyPants
-  class SmartyPantsFilter < Nanoc::Filter
+module Nanoc::Filters
+  class SmartyPants < Nanoc::Filter
 
     identifiers :smartypants, :rubypants
 

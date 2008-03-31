@@ -1,3 +1,6 @@
+# This file is a large mess. It's basically the place where everything gets
+# dumped if it doesn't belong elsewhere. Embarrassing, really.
+
 # Get requirements
 begin ; require 'rubygems' ; rescue LoadError ; end
 require 'yaml'
@@ -15,6 +18,11 @@ def error(s, pre='ERROR')
   exit(1)
 end
 
+# Convenience function for printing warnings
+def warn(s, pre='WARNING')
+  log(:high, pre + ': ' + s, $stderr)
+end
+
 # Convenience function for requiring libraries
 def nanoc_require(x, message="'#{x}' is required to compile this site.")
   require x
@@ -25,8 +33,8 @@ end
 # Rendering sub-layouts
 def render(name, other_assigns={})
   layout = @site.layouts.find { |l| l[:name] == name }
-  layout_processor_class = Nanoc::PluginManager.layout_processor_for_extension(layout[:extension])
-  layout_processor = layout_processor_class.new(@page, @pages, @site.config, @site, other_assigns)
+  layout_processor_class = Nanoc::PluginManager.instance.layout_processor(layout[:extension])
+  layout_processor = layout_processor_class.new(@page, @site, other_assigns)
   layout_processor.run(layout[:content])
 end
 
@@ -38,7 +46,7 @@ ensure
   FileUtils.cd(File.join(path.map { |n| '..' }))
 end
 
-class FileManager
+class FileManager # :nodoc:
 
   ACTION_COLORS = {
     :create     => "\e[1m" + "\e[32m", # bold + green
