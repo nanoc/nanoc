@@ -35,4 +35,17 @@ class PageLayoutTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_sublayouts
+    with_site_fixture 'site_with_sublayouts' do |site|
+      assert_nothing_raised() { site.compile }
+      assert_equal(1, Dir["output/*"].size)
+      assert(File.file?('output/index.html'))
+      
+      text = File.read('output/index.html')
+      assert(text.include?('<!-- Hi, I\'m Bar! -->'))
+      assert(text.include?('<!-- This is the header -->'))
+      assert(text.include?('<!-- This is the footer -->'))
+    end
+  end
+
 end
