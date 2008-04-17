@@ -34,6 +34,7 @@ class CompilerTest < Test::Unit::TestCase
       assert(File.file?('output/bar.html'))
       assert(!File.file?('output/foo/index.html'))
       assert(!File.file?('output/bar/index.html'))
+      assert_match(/\/bar.html/, File.read('output/index.html'))
     end
   end
 
