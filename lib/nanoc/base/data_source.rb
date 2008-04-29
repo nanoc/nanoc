@@ -5,8 +5,6 @@ module Nanoc
   # here; instead, they are documented in the nanoc manual.
   class DataSource < Plugin
 
-    attr_reader :config
-
     # Creates a new data source for the given site.
     def initialize(site)
       @site       = site
