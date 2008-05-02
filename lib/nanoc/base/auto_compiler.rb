@@ -51,8 +51,12 @@ END
     end
 
     def start(port)
-      nanoc_require('mime/types', "'mime/types' is required to autocompile sites.")
-      
+      nanoc_require(
+        'mime/types',
+        "'mime/types' is required to autocompile sites. You may want to " +
+        "install the mime-types gem by running 'gem install mime-types'."
+      )
+
       # Create server
       @server = WEBrick::HTTPServer.new(:Port => port || 3000)
       @server.mount_proc("/") { |request, response| handle_request(request, response) }
