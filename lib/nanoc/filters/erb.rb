@@ -1,6 +1,6 @@
 module Nanoc::Filter::ERB
 
-  class ERBContext
+  class Context
 
     def initialize(hash)
       hash.each_pair do |key, value|
@@ -23,7 +23,7 @@ module Nanoc::Filter::ERB
 
       # Create context
       assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
-      context = ERBContext.new(assigns)
+      context = Context.new(assigns)
 
       # Get result
       ::ERB.new(content).result(context.get_binding)
