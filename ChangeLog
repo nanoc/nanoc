@@ -1,11 +1,18 @@
 nanoc Release Notes
 ===================
 
+2.0.4
+-----
+
+* Fixed default.rb's `html_escape`
+* Updated Haml filter and layout processor so that @page, @pages and @config
+  are now available as instance variables instead of local variables
+
 2.0.3
 -----
 
-* autocompiler now honors custom paths
-* autocompiler now attempts to serve pages with the most appropriate MIME
+* The utocompiler now honors custom paths
+* The autocompiler now attempts to serve pages with the most appropriate MIME
   type, instead of always serving everything as "text/html"
 
 2.0.2

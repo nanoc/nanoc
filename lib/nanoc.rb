@@ -1,6 +1,6 @@
 module Nanoc
 
-  VERSION = '2.0.3'
+  VERSION = '2.0.4'
 
   def self.load_file(*path)
     full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
