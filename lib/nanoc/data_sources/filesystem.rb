@@ -87,7 +87,7 @@ module Nanoc::DataSource::Filesystem
         "\# before nanoc starts compiling.\n" +
         "\n" +
         "def html_escape(str)\n" +
-        "  str.gsub('&', '&amp;').str('<', '&lt;').str('>', '&gt;').str('\"', '&quot;')\n" +
+        "  str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n" +
         "end\n" +
         "alias h html_escape\n"
       end
