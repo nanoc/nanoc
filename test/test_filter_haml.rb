@@ -21,6 +21,14 @@ class FilterHamlTest < Test::Unit::TestCase
           # Run filter
           result = filter.run('%html')
           assert_equal("<html>\n</html>\n", result)
+
+          # Run filter
+          result = filter.run('%h1= page.title')
+          assert_equal("<h1>My New Homepage</h1>\n", result)
+
+          # Run filter
+          result = filter.run('%h1= @page.title')
+          assert_equal("<h1>My New Homepage</h1>\n", result)
         end
       end
     end

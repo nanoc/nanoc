@@ -18,8 +18,16 @@ class LayoutProcessorHamlTest < Test::Unit::TestCase
           pages = site.pages.map { |p| p.to_proxy }
           layout_processor = ::Nanoc::LayoutProcessor::Haml::HamlLayoutProcessor.new(page, pages, site.config, site)
 
-          # Run layout processor
+          # Run filter
+          result = layout_processor.run('%html')
+          assert_equal("<html>\n</html>\n", result)
+
+          # Run filter
           result = layout_processor.run('%h1= page.title')
+          assert_equal("<h1>My New Homepage</h1>\n", result)
+
+          # Run filter
+          result = layout_processor.run('%h1= @page.title')
           assert_equal("<h1>My New Homepage</h1>\n", result)
         end
       end
