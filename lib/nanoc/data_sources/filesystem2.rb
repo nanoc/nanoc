@@ -151,12 +151,8 @@ module Nanoc::DataSources
             path = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
           end
 
-          # Build final page hash
-          meta.merge({
-            :path               => path,
-            :uncompiled_content => content,
-            :file               => FileProxy.new(filename)
-          })
+          # Build page
+          Nanoc::Page.new(content, meta.merge(:file => FileProxy.new(filename)), path)
         end.compact
       end
 
@@ -169,18 +165,15 @@ module Nanoc::DataSources
       # pages, each layout consists of a metadata part and a content part,
       # separated by '-----'.
       def layouts
-        files('layouts', false).map do |filename|
+        files('layouts', true).map do |filename|
           # Read and parse data
           meta, content = *parse_file(filename, 'layout')
 
           # Get actual path
           path = filename.sub(/^layouts\//, '').sub(/\.[^\/]+$/, '')
 
-          # Build final page hash
-          meta.merge({
-            :name    => path,
-            :content => content
-          })
+          # Build layout
+          Nanoc::Layout.new(content, meta, path)
         end.compact
       end
 

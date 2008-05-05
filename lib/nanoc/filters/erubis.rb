@@ -4,10 +4,8 @@ module Nanoc::Filters
     identifiers :eruby
 
     def run(content)
+      # Load requirements
       nanoc_require 'erubis'
-
-      # Get assigns
-      assigns = { :page => @page, :pages => @pages, :config => @config, :site => @site }
 
       # Get result
       ::Erubis::Eruby.new(content).evaluate(assigns)

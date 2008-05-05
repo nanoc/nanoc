@@ -1,0 +1,8 @@
+-----
+# Built-in
+filters_pre: [ 'erb' ]
+
+# Custom
+title: "A New Root Page"
+-----
+<p>The cool layouts are <%= @layouts.select { |l| l.kind == 'cool' }.map { |l| l.path }.join(', ') %>.</p>

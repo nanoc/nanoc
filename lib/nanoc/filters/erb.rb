@@ -2,13 +2,13 @@ module Nanoc::Filters
   class ERB < Nanoc::Filter
 
     identifiers :erb
-    extensions   '.erb', '.rhtml'
+    extensions  '.erb', '.rhtml'
 
     def run(content)
+      # Load requirements
       nanoc_require 'erb'
 
       # Create context
-      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
       context = ::Nanoc::Context.new(assigns)
 
       # Get result

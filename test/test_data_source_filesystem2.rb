@@ -110,23 +110,11 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_equal(
-          [
-            {
-              :name       => 'default',
-              :content    => "<html>\n" +
-                             "  <head>\n" +
-                             "    <title><%= @page.title %></title>\n" +
-                             "  </head>\n" +
-                             "  <body>\n" +
-                             "<%= @page.content %>\n" +
-                             "  </body>\n" +
-                             "</html>",
-              :filter     => 'erb'
-            }
-          ],
-          site.layouts
-        )
+        layout = site.layouts[0]
+
+        assert_equal('/default/', layout.path)
+        assert_equal('erb', layout.attribute_named(:filter))
+        assert(layout.content.include?('<title><%= @page.title %></title>'))
       end
     end
   end
@@ -148,22 +136,24 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_nothing_raised()   { site.create_page('test1') }
-        assert_raise(SystemExit)  { site.create_page('test1') }
-        assert(File.file?('content/test1.txt'))
+        begin
+          assert_nothing_raised()   { site.create_page('test1') }
+          assert_raise(SystemExit)  { site.create_page('test1') }
+          assert(File.file?('content/test1.txt'))
 
-        assert_nothing_raised()   { site.create_page('test2/sub') }
-        assert_raise(SystemExit)  { site.create_page('test2/sub') }
-        assert(File.file?('content/test2/sub.txt'))
+          assert_nothing_raised()   { site.create_page('test2/sub') }
+          assert_raise(SystemExit)  { site.create_page('test2/sub') }
+          assert(File.file?('content/test2/sub.txt'))
 
-        site.load_data(true)
+          site.load_data(true)
 
-        assert_equal(4, site.pages.size)
-        assert(site.pages.any? { |page| page.path == '/test1/' })
-        assert(site.pages.any? { |page| page.path == '/test2/sub/' })
-
-        FileUtils.remove_entry_secure('content/test1.txt')
-        FileUtils.remove_entry_secure('content/test2')
+          assert_equal(4, site.pages.size)
+          assert(site.pages.any? { |page| page.path == '/test1/' })
+          assert(site.pages.any? { |page| page.path == '/test2/sub/' })
+        ensure
+          FileUtils.remove_entry_secure('content/test1.txt')
+          FileUtils.remove_entry_secure('content/test2')
+        end
       end
     end
   end
@@ -173,16 +163,18 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_nothing_raised()   { site.create_template('test1') }
-        assert_raise(SystemExit)  { site.create_template('test1') }
-        assert(File.file?('templates/test1.txt'))
+        begin
+          assert_nothing_raised()   { site.create_template('test1') }
+          assert_raise(SystemExit)  { site.create_template('test1') }
+          assert(File.file?('templates/test1.txt'))
 
-        site.load_data(true)
+          site.load_data(true)
 
-        assert_equal(2, site.templates.size)
-        assert(site.templates.any? { |template| template[:name] == 'test1' })
-
-        FileUtils.remove_entry_secure('templates/test1.txt')
+          assert_equal(2, site.templates.size)
+          assert(site.templates.any? { |template| template[:name] == 'test1' })
+        ensure
+          FileUtils.remove_entry_secure('templates/test1.txt')
+        end
       end
     end
   end
@@ -192,16 +184,18 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_nothing_raised()   { site.create_layout('test1') }
-        assert_raise(SystemExit)  { site.create_layout('test1') }
-        assert(File.file?('layouts/test1.erb'))
+        begin
+          assert_nothing_raised()   { site.create_layout('test1') }
+          assert_raise(SystemExit)  { site.create_layout('test1') }
+          assert(File.file?('layouts/test1.erb'))
 
-        site.load_data(true)
+          site.load_data(true)
 
-        assert_equal(2, site.layouts.size)
-        assert(site.layouts.any? { |layout| layout[:name] == 'test1' })
-
-        FileUtils.remove_entry_secure('layouts/test1.erb')
+          assert_equal(2, site.layouts.size)
+          assert(site.layouts.any? { |layout| layout.path == '/test1/' })
+        ensure
+          FileUtils.remove_entry_secure('layouts/test1.erb')
+        end
       end
     end
   end
@@ -218,16 +212,18 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
 
   def test_compile_site_with_backup_files
     with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      FileManager.create_file('content/index.txt~') { '' }
-      FileManager.create_file('layouts/default.erb~') { '' }
+      begin
+        FileManager.create_file('content/index.txt~') { '' }
+        FileManager.create_file('layouts/default.erb~') { '' }
 
-      assert_nothing_raised() { site.compile }
+        assert_nothing_raised() { site.compile }
 
-      assert_equal(2, site.pages.size)
-      assert_equal(1, site.layouts.size)
-
-      FileUtils.remove_entry_secure 'content/index.txt~' if File.exist?('content/index.txt~')
-      FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+        assert_equal(2, site.pages.size)
+        assert_equal(1, site.layouts.size)
+      ensure
+        FileUtils.remove_entry_secure 'content/index.txt~' if File.exist?('content/index.txt~')
+        FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+      end
     end
   end
 
