@@ -152,8 +152,7 @@ module Nanoc::DataSources
           end
 
           # Build page
-          attributes = meta.merge(:file => FileProxy.new(filename))
-          Nanoc::Page.new(content, attributes, path)
+          Nanoc::Page.new(content, meta.merge(:file => FileProxy.new(filename)), path)
         end.compact
       end
 
@@ -173,11 +172,8 @@ module Nanoc::DataSources
           # Get actual path
           path = filename.sub(/^layouts\//, '').sub(/\.[^\/]+$/, '')
 
-          # Build final page hash
-          meta.merge({
-            :name    => path,
-            :content => content
-          })
+          # Build layout
+          Nanoc::Layout.new(content, meta, path)
         end.compact
       end
 

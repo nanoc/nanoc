@@ -11,7 +11,7 @@ module Nanoc::Filters
       options = @page.haml_options || {}
 
       # Get assigns/locals
-      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :config => @config, :site => @site })
+      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :layouts => @layouts, :config => @config, :site => @site })
       context = ::Nanoc::Context.new(assigns)
 
       # Get result

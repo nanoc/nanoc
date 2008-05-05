@@ -37,4 +37,13 @@ class PageFilterTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_site_with_layouts_variable
+    with_site_fixture 'site_with_layouts_variable' do |site|
+      assert_nothing_raised() { site.compile }
+      assert(File.file?('output/index.html'))
+      assert_equal(1, Dir["output/*"].size)
+      assert(File.read('output/index.html').include?('<p>The cool layouts are /bar/, /foo/.</p>'))
+    end
+  end
+
 end
