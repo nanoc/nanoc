@@ -66,8 +66,12 @@ EOT
 
 # Create site
 
-config = YAML.load_file('config.yaml')
-$nanoc_site = Nanoc::Site.new(config)
+if File.file?('config.yaml')
+  config = YAML.load_file('config.yaml')
+  $nanoc_site = Nanoc::Site.new(config)
+else
+  $nanoc_site = nil
+end
 
 # Parse options
 
