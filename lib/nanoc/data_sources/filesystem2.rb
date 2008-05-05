@@ -165,7 +165,7 @@ module Nanoc::DataSources
       # pages, each layout consists of a metadata part and a content part,
       # separated by '-----'.
       def layouts
-        files('layouts', false).map do |filename|
+        files('layouts', true).map do |filename|
           # Read and parse data
           meta, content = *parse_file(filename, 'layout')
 
