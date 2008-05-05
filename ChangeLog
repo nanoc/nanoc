@@ -11,7 +11,7 @@ nanoc Release Notes
 2.0.3
 -----
 
-* The utocompiler now honors custom paths
+* The autocompiler now honors custom paths
 * The autocompiler now attempts to serve pages with the most appropriate MIME
   type, instead of always serving everything as "text/html"
 
