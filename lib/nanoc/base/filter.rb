@@ -20,6 +20,11 @@ module Nanoc
       error 'Filter#run must be overridden'
     end
 
+    # Returns a hash with data that should be available.
+    def assigns
+      @other_assigns.merge({ :page => @page, :pages => @pages, :layouts => @layouts, :config => @config, :site => @site })
+    end
+
     class << self
 
       attr_accessor :extensions # :nodoc:

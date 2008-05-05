@@ -5,13 +5,13 @@ module Nanoc::Filters
     extensions  '.haml'
 
     def run(content)
+      # Load requirements
       nanoc_require 'haml'
 
       # Get options
       options = @page.haml_options || {}
 
-      # Get assigns/locals
-      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :layouts => @layouts, :config => @config, :site => @site })
+      # Create context
       context = ::Nanoc::Context.new(assigns)
 
       # Get result

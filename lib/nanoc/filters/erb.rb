@@ -5,10 +5,10 @@ module Nanoc::Filters
     extensions  '.erb', '.rhtml'
 
     def run(content)
+      # Load requirements
       nanoc_require 'erb'
 
       # Create context
-      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :layouts => @layouts, :config => @config, :site => @site })
       context = ::Nanoc::Context.new(assigns)
 
       # Get result

@@ -4,8 +4,10 @@ module Nanoc::Filters
     identifiers :smartypants, :rubypants
 
     def run(content)
+      # Load requirements
       nanoc_require 'rubypants'
 
+      # Get result
       ::RubyPants.new(content).to_html
     end
 
