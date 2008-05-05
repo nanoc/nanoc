@@ -14,7 +14,6 @@ module Nanoc
       :skip_output  => false
     }
 
-    attr_reader   :attributes
     attr_accessor :parent, :children, :site
 
     # Creates a new page.
