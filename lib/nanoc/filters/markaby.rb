@@ -5,10 +5,10 @@ module Nanoc::Filters
     extensions  '.mab'
 
     def run(content)
+      # Load requirements
       nanoc_require 'markaby'
 
-      assigns = @other_assigns.merge({ :page => @page, :pages => @pages, :layouts => @layouts, :config => @config, :site => @site })
-
+      # Get result
       ::Markaby::Builder.new(assigns).instance_eval(content).to_s
     end
 
