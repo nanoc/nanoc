@@ -151,7 +151,7 @@ module Nanoc
 
       # Find layout processor
       filter_class = layout.filter_class
-      error "Unknown layout processor: '#{layout[:extension]}'" if filter_class.nil?
+      error "Cannot determine filter for layout '#{layout.path}'" if filter_class.nil?
       filter = filter_class.new(self.to_proxy, @site)
 
       # Layout
