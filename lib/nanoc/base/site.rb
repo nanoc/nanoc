@@ -53,10 +53,21 @@ module Nanoc
 
       # Load data
       @data_source.loading do
+        # Code
         @code           = @data_source.code
-        @pages          = @data_source.pages.map { |p| Page.new(p, self) }
+
+        # Pages
+        @pages          = @data_source.pages
+        @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) } if @pages.any? { |p| p.is_a? Hash }
+        @pages.each { |p| p.site = self }
+
+        # Page defaults
         @page_defaults  = @data_source.page_defaults
+
+        # Layouts
         @layouts        = @data_source.layouts
+
+        # Templates
         @templates      = @data_source.templates
       end
 

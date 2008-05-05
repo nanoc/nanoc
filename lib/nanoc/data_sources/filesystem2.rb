@@ -151,12 +151,9 @@ module Nanoc::DataSources
             path = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
           end
 
-          # Build final page hash
-          meta.merge({
-            :path               => path,
-            :uncompiled_content => content,
-            :file               => FileProxy.new(filename)
-          })
+          # Build page
+          attributes = meta.merge(:file => FileProxy.new(filename))
+          Nanoc::Page.new(content, attributes, path)
         end.compact
       end
 

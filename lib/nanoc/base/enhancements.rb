@@ -31,9 +31,11 @@ rescue LoadError
 end
 
 # Rendering nested layouts
-def render(name, other_assigns={})
+def render(name_or_path, other_assigns={})
   # Find layout
-  layout = @site.layouts.find { |l| l[:name] == name }
+  layout = @site.layouts.find do |l|
+    (l[:path] || l[:name]).cleaned_path == name_or_path.cleaned_path
+  end
 
   # Find layout processor class
   if layout.has_key?(:extension)
@@ -45,6 +47,13 @@ def render(name, other_assigns={})
   # Layout
   layout_processor = layout_processor_class.new(@page, @site, other_assigns)
   layout_processor.run(layout[:content])
+end
+
+# Transforms string into an actual path
+class String
+  def cleaned_path
+    "/#{self}/".gsub(/^\/+|\/+$/, '/')
+  end
 end
 
 # Convenience function for cd'ing in and out of a directory

@@ -8,7 +8,6 @@ module Nanoc
       :filename     => 'index',
       :filters_pre  => [],
       :filters_post => [],
-      :haml_options => {},
       :is_draft     => false,
       :layout       => 'default',
       :path         => nil,
@@ -16,23 +15,21 @@ module Nanoc
     }
 
     attr_reader   :attributes
-    attr_accessor :parent, :children
+    attr_accessor :parent, :children, :site
 
     # Creates a new page.
-    def initialize(hash, site)
-      @site                   = site
-      @compiler               = site.compiler
+    def initialize(content, attributes, path)
+      @attributes     = attributes
+      @content        = { :pre => content, :post => nil }
+      @path           = path.cleaned_path
 
-      @attributes             = hash
-      @content                = { :pre => attribute_named(:uncompiled_content), :post => nil }
+      @parent         = nil
+      @children       = []
 
-      @parent                 = nil
-      @children               = []
-
-      @filtered_pre           = false
-      @laid_out               = false
-      @filtered_post          = false
-      @written                = false
+      @filtered_pre   = false
+      @laid_out       = false
+      @filtered_post  = false
+      @written        = false
     end
 
     # Returns a proxy for this page.
@@ -67,14 +64,13 @@ module Nanoc
 
     # Returns the page's path relative to the web root.
     def path
-      attribute_named(:custom_path) || attribute_named(:path)
+      attribute_named(:custom_path) || @path
     end
 
     # Returns the path to the compiled page on the filesystem.
     def path_on_filesystem
       if attribute_named(:custom_path).nil?
-        @site.config[:output_dir] + attribute_named(:path) +
-          attribute_named(:filename) + '.' + attribute_named(:extension)
+        @site.config[:output_dir] + @path + attribute_named(:filename) + '.' + attribute_named(:extension)
       else
         @site.config[:output_dir] + attribute_named(:custom_path)
       end
@@ -86,16 +82,16 @@ module Nanoc
       @modified = false
 
       # Check for recursive call
-      if @compiler.stack.include?(self)
+      if @site.compiler.stack.include?(self)
         log(:high, "\n" + 'ERROR: Recursive call to page content. Page filter stack:', $stderr)
-        log(:high, "  - #{self.attribute_named(:path)}", $stderr)
-        @compiler.stack.each_with_index do |page, i|
-          log(:high, "  - #{page.attribute_named(:path)}", $stderr)
+        log(:high, "  - #{@path}", $stderr)
+        @site.compiler.stack.each_with_index do |page, i|
+          log(:high, "  - #{page.path}", $stderr)
         end
         exit(1)
       end
 
-      @compiler.stack.push(self)
+      @site.compiler.stack.push(self)
 
       # Filter pre
       unless @filtered_pre
@@ -121,7 +117,7 @@ module Nanoc
         @written = true
       end
 
-      @compiler.stack.pop
+      @site.compiler.stack.pop
     end
 
   private
@@ -150,7 +146,9 @@ module Nanoc
       end
 
       # Find layout
-      layout = @site.layouts.find { |l| l[:name] == attribute_named(:layout) }
+      layout = @site.layouts.find do |l|
+        (l[:path] || l[:name]).cleaned_path == attribute_named(:layout).cleaned_path
+      end
       error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Find layout processor
