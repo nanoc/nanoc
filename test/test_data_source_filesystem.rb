@@ -105,23 +105,11 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_equal(
-          [
-            {
-              :name       => 'default',
-              :content    => "<html>\n" +
-                             "  <head>\n" +
-                             "    <title><%= @page[:title] %></title>\n" +
-                             "  </head>\n" +
-                             "  <body>\n" +
-                             "<%= @page[:content] %>\n" +
-                             "  </body>\n" +
-                             "</html>\n",
-              :extension  => '.erb'
-            }
-          ],
-          site.layouts
-        )
+        layout = site.layouts[0]
+
+        assert_equal('/default/', layout.path)
+        assert_equal('.erb', layout.attribute_named(:extension))
+        assert(layout.content.include?('<title><%= @page[:title] %></title>'))
       end
     end
   end

@@ -4,12 +4,11 @@ module Nanoc
   # 
   # It holds references to the following site data:
   # 
-  # * pages (represented by the Nanoc::Page class)
-  # * page defaults (global meta.yaml file when using the filesystem data
-  #   source)
+  # * pages
+  # * page defaults
   # * layouts
   # * templates
-  # * code (in the lib directory when using the filesystem data source)
+  # * code
   # * configuration (config.yaml file)
   # 
   # Each Nanoc::Site also has a compiler (Nanoc::Compiler) and a data source
@@ -58,7 +57,10 @@ module Nanoc
 
         # Pages
         @pages          = @data_source.pages
-        @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) } if @pages.any? { |p| p.is_a? Hash }
+        if @pages.any? { |p| p.is_a? Hash }
+          warn "in nanoc 2.1, DataSource#pages should return an array of Page objects"
+          @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
+        end
         @pages.each { |p| p.site = self }
 
         # Page defaults
@@ -66,6 +68,11 @@ module Nanoc
 
         # Layouts
         @layouts        = @data_source.layouts
+        if @layouts.any? { |l| l.is_a? Hash }
+          warn "in nanoc 2.1, DataSource#layouts should return an array of Layout objects"
+          @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
+        end
+        @layouts.each { |l| l.site = self }
 
         # Templates
         @templates      = @data_source.templates
@@ -158,6 +165,11 @@ module Nanoc
     # for this site's data source.
     def setup
       @data_source.loading { @data_source.setup }
+    end
+
+    # Returns the layout with the given path.
+    def layout_with_path(path)
+      @layouts.find { |l| l.path == path }
     end
 
     # Creates a new blank page (calls DataSource#create_page) with the given

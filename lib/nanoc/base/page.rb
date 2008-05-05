@@ -146,22 +146,16 @@ module Nanoc
       end
 
       # Find layout
-      layout = @site.layouts.find do |l|
-        (l[:path] || l[:name]).cleaned_path == attribute_named(:layout).cleaned_path
-      end
+      layout = @site.layout_with_path(attribute_named(:layout).cleaned_path)
       error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Find layout processor
-      if layout[:extension].nil?
-        layout_processor_class = PluginManager.instance.filter(layout[:filter].to_sym)
-      else
-        layout_processor_class = PluginManager.instance.layout_processor(layout[:extension])
-      end
-      error "Unknown layout processor: '#{layout[:extension]}'" if layout_processor_class.nil?
-      layout_processor = layout_processor_class.new(self.to_proxy, @site)
+      filter_class = layout.filter_class
+      error "Unknown layout processor: '#{layout[:extension]}'" if filter_class.nil?
+      filter = filter_class.new(self.to_proxy, @site)
 
       # Layout
-      @content[:post] = layout_processor.run(layout[:content])
+      @content[:post] = filter.run(layout.content)
     end
 
   end

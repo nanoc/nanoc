@@ -33,20 +33,16 @@ end
 # Rendering nested layouts
 def render(name_or_path, other_assigns={})
   # Find layout
-  layout = @site.layouts.find do |l|
-    (l[:path] || l[:name]).cleaned_path == name_or_path.cleaned_path
-  end
+  layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_path }
+  error 'Unknown layout: ' + name_or_path.cleaned_path if layout.nil?
 
-  # Find layout processor class
-  if layout.has_key?(:extension)
-    layout_processor_class = Nanoc::PluginManager.instance.layout_processor(layout[:extension])
-  else
-    layout_processor_class = Nanoc::PluginManager.instance.filter(layout[:filter].to_sym)
-  end
+  # Find filter
+  filter_class = layout.filter_class
+  error "Cannot determine filter for layout '#{layout.path}'" if filter_class.nil?
+  filter = filter_class.new(@page, @site, other_assigns)
 
   # Layout
-  layout_processor = layout_processor_class.new(@page, @site, other_assigns)
-  layout_processor.run(layout[:content])
+  filter.run(layout.content)
 end
 
 # Transforms string into an actual path
