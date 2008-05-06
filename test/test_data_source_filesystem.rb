@@ -152,7 +152,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   def test_create_template
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
-      in_dir %w{ site }  do
+      in_dir %w{ site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_template('test') }
@@ -166,9 +166,9 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   end
 
   def test_create_layout
-    in_dir %w{ tmp }  do
+    in_dir %w{ tmp } do
       Nanoc::Site.create('site')
-      in_dir %w{ site }  do  
+      in_dir %w{ site } do  
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_layout('test') }
@@ -181,6 +181,27 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   end
 
   # Miscellaneous
+
+  def test_html_escape
+    in_dir %w{ tmp } do
+      Nanoc::Site.create('site')
+
+      in_dir %w{ site } do
+        File.open('content/content.yaml', 'w') do |io|
+          io << %q{filters_pre: [ 'erb' ]} + "\n"
+          io << %q{title:       "<Hello>"} + "\n"
+        end
+        File.open('content/content.txt', 'w') { |io| io << "<h1><%= h @page.title %></h1>" }
+
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+
+        assert_nothing_raised() { site.compile }
+
+        assert(File.file?('output/index.html'))
+        assert_match(/<h1>&lt;Hello&gt;<\/h1>/, File.read('output/index.html'))
+      end
+    end
+  end
 
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_file_object' do |site|

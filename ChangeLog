@@ -29,11 +29,19 @@ Removed:
 * The database and trivial data sources are no longer included in the standard
   nanoc distribution, but you can get them from the plugins repository now.
 
+2.0.4
+-----
+
+* Fixed default.rb's `html_escape`
+* Updated Haml filter and layout processor so that @page, @pages and @config
+  are now available as instance variables instead of local variables
+>>>>>>> other
+
 2.0.3
 -----
 
-* autocompiler now honors custom paths
-* autocompiler now attempts to serve pages with the most appropriate MIME
+* The autocompiler now honors custom paths
+* The autocompiler now attempts to serve pages with the most appropriate MIME
   type, instead of always serving everything as "text/html"
 
 2.0.2
