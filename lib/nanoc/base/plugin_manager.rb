@@ -1,33 +1,42 @@
+require 'singleton'
+
 module Nanoc
+
+  # Nanoc::PluginManager is a singleton class that is responsible for
+  # finding plugins such as data sources, filters and layout processors.
   class PluginManager
 
-    @@data_sources       = {}
-    @@filters            = {}
-    @@layout_processors  = {}
+    include Singleton
 
-    def self.subclasses_of(superclass)
+    def initialize # :nodoc:
+      @data_sources       = {}
+      @filters            = {}
+      @layout_processors  = {}
+    end
+
+    # Returns the data source class with the given identifier
+    def data_source(identifier)
+      @data_sources[identifier] ||= find(DataSource, :identifiers, identifier)
+    end
+
+    # Returns the filter class with the given identifier
+    def filter(identifier)
+      @filters[identifier] ||= find(Filter, :identifiers, identifier)
+    end
+
+    # Returns the layout processor class with the given file extension
+    def layout_processor(ext)
+      @layout_processors[ext] ||= find(Filter, :extensions, ext)
+    end
+
+  private
+
+    def find(superclass, attribute, value)
       subclasses = []
       ObjectSpace.each_object(Class) { |subclass| subclasses << subclass if subclass < superclass }
-      subclasses
-    end
-
-    def self.data_source_named(name)
-      @@data_sources[name.to_sym] ||= subclasses_of(DataSource).find do |klass|
-        klass.identifiers.include?(name.to_sym)
-      end
-    end
-
-    def self.filter_named(name)
-      @@filters[name.to_sym] ||= subclasses_of(Filter).find do |klass|
-        klass.identifiers.include?(name.to_sym)
-      end
-    end
-
-    def self.layout_processor_for_extension(ext)
-      @@filters[ext.to_sym] ||= subclasses_of(LayoutProcessor).find do |klass|
-        klass.extensions.include?(ext)
-      end
+      subclasses.find { |klass| klass.send(attribute).include?(value) }
     end
 
   end
+
 end

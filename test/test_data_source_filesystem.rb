@@ -13,7 +13,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
       in_dir %w{ site } do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files to make sure they are recreated
 
@@ -25,7 +25,8 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         FileUtils.remove_entry_secure('templates/default/default.txt')
         FileUtils.remove_entry_secure('templates/default/default.yaml')
 
-        FileUtils.remove_entry_secure('layouts/default.erb')
+        FileUtils.remove_entry_secure('layouts/default/default.erb')
+        FileUtils.remove_entry_secure('layouts/default/default.yaml')
 
         FileUtils.remove_entry_secure('lib/default.rb')
 
@@ -47,7 +48,9 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         assert(File.file?('templates/default/default.yaml'))
 
         assert(File.directory?('layouts/'))
-        assert(File.file?('layouts/default.erb'))
+        assert(File.directory?('layouts/default/'))
+        assert(File.file?('layouts/default/default.erb'))
+        assert(File.file?('layouts/default/default.yaml'))
 
         assert(File.directory?('lib/'))
         assert(File.file?('lib/default.rb'))
@@ -102,23 +105,11 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_equal(
-          [
-            {
-              :name       => 'default',
-              :content    => "<html>\n" +
-                             "  <head>\n" +
-                             "    <title><%= @page[:title] %></title>\n" +
-                             "  </head>\n" +
-                             "  <body>\n" +
-                             "<%= @page[:content] %>\n" +
-                             "  </body>\n" +
-                             "</html>\n",
-              :extension  => '.erb'
-            }
-          ],
-          site.layouts
-        )
+        layout = site.layouts[0]
+
+        assert_equal('/default/', layout.path)
+        assert_equal('.erb', layout.attribute_named(:extension))
+        assert(layout.content.include?('<title><%= @page[:title] %></title>'))
       end
     end
   end
@@ -139,7 +130,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
       in_dir %w{ site } do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_page('test') }
         assert_raise(SystemExit)  { site.create_page('test') }
@@ -162,7 +153,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
       in_dir %w{ site } do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_template('test') }
         assert_raise(SystemExit)  { site.create_template('test') }
@@ -177,13 +168,14 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   def test_create_layout
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
-      in_dir %w{ site } do
-        site = Nanoc::Site.from_cwd
+      in_dir %w{ site } do  
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised()   { site.create_layout('test') }
         assert_raise(SystemExit)  { site.create_layout('test') }
 
-        assert(File.file?('layouts/test.erb'))
+        assert(File.file?('layouts/test/test.erb'))
+        assert(File.file?('layouts/test/test.yaml'))
       end
     end
   end
@@ -199,9 +191,9 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
           io << %q{filters_pre: [ 'erb' ]} + "\n"
           io << %q{title:       "<Hello>"} + "\n"
         end
-        File.open('content/content.txt', 'w')   { |io| io << "<h1><%= h @page.title %></h1>" }
+        File.open('content/content.txt', 'w') { |io| io << "<h1><%= h @page.title %></h1>" }
 
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised() { site.compile }
 
@@ -227,6 +219,15 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('content/content.txt~')
       FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+    end
+  end
+
+  def test_compile_site_with_new_layout_structure
+    with_site_fixture 'site_with_new_layout_structure' do |site|
+      assert_nothing_raised() { site.compile }
+      assert(File.file?('output/index.html'))
+      assert_equal(1, Dir["output/*"].size)
+      assert(File.read('output/index.html').include?('<div class="supercool">Blah blah blah this is a page blah blah blah.</div>'))
     end
   end
 

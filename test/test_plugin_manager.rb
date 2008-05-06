@@ -7,86 +7,44 @@ class PluginManagerTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_data_source_named_right
-    # Symbol
+  def test_data_source_right
     assert_nothing_raised do
-      data_source = Nanoc::PluginManager.data_source_named(:filesystem)
-      assert(!data_source.nil?)
-    end
-
-    # String
-    assert_nothing_raised do
-      data_source = Nanoc::PluginManager.data_source_named('filesystem')
+      data_source = Nanoc::PluginManager.instance.data_source(:filesystem)
       assert(!data_source.nil?)
     end
   end
 
-  def test_data_source_named_wrong
-    # Symbol
+  def test_data_source_wrong
     assert_nothing_raised do
-      data_source = Nanoc::PluginManager.data_source_named(:lksdaffhdlkashlgkskahf)
-      assert(data_source.nil?)
-    end
-
-    # String
-    assert_nothing_raised do
-      data_source = Nanoc::PluginManager.data_source_named('lksdaffhdlkashlgkskahf')
+      data_source = Nanoc::PluginManager.instance.data_source(:lksdaffhdlkashlgkskahf)
       assert(data_source.nil?)
     end
   end
 
-  def test_filter_named_right
-    # Symbol
+  def test_filter_right
     assert_nothing_raised do
-      filter = Nanoc::PluginManager.filter_named(:erb)
-      assert(!filter.nil?)
-    end
-
-    # String
-    assert_nothing_raised do
-      filter = Nanoc::PluginManager.filter_named('erb')
+      filter = Nanoc::PluginManager.instance.filter(:erb)
       assert(!filter.nil?)
     end
   end
 
-  def test_filter_named_wrong
-    # Symbol
+  def test_filter_wrong
     assert_nothing_raised do
-      filter = Nanoc::PluginManager.filter_named(:lksdaffhdlkashlgkskahf)
-      assert(filter.nil?)
-    end
-
-    # String
-    assert_nothing_raised do
-      filter = Nanoc::PluginManager.filter_named('lksdaffhdlkashlgkskahf')
+      filter = Nanoc::PluginManager.instance.filter(:lksdaffhdlkashlgkskahf)
       assert(filter.nil?)
     end
   end
 
-  def test_layout_processor_for_extension_right
-    # Symbol
+  def test_layout_processor_right
     assert_nothing_raised do
-      layout_processor = Nanoc::PluginManager.layout_processor_for_extension(:'.erb')
-      assert(!layout_processor.nil?)
-    end
-
-    # String
-    assert_nothing_raised do
-      layout_processor = Nanoc::PluginManager.layout_processor_for_extension('.erb')
+      layout_processor = Nanoc::PluginManager.instance.layout_processor('.erb')
       assert(!layout_processor.nil?)
     end
   end
 
-  def test_layout_processor_for_extension_wrong
-    # Symbol
+  def test_layout_processor_wrong
     assert_nothing_raised do
-      layout_processor = Nanoc::PluginManager.layout_processor_for_extension(:'.xxx')
-      assert(layout_processor.nil?)
-    end
-
-    # String
-    assert_nothing_raised do
-      layout_processor = Nanoc::PluginManager.layout_processor_for_extension('.xxx')
+      layout_processor = Nanoc::PluginManager.instance.layout_processor('.xxx')
       assert(layout_processor.nil?)
     end
   end

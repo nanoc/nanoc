@@ -15,32 +15,63 @@ end
 
 version_text = "nanoc #{Nanoc::VERSION} (c) 2007-2008 Denis Defreyne."
 help_text    = <<EOT
-Usage: nanoc [-chvV]
-       nanoc compile
-       nanoc autocompile
-       nanoc create_layout [layout_name]
-       nanoc create_page [page_name] [-t template]
-       nanoc create_site [site_name]
-       nanoc create_template [template_name]
+Usage: nanoc [options] [command] [arguments ...]
+
+Commands:
+
+    co, compile
+      Compiles the site.
+      Arguments: path of a single page (optional)
+
+    aco, autocompile
+      Runs the autocompiler.
+      Arguments: none
+      Options: -p, -V
+
+    cl, create_layout
+      Creates a new layout.
+      Arguments: layout name
+      Options: -V
+
+    cp, create_page
+      Creates a new page.
+      Arguments: page name
+      Options: -t, -V
+
+    cs, create_site
+      Creates a new site.
+      Arguments: site name
+      Options: -V
+
+    ct, create_template
+      Creates a new template.
+      Arguments: template name
+      Options: -V
 
 Options:
-    -h, --help          Show this help message and quit.
-    -p, --port          Port the autocompiler should be run on.
-    -t, --template      Template that should be used when creating a page.
-                        (can only be used with create_page)
-    -V, --verbose       Display more verbose log messages.
-    -v, --version       Show the nanoc version number and quit.
+
+    -h, --help            Show this help message and quit.
+    -p, --port            Specify a port number for the autocompiler.
+    -t, --template        Specify a template for creating a page.
+    -V, --verbose         Display more verbose log messages.
+    -v, --version         Show the nanoc version number and quit.
 
 Description:
+
     The 'nanoc' command is used for creating nanoc-powered sites, as well as
-    managing them: creating pages and templates and compiling the site.
+    managing them: creating content and compiling the site.
 
     Read more about nanoc on the site: <http://nanoc.stoneship.org/>
 EOT
 
 # Create site
 
-$nanoc_site = Nanoc::Site.from_cwd
+if File.file?('config.yaml')
+  config = YAML.load_file('config.yaml')
+  $nanoc_site = Nanoc::Site.new(config)
+else
+  $nanoc_site = nil
+end
 
 # Parse options
 
@@ -156,7 +187,7 @@ end
 
 def compile_site
   # Check syntax
-  usage 'nanoc compile' if ARGV.size != 1
+  usage 'nanoc compile' if ARGV.size > 2
 
   # Make sure we are in a nanoc site directory
   unless $nanoc_site
@@ -165,7 +196,7 @@ def compile_site
   end
 
   # Compile site
-  $nanoc_site.compile
+  $nanoc_site.compile(ARGV.size == 1 ? nil : ARGV[1])
 end
 
 def autocompile_site

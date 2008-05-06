@@ -1,0 +1,230 @@
+require 'test/unit'
+
+require File.join(File.dirname(__FILE__), 'helper.rb')
+
+class DataSourceFilesystem2Test < Test::Unit::TestCase
+
+  def setup    ; global_setup    ; end
+  def teardown ; global_teardown ; end
+
+  # Test preparation
+
+  def test_setup
+    in_dir %w{ tmp } do
+      Nanoc::Site.create('site')
+      in_dir %w{ site } do
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+
+        # Remove files
+
+        FileUtils.remove_entry_secure('content/content.txt')
+        FileUtils.remove_entry_secure('content/content.yaml')
+
+        FileUtils.remove_entry_secure('meta.yaml')
+
+        FileUtils.remove_entry_secure('templates/default/default.txt')
+        FileUtils.remove_entry_secure('templates/default/default.yaml')
+
+        FileUtils.remove_entry_secure('layouts/default/default.erb')
+        FileUtils.remove_entry_secure('layouts/default/default.yaml')
+
+        FileUtils.remove_entry_secure('lib/default.rb')
+
+        # Convert site to filesystem2
+
+        open('config.yaml', 'w') { |io| io.write('data_source: filesystem2') }
+
+        # Setup site
+
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.setup
+
+        # Check whether files have been recreated
+
+        assert(File.directory?('content/'))
+        assert(File.file?('content/index.txt'))
+
+        assert(File.file?('meta.yaml'))
+
+        assert(File.directory?('templates/'))
+        assert(File.file?('templates/default.txt'))
+
+        assert(File.directory?('layouts/'))
+        assert(File.file?('layouts/default.erb'))
+
+        assert(File.directory?('lib/'))
+        assert(File.file?('lib/default.rb'))
+      end
+    end
+  end
+
+  # Test loading data
+
+  def test_pages
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal(2, site.pages.size)
+
+        pages = site.pages.sort_by { |page| page.attribute_named(:title) }
+
+        assert_equal('About', pages[0].attribute_named(:title))
+        assert_equal('Home', pages[1].attribute_named(:title))
+      end
+    end
+  end
+
+  def test_page_defaults
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal('html', site.page_defaults[:extension])
+      end
+    end
+  end
+
+  def test_templates
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        assert_equal(
+          [
+            {
+              :name       => 'default',
+              :content    => "This is a new page. Please edit me!",
+              :meta       => "# Built-in\n\n# Custom\ntitle: A New Page",
+              :extension  => '.txt'
+            }
+          ],
+          site.templates
+        )
+      end
+    end
+  end
+
+  def test_layouts
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        layout = site.layouts[0]
+
+        assert_equal('/default/', layout.path)
+        assert_equal('erb', layout.attribute_named(:filter))
+        assert(layout.content.include?('<title><%= @page.title %></title>'))
+      end
+    end
+  end
+
+  def test_code
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+  
+      assert_nothing_raised do
+        assert_match(/# All files in the 'lib' directory will be loaded/, site.code)
+      end
+    end
+  end
+
+  # Test creating data
+
+  def test_create_page
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        begin
+          assert_nothing_raised()   { site.create_page('test1') }
+          assert_raise(SystemExit)  { site.create_page('test1') }
+          assert(File.file?('content/test1.txt'))
+
+          assert_nothing_raised()   { site.create_page('test2/sub') }
+          assert_raise(SystemExit)  { site.create_page('test2/sub') }
+          assert(File.file?('content/test2/sub.txt'))
+
+          site.load_data(true)
+
+          assert_equal(4, site.pages.size)
+          assert(site.pages.any? { |page| page.path == '/test1/' })
+          assert(site.pages.any? { |page| page.path == '/test2/sub/' })
+        ensure
+          FileUtils.remove_entry_secure('content/test1.txt')
+          FileUtils.remove_entry_secure('content/test2')
+        end
+      end
+    end
+  end
+
+  def test_create_template
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        begin
+          assert_nothing_raised()   { site.create_template('test1') }
+          assert_raise(SystemExit)  { site.create_template('test1') }
+          assert(File.file?('templates/test1.txt'))
+
+          site.load_data(true)
+
+          assert_equal(2, site.templates.size)
+          assert(site.templates.any? { |template| template[:name] == 'test1' })
+        ensure
+          FileUtils.remove_entry_secure('templates/test1.txt')
+        end
+      end
+    end
+  end
+
+  def test_create_layout
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      site.load_data
+
+      assert_nothing_raised do
+        begin
+          assert_nothing_raised()   { site.create_layout('test1') }
+          assert_raise(SystemExit)  { site.create_layout('test1') }
+          assert(File.file?('layouts/test1.erb'))
+
+          site.load_data(true)
+
+          assert_equal(2, site.layouts.size)
+          assert(site.layouts.any? { |layout| layout.path == '/test1/' })
+        ensure
+          FileUtils.remove_entry_secure('layouts/test1.erb')
+        end
+      end
+    end
+  end
+
+  # Miscellaneous
+
+  def test_compile_site_with_file_object
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      assert_nothing_raised() { site.compile }
+
+      assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/index.txt').mtime}."))
+    end
+  end
+
+  def test_compile_site_with_backup_files
+    with_site_fixture 'site_with_filesystem2_data_source' do |site|
+      begin
+        FileManager.create_file('content/index.txt~') { '' }
+        FileManager.create_file('layouts/default.erb~') { '' }
+
+        assert_nothing_raised() { site.compile }
+
+        assert_equal(2, site.pages.size)
+        assert_equal(1, site.layouts.size)
+      ensure
+        FileUtils.remove_entry_secure 'content/index.txt~' if File.exist?('content/index.txt~')
+        FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+      end
+    end
+  end
+
+end

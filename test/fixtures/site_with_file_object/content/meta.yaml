@@ -1,7 +1,7 @@
 # Built-in
 filters_pre:
 
-  - "eruby"
+  - "erb"
 
 # Custom
 title: My New Homepage

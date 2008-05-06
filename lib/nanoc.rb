@@ -1,8 +1,8 @@
 module Nanoc
 
-  VERSION = '2.0.4'
+  VERSION = '2.1'
 
-  def self.load_file(*path)
+  def self.load(*path)
     full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
     Dir[File.join(full_path)].each { |f| require f }
   end
@@ -10,15 +10,15 @@ module Nanoc
 end
 
 # Load base
-Nanoc.load_file('base', 'enhancements.rb')
-Nanoc.load_file('base', 'core_ext', '*.rb')
-Nanoc.load_file('base', 'plugin.rb')
-Nanoc.load_file('base', '*.rb')
+Nanoc.load('base', 'enhancements.rb')
+Nanoc.load('base', 'proxy.rb')
+Nanoc.load('base', 'core_ext', '*.rb')
+Nanoc.load('base', 'plugin.rb')
+Nanoc.load('base', '*.rb')
 
 # Load plugins
-Nanoc.load_file('data_sources', '*.rb')
-Nanoc.load_file('filters', '*.rb')
-Nanoc.load_file('layout_processors', '*.rb')
+Nanoc.load('data_sources', '*.rb')
+Nanoc.load('filters', '*.rb')
 
 # Get global binding
 $nanoc_binding = binding

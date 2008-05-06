@@ -34,6 +34,7 @@ class CompilerTest < Test::Unit::TestCase
       assert(File.file?('output/bar.html'))
       assert(!File.file?('output/foo/index.html'))
       assert(!File.file?('output/bar/index.html'))
+      assert_match(/\/bar.html/, File.read('output/index.html'))
     end
   end
 
@@ -168,7 +169,7 @@ class CompilerTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       Nanoc::Site.create('tmp_site')
       in_dir %w{ tmp_site } do
-        site = Nanoc::Site.from_cwd
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
         assert(site)
         assert_nothing_raised() { site.compile }
 

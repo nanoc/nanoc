@@ -14,21 +14,19 @@ class FilterHamlTest < Test::Unit::TestCase
           site.load_data
 
           # Get filter
-          page  = site.pages.first.to_proxy
-          pages = site.pages.map { |p| p.to_proxy }
-          filter = ::Nanoc::Filter::Haml::HamlFilter.new(page, pages, site.config, site)
+          filter = ::Nanoc::Filters::Haml.new(site.pages.first.to_proxy, site)
 
-          # Run filter
+          # Run filter (no assigns)
           result = filter.run('%html')
           assert_equal("<html>\n</html>\n", result)
 
-          # Run filter
-          result = filter.run('%h1= page.title')
-          assert_equal("<h1>My New Homepage</h1>\n", result)
+          # Run filter (assigns without @)
+          result = filter.run('%p= page.title')
+          assert_equal("<p>My New Homepage</p>\n", result)
 
-          # Run filter
-          result = filter.run('%h1= @page.title')
-          assert_equal("<h1>My New Homepage</h1>\n", result)
+          # Run filter (assigns with @)
+          result = filter.run('%p= @page.title')
+          assert_equal("<p>My New Homepage</p>\n", result)
         end
       end
     end
