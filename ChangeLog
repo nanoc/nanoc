@@ -35,7 +35,6 @@ Removed:
 * Fixed default.rb's `html_escape`
 * Updated Haml filter and layout processor so that @page, @pages and @config
   are now available as instance variables instead of local variables
->>>>>>> other
 
 2.0.3
 -----
