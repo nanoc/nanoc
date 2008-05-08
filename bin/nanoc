@@ -50,6 +50,7 @@ Commands:
 
 Options:
 
+    -a, --all             Compiles all pages, even those that aren't outdated.
     -h, --help            Show this help message and quit.
     -p, --port            Specify a port number for the autocompiler.
     -t, --template        Specify a template for creating a page.
@@ -67,8 +68,7 @@ EOT
 # Create site
 
 if File.file?('config.yaml')
-  config = YAML.load_file('config.yaml')
-  $nanoc_site = Nanoc::Site.new(config)
+  $nanoc_site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 else
   $nanoc_site = nil
 end
@@ -76,6 +76,7 @@ end
 # Parse options
 
 opts = GetoptLong.new(
+  [ '--all',      '-a', GetoptLong::NO_ARGUMENT ],
   [ '--help',     '-h', GetoptLong::NO_ARGUMENT ],
   [ '--port',     '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--template', '-t', GetoptLong::REQUIRED_ARGUMENT ],
@@ -196,7 +197,7 @@ def compile_site
   end
 
   # Compile site
-  $nanoc_site.compile(ARGV.size == 1 ? nil : ARGV[1])
+  $nanoc_site.compile(ARGV.size == 1 ? nil : ARGV[1], $unprocessed_opts.has_key?('--all'))
 end
 
 def autocompile_site

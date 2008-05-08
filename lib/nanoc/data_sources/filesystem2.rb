@@ -152,7 +152,7 @@ module Nanoc::DataSources
           end
 
           # Build page
-          Nanoc::Page.new(content, meta.merge(:file => FileProxy.new(filename)), path)
+          Nanoc::Page.new(content, meta.merge(:file => FileProxy.new(filename)), path, File.stat(filename).mtime)
         end.compact
       end
 

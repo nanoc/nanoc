@@ -17,10 +17,12 @@ module Nanoc
     attr_accessor :parent, :children, :site
 
     # Creates a new page.
-    def initialize(content, attributes, path)
+    def initialize(content, attributes, path, mtime=nil)
       @attributes     = attributes
       @content        = { :pre => content, :post => nil }
       @path           = path.cleaned_path
+
+      @mtime          = mtime
 
       @parent         = nil
       @children       = []
@@ -40,6 +42,12 @@ module Nanoc
     # session, false otherwise.
     def modified?
       @modified
+    end
+
+    # Returns true if the source page is newer than the compiled page, false
+    # otherwise.
+    def outdated?
+      !File.file?(path_on_filesystem) or @mtime.nil? or @mtime > File.stat(path_on_filesystem).mtime
     end
 
     # Returns the attribute with the given name.

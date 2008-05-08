@@ -141,7 +141,7 @@ module Nanoc
     # Compiles the site (calls Nanoc::Compiler#run for the site's compiler)
     # and writes the compiled site to the output directory specified in the
     # site configuration file.
-    def compile(path=nil)
+    def compile(path=nil, all=false)
       load_data
 
       # Find page with given path
@@ -152,7 +152,7 @@ module Nanoc
         error "The '/#{path.gsub(/^\/|\/$/, '')}/' page was not found; aborting." if page.nil?
       end
 
-      @compiler.run(page)
+      @compiler.run(page, all)
     end
 
     # Starts the autocompiler (calls Nanoc::AutoCompiler#start) on the
