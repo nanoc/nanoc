@@ -122,25 +122,31 @@ module Nanoc::DataSources
       # 'foo' can have an 'index.txt' content file and a 'meta.yaml' meta file.
       # This is to preserve backward compatibility.
       def pages
-        meta_filenames('content').map do |filename|
+        meta_filenames('content').map do |meta_filename|
           # Read metadata
-          meta = (YAML.load_file(filename) || {}).clean
+          meta = (YAML.load_file(meta_filename) || {}).clean
 
           if meta[:is_draft]
             # Skip drafts
             nil
           else
-            # Get extra info
-            path              = filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
-            content_filename  = content_filename_for_dir(File.dirname(filename))
-            extras            = {
-              :path               => path,
-              :file               => FileProxy.new(content_filename),
-              :uncompiled_content => File.read(content_filename)
-            }
+            # Get content
+            content_filename = content_filename_for_dir(File.dirname(meta_filename))
+            content = File.read(content_filename)
 
-            # Add to list of pages
-            meta.merge(extras)
+            # Get attributes
+            attributes = meta.merge(:file => FileProxy.new(content_filename))
+
+            # Get path
+            path = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
+
+            # Get modification times
+            meta_mtime    = File.stat(meta_filename).mtime
+            content_mtime = File.stat(content_filename).mtime
+            oldest_mtime  = meta_mtime < content_mtime ? meta_mtime : content_mtime
+
+            # Create page object
+            Nanoc::Page.new(content, attributes, path, oldest_mtime)
           end
         end.compact
       end

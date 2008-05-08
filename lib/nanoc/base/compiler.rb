@@ -12,7 +12,7 @@ module Nanoc
 
     # Compiles the site. When the +page+ argument is nil, compiles the entire
     # site; compiles only the specified page (and dependencies) otherwise.
-    def run(page=nil)
+    def run(page=nil, all=false)
       # Give feedback
       log(:high, "Compiling #{page.nil? ? 'site' : 'page'}...")
       time_before = Time.now
@@ -25,7 +25,7 @@ module Nanoc
       pages = (page.nil? ? @site.pages : [ page ])
       pages.each do |current_page|
         begin
-          current_page.compile
+          current_page.compile if current_page.outdated? or all
         rescue => exception
           handle_exception(exception, current_page, !page.nil?)
         end
