@@ -143,7 +143,7 @@ module Nanoc::DataSources
             # Get modification times
             meta_mtime    = File.stat(meta_filename).mtime
             content_mtime = File.stat(content_filename).mtime
-            oldest_mtime  = meta_mtime < content_mtime ? meta_mtime : content_mtime
+            oldest_mtime  = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
             # Create page object
             Nanoc::Page.new(content, attributes, path, oldest_mtime)
