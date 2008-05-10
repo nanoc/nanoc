@@ -246,7 +246,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         recent_past  = Time.parse('1998-05-18')
         now          = Time.now
 
-        ########## INITIAL OUTPUT FILE GENERATIOn
+        ########## INITIAL OUTPUT FILE GENERATION
 
         # Compile
         site.load_data(true)
@@ -255,6 +255,8 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         ########## EVERYTHING UP TO DATE
 
         # Update file mtimes
+        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
@@ -269,8 +271,10 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         ########## RECENT CONTENT AND META FILES
 
         # Update file mtimes
-        File.utime(now, now, 'content/content.txt')
-        File.utime(now, now, 'content/content.yaml')
+        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
+        File.utime(now,          now,          'content/content.txt')
+        File.utime(now,          now,          'content/content.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -283,6 +287,8 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         ########## RECENT META FILE
 
         # Update file mtimes
+        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(now,          now,          'content/content.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
@@ -297,7 +303,41 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         ########## RECENT CONTENT FILE
 
         # Update file mtimes
+        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
         File.utime(now,          now,          'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT LAYOUT CONTENT FILE
+
+        # Update file mtimes
+        File.utime(now,          now,          'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
+        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT LAYOUT META FILE
+
+        # Update file mtimes
+        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(now,          now,          'layouts/default/default.yaml')
+        File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
