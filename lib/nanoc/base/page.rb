@@ -15,6 +15,7 @@ module Nanoc
     }
 
     attr_accessor :parent, :children, :site
+    attr_reader   :mtime
 
     # Creates a new page.
     def initialize(content, attributes, path, mtime=nil)
@@ -47,7 +48,20 @@ module Nanoc
     # Returns true if the source page is newer than the compiled page, false
     # otherwise.
     def outdated?
-      !File.file?(path_on_filesystem) or @mtime.nil? or @mtime > File.stat(path_on_filesystem).mtime
+      # Outdated if compiled file doesn't exist
+      return true if !File.file?(path_on_filesystem)
+
+      # Outdated if we don't know
+      return true if @mtime.nil?
+
+      # Outdated if file too old
+      return true if @mtime > File.stat(path_on_filesystem).mtime
+
+      # Outdated if layout outdated
+      layout = @site.layout_with_path(attribute_named(:layout).cleaned_path)
+      return true if layout.outdated?
+
+      return false
     end
 
     # Returns the attribute with the given name.
