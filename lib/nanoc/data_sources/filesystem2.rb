@@ -144,6 +144,9 @@ module Nanoc::DataSources
           # Skip drafts
           return nil if meta[:is_draft]
 
+          # Get attributes
+          attributes = meta.merge(:file => FileProxy.new(filename))
+
           # Get actual path
           if filename =~ /\/index\.[^\/]+$/
             path = filename.sub(/^content/, '').sub(/index\.[^\/]+$/, '') + '/'
@@ -151,8 +154,11 @@ module Nanoc::DataSources
             path = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
           end
 
+          # Get mtime
+          mtime = File.stat(filename).mtime
+
           # Build page
-          Nanoc::Page.new(content, meta.merge(:file => FileProxy.new(filename)), path, File.stat(filename).mtime)
+          Nanoc::Page.new(content, attributes, path, mtime)
         end.compact
       end
 
@@ -172,8 +178,11 @@ module Nanoc::DataSources
           # Get actual path
           path = filename.sub(/^layouts\//, '').sub(/\.[^\/]+$/, '')
 
+          # Get mtime
+          mtime = File.stat(filename).mtime
+
           # Build layout
-          Nanoc::Layout.new(content, meta, path)
+          Nanoc::Layout.new(content, meta, path, mtime)
         end.compact
       end
 
