@@ -100,27 +100,28 @@ module Nanoc::DataSources
 
       ########## Loading data ##########
 
-      # The filesystem data source stores its pages in nested directories. Each
-      # directory represents a single page. The root directory is the 'content'
-      # directory.
-      # 
+      # The filesystem data source stores its pages in nested directories.
+      # Each directory represents a single page. The root directory is the
+      # 'content' directory.
+      #
       # Every directory has a content file and a meta file. The content file
       # contains the actual page content, while the meta file contains the
       # page's metadata.
-      # 
+      #
       # Both content files and meta files are named after its parent directory
-      # (i.e. page). For example, a page named 'foo' will have a directory named
-      # 'foo', with e.g. a 'foo.markdown' content file and a 'foo.yaml' meta
-      # file.
-      # 
-      # Content file extensions are ignored by nanoc. The content file extension
-      # does not determine the filters to run on it; the meta file defines the
-      # list of filters. The meta file extension must always be 'yaml', though.
-      # 
-      # Content files can also have the 'index' basename. Similarly, meta files
-      # can have the 'meta' basename. For example, a parent directory named
-      # 'foo' can have an 'index.txt' content file and a 'meta.yaml' meta file.
-      # This is to preserve backward compatibility.
+      # (i.e. page). For example, a page named 'foo' will have a
+      # directorynamed 'foo', with e.g. a 'foo.markdown' content file and a
+      # 'foo.yaml' meta file.
+      #
+      # Content file extensions are ignored by nanoc. The content file
+      # extension does not determine the filters to run on it; the meta file
+      # defines the list of filters. The meta file extension must always be
+      # 'yaml', though.
+      #
+      # Content files can also have the 'index' basename. Similarly, meta
+      # files can have the 'meta' basename. For example, a parent directory
+      # named 'foo' can have an 'index.txt' content file and a 'meta.yaml'
+      # meta file. This is to preserve backward compatibility.
       def pages
         meta_filenames('content').map do |meta_filename|
           # Read metadata
@@ -156,12 +157,10 @@ module Nanoc::DataSources
         (YAML.load_file('meta.yaml') || {}).clean
       end
 
-      # FIXME update the comment
-      # Layouts are stored as files in the 'layouts' directory. Each layout has
-      # a basename (the part before the extension) and an extension. Unlike page
-      # content files, the extension _is_ used for determining the layout
-      # processor; which extension maps to which layout processor is defined in
-      # the layout processors.
+      # Layouts are stored as directories in the 'layouts' directory. Each
+      # layout contains a content file and a meta file. The content file
+      # contain the actual layout, and the meta file describes how the page
+      # should be handled (contains the filter that should be used).
       def layouts
         # Determine what layout directory structure is being used
         dir_count = Dir["layouts/*"].select { |f| File.directory?(f) }.size
@@ -170,8 +169,8 @@ module Nanoc::DataSources
         if is_old_school
           # Warn about deprecation
           # TODO fix URL
-          warn('nanoc 2.1 changes the way layouts are stored. Please see XXX ' +
-               'for details on how to adjust your site.')
+          warn('nanoc 2.1 changes the way layouts are stored. Please see ' +
+               'XXX for details on how to adjust your site.')
 
           Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
             # Get content
@@ -212,10 +211,10 @@ module Nanoc::DataSources
         end
       end
 
-      # Templates are located in the 'templates' directroy. Every template is a
-      # directory consisting of a content file and a meta file, both named after
-      # the template. This is very similar to the way pages are stored, except
-      # that templates cannot be nested.
+      # Templates are located in the 'templates' directroy. Every template is
+      # a directory consisting of a content file and a meta file, both named
+      # after the template. This is very similar to the way pages are stored,
+      # except that templates cannot be nested.
       def templates
         meta_filenames('templates').map do |filename|
           # Get template name
