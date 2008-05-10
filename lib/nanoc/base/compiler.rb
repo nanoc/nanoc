@@ -26,7 +26,7 @@ module Nanoc
       pages.each do |current_page|
         begin
           current_page.compile if current_page.outdated? or all
-        rescue => exception
+        rescue Exception => exception
           handle_exception(exception, current_page, !page.nil?)
         end
       end
