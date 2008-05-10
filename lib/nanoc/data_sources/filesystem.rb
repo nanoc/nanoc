@@ -143,10 +143,10 @@ module Nanoc::DataSources
             # Get modification times
             meta_mtime    = File.stat(meta_filename).mtime
             content_mtime = File.stat(content_filename).mtime
-            oldest_mtime  = meta_mtime > content_mtime ? meta_mtime : content_mtime
+            mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
             # Create page object
-            Nanoc::Page.new(content, attributes, path, oldest_mtime)
+            Nanoc::Page.new(content, attributes, path, mtime)
           end
         end.compact
       end
@@ -156,6 +156,7 @@ module Nanoc::DataSources
         (YAML.load_file('meta.yaml') || {}).clean
       end
 
+      # FIXME update the comment
       # Layouts are stored as files in the 'layouts' directory. Each layout has
       # a basename (the part before the extension) and an extension. Unlike page
       # content files, the extension _is_ used for determining the layout
@@ -169,31 +170,44 @@ module Nanoc::DataSources
         if is_old_school
           # Warn about deprecation
           # TODO fix URL
-          warn('nanoc 2.1 changes the way layouts are stored. Please see XXX' +
+          warn('nanoc 2.1 changes the way layouts are stored. Please see XXX ' +
                'for details on how to adjust your site.')
 
           Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
-            # Get layout details
-            extension = File.extname(filename)
-            name      = File.basename(filename, extension)
-            content   = File.read(filename)
+            # Get content
+            content = File.read(filename)
 
-            # Build hash for layout
-            { :name => name, :content => content, :extension => extension }
+            # Get attributes
+            attributes = { :extension => File.extname(filename)}
+
+            # Get path
+            path = File.basename(filename, attributes[:extension])
+
+            # Get modification time
+            mtime = File.stat(filename).mtime
+
+            # Create layout object
+            Nanoc::Layout.new(content, attributes, path, mtime)
           end
         else
-          meta_filenames('layouts').map do |filename|
-            # Read metadata
-            meta = (YAML.load_file(filename) || {}).clean
- 
-            # Get extra info
-            extras      = {
-              :name     => filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, ''),
-              :content  => File.read(content_filename_for_dir(File.dirname(filename)))
-            }
+          meta_filenames('layouts').map do |meta_filename|
+            # Get content
+            content_filename  = content_filename_for_dir(File.dirname(meta_filename))
+            content           = File.read(content_filename)
 
-            # Add to list of pages
-            meta.merge(extras)
+            # Get attributes
+            attributes = (YAML.load_file(meta_filename) || {}).clean
+
+            # Get path
+            path = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
+ 
+            # Get modification times
+            meta_mtime    = File.stat(meta_filename).mtime
+            content_mtime = File.stat(content_filename).mtime
+            mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
+
+            # Create layout object
+            Nanoc::Layout.new(content, attributes, path, mtime)
           end
         end
       end
