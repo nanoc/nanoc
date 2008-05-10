@@ -8,24 +8,26 @@ New:
 
 * Maruku filter
 * Erubis filter
-* The Haml filter now provides @page, @pages and @config variables
 * The `compile` command now takes an optional path, so you can compile
   a single page instead of the entire site if you want
 * Better source code documentation
+* A new filesystem data source named "filesystem2", which stores pages and
+  layouts in single files instead of directories
 
 Changed:
 
-* Updated Haml filter so it uses Haml 1.8.0 now (older versions will not work)
 * Layout processors and filters have been merged, so you don't have to write
   the same code twice
 * Layouts no longer rely on file extensions to determine the layout processor
   used, and layouts are now stored in directories instead of simple files
+* nanoc will no longer compile already compiled pages, unless they have been
+  updated in the mean time.
 
 Removed:
 
 * The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
-  `erb` (for embedded Ruby), `bluecloth` (for Markdown) and `redcloth` (for
-  Markdown and Textile)
+  `erb` or `erubis` (for embedded Ruby), `bluecloth` or `maruku` (for
+  Markdown) and `redcloth` (for Markdown and Textile)
 * The database and trivial data sources are no longer included in the standard
   nanoc distribution, but you can get them from the plugins repository now.
 
