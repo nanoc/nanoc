@@ -73,7 +73,7 @@ module Nanoc::DataSources
         # Create layout
         FileManager.create_file 'layouts/default.erb'  do
           "-----\n" +
-          "filter: 'erb'\n"
+          "filter: 'erb'\n" +
           "-----\n" +
           "<html>\n" +
           "  <head>\n" +
