@@ -79,7 +79,7 @@ module Nanoc
       end
 
       # Load code
-      eval(@code, $nanoc_binding)
+      eval(@code, TOPLEVEL_BINDING)
 
       # Setup child-parent links
       @pages.each do |page|
