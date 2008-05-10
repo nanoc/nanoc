@@ -351,4 +351,25 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  # NOTE: This test works (and passes), but is very slow and resource-hungry.
+
+  # def test_compile_huge_site
+  #   in_dir %w{ tmp } do
+  #     Nanoc::Site.create('site')
+  # 
+  #     in_dir %w{ site } do
+  #       # Create 10,000 pages
+  #       (1..10000).each do |i|
+  #         FileUtils.mkdir("content/#{i}")
+  #         File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is page #{i}." }
+  #         File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Page #{i}"   }
+  #       end
+  # 
+  #       # Load and compile site
+  #       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+  #       assert_nothing_raised() { site.compile }
+  #     end
+  #   end
+  # end
+
 end
