@@ -231,4 +231,84 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  def test_compile_outdated_site
+    # Threshold for mtimes in which files will be considered the same
+    threshold = 2.0
+
+    in_dir %w{ tmp } do
+      Nanoc::Site.create('site')
+
+      in_dir %w{ site } do
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+
+        # Get timestamps
+        distant_past = Time.parse('1992-10-14')
+        recent_past  = Time.parse('1998-05-18')
+        now          = Time.now
+
+        ########## INITIAL OUTPUT FILE GENERATIOn
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        ########## EVERYTHING UP TO DATE
+
+        # Update file mtimes
+        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (shouldn't have changed)
+        assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT CONTENT AND META FILES
+
+        # Update file mtimes
+        File.utime(now, now, 'content/content.txt')
+        File.utime(now, now, 'content/content.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT META FILE
+
+        # Update file mtimes
+        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(now,          now,          'content/content.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT CONTENT FILE
+
+        # Update file mtimes
+        File.utime(now,          now,          'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+      end
+    end
+  end
+
 end
