@@ -37,14 +37,8 @@ module Nanoc
       # Get pages for this layout
       pages = @site.pages.select { |p| p.layout == self }
 
-      # Get mtimes for pages for this layout
-      compiled_page_mtimes = pages.map do |page|
-        path = page.path_on_filesystem
-        File.file?(path) ? File.stat(path).mtime : nil
-      end.compact
-
       # Check if there are any newer pages
-      compiled_page_mtimes.any? { |compiled_page_mtime| @mtime > compiled_page_mtime }
+      pages.map { |p| p.compiled_mtime }.compact.any? { |mtime| @mtime > mtime }
     end
 
     # Returns the attribute with the given name.

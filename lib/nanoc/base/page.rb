@@ -119,6 +119,12 @@ module Nanoc
       end
     end
 
+    # Returns the modification time of the compiled page if it exists, nil otherwise.
+    def compiled_mtime
+      compiled_path = path_on_filesystem
+      File.exist?(compiled_path) ? File.stat(compiled_path).mtime : nil
+    end
+
     # Compiles the page. Will layout and post-filter the page, unless +full+
     # is false.
     def compile(full=true)
