@@ -19,15 +19,17 @@ module Nanoc
 
     # Creates a new page.
     def initialize(content, attributes, path, mtime=nil)
+      # Set primary attributes
       @attributes     = attributes
       @content        = { :pre => content, :post => nil }
       @path           = path.cleaned_path
-
       @mtime          = mtime
 
+      # Start disconnected
       @parent         = nil
       @children       = []
 
+      # Reset flags
       @filtered_pre   = false
       @laid_out       = false
       @filtered_post  = false
@@ -58,7 +60,6 @@ module Nanoc
       return true if @mtime > File.stat(path_on_filesystem).mtime
 
       # Outdated if layout outdated
-      layout = @site.layout_with_path(attribute_named(:layout).cleaned_path)
       return true if layout.outdated?
 
       return false
@@ -75,6 +76,15 @@ module Nanoc
     def content
       compile(false) unless @filtered_pre
       @content[:pre]
+    end
+
+    # Returns the page's layout
+    def layout
+      # Find layout
+      @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
+      error 'Unknown layout: ' + attribute_named(:layout) if @layout.nil?
+
+      @layout
     end
 
     # Returns the page's pre-filtered, laid out and post-filtered content.
@@ -116,19 +126,19 @@ module Nanoc
 
       # Filter pre
       unless @filtered_pre
-        filter(:pre)
+        filter!(:pre)
         @filtered_pre = true
       end
 
       # Layout
       if !@laid_out and full
-        layout
+        layout!
         @laid_out = true
       end
 
       # Filter post
       if !@filtered_post and full
-        filter(:post)
+        filter!(:post)
         @filtered_post = true
       end
 
@@ -143,7 +153,7 @@ module Nanoc
 
   private
 
-    def filter(stage)
+    def filter!(stage)
       # Get filters
       error 'The `filters` property is no longer supported; please use `filters_pre` instead.' unless attribute_named(:filters).nil?
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
@@ -159,16 +169,12 @@ module Nanoc
       end
     end
 
-    def layout
+    def layout!
       # Don't layout if not necessary
       if attribute_named(:layout).nil?
         @content[:post] = @content[:pre]
         return
       end
-
-      # Find layout
-      layout = @site.layout_with_path(attribute_named(:layout).cleaned_path)
-      error 'Unknown layout: ' + attribute_named(:layout) if layout.nil?
 
       # Find layout processor
       filter_class = layout.filter_class
