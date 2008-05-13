@@ -23,8 +23,8 @@ module Nanoc
       # Outdated if we don't know
       return true if @mtime.nil?
 
-      # Check if there are newer pages
-      @site.pages.any? { |p| !p.mtime.nil? and @mtime > p.mtime }
+      # Check if there are any newer pages
+      @site.pages.map { |p| p.compiled_mtime }.compact.any? { |mtime| @mtime > mtime }
     end
 
   end
