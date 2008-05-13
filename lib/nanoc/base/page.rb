@@ -60,7 +60,7 @@ module Nanoc
       return true if @mtime > File.stat(path_on_filesystem).mtime
 
       # Outdated if layout outdated
-      return true if layout.outdated?
+      return true if (!layout.nil? and layout.outdated?)
 
       return false
     end
@@ -80,6 +80,9 @@ module Nanoc
 
     # Returns the page's layout
     def layout
+      # Check whether layout is present
+      return nil if attribute_named(:layout).nil?
+
       # Find layout
       @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
       error 'Unknown layout: ' + attribute_named(:layout) if @layout.nil?

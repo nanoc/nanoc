@@ -29,7 +29,7 @@ module Nanoc
       return true if @mtime.nil?
 
       # Get pages for this layout
-      pages = @site.pages.select { |p| p.attribute_named(:layout).cleaned_path == @path }
+      pages = @site.pages.select { |p| p.layout == self }
 
       # Get mtimes for pages for this layout
       compiled_page_mtimes = pages.map do |page|
