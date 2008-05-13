@@ -167,11 +167,6 @@ module Nanoc
       @data_source.loading { @data_source.setup }
     end
 
-    # Returns the layout with the given path.
-    def layout_with_path(path)
-      @layouts.find { |l| l.path == path }
-    end
-
     # Creates a new blank page (calls DataSource#create_page) with the given
     # page path (+path+) and with the given template name (+template_name+).
     def create_page(path, template_name='default')
