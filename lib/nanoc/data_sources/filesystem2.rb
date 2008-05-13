@@ -222,7 +222,14 @@ module Nanoc::DataSources
       # Code is stored in '.rb' files in the 'lib' directory. Code can reside
       # in sub-directories.
       def code
-        Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
+        # Get data
+        data = Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
+
+        # Get modification time
+        mtime = Dir['lib/**/*.rb'].map { |filename| File.stat(filename).mtime }.inject { |memo, mtime| memo > mtime ? mtime : memo}
+
+        # Build code
+        Nanoc::Code.new(data, mtime)
       end
 
       ########## Creating data ##########
