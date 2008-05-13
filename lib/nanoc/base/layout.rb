@@ -1,4 +1,9 @@
 module Nanoc
+
+  # A Layout represents a layout in a nanoc site. It has content, attributes
+  # (for determining which filter to use for laying out a page), a path
+  # (because layouts are organised hierarchically), and a modification time
+  # (to speed up compilation).
   class Layout
 
     # Default values for layouts.
@@ -17,7 +22,7 @@ module Nanoc
       @mtime      = mtime
     end
 
-    # Returns a proxy for this layout.
+    # Returns a proxy (LayoutProxy) for this layout.
     def to_proxy
       @proxy ||= LayoutProxy.new(self)
     end
@@ -57,4 +62,5 @@ module Nanoc
     end
 
   end
+
 end
