@@ -1,4 +1,8 @@
 module Nanoc
+
+  # A Page represents a page in a nanoc site. It has content and attributes,
+  # as well as a path. It can also store the modification time to speed up
+  # compilation.
   class Page
 
     # Default values for pages.
@@ -17,7 +21,10 @@ module Nanoc
     attr_accessor :parent, :children, :site
     attr_reader   :mtime
 
-    # Creates a new page.
+    # Creates a new page. +content+ is the actual content of the page.
+    # +attributes+ is a hash containing metadata for the page. +path+ is the
+    # path of the page relative to the web root. +mtime+ is the time when the
+    # page was last modified (optional).
     def initialize(content, attributes, path, mtime=nil)
       # Set primary attributes
       @attributes     = attributes
@@ -36,7 +43,7 @@ module Nanoc
       @written        = false
     end
 
-    # Returns a proxy for this page.
+    # Returns a proxy (PageProxy) for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
     end
@@ -48,7 +55,7 @@ module Nanoc
     end
 
     # Returns true if the source page is newer than the compiled page, false
-    # otherwise.
+    # otherwise. Will also return false if there is no modification time set.
     def outdated?
       # Outdated if compiled file doesn't exist
       return true if !File.file?(path_on_filesystem)
@@ -70,7 +77,7 @@ module Nanoc
 
     # Returns the attribute with the given name.
     def attribute_named(name)
-      return @attributes[name]  if @attributes.has_key?(name)
+      return @attributes[name] if @attributes.has_key?(name)
       return @site.page_defaults.attributes[name] if @site.page_defaults.attributes.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
@@ -81,7 +88,7 @@ module Nanoc
       @content[:pre]
     end
 
-    # Returns the page's layout
+    # Returns the page's layout.
     def layout
       # Check whether layout is present
       return nil if attribute_named(:layout).nil?
@@ -192,4 +199,5 @@ module Nanoc
     end
 
   end
+
 end

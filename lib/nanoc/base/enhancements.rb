@@ -45,11 +45,13 @@ def render(name_or_path, other_assigns={})
   filter.run(layout.content)
 end
 
-# Transforms string into an actual path
 class String
+
+  # Transforms string into an actual path
   def cleaned_path
     "/#{self}/".gsub(/^\/+|\/+$/, '/')
   end
+
 end
 
 # Convenience function for cd'ing in and out of a directory

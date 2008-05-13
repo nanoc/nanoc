@@ -3,6 +3,9 @@ module Nanoc
   # Nanoc::PageProxy is a proxy object for a Nanoc::Page object.
   class PageProxy < Proxy
 
+    # Requests the attribute with the given name. +key+ can be a string or a
+    # symbol, and it can contain a trailing question mark (which will be
+    # stripped).
     def [](key)
       real_key = key.to_s.sub(/\?$/, '').to_sym
 
