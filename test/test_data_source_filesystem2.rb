@@ -124,7 +124,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
       site.load_data
   
       assert_nothing_raised do
-        assert_match(/# All files in the 'lib' directory will be loaded/, site.code)
+        assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
       end
     end
   end
