@@ -66,11 +66,10 @@ module Nanoc
       # Outdated if file too old
       return true if @mtime > File.stat(path_on_filesystem).mtime
 
-      # Outdated if layout outdated
+      # Outdated if dependencies outdated
       return true if (!layout.nil? and layout.outdated?)
-
-      # Outdated if page defaults outdated
       return true if @site.page_defaults.outdated?
+      return true if @site.code.outdated?
 
       return false
     end

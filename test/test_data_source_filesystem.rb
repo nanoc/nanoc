@@ -267,6 +267,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -284,6 +285,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(now,          now,          'content/content.txt')
         File.utime(now,          now,          'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -301,6 +303,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(now,          now,          'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -318,6 +321,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(now,          now,          'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -335,6 +339,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -352,6 +357,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -369,6 +375,25 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         File.utime(distant_past, distant_past, 'content/content.txt')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(now,          now,          'meta.yaml')
+        File.utime(distant_past, distant_past, 'lib/default.rb')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT CODE
+
+        # Update file mtimes
+        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
+        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.yaml')
+        File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(now,          now,          'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
