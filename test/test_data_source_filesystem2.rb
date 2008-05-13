@@ -205,6 +205,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_filesystem2_data_source' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
 
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/index.txt').mtime}."))
     end
@@ -216,6 +217,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
         FileManager.create_file('content/index.txt~') { '' }
         FileManager.create_file('layouts/default.erb~') { '' }
 
+        assert_nothing_raised() { site.compile }
         assert_nothing_raised() { site.compile }
 
         assert_equal(2, site.pages.size)

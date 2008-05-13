@@ -196,6 +196,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         assert_nothing_raised() { site.compile }
+        assert_nothing_raised() { site.compile }
 
         assert(File.file?('output/index.html'))
         assert_match(/<h1>&lt;Hello&gt;<\/h1>/, File.read('output/index.html'))
@@ -206,6 +207,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_file_object' do |site|
       assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))
@@ -216,7 +218,10 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     with_site_fixture 'site_with_backup_files' do |site|
       FileManager.create_file('content/content.txt~') { '' }
       FileManager.create_file('layouts/default.erb~') { '' }
+
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('content/content.txt~')
       FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
     end
@@ -225,6 +230,8 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   def test_compile_site_with_new_layout_structure
     with_site_fixture 'site_with_new_layout_structure' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert(File.read('output/index.html').include?('<div class="supercool">Blah blah blah this is a page blah blah blah.</div>'))
