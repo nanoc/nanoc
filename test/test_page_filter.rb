@@ -10,6 +10,8 @@ class PageFilterTest < Test::Unit::TestCase
   def test_compile_site_with_filters
     with_site_fixture 'site_with_filters' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert_equal(2, Dir["output/*"].size)
       assert(File.file?('output/index.html'))
       assert(File.file?('output/foo/index.html'))
@@ -21,6 +23,8 @@ class PageFilterTest < Test::Unit::TestCase
   def test_compile_site_with_custom_filters
     with_site_fixture 'site_with_custom_filters' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert_match(/nanoc rocks/, File.read('output/index.html'))
@@ -30,6 +34,8 @@ class PageFilterTest < Test::Unit::TestCase
   def test_compile_site_with_post_filters
     with_site_fixture 'site_with_post_filters' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert_match(/<p>First pass<\/p>/, File.read('output/index.html'))
@@ -40,6 +46,8 @@ class PageFilterTest < Test::Unit::TestCase
   def test_compile_site_with_layouts_variable
     with_site_fixture 'site_with_layouts_variable' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert(File.read('output/index.html').include?('<p>The cool layouts are /bar/, /foo/.</p>'))

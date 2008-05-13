@@ -10,6 +10,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_empty_site
     with_site_fixture 'empty_site' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert_equal(1, Dir["output/*"].size)
       assert(File.file?('output/index.html'))
       assert(!File.file?('output/moo/index.html'))
@@ -19,6 +21,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_one_page
     with_site_fixture 'site_with_one_page' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert_equal(2, Dir["output/*"].size)
       assert(File.file?('output/index.html'))
       assert(File.file?('output/moo/index.html'))
@@ -27,6 +31,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_paths
     with_site_fixture 'site_with_custom_paths' do |site|
+      assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
       assert_equal(2, Dir["output/*"].size)
@@ -41,6 +46,7 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_custom_extensions
     with_site_fixture 'site_with_custom_extensions' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
 
       assert_equal(1, Dir["output/*"].size)
       assert(!File.file?('output/index.html'))
@@ -50,6 +56,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_output_dir
     with_site_fixture 'site_with_custom_output_dir' do |site|
+      assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
       assert_equal(0, Dir["output/*"].size)
@@ -65,6 +72,7 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_cool_content_file_names
     with_site_fixture 'site_with_cool_content_file_names' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
 
       assert_equal(2, Dir["output/*"].size)
       assert(File.file?('output/index.html'))
@@ -74,6 +82,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_draft_pages
     with_site_fixture 'site_with_draft_pages' do |site|
+      assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
       assert_equal(1, Dir["output/*"].size)
@@ -85,6 +94,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_double_extensions
     with_site_fixture 'site_with_double_extensions' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
     end
@@ -93,6 +104,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_page_dot_notation
     with_site_fixture 'site_with_page_dot_notation' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir["output/*"].size)
       assert_match(/<title>Foobar<\/title>/, File.read('output/index.html'))
@@ -105,6 +118,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_page_id_links
     with_site_fixture 'site_with_page_id_links' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert(File.file?('output/about/index.html'))
       assert(File.file?('output/blog/index.html'))
@@ -117,6 +132,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_non_outputed_pages
     with_site_fixture 'site_with_non_outputed_pages' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/index.html'))
       assert(!File.file?('output/hidden/index.html'))
       assert_equal(1, Dir["output/*"].size)
@@ -126,6 +143,8 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_custom_filename
     with_site_fixture 'site_with_custom_filename' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
+
       assert(File.file?('output/default.html'))
       assert_equal(1, Dir["output/*"].size)
     end
@@ -139,6 +158,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_parent_children_links
     with_site_fixture 'site_with_parent_children_links' do |site|
+      assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
@@ -156,6 +176,7 @@ class CompilerTest < Test::Unit::TestCase
   def test_compile_site_with_content_from_other_page
     with_site_fixture 'site_with_content_from_other_page' do |site|
       assert_nothing_raised() { site.compile }
+      assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
       assert(File.file?('output/foo/index.html'))
@@ -171,6 +192,7 @@ class CompilerTest < Test::Unit::TestCase
       in_dir %w{ tmp_site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
         assert(site)
+        assert_nothing_raised() { site.compile }
         assert_nothing_raised() { site.compile }
 
         assert_equal(1, Dir["output/*"].size)
