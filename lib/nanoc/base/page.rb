@@ -55,7 +55,7 @@ module Nanoc
     end
 
     # Returns true if the source page is newer than the compiled page, false
-    # otherwise. Will also return false if there is no modification time set.
+    # otherwise. Also returns false if the page modification time isn't known.
     def outdated?
       # Outdated if compiled file doesn't exist
       return true if !File.file?(path_on_filesystem)

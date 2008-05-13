@@ -12,6 +12,9 @@ module Nanoc
 
     # Compiles the site. When the +page+ argument is nil, compiles the entire
     # site; compiles only the specified page (and dependencies) otherwise.
+    # When the +all+ argument is true, all pages will be compiled even if they
+    # are not outdated; if +all+ is false, only outdated pages will be
+    # compiled.
     def run(page=nil, all=false)
       # Give feedback
       log(:high, "Compiling #{page.nil? ? 'site' : 'page'}...")
