@@ -71,7 +71,7 @@ module Nanoc
     # Returns the attribute with the given name.
     def attribute_named(name)
       return @attributes[name]  if @attributes.has_key?(name)
-      return @site.page_defaults.attributes[name] if @site.page_defaults.has_key?(name)
+      return @site.page_defaults.attributes[name] if @site.page_defaults.attributes.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
 
