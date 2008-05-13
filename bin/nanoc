@@ -13,8 +13,9 @@ end
 
 # Define some texts
 
-version_text = "nanoc #{Nanoc::VERSION} (c) 2007-2008 Denis Defreyne."
-help_text    = <<EOT
+version_text  = "nanoc #{Nanoc::VERSION} (c) 2007-2008 Denis Defreyne."
+usage_text    = "usage: Usage: nanoc [options] [command] [arguments ...]"
+help_text     = <<EOT
 Usage: nanoc [options] [command] [arguments ...]
 
 Commands:
