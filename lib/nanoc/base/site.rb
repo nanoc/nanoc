@@ -53,10 +53,16 @@ module Nanoc
       # Load data
       @data_source.loading do
         # Code
-        @code           = @data_source.code
+        @code = @data_source.code
+        if @code.is_a? String
+          warn "in nanoc 2.1, DataSource#code should return a Code object"
+          @code = Code.new(code)
+        end
+        @code.site = self
+        @code.load
 
         # Pages
-        @pages          = @data_source.pages
+        @pages = @data_source.pages
         if @pages.any? { |p| p.is_a? Hash }
           warn "in nanoc 2.1, DataSource#pages should return an array of Page objects"
           @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
@@ -64,7 +70,7 @@ module Nanoc
         @pages.each { |p| p.site = self }
 
         # Page defaults
-        @page_defaults  = @data_source.page_defaults
+        @page_defaults = @data_source.page_defaults
         if @page_defaults.is_a? Hash
           warn "in nanoc 2.1, DataSource#layouts should return a PageDefaults object"
           @page_defaults = PageDefaults.new(@page_defaults)
@@ -72,7 +78,7 @@ module Nanoc
         @page_defaults.site = self
 
         # Layouts
-        @layouts        = @data_source.layouts
+        @layouts = @data_source.layouts
         if @layouts.any? { |l| l.is_a? Hash }
           warn "in nanoc 2.1, DataSource#layouts should return an array of Layout objects"
           @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
@@ -80,11 +86,8 @@ module Nanoc
         @layouts.each { |l| l.site = self }
 
         # Templates
-        @templates      = @data_source.templates
+        @templates = @data_source.templates
       end
-
-      # Load code
-      eval(@code, TOPLEVEL_BINDING)
 
       # Setup child-parent links
       @pages.each do |page|
