@@ -28,7 +28,8 @@ module Nanoc
     end
 
     # Returns true if there exists a compiled page that is older than the
-    # lyaout, false otherwise.
+    # layout, false otherwise. Also returns true if the layout modification
+    # time isn't known.
     def outdated?
       # Outdated if we don't know
       return true if @mtime.nil?

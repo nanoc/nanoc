@@ -17,6 +17,8 @@ module Nanoc
       @mtime      = mtime
     end
 
+    # Returns true if there exists a compiled page that is older than the
+    # page defaults, false otherwise.
     def outdated?
       # Outdated if we don't know
       return true if @mtime.nil?
