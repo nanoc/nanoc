@@ -20,17 +20,6 @@ module Nanoc
       eval(@data, TOPLEVEL_BINDING)
     end
 
-    # Returns true if there exists a compiled page that is older than the
-    # code, false otherwise. Also returns true if the code modification time
-    # isn't known.
-    def outdated?
-      # Outdated if we don't know
-      return true if @mtime.nil?
-
-      # Check if there are newer pages
-      @site.pages.any? { |p| !p.mtime.nil? and @mtime > p.mtime }
-    end
-
   end
 
 end

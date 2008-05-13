@@ -64,12 +64,12 @@ module Nanoc
       return true if @mtime.nil?
 
       # Outdated if file too old
-      return true if @mtime > File.stat(path_on_filesystem).mtime
+      return true if @mtime > compiled_mtime
 
       # Outdated if dependencies outdated
-      return true if (!layout.nil? and layout.outdated?)
-      return true if @site.page_defaults.outdated?
-      return true if @site.code.outdated?
+      return true if @site.layouts.any? { |l| l.mtime > compiled_mtime }
+      return true if @site.page_defaults.mtime > compiled_mtime
+      return true if @site.code.mtime > compiled_mtime
 
       return false
     end

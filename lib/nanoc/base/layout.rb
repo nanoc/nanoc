@@ -11,7 +11,7 @@ module Nanoc
       :filter => 'erb'
     }
 
-    attr_reader   :content, :attributes, :path
+    attr_reader   :content, :attributes, :path, :mtime
     attr_accessor :site
 
     # Creates a new layout.
@@ -25,20 +25,6 @@ module Nanoc
     # Returns a proxy (LayoutProxy) for this layout.
     def to_proxy
       @proxy ||= LayoutProxy.new(self)
-    end
-
-    # Returns true if there exists a compiled page that is older than the
-    # layout, false otherwise. Also returns true if the layout modification
-    # time isn't known.
-    def outdated?
-      # Outdated if we don't know
-      return true if @mtime.nil?
-
-      # Get pages for this layout
-      pages = @site.pages.select { |p| p.layout == self }
-
-      # Check if there are any newer pages
-      pages.map { |p| p.compiled_mtime }.compact.any? { |mtime| @mtime > mtime }
     end
 
     # Returns the attribute with the given name.
