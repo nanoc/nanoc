@@ -1,16 +1,16 @@
 module Nanoc
 
   # Nanoc::Site is the in-memory representation of a nanoc site directory.
-  # 
+  #
   # It holds references to the following site data:
-  # 
+  #
   # * pages
   # * page defaults
   # * layouts
   # * templates
   # * code
   # * configuration (config.yaml file)
-  # 
+  #
   # Each Nanoc::Site also has a compiler (Nanoc::Compiler) and a data source
   # (Nanoc::DataSource).
   class Site
@@ -99,7 +99,7 @@ module Nanoc
 
     # Creates a new site directory on disk. +path+ is the path to the new
     # site directory.
-    # 
+    #
     # Newly created sites always use the filesystem data source, although it
     # is possible to change the data source after the site is created.
     def self.create(path)
@@ -181,16 +181,12 @@ module Nanoc
     # Creates a new blank template (calls DataSource#create_template) with
     # +name+ as the template name.
     def create_template(name)
-      load_data
-
       @data_source.loading {@data_source.create_template(name) }
     end
 
     # Creates a new blank layout (calls DataSource#create_layout) with
     # +name+ as the layout name.
     def create_layout(name)
-      load_data
-
       @data_source.loading { @data_source.create_layout(name) }
     end
 
