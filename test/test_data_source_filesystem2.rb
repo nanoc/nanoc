@@ -80,7 +80,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_equal('html', site.page_defaults[:extension])
+        assert_equal('html', site.page_defaults.attributes[:extension])
       end
     end
   end
@@ -270,6 +270,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
         # Update file mtimes
         File.utime(distant_past, distant_past, 'layouts/default.erb')
         File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -284,6 +285,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
         # Update file mtimes
         File.utime(distant_past, distant_past, 'layouts/default.erb')
         File.utime(now,          now,          'content/index.txt')
+        File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile
@@ -298,6 +300,22 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
         # Update file mtimes
         File.utime(now,          now,          'layouts/default.erb')
         File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(distant_past, distant_past, 'meta.yaml')
+        File.utime(recent_past,  recent_past,  'output/index.html')
+
+        # Compile
+        site.load_data(true)
+        assert_nothing_raised() { site.compile }
+
+        # Check compiled file's mtime (should be now)
+        assert((now - File.new('output/index.html').mtime).abs < threshold)
+
+        ########## RECENT PAGE DEFAULTS
+
+        # Update file mtimes
+        File.utime(distant_past, distant_past, 'layouts/default.erb')
+        File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(now,          now,          'meta.yaml')
         File.utime(recent_past,  recent_past,  'output/index.html')
 
         # Compile

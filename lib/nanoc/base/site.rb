@@ -65,6 +65,11 @@ module Nanoc
 
         # Page defaults
         @page_defaults  = @data_source.page_defaults
+        if @page_defaults.is_a? Hash
+          warn "in nanoc 2.1, DataSource#layouts should return a PageDefaults object"
+          @page_defaults = PageDefaults.new(@page_defaults)
+        end
+        @page_defaults.site = self
 
         # Layouts
         @layouts        = @data_source.layouts

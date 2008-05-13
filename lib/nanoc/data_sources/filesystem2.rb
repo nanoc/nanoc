@@ -164,7 +164,14 @@ module Nanoc::DataSources
 
       # The page defaults are loaded from a 'meta.yaml' file
       def page_defaults
-        (YAML.load_file('meta.yaml') || {}).clean
+        # Get attributes
+        attributes = (YAML.load_file('meta.yaml') || {}).clean
+
+        # Get mtime
+        mtime = File.stat('meta.yaml').mtime
+
+        # Build page defaults
+        Nanoc::PageDefaults.new(attributes, mtime)
       end
 
       # Layouts are stored as files in the 'layouts' directory. Similar to

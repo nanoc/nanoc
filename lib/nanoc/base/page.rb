@@ -62,13 +62,16 @@ module Nanoc
       # Outdated if layout outdated
       return true if (!layout.nil? and layout.outdated?)
 
+      # Outdated if page defaults outdated
+      return true if @site.page_defaults.outdated?
+
       return false
     end
 
     # Returns the attribute with the given name.
     def attribute_named(name)
-      return @attributes[name]         if @attributes.has_key?(name)
-      return @site.page_defaults[name] if @site.page_defaults.has_key?(name)
+      return @attributes[name]  if @attributes.has_key?(name)
+      return @site.page_defaults.attributes[name] if @site.page_defaults.has_key?(name)
       return PAGE_DEFAULTS[name]
     end
 
