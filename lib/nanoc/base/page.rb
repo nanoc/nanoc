@@ -103,10 +103,9 @@ module Nanoc
       @layout
     end
 
-    # Returns the page's path relative to the web root.
-    # FIXME replace with web_path
+    # Returns the page's path like it is stored in the data source.
     def path
-      attribute_named(:custom_path) || @path
+      @path
     end
 
     # Returns the path to the compiled page on the disk.

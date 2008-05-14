@@ -22,14 +22,14 @@ module Nanoc
 
         "#{page.path}#{filename}.#{extension}"
       else
-        "#{page.path}"
+        page.attribute_named(:custom_path)
       end
     end
 
     # Returns the path of the page relative to the web root. It should start
     # with a slash.
     def web_path_for(page)
-      page.path
+      page.attribute_named(:custom_path) || page.path
     end
 
   end
