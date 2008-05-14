@@ -19,7 +19,7 @@ module Nanoc
     }
 
     attr_accessor :parent, :children, :site
-    attr_reader   :mtime
+    attr_reader   :mtime, :raw_content, :raw_attributes
 
     # Creates a new page. +content+ is the actual content of the page.
     # +attributes+ is a hash containing metadata for the page. +path+ is the
@@ -27,10 +27,14 @@ module Nanoc
     # page was last modified (optional).
     def initialize(content, attributes, path, mtime=nil)
       # Set primary attributes
-      @attributes     = attributes
+      @attributes     = attributes.clean
       @content        = { :pre => content, :post => nil }
       @path           = path.cleaned_path
       @mtime          = mtime
+
+      # Set helper variables
+      @raw_content    = content
+      @raw_attributes = attributes
 
       # Start disconnected
       @parent         = nil

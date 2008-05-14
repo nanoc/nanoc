@@ -17,7 +17,7 @@ module Nanoc
     # Creates a new layout.
     def initialize(content, attributes, path, mtime=nil)
       @content    = content
-      @attributes = attributes
+      @attributes = attributes.clean
       @path       = path.cleaned_path
       @mtime      = mtime
     end

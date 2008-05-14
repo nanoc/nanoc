@@ -13,7 +13,7 @@ module Nanoc
     # individual pages will override. +mtime+ is the time when the page
     # defaults were last modified (optional).
     def initialize(attributes, mtime=nil)
-      @attributes = attributes
+      @attributes = attributes.clean
       @mtime      = mtime
     end
 
