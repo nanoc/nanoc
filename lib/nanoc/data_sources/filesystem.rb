@@ -182,7 +182,7 @@ module Nanoc::DataSources
 
         # Write files
         File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(page.raw_attributes)) }
-        File.open(content_filename, 'w') { |io| io.write(page.raw_content) }
+        File.open(content_filename, 'w') { |io| io.write(page.content(:raw)) }
       end
 
       # TODO document

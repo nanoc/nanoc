@@ -19,7 +19,7 @@ module Nanoc
     }
 
     attr_accessor :parent, :children, :site
-    attr_reader   :mtime, :raw_content, :raw_attributes
+    attr_reader   :mtime, :raw_attributes
 
     # Creates a new page. +content+ is the actual content of the page.
     # +attributes+ is a hash containing metadata for the page. +path+ is the
@@ -28,12 +28,11 @@ module Nanoc
     def initialize(content, attributes, path, mtime=nil)
       # Set primary attributes
       @attributes     = attributes.clean
-      @content        = { :pre => content, :post => nil }
+      @content        = { :raw => content, :pre => content, :post => nil }
       @path           = path.cleaned_path
       @mtime          = mtime
 
       # Set helper variables
-      @raw_content    = content
       @raw_attributes = attributes
 
       # Start disconnected
@@ -85,10 +84,11 @@ module Nanoc
       return PAGE_DEFAULTS[name]
     end
 
-    # Returns the page's pre-filtered but not yet laid out content.
-    def content
-      compile(false) unless @filtered_pre
-      @content[:pre]
+    # Returns the page's content in the given stage (+:raw+, +:pre+, +:post+)
+    def content(stage=:pre)
+      compile(false) if stage == :pre  and !@filtered_pre
+      compile(true)  if stage == :post and !@filtered_post
+      @content[stage]
     end
 
     # Returns the page's layout.
@@ -101,12 +101,6 @@ module Nanoc
       error 'Unknown layout: ' + attribute_named(:layout) if @layout.nil?
 
       @layout
-    end
-
-    # Returns the page's pre-filtered, laid out and post-filtered content.
-    def laid_out_content
-      compile(true)
-      @content[:post]
     end
 
     # Returns the page's path relative to the web root.
