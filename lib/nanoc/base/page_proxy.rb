@@ -12,7 +12,7 @@ module Nanoc
       if real_key == :content
         @obj.content
       elsif real_key == :path
-        @obj.path
+        @obj.web_path
       elsif real_key == :parent
         @obj.parent.nil? ? nil : @obj.parent.to_proxy
       elsif real_key == :children

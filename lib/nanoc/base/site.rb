@@ -160,7 +160,7 @@ module Nanoc
       if path.nil?
         page = nil
       else
-        page = @pages.find { |page| page.path == "/#{path.gsub(/^\/|\/$/, '')}/" }
+        page = @pages.find { |page| page.web_path == "/#{path.gsub(/^\/|\/$/, '')}/" }
         error "The '/#{path.gsub(/^\/|\/$/, '')}/' page was not found; aborting." if page.nil?
       end
 

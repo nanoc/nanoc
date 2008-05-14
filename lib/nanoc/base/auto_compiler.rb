@@ -78,7 +78,7 @@ END
       @site.load_data(true)
 
       # Get page or file
-      page      = @site.pages.find { |page| page.path == request.path }
+      page      = @site.pages.find { |page| page.web_path == request.path }
       file_path = @site.config[:output_dir] + request.path
 
       if page.nil?
@@ -121,12 +121,12 @@ END
       begin
         @site.compiler.run(page)
       rescue => exception
-        serve_500(page.path, exception, response)
+        serve_500(page.web_path, exception, response)
         return
       end
 
       # Determine most likely MIME type
-      mime_type = MIME::Types.of(page.path).first
+      mime_type = MIME::Types.of(page.disk_path).first
       mime_type = mime_type.nil? ? 'text/html' : mime_type.simplified
 
       response.status           = 200
