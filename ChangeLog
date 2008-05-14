@@ -21,7 +21,7 @@ Changed:
 * Layouts no longer rely on file extensions to determine the layout processor
   used, and layouts are now stored in directories instead of simple files
 * nanoc will no longer compile already compiled pages, unless they have been
-  updated in the mean time.
+  updated in the mean time
 
 Removed:
 
@@ -29,7 +29,7 @@ Removed:
   `erb` or `erubis` (for embedded Ruby), `bluecloth` or `maruku` (for
   Markdown) and `redcloth` (for Markdown and Textile)
 * The database and trivial data sources are no longer included in the standard
-  nanoc distribution, but you can get them from the plugins repository now.
+  nanoc distribution, but you can get them from the plugins repository now
 
 2.0.4
 -----
