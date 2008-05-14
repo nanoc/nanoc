@@ -98,7 +98,7 @@ module Nanoc::DataSources
 
       end
 
-      ########## Loading data ##########
+      ########## Pages ##########
 
       # The filesystem data source stores its pages in nested directories.
       # Each directory represents a single page. The root directory is the
@@ -125,9 +125,9 @@ module Nanoc::DataSources
       def pages
         meta_filenames('content').map do |meta_filename|
           # Read metadata
-          meta = (YAML.load_file(meta_filename) || {}).clean
+          meta = YAML.load_file(meta_filename) || {}
 
-          if meta[:is_draft]
+          if meta['is_draft']
             # Skip drafts
             nil
           else
@@ -152,10 +152,57 @@ module Nanoc::DataSources
         end.compact
       end
 
+      # Saves the given page on the disk, creating it first if it's not
+      # already there yet. If the page already exists, the existing path will
+      # be used.
+      def save_page(page)
+        # Determine possible meta file paths
+        last_component = page.path.split('/')[-1]
+        meta_filename_worst = 'content' + page.path + 'index.yaml'
+        meta_filename_best  = 'content' + page.path + (last_component || 'content') + '.yaml'
+
+        # Get existing path
+        existing_path = nil
+        existing_path = meta_filename_best if File.file?(meta_filename_best)
+        existing_path = meta_filename_worst if File.file?(meta_filename_worst)
+
+        if existing_path.nil?
+          # Get filenames
+          dir_path         = 'content' + page.path
+          meta_filename    = meta_filename_best
+          content_filename = 'content' + page.path + (last_component || 'content') + '.html'
+
+          # Create directories if necessary
+          FileUtils.mkdir_p(dir_path)
+        else
+          # Get filenames
+          meta_filename    = existing_path
+          content_filename = content_filename_for_dir(File.dirname(existing_path))
+        end
+
+        hash_to_yaml(page.raw_attributes)
+
+        # Write files
+        File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(page.raw_attributes)) }
+        File.open(content_filename, 'w') { |io| io.write(page.raw_content) }
+      end
+
+      # TODO document
+      def move_page(page, new_path)
+        not_implemented('move_page', :optional)
+      end
+
+      # TODO document
+      def delete_page(page)
+        not_implemented('delete_page', :optional)
+      end
+
+      ########## Page Defaults ##########
+
       # The page defaults are loaded from a 'meta.yaml' file
       def page_defaults
         # Get attributes
-        attributes = (YAML.load_file('meta.yaml') || {}).clean
+        attributes = YAML.load_file('meta.yaml') || {}
 
         # Get mtime
         mtime = File.stat('meta.yaml').mtime
@@ -163,6 +210,13 @@ module Nanoc::DataSources
         # Build page defaults
         Nanoc::PageDefaults.new(attributes, mtime)
       end
+
+      # TODO document
+      def save_page_defaults(page_defaults)
+        not_implemented('save_page_defaults', :optional)
+      end
+
+      ########## Layouts ##########
 
       # Layouts are stored as directories in the 'layouts' directory. Each
       # layout contains a content file and a meta file. The content file
@@ -202,7 +256,7 @@ module Nanoc::DataSources
             content           = File.read(content_filename)
 
             # Get attributes
-            attributes = (YAML.load_file(meta_filename) || {}).clean
+            attributes = YAML.load_file(meta_filename) || {}
 
             # Get path
             path = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
@@ -217,6 +271,23 @@ module Nanoc::DataSources
           end
         end
       end
+
+      # TODO document
+      def save_layout(layout)
+        not_implemented('save_layout', :optional)
+      end
+
+      # TODO document
+      def move_layout(layout, new_path)
+        not_implemented('move_layout', :optional)
+      end
+
+      # TODO document
+      def delete_layout(layout)
+        not_implemented('delete_layout', :optional)
+      end
+
+      ########## Templates ##########
 
       # Templates are located in the 'templates' directroy. Every template is
       # a directory consisting of a content file and a meta file, both named
@@ -241,6 +312,23 @@ module Nanoc::DataSources
         end
       end
 
+      # TODO document
+      def save_template(template)
+        not_implemented('save_template', :optional)
+      end
+
+      # TODO document
+      def move_template(template, new_path)
+        not_implemented('move_template', :optional)
+      end
+
+      # TODO document
+      def delete_template(template)
+        not_implemented('delete_template', :optional)
+      end
+
+      ########## Code ##########
+
       # Code is stored in '.rb' files in the 'lib' directory. Code can reside
       # in sub-directories.
       def code
@@ -254,7 +342,12 @@ module Nanoc::DataSources
         Nanoc::Code.new(data, mtime)
       end
 
-      ########## Creating data ##########
+      # TODO document
+      def save_code(code)
+        not_implemented('save_code', :optional)
+      end
+
+      ########## OLD ##########
 
       # Creating a page creates a page directory with the name of the page in
       # the 'content' directory, as well as a content file named xxx.txt and a
@@ -323,7 +416,7 @@ module Nanoc::DataSources
 
       ########## Custom functions ##########
 
-      # Returns the list of meta files in the given (optional) base directory.
+      # Returns the list of meta files in the given base directory.
       def meta_filenames(base)
         # Find all possible meta file names
         filenames = Dir[base + '/**/*.yaml']
@@ -369,6 +462,23 @@ module Nanoc::DataSources
 
         # Return content filename
         filenames.first
+      end
+
+      def hash_to_yaml(hash)
+        # FIXME add more keys
+        builtin_keys = [ 'filters_pre' ]
+
+        # Split keys
+        builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
+        custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }
+
+        # Convert to YAML
+        # FIXME this is a hack, plz clean up
+        '# Built-in' +
+        YAML.dump(builtin_hash).split('---')[1] +
+        "\n" +
+        '# Custom' +
+        YAML.dump(custom_hash).split('---')[1]
       end
 
     end

@@ -98,7 +98,7 @@ module Nanoc::DataSources
 
       end
 
-      ########## Loading data ##########
+      ########## Pages ##########
 
       # The filesystem data source stores its pages in nested directories. A
       # page is represented by a single file. The root directory is the
@@ -162,10 +162,56 @@ module Nanoc::DataSources
         end.compact
       end
 
+      # TODO document
+      def save_page(page)
+        # # Get possible paths
+        # path_best_glob  = 'content' + page.path[0..-2] + '.*'
+        # path_worst_glob = 'content' + page.path + 'index.*'
+        # 
+        # # Get files
+        # paths_best  = Dir[path_best_glob]
+        # paths_worst = Dir[path_worst_glob]
+        # 
+        # # Find existing path
+        # existing_path = nil
+        # if paths_best.size > 0
+        #   existing_path = paths_best.first
+        # elsif paths_worst.size > 0
+        #   existing_path = paths_worst.first
+        # else
+        #   existing_path = nil
+        # end
+        # 
+        # unless existing_path.nil?
+        #   # Update this file
+        #   File.open(existing_path, 'w') { |io| io.write('lol, noob') }
+        # else
+        #   # Determine best path
+        #   # ...
+        #   
+        #   # Create new file
+        #   # ...
+        # end
+
+        not_implemented('save_page', :optional)
+      end
+
+      # TODO document
+      def move_page(page, new_path)
+        not_implemented('move_page', :optional)
+      end
+
+      # TODO document
+      def delete_page(page)
+        not_implemented('delete_page', :optional)
+      end
+
+      ########## Page Defaults ##########
+
       # The page defaults are loaded from a 'meta.yaml' file
       def page_defaults
         # Get attributes
-        attributes = (YAML.load_file('meta.yaml') || {}).clean
+        attributes = YAML.load_file('meta.yaml') || {}
 
         # Get mtime
         mtime = File.stat('meta.yaml').mtime
@@ -173,6 +219,13 @@ module Nanoc::DataSources
         # Build page defaults
         Nanoc::PageDefaults.new(attributes, mtime)
       end
+
+      # TODO document
+      def save_page_defaults(page_defaults)
+        not_implemented('save_page_defaults', :optional)
+      end
+
+      ########## Layouts ##########
 
       # Layouts are stored as files in the 'layouts' directory. Similar to
       # pages, each layout consists of a metadata part and a content part,
@@ -193,31 +246,66 @@ module Nanoc::DataSources
         end.compact
       end
 
+      # TODO document
+      def save_layout(layout)
+        not_implemented('save_layout', :optional)
+      end
+
+      # TODO document
+      def move_layout(layout, new_path)
+        not_implemented('move_layout', :optional)
+      end
+
+      # TODO document
+      def delete_layout(layout)
+        not_implemented('delete_layout', :optional)
+      end
+
+      ########## Templates ##########
+
       # Templates are located in the 'templates' directory. Templates are,
       # just like pages, files consisting of a metadata part and a content
       # part, separated by '-----'.
       def templates
         files('templates', false).map do |filename|
-          # Split file
-          pieces = File.read(filename).split(/^-----/)
-          error "The file '#{filename}' does not seem to be a nanoc #{kind}" if pieces.size < 3
-
-          # Parse
-          meta    = pieces[1].strip
-          content = pieces[2..-1].join.strip
+          # Read and parse data
+          meta, content = *parse_file(filename, 'template')
 
           # Get name
           name = filename.sub(/^templates\//, '').sub(/\.[^\/]+$/, '')
+
+          # Get mtime
+          mtime = File.stat(filename).mtime
+
+          # Build template
+          template = Nanoc::Template.new(name, content, meta, mtime)
 
           # Build final page hash
           {
             :extension  => File.extname(filename),
             :content    => content,
             :name       => name,
-            :meta       => meta
+            :meta       => hash_to_yaml(meta)
           }
         end.compact
       end
+
+      # TODO document
+      def save_template(template)
+        not_implemented('save_template', :optional)
+      end
+
+      # TODO document
+      def move_template(template, new_path)
+        not_implemented('move_template', :optional)
+      end
+
+      # TODO document
+      def delete_template(template)
+        not_implemented('delete_template', :optional)
+      end
+
+      ########## Code ##########
 
       # Code is stored in '.rb' files in the 'lib' directory. Code can reside
       # in sub-directories.
@@ -232,7 +320,12 @@ module Nanoc::DataSources
         Nanoc::Code.new(data, mtime)
       end
 
-      ########## Creating data ##########
+      # TODO document
+      def save_code(code)
+        not_implemented('save_code', :optional)
+      end
+
+      ########## OLD ##########
 
       # Creates a bare-bones page at the given path with the given template
       def create_page(path, template)
@@ -313,12 +406,29 @@ module Nanoc::DataSources
         error "The file '#{filename}' does not seem to be a nanoc #{kind}" if pieces.size < 3
 
         # Parse
-        meta    = YAML.load(pieces[1]).clean
+        meta    = YAML.load(pieces[1])
         content = pieces[2..-1].join.strip
 
         [ meta, content ]
       end
 
+      def hash_to_yaml(hash)
+        # FIXME add more keys
+        builtin_keys = [ 'filters_pre' ]
+
+        # Split keys
+        builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
+        custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }
+
+        # Convert to YAML
+        # FIXME this is a hack, plz clean up
+        '# Built-in' +
+        YAML.dump(builtin_hash).split('---')[1] +
+        "\n" +
+        '# Custom' +
+        YAML.dump(custom_hash).split('---')[1]
+      end
+ 
     end
 
   end
