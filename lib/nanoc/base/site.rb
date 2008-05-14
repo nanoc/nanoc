@@ -21,7 +21,7 @@ module Nanoc
     }
 
     attr_reader :config
-    attr_reader :compiler, :data_source
+    attr_reader :compiler, :data_source, :router
     attr_reader :code, :pages, :page_defaults, :layouts, :templates
 
     # Returns a Nanoc::Site object for the site specified by the given
@@ -38,6 +38,10 @@ module Nanoc
       # Create compiler
       @compiler     = Compiler.new(self)
       @autocompiler = AutoCompiler.new(self)
+
+      # Create router
+      # FIXME instantiate right router subclass
+      @router = Router.new(self)
 
       # Set not loaded
       @data_loaded = false
