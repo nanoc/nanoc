@@ -131,7 +131,7 @@ END
 
       response.status           = 200
       response['Content-Type']  = mime_type
-      response.body             = page.laid_out_content
+      response.body             = page.content(:post)
     end
 
   end
