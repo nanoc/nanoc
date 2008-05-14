@@ -61,7 +61,7 @@ module Nanoc
     # otherwise. Also returns false if the page modification time isn't known.
     def outdated?
       # Outdated if compiled file doesn't exist
-      return true if !File.file?(path_on_filesystem)
+      return true if !File.file?(disk_path)
 
       # Outdated if we don't know
       return true if @mtime.nil?
@@ -104,22 +104,24 @@ module Nanoc
     end
 
     # Returns the page's path relative to the web root.
+    # FIXME replace with web_path
     def path
       attribute_named(:custom_path) || @path
     end
 
-    # Returns the path to the compiled page on the filesystem.
-    def path_on_filesystem
-      if attribute_named(:custom_path).nil?
-        @site.config[:output_dir] + @path + attribute_named(:filename) + '.' + attribute_named(:extension)
-      else
-        @site.config[:output_dir] + attribute_named(:custom_path)
-      end
+    # Returns the path to the compiled page on the disk.
+    def disk_path
+      @disk_path ||= @site.config[:output_dir] + @site.router.disk_path_for(self)
+    end
+
+    # Returns the path to the compiled page as used in the web site itself.
+    def web_path
+      @web_path ||= @site.router.web_path_for(self)
     end
 
     # Returns the modification time of the compiled page if it exists, nil otherwise.
     def compiled_mtime
-      compiled_path = path_on_filesystem
+      compiled_path = disk_path
       File.exist?(compiled_path) ? File.stat(compiled_path).mtime : nil
     end
 
@@ -160,7 +162,7 @@ module Nanoc
 
       # Write
       if !@written and full
-        @modified = FileManager.create_file(self.path_on_filesystem) { @content[:post] } unless attribute_named(:skip_output)
+        @modified = FileManager.create_file(self.disk_path) { @content[:post] } unless attribute_named(:skip_output)
         @written = true
       end
 
