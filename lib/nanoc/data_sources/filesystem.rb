@@ -180,8 +180,6 @@ module Nanoc::DataSources
           content_filename = content_filename_for_dir(File.dirname(existing_path))
         end
 
-        hash_to_yaml(page.raw_attributes)
-
         # Write files
         File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(page.raw_attributes)) }
         File.open(content_filename, 'w') { |io| io.write(page.raw_content) }
