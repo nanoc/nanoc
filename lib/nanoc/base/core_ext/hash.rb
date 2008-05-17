@@ -31,4 +31,11 @@ class Hash
     end
   end
 
+  # Returns the hash where all keys are converted to strings
+  def stringify_keys
+    inject({}) do |hash, (key, value)|
+      hash.merge(key.to_s => value.is_a?(Hash) ? value.stringify_keys : value)
+    end
+  end
+
 end

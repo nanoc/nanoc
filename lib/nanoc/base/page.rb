@@ -18,8 +18,9 @@ module Nanoc
       :skip_output  => false
     }
 
-    attr_accessor :parent, :children, :site
-    attr_reader   :mtime, :raw_attributes
+    attr_accessor :content, :attributes, :path, :mtime
+    attr_accessor :parent, :children
+    attr_accessor :site
 
     # Creates a new page. +content+ is the actual content of the page.
     # +attributes+ is a hash containing metadata for the page. +path+ is the
@@ -31,9 +32,6 @@ module Nanoc
       @content        = { :raw => content, :pre => content, :post => nil }
       @path           = path.cleaned_path
       @mtime          = mtime
-
-      # Set helper variables
-      @raw_attributes = attributes
 
       # Start disconnected
       @parent         = nil
