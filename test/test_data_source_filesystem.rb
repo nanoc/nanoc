@@ -58,7 +58,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
-  # Test loading data
+  # Test pages
 
   def test_pages
     with_site_fixture 'empty_site' do |site|
@@ -70,6 +70,50 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  def test_save_page
+    in_dir %w{ tmp } do
+      # Create site
+      Nanoc::Site.create('site')
+
+      in_dir %w{ site } do
+        # Load site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+
+        # Check pages
+        assert_equal(1, site.pages.size)
+        old_page = site.pages[0]
+
+        # Create page
+        new_page = Nanoc::Page.new('Hello, I am a noob.', { :foo => 'bar' }, '/noob/')
+        site.data_source.save_page(new_page)
+        site.load_data(true)
+
+        # Check pages
+        assert_equal(2, site.pages.size)
+
+        # Update page
+        old_page.attributes = { :xyzzy => 'abba' }
+        site.data_source.save_page(old_page)
+        site.load_data(true)
+
+        # Check pages
+        assert_equal(2, site.pages.size)
+        assert(site.pages.any? { |p| p.attribute_named(:xyzzy) == 'abba' })
+      end
+    end
+  end
+
+  def test_move_page
+    # TODO implement
+  end
+
+  def test_delete_page
+    # TODO implement
+  end
+
+  # Test page defaults
+
   def test_page_defaults
     with_site_fixture 'empty_site' do |site|
       site.load_data
@@ -79,6 +123,12 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       end
     end
   end
+
+  def test_save_page_defaults
+    # TODO implement
+  end
+
+  # Test templates
 
   def test_templates
     with_site_fixture 'empty_site' do |site|
@@ -100,6 +150,20 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  def test_save_template
+    # TODO implement
+  end
+
+  def test_move_template
+    # TODO implement
+  end
+
+  def test_delete_template
+    # TODO implement
+  end
+
+  # Test layouts
+
   def test_layouts
     with_site_fixture 'empty_site' do |site|
       site.load_data
@@ -114,6 +178,20 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  def test_save_layout
+    # TODO implement
+  end
+
+  def test_move_layout
+    # TODO implement
+  end
+
+  def test_delete_layout
+    # TODO implement
+  end
+
+  # Test code
+
   def test_code
     with_site_fixture 'empty_site' do |site|
       site.load_data
@@ -124,8 +202,13 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  def test_save_code
+    # TODO implement
+  end
+
   # Test creating data
 
+  # FIXME outdated, remove
   def test_create_page
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
@@ -149,6 +232,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  # FIXME outdated, remove
   def test_create_template
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
@@ -165,6 +249,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     end
   end
 
+  # FIXME outdated, remove
   def test_create_layout
     in_dir %w{ tmp } do
       Nanoc::Site.create('site')
