@@ -473,10 +473,10 @@ module Nanoc::DataSources
         # Convert to YAML
         # FIXME this is a hack, plz clean up
         '# Built-in' +
-        YAML.dump(builtin_hash).split('---')[1] +
+        (builtin_hash.keys.empty? ? "\n" : YAML.dump(builtin_hash).split('---')[1]) +
         "\n" +
         '# Custom' +
-        YAML.dump(custom_hash).split('---')[1]
+        (custom_hash.keys.empty? ? "\n" : YAML.dump(custom_hash).split('---')[1])
       end
 
     end
