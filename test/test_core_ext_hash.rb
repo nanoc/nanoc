@@ -37,4 +37,10 @@ class CoreExtHashTest < Test::Unit::TestCase
     assert_equal(hash_cleaned, hash.clean)
   end
 
+  def test_hash_stringify_keys
+    hash                        = { 'foo' => 'bar', :foo => 'bar', 3 => 'lol', nil => 'moo' }
+    hash_with_stringified_keys  = { 'foo' => 'bar', 'foo' => 'bar', '3' => 'lol', '' => 'moo' }
+    assert_equal(hash_with_stringified_keys, hash.stringify_keys)
+  end
+
 end
