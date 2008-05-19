@@ -212,7 +212,8 @@ def autocompile_site
   end
 
   # Autocompile site
-  $nanoc_site.autocompile($unprocessed_opts['--port'])
+  autocompiler = Nanoc::AutoCompiler.new($nanoc_site)
+  autocompiler.start($unprocessed_opts['--port'] || 3000)
 end
 
 # Handle command

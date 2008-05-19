@@ -37,7 +37,6 @@ module Nanoc
 
       # Create compiler
       @compiler     = Compiler.new(self)
-      @autocompiler = AutoCompiler.new(self)
 
       # Create router
       # FIXME instantiate right router subclass
@@ -165,12 +164,6 @@ module Nanoc
       end
 
       @compiler.run(page, all)
-    end
-
-    # Starts the autocompiler (calls Nanoc::AutoCompiler#start) on the
-    # specified port number indicated by +port+.
-    def autocompile(port)
-      @autocompiler.start(port)
     end
 
     # Sets up the site's data source. This will call Nanoc::DataSource#setup
