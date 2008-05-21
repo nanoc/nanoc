@@ -292,21 +292,19 @@ module Nanoc::DataSources
       # after the template. This is very similar to the way pages are stored,
       # except that templates cannot be nested.
       def templates
-        meta_filenames('templates').map do |filename|
-          # Get template name
-          name = filename.sub(/^templates\/(.*)\/[^\/]+\.yaml$/, '\1')
+        meta_filenames('templates').map do |meta_filename|
+          # Get name
+          name = meta_filename.sub(/^templates\/(.*)\/[^\/]+\.yaml$/, '\1')
 
-          # Get file names
-          meta_filename     = filename
-          content_filename  = content_filename_for_dir(File.dirname(filename))
+          # Get content
+          content_filename  = content_filename_for_dir(File.dirname(meta_filename))
+          content           = File.read(content_filename)
 
-          # Add it to the list of templates
-          {
-            :name       => name,
-            :extension  => File.extname(content_filename),
-            :content    => File.read(content_filename),
-            :meta       => File.read(meta_filename)
-          }
+          # Get attributes
+          attributes = YAML.load_file(meta_filename) || {}
+
+          # Build template
+          Nanoc::Template.new(name, content, attributes)
         end
       end
 

@@ -135,17 +135,15 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        assert_equal(
-          [
-            {
-              :name       => 'default',
-              :content    => "This is a new page. Please edit me!\n",
-              :meta       => "# Built-in\n\n# Custom\ntitle: A New Page\n",
-              :extension  => '.txt'
-            }
-          ],
-          site.templates
-        )
+        # Find template
+        templates = site.templates
+
+        # Check number of templates
+        assert_equal(1, templates.size)
+
+        # Check template attributes
+        assert_equal('default', templates[0].name)
+        assert_equal("This is a new page. Please edit me!\n", templates[0].page_content)
       end
     end
   end
