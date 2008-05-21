@@ -278,7 +278,7 @@ module Nanoc::DataSources
           mtime = File.stat(filename).mtime
 
           # Build template
-          template = Nanoc::Template.new(name, content, meta, mtime)
+          template = Nanoc::Template.new(name, content, meta)
 
           # Build final page hash
           {
