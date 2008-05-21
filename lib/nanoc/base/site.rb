@@ -90,6 +90,11 @@ module Nanoc
 
         # Templates
         @templates = @data_source.templates
+        if @templates.any? { |t| t.is_a? Hash }
+          warn "in nanoc 2.1, DataSource#templates should return an array of Template objects"
+          @templates.map! { |t| Template.new(t[:name], t[:content], YAML.load(t[:meta])) }
+        end
+        @templates.each { |t| t.site = self }
       end
 
       # Setup child-parent links
@@ -177,7 +182,8 @@ module Nanoc
     def create_page(path, template_name='default')
       load_data
 
-      template = @templates.find { |t| t[:name] == template_name }
+      # Find template
+      template = @templates.find { |t| t.name == template_name }
       error "A template named '#{template_name}' was not found; aborting." if template.nil?
 
       @data_source.loading { @data_source.create_page(path, template) }
