@@ -12,6 +12,7 @@ module Nanoc
       @data_sources       = {}
       @filters            = {}
       @layout_processors  = {}
+      @routers            = {}
     end
 
     # Returns the data source class with the given identifier
@@ -27,6 +28,11 @@ module Nanoc
     # Returns the layout processor class with the given file extension
     def layout_processor(ext)
       @layout_processors[ext] ||= find(Filter, :extensions, ext)
+    end
+
+    # Returns the router class with the given identifier
+    def router(identifier)
+      @routers[identifier] ||= find(Router, :identifiers, identifier)
     end
 
   private

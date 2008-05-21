@@ -17,7 +17,8 @@ module Nanoc
 
     DEFAULT_CONFIG = {
       :output_dir   => 'output',
-      :data_source  => 'filesystem'
+      :data_source  => 'filesystem',
+      :router       => 'default'
     }
 
     attr_reader :config
@@ -36,11 +37,12 @@ module Nanoc
       @data_source = @data_source_class.new(self)
 
       # Create compiler
-      @compiler     = Compiler.new(self)
+      @compiler = Compiler.new(self)
 
       # Create router
-      # FIXME instantiate right router subclass
-      @router = Router.new(self)
+      @router_class = PluginManager.instance.router(@config[:router].to_sym)
+      error "Unrecognised router: #{@config[:router]}" if @router_class.nil?
+      @router = @router_class.new(self)
 
       # Set not loaded
       @data_loaded = false

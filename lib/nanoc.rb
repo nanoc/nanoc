@@ -19,3 +19,4 @@ Nanoc.load('base', '*.rb')
 # Load plugins
 Nanoc.load('data_sources', '*.rb')
 Nanoc.load('filters', '*.rb')
+Nanoc.load('routers', '*.rb')
