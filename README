@@ -1,6 +1,6 @@
 == Overview
 
-nanoc is a simple but very flexible content management system written in Ruby.
+nanoc is a simple but very flexible static site generator written in Ruby.
 It operates on local files, and therefore does not run on the server. nanoc
 "compiles" the local source files into HTML (usually), by evaluating eRuby,
 Markdown, etc.
@@ -8,7 +8,7 @@ Markdown, etc.
 == Documentation
 
 nanoc has a web site at <http://nanoc.stoneship.org/>, which contains a
-"Getting Started" guide as well as a reference for nanoc.
+tutorial and a manual to help you get started with nanoc.
 
 == Contributors
 
