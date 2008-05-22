@@ -44,8 +44,13 @@ spec = Gem::Specification.new do |s|
 
   s.has_rdoc              = true
   s.extra_rdoc_files      = [ 'README' ]
-  s.rdoc_options          <<  '--title' << 'nanoc'  <<
-                              '--main'  << 'README' <<
+  s.rdoc_options          <<  '--title'   << 'nanoc'                  <<
+                              '--main'    << 'README'                 <<
+                              '--charset' << 'utf-8'                  <<
+                              '--exclude' << 'lib/nanoc/data_sources' <<
+                              '--exclude' << 'lib/nanoc/filters'      <<
+                              '--exclude' << 'lib/nanoc/routers'      <<
+                              '--exclude' << 'test'                   <<
                               '--line-numbers'
 
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir['{bin,lib}/**/*']
@@ -68,8 +73,8 @@ end
 ### Documentation
 
 Rake::RDocTask.new do |task|
-  task.main = "README"
-  task.rdoc_files.include('README', 'lib/nanoc.rb', 'lib/nanoc/base/**/*.rb')
+  task.rdoc_files.include(spec.extra_rdoc_files + [ 'lib' ])
+  task.options = spec.rdoc_options
 end
 
 ### Testing
