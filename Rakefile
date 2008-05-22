@@ -52,11 +52,11 @@ Rake::GemPackageTask.new(spec) { |task| }
 
 task :install_gem do
   sh %{rake package}
-  sh %{sudo gem install pkg/#{NAME}-#{VERS}}
+  sh %{gem install pkg/#{NAME}-#{VERS}}
 end
 
 task :uninstall_gem do
-  sh %{sudo gem uninstall #{NAME}}
+  sh %{gem uninstall #{NAME}}
 end
 
 ### Testing
