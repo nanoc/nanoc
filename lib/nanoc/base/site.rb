@@ -1,20 +1,44 @@
 module Nanoc
 
-  # Nanoc::Site is the in-memory representation of a nanoc site directory.
+  # Nanoc::Site is the in-memory representation of a nanoc site. It holds
+  # references to site data, which is represented by five classes:
   #
-  # It holds references to the following site data:
+  # * Nanoc::Page represents a page
+  # * Nanoc::PageDefaults represents page defaults
+  # * Nanoc::Layout represents a layout
+  # * Nanoc::Template represents a template templates, and
+  # * Nanoc::Code represents custom site code
   #
-  # * pages
-  # * page defaults
-  # * layouts
-  # * templates
-  # * code
-  # * configuration (config.yaml file)
+  # In addition, each site has a +config+ hash which stores the site
+  # configuration. This configuration hash can have the following keys:
   #
-  # Each Nanoc::Site also has a compiler (Nanoc::Compiler) and a data source
-  # (Nanoc::DataSource).
+  # +output_dir+:: The directory to which compiled pages will be written.
+  #                This path is relative to the current working directory,
+  #                but can also be an absolute path.
+  #
+  # +data_source+:: The identifier of the data source that will be used for
+  #                 loading site data.
+  #
+  # +router+:: The identifier of the router that will be used for
+  #            determining page paths.
+  #
+  # A site also has several helper classes:
+  #
+  # * A Nanoc::Router subclass instance used for determining page paths.
+  # * A Nanoc::DataSource subclass instance used for managing site data.
+  # * A Nanoc::Compiler instance that turns pages into compiled pages.
+  #
+  # The physical representation of a Nanoc::Site is usually a directory that
+  # contains a configuration file, site data, and some rake tasks. However,
+  # different frontends may store data differently. For example, a web-based
+  # frontend would probably store the configuration and the site content in a
+  # database, and would not have rake tasks at all.
   class Site
 
+    # The default configuration for a site. A site's configuration overrides
+    # these options: when a Nanoc::Site is created with a configuration that
+    # lacks some options, the default value will be taken from
+    # +DEFAULT_CONFIG+.
     DEFAULT_CONFIG = {
       :output_dir   => 'output',
       :data_source  => 'filesystem',
@@ -23,10 +47,12 @@ module Nanoc
 
     attr_reader :config
     attr_reader :compiler, :data_source, :router
-    attr_reader :code, :pages, :page_defaults, :layouts, :templates
+    attr_reader :pages, :page_defaults, :layouts, :templates, :code
 
     # Returns a Nanoc::Site object for the site specified by the given
-    # configuration hash.
+    # configuration hash +config+.
+    #
+    # +config+:: A hash containing the site configuration.
     def initialize(config)
       # Load configuration
       @config = DEFAULT_CONFIG.merge(config.clean)
@@ -48,9 +74,15 @@ module Nanoc
       @data_loaded = false
     end
 
-    # Loads the site data. The site data is cached, so calling this method
-    # will not have any effect the second time, unless +force+ is true.
+    # Loads the site data. This will query the Nanoc::DataSource associated
+    # with the site and fetch all site data. The site data is cached, so
+    # calling this method will not have any effect the second time, unless
+    # +force+ is true.
+    #
+    # +force+:: If true, will force load the site data even if it has been
+    #           loaded before, to circumvent caching issues.
     def load_data(force=false)
+      # Don't load data twice
       return if @data_loaded and !force
 
       log(:low, "Loading data...")
@@ -64,6 +96,8 @@ module Nanoc
           @code = Code.new(code)
         end
         @code.site = self
+        # FIXME more responsibility for loading site code elsewhere, so
+        # potentially dangerous code can be put in a sandbox.
         @code.load
 
         # Pages
@@ -115,12 +149,39 @@ module Nanoc
       @data_loaded = true
     end
 
-    # Creates a new site directory on disk. +path+ is the path to the new
-    # site directory.
+    # Compiles the site (calls Nanoc::Compiler#run for the site's compiler)
+    # and writes the compiled site to the output directory specified in the
+    # site configuration file.
     #
-    # Newly created sites always use the filesystem data source, although it
-    # is possible to change the data source after the site is created.
-    def self.create(path)
+    # +path+:: The path to the page that should be compiled, or +nil+ if the
+    #          entire site should be compiled.
+    #
+    # +include_outdated+:: +false+ if outdated pages should not be recompiled,
+    #                      and +true+ if they should.
+    def compile(path=nil, include_outdated=false)
+      load_data
+
+      # Find page with given path
+      if path.nil?
+        page = nil
+      else
+        page = @pages.find { |page| page.web_path == "/#{path.gsub(/^\/|\/$/, '')}/" }
+        error "The '/#{path.gsub(/^\/|\/$/, '')}/' page was not found; aborting." if page.nil?
+      end
+
+      @compiler.run(page, include_outdated)
+    end
+
+    # Sets up the site's data source. This will call Nanoc::DataSource#setup
+    # for this site's data source.
+    def setup
+      @data_source.loading { @data_source.setup }
+    end
+
+    #################### OUTDATED ####################
+
+    # TODO outdated; remove me (frontend should implement this)
+    def self.create(path) # :nodoc:
       # Check whether site exists
       error "A site at '#{path}' already exists." if File.exist?(path)
 
@@ -156,32 +217,8 @@ module Nanoc
       end
     end
 
-    # Compiles the site (calls Nanoc::Compiler#run for the site's compiler)
-    # and writes the compiled site to the output directory specified in the
-    # site configuration file.
-    def compile(path=nil, all=false)
-      load_data
-
-      # Find page with given path
-      if path.nil?
-        page = nil
-      else
-        page = @pages.find { |page| page.web_path == "/#{path.gsub(/^\/|\/$/, '')}/" }
-        error "The '/#{path.gsub(/^\/|\/$/, '')}/' page was not found; aborting." if page.nil?
-      end
-
-      @compiler.run(page, all)
-    end
-
-    # Sets up the site's data source. This will call Nanoc::DataSource#setup
-    # for this site's data source.
-    def setup
-      @data_source.loading { @data_source.setup }
-    end
-
-    # Creates a new blank page (calls DataSource#create_page) with the given
-    # page path (+path+) and with the given template name (+template_name+).
-    def create_page(path, template_name='default')
+    # TODO outdated; remove me (frontend should implement this)
+    def create_page(path, template_name='default') # :nodoc:
       load_data
 
       # Find template
@@ -191,15 +228,13 @@ module Nanoc
       @data_source.loading { @data_source.create_page(path, template) }
     end
 
-    # Creates a new blank template (calls DataSource#create_template) with
-    # +name+ as the template name.
-    def create_template(name)
+    # TODO outdated; remove me (frontend should implement this)
+    def create_template(name) # :nodoc:
       @data_source.loading {@data_source.create_template(name) }
     end
 
-    # Creates a new blank layout (calls DataSource#create_layout) with
-    # +name+ as the layout name.
-    def create_layout(name)
+    # TODO outdated; remove me (frontend should implement this)
+    def create_layout(name) # :nodoc:
       @data_source.loading { @data_source.create_layout(name) }
     end
 
