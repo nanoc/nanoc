@@ -7,8 +7,12 @@ Markdown, etc.
 
 == Documentation
 
-nanoc has a web site at <http://nanoc.stoneship.org/>, which contains a
+nanoc's web site, which can be found at http://nanoc.stoneship.org, contains a
 tutorial and a manual to help you get started with nanoc.
+
+Hackers that simply love poking around in other people's source code should
+start by taking a look at the documentation for Nanoc::Site, which pretty much
+is the central class in nanoc.
 
 == Contributors
 
