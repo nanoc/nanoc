@@ -1,32 +1,36 @@
 module Nanoc
 
-  # Nanoc::Site is the in-memory representation of a nanoc site. It holds
-  # references to site data, which is represented by five classes:
+  # A Nanoc::Site is the in-memory representation of a nanoc site. It holds
+  # references to the following site data:
   #
-  # * Nanoc::Page represents a page
-  # * Nanoc::PageDefaults represents page defaults
-  # * Nanoc::Layout represents a layout
-  # * Nanoc::Template represents a template templates, and
-  # * Nanoc::Code represents custom site code
+  # * +pages+ is a list of Nanoc::Page instances representing pages
+  # * +page_defaults+ is a Nanoc::PageDefaults instance representing page
+  #   defaults
+  # * +layouts+ is a list of Nanoc::Layout instances representing layouts
+  # * +templates+ is a list of Nanoc::Template representing templates
+  # * +code+ is a Nanoc::Code instance representing custom site code
   #
   # In addition, each site has a +config+ hash which stores the site
   # configuration. This configuration hash can have the following keys:
   #
-  # +output_dir+:: The directory to which compiled pages will be written.
-  #                This path is relative to the current working directory,
-  #                but can also be an absolute path.
+  # +output_dir+:: The directory to which compiled pages will be written. This
+  #                path is relative to the current working directory, but can
+  #                also be an absolute path.
   #
   # +data_source+:: The identifier of the data source that will be used for
   #                 loading site data.
   #
-  # +router+:: The identifier of the router that will be used for
-  #            determining page paths.
+  # +router+:: The identifier of the router that will be used for determining
+  #            page paths.
   #
   # A site also has several helper classes:
   #
-  # * A Nanoc::Router subclass instance used for determining page paths.
-  # * A Nanoc::DataSource subclass instance used for managing site data.
-  # * A Nanoc::Compiler instance that turns pages into compiled pages.
+  # * +router+ is a Nanoc::Router subclass instance used for determining page
+  #   paths.
+  # * +data_source+ is a Nanoc::DataSource subclass instance used for managing
+  #   site data.
+  # * +compiler+ is a Nanoc::Compiler instance that turns pages into compiled
+  #   pages.
   #
   # The physical representation of a Nanoc::Site is usually a directory that
   # contains a configuration file, site data, and some rake tasks. However,
@@ -153,8 +157,8 @@ module Nanoc
     # and writes the compiled site to the output directory specified in the
     # site configuration file.
     #
-    # +path+:: The path to the page that should be compiled, or +nil+ if the
-    #          entire site should be compiled.
+    # +path+:: The path of the page (and its dependencies) that should be
+    #          compiled, or +nil+ if the entire site should be compiled.
     #
     # +include_outdated+:: +false+ if outdated pages should not be recompiled,
     #                      and +true+ if they should.

@@ -1,20 +1,38 @@
 module Nanoc
 
-  # TODO document
+  # A Nanoc::Template represents a template, which can be used for creating
+  # new pages (but pages don't need to be generated off pages).
   class Template
 
+    # The Nanoc::Site this template belongs to.
     attr_accessor :site
-    attr_reader   :name, :page_content, :page_attributes
 
-    # TODO document
+    # The name of this template.
+    attr_reader :name
+
+    # The raw content a page created using this template will have.
+    attr_reader :page_content
+
+    # A hash containing the attributes a page created using this template will
+    # have.
+    attr_reader :page_attributes
+
+    # Creates a new template.
+    #
+    # +name+:: The name of this template.
+    #
+    # +page_content+:: The raw content a page created using this template will
+    #                  have.
+    #
+    # +page_attributes+:: A hash containing the attributes a page created
+    #                     using this template will have.
     def initialize(name, page_content, page_attributes)
       @name             = name
       @page_content     = page_content
       @page_attributes  = page_attributes
     end
 
-    # :nodoc:
-    def [](key)
+    def [](key) # :nodoc:
       # FIXME get a decent warning
       warn "NOOO"
 

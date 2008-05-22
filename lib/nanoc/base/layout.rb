@@ -1,20 +1,40 @@
 module Nanoc
 
-  # A Layout represents a layout in a nanoc site. It has content, attributes
-  # (for determining which filter to use for laying out a page), a path
-  # (because layouts are organised hierarchically), and a modification time
-  # (to speed up compilation).
+  # A Nanoc::Layout represents a layout in a nanoc site. It has content,
+  # attributes (for determining which filter to use for laying out a page), a
+  # path (because layouts are organised hierarchically), and a modification
+  # time (to speed up compilation).
   class Layout
 
     # Default values for layouts.
-    PAGE_DEFAULTS = {
+    LAYOUT_DEFAULTS = {
       :filter => 'erb'
     }
 
-    attr_reader   :content, :attributes, :path, :mtime
+    # The Nanoc::Site this layout belongs to.
     attr_accessor :site
 
+    # The raw content of this layout.
+    attr_reader :content
+
+    # A hash containing this layout's attributes.
+    attr_reader :attributes
+
+    # This layout's path, starting and ending with a slash.
+    attr_reader :path
+
+    # The time when this layout was last modified.
+    attr_reader :mtime
+
     # Creates a new layout.
+    #
+    # +content+:: The raw content of this layout.
+    #
+    # +attributes+:: A hash containing this layout's attributes.
+    #
+    # +path+:: This layout's path, starting and ending with a slash.
+    #
+    # +mtime+:: The time when this layout was last modified.
     def initialize(content, attributes, path, mtime=nil)
       @content    = content
       @attributes = attributes.clean
@@ -22,7 +42,7 @@ module Nanoc
       @mtime      = mtime
     end
 
-    # Returns a proxy (LayoutProxy) for this layout.
+    # Returns a proxy (Nanoc::LayoutProxy) for this layout.
     def to_proxy
       @proxy ||= LayoutProxy.new(self)
     end
@@ -30,7 +50,7 @@ module Nanoc
     # Returns the attribute with the given name.
     def attribute_named(name)
       return @attributes[name] if @attributes.has_key?(name)
-      return PAGE_DEFAULTS[name]
+      return LAYOUT_DEFAULTS[name]
     end
 
     # Returns the filter class needed for this layout.

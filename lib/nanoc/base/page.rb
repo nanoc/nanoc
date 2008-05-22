@@ -1,8 +1,8 @@
 module Nanoc
 
-  # A Page represents a page in a nanoc site. It has content and attributes,
-  # as well as a path. It can also store the modification time to speed up
-  # compilation.
+  # A Nanoc::Page represents a page in a nanoc site. It has content and
+  # attributes, as well as a path. It can also store the modification time to
+  # speed up compilation.
   class Page
 
     # Default values for pages.
@@ -18,14 +18,36 @@ module Nanoc
       :skip_output  => false
     }
 
-    attr_accessor :content, :attributes, :path, :mtime
-    attr_accessor :parent, :children
+    # The Nanoc::Site this page belongs to.
     attr_accessor :site
 
-    # Creates a new page. +content+ is the actual content of the page.
-    # +attributes+ is a hash containing metadata for the page. +path+ is the
-    # path of the page relative to the web root. +mtime+ is the time when the
-    # page was last modified (optional).
+    # The parent page of this page. This can be nil even for non-root pages.
+    attr_accessor :parent
+
+    # The child pages of this page.
+    attr_accessor :children
+
+    # The page's unprocessed content
+    attr_accessor :content
+
+    # A hash containing this page's attributes.
+    attr_accessor :attributes
+
+    # This page's path.
+    attr_accessor :path
+
+    # The time when this page was last modified.
+    attr_accessor :mtime
+
+    # Creates a new page.
+    #
+    # +content+:: This page's unprocessed content.
+    #
+    # +attributes+:: A hash containing this page's attributes.
+    #
+    # +path+:: This page's path.
+    #
+    # +mtime+:: The time when this page was last modified.
     def initialize(content, attributes, path, mtime=nil)
       # Set primary attributes
       @attributes     = attributes.clean
@@ -44,7 +66,7 @@ module Nanoc
       @written        = false
     end
 
-    # Returns a proxy (PageProxy) for this page.
+    # Returns a proxy (Nanoc::PageProxy) for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
     end
@@ -63,6 +85,9 @@ module Nanoc
 
       # Outdated if we don't know
       return true if @mtime.nil?
+
+      # Calculate compiled mtime
+      compiled_mtime = File.exist?(disk_path) ? File.stat(disk_path).mtime : nil
 
       # Outdated if file too old
       return true if @mtime > compiled_mtime
@@ -116,15 +141,12 @@ module Nanoc
       @web_path ||= @site.router.web_path_for(self)
     end
 
-    # Returns the modification time of the compiled page if it exists, nil otherwise.
-    def compiled_mtime
-      compiled_path = disk_path
-      File.exist?(compiled_path) ? File.stat(compiled_path).mtime : nil
-    end
-
-    # Compiles the page. Will layout and post-filter the page, unless +full+
-    # is false.
-    def compile(full=true)
+    # Compiles the page.
+    #
+    # +also_layout+:: When +true+, will layout and post-filter the page, as
+    #                 well as write out the compiled page. Otherwise, will
+    #                 just pre-filter the page.
+    def compile(also_layout=true)
       @modified = false
 
       # Check for recursive call
@@ -146,19 +168,19 @@ module Nanoc
       end
 
       # Layout
-      if !@laid_out and full
+      if !@laid_out and also_layout
         layout!
         @laid_out = true
       end
 
       # Filter post
-      if !@filtered_post and full
+      if !@filtered_post and also_layout
         filter!(:post)
         @filtered_post = true
       end
 
       # Write
-      if !@written and full
+      if !@written and also_layout
         @modified = FileManager.create_file(self.disk_path) { @content[:post] } unless attribute_named(:skip_output)
         @written = true
       end

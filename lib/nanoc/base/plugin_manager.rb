@@ -15,22 +15,22 @@ module Nanoc
       @routers            = {}
     end
 
-    # Returns the data source class with the given identifier
+    # Returns the data source class with the given identifier.
     def data_source(identifier)
       @data_sources[identifier] ||= find(DataSource, :identifiers, identifier)
     end
 
-    # Returns the filter class with the given identifier
+    # Returns the filter class with the given identifier.
     def filter(identifier)
       @filters[identifier] ||= find(Filter, :identifiers, identifier)
     end
 
-    # Returns the layout processor class with the given file extension
+    # Returns the layout processor class with the given file extension.
     def layout_processor(ext)
       @layout_processors[ext] ||= find(Filter, :extensions, ext)
     end
 
-    # Returns the router class with the given identifier
+    # Returns the router class with the given identifier.
     def router(identifier)
       @routers[identifier] ||= find(Router, :identifiers, identifier)
     end
