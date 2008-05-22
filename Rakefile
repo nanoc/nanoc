@@ -4,6 +4,7 @@ require 'rake'
 
 require 'rake/clean'
 require 'rake/gempackagetask'
+require 'rake/rdoctask'
 require 'rake/testtask'
 
 require File.dirname(__FILE__) + '/lib/nanoc.rb'
@@ -41,7 +42,12 @@ spec = Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.8.5'
 
-  s.has_rdoc              = false
+  s.has_rdoc              = true
+  s.extra_rdoc_files      = [ 'README' ]
+  s.rdoc_options          <<  '--title' << 'nanoc'  <<
+                              '--main'  << 'README' <<
+                              '--line-numbers'
+
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir['{bin,lib}/**/*']
   s.executables           = [ 'nanoc' ]
   s.require_path          = 'lib'
@@ -59,10 +65,17 @@ task :uninstall_gem do
   sh %{gem uninstall #{NAME}}
 end
 
+### Documentation
+
+Rake::RDocTask.new do |task|
+  task.main = "README"
+  task.rdoc_files.include('README', 'lib/nanoc.rb', 'lib/nanoc/base/**/*.rb')
+end
+
 ### Testing
 
-Rake::TestTask.new(:test) do |test|
-  test.test_files = Dir['test/test_*.rb']
+Rake::TestTask.new(:test) do |task|
+  task.test_files = Dir['test/test_*.rb']
 end
 
 task :default => [ :test ]
