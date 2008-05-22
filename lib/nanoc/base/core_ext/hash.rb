@@ -5,11 +5,11 @@ class Hash
   # Cleans up the hash and returns the result. It performs the following
   # operations:
   #
-  # * Values with keys ending in _at and _on are converted into Times and
-  #   Dates, respectively
+  # * Values with keys ending in +_at+ and +_on+ are converted into +Time+ and
+  #   and +Date+ objects, respectively
   # * All keys are converted to symbols
-  # * Value strings 'true', 'false', and 'none' are converted into
-  #   true, false, and nil, respectively
+  # * Value strings 'true', 'false' and 'none' are converted into +true+,
+  #   +false+ and +nil+, respectively
   def clean
     inject({}) do |hash, (key, value)|
       real_key = key.to_s
@@ -31,7 +31,7 @@ class Hash
     end
   end
 
-  # Returns the hash where all keys are converted to strings
+  # Returns the hash where all keys are converted to strings.
   def stringify_keys
     inject({}) do |hash, (key, value)|
       hash.merge(key.to_s => value.is_a?(Hash) ? value.stringify_keys : value)

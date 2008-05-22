@@ -1,13 +1,12 @@
 module Nanoc
 
   # Nanoc::Context provides a context and a Binding for use in various
-  # filters and layout processors such as the ERB and Haml one.
+  # filters, such as the ERB and Haml one.
   class Context
 
-    # Creates a new context based off the contents of the hash. Each pair
-    # in the hash will be converted to an instance variable. For example,
-    # passing the hash { :foo => 'bar' } will cause @foo to have the value
-    # "bar".
+    # Creates a new context based off the contents of the hash. Each pair in
+    # the hash will be converted to an instance variable. For example, passing
+    # the hash { :foo => 'bar' } will cause @foo to have the value "bar".
     def initialize(hash)
       hash.each_pair do |key, value|
         instance_variable_set('@' + key.to_s, value)

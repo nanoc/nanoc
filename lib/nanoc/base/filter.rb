@@ -5,6 +5,13 @@ module Nanoc
   class Filter < Plugin
 
     # Creates a new filter for the given page and site.
+    #
+    # +page+:: The page (Nanoc::Page) that should be compiled by this filter.
+    #
+    # +site+:: The site (Nanoc::Site) this filter belongs to.
+    #
+    # +other_assigns+:: A hash containing other variables that should be made
+    #                   available during filtering.
     def initialize(page, site, other_assigns={})
       @page           = page
       @pages          = site.pages.map   { |p| p.to_proxy }
@@ -14,8 +21,11 @@ module Nanoc
       @other_assigns  = other_assigns
     end
 
-    # Runs the filter. Subclasses should override this method. This method
-    # returns the filtered content.
+    # Runs the filter. This method returns the filtered content.
+    #
+    # Subclasses should override this method.
+    #
+    # +content+:: The unprocessed content that should be filtered.
     def run(content)
       error 'Filter#run must be overridden'
     end
@@ -29,23 +39,12 @@ module Nanoc
 
       attr_accessor :extensions # :nodoc:
 
-      # Sets or returns the extensions for this filter when used as a
-      # layout processor.
-      # 
-      # When given a list of extension symbols, sets the extensions for
-      # this layout processor. When given nothing, returns an array of
-      # extension symbols.
-      def extensions(*exts)
+      def extensions(*exts) # :nodoc:
         @extensions = [] unless instance_variables.include?('@extensions')
         exts.empty? ? @extensions : @extensions = exts
       end
 
-      # Sets or returns the extension for this filter when used as a
-      # layout processor.
-      # 
-      # When given an extension symbols, sets the extension for this layout
-      # processor. When given nothing, returns the extension.
-      def extension(ext=nil)
+      def extension(ext=nil) # :nodoc:
         @extensions = [] unless instance_variables.include?('@extensions')
         ext.nil? ? @extensions.first : extensions(ext)
       end
