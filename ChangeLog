@@ -13,6 +13,7 @@ New:
 * Better source code documentation
 * A new filesystem data source named "filesystem2", which stores pages and
   layouts in single files instead of directories
+* Routers, which decide where compiled pages should be written to.
 
 Changed:
 
