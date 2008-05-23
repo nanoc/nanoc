@@ -1,6 +1,6 @@
 require 'test/unit'
 
-require File.join(File.dirname(__FILE__), 'helper.rb')
+require File.join(File.dirname(__FILE__), '..', 'helper.rb')
 
 class DataSourceFilesystemTest < Test::Unit::TestCase
 
@@ -226,23 +226,6 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
         assert(File.directory?('content/foo/bar/'))
         assert(File.file?('content/foo/bar/bar.txt'))
         assert(File.file?('content/foo/bar/bar.yaml'))
-      end
-    end
-  end
-
-  # FIXME outdated, remove
-  def test_create_template
-    in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
-      in_dir %w{ site } do
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-
-        assert_nothing_raised()   { site.create_template('test') }
-        assert_raise(SystemExit)  { site.create_template('test') }
-
-        assert(File.directory?('templates/test/'))
-        assert(File.file?('templates/test/test.txt'))
-        assert(File.file?('templates/test/test.yaml'))
       end
     end
   end

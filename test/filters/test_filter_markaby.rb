@@ -1,24 +1,24 @@
 require 'test/unit'
 
-require File.join(File.dirname(__FILE__), 'helper.rb')
+require File.join(File.dirname(__FILE__), '..', 'helper.rb')
 
-class FilterErubisTest < Test::Unit::TestCase
+class FilterMarkabyTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
-    if_have 'erubis' do
+    if_have 'markaby' do
       assert_nothing_raised do
         with_site_fixture 'empty_site' do |site|
           site.load_data
 
           # Get filter
-          filter = ::Nanoc::Filters::Erubis.new(site.pages.first.to_proxy, site)
+          filter = ::Nanoc::Filters::Markaby.new(site.pages.first.to_proxy, site)
 
           # Run filter
-          result = filter.run('<%= "Hello." %>')
-          assert_equal('Hello.', result)
+          result = filter.run("html do\nend")
+          assert_equal("<html></html>", result)
         end
       end
     end

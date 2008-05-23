@@ -1,6 +1,6 @@
 require 'test/unit'
 
-require File.join(File.dirname(__FILE__), 'helper.rb')
+require File.join(File.dirname(__FILE__), '..', 'helper.rb')
 
 class LayoutProcessorERBTest < Test::Unit::TestCase
 
