@@ -80,7 +80,7 @@ end
 ### Testing
 
 Rake::TestTask.new(:test) do |task|
-  task.test_files = Dir['test/test_*.rb']
+  task.test_files = Dir['test/**/test_*.rb']
 end
 
 task :default => [ :test ]
