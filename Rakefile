@@ -80,6 +80,7 @@ end
 ### Testing
 
 Rake::TestTask.new(:test) do |task|
+  task.libs       = [ 'lib', 'test' ]
   task.test_files = Dir['test/**/test_*.rb']
 end
 

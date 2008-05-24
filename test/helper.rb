@@ -1,4 +1,6 @@
-require File.dirname(__FILE__) + '/../lib/nanoc.rb'
+require 'test/unit'
+
+require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc.rb')
 
 def with_site_fixture(a_fixture)
   in_dir(['test', 'fixtures', a_fixture]) do

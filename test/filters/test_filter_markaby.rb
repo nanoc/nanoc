@@ -1,6 +1,4 @@
-require 'test/unit'
-
-require File.join(File.dirname(__FILE__), '..', 'helper.rb')
+require 'helper'
 
 class FilterMarkabyTest < Test::Unit::TestCase
 
