@@ -35,7 +35,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
         # Setup site
 
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-        site.data_source.loading { site.data_source.setup }
+        site.data_source.loading { site.data_source.setup {} }
 
         # Check whether files have been recreated
 
@@ -306,7 +306,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
 
         # Setup site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-        site.data_source.loading { site.data_source.setup }
+        site.data_source.loading { site.data_source.setup {} }
 
         # Get timestamps
         distant_past = Time.parse('1992-10-14')

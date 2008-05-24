@@ -30,7 +30,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
         # Recreate files
 
-        site.data_source.loading { site.data_source.setup }
+        site.data_source.loading { site.data_source.setup {} }
 
         # Check whether files have been recreated
 

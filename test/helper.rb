@@ -34,7 +34,10 @@ end
 
 def global_setup
   # Go quiet
-  $log_level = :off unless ENV['QUIET'] == 'false'
+  unless ENV['QUIET'] == 'false'
+    $log_level = :off 
+    Nanoc::CLI::Logger.instance.level = :off
+  end
 
   # Create tmp directory
   FileUtils.mkdir_p('tmp')
