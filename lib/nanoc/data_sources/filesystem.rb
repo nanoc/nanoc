@@ -181,7 +181,7 @@ module Nanoc::DataSources
         end
 
         # Write files
-        File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(page.attributes.stringify_keys)) }
+        File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(page.attributes)) }
         File.open(content_filename, 'w') { |io| io.write(page.content(:raw)) }
       end
 
@@ -211,7 +211,9 @@ module Nanoc::DataSources
 
       # TODO document
       def save_page_defaults(page_defaults)
-        # TODO implement
+        File.open('meta.yaml', 'w') do |io|
+          io.write(hash_to_yaml(page_defaults.attributes))
+        end
       end
 
       ########## Layouts ##########
@@ -458,8 +460,11 @@ module Nanoc::DataSources
       end
 
       def hash_to_yaml(hash)
-        # FIXME add more keys
-        builtin_keys = [ 'filters_pre' ]
+        # Get list of built-in keys
+        builtin_keys = Nanoc::Page::PAGE_DEFAULTS
+
+        # Stringify keys
+        hash = hash.stringify_keys
 
         # Split keys
         builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
