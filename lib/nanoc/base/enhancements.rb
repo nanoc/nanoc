@@ -6,28 +6,9 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 require 'yaml'
 require 'fileutils'
 
-# Logging (level can be :off, :high, :low)
-$log_level = :high
-def log(log_level, s, io=$stdout)
-  io.puts s if ($log_level == :low or $log_level == log_level) and $log_level != :off
-end
-
-# Convenience function for printing errors
-def error(s, pre='ERROR')
-  log(:high, pre + ': ' + s, $stderr)
-  exit(1)
-end
-
 # Convenience function for printing warnings
 def warn(s, pre='WARNING')
-  log(:high, pre + ': ' + s, $stderr)
-end
-
-# Convenience function for requiring libraries
-def nanoc_require(x, message="'#{x}' is required to compile this site.")
-  require x
-rescue LoadError
-  error(message)
+  $stderr.puts "WARNING: #{s}" unless ENV['QUIET']
 end
 
 # Rendering nested layouts
@@ -60,6 +41,27 @@ def in_dir(path)
   yield
 ensure
   FileUtils.cd(File.join(path.map { |n| '..' }))
+end
+
+############################# OLD AND DEPRECATED #############################
+
+# Logging (level can be :off, :high, :low)
+$log_level = :high
+def log(log_level, s, io=$stdout)
+  io.puts s if ($log_level == :low or $log_level == log_level) and $log_level != :off
+end
+
+# Convenience function for printing errors
+def error(s, pre='ERROR')
+  log(:high, pre + ': ' + s, $stderr)
+  exit(1)
+end
+
+# Convenience function for requiring libraries
+def nanoc_require(x, message="'#{x}' is required to compile this site.")
+  require x
+rescue LoadError
+  error(message)
 end
 
 class FileManager # :nodoc:

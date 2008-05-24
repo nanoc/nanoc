@@ -5,6 +5,9 @@ module Nanoc::CLI ; end
 Nanoc.load('cli', 'ext.rb')
 Nanoc.load('cli', 'option_parser.rb')
 
+# Load logger
+Nanoc.load('cli', 'logger.rb')
+
 # Load commands
 Nanoc.load('cli', 'command.rb')
 Nanoc.load('cli', 'commands', '*.rb')
