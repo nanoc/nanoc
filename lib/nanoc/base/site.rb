@@ -182,66 +182,6 @@ module Nanoc
       @data_source.loading { @data_source.setup }
     end
 
-    #################### OUTDATED ####################
-
-    # TODO outdated; remove me (frontend should implement this)
-    def self.create(path) # :nodoc:
-      # Check whether site exists
-      error "A site at '#{path}' already exists." if File.exist?(path)
-
-      FileUtils.mkdir_p(path)
-      in_dir([path]) do
-        # Create output
-        FileManager.create_dir 'output'
-
-        # Create config
-        FileManager.create_file 'config.yaml' do
-          "output_dir:  \"output\"\n" +
-          "data_source: \"filesystem\"\n"
-        end
-
-        # Create rakefile
-        FileManager.create_file 'Rakefile' do
-          "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n" +
-          "\n" +
-          "task :default do\n" +
-          "  puts 'This is an example rake task.'\n" +
-          "end\n"
-        end
-
-        # Create tasks
-        FileManager.create_file 'tasks/default.rake' do
-          "task :example do\n" +
-          "  puts 'This is an example rake task in tasks/default.rake.'\n" +
-          "end\n"
-        end
-
-        # Setup site
-        Site.new(YAML.load_file('config.yaml')).setup
-      end
-    end
-
-    # TODO outdated; remove me (frontend should implement this)
-    def create_page(path, template_name='default') # :nodoc:
-      load_data
-
-      # Find template
-      template = @templates.find { |t| t.name == template_name }
-      error "A template named '#{template_name}' was not found; aborting." if template.nil?
-
-      @data_source.loading { @data_source.create_page(path, template) }
-    end
-
-    # TODO outdated; remove me (frontend should implement this)
-    def create_template(name) # :nodoc:
-      @data_source.loading {@data_source.create_template(name) }
-    end
-
-    # TODO outdated; remove me (frontend should implement this)
-    def create_layout(name) # :nodoc:
-      @data_source.loading { @data_source.create_layout(name) }
-    end
-
   end
 
 end

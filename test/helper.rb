@@ -9,6 +9,22 @@ def with_site_fixture(a_fixture)
   end
 end
 
+def create_site(name)
+  Nanoc::CLI::Base.new.run(['create_site', name])
+end
+
+def create_layout(name)
+  Nanoc::CLI::Base.new.run(['create_layout', name])
+end
+
+def create_page(name)
+  Nanoc::CLI::Base.new.run(['create_page', name])
+end
+
+def create_template(name)
+  Nanoc::CLI::Base.new.run(['create_template', name])
+end
+
 def if_have(x)
   require x
   yield

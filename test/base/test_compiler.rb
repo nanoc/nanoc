@@ -186,7 +186,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_newly_created_site
     in_dir %w{ tmp } do
-      Nanoc::Site.create('tmp_site')
+      create_site('tmp_site')
       in_dir %w{ tmp_site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
         assert(site)
