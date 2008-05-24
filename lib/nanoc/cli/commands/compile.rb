@@ -45,8 +45,20 @@ module Nanoc::CLI
       # Make sure we are in a nanoc site directory
       @base.require_site
 
+      # Find page with given path
+      if arguments[0].nil?
+        page = nil
+      else
+        path = arguments[0].cleaned_path
+        page = @base.site.pages.find { |page| page.web_path == path }
+        if page.nil?
+          puts "Unknown page: #{path}"
+          exit 1
+        end
+      end
+
       # Compile site
-      @base.site.compile(arguments[0], options.has_key?(:all))
+      @base.site.compiler.run(page, options.has_key?(:all))
     end
 
   end

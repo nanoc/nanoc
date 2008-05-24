@@ -153,35 +153,6 @@ module Nanoc
       @data_loaded = true
     end
 
-    # Compiles the site (calls Nanoc::Compiler#run for the site's compiler)
-    # and writes the compiled site to the output directory specified in the
-    # site configuration file.
-    #
-    # +path+:: The path of the page (and its dependencies) that should be
-    #          compiled, or +nil+ if the entire site should be compiled.
-    #
-    # +include_outdated+:: +false+ if outdated pages should not be recompiled,
-    #                      and +true+ if they should.
-    def compile(path=nil, include_outdated=false)
-      load_data
-
-      # Find page with given path
-      if path.nil?
-        page = nil
-      else
-        page = @pages.find { |page| page.web_path == "/#{path.gsub(/^\/|\/$/, '')}/" }
-        error "The '/#{path.gsub(/^\/|\/$/, '')}/' page was not found; aborting." if page.nil?
-      end
-
-      @compiler.run(page, include_outdated)
-    end
-
-    # Sets up the site's data source. This will call Nanoc::DataSource#setup
-    # for this site's data source.
-    def setup
-      @data_source.loading { @data_source.setup }
-    end
-
   end
 
 end

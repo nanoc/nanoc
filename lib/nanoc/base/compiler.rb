@@ -18,6 +18,9 @@ module Nanoc
     # +include_outdated+:: +false+ if outdated pages should not be recompiled,
     #                      and +true+ if they should.
     def run(page=nil, include_outdated=false)
+      # Load data
+      @site.load_data
+
       # Give feedback
       log(:high, "Compiling #{page.nil? ? 'site' : 'page'}...")
       time_before = Time.now
