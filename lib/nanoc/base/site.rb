@@ -89,8 +89,6 @@ module Nanoc
       # Don't load data twice
       return if @data_loaded and !force
 
-      log(:low, "Loading data...")
-
       # Load data
       @data_source.loading do
         # Code

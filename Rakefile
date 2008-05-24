@@ -84,6 +84,8 @@ end
 ### Testing
 
 Rake::TestTask.new(:test) do |task|
+  ENV['QUIET'] = 'true'
+
   task.libs       = [ 'lib', 'test' ]
   task.test_files = Dir['test/**/test_*.rb']
 end

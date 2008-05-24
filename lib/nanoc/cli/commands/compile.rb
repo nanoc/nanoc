@@ -75,7 +75,7 @@ module Nanoc::CLI
           end
 
           # Log
-          FileManager.file_log(level, action, page.disk_path)
+          Nanoc::CLI::Logger.instance.file(level, action, page.disk_path)
         end
 
         # Give feedback

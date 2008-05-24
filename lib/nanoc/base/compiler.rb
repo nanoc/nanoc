@@ -21,8 +21,6 @@ module Nanoc
       # Load data
       @site.load_data
 
-      # TODO notify when a page is compiled (or not, if it's not modified) (:identical, :updated, :created)
-
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 

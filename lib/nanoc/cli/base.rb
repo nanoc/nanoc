@@ -44,6 +44,11 @@ module Nanoc::CLI
         {
           :long => 'help', :short => 'h', :argument => :forbidden,
           :desc => 'show this help message and quit'
+        },
+        # --verbose
+        {
+          :long => 'verbose', :short => 'V', :argument => :forbidden,
+          :desc => 'enable more detailed output'
         }
       ]
 
@@ -62,6 +67,11 @@ module Nanoc::CLI
       if parsed_arguments[:options].has_key?(:help)
         show_help(command)
         exit 1
+      end
+
+      # Check verbose option
+      if parsed_arguments[:options].has_key?(:verbose)
+        Nanoc::CLI::Logger.instance.level = :low
       end
 
       # Find and run command
