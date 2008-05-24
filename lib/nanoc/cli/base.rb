@@ -17,7 +17,7 @@ module Nanoc::CLI
 
       # Find version or help options
       if args.length == 1
-        parsed_arguments = Nanoc::OptionParser.parse(args[0..-1], global_option_definitions, true)
+        parsed_arguments = Nanoc::OptionParser::Base.parse(args[0..-1], global_option_definitions, true)
         if parsed_arguments[:options].has_key?(:version)
           puts "nanoc #{Nanoc::VERSION} (c) 2007-2008 Denis Defreyne."
           exit 1
@@ -31,7 +31,7 @@ module Nanoc::CLI
       command = command_named(args[0])
 
       # Parse arguments
-      parsed_arguments = Nanoc::OptionParser.parse(args[1..-1], command.option_definitions)
+      parsed_arguments = Nanoc::OptionParser::Base.parse(args[1..-1], command.option_definitions)
 
       # Find and run command
       command.run(parsed_arguments[:options], parsed_arguments[:arguments])

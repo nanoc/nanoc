@@ -12,7 +12,7 @@ class OptionParserTest < Test::Unit::TestCase
     result = nil
 
     assert_nothing_raised do
-      result = Nanoc::OptionParser.parse(input, definitions)
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
 
     assert_equal({},                      result[:options])
@@ -28,7 +28,7 @@ class OptionParserTest < Test::Unit::TestCase
     result = nil
 
     assert_nothing_raised do
-      result = Nanoc::OptionParser.parse(input, definitions)
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
 
     assert_equal({ :aaa => nil },  result[:options])
@@ -44,7 +44,7 @@ class OptionParserTest < Test::Unit::TestCase
     result = nil
 
     assert_nothing_raised do
-      result = Nanoc::OptionParser.parse(input, definitions)
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
 
     assert_equal({ :aaa => 'xxx' },  result[:options])
@@ -59,8 +59,8 @@ class OptionParserTest < Test::Unit::TestCase
 
     result = nil
 
-    assert_raise(RuntimeError) do
-      result = Nanoc::OptionParser.parse(input, definitions)
+    assert_raise(Nanoc::OptionParser::OptionRequiresAnArgumentError) do
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
   end
 
@@ -73,7 +73,7 @@ class OptionParserTest < Test::Unit::TestCase
     result = nil
 
     assert_nothing_raised do
-      result = Nanoc::OptionParser.parse(input, definitions)
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
 
     assert_equal({ :aaa => nil },  result[:options])
@@ -88,8 +88,8 @@ class OptionParserTest < Test::Unit::TestCase
 
     result = nil
 
-    assert_raise(RuntimeError) do
-      result = Nanoc::OptionParser.parse(input, definitions)
+    assert_raise(Nanoc::OptionParser::OptionRequiresAnArgumentError) do
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
   end
 
@@ -104,7 +104,7 @@ class OptionParserTest < Test::Unit::TestCase
     result = nil
 
     assert_nothing_raised do
-      result = Nanoc::OptionParser.parse(input, definitions)
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
 
     assert_equal({ :aaa => nil, :bbb => nil, :ccc => nil },  result[:options])
@@ -118,7 +118,7 @@ class OptionParserTest < Test::Unit::TestCase
     result = nil
 
     assert_nothing_raised do
-      result = Nanoc::OptionParser.parse(input, definitions)
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
     end
 
     assert_equal({},                                      result[:options])
