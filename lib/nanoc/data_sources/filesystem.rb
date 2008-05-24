@@ -163,7 +163,7 @@ module Nanoc::DataSources
 
         # Get existing path
         existing_path = nil
-        existing_path = meta_filename_best if File.file?(meta_filename_best)
+        existing_path = meta_filename_best  if File.file?(meta_filename_best)
         existing_path = meta_filename_worst if File.file?(meta_filename_worst)
 
         if existing_path.nil?
@@ -187,12 +187,12 @@ module Nanoc::DataSources
 
       # TODO document
       def move_page(page, new_path)
-        not_implemented('move_page', :optional)
+        # TODO implement
       end
 
       # TODO document
       def delete_page(page)
-        not_implemented('delete_page', :optional)
+        # TODO implement
       end
 
       ########## Page Defaults ##########
@@ -211,7 +211,7 @@ module Nanoc::DataSources
 
       # TODO document
       def save_page_defaults(page_defaults)
-        not_implemented('save_page_defaults', :optional)
+        # TODO implement
       end
 
       ########## Layouts ##########
@@ -227,9 +227,8 @@ module Nanoc::DataSources
 
         if is_old_school
           # Warn about deprecation
-          # TODO fix URL
           warn('nanoc 2.1 changes the way layouts are stored. Please see ' +
-               'XXX for details on how to adjust your site.')
+               'the nanoc web site for details on how to adjust your site.')
 
           Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
             # Get content
@@ -258,7 +257,7 @@ module Nanoc::DataSources
 
             # Get path
             path = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
- 
+
             # Get modification times
             meta_mtime    = File.stat(meta_filename).mtime
             content_mtime = File.stat(content_filename).mtime
@@ -272,17 +271,17 @@ module Nanoc::DataSources
 
       # TODO document
       def save_layout(layout)
-        not_implemented('save_layout', :optional)
+        # TODO implement
       end
 
       # TODO document
       def move_layout(layout, new_path)
-        not_implemented('move_layout', :optional)
+        # TODO implement
       end
 
       # TODO document
       def delete_layout(layout)
-        not_implemented('delete_layout', :optional)
+        # TODO implement
       end
 
       ########## Templates ##########
@@ -310,17 +309,17 @@ module Nanoc::DataSources
 
       # TODO document
       def save_template(template)
-        not_implemented('save_template', :optional)
+        # TODO implement
       end
 
       # TODO document
       def move_template(template, new_path)
-        not_implemented('move_template', :optional)
+        # TODO implement
       end
 
       # TODO document
       def delete_template(template)
-        not_implemented('delete_template', :optional)
+        # TODO implement
       end
 
       ########## Code ##########
@@ -328,11 +327,15 @@ module Nanoc::DataSources
       # Code is stored in '.rb' files in the 'lib' directory. Code can reside
       # in sub-directories.
       def code
+        # Get files
+        filenames = Dir['lib/**/*.rb'].sort
+
         # Get data
-        data = Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
+        data = filenames.map { |filename| File.read(filename) + "\n" }.join('')
 
         # Get modification time
-        mtime = Dir['lib/**/*.rb'].map { |filename| File.stat(filename).mtime }.inject { |memo, mtime| memo > mtime ? mtime : memo}
+        mtimes = filenames.map { |filename| File.stat(filename).mtime }
+        mtime = mtimes.inject { |memo, mtime| memo > mtime ? mtime : memo }
 
         # Build code
         Nanoc::Code.new(data, mtime)
@@ -340,15 +343,13 @@ module Nanoc::DataSources
 
       # TODO document
       def save_code(code)
-        not_implemented('save_code', :optional)
+        # TODO implement
       end
 
       ########## OLD ##########
 
-      # Creating a page creates a page directory with the name of the page in
-      # the 'content' directory, as well as a content file named xxx.txt and a
-      # meta file named xxx.yaml (with xxx being the name of the page).
-      def create_page(path, template)
+      # TODO remove this; outdated
+      def create_page(path, template) # :nodoc:
         # Make sure path does not start or end with a slash
         sanitized_path = path.gsub(/^\/+|\/+$/, '')
 
@@ -366,9 +367,8 @@ module Nanoc::DataSources
         FileManager.create_file(content_path) { template[:content] }
       end
 
-      # Creating a layout creates a single file in the 'layouts' directory,
-      # named xxx.erb (with xxx being the name of the layout).
-      def create_layout(name)
+      # TODO remove this; outdated
+      def create_layout(name) # :nodoc:
         # Get details
         path = 'layouts/' + name
 
@@ -391,10 +391,7 @@ module Nanoc::DataSources
         end
       end
 
-      # Creating a template creates a template directory with the name of the
-      # template in the 'templates' directory, as well as a content file named
-      # xxx.txt and a meta file named xxx.yaml (with xxx being the name of the
-      # template).
+      # TODO remove this; outdated
       def create_template(name)
         # Get paths
         meta_path    = 'templates/' + name + '/' + name + '.yaml'

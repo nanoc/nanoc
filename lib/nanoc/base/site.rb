@@ -100,7 +100,7 @@ module Nanoc
           @code = Code.new(code)
         end
         @code.site = self
-        # FIXME more responsibility for loading site code elsewhere, so
+        # FIXME move responsibility for loading site code elsewhere, so
         # potentially dangerous code can be put in a sandbox.
         @code.load
 
