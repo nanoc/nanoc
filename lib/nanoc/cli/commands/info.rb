@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class InfoCommand < Command
+  class InfoCommand < Command # :nodoc:
 
     def name
       'info'

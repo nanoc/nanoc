@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreateSiteCommand < Command
+  class CreateSiteCommand < Command # :nodoc:
 
     def name
       'create_site'

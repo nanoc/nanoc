@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class AutocompileCommand < Command
+  class AutocompileCommand < Command # :nodoc:
 
     def name
       'autocompile'

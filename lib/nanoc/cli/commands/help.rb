@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class HelpCommand < Command
+  class HelpCommand < Command # :nodoc:
 
     def name
       'help'
