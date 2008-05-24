@@ -2,6 +2,7 @@
 
 # Load nanoc
 require File.dirname(__FILE__) + '/../lib/nanoc.rb'
+require File.dirname(__FILE__) + '/../lib/nanoc/cli/cli.rb'
 
 # Run base
 base = Nanoc::CLI::Base.new
