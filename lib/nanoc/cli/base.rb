@@ -122,8 +122,10 @@ module Nanoc::CLI
           @site.load_data
         rescue Nanoc::UnknownDataSourceError => e
           puts "Unknown data source: #{e}"
+          exit 1
         rescue Nanoc::UnknownRouterError => e
           puts "Unknown router: #{e}"
+          exit 1
         end
       end
 
