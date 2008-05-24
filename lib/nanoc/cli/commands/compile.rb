@@ -11,19 +11,51 @@ module Nanoc::CLI
     end
 
     def short_desc
-      'compile all pages of this site'
+      'compile pages of this site'
     end
 
     def long_desc
-      'blah.'
+      'Compile all pages of the current site. If a path is given, only ' +
+      'the page with the given path will be compiled. Additionally, only ' +
+      'pages that are outdated will be compiled, unless specified ' +
+      'otherwise with the -a option.'
     end
 
     def usage
-      "nanoc compile [path]"
+      "nanoc compile [options] [path]"
+    end
+
+    def option_definitions
+      [
+        # --all
+        {
+          :long => 'all', :short => 'a', :argument => :forbidden,
+          :desc => 'Compile all pages, even those that aren\'t outdated.'
+        },
+        # --help
+        {
+          :long => 'help', :short => 'h', :argument => :forbidden,
+          :desc => 'Show this help message and quit.'
+        }
+      ]
     end
 
     def run(options, arguments)
-      puts "Compiling! :D"
+      # Check help argument
+      if options.has_key?(:help)
+        @base.show_help(self)
+        exit 1
+      end
+
+      # Make sure we are in a nanoc site directory
+      if @base.site.nil?
+        puts 'The current working directory does not seem to be a ' +
+             'valid/complete nanoc site directory; aborting.'
+        exit 1
+      end
+
+      # Compile site
+      @base.site.compile(arguments[0], options.has_key?(:all))
     end
 
   end
