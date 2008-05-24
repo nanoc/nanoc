@@ -1,5 +1,5 @@
-# The namespace for all functionality of the nanoc CLI tool.
-module Nanoc::CLI ; end
+module Nanoc::CLI # :nodoc:
+end
 
 # Load extensions
 Nanoc.load('cli', 'ext.rb')

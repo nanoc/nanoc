@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreatePageCommand < Command
+  class CreatePageCommand < Command # :nodoc:
 
     def name
       'create_page'

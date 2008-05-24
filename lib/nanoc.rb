@@ -6,8 +6,7 @@ module Nanoc
   # Generic error. Superclass for all nanoc-specific errors.
   class Error < RuntimeError ; end
 
-  # Module in which all nanoc errors are defined.
-  module Errors
+  module Errors # :nodoc:
 
     # Error that is raised when a site is loaded that uses a data source with
     # an unknown identifier.

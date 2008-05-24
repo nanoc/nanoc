@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CompileCommand < Command
+  class CompileCommand < Command # :nodoc:
 
     def name
       'compile'

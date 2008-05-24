@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class SetupCommand < Command
+  class SetupCommand < Command # :nodoc:
 
     def name
       'setup'
