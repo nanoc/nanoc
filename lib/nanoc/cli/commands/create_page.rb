@@ -46,11 +46,7 @@ module Nanoc::CLI
       template_name = options[:template] || 'default'
 
       # Make sure we are in a nanoc site directory
-      if @base.site.nil?
-        puts 'The current working directory does not seem to be a ' +
-             'valid/complete nanoc site directory; aborting.'
-        exit 1
-      end
+      @base.require_site
 
       # Find template
       template = @base.site.templates.find { |t| t.name == template_name }
