@@ -43,11 +43,7 @@ module Nanoc::CLI
       end
 
       # Make sure we are in a nanoc site directory
-      if @base.site.nil?
-        puts 'The current working directory does not seem to be a ' +
-             'valid/complete nanoc site directory; aborting.'
-        exit 1
-      end
+      @base.require_site
 
       # Create template
       @base.site.data_source.loading do

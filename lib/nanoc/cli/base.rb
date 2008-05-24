@@ -79,6 +79,14 @@ module Nanoc::CLI
       end
     end
 
+    def require_site
+      if site.nil?
+        puts 'The current working directory does not seem to be a ' +
+             'valid/complete nanoc site directory; aborting.'
+        exit 1
+      end
+    end
+
     def site
       # Load site if possible
       if File.file?('config.yaml') and @site.nil?
