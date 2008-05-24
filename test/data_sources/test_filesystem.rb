@@ -123,7 +123,29 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   end
 
   def test_save_page_defaults
-    # TODO implement
+    in_dir %w{ tmp } do
+      # Create site
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Load site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+
+        assert_nothing_raised do
+          # Get page defaults
+          page_defaults = site.page_defaults
+
+          # Update page defaults
+          page_defaults.attributes[:extension] = 'php' # eww, php! :D
+          site.data_source.save_page_defaults(page_defaults)
+          site.load_data(true)
+
+          # Check page defaults
+          assert_equal('php', site.page_defaults.attributes[:extension])
+        end
+      end
+    end
   end
 
   # Test templates
@@ -486,7 +508,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   # 
   #       # Load and compile site
   #       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-  #       assert_nothing_raised() { site.compile }
+  #       assert_nothing_raised() { site.compiler.run }
   #     end
   #   end
   # end
