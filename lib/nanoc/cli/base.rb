@@ -120,10 +120,10 @@ module Nanoc::CLI
         begin
           @site = Nanoc::Site.new(YAML.load_file('config.yaml'))
           @site.load_data
-        rescue Nanoc::UnknownDataSourceError => e
+        rescue Nanoc::Errors::UnknownDataSourceError => e
           puts "Unknown data source: #{e}"
           exit 1
-        rescue Nanoc::UnknownRouterError => e
+        rescue Nanoc::Errors::UnknownRouterError => e
           puts "Unknown router: #{e}"
           exit 1
         end

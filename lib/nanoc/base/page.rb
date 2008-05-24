@@ -131,7 +131,7 @@ module Nanoc
 
       # Find layout
       @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
-      raise UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
+      raise Nanoc::Errors::UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
 
       @layout
     end
@@ -162,7 +162,7 @@ module Nanoc
       # Check for recursive call
       if @site.compiler.stack.include?(self)
         @site.compiler.stack.push(self)
-        raise RecursiveCompilationError.new 
+        raise Nanoc::Errors::RecursiveCompilationError.new 
       end
 
       @site.compiler.stack.push(self)
@@ -209,7 +209,7 @@ module Nanoc
     def filter!(stage)
       # Get filters
       unless attribute_named(:filters).nil?
-        raise NoLongerSupportedError.new(
+        raise Nanoc::Errors::NoLongerSupportedError.new(
           'The `filters` property is no longer supported; please use `filters_pre` instead.'
         )
       end
@@ -218,7 +218,7 @@ module Nanoc
       filters.each do |filter_name|
         # Create filter
         filter_class = PluginManager.instance.filter(filter_name.to_sym)
-        raise UnknownFilterError.new(filter_name) if filter_class.nil?
+        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
         filter = filter_class.new(self.to_proxy, @site)
 
         # Run filter

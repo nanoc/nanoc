@@ -1,4 +1,4 @@
-# Define CLI namespace
+# The namespace for all functionality of the nanoc CLI tool.
 module Nanoc::CLI ; end
 
 # Load extensions

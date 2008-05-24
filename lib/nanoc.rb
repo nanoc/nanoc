@@ -3,15 +3,42 @@ module Nanoc
   # The current nanoc version.
   VERSION = '2.1'
 
+  # Generic error. Superclass for all nanoc-specific errors.
   class Error < RuntimeError ; end
 
-  class UnknownDataSourceError      < Error ; end
-  class UnknownRouterError          < Error ; end
-  class UnknownLayoutError          < Error ; end
-  class UnknownFilterError          < Error ; end
-  class CannotDetermineFilterError  < Error ; end
-  class RecursiveCompilationError   < Error ; end
-  class NoLongerSupportedError      < Error ; end
+  # Module in which all nanoc errors are defined.
+  module Errors
+
+    # Error that is raised when a site is loaded that uses a data source with
+    # an unknown identifier.
+    class UnknownDataSourceError < Error ; end
+
+    # Error that is raised when a site is loaded that uses a data source with
+    # an unknown identifier.
+    class UnknownRouterError < Error ; end
+
+    # Error that is raised during site compilation when a page uses a layout
+    # that is not present in the site.
+    class UnknownLayoutError < Error ; end
+
+    # Error that is raised during site compilation when a page uses a filter
+    # that is not known.
+    class UnknownFilterError < Error ; end
+
+    # Error that is raised during site compilation when a layout is compiled
+    # for which the filter cannot be determined. This is similar to the
+    # UnknownFilterError, but specific for filters for layouts.
+    class CannotDetermineFilterError < Error ; end
+
+    # Error that is raised during site compilation when a page (directly or
+    # indirectly) includes its own page content, leading to endless recursion.
+    class RecursiveCompilationError < Error ; end
+
+    # Error that is raised when a certain function or feature is used that is
+    # no longer supported by nanoc.
+    class NoLongerSupportedError < Error ; end
+
+  end
 
   # Requires the given Ruby files at the specified path.
   #

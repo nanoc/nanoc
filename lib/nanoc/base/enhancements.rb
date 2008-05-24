@@ -15,11 +15,11 @@ end
 def render(name_or_path, other_assigns={})
   # Find layout
   layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_path }
-  raise Nanoc::UnknownLayoutError.new(name_or_path.cleaned_path) if layout.nil?
+  raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_path) if layout.nil?
 
   # Find filter
   filter_class = layout.filter_class
-  raise Nanoc::CannotDetermineFilterError.new(layout.path) if filter_class.nil?
+  raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if filter_class.nil?
   filter = filter_class.new(@page, @site, other_assigns)
 
   # Layout
