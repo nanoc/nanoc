@@ -23,6 +23,12 @@ module Nanoc::CLI
     end
 
     def run(options, arguments)
+      # Check arguments
+      if arguments.size > 1
+        puts "usage: #{usage}"
+        exit 1
+      end
+
       if arguments.length == 0
         # Build help text
         text = ''
@@ -51,8 +57,6 @@ module Nanoc::CLI
       elsif arguments.length == 1
         command = @base.command_named(arguments[0])
         puts command.help
-      else
-        puts 'nanoc help: invalid arguments'
       end
     end
 
