@@ -19,6 +19,17 @@ class OptionParserTest < Test::Unit::TestCase
     assert_equal([ 'foo', 'bar', 'baz' ], result[:arguments])
   end
 
+  def test_parse_without_options
+    input       = %w( foo -x )
+    definitions = []
+
+    result = nil
+
+    assert_raise(Nanoc::OptionParser::IllegalOptionError) do
+      result = Nanoc::OptionParser::Base.parse(input, definitions)
+    end
+  end
+
   def test_parse_with_long_valueless_option
     input       = %w( foo --aaa bar )
     definitions = [
