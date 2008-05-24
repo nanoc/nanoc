@@ -35,6 +35,13 @@ module Nanoc
       @routers[identifier] ||= find(Router, :identifiers, identifier)
     end
 
+    # Returns all subclasses of the given class
+    def find_all(superclass)
+      subclasses = []
+      ObjectSpace.each_object(Class) { |subclass| subclasses << subclass if subclass < superclass }
+      subclasses
+    end
+
   private
 
     def find(superclass, attribute, value)
