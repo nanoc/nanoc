@@ -268,8 +268,8 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
   def test_compile_site_with_backup_files
     with_site_fixture 'site_with_filesystem2_data_source' do |site|
       begin
-        FileManager.create_file('content/index.txt~') { '' }
-        FileManager.create_file('layouts/default.erb~') { '' }
+        File.open('content/index.txt~',   'w') { |io| }
+        File.open('layouts/default.erb~', 'w') { |io| }
 
         assert_nothing_raised() { site.compiler.run }
         assert_nothing_raised() { site.compiler.run }

@@ -31,70 +31,79 @@ module Nanoc::DataSources
 
       def setup
         # Create page
-        FileManager.create_file 'content/index.txt' do
-          "-----\n" +
-          "# Built-in\n" +
-          "\n" +
-          "# Custom\n" +
-          "title: \"A New Root Page\"\n" +
-          "-----\n" +
-          "I'm a brand new root page. Please edit me!\n"
+        FileUtils.mkdir_p('content')
+        File.open('content/index.txt', 'w') do |io|
+          io.write "-----\n"
+          io.write "# Built-in\n"
+          io.write "\n"
+          io.write "# Custom\n"
+          io.write "title: \"A New Root Page\"\n"
+          io.write "-----\n"
+          io.write "I'm a brand new root page. Please edit me!\n"
         end
+        yield('content/index.txt')
 
         # Create page defaults
-        FileManager.create_file 'meta.yaml' do
-          "# This file contains the default values for all metafiles.\n" +
-          "# Other metafiles can override the contents of this one.\n" +
-          "\n" +
-          "# Built-in\n" +
-          "custom_path:  none\n" +
-          "extension:    \"html\"\n" +
-          "filename:     \"index\"\n" +
-          "filters_post: []\n" +
-          "filters_pre:  []\n" +
-          "is_draft:     false\n" +
-          "layout:       \"default\"\n" +
-          "skip_output:  false\n" +
-          "\n" +
-          "# Custom\n"
+        File.open('meta.yaml', 'w') do |io|
+          io.write "# This file contains the default values for all metafiles.\n"
+          io.write "# Other metafiles can override the contents of this one.\n"
+          io.write "\n"
+          io.write "# Built-in\n"
+          io.write "custom_path:  none\n"
+          io.write "extension:    \"html\"\n"
+          io.write "filename:     \"index\"\n"
+          io.write "filters_post: []\n"
+          io.write "filters_pre:  []\n"
+          io.write "is_draft:     false\n"
+          io.write "layout:       \"default\"\n"
+          io.write "skip_output:  false\n"
+          io.write "\n"
+          io.write "# Custom\n"
         end
+        yield('meta.yaml')
 
         # Create template
-        FileManager.create_file 'templates/default.txt' do
-          "-----\n" +
-          "# Built-in\n" +
-          "\n" +
-          "# Custom\n" +
-          "title: \"A New Page\"\n" +
-          "-----\n" +
-          "Hi, I'm a new page!\n"
+        FileUtils.mkdir_p('templates')
+        File.open('templates/default.txt', 'w') do |io|
+          io.write "-----\n"
+          io.write "# Built-in\n"
+          io.write "\n"
+          io.write "# Custom\n"
+          io.write "title: \"A New Page\"\n"
+          io.write "-----\n"
+          io.write "Hi, I'm a new page!\n"
         end
+        yield('templates/default.txt')
 
         # Create layout
-        FileManager.create_file 'layouts/default.erb'  do
-          "-----\n" +
-          "filter: 'erb'\n" +
-          "-----\n" +
-          "<html>\n" +
-          "  <head>\n" +
-          "    <title><%= @page.title %></title>\n" +
-          "  </head>\n" +
-          "  <body>\n" +
-          "<%= @page.content %>\n" +
-          "  </body>\n" +
-          "</html>\n"
+        FileUtils.mkdir_p('layouts')
+        File.open('layouts/default.erb', 'w') do |io|
+          io.write "-----\n"
+          io.write "filter: 'erb'\n"
+          io.write "-----\n"
+          io.write "<html>\n"
+          io.write "  <head>\n"
+          io.write "    <title><%= @page.title %></title>\n"
+          io.write "  </head>\n"
+          io.write "  <body>\n"
+          io.write "<%= @page.content %>\n"
+          io.write "  </body>\n"
+          io.write "</html>\n"
         end
+        yield('layouts/default.erb')
 
         # Create code
-        FileManager.create_file 'lib/default.rb' do
-          "\# All files in the 'lib' directory will be loaded\n" +
-          "\# before nanoc starts compiling.\n" +
-          "\n" +
-          "def html_escape(str)\n" +
-          "  str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n" +
-          "end\n" +
-          "alias h html_escape\n"
+        FileUtils.mkdir_p('lib')
+        File.open('lib/default.rb', 'w') do |io|
+          io.write "\# All files in the 'lib' directory will be loaded\n"
+          io.write "\# before nanoc starts compiling.\n"
+          io.write "\n"
+          io.write "def html_escape(str)\n"
+          io.write "  str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n"
+          io.write "end\n"
+          io.write "alias h html_escape\n"
         end
+        yield('lib/default.rb')
 
       end
 

@@ -302,8 +302,8 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_compile_site_with_backup_files
     with_site_fixture 'site_with_backup_files' do |site|
-      FileManager.create_file('content/content.txt~') { '' }
-      FileManager.create_file('layouts/default.erb~') { '' }
+      File.open('content/content.txt~', 'w') { |io| }
+      File.open('layouts/default.erb~', 'w') { |io| }
 
       assert_nothing_raised() { site.compiler.run }
       assert_nothing_raised() { site.compiler.run }
