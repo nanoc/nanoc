@@ -71,7 +71,7 @@ END
       @site.load_data(true)
 
       # Get page or file
-      page      = @site.pages.find { |page| page.path == request.path }
+      page      = @site.pages.find { |page| [ request.path, "/#{request.path}/".gsub(/^\/+|\/+$/, '/') ].include?(page.path) }
       file_path = @site.config[:output_dir] + request.path
 
       if page.nil?
