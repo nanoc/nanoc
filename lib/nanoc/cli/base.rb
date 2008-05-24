@@ -30,8 +30,22 @@ module Nanoc::CLI
       # Find command
       command = command_named(args[0])
 
+      # Get extended option definitions (with help)
+      extended_option_definitions = command.option_definitions + [
+        {
+          :long => 'help', :short => 'h', :argument => :forbidden,
+          :desc => 'Show this help message and quit.'
+        }
+      ]
+
       # Parse arguments
-      parsed_arguments = Nanoc::OptionParser::Base.parse(args[1..-1], command.option_definitions)
+      parsed_arguments = Nanoc::OptionParser::Base.parse(args[1..-1], extended_option_definitions)
+
+      # Check help option
+      if parsed_arguments[:options].has_key?(:help)
+        show_help(command)
+        exit 1
+      end
 
       # Find and run command
       command.run(parsed_arguments[:options], parsed_arguments[:arguments])

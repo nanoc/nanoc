@@ -31,22 +31,11 @@ module Nanoc::CLI
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
           :desc => 'Compile all pages, even those that aren\'t outdated.'
-        },
-        # --help
-        {
-          :long => 'help', :short => 'h', :argument => :forbidden,
-          :desc => 'Show this help message and quit.'
         }
       ]
     end
 
     def run(options, arguments)
-      # Check help argument
-      if options.has_key?(:help)
-        @base.show_help(self)
-        exit 1
-      end
-
       # Make sure we are in a nanoc site directory
       if @base.site.nil?
         puts 'The current working directory does not seem to be a ' +
