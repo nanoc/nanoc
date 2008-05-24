@@ -34,7 +34,7 @@ module Nanoc::CLI
       extended_option_definitions = command.option_definitions + [
         {
           :long => 'help', :short => 'h', :argument => :forbidden,
-          :desc => 'Show this help message and quit.'
+          :desc => 'show this help message and quit'
         }
       ]
 

@@ -29,12 +29,12 @@ module Nanoc::CLI
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'Compile all pages, even those that aren\'t outdated.'
+          :desc => 'compile all pages, even those that aren\'t outdated'
         },
         # --port
         {
           :long => 'port', :short => 'p', :argument => :required,
-          :desc => 'Specify a port number for the autocompiler.'
+          :desc => 'specify a port number for the autocompiler'
         }
       ]
     end
