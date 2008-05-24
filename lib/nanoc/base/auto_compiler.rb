@@ -49,9 +49,12 @@ END
 END
 
     # Creates a new autocompiler for the given site.
-    def initialize(site)
+    def initialize(site, include_outdated=false)
       # Set site
       @site = site
+
+      # Set options
+      @include_outdated = include_outdated
     end
 
     # Starts the server on the given port.
@@ -119,7 +122,7 @@ END
     def serve_page(page, response)
       # Recompile page
       begin
-        @site.compiler.run(page)
+        @site.compiler.run(page, @include_outdated)
       rescue => exception
         serve_500(page.web_path, exception, response)
         return
