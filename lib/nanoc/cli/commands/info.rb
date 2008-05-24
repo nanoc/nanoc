@@ -28,6 +28,12 @@ module Nanoc::CLI
     end
 
     def run(options, arguments)
+      # Check arguments
+      if arguments.size != 0
+        puts "usage: #{usage}"
+        exit 1
+      end
+
       # Get list of plugin classes
       plugins = {
         Nanoc::Filter     => 'Filters',
@@ -37,7 +43,7 @@ module Nanoc::CLI
 
       first = true
 
-      plugins.each_pair do |klass, name|
+      plugins.to_a.sort_by { |i| i[1] }.each do |(klass, name)|
         # Find classes
         klasses = Nanoc::PluginManager.instance.find_all(klass)
 

@@ -35,11 +35,13 @@ module Nanoc::CLI
     end
 
     def run(options, arguments)
-      # Extract arguments
+      # Check arguments
       if arguments.length != 1
         puts "usage: #{usage}"
         exit 1
       end
+
+      # Extract arguments and options
       path        = arguments[0]
       data_source = options[:datasource] || 'filesystem'
 

@@ -36,6 +36,12 @@ module Nanoc::CLI
     end
 
     def run(options, arguments)
+      # Check arguments
+      if arguments.size > 1
+        puts "usage: #{usage}"
+        exit 1
+      end
+
       # Make sure we are in a nanoc site directory
       if @base.site.nil?
         puts 'The current working directory does not seem to be a ' +

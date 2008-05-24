@@ -15,11 +15,39 @@ module Nanoc::CLI
     end
 
     def long_desc
-      'blah.'
+      'Create a new layout in the current site.'
+    end
+
+    def usage
+      "nanoc create_layout [path]"
+    end
+
+    def option_definitions
+      []
     end
 
     def run(options, arguments)
-      puts "Creating a layout! :D"
+      # Check arguments
+      if arguments.length != 1
+        puts "usage: #{usage}"
+        exit 1
+      end
+
+      # Extract arguments
+      path = arguments[0]
+
+      # Make sure we are in a nanoc site directory
+      if @base.site.nil?
+        puts 'The current working directory does not seem to be a ' +
+             'valid/complete nanoc site directory; aborting.'
+        exit 1
+      end
+
+      # Create layout
+      @base.site.data_source.loading do
+        # FIXME don't use #create_layout
+        @base.site.data_source.create_layout(path)
+      end
     end
 
   end

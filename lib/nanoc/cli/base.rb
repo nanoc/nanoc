@@ -108,9 +108,12 @@ module Nanoc::CLI
       # Create general commands
       @commands << AutocompileCommand.new
       @commands << CompileCommand.new
+      @commands << InfoCommand.new
+      @commands << CreateSiteCommand.new
       @commands << CreateLayoutCommand.new
       @commands << CreatePageCommand.new
       @commands << CreateTemplateCommand.new
+      @commands << SetupCommand.new
 
       # Set base
       @commands.each { |c| c.base = self }
