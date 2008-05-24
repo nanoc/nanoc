@@ -63,7 +63,7 @@ module Nanoc
 
       # Create data source
       @data_source_class = PluginManager.instance.data_source(@config[:data_source].to_sym)
-      error "Unrecognised data source: #{@config[:data_source]}" if @data_source_class.nil?
+      raise UnknownDataSourceError.new(@config[:data_source]) if @data_source_class.nil?
       @data_source = @data_source_class.new(self)
 
       # Create compiler
@@ -71,7 +71,7 @@ module Nanoc
 
       # Create router
       @router_class = PluginManager.instance.router(@config[:router].to_sym)
-      error "Unrecognised router: #{@config[:router]}" if @router_class.nil?
+      raise UnknownRouterError.new(@config[:router]) if @router_class.nil?
       @router = @router_class.new(self)
 
       # Set not loaded

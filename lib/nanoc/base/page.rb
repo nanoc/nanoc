@@ -59,6 +59,10 @@ module Nanoc
       @parent         = nil
       @children       = []
 
+      # Not modified, not created by default
+      @modified       = false
+      @created        = false
+
       # Reset flags
       @filtered_pre   = false
       @laid_out       = false
@@ -71,10 +75,16 @@ module Nanoc
       @proxy ||= PageProxy.new(self)
     end
 
-    # Returns true if the page has been modified during the last compilation
-    # session, false otherwise.
+    # Returns true if the compiled page has been modified during the last
+    # compilation session, false otherwise.
     def modified?
       @modified
+    end
+
+    # Returns true if the compiled page did not exist before and had to be
+    # recreated, false otherwise.
+    def created?
+      @created
     end
 
     # Returns true if the source page is newer than the compiled page, false
@@ -121,7 +131,7 @@ module Nanoc
 
       # Find layout
       @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
-      error 'Unknown layout: ' + attribute_named(:layout) if @layout.nil?
+      raise UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
 
       @layout
     end
@@ -151,12 +161,8 @@ module Nanoc
 
       # Check for recursive call
       if @site.compiler.stack.include?(self)
-        log(:high, "\n" + 'ERROR: Recursive call to page content. Page filter stack:', $stderr)
-        log(:high, "  - #{@path}", $stderr)
-        @site.compiler.stack.each_with_index do |page, i|
-          log(:high, "  - #{page.path}", $stderr)
-        end
-        exit(1)
+        @site.compiler.stack.push(self)
+        raise RecursiveCompilationError.new 
       end
 
       @site.compiler.stack.push(self)
@@ -181,7 +187,17 @@ module Nanoc
 
       # Write
       if !@written and also_layout
-        @modified = FileManager.create_file(self.disk_path) { @content[:post] } unless attribute_named(:skip_output)
+        # Check status
+        @created  = !File.file?(self.disk_path)
+        @modified = @created ? true : File.read(self.disk_path) == @content[:post]
+
+        # Write
+        unless attribute_named(:skip_output)
+          FileUtils.mkdir_p(File.dirname(self.disk_path))
+          File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
+        end
+
+        # Done
         @written = true
       end
 
@@ -192,13 +208,17 @@ module Nanoc
 
     def filter!(stage)
       # Get filters
-      error 'The `filters` property is no longer supported; please use `filters_pre` instead.' unless attribute_named(:filters).nil?
+      unless attribute_named(:filters).nil?
+        raise NoLongerSupportedError.new(
+          'The `filters` property is no longer supported; please use `filters_pre` instead.'
+        )
+      end
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
       filters.each do |filter_name|
         # Create filter
         filter_class = PluginManager.instance.filter(filter_name.to_sym)
-        error "Unknown filter: '#{filter_name}'" if filter_class.nil?
+        raise UnknownFilterError.new(filter_name) if filter_class.nil?
         filter = filter_class.new(self.to_proxy, @site)
 
         # Run filter
@@ -215,7 +235,7 @@ module Nanoc
 
       # Find layout processor
       filter_class = layout.filter_class
-      error "Cannot determine filter for layout '#{layout.path}'" if filter_class.nil?
+      raise CannotDetermineFilterError(layout.path) if filter_class.nil?
       filter = filter_class.new(self.to_proxy, @site)
 
       # Layout

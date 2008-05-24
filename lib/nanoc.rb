@@ -3,6 +3,16 @@ module Nanoc
   # The current nanoc version.
   VERSION = '2.1'
 
+  class Error < RuntimeError ; end
+
+  class UnknownDataSourceError      < Error ; end
+  class UnknownRouterError          < Error ; end
+  class UnknownLayoutError          < Error ; end
+  class UnknownFilterError          < Error ; end
+  class CannotDetermineFilterError  < Error ; end
+  class RecursiveCompilationError   < Error ; end
+  class NoLongerSupportedError      < Error ; end
+
   # Requires the given Ruby files at the specified path.
   #
   # +path+:: An array containing path segments. This path is relative to the
