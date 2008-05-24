@@ -37,7 +37,7 @@ def global_setup
   $log_level = :off unless ENV['QUIET'] == 'false'
 
   # Create tmp directory
-  FileManager.create_dir 'tmp'
+  FileUtils.mkdir_p('tmp')
 end
 
 def global_teardown

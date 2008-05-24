@@ -61,33 +61,42 @@ module Nanoc::CLI
       FileUtils.mkdir_p(path)
       in_dir([path]) do
         # Create output
-        FileManager.create_dir 'output'
+        FileUtils.mkdir_p('output')
+        Nanoc::CLI::Logger.instance.file(:high, :create, 'output')
 
         # Create config
-        FileManager.create_file 'config.yaml' do
-          "output_dir:  \"output\"\n" +
-          "data_source: \"#{data_source}\"\n"
+        File.open('config.yaml', 'w') do |io|
+          io.write "output_dir:  \"output\"\n"
+          io.write "data_source: \"#{data_source}\"\n"
         end
+        Nanoc::CLI::Logger.instance.file(:high, :create, 'config.yaml')
 
         # Create rakefile
-        FileManager.create_file 'Rakefile' do
-          "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n" +
-          "\n" +
-          "task :default do\n" +
-          "  puts 'This is an example rake task.'\n" +
-          "end\n"
+        File.open('Rakefile', 'w') do |io|
+          io.write "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n"
+          io.write "\n"
+          io.write "task :default do\n"
+          io.write "  puts 'This is an example rake task.'\n"
+          io.write "end\n"
         end
+        Nanoc::CLI::Logger.instance.file(:high, :create, 'Rakefile')
 
         # Create tasks
-        FileManager.create_file 'tasks/default.rake' do
-          "task :example do\n" +
-          "  puts 'This is an example rake task in tasks/default.rake.'\n" +
-          "end\n"
+        FileUtils.mkdir_p('tasks')
+        File.open('tasks/default.rake', 'w') do |io|
+          io.write "task :example do\n"
+          io.write "  puts 'This is an example rake task in tasks/default.rake.'\n"
+          io.write "end\n"
         end
+        Nanoc::CLI::Logger.instance.file(:high, :create, 'tasks/default.rake')
 
         # Setup site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-        site.data_source.loading { site.data_source.setup }
+        site.data_source.loading do
+          site.data_source.setup do |filename|
+            Nanoc::CLI::Logger.instance.file(:high, :create, filename)
+          end
+        end
       end
     end
 
