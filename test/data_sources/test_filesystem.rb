@@ -9,7 +9,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_setup
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
       in_dir %w{ site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
@@ -71,7 +71,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   def test_save_page
     in_dir %w{ tmp } do
       # Create site
-      Nanoc::Site.create('site')
+      create_site('site')
 
       in_dir %w{ site } do
         # Load site
@@ -207,15 +207,15 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   # FIXME outdated, remove
   def test_create_page
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
       in_dir %w{ site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
-        assert_nothing_raised()   { site.create_page('test') }
-        assert_raise(SystemExit)  { site.create_page('test') }
+        assert_nothing_raised()   { create_page('test') }
+        assert_raise(SystemExit)  { create_page('test') }
 
-        assert_nothing_raised()   { site.create_page('foo/bar') }
-        assert_raise(SystemExit)  { site.create_page('foo/bar') }
+        assert_nothing_raised()   { create_page('foo/bar') }
+        assert_raise(SystemExit)  { create_page('foo/bar') }
 
         assert(File.directory?('content/test/'))
         assert(File.file?('content/test/test.txt'))
@@ -231,12 +231,12 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
   # FIXME outdated, remove
   def test_create_layout
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
       in_dir %w{ site } do  
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
-        assert_nothing_raised()   { site.create_layout('test') }
-        assert_raise(SystemExit)  { site.create_layout('test') }
+        assert_nothing_raised()   { create_layout('test') }
+        assert_raise(SystemExit)  { create_layout('test') }
 
         assert(File.file?('layouts/test/test.erb'))
         assert(File.file?('layouts/test/test.yaml'))
@@ -248,7 +248,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
 
   def test_html_escape
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
 
       in_dir %w{ site } do
         File.open('content/content.yaml', 'w') do |io|
@@ -307,7 +307,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
     threshold = 2.0
 
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
 
       in_dir %w{ site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))

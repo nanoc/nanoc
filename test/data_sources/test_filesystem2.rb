@@ -9,7 +9,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
 
   def test_setup
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
       in_dir %w{ site } do
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
@@ -136,12 +136,12 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
 
       assert_nothing_raised do
         begin
-          assert_nothing_raised()   { site.create_page('test1') }
-          assert_raise(SystemExit)  { site.create_page('test1') }
+          assert_nothing_raised()   { create_page('test1') }
+          assert_raise(SystemExit)  { create_page('test1') }
           assert(File.file?('content/test1.txt'))
 
-          assert_nothing_raised()   { site.create_page('test2/sub') }
-          assert_raise(SystemExit)  { site.create_page('test2/sub') }
+          assert_nothing_raised()   { create_page('test2/sub') }
+          assert_raise(SystemExit)  { create_page('test2/sub') }
           assert(File.file?('content/test2/sub.txt'))
 
           site.load_data(true)
@@ -163,8 +163,8 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
 
       assert_nothing_raised do
         begin
-          assert_nothing_raised()   { site.create_template('test1') }
-          assert_raise(SystemExit)  { site.create_template('test1') }
+          assert_nothing_raised()   { create_template('test1') }
+          assert_raise(SystemExit)  { create_template('test1') }
           assert(File.file?('templates/test1.txt'))
 
           site.load_data(true)
@@ -184,8 +184,8 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
 
       assert_nothing_raised do
         begin
-          assert_nothing_raised()   { site.create_layout('test1') }
-          assert_raise(SystemExit)  { site.create_layout('test1') }
+          assert_nothing_raised()   { create_layout('test1') }
+          assert_raise(SystemExit)  { create_layout('test1') }
           assert(File.file?('layouts/test1.erb'))
 
           site.load_data(true)
@@ -233,7 +233,7 @@ class DataSourceFilesystem2Test < Test::Unit::TestCase
     threshold = 2.0
 
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
 
       in_dir %w{ site } do
         # Remove files

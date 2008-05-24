@@ -91,8 +91,14 @@ module Nanoc::CLI
 
     def global_option_definitions
       [
-        { :long => 'help',    :short => 'h', :argument => :forbidden, :desc => 'show this help message and quit' },
-        { :long => 'version', :short => 'v', :argument => :forbidden, :desc => 'show version information and quit' }
+        {
+          :long => 'help', :short => 'h', :argument => :forbidden,
+          :desc => 'show this help message and quit'
+        },
+        {
+          :long => 'version', :short => 'v', :argument => :forbidden,
+          :desc => 'show version information and quit'
+        }
       ]
     end
 
@@ -108,11 +114,11 @@ module Nanoc::CLI
       # Create general commands
       @commands << AutocompileCommand.new
       @commands << CompileCommand.new
-      @commands << InfoCommand.new
-      @commands << CreateSiteCommand.new
       @commands << CreateLayoutCommand.new
       @commands << CreatePageCommand.new
+      @commands << CreateSiteCommand.new
       @commands << CreateTemplateCommand.new
+      @commands << InfoCommand.new
       @commands << SetupCommand.new
 
       # Set base

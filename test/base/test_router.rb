@@ -7,7 +7,7 @@ class RouterTest < Test::Unit::TestCase
 
   def test_paths_for
     in_dir %w{ tmp } do
-      Nanoc::Site.create('site')
+      create_site('site')
 
       in_dir %w{ site } do
         # Create site
