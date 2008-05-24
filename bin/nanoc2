@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+# Load nanoc
+require File.dirname(__FILE__) + '/../lib/nanoc.rb'
+
+# Run base
+base = Nanoc::CLI::Base.new
+base.run(ARGV)
+
+# hg add: option -p not recognized
+# hg add [OPTION]... [FILE]...
+# hg add: option -X requires argument
+# hg help: invalid arguments

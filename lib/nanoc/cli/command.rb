@@ -1,0 +1,75 @@
+module Nanoc::CLI
+
+  class Command
+
+    attr_accessor :base
+
+    def name
+      raise NotImplementedError.new("Command subclasses should override #name")
+    end
+
+    def aliases
+      raise NotImplementedError.new("Command subclasses should override #aliases")
+    end
+
+    def short_desc
+      raise NotImplementedError.new("Command subclasses should override #short_desc")
+    end
+
+    def long_desc
+      raise NotImplementedError.new("Command subclasses should override #long_desc")
+    end
+
+    def usage
+      raise NotImplementedError.new("Command subclasses should override #usage")
+    end
+
+    def option_definitions
+      []
+    end
+
+    def run(options, arguments)
+      raise NotImplementedError.new("Command subclasses should override #run")
+    end
+
+    def help
+      text = ''
+
+      # Append usage
+      text << usage + "\n"
+
+      # Append aliases
+      unless aliases.empty?
+        text << "\n"
+        text << "aliases: #{aliases.join(' ')}\n"
+      end
+
+      # Append short description
+      text << "\n"
+      text << short_desc + "\n"
+
+      # Append long description
+      text << "\n"
+      text << long_desc.wrap_and_indent(78, 4) + "\n"
+
+      # Append options
+      unless option_definitions.empty?
+        text << "\n"
+        text << "options:\n"
+        text << "\n"
+        option_definitions.sort { |x,y| x[:long] <=> y[:long] }.each do |opt_def|
+          text << sprintf("    -%1s --%-10s %s\n", opt_def[:short], opt_def[:long], opt_def[:desc])
+        end
+      end
+
+      # Return text
+      text
+    end
+
+    def <=>(other)
+      self.name <=> other.name
+    end
+
+  end
+
+end
