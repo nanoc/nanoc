@@ -1,7 +1,12 @@
 module Nanoc
 
+  # The current nanoc version.
   VERSION = '2.1'
 
+  # Requires the given Ruby files at the specified path.
+  #
+  # +path+:: An array containing path segments. This path is relative to the
+  #          directory this file (nanoc.rb) is in. Can contain wildcards.
   def self.load(*path)
     full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
     Dir[File.join(full_path)].each { |f| require f }
