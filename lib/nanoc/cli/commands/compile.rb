@@ -58,7 +58,65 @@ module Nanoc::CLI
       end
 
       # Compile site
-      @base.site.compiler.run(page, options.has_key?(:all))
+      begin
+        # Give feedback
+        puts "Compiling #{page.nil? ? 'site' : 'page'}..."
+        time_before = Time.now
+
+        # Compile
+        @base.site.compiler.run(page, options.has_key?(:all)) do |page|
+          # Get action and level
+          action, level = *if page.created?
+            [ :create, :high ]
+          elsif page.modified?
+            [ :update, :high ]
+          else
+            [ :identical, :low ]
+          end
+
+          # Log
+          FileManager.file_log(level, action, page.disk_path)
+        end
+
+        # Give feedback
+        puts "No pages were modified." unless @base.site.pages.any? { |p| p.modified? }
+        puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
+      rescue Nanoc::Error => e
+        # Get page
+        page = @base.site.compiler.stack[-1]
+
+        # Build message
+        case e.class
+        when Nanoc::UnknownLayoutError.class
+          message = "Unknown layout: #{e.message}"
+        when Nanoc::UnknownFilterError.class
+          message = "Unknown filter: #{e.message}"
+        when Nanoc::CannotDetermineFilterError.class
+          message = "Cannot determine filter for layout: #{e.message}"
+        when Nanoc::RecursiveCompilationError.class
+          message = "Recursive call to page content. Page stack:"
+          @base.site.compiler.stack.each do |page|
+            message << "  - #{page.path}"
+          end
+        when Nanoc::NoLongerSupportedError.class
+          message = "No longer supported: #{e.message}"
+        else
+          message = "Unknown error: #{e.message}"
+        end
+
+        # Print message
+        puts
+        puts "ERROR: An exception occured while compiling #{page.path}."
+        puts
+        puts "If you think this is a bug in nanoc, please do report it at"
+        puts "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
+        puts
+        puts 'Message:'
+        puts '  ' + message
+        puts
+        puts 'Backtrace:'
+        puts e.backtrace.map { |t| '  - ' + t }.join("\n")
+      end
     end
 
   end

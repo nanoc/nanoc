@@ -27,7 +27,7 @@ module Nanoc
     #
     # +content+:: The unprocessed content that should be filtered.
     def run(content)
-      error 'Filter#run must be overridden'
+      raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
     end
 
     # Returns a hash with data that should be available.

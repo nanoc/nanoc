@@ -107,8 +107,14 @@ module Nanoc::CLI
     def site
       # Load site if possible
       if File.file?('config.yaml') and @site.nil?
-        @site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-        @site.load_data
+        begin
+          @site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+          @site.load_data
+        rescue Nanoc::UnknownDataSourceError => e
+          puts "Unknown data source: #{e}"
+        rescue Nanoc::UnknownRouterError => e
+          puts "Unknown router: #{e}"
+        end
       end
 
       @site

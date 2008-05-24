@@ -150,7 +150,7 @@ class CompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_circular_dependencies
     with_site_fixture 'site_with_circular_dependencies' do |site|
-      assert_raise(SystemExit) { site.compiler.run }
+      assert_raise(Nanoc::RecursiveCompilationError) { site.compiler.run }
     end
   end
 

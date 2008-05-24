@@ -37,7 +37,7 @@ END
 		<p>An error occurred while compiling the page you requested, <i><%=h path %></i>.</p>
 		<p>If you think this is a bug in nanoc, please do <a href="http://nanoc.stoneship.org/trac/newticket">report it</a>&mdash;thanks!</p>
 		<p>Message:</p>
-		<blockquote><p><%=h exception.message %></p></blockquote>
+		<blockquote><p><%=h message %></p></blockquote>
 		<p>Backtrace:</p>
 		<ol>
 <% exception.backtrace.each do |line| %>
@@ -108,6 +108,26 @@ END
     end
 
     def serve_500(path, exception, response)
+      # Build message
+      case exception.class
+      when Nanoc::UnknownLayoutError.class
+        message = "Unknown layout: #{exception.message}"
+      when Nanoc::UnknownFilterError.class
+        message = "Unknown filter: #{exception.message}"
+      when Nanoc::CannotDetermineFilterError.class
+        message = "Cannot determine filter for layout: #{exception.message}"
+      when Nanoc::RecursiveCompilationError.class
+        message = "Recursive call to page content. Page stack:"
+        @base.site.compiler.stack.each do |page|
+          message << "  - #{page.path}"
+        end
+      when Nanoc::NoLongerSupportedError.class
+        message = "No longer supported: #{exception.message}"
+      else
+        message = "Unknown error: #{exception.message}"
+      end
+
+      # Set response
       response.status           = 500
       response['Content-Type']  = 'text/html'
       response.body             = ERB.new(ERROR_500).result(binding)
