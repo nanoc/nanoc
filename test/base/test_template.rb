@@ -1,11 +1,11 @@
 require 'helper'
 
-class SiteTest < Test::Unit::TestCase
+class TemplateTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_load_data
+  def test_initialize
     # TODO implement
   end
 

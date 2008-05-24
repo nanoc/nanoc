@@ -47,4 +47,16 @@ class PluginManagerTest < Test::Unit::TestCase
     end
   end
 
+  def test_router_right
+    # TODO implement
+  end
+
+  def test_router_wrong
+    # TODO implement
+  end
+
+  def test_find_all
+    # TODO implement
+  end
+
 end
