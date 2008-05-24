@@ -17,10 +17,19 @@ module Nanoc::CLI
 
       # Find version or help options
       if args.length == 1
-        parsed_arguments = Nanoc::OptionParser::Base.parse(args[0..-1], global_option_definitions, true)
+        # Parse arguments
+        begin
+          parsed_arguments = Nanoc::CLI::OptionParser.parse(args[0..1], global_option_definitions)
+        rescue Nanoc::CLI::OptionParser::IllegalOptionError => e
+          puts "illegal option -- #{e}"
+          exit 1
+        end
+
+        # Handle version option
         if parsed_arguments[:options].has_key?(:version)
           puts "nanoc #{Nanoc::VERSION} (c) 2007-2008 Denis Defreyne."
           exit 1
+        # Handle help option
         elsif parsed_arguments[:options].has_key?(:help)
           show_help
           exit 1
@@ -39,7 +48,15 @@ module Nanoc::CLI
       ]
 
       # Parse arguments
-      parsed_arguments = Nanoc::OptionParser::Base.parse(args[1..-1], extended_option_definitions)
+      begin
+        parsed_arguments = Nanoc::CLI::OptionParser.parse(args[1..-1], extended_option_definitions)
+      rescue Nanoc::CLI::OptionParser::IllegalOptionError => e
+        puts "illegal option -- #{e}"
+        exit 1
+      rescue Nanoc::CLI::OptionParser::OptionRequiresAnArgumentError => e
+        puts "option requires an argument -- #{e}"
+        exit 1
+      end
 
       # Check help option
       if parsed_arguments[:options].has_key?(:help)
