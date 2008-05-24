@@ -86,7 +86,8 @@ module Nanoc::CLI
         end
 
         # Setup site
-        Nanoc::Site.new(YAML.load_file('config.yaml')).setup
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.data_source.loading { site.data_source.setup }
       end
     end
 
