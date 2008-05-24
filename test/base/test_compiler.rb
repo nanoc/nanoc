@@ -10,7 +10,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert(!File.file?('output/moo/index.html'))
     end
@@ -21,7 +21,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(2, Dir["output/*"].size)
+      assert_equal(2, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert(File.file?('output/moo/index.html'))
     end
@@ -32,7 +32,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(2, Dir["output/*"].size)
+      assert_equal(2, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert(File.file?('output/bar.html'))
       assert(!File.file?('output/foo/index.html'))
@@ -46,7 +46,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(!File.file?('output/index.html'))
       assert(File.file?('output/index.xhtml'))
     end
@@ -57,10 +57,10 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(0, Dir["output/*"].size)
+      assert_equal(0, Dir[File.join('output', '*')].size)
       assert(!File.file?('output/index.html'))
 
-      assert_equal(1, Dir["tmp/custom_output/*"].size)
+      assert_equal(1, Dir[File.join('tmp', 'custom_output', '*')].size)
       assert(File.file?('tmp/custom_output/index.html'))
 
       FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
@@ -72,7 +72,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(2, Dir["output/*"].size)
+      assert_equal(2, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert(File.file?('output/about/index.html'))
     end
@@ -83,7 +83,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert(!File.file?('output/about/index.html'))
     end
@@ -95,7 +95,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
     end
   end
 
@@ -105,7 +105,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert_match(/<title>Foobar<\/title>/, File.read('output/index.html'))
       assert_match(/This page is called "Foobar"/, File.read('output/index.html'))
       assert_match(/ya rly/, File.read('output/index.html'))
@@ -121,7 +121,7 @@ class CompilerTest < Test::Unit::TestCase
       assert(File.file?('output/index.html'))
       assert(File.file?('output/about/index.html'))
       assert(File.file?('output/blog/index.html'))
-      assert_equal(3, Dir["output/*"].size)
+      assert_equal(3, Dir[File.join('output', '*')].size)
       assert_match(/<a href="\/">home page<\/a>/, File.read('output/about/index.html'))
       assert_match(/<a href="\/blog\/">blog<\/a>/, File.read('output/about/index.html'))
     end
@@ -134,7 +134,7 @@ class CompilerTest < Test::Unit::TestCase
 
       assert(File.file?('output/index.html'))
       assert(!File.file?('output/hidden/index.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
     end
   end
 
@@ -144,7 +144,7 @@ class CompilerTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/default.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
     end
   end
 
@@ -161,7 +161,7 @@ class CompilerTest < Test::Unit::TestCase
 
       assert(File.file?('output/index.html'))
       assert(File.file?('output/foo/index.html'))
-      assert_equal(2, Dir["output/*"].size)
+      assert_equal(2, Dir[File.join('output', '*')].size)
 
       assert_match(/The children of this page are: Foo./, File.read('output/index.html'))
       assert_match(/This page does not have a parent/, File.read('output/index.html'))
@@ -178,7 +178,7 @@ class CompilerTest < Test::Unit::TestCase
 
       assert(File.file?('output/index.html'))
       assert(File.file?('output/foo/index.html'))
-      assert_equal(2, Dir["output/*"].size)
+      assert_equal(2, Dir[File.join('output', '*')].size)
 
       assert_match(/<p>The content of foo is <q>Hi, I'm the Foo page.<\/q>.<\/p>/, File.read('output/index.html'))
     end
@@ -193,7 +193,7 @@ class CompilerTest < Test::Unit::TestCase
         assert_nothing_raised() { site.compile }
         assert_nothing_raised() { site.compile }
 
-        assert_equal(1, Dir["output/*"].size)
+        assert_equal(1, Dir[File.join('output', '*')].size)
         assert(File.file?('output/index.html'))
       end
     end

@@ -22,8 +22,12 @@ EMAIL     = 'denis.defreyne@stoneship.org'
 
 ##### Cleaning
 
-CLEAN.include [ 'tmp', 'test/fixtures/*/output/*', 'test/fixtures/*/tmp' ]
-CLOBBER.include [ 'pkg' ]
+CLEAN.include([
+  'tmp',
+  File.join('test', 'fixtures', '*', 'output', '*'),
+  File.join('test', 'fixtures', '*', 'tmp')
+])
+CLOBBER.include([ 'pkg' ])
 
 ##### Packaging
 
@@ -53,7 +57,7 @@ spec = Gem::Specification.new do |s|
                               '--exclude' << 'test'                   <<
                               '--line-numbers'
 
-  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir['{bin,lib}/**/*']
+  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib}', '**', '*')]
   s.executables           = [ 'nanoc' ]
   s.require_path          = 'lib'
   s.bindir                = 'bin'
