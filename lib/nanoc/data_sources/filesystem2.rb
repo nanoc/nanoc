@@ -398,7 +398,8 @@ module Nanoc::DataSources
     private
 
       def files(dir, recursively)
-        Dir[dir + (recursively ? '/**/*' : '/*')].reject { |f| File.directory?(f) or f =~ /~$/ }
+        glob = File.join([dir] + (recursively ? [ '**', '*' ] : [ '*' ]))
+        Dir[glob].reject { |f| File.directory?(f) or f =~ /~$/ }
       end
 
       def parse_file(filename, kind)

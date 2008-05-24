@@ -273,7 +273,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))
     end
   end
@@ -297,7 +297,7 @@ class DataSourceFilesystemTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.read('output/index.html').include?('<div class="supercool">Blah blah blah this is a page blah blah blah.</div>'))
     end
   end

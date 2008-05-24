@@ -45,5 +45,7 @@ def global_teardown
   FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
 
   # Remove output
-  Dir['test/fixtures/*/output/*'].each { |f| FileUtils.remove_entry_secure(f) if File.exist?(f)}
+  Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
+    FileUtils.remove_entry_secure(f) if File.exist?(f)
+  end
 end

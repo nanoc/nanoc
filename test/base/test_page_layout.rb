@@ -11,7 +11,7 @@ class PageLayoutTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
 
       assert(File.file?('output/index.html'))
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert_match(/This is a page without layout/, File.read('output/index.html'))
     end
   end
@@ -21,7 +21,7 @@ class PageLayoutTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert_match(/This is the default layout/, File.read('output/index.html'))
       assert_match(/This is the page layout/, File.read('output/index.html'))
@@ -33,7 +33,7 @@ class PageLayoutTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       assert_match(/This page is called "A New Root Page"./, File.read('output/index.html'))
     end
@@ -44,7 +44,7 @@ class PageLayoutTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compile }
       assert_nothing_raised() { site.compile }
 
-      assert_equal(1, Dir["output/*"].size)
+      assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
       
       text = File.read('output/index.html')

@@ -222,7 +222,7 @@ module Nanoc::DataSources
       # should be handled (contains the filter that should be used).
       def layouts
         # Determine what layout directory structure is being used
-        dir_count = Dir["layouts/*"].select { |f| File.directory?(f) }.size
+        dir_count = Dir[File.join('layouts', '*')].select { |f| File.directory?(f) }.size
         is_old_school = (dir_count == 0)
 
         if is_old_school
@@ -230,7 +230,7 @@ module Nanoc::DataSources
           warn('nanoc 2.1 changes the way layouts are stored. Please see ' +
                'the nanoc web site for details on how to adjust your site.')
 
-          Dir["layouts/*"].reject { |f| f =~ /~$/ }.map do |filename|
+          Dir[File.join('layouts', '*')].reject { |f| f =~ /~$/ }.map do |filename|
             # Get content
             content = File.read(filename)
 
