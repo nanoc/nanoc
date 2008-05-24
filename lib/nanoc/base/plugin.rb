@@ -9,7 +9,7 @@ module Nanoc
       attr_accessor :identifiers # :nodoc:
 
       # Sets or returns the identifiers for this plugin.
-      # 
+      #
       # When given a list of identifier symbols, sets the identifiers for
       # this plugin. When given nothing, returns an array of identifier
       # symbols for this plugin.
@@ -19,7 +19,7 @@ module Nanoc
       end
 
       # Sets or returns the identifier for this plugin.
-      # 
+      #
       # When given an identifier symbols, sets the identifier for this plugin.
       # When given nothing, returns the identifier for this plugin.
       def identifier(ident=nil)

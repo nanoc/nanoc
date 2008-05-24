@@ -165,6 +165,7 @@ module Nanoc::DataSources
       # TODO document
       def save_page(page)
         # # Get possible paths
+        # # FIXME fix usage of 'path' here
         # path_best_glob  = 'content' + page.path[0..-2] + '.*'
         # path_worst_glob = 'content' + page.path + 'index.*'
         # 
@@ -193,17 +194,17 @@ module Nanoc::DataSources
         #   # ...
         # end
 
-        not_implemented('save_page', :optional)
+        # TODO implement
       end
 
       # TODO document
       def move_page(page, new_path)
-        not_implemented('move_page', :optional)
+        # TODO implement
       end
 
       # TODO document
       def delete_page(page)
-        not_implemented('delete_page', :optional)
+        # TODO implement
       end
 
       ########## Page Defaults ##########
@@ -222,7 +223,7 @@ module Nanoc::DataSources
 
       # TODO document
       def save_page_defaults(page_defaults)
-        not_implemented('save_page_defaults', :optional)
+        # TODO implement
       end
 
       ########## Layouts ##########
@@ -248,17 +249,17 @@ module Nanoc::DataSources
 
       # TODO document
       def save_layout(layout)
-        not_implemented('save_layout', :optional)
+        # TODO implement
       end
 
       # TODO document
       def move_layout(layout, new_path)
-        not_implemented('move_layout', :optional)
+        # TODO implement
       end
 
       # TODO document
       def delete_layout(layout)
-        not_implemented('delete_layout', :optional)
+        # TODO implement
       end
 
       ########## Templates ##########
@@ -292,17 +293,17 @@ module Nanoc::DataSources
 
       # TODO document
       def save_template(template)
-        not_implemented('save_template', :optional)
+        # TODO implement
       end
 
       # TODO document
       def move_template(template, new_path)
-        not_implemented('move_template', :optional)
+        # TODO implement
       end
 
       # TODO document
       def delete_template(template)
-        not_implemented('delete_template', :optional)
+        # TODO implement
       end
 
       ########## Code ##########
@@ -322,7 +323,7 @@ module Nanoc::DataSources
 
       # TODO document
       def save_code(code)
-        not_implemented('save_code', :optional)
+        # TODO implement
       end
 
       ########## OLD ##########
