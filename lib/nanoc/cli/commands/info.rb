@@ -52,7 +52,7 @@ module Nanoc::CLI
         puts "#{name}:"
         puts
         klasses.sort_by { |k| k.identifier.to_s }.each do |klass|
-          puts "    " + klass.identifier.to_s
+          puts sprintf("    %-15s (%s)", klass.identifier.to_s, klass.to_s)
         end
 
         first = false
