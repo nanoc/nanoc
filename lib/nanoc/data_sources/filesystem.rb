@@ -44,6 +44,9 @@ module Nanoc::DataSources
 
       # Create code
       FileUtils.mkdir_p('lib')
+
+      # FIXME remove this
+      populate { |i| yield i }
     end
 
     def populate
