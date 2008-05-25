@@ -4,8 +4,7 @@ module Nanoc::Filters
     identifiers :redcloth
 
     def run(content)
-      # Load requirements
-      nanoc_require 'redcloth'
+      require 'redcloth'
 
       # Get result
       ::RedCloth.new(content).to_html

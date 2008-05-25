@@ -5,8 +5,7 @@ module Nanoc::Filters
     extensions  '.haml'
 
     def run(content)
-      # Load requirements
-      nanoc_require 'haml'
+      require 'haml'
 
       # Get options
       options = @page.haml_options || {}

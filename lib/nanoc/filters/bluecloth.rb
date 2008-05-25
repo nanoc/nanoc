@@ -4,7 +4,7 @@ module Nanoc::Filters
     identifiers :bluecloth
 
     def run(content)
-      nanoc_require 'bluecloth'
+      require 'bluecloth'
 
       ::BlueCloth.new(content).to_html
     end

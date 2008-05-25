@@ -48,13 +48,6 @@ def error(s, pre='ERROR')
   exit(1)
 end
 
-# Convenience function for requiring libraries
-def nanoc_require(x, message="'#{x}' is required to compile this site.")
-  require x
-rescue LoadError
-  error(message)
-end
-
 class FileManager # :nodoc:
 
   ACTION_COLORS = {

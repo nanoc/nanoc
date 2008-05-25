@@ -5,8 +5,7 @@ module Nanoc::Filters
     extensions  '.erb', '.rhtml'
 
     def run(content)
-      # Load requirements
-      nanoc_require 'erb'
+      require 'erb'
 
       # Create context
       context = ::Nanoc::Context.new(assigns)
