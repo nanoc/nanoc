@@ -23,6 +23,7 @@ EMAIL     = 'denis.defreyne@stoneship.org'
 ##### Cleaning
 
 CLEAN.include([
+  'coverage',
   'tmp',
   File.join('test', 'fixtures', '*', 'output', '*'),
   File.join('test', 'fixtures', '*', 'tmp')
@@ -82,6 +83,10 @@ Rake::RDocTask.new do |task|
 end
 
 ### Testing
+
+task :rcov do
+  sh %{rcov test/**/*.rb -I test -x /Library}
+end
 
 Rake::TestTask.new(:test) do |task|
   ENV['QUIET'] = 'true'
