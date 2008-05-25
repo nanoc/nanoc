@@ -162,7 +162,6 @@ module Nanoc::CLI
       @commands << CreateSiteCommand.new
       @commands << CreateTemplateCommand.new
       @commands << InfoCommand.new
-      @commands << SetupCommand.new
       @commands << SwitchCommand.new
 
       # Set base
