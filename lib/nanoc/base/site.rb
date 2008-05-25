@@ -130,7 +130,7 @@ module Nanoc
         @templates = @data_source.templates
         if @templates.any? { |t| t.is_a? Hash }
           warn "in nanoc 2.1, DataSource#templates should return an array of Template objects"
-          @templates.map! { |t| Template.new(t[:name], t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta]) }
+          @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
         end
         @templates.each { |t| t.site = self }
       end

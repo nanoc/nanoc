@@ -335,7 +335,7 @@ module Nanoc::DataSources
         attributes = YAML.load_file(meta_filename) || {}
 
         # Build template
-        Nanoc::Template.new(name, content, attributes)
+        Nanoc::Template.new(content, attributes, name)
       end
     end
 

@@ -236,7 +236,7 @@ module Nanoc::DataSources
 
     def templates
       DatabaseTemplate.find(:all).map do |dbt|
-        Nanoc::Template.new(dbt.name, dbt.content, YAML.load(dbt.attribs) || {})
+        Nanoc::Template.new(dbt.content, YAML.load(dbt.attribs) || {}, dbt.name)
       end
     end
 

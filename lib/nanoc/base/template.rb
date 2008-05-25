@@ -26,10 +26,10 @@ module Nanoc
     #
     # +page_attributes+:: A hash containing the attributes a page created
     #                     using this template will have.
-    def initialize(name, page_content, page_attributes)
-      @name             = name
+    def initialize(page_content, page_attributes, name)
       @page_content     = page_content
       @page_attributes  = page_attributes.clean
+      @name             = name
     end
 
     def [](key) # :nodoc:
