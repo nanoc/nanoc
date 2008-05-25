@@ -48,15 +48,30 @@ class PluginManagerTest < Test::Unit::TestCase
   end
 
   def test_router_right
-    # TODO implement
+    assert_nothing_raised do
+      router = Nanoc::PluginManager.instance.router(:default)
+      assert(!router.nil?)
+    end
   end
 
   def test_router_wrong
-    # TODO implement
+    assert_nothing_raised do
+      router = Nanoc::PluginManager.instance.router(:lksdaffhdlkashlgkskahf)
+      assert(router.nil?)
+    end
   end
 
   def test_find_all
-    # TODO implement
+    assert_nothing_raised do
+      # Get filters
+      filters = Nanoc::PluginManager.instance.find_all(Nanoc::Filter)
+
+      # Check
+      assert(!filters.nil?)
+      assert(filters.include?(Nanoc::Filters::ERB))
+      assert(!filters.include?(Nanoc::DataSources::Filesystem))
+      assert(!filters.include?(Nanoc::Routers::Default))
+    end
   end
 
 end

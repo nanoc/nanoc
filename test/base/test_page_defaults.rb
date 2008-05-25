@@ -6,7 +6,9 @@ class PageDefaultsTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_initialize
-    # TODO implement
+    # Make sure attributes are cleaned
+    page_defaults = Nanoc::PageDefaults.new({ 'foo' => 'bar' })
+    assert_equal({ :foo => 'bar' }, page_defaults.attributes)
   end
 
 end

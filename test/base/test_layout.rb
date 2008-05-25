@@ -41,6 +41,7 @@ class LayoutTest < Test::Unit::TestCase
 
     # Check attributes
     assert_equal({ :filter => 'bar' }, layout.attributes)
+    assert_equal(nil,   layout.attribute_named(:foo))
     assert_equal('bar', layout.attribute_named(:filter))
   end
 
