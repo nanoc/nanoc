@@ -134,8 +134,12 @@ END
     end
 
     def serve_file(path, response)
+      # Determine most likely MIME type
+      mime_type = MIME::Types.of(path).first
+      mime_type = mime_type.nil? ? 'application/octet-stream' : mime_type.simplified
+
       response.status           = 200
-      response['Content-Type']  = MIME::Types.of(path).first || 'application/octet-stream'
+      response['Content-Type']  = mime_type
       response.body             = File.read(path)
     end
 
