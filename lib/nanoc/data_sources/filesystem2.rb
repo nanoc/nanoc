@@ -31,6 +31,22 @@ module Nanoc::DataSources
     def setup
       # Create page
       FileUtils.mkdir_p('content')
+
+      # Create page defaults
+      File.open('meta.yaml', 'w') { |io| }
+
+      # Create template
+      FileUtils.mkdir_p('templates')
+
+      # Create layout
+      FileUtils.mkdir_p('layouts')
+
+      # Create code
+      FileUtils.mkdir_p('lib')
+    end
+
+    def populate
+      # Create page
       File.open('content/index.txt', 'w') do |io|
         io.write "-----\n"
         io.write "# Built-in\n"
@@ -62,7 +78,6 @@ module Nanoc::DataSources
       yield('meta.yaml')
 
       # Create template
-      FileUtils.mkdir_p('templates')
       File.open('templates/default.txt', 'w') do |io|
         io.write "-----\n"
         io.write "# Built-in\n"
@@ -75,7 +90,6 @@ module Nanoc::DataSources
       yield('templates/default.txt')
 
       # Create layout
-      FileUtils.mkdir_p('layouts')
       File.open('layouts/default.erb', 'w') do |io|
         io.write "-----\n"
         io.write "filter: 'erb'\n"
@@ -92,7 +106,6 @@ module Nanoc::DataSources
       yield('layouts/default.erb')
 
       # Create code
-      FileUtils.mkdir_p('lib')
       File.open('lib/default.rb', 'w') do |io|
         io.write "\# All files in the 'lib' directory will be loaded\n"
         io.write "\# before nanoc starts compiling.\n"
@@ -103,7 +116,6 @@ module Nanoc::DataSources
         io.write "alias h html_escape\n"
       end
       yield('lib/default.rb')
-
     end
 
     ########## Pages ##########
