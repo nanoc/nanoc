@@ -5,6 +5,58 @@ class Nanoc::PageTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  class TestDataSource
+
+    attr_reader :save_called, :move_called, :delete_called, :was_loaded
+
+    def initialize
+      @save_called    = false
+      @move_called    = false
+      @delete_called  = false
+      @references     = 0
+      @was_loaded     = false
+    end
+
+    def save_page(page)
+      @save_called = true
+    end
+
+    def move_page(page, new_path)
+      @move_called = true
+    end
+
+    def delete_page(page)
+      @delete_called = true
+    end
+
+    def loading
+      # Load if necessary
+      up if @references == 0
+      @references += 1
+
+      yield
+    ensure
+      # Unload if necessary
+      @references -= 1
+      down if @references == 0
+    end
+
+    def up
+      @was_loaded = true
+    end
+
+    def down
+    end
+  end
+
+  class TestSite
+
+    def data_source
+      @data_source ||= TestDataSource.new
+    end
+
+  end
+
   def test_initialize
     # Make sure attributes are cleaned
     page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
@@ -80,6 +132,54 @@ class Nanoc::PageTest < Test::Unit::TestCase
 
   def test_web_path
     # TODO implement
+  end
+
+  def test_save
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes'}, '/path/')
+    page.site = site
+
+    # Save
+    assert(!site.data_source.save_called)
+    assert(!site.data_source.was_loaded)
+    page.save
+    assert(site.data_source.save_called)
+    assert(site.data_source.was_loaded)
+  end
+
+  def test_move_to
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes'}, '/path/')
+    page.site = site
+
+    # Move
+    assert(!site.data_source.move_called)
+    assert(!site.data_source.was_loaded)
+    page.move_to('/new_path/')
+    assert(site.data_source.move_called)
+    assert(site.data_source.was_loaded)
+  end
+
+  def test_delete
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes'}, '/path/')
+    page.site = site
+
+    # Delete
+    assert(!site.data_source.delete_called)
+    assert(!site.data_source.was_loaded)
+    page.delete
+    assert(site.data_source.delete_called)
+    assert(site.data_source.was_loaded)
   end
 
   def test_compile

@@ -48,6 +48,31 @@ module Nanoc
       end
     end
 
+    # Saves the template in the database, creating it if it doesn't exist yet
+    # or updating it if it already exists. Tells the site's data source to
+    # save the template.
+    def save
+      @site.data_source.loading do
+        @site.data_source.save_template(self)
+      end
+    end
+
+    # Renames the template. Tells the site's data source to rename the
+    # template.
+    def move_to(new_name)
+      @site.data_source.loading do
+        @site.data_source.move_template(self, new_name)
+      end
+    end
+
+    # Deletes the template. Tells the site's data source to delete the
+    # template.
+    def delete
+      @site.data_source.loading do
+        @site.data_source.delete_template(self)
+      end
+    end
+
   end
 
 end
