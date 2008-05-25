@@ -136,11 +136,6 @@ module Nanoc
       @layout
     end
 
-    # Returns the page's path like it is stored in the data source.
-    def path
-      @path
-    end
-
     # Returns the path to the compiled page on the disk.
     def disk_path
       @disk_path ||= @site.config[:output_dir] + @site.router.disk_path_for(self)
