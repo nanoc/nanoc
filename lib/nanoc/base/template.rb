@@ -29,7 +29,7 @@ module Nanoc
     def initialize(name, page_content, page_attributes)
       @name             = name
       @page_content     = page_content
-      @page_attributes  = page_attributes
+      @page_attributes  = page_attributes.clean
     end
 
     def [](key) # :nodoc:
