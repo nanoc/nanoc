@@ -50,8 +50,13 @@ module Nanoc::CLI
       @base.require_site
 
       # Autocompile site
-      autocompiler = Nanoc::AutoCompiler.new(@base.site, options.has_key?(:all))
-      autocompiler.start(options[:port] || 3000)
+      begin
+        autocompiler = Nanoc::AutoCompiler.new(@base.site, options.has_key?(:all))
+        autocompiler.start(options[:port] || 3000)
+      rescue LoadError
+        puts "'mime/types' is required to autocompile sites. You may want to " +
+             "install the mime-types gem by running 'gem install mime-types'."
+      end
     end
 
   end

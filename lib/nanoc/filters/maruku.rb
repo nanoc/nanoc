@@ -4,8 +4,7 @@ module Nanoc::Filters
     identifiers :maruku
 
     def run(content)
-      # Load requirements
-      nanoc_require 'maruku'
+      require 'maruku'
 
       # Get result
       ::Maruku.new(content).to_html
