@@ -110,18 +110,18 @@ END
     def serve_500(path, exception, response)
       # Build message
       case exception.class
-      when Nanoc::Errors::UnknownLayoutError.class
+      when Nanoc::Errors::UnknownLayoutError
         message = "Unknown layout: #{exception.message}"
-      when Nanoc::Errors::UnknownFilterError.class
+      when Nanoc::Errors::UnknownFilterError
         message = "Unknown filter: #{exception.message}"
-      when Nanoc::Errors::CannotDetermineFilterError.class
+      when Nanoc::Errors::CannotDetermineFilterError
         message = "Cannot determine filter for layout: #{exception.message}"
-      when Nanoc::Errors::RecursiveCompilationError.class
+      when Nanoc::Errors::RecursiveCompilationError
         message = "Recursive call to page content. Page stack:"
         @base.site.compiler.stack.each do |page|
           message << "  - #{page.path}"
         end
-      when Nanoc::Errors::NoLongerSupportedError.class
+      when Nanoc::Errors::NoLongerSupportedError
         message = "No longer supported: #{exception.message}"
       else
         message = "Unknown error: #{exception.message}"
