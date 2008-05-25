@@ -86,7 +86,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
     def templates
       [
-        Nanoc::Template.new('default', 'Content Here', { :foo => 'bar' })
+        Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
       ]
     end
 

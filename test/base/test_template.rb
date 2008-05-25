@@ -7,7 +7,7 @@ class Nanoc::TemplateTest < Test::Unit::TestCase
 
   def test_initialize
     # Make sure attributes are cleaned
-    template = Nanoc::Template.new('sample', 'content', { 'foo' => 'bar' })
+    template = Nanoc::Template.new('content', { 'foo' => 'bar' }, 'sample')
     assert_equal({ :foo => 'bar' }, template.page_attributes)
   end
 
