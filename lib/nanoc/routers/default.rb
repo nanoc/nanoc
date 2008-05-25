@@ -1,7 +1,7 @@
 module Nanoc::Routers
 
   # TODO document
-  class DefaultRouter < Nanoc::Router
+  class Default < Nanoc::Router
 
     identifier :default
 
