@@ -6,11 +6,25 @@ class PageTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_initialize
-    # TODO implement
+    # Make sure attributes are cleaned
+    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
+    assert_equal({ :foo => 'bar' }, page.attributes)
+
+    # Make sure path is fixed
+    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, 'foo')
+    assert_equal('/foo/', page.path)
   end
 
   def test_to_proxy
-    # TODO implement
+    # Create page
+    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
+    assert_equal({ :foo => 'bar' }, page.attributes)
+
+    # Create proxy
+    page_proxy = page.to_proxy
+
+    # Check values
+    assert_equal('bar', page_proxy.foo)
   end
 
   def test_modified
@@ -26,7 +40,30 @@ class PageTest < Test::Unit::TestCase
   end
 
   def test_attribute_named
-    # TODO implement
+    # Create site
+    site = Nanoc::Site.new({})
+
+    # Create page defaults (hacky...)
+    page_defaults = Nanoc::PageDefaults.new({ :quux => 'stfu' })
+    site.instance_eval { @page_defaults = page_defaults }
+
+    # Create page
+    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+
+    # Test
+    assert_equal('bar',  page.attribute_named(:foo))
+    assert_equal('html', page.attribute_named(:extension))
+    assert_equal('stfu', page.attribute_named(:quux))
+
+    # Create page
+    page = Nanoc::Page.new("content", { 'extension' => 'php' }, '/foo/')
+    page.site = site
+
+    # Test
+    assert_equal(nil,    page.attribute_named(:foo))
+    assert_equal('php',  page.attribute_named(:extension))
+    assert_equal('stfu', page.attribute_named(:quux))
   end
 
   def test_content
@@ -34,10 +71,6 @@ class PageTest < Test::Unit::TestCase
   end
 
   def test_layout
-    # TODO implement
-  end
-
-  def test_path
     # TODO implement
   end
 
