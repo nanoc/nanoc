@@ -1,6 +1,6 @@
 require 'helper'
 
-class CoreExtHashTest < Test::Unit::TestCase
+class Nanoc::CoreExtHashTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

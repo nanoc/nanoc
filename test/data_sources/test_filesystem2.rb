@@ -1,6 +1,6 @@
 require 'helper'
 
-class DataSourceFilesystem2Test < Test::Unit::TestCase
+class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

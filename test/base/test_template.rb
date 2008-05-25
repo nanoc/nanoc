@@ -1,6 +1,6 @@
 require 'helper'
 
-class TemplateTest < Test::Unit::TestCase
+class Nanoc::TemplateTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

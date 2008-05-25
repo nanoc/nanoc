@@ -1,6 +1,6 @@
 require 'helper'
 
-class CoreExtStringTest < Test::Unit::TestCase
+class Nanoc::CoreExtStringTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

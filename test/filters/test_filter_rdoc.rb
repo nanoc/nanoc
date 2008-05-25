@@ -1,6 +1,6 @@
 require 'helper'
 
-class FilterRDocTest < Test::Unit::TestCase
+class Nanoc::Filters::RDocTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

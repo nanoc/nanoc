@@ -1,6 +1,6 @@
 require 'helper'
 
-class LayoutTest < Test::Unit::TestCase
+class Nanoc::LayoutTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

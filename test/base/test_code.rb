@@ -1,6 +1,6 @@
 require 'helper'
 
-class CodeTest < Test::Unit::TestCase
+class Nanoc::CodeTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

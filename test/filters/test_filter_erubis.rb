@@ -1,6 +1,6 @@
 require 'helper'
 
-class FilterErubisTest < Test::Unit::TestCase
+class Nanoc::Filters::ErubisTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

@@ -1,6 +1,6 @@
 require 'helper'
 
-class FilterBlueClothTest < Test::Unit::TestCase
+class Nanoc::Filters::BlueClothTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
