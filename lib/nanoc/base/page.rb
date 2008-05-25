@@ -146,6 +146,30 @@ module Nanoc
       @web_path ||= @site.router.web_path_for(self)
     end
 
+    # Saves the page in the database, creating it if it doesn't exist yet or
+    # updating it if it already exists. Tells the site's data source to save
+    # the page.
+    def save
+      @site.data_source.loading do
+        @site.data_source.save_page(self)
+      end
+    end
+
+    # Moves the page to a new path. Tells the site's data source to move the
+    # page.
+    def move_to(new_path)
+      @site.data_source.loading do
+        @site.data_source.move_page(self, new_path)
+      end
+    end
+
+    # Deletes the page. Tells the site's data source to delete the page.
+    def delete
+      @site.data_source.loading do
+        @site.data_source.delete_page(self)
+      end
+    end
+
     # Compiles the page.
     #
     # +also_layout+:: When +true+, will layout and post-filter the page, as

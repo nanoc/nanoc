@@ -27,6 +27,15 @@ module Nanoc
       eval(@data, TOPLEVEL_BINDING)
     end
 
+    # Saves the code in the database, creating it if it doesn't exist yet or
+    # updating it if it already exists. Tells the site's data source to save
+    # the code.
+    def save
+      @site.data_source.loading do
+        @site.data_source.save_code(self)
+      end
+    end
+
   end
 
 end
