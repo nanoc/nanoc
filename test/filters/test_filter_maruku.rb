@@ -1,6 +1,6 @@
 require 'helper'
 
-class FilterMarukuTest < Test::Unit::TestCase
+class Nanoc::Filters::MarukuTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

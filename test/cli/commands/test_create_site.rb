@@ -1,6 +1,6 @@
 require 'helper'
 
-class CommandCreateSiteTest < Test::Unit::TestCase
+class Nanoc::CLI::CreateSiteCommandTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

@@ -1,6 +1,6 @@
 require 'helper'
 
-class PageLayoutTest < Test::Unit::TestCase
+class Nanoc::PageLayoutTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

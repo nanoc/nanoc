@@ -1,6 +1,6 @@
 require 'helper'
 
-class PluginManagerTest < Test::Unit::TestCase
+class Nanoc::PluginManagerTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

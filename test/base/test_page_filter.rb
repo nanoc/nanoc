@@ -1,6 +1,6 @@
 require 'helper'
 
-class PageFilterTest < Test::Unit::TestCase
+class Nanoc::PageFilterTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

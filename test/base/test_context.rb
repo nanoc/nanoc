@@ -1,6 +1,6 @@
 require 'helper'
 
-class ContextTest < Test::Unit::TestCase
+class Nanoc::ContextTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
