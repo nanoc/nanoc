@@ -24,6 +24,7 @@ EMAIL     = 'denis.defreyne@stoneship.org'
 
 CLEAN.include([
   'coverage',
+  'rdoc',
   'tmp',
   File.join('test', 'fixtures', '*', 'output', '*'),
   File.join('test', 'fixtures', '*', 'tmp')
@@ -79,6 +80,7 @@ end
 
 Rake::RDocTask.new do |task|
   task.rdoc_files.include(spec.extra_rdoc_files + [ 'lib' ])
+  task.rdoc_dir = 'rdoc'
   task.options = spec.rdoc_options
 end
 
