@@ -1,5 +1,10 @@
 class String
 
+  # Word-wraps and indents the string.
+  #
+  # +width+:: The maximal width of each line. This also includes indentation, i.e. the actual maximal width of the text is width-indentation.
+  #
+  # +indentation+:: The number of spaces to indent each wrapped line.
   def wrap_and_indent(width, indentation)
     # Split into paragraphs
     paragraphs = self.split("\n").map { |p| p.strip }.reject { |p| p == '' }
