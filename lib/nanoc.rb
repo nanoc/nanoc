@@ -39,6 +39,18 @@ module Nanoc
 
   end
 
+  module DataSources # :nodoc:
+  end
+
+  module Extensions # :nodoc:
+  end
+
+  module Filters # :nodoc:
+  end
+
+  module Routers # :nodoc:
+  end
+
   # Requires the given Ruby files at the specified path.
   #
   # +path+:: An array containing path segments. This path is relative to the
