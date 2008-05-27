@@ -79,26 +79,25 @@ module Nanoc
       not_implemented('pages', :required)
     end
 
-    # TODO document
+    # Saves the given page in the data source, creating it if it doesn't exist
+    # yet and updating the existing copy otherwise.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def save_page(page)
       not_implemented('save_page', :optional)
     end
 
-    # TODO document
+    # Changes the path of the given page to the given new path. When changing
+    # a page's path, this method must be used (save_page will not work).
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def move_page(page, new_path)
       not_implemented('move_page', :optional)
     end
 
-    # TODO document
+    # Removes the given page from the data source.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def delete_page(page)
       not_implemented('delete_page', :optional)
     end
@@ -107,14 +106,15 @@ module Nanoc
 
     # Returns the page defaults (represented by Nanoc::PageDefaults) of this
     # site. This is an abstract method implemented by the subclass.
+    #
+    # Subclasses must implement this method.
     def page_defaults
       not_implemented('page_defaults', :required)
     end
 
-    # TODO document
+    # Saves the given page defaults in the data source.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def save_page_defaults(page_defaults)
       not_implemented('save_page_defaults', :optional)
     end
@@ -123,30 +123,32 @@ module Nanoc
 
     # Returns the list of layouts (represented by Nanoc::Layout) in this site.
     # This is an abstract method implemented by the subclass.
+    #
+    # Subclasses must implement this method.
     def layouts
       not_implemented('layouts', :required)
     end
 
-    # TODO document
+    # Saves the given layout in the data source, creating it if it doesn't
+    # exist yet and updating the existing copy otherwise.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def save_layout(layout)
       not_implemented('save_layout', :optional)
     end
 
-    # TODO document
+    # Changes the path of the given layout to the given new path. When
+    # changing a layout's path, this method must be used (save_layout will not
+    # work).
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def move_layout(layout, new_path)
       not_implemented('move_layout', :optional)
     end
 
-    # TODO document
+    # Removes the given layout from the data source.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def delete_layout(layout)
       not_implemented('delete_layout', :optional)
     end
@@ -155,30 +157,32 @@ module Nanoc
 
     # Returns the list of templates (represented by Nanoc::Template) in this
     # site. This is an abstract method implemented by the subclass.
+    #
+    # Subclasses must implement this method.
     def templates
       not_implemented('templates', :required)
     end
 
-    # TODO document
+    # Saves the given template in the data source, creating it if it doesn't
+    # exist yet and updating the existing copy otherwise.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def save_template(template)
       not_implemented('save_template', :optional)
     end
 
-    # TODO document
+    # Changes the name of the given template to the given new name. When
+    # changing a template's name, this method must be used (save_template will
+    # not work).
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
-    def move_template(template, new_path)
+    # Subclasses must implement this method.
+    def move_template(template, new_name)
       not_implemented('move_template', :optional)
     end
 
-    # TODO document
+    # Removes the given template from the data source.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def delete_template(template)
       not_implemented('delete_template', :optional)
     end
@@ -195,10 +199,9 @@ module Nanoc
       not_implemented('code', :required)
     end
 
-    # TODO document
+    # Saves the given code in the data source.
     #
-    # Subclasses may implement this method. Data manipulation will not be
-    # possible when not implemented.
+    # Subclasses must implement this method.
     def save_code(code)
       not_implemented('save_code', :optional)
     end
