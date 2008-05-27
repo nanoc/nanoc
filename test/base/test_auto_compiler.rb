@@ -5,6 +5,46 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  class TestWorkingPage
+
+    def content(stage)
+      "compiled page content (#{stage})"
+    end
+
+    def disk_path
+      "tmp/test.html"
+    end
+
+  end
+
+  class TestBrokenPage
+
+    def content(stage)
+      raise RuntimeError.new("aah! fail!")
+    end
+
+    def web_path
+      "/foobar/"
+    end
+
+  end
+
+  class TestCompiler
+
+    def run(page, include_outdated)
+      page.content(:post)
+    end
+
+  end
+
+  class TestSite
+
+    def compiler
+      @compiler ||= TestCompiler.new
+    end
+
+  end
+
   class TestResponse
 
     attr_accessor :status, :body
@@ -62,7 +102,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_serve_500
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(self)
+    autocompiler = Nanoc::AutoCompiler.new(nil)
 
     # Create mock response
     response = TestResponse.new
@@ -84,7 +124,48 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
   end
 
   def test_serve_page
-    # TODO implement
+    if_have('mime/types') do
+      # Create site
+      site = TestSite.new
+
+      # Create autocompiler
+      autocompiler = Nanoc::AutoCompiler.new(site)
+
+      begin
+        # Create working page
+        working_page      = TestWorkingPage.new
+        working_response  = TestResponse.new
+        assert_nothing_raised do
+          autocompiler.instance_eval { serve_page(working_page, working_response) }
+        end
+
+        # Create output file
+        File.open(working_page.disk_path, 'w') { |io| }
+
+        # Check response
+        assert_equal(200,                     working_response.status)
+        assert_equal('text/html',             working_response['Content-Type'])
+        assert_match(/compiled page content/, working_response.body)
+      ensure
+        # Clean up
+        FileUtils.remove_entry_secure(working_page.disk_path)
+      end
+
+      begin
+        # Create broken page
+        broken_page     = TestBrokenPage.new
+        broken_response = TestResponse.new
+        assert_nothing_raised do
+          autocompiler.instance_eval { serve_page(broken_page, broken_response) }
+        end
+
+        # Check response
+        assert_equal(500,                 broken_response.status)
+        assert_equal('text/html',         broken_response['Content-Type'])
+        assert_match(/aah! fail!/,        broken_response.body)
+        assert_match(/500 Server Error/,  broken_response.body)
+      end
+    end
   end
 
   def test_serve_file
