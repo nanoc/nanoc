@@ -186,11 +186,21 @@ class Nanoc::PageTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_filter!
+  def test_do_filter
     # TODO implement
   end
 
-  def test_layout!
+  def test_do_filter_outdated
+    # Create page
+    page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
+
+    # Filter
+    assert_raise Nanoc::Errors::NoLongerSupportedError do
+      page.instance_eval { filter!(:pre) }
+    end
+  end
+
+  def test_do_layout
     # TODO implement
   end
 
