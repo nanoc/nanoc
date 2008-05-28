@@ -29,8 +29,6 @@ Removed:
 * The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
   `erb` or `erubis` (for embedded Ruby), `bluecloth` or `maruku` (for
   Markdown) and `redcloth` (for Markdown and Textile)
-* The database and trivial data sources are no longer included in the standard
-  nanoc distribution, but you can get them from the plugins repository now
 
 2.0.4
 -----
