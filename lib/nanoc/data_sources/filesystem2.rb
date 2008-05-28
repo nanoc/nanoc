@@ -320,7 +320,7 @@ module Nanoc::DataSources
     end
 
     # TODO document
-    def move_template(template, new_path)
+    def move_template(template, new_name)
       # TODO implement
     end
 

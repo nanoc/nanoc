@@ -253,7 +253,7 @@ module Nanoc::DataSources
       database_template.save
     end
 
-    def move_template(teamplte, new_path)
+    def move_template(template, new_name)
       # TODO implement
     end
 
