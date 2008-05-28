@@ -11,14 +11,32 @@ require File.dirname(__FILE__) + '/lib/nanoc.rb'
 
 ##### General details
 
-NAME    = 'nanoc'
-VERS    = Nanoc::VERSION
-SUMMARY = 'a tool that runs on your local computer and compiles Markdown, ' +
-          'Textile, Haml, ... documents into static web pages'
+NAME      = 'nanoc'
+VERS      = Nanoc::VERSION
+SUMMARY   = 'a tool that runs on your local computer and compiles ' +
+            'Markdown, Textile, Haml, ... documents into static web pages'
 HOMEPAGE  = 'http://nanoc.stoneship.org/'
 
 AUTHOR    = 'Denis Defreyne'
 EMAIL     = 'denis.defreyne@stoneship.org'
+
+MESSAGE   = <<EOS
+Thanks for installing nanoc! Here are some resources to help you get started:
+
+* There's a tutorial at <http://nanoc.stoneship.org/help/tutorial/>. This
+  tutorial will familiarize you with nanoc, so it is a must read if you
+  haven't used nanoc before.
+
+* The manual at <http://nanoc.stoneship.org/help/manual/> describing all of
+  nanoc's features in detail. It also has descriptions of the plugins that
+  come with nanoc.
+
+* The discussion group at <http://groups.google.com/group/nanoc> is extremely
+  useful if you have questions, or if you are running into trouble with
+  nanoc. Don't hesitate; just ask away.
+
+Enjoy!
+EOS
 
 ##### Cleaning
 
@@ -43,6 +61,8 @@ spec = Gem::Specification.new do |s|
 
   s.author                = AUTHOR
   s.email                 = EMAIL
+
+  s.post_install_message  = '-' * 78 + "\n" + MESSAGE + '-' * 78
 
   s.rubyforge_project     = 'nanoc'
 
