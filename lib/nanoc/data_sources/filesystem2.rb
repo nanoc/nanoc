@@ -465,8 +465,11 @@ module Nanoc::DataSources
     # Converts the given hash into YAML format, splitting the YAML output into
     # a 'builtin' and a 'custom' section.
     def hash_to_yaml(hash)
-      # FIXME add more keys
-      builtin_keys = [ 'filters_pre' ]
+      # Get list of built-in keys
+      builtin_keys = Nanoc::Page::PAGE_DEFAULTS
+
+      # Stringify keys
+      hash = hash.stringify_keys
 
       # Split keys
       builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
