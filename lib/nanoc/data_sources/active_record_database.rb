@@ -2,29 +2,30 @@ begin ; require 'active_record' ; rescue LoadError ; end
 
 module Nanoc::DataSources
 
+  # TODO document
   class ActiveRecordDatabase < Nanoc::DataSource
 
     ########## Helper classes ##########
 
     begin
 
-      class DatabasePage < ActiveRecord::Base
+      class DatabasePage < ActiveRecord::Base # :nodoc:
         set_table_name 'pages'
       end
 
-      class DatabasePageDefaults < ActiveRecord::Base
+      class DatabasePageDefaults < ActiveRecord::Base # :nodoc:
         set_table_name 'page_defaults'
       end
 
-      class DatabaseTemplate < ActiveRecord::Base
+      class DatabaseTemplate < ActiveRecord::Base # :nodoc:
         set_table_name 'templates'
       end
 
-      class DatabaseLayout < ActiveRecord::Base
+      class DatabaseLayout < ActiveRecord::Base # :nodoc:
         set_table_name 'layouts'
       end
 
-      class DatabaseCodePiece < ActiveRecord::Base
+      class DatabaseCodePiece < ActiveRecord::Base # :nodoc:
         set_table_name 'code_pieces'
       end
 
@@ -37,19 +38,19 @@ module Nanoc::DataSources
 
     ########## Preparation ##########
 
-    def up
+    def up # :nodoc:
       require 'active_record'
 
       # Connect to the database
       ActiveRecord::Base.establish_connection(@site.config[:database])
     end
 
-    def down
+    def down # :nodoc:
       # Disconnect from the database
       ActiveRecord::Base.remove_connection
     end
 
-    def setup
+    def setup # :nodoc:
       # Create tables
       schema = ActiveRecord::Schema
       schema.verbose = false
@@ -87,7 +88,7 @@ module Nanoc::DataSources
       DatabasePageDefaults.create :attribs => ''
     end
 
-    def populate
+    def populate # :nodoc:
       # Create first page
       DatabasePage.create(
         :path    => '/',
@@ -149,7 +150,7 @@ module Nanoc::DataSources
 
     ########## Pages ##########
 
-    def pages
+    def pages # :nodoc:
       # Create Pages for each database object
       DatabasePage.find(:all).map do |page|
         # Read attributes
@@ -165,7 +166,7 @@ module Nanoc::DataSources
       end.compact
     end
 
-    def save_page(page)
+    def save_page(page) # :nodoc:
       # Find or create database page
       database_page = DatabasePage.find_or_create_by_path(page.path)
 
@@ -178,21 +179,21 @@ module Nanoc::DataSources
       database_page.save
     end
 
-    def move_page(page, new_path)
+    def move_page(page, new_path) # :nodoc:
       # TODO implement
     end
 
-    def delete_page(page)
+    def delete_page(page) # :nodoc:
       # TODO implement
     end
 
     ########## Page Defaults ##########
 
-    def page_defaults
+    def page_defaults # :nodoc:
       Nanoc::PageDefaults.new(YAML.load(DatabasePageDefaults.find(:first).attribs) || {})
     end
 
-    def save_page_defaults(page_defaults)
+    def save_page_defaults(page_defaults) # :nodoc:
       # Find database page defaults
       database_page_defaults = DatabasePageDefaults.find(:first)
 
@@ -205,13 +206,13 @@ module Nanoc::DataSources
 
     ########## Layout ##########
 
-    def layouts
+    def layouts # :nodoc:
       DatabaseLayout.find(:all).map do |dbl|
         Nanoc::Layout.new(dbl.content, YAML.load(dbl.attribs) || {}, dbl.path)
       end
     end
 
-    def save_layout(layout)
+    def save_layout(layout) # :nodoc:
       # Find or create database layout
       database_layout = DatabaseLayout.find_or_create_by_path(layout.path)
 
@@ -224,23 +225,23 @@ module Nanoc::DataSources
       database_layout.save
     end
 
-    def move_layout(layout, new_path)
+    def move_layout(layout, new_path) # :nodoc:
       # TODO implement
     end
 
-    def delete_layout(layout)
+    def delete_layout(layout) # :nodoc:
       # TODO implement
     end
 
     ########## Templates ##########
 
-    def templates
+    def templates # :nodoc:
       DatabaseTemplate.find(:all).map do |dbt|
         Nanoc::Template.new(dbt.content, YAML.load(dbt.attribs) || {}, dbt.name)
       end
     end
 
-    def save_template(template)
+    def save_template(template) # :nodoc:
       # Find or create database template
       database_template = DatabaseTemplate.find_or_create_by_name(template.name)
 
@@ -253,21 +254,21 @@ module Nanoc::DataSources
       database_template.save
     end
 
-    def move_template(template, new_name)
+    def move_template(template, new_name) # :nodoc:
       # TODO implement
     end
 
-    def delete_template(template)
+    def delete_template(template) # :nodoc:
       # TODO implement
     end
 
     ########## Code ##########
 
-    def code
+    def code # :nodoc:
       DatabaseCodePiece.find(:all).map { |p| p.code }.join("\n")
     end
 
-    def save_code(code)
+    def save_code(code) # :nodoc:
       # TODO implement
     end
 

@@ -1,15 +1,87 @@
 module Nanoc::DataSources
 
+  # = Pages
+  #
+  # The filesystem data source stores its pages in nested directories. A page
+  # is represented by a single file. The root directory is the 'content'
+  # directory.
+  #
+  # The metadata for a page is embedded into the file itself. It is stored at
+  # the top of the file, between '-----' (five dashes) separators. For
+  # example:
+  #
+  #   -----
+  #   filters_pre: [ 'redcloth' ]
+  #   -----
+  #   h1. Hello!
+  #
+  # The path of a page is determined as follows. A file with an 'index.*'
+  # filename, such as 'index.txt', will have the filesystem path with the
+  # 'index.*' part stripped as a path. For example, 'foo/bar/index.html' will
+  # have '/foo/bar/' as path.
+  #
+  # A file with a filename not starting with 'index.', such as 'foo.html',
+  # will have a path ending in 'foo/'. For example, 'foo/bar.html' will have
+  # '/foo/bar/' as path.
+  #
+  # Note that it is possible for two different, separate files to have the
+  # same path. It is therefore recommended to avoid such situations.
+  #
+  # Some more examples:
+  #
+  #   content/index.html          --> /
+  #   content/foo.html            --> /foo/
+  #   content/foo/index.html      --> /foo/
+  #   content/foo/bar.html        --> /foo/bar/
+  #   content/foo/bar/index.html  --> /foo/bar/
+  #
+  # File extensions are ignored by nanoc. The file extension does not
+  # determine the filters to run on it; the metadata in the file defines the
+  # list of filters.
+  #
+  # = Page defaults
+  #
+  # The page defaults are loaded from a YAML-formatted file named 'meta.yaml'
+  # file at the top level of the nanoc site directory.
+  #
+  # = Layouts
+  #
+  # Layouts are stored as files in the 'layouts' directory. Similar to pages,
+  # each layout consists of a metadata part and a content part, separated by
+  # '-----'.
+  #
+  # = Templates
+  #
+  # Templates are located in the 'templates' directory. Templates are, just
+  # like pages, files consisting of a metadata part and a content part,
+  # separated by '-----'.
+  #
+  # = Code
+  #
+  # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
+  # sub-directories.
   class Filesystem2 < Nanoc::DataSource
 
+    # A FileProxy is a proxy for a File object. It is used to prevent a File
+    # object from being created until it is actually necessary.
+    #
+    # For example, a site with a few thousand pages would fail to compile
+    # because the massive amount of file descriptors necessary, but the file
+    # proxy will make sure the File object is not created until it is used.
     class FileProxy
 
       instance_methods.each { |m| undef_method m unless m =~ /^__/ }
 
+      # Creates a new file proxy for the given path. This is similar to
+      # creating a File object with the same path, except that the File object
+      # will not be created until it is accessed.
       def initialize(path)
         @path = path
       end
 
+      # Makes sure all method calls are relayed to a File object, which will
+      # be created right before the method call takes place and destroyed
+      # right after.
       def method_missing(sym, *args, &block)
         File.new(@path).__send__(sym, *args, &block)
       end
@@ -22,13 +94,13 @@ module Nanoc::DataSources
 
     ########## Preparation ##########
 
-    def up
+    def up # :nodoc:
     end
 
-    def down
+    def down # :nodoc:
     end
 
-    def setup
+    def setup # :nodoc:
       # Create page
       FileUtils.mkdir_p('content')
 
@@ -48,7 +120,7 @@ module Nanoc::DataSources
       populate { |i| yield i }
     end
 
-    def populate
+    def populate # :nodoc:
       # Create page
       File.open('content/index.txt', 'w') do |io|
         io.write "-----\n"
@@ -123,43 +195,7 @@ module Nanoc::DataSources
 
     ########## Pages ##########
 
-    # The filesystem data source stores its pages in nested directories. A
-    # page is represented by a single file. The root directory is the
-    # 'content' directory.
-    #
-    # The metadata for a page is embedded into the file itself. It is
-    # stored at the top of the file, between '-----' (five dashes)
-    # separators. For example:
-    #
-    #   -----
-    #   filters_pre: [ 'redcloth' ]
-    #   -----
-    #   h1. Hello!
-    #
-    # The path of a page is determined as follows. A file with an 'index.*'
-    # filename, such as 'index.txt', will have the filesystem path with the
-    # 'index.*' part stripped as a path. For example, 'foo/bar/index.html'
-    # will have '/foo/bar/' as path.
-    #
-    # A file with a filename not starting with 'index.', such as 'foo.html',
-    # will have a path ending in 'foo/'. For example, 'foo/bar.html' will
-    # have '/foo/bar/' as path.
-    #
-    # Note that it is possible for two different, separate files to have
-    # the same path. It is therefore recommended to avoid such situations.
-    #
-    # Some more examples:
-    #
-    #   content/index.html          --> /
-    #   content/foo.html            --> /foo/
-    #   content/foo/index.html      --> /foo/
-    #   content/foo/bar.html        --> /foo/bar/
-    #   content/foo/bar/index.html  --> /foo/bar/
-    #
-    # File extensions are ignored by nanoc. The file extension does not
-    # determine the filters to run on it; the metadata in the file defines
-    # the list of filters.
-    def pages
+    def pages # :nodoc:
       files('content', true).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'page')
@@ -185,8 +221,7 @@ module Nanoc::DataSources
       end.compact
     end
 
-    # TODO document
-    def save_page(page)
+    def save_page(page) # :nodoc:
       # # Get possible paths
       # # FIXME fix usage of 'path' here
       # path_best_glob  = 'content' + page.path[0..-2] + '.*'
@@ -220,20 +255,17 @@ module Nanoc::DataSources
       # TODO implement
     end
 
-    # TODO document
-    def move_page(page, new_path)
+    def move_page(page, new_path) # :nodoc:
       # TODO implement
     end
 
-    # TODO document
-    def delete_page(page)
+    def delete_page(page) # :nodoc:
       # TODO implement
     end
 
     ########## Page Defaults ##########
 
-    # The page defaults are loaded from a 'meta.yaml' file
-    def page_defaults
+     def page_defaults # :nodoc:
       # Get attributes
       attributes = YAML.load_file('meta.yaml') || {}
 
@@ -244,17 +276,13 @@ module Nanoc::DataSources
       Nanoc::PageDefaults.new(attributes, mtime)
     end
 
-    # TODO document
-    def save_page_defaults(page_defaults)
+    def save_page_defaults(page_defaults) # :nodoc:
       # TODO implement
     end
 
     ########## Layouts ##########
 
-    # Layouts are stored as files in the 'layouts' directory. Similar to
-    # pages, each layout consists of a metadata part and a content part,
-    # separated by '-----'.
-    def layouts
+    def layouts # :nodoc:
       files('layouts', true).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'layout')
@@ -270,27 +298,21 @@ module Nanoc::DataSources
       end.compact
     end
 
-    # TODO document
-    def save_layout(layout)
+    def save_layout(layout) # :nodoc:
       # TODO implement
     end
 
-    # TODO document
-    def move_layout(layout, new_path)
+    def move_layout(layout, new_path) # :nodoc:
       # TODO implement
     end
 
-    # TODO document
-    def delete_layout(layout)
+    def delete_layout(layout) # :nodoc:
       # TODO implement
     end
 
     ########## Templates ##########
 
-    # Templates are located in the 'templates' directory. Templates are,
-    # just like pages, files consisting of a metadata part and a content
-    # part, separated by '-----'.
-    def templates
+    def templates # :nodoc:
       files('templates', false).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'template')
@@ -314,26 +336,21 @@ module Nanoc::DataSources
       end.compact
     end
 
-    # TODO document
-    def save_template(template)
+    def save_template(template) # :nodoc:
       # TODO implement
     end
 
-    # TODO document
-    def move_template(template, new_name)
+    def move_template(template, new_name) # :nodoc:
       # TODO implement
     end
 
-    # TODO document
-    def delete_template(template)
+    def delete_template(template) # :nodoc:
       # TODO implement
     end
 
     ########## Code ##########
 
-    # Code is stored in '.rb' files in the 'lib' directory. Code can reside
-    # in sub-directories.
-    def code
+    def code # :nodoc:
       # Get data
       data = Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
 
@@ -344,15 +361,14 @@ module Nanoc::DataSources
       Nanoc::Code.new(data, mtime)
     end
 
-    # TODO document
-    def save_code(code)
+    def save_code(code) # :nodoc:
       # TODO implement
     end
 
     ########## OLD ##########
 
-    # Creates a bare-bones page at the given path with the given template
-    def create_page(path, template)
+    # FIXME outdated, remove
+    def create_page(path, template) # :nodoc:
       # Make sure path does not start or end with a slash
       sanitized_path = path.sub(/^\/+/, '').sub(/\/+$/, '')
 
@@ -371,8 +387,8 @@ module Nanoc::DataSources
       end
     end
 
-    # Creates a bare-bones layout with the given name
-    def create_layout(name)
+    # FIXME outdated, remove
+    def create_layout(name) # :nodoc:
       # Make sure name does not start or end with a slash
       sanitized_name = name.sub(/^\/+/, '').sub(/\/+$/, '')
 
@@ -398,8 +414,8 @@ module Nanoc::DataSources
       end
     end
 
-    # Creates a bare-bones template with the given name
-    def create_template(name)
+    # FIXME outdated, remove
+    def create_template(name) # :nodoc:
       # Make sure name does not start or end with a slash
       sanitized_name = name.sub(/^\/+/, '').sub(/\/+$/, '')
 
@@ -420,11 +436,20 @@ module Nanoc::DataSources
 
   private
 
+    # Returns a list of all files in +dir+, ignoring any backup files (files
+    # that end with a ~).
+    #
+    # +recursively+:: When +true+, finds files in +dir+ as well as its
+    #                 subdirectories; when +false+, only searches +dir+
+    #                 itself.
     def files(dir, recursively)
       glob = File.join([dir] + (recursively ? [ '**', '*' ] : [ '*' ]))
       Dir[glob].reject { |f| File.directory?(f) or f =~ /~$/ }
     end
 
+    # Parses the file named +filename+ and returns an array with its first
+    # element a hash with the file's metadata, and with its second element the
+    # file content itself.
     def parse_file(filename, kind)
       # Split file
       pieces = File.read(filename).split(/^-----/)
@@ -437,6 +462,8 @@ module Nanoc::DataSources
       [ meta, content ]
     end
 
+    # Converts the given hash into YAML format, splitting the YAML output into
+    # a 'builtin' and a 'custom' section.
     def hash_to_yaml(hash)
       # FIXME add more keys
       builtin_keys = [ 'filters_pre' ]
