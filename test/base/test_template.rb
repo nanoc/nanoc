@@ -40,7 +40,7 @@ class Nanoc::TemplateTest < Test::Unit::TestCase
       @save_called = true
     end
 
-    def move_template(template, new_path)
+    def move_template(template, new_name)
       @move_called = true
     end
 
@@ -91,7 +91,7 @@ class Nanoc::TemplateTest < Test::Unit::TestCase
     # Move
     assert(!site.data_source.move_called)
     assert(!site.data_source.was_loaded)
-    template.move_to('/new_path/')
+    template.move_to('/new_name/')
     assert(site.data_source.move_called)
     assert(site.data_source.was_loaded)
   end
