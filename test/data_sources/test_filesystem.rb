@@ -224,6 +224,20 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # TODO implement
   end
 
+  # Test private methods
+
+  def test_meta_filenamed
+    # TODO implement
+  end
+
+  def test_content_filename_for_dir
+    # TODO implement
+  end
+
+  def test_hash_to_yaml
+    # TODO implement
+  end
+
   # Test creating data
 
   # FIXME outdated, remove
