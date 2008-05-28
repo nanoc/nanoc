@@ -6,7 +6,7 @@ class Nanoc::Filters::OldTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    assert_raise(SystemExit) do
+    assert_raise(Nanoc::Error) do
       with_site_fixture 'empty_site' do |site|
         site.load_data
 
