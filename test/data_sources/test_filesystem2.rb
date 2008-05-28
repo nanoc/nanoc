@@ -180,6 +180,17 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     # TODO implement
   end
 
+  # Test private methods
+
+  def test_files
+  end
+
+  def test_parse_file
+  end
+
+  def test_hash_to_yaml
+  end
+
   # Test creating data
 
   # FIXME outdated, remove
