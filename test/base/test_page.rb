@@ -5,6 +5,18 @@ class Nanoc::PageTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  class TestRouter
+
+    def disk_path_for(page)
+      '/disk' + page.path + 'index.html'
+    end
+
+    def web_path_for(page)
+      '/web' + page.path
+    end
+
+  end
+
   class TestDataSource
 
     attr_reader :save_called, :move_called, :delete_called, :was_loaded
@@ -47,12 +59,25 @@ class Nanoc::PageTest < Test::Unit::TestCase
 
     def down
     end
+
   end
 
   class TestSite
 
+    def config
+      @config ||= { :output_dir => 'tmp' }
+    end
+
     def data_source
       @data_source ||= TestDataSource.new
+    end
+
+    def page_defaults
+      @page_defaults ||= Nanoc::PageDefaults.new(:foo => 'bar')
+    end
+
+    def router
+      @router ||= TestRouter.new
     end
 
   end
@@ -126,8 +151,30 @@ class Nanoc::PageTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_disk_path
-    # TODO implement
+  def test_disk_path_for_normal_page
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
+    page.site = site
+
+    # Check
+    assert_equal('tmp/disk/path/index.html',  page.disk_path)
+    assert_equal('/web/path/',                page.web_path)
+  end
+
+  def test_disk_path_for_page_with_custom_path
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("content", { :custom_path => '/noobs/something.txt' }, '/path/')
+    page.site = site
+
+    # Check
+    assert_equal('tmp/noobs/something.txt', page.disk_path)
+    assert_equal('/noobs/something.txt',    page.web_path)
   end
 
   def test_web_path
@@ -139,7 +186,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
     site = TestSite.new
 
     # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes'}, '/path/')
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
     page.site = site
 
     # Save
@@ -155,7 +202,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
     site = TestSite.new
 
     # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes'}, '/path/')
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
     page.site = site
 
     # Move
@@ -171,7 +218,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
     site = TestSite.new
 
     # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes'}, '/path/')
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
     page.site = site
 
     # Delete

@@ -138,12 +138,15 @@ module Nanoc
 
     # Returns the path to the compiled page on the disk.
     def disk_path
-      @disk_path ||= @site.config[:output_dir] + @site.router.disk_path_for(self)
+      @disk_path ||= @site.config[:output_dir] + (
+        attribute_named(:custom_path) ||
+        @site.router.disk_path_for(self)
+      )
     end
 
     # Returns the path to the compiled page as used in the web site itself.
     def web_path
-      @web_path ||= @site.router.web_path_for(self)
+      @web_path ||= attribute_named(:custom_path) || @site.router.web_path_for(self)
     end
 
     # Saves the page in the database, creating it if it doesn't exist yet or
