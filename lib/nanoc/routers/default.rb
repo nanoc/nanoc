@@ -7,20 +7,18 @@ module Nanoc::Routers
 
     # TODO document
     def disk_path_for(page)
-      if page.attribute_named(:custom_path).nil?
-        # Get data we need
-        filename   = page.attribute_named(:filename)
-        extension  = page.attribute_named(:extension)
+      # Get data we need
+      filename   = page.attribute_named(:filename)
+      extension  = page.attribute_named(:extension)
 
-        page.path + "#{filename}.#{extension}"
-      else
-        page.attribute_named(:custom_path)
-      end
+      # Build path
+      page.path + "#{filename}.#{extension}"
     end
 
     # TODO document
     def web_path_for(page)
-      page.attribute_named(:custom_path) || page.path
+      # Return normal page path
+      page.path
     end
 
   end
