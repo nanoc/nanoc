@@ -35,8 +35,8 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
         assert_equal('/foo/index.html',   site.router.disk_path_for(foo_page))
 
         # Check custom page paths
-        assert_equal('/quack/zomg.html',  site.router.web_path_for(bar_page))
-        assert_equal('/quack/zomg.html',  site.router.disk_path_for(bar_page))
+        assert_equal('/bar/',             site.router.web_path_for(bar_page))
+        assert_equal('/bar/index.html',   site.router.disk_path_for(bar_page))
       end
 
     end
