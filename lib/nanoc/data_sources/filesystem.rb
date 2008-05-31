@@ -117,6 +117,39 @@ module Nanoc::DataSources
       populate { |i| yield i }
     end
 
+    def update # :nodoc :
+      # Update pages
+      # TODO implement
+
+      # Update layouts
+      Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
+        # Get filter class
+        filter_class = Nanoc::PluginManager.instance.layout_processor(File.extname(filename))
+
+        # Get data
+        content     = File.read(filename)
+        attributes  = { :filter => filter_class.identifier.to_s }
+        path        = File.basename(filename, File.extname(filename))
+
+        # Get layout
+        tmp_layout = Nanoc::Layout.new(content, attributes, path)
+
+        # Get filenames
+        last_component    = tmp_layout.path.split('/')[-1]
+        dir_path          = 'layouts' + tmp_layout.path
+        meta_filename     = dir_path + last_component + '.yaml'
+        content_filename  = dir_path + last_component + '.html'
+
+        # Create new files
+        FileUtils.mkdir_p(dir_path)
+        File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(tmp_layout.attributes)) }
+        File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
+
+        # Delete old files
+        FileUtils.remove_entry_secure(filename)
+      end
+    end
+
     def populate # :nodoc:
       # Create page
       FileUtils.mkdir_p('content')
@@ -531,6 +564,15 @@ module Nanoc::DataSources
       "\n" +
       '# Custom' +
       (custom_hash.keys.empty? ? "\n" : YAML.dump(custom_hash).split('---')[1])
+    end
+
+    # Raises an "outdated data format" error.
+    def error_outdated
+      raise RuntimeError.new(
+        'This site\'s data is stored in an old format and must be updated. ' +
+        'To do so, issue the \'nanoc update\' command. For help on ' +
+        'updating a site\'s data, issue \'nanoc help update\'.'
+      )
     end
 
   end
