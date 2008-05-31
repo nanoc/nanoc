@@ -57,7 +57,7 @@ module Nanoc::CLI
 
       # Create page
       @base.site.data_source.loading do
-        # FIXME don't use #create_layout
+        # FIXME don't use #create_page
         @base.site.data_source.create_page(path, template)
       end
     end

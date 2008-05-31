@@ -77,6 +77,13 @@ module Nanoc
       raise Nanoc::Errors::UnknownRouterError.new(@config[:router]) if @router_class.nil?
       @router = @router_class.new(self)
 
+      # Initialize data
+      @pages              = []
+      @layouts            = []
+      @templates          = []
+      @page_defaults      = PageDefaults.new({})
+      @page_defaults.site = self
+
       # Set not loaded
       @code_loaded = false
       @data_loaded = false

@@ -11,47 +11,33 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     in_dir %w{ tmp } do
       create_site('site')
       in_dir %w{ site } do
+        # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files to make sure they are recreated
-
-        FileUtils.remove_entry_secure('content/content.txt')
+        FileUtils.remove_entry_secure('content/content.html')
         FileUtils.remove_entry_secure('content/content.yaml')
-
         FileUtils.remove_entry_secure('meta.yaml')
-
-        FileUtils.remove_entry_secure('templates/default/default.txt')
-        FileUtils.remove_entry_secure('templates/default/default.yaml')
-
-        FileUtils.remove_entry_secure('layouts/default/default.erb')
-        FileUtils.remove_entry_secure('layouts/default/default.yaml')
-
+        FileUtils.remove_entry_secure('templates/default')
+        FileUtils.remove_entry_secure('layouts/default')
         FileUtils.remove_entry_secure('lib/default.rb')
 
         # Recreate files
-
         site.data_source.loading { site.data_source.setup {} }
 
-        # Check whether files have been recreated
-
+        # Ensure essential files have been recreated
         assert(File.directory?('content/'))
-        assert(File.file?('content/content.txt'))
-        assert(File.file?('content/content.yaml'))
-
         assert(File.file?('meta.yaml'))
-
         assert(File.directory?('templates/'))
-        assert(File.directory?('templates/default/'))
-        assert(File.file?('templates/default/default.txt'))
-        assert(File.file?('templates/default/default.yaml'))
-
         assert(File.directory?('layouts/'))
-        assert(File.directory?('layouts/default/'))
-        assert(File.file?('layouts/default/default.erb'))
-        assert(File.file?('layouts/default/default.yaml'))
-
         assert(File.directory?('lib/'))
         assert(File.file?('lib/default.rb'))
+
+        # Ensure no non-essential files have been recreated
+        assert(!File.file?('content/content.html'))
+        assert(!File.file?('content/content.yaml'))
+        assert(!File.directory?('templates/default/'))
+        assert(!File.directory?('layouts/default/'))
       end
     end
   end
@@ -303,7 +289,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
           io << %q{filters_pre: [ 'erb' ]} + "\n"
           io << %q{title:       "<Hello>"} + "\n"
         end
-        File.open('content/content.txt', 'w') { |io| io << "<h1><%= h @page.title %></h1>" }
+        File.open('content/content.html', 'w') { |io| io << "<h1><%= h @page.title %></h1>" }
 
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
@@ -374,9 +360,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## EVERYTHING UP TO DATE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.html')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -392,9 +378,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT CONTENT AND META FILES
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(now,          now,          'content/content.txt')
+        File.utime(now,          now,          'content/content.html')
         File.utime(now,          now,          'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -410,9 +396,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT META FILE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.html')
         File.utime(now,          now,          'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -428,9 +414,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT CONTENT FILE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(now,          now,          'content/content.txt')
+        File.utime(now,          now,          'content/content.html')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -446,9 +432,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT LAYOUT CONTENT FILE
 
         # Update file mtimes
-        File.utime(now,          now,          'layouts/default/default.erb')
+        File.utime(now,          now,          'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.html')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -464,9 +450,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT LAYOUT META FILE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(now,          now,          'layouts/default/default.yaml')
-        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.html')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -482,9 +468,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT PAGE DEFAULTS
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.html')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(now,          now,          'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
@@ -500,9 +486,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         ########## RECENT CODE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default/default.erb')
+        File.utime(distant_past, distant_past, 'layouts/default/default.html')
         File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
-        File.utime(distant_past, distant_past, 'content/content.txt')
+        File.utime(distant_past, distant_past, 'content/content.html')
         File.utime(distant_past, distant_past, 'content/content.yaml')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(now,          now,          'lib/default.rb')

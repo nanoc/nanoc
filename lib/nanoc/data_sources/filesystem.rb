@@ -97,7 +97,7 @@ module Nanoc::DataSources
     end
 
     def setup # :nodoc:
-      # Create page
+      # Create pages
       FileUtils.mkdir_p('content')
 
       # Create page defaults
@@ -112,16 +112,18 @@ module Nanoc::DataSources
 
       # Create code
       FileUtils.mkdir_p('lib')
-
-      # FIXME remove this
-      populate { |i| yield i }
+      File.open('lib/default.rb', 'w') { |io| }
+      yield('lib/default.rb')
     end
 
     def update # :nodoc :
       # Update pages
+      # content/foo/bar/baz/index.ext -> content/foo/bar/baz/baz.ext
+      # content/foo/bar/baz/meta.yaml -> content/foo/bar/baz/baz.yaml
       # TODO implement
 
       # Update layouts
+      # layouts/abc.ext -> layouts/abc/abc.{html,yaml}
       Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
         # Get filter class
         filter_class = Nanoc::PluginManager.instance.layout_processor(File.extname(filename))
@@ -138,7 +140,7 @@ module Nanoc::DataSources
         last_component    = tmp_layout.path.split('/')[-1]
         dir_path          = 'layouts' + tmp_layout.path
         meta_filename     = dir_path + last_component + '.yaml'
-        content_filename  = dir_path + last_component + '.html'
+        content_filename  = dir_path + last_component + '.' + File.extname(filename)
 
         # Create new files
         FileUtils.mkdir_p(dir_path)
@@ -148,85 +150,11 @@ module Nanoc::DataSources
         # Delete old files
         FileUtils.remove_entry_secure(filename)
       end
-    end
 
-    def populate # :nodoc:
-      # Create page
-      FileUtils.mkdir_p('content')
-      File.open('content/content.txt', 'w') do |io|
-        io.write "I'm a brand new root page. Please edit me!\n"
-      end
-      File.open('content/content.yaml', 'w') do |io|
-        io.write "# Built-in\n"
-        io.write "\n"
-        io.write "# Custom\n"
-        io.write "title: \"A New Root Page\"\n"
-      end
-      yield('content/content.txt')
-      yield('content/content.yaml')
-
-      # Create page defaults
-      File.open('meta.yaml', 'w') do |io|
-        io.write "# This file contains the default values for all metafiles.\n"
-        io.write "# Other metafiles can override the contents of this one.\n"
-        io.write "\n"
-        io.write "# Built-in\n"
-        io.write "custom_path:  none\n"
-        io.write "extension:    \"html\"\n"
-        io.write "filename:     \"index\"\n"
-        io.write "filters_post: []\n"
-        io.write "filters_pre:  []\n"
-        io.write "is_draft:     false\n"
-        io.write "layout:       \"default\"\n"
-        io.write "skip_output:  false\n"
-        io.write "\n"
-        io.write "# Custom\n"
-      end
-      yield('meta.yaml')
-
-      # Create template
-      FileUtils.mkdir_p('templates/default')
-      File.open('templates/default/default.txt', 'w') do |io|
-        io.write "Hi, I'm a new page!\n"
-      end
-      File.open('templates/default/default.yaml', 'w') do |io|
-        io.write "# Built-in\n"
-        io.write "\n"
-        io.write "# Custom\n"
-        io.write "title: \"A New Page\"\n"
-      end
-      yield('templates/default/default.txt')
-      yield('templates/default/default.yaml')
-
-      # Create layout
-      FileUtils.mkdir_p('layouts/default')
-      File.open('layouts/default/default.erb', 'w') do |io|
-        io.write "<html>\n"
-        io.write "  <head>\n"
-        io.write "    <title><%= @page.title %></title>\n"
-        io.write "  </head>\n"
-        io.write "  <body>\n"
-        io.write "<%= @page.content %>\n"
-        io.write "  </body>\n"
-        io.write "</html>\n"
-      end
-      File.open('layouts/default/default.yaml', 'w') do |io|
-        io.write "filter: 'erb'\n"
-      end
-      yield('layouts/default/default.erb')
-      yield('layouts/default/default.yaml')
-
-      # Create code
-      File.open('lib/default.rb', 'w') do |io|
-        io.write "\# All files in the 'lib' directory will be loaded\n"
-        io.write "\# before nanoc starts compiling.\n"
-        io.write "\n"
-        io.write "def html_escape(str)\n"
-        io.write "  str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n"
-        io.write "end\n"
-        io.write "alias h html_escape\n"
-      end
-      yield('lib/default.rb')
+      # Update templates
+      # templates/foo/index.ext -> templates/foo/foo.ext
+      # templates/foo/meta.yaml -> templates/foo/foo.yaml
+      # TODO implement
     end
 
     ########## Pages ##########
@@ -371,8 +299,8 @@ module Nanoc::DataSources
 
     def save_layout(layout) # :nodoc:
       # Determine what layout directory structure is being used
-      layout_dir_count = Dir[File.join('layouts', '*')].select { |f| File.directory?(f) }.size
-      error_outdated if layout_dir_count == 0
+      layout_file_count = Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.size
+      error_outdated if layout_file_count > 0
 
       # Get paths
       last_component    = layout.path.split('/')[-1]
@@ -421,7 +349,32 @@ module Nanoc::DataSources
     end
 
     def save_template(template) # :nodoc:
-      # TODO implement
+      # Determine possible meta file paths
+      meta_filename_worst = 'templates/' + template.name + '/index.yaml'
+      meta_filename_best  = 'templates/' + template.name + '/' + template.name + '.yaml'
+
+      # Get existing path
+      existing_path = nil
+      existing_path = meta_filename_best  if File.file?(meta_filename_best)
+      existing_path = meta_filename_worst if File.file?(meta_filename_worst)
+
+      if existing_path.nil?
+        # Get filenames
+        dir_path         = 'templates/' + template.name
+        meta_filename    = meta_filename_best
+        content_filename = 'templates/' + template.name + '/' + template.name + '.html'
+
+        # Create directories if necessary
+        FileUtils.mkdir_p(dir_path)
+      else
+        # Get filenames
+        meta_filename    = existing_path
+        content_filename = content_filename_for_dir(File.dirname(existing_path))
+      end
+
+      # Write files
+      File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(template.page_attributes)) }
+      File.open(content_filename, 'w') { |io| io.write(template.page_content) }
     end
 
     def move_template(template, new_name) # :nodoc:

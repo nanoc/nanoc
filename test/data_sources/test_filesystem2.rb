@@ -11,47 +11,36 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     in_dir %w{ tmp } do
       create_site('site')
       in_dir %w{ site } do
+        # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files
-
-        FileUtils.remove_entry_secure('content/content.txt')
+        FileUtils.remove_entry_secure('content/content.html')
         FileUtils.remove_entry_secure('content/content.yaml')
-
         FileUtils.remove_entry_secure('meta.yaml')
-
-        FileUtils.remove_entry_secure('templates/default/default.txt')
-        FileUtils.remove_entry_secure('templates/default/default.yaml')
-
-        FileUtils.remove_entry_secure('layouts/default/default.erb')
-        FileUtils.remove_entry_secure('layouts/default/default.yaml')
-
+        FileUtils.remove_entry_secure('templates/default')
+        FileUtils.remove_entry_secure('layouts/default')
         FileUtils.remove_entry_secure('lib/default.rb')
 
         # Convert site to filesystem2
-
         open('config.yaml', 'w') { |io| io.write('data_source: filesystem2') }
 
         # Setup site
-
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
         site.data_source.loading { site.data_source.setup {} }
 
-        # Check whether files have been recreated
-
+        # Ensure essential files have been recreated
         assert(File.directory?('content/'))
-        assert(File.file?('content/index.txt'))
-
         assert(File.file?('meta.yaml'))
-
         assert(File.directory?('templates/'))
-        assert(File.file?('templates/default.txt'))
-
         assert(File.directory?('layouts/'))
-        assert(File.file?('layouts/default.erb'))
-
         assert(File.directory?('lib/'))
         assert(File.file?('lib/default.rb'))
+
+        # Ensure no non-essential files have been recreated
+        assert(!File.file?('content/index.html'))
+        assert(!File.file?('templates/default.html'))
+        assert(!File.file?('layouts/default.html'))
       end
     end
   end
@@ -303,25 +292,11 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     threshold = 2.0
 
     in_dir %w{ tmp } do
-      create_site('site')
+      create_site('site', 'filesystem2')
 
       in_dir %w{ site } do
-        # Remove files
-        FileUtils.remove_entry_secure('content/content.txt')
-        FileUtils.remove_entry_secure('content/content.yaml')
-        FileUtils.remove_entry_secure('meta.yaml')
-        FileUtils.remove_entry_secure('templates/default/default.txt')
-        FileUtils.remove_entry_secure('templates/default/default.yaml')
-        FileUtils.remove_entry_secure('layouts/default/default.erb')
-        FileUtils.remove_entry_secure('layouts/default/default.yaml')
-        FileUtils.remove_entry_secure('lib/default.rb')
-
-        # Convert site to filesystem2
-        open('config.yaml', 'w') { |io| io.write('data_source: filesystem2') }
-
-        # Setup site
+        # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-        site.data_source.loading { site.data_source.setup {} }
 
         # Get timestamps
         distant_past = Time.parse('1992-10-14')
@@ -337,8 +312,8 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         ########## EVERYTHING UP TO DATE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.erb')
-        File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(distant_past, distant_past, 'layouts/default.html')
+        File.utime(distant_past, distant_past, 'content/index.html')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
@@ -353,8 +328,8 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         ########## RECENT PAGE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.erb')
-        File.utime(now,          now,          'content/index.txt')
+        File.utime(distant_past, distant_past, 'layouts/default.html')
+        File.utime(now,          now,          'content/index.html')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
@@ -369,8 +344,8 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         ########## RECENT LAYOUT
 
         # Update file mtimes
-        File.utime(now,          now,          'layouts/default.erb')
-        File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(now,          now,          'layouts/default.html')
+        File.utime(distant_past, distant_past, 'content/index.html')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
@@ -385,8 +360,8 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         ########## RECENT PAGE DEFAULTS
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.erb')
-        File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(distant_past, distant_past, 'layouts/default.html')
+        File.utime(distant_past, distant_past, 'content/index.html')
         File.utime(now,          now,          'meta.yaml')
         File.utime(distant_past, distant_past, 'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
@@ -401,8 +376,8 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         ########## RECENT CODE
 
         # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.erb')
-        File.utime(distant_past, distant_past, 'content/index.txt')
+        File.utime(distant_past, distant_past, 'layouts/default.html')
+        File.utime(distant_past, distant_past, 'content/index.html')
         File.utime(distant_past, distant_past, 'meta.yaml')
         File.utime(now,          now,          'lib/default.rb')
         File.utime(recent_past,  recent_past,  'output/index.html')
