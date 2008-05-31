@@ -228,48 +228,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  # Test creating data
-
-  # FIXME outdated, remove
-  def test_create_page
-    in_dir %w{ tmp } do
-      create_site('site')
-      in_dir %w{ site } do
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-
-        assert_nothing_raised()   { create_page('test') }
-        assert_raise(SystemExit)  { create_page('test') }
-
-        assert_nothing_raised()   { create_page('foo/bar') }
-        assert_raise(SystemExit)  { create_page('foo/bar') }
-
-        assert(File.directory?('content/test/'))
-        assert(File.file?('content/test/test.txt'))
-        assert(File.file?('content/test/test.yaml'))
-
-        assert(File.directory?('content/foo/bar/'))
-        assert(File.file?('content/foo/bar/bar.txt'))
-        assert(File.file?('content/foo/bar/bar.yaml'))
-      end
-    end
-  end
-
-  # FIXME outdated, remove
-  def test_create_layout
-    in_dir %w{ tmp } do
-      create_site('site')
-      in_dir %w{ site } do  
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-
-        assert_nothing_raised()   { create_layout('test') }
-        assert_raise(SystemExit)  { create_layout('test') }
-
-        assert(File.file?('layouts/test/test.erb'))
-        assert(File.file?('layouts/test/test.yaml'))
-      end
-    end
-  end
-
   # Miscellaneous
 
   def test_meta_filenames_error
