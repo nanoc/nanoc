@@ -414,65 +414,6 @@ module Nanoc::DataSources
       end
     end
 
-    ########## OLD ##########
-
-    # FIXME outdated, remove
-    def create_page(path, template) # :nodoc:
-      # Make sure path does not start or end with a slash
-      sanitized_path = path.gsub(/^\/+|\/+$/, '')
-
-      # Get paths
-      dir_path      = 'content/' + sanitized_path
-      name          = sanitized_path.sub(/.*\/([^\/]+)$/, '\1')
-      meta_path     = dir_path + '/' + name + '.yaml'
-      content_path  = dir_path + '/' + name + template[:extension]
-
-      # Make sure the page doesn't exist yet
-      error "A page named '#{path}' already exists." if File.exist?(meta_path)
-
-      # Create index and meta file
-      FileManager.create_file(meta_path)    { template[:meta] }
-      FileManager.create_file(content_path) { template[:content] }
-    end
-
-    # FIXME outdated, remove
-    def create_layout(name) # :nodoc:
-      # Get details
-      path = 'layouts/' + name
-
-      # Make sure the layout doesn't exist yet
-      error "A layout named '#{name}' already exists." if File.exist?(path)
-
-      # Create layout file
-      FileManager.create_file(path + '/' + name + '.erb') do
-        "<html>\n" +
-        "  <head>\n" +
-        "    <title><%= @page.title %></title>\n" +
-        "  </head>\n" +
-        "  <body>\n" +
-        "<%= @page.content %>\n" +
-        "  </body>\n" +
-        "</html>\n"
-      end
-      FileManager.create_file(path + '/' + name + '.yaml') do
-        "filter: 'erb'\n"
-      end
-    end
-
-    # FIXME outdated, remove
-    def create_template(name) # :nodoc:
-      # Get paths
-      meta_path    = 'templates/' + name + '/' + name + '.yaml'
-      content_path = 'templates/' + name + '/' + name + '.txt'
-
-      # Make sure the template doesn't exist yet
-      error "A template named '#{name}' already exists." if File.exist?(meta_path)
-
-      # Create index and meta file
-      FileManager.create_file(meta_path)    { "# Built-in\n\n# Custom\ntitle: A New Page\n" }
-      FileManager.create_file(content_path) { "Hi, I'm new here!\n" }
-    end
-
   private
 
     ########## Custom functions ##########
