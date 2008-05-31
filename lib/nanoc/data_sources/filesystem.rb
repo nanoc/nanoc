@@ -370,7 +370,27 @@ module Nanoc::DataSources
     end
 
     def save_layout(layout) # :nodoc:
-      # TODO implement
+      # Determine what layout directory structure is being used
+      layout_dir_count = Dir[File.join('layouts', '*')].select { |f| File.directory?(f) }.size
+      error_outdated if layout_dir_count == 0
+
+      # Get paths
+      last_component    = layout.path.split('/')[-1]
+      dir_path          = 'layouts' + layout.path
+      meta_filename     = dir_path + last_component + '.yaml'
+      content_filename  = Dir[dir_path + last_component + '.*'][0]
+
+      unless File.file?(meta_filename)
+        # Create dir
+        FileUtils.mkdir_p(dir_path)
+
+        # Get content filename
+        content_filename = dir_path + last_component + '.html'
+      end
+
+      # Write files
+      File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(layout.attributes)) }
+      File.open(content_filename, 'w') { |io| io.write(layout.content) }
     end
 
     def move_layout(layout, new_path) # :nodoc:
@@ -430,7 +450,13 @@ module Nanoc::DataSources
     end
 
     def save_code(code) # :nodoc:
-      # TODO implement
+      # Remove all existing code files
+      Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
+
+      # Write new code
+      File.open('lib/default.rb', 'w') do |io|
+        io.write(code.data)
+      end
     end
 
     ########## OLD ##########
