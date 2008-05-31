@@ -15,7 +15,7 @@ module Nanoc::CLI
     end
 
     def long_desc
-      '... write me ...'
+      'TODO write me'
     end
 
     def usage

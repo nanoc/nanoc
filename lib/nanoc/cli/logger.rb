@@ -2,6 +2,7 @@ require 'singleton'
 
 module Nanoc::CLI
 
+  # TODO document
   class Logger
 
     ACTION_COLORS = {
@@ -12,12 +13,15 @@ module Nanoc::CLI
 
     include Singleton
 
+    # TODO document
     attr_accessor :level
 
+    # TODO document
     def initialize
       @level = :high
     end
 
+    # TODO document
     def file(level, action, path)
       log(
         level,
@@ -29,6 +33,7 @@ module Nanoc::CLI
       )
     end
 
+    # TODO document
     def log(level, s, io=$stdout)
       # Don't log when logging is disabled
       return if @level == :off

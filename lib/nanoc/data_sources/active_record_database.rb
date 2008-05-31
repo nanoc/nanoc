@@ -88,6 +88,10 @@ module Nanoc::DataSources
       DatabasePageDefaults.create :attribs => ''
     end
 
+    def update
+      # TODO implement
+    end
+
     def populate # :nodoc:
       # Create first page
       DatabasePage.create(
