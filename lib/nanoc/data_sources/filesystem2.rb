@@ -101,7 +101,7 @@ module Nanoc::DataSources
     end
 
     def setup # :nodoc:
-      # Create page
+      # Create pages
       FileUtils.mkdir_p('content')
 
       # Create page defaults
@@ -115,82 +115,7 @@ module Nanoc::DataSources
 
       # Create code
       FileUtils.mkdir_p('lib')
-
-      # FIXME remove this
-      populate { |i| yield i }
-    end
-
-    def populate # :nodoc:
-      # Create page
-      File.open('content/index.txt', 'w') do |io|
-        io.write "-----\n"
-        io.write "# Built-in\n"
-        io.write "\n"
-        io.write "# Custom\n"
-        io.write "title: \"A New Root Page\"\n"
-        io.write "-----\n"
-        io.write "I'm a brand new root page. Please edit me!\n"
-      end
-      yield('content/index.txt')
-
-      # Create page defaults
-      File.open('meta.yaml', 'w') do |io|
-        io.write "# This file contains the default values for all metafiles.\n"
-        io.write "# Other metafiles can override the contents of this one.\n"
-        io.write "\n"
-        io.write "# Built-in\n"
-        io.write "custom_path:  none\n"
-        io.write "extension:    \"html\"\n"
-        io.write "filename:     \"index\"\n"
-        io.write "filters_post: []\n"
-        io.write "filters_pre:  []\n"
-        io.write "is_draft:     false\n"
-        io.write "layout:       \"default\"\n"
-        io.write "skip_output:  false\n"
-        io.write "\n"
-        io.write "# Custom\n"
-      end
-      yield('meta.yaml')
-
-      # Create template
-      File.open('templates/default.txt', 'w') do |io|
-        io.write "-----\n"
-        io.write "# Built-in\n"
-        io.write "\n"
-        io.write "# Custom\n"
-        io.write "title: \"A New Page\"\n"
-        io.write "-----\n"
-        io.write "Hi, I'm a new page!\n"
-      end
-      yield('templates/default.txt')
-
-      # Create layout
-      File.open('layouts/default.erb', 'w') do |io|
-        io.write "-----\n"
-        io.write "filter: 'erb'\n"
-        io.write "-----\n"
-        io.write "<html>\n"
-        io.write "  <head>\n"
-        io.write "    <title><%= @page.title %></title>\n"
-        io.write "  </head>\n"
-        io.write "  <body>\n"
-        io.write "<%= @page.content %>\n"
-        io.write "  </body>\n"
-        io.write "</html>\n"
-      end
-      yield('layouts/default.erb')
-
-      # Create code
-      File.open('lib/default.rb', 'w') do |io|
-        io.write "\# All files in the 'lib' directory will be loaded\n"
-        io.write "\# before nanoc starts compiling.\n"
-        io.write "\n"
-        io.write "def html_escape(str)\n"
-        io.write "  str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n"
-        io.write "end\n"
-        io.write "alias h html_escape\n"
-      end
-      yield('lib/default.rb')
+      File.open('lib/default.rb', 'w') { |io| }
     end
 
     ########## Pages ##########
@@ -222,37 +147,26 @@ module Nanoc::DataSources
     end
 
     def save_page(page) # :nodoc:
-      # # Get possible paths
-      # # FIXME fix usage of 'path' here
-      # path_best_glob  = 'content' + page.path[0..-2] + '.*'
-      # path_worst_glob = 'content' + page.path + 'index.*'
-      # 
-      # # Get files
-      # paths_best  = Dir[path_best_glob]
-      # paths_worst = Dir[path_worst_glob]
-      # 
-      # # Find existing path
-      # existing_path = nil
-      # if paths_best.size > 0
-      #   existing_path = paths_best.first
-      # elsif paths_worst.size > 0
-      #   existing_path = paths_worst.first
-      # else
-      #   existing_path = nil
-      # end
-      # 
-      # unless existing_path.nil?
-      #   # Update this file
-      #   File.open(existing_path, 'w') { |io| io.write('lol, noob') }
-      # else
-      #   # Determine best path
-      #   # ...
-      #   
-      #   # Create new file
-      #   # ...
-      # end
+      # Find page path
+      if page.path == '/'
+        paths = Dir['content/index.*']
+        path  = paths[0] || 'content/index.html'
+      else
+        last_path_component = layout.path.split('/')[-1]
+        paths_best    = Dir['content' + page.path[0..-2] + '.*']
+        paths_worst   = Dir['content' + page.path + 'index.*']
+        path_default  = 'content' + page.path + last_path_component + '.html'
+        path          = paths_best[0] || paths_worst[0] || path_default
+      end
 
-      # TODO implement
+      # Update page
+      FileUtils.mkdir_p('content' + page.path)
+      File.open(path, 'w') do |io|
+        io.write("-----\n")
+        io.write(hash_to_yaml(page.attributes) + "\n")
+        io.write("-----\n")
+        io.write(page.content(:raw))
+      end
     end
 
     def move_page(page, new_path) # :nodoc:
@@ -288,7 +202,11 @@ module Nanoc::DataSources
         meta, content = *parse_file(filename, 'layout')
 
         # Get actual path
-        path = filename.sub(/^layouts\//, '').sub(/\.[^\/]+$/, '')
+        if filename =~ /\/index\.[^\/]+$/
+          path = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
+        else
+          path = filename.sub(/^layouts/, '').sub(/\.[^\/]+$/, '') + '/'
+        end
 
         # Get mtime
         mtime = File.stat(filename).mtime
@@ -299,7 +217,21 @@ module Nanoc::DataSources
     end
 
     def save_layout(layout) # :nodoc:
-      # TODO implement
+      # Find layout path
+      last_path_component = layout.path.split('/')[-1]
+      paths_best    = Dir['layouts' + layout.path[0..-2] + '.*']
+      paths_worst   = Dir['layouts' + layout.path + 'index.*']
+      path_default  = 'layouts' + layout.path[0..-2] + '.html'
+      path          = paths_best[0] || paths_worst[0] || path_default
+
+      # Update layout
+      FileUtils.mkdir_p('layouts' + layout.path)
+      File.open(path, 'w') do |io|
+        io.write("-----\n")
+        io.write(hash_to_yaml(layout.attributes) + "\n")
+        io.write("-----\n")
+        io.write(layout.content)
+      end
     end
 
     def move_layout(layout, new_path) # :nodoc:
@@ -313,6 +245,8 @@ module Nanoc::DataSources
     ########## Templates ##########
 
     def templates # :nodoc:
+      # FIXME let this method return Template objects
+
       files('templates', false).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'template')

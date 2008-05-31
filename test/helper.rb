@@ -9,8 +9,8 @@ def with_site_fixture(a_fixture)
   end
 end
 
-def create_site(name)
-  Nanoc::CLI::Base.new.run(['create_site', name])
+def create_site(name, data_source='filesystem')
+  Nanoc::CLI::Base.new.run(['create_site', name, '-d', data_source])
 end
 
 def create_layout(name)
