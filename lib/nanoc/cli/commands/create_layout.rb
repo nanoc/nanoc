@@ -42,7 +42,7 @@ module Nanoc::CLI
       # Check whether layout is unique
       if !@base.site.layouts.find { |l| l.path == path }.nil?
         puts "A layout already exists at #{path}. Please pick a unique name" +
-             " for the layout you are creating."
+             " for the layout you are creating." unless ENV['QUIET']
         exit 1
       end
 
@@ -63,7 +63,7 @@ module Nanoc::CLI
       layout.site = @base.site
       layout.save
 
-      puts "A layout has been created at #{path}."
+      puts "A layout has been created at #{path}." unless ENV['QUIET']
     end
 
   end
