@@ -101,7 +101,10 @@ module Nanoc
         # Get code
         @code = @data_source.code
         if @code.is_a? String
-          warn "in nanoc 2.1, DataSource#code should return a Code object"
+          warn(
+            "In nanoc 2.1, DataSource#code should return a Code object. Future versions will not support these outdated data sources.",
+            'DEPRECATION WARNING'
+          )
           @code = Code.new(code)
         end
         @code.site = self
@@ -135,7 +138,10 @@ module Nanoc
         # Pages
         @pages = @data_source.pages
         if @pages.any? { |p| p.is_a? Hash }
-          warn "in nanoc 2.1, DataSource#pages should return an array of Page objects"
+          warn(
+            "In nanoc 2.1, DataSource#pages should return an array of Nanoc::Page objects. Future versions will not support these outdated data sources.",
+            'DEPRECATION WARNING'
+          )
           @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
         end
         @pages.each { |p| p.site = self }
@@ -143,7 +149,10 @@ module Nanoc
         # Page defaults
         @page_defaults = @data_source.page_defaults
         if @page_defaults.is_a? Hash
-          warn "in nanoc 2.1, DataSource#layouts should return a PageDefaults object"
+          warn(
+            "In nanoc 2.1, DataSource#page_defaults should return a Nanoc::PageDefaults object. Future versions will not support these outdated data sources.",
+            'DEPRECATION WARNING'
+          )
           @page_defaults = PageDefaults.new(@page_defaults)
         end
         @page_defaults.site = self
@@ -151,7 +160,10 @@ module Nanoc
         # Layouts
         @layouts = @data_source.layouts
         if @layouts.any? { |l| l.is_a? Hash }
-          warn "in nanoc 2.1, DataSource#layouts should return an array of Layout objects"
+          warn(
+            "In nanoc 2.1, DataSource#layouts should return an array of Nanoc::Layout objects. Future versions will not support these outdated data sources.",
+            'DEPRECATION WARNING'
+          )
           @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
         end
         @layouts.each { |l| l.site = self }
@@ -159,7 +171,10 @@ module Nanoc
         # Templates
         @templates = @data_source.templates
         if @templates.any? { |t| t.is_a? Hash }
-          warn "in nanoc 2.1, DataSource#templates should return an array of Template objects"
+          warn(
+            "In nanoc 2.1, DataSource#templates should return an array of Nanoc::Template objects. Future versions will not support these outdated data sources.",
+            'DEPRECATION WARNING'
+          )
           @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
         end
         @templates.each { |t| t.site = self }
