@@ -30,6 +30,11 @@ module Nanoc::Extensions
       end
     end
 
+    # TODO document
+    def pages_with_tag(tag)
+      # TODO implement
+    end
+
     # Returns a link to to the specified tag. The link is marked up using the
     # rel-tag microformat.
     #

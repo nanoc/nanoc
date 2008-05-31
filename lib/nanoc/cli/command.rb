@@ -1,37 +1,46 @@
 module Nanoc::CLI
 
+  # TODO document
   class Command
 
     attr_accessor :base
 
+    # TODO document
     def name
       raise NotImplementedError.new("Command subclasses should override #name")
     end
 
+    # TODO document
     def aliases
       raise NotImplementedError.new("Command subclasses should override #aliases")
     end
 
+    # TODO document
     def short_desc
       raise NotImplementedError.new("Command subclasses should override #short_desc")
     end
 
+    # TODO document
     def long_desc
       raise NotImplementedError.new("Command subclasses should override #long_desc")
     end
 
+    # TODO document
     def usage
       raise NotImplementedError.new("Command subclasses should override #usage")
     end
 
+    # TODO document
     def option_definitions
       []
     end
 
+    # TODO document
     def run(options, arguments)
       raise NotImplementedError.new("Command subclasses should override #run")
     end
 
+    # TODO document
     def help
       text = ''
 
@@ -66,6 +75,7 @@ module Nanoc::CLI
       text
     end
 
+    # TODO document
     def <=>(other)
       self.name <=> other.name
     end

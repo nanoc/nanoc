@@ -56,6 +56,10 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     end
   end
 
+  def test_update
+    # TODO implement
+  end
+
   # Test pages
 
   def test_pages
@@ -281,6 +285,14 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
   end
 
   # Miscellaneous
+
+  def test_meta_filenames_error
+    # TODO implement
+  end
+
+  def test_content_filename_for_dir_error
+    # TODO implement
+  end
 
   def test_html_escape
     in_dir %w{ tmp } do

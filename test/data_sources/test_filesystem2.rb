@@ -56,6 +56,10 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     end
   end
 
+  def test_update
+    # TODO implement
+  end
+
   # Test pages
 
   def test_pages

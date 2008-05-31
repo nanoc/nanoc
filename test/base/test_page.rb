@@ -106,6 +106,28 @@ class Nanoc::PageTest < Test::Unit::TestCase
 
   def test_modified
     # TODO implement
+
+    # needed for compilation:
+    # - page (obviously)
+    # - router (for getting disk path)
+    # - compiler (for stack)
+    # - site config (for output dir)
+
+    # Create page
+
+    # Assert not modified
+
+    # Compile page
+
+    # Assert modified
+
+    # Compile page again
+
+    # Assert not modified
+
+    # Edit and compile page
+
+    # Assert modified
   end
 
   def test_created
@@ -114,6 +136,8 @@ class Nanoc::PageTest < Test::Unit::TestCase
 
   def test_outdated
     # TODO implement
+
+    # Also check data sources that don't provide mtimes
   end
 
   def test_attribute_named
@@ -238,13 +262,28 @@ class Nanoc::PageTest < Test::Unit::TestCase
 
   def test_compile
     # TODO implement
+    
+    # - check modified
+    # - check stack
+  end
+
+  def test_compile_without_layout
+    # TODO implement
   end
 
   def test_do_filter
     # TODO implement
   end
 
-  def test_do_filter_outdated
+  def test_do_filter_get_filters_for_stage
+    # TODO implement
+  end
+
+  def test_do_filter_chained
+    # TODO implement
+  end
+
+  def test_do_filter_with_outdated_filters_attribute
     # Create page
     page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
 
@@ -254,7 +293,27 @@ class Nanoc::PageTest < Test::Unit::TestCase
     end
   end
 
+  def test_do_filter_with_unknown_filter
+    # TODO implement
+  end
+
   def test_do_layout
+    # TODO implement
+  end
+
+  def test_do_layout_without_layout
+    # TODO implement
+  end
+
+  def test_do_layout_with_unknown_filter
+    # TODO implement
+  end
+
+  def test_write_page
+    # TODO implement
+  end
+
+  def test_write_page_with_skip_output
     # TODO implement
   end
 

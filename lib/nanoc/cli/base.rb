@@ -1,13 +1,16 @@
 module Nanoc::CLI
 
+  # TODO document
   class Base
 
     attr_reader :commands, :site
 
+    # TODO document
     def initialize
       create_commands
     end
 
+    # TODO document
     def run(args)
       # Check arguments
       if args.length == 0
@@ -78,6 +81,7 @@ module Nanoc::CLI
       command.run(parsed_arguments[:options], parsed_arguments[:arguments])
     end
 
+    # TODO document
     def command_named(name)
       # Find by exact name or alias
       command = @commands.find { |c| c.name == name or c.aliases.include?(name) }
@@ -98,6 +102,7 @@ module Nanoc::CLI
       end
     end
 
+    # TODO document
     def show_help(command=nil)
       if command.nil?
         @help_command.run([], [])
@@ -106,6 +111,7 @@ module Nanoc::CLI
       end
     end
 
+    # TODO document
     def require_site
       if site.nil?
         puts 'The current working directory does not seem to be a ' +
@@ -114,6 +120,7 @@ module Nanoc::CLI
       end
     end
 
+    # TODO document
     def site
       # Load site if possible
       if File.file?('config.yaml') and @site.nil?
@@ -132,6 +139,7 @@ module Nanoc::CLI
       @site
     end
 
+    # TODO document
     def global_option_definitions
       [
         {

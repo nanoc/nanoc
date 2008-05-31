@@ -11,6 +11,10 @@ class Nanoc::DataSources::ActiveRecordDatabaseTest < Test::Unit::TestCase
     # TODO implement
   end
 
+  def test_update
+    # TODO implement
+  end
+
   # Test pages
 
   def test_pages
