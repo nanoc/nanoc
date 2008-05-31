@@ -211,7 +211,7 @@ module Nanoc
       if !@written and also_layout
         # Check status
         @created  = !File.file?(self.disk_path)
-        @modified = @created ? true : File.read(self.disk_path) == @content[:post]
+        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
 
         # Write
         unless attribute_named(:skip_output)
