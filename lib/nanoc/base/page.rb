@@ -96,8 +96,8 @@ module Nanoc
       # Outdated if we don't know
       return true if @mtime.nil?
 
-      # Calculate compiled mtime
-      compiled_mtime = File.exist?(disk_path) ? File.stat(disk_path).mtime : nil
+      # Get compiled mtime
+      compiled_mtime = File.stat(disk_path).mtime
 
       # Outdated if file too old
       return true if @mtime > compiled_mtime
