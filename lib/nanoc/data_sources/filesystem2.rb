@@ -362,7 +362,13 @@ module Nanoc::DataSources
     end
 
     def save_code(code) # :nodoc:
-      # TODO implement
+      # Remove all existing code files
+      Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
+
+      # Write new code
+      File.open('lib/default.rb', 'w') do |io|
+        io.write(code.data)
+      end
     end
 
     ########## OLD ##########
