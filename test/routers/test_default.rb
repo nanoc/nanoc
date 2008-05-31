@@ -5,40 +5,199 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_paths_for
+  def test_web_path_normal
     in_dir %w{ tmp } do
+      # Create
       create_site('site')
 
       in_dir %w{ site } do
-        # Create site
+        # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
         site.load_data
-
-        # Create page with normal path
-        foo_page = Nanoc::Page.new(
-          "Hello, I am Foo!",
-          { },
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          {},
           '/foo/'
         )
-        foo_page.site = site
+        page.site = site
 
-        # Create page with custom path
-        bar_page = Nanoc::Page.new(
-          "Hello, I am Bar!",
-          { :custom_path => '/quack/zomg.html' },
-          '/bar/'
-        )
-        bar_page.site = site
-
-        # Check normal page paths
-        assert_equal('/foo/',             site.router.web_path_for(foo_page))
-        assert_equal('/foo/index.html',   site.router.disk_path_for(foo_page))
-
-        # Check custom page paths
-        assert_equal('/bar/',             site.router.web_path_for(bar_page))
-        assert_equal('/bar/index.html',   site.router.disk_path_for(bar_page))
+        # Check path
+        assert_equal('/foo/', site.router.web_path_for(page))
       end
+    end
+  end
 
+  def test_web_path_with_custom_path
+    # Custom paths aren't handled by the router, so make sure they really aren't!
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          { :custom_path => '/quack/zomg.html' },
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/', site.router.web_path_for(page))
+      end
+    end
+  end
+
+  def test_web_path_with_custom_path
+    # Custom paths aren't handled by the router, so make sure they really aren't!
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          { :filename => 'asdf' },
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/', site.router.web_path_for(page))
+      end
+    end
+  end
+
+  def test_web_path_with_custom_path
+    # Custom paths aren't handled by the router, so make sure they really aren't!
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          { :extension => 'xyz' },
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/', site.router.web_path_for(page))
+      end
+    end
+  end
+
+  def test_disk_path_normal
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          {},
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/index.html', site.router.disk_path_for(page))
+      end
+    end
+  end
+
+  def test_disk_path_with_custom_path
+    # Custom paths aren't handled by the router, so make sure they really aren't!
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          { :custom_path => '/quack/zomg.html' },
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/index.html', site.router.disk_path_for(page))
+      end
+    end
+  end
+
+  def test_disk_path_with_custom_filename
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          { :filename => 'default' },
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/default.html', site.router.disk_path_for(page))
+      end
+    end
+  end
+
+  def test_disk_path_with_custom_extension
+    in_dir %w{ tmp } do
+      # Create
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
+        
+        # Create page
+        page = Nanoc::Page.new(
+          "Hello, I am a cool page!",
+          { :extension => 'htm' },
+          '/foo/'
+        )
+        page.site = site
+
+        # Check path
+        assert_equal('/foo/index.htm', site.router.disk_path_for(page))
+      end
     end
   end
 
