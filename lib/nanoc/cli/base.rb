@@ -133,6 +133,18 @@ module Nanoc::CLI
         rescue Nanoc::Errors::UnknownRouterError => e
           puts "Unknown router: #{e}"
           exit 1
+        rescue Exception => e
+          puts "ERROR: An exception occured while loading this site."
+          puts
+          puts "If you think this is a bug in nanoc, please do report it at"
+          puts "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
+          puts
+          puts 'Message:'
+          puts '  ' + e.message
+          puts
+          puts 'Backtrace:'
+          puts e.backtrace.map { |t| '  - ' + t }.join("\n")
+          exit 1
         end
       end
 
