@@ -103,9 +103,9 @@ module Nanoc
       return true if @mtime > compiled_mtime
 
       # Outdated if dependencies outdated
-      return true if @site.layouts.any? { |l| l.mtime > compiled_mtime }
-      return true if @site.page_defaults.mtime > compiled_mtime
-      return true if @site.code.mtime > compiled_mtime
+      return true if @site.layouts.any? { |l| l.mtime and l.mtime > compiled_mtime }
+      return true if @site.page_defaults.mtime and @site.page_defaults.mtime > compiled_mtime
+      return true if @site.code.mtime and @site.code.mtime > compiled_mtime
 
       return false
     end
