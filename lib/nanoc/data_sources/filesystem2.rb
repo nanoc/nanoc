@@ -459,7 +459,11 @@ module Nanoc::DataSources
     def parse_file(filename, kind)
       # Split file
       pieces = File.read(filename).split(/^-----/)
-      error "The file '#{filename}' does not seem to be a nanoc #{kind}" if pieces.size < 3
+      if pieces.size < 3
+        raise RuntimeError.new(
+          "The file '#{filename}' does not seem to be a nanoc #{kind}"
+        )
+      end
 
       # Parse
       meta    = YAML.load(pieces[1])
