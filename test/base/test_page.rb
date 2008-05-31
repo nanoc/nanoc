@@ -117,30 +117,37 @@ class Nanoc::PageTest < Test::Unit::TestCase
   end
 
   def test_attribute_named
-    # Create site
-    site = Nanoc::Site.new({})
+    in_dir [ 'tmp' ] do
+      # Create temporary site
+      create_site('testing')
 
-    # Create page defaults (hacky...)
-    page_defaults = Nanoc::PageDefaults.new({ :quux => 'stfu' })
-    site.instance_eval { @page_defaults = page_defaults }
+      in_dir [ 'testing' ] do
+        # Get site
+        site = Nanoc::Site.new({})
 
-    # Create page
-    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
-    page.site = site
+        # Create page defaults (hacky...)
+        page_defaults = Nanoc::PageDefaults.new({ :quux => 'stfu' })
+        site.instance_eval { @page_defaults = page_defaults }
 
-    # Test
-    assert_equal('bar',  page.attribute_named(:foo))
-    assert_equal('html', page.attribute_named(:extension))
-    assert_equal('stfu', page.attribute_named(:quux))
+        # Create page
+        page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
+        page.site = site
 
-    # Create page
-    page = Nanoc::Page.new("content", { 'extension' => 'php' }, '/foo/')
-    page.site = site
+        # Test
+        assert_equal('bar',  page.attribute_named(:foo))
+        assert_equal('html', page.attribute_named(:extension))
+        assert_equal('stfu', page.attribute_named(:quux))
 
-    # Test
-    assert_equal(nil,    page.attribute_named(:foo))
-    assert_equal('php',  page.attribute_named(:extension))
-    assert_equal('stfu', page.attribute_named(:quux))
+        # Create page
+        page = Nanoc::Page.new("content", { 'extension' => 'php' }, '/foo/')
+        page.site = site
+
+        # Test
+        assert_equal(nil,    page.attribute_named(:foo))
+        assert_equal('php',  page.attribute_named(:extension))
+        assert_equal('stfu', page.attribute_named(:quux))
+      end
+    end
   end
 
   def test_content
