@@ -46,10 +46,15 @@ module Nanoc::CLI
       @base.require_site
 
       # Create template
-      @base.site.data_source.loading do
-        # FIXME don't use #create_template
-        @base.site.data_source.create_template(name)
-      end
+      template = Nanoc::Template.new(
+        "Hi, I'm a new template. Please edit me!",
+        { :title => "A Title" },
+        name
+      )
+      template.site = @base.site
+      template.save
+
+      puts "A template named '#{name}' has been created." unless ENV['QUIET']
     end
 
   end
