@@ -57,7 +57,7 @@ module Nanoc
     def down
     end
 
-    ########## Creating
+    ########## Creating/updating
 
     # Creates the initial data for the site. This action will likely be
     # destructive. For example, if you're using a database, this is where you
@@ -67,6 +67,14 @@ module Nanoc
     # Subclasses must implement this method.
     def setup
       not_implemented('setup', :required)
+    end
+
+    # Updated the content stored in this site to a newer version. A newer
+    # version of a data source may store content in a different format, and
+    # this method will update the stored content to this newer format.
+    #
+    # Subclasses may implement this method.
+    def update
     end
 
     ########## Pages

@@ -163,6 +163,7 @@ module Nanoc::CLI
       @commands << CreateTemplateCommand.new
       @commands << InfoCommand.new
       @commands << SwitchCommand.new
+      @commands << UpdateCommand.new
 
       # Set base
       @commands.each { |c| c.base = self }
