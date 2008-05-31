@@ -5,7 +5,7 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestingDataSource < Nanoc::DataSource
+  class TestingLoadingDataSource < Nanoc::DataSource
 
     attr_reader   :references
     attr_accessor :upped, :downed
@@ -20,9 +20,13 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
 
   end
 
+  class TestingDataSource < Nanoc::DataSource
+
+  end
+
   def test_loading
     # Create data source
-    data_source = TestingDataSource.new(nil)
+    data_source = TestingLoadingDataSource.new(nil)
 
     # Reset
     data_source.upped  = false
@@ -70,6 +74,7 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
     # Test optional methods
     assert_nothing_raised { data_source.up }
     assert_nothing_raised { data_source.down }
+    assert_nothing_raised { data_source.update }
 
     # Test required methods - general
     assert_raise(NotImplementedError) { data_source.setup }
