@@ -64,18 +64,18 @@ module Nanoc::CLI
         time_before = Time.now
 
         # Compile
-        @base.site.compiler.run(page, options.has_key?(:all)) do |page|
+        @base.site.compiler.run(page, options.has_key?(:all)) do |cur_page|
           # Get action and level
-          action, level = *if page.created?
+          action, level = *if cur_page.created?
             [ :create, :high ]
-          elsif page.modified?
+          elsif cur_page.modified?
             [ :update, :high ]
           else
             [ :identical, :low ]
           end
 
           # Log
-          Nanoc::CLI::Logger.instance.file(level, action, page.disk_path)
+          Nanoc::CLI::Logger.instance.file(level, action, cur_page.disk_path)
         end
 
         # Give feedback
