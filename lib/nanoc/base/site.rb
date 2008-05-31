@@ -69,13 +69,44 @@ module Nanoc
       # Create compiler
       @compiler = Compiler.new(self)
 
+      # Load code (necessary for custom routers)
+      load_code
+
       # Create router
       @router_class = PluginManager.instance.router(@config[:router].to_sym)
       raise Nanoc::Errors::UnknownRouterError.new(@config[:router]) if @router_class.nil?
       @router = @router_class.new(self)
 
       # Set not loaded
+      @code_loaded = false
       @data_loaded = false
+    end
+
+    # Loads the custom site code. This method will be called as soon as the
+    # Nanoc::Site instance is created (because the custom site code could
+    # contain the definition of a custom router). It is not necessary to
+    # explicitly call this method.
+    def load_code(force=false)
+      # Don't load code twice
+      return if @code_loaded and !force
+
+      @data_source.loading do
+        # Get code
+        @code = @data_source.code
+        if @code.is_a? String
+          warn "in nanoc 2.1, DataSource#code should return a Code object"
+          @code = Code.new(code)
+        end
+        @code.site = self
+
+        # Execute code
+        # FIXME move responsibility for loading site code elsewhere, so
+        # potentially dangerous code can be put in a sandbox.
+        @code.load
+      end
+
+      # Set loaded
+      @code_loaded = true
     end
 
     # Loads the site data. This will query the Nanoc::DataSource associated
@@ -89,19 +120,11 @@ module Nanoc
       # Don't load data twice
       return if @data_loaded and !force
 
+      # Load code
+      load_code(force)
+
       # Load data
       @data_source.loading do
-        # Code
-        @code = @data_source.code
-        if @code.is_a? String
-          warn "in nanoc 2.1, DataSource#code should return a Code object"
-          @code = Code.new(code)
-        end
-        @code.site = self
-        # FIXME move responsibility for loading site code elsewhere, so
-        # potentially dangerous code can be put in a sandbox.
-        @code.load
-
         # Pages
         @pages = @data_source.pages
         if @pages.any? { |p| p.is_a? Hash }

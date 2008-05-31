@@ -9,6 +9,8 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
     identifier :test_data_source
 
+    def code ; Nanoc::Code.new('') ; end
+
   end
 
   class TestOldschoolDataSource < Nanoc::DataSource
@@ -96,6 +98,49 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
   end
 
+  class TestEarlyLoadingCodeDataSource < Nanoc::DataSource
+
+    identifier :early_loading_code_data_source
+
+    def pages
+      [
+        Nanoc::Page.new("Hi!",          {}, '/'),
+        Nanoc::Page.new("Hello there.", {}, '/about/')
+      ]
+    end
+
+    def page_defaults
+      Nanoc::PageDefaults.new({ :foo => 'bar' })
+    end
+
+    def layouts
+      [
+        Nanoc::Layout.new(
+          'HEADER <%= @page.content %> FOOTER',
+          { :filter => 'erb' },
+          '/quux/'
+        )
+      ]
+    end
+
+    def templates
+      [
+        Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
+      ]
+    end
+
+    def code
+      Nanoc::Code.new(
+        "class TestEarlyLoadingCodeRouter < Nanoc::Router\n" +
+        "  identifier :early_loading_code_router\n" +
+        "  def web_path_for(page)  ; 'web path'  ; end\n" +
+        "  def disk_path_for(page) ; 'disk path' ; end\n" +
+        "end"
+      )
+    end
+
+  end
+
   class TestRouter < Nanoc::Router
 
     identifier :test_router
@@ -103,30 +148,47 @@ class Nanoc::SiteTest < Test::Unit::TestCase
   end
 
   def test_initialize
-    # Test everything okay
+    in_dir [ 'tmp' ] do
+      # Create temporary site
+      create_site('testing')
+
+      in_dir [ 'testing' ] do
+        # Test everything okay
+        assert_nothing_raised do
+          Nanoc::Site.new(
+            :output_dir   => 'output',
+            :data_source  => 'filesystem',
+            :router       => 'default'
+          )
+        end
+
+        # Test unknown data source
+        assert_raise(Nanoc::Errors::UnknownDataSourceError) do
+          Nanoc::Site.new(
+            :output_dir   => 'output',
+            :data_source  => 'kasdflksafjlksdjaklfkjdsjakf',
+            :router       => 'default'
+          )
+        end
+
+        # Test unknown router
+        assert_raise(Nanoc::Errors::UnknownRouterError) do
+          Nanoc::Site.new(
+            :output_dir   => 'output',
+            :data_source  => 'filesystem',
+            :router       => 'kasdflksafjlksdjaklfkjdsjakf'
+          )
+        end
+      end
+    end
+  end
+
+  def test_initialize_custom_router
     assert_nothing_raised do
       Nanoc::Site.new(
         :output_dir   => 'output',
-        :data_source  => 'filesystem',
-        :router       => 'default'
-      )
-    end
-
-    # Test unknown data source
-    assert_raise(Nanoc::Errors::UnknownDataSourceError) do
-      Nanoc::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'kasdflksafjlksdjaklfkjdsjakf',
-        :router       => 'default'
-      )
-    end
-
-    # Test unknown router
-    assert_raise(Nanoc::Errors::UnknownRouterError) do
-      Nanoc::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'filesystem',
-        :router       => 'kasdflksafjlksdjaklfkjdsjakf'
+        :data_source  => 'early_loading_code_data_source',
+        :router       => 'early_loading_code_router'
       )
     end
   end
@@ -177,25 +239,32 @@ class Nanoc::SiteTest < Test::Unit::TestCase
   end
 
   def test_config
-    # Create site
-    site = Nanoc::Site.new(
-      :output_dir   => 'custom_output',
-      :data_source  => 'test_data_source',
-      :router       => 'test_router'
-    )
+    in_dir [ 'tmp' ] do
+      # Create temporary site
+      create_site('testing')
 
-    # Check
-    assert_equal('custom_output',     site.config[:output_dir])
-    assert_equal('test_data_source',  site.config[:data_source])
-    assert_equal('test_router',       site.config[:router])
+      in_dir [ 'testing' ] do
+        # Create site
+        site = Nanoc::Site.new(
+          :output_dir   => 'custom_output',
+          :data_source  => 'test_data_source',
+          :router       => 'test_router'
+        )
 
-    # Create site
-    site = Nanoc::Site.new({})
+        # Check
+        assert_equal('custom_output',     site.config[:output_dir])
+        assert_equal('test_data_source',  site.config[:data_source])
+        assert_equal('test_router',       site.config[:router])
 
-    # Check
-    assert_equal('output',      site.config[:output_dir])
-    assert_equal('filesystem',  site.config[:data_source])
-    assert_equal('default',     site.config[:router])
+        # Create site
+        site = Nanoc::Site.new({})
+
+        # Check
+        assert_equal('output',      site.config[:output_dir])
+        assert_equal('filesystem',  site.config[:data_source])
+        assert_equal('default',     site.config[:router])
+      end
+    end
   end
 
 end
