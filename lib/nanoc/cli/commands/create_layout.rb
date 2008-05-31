@@ -34,16 +34,36 @@ module Nanoc::CLI
       end
 
       # Extract arguments
-      path = arguments[0]
+      path = arguments[0].cleaned_path
 
       # Make sure we are in a nanoc site directory
       @base.require_site
 
-      # Create layout
-      @base.site.data_source.loading do
-        # FIXME don't use #create_layout
-        @base.site.data_source.create_layout(path)
+      # Check whether layout is unique
+      if !@base.site.layouts.find { |l| l.path == path }.nil?
+        puts "A layout already exists at #{path}. Please pick a unique name" +
+             " for the layout you are creating."
+        exit 1
       end
+
+      # Create layout
+      layout = Nanoc::Layout.new(
+        "<html>\n" +
+        "  <head>\n" +
+        "    <title><%= @page.title %></title>\n" +
+        "  </head>\n" +
+        "  <body>\n" +
+        "    <p>Hi, I'm a new layout. Please customize me!</p>\n" +
+        "<%= @page.content %>\n" +
+        "  </body>\n" +
+        "</html>\n",
+        { :filter => 'erb' },
+        path
+      )
+      layout.site = @base.site
+      layout.save
+
+      puts "A layout has been created at #{path}."
     end
 
   end
