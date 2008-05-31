@@ -540,9 +540,11 @@ module Nanoc::DataSources
 
       # Warn about bad filenames
       unless bad_filenames.empty?
-        error "The following files appear to be meta files, " +
-              "but have an invalid name:\n  - " +
-              bad_filenames.join("\n  - ")
+        raise RuntimeError.new(
+          "The following files appear to be meta files, " +
+          "but have an invalid name:\n  - " +
+          bad_filenames.join("\n  - ")
+        )
       end
 
       good_filenames
@@ -563,7 +565,9 @@ module Nanoc::DataSources
 
       # Make sure there is only one content file
       if filenames.size != 1
-        error "Expected 1 content file in #{dir} but found #{filenames.size}"
+        raise RuntimeError.new(
+          "Expected 1 content file in #{dir} but found #{filenames.size}"
+        )
       end
 
       # Return content filename
