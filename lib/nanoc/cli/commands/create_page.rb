@@ -42,7 +42,7 @@ module Nanoc::CLI
       end
 
       # Extract arguments and options
-      path          = arguments[0]
+      path          = arguments[0].cleaned_path
       template_name = options[:template] || 'default'
 
       # Make sure we are in a nanoc site directory
@@ -56,10 +56,15 @@ module Nanoc::CLI
       end
 
       # Create page
-      @base.site.data_source.loading do
-        # FIXME don't use #create_page
-        @base.site.data_source.create_page(path, template)
-      end
+      page = Nanoc::Page.new(
+        template.page_content,
+        template.page_attributes,
+        path
+      )
+      page.site = @base.site
+      page.save
+
+      puts "A page has been created at #{path}." unless ENV['QUIET']
     end
 
   end
