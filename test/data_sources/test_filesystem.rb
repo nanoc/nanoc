@@ -9,7 +9,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_setup
     in_dir %w{ tmp } do
+      # Create site
       create_site('site')
+
       in_dir %w{ site } do
         # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
@@ -38,6 +40,28 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         assert(!File.file?('content/content.yaml'))
         assert(!File.directory?('templates/default/'))
         assert(!File.directory?('layouts/default/'))
+      end
+    end
+  end
+
+  def test_destroy
+    in_dir %w{ tmp } do
+      # Create site
+      create_site('site')
+
+      in_dir %w{ site } do
+        # Get site
+        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+
+        # Destroy
+        site.data_source.destroy
+
+        # Check files
+        assert(!File.directory?('content/'))
+        assert(!File.file?('meta.yaml'))
+        assert(!File.directory?('templates/'))
+        assert(!File.directory?('layouts/'))
+        assert(!File.directory?('lib/'))
       end
     end
   end

@@ -70,6 +70,14 @@ module Nanoc
       not_implemented('setup', :required)
     end
 
+    # Removes all data stored by this data source. This method undoes the
+    # effects of the +setup+ method.
+    #
+    # Subclasses must implement this method.
+    def destroy
+      not_implemented('destroy', :required)
+    end
+
     # Updated the content stored in this site to a newer version. A newer
     # version of a data source may store content in a different format, and
     # this method will update the stored content to this newer format.
