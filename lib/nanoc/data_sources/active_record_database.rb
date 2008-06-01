@@ -88,6 +88,10 @@ module Nanoc::DataSources
       DatabasePageDefaults.create :attribs => ''
     end
 
+    def destroy
+      # TODO implement
+    end
+
     def update
       # TODO implement
     end

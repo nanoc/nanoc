@@ -116,6 +116,14 @@ module Nanoc::DataSources
       yield('lib/default.rb')
     end
 
+    def destroy # :nodoc:
+      FileUtils.remove_entry_secure('meta.yaml')
+      FileUtils.remove_entry_secure('content')
+      FileUtils.remove_entry_secure('templates')
+      FileUtils.remove_entry_secure('layouts')
+      FileUtils.remove_entry_secure('lib')
+    end
+
     def update # :nodoc :
       # Update pages
       # content/foo/bar/baz/index.ext -> content/foo/bar/baz/baz.ext
