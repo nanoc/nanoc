@@ -157,18 +157,20 @@ module Nanoc::DataSources
     def save_page(page) # :nodoc:
       # Find page path
       if page.path == '/'
-        paths = Dir['content/index.*']
-        path  = paths[0] || 'content/index.html'
+        paths         = Dir['content/index.*']
+        path          = paths[0] || 'content/index.html'
+        parent_path   = '/'
       else
-        last_path_component = layout.path.split('/')[-1]
+        last_path_component = page.path.split('/')[-1]
         paths_best    = Dir['content' + page.path[0..-2] + '.*']
         paths_worst   = Dir['content' + page.path + 'index.*']
-        path_default  = 'content' + page.path + last_path_component + '.html'
+        path_default  = 'content' + page.path[0..-2] + '.html'
         path          = paths_best[0] || paths_worst[0] || path_default
+        parent_path   = '/' + File.join(page.path.split('/')[0..-2])
       end
 
-      # Update page
-      FileUtils.mkdir_p('content' + page.path)
+      # Write page
+      FileUtils.mkdir_p('content' + parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
         io.write(hash_to_yaml(page.attributes) + "\n")
@@ -199,7 +201,10 @@ module Nanoc::DataSources
     end
 
     def save_page_defaults(page_defaults) # :nodoc:
-      # TODO implement
+      # Write page defaults
+      File.open('meta.yaml', 'w') do |io|
+        io.write(hash_to_yaml(page_defaults.attributes))
+      end
     end
 
     ########## Layouts ##########
@@ -231,9 +236,10 @@ module Nanoc::DataSources
       paths_worst   = Dir['layouts' + layout.path + 'index.*']
       path_default  = 'layouts' + layout.path[0..-2] + '.html'
       path          = paths_best[0] || paths_worst[0] || path_default
+      parent_path   = '/' + File.join(layout.path.split('/')[0..-2])
 
-      # Update layout
-      FileUtils.mkdir_p('layouts' + layout.path)
+      # Write layout
+      FileUtils.mkdir_p('layouts' + parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
         io.write(hash_to_yaml(layout.attributes) + "\n")
@@ -266,7 +272,18 @@ module Nanoc::DataSources
     end
 
     def save_template(template) # :nodoc:
-      # TODO implement
+      # Get template path
+      paths         = Dir[File.join('templates', template.name) + '.*']
+      path_default  = File.join('templates', template.name) + '.html'
+      path          = paths[0] || path_default
+
+      # Write template
+      File.open(path, 'w') do |io|
+        io.write("-----\n")
+        io.write(hash_to_yaml(template.page_attributes) + "\n")
+        io.write("-----\n")
+        io.write(template.page_content)
+      end
     end
 
     def move_template(template, new_name) # :nodoc:
@@ -294,7 +311,7 @@ module Nanoc::DataSources
       # Remove all existing code files
       Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
 
-      # Write new code
+      # Write code
       File.open('lib/default.rb', 'w') do |io|
         io.write(code.data)
       end
@@ -339,7 +356,7 @@ module Nanoc::DataSources
       builtin_keys = Nanoc::Page::PAGE_DEFAULTS
 
       # Stringify keys
-      hash = hash.stringify_keys
+      hash = hash.reject { |k,v| k == :file }.stringify_keys
 
       # Split keys
       builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
