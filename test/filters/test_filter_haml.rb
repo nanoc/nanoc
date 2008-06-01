@@ -16,7 +16,7 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
 
           # Run filter (no assigns)
           result = filter.run('%html')
-          assert_equal("<html>\n</html>\n", result)
+          assert_match(/<html>.*<\/html>/, result)
 
           # Run filter (assigns without @)
           result = filter.run('%p= page.title')
