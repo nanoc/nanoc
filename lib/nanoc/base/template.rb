@@ -32,22 +32,6 @@ module Nanoc
       @name             = name
     end
 
-    def [](key) # :nodoc:
-      # FIXME get a decent warning
-      warn "NOOO"
-
-      case key
-      when :name
-        @name
-      when :content
-        @page_content
-      when :meta
-        YAML.dump(@page_attributes)
-      when :extension
-        '.txt'
-      end
-    end
-
     # Saves the template in the database, creating it if it doesn't exist yet
     # or updating it if it already exists. Tells the site's data source to
     # save the template.
