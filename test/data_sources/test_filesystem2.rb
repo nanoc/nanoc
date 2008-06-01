@@ -9,7 +9,9 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
 
   def test_setup
     in_dir %w{ tmp } do
+      # Create site
       create_site('site')
+
       in_dir %w{ site } do
         # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
@@ -101,18 +103,10 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
       site.load_data
 
       assert_nothing_raised do
-        # FIXME test fails because reconstructing metadata is no longer possible
-        # assert_equal(
-        #   [
-        #     {
-        #       :name       => 'default',
-        #       :content    => "This is a new page. Please edit me!",
-        #       :meta       => "# Built-in\n\n# Custom\ntitle: A New Page",
-        #       :extension  => '.txt'
-        #     }
-        #   ],
-        #   site.templates
-        # )
+        template = site.templates[0]
+        assert_equal('default', template.name)
+        assert_equal({ :title => 'A New Page' }, template.page_attributes)
+        assert_equal('This is a new page. Please edit me!', template.page_content)
       end
     end
   end
