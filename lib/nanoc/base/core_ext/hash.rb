@@ -13,10 +13,11 @@ class Hash
   def clean
     inject({}) do |hash, (key, value)|
       real_key = key.to_s
-      if real_key =~ /_on$/
+
+      if real_key =~ /_on$/ and value.is_a?(String)
         hash.merge(key.to_sym => Date.parse(value))
-      elsif real_key =~ /_at$/
-        hash.merge(key.to_sym => Time.parse(value))
+      elsif real_key =~ /_at$/ and value.is_a?(String)
+        hash.merge(key.to_sym => Time.parse(value.to_s))
       elsif value == 'true'
         hash.merge(key.to_sym => true)
       elsif value == 'false'
