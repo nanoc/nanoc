@@ -59,10 +59,11 @@ module Nanoc
 
     ########## Creating/updating
 
-    # Creates the initial data for the site. This action will likely be
-    # destructive. For example, if you're using a database, this is where you
-    # should create the necessary tables for the data source to function
-    # properly.
+    # Creates the bare minimum essentials for this data source to work. This
+    # action will likely be destructive. This method should not create sample
+    # data such as a default home page, a default layout, etc. For example, if
+    # you're using a database, this is where you should create the necessary
+    # tables for the data source to function properly.
     #
     # Subclasses must implement this method.
     def setup
