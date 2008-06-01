@@ -245,8 +245,6 @@ module Nanoc::DataSources
     ########## Templates ##########
 
     def templates # :nodoc:
-      # FIXME let this method return Template objects
-
       files('templates', false).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'template')
@@ -254,19 +252,8 @@ module Nanoc::DataSources
         # Get name
         name = filename.sub(/^templates\//, '').sub(/\.[^\/]+$/, '')
 
-        # Get mtime
-        mtime = File.stat(filename).mtime
-
         # Build template
-        template = Nanoc::Template.new(content, meta, name)
-
-        # Build final page hash
-        {
-          :extension  => File.extname(filename),
-          :content    => content,
-          :name       => name,
-          :meta       => hash_to_yaml(meta)
-        }
+        Nanoc::Template.new(content, meta, name)
       end.compact
     end
 
