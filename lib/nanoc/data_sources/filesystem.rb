@@ -485,7 +485,7 @@ module Nanoc::DataSources
       builtin_keys = Nanoc::Page::PAGE_DEFAULTS
 
       # Stringify keys
-      hash = hash.stringify_keys
+      hash = hash.reject { |k,v| k == :file }.stringify_keys
 
       # Split keys
       builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
