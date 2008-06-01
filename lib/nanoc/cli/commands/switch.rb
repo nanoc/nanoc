@@ -73,13 +73,13 @@ module Nanoc::CLI
       # Load data
       @base.site.load_data
 
+      # Destroy existing data
+      @base.site.data_source.destroy
+
       # Update configuration
       @base.site.config[:data_source] = options[:datasource]
       @base.site.instance_eval { @data_source = data_source.new(self) }
       File.open('config.yaml', 'w') { |io| io.write(YAML.dump(@base.site.config.stringify_keys)) }
-
-      # TODO Destroy existing data
-      # ...
 
       @base.site.data_source.loading do
         # Create initial data source
