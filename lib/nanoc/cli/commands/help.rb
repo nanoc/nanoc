@@ -15,7 +15,11 @@ module Nanoc::CLI
     end
 
     def long_desc
-      'blah.'
+      'Show help for the given command, or show general help. When no ' +
+      'command is given, a list of available commands is displayed, as ' +
+      'well as a list of global commandline options. When a command is ' +
+      'given, a command description as well as command-specific ' +
+      'commandline options are shown.'
     end
 
     def usage
