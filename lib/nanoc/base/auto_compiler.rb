@@ -105,17 +105,39 @@ END
     def handler_named(handler_name)
       # Build list of handlers
       @handlers ||= {
-        :cgi      => lambda { Rack::Handler::CGI      }, # FIXME buggy
-        :fastcgi  => lambda { Rack::Handler::FastCGI  }, # FIXME buggy
-        :lsws     => lambda { Rack::Handler::LSWS     }, # FIXME test
-        :mongrel  => lambda { Rack::Handler::Mongrel  },
-        :scgi     => lambda { Rack::Handler::SCGI     }, # FIXME buggy
-        :webrick  => lambda { Rack::Handler::WEBrick  }
+        :cgi => {
+          :proc => lambda { Rack::Handler::CGI }
+        },
+        :fastcgi => { # FIXME buggy
+          :proc => lambda { Rack::Handler::FastCGI }
+        }, 
+        :lsws => { # FIXME test
+          :proc => lambda { Rack::Handler::LSWS }
+        },
+        :mongrel => {
+          :proc => lambda { Rack::Handler::Mongrel }
+        },
+        :scgi => { # FIXME buggy
+          :proc => lambda { Rack::Handler::SCGI }
+        },
+        :webrick => {
+          :proc => lambda { Rack::Handler::WEBrick }
+        },
+        :thin => {
+          :proc => lambda { Rack::Handler::Thin },
+          :requires => [ 'thin' ]
+        }
       }
 
-      # Get handler
       begin
-        @handlers[handler_name].call
+        # Lookup handler
+        handler = @handlers[handler_name]
+
+        # Load requirements
+        (handler[:requires] || []).each { |r| require r }
+
+        # Get handler class
+        handler[:proc].call
       rescue NameError, LoadError
         nil
       end
@@ -132,17 +154,14 @@ END
       if page.nil?
         # Serve file
         if File.file?(file_path)
-          response = serve_file(file_path)
+          serve_file(file_path)
         else
-          response = serve_404(path)
+          serve_404(path)
         end
       else
         # Serve page
-        response = serve_page(page)
+        serve_page(page)
       end
-
-      # Return response
-      response
     end
 
     def h(s)
