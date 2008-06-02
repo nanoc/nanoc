@@ -25,6 +25,7 @@ Changed:
   used, and layouts are now stored in directories instead of simple files
 * nanoc will no longer compile already compiled pages, unless they have been
   updated in the mean time
+* The autocompiler now uses Rack, so you no longer have to use WEBrick
 
 Removed:
 

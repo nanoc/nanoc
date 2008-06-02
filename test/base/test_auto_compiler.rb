@@ -45,26 +45,25 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   end
 
-  class TestResponse
-
-    attr_accessor :status, :body
-
-    def initialize
-      @attributes = {}
-    end
-
-    def [](key)
-      @attributes[key]
-    end
-
-    def []=(key, value)
-      @attributes[key] = value
-    end
-
-  end
-
   def test_start
     # TODO implement
+  end
+
+  def test_preferred_handler
+    # TODO implement
+  end
+
+  def test_handler_named
+    require 'rack'
+
+    # Create autocompiler
+    autocompiler = Nanoc::AutoCompiler.new(self)
+
+    # Check
+    assert_equal(
+      Rack::Handler::WEBrick,
+      autocompiler.instance_eval { handler_named(:webrick) }
+    )
   end
 
   def test_handle_request
@@ -82,45 +81,58 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     )
   end
 
+  def test_mime_type_of
+    require 'mime/types'
+
+    # Create autocompiler
+    autocompiler = Nanoc::AutoCompiler.new(self)
+
+    # Create known test file
+    File.open('tmp/foo.html', 'w') { |io| }
+    assert_equal(
+      'text/html',
+      autocompiler.instance_eval { mime_type_of('tmp/foo.html', 'huh') }
+    )
+
+    # Create unknown test file
+    File.open('tmp/foo', 'w') { |io| }
+    assert_equal(
+      'huh',
+      autocompiler.instance_eval { mime_type_of('tmp/foo', 'huh') }
+    )
+  end
+
   def test_serve_400
     # Create autocompiler
     autocompiler = Nanoc::AutoCompiler.new(self)
 
-    # Create mock response
-    response = TestResponse.new
-
     # Fill response for 404
-    autocompiler.instance_eval do
-      serve_404('/foo/bar/baz/', response)
-    end
+    response = autocompiler.instance_eval { serve_404('/foo/bar/baz/') }
 
     # Check response
-    assert_equal(404,                   response.status)
-    assert_equal('text/html',           response['Content-Type'])
-    assert_match(/404 File Not Found/,  response.body)
+    assert_equal(404,                   response[0])
+    assert_equal('text/html',           response[1]['Content-Type'])
+    assert_match(/404 File Not Found/,  response[2][0])
   end
 
   def test_serve_500
     # Create autocompiler
     autocompiler = Nanoc::AutoCompiler.new(nil)
 
-    # Create mock response
-    response = TestResponse.new
-
     # Fill response for 500
-    autocompiler.instance_eval do
+    response = autocompiler.instance_eval do
       begin
         raise RuntimeError.new("boink")
       rescue RuntimeError => e
-        serve_500('/foo/bar/baz/', e, response)
+        serve_500('/foo/bar/baz/', e)
       end
     end
 
     # Check response
-    assert_equal(500,                     response.status)
-    assert_equal('text/html',             response['Content-Type'])
-    assert_match(/500 Server Error/,      response.body)
-    assert_match(/Unknown error: boink/,  response.body)
+    assert_equal(500,                     response[0])
+    assert_equal('text/html',             response[1]['Content-Type'])
+    assert_match(/500 Server Error/,      response[2][0])
+    assert_match(/Unknown error: boink/,  response[2][0])
   end
 
   def test_serve_page
@@ -133,19 +145,18 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
       begin
         # Create working page
-        working_page      = TestWorkingPage.new
-        working_response  = TestResponse.new
-        assert_nothing_raised do
-          autocompiler.instance_eval { serve_page(working_page, working_response) }
-        end
-
-        # Create output file
+        working_page  = TestWorkingPage.new
         File.open(working_page.disk_path, 'w') { |io| }
 
-        # Check response
-        assert_equal(200,                     working_response.status)
-        assert_equal('text/html',             working_response['Content-Type'])
-        assert_match(/compiled page content/, working_response.body)
+        assert_nothing_raised do
+          # Serve
+          response = autocompiler.instance_eval { serve_page(working_page) }
+
+          # Check response
+          assert_equal(200,                     response[0])
+          assert_equal('text/html',             response[1]['Content-Type'])
+          assert_match(/compiled page content/, response[2][0])
+        end
       ensure
         # Clean up
         FileUtils.remove_entry_secure(working_page.disk_path)
@@ -153,17 +164,18 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
       begin
         # Create broken page
-        broken_page     = TestBrokenPage.new
-        broken_response = TestResponse.new
-        assert_nothing_raised do
-          autocompiler.instance_eval { serve_page(broken_page, broken_response) }
-        end
+        broken_page = TestBrokenPage.new
 
-        # Check response
-        assert_equal(500,                 broken_response.status)
-        assert_equal('text/html',         broken_response['Content-Type'])
-        assert_match(/aah! fail!/,        broken_response.body)
-        assert_match(/500 Server Error/,  broken_response.body)
+        assert_nothing_raised do
+          # Serve
+          response = autocompiler.instance_eval { serve_page(broken_page) }
+
+          # Check response
+          assert_equal(500,                 response[0])
+          assert_equal('text/html',         response[1]['Content-Type'])
+          assert_match(/aah! fail!/,        response[2][0])
+          assert_match(/500 Server Error/,  response[2][0])
+        end
       end
     end
   end
@@ -177,31 +189,27 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
       # Create autocompiler
       autocompiler = Nanoc::AutoCompiler.new(self)
 
-      # Create mock response
-      response = TestResponse.new
+      # Test file 1
+      assert_nothing_raised do
+        # Serve
+        response = autocompiler.instance_eval { serve_file('tmp/test.css') }
 
-      # Fill response for file 1
-      autocompiler.instance_eval do
-        serve_file('tmp/test.css', response)
+        # Check response
+        assert_equal(200,         response[0])
+        assert_equal('text/css',  response[1]['Content-Type'])
+        assert(response[2][0].include?('body { color: blue; }'))
       end
 
-      # Check response
-      assert_equal(200,         response.status)
-      assert_equal('text/css',  response['Content-Type'])
-      assert(response.body.include?('body { color: blue; }'))
+      # Test file 2
+      assert_nothing_raised do
+        # Serve
+        response = autocompiler.instance_eval { serve_file('tmp/test') }
 
-      # Create mock response
-      response = TestResponse.new
-
-      # Fill response for file 2
-      autocompiler.instance_eval do
-        serve_file('tmp/test', response)
+        # Check response
+        assert_equal(200,                         response[0])
+        assert_equal('application/octet-stream',  response[1]['Content-Type'])
+        assert(response[2][0].include?('random blah blah stuff'))
       end
-
-      # Check response
-      assert_equal(200,                         response.status)
-      assert_equal('application/octet-stream',  response['Content-Type'])
-      assert(response.body.include?('random blah blah stuff'))
     end
   end
 
