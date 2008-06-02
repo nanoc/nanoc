@@ -11,11 +11,18 @@ module Nanoc::CLI
     end
 
     def short_desc
-      'updates the data stored by the data source to a newer version'
+      'update the data stored by the data source to a newer version'
     end
 
     def long_desc
-      'TODO write me'
+      'Update the data stored by the data source to a newer format. The ' +
+      'format in which data is stored can change between releases, and ' +
+      'even though backward compatibility is usually preserved, it is ' +
+      'often a good idea to store the site data in a newer format so newer ' +
+      'features can be taken advantage of.' +
+      "\n" +
+      'This command will change data, and it is therefore recommended to ' +
+      'make a backup in case something goes wrong.'
     end
 
     def usage

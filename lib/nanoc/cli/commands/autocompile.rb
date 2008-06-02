@@ -15,7 +15,7 @@ module Nanoc::CLI
     end
 
     def long_desc
-      'Starts the autocompiler web server. Unless specified, the web ' +
+      'Start the autocompiler web server. Unless specified, the web ' +
       'server will run on port 3000 and listen on all IP addresses. ' +
       'Running the autocompiler requires the \'mime-types\' Ruby gem.'
     end

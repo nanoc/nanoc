@@ -11,11 +11,25 @@ module Nanoc::CLI
     end
 
     def short_desc
-      'switches the site to a new data source'
+      'switch the site to a new data source'
     end
 
     def long_desc
-      'TODO write me'
+      'Move the data stored in the site to a new, given data source.' +
+      "\n" +
+      'The given new data source may need additional configuration ' +
+      'parameters that cannot be specified on the commandline. These ' +
+      'should be stored in the configuration file (config.yaml) BEFORE ' +
+      'executing the switch command.' +
+      "\n" +
+      'This command first loads all existing data into memory, destroys ' +
+      'the on-disk data, changes the site\'s data source, and finally ' +
+      'writes the data back to the disk using the new data source. Because ' +
+      'of this action\'s destructive nature, THIS OPERATION SHOULD NOT BE ' +
+      'INTERRUPTED as interruption could result in data loss.' +
+      "\n" +
+      'This command will change data, and it is therefore recommended to ' +
+      'make a backup in case something goes wrong.'
     end
 
     def usage
