@@ -59,11 +59,23 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc::AutoCompiler.new(self)
 
-    # Check
+    # Check handler without requirements
     assert_equal(
       Rack::Handler::WEBrick,
       autocompiler.instance_eval { handler_named(:webrick) }
     )
+
+    # Check handler with requirements
+    assert_raises(NameError) do
+      Rack::Handler::Thin
+    end
+    assert_nothing_raised do
+      autocompiler.instance_eval { handler_named(:thin) }
+      assert_equal(
+        Rack::Handler::Thin,
+        autocompiler.instance_eval { handler_named(:thin) }
+      )
+    end
   end
 
   def test_handle_request
