@@ -10,7 +10,7 @@ module Nanoc
     # TODO document
     class UnknownHandlerError < Nanoc::Error ; end
 
-    HANDLER_NAMES = [ :mongrel, :webrick, :cgi, :fastcgi, :lsws, :scgi ]
+    HANDLER_NAMES = [ :thin, :mongrel, :webrick, :cgi, :fastcgi, :lsws, :scgi ]
 
     ERROR_404 = <<END
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
