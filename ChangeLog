@@ -6,16 +6,30 @@ nanoc Release Notes
 
 New:
 
-* Maruku filter
-* Erubis filter
-* The `compile` command now takes an optional path, so you can compile
-  a single page instead of the entire site if you want
-* Better source code documentation
+* New filters
+	* Discount, a fast implementation of Markdown
+	* Maruku, an implementation of a Markdown superset
+	* Erubis, a fast alternative to ERB
+* A better commandline frontend, ...
+	* ... with much better commandline help (try `nanoc help` or
+	  `nanoc help <command>`  for command-specific help)
+	* ... that is extensible with custom commands
+	* ... with a new `update` command, which upgrades the site's data
+	  to a new format so you can take advantage of new features
+	* ... with a new `switch` command, which allows you to move data from one
+	  data source to another
+	* .... with a `compile` command that takes an optional path argument, so
+	  you can compile a single page instead of the entire site (for example,
+	  `nanoc compile /about/`)
+	* ... with an improved autocompiler that uses Rack now, so you can use
+	  Mongrel instead of WEBrick now if you want (pass the `-H` option)
+* Much better source code documentation
+* Lots of new unit tests
 * A new filesystem data source named "filesystem2", which stores pages and
   layouts in single files instead of directories
 * Routers, which decide where compiled pages should be written to
-* A 'switch' command that allows sites to be switched between data sources
-* An 'update' command that upgrades the site's data to a new format
+* Already compiled pages will no longer be re-compiled unless they have been
+  updated in the mean time
 * Page and layout mtimes can now be retrieved through page.mtime or
   layout.mtime
 
@@ -25,15 +39,12 @@ Changed:
   the same code twice
 * Layouts no longer rely on file extensions to determine the layout processor
   used, and layouts are now stored in directories instead of simple files
-* nanoc will no longer compile already compiled pages, unless they have been
-  updated in the mean time
-* The autocompiler now uses Rack, so you no longer have to use WEBrick
 
 Removed:
 
 * The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
-  `erb` or `erubis` (for embedded Ruby), `bluecloth` or `maruku` (for
-  Markdown) and `redcloth` (for Markdown and Textile)
+  `erb` or `erubis` (for embedded Ruby), `bluecloth`, `discount` or `maruku`
+  (for Markdown) and `redcloth` (for Markdown and Textile)
 
 2.0.4
 -----
