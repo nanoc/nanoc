@@ -44,9 +44,10 @@ module Nanoc
     # lacks some options, the default value will be taken from
     # +DEFAULT_CONFIG+.
     DEFAULT_CONFIG = {
-      :output_dir   => 'output',
-      :data_source  => 'filesystem',
-      :router       => 'default'
+      :output_dir       => 'output',
+      :data_source      => 'filesystem',
+      :router           => 'default',
+      :index_filenames  => [ 'index.html' ]
     }
 
     attr_reader :config
