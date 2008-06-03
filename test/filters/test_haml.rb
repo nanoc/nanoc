@@ -8,9 +8,7 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
   def test_filter
     if_have 'haml' do
       assert_nothing_raised do
-        with_site_fixture 'empty_site' do |site|
-          site.load_data
-
+        with_temp_site do |site|
           # Get filter
           filter = ::Nanoc::Filters::Haml.new(site.pages.first.to_proxy, site)
 
@@ -20,11 +18,11 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
 
           # Run filter (assigns without @)
           result = filter.run('%p= page.title')
-          assert_equal("<p>My New Homepage</p>\n", result)
+          assert_equal("<p>A New Root Page</p>\n", result)
 
           # Run filter (assigns with @)
           result = filter.run('%p= @page.title')
-          assert_equal("<p>My New Homepage</p>\n", result)
+          assert_equal("<p>A New Root Page</p>\n", result)
         end
       end
     end

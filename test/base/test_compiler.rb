@@ -5,17 +5,6 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_compile_empty_site
-    with_site_fixture 'empty_site' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
-
-      assert_equal(1, Dir[File.join('output', '*')].size)
-      assert(File.file?('output/index.html'))
-      assert(!File.file?('output/moo/index.html'))
-    end
-  end
-
   def test_compile_site_with_one_page
     with_site_fixture 'site_with_one_page' do |site|
       assert_nothing_raised() { site.compiler.run }

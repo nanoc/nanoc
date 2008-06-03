@@ -8,9 +8,7 @@ class Nanoc::Filters::DiscountTest < Test::Unit::TestCase
   def test_filter
     if_have 'discount' do
       assert_nothing_raised do
-        with_site_fixture 'empty_site' do |site|
-          site.load_data
-
+        with_temp_site do |site|
           # Get filter
           filter = ::Nanoc::Filters::Discount.new(site.pages.first.to_proxy, site)
 
