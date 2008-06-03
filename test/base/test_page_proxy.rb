@@ -15,6 +15,10 @@ class Nanoc::PageProxyTest < Test::Unit::TestCase
       'page path'
     end
 
+    def mtime
+      Time.parse('2008-05-19')
+    end
+
     def web_path
       'page web path'
     end
@@ -31,11 +35,12 @@ class Nanoc::PageProxyTest < Test::Unit::TestCase
     page_proxy = Nanoc::PageProxy.new(page)
 
     # Test
-    assert_equal('page content',          page_proxy.content)
-    assert_equal('page web path',         page_proxy.path)
-    assert_equal('attribute named blah',  page_proxy.blah)
-    assert_equal('attribute named blah',  page_proxy.blah?)
-    assert_equal('attribute named blah!', page_proxy.blah!)
+    assert_equal('page content',            page_proxy.content)
+    assert_equal('page web path',           page_proxy.path)
+    assert_equal(Time.parse('2008-05-19'),  page_proxy.mtime)
+    assert_equal('attribute named blah',    page_proxy.blah)
+    assert_equal('attribute named blah',    page_proxy.blah?)
+    assert_equal('attribute named blah!',   page_proxy.blah!)
   end
 
 end

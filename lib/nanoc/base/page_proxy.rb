@@ -13,6 +13,8 @@ module Nanoc
         @obj.content
       elsif real_key == :path
         @obj.web_path
+      elsif real_key == :mtime
+        @obj.mtime
       elsif real_key == :parent
         @obj.parent.nil? ? nil : @obj.parent.to_proxy
       elsif real_key == :children

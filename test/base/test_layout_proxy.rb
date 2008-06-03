@@ -15,6 +15,10 @@ class Nanoc::LayoutProxyTest < Test::Unit::TestCase
       'layout path'
     end
 
+    def mtime
+      Time.parse('2008-05-19')
+    end
+
     def attribute_named(key)
       "attribute named #{key}"
     end
@@ -27,11 +31,12 @@ class Nanoc::LayoutProxyTest < Test::Unit::TestCase
     layout_proxy = Nanoc::LayoutProxy.new(layout)
 
     # Test
-    assert_equal('layout content',        layout_proxy.content)
-    assert_equal('layout path',           layout_proxy.path)
-    assert_equal('attribute named blah',  layout_proxy.blah)
-    assert_equal('attribute named blah',  layout_proxy.blah?)
-    assert_equal('attribute named blah!', layout_proxy.blah!)
+    assert_equal('layout content',          layout_proxy.content)
+    assert_equal('layout path',             layout_proxy.path)
+    assert_equal(Time.parse('2008-05-19'),  layout_proxy.mtime)
+    assert_equal('attribute named blah',    layout_proxy.blah)
+    assert_equal('attribute named blah',    layout_proxy.blah?)
+    assert_equal('attribute named blah!',   layout_proxy.blah!)
   end
 
 end
