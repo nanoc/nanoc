@@ -10,7 +10,7 @@ module Nanoc
     # TODO document
     class UnknownHandlerError < Nanoc::Error ; end
 
-    HANDLER_NAMES = [ :thin, :mongrel, :webrick, :cgi, :fastcgi, :lsws, :scgi ]
+    HANDLER_NAMES = [ :thin, :mongrel, :webrick, :ebb, :cgi, :fastcgi, :lsws, :scgi ]
 
     ERROR_404 = <<END
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -81,7 +81,8 @@ END
       end
 
       # Run Rack app
-      handler.run(app, :Port => port || 3000) do |server|
+      port ||= 3000
+      handler.run(app, :Port => port, :port => port) do |server|
         trap(:INT) { server.stop }
       end
     end
@@ -126,6 +127,10 @@ END
         :thin => {
           :proc => lambda { Rack::Handler::Thin },
           :requires => [ 'thin' ]
+        },
+        :ebb => {
+          :proc => lambda { Rack::Handler::Ebb },
+          :requires => [ 'ebb' ]
         }
       }
 
