@@ -9,6 +9,22 @@ def with_site_fixture(a_fixture)
   end
 end
 
+def with_temp_site(data_source='filesystem')
+  in_dir %w{ tmp } do
+    # Create site
+    create_site('site', data_source)
+
+    in_dir %w{ site } do
+      # Load site
+      site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+      site.load_data
+      
+      # Done
+      yield site
+    end
+  end
+end
+
 def create_site(name, data_source='filesystem')
   Nanoc::CLI::Base.new.run(['create_site', name, '-d', data_source])
 end

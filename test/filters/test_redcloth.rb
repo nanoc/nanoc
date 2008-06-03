@@ -8,9 +8,7 @@ class Nanoc::Filters::RedClothTest < Test::Unit::TestCase
   def test_filter
     if_have 'redcloth' do
       assert_nothing_raised do
-        with_site_fixture 'empty_site' do |site|
-          site.load_data
-
+        with_temp_site do |site|
           # Get filter
           filter = ::Nanoc::Filters::RedCloth.new(site.pages.first.to_proxy, site)
 

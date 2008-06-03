@@ -7,9 +7,7 @@ class Nanoc::Filters::OldTest < Test::Unit::TestCase
 
   def test_filter
     assert_raise(Nanoc::Error) do
-      with_site_fixture 'empty_site' do |site|
-        site.load_data
-
+      with_temp_site do |site|
         # Get filter
         filter = ::Nanoc::Filters::Old.new(site.pages.first.to_proxy, site)
 

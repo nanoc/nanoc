@@ -48,24 +48,16 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   end
 
   def test_destroy
-    in_dir %w{ tmp } do
-      # Create site
-      create_site('site', 'filesystem2')
+    with_temp_site('filesystem2') do |site|
+      # Destroy
+      site.data_source.destroy
 
-      in_dir %w{ site } do
-        # Get site
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-
-        # Destroy
-        site.data_source.destroy
-
-        # Check files
-        assert(!File.directory?('content/'))
-        assert(!File.file?('meta.yaml'))
-        assert(!File.directory?('templates/'))
-        assert(!File.directory?('layouts/'))
-        assert(!File.directory?('lib/'))
-      end
+      # Check files
+      assert(!File.directory?('content/'))
+      assert(!File.file?('meta.yaml'))
+      assert(!File.directory?('templates/'))
+      assert(!File.directory?('layouts/'))
+      assert(!File.directory?('lib/'))
     end
   end
 
@@ -76,16 +68,11 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test pages
 
   def test_pages
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      site.load_data
-
+    with_temp_site('filesystem2') do |site|
       assert_nothing_raised do
-        assert_equal(2, site.pages.size)
+        assert_equal(1, site.pages.size)
 
-        pages = site.pages.sort_by { |page| page.attribute_named(:title) }
-
-        assert_equal('About', pages[0].attribute_named(:title))
-        assert_equal('Home', pages[1].attribute_named(:title))
+        assert_equal('A New Root Page', site.pages[0].attribute_named(:title))
       end
     end
   end
@@ -105,9 +92,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test page defaults
 
   def test_page_defaults
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      site.load_data
-
+    with_temp_site('filesystem2') do |site|
       assert_nothing_raised do
         assert_equal('html', site.page_defaults.attributes[:extension])
       end
@@ -121,14 +106,12 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test templates
 
   def test_templates
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      site.load_data
-
+    with_temp_site('filesystem2') do |site|
       assert_nothing_raised do
         template = site.templates[0]
         assert_equal('default', template.name)
         assert_equal({ :title => 'A New Page' }, template.page_attributes)
-        assert_equal('This is a new page. Please edit me!', template.page_content)
+        assert_equal('Hi, I\'m a new page!', template.page_content)
       end
     end
   end
@@ -148,9 +131,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test layouts
 
   def test_layouts
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      site.load_data
-
+    with_temp_site('filesystem2') do |site|
       assert_nothing_raised do
         layout = site.layouts[0]
 
@@ -176,9 +157,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test code
 
   def test_code
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      site.load_data
-  
+    with_temp_site('filesystem2') do |site|
       assert_nothing_raised do
         assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
       end
@@ -192,12 +171,15 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test private methods
 
   def test_files
+    # TODO implement
   end
 
   def test_parse_file
+    # TODO implement
   end
 
   def test_hash_to_yaml
+    # TODO implement
   end
 
   # Miscellaneous
@@ -233,104 +215,97 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     # Threshold for mtimes in which files will be considered the same
     threshold = 2.0
 
-    in_dir %w{ tmp } do
-      create_site('site', 'filesystem2')
+    with_temp_site('filesystem2') do |site|
+      # Get timestamps
+      distant_past = Time.parse('1992-10-14')
+      recent_past  = Time.parse('1998-05-18')
+      now          = Time.now
 
-      in_dir %w{ site } do
-        # Get site
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+      ########## INITIAL OUTPUT FILE GENERATION
 
-        # Get timestamps
-        distant_past = Time.parse('1992-10-14')
-        recent_past  = Time.parse('1998-05-18')
-        now          = Time.now
+      # Compile
+      site.load_data(true)
+      assert_nothing_raised() { site.compiler.run }
 
-        ########## INITIAL OUTPUT FILE GENERATION
+      ########## EVERYTHING UP TO DATE
 
-        # Compile
-        site.load_data(true)
-        assert_nothing_raised() { site.compiler.run }
+      # Update file mtimes
+      File.utime(distant_past, distant_past, 'layouts/default.html')
+      File.utime(distant_past, distant_past, 'content/index.html')
+      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'lib/default.rb')
+      File.utime(recent_past,  recent_past,  'output/index.html')
 
-        ########## EVERYTHING UP TO DATE
+      # Compile
+      site.load_data(true)
+      assert_nothing_raised() { site.compiler.run }
 
-        # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.html')
-        File.utime(distant_past, distant_past, 'content/index.html')
-        File.utime(distant_past, distant_past, 'meta.yaml')
-        File.utime(distant_past, distant_past, 'lib/default.rb')
-        File.utime(recent_past,  recent_past,  'output/index.html')
+      # Check compiled file's mtime (shouldn't have changed)
+      assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
 
-        # Compile
-        site.load_data(true)
-        assert_nothing_raised() { site.compiler.run }
+      ########## RECENT PAGE
 
-        # Check compiled file's mtime (shouldn't have changed)
-        assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
+      # Update file mtimes
+      File.utime(distant_past, distant_past, 'layouts/default.html')
+      File.utime(now,          now,          'content/index.html')
+      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'lib/default.rb')
+      File.utime(recent_past,  recent_past,  'output/index.html')
 
-        ########## RECENT PAGE
+      # Compile
+      site.load_data(true)
+      assert_nothing_raised() { site.compiler.run }
 
-        # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.html')
-        File.utime(now,          now,          'content/index.html')
-        File.utime(distant_past, distant_past, 'meta.yaml')
-        File.utime(distant_past, distant_past, 'lib/default.rb')
-        File.utime(recent_past,  recent_past,  'output/index.html')
+      # Check compiled file's mtime (should be now)
+      assert((now - File.new('output/index.html').mtime).abs < threshold)
 
-        # Compile
-        site.load_data(true)
-        assert_nothing_raised() { site.compiler.run }
+      ########## RECENT LAYOUT
 
-        # Check compiled file's mtime (should be now)
-        assert((now - File.new('output/index.html').mtime).abs < threshold)
+      # Update file mtimes
+      File.utime(now,          now,          'layouts/default.html')
+      File.utime(distant_past, distant_past, 'content/index.html')
+      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'lib/default.rb')
+      File.utime(recent_past,  recent_past,  'output/index.html')
 
-        ########## RECENT LAYOUT
+      # Compile
+      site.load_data(true)
+      assert_nothing_raised() { site.compiler.run }
 
-        # Update file mtimes
-        File.utime(now,          now,          'layouts/default.html')
-        File.utime(distant_past, distant_past, 'content/index.html')
-        File.utime(distant_past, distant_past, 'meta.yaml')
-        File.utime(distant_past, distant_past, 'lib/default.rb')
-        File.utime(recent_past,  recent_past,  'output/index.html')
+      # Check compiled file's mtime (should be now)
+      assert((now - File.new('output/index.html').mtime).abs < threshold)
 
-        # Compile
-        site.load_data(true)
-        assert_nothing_raised() { site.compiler.run }
+      ########## RECENT PAGE DEFAULTS
 
-        # Check compiled file's mtime (should be now)
-        assert((now - File.new('output/index.html').mtime).abs < threshold)
+      # Update file mtimes
+      File.utime(distant_past, distant_past, 'layouts/default.html')
+      File.utime(distant_past, distant_past, 'content/index.html')
+      File.utime(now,          now,          'meta.yaml')
+      File.utime(distant_past, distant_past, 'lib/default.rb')
+      File.utime(recent_past,  recent_past,  'output/index.html')
 
-        ########## RECENT PAGE DEFAULTS
+      # Compile
+      site.load_data(true)
+      assert_nothing_raised() { site.compiler.run }
 
-        # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.html')
-        File.utime(distant_past, distant_past, 'content/index.html')
-        File.utime(now,          now,          'meta.yaml')
-        File.utime(distant_past, distant_past, 'lib/default.rb')
-        File.utime(recent_past,  recent_past,  'output/index.html')
+      # Check compiled file's mtime (should be now)
+      assert((now - File.new('output/index.html').mtime).abs < threshold)
 
-        # Compile
-        site.load_data(true)
-        assert_nothing_raised() { site.compiler.run }
+      ########## RECENT CODE
 
-        # Check compiled file's mtime (should be now)
-        assert((now - File.new('output/index.html').mtime).abs < threshold)
+      # Update file mtimes
+      File.utime(distant_past, distant_past, 'layouts/default.html')
+      File.utime(distant_past, distant_past, 'content/index.html')
+      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(now,          now,          'lib/default.rb')
+      File.utime(recent_past,  recent_past,  'output/index.html')
 
-        ########## RECENT CODE
+      # Compile
+      site.load_data(true)
+      assert_nothing_raised() { site.compiler.run }
 
-        # Update file mtimes
-        File.utime(distant_past, distant_past, 'layouts/default.html')
-        File.utime(distant_past, distant_past, 'content/index.html')
-        File.utime(distant_past, distant_past, 'meta.yaml')
-        File.utime(now,          now,          'lib/default.rb')
-        File.utime(recent_past,  recent_past,  'output/index.html')
-
-        # Compile
-        site.load_data(true)
-        assert_nothing_raised() { site.compiler.run }
-
-        # Check compiled file's mtime (should be now)
-        assert((now - File.new('output/index.html').mtime).abs < threshold)
-      end
+      # Check compiled file's mtime (should be now)
+      assert((now - File.new('output/index.html').mtime).abs < threshold)
     end
   end
 
