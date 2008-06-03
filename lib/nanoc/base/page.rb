@@ -12,9 +12,7 @@ module Nanoc
       :filename     => 'index',
       :filters_pre  => [],
       :filters_post => [],
-      :is_draft     => false,
       :layout       => 'default',
-      :path         => nil,
       :skip_output  => false
     }
 
