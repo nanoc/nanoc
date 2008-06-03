@@ -5,23 +5,137 @@ class Nanoc::RouterTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_disk_path_for
+  class TestSite
+
+    def config
+      @config ||= {
+        :output_dir       => 'tmp/out',
+        :index_filenames  => [ 'home.htm' ]
+      }
+    end
+
+    def page_defaults
+      @page_defaults ||= Nanoc::PageDefaults.new({})
+    end
+
+  end
+
+  class TestRouter < Nanoc::Router
+
+    def path_for(page)
+      page.path + page.attribute_named(:filename) + '.' + page.attribute_named(:extension)
+    end
+  end
+
+  def test_path_for
     # Create router
     router = Nanoc::Router.new(nil)
 
     # Make sure an error is raised
     assert_raise(NotImplementedError) do
-      router.disk_path_for(nil)
+      router.path_for(nil)
+    end
+  end
+
+  def test_disk_path_for
+    # Create stuff we need
+    site    = TestSite.new
+    router  = TestRouter.new(site)
+
+    # Create test pages
+    pages = {
+      :with_cp_without_index => Nanoc::Page.new(
+        'page with cp',
+        { :custom_path => '/with/cp/moo.html' },
+        '/with/cp/without/index/'
+      ),
+      :with_cp_with_index => Nanoc::Page.new(
+        'page without cp',
+        { :custom_path => '/with/cp/with/index/home.htm'},
+        '/with/cp/with/index/'
+      ),
+      :without_cp_without_index => Nanoc::Page.new(
+        'page without cp, without index',
+        { :filename => 'foo' },
+        '/without/cp/without/index/'
+      ),
+      :without_cp_with_index => Nanoc::Page.new(
+        'page without cp, with index',
+        { :filename => 'home', :extension => 'htm' },
+        '/without/cp/with/index/'
+      )
+    }
+    pages.values.each { |page| page.site = site }
+
+    # Check
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/out/with/cp/moo.html',
+        router.disk_path_for(pages[:with_cp_without_index])
+      )
+      assert_equal(
+        'tmp/out/with/cp/with/index/home.htm',
+        router.disk_path_for(pages[:with_cp_with_index])
+      )
+      assert_equal(
+        'tmp/out/without/cp/without/index/foo.html',
+        router.disk_path_for(pages[:without_cp_without_index])
+      )
+      assert_equal(
+        'tmp/out/without/cp/with/index/home.htm',
+        router.disk_path_for(pages[:without_cp_with_index])
+      )
     end
   end
 
   def test_web_path_for
-    # Create router
-    router = Nanoc::Router.new(nil)
+    # Create stuff we need
+    site    = TestSite.new
+    router  = TestRouter.new(site)
 
-    # Make sure an error is raised
-    assert_raise(NotImplementedError) do
-      router.web_path_for(nil)
+    # Create test pages
+    pages = {
+      :with_cp_without_index => Nanoc::Page.new(
+        'page with cp',
+        { :custom_path => '/with/cp/moo.html' },
+        '/with/cp/without/index/'
+      ),
+      :with_cp_with_index => Nanoc::Page.new(
+        'page without cp',
+        { :custom_path => '/with/cp/with/index/home.htm'},
+        '/with/cp/with/index/'
+      ),
+      :without_cp_without_index => Nanoc::Page.new(
+        'page without cp, without index',
+        { :filename => 'foo' },
+        '/without/cp/without/index/'
+      ),
+      :without_cp_with_index => Nanoc::Page.new(
+        'page without cp, with index',
+        { :filename => 'home', :extension => 'htm' },
+        '/without/cp/with/index/'
+      )
+    }
+    pages.values.each { |page| page.site = site }
+
+    # Check
+    assert_nothing_raised do
+      assert_equal(
+        '/with/cp/moo.html',
+        router.web_path_for(pages[:with_cp_without_index])
+      )
+      assert_equal(
+        '/with/cp/with/index/',
+        router.web_path_for(pages[:with_cp_with_index])
+      )
+      assert_equal(
+        '/without/cp/without/index/foo.html',
+        router.web_path_for(pages[:without_cp_without_index])
+      )
+      assert_equal(
+        '/without/cp/with/index/',
+        router.web_path_for(pages[:without_cp_with_index])
+      )
     end
   end
 

@@ -10,30 +10,40 @@ module Nanoc
       @site = site
     end
 
-    # Returns the path of the page on the disk, relative to the output
-    # directory. It should start with a slash.
-    #
-    # For example, a page with a path of "/foo/bar/" should return something
-    # like "/foo/bar.html" or "/foo/bar/index.html". 
-    #
-    # Subclasses must override this method.
-    def disk_path_for(page)
-      raise NotImplementedError.new("Nanoc::Router subclasses must implement #disk_path_for.")
+    # Returns the routed path for the given page, including the filename and
+    # the extension. It should start with a slash, and and should be relative
+    # to the web root (i.e. should not include any references to the output
+    # directory). There is no need to let this method handle custom paths.
+    def path_for(page)
+      raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for.")
     end
 
-    # Returns the path of the page relative to the web root. It should start
-    # with a slash.
-    #
-    # It is correct to let this method return the disk path, but sometimes not
-    # desirable: for example, a trailing "index.html" is usually not
-    # necessary.
-    #
-    # When following the example for disk_path_for, a page with a path of
-    # "/foo/bar/" should return something like "/foo/bar.html" or "/foo/bar/".
-    #
-    # Subclasses must override this method.
+    # Returns the web path for the given page, i.e. the page's custom path or
+    # routed path with index filenames stripped.
     def web_path_for(page)
-      raise NotImplementedError.new("Nanoc::Router subclasses must implement #web_path_for.")
+      # Get actual path
+      path = page.attribute_named(:custom_path) || path_for(page)
+
+      # Try stripping each index filename
+      @site.config[:index_filenames].each do |index_filename|
+        if path[-index_filename.length..-1] == index_filename
+          # Strip and stop
+          path = path[0..-index_filename.length-1]
+          break
+        end
+      end
+
+      # Return possibly stripped path
+      path
+    end
+
+    # Returns the disk path for the given page, i.e. the page's custom path or
+    # routed path relative to the output directory.
+    def disk_path_for(page)
+      @site.config[:output_dir] + (
+        page.attribute_named(:custom_path) ||
+        path_for(page)
+      )
     end
 
   end

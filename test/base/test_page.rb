@@ -5,14 +5,14 @@ class Nanoc::PageTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestRouter
+  class TestRouter < Nanoc::Router
 
-    def disk_path_for(page)
-      '/disk' + page.path + 'index.html'
+    def path_for(page)
+      '/pages' + page.path + page.attribute_named(:filename) + '.' + page.attribute_named(:extension)
     end
 
-    def web_path_for(page)
-      '/web' + page.path
+    def index_filenames
+      [ 'index.html' ]
     end
 
   end
@@ -65,7 +65,10 @@ class Nanoc::PageTest < Test::Unit::TestCase
   class TestSite
 
     def config
-      @config ||= { :output_dir => 'tmp' }
+      @config ||= {
+        :output_dir       => 'tmp/output',
+        :index_filenames  => [ 'index.html' ]
+      }
     end
 
     def data_source
@@ -77,7 +80,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
     end
 
     def router
-      @router ||= TestRouter.new
+      @router ||= TestRouter.new(self)
     end
 
   end
@@ -182,7 +185,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_disk_path_for_normal_page
+  def test_disk_and_web_path
     # Create site
     site = TestSite.new
 
@@ -191,25 +194,8 @@ class Nanoc::PageTest < Test::Unit::TestCase
     page.site = site
 
     # Check
-    assert_equal('tmp/disk/path/index.html',  page.disk_path)
-    assert_equal('/web/path/',                page.web_path)
-  end
-
-  def test_disk_path_for_page_with_custom_path
-    # Create site
-    site = TestSite.new
-
-    # Create page
-    page = Nanoc::Page.new("content", { :custom_path => '/noobs/something.txt' }, '/path/')
-    page.site = site
-
-    # Check
-    assert_equal('tmp/noobs/something.txt', page.disk_path)
-    assert_equal('/noobs/something.txt',    page.web_path)
-  end
-
-  def test_web_path
-    # TODO implement
+    assert_equal('tmp/output/pages/path/index.html', page.disk_path)
+    assert_equal('/pages/path/',                     page.web_path)
   end
 
   def test_save
