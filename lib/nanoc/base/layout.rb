@@ -7,7 +7,7 @@ module Nanoc
   class Layout
 
     # Default values for layouts.
-    LAYOUT_DEFAULTS = {
+    DEFAULTS = {
       :filter => 'erb'
     }
 
@@ -50,7 +50,7 @@ module Nanoc
     # Returns the attribute with the given name.
     def attribute_named(name)
       return @attributes[name] if @attributes.has_key?(name)
-      return LAYOUT_DEFAULTS[name]
+      return DEFAULTS[name]
     end
 
     # Returns the filter class needed for this layout.
