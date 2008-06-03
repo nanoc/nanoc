@@ -16,6 +16,8 @@ New:
 * Routers, which decide where compiled pages should be written to
 * A 'switch' command that allows sites to be switched between data sources
 * An 'update' command that upgrades the site's data to a new format
+* Page and layout mtimes can now be retrieved through page.mtime or
+  layout.mtime
 
 Changed:
 

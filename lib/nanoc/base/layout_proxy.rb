@@ -13,6 +13,8 @@ module Nanoc
         @obj.content
       elsif real_key == :path
         @obj.path
+      elsif real_key == :mtime
+        @obj.mtime
       else
         super(key)
       end
