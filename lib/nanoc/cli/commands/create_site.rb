@@ -133,7 +133,7 @@ module Nanoc::CLI
       page.save
 
       # Fill page defaults
-      Nanoc::Page::PAGE_DEFAULTS.each_pair do |key, value|
+      Nanoc::Page::DEFAULTS.each_pair do |key, value|
         site.page_defaults.attributes[key] = value
       end
       site.page_defaults.save

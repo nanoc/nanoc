@@ -482,7 +482,7 @@ module Nanoc::DataSources
     # a 'builtin' and a 'custom' section.
     def hash_to_yaml(hash)
       # Get list of built-in keys
-      builtin_keys = Nanoc::Page::PAGE_DEFAULTS
+      builtin_keys = Nanoc::Page::DEFAULTS
 
       # Stringify keys
       hash = hash.reject { |k,v| k == :file }.stringify_keys

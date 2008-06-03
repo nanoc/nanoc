@@ -6,7 +6,7 @@ module Nanoc
   class Page
 
     # Default values for pages.
-    PAGE_DEFAULTS = {
+    DEFAULTS = {
       :custom_path  => nil,
       :extension    => 'html',
       :filename     => 'index',
@@ -114,7 +114,7 @@ module Nanoc
     def attribute_named(name)
       return @attributes[name] if @attributes.has_key?(name)
       return @site.page_defaults.attributes[name] if @site.page_defaults.attributes.has_key?(name)
-      return PAGE_DEFAULTS[name]
+      return DEFAULTS[name]
     end
 
     # Returns the page's content in the given stage (+:raw+, +:pre+, +:post+)
