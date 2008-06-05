@@ -50,7 +50,7 @@ module Nanoc::CLI
         page = nil
       else
         path = arguments[0].cleaned_path
-        page = @base.site.pages.find { |page| page.web_path == path }
+        page = @base.site.pages.find { |page| page.path == path }
         if page.nil?
           puts "Unknown page: #{path}"
           exit 1
