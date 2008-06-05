@@ -50,6 +50,16 @@ module Nanoc
     end
 
     # TODO document
+    def created?
+      @created
+    end
+
+    # TODO document
+    def modified?
+      @modified
+    end
+
+    # TODO document
     def outdated?
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
