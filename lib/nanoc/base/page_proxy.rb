@@ -9,16 +9,16 @@ module Nanoc
     def [](key)
       real_key = key.to_s.sub(/\?$/, '').to_sym
 
-      if real_key == :content
-        @obj.content
-      elsif real_key == :path # backward compatibility
-        @obj.reps[:default].web_path
-      elsif real_key == :mtime
+      if real_key == :mtime
         @obj.mtime
       elsif real_key == :parent
         @obj.parent.nil? ? nil : @obj.parent.to_proxy
       elsif real_key == :children
         @obj.children.map { |page| page.to_proxy }
+      elsif real_key == :content # backward compatibility
+        @obj.reps[:default].content
+      elsif real_key == :path # backward compatibility
+        @obj.reps[:default].web_path
       else
         super(key)
       end
