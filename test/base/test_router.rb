@@ -22,9 +22,14 @@ class Nanoc::RouterTest < Test::Unit::TestCase
 
   class TestRouter < Nanoc::Router
 
-    def path_for(page)
-      page.path + page.attribute_named(:filename) + '.' + page.attribute_named(:extension)
+    def path_for(page_rep)
+      path      = page_rep.page.path
+      filename  = page_rep.attribute_named(:filename)
+      extension = page_rep.attribute_named(:extension)
+
+      path + filename + '.' + extension
     end
+
   end
 
   def test_path_for
@@ -71,19 +76,19 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     assert_nothing_raised do
       assert_equal(
         'tmp/out/with/cp/moo.html',
-        router.disk_path_for(pages[:with_cp_without_index])
+        router.disk_path_for(pages[:with_cp_without_index].reps[:default])
       )
       assert_equal(
         'tmp/out/with/cp/with/index/home.htm',
-        router.disk_path_for(pages[:with_cp_with_index])
+        router.disk_path_for(pages[:with_cp_with_index].reps[:default])
       )
       assert_equal(
         'tmp/out/without/cp/without/index/foo.html',
-        router.disk_path_for(pages[:without_cp_without_index])
+        router.disk_path_for(pages[:without_cp_without_index].reps[:default])
       )
       assert_equal(
         'tmp/out/without/cp/with/index/home.htm',
-        router.disk_path_for(pages[:without_cp_with_index])
+        router.disk_path_for(pages[:without_cp_with_index].reps[:default])
       )
     end
   end
@@ -122,19 +127,19 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     assert_nothing_raised do
       assert_equal(
         '/with/cp/moo.html',
-        router.web_path_for(pages[:with_cp_without_index])
+        router.web_path_for(pages[:with_cp_without_index].reps[:default])
       )
       assert_equal(
         '/with/cp/with/index/',
-        router.web_path_for(pages[:with_cp_with_index])
+        router.web_path_for(pages[:with_cp_with_index].reps[:default])
       )
       assert_equal(
         '/without/cp/without/index/foo.html',
-        router.web_path_for(pages[:without_cp_without_index])
+        router.web_path_for(pages[:without_cp_without_index].reps[:default])
       )
       assert_equal(
         '/without/cp/with/index/',
-        router.web_path_for(pages[:without_cp_with_index])
+        router.web_path_for(pages[:without_cp_with_index].reps[:default])
       )
     end
   end

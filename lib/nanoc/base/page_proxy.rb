@@ -11,8 +11,8 @@ module Nanoc
 
       if real_key == :content
         @obj.content
-      elsif real_key == :path
-        @obj.web_path
+      elsif real_key == :path # backward compatibility
+        @obj.reps[:default].web_path
       elsif real_key == :mtime
         @obj.mtime
       elsif real_key == :parent
