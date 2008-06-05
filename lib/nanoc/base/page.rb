@@ -25,17 +25,17 @@ module Nanoc
     # The child pages of this page.
     attr_accessor :children
 
-    # The page's unprocessed content
-    attr_accessor :content
-
     # A hash containing this page's attributes.
     attr_accessor :attributes
 
     # This page's path.
-    attr_accessor :path
+    attr_reader   :path
 
     # The time when this page was last modified.
-    attr_accessor :mtime
+    attr_reader   :mtime
+
+    # TODO document
+    attr_reader   :reps
 
     # Creates a new page.
     #
@@ -66,6 +66,9 @@ module Nanoc
       @laid_out       = false
       @filtered_post  = false
       @written        = false
+
+      # Build reps
+      build_page_reps
     end
 
     # Returns a proxy (Nanoc::PageProxy) for this page.
@@ -174,89 +177,26 @@ module Nanoc
     #                 well as write out the compiled page. Otherwise, will
     #                 just pre-filter the page.
     def compile(also_layout=true)
-      @modified = false
-
-      # Check for recursive call
-      if @site.compiler.stack.include?(self)
-        @site.compiler.stack.push(self)
-        raise Nanoc::Errors::RecursiveCompilationError.new 
+      # Compile all representations
+      @reps.values.each do |rep|
+        rep.compile(also_layout)
       end
-
-      @site.compiler.stack.push(self)
-
-      # Filter pre
-      unless @filtered_pre
-        filter!(:pre)
-        @filtered_pre = true
-      end
-
-      # Layout
-      if !@laid_out and also_layout
-        layout!
-        @laid_out = true
-      end
-
-      # Filter post
-      if !@filtered_post and also_layout
-        filter!(:post)
-        @filtered_post = true
-      end
-
-      # Write
-      if !@written and also_layout
-        # Check status
-        @created  = !File.file?(self.disk_path)
-        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
-
-        # Write
-        unless attribute_named(:skip_output)
-          FileUtils.mkdir_p(File.dirname(self.disk_path))
-          File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
-        end
-
-        # Done
-        @written = true
-      end
-
-      @site.compiler.stack.pop
     end
 
   private
 
-    def filter!(stage)
-      # Get filters
-      unless attribute_named(:filters).nil?
-        raise Nanoc::Errors::NoLongerSupportedError.new(
-          'The `filters` property is no longer supported; please use `filters_pre` instead.'
-        )
+    # TODO document
+    def build_page_reps
+      @reps = {}
+
+      # Build default rep
+      default_rep_attrs = (@attributes[:reps] || {})[:default] || {}
+      @reps[:default] = PageRep.new(self, default_rep_attrs, :default)
+
+      # Build other reps
+      (@attributes[:reps] || {}).each_pair do |name, attrs|
+        @reps[name] = PageRep.new(self, attrs, name)
       end
-      filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
-
-      filters.each do |filter_name|
-        # Create filter
-        filter_class = PluginManager.instance.filter(filter_name.to_sym)
-        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
-        filter = filter_class.new(self.to_proxy, @site)
-
-        # Run filter
-        @content[stage] = filter.run(@content[stage])
-      end
-    end
-
-    def layout!
-      # Don't layout if not necessary
-      if attribute_named(:layout).nil?
-        @content[:post] = @content[:pre]
-        return
-      end
-
-      # Find layout processor
-      filter_class = layout.filter_class
-      raise CannotDetermineFilterError(layout.path) if filter_class.nil?
-      filter = filter_class.new(self.to_proxy, @site)
-
-      # Layout
-      @content[:post] = filter.run(layout.content)
     end
 
   end
