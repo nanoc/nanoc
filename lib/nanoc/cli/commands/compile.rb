@@ -83,7 +83,7 @@ module Nanoc::CLI
         # Give feedback
         puts "No pages were modified." unless @base.site.pages.any? { |p| p.reps.values.any? { |r| r.modified? } }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
-      rescue Nanoc::Error => e
+      rescue Exception => e
         # Get page rep
         page_rep = @base.site.compiler.stack[-1]
         page_rep_name = "#{page_rep.page.path} (rep #{page_rep.name})"
