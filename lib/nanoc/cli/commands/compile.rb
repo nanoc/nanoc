@@ -86,7 +86,7 @@ module Nanoc::CLI
       rescue Exception => e
         # Get page rep
         page_rep = @base.site.compiler.stack[-1]
-        page_rep_name = "#{page_rep.page.path} (rep #{page_rep.name})"
+        page_rep_name = page_rep.nil? ? 'the site' : "#{page_rep.page.path} (rep #{page_rep.name})"
 
         # Build message
         case e

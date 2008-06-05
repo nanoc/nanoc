@@ -147,19 +147,22 @@ module Nanoc
     def build_page_reps
       @reps = {}
 
-      # Get unparsed list of reps
-      raw_reps_global = @site.page_defaults.attributes[:reps] || {}
-      raw_reps_local  = @attributes[:reps] || {}
-      raw_reps = raw_reps_global.merge(raw_reps_local)
+      # Get list of rep names
+      rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
+      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
+      rep_names         = rep_names_default | rep_names_this
 
-      # Build default rep
-      default_rep_attrs = (raw_reps || {})[:default] || {}
-      @reps[:default] = PageRep.new(self, default_rep_attrs, :default)
+      # Get list of reps
+      reps = rep_names.inject({}) do |memo, rep_name|
+        rep = (@attributes[:reps] || {})[rep_name]
+        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) and rep.nil?
+        is_bad ? memo : memo.merge(rep_name => rep || {})
+      end
 
-      # Build other reps
-      (raw_reps || {}).each_pair do |name, attrs|
-        next if name == :default
+      # Build reps
+      reps.each_pair do |name, attrs|
         @reps[name] = PageRep.new(self, attrs, name)
+        #puts "*** added #{@reps[name].inspect}"
       end
     end
 
