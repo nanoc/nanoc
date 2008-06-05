@@ -94,7 +94,9 @@ module Nanoc
       return @attributes[name] if @attributes.has_key?(name)
 
       # Check in page
-      return @page.attributes[name] if @page.attributes.has_key?(name)
+      if @name == :default
+        return @page.attributes[name] if @page.attributes.has_key?(name)
+      end
 
       # Check in page defaults' page rep
       page_default_reps = @page.site.page_defaults.attributes[:reps] || {}
@@ -102,8 +104,10 @@ module Nanoc
       return page_default_rep[name] if page_default_rep.has_key?(name)
 
       # Check in site defaults (global)
-      page_defaults_attrs = @page.site.page_defaults.attributes
-      return page_defaults_attrs[name] if page_defaults_attrs.has_key?(name)
+      if @name == :default
+        page_defaults_attrs = @page.site.page_defaults.attributes
+        return page_defaults_attrs[name] if page_defaults_attrs.has_key?(name)
+      end
 
       # Check in hardcoded defaults
       return Nanoc::Page::DEFAULTS[name]

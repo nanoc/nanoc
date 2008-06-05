@@ -162,7 +162,6 @@ module Nanoc
       # Build reps
       reps.each_pair do |name, attrs|
         @reps[name] = PageRep.new(self, attrs, name)
-        #puts "*** added #{@reps[name].inspect}"
       end
     end
 
