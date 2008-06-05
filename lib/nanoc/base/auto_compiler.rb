@@ -189,7 +189,7 @@ END
 
     def serve_500(path, exception)
       # Build message
-      case exception.class
+      case exception
       when Nanoc::Errors::UnknownLayoutError
         message = "Unknown layout: #{exception.message}"
       when Nanoc::Errors::UnknownFilterError
