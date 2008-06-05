@@ -65,21 +65,23 @@ module Nanoc::CLI
 
         # Compile
         @base.site.compiler.run(page, options.has_key?(:all)) do |cur_page|
-          # Get action and level
-          action, level = *if cur_page.created?
-            [ :create, :high ]
-          elsif cur_page.modified?
-            [ :update, :high ]
-          else
-            [ :identical, :low ]
-          end
+          cur_page.reps.values.each do |rep|
+            # Get action and level
+            action, level = *if rep.created?
+              [ :create, :high ]
+            elsif rep.modified?
+              [ :update, :high ]
+            else
+              [ :identical, :low ]
+            end
 
-          # Log
-          Nanoc::CLI::Logger.instance.file(level, action, cur_page.disk_path)
+            # Log
+            Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path)
+          end
         end
 
         # Give feedback
-        puts "No pages were modified." unless @base.site.pages.any? { |p| p.modified? }
+        puts "No pages were modified." unless @base.site.pages.any? { |p| p.reps.values.any? { |r| r.modified? } }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
       rescue Nanoc::Error => e
         # Get page rep
