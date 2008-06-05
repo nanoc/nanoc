@@ -136,17 +136,6 @@ module Nanoc
 
       # Load data
       @data_source.loading do
-        # Pages
-        @pages = @data_source.pages
-        if @pages.any? { |p| p.is_a? Hash }
-          warn(
-            "In nanoc 2.1, DataSource#pages should return an array of Nanoc::Page objects. Future versions will not support these outdated data sources.",
-            'DEPRECATION WARNING'
-          )
-          @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
-        end
-        @pages.each { |p| p.site = self }
-
         # Page defaults
         @page_defaults = @data_source.page_defaults
         if @page_defaults.is_a? Hash
@@ -157,6 +146,17 @@ module Nanoc
           @page_defaults = PageDefaults.new(@page_defaults)
         end
         @page_defaults.site = self
+
+        # Pages
+        @pages = @data_source.pages
+        if @pages.any? { |p| p.is_a? Hash }
+          warn(
+            "In nanoc 2.1, DataSource#pages should return an array of Nanoc::Page objects. Future versions will not support these outdated data sources.",
+            'DEPRECATION WARNING'
+          )
+          @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
+        end
+        @pages.each { |p| p.site = self }
 
         # Layouts
         @layouts = @data_source.layouts

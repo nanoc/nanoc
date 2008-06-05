@@ -67,26 +67,11 @@ module Nanoc
       @laid_out       = false
       @filtered_post  = false
       @written        = false
-
-      # Build reps
-      build_page_reps
     end
 
     # Returns a proxy (Nanoc::PageProxy) for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
-    end
-
-    # Returns true if the compiled page has been modified during the last
-    # compilation session, false otherwise.
-    def modified?
-      @modified
-    end
-
-    # Returns true if the compiled page did not exist before and had to be
-    # recreated, false otherwise.
-    def created?
-      @created
     end
 
     # Returns true if the source page is newer than the compiled page, false
@@ -111,6 +96,13 @@ module Nanoc
       compile(false) if stage == :pre  and !@filtered_pre
       compile(true)  if stage == :post and !@filtered_post
       @content[stage]
+    end
+
+    # TODO document
+    def site=(site)
+      @site = site
+
+      build_page_reps
     end
 
     # Saves the page in the database, creating it if it doesn't exist yet or
@@ -155,41 +147,20 @@ module Nanoc
     def build_page_reps
       @reps = {}
 
+      # Get unparsed list of reps
+      raw_reps_global = @site.page_defaults.attributes[:reps] || {}
+      raw_reps_local  = @attributes[:reps] || {}
+      raw_reps = raw_reps_global.merge(raw_reps_local)
+
       # Build default rep
-      default_rep_attrs = (@attributes[:reps] || {})[:default] || {}
+      default_rep_attrs = (raw_reps || {})[:default] || {}
       @reps[:default] = PageRep.new(self, default_rep_attrs, :default)
 
       # Build other reps
-      (@attributes[:reps] || {}).each_pair do |name, attrs|
+      (raw_reps || {}).each_pair do |name, attrs|
         next if name == :default
         @reps[name] = PageRep.new(self, attrs, name)
       end
-    end
-
-  public
-
-    # Deprecated
-    def layout
-      return 'asdf'
-
-      # Check whether layout is present
-      return nil if attribute_named(:layout).nil?
-
-      # Find layout
-      @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
-      raise Nanoc::Errors::UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
-
-      @layout
-    end
-
-    # Deprecated
-    def disk_path
-      @disk_path ||= @site.router.disk_path_for(@reps[:default])
-    end
-
-    # Deprecated
-    def web_path
-      @web_path ||= @site.router.web_path_for(@reps[:default])
     end
 
   end

@@ -26,10 +26,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
       }
     end
 
-    # def data_source
-    #   @data_source ||= TestDataSource.new
-    # end
-
     def page_defaults
       @page_defaults ||= Nanoc::PageDefaults.new(:foo => 'bar')
     end
@@ -55,8 +51,12 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   end
 
   def test_do_filter_with_outdated_filters_attribute
+    # Create site
+    site = TestSite.new
+
     # Create page
     page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
+    page.site = site
     page_rep = page.reps[:default]
 
     # Filter
