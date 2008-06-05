@@ -17,7 +17,7 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
     )
 
     # Check
-    assert_equal('/foo/home.htm', router.path_for(page))
+    assert_equal('/foo/home.htm', router.path_for(page.reps[:default]))
   end
 
 end

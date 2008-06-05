@@ -56,6 +56,7 @@ module Nanoc
       # Start disconnected
       @parent         = nil
       @children       = []
+      @reps           = {}
 
       # Not modified, not created by default
       @modified       = false
@@ -91,24 +92,11 @@ module Nanoc
     # Returns true if the source page is newer than the compiled page, false
     # otherwise. Also returns false if the page modification time isn't known.
     def outdated?
-      # Outdated if compiled file doesn't exist
-      return true if !File.file?(disk_path)
-
       # Outdated if we don't know
       return true if @mtime.nil?
 
-      # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime
-
-      # Outdated if file too old
-      return true if @mtime > compiled_mtime
-
-      # Outdated if dependencies outdated
-      return true if @site.layouts.any? { |l| l.mtime and l.mtime > compiled_mtime }
-      return true if @site.page_defaults.mtime and @site.page_defaults.mtime > compiled_mtime
-      return true if @site.code.mtime and @site.code.mtime > compiled_mtime
-
-      return false
+      # Outdated if a page rep is outdated
+      return @reps.values.any? { |rep| rep.outdated? }
     end
 
     # Returns the attribute with the given name.
@@ -123,28 +111,6 @@ module Nanoc
       compile(false) if stage == :pre  and !@filtered_pre
       compile(true)  if stage == :post and !@filtered_post
       @content[stage]
-    end
-
-    # Returns the page's layout.
-    def layout
-      # Check whether layout is present
-      return nil if attribute_named(:layout).nil?
-
-      # Find layout
-      @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
-      raise Nanoc::Errors::UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
-
-      @layout
-    end
-
-    # Returns the path to the compiled page on the disk.
-    def disk_path
-      @disk_path ||= @site.router.disk_path_for(self)
-    end
-
-    # Returns the path to the compiled page as used in the web site itself.
-    def web_path
-      @web_path ||= @site.router.web_path_for(self)
     end
 
     # Saves the page in the database, creating it if it doesn't exist yet or
@@ -195,8 +161,35 @@ module Nanoc
 
       # Build other reps
       (@attributes[:reps] || {}).each_pair do |name, attrs|
+        next if name == :default
         @reps[name] = PageRep.new(self, attrs, name)
       end
+    end
+
+  public
+
+    # Deprecated
+    def layout
+      return 'asdf'
+
+      # Check whether layout is present
+      return nil if attribute_named(:layout).nil?
+
+      # Find layout
+      @layout ||= @site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
+      raise Nanoc::Errors::UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
+
+      @layout
+    end
+
+    # Deprecated
+    def disk_path
+      @disk_path ||= @site.router.disk_path_for(@reps[:default])
+    end
+
+    # Deprecated
+    def web_path
+      @web_path ||= @site.router.web_path_for(@reps[:default])
     end
 
   end

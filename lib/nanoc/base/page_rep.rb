@@ -50,15 +50,32 @@ module Nanoc
     end
 
     # TODO document
+    def outdated?
+      # Outdated if compiled file doesn't exist
+      return true if !File.file?(disk_path)
+
+      # Get compiled mtime
+      compiled_mtime = File.stat(disk_path).mtime
+
+      # Outdated if file too old
+      return true if @page.mtime > compiled_mtime
+
+      # Outdated if dependencies outdated
+      return true if @page.site.layouts.any? { |l| l.mtime and l.mtime > compiled_mtime }
+      return true if @page.site.page_defaults.mtime and @page.site.page_defaults.mtime > compiled_mtime
+      return true if @page.site.code.mtime and @page.site.code.mtime > compiled_mtime
+
+      return false
+    end
+
+    # TODO document
     def disk_path
-      # FIXME use this rep's path, not the page's path
-      @disk_path ||= @page.site.router.disk_path_for(@page)
+      @disk_path ||= @page.site.router.disk_path_for(self)
     end
 
     # TODO document
     def web_path
-      # FIXME use this rep's path, not the page's path
-      @web_path ||= @page.site.router.web_path_for(@page)
+      @web_path ||= @page.site.router.web_path_for(self)
     end
 
     # TODO document

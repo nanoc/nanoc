@@ -7,13 +7,17 @@ module Nanoc::Routers
 
     identifier :default
 
-    def path_for(page)
+    def path_for(page_rep)
       # Get data we need
-      filename   = page.attribute_named(:filename)
-      extension  = page.attribute_named(:extension)
+      filename   = page_rep.attribute_named(:filename)
+      extension  = page_rep.attribute_named(:extension)
 
       # Build path
-      page.path + "#{filename}.#{extension}"
+      if page_rep.name == :default
+        page_rep.page.path + "#{filename}.#{extension}"
+      else
+        page_rep.page.path + "#{filename}-#{page_rep.name}.#{extension}"
+      end
     end
 
   end

@@ -82,8 +82,9 @@ module Nanoc::CLI
         puts "No pages were modified." unless @base.site.pages.any? { |p| p.modified? }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
       rescue Nanoc::Error => e
-        # Get page
-        page = @base.site.compiler.stack[-1]
+        # Get page rep
+        page_rep = @base.site.compiler.stack[-1]
+        page_rep_name = "#{page_rep.page.path} (rep #{page_rep.name})"
 
         # Build message
         case e
@@ -95,8 +96,8 @@ module Nanoc::CLI
           message = "Cannot determine filter for layout: #{e.message}"
         when Nanoc::Errors::RecursiveCompilationError
           message = "Recursive call to page content. Page stack:"
-          @base.site.compiler.stack.each do |page|
-            message << "  - #{page.path}"
+          @base.site.compiler.stack.each do |page_rep|
+            message << "  - #{page_rep.page.path} (rep #{page_rep.name})"
           end
         when Nanoc::Errors::NoLongerSupportedError
           message = "No longer supported: #{e.message}"
@@ -106,7 +107,7 @@ module Nanoc::CLI
 
         # Print message
         puts
-        puts "ERROR: An exception occured while compiling #{page.path}."
+        puts "ERROR: An exception occured while compiling #{page_rep_name}."
         puts
         puts "If you think this is a bug in nanoc, please do report it at"
         puts "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"

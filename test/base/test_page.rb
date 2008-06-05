@@ -11,10 +11,6 @@ class Nanoc::PageTest < Test::Unit::TestCase
       '/pages' + page.path + page.attribute_named(:filename) + '.' + page.attribute_named(:extension)
     end
 
-    def index_filenames
-      [ 'index.html' ]
-    end
-
   end
 
   class TestDataSource
@@ -186,16 +182,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
   end
 
   def test_disk_and_web_path
-    # Create site
-    site = TestSite.new
-
-    # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
-    page.site = site
-
-    # Check
-    assert_equal('tmp/output/pages/path/index.html', page.disk_path)
-    assert_equal('/pages/path/',                     page.web_path)
+    # TODO implement
   end
 
   def test_save
