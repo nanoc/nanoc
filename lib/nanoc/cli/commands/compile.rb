@@ -86,19 +86,19 @@ module Nanoc::CLI
         page = @base.site.compiler.stack[-1]
 
         # Build message
-        case e.class
-        when Nanoc::Errors::UnknownLayoutError.class
+        case e
+        when Nanoc::Errors::UnknownLayoutError
           message = "Unknown layout: #{e.message}"
-        when Nanoc::Errors::UnknownFilterError.class
+        when Nanoc::Errors::UnknownFilterError
           message = "Unknown filter: #{e.message}"
-        when Nanoc::Errors::CannotDetermineFilterError.class
+        when Nanoc::Errors::CannotDetermineFilterError
           message = "Cannot determine filter for layout: #{e.message}"
-        when Nanoc::Errors::RecursiveCompilationError.class
+        when Nanoc::Errors::RecursiveCompilationError
           message = "Recursive call to page content. Page stack:"
           @base.site.compiler.stack.each do |page|
             message << "  - #{page.path}"
           end
-        when Nanoc::Errors::NoLongerSupportedError.class
+        when Nanoc::Errors::NoLongerSupportedError
           message = "No longer supported: #{e.message}"
         else
           message = "Unknown error: #{e.message}"
