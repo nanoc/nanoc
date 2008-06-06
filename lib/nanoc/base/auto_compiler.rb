@@ -76,9 +76,7 @@ END
       end
 
       # Build Rack app
-      app = lambda do |env|
-        handle_request(env['PATH_INFO'])
-      end
+      app = lambda { |env| handle_request(env['PATH_INFO']) }
 
       # Run Rack app
       port ||= 3000
@@ -153,10 +151,11 @@ END
       @site.load_data(true)
 
       # Get page or file
-      page      = @site.pages.find { |page| page.web_path == path }
+      page_reps = @site.pages.map { |p| p.reps.values }.flatten
+      page_rep  = page_reps.find { |p| p.web_path == path }
       file_path = @site.config[:output_dir] + path
 
-      if page.nil?
+      if page_rep.nil?
         # Serve file
         if File.file?(file_path)
           serve_file(file_path)
@@ -164,8 +163,8 @@ END
           serve_404(path)
         end
       else
-        # Serve page
-        serve_page(page)
+        # Serve page rep
+        serve_page_rep(page_rep)
       end
     end
 
@@ -198,8 +197,8 @@ END
         message = "Cannot determine filter for layout: #{exception.message}"
       when Nanoc::Errors::RecursiveCompilationError
         message = "Recursive call to page content. Page stack:"
-        @base.site.compiler.stack.each do |page|
-          message << "  - #{page.path}"
+        @base.site.compiler.stack.each do |page_rep|
+          message << "  - #{page_rep.path}"
         end
       when Nanoc::Errors::NoLongerSupportedError
         message = "No longer supported: #{exception.message}"
@@ -224,19 +223,19 @@ END
       ]
     end
 
-    def serve_page(page)
-      # Recompile page
+    def serve_page_rep(page_rep)
+      # Recompile page rep
       begin
-        @site.compiler.run(page, @include_outdated)
+        @site.compiler.run(page_rep.page, @include_outdated)
       rescue => exception
-        return serve_500(page.web_path, exception)
+        return serve_500(page_rep.web_path, exception)
       end
 
       # Build response
       [
         200,
-        { 'Content-Type' => mime_type_of(page.disk_path, 'text/html') },
-        [ page.content(:post) ]
+        { 'Content-Type' => mime_type_of(page_rep.disk_path, 'text/html') },
+        [ page_rep.content(:post) ]
       ]
     end
 
