@@ -16,9 +16,9 @@ module Nanoc
       elsif real_key == :children
         @obj.children.map { |page| page.to_proxy }
       elsif real_key == :content # backward compatibility
-        @obj.reps[:default].content
+        @obj.reps.find { |r| r.name == :default }.content
       elsif real_key == :path # backward compatibility
-        @obj.reps[:default].web_path
+        @obj.reps.find { |r| r.name == :default }.web_path
       else
         super(key)
       end
@@ -26,7 +26,7 @@ module Nanoc
 
     # TODO document
     def reps(name)
-      rep = @obj.reps[name]
+      rep = @obj.reps.find { |r| r.name == name }
       rep.nil? ? nil : rep.to_proxy
     end
 

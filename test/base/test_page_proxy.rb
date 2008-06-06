@@ -7,6 +7,10 @@ class Nanoc::PageProxyTest < Test::Unit::TestCase
 
   class TestPageRep
 
+    def name
+      :default
+    end
+
     def web_path
       "page rep web path"
     end
@@ -40,7 +44,7 @@ class Nanoc::PageProxyTest < Test::Unit::TestCase
     end
 
     def reps
-      { :default => TestPageRep.new }
+      @reps ||= [ TestPageRep.new ]
     end
 
   end

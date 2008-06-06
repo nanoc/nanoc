@@ -151,7 +151,7 @@ END
       @site.load_data(true)
 
       # Get page or file
-      page_reps = @site.pages.map { |p| p.reps.values }.flatten
+      page_reps = @site.pages.map { |p| p.reps }.flatten
       page_rep  = page_reps.find { |p| p.web_path == path }
       file_path = @site.config[:output_dir] + path
 
