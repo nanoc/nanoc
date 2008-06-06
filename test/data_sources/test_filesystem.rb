@@ -220,10 +220,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_hash_to_yaml
-    # TODO implement
-  end
-
   # Miscellaneous
 
   def test_meta_filenames_error

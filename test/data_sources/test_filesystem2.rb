@@ -178,10 +178,6 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_hash_to_yaml
-    # TODO implement
-  end
-
   # Miscellaneous
 
   def test_compile_site_with_file_object
