@@ -136,17 +136,13 @@ module Nanoc
     #                 just pre-filter the page.
     def compile(also_layout=true)
       # Compile all representations
-      @reps.values.each do |rep|
-        rep.compile(also_layout)
-      end
+      @reps.values.each { |r| r.compile(also_layout) }
     end
 
   private
 
     # TODO document
     def build_page_reps
-      @reps = {}
-
       # Get list of rep names
       rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
       rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
@@ -160,9 +156,11 @@ module Nanoc
       end
 
       # Build reps
+      @reps = {}
       reps.each_pair do |name, attrs|
         @reps[name] = PageRep.new(self, attrs, name)
       end
+
     end
 
   end
