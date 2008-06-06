@@ -43,7 +43,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # Create page
     page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
     page.site = site
-    page_rep = page.reps[:default]
+    page_rep = page.reps.find { |r| r.name == :default }
 
     # Check
     assert_equal('tmp/output/pages/path/index.html', page_rep.disk_path)
@@ -57,7 +57,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # Create page
     page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
     page.site = site
-    page_rep = page.reps[:default]
+    page_rep = page.reps.find { |r| r.name == :default }
 
     # Filter
     assert_raise Nanoc::Errors::NoLongerSupportedError do

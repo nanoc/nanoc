@@ -65,7 +65,7 @@ module Nanoc::CLI
 
         # Compile
         @base.site.compiler.run(page, options.has_key?(:all)) do |cur_page|
-          cur_page.reps.values.each do |rep|
+          cur_page.reps.each do |rep|
             # Get action and level
             action, level = *if rep.created?
               [ :create, :high ]
@@ -81,7 +81,7 @@ module Nanoc::CLI
         end
 
         # Give feedback
-        puts "No pages were modified." unless @base.site.pages.any? { |p| p.reps.values.any? { |r| r.modified? } }
+        puts "No pages were modified." unless @base.site.pages.any? { |p| p.reps.any? { |r| r.modified? } }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
       rescue Exception => e
         # Get page rep

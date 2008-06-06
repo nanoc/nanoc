@@ -56,7 +56,7 @@ module Nanoc
       # Start disconnected
       @parent         = nil
       @children       = []
-      @reps           = {}
+      @reps           = []
 
       # Not modified, not created by default
       @modified       = false
@@ -81,7 +81,7 @@ module Nanoc
       return true if @mtime.nil?
 
       # Outdated if a page rep is outdated
-      return @reps.values.any? { |rep| rep.outdated? }
+      return @reps.any? { |rep| rep.outdated? }
     end
 
     # Returns the attribute with the given name.
@@ -136,7 +136,7 @@ module Nanoc
     #                 just pre-filter the page.
     def compile(also_layout=true)
       # Compile all representations
-      @reps.values.each { |r| r.compile(also_layout) }
+      @reps.each { |r| r.compile(also_layout) }
     end
 
   private
@@ -156,9 +156,9 @@ module Nanoc
       end
 
       # Build reps
-      @reps = {}
+      @reps = []
       reps.each_pair do |name, attrs|
-        @reps[name] = PageRep.new(self, attrs, name)
+        @reps << PageRep.new(self, attrs, name)
       end
 
     end

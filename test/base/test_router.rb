@@ -76,19 +76,19 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     assert_nothing_raised do
       assert_equal(
         'tmp/out/with/cp/moo.html',
-        router.disk_path_for(pages[:with_cp_without_index].reps[:default])
+        router.disk_path_for(pages[:with_cp_without_index].reps.find { |r| r.name == :default })
       )
       assert_equal(
         'tmp/out/with/cp/with/index/home.htm',
-        router.disk_path_for(pages[:with_cp_with_index].reps[:default])
+        router.disk_path_for(pages[:with_cp_with_index].reps.find { |r| r.name == :default })
       )
       assert_equal(
         'tmp/out/without/cp/without/index/foo.html',
-        router.disk_path_for(pages[:without_cp_without_index].reps[:default])
+        router.disk_path_for(pages[:without_cp_without_index].reps.find { |r| r.name == :default })
       )
       assert_equal(
         'tmp/out/without/cp/with/index/home.htm',
-        router.disk_path_for(pages[:without_cp_with_index].reps[:default])
+        router.disk_path_for(pages[:without_cp_with_index].reps.find { |r| r.name == :default })
       )
     end
   end
@@ -127,19 +127,19 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     assert_nothing_raised do
       assert_equal(
         '/with/cp/moo.html',
-        router.web_path_for(pages[:with_cp_without_index].reps[:default])
+        router.web_path_for(pages[:with_cp_without_index].reps.find { |r| r.name == :default })
       )
       assert_equal(
         '/with/cp/with/index/',
-        router.web_path_for(pages[:with_cp_with_index].reps[:default])
+        router.web_path_for(pages[:with_cp_with_index].reps.find { |r| r.name == :default })
       )
       assert_equal(
         '/without/cp/without/index/foo.html',
-        router.web_path_for(pages[:without_cp_without_index].reps[:default])
+        router.web_path_for(pages[:without_cp_without_index].reps.find { |r| r.name == :default })
       )
       assert_equal(
         '/without/cp/with/index/',
-        router.web_path_for(pages[:without_cp_with_index].reps[:default])
+        router.web_path_for(pages[:without_cp_with_index].reps.find { |r| r.name == :default })
       )
     end
   end
