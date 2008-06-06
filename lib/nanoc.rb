@@ -69,6 +69,10 @@ Nanoc.load('base', 'core_ext', '*.rb')
 Nanoc.load('base', 'plugin.rb')
 Nanoc.load('base', '*.rb')
 
+# Load extra's
+Nanoc.load('extra', 'core_ext', '*.rb')
+Nanoc.load('extra', '*.rb')
+
 # Load plugins
 Nanoc.load('data_sources', '*.rb')
 Nanoc.load('filters', '*.rb')

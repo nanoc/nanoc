@@ -152,7 +152,7 @@ module Nanoc::DataSources
 
         # Create new files
         FileUtils.mkdir_p(dir_path)
-        File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(tmp_layout.attributes)) }
+        File.open(meta_filename,    'w') { |io| io.write(tmp_layout.attributes.to_split_yaml) }
         File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
 
         # Delete old files
@@ -223,7 +223,7 @@ module Nanoc::DataSources
       end
 
       # Write files
-      File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(page.attributes)) }
+      File.open(meta_filename,    'w') { |io| io.write(page.attributes.to_split_yaml) }
       File.open(content_filename, 'w') { |io| io.write(page.content(:raw)) }
     end
 
@@ -250,7 +250,7 @@ module Nanoc::DataSources
 
     def save_page_defaults(page_defaults) # :nodoc:
       File.open('meta.yaml', 'w') do |io|
-        io.write(hash_to_yaml(page_defaults.attributes))
+        io.write(page_defaults.attributes.to_split_yaml)
       end
     end
 
@@ -327,7 +327,7 @@ module Nanoc::DataSources
       end
 
       # Write files
-      File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(layout.attributes)) }
+      File.open(meta_filename,    'w') { |io| io.write(layout.attributes.to_split_yaml) }
       File.open(content_filename, 'w') { |io| io.write(layout.content) }
     end
 
@@ -383,7 +383,7 @@ module Nanoc::DataSources
       end
 
       # Write files
-      File.open(meta_filename,    'w') { |io| io.write(hash_to_yaml(template.page_attributes)) }
+      File.open(meta_filename,    'w') { |io| io.write(template.page_attributes.to_split_yaml) }
       File.open(content_filename, 'w') { |io| io.write(template.page_content) }
     end
 
@@ -476,28 +476,6 @@ module Nanoc::DataSources
 
       # Return content filename
       filenames.first
-    end
-
-    # Converts the given hash into YAML format, splitting the YAML output into
-    # a 'builtin' and a 'custom' section.
-    def hash_to_yaml(hash)
-      # Get list of built-in keys
-      builtin_keys = Nanoc::Page::DEFAULTS
-
-      # Stringify keys
-      hash = hash.reject { |k,v| k == :file }.stringify_keys
-
-      # Split keys
-      builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
-      custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }
-
-      # Convert to YAML
-      # FIXME this is a hack, plz clean up
-      '# Built-in' +
-      (builtin_hash.keys.empty? ? "\n" : YAML.dump(builtin_hash).split('---')[1]) +
-      "\n" +
-      '# Custom' +
-      (custom_hash.keys.empty? ? "\n" : YAML.dump(custom_hash).split('---')[1])
     end
 
     # Raises an "outdated data format" error.

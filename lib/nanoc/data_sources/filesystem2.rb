@@ -173,7 +173,7 @@ module Nanoc::DataSources
       FileUtils.mkdir_p('content' + parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
-        io.write(hash_to_yaml(page.attributes) + "\n")
+        io.write(page.attributes.to_split_yaml + "\n")
         io.write("-----\n")
         io.write(page.content(:raw))
       end
@@ -203,7 +203,7 @@ module Nanoc::DataSources
     def save_page_defaults(page_defaults) # :nodoc:
       # Write page defaults
       File.open('meta.yaml', 'w') do |io|
-        io.write(hash_to_yaml(page_defaults.attributes))
+        io.write(page_defaults.attributes.to_split_yaml)
       end
     end
 
@@ -242,7 +242,7 @@ module Nanoc::DataSources
       FileUtils.mkdir_p('layouts' + parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
-        io.write(hash_to_yaml(layout.attributes) + "\n")
+        io.write(layout.attributes.to_split_yaml + "\n")
         io.write("-----\n")
         io.write(layout.content)
       end
@@ -280,7 +280,7 @@ module Nanoc::DataSources
       # Write template
       File.open(path, 'w') do |io|
         io.write("-----\n")
-        io.write(hash_to_yaml(template.page_attributes) + "\n")
+        io.write(template.page_attributes.to_split_yaml + "\n")
         io.write("-----\n")
         io.write(template.page_content)
       end
@@ -347,28 +347,6 @@ module Nanoc::DataSources
       content = pieces[2..-1].join.strip
 
       [ meta, content ]
-    end
-
-    # Converts the given hash into YAML format, splitting the YAML output into
-    # a 'builtin' and a 'custom' section.
-    def hash_to_yaml(hash)
-      # Get list of built-in keys
-      builtin_keys = Nanoc::Page::DEFAULTS
-
-      # Stringify keys
-      hash = hash.reject { |k,v| k == :file }.stringify_keys
-
-      # Split keys
-      builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
-      custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }
-
-      # Convert to YAML
-      # FIXME this is a hack, plz clean up
-      '# Built-in' +
-      (builtin_hash.keys.empty? ? "\n" : YAML.dump(builtin_hash).split('---')[1]) +
-      "\n" +
-      '# Custom' +
-      (custom_hash.keys.empty? ? "\n" : YAML.dump(custom_hash).split('---')[1])
     end
 
   end
