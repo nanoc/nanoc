@@ -5,7 +5,23 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestWorkingPage
+  class TestPage
+
+    attr_reader :reps
+
+    def initialize(reps)
+      @reps = reps
+    end
+
+    def compile
+      @reps.each { |r| r.compile }
+    end
+
+  end
+
+  class TestWorkingPageRep
+
+    attr_accessor :page
 
     def content(stage)
       "compiled page content (#{stage})"
@@ -15,12 +31,22 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
       "tmp/test.html"
     end
 
+    def web_path
+      "/test.html"
+    end
+
   end
 
-  class TestBrokenPage
+  class TestBrokenPageRep
+
+    attr_accessor :page
 
     def content(stage)
       raise RuntimeError.new("aah! fail!")
+    end
+
+    def disk_path
+      "tmp/foobar/index.htm"
     end
 
     def web_path
@@ -32,7 +58,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
   class TestCompiler
 
     def run(page, include_outdated)
-      page.content(:post)
+      page.reps.each { |r| r.content(:post) }
     end
 
   end
@@ -147,7 +173,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     assert_match(/Unknown error: boink/,  response[2][0])
   end
 
-  def test_serve_page
+  def test_serve_page_rep
     if_have('mime/types') do
       # Create site
       site = TestSite.new
@@ -157,12 +183,14 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
       begin
         # Create working page
-        working_page  = TestWorkingPage.new
-        File.open(working_page.disk_path, 'w') { |io| }
+        working_page_rep      = TestWorkingPageRep.new
+        working_page          = TestPage.new([working_page_rep])
+        working_page_rep.page = working_page
+        File.open(working_page_rep.disk_path, 'w') { |io| }
 
         assert_nothing_raised do
           # Serve
-          response = autocompiler.instance_eval { serve_page(working_page) }
+          response = autocompiler.instance_eval { serve_page_rep(working_page_rep) }
 
           # Check response
           assert_equal(200,                     response[0])
@@ -171,16 +199,18 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
         end
       ensure
         # Clean up
-        FileUtils.remove_entry_secure(working_page.disk_path)
+        FileUtils.remove_entry_secure(working_page_rep.disk_path)
       end
 
       begin
         # Create broken page
-        broken_page = TestBrokenPage.new
+        broken_page_rep       = TestBrokenPageRep.new
+        broken_page           = TestPage.new([broken_page_rep])
+        broken_page_rep.page  = broken_page
 
         assert_nothing_raised do
           # Serve
-          response = autocompiler.instance_eval { serve_page(broken_page) }
+          response = autocompiler.instance_eval { serve_page_rep(broken_page_rep) }
 
           # Check response
           assert_equal(500,                 response[0])
