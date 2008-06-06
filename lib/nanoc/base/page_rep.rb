@@ -198,7 +198,7 @@ module Nanoc
         # Create filter
         klass = PluginManager.instance.filter(filter_name.to_sym)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self.to_proxy, @page.site)
+        filter = klass.new(self.to_proxy, @page.to_proxy, @page.site)
 
         # Run filter
         @content[stage] = filter.run(@content[stage])
@@ -215,7 +215,7 @@ module Nanoc
       # Create filter
       klass = layout.filter_class
       raise Nanoc::Errors::CannotDetermineFilterError(layout.path) if klass.nil?
-      filter = klass.new(self.to_proxy, @page.site)
+      filter = klass.new(self.to_proxy, @page.to_proxy, @page.site)
 
       # Layout
       @content[:post] = filter.run(layout.content)
