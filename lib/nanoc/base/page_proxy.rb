@@ -24,6 +24,12 @@ module Nanoc
       end
     end
 
+    # TODO document
+    def reps(name)
+      rep = @obj.reps[name]
+      rep.nil? ? nil : rep.to_proxy
+    end
+
   end
 
 end
