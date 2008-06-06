@@ -155,7 +155,7 @@ module Nanoc
       # Get list of reps
       reps = rep_names.inject({}) do |memo, rep_name|
         rep = (@attributes[:reps] || {})[rep_name]
-        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) and rep.nil?
+        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
         is_bad ? memo : memo.merge(rep_name => rep || {})
       end
 
