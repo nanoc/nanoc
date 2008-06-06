@@ -6,13 +6,17 @@ module Nanoc
 
     # Creates a new filter for the given page and site.
     #
-    # +page+:: The page (Nanoc::Page) that should be compiled by this filter.
+    # +page_rep+:: A proxy for the page representation (Nanoc::PageRep) that
+    #              should be compiled by this filter.
+    #
+    # +page+:: A proxy for the given page representation's page (Nanoc::Page).
     #
     # +site+:: The site (Nanoc::Site) this filter belongs to.
     #
     # +other_assigns+:: A hash containing other variables that should be made
     #                   available during filtering.
-    def initialize(page, site, other_assigns={})
+    def initialize(page_rep, page, site, other_assigns={})
+      @page_rep       = page_rep
       @page           = page
       @pages          = site.pages.map   { |p| p.to_proxy }
       @layouts        = site.layouts.map { |l| l.to_proxy }
@@ -32,7 +36,14 @@ module Nanoc
 
     # Returns a hash with data that should be available.
     def assigns
-      @other_assigns.merge({ :page => @page, :pages => @pages, :layouts => @layouts, :config => @config, :site => @site })
+      @other_assigns.merge({
+        :page_rep => @page_rep,
+        :page     => @page,
+        :pages    => @pages,
+        :layouts  => @layouts,
+        :config   => @config,
+        :site     => @site
+      })
     end
 
     class << self

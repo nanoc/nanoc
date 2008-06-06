@@ -10,7 +10,9 @@ class Nanoc::Filters::ErubisTest < Test::Unit::TestCase
       assert_nothing_raised do
         with_temp_site do |site|
           # Get filter
-          filter = ::Nanoc::Filters::Erubis.new(site.pages.first.to_proxy, site)
+          page_rep  = site.pages[0].reps[0].to_proxy
+          page      = site.pages[0].to_proxy
+          filter = ::Nanoc::Filters::Erubis.new(page_rep, page, site)
 
           # Run filter
           result = filter.run('<%= "Hello." %>')

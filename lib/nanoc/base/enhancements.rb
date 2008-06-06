@@ -20,7 +20,7 @@ def render(name_or_path, other_assigns={})
   # Find filter
   filter_class = layout.filter_class
   raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if filter_class.nil?
-  filter = filter_class.new(@page, @site, other_assigns)
+  filter = filter_class.new(@page_rep, @page, @site, other_assigns)
 
   # Layout
   filter.run(layout.content)
