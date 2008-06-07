@@ -138,6 +138,21 @@ class Nanoc::CLI::OptionParserTest < Test::Unit::TestCase
     assert_equal([ 'foo', 'bar' ], result[:arguments])
   end
 
+  def test_parse_with_short_combined_valueful_options_with_missing_value
+    input       = %w( foo -abc bar )
+    definitions = [
+      { :long => 'aaa', :short => 'a', :argument => :required  },
+      { :long => 'bbb', :short => 'b', :argument => :forbidden },
+      { :long => 'ccc', :short => 'c', :argument => :forbidden }
+    ]
+
+    result = nil
+
+    assert_raise(Nanoc::CLI::OptionParser::OptionRequiresAnArgumentError) do
+      result = Nanoc::CLI::OptionParser.parse(input, definitions)
+    end
+  end
+
   def test_parse_with_end_marker
     input       = %w( foo bar -- -x --yyy -abc )
     definitions = []
