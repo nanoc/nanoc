@@ -16,7 +16,12 @@ module Nanoc::Routers
       if page_rep.name == :default
         page_rep.page.path + "#{filename}.#{extension}"
       else
-        page_rep.page.path + "#{filename}-#{page_rep.name}.#{extension}"
+        if filename == Nanoc::Page::DEFAULTS[:filename] and
+           extension == Nanoc::Page::DEFAULTS[:extension]
+          page_rep.page.path + "#{filename}-#{page_rep.name}.#{extension}"
+        else
+          page_rep.page.path + "#{filename}.#{extension}"
+        end
       end
     end
 
