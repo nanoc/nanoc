@@ -7,7 +7,8 @@ module Nanoc
   # images.
   class AutoCompiler
 
-    # TODO document
+    # Error that is raised when the autocompiler is started if the specified
+    # handler cannot be found.
     class UnknownHandlerError < Nanoc::Error ; end
 
     HANDLER_NAMES = [ :thin, :mongrel, :webrick, :ebb, :cgi, :fastcgi, :lsws, :scgi ]

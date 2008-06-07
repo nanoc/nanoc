@@ -37,7 +37,7 @@ module Nanoc
     # The time when this page was last modified.
     attr_reader   :mtime
 
-    # TODO document
+    # This page's list of page representations.
     attr_reader   :reps
 
     # Creates a new page.
@@ -94,10 +94,12 @@ module Nanoc
       return DEFAULTS[name]
     end
 
-    # TODO document
+    # Sets the site to which this page belongs. This will also cause the list
+    # of page representations to be built.
     def site=(site)
       @site = site
 
+      # FIXME this is not the best place to build the reps...
       build_page_reps
     end
 
@@ -137,7 +139,6 @@ module Nanoc
 
   private
 
-    # TODO document
     def build_page_reps
       # Get list of rep names
       rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
