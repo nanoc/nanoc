@@ -78,7 +78,6 @@ spec = Gem::Specification.new do |s|
                               '--exclude' << 'lib/nanoc/filters'      <<
                               '--exclude' << 'lib/nanoc/routers'      <<
                               '--exclude' << 'test'                   <<
-                              '--inline-source'                       <<
                               '--line-numbers'
 
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib}', '**', '*')]
@@ -103,7 +102,6 @@ end
 Rake::RDocTask.new do |task|
   task.rdoc_files.include(spec.extra_rdoc_files + [ 'lib' ])
   task.rdoc_dir = 'rdoc'
-  task.template = '/Library/Ruby/Gems/1.8/gems/allison-2.0.3/lib/allison'
   task.options = spec.rdoc_options
 end
 
