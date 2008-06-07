@@ -119,7 +119,7 @@ module Nanoc::DataSources
       database_page = DatabasePage.find_or_create_by_path(page.path)
 
       # Update attributes
-      database_page.content = page.content(:raw)
+      database_page.content = page.content
       database_page.attribs = YAML.dump(page.attributes)
       database_page.path    = page.path
 

@@ -224,7 +224,7 @@ module Nanoc::DataSources
 
       # Write files
       File.open(meta_filename,    'w') { |io| io.write(page.attributes.to_split_yaml) }
-      File.open(content_filename, 'w') { |io| io.write(page.content(:raw)) }
+      File.open(content_filename, 'w') { |io| io.write(page.content) }
     end
 
     def move_page(page, new_path) # :nodoc:
