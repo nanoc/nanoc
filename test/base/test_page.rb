@@ -103,36 +103,6 @@ class Nanoc::PageTest < Test::Unit::TestCase
     assert_equal('bar', page_proxy.foo)
   end
 
-  def test_modified
-    # TODO implement
-
-    # needed for compilation:
-    # - page (obviously)
-    # - router (for getting disk path)
-    # - compiler (for stack)
-    # - site config (for output dir)
-
-    # Create page
-
-    # Assert not modified
-
-    # Compile page
-
-    # Assert modified
-
-    # Compile page again
-
-    # Assert not modified
-
-    # Edit and compile page
-
-    # Assert modified
-  end
-
-  def test_created
-    # TODO implement
-  end
-
   def test_outdated
     # TODO implement
 
@@ -171,18 +141,6 @@ class Nanoc::PageTest < Test::Unit::TestCase
         assert_equal('stfu', page.attribute_named(:quux))
       end
     end
-  end
-
-  def test_content
-    # TODO implement
-  end
-
-  def test_layout
-    # TODO implement
-  end
-
-  def test_disk_and_web_path
-    # TODO implement
   end
 
   def test_save
@@ -231,53 +189,6 @@ class Nanoc::PageTest < Test::Unit::TestCase
     page.delete
     assert(site.data_source.delete_called)
     assert(site.data_source.was_loaded)
-  end
-
-  def test_compile
-    # TODO implement
-    
-    # - check modified
-    # - check stack
-  end
-
-  def test_compile_without_layout
-    # TODO implement
-  end
-
-  def test_do_filter
-    # TODO implement
-  end
-
-  def test_do_filter_get_filters_for_stage
-    # TODO implement
-  end
-
-  def test_do_filter_chained
-    # TODO implement
-  end
-
-  def test_do_filter_with_unknown_filter
-    # TODO implement
-  end
-
-  def test_do_layout
-    # TODO implement
-  end
-
-  def test_do_layout_without_layout
-    # TODO implement
-  end
-
-  def test_do_layout_with_unknown_filter
-    # TODO implement
-  end
-
-  def test_write_page
-    # TODO implement
-  end
-
-  def test_write_page_with_skip_output
-    # TODO implement
   end
 
 end
