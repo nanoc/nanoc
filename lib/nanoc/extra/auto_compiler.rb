@@ -64,6 +64,14 @@ END
     end
 
     # Starts the server on the given port.
+    #
+    # +port+:: The port the autocompiler web server should be started on. Can
+    #          be nil; in this case the server will be started on port 3000.
+    #
+    # +handler_name+:: A symbol containing the name of the handler to use. See
+    #                  HANDLER_NAMES for a list of supported handlers. Can be
+    #                  set to nil; in this case the best handler will be
+    #                  picked.
     def start(port, handler_name)
       require 'mime/types'
       require 'rack'

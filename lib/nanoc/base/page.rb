@@ -2,7 +2,9 @@ module Nanoc
 
   # A Nanoc::Page represents a page in a nanoc site. It has content and
   # attributes, as well as a path. It can also store the modification time to
-  # speed up compilation.
+  # speed up compilation. Each page has a list of page representations or reps
+  # (Nanoc::PageRep); compiling a page actually compiles all of it's
+  # representations..
   class Page
 
     # Default values for pages.

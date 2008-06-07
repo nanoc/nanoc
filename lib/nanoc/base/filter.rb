@@ -27,9 +27,9 @@ module Nanoc
 
     # Runs the filter. This method returns the filtered content.
     #
-    # Subclasses should override this method.
-    #
     # +content+:: The unprocessed content that should be filtered.
+    #
+    # Subclasses must implement this method.
     def run(content)
       raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
     end
