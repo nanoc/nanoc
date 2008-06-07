@@ -64,6 +64,34 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_modified
     # TODO implement
+
+    # needed for compilation:
+    # - page (obviously)
+    # - router (for getting disk path)
+    # - compiler (for stack)
+    # - site config (for output dir)
+
+    # Create page
+
+    # Assert not modified
+
+    # Compile page
+
+    # Assert modified
+
+    # Compile page again
+
+    # Assert not modified
+
+    # Edit and compile page
+
+    # Assert modified
+  end
+
+  def test_outdated
+    # TODO implement
+
+    # Also check data sources that don't provide mtimes
   end
 
   def test_disk_and_web_path
@@ -157,13 +185,48 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile
     # TODO implement
+    
+    # - check modified
+    # - check stack
+  end
+
+  def test_compile_without_layout
+    # TODO implement
   end
 
   def test_do_filter
     # TODO implement
   end
 
+  def test_do_filter_get_filters_for_stage
+    # TODO implement
+  end
+
+  def test_do_filter_chained
+    # TODO implement
+  end
+
+  def test_do_filter_with_unknown_filter
+    # TODO implement
+  end
+
   def test_do_layout
+    # TODO implement
+  end
+
+  def test_do_layout_without_layout
+    # TODO implement
+  end
+
+  def test_do_layout_with_unknown_filter
+    # TODO implement
+  end
+
+  def test_write_page
+    # TODO implement
+  end
+
+  def test_write_page_with_skip_output
     # TODO implement
   end
 
