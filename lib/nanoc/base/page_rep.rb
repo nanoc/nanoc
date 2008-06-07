@@ -1,18 +1,31 @@
 module Nanoc
 
-  # TODO document
+  # A Nanoc::PageRep is a single representation (rep) of a page (Nanoc::Page).
+  # A page can have multiple representations. A representation has its own
+  # attributes and its own output file. A single page can therefore have
+  # multiple output files, each run through a different set of filters with a
+  # different layout.
   class PageRep
 
-    # TODO document
+    # The page to which this representation belongs.
     attr_reader   :page
 
-    # TODO document
+    # A hash containing this page representation's attributes.
     attr_accessor :attributes
 
-    # TODO document
+    # This page representation's unique name.
     attr_reader   :name
 
-    # TODO document
+    # Creates a new page representation for the given page and with the given
+    # attributes.
+    #
+    # +page+:: The page to which the new representation will belong.
+    #
+    # +attributes+:: A hash containing the new page representation's
+    #                attributes. This hash must have been run through
+    #                Hash#clean before using it here.
+    #
+    # +name+:: The unique name for the new page representation.
     def initialize(page, attributes, name)
       # Set primary attributes
       @page           = page
@@ -33,22 +46,25 @@ module Nanoc
       @written        = false
     end
 
-    # TODO document
+    # Returns a proxy (Nanoc::PageRepProxy) for this page representation.
     def to_proxy
       @proxy ||= PageRepProxy.new(self)
     end
 
-    # TODO document
+    # Returns true if this page rep's output file was created during the last
+    # compilation session, or false if the output file did already exist.
     def created?
       @created
     end
 
-    # TODO document
+    # Returns true if this page rep's output file was modified during the last
+    # compilation session, or false if the output file wasn't changed.
     def modified?
       @modified
     end
 
-    # TODO document
+    # Returns true if this page rep's output file is outdated and must be
+    # regenerated, false otherwise.
     def outdated?
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
@@ -67,17 +83,32 @@ module Nanoc
       return false
     end
 
-    # TODO document
+    # Returns the path to the output file, including the path to the output
+    # directory specified in the site configuration, and including the
+    # filename and extension.
     def disk_path
       @disk_path ||= @page.site.router.disk_path_for(self)
     end
 
-    # TODO document
+    # Returns the path to the output file as it would be used in a web
+    # browser: starting with a slash (representing the web root), and only
+    # including the filename and extension if they cannot be ignored (i.e.
+    # they are not in the site configuration's list of index files).
     def web_path
       @web_path ||= @page.site.router.web_path_for(self)
     end
 
-    # TODO document
+    # Returns the attribute with the given name. This method will look in
+    # several places for the requested attribute:
+    #
+    # 1. This page representation's attributes;
+    # 2. The attributes of this page representation's page (but only if this
+    #    is the default representation);
+    # 3. The page defaults' representation corresponding to this page
+    #    representation;
+    # 4. The page defaults in general (but only if this is the default page
+    #    representation);
+    # 5. The hardcoded page defaults, if everything else fails.
     def attribute_named(name)
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
@@ -102,14 +133,18 @@ module Nanoc
       return Nanoc::Page::DEFAULTS[name]
     end
 
-    # TODO document
+    # Returns the page representation content at the given stage.
+    #
+    # +stage+:: The stage at which the content should be fetched. Can be
+    #           either +:pre+ or +:post+. To get the raw, uncompiled content,
+    #           use Nanoc::Page#content.
     def content(stage=:pre)
       compile(false) if stage == :pre  and !@filtered_pre
       compile(true)  if stage == :post and !@filtered_post
       @content[stage]
     end
 
-    # TODO document
+    # Returns the layout used for this page representation.
     def layout
       # Check whether layout is present
       return nil if attribute_named(:layout).nil?
@@ -121,7 +156,12 @@ module Nanoc
       @layout
     end
 
-    # TODO document
+    # Compiles the page representation. This will run the pre-filters, layout
+    # the page representation, run the post-filters, and write the page
+    # (unless +skip_output+ is set).
+    #
+    # +also_layout+:: true if the page representation should be laid out (and
+    #                 post-filtered), and false if not.
     def compile(also_layout=true)
       @modified = false
 
