@@ -62,6 +62,22 @@ class Nanoc::CLI::OptionParserTest < Test::Unit::TestCase
     assert_equal([ 'foo', 'bar' ], result[:arguments])
   end
 
+  def test_parse_with_long_valueful_equalsign_option
+    input       = %w( foo --aaa=xxx bar )
+    definitions = [
+      { :long => 'aaa', :short => 'a', :argument => :required }
+    ]
+
+    result = nil
+
+    assert_nothing_raised do
+      result = Nanoc::CLI::OptionParser.parse(input, definitions)
+    end
+
+    assert_equal({ :aaa => 'xxx' },  result[:options])
+    assert_equal([ 'foo', 'bar' ], result[:arguments])
+  end
+
   def test_parse_with_long_valueful_option_with_missing_value
     input       = %w( foo --aaa )
     definitions = [
