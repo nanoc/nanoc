@@ -175,7 +175,7 @@ module Nanoc::DataSources
         io.write("-----\n")
         io.write(page.attributes.to_split_yaml + "\n")
         io.write("-----\n")
-        io.write(page.content(:raw))
+        io.write(page.content)
       end
     end
 

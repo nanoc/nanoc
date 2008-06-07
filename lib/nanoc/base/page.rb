@@ -25,6 +25,9 @@ module Nanoc
     # The child pages of this page.
     attr_accessor :children
 
+    # This page's raw, uncompiled content.
+    attr_reader   :content
+
     # A hash containing this page's attributes.
     attr_accessor :attributes
 
@@ -49,7 +52,7 @@ module Nanoc
     def initialize(content, attributes, path, mtime=nil)
       # Set primary attributes
       @attributes     = attributes.clean
-      @content        = { :raw => content, :pre => content, :post => nil }
+      @content        = content
       @path           = path.cleaned_path
       @mtime          = mtime
 
@@ -89,13 +92,6 @@ module Nanoc
       return @attributes[name] if @attributes.has_key?(name)
       return @site.page_defaults.attributes[name] if @site.page_defaults.attributes.has_key?(name)
       return DEFAULTS[name]
-    end
-
-    # Returns the page's content in the given stage (+:raw+, +:pre+, +:post+)
-    def content(stage=:pre)
-      compile(false) if stage == :pre  and !@filtered_pre
-      compile(true)  if stage == :post and !@filtered_post
-      @content[stage]
     end
 
     # TODO document

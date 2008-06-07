@@ -20,7 +20,7 @@ module Nanoc
       @name           = name
 
       # Get page content from page
-      @content        = { :pre => page.content(:raw), :post => nil }
+      @content        = { :pre => page.content, :post => nil }
 
       # Not modified, not created by default
       @modified       = false
