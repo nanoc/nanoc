@@ -81,6 +81,29 @@ class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
     )
   end
 
+  def test_pages_with_tag
+    # Create site
+    site = TestSite.new
+
+    # Create pages
+    pages = [
+      Nanoc::Page.new('page 1', { :tags => [ :foo ]}, '/page1/'),
+      Nanoc::Page.new('page 2', { :tags => [ :bar ]}, '/page2/'),
+      Nanoc::Page.new('page 3', { :tags => [ :foo, :bar ]}, '/page3/')
+    ]
+    pages.each { |p| p.site = site }
+    @pages = pages.map { |p| p.to_proxy }
+
+    # Find pages
+    pages_with_foo_tag = pages_with_tag(:foo)
+
+    # Check
+    assert_equal(
+      [ pages[0], pages[2] ].map { |p| p.to_proxy },
+      pages_with_foo_tag
+    )
+  end
+
   def test_link_for_tag
     assert_equal(
       %[<a href="http://stoneship.org/tags/foobar" rel="tag">foobar</a>],
