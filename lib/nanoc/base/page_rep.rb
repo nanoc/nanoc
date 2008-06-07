@@ -4,17 +4,6 @@ module Nanoc
   class PageRep
 
     # TODO document
-    DEFAULTS = {
-      :custom_path  => nil,
-      :extension    => 'html',
-      :filename     => 'index',
-      :filters_pre  => [],
-      :filters_post => [],
-      :layout       => 'default',
-      :skip_output  => false
-    }
-
-    # TODO document
     attr_reader   :page
 
     # TODO document
