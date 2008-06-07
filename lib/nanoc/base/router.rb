@@ -15,6 +15,8 @@ module Nanoc
     # be relative to the web root (i.e. should not include any references to
     # the output directory). There is no need to let this method handle custom
     # paths.
+    #
+    # Subclasses must implement this method.
     def path_for(page_rep)
       raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for.")
     end
