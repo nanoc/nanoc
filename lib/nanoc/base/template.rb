@@ -1,7 +1,9 @@
 module Nanoc
 
   # A Nanoc::Template represents a template, which can be used for creating
-  # new pages (but pages don't need to be generated off pages).
+  # new pages. Pages don't necessary have to be created using templates, but
+  # they can be useful for generating pages where you only have to "fill in
+  # the blanks".
   class Template
 
     # The Nanoc::Site this template belongs to.

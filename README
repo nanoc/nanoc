@@ -8,11 +8,51 @@ Markdown, etc.
 == Documentation
 
 nanoc's web site, which can be found at http://nanoc.stoneship.org, contains a
-tutorial and a manual to help you get started with nanoc.
+few useful resources to help you get started with nanoc:
 
-Hackers that simply love poking around in other people's source code should
-start by taking a look at the documentation for Nanoc::Site, which pretty much
-is the central class in nanoc.
+* The tutorial at http://nanoc.stoneship.org/help/tutorial
+* The manual at http://nanoc.stoneship.org/help/manual
+
+It is probably also worth checking out and perhaps subscribing to the
+discussion groups:
+
+* The discussion group in English at http://groups.google.com/group/nanoc
+* The discussion group in Spanish at http://groups.google.com/group/nanoc-es
+
+=== Source Code Documentation
+
+The source code is structured in a few directories:
+
+* *bin* contains the commandline tool aptly named +nanoc+
+* *lib*
+  * *nanoc*
+    * *base* contains the bare essentials necessary for nanoc to function
+    * *cli* contains the commandline interface
+    * *data_sources* contains the standard data sources (Nanoc::DataSource
+      subclasses), such as the filesystem data source
+    * *extensions* contains extensions, which provide functionality some sites
+      may find useful, such as the blogging and tagging extensions
+    * *extra* contains stuff that is not needed by nanoc itself, but which may
+      be used by extensions, data sources, filters or routers.
+    * *filters* contains the standard filters (Nanoc::Filter subclasses) such
+      as ERB, Markdown, Haml, ...
+    * *routers* contains the standard routers (Nanoc::Router subclasses)
+* *test* contains test fixtures as well as testing code, structured in the
+  same way as lib/nanoc
+
+The namespaces (modules) are organised like this:
+
+* *Nanoc* is the namespace for everything nanoc-related (obviously). The
+  classes in 'lib/nanoc/base' and 'lib/nanoc/extra' are part of this module
+  (not Nanoc::Base which does not exist)
+  * *CLI* containing everything related to the commandline tool.
+  * *DataSources* contains the data sources
+  * *Extensions* contains the extensions
+  * *Filters* contains the filters
+  * *Routers* contains the routers
+
+The central class in nanoc is Nanoc::Site, so you should start there if you
+want to explore nanoc from a technical perspective.
 
 == Contributors
 
