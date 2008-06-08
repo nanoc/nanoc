@@ -23,6 +23,12 @@ module Nanoc
   # +router+:: The identifier of the router that will be used for determining
   #            page paths.
   #
+  # +index_filenames+:: A list of filenames that will be stripped off full
+  #                     page paths to create cleaner URLs (for example,
+  #                     '/about/' will be used instead of
+  #                     '/about/index.html'). The default value should be okay
+  #                     in most cases.
+  #
   # A site also has several helper classes:
   #
   # * +router+ is a Nanoc::Router subclass instance used for determining page
