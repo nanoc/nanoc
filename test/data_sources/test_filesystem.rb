@@ -75,7 +75,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
   def test_pages
     with_temp_site do |site|
       assert_nothing_raised do
-        assert_equal([ 'A New Root Page' ], site.pages.map { |page| page.attribute_named(:title) })
+        assert_equal([ 'Home' ], site.pages.map { |page| page.attribute_named(:title) })
       end
     end
   end
@@ -179,7 +179,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
         assert_equal('/default/', layout.path)
         assert_equal('erb', layout.attribute_named(:filter))
-        assert(layout.content.include?('<title><%= @page.title %></title>'))
+        assert(layout.content.include?('<%= @page.title %></title>'))
       end
     end
   end

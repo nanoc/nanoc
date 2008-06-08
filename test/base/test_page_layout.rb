@@ -35,7 +35,7 @@ class Nanoc::PageLayoutTest < Test::Unit::TestCase
 
       assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
-      assert_match(/This page is called "A New Root Page"./, File.read('output/index.html'))
+      assert_match(/This page is called "A New Root Page"/, File.read('output/index.html'))
     end
   end
 

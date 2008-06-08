@@ -20,11 +20,11 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
 
           # Run filter (assigns without @)
           result = filter.run('%p= page.title')
-          assert_equal("<p>A New Root Page</p>\n", result)
+          assert_equal("<p>Home</p>\n", result)
 
           # Run filter (assigns with @)
           result = filter.run('%p= @page.title')
-          assert_equal("<p>A New Root Page</p>\n", result)
+          assert_equal("<p>Home</p>\n", result)
         end
       end
     end
