@@ -14,9 +14,9 @@ module Nanoc
     # The time where the code was last modified.
     attr_reader :mtime
 
-    # Creates a new set of page defaults. +attributes+ is the metadata that
-    # individual pages will override. +mtime+ is the time when the page
-    # defaults were last modified (optional).
+    # Creates a new code object. +data+ is the raw source code, which will be
+    # executed before compilation. +mtime+ is the time when the code was last
+    # modified (optional).
     def initialize(data, mtime=nil)
       @data  = data
       @mtime = mtime
