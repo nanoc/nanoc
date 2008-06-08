@@ -1,7 +1,26 @@
 class Hash
 
   # Converts this hash into YAML format, splitting the YAML output into a
-  # 'builtin' and a 'custom' section.
+  # 'builtin' and a 'custom' section. A key that is present in
+  # Nanoc::Page::DEFAULTS will be considered a 'default' key; all other keys
+  # will be put in the 'Custom' section.
+  #
+  # For example, the hash:
+  #
+  #   {
+  #     :title       => 'My Cool Page',
+  #     :filters_pre => [ 'foo', 'bar' ]
+  #   }
+  #
+  # will be converted into:
+  #
+  #   # Built-in
+  #   filters_pre: [ 'foo', 'bar' ]
+  #    
+  #   # Custom
+  #   title: 'My Cool Page'
+  #
+  # as +filters_pre+ is considered a 'default' key while +title+ is not.
   def to_split_yaml
     # Get list of built-in keys
     builtin_keys = Nanoc::Page::DEFAULTS

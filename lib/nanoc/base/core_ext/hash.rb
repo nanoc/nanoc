@@ -10,6 +10,25 @@ class Hash
   # * All keys are converted to symbols
   # * Value strings 'true', 'false' and 'none' are converted into +true+,
   #   +false+ and +nil+, respectively
+  #
+  # Hashes are cleaned recursively, so the value of a hash pair will also be
+  # cleaned if the value is a hash.
+  #
+  # For example, the following hash:
+  #
+  #   {
+  #     'foo'       => 'bar',
+  #     :created_on => '2008-05-19',
+  #     :layout     => 'none'
+  #   }
+  #
+  # will be converted into:
+  #
+  #   {
+  #     :foo        => 'bar',
+  #     :created_on => Date.parse('2008-05-19'),
+  #     :layout     => nil
+  #   }
   def clean
     inject({}) do |hash, (key, value)|
       real_key = key.to_s
@@ -32,7 +51,24 @@ class Hash
     end
   end
 
-  # Returns the hash where all keys are converted to strings.
+  # Returns the hash where all keys are converted to strings. Hash keys are
+  # converted to strings recursively, so the keys of a value of a hash pair
+  # will also be converted to strings if the value is a hash.
+  #
+  # For example, the following hash:
+  #
+  #   {
+  #     'foo' => 'bar',
+  #     :baz  => 'quux'
+  #   }
+  #
+  # will be converted into:
+  #
+  #   {
+  #     :foo  => 'bar',
+  #     :baz  => 'quux'
+  #   }
+  #
   def stringify_keys
     inject({}) do |hash, (key, value)|
       hash.merge(key.to_s => value.is_a?(Hash) ? value.stringify_keys : value)
