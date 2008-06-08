@@ -2,6 +2,163 @@ module Nanoc::CLI
 
   class CreateSiteCommand < Command # :nodoc:
 
+    DEFAULT_PAGE = <<EOS
+<h1>A Brand New nanoc Site</h1>
+<p>You&#8217;ve just created a new nanoc site. The page you are looking at right now is the home page for your site (and it&#8217;s probably the only page).</p>
+<p>To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
+<ul>
+  <li><strong>Change this page&#8217;s content</strong> by editing &#8220;content.txt&#8221; file in the &#8220;content&#8221; directory. This is the actual page content, and therefore doesn&#8217;t include the header, sidebar or style information (those are part of the layout).</li>
+  <li><strong>Change the layout</strong>, which is the &#8220;default.txt&#8221; file in the &#8220;layouts/default&#8221; directory, and create something unique (and hopefully less bland).</li>
+</ul>
+<p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
+EOS
+
+    DEFAULT_LAYOUT = <<EOS
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>A Brand New nanoc Site - <%= @page.title %></title>
+    <style type="text/css" media="screen">
+      * {
+        margin: 0;
+        padding: 0;
+        
+        font-family: Helvetica, Arial, sans-serif;
+      }
+      
+      body {
+        background: #ccc;
+      }
+      
+      a {
+        text-decoration: none;
+      }
+      
+      a:link,
+      a:visited {
+        color: #f30;
+      }
+      
+      a:hover {
+        color: #f90;
+      }
+      
+      #main {
+        position: absolute;
+        
+        top: 20px;
+        left: 20px;
+        
+        padding: 30px 40px 20px 20px;
+        
+        width: 580px;
+        
+        border-top: 10px solid #f90;
+        
+        background: #fff;
+      }
+      
+      #main h1 {
+        font-size: 50px;
+        
+        letter-spacing: -3px;
+        
+        border-bottom: 3px solid #f30;
+        
+        padding-bottom: 7px;
+        margin-bottom: 20px;
+      }
+      
+      #main p {
+        margin-top: 20px;
+        
+        font-size: 16px;
+        
+        line-height: 20px;
+        
+        color: #333;
+      }
+      
+      #main strong {
+        text-transform: uppercase;
+        
+        font-size: 14px;
+        
+        color: #000;
+      }
+      
+      #main ul {
+        margin: 20px 0;
+      }
+      
+      #main li {
+        margin: 20px 0 20px 20px;
+
+        font-size: 16px;
+        
+        line-height: 20px;
+        
+        color: #333;
+      }
+      
+      #sidebar {
+        position: absolute;
+        
+        top: 60px;
+        left: 640px;
+        
+        width: 220px;
+        
+        padding: 10px 10px 0 10px;
+        
+        border-top: 6px solid #f30;
+        
+        background: #eee;
+      }
+      
+      #sidebar h2 {
+        font-size: 14px;
+        
+        text-transform: uppercase;
+        
+        color: #333;
+        
+        line-height: 20px;
+      }
+      
+      #sidebar ul {
+        padding: 10px 0;
+      }
+      
+      #sidebar li {
+        font-size: 14px;
+        line-height: 20px;
+        
+        list-style-type: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+<%= @page.content %>
+    </div>
+    <div id="sidebar">
+      <h2>Documentation</h2>
+      <ul>
+        <li><a href="http://nanoc.stoneship.org/help/tutorial/">Tutorial</a></li>
+        <li><a href="http://nanoc.stoneship.org/help/manual/">Manual</a></li>
+      </ul>
+      <h2>Community</h2>
+      <ul>
+        <li><a href="http://groups.google.com/group/nanoc/">Discussion Group</a></li>
+        <li><a href="http://groups.google.com/group/nanoc-es/">Discussion Group (Spanish)</a></li>
+        <li><a href="http://nanoc.stoneship.org/trac/">Wiki</a></li>
+      </ul>
+    </div>
+  </body>
+</html>
+EOS
+
     def name
       'create_site'
     end
@@ -125,8 +282,8 @@ module Nanoc::CLI
 
       # Create page
       page = Nanoc::Page.new(
-        "I'm a brand new root page. Please edit me!\n",
-        { :title => 'A New Root Page' },
+        DEFAULT_PAGE,
+        { :title => 'Home' },
         '/'
       )
       page.site = site
@@ -140,14 +297,7 @@ module Nanoc::CLI
 
       # Create layout
       layout = Nanoc::Layout.new(
-        "<html>\n" +
-        "  <head>\n" +
-        "    <title><%= @page.title %></title>\n" +
-        "  </head>\n" +
-        "  <body>\n" +
-        "<%= @page.content %>\n" +
-        "  </body>\n" +
-        "</html>\n",
+        DEFAULT_LAYOUT,
         { :filter => 'erb' },
         '/default/'
       )
