@@ -85,45 +85,11 @@ module Nanoc
       @router = @router_class.new(self)
 
       # Initialize data
+      @page_defaults      = PageDefaults.new({})
+      @page_defaults.site = self
       @pages              = []
       @layouts            = []
       @templates          = []
-      @page_defaults      = PageDefaults.new({})
-      @page_defaults.site = self
-
-      # Set not loaded
-      @code_loaded = false
-      @data_loaded = false
-    end
-
-    # Loads the custom site code. This method will be called as soon as the
-    # Nanoc::Site instance is created (because the custom site code could
-    # contain the definition of a custom router). It is not necessary to
-    # explicitly call this method.
-    def load_code(force=false)
-      # Don't load code twice
-      return if @code_loaded and !force
-
-      @data_source.loading do
-        # Get code
-        @code = @data_source.code
-        if @code.is_a? String
-          warn(
-            "In nanoc 2.1, DataSource#code should return a Code object. Future versions will not support these outdated data sources.",
-            'DEPRECATION WARNING'
-          )
-          @code = Code.new(code)
-        end
-        @code.site = self
-
-        # Execute code
-        # FIXME move responsibility for loading site code elsewhere, so
-        # potentially dangerous code can be put in a sandbox.
-        @code.load
-      end
-
-      # Set loaded
-      @code_loaded = true
     end
 
     # Loads the site data. This will query the Nanoc::DataSource associated
@@ -135,57 +101,17 @@ module Nanoc
     #           loaded before, to circumvent caching issues.
     def load_data(force=false)
       # Don't load data twice
+      @data_loaded ||= false
       return if @data_loaded and !force
 
       # Load code
       load_code(force)
 
-      # Load data
-      @data_source.loading do
-        # Page defaults
-        @page_defaults = @data_source.page_defaults
-        if @page_defaults.is_a? Hash
-          warn(
-            "In nanoc 2.1, DataSource#page_defaults should return a Nanoc::PageDefaults object. Future versions will not support these outdated data sources.",
-            'DEPRECATION WARNING'
-          )
-          @page_defaults = PageDefaults.new(@page_defaults)
-        end
-        @page_defaults.site = self
-
-        # Pages
-        @pages = @data_source.pages
-        if @pages.any? { |p| p.is_a? Hash }
-          warn(
-            "In nanoc 2.1, DataSource#pages should return an array of Nanoc::Page objects. Future versions will not support these outdated data sources.",
-            'DEPRECATION WARNING'
-          )
-          @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
-        end
-        @pages.each { |p| p.site = self }
-
-        # Layouts
-        @layouts = @data_source.layouts
-        if @layouts.any? { |l| l.is_a? Hash }
-          warn(
-            "In nanoc 2.1, DataSource#layouts should return an array of Nanoc::Layout objects. Future versions will not support these outdated data sources.",
-            'DEPRECATION WARNING'
-          )
-          @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
-        end
-        @layouts.each { |l| l.site = self }
-
-        # Templates
-        @templates = @data_source.templates
-        if @templates.any? { |t| t.is_a? Hash }
-          warn(
-            "In nanoc 2.1, DataSource#templates should return an array of Nanoc::Template objects. Future versions will not support these outdated data sources.",
-            'DEPRECATION WARNING'
-          )
-          @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
-        end
-        @templates.each { |t| t.site = self }
-      end
+      # Load pieces
+      load_page_defaults
+      load_pages
+      load_layouts
+      load_templates
 
       # Setup child-parent links
       @pages.each do |page|
@@ -201,6 +127,111 @@ module Nanoc
 
       # Set loaded
       @data_loaded = true
+    end
+
+  private
+
+    def load_code(force=false)
+      # Don't load code twice
+      @code_loaded ||= false
+      return if @code_loaded and !force
+
+      @data_source.loading do
+        # Get code
+        @code = @data_source.code
+
+        # Fix code if outdated
+        if @code.is_a? String
+          warn_data_source('Code', 'code', false)
+          @code = Code.new(code)
+        end
+
+        # Set site
+        @code.site = self
+
+        # Execute code
+        # FIXME move responsibility for loading site code elsewhere
+        @code.load
+      end
+
+      # Set loaded
+      @code_loaded = true
+    end
+
+    # TODO document
+    def load_page_defaults
+      @data_source.loading do
+        # Get page defaults
+        @page_defaults = @data_source.page_defaults
+
+        # Fix page defaults if outdated
+        if @page_defaults.is_a? Hash
+          warn_data_source('PageDefaults', 'page_defaults', false)
+          @page_defaults = PageDefaults.new(@page_defaults)
+        end
+
+        # Set site
+        @page_defaults.site = self
+      end
+    end
+
+    # TODO document
+    def load_pages
+      @data_source.loading do
+        # Get pages
+        @pages = @data_source.pages
+
+        # Fix pages if outdated
+        if @pages.any? { |p| p.is_a? Hash }
+          warn_data_source('Page', 'pages', true)
+          @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
+        end
+
+        # Set site
+        @pages.each { |p| p.site = self }
+      end
+    end
+
+    # TODO document
+    def load_layouts
+      @data_source.loading do
+        # Get layouts
+        @layouts = @data_source.layouts
+
+        # Fix layouts if outdated
+        if @layouts.any? { |l| l.is_a? Hash }
+          warn_data_source('Layout', 'layouts', true)
+          @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
+        end
+
+        # Set site
+        @layouts.each { |l| l.site = self }
+      end
+    end
+
+    # TODO document
+    def load_templates
+      @data_source.loading do
+        # Get templates
+        @templates = @data_source.templates
+        
+        # Fix templates if outdated
+        if @templates.any? { |t| t.is_a? Hash }
+          warn_data_source('Template', 'templates', true)
+          @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
+        end
+
+        # Set site
+        @templates.each { |t| t.site = self }
+      end
+
+    end
+
+    def warn_data_source(class_name, method_name, is_array)
+      warn(
+        "In nanoc 2.1, DataSource##{method_name} should return #{is_array ? 'an array of' : 'a' } Nanoc::#{class_name} object#{is_array ? 's' : ''}. Future versions will not support these outdated data sources.",
+        'DEPRECATION WARNING'
+      )
     end
 
   end
