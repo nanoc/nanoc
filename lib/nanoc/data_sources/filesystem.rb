@@ -76,7 +76,6 @@ module Nanoc::DataSources
 
       # Create page defaults
       File.open('meta.yaml', 'w') { |io| }
-      yield('meta.yaml')
 
       # Create templates
       FileUtils.mkdir_p('templates')
@@ -87,7 +86,6 @@ module Nanoc::DataSources
       # Create code
       FileUtils.mkdir_p('lib')
       File.open('lib/default.rb', 'w') { |io| }
-      yield('lib/default.rb')
     end
 
     def destroy # :nodoc:
