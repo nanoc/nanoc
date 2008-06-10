@@ -67,7 +67,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def setup
-      not_implemented('setup', :required)
+      not_implemented('setup')
     end
 
     # Removes all data stored by this data source. This method undoes the
@@ -75,7 +75,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def destroy
-      not_implemented('destroy', :required)
+      not_implemented('destroy')
     end
 
     # Updated the content stored in this site to a newer version. A newer
@@ -93,7 +93,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def pages
-      not_implemented('pages', :required)
+      not_implemented('pages')
     end
 
     # Saves the given page in the data source, creating it if it doesn't exist
@@ -101,7 +101,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def save_page(page)
-      not_implemented('save_page', :optional)
+      not_implemented('save_page')
     end
 
     # Changes the path of the given page to the given new path. When changing
@@ -109,14 +109,14 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def move_page(page, new_path)
-      not_implemented('move_page', :optional)
+      not_implemented('move_page')
     end
 
     # Removes the given page from the data source.
     #
     # Subclasses must implement this method.
     def delete_page(page)
-      not_implemented('delete_page', :optional)
+      not_implemented('delete_page')
     end
 
     ########## Page defaults
@@ -126,14 +126,14 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def page_defaults
-      not_implemented('page_defaults', :required)
+      not_implemented('page_defaults')
     end
 
     # Saves the given page defaults in the data source.
     #
     # Subclasses must implement this method.
     def save_page_defaults(page_defaults)
-      not_implemented('save_page_defaults', :optional)
+      not_implemented('save_page_defaults')
     end
 
     ########## Layouts
@@ -143,7 +143,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def layouts
-      not_implemented('layouts', :required)
+      not_implemented('layouts')
     end
 
     # Saves the given layout in the data source, creating it if it doesn't
@@ -151,7 +151,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def save_layout(layout)
-      not_implemented('save_layout', :optional)
+      not_implemented('save_layout')
     end
 
     # Changes the path of the given layout to the given new path. When
@@ -160,14 +160,14 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def move_layout(layout, new_path)
-      not_implemented('move_layout', :optional)
+      not_implemented('move_layout')
     end
 
     # Removes the given layout from the data source.
     #
     # Subclasses must implement this method.
     def delete_layout(layout)
-      not_implemented('delete_layout', :optional)
+      not_implemented('delete_layout')
     end
 
     ########## Templates
@@ -177,7 +177,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def templates
-      not_implemented('templates', :required)
+      not_implemented('templates')
     end
 
     # Saves the given template in the data source, creating it if it doesn't
@@ -185,7 +185,7 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def save_template(template)
-      not_implemented('save_template', :optional)
+      not_implemented('save_template')
     end
 
     # Changes the name of the given template to the given new name. When
@@ -194,14 +194,14 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def move_template(template, new_name)
-      not_implemented('move_template', :optional)
+      not_implemented('move_template')
     end
 
     # Removes the given template from the data source.
     #
     # Subclasses must implement this method.
     def delete_template(template)
-      not_implemented('delete_template', :optional)
+      not_implemented('delete_template')
     end
 
     ########## Code
@@ -213,29 +213,23 @@ module Nanoc
     #
     # Subclasses must implement this method.
     def code
-      not_implemented('code', :required)
+      not_implemented('code')
     end
 
     # Saves the given code in the data source.
     #
     # Subclasses must implement this method.
     def save_code(code)
-      not_implemented('save_code', :optional)
+      not_implemented('save_code')
     end
 
   private
 
-    def not_implemented(name, kind)
-      # Build message
-      case kind
-        when :required
-          message = "#{self.class} does not override ##{name}, which is required for this data source to be used."
-        when :optional
-          message = "#{self.class} does not override ##{name}, which is required for the kind of functionality you requested."
-      end
-
-      # Raise exception
-      raise NotImplementedError.new(message)
+    def not_implemented(name)
+      raise NotImplementedError.new(
+        "#{self.class} does not override ##{name}, which is required for " +
+        "this data source to be used."
+      )
     end
 
   end
