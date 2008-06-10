@@ -85,7 +85,7 @@ module Nanoc::CLI
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
       rescue Exception => e
         # Get page rep
-        page_rep = @base.site.compiler.stack[-1]
+        page_rep = @base.site.compiler.stack.select { |i| i.is_a?(Nanoc::PageRep) }[-1]
         page_rep_name = page_rep.nil? ? 'the site' : "#{page_rep.page.path} (rep #{page_rep.name})"
 
         # Build message
@@ -97,10 +97,7 @@ module Nanoc::CLI
         when Nanoc::Errors::CannotDetermineFilterError
           message = "Cannot determine filter for layout: #{e.message}"
         when Nanoc::Errors::RecursiveCompilationError
-          message = "Recursive call to page content. Page stack:"
-          @base.site.compiler.stack.each do |page_rep|
-            message << "  - #{page_rep.page.path} (rep #{page_rep.name})"
-          end
+          message = "Recursive call to page content."
         when Nanoc::Errors::NoLongerSupportedError
           message = "No longer supported: #{e.message}"
         else
@@ -116,6 +113,15 @@ module Nanoc::CLI
         puts
         puts 'Message:'
         puts '  ' + message
+        puts
+        puts 'Page compilation stack:'
+        @base.site.compiler.stack.reverse.each do |item|
+          if item.is_a?(Nanoc::PageRep) # page rep
+            puts "  - [page]   #{item.page.path} (rep #{item.name})"
+          else # layout
+            puts "  - [layout] #{item.path}"
+          end
+        end
         puts
         puts 'Backtrace:'
         puts e.backtrace.map { |t| '  - ' + t }.join("\n")

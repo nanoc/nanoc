@@ -5,7 +5,21 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  class TestCompiler
+
+    attr_reader :stack
+
+    def initialize
+      @stack = []
+    end
+
+  end
+
   class TestSite
+
+    def compiler
+      @compiler ||= TestCompiler.new
+    end
 
     def config
       @config ||= {}

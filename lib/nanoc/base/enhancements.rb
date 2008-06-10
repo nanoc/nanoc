@@ -23,7 +23,10 @@ def render(name_or_path, other_assigns={})
   filter = filter_class.new(@page_rep, @page, @site, other_assigns)
 
   # Layout
-  filter.run(layout.content)
+  @site.compiler.stack.push(layout)
+  result = filter.run(layout.content)
+  @site.compiler.stack.pop
+  result
 end
 
 # Convenience function for cd'ing in and out of a directory
