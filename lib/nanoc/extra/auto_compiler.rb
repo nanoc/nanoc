@@ -44,6 +44,16 @@ END
 		<p>If you think this is a bug in nanoc, please do <a href="http://nanoc.stoneship.org/trac/newticket">report it</a>&mdash;thanks!</p>
 		<p>Message:</p>
 		<blockquote><p><%=h message %></p></blockquote>
+		<p>Page compilation stack:</p>
+		<ol>
+<% @site.compiler.stack.reverse.each do |item| %>
+<%   if item.is_a?(Nanoc::PageRep) # page rep %>
+			<li><strong>Page</strong> <%= item.page.path %> (rep <%= item.name %>)</li>
+<% else # layout %>
+			<li><strong>Layout</strong> <%= item.path %></li>
+<% end %>
+<% end %>
+		</ol>
 		<p>Backtrace:</p>
 		<ol>
 <% exception.backtrace.each do |line| %>
@@ -206,9 +216,6 @@ END
         message = "Cannot determine filter for layout: #{exception.message}"
       when Nanoc::Errors::RecursiveCompilationError
         message = "Recursive call to page content. Page stack:"
-        @base.site.compiler.stack.each do |page_rep|
-          message << "  - #{page_rep.path}"
-        end
       when Nanoc::Errors::NoLongerSupportedError
         message = "No longer supported: #{exception.message}"
       else
@@ -236,7 +243,7 @@ END
       # Recompile page rep
       begin
         @site.compiler.run(page_rep.page, @include_outdated)
-      rescue => exception
+      rescue Exception => exception
         return serve_500(page_rep.web_path, exception)
       end
 

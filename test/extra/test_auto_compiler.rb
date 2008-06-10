@@ -57,6 +57,12 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   class TestCompiler
 
+    attr_reader :stack
+
+    def initialize
+      @stack = []
+    end
+
     def run(page, include_outdated)
       page.reps.each { |r| r.content(:post) }
     end
@@ -83,7 +89,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     require 'rack'
 
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(self)
+    autocompiler = Nanoc::AutoCompiler.new(nil)
 
     # Check handler without requirements
     assert_equal(
@@ -110,7 +116,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_h
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(self)
+    autocompiler = Nanoc::AutoCompiler.new(nil)
 
     # Check HTML escaping
     assert_equal(
@@ -123,7 +129,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     require 'mime/types'
 
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(self)
+    autocompiler = Nanoc::AutoCompiler.new(nil)
 
     # Create known test file
     File.open('tmp/foo.html', 'w') { |io| }
@@ -142,7 +148,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_serve_400
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(self)
+    autocompiler = Nanoc::AutoCompiler.new(nil)
 
     # Fill response for 404
     response = autocompiler.instance_eval { serve_404('/foo/bar/baz/') }
@@ -155,7 +161,8 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_serve_500
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(nil)
+    site = TestSite.new
+    autocompiler = Nanoc::AutoCompiler.new(site)
 
     # Fill response for 500
     response = autocompiler.instance_eval do
@@ -175,10 +182,8 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_serve_page_rep
     if_have('mime/types') do
-      # Create site
-      site = TestSite.new
-
       # Create autocompiler
+      site = TestSite.new
       autocompiler = Nanoc::AutoCompiler.new(site)
 
       begin
