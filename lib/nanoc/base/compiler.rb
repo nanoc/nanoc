@@ -28,14 +28,8 @@ module Nanoc
       @stack = []
       pages = (page.nil? ? @site.pages : [ page ])
 
-      # Compile
-      pages.each do |current_page|
-        # Compile page
-        current_page.compile if current_page.outdated? or include_outdated
-
-        # Notify
-        yield(current_page) if block_given?
-      end
+      # Compile all pages
+      pages.each { |p| p.compile if p.outdated? or include_outdated }
     end
 
   end

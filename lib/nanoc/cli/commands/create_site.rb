@@ -221,6 +221,8 @@ EOS
         site_setup
         site_populate
       end
+
+      puts "Created a blank nanoc site at '#{path}'. Enjoy!" unless ENV['QUIET']
     end
 
   protected
@@ -230,7 +232,6 @@ EOS
     def site_create_minimal(data_source)
       # Create output
       FileUtils.mkdir_p('output')
-      Nanoc::CLI::Logger.instance.file(:high, :create, 'output')
 
       # Create config
       File.open('config.yaml', 'w') do |io|
@@ -238,7 +239,6 @@ EOS
         io.write "data_source: \"#{data_source}\"\n"
         io.write "router:      \"default\"\n"
       end
-      Nanoc::CLI::Logger.instance.file(:high, :create, 'config.yaml')
 
       # Create rakefile
       File.open('Rakefile', 'w') do |io|
@@ -248,7 +248,6 @@ EOS
         io.write "  puts 'This is an example rake task.'\n"
         io.write "end\n"
       end
-      Nanoc::CLI::Logger.instance.file(:high, :create, 'Rakefile')
 
       # Create tasks
       FileUtils.mkdir_p('tasks')
@@ -257,7 +256,6 @@ EOS
         io.write "  puts 'This is an example rake task in tasks/default.rake.'\n"
         io.write "end\n"
       end
-      Nanoc::CLI::Logger.instance.file(:high, :create, 'tasks/default.rake')
     end
 
     # Sets up the site's data source, i.e. creates the bare essentials for
@@ -268,9 +266,7 @@ EOS
 
       # Set up data source
       site.data_source.loading do
-        site.data_source.setup do |filename|
-          Nanoc::CLI::Logger.instance.file(:high, :create, filename)
-        end
+        site.data_source.setup
       end
     end
 
