@@ -104,25 +104,13 @@ module Nanoc
       @data_loaded ||= false
       return if @data_loaded and !force
 
-      # Load code
-      load_code(force)
-
-      # Load pieces
-      load_page_defaults
-      load_pages
-      load_layouts
-      load_templates
-
-      # Setup child-parent links
-      @pages.each do |page|
-        # Get parent
-        parent_path = page.path.sub(/[^\/]+\/$/, '')
-        parent = @pages.find { |p| p.path == parent_path }
-        next if parent.nil? or page.path == '/'
-
-        # Link
-        page.parent = parent
-        parent.children << page
+      # Load all data
+      @data_source.loading do
+        load_code(force)
+        load_page_defaults
+        load_pages
+        load_layouts
+        load_templates
       end
 
       # Set loaded
@@ -136,23 +124,21 @@ module Nanoc
       @code_loaded ||= false
       return if @code_loaded and !force
 
-      @data_source.loading do
-        # Get code
-        @code = @data_source.code
+      # Get code
+      @code = @data_source.code
 
-        # Fix code if outdated
-        if @code.is_a? String
-          warn_data_source('Code', 'code', false)
-          @code = Code.new(code)
-        end
-
-        # Set site
-        @code.site = self
-
-        # Execute code
-        # FIXME move responsibility for loading site code elsewhere
-        @code.load
+      # Fix code if outdated
+      if @code.is_a? String
+        warn_data_source('Code', 'code', false)
+        @code = Code.new(code)
       end
+
+      # Set site
+      @code.site = self
+
+      # Execute code
+      # FIXME move responsibility for loading site code elsewhere
+      @code.load
 
       # Set loaded
       @code_loaded = true
@@ -160,73 +146,80 @@ module Nanoc
 
     # TODO document
     def load_page_defaults
-      @data_source.loading do
-        # Get page defaults
-        @page_defaults = @data_source.page_defaults
+      # Get page defaults
+      @page_defaults = @data_source.page_defaults
 
-        # Fix page defaults if outdated
-        if @page_defaults.is_a? Hash
-          warn_data_source('PageDefaults', 'page_defaults', false)
-          @page_defaults = PageDefaults.new(@page_defaults)
-        end
-
-        # Set site
-        @page_defaults.site = self
+      # Fix page defaults if outdated
+      if @page_defaults.is_a? Hash
+        warn_data_source('PageDefaults', 'page_defaults', false)
+        @page_defaults = PageDefaults.new(@page_defaults)
       end
+
+      # Set site
+      @page_defaults.site = self
     end
 
     # TODO document
     def load_pages
-      @data_source.loading do
-        # Get pages
-        @pages = @data_source.pages
+      # Get pages
+      @pages = @data_source.pages
 
-        # Fix pages if outdated
-        if @pages.any? { |p| p.is_a? Hash }
-          warn_data_source('Page', 'pages', true)
-          @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
-        end
-
-        # Set site
-        @pages.each { |p| p.site = self }
+      # Fix pages if outdated
+      if @pages.any? { |p| p.is_a? Hash }
+        warn_data_source('Page', 'pages', true)
+        @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
       end
+
+      # Set site
+      @pages.each { |p| p.site = self }
+
+      # Setup child-parent links
+      @pages.each do |page|
+        # Get parent
+        parent_path = page.path.sub(/[^\/]+\/$/, '')
+        parent = @pages.find { |p| p.path == parent_path }
+        next if parent.nil? or page.path == '/'
+
+        # Link
+        page.parent = parent
+        parent.children << page
+      end
+
+      # Build page representations
+      @pages.each { |p| p.build_page_reps }
     end
 
     # TODO document
     def load_layouts
-      @data_source.loading do
-        # Get layouts
-        @layouts = @data_source.layouts
+      # Get layouts
+      @layouts = @data_source.layouts
 
-        # Fix layouts if outdated
-        if @layouts.any? { |l| l.is_a? Hash }
-          warn_data_source('Layout', 'layouts', true)
-          @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
-        end
-
-        # Set site
-        @layouts.each { |l| l.site = self }
+      # Fix layouts if outdated
+      if @layouts.any? { |l| l.is_a? Hash }
+        warn_data_source('Layout', 'layouts', true)
+        @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
       end
+
+      # Set site
+      @layouts.each { |l| l.site = self }
     end
 
     # TODO document
     def load_templates
-      @data_source.loading do
-        # Get templates
-        @templates = @data_source.templates
-        
-        # Fix templates if outdated
-        if @templates.any? { |t| t.is_a? Hash }
-          warn_data_source('Template', 'templates', true)
-          @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
-        end
-
-        # Set site
-        @templates.each { |t| t.site = self }
+      # Get templates
+      @templates = @data_source.templates
+      
+      # Fix templates if outdated
+      if @templates.any? { |t| t.is_a? Hash }
+        warn_data_source('Template', 'templates', true)
+        @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
       end
 
+      # Set site
+      @templates.each { |t| t.site = self }
     end
 
+    # Raises a warning about an outdated data source method.
     def warn_data_source(class_name, method_name, is_array)
       warn(
         "In nanoc 2.1, DataSource##{method_name} should return #{is_array ? 'an array of' : 'a' } Nanoc::#{class_name} object#{is_array ? 's' : ''}. Future versions will not support these outdated data sources.",

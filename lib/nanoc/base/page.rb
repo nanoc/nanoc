@@ -74,6 +74,28 @@ module Nanoc
       @written        = false
     end
 
+    # TODO document
+    def build_page_reps
+      # Get list of rep names
+      rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
+      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
+      rep_names         = rep_names_default | rep_names_this
+
+      # Get list of reps
+      reps = rep_names.inject({}) do |memo, rep_name|
+        rep = (@attributes[:reps] || {})[rep_name]
+        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
+        is_bad ? memo : memo.merge(rep_name => rep || {})
+      end
+
+      # Build reps
+      @reps = []
+      reps.each_pair do |name, attrs|
+        @reps << PageRep.new(self, attrs, name)
+      end
+
+    end
+
     # Returns a proxy (Nanoc::PageProxy) for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
@@ -137,29 +159,6 @@ module Nanoc
     def compile(also_layout=true)
       # Compile all representations
       @reps.each { |r| r.compile(also_layout) }
-    end
-
-  private
-
-    def build_page_reps
-      # Get list of rep names
-      rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
-      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
-      rep_names         = rep_names_default | rep_names_this
-
-      # Get list of reps
-      reps = rep_names.inject({}) do |memo, rep_name|
-        rep = (@attributes[:reps] || {})[rep_name]
-        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
-        is_bad ? memo : memo.merge(rep_name => rep || {})
-      end
-
-      # Build reps
-      @reps = []
-      reps.each_pair do |name, attrs|
-        @reps << PageRep.new(self, attrs, name)
-      end
-
     end
 
   end
