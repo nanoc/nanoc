@@ -32,6 +32,8 @@ New:
   updated in the mean time
 * Page and layout mtimes can now be retrieved through page.mtime or
   layout.mtime
+* The entire compilation stack, which now includes rendered layouts as well,
+  is shown when an error occurs
 
 Changed:
 
