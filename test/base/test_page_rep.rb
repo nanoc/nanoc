@@ -7,7 +7,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   class TestRouter < Nanoc::Router
 
-    def path_for(page_rep)
+    def path_for_page_rep(page_rep)
       path      = page_rep.page.path
       filename  = page_rep.attribute_named(:filename)
       extension = page_rep.attribute_named(:extension)

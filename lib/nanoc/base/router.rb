@@ -17,18 +17,26 @@ module Nanoc
     # paths.
     #
     # Subclasses must implement this method.
-    def path_for(page_rep)
-      raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for.")
+    def path_for_page_rep(page_rep)
+      raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for_page_rep.")
+    end
+
+    # TODO document
+    def path_for_asset(asset)
+      raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for_asset.")
     end
 
     # Returns the web path for the given page representation, i.e. the page
     # rep's custom path or routed path with index filenames stripped.
-    def web_path_for(page_rep)
+    def web_path_for(obj)
       # Get actual path
-      path =   nil
-      path ||= page_rep.attributes[:custom_path]
-      path ||= page_rep.page.attribute_named(:custom_path) if page_rep.name == :default
-      path ||= path_for(page_rep)
+      path = obj.attributes[:custom_path]
+      if obj.is_a?(Nanoc::PageRep)
+        path ||= obj.page.attribute_named(:custom_path) if obj.name == :default
+        path ||= path_for_page_rep(obj)
+      else
+        path ||= path_for_asset(obj)
+      end
 
       # Try stripping each index filename
       @site.config[:index_filenames].each do |index_filename|
@@ -45,10 +53,10 @@ module Nanoc
 
     # Returns the disk path for the given page representation, i.e. the page's
     # custom path or routed path relative to the output directory.
-    def disk_path_for(page_rep)
+    def disk_path_for(obj)
       @site.config[:output_dir] + (
-        page_rep.attribute_named(:custom_path) ||
-        path_for(page_rep)
+        obj.attribute_named(:custom_path) ||
+        (obj.is_a?(Nanoc::PageRep) ? path_for_page_rep(obj) : path_for_asset(obj))
       )
     end
 
