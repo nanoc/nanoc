@@ -70,14 +70,15 @@ spec = Gem::Specification.new do |s|
 
   s.has_rdoc              = true
   s.extra_rdoc_files      = [ 'README' ]
-  s.rdoc_options          <<  '--title'   << 'nanoc'                  <<
-                              '--main'    << 'README'                 <<
-                              '--charset' << 'utf-8'                  <<
-                              '--exclude' << 'lib/nanoc/cli/commands' <<
-                              '--exclude' << 'lib/nanoc/data_sources' <<
-                              '--exclude' << 'lib/nanoc/filters'      <<
-                              '--exclude' << 'lib/nanoc/routers'      <<
-                              '--exclude' << 'test'                   <<
+  s.rdoc_options          <<  '--title'   << 'nanoc'                    <<
+                              '--main'    << 'README'                   <<
+                              '--charset' << 'utf-8'                    <<
+                              '--exclude' << 'lib/nanoc/cli/commands'   <<
+                              '--exclude' << 'lib/nanoc/binary_filters' <<
+                              '--exclude' << 'lib/nanoc/data_sources'   <<
+                              '--exclude' << 'lib/nanoc/filters'        <<
+                              '--exclude' << 'lib/nanoc/routers'        <<
+                              '--exclude' << 'test'                     <<
                               '--line-numbers'
 
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib}', '**', '*')]
