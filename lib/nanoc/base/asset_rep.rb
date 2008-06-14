@@ -69,8 +69,7 @@ module Nanoc
       return true if @asset.mtime > compiled_mtime
 
       # Outdated if dependencies outdated
-      # FIXME re-enable
-      #return true if @asset.site.asset_defaults.mtime and @asset.site.asset__defaults.mtime > compiled_mtime
+      return true if @asset.site.asset_defaults.mtime and @asset.site.asset__defaults.mtime > compiled_mtime
       return true if @asset.site.code.mtime and @asset.site.code.mtime > compiled_mtime
 
       return false
@@ -96,9 +95,16 @@ module Nanoc
         return @asset.attributes[name] if @asset.attributes.has_key?(name)
       end
 
-      # TODO Check in asset defaults' asset rep
+      # Check in asset defaults' asset rep
+      asset_default_reps = @asset.site.asset_defaults.attributes[:reps] || {}
+      asset_default_rep  = asset_default_reps[@name] || {}
+      return asset_default_rep[name] if asset_default_rep.has_key?(name)
 
-      # TODO Check in site defaults (global)
+      # Check in site defaults (global)
+      if @name == :default
+        asset_defaults_attrs = @asset.site.asset_defaults.attributes
+        return asset_defaults_attrs[name] if asset_defaults_attrs.has_key?(name)
+      end
 
       # Check in hardcoded defaults
       return Nanoc::Asset::DEFAULTS[name]
