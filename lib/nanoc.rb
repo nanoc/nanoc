@@ -65,6 +65,7 @@ end
 # Load base
 Nanoc.load('base', 'enhancements.rb')
 Nanoc.load('base', 'proxy.rb')
+Nanoc.load('base', 'proxies', '*.rb')
 Nanoc.load('base', 'core_ext', '*.rb')
 Nanoc.load('base', 'plugin.rb')
 Nanoc.load('base', '*.rb')
