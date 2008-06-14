@@ -29,6 +29,10 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
       @pages ||= []
     end
 
+    def assets
+      @assets ||= []
+    end
+
     def layouts
       @layouts ||= [
         Nanoc::Layout.new(
