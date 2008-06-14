@@ -17,7 +17,7 @@ module Nanoc::Routers
 
       # Add rep name if necessary
       unless page_rep.name == :default
-        path += page_rep.name.to_s
+        path += '-' + page_rep.name.to_s
       end
 
       # Add extension
