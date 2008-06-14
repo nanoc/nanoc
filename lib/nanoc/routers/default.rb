@@ -12,14 +12,18 @@ module Nanoc::Routers
       filename   = page_rep.attribute_named(:filename)
       extension  = page_rep.attribute_named(:extension)
 
-      # Build path
+      # Initialize path
       path = page_rep.page.path + filename
-      if page_rep.name == :default
-        path += '.' + extension
-      else
-        path += page_rep.name.to_s + '.' + extension
+
+      # Add rep name if necessary
+      unless asset_rep.name == :default
+        path += page_rep.name.to_s
       end
 
+      # Add extension
+      path += '.' + extension
+
+      # Done
       path
     end
 
@@ -27,16 +31,21 @@ module Nanoc::Routers
       # Get data we need
       extension     = asset_rep.attribute_named(:extension)
       modified_path = asset_rep.asset.path[0..-2]
+      version       = asset_rep.attribute_named(:version)
 
-      # Build path
+      # Initialize path
       assets_prefix = @site.config[:assets_prefix] || '/assets'
       path = assets_prefix + modified_path
-      if asset_rep.name == :default
-        path += '.' + extension
-      else
-        path += '-' + asset_rep.name.to_s + '.' + extension
+
+      # Add rep name if necessary
+      unless asset_rep.name == :default
+        path += '-' + asset_rep.name.to_s
       end
 
+      # Add extension
+      path += '.' + extension
+
+      # Done
       path
     end
 
