@@ -39,6 +39,9 @@ module Nanoc
 
   end
 
+  module BinaryFilters # :nodoc:
+  end
+
   module DataSources # :nodoc:
   end
 
