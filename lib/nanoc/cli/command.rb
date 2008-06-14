@@ -1,46 +1,66 @@
 module Nanoc::CLI
 
-  # TODO document
+  # Nanoc::CLI::Command represents a command that can be executed on the
+  # commandline. It is an abstract superclass for all commands.
   class Command
 
     attr_accessor :base
 
-    # TODO document
+    # Returns a string containing the name of thi command. Subclasses must
+    # implement this method.
     def name
       raise NotImplementedError.new("Command subclasses should override #name")
     end
 
-    # TODO document
+    # Returns an array of strings containing the aliases for this command.
+    # Subclasses must implement this method.
     def aliases
       raise NotImplementedError.new("Command subclasses should override #aliases")
     end
 
-    # TODO document
+    # Returns a string containing this command's short description, which
+    # should not be longer than 50 characters. Subclasses must implement this
+    # method.
     def short_desc
       raise NotImplementedError.new("Command subclasses should override #short_desc")
     end
 
-    # TODO document
+    # Returns a string containing this command's complete description, which
+    # should explain what this command does and how it works in detail.
+    # Subclasses must implement this method.
     def long_desc
       raise NotImplementedError.new("Command subclasses should override #long_desc")
     end
 
-    # TODO document
+    # Returns a string containing this command's usage. Subclasses must
+    # implement this method.
     def usage
       raise NotImplementedError.new("Command subclasses should override #usage")
     end
 
-    # TODO document
+    # Returns an array containing this command's option definitions. See the
+    # documentation for Nanoc::CLI::OptionParser for details on what option
+    # definitions look like. Subclasses may implement this method if the
+    # command has options.
     def option_definitions
       []
     end
 
-    # TODO document
+    # Executes the command. Subclasses must implement this method
+    # (obviously... what's the point of a command that can't be run?).
+    #
+    # +options+:: A hash containing the parsed commandline options. For
+    #             example, '--foo=bar' will be converted into { :foo => 'bar'
+    #             }. See the Nanoc::CLI::OptionParser documentation for
+    #             details.
+    #
+    # +arguments+:: An array of strings representing the commandline arguments
+    #               given to this command.
     def run(options, arguments)
       raise NotImplementedError.new("Command subclasses should override #run")
     end
 
-    # TODO document
+    # Returns the help text for this command.
     def help
       text = ''
 
@@ -75,7 +95,7 @@ module Nanoc::CLI
       text
     end
 
-    # TODO document
+    # Compares this command's name to the other given command's name. 
     def <=>(other)
       self.name <=> other.name
     end

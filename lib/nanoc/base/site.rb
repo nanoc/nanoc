@@ -128,7 +128,7 @@ module Nanoc
 
   private
 
-    # TODO document
+    # Loads this site's code and executes it.
     def load_code(force=false)
       # Don't load code twice
       @code_loaded ||= false
@@ -154,7 +154,7 @@ module Nanoc
       @code_loaded = true
     end
 
-    # TODO document
+    # Loads this site's page defaults.
     def load_page_defaults
       # Get page defaults
       @page_defaults = @data_source.page_defaults
@@ -169,7 +169,8 @@ module Nanoc
       @page_defaults.site = self
     end
 
-    # TODO document
+    # Loads this site's pages, sets up page child-parent relationships and
+    # builds each page's list of page representations.
     def load_pages
       # Get pages
       @pages = @data_source.pages
@@ -199,7 +200,7 @@ module Nanoc
       @pages.each { |p| p.build_reps }
     end
 
-    # TODO document
+    # Loads this site's asset defaults.
     def load_asset_defaults
       # Get page defaults
       @asset_defaults = @data_source.asset_defaults
@@ -212,7 +213,8 @@ module Nanoc
       @asset_defaults.site = self
     end
 
-    # TODO document
+    # Loads this site's assets and builds each asset's list of asset
+    # representations.
     def load_assets
       # Get assets
       @assets = @data_source.assets
@@ -227,7 +229,7 @@ module Nanoc
       @assets = []
     end  
 
-    # TODO document
+    # Loads this site's layouts.
     def load_layouts
       # Get layouts
       @layouts = @data_source.layouts
@@ -242,7 +244,7 @@ module Nanoc
       @layouts.each { |l| l.site = self }
     end
 
-    # TODO document
+    # Loads this site's templates.
     def load_templates
       # Get templates
       @templates = @data_source.templates
