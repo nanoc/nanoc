@@ -21,6 +21,7 @@ module Nanoc
       @asset_rep      = asset_rep
       @asset          = asset
       @pages          = site.pages.map   { |p| p.to_proxy }
+      @assets         = site.assets.map  { |a| a.to_proxy }
       @layouts        = site.layouts.map { |l| l.to_proxy }
       @config         = site.config
       @site           = site
