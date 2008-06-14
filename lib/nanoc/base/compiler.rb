@@ -29,7 +29,10 @@ module Nanoc
       pages = (page.nil? ? @site.pages : [ page ])
 
       # Compile all pages
-      pages.each { |p| p.compile if p.outdated? or include_outdated }
+      pages.each do |p|
+        p.compile if p.outdated? or include_outdated
+        yield p
+      end
     end
 
   end
