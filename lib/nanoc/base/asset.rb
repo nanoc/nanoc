@@ -40,8 +40,7 @@ module Nanoc
 
     def build_reps
       # Get list of rep names
-      # FIXME re-enable
-      rep_names_default = [] # (@site.asset_defaults.attributes[:reps] || {}).keys
+      rep_names_default = (@site.asset_defaults.attributes[:reps] || {}).keys
       rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
       rep_names         = rep_names_default | rep_names_this
 

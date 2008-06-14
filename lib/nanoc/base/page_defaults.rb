@@ -20,8 +20,7 @@ module Nanoc
     # +attributes+:: The hash containing the metadata that individual pages
     #                will override.
     #
-    # +mtime+:: The time when the page
-    #           defaults were last modified (optional).
+    # +mtime+:: The time when the page defaults were last modified (optional).
     def initialize(attributes, mtime=nil)
       @attributes = attributes.clean
       @mtime      = mtime

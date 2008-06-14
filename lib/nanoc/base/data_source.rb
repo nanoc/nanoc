@@ -158,6 +158,23 @@ module Nanoc
       not_implemented('save_page_defaults')
     end
 
+    ########## Asset defaults
+
+    # Returns the asset defaults (represented by Nanoc::AssetDefaults) of this
+    # site. This is an abstract method implemented by the subclass.
+    #
+    # Subclasses must implement this method.
+    def asset_defaults
+      not_implemented('asset_defaults')
+    end
+
+    # Saves the given asset defaults in the data source.
+    #
+    # Subclasses must implement this method.
+    def save_asset_defaults(asset_defaults)
+      not_implemented('save_asset_defaults')
+    end
+
     ########## Layouts
 
     # Returns the list of layouts (represented by Nanoc::Layout) in this site.
