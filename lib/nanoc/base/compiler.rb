@@ -31,7 +31,7 @@ module Nanoc
       # Compile all pages
       pages.each do |p|
         p.compile if p.outdated? or include_outdated
-        yield p
+        yield p if block_given?
       end
     end
 
