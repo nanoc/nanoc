@@ -11,6 +11,7 @@ module Nanoc
     def initialize # :nodoc:
       @data_sources       = {}
       @filters            = {}
+      @binary_filters     = {}
       @layout_processors  = {}
       @routers            = {}
     end
@@ -23,6 +24,11 @@ module Nanoc
     # Returns the filter class with the given identifier.
     def filter(identifier)
       @filters[identifier] ||= find(Filter, :identifiers, identifier)
+    end
+
+    # Returns the binary filter class with the given identifier.
+    def binary_filter(identifier)
+      @binary_filters[identifier] ||= find(BinaryFilter, :identifiers, identifier)
     end
 
     # Returns the layout processor class with the given file extension.

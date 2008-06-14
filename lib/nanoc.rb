@@ -64,7 +64,9 @@ end
 
 # Load base
 Nanoc.load('base', 'enhancements.rb')
+Nanoc.load('base', 'defaults.rb')
 Nanoc.load('base', 'proxy.rb')
+Nanoc.load('base', 'proxies', '*.rb')
 Nanoc.load('base', 'core_ext', '*.rb')
 Nanoc.load('base', 'plugin.rb')
 Nanoc.load('base', '*.rb')
@@ -76,5 +78,6 @@ Nanoc.load('extra', '*.rb')
 # Load plugins
 Nanoc.load('data_sources', '*.rb')
 Nanoc.load('filters', '*.rb')
+Nanoc.load('binary_filters', '*.rb')
 Nanoc.load('routers', '*.rb')
 Nanoc.load('extensions', '*.rb')

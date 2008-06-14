@@ -119,6 +119,28 @@ module Nanoc
       not_implemented('delete_page')
     end
 
+    ########## Assets
+
+    # TODO document
+    def assets
+      not_implemented('assets')
+    end
+
+    # TODO document
+    def save_asset(asset)
+      not_implemented('save_asset')
+    end
+
+    # TODO document
+    def move_asset(asset)
+      not_implemented('move_asset')
+    end
+
+    # TODO document
+    def delete_asset(asset)
+      not_implemented('delete_asset')
+    end
+
     ########## Page defaults
 
     # Returns the page defaults (represented by Nanoc::PageDefaults) of this
@@ -134,6 +156,23 @@ module Nanoc
     # Subclasses must implement this method.
     def save_page_defaults(page_defaults)
       not_implemented('save_page_defaults')
+    end
+
+    ########## Asset defaults
+
+    # Returns the asset defaults (represented by Nanoc::AssetDefaults) of this
+    # site. This is an abstract method implemented by the subclass.
+    #
+    # Subclasses must implement this method.
+    def asset_defaults
+      not_implemented('asset_defaults')
+    end
+
+    # Saves the given asset defaults in the data source.
+    #
+    # Subclasses must implement this method.
+    def save_asset_defaults(asset_defaults)
+      not_implemented('save_asset_defaults')
     end
 
     ########## Layouts

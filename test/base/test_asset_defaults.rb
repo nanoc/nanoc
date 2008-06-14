@@ -1,6 +1,6 @@
 require 'helper'
 
-class Nanoc::PageDefaultsTest < Test::Unit::TestCase
+class Nanoc::AssetDefaultsTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -34,7 +34,7 @@ class Nanoc::PageDefaultsTest < Test::Unit::TestCase
     def down
     end
 
-    def save_page_defaults(page_defaults)
+    def save_asset_defaults(asset_defaults)
       @save_called = true
     end
 
@@ -52,14 +52,14 @@ class Nanoc::PageDefaultsTest < Test::Unit::TestCase
     # Create site
     site = TestSite.new
 
-    # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new({ :foo => 'bar' })
-    page_defaults.site = site
+    # Create asset defaults
+    asset_defaults = Nanoc::AssetDefaults.new({ :foo => 'bar' })
+    asset_defaults.site = site
 
     # Save
     assert(!site.data_source.save_called)
     assert(!site.data_source.was_loaded)
-    page_defaults.save
+    asset_defaults.save
     assert(site.data_source.save_called)
     assert(site.data_source.was_loaded)
   end

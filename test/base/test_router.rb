@@ -22,7 +22,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
 
   class TestRouter < Nanoc::Router
 
-    def path_for(page_rep)
+    def path_for_page_rep(page_rep)
       path      = page_rep.page.path
       filename  = page_rep.attribute_named(:filename)
       extension = page_rep.attribute_named(:extension)
@@ -32,13 +32,13 @@ class Nanoc::RouterTest < Test::Unit::TestCase
 
   end
 
-  def test_path_for
+  def test_path_for_page_rep
     # Create router
     router = Nanoc::Router.new(nil)
 
     # Make sure an error is raised
     assert_raise(NotImplementedError) do
-      router.path_for(nil)
+      router.path_for_page_rep(nil)
     end
   end
 

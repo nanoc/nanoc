@@ -64,8 +64,8 @@ module Nanoc::CLI
         time_before = Time.now
 
         # Compile
-        @base.site.compiler.run(page, options.has_key?(:all)) do |cur_page|
-          cur_page.reps.each do |rep|
+        @base.site.compiler.run(page, options.has_key?(:all)) do |obj|
+          obj.reps.each do |rep|
             # Get action and level
             action, level = *if rep.created?
               [ :create, :high ]
