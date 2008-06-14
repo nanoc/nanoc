@@ -1,13 +1,32 @@
 module Nanoc
 
+  # A Nanoc::AssetRep is a single representation (rep) of an asset
+  # (Nanoc::Asset). An asset can have multiple representations. A
+  # representation has its own attributes and its own output file. A single
+  # asset can therefore have multiple output files, each run through a
+  # different set of filters with a different layout.
   class AssetRep
 
-    attr_reader :asset
+    # The asset (Nanoc::Asset) to which this representation belongs.
+    attr_reader   :asset
 
-    attr_reader :attributes
+    # A hash containing this asset representation's attributes.
+    attr_accessor :attributes
 
-    attr_reader :name
+    # This asset representation's unique name.
+    attr_reader   :name
 
+    # Creates a new asset representation for the given asset and with the
+    # given attributes.
+    #
+    # +asset+:: The asset (Nanoc::Asset) to which the new representation will
+    #           belong.
+    #
+    # +attributes+:: A hash containing the new asset representation's
+    #                attributes. This hash must have been run through
+    #                Hash#clean before using it here.
+    #
+    # +name+:: The unique name for the new asset representation.
     def initialize(asset, attributes, name)
       # Set primary attributes
       @asset            = asset
@@ -23,6 +42,7 @@ module Nanoc
       @written          = false
     end
 
+    # Returns a proxy (Nanoc::AssetRepProxy) for this asset representation.
     def to_proxy
       @proxy ||= AssetRepProxy.new(self)
     end
@@ -54,6 +74,8 @@ module Nanoc
       @web_path ||= @asset.site.router.web_path_for(self)
     end
 
+    # Returns true if this asset rep's output file is outdated and must be
+    # regenerated, false otherwise.
     def outdated?
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
@@ -106,6 +128,8 @@ module Nanoc
       return Nanoc::Asset::DEFAULTS[name]
     end
 
+    # Compiles this asset representation. This will run all the filters and
+    # write the resulting asset rep to the disk.
     def compile
       # Check created
       @created = !File.file?(self.disk_path)
@@ -120,12 +144,14 @@ module Nanoc
 
   private
 
+    # Computes and returns the MD5 digest for the given file.
     def digest(file)
       incr_digest = Digest::MD5.new()
       file.read(1000) { |data| incr_digest << data }
       incr_digest.hexdigest
     end
 
+    # Compiles the asset rep, treating its contents as binary data.
     def compile_binary
       # Get filters
       filters = attribute_named(:filters)
@@ -154,6 +180,7 @@ module Nanoc
       @modified = (digest_after != digest_before)
     end
 
+    # Compiles the asset rep, treating its contents as textual data.
     def compile_textual
       # Get filters
       filters = attribute_named(:filters)
@@ -164,7 +191,7 @@ module Nanoc
         # Create filter
         klass = PluginManager.instance.filter(filter_name.to_sym)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(:page, self.to_proxy, @asset.to_proxy, @asset.site)
+        filter = klass.new(:asset, self.to_proxy, @asset.to_proxy, @asset.site)
 
         # Run filter
         current_content = filter.run(current_content)

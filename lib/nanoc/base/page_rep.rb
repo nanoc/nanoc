@@ -7,7 +7,7 @@ module Nanoc
   # different layout.
   class PageRep
 
-    # The page to which this representation belongs.
+    # The page (Nanoc::Page) to which this representation belongs.
     attr_reader   :page
 
     # A hash containing this page representation's attributes.
@@ -19,7 +19,8 @@ module Nanoc
     # Creates a new page representation for the given page and with the given
     # attributes.
     #
-    # +page+:: The page to which the new representation will belong.
+    # +page+:: The page (Nanoc::Page) to which the new representation will
+    #          belong.
     #
     # +attributes+:: A hash containing the new page representation's
     #                attributes. This hash must have been run through
@@ -157,8 +158,8 @@ module Nanoc
     end
 
     # Compiles the page representation. This will run the pre-filters, layout
-    # the page representation, run the post-filters, and write the page
-    # (unless +skip_output+ is set).
+    # the page representation, run the post-filters, and write the resulting
+    # page rep to disk (unless +skip_output+ is set).
     #
     # +also_layout+:: true if the page representation should be laid out (and
     #                 post-filtered), and false if not.
@@ -212,6 +213,7 @@ module Nanoc
 
   private
 
+    # Runs the content through the filters in the given stage.
     def filter!(stage)
       # Get filters
       unless attribute_named(:filters).nil?
@@ -234,6 +236,7 @@ module Nanoc
       end
     end
 
+    # Runs the content through this rep's layout.
     def layout!
       # Don't layout if not necessary
       if attribute_named(:layout).nil?
