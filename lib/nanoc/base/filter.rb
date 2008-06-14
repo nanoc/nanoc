@@ -15,9 +15,14 @@ module Nanoc
     #
     # +other_assigns+:: A hash containing other variables that should be made
     #                   available during filtering.
-    def initialize(page_rep, page, site, other_assigns={})
-      @page_rep       = page_rep
-      @page           = page
+    def initialize(kind, obj_rep, obj, site, other_assigns={})
+      if kind == :page
+        @page_rep     = obj_rep
+        @page         = obj
+      else
+        @asset_rep    = obj_rep
+        @asset        = obj
+      end
       @assets         = site.assets.map  { |a| a.to_proxy }
       @pages          = site.pages.map   { |p| p.to_proxy }
       @layouts        = site.layouts.map { |l| l.to_proxy }
@@ -38,13 +43,15 @@ module Nanoc
     # Returns a hash with data that should be available.
     def assigns
       @other_assigns.merge({
-        :page_rep => @page_rep,
-        :page     => @page,
-        :pages    => @pages,
-        :assets   => @assets,
-        :layouts  => @layouts,
-        :config   => @config,
-        :site     => @site
+        :page_rep   => @page_rep,
+        :page       => @page,
+        :asset_rep  => @asset_rep,
+        :asset      => @asset,
+        :pages      => @pages,
+        :assets     => @assets,
+        :layouts    => @layouts,
+        :config     => @config,
+        :site       => @site
       })
     end
 
