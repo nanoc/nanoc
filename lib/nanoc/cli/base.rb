@@ -1,16 +1,18 @@
 module Nanoc::CLI
 
-  # TODO document
+  # Nanoc::CLI::Base is the central class representing a commandline nanoc
+  # tool. It has a list of commands, and is linked to a specific nanoc site.
   class Base
 
     attr_reader :commands, :site
 
-    # TODO document
+    # Creates a new instance of the commandline nanoc tool.
     def initialize
       create_commands
     end
 
-    # TODO document
+    # Parses the given commandline arguments and executes the requested
+    # command.
     def run(args)
       # Check arguments
       if args.length == 0
@@ -81,7 +83,7 @@ module Nanoc::CLI
       command.run(parsed_arguments[:options], parsed_arguments[:arguments])
     end
 
-    # TODO document
+    # Returns the command with the given name.
     def command_named(name)
       # Find by exact name or alias
       command = @commands.find { |c| c.name == name or c.aliases.include?(name) }
@@ -102,7 +104,8 @@ module Nanoc::CLI
       end
     end
 
-    # TODO document
+    # Shows the help text for the given command, or shows the general help
+    # text if no command is given.
     def show_help(command=nil)
       if command.nil?
         @help_command.run([], [])
@@ -111,7 +114,8 @@ module Nanoc::CLI
       end
     end
 
-    # TODO document
+    # Helper function which can be called when a command is executed that
+    # requires a site, such as the compile command.
     def require_site
       if site.nil?
         puts 'The current working directory does not seem to be a ' +
@@ -120,7 +124,7 @@ module Nanoc::CLI
       end
     end
 
-    # TODO document
+    # Gets the site (Nanoc::Site) in the current directory and loads its data.
     def site
       # Load site if possible
       if File.file?('config.yaml') and @site.nil?
@@ -151,7 +155,8 @@ module Nanoc::CLI
       @site
     end
 
-    # TODO document
+    # Returns the list of global option definitions, which currently include
+    # the --help and --version options.
     def global_option_definitions
       [
         {

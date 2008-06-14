@@ -2,7 +2,8 @@ require 'singleton'
 
 module Nanoc::CLI
 
-  # TODO document
+  # Nanoc::CLI::Logger is a singleton class responsible for generating
+  # feedback in the terminal.
   class Logger
 
     ACTION_COLORS = {
@@ -13,15 +14,23 @@ module Nanoc::CLI
 
     include Singleton
 
-    # TODO document
+    # The log leve, which can be :high, :low or :off (which will log all
+    # messages, only high-priority messages, or no messages at all,
+    # respectively).
     attr_accessor :level
 
-    # TODO document
-    def initialize
+    def initialize # :nodoc:
       @level = :high
     end
 
-    # TODO document
+    # Logs a file-related action.
+    #
+    # +level+:: The importance of this action. Can be :high or :low.
+    #
+    # +action+:: The kind of file action. Can be :create, :update or
+    #            :identical.
+    #
+    # +path+:: The path to the file the action was performed on.
     def file(level, action, path)
       log(
         level,
@@ -33,7 +42,14 @@ module Nanoc::CLI
       )
     end
 
-    # TODO document
+    # Logs a message.
+    #
+    # +level+:: The importance of this message. Can be :high or :low.
+    #
+    # +s+:: The message to be logged.
+    #
+    # +io+:: The IO instance to which the message will be written. Defaults to
+    #        standard output.
     def log(level, s, io=$stdout)
       # Don't log when logging is disabled
       return if @level == :off
