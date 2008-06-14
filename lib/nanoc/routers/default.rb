@@ -1,8 +1,8 @@
 module Nanoc::Routers
 
   # The default router organises pages in the most obvious, but sometimes
-  # slightly restrictive, way: the hierarchy of compiled pages is the same as
-  # the hierarchy of uncompiled pages.
+  # slightly restrictive, way: the hierarchy of compiled pages and assets is
+  # the same as the hierarchy of uncompiled pages and assets.
   class Default < Nanoc::Router
 
     identifier :default
@@ -13,11 +13,14 @@ module Nanoc::Routers
       extension  = page_rep.attribute_named(:extension)
 
       # Build path
+      path = page_rep.page.path + filename
       if page_rep.name == :default
-        page_rep.page.path + "#{filename}.#{extension}"
+        path += '.' + extension
       else
-        page_rep.page.path + "#{filename}-#{page_rep.name}.#{extension}"
+        path += page_rep.name.to_s + '.' + extension
       end
+
+      path
     end
 
     def path_for_asset_rep(asset_rep)
@@ -26,11 +29,15 @@ module Nanoc::Routers
       modified_path = asset_rep.asset.path[0..-2]
 
       # Build path
+      assets_prefix = @site.config[:assets_prefix] || '/assets'
+      path = assets_prefix + modified_path
       if asset_rep.name == :default
-        modified_path + '.' + extension
+        path += '.' + extension
       else
-        modified_path + '-' + asset_rep.name.to_s + '.' + extension
+        path += '-' + asset_rep.name.to_s + '.' + extension
       end
+
+      path
     end
 
   end
