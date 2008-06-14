@@ -22,6 +22,9 @@ module Nanoc
     # The time when this asset was last modified.
     attr_reader   :mtime
 
+    # This asset's list of asset representations.
+    attr_reader   :reps
+
     def initialize(file, attributes, path, mtime=nil)
       # Set primary attributes
       @file           = file
