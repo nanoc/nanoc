@@ -55,6 +55,10 @@ class Nanoc::FilterTest < Test::Unit::TestCase
       @pages ||= [ TestPage.new ]
     end
 
+    def assets
+      @assets ||= []
+    end
+
     def layouts
       @layouts ||= [ TestLayout.new ]
     end
