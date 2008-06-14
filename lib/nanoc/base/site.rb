@@ -58,7 +58,7 @@ module Nanoc
 
     attr_reader :config
     attr_reader :compiler, :data_source, :router
-    attr_reader :pages, :page_defaults, :layouts, :templates, :code
+    attr_reader :pages, :assets, :page_defaults, :layouts, :templates, :code
 
     # Returns a Nanoc::Site object for the site specified by the given
     # configuration hash +config+.
@@ -88,6 +88,7 @@ module Nanoc
       @page_defaults      = PageDefaults.new({})
       @page_defaults.site = self
       @pages              = []
+      @assets             = []
       @layouts            = []
       @templates          = []
     end
@@ -109,6 +110,7 @@ module Nanoc
         load_code(force)
         load_page_defaults
         load_pages
+        load_assets
         load_layouts
         load_templates
       end
@@ -188,6 +190,17 @@ module Nanoc
       # Build page representations
       @pages.each { |p| p.build_page_reps }
     end
+
+    # TODO document
+    def load_assets
+      # Get assets
+      @assets = @data_source.assets
+
+      # Set site
+      @assets.each { |a| a.site = self }
+    rescue NotImplementedError
+      # FIXME catch this error in a nicer way
+    end  
 
     # TODO document
     def load_layouts

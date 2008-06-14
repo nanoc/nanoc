@@ -207,6 +207,45 @@ module Nanoc::DataSources
       # TODO implement
     end
 
+    ########## Assets ##########
+
+    def assets # :nodoc:
+      meta_filenames('assets').map do |meta_filename|
+        # Read metadata
+        meta = YAML.load_file(meta_filename) || {}
+
+        # Get content file
+        content_filename = content_filename_for_dir(File.dirname(meta_filename))
+        content_file = File.new(content_filename)
+
+        # Get attributes
+        attributes = meta.merge(:extension => File.extname(content_filename)[1..-1])
+
+        # Get path
+        path = meta_filename.sub(/^assets/, '').sub(/[^\/]+\.yaml$/, '')
+
+        # Get modification times
+        meta_mtime    = File.stat(meta_filename).mtime
+        content_mtime = File.stat(content_filename).mtime
+        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
+
+        # Create asset object
+        Nanoc::Asset.new(content_file, attributes, path, mtime)
+      end
+    end
+
+    def save_asset(asset) # :nodoc:
+      # TODO implement
+    end
+
+    def move_asset(asset, new_path) # :nodoc:
+      # TODO implement
+    end
+
+    def delete_asset(asset) # :nodoc:
+      # TODO implement
+    end
+
     ########## Page Defaults ##########
 
     def page_defaults # :nodoc:

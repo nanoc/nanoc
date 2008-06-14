@@ -7,7 +7,7 @@ module Nanoc::Routers
 
     identifier :default
 
-    def path_for(page_rep)
+    def path_for_page_rep(page_rep)
       # Get data we need
       filename   = page_rep.attribute_named(:filename)
       extension  = page_rep.attribute_named(:extension)
@@ -23,6 +23,10 @@ module Nanoc::Routers
           page_rep.page.path + "#{filename}.#{extension}"
         end
       end
+    end
+
+    def path_for_asset(asset)
+      asset.path[0..-2] + '.' + asset.attribute_named(:extension)
     end
 
   end

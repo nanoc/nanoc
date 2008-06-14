@@ -76,5 +76,6 @@ Nanoc.load('extra', '*.rb')
 # Load plugins
 Nanoc.load('data_sources', '*.rb')
 Nanoc.load('filters', '*.rb')
+Nanoc.load('binary_filters', '*.rb')
 Nanoc.load('routers', '*.rb')
 Nanoc.load('extensions', '*.rb')
