@@ -12,7 +12,7 @@ class Nanoc::Filters::DiscountTest < Test::Unit::TestCase
           # Get filter
           page_rep  = site.pages[0].reps[0].to_proxy
           page      = site.pages[0].to_proxy
-          filter = ::Nanoc::Filters::Discount.new(page_rep, page, site)
+          filter = ::Nanoc::Filters::Discount.new(:page, page_rep, page, site)
 
           # Run filter
           result = filter.run("> Quote")

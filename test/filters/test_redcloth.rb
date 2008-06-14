@@ -12,7 +12,7 @@ class Nanoc::Filters::RedClothTest < Test::Unit::TestCase
           # Get filter
           page_rep  = site.pages[0].reps[0].to_proxy
           page      = site.pages[0].to_proxy
-          filter = ::Nanoc::Filters::RedCloth.new(page_rep, page, site)
+          filter = ::Nanoc::Filters::RedCloth.new(:page, page_rep, page, site)
 
           # Run filter
           result = filter.run("h1. Foo")

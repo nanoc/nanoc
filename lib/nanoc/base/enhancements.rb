@@ -18,9 +18,9 @@ def render(name_or_path, other_assigns={})
   raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_path) if layout.nil?
 
   # Find filter
-  filter_class = layout.filter_class
-  raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if filter_class.nil?
-  filter = filter_class.new(@page_rep, @page, @site, other_assigns)
+  klass = layout.filter_class
+  raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
+  filter = klass.new(:page, @page_rep, @page, @site, other_assigns)
 
   # Layout
   @site.compiler.stack.push(layout)

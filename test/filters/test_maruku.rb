@@ -12,7 +12,7 @@ class Nanoc::Filters::MarukuTest < Test::Unit::TestCase
           # Get filter
           page_rep  = site.pages[0].reps[0].to_proxy
           page      = site.pages[0].to_proxy
-          filter = ::Nanoc::Filters::Maruku.new(page_rep, page, site)
+          filter = ::Nanoc::Filters::Maruku.new(:page, page_rep, page, site)
 
           # Run filter
           result = filter.run("This is _so_ *cool*!")

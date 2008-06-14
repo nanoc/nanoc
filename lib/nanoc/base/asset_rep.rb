@@ -164,7 +164,7 @@ module Nanoc
         # Create filter
         klass = PluginManager.instance.filter(filter_name.to_sym)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self.to_proxy, @asset.to_proxy, @asset.site)
+        filter = klass.new(:page, self.to_proxy, @asset.to_proxy, @asset.site)
 
         # Run filter
         current_content = filter.run(current_content)

@@ -70,7 +70,7 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     site      = TestSite.new
     page_rep  = site.pages[0].reps[0]
     page      = site.pages[0]
-    filter = Nanoc::Filter.new(page_rep, page, site)
+    filter = Nanoc::Filter.new(:page, page_rep, page, site)
 
     # Make sure page itself is not proxied by the filter
     assert_equal(
@@ -94,7 +94,7 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     site      = TestSite.new
     page_rep  = site.pages[0].reps[0].to_proxy
     page      = site.pages[0].to_proxy
-    filter = Nanoc::Filter.new(page_rep, page, site, { :foo => 'bar' })
+    filter = Nanoc::Filter.new(:page, page_rep, page, site, { :foo => 'bar' })
 
     # Check normal assigns
     assert_equal(site.config,                         filter.assigns[:config])
@@ -112,7 +112,7 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     site      = TestSite.new
     page_rep  = site.pages[0].reps[0].to_proxy
     page      = site.pages[0].to_proxy
-    filter = Nanoc::Filter.new(page_rep, page, site)
+    filter = Nanoc::Filter.new(:page, page_rep, page, site)
 
     # Make sure an error is raised
     assert_raise(NotImplementedError) do
@@ -125,7 +125,7 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     site      = TestSite.new
     page_rep  = site.pages[0].reps[0].to_proxy
     page      = site.pages[0].to_proxy
-    filter = Nanoc::Filter.new(page_rep, page, site)
+    filter = Nanoc::Filter.new(:page, page_rep, page, site)
 
     # Update extension
     filter.class.class_eval { extension :foo }
