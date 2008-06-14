@@ -119,15 +119,6 @@ module Nanoc
       return DEFAULTS[name]
     end
 
-    # FIXME remove this
-    # Sets the site to which this page belongs. This will also cause the list
-    # of page representations to be built.
-    def site=(site)
-      @site = site
-
-      build_reps
-    end
-
     # Saves the page in the database, creating it if it doesn't exist yet or
     # updating it if it already exists. Tells the site's data source to save
     # the page.
