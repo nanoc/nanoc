@@ -1,4 +1,4 @@
-module Nanoc::Filters
+module Nanoc::BinaryFilters
 
   class Thumbnail < Nanoc::BinaryFilter
 
