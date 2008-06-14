@@ -26,11 +26,11 @@ class Hash
     builtin_keys = Nanoc::Page::DEFAULTS
 
     # Stringify keys
-    hash = self.reject { |k,v| k == :file }.stringify_keys
+    hash = self.reject { |k,v| k == :file }
 
     # Split keys
-    builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }
-    custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }
+    builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }.stringify_keys
+    custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }.stringify_keys
 
     # Convert to YAML
     # FIXME this is a hack, plz clean up
