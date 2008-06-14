@@ -11,8 +11,8 @@ module Nanoc
 
       if real_key == :mtime
         @obj.mtime
-      elsif real_key == :path
-        @obj.web_path
+      elsif real_key == :path # backward compatibility
+        @obj.reps.find { |r| r.name == :default }.web_path
       else
         super(key)
       end
