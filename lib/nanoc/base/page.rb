@@ -2,9 +2,10 @@ module Nanoc
 
   # A Nanoc::Page represents a page in a nanoc site. It has content and
   # attributes, as well as a path. It can also store the modification time to
-  # speed up compilation. Each page has a list of page representations or reps
-  # (Nanoc::PageRep); compiling a page actually compiles all of it's
-  # representations..
+  # speed up compilation.
+  #
+  # Each page has a list of page representations or reps (Nanoc::PageRep);
+  # compiling a page actually compiles all of its representations.
   class Page
 
     # Default values for pages.
@@ -74,7 +75,8 @@ module Nanoc
       @written        = false
     end
 
-    # TODO document
+    # Builds the individual page representations (Nanoc::PageRep) for this
+    # page.
     def build_reps
       # Get list of rep names
       rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
@@ -117,12 +119,12 @@ module Nanoc
       return DEFAULTS[name]
     end
 
+    # FIXME remove this
     # Sets the site to which this page belongs. This will also cause the list
     # of page representations to be built.
     def site=(site)
       @site = site
 
-      # FIXME this is not the best place to build the reps...
       build_reps
     end
 
@@ -150,13 +152,12 @@ module Nanoc
       end
     end
 
-    # Compiles the page.
+    # Compiles all page representations for this page.
     #
     # +also_layout+:: When +true+, will layout and post-filter the page, as
     #                 well as write out the compiled page. Otherwise, will
     #                 just pre-filter the page.
     def compile(also_layout=true)
-      # Compile all representations
       @reps.each { |r| r.compile(also_layout) }
     end
 

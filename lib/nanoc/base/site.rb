@@ -4,7 +4,10 @@ module Nanoc
   # references to the following site data:
   #
   # * +pages+ is a list of Nanoc::Page instances representing pages
+  # * +assets+ is a list of Nanoc::Asset instances representing assets
   # * +page_defaults+ is a Nanoc::PageDefaults instance representing page
+  #   defaults
+  # * +asset_defaults+ is a Nanoc::AssetDefaults instance representing asset
   #   defaults
   # * +layouts+ is a list of Nanoc::Layout instances representing layouts
   # * +templates+ is a list of Nanoc::Template representing templates
@@ -13,30 +16,30 @@ module Nanoc
   # In addition, each site has a +config+ hash which stores the site
   # configuration. This configuration hash can have the following keys:
   #
-  # +output_dir+:: The directory to which compiled pages will be written. This
-  #                path is relative to the current working directory, but can
-  #                also be an absolute path.
+  # +output_dir+:: The directory to which compiled pages and assets will be
+  #                written. This path is relative to the current working
+  #                directory, but can also be an absolute path.
   #
   # +data_source+:: The identifier of the data source that will be used for
   #                 loading site data.
   #
   # +router+:: The identifier of the router that will be used for determining
-  #            page paths.
+  #            page and asset representation paths.
   #
   # +index_filenames+:: A list of filenames that will be stripped off full
-  #                     page paths to create cleaner URLs (for example,
-  #                     '/about/' will be used instead of
+  #                     page and asset paths to create cleaner URLs (for
+  #                     example, '/about/' will be used instead of
   #                     '/about/index.html'). The default value should be okay
   #                     in most cases.
   #
   # A site also has several helper classes:
   #
   # * +router+ is a Nanoc::Router subclass instance used for determining page
-  #   paths.
+  #   and asset paths.
   # * +data_source+ is a Nanoc::DataSource subclass instance used for managing
   #   site data.
-  # * +compiler+ is a Nanoc::Compiler instance that turns pages into compiled
-  #   pages.
+  # * +compiler+ is a Nanoc::Compiler instance that compiles page and asset
+  #   representations.
   #
   # The physical representation of a Nanoc::Site is usually a directory that
   # contains a configuration file, site data, and some rake tasks. However,
@@ -86,12 +89,14 @@ module Nanoc
       @router = @router_class.new(self)
 
       # Initialize data
-      @page_defaults      = PageDefaults.new({})
-      @page_defaults.site = self
-      @pages              = []
-      @assets             = []
-      @layouts            = []
-      @templates          = []
+      @page_defaults        = PageDefaults.new({})
+      @page_defaults.site   = self
+      @asset_defaults       = AssetDefaults.new({})
+      @asset_defaults.site  = self
+      @pages                = []
+      @assets               = []
+      @layouts              = []
+      @templates            = []
     end
 
     # Loads the site data. This will query the Nanoc::DataSource associated
@@ -123,6 +128,7 @@ module Nanoc
 
   private
 
+    # TODO document
     def load_code(force=false)
       # Don't load code twice
       @code_loaded ||= false

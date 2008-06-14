@@ -1,6 +1,7 @@
 module Nanoc
 
-  # Nanoc::Compiler is responsible for compiling a site.
+  # Nanoc::Compiler is responsible for compiling a site's page and asset
+  # representations.
   class Compiler
 
     attr_reader :stack
@@ -10,14 +11,15 @@ module Nanoc
       @site = site
     end
 
-    # TODO fix documentation
-    # Compiles (part of) the site and writes out the compiled pages.
+    # Compiles (part of) the site and writes out the compiled page and asset
+    # representations.
     #
-    # +page+:: The page (and its dependencies) that should be compiled, or
-    #          +nil+ if the entire site should be compiled.
+    # +page_or_asset+:: The page or asset that should be compiled, along with
+    #                   their dependencies, or +nil+ if the entire site should
+    #                   be compiled.
     #
-    # +include_outdated+:: +false+ if outdated pages should not be recompiled,
-    #                      and +true+ if they should.
+    # +include_outdated+:: +false+ if outdated pages and assets should not be
+    #                      recompiled, and +true+ if they should.
     def run(page_or_asset=nil, include_outdated=false)
       # Load data
       @site.load_data

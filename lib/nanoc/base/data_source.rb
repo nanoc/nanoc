@@ -121,22 +121,33 @@ module Nanoc
 
     ########## Assets
 
-    # TODO document
+    # Returns the list of assets (represented by Nanoc::Asset) in this site.
+    # This is an abstract method implemented by the subclass.
+    #
+    # Subclasses must implement this method.
     def assets
       not_implemented('assets')
     end
 
-    # TODO document
+    # Saves the given asset in the data source, creating it if it doesn't
+    # exist yet and updating the existing copy otherwise.
+    #
+    # Subclasses must implement this method.
     def save_asset(asset)
       not_implemented('save_asset')
     end
 
-    # TODO document
+    # Changes the path of the given asset to the given new path. When changing
+    # a asset's path, this method must be used (save_asset will not work).
+    #
+    # Subclasses must implement this method.
     def move_asset(asset)
       not_implemented('move_asset')
     end
 
-    # TODO document
+    # Removes the given asset from the data source.
+    #
+    # Subclasses must implement this method.
     def delete_asset(asset)
       not_implemented('delete_asset')
     end

@@ -1,15 +1,21 @@
 module Nanoc
 
-  # Nanoc::Filter is responsible for filtering pages. It is the (abstract)
-  # superclass for all filters. Subclasses should override the +run+ method.
+  # Nanoc::Filter is responsible for filtering pages and textual assets
+  # (binary assets are filtered using Nanoc::BinaryFilter). It is the
+  # (abstract) superclass for all textual filters. Subclasses should override
+  # the +run+ method.
   class Filter < Plugin
 
-    # Creates a new filter for the given page and site.
+    # Creates a new filter for the given object (page or asset) and site.
     #
-    # +page_rep+:: A proxy for the page representation (Nanoc::PageRep) that
-    #              should be compiled by this filter.
+    # +kind+:: The kind of object that is passed. Can be either +:page+ or
+    #          +:asset+.
     #
-    # +page+:: A proxy for the given page representation's page (Nanoc::Page).
+    # +obj_rep+:: A proxy for the page or asset representation (Nanoc::PageRep
+    #             or Nanoc::AssetRep) that should be compiled by this filter.
+    #
+    # +obj+:: A proxy for the page or asset's page (Nanoc::Page or
+    #         Nanoc::Asset).
     #
     # +site+:: The site (Nanoc::Site) this filter belongs to.
     #
