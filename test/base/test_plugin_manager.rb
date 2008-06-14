@@ -34,11 +34,17 @@ class Nanoc::PluginManagerTest < Test::Unit::TestCase
   end
 
   def test_binary_filter_right
-    # TODO implement
+    assert_nothing_raised do
+      filter = Nanoc::PluginManager.instance.binary_filter(:thumbnail)
+      assert(!filter.nil?)
+    end
   end
 
   def test_binary_filter_wrong
-    # TODO implement
+    assert_nothing_raised do
+      filter = Nanoc::PluginManager.instance.binary_filter(:lksdaffhd)
+      assert(filter.nil?)
+    end
   end
 
   def test_layout_processor_right
