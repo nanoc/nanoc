@@ -18,6 +18,7 @@ module Nanoc
     def initialize(page_rep, page, site, other_assigns={})
       @page_rep       = page_rep
       @page           = page
+      @assets         = site.assets.map  { |a| a.to_proxy }
       @pages          = site.pages.map   { |p| p.to_proxy }
       @layouts        = site.layouts.map { |l| l.to_proxy }
       @config         = site.config
@@ -40,6 +41,7 @@ module Nanoc
         :page_rep => @page_rep,
         :page     => @page,
         :pages    => @pages,
+        :assets   => @assets,
         :layouts  => @layouts,
         :config   => @config,
         :site     => @site
