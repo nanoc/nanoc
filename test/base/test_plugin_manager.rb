@@ -33,6 +33,14 @@ class Nanoc::PluginManagerTest < Test::Unit::TestCase
     end
   end
 
+  def test_binary_filter_right
+    # TODO implement
+  end
+
+  def test_binary_filter_wrong
+    # TODO implement
+  end
+
   def test_layout_processor_right
     assert_nothing_raised do
       layout_processor = Nanoc::PluginManager.instance.layout_processor('.erb')
