@@ -18,6 +18,12 @@ module Nanoc
       end
     end
 
+    # Returns the asset representation with the given name.
+    def reps(name)
+      rep = @obj.reps.find { |r| r.name == name }
+      rep.nil? ? nil : rep.to_proxy
+    end
+
   end
 
 end
