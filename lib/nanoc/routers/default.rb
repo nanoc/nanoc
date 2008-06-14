@@ -16,7 +16,7 @@ module Nanoc::Routers
       path = page_rep.page.path + filename
 
       # Add rep name if necessary
-      unless asset_rep.name == :default
+      unless page_rep.name == :default
         path += page_rep.name.to_s
       end
 
