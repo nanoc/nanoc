@@ -107,8 +107,31 @@ module Nanoc
     end
 
     def compile
+      # Check created
+      @created = !File.file?(self.disk_path)
+
+      # Compile
+      if attribute_named(:binary) == true
+        compile_binary
+      else
+        compile_textual
+      end
+    end
+
+  private
+
+    def digest(file)
+      incr_digest = Digest::MD5.new()
+      file.read(1000) { |data| incr_digest << data }
+      incr_digest.hexdigest
+    end
+
+    def compile_binary
       # Get filters
       filters = attribute_named(:filters)
+
+      # Calculate digest before
+      digest_before = File.file?(disk_path) ? digest(File.open(disk_path, 'r')) : nil
 
       # Run each filter
       current_file = @asset.file
@@ -123,7 +146,36 @@ module Nanoc
       end
 
       # Write asset
+      FileUtils.mkdir_p(File.dirname(self.disk_path))
       FileUtils.cp(current_file.path, disk_path)
+
+      # Calculate digest after
+      digest_after = digest(current_file)
+      @modified = (digest_after != digest_before)
+    end
+
+    def compile_textual
+      # Get filters
+      filters = attribute_named(:filters)
+
+      # Run each filter
+      current_content = @asset.file.read
+      filters.each do |filter_name|
+        # Create filter
+        klass = PluginManager.instance.filter(filter_name.to_sym)
+        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
+        filter = klass.new(self.to_proxy, @asset.to_proxy, @asset.site)
+
+        # Run filter
+        current_content = filter.run(current_content)
+      end
+
+      # Write asset
+      FileUtils.mkdir_p(File.dirname(self.disk_path))
+      File.open(self.disk_path, 'w') { |io| io.write(current_content) }
+
+      # Check modified
+      @modified = @created ? true : File.read(self.disk_path) != current_content
     end
 
   end

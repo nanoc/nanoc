@@ -4,6 +4,7 @@ module Nanoc
 
     DEFAULTS = {
       :extension  => 'dat',
+      :binary     => true,
       :filters    => []
     }
 
