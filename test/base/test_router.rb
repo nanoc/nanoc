@@ -70,7 +70,10 @@ class Nanoc::RouterTest < Test::Unit::TestCase
         '/without/cp/with/index/'
       )
     }
-    pages.values.each { |page| page.site = site }
+    pages.values.each do |page|
+      page.site = site
+      page.build_reps
+    end
 
     # Check
     assert_nothing_raised do
@@ -121,7 +124,10 @@ class Nanoc::RouterTest < Test::Unit::TestCase
         '/without/cp/with/index/'
       )
     }
-    pages.values.each { |page| page.site = site }
+    pages.values.each do |page|
+      page.site = site
+      page.build_reps
+    end
 
     # Check
     assert_nothing_raised do

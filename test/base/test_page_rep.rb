@@ -101,6 +101,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # Create page
     page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
     page.site = site
+    page.build_reps
     page_rep = page.reps.find { |r| r.name == :default }
 
     # Check
@@ -124,6 +125,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
       '/path/'
     )
     page.site = site
+    page.build_reps
     page_rep = page.reps.find { |r| r.name == :custom }
 
     # Test finding one
@@ -157,6 +159,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
       '/path/'
     )
     page.site = site
+    page.build_reps
     page_rep = page.reps.find { |r| r.name == :default }
 
     # Test finding one
@@ -237,6 +240,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # Create page
     page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
     page.site = site
+    page.build_reps
     page_rep = page.reps.find { |r| r.name == :default }
 
     # Filter
