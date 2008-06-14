@@ -73,6 +73,13 @@ module Nanoc
       return @reps.any? { |rep| rep.outdated? }
     end
 
+    # Returns the attribute with the given name.
+    def attribute_named(name)
+      return @attributes[name] if @attributes.has_key?(name)
+      return @site.asset_defaults.attributes[name] if @site.asset_defaults.attributes.has_key?(name)
+      return DEFAULTS[name]
+    end
+
     def compile
       # Compile all representations
       @reps.each { |r| r.compile }
