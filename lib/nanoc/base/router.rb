@@ -22,20 +22,19 @@ module Nanoc
     end
 
     # TODO document
-    def path_for_asset(asset)
-      raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for_asset.")
+    def path_for_asset_rep(asset)
+      raise NotImplementedError.new("Nanoc::Router subclasses must implement #path_for_asset_rep.")
     end
 
     # Returns the web path for the given page representation, i.e. the page
     # rep's custom path or routed path with index filenames stripped.
     def web_path_for(obj)
       # Get actual path
-      path = obj.attributes[:custom_path]
-      if obj.is_a?(Nanoc::PageRep)
-        path ||= obj.page.attribute_named(:custom_path) if obj.name == :default
+      path ||= obj.attribute_named(:custom_path)
+      if obj.is_a?(Nanoc::PageRep) # Page rep
         path ||= path_for_page_rep(obj)
-      else
-        path ||= path_for_asset(obj)
+      else # Asset rep
+        path ||= path_for_asset_rep(obj)
       end
 
       # Try stripping each index filename
@@ -56,7 +55,7 @@ module Nanoc
     def disk_path_for(obj)
       @site.config[:output_dir] + (
         obj.attribute_named(:custom_path) ||
-        (obj.is_a?(Nanoc::PageRep) ? path_for_page_rep(obj) : path_for_asset(obj))
+        (obj.is_a?(Nanoc::PageRep) ? path_for_page_rep(obj) : path_for_asset_rep(obj))
       )
     end
 

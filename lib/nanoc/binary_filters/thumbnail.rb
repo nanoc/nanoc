@@ -14,7 +14,7 @@ module Nanoc::Filters
 
       # Create thumbnail
       ImageScience.with_image(file.path) do |img|
-        img.thumbnail(@asset.thumbnail_size || 150) do |thumbnail|
+        img.thumbnail(@asset_rep.thumbnail_size || 150) do |thumbnail|
           thumbnail.save(tmp_path)
         end
       end

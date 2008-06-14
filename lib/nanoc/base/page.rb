@@ -75,7 +75,7 @@ module Nanoc
     end
 
     # TODO document
-    def build_page_reps
+    def build_reps
       # Get list of rep names
       rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
       rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
@@ -93,7 +93,6 @@ module Nanoc
       reps.each_pair do |name, attrs|
         @reps << PageRep.new(self, attrs, name)
       end
-
     end
 
     # Returns a proxy (Nanoc::PageProxy) for this page.
@@ -124,7 +123,7 @@ module Nanoc
       @site = site
 
       # FIXME this is not the best place to build the reps...
-      build_page_reps
+      build_reps
     end
 
     # Saves the page in the database, creating it if it doesn't exist yet or

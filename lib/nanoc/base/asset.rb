@@ -29,9 +29,6 @@ module Nanoc
       @path           = path.cleaned_path
       @mtime          = mtime
 
-      # Compiled file is not present
-      @compiled_file  = nil
-
       # Not modified, not created by default
       @modified       = false
       @created        = false
@@ -41,69 +38,42 @@ module Nanoc
       @written        = false
     end
 
+    def build_reps
+      # Get list of rep names
+      # FIXME re-enable
+      rep_names_default = [] # (@site.asset_defaults.attributes[:reps] || {}).keys
+      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
+      rep_names         = rep_names_default | rep_names_this
+
+      # Get list of reps
+      reps = rep_names.inject({}) do |memo, rep_name|
+        rep = (@attributes[:reps] || {})[rep_name]
+        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
+        is_bad ? memo : memo.merge(rep_name => rep || {})
+      end
+
+      # Build reps
+      @reps = []
+      reps.each_pair do |name, attrs|
+        @reps << AssetRep.new(self, attrs, name)
+      end
+    end
+
     def to_proxy
       @proxy ||= AssetProxy.new(self)
     end
 
     def outdated?
-      # Outdated if compiled file doesn't exist
-      return true if !File.file?(disk_path)
+      # Outdated if we don't know
+      return true if @mtime.nil?
 
-      # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime
-
-      # Outdated if file too old
-      return true if @file.mtime > compiled_mtime
-
-      # Outdated if dependencies outdated
-      return true if @site.code.mtime and @site.code.mtime > compiled_mtime
-
-      return false
-    end
-
-    def attribute_named(name)
-      # Check in here
-      return @attributes[name] if @attributes.has_key?(name)
-
-      # TODO check in asset defaults
-
-      # Check in hardcoded defaults
-      return DEFAULTS[name]
-    end
-
-    # Returns the path to the output file, including the path to the output
-    # directory specified in the site configuration, and including the
-    # filename and extension.
-    def disk_path
-      @disk_path ||= @site.router.disk_path_for(self)
-    end
-
-    # Returns the path to the output file as it would be used in a web
-    # browser: starting with a slash (representing the web root), and only
-    # including the filename and extension if they cannot be ignored (i.e.
-    # they are not in the site configuration's list of index files).
-    def web_path
-      @web_path ||= @site.router.web_path_for(self)
+      # Outdated if an asset rep is outdated
+      return @reps.any? { |rep| rep.outdated? }
     end
 
     def compile
-      # Get filters
-      filters = attribute_named(:filters)
-
-      # Run each filter
-      current_file = @file
-      filters.each do |filter_name|
-        # Create filter
-        klass = PluginManager.instance.binary_filter(filter_name.to_sym)
-        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self.to_proxy, @site)
-
-        # Run filter
-        current_file = filter.run(current_file)
-      end
-
-      # Write asset
-      FileUtils.cp(current_file.path, disk_path)
+      # Compile all representations
+      @reps.each { |r| r.compile }
     end
 
   end

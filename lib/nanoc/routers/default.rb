@@ -16,17 +16,21 @@ module Nanoc::Routers
       if page_rep.name == :default
         page_rep.page.path + "#{filename}.#{extension}"
       else
-        if filename == Nanoc::Page::DEFAULTS[:filename] and
-           extension == Nanoc::Page::DEFAULTS[:extension]
-          page_rep.page.path + "#{filename}-#{page_rep.name}.#{extension}"
-        else
-          page_rep.page.path + "#{filename}.#{extension}"
-        end
+        page_rep.page.path + "#{filename}-#{page_rep.name}.#{extension}"
       end
     end
 
-    def path_for_asset(asset)
-      asset.path[0..-2] + '.' + asset.attribute_named(:extension)
+    def path_for_asset_rep(asset_rep)
+      # Get data we need
+      extension     = asset_rep.attribute_named(:extension)
+      modified_path = asset_rep.asset.path[0..-2]
+
+      # Build path
+      if asset_rep.name == :default
+        modified_path + '.' + extension
+      else
+        modified_path + '-' + asset_rep.name.to_s + '.' + extension
+      end
     end
 
   end

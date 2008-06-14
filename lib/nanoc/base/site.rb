@@ -188,7 +188,7 @@ module Nanoc
       end
 
       # Build page representations
-      @pages.each { |p| p.build_page_reps }
+      @pages.each { |p| p.build_reps }
     end
 
     # TODO document
@@ -198,6 +198,9 @@ module Nanoc
 
       # Set site
       @assets.each { |a| a.site = self }
+
+      # Build asset representations
+      @assets.each { |p| p.build_reps }
     rescue NotImplementedError
       # FIXME catch this error in a nicer way
     end  
