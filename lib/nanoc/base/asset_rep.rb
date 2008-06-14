@@ -14,10 +14,6 @@ module Nanoc
       @attributes       = attributes
       @name             = name
 
-      # Compiled file is not present
-      @uncompiled_file  = asset.file
-      @compiled_file    = nil
-
       # Not modified, not created by default
       @modified         = false
       @created          = false
@@ -115,7 +111,7 @@ module Nanoc
       filters = attribute_named(:filters)
 
       # Run each filter
-      current_file = @uncompiled_file
+      current_file = @asset.file
       filters.each do |filter_name|
         # Create filter
         klass = PluginManager.instance.binary_filter(filter_name.to_sym)
