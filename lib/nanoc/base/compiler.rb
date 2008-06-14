@@ -38,7 +38,10 @@ module Nanoc
     end
 
     def compile_objects(objects, include_outdated)
-      objects.each { |obj| obj.compile if obj.outdated? or include_outdated }
+      objects.each do |obj|
+        obj.compile if obj.outdated? or include_outdated
+        yield obj
+      end
     end
 
   end
