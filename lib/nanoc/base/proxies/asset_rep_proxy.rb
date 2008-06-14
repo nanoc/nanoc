@@ -10,9 +10,7 @@ module Nanoc
     def [](key)
       real_key = key.to_s.sub(/\?$/, '').to_sym
 
-      if real_key == :content
-        @obj.content
-      elsif real_key == :path
+      if real_key == :path
         @obj.web_path
       elsif real_key == :asset
         @obj.asset.to_proxy
