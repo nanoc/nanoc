@@ -1,3 +1,5 @@
+require 'observer'
+
 module Nanoc
 
   # A Nanoc::PageRep is a single representation (rep) of a page (Nanoc::Page).
@@ -6,6 +8,8 @@ module Nanoc
   # multiple output files, each run through a different set of filters with a
   # different layout.
   class PageRep
+
+    include Observable
 
     # The page (Nanoc::Page) to which this representation belongs.
     attr_reader   :page
@@ -207,6 +211,10 @@ module Nanoc
         # Done
         @written = true
       end
+
+      # Notify
+      changed
+      notify_observers(self)
 
       @page.site.compiler.stack.pop
     end
