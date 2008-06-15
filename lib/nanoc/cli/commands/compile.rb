@@ -117,20 +117,32 @@ module Nanoc::CLI
       @base.site.compiler.delete_observer(self)
     end
 
-    def update(rep, oudated_included)
+    def update(rep, event, outdated_included)
+      # Profile compilation
+      @times ||= {}
+      if event == :compile_start
+        @times[rep.disk_path] = Time.now
+      elsif event == :compile_end
+        @times[rep.disk_path] = Time.now - @times[rep.disk_path]
+      end
+
+      # Only print at end of compilation
+      return unless event == :compile_end
+
       # Get action and level
       action, level = *if rep.created?
         [ :create, :high ]
       elsif rep.modified?
         [ :update, :high ]
-      elsif !rep.outdated? && !oudated_included
+      elsif !rep.outdated? && !outdated_included
         [ :skip, :low ]
       else
         [ :identical, :low ]
       end
 
       # Log
-      Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path)
+      duration = @times[rep.disk_path]
+      Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path, duration)
     end
 
   end

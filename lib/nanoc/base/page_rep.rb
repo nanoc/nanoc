@@ -7,6 +7,14 @@ module Nanoc
   # attributes and its own output file. A single page can therefore have
   # multiple output files, each run through a different set of filters with a
   # different layout.
+  #
+  # A page representation is observable. Events will be notified through the
+  # 'update' method (as specified by Observable) with the page representation
+  # as its first argument, followed by a symbol describing the event (listed
+  # in chronological order):
+  #
+  # * :compile_start
+  # * :compile_end
   class PageRep
 
     include Observable
@@ -176,6 +184,7 @@ module Nanoc
         raise Nanoc::Errors::RecursiveCompilationError.new 
       end
 
+      notify(:compile_start)
       @page.site.compiler.stack.push(self)
 
       # Filter pre
@@ -212,11 +221,8 @@ module Nanoc
         @written = true
       end
 
-      # Notify
-      changed
-      notify_observers(self)
-
       @page.site.compiler.stack.pop
+      notify(:compile_end)
     end
 
   private
@@ -259,6 +265,11 @@ module Nanoc
 
       # Layout
       @content[:post] = filter.run(layout.content)
+    end
+
+    def notify(event)
+      changed
+      notify_observers(self, event)
     end
 
   end
