@@ -7,6 +7,14 @@ module Nanoc
   # representation has its own attributes and its own output file. A single
   # asset can therefore have multiple output files, each run through a
   # different set of filters with a different layout.
+  #
+  # A page representation is observable. Events will be notified through the
+  # 'update' method (as specified by Observable) with the page representation
+  # as its first argument, followed by a symbol describing the event (listed
+  # in chronological order):
+  #
+  # * :compile_start
+  # * :compile_end
   class AssetRep
 
     include Observable
@@ -139,15 +147,13 @@ module Nanoc
       @created = !File.file?(self.disk_path)
 
       # Compile
+      notify(:compile_start)
       if attribute_named(:binary) == true
         compile_binary
       else
         compile_textual
       end
-
-      # Notify
-      changed
-      notify_observers(self)
+      notify(:compile_end)
     end
 
   private
@@ -213,6 +219,11 @@ module Nanoc
       # Write asset
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(current_content) }
+    end
+
+    def notify(event)
+      changed
+      notify_observers(self, event)
     end
 
   end

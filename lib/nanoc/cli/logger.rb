@@ -32,13 +32,15 @@ module Nanoc::CLI
     #            :identical.
     #
     # +path+:: The path to the file the action was performed on.
-    def file(level, action, path)
+    def file(level, action, path, duration=nil)
       log(
         level,
-        '%s%12s%s  %s' % [
+        '%s%12s%s  %s%s' % [
           ACTION_COLORS[action.to_sym],
           action,
-          "\e[0m", path
+          "\e[0m",
+          duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
+          path
         ]
       )
     end

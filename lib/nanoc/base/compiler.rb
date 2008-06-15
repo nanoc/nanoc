@@ -4,6 +4,13 @@ module Nanoc
 
   # Nanoc::Compiler is responsible for compiling a site's page and asset
   # representations.
+  #
+  # A compiler can be observed. Events will be notified through the 'update'
+  # method (as specified by Observable) with the page representation as its
+  # first argument, followed by a symbol describing the event (described in
+  # the Nanoc::PageRep and Nanoc::AssetRep documentation), and followed by a
+  # boolean variable indicating whether outdated representations were compiled
+  # or not.
   class Compiler
 
     include Observable
@@ -51,7 +58,8 @@ module Nanoc
         if rep.outdated? or include_outdated
           rep.compile
         else
-          update(rep)
+          update(rep, :compile_start)
+          update(rep, :compile_end)
         end
       end
 
@@ -59,9 +67,9 @@ module Nanoc
       reps.each { |rep| rep.delete_observer(self) }
     end
 
-    def update(rep)
+    def update(rep, event)
       changed
-      notify_observers(rep, @include_outdated)
+      notify_observers(rep, event, @include_outdated)
     end
 
   end
