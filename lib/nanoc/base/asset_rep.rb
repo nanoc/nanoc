@@ -185,8 +185,13 @@ module Nanoc
       # Get filters
       filters = attribute_named(:filters)
 
-      # Run each filter
+      # Prepare
       current_content = @asset.file.read
+
+      # Check modified
+      @modified = @created ? true : File.read(self.disk_path) != current_content
+
+      # Run each filter
       filters.each do |filter_name|
         # Create filter
         klass = PluginManager.instance.filter(filter_name.to_sym)
@@ -200,9 +205,6 @@ module Nanoc
       # Write asset
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(current_content) }
-
-      # Check modified
-      @modified = @created ? true : File.read(self.disk_path) != current_content
     end
 
   end
