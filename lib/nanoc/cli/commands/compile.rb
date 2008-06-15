@@ -70,6 +70,8 @@ module Nanoc::CLI
             [ :create, :high ]
           elsif rep.modified?
             [ :update, :high ]
+          elsif !rep.outdated?
+            [ :skip, :low ]
           else
             [ :identical, :low ]
           end
