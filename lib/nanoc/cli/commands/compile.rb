@@ -64,21 +64,8 @@ module Nanoc::CLI
         time_before = Time.now
 
         # Compile
-        @base.site.compiler.run(page, options.has_key?(:all)) do |rep|
-          # Get action and level
-          action, level = *if rep.created?
-            [ :create, :high ]
-          elsif rep.modified?
-            [ :update, :high ]
-          elsif !rep.outdated?
-            [ :skip, :low ]
-          else
-            [ :identical, :low ]
-          end
-
-          # Log
-          Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path)
-        end
+        @base.site.compiler.add_observer(self)
+        @base.site.compiler.run(page, options.has_key?(:all))
 
         # Give feedback
         puts "No pages were modified." unless @base.site.pages.any? { |p| p.reps.any? { |r| r.modified? } }
@@ -126,6 +113,24 @@ module Nanoc::CLI
         puts 'Backtrace:'
         puts e.backtrace.map { |t| '  - ' + t }.join("\n")
       end
+    ensure
+      @base.site.compiler.delete_observer(self)
+    end
+
+    def update(rep, oudated_included)
+      # Get action and level
+      action, level = *if rep.created?
+        [ :create, :high ]
+      elsif rep.modified?
+        [ :update, :high ]
+      elsif !rep.outdated? && !oudated_included
+        [ :skip, :low ]
+      else
+        [ :identical, :low ]
+      end
+
+      # Log
+      Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path)
     end
 
   end

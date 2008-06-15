@@ -1,8 +1,12 @@
+require 'observer'
+
 module Nanoc
 
   # Nanoc::Compiler is responsible for compiling a site's page and asset
   # representations.
   class Compiler
+
+    include Observable
 
     attr_reader :stack
 
@@ -29,6 +33,7 @@ module Nanoc
 
       # Initialize
       @stack = []
+      @include_outdated = include_outdated
 
       # Get pages and assets
       unless page_or_asset.nil?
@@ -36,12 +41,27 @@ module Nanoc
       else
         objects = @site.pages + @site.assets
       end
+      reps = objects.map { |o| o.reps }.flatten
 
-      # Compile pages and assets
-      objects.map { |o| o.reps }.flatten.each do |rep|
-        yield rep if block_given?
-        rep.compile if rep.outdated? or include_outdated
+      # Start observing
+      reps.each { |rep| rep.add_observer(self) }
+
+      # Compile everything
+      reps.each do |rep|
+        if rep.outdated? or include_outdated
+          rep.compile
+        else
+          update(rep)
+        end
       end
+
+      # Stop observing
+      reps.each { |rep| rep.delete_observer(self) }
+    end
+
+    def update(rep)
+      changed
+      notify_observers(rep, @include_outdated)
     end
 
   end

@@ -1,3 +1,5 @@
+require 'observer'
+
 module Nanoc
 
   # A Nanoc::AssetRep is a single representation (rep) of an asset
@@ -6,6 +8,8 @@ module Nanoc
   # asset can therefore have multiple output files, each run through a
   # different set of filters with a different layout.
   class AssetRep
+
+    include Observable
 
     # The asset (Nanoc::Asset) to which this representation belongs.
     attr_reader   :asset
@@ -140,6 +144,10 @@ module Nanoc
       else
         compile_textual
       end
+
+      # Notify
+      changed
+      notify_observers(self)
     end
 
   private
