@@ -64,20 +64,18 @@ module Nanoc::CLI
         time_before = Time.now
 
         # Compile
-        @base.site.compiler.run(page, options.has_key?(:all)) do |obj|
-          obj.reps.each do |rep|
-            # Get action and level
-            action, level = *if rep.created?
-              [ :create, :high ]
-            elsif rep.modified?
-              [ :update, :high ]
-            else
-              [ :identical, :low ]
-            end
-
-            # Log
-            Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path)
+        @base.site.compiler.run(page, options.has_key?(:all)) do |rep|
+          # Get action and level
+          action, level = *if rep.created?
+            [ :create, :high ]
+          elsif rep.modified?
+            [ :update, :high ]
+          else
+            [ :identical, :low ]
           end
+
+          # Log
+          Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path)
         end
 
         # Give feedback
