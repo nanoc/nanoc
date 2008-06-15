@@ -49,6 +49,7 @@ module Nanoc
       @content        = { :pre => page.content, :post => nil }
 
       # Not modified, not created by default
+      @compiled       = false
       @modified       = false
       @created        = false
 
@@ -74,6 +75,11 @@ module Nanoc
     # compilation session, or false if the output file wasn't changed.
     def modified?
       @modified
+    end
+
+    # Returns true if this page rep has been compiled, false otherwise.
+    def compiled?
+      @compiled
     end
 
     # Returns true if this page rep's output file is outdated and must be
@@ -184,8 +190,10 @@ module Nanoc
         raise Nanoc::Errors::RecursiveCompilationError.new 
       end
 
-      notify(:compile_start)
+      # Start
+      @compiled = false
       @page.site.compiler.stack.push(self)
+      notify(:compile_start)
 
       # Filter pre
       unless @filtered_pre
@@ -221,6 +229,8 @@ module Nanoc
         @written = true
       end
 
+      # Stop
+      @compiled = true
       @page.site.compiler.stack.pop
       notify(:compile_end)
     end

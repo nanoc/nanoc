@@ -69,7 +69,7 @@ module Nanoc
 
     def update(rep, event)
       changed
-      notify_observers(rep, event, @include_outdated)
+      notify_observers(rep, event)
     end
 
   end
