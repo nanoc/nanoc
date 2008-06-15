@@ -39,8 +39,8 @@ module Nanoc
 
       # Compile pages and assets
       objects.map { |o| o.reps }.flatten.each do |rep|
-        rep.compile if rep.outdated? or include_outdated
         yield rep if block_given?
+        rep.compile if rep.outdated? or include_outdated
       end
     end
 
