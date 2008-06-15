@@ -143,15 +143,6 @@ module Nanoc
       end
     end
 
-    # Compiles all page representations for this page.
-    #
-    # +also_layout+:: When +true+, will layout and post-filter the page, as
-    #                 well as write out the compiled page. Otherwise, will
-    #                 just pre-filter the page.
-    def compile(also_layout=true)
-      @reps.each { |r| r.compile(also_layout) }
-    end
-
   end
 
 end

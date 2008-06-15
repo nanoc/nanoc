@@ -103,11 +103,6 @@ module Nanoc
       return DEFAULTS[name]
     end
 
-    # Compiles all asset representations for this asset.
-    def compile
-      @reps.each { |r| r.compile }
-    end
-
   end
 
 end
