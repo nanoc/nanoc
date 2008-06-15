@@ -50,6 +50,7 @@ module Nanoc
       @created          = false
 
       # Reset flags
+      @compiled         = false
       @filtered         = false
       @written          = false
     end
@@ -69,6 +70,11 @@ module Nanoc
     # last compilation session, or false if the output file wasn't changed.
     def modified?
       @modified
+    end
+
+    # Returns true if this page rep has been compiled, false otherwise.
+    def compiled?
+      @compiled
     end
 
     # Returns the path to the output file, including the path to the output
@@ -146,6 +152,11 @@ module Nanoc
       # Check created
       @created = !File.file?(self.disk_path)
 
+      # Start
+      @compiled = false
+      @asset.site.compiler.stack.push(self)
+      notify(:compile_start)
+ 
       # Compile
       notify(:compile_start)
       if attribute_named(:binary) == true
@@ -153,6 +164,10 @@ module Nanoc
       else
         compile_textual
       end
+
+      # Stop
+      @compiled = true
+      @asset.site.compiler.stack.pop
       notify(:compile_end)
     end
 

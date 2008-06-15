@@ -105,6 +105,8 @@ module Nanoc::CLI
         @base.site.compiler.stack.reverse.each do |item|
           if item.is_a?(Nanoc::PageRep) # page rep
             puts "  - [page]   #{item.page.path} (rep #{item.name})"
+          elsif item.is_a?(Nanoc::AssetRep) # asset rep
+            puts "  - [asset]  #{item.asset.path} (rep #{item.name})"
           else # layout
             puts "  - [layout] #{item.path}"
           end
@@ -117,7 +119,7 @@ module Nanoc::CLI
       @base.site.compiler.delete_observer(self)
     end
 
-    def update(rep, event, outdated_included)
+    def update(rep, event)
       # Profile compilation
       @times ||= {}
       if event == :compile_start
@@ -134,7 +136,7 @@ module Nanoc::CLI
         [ :create, :high ]
       elsif rep.modified?
         [ :update, :high ]
-      elsif !rep.outdated? && !outdated_included
+      elsif !rep.compiled?
         [ :skip, :low ]
       else
         [ :identical, :low ]
