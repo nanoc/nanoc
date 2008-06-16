@@ -74,9 +74,6 @@ module Nanoc::DataSources
       # Create pages
       FileUtils.mkdir_p('content')
 
-      # Create page defaults
-      File.open('meta.yaml', 'w') { |io| }
-
       # Create templates
       FileUtils.mkdir_p('templates')
 
@@ -85,7 +82,6 @@ module Nanoc::DataSources
 
       # Create code
       FileUtils.mkdir_p('lib')
-      File.open('lib/default.rb', 'w') { |io| }
     end
 
     def destroy # :nodoc:
@@ -186,12 +182,20 @@ module Nanoc::DataSources
         meta_filename    = meta_filename_best
         content_filename = 'content' + page.path + (last_component || 'content') + '.html'
 
+        # Notify
+        Nanoc::NotificationCenter.post(:file_created, meta_filename)
+        Nanoc::NotificationCenter.post(:file_created, content_filename)
+
         # Create directories if necessary
         FileUtils.mkdir_p(dir_path)
       else
         # Get filenames
         meta_filename    = existing_path
         content_filename = content_filename_for_dir(File.dirname(existing_path))
+
+        # Notify
+        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
+        Nanoc::NotificationCenter.post(:file_updated, content_filename)
       end
 
       # Write files
@@ -260,6 +264,14 @@ module Nanoc::DataSources
     end
 
     def save_page_defaults(page_defaults) # :nodoc:
+      # Notify
+      if File.file?('meta.yaml')
+        Nanoc::NotificationCenter.post(:file_updated, 'meta.yaml')
+      else
+        Nanoc::NotificationCenter.post(:file_created, 'meta.yaml')
+      end
+
+      # Write
       File.open('meta.yaml', 'w') do |io|
         io.write(page_defaults.attributes.to_split_yaml)
       end
@@ -329,12 +341,20 @@ module Nanoc::DataSources
       meta_filename     = dir_path + last_component + '.yaml'
       content_filename  = Dir[dir_path + last_component + '.*'][0]
 
-      unless File.file?(meta_filename)
+      if File.file?(meta_filename)
+        # Notify
+        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
+        Nanoc::NotificationCenter.post(:file_updated, content_filename)
+      else
         # Create dir
         FileUtils.mkdir_p(dir_path)
 
         # Get content filename
         content_filename = dir_path + last_component + '.html'
+
+        # Notify
+        Nanoc::NotificationCenter.post(:file_created, meta_filename)
+        Nanoc::NotificationCenter.post(:file_created, content_filename)
       end
 
       # Write files
@@ -385,12 +405,20 @@ module Nanoc::DataSources
         meta_filename    = meta_filename_best
         content_filename = 'templates/' + template.name + '/' + template.name + '.html'
 
+        # Notify
+        Nanoc::NotificationCenter.post(:file_created, meta_filename)
+        Nanoc::NotificationCenter.post(:file_created, content_filename)
+
         # Create directories if necessary
         FileUtils.mkdir_p(dir_path)
       else
         # Get filenames
         meta_filename    = existing_path
         content_filename = content_filename_for_dir(File.dirname(existing_path))
+
+        # Notify
+        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
+        Nanoc::NotificationCenter.post(:file_updated, content_filename)
       end
 
       # Write files
@@ -424,8 +452,18 @@ module Nanoc::DataSources
     end
 
     def save_code(code) # :nodoc:
+      # Check whether code existed
+      existed = File.file?('lib/default.rb')
+
       # Remove all existing code files
       Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
+
+      # Notify
+      if existed
+        Nanoc::NotificationCenter.post(:file_updated, 'lib/default.rb')
+      else
+        Nanoc::NotificationCenter.post(:file_created, 'lib/default.rb')
+      end
 
       # Write new code
       File.open('lib/default.rb', 'w') do |io|

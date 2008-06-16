@@ -84,6 +84,14 @@ module Nanoc::CLI
         exit 1
       end
 
+      # Setup notifications
+      Nanoc::NotificationCenter.on(:file_created) do |file_path|
+        Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
+      end
+      Nanoc::NotificationCenter.on(:file_updated) do |file_path|
+        Nanoc::CLI::Logger.instance.file(:high, :update, file_path)
+      end
+
       # Load data
       @base.site.load_data
 

@@ -33,16 +33,16 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
 
         # Ensure essential files have been recreated
         assert(File.directory?('content/'))
-        assert(File.file?('meta.yaml'))
         assert(File.directory?('templates/'))
         assert(File.directory?('layouts/'))
         assert(File.directory?('lib/'))
-        assert(File.file?('lib/default.rb'))
 
         # Ensure no non-essential files have been recreated
         assert(!File.file?('content/index.html'))
         assert(!File.file?('templates/default.html'))
         assert(!File.file?('layouts/default.html'))
+        assert(!File.file?('meta.yaml'))
+        assert(!File.file?('lib/default.rb'))
       end
     end
   end
