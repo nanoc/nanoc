@@ -78,9 +78,6 @@ module Nanoc::DataSources
       # Create pages
       FileUtils.mkdir_p('content')
 
-      # Create page defaults
-      File.open('meta.yaml', 'w') { |io| }
-
       # Create template
       FileUtils.mkdir_p('templates')
 
@@ -89,7 +86,6 @@ module Nanoc::DataSources
 
       # Create code
       FileUtils.mkdir_p('lib')
-      File.open('lib/default.rb', 'w') { |io| }
     end
 
     def destroy # :nodoc:
@@ -143,6 +139,13 @@ module Nanoc::DataSources
         parent_path   = '/' + File.join(page.path.split('/')[0..-2])
       end
 
+      # Notify
+      if File.file?(path)
+        Nanoc::NotificationCenter.post(:file_updated, path)
+      else
+        Nanoc::NotificationCenter.post(:file_created, path)
+      end
+
       # Write page
       FileUtils.mkdir_p('content' + parent_path)
       File.open(path, 'w') do |io|
@@ -175,6 +178,13 @@ module Nanoc::DataSources
     end
 
     def save_page_defaults(page_defaults) # :nodoc:
+      # Notify
+      if File.file?('meta.yaml')
+        Nanoc::NotificationCenter.post(:file_updated, 'meta.yaml')
+      else
+        Nanoc::NotificationCenter.post(:file_created, 'meta.yaml')
+      end
+
       # Write page defaults
       File.open('meta.yaml', 'w') do |io|
         io.write(page_defaults.attributes.to_split_yaml)
@@ -211,6 +221,13 @@ module Nanoc::DataSources
       path_default  = 'layouts' + layout.path[0..-2] + '.html'
       path          = paths_best[0] || paths_worst[0] || path_default
       parent_path   = '/' + File.join(layout.path.split('/')[0..-2])
+
+      # Notify
+      if File.file?(path)
+        Nanoc::NotificationCenter.post(:file_updated, path)
+      else
+        Nanoc::NotificationCenter.post(:file_created, path)
+      end
 
       # Write layout
       FileUtils.mkdir_p('layouts' + parent_path)
@@ -251,6 +268,13 @@ module Nanoc::DataSources
       path_default  = File.join('templates', template.name) + '.html'
       path          = paths[0] || path_default
 
+      # Notify
+      if File.file?(path)
+        Nanoc::NotificationCenter.post(:file_updated, path)
+      else
+        Nanoc::NotificationCenter.post(:file_created, path)
+      end
+
       # Write template
       File.open(path, 'w') do |io|
         io.write("-----\n")
@@ -282,8 +306,18 @@ module Nanoc::DataSources
     end
 
     def save_code(code) # :nodoc:
+      # Check whether code existed
+      existed = File.file?('lib/default.rb')
+
       # Remove all existing code files
       Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
+
+      # Notify
+      if existed
+        Nanoc::NotificationCenter.post(:file_updated, 'lib/default.rb')
+      else
+        Nanoc::NotificationCenter.post(:file_created, 'lib/default.rb')
+      end
 
       # Write code
       File.open('lib/default.rb', 'w') do |io|

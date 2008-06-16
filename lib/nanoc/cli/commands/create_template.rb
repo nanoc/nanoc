@@ -45,6 +45,11 @@ module Nanoc::CLI
       # Make sure we are in a nanoc site directory
       @base.require_site
 
+      # Setup notifications
+      Nanoc::NotificationCenter.on(:file_created) do |file_path|
+        Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
+      end
+
       # Create template
       template = Nanoc::Template.new(
         "Hi, I'm a new template. Please edit me!",

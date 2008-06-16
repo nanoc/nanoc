@@ -214,6 +214,11 @@ EOS
         exit 1
       end
 
+      # Setup notifications
+      Nanoc::NotificationCenter.on(:file_created) do |file_path|
+        Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
+      end
+
       # Build entire site
       FileUtils.mkdir_p(path)
       in_dir([path]) do
@@ -239,6 +244,7 @@ EOS
         io.write "data_source: \"#{data_source}\"\n"
         io.write "router:      \"default\"\n"
       end
+      Nanoc::NotificationCenter.post(:file_created, 'config.yaml')
 
       # Create rakefile
       File.open('Rakefile', 'w') do |io|
@@ -248,6 +254,7 @@ EOS
         io.write "  puts 'This is an example rake task.'\n"
         io.write "end\n"
       end
+      Nanoc::NotificationCenter.post(:file_created, 'Rakefile')
 
       # Create tasks
       FileUtils.mkdir_p('tasks')
@@ -256,6 +263,7 @@ EOS
         io.write "  puts 'This is an example rake task in tasks/default.rake.'\n"
         io.write "end\n"
       end
+      Nanoc::NotificationCenter.post(:file_created, 'tasks/default.rake')
     end
 
     # Sets up the site's data source, i.e. creates the bare essentials for
