@@ -1,5 +1,3 @@
-require 'observer'
-
 module Nanoc
 
   # Nanoc::Compiler is responsible for compiling a site's page and asset
@@ -12,8 +10,6 @@ module Nanoc
   # boolean variable indicating whether outdated representations were compiled
   # or not.
   class Compiler
-
-    include Observable
 
     attr_reader :stack
 
@@ -50,26 +46,15 @@ module Nanoc
       end
       reps = objects.map { |o| o.reps }.flatten
 
-      # Start observing
-      reps.each { |rep| rep.add_observer(self) }
-
       # Compile everything
       reps.each do |rep|
         if rep.outdated? or include_outdated
           rep.compile
         else
-          update(rep, :compile_start)
-          update(rep, :compile_end)
+          Nanoc::NotificationCenter.post(:compilation_started, rep)
+          Nanoc::NotificationCenter.post(:compilation_ended,   rep)
         end
       end
-
-      # Stop observing
-      reps.each { |rep| rep.delete_observer(self) }
-    end
-
-    def update(rep, event)
-      changed
-      notify_observers(rep, event)
     end
 
   end
