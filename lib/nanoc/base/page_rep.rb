@@ -189,7 +189,11 @@ module Nanoc
       # Start
       @compiled = false
       @page.site.compiler.stack.push(self)
-      Nanoc::NotificationCenter.post(:compilation_started, self)
+
+      # Notify
+      if also_layout
+        Nanoc::NotificationCenter.post(:compilation_started, self)
+      end
 
       # Filter pre
       unless @filtered_pre
@@ -225,10 +229,14 @@ module Nanoc
         @written = true
       end
 
+      # Notify
+      if also_layout
+        Nanoc::NotificationCenter.post(:compilation_ended, self)
+      end
+
       # Stop
       @compiled = true
       @page.site.compiler.stack.pop
-      Nanoc::NotificationCenter.post(:compilation_ended, self)
     end
 
   private
