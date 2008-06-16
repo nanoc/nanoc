@@ -178,7 +178,10 @@ module Nanoc
     # +also_layout+:: true if the page representation should be laid out (and
     #                 post-filtered), and false if not.
     def compile(also_layout=true)
+      # Reinit
+      @created  = false
       @modified = false
+      @compiled = false
 
       # Check for recursive call
       if @page.site.compiler.stack.include?(self)
@@ -187,7 +190,6 @@ module Nanoc
       end
 
       # Start
-      @compiled = false
       @page.site.compiler.stack.push(self)
 
       # Notify
@@ -229,13 +231,15 @@ module Nanoc
         @written = true
       end
 
+      # Done
+      @compiled = true
+
       # Notify
       if also_layout
         Nanoc::NotificationCenter.post(:compilation_ended, self)
       end
 
       # Stop
-      @compiled = true
       @page.site.compiler.stack.pop
     end
 
