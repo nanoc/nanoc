@@ -1,5 +1,3 @@
-require 'observer'
-
 module Nanoc
 
   # A Nanoc::AssetRep is a single representation (rep) of an asset
@@ -16,8 +14,6 @@ module Nanoc
   # * :compile_start
   # * :compile_end
   class AssetRep
-
-    include Observable
 
     # The asset (Nanoc::Asset) to which this representation belongs.
     attr_reader   :asset
@@ -155,10 +151,9 @@ module Nanoc
       # Start
       @compiled = false
       @asset.site.compiler.stack.push(self)
-      notify(:compile_start)
- 
+      Nanoc::NotificationCenter.post(:compilation_started, self)
+
       # Compile
-      notify(:compile_start)
       if attribute_named(:binary) == true
         compile_binary
       else
@@ -168,7 +163,7 @@ module Nanoc
       # Stop
       @compiled = true
       @asset.site.compiler.stack.pop
-      notify(:compile_end)
+      Nanoc::NotificationCenter.post(:compilation_ended, self)
     end
 
   private
@@ -234,11 +229,6 @@ module Nanoc
       # Write asset
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(current_content) }
-    end
-
-    def notify(event)
-      changed
-      notify_observers(self, event)
     end
 
   end

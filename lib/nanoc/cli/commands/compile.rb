@@ -63,12 +63,24 @@ module Nanoc::CLI
         puts "Compiling #{page.nil? ? 'site' : 'page'}..."
         time_before = Time.now
 
+        # Set notifications
+        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+          rep_compilation_started(rep)
+        end
+        Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
+          rep_compilation_ended(rep)
+        end
+
         # Compile
-        @base.site.compiler.add_observer(self)
         @base.site.compiler.run(page, options.has_key?(:all))
 
+        # Find reps
+        page_reps  = @base.site.pages.map { |p| p.reps }.flatten
+        asset_reps = @base.site.assets.map { |a| a.reps }.flatten
+        reps       = page_reps + asset_reps
+
         # Give feedback
-        puts "No pages were modified." unless @base.site.pages.any? { |p| p.reps.any? { |r| r.modified? } }
+        puts "No pages were modified." unless reps.any? { |r| r.modified? }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
       rescue Exception => e
         # Get page rep
@@ -115,21 +127,18 @@ module Nanoc::CLI
         puts 'Backtrace:'
         puts e.backtrace.map { |t| '  - ' + t }.join("\n")
       end
-    ensure
-      @base.site.compiler.delete_observer(self)
     end
 
-    def update(rep, event)
+    def rep_compilation_started(rep)
       # Profile compilation
       @times ||= {}
-      if event == :compile_start
-        @times[rep.disk_path] = Time.now
-      elsif event == :compile_end
-        @times[rep.disk_path] = Time.now - @times[rep.disk_path]
-      end
+      @times[rep.disk_path] = Time.now
+    end
 
-      # Only print at end of compilation
-      return unless event == :compile_end
+    def rep_compilation_ended(rep)
+      # Profile compilation
+      @times ||= {}
+      @times[rep.disk_path] = Time.now - @times[rep.disk_path]
 
       # Get action and level
       action, level = *if rep.created?

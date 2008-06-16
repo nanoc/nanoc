@@ -1,5 +1,3 @@
-require 'observer'
-
 module Nanoc
 
   # A Nanoc::PageRep is a single representation (rep) of a page (Nanoc::Page).
@@ -16,8 +14,6 @@ module Nanoc
   # * :compile_start
   # * :compile_end
   class PageRep
-
-    include Observable
 
     # The page (Nanoc::Page) to which this representation belongs.
     attr_reader   :page
@@ -193,7 +189,7 @@ module Nanoc
       # Start
       @compiled = false
       @page.site.compiler.stack.push(self)
-      notify(:compile_start)
+      Nanoc::NotificationCenter.post(:compilation_started, self)
 
       # Filter pre
       unless @filtered_pre
@@ -232,7 +228,7 @@ module Nanoc
       # Stop
       @compiled = true
       @page.site.compiler.stack.pop
-      notify(:compile_end)
+      Nanoc::NotificationCenter.post(:compilation_ended, self)
     end
 
   private
@@ -275,11 +271,6 @@ module Nanoc
 
       # Layout
       @content[:post] = filter.run(layout.content)
-    end
-
-    def notify(event)
-      changed
-      notify_observers(self, event)
     end
 
   end
