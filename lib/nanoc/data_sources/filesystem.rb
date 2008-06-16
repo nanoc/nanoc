@@ -116,7 +116,7 @@ module Nanoc::DataSources
         last_component    = tmp_layout.path.split('/')[-1]
         dir_path          = 'layouts' + tmp_layout.path
         meta_filename     = dir_path + last_component + '.yaml'
-        content_filename  = dir_path + last_component + '.' + File.extname(filename)
+        content_filename  = dir_path + last_component +  File.extname(filename)
 
         # Create new files
         FileUtils.mkdir_p(dir_path)
