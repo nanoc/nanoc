@@ -21,13 +21,30 @@ module Nanoc
     # Compiles (part of) the site and writes out the compiled page and asset
     # representations.
     #
-    # +page_or_asset+:: The page or asset that should be compiled, along with
-    #                   their dependencies, or +nil+ if the entire site should
-    #                   be compiled.
+    # +obj+:: The page or asset that should be compiled, along with their
+    #         dependencies, or +nil+ if the entire site should be compiled.
     #
-    # +include_outdated+:: +false+ if outdated pages and assets should not be
-    #                      recompiled, and +true+ if they should.
-    def run(page_or_asset=nil, include_outdated=false)
+    # This method also accepts a few parameters:
+    #
+    # +:also_layout+:: true if the page rep should also be laid out and
+    #                  post-filtered, false if the page rep should only be
+    #                  pre-filtered. Only applicable to page reps, and not to
+    #                  asset reps. Defaults to true.
+    #
+    # +:even_when_outdated+:: true if the rep should be compiled even if it is
+    #                         not outdated, false if not. Defaults to false.
+    #
+    # +:from_scratch+:: true if all compilation stages (for page reps:
+    #                   pre-filter, layout, post-filter; for asset reps:
+    #                   filter) should be performed again even if they have
+    #                   already been performed, false otherwise. Defaults to
+    #                   false.
+    def run(obj=nil, params={})
+      # Parse params
+      also_layout         = params[:also_layout]        || true
+      even_when_outdated  = params[:even_when_outdated] || false
+      from_scratch        = params[:from_scratch]       || false
+
       # Load data
       @site.load_data
 
@@ -36,23 +53,17 @@ module Nanoc
 
       # Initialize
       @stack = []
-      @include_outdated = include_outdated
 
-      # Get pages and assets
-      unless page_or_asset.nil?
-        objects = [ page_or_asset ]
-      else
-        objects = @site.pages + @site.assets
-      end
+      # Get pages and asset reps
+      objects = obj.nil? ? @site.pages + @site.assets : [ obj ]
       reps = objects.map { |o| o.reps }.flatten
 
       # Compile everything
       reps.each do |rep|
-        if rep.outdated? or include_outdated
-          rep.compile
+        if rep.is_a?(Nanoc::PageRep)
+          rep.compile(also_layout, even_when_outdated, from_scratch)
         else
-          Nanoc::NotificationCenter.post(:compilation_started, rep)
-          Nanoc::NotificationCenter.post(:compilation_ended,   rep)
+          rep.compile(even_when_outdated, from_scratch)
         end
       end
     end
