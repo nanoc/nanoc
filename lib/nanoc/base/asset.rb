@@ -48,14 +48,6 @@ module Nanoc
       @attributes     = attributes.clean
       @path           = path.cleaned_path
       @mtime          = mtime
-
-      # Not modified, not created by default
-      @modified       = false
-      @created        = false
-
-      # Reset flags
-      @filtered       = false
-      @written        = false
     end
 
     # Builds the individual asset representations (Nanoc::AssetRep) for this

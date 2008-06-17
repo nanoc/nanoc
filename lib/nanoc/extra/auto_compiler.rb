@@ -242,7 +242,7 @@ END
     def serve_page_rep(page_rep)
       # Recompile page rep
       begin
-        @site.compiler.run(page_rep.page, @include_outdated)
+        @site.compiler.run(page_rep.page, :even_when_outdated => @include_outdated)
       rescue Exception => exception
         return serve_500(page_rep.web_path, exception)
       end

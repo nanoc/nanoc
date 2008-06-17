@@ -44,16 +44,14 @@ module Nanoc
       # Get page content from page
       @content        = { :pre => page.content, :post => nil }
 
-      # Not modified, not created by default
+      # Reset flags
       @compiled       = false
       @modified       = false
       @created        = false
 
-      # Reset flags
+      # Reset stages
       @filtered_pre   = false
-      @laid_out       = false
       @filtered_post  = false
-      @written        = false
     end
 
     # Returns a proxy (Nanoc::PageRepProxy) for this page representation.
@@ -81,6 +79,9 @@ module Nanoc
     # Returns true if this page rep's output file is outdated and must be
     # regenerated, false otherwise.
     def outdated?
+      # Outdated if we don't know
+      return true if @page.mtime.nil?
+
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
 
@@ -154,8 +155,8 @@ module Nanoc
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
     def content(stage=:pre)
-      compile(false) if stage == :pre  and !@filtered_pre
-      compile(true)  if stage == :post and !@filtered_post
+      compile(false, false, false) if stage == :pre  and !@filtered_pre
+      compile(true,  false, false) if stage == :post and !@filtered_post
       @content[stage]
     end
 
@@ -171,17 +172,38 @@ module Nanoc
       @layout
     end
 
-    # Compiles the page representation. This will run the pre-filters, layout
-    # the page representation, run the post-filters, and write the resulting
-    # page rep to disk (unless +skip_output+ is set).
+    # Compiles the page representation and writes the result to the disk. This
+    # method should not be called directly; please use Nanoc::Compiler#run
+    # instead, and pass this page representation's page as its first argument.
     #
-    # +also_layout+:: true if the page representation should be laid out (and
-    #                 post-filtered), and false if not.
-    def compile(also_layout=true)
-      # Reinit
-      @created  = false
-      @modified = false
+    # +also_layout+:: true if the page rep should also be laid out and
+    #                 post-filtered, false if the page rep should only be
+    #                 pre-filtered.
+    #
+    # +even_when_outdated+:: true if the page rep should be compiled even if
+    #                        it is not outdated, false if not.
+    #
+    # +from_scratch+:: true if all compilation stages (pre-filter, layout,
+    #                  post-filter) should be performed again even if they
+    #                  have already been performed, false otherwise.
+    def compile(also_layout, even_when_outdated, from_scratch)
+      # Skip unless outdated
+      unless outdated? or even_when_outdated
+        Nanoc::NotificationCenter.post(:compilation_started, self)
+        Nanoc::NotificationCenter.post(:compilation_ended,   self)
+        return
+      end
+
+      # Reset flags
       @compiled = false
+      @modified = false
+      @created  = false
+
+      # Forget progress if requested
+      if from_scratch
+        @filtered_pre   = false
+        @filtered_post  = false
+      end
 
       # Check for recursive call
       if @page.site.compiler.stack.include?(self)
@@ -191,59 +213,51 @@ module Nanoc
 
       # Start
       @page.site.compiler.stack.push(self)
-
-      # Notify
       if also_layout
         Nanoc::NotificationCenter.post(:compilation_started, self)
       end
 
-      # Filter pre
-      unless @filtered_pre
-        filter!(:pre)
-        @filtered_pre = true
-      end
-
-      # Layout
-      if !@laid_out and also_layout
-        layout!
-        @laid_out = true
-      end
-
-      # Filter post
-      if !@filtered_post and also_layout
-        filter!(:post)
-        @filtered_post = true
-      end
-
-      # Write
-      if !@written and also_layout
-        # Check status
-        @created  = !File.file?(self.disk_path)
-        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
-
-        # Write
-        unless attribute_named(:skip_output)
-          FileUtils.mkdir_p(File.dirname(self.disk_path))
-          File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
-        end
-
-        # Done
-        @written = true
-      end
-
-      # Done
+      # Compile
+      compile_pre  if !@filtered_pre
+      compile_post if !@filtered_post and also_layout
       @compiled = true
 
-      # Notify
+      # Stop
       if also_layout
         Nanoc::NotificationCenter.post(:compilation_ended, self)
       end
-
-      # Stop
       @page.site.compiler.stack.pop
     end
 
   private
+
+    # Runs the uncompiled content through the pre-filters
+    def compile_pre
+      # Filter pre
+      filter!(:pre)
+
+      # Done
+      @filtered_pre = true
+    end
+
+    def compile_post
+      # Layout and filter post
+      layout!
+      filter!(:post)
+
+      # Check status
+      @created  = !File.file?(self.disk_path)
+      @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+
+      # Write
+      unless attribute_named(:skip_output)
+        FileUtils.mkdir_p(File.dirname(self.disk_path))
+        File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
+      end
+
+      # Done
+      @filtered_post = true
+    end
 
     # Runs the content through the filters in the given stage.
     def filter!(stage)

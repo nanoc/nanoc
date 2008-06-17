@@ -63,16 +63,6 @@ module Nanoc
       @parent         = nil
       @children       = []
       @reps           = []
-
-      # Not modified, not created by default
-      @modified       = false
-      @created        = false
-
-      # Reset flags
-      @filtered_pre   = false
-      @laid_out       = false
-      @filtered_post  = false
-      @written        = false
     end
 
     # Builds the individual page representations (Nanoc::PageRep) for this
@@ -100,16 +90,6 @@ module Nanoc
     # Returns a proxy (Nanoc::PageProxy) for this page.
     def to_proxy
       @proxy ||= PageProxy.new(self)
-    end
-
-    # Returns true if the source page is newer than the compiled page, false
-    # otherwise. Also returns false if the page modification time isn't known.
-    def outdated?
-      # Outdated if we don't know
-      return true if @mtime.nil?
-
-      # Outdated if a page rep is outdated
-      return @reps.any? { |rep| rep.outdated? }
     end
 
     # Returns the attribute with the given name.

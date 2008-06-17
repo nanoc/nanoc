@@ -37,18 +37,17 @@ module Nanoc
     # +name+:: The unique name for the new asset representation.
     def initialize(asset, attributes, name)
       # Set primary attributes
-      @asset            = asset
-      @attributes       = attributes
-      @name             = name
-
-      # Not modified, not created by default
-      @modified         = false
-      @created          = false
+      @asset      = asset
+      @attributes = attributes
+      @name       = name
 
       # Reset flags
-      @compiled         = false
-      @filtered         = false
-      @written          = false
+      @compiled   = false
+      @modified   = false
+      @created    = false
+
+      # Reset stages
+      @filtered   = false
     end
 
     # Returns a proxy (Nanoc::AssetRepProxy) for this asset representation.
@@ -142,26 +141,46 @@ module Nanoc
       return Nanoc::Asset::DEFAULTS[name]
     end
 
-    # Compiles this asset representation. This will run all the filters and
-    # write the resulting asset rep to the disk.
-    def compile
-      # Check created
-      @created = !File.file?(self.disk_path)
+    # Compiles the asset representation and writes the result to the disk.
+    # This method should not be called directly; please use
+    # Nanoc::Compiler#run instead, and pass this asset representation's asset
+    # as its first argument.
+    #
+    # +even_when_outdated+:: true if the asset rep should be compiled even if
+    #                        it is not outdated, false if not.
+    #
+    # +from_scratch+:: true if the asset rep should be filtered again even if
+    #                  it has already been filtered, false otherwise.
+    def compile(even_when_outdated, from_scratch)
+      # Skip unless outdated
+      unless outdated? or even_when_outdated
+        Nanoc::NotificationCenter.post(:compilation_started, self)
+        Nanoc::NotificationCenter.post(:compilation_ended,   self)
+      end
+
+      # Reset flags
+      @compiled = false
+      @modified = false
+      @created  = !File.file?(self.disk_path)
+
+      # Forget progress if requested
+      @filtered = false if from_scratch
 
       # Start
-      @compiled = false
       @asset.site.compiler.stack.push(self)
       Nanoc::NotificationCenter.post(:compilation_started, self)
 
       # Compile
-      if attribute_named(:binary) == true
-        compile_binary
-      else
-        compile_textual
+      unless @filtered
+        if attribute_named(:binary) == true
+          compile_binary
+        else
+          compile_textual
+        end
       end
+      @compiled = true
 
       # Stop
-      @compiled = true
       @asset.site.compiler.stack.pop
       Nanoc::NotificationCenter.post(:compilation_ended, self)
     end
