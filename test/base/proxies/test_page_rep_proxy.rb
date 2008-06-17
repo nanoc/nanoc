@@ -5,77 +5,33 @@ class Nanoc::PageRepProxyTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestPageRep
-
-    attr_reader :page
-
-    def initialize(page)
-      @page = page
-    end
-
-    def to_proxy
-      @proxy ||= Nanoc::PageRepProxy.new(self)
-    end
-
-    def name
-      :default
-    end
-
-    def web_path
-      "page rep web path"
-    end
-
-    def content
-      "page rep content"
-    end
-
-    def attribute_named(key)
-      "page rep attribute named #{key}"
-    end
-
-  end
-
-  class TestPage
-
-    def to_proxy
-      @proxy ||= Nanoc::PageProxy.new(self)
-    end
-
-    def content
-      'page content'
-    end
-
-    def path
-      'page path'
-    end
-
-    def web_path
-      'page web path'
-    end
-
-    def attribute_named(key)
-      "page attribute named #{key}"
-    end
-
-    def reps
-      @reps ||= [ TestPageRep.new(self) ]
-    end
-
-  end
-
   def test_get
     # Get page
-    page = TestPage.new
-    page_rep = page.reps[0]
-    page_rep_proxy = page_rep.to_proxy
+    page = mock
+    page.expects(:attribute_named).with(:moo).returns('page attr moo')
+
+    # Get page proxy
+    page_proxy = Nanoc::PageProxy.new(page)
+    page.expects(:to_proxy).returns(page_proxy)
+
+    # Get page rep
+    page_rep = mock
+    page_rep.expects(:page).returns(page)
+    page_rep.expects(:content).returns('page rep content')
+    page_rep.expects(:web_path).returns('page rep web path')
+    page_rep.expects(:attribute_named).times(2).with(:blah).returns('page rep attr blah')
+    page_rep.expects(:attribute_named).with(:'blah!').returns('page rep attr blah!')
+
+    # Get page proxy
+    page_rep_proxy = Nanoc::PageRepProxy.new(page_rep)
 
     # Test
-    assert_equal('page rep content',                page_rep_proxy.content)
-    assert_equal('page attribute named moo',        page_rep_proxy.page.moo)
-    assert_equal('page rep web path',               page_rep_proxy.path)
-    assert_equal('page rep attribute named blah',   page_rep_proxy.blah)
-    assert_equal('page rep attribute named blah',   page_rep_proxy.blah?)
-    assert_equal('page rep attribute named blah!',  page_rep_proxy.blah!)
+    assert_equal('page rep content',      page_rep_proxy.content)
+    assert_equal('page attr moo',         page_rep_proxy.page.moo)
+    assert_equal('page rep web path',     page_rep_proxy.path)
+    assert_equal('page rep attr blah',    page_rep_proxy.blah)
+    assert_equal('page rep attr blah',    page_rep_proxy.blah?)
+    assert_equal('page rep attr blah!',   page_rep_proxy.blah!)
   end
 
 end

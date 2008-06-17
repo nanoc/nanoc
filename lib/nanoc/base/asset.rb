@@ -77,17 +77,6 @@ module Nanoc
       @proxy ||= AssetProxy.new(self)
     end
 
-    # Returns true if the source asset is newer than the compiled asset, false
-    # otherwise. Also returns false if the asset modification time isn't
-    # known.
-    def outdated?
-      # Outdated if we don't know
-      return true if @mtime.nil?
-
-      # Outdated if an asset rep is outdated
-      return @reps.any? { |rep| rep.outdated? }
-    end
-
     # Returns the attribute with the given name.
     def attribute_named(name)
       return @attributes[name] if @attributes.has_key?(name)

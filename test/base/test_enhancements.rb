@@ -5,56 +5,6 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestCompiler
-
-    attr_reader :stack
-
-    def initialize
-      @stack = []
-    end
-
-  end
-
-  class TestSite
-
-    def compiler
-      @compiler ||= TestCompiler.new
-    end
-
-    def config
-      @config ||= {}
-    end
-
-    def pages
-      @pages ||= []
-    end
-
-    def assets
-      @assets ||= []
-    end
-
-    def layouts
-      @layouts ||= [
-        Nanoc::Layout.new(
-          'Hi, this is the <%= @page.title %> page',
-          { :filter => 'erb' },
-          '/foo/'
-        ),
-        Nanoc::Layout.new(
-          'layout content',
-          { :filter => 'asdfsf' },
-          '/bar/'
-        ),
-        Nanoc::Layout.new(
-          'Foo <%= @middle %> Baz',
-          { :filter => 'erb' },
-          '/baz/'
-        ),
-      ]
-    end
-
-  end
-
   def test_in_dir
     # Initialize
     current_dir = Dir.getwd
@@ -66,8 +16,24 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
   end
 
   def test_render
-    # Initialize
-    @site     = TestSite.new
+    # Create layout
+    layout = Nanoc::Layout.new(
+      'Hi, this is the <%= @page.title %> page',
+      { :filter => 'erb' },
+      '/foo/'
+    )
+
+    # Create site
+    @site = mock
+    @site.expects(:config).returns({})
+    @site.expects(:pages).returns([])
+    @site.expects(:assets).returns([])
+    @site.expects(:layouts).times(2).returns([ layout ])
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns([])
+    @site.expects(:compiler).at_least_once.returns(compiler)
+
+    # Create pages
     @page     = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
     @page_rep = Nanoc::PageRep.new(@page, {}, :default)
     @page.reps << @page_rep
@@ -83,8 +49,24 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
   end
 
   def test_render_with_other_assigns
-    # Initialize
-    @site     = TestSite.new
+    # Create layout
+    layout = Nanoc::Layout.new(
+      'Foo <%= @middle %> Baz',
+      { :filter => 'erb' },
+      '/foo/'
+    )
+
+    # Create site
+    @site = mock
+    @site.expects(:config).returns({})
+    @site.expects(:pages).returns([])
+    @site.expects(:assets).returns([])
+    @site.expects(:layouts).times(2).returns([ layout ])
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns([])
+    @site.expects(:compiler).at_least_once.returns(compiler)
+
+    # Create pages
     @page     = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
     @page_rep = Nanoc::PageRep.new(@page, {}, :default)
     @page.reps << @page_rep
@@ -95,31 +77,43 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
 
     # Render
     assert_nothing_raised do
-      assert_equal('Foo Bar Baz', render('/baz/', :middle => 'Bar'))
+      assert_equal('Foo Bar Baz', render('/foo/', :middle => 'Bar'))
     end
   end
 
   def test_render_with_unknown_layout
-    # Initialize
-    @site     = TestSite.new
-    @page     = Nanoc::Page.new('page content', {}, '/')
-    @page_rep = Nanoc::PageRep.new(@page, {}, :default)
+    # Create layout
+    layout = Nanoc::Layout.new(
+      'Foo',
+      { :filter => 'erb' },
+      '/foo/'
+    )
+
+    # Create site
+    @site = mock
+    @site.expects(:layouts).returns([ layout ])
 
     # Render
     assert_raise(Nanoc::Errors::UnknownLayoutError) do
-      render '/blah/'
+      render('/fawgooafwagwfe/')
     end
   end
 
   def test_render_with_unknown_filter
-    # Initialize
-    @site     = TestSite.new
-    @page     = Nanoc::Page.new('page content', {}, '/')
-    @page_rep = Nanoc::PageRep.new(@page, {}, :default)
+    # Create layout
+    layout = Nanoc::Layout.new(
+      'Foo',
+      { :filter => 'afafedhrdjdhrwegfwe' },
+      '/foo/'
+    )
+
+    # Create site
+    @site = mock
+    @site.expects(:layouts).returns([ layout ])
 
     # Render
     assert_raise(Nanoc::Errors::CannotDetermineFilterError) do
-      render '/bar/'
+      render '/foo/'
     end
   end
 

@@ -5,178 +5,187 @@ class Nanoc::FilterTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestPageRep
-
-    def to_proxy
-      @proxy ||= Nanoc::Proxy.new(self)
-    end
-
-    def attribute_named(key)
-      "page rep attribute named #{key}"
-    end
-
-  end
-
-  class TestPage
-
-    def to_proxy
-      @proxy ||= Nanoc::Proxy.new(self)
-    end
-
-    def attribute_named(key)
-      "page attribute named #{key}"
-    end
-
-    def reps
-      @reps ||= [ TestPageRep.new ]
-    end
-
-  end
-
-  class TestAssetRep
-
-    def to_proxy
-      @proxy ||= Nanoc::Proxy.new(self)
-    end
-
-    def attribute_named(key)
-      "asset rep attribute named #{key}"
-    end
-
-  end
-
-  class TestAsset
-
-    def to_proxy
-      @proxy ||= Nanoc::Proxy.new(self)
-    end
-
-    def attribute_named(key)
-      "asset attribute named #{key}"
-    end
-
-    def reps
-      @reps ||= [ TestAssetRep.new ]
-    end
-
-  end
-
-  class TestLayout
-
-    def to_proxy
-      @proxy ||= Nanoc::Proxy.new(self)
-    end
-
-    def attribute_named(key)
-      "layout attribute named #{key}"
-    end
-
-  end
-
-  class TestSite
-
-    attr_reader :pages, :assets, :layouts
-
-    def config
-      "Not a real config."
-    end
-
-    def initialize
-      @pages   = [ TestPage.new   ]
-      @assets  = [ TestAsset.new  ]
-      @layouts = [ TestLayout.new ]
-    end
-
-  end
-
   def test_initialize_with_page_rep
-    # Create site and filter
-    site      = TestSite.new
-    page_rep  = site.pages[0].reps[0]
-    page      = site.pages[0]
-    filter    = Nanoc::Filter.new(:page, page_rep, page, site)
+    # Create page
+    page_rep = mock
+    page_rep_proxy = Nanoc::Proxy.new(page_rep)
+    page_rep.expects(:to_proxy).returns(page_rep_proxy)
+    page_rep.expects(:attribute_named).with(:foo).returns('page rep attr foo')
+    page = mock
+    page_proxy = Nanoc::Proxy.new(page)
+    page.expects(:to_proxy).times(2).returns(page_proxy)
+    page.expects(:attribute_named).times(2).with(:foo).returns('page attr foo')
+
+    # Create asset
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:to_proxy).returns(asset_proxy)
+    asset.expects(:attribute_named).with(:foo).returns('asset attr foo')
+
+    # Create layout
+    layout = mock
+    layout_proxy = Nanoc::Proxy.new(layout)
+    layout.expects(:to_proxy).returns(layout_proxy)
+    layout.expects(:attribute_named).with(:foo).returns('layout attr foo')
+
+    # Create site
+    site = mock
+    site.expects(:assets).returns([ asset ])
+    site.expects(:pages).returns([ page ])
+    site.expects(:layouts).returns([ layout ])
+    site.expects(:config).returns({})
+
+    # Create filter
+    filter = Nanoc::Filter.new(:page, page_rep, page, site)
 
     # Make sure page itself is not proxied by the filter
     assert_equal(
-      'page attribute named foo',
+      'page attr foo',
       filter.instance_eval { @page.to_proxy.foo }
     )
     assert_equal(
-      'page rep attribute named foo',
+      'page rep attr foo',
       filter.instance_eval { @page_rep.to_proxy.foo }
     )
 
     # Make sure pages, assets and layouts are proxied
     assert_equal(
-      'page attribute named foo',
+      'page attr foo',
       filter.instance_eval { @pages[0].foo }
     )
     assert_equal(
-      'asset attribute named foo',
+      'asset attr foo',
       filter.instance_eval { @assets[0].foo }
     )
     assert_equal(
-      'layout attribute named foo',
+      'layout attr foo',
       filter.instance_eval { @layouts[0].foo }
     )
   end
 
   def test_initialize_with_asset_rep
-    # Create site and filter
-    site      = TestSite.new
-    asset_rep = site.assets[0].reps[0]
-    asset     = site.assets[0]
-    filter    = Nanoc::Filter.new(:asset, asset_rep, asset, site)
+    # Create asset
+    asset_rep = mock
+    asset_rep_proxy = Nanoc::Proxy.new(asset_rep)
+    asset_rep.expects(:to_proxy).returns(asset_rep_proxy)
+    asset_rep.expects(:attribute_named).with(:foo).returns('asset rep attr foo')
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:to_proxy).times(2).returns(asset_proxy)
+    asset.expects(:attribute_named).times(2).with(:foo).returns('asset attr foo')
+
+    # Create page
+    page = mock
+    page_proxy = Nanoc::Proxy.new(page)
+    page.expects(:to_proxy).returns(page_proxy)
+    page.expects(:attribute_named).with(:foo).returns('page attr foo')
+
+    # Create layout
+    layout = mock
+    layout_proxy = Nanoc::Proxy.new(layout)
+    layout.expects(:to_proxy).returns(layout_proxy)
+    layout.expects(:attribute_named).with(:foo).returns('layout attr foo')
+
+    # Create site
+    site = mock
+    site.expects(:assets).returns([ asset ])
+    site.expects(:pages).returns([ page ])
+    site.expects(:layouts).returns([ layout ])
+    site.expects(:config).returns({})
+
+    # Create filter
+    filter = Nanoc::Filter.new(:asset, asset_rep, asset, site)
 
     # Make sure asset itself is not proxied by the filter
     assert_equal(
-      'asset attribute named foo',
+      'asset attr foo',
       filter.instance_eval { @asset.to_proxy.foo }
     )
     assert_equal(
-      'asset rep attribute named foo',
+      'asset rep attr foo',
       filter.instance_eval { @asset_rep.to_proxy.foo }
     )
 
     # Make sure pages, assets and layouts are proxied
     assert_equal(
-      'page attribute named foo',
+      'page attr foo',
       filter.instance_eval { @pages[0].foo }
     )
     assert_equal(
-      'asset attribute named foo',
+      'asset attr foo',
       filter.instance_eval { @assets[0].foo }
     )
     assert_equal(
-      'layout attribute named foo',
+      'layout attr foo',
       filter.instance_eval { @layouts[0].foo }
     )
   end
 
   def test_assigns
-    # Create site and filter
-    site      = TestSite.new
-    page_rep  = site.pages[0].reps[0].to_proxy
-    page      = site.pages[0].to_proxy
-    filter    = Nanoc::Filter.new(:page, page_rep, page, site, { :foo => 'bar' })
+    # Create page
+    page_rep = mock
+    page = mock
+    page_proxy = Nanoc::Proxy.new(page)
+    page.expects(:to_proxy).returns(page_proxy)
+
+    # Create asset
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:to_proxy).returns(asset_proxy)
+
+    # Create layout
+    layout = mock
+    layout_proxy = Nanoc::Proxy.new(layout)
+    layout.expects(:to_proxy).returns(layout_proxy)
+
+    # Create site
+    site = mock
+    site.expects(:assets).returns([ asset ])
+    site.expects(:pages).returns([ page ])
+    site.expects(:layouts).returns([ layout ])
+    site.expects(:config).returns({ :xxx => 'yyy' })
+
+    # Create filter
+    filter = Nanoc::Filter.new(:page, page_rep, page, site, { :foo => 'bar' })
 
     # Check normal assigns
-    assert_equal(site.config,                         filter.assigns[:config])
-    assert_equal(site.pages[0].to_proxy,              filter.assigns[:page])
-    assert_equal(site.pages[0].reps[0].to_proxy,      filter.assigns[:page_rep])
-    assert_equal(site.pages.map   { |p| p.to_proxy }, filter.assigns[:pages])
-    assert_equal(site.layouts.map { |l| l.to_proxy }, filter.assigns[:layouts])
+    assert_equal(page,              filter.assigns[:page])
+    assert_equal(page_rep,          filter.assigns[:page_rep])
+    assert_equal([ page_proxy ],    filter.assigns[:pages])
+    assert_equal([ asset_proxy ],   filter.assigns[:assets])
+    assert_equal([ layout_proxy ],  filter.assigns[:layouts])
+    assert_equal({ :xxx => 'yyy' }, filter.assigns[:config])
 
     # Check other assigns
-    assert_equal('bar',                               filter.assigns[:foo])
+    assert_equal('bar', filter.assigns[:foo])
   end
 
   def test_run
-    # Create site and filter
-    site      = TestSite.new
-    page_rep  = site.pages[0].reps[0].to_proxy
-    page      = site.pages[0].to_proxy
-    filter    = Nanoc::Filter.new(:page, page_rep, page, site)
+    # Create page
+    page_rep = mock
+    page = mock
+    page_proxy = Nanoc::Proxy.new(page)
+    page.expects(:to_proxy).returns(page_proxy)
+
+    # Create asset
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:to_proxy).returns(asset_proxy)
+
+    # Create layout
+    layout = mock
+    layout_proxy = Nanoc::Proxy.new(layout)
+    layout.expects(:to_proxy).returns(layout_proxy)
+
+    # Create site
+    site = mock
+    site.expects(:assets).returns([ asset ])
+    site.expects(:pages).returns([ page ])
+    site.expects(:layouts).returns([ layout ])
+    site.expects(:config).returns({ :xxx => 'yyy' })
+
+    # Create filter
+    filter = Nanoc::Filter.new(:page, page_rep, page, site, { :foo => 'bar' })
 
     # Make sure an error is raised
     assert_raise(NotImplementedError) do
@@ -185,11 +194,31 @@ class Nanoc::FilterTest < Test::Unit::TestCase
   end
 
   def test_extensions
-    # Create site and filter
-    site      = TestSite.new
-    page_rep  = site.pages[0].reps[0].to_proxy
-    page      = site.pages[0].to_proxy
-    filter    = Nanoc::Filter.new(:page, page_rep, page, site)
+    # Create page
+    page_rep = mock
+    page = mock
+    page_proxy = Nanoc::Proxy.new(page)
+    page.expects(:to_proxy).returns(page_proxy)
+
+    # Create asset
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:to_proxy).returns(asset_proxy)
+
+    # Create layout
+    layout = mock
+    layout_proxy = Nanoc::Proxy.new(layout)
+    layout.expects(:to_proxy).returns(layout_proxy)
+
+    # Create site
+    site = mock
+    site.expects(:assets).returns([ asset ])
+    site.expects(:pages).returns([ page ])
+    site.expects(:layouts).returns([ layout ])
+    site.expects(:config).returns({ :xxx => 'yyy' })
+
+    # Create filter
+    filter = Nanoc::Filter.new(:page, page_rep, page, site, { :foo => 'bar' })
 
     # Update extension
     filter.class.class_eval { extension :foo }

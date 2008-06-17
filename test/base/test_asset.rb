@@ -14,11 +14,14 @@ class Nanoc::AssetTest < Test::Unit::TestCase
   end
 
   def test_to_proxy
-    # TODO implement
-  end
+    # Create asset
+    asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')
 
-  def test_outdated
-    # TODO implement
+    # Create proxy
+    asset_proxy = asset.to_proxy
+
+    # Check values
+    assert_equal('bar', asset_proxy.foo)
   end
 
   def test_attribute_named
