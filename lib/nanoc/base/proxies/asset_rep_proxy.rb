@@ -10,6 +10,8 @@ module Nanoc
     def [](key)
       real_key = key.to_s.sub(/\?$/, '').to_sym
 
+      # TODO add name
+
       if real_key == :path
         @obj.web_path
       elsif real_key == :asset

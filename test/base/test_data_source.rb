@@ -5,71 +5,27 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestingLoadingDataSource < Nanoc::DataSource
-
-    attr_reader   :references
-    attr_accessor :upped, :downed
-
-    def up
-      @upped = true
-    end
-
-    def down
-      @downed = true
-    end
-
-  end
-
-  class TestingDataSource < Nanoc::DataSource
-
-  end
-
   def test_loading
     # Create data source
-    data_source = TestingLoadingDataSource.new(nil)
+    data_source = Nanoc::DataSource.new(nil)
+    data_source.expects(:up).times(1)
+    data_source.expects(:down).times(1)
 
-    # Reset
-    data_source.upped  = false
-    data_source.downed = false
-
-    # Check state
-    assert_equal(0,     data_source.references)
-    assert_equal(false, data_source.upped)
-    assert_equal(false, data_source.downed)
-
-    # Load
+    # Test nested loading
+    assert_equal(0, data_source.instance_eval { @references })
     data_source.loading do
-      # Check state
-      assert_equal(1,     data_source.references)
-      assert_equal(true,  data_source.upped)
-      assert_equal(false, data_source.downed)
-
-      # Reset
-      data_source.upped  = false
-      data_source.downed = false
-
-      # Load
+      assert_equal(1, data_source.instance_eval { @references })
       data_source.loading do
-        # Check state
-        assert_equal(2,     data_source.references)
-        assert_equal(false, data_source.upped)
-        assert_equal(false, data_source.downed)
-
-        # Reset
-        data_source.upped  = false
-        data_source.downed = false
+        assert_equal(2, data_source.instance_eval { @references })
       end
+      assert_equal(1, data_source.instance_eval { @references })
     end
-
-    # Check state
-    assert_equal(0,     data_source.references)
-    assert_equal(false, data_source.upped)
-    assert_equal(true,  data_source.downed)
+    assert_equal(0, data_source.instance_eval { @references })
   end
 
   def test_not_implemented
     # Create data source
-    data_source = TestingDataSource.new(nil)
+    data_source = Nanoc::DataSource.new(nil)
 
     # Test optional methods
     assert_nothing_raised { data_source.up }
