@@ -26,12 +26,33 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
       }
     end
 
-    def page_defaults
-      @page_defaults ||= Nanoc::PageDefaults.new(:foo => 'bar')
+    def compiler
+      @compiler ||= Nanoc::Compiler.new(self)
     end
 
     def router
       @router ||= TestRouter.new(self)
+    end
+
+    def load_data
+    end
+
+    def pages
+      []
+    end
+
+    def page_defaults
+      @page_defaults ||= Nanoc::PageDefaults.new(:foo => 'bar')
+    end
+
+    def assets
+      []
+    end
+
+    def layouts
+      [
+        Nanoc::Layout.new('Head <%= @page.content %> Foot', {}, '/default/')
+      ]
     end
 
   end
@@ -51,41 +72,146 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   end
 
   def test_initialize
-    # TODO implement
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("some content", { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+
+    # Get rep
+    page.build_reps
+    page_rep = page.reps.first
+
+    # Assert content set
+    assert_equal('some content', page_rep.instance_eval { @content[:pre] })
+    assert_equal(nil,            page_rep.instance_eval { @content[:post] })
+
+    # Assert flags reset
+    assert(page_rep.instance_eval { !@compiled })
+    assert(page_rep.instance_eval { !@modified })
+    assert(page_rep.instance_eval { !@created })
+    assert(page_rep.instance_eval { !@filtered_pre })
+    assert(page_rep.instance_eval { !@filtered_post })
   end
 
   def test_to_proxy
-    # TODO implement
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+
+    # Get rep
+    page.build_reps
+    page_rep = page.reps.first
+
+    # Create proxy
+    page_rep_proxy = page_rep.to_proxy
+
+    # Check values
+    assert_equal('bar', page_rep_proxy.foo)
   end
 
   def test_created
-    # TODO implement
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+
+    # Get rep
+    page.build_reps
+    page_rep = page.reps.first
+
+    # Assert not created
+    assert(!page_rep.created?)
+
+    # Compile page rep
+    site.compiler.run(page, :from_scratch => true)
+
+    # Assert created
+    assert(page_rep.created?)
+
+    # Compile page rep again
+    site.compiler.run(page, :from_scratch => true)
+
+    # Assert not created
+    assert(!page_rep.created?)
   end
 
   def test_modified
-    # TODO implement
-
-    # needed for compilation:
-    # - page (obviously)
-    # - router (for getting disk path)
-    # - compiler (for stack)
-    # - site config (for output dir)
+    # Create site
+    site = TestSite.new
 
     # Create page
+    page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+
+    # Get rep
+    page.build_reps
+    page_rep = page.reps.first
 
     # Assert not modified
+    assert(!page_rep.modified?)
 
-    # Compile page
+    # Compile page rep
+    site.compiler.run(page, :from_scratch => true)
 
     # Assert modified
+    assert(page_rep.modified?)
 
-    # Compile page again
+    # Compile page rep again
+    site.compiler.run(page, :from_scratch => true)
 
     # Assert not modified
+    assert(!page_rep.modified?)
 
-    # Edit and compile page
+    # Edit and compile page rep
+    page.instance_eval      { @mtime = Time.now + 5 }
+    page_rep.instance_eval  { @content[:pre] = 'new content' }
+    site.compiler.run(page, :from_scratch => true)
 
     # Assert modified
+    assert(page_rep.modified?)
+  end
+
+  def test_compiled
+    # Create site
+    site = TestSite.new
+
+    # Create page
+    page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+
+    # Get rep
+    page.build_reps
+    page_rep = page.reps.first
+
+    # Assert not compiled
+    assert(!page_rep.compiled?)
+
+    # Compile page rep
+    site.compiler.run(page, :from_scratch => true)
+
+    # Assert compiled
+    assert(page_rep.compiled?)
+
+    # Compile page rep again
+    site.compiler.run(page, :from_scratch => true)
+
+    # Assert not compiled
+    assert(page_rep.compiled?)
+
+    # Edit and compile page rep
+    page.instance_eval      { @mtime = Time.now + 5 }
+    page_rep.instance_eval  { @content[:pre] = 'new content' }
+    site.compiler.run(page, :from_scratch => true)
+
+    # Assert compiled
+    assert(page_rep.compiled?)
   end
 
   def test_outdated
@@ -194,6 +320,18 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   end
 
   def test_compile_without_layout
+    # TODO implement
+  end
+
+  def test_compile_also_layout
+    # TODO implement
+  end
+
+  def test_compile_even_when_outdated
+    # TODO implement
+  end
+
+  def test_compile_from_scratch
     # TODO implement
   end
 

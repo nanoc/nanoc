@@ -91,6 +91,10 @@ class Nanoc::PageTest < Test::Unit::TestCase
     assert_equal('/foo/', page.path)
   end
 
+  def test_build_reps
+    # TODO implement
+  end
+
   def test_to_proxy
     # Create page
     page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')

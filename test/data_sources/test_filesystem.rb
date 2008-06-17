@@ -300,7 +300,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       ########## EVERYTHING UP TO DATE
 
@@ -315,7 +317,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (shouldn't have changed)
       assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
@@ -333,7 +337,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -351,7 +357,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -369,7 +377,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -387,7 +397,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -405,7 +417,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -423,7 +437,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -441,7 +457,9 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      assert_nothing_raised() do
+        site.compiler.run(nil, :from_scratch => true)
+      end
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)

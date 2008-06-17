@@ -21,6 +21,10 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
+  def test_compiled
+    # TODO implement
+  end
+
   def test_disk_path
     # TODO implement
   end
@@ -38,6 +42,14 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_compile
+    # TODO implement
+  end
+
+  def test_compile_even_when_outdated
+    # TODO implement
+  end
+
+  def test_compile_from_scratch
     # TODO implement
   end
 
