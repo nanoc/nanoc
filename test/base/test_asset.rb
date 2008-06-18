@@ -28,8 +28,58 @@ class Nanoc::AssetTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_compile
-    # TODO implement
+  def test_save
+    # Create site
+    site = mock
+
+    # Create asset
+    asset = Nanoc::Asset.new("content", { :attr => 'ibutes' }, '/path/')
+    asset.site = site
+
+    # Create data source
+    data_source = mock
+    site.stubs(:data_source).returns(data_source)
+    data_source.expects(:loading).yields
+    data_source.expects(:save_asset).with(asset)
+
+    # Save
+    asset.save
+  end
+
+  def test_move_to
+    # Create site
+    site = mock
+
+    # Create asset
+    asset = Nanoc::Asset.new("content", { :attr => 'ibutes' }, '/path/')
+    asset.site = site
+
+    # Create data source
+    data_source = mock
+    site.stubs(:data_source).returns(data_source)
+    data_source.expects(:loading).yields
+    data_source.expects(:move_asset).with(asset, '/new_path/')
+
+    # Move
+    asset.move_to('/new_path/')
+  end
+
+  def test_delete
+    # Create site
+    site = mock
+
+    # Create asset
+    asset = Nanoc::Asset.new("content", { :attr => 'ibutes' }, '/path/')
+    asset.site = site
+
+    # Create data source
+    data_source = mock
+    site.stubs(:data_source).returns(data_source)
+    data_source.expects(:loading).yields
+    data_source.expects(:delete_asset).with(asset)
+
+    # Delete
+    asset.delete
   end
 
 end
