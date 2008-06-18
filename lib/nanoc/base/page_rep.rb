@@ -293,7 +293,7 @@ module Nanoc
 
       # Create filter
       klass = layout.filter_class
-      raise Nanoc::Errors::CannotDetermineFilterError(layout.path) if klass.nil?
+      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
       filter = klass.new(:page, self.to_proxy, @page.to_proxy, @page.site)
 
       # Layout
