@@ -188,15 +188,15 @@ module Nanoc
     #                 post-filtered, false if the page rep should only be
     #                 pre-filtered.
     #
-    # +even_when_outdated+:: true if the page rep should be compiled even if
+    # +even_when_not_outdated+:: true if the page rep should be compiled even if
     #                        it is not outdated, false if not.
     #
     # +from_scratch+:: true if all compilation stages (pre-filter, layout,
     #                  post-filter) should be performed again even if they
     #                  have already been performed, false otherwise.
-    def compile(also_layout, even_when_outdated, from_scratch)
+    def compile(also_layout, even_when_not_outdated, from_scratch)
       # Skip unless outdated
-      unless outdated? or even_when_outdated
+      unless outdated? or even_when_not_outdated
         Nanoc::NotificationCenter.post(:compilation_started, self)
         Nanoc::NotificationCenter.post(:compilation_ended,   self)
         return

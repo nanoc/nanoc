@@ -153,14 +153,14 @@ module Nanoc
     # Nanoc::Compiler#run instead, and pass this asset representation's asset
     # as its first argument.
     #
-    # +even_when_outdated+:: true if the asset rep should be compiled even if
+    # +even_when_not_outdated+:: true if the asset rep should be compiled even if
     #                        it is not outdated, false if not.
     #
     # +from_scratch+:: true if the asset rep should be filtered again even if
     #                  it has already been filtered, false otherwise.
-    def compile(even_when_outdated, from_scratch)
+    def compile(even_when_not_outdated, from_scratch)
       # Skip unless outdated
-      unless outdated? or even_when_outdated
+      unless outdated? or even_when_not_outdated
         Nanoc::NotificationCenter.post(:compilation_started, self)
         Nanoc::NotificationCenter.post(:compilation_ended,   self)
       end
