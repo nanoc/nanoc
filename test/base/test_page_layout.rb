@@ -46,7 +46,7 @@ class Nanoc::PageLayoutTest < Test::Unit::TestCase
 
       assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
-      
+
       text = File.read('output/index.html')
       assert(text.include?('<!-- Hi, I\'m Bar! -->'))
       assert(text.include?('<!-- This is the header -->'))

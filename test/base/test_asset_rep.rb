@@ -6,30 +6,52 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_initialize
-    # TODO implement
+    # Create asset defaults
+    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:asset_defaults).returns(asset_defaults)
+
+    # Create asset
+    asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')
+    asset.site = site
+
+    # Get rep
+    asset.build_reps
+    asset_rep = asset.reps.first
+
+    # Assert flags reset
+    assert(asset_rep.instance_eval { !@compiled })
+    assert(asset_rep.instance_eval { !@modified })
+    assert(asset_rep.instance_eval { !@created })
+    assert(asset_rep.instance_eval { !@filtered })
   end
 
   def test_to_proxy
-    # TODO implement
+    # Create asset defaults
+    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:asset_defaults).returns(asset_defaults)
+
+    # Create asset
+    asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')
+    asset.site = site
+
+    # Get rep
+    asset.build_reps
+    asset_rep = asset.reps.first
+
+    # Create proxy
+    asset_rep_proxy = asset_rep.to_proxy
+
+    # Check values
+    assert_equal('bar', asset_rep_proxy.foo)
   end
 
-  def test_created
-    # TODO implement
-  end
-
-  def test_modified
-    # TODO implement
-  end
-
-  def test_compiled
-    # TODO implement
-  end
-
-  def test_disk_path
-    # TODO implement
-  end
-
-  def test_web_path
+  def test_created_modified_compiled
     # TODO implement
   end
 
@@ -37,7 +59,15 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_attribute_named
+  def test_disk_and_web_path
+    # TODO implement
+  end
+
+  def test_attribute_named_with_custom_rep
+    # TODO implement
+  end
+
+  def test_attribute_named_with_default_rep
     # TODO implement
   end
 
