@@ -196,8 +196,14 @@ module Nanoc
 
     # Computes and returns the MD5 digest for the given file.
     def digest(file)
+      # Create hash
       incr_digest = Digest::MD5.new()
-      file.read(1000) { |data| incr_digest << data }
+
+      # Collect data
+      file.rewind
+      incr_digest << file.read(1000) until file.eof?
+
+      # Calculate hex hash
       incr_digest.hexdigest
     end
 
