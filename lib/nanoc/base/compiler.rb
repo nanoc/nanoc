@@ -31,7 +31,7 @@ module Nanoc
     #                  pre-filtered. Only applicable to page reps, and not to
     #                  asset reps. Defaults to true.
     #
-    # +:even_when_outdated+:: true if the rep should be compiled even if it is
+    # +:even_when_not_outdated+:: true if the rep should be compiled even if it is
     #                         not outdated, false if not. Defaults to false.
     #
     # +:from_scratch+:: true if all compilation stages (for page reps:
@@ -42,7 +42,7 @@ module Nanoc
     def run(obj=nil, params={})
       # Parse params
       also_layout         = params[:also_layout]        || true
-      even_when_outdated  = params[:even_when_outdated] || false
+      even_when_not_outdated  = params[:even_when_not_outdated] || false
       from_scratch        = params[:from_scratch]       || false
 
       # Load data
@@ -61,9 +61,9 @@ module Nanoc
       # Compile everything
       reps.each do |rep|
         if rep.is_a?(Nanoc::PageRep)
-          rep.compile(also_layout, even_when_outdated, from_scratch)
+          rep.compile(also_layout, even_when_not_outdated, from_scratch)
         else
-          rep.compile(even_when_outdated, from_scratch)
+          rep.compile(even_when_not_outdated, from_scratch)
         end
       end
     end
