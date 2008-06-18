@@ -91,10 +91,18 @@ module Nanoc
       # Outdated if file too old
       return true if @page.mtime > compiled_mtime
 
-      # Outdated if dependencies outdated
-      return true if @page.site.layouts.any? { |l| l.mtime and l.mtime > compiled_mtime }
-      return true if @page.site.page_defaults.mtime and @page.site.page_defaults.mtime > compiled_mtime
-      return true if @page.site.code.mtime and @page.site.code.mtime > compiled_mtime
+      # Outdated if layouts outdated
+      return true if @page.site.layouts.any? do |l|
+        l.mtime.nil? or l.mtime > compiled_mtime
+      end
+
+      # Outdated if page defaults outdated
+      return true if @page.site.page_defaults.mtime.nil?
+      return true if @page.site.page_defaults.mtime > compiled_mtime
+
+      # Outdated if code outdated
+      return true if @page.site.code.mtime.nil?
+      return true if @page.site.code.mtime > compiled_mtime
 
       return false
     end
@@ -201,31 +209,30 @@ module Nanoc
 
       # Forget progress if requested
       if from_scratch
-        @filtered_pre   = false
-        @filtered_post  = false
+        @filtered_pre  = false
+        @filtered_post = false
       end
 
       # Check for recursive call
       if @page.site.compiler.stack.include?(self)
         @page.site.compiler.stack.push(self)
-        raise Nanoc::Errors::RecursiveCompilationError.new 
+        raise Nanoc::Errors::RecursiveCompilationError.new
       end
 
       # Start
       @page.site.compiler.stack.push(self)
-      if also_layout
-        Nanoc::NotificationCenter.post(:compilation_started, self)
-      end
+      Nanoc::NotificationCenter.post(:compilation_started, self) if also_layout
 
       # Compile
       compile_pre  if !@filtered_pre
       compile_post if !@filtered_post and also_layout
       @compiled = true
 
+      # Write
+      write unless attribute_named(:skip_output)
+
       # Stop
-      if also_layout
-        Nanoc::NotificationCenter.post(:compilation_ended, self)
-      end
+      Nanoc::NotificationCenter.post(:compilation_ended, self) if also_layout
       @page.site.compiler.stack.pop
     end
 
@@ -234,7 +241,7 @@ module Nanoc
     # Runs the uncompiled content through the pre-filters
     def compile_pre
       # Filter pre
-      filter!(:pre)
+      do_filter(:pre)
 
       # Done
       @filtered_pre = true
@@ -242,25 +249,19 @@ module Nanoc
 
     def compile_post
       # Layout and filter post
-      layout!
-      filter!(:post)
+      do_layout
+      do_filter(:post)
 
       # Check status
       @created  = !File.file?(self.disk_path)
       @modified = @created ? true : File.read(self.disk_path) != @content[:post]
-
-      # Write
-      unless attribute_named(:skip_output)
-        FileUtils.mkdir_p(File.dirname(self.disk_path))
-        File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
-      end
 
       # Done
       @filtered_post = true
     end
 
     # Runs the content through the filters in the given stage.
-    def filter!(stage)
+    def do_filter(stage)
       # Get filters
       unless attribute_named(:filters).nil?
         raise Nanoc::Errors::NoLongerSupportedError.new(
@@ -283,7 +284,7 @@ module Nanoc
     end
 
     # Runs the content through this rep's layout.
-    def layout!
+    def do_layout
       # Don't layout if not necessary
       if attribute_named(:layout).nil?
         @content[:post] = @content[:pre]
@@ -297,6 +298,13 @@ module Nanoc
 
       # Layout
       @content[:post] = filter.run(layout.content)
+    end
+
+    # Writes the compiled content to the disk.
+    def write
+      # TODO add ruby 1.9 support
+      FileUtils.mkdir_p(File.dirname(self.disk_path))
+      File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
     end
 
   end

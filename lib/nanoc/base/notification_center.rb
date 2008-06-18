@@ -1,5 +1,5 @@
 module Nanoc
-  
+
   # Nanoc::NotificationCenter provides a way to send notifications between
   # objects. It allows blocks associated with a certain notification name to
   # be registered; these blocks will be called when the notification with the

@@ -22,118 +22,118 @@ EOS
       * {
         margin: 0;
         padding: 0;
-        
+
         font-family: Helvetica, Arial, sans-serif;
       }
-      
+
       body {
         background: #ccc;
       }
-      
+
       a {
         text-decoration: none;
       }
-      
+
       a:link,
       a:visited {
         color: #f30;
       }
-      
+
       a:hover {
         color: #f90;
       }
-      
+
       #main {
         position: absolute;
-        
+
         top: 20px;
         left: 20px;
-        
+
         padding: 30px 40px 20px 20px;
-        
+
         width: 580px;
-        
+
         border-top: 10px solid #f90;
-        
+
         background: #fff;
       }
-      
+
       #main h1 {
         font-size: 50px;
-        
+
         letter-spacing: -3px;
-        
+
         border-bottom: 3px solid #f30;
-        
+
         padding-bottom: 7px;
         margin-bottom: 20px;
       }
-      
+
       #main p {
         margin-top: 20px;
-        
+
         font-size: 16px;
-        
+
         line-height: 20px;
-        
+
         color: #333;
       }
-      
+
       #main strong {
         text-transform: uppercase;
-        
+
         font-size: 14px;
-        
+
         color: #000;
       }
-      
+
       #main ul {
         margin: 20px 0;
       }
-      
+
       #main li {
         margin: 20px 0 20px 20px;
 
         font-size: 16px;
-        
+
         line-height: 20px;
-        
+
         color: #333;
       }
-      
+
       #sidebar {
         position: absolute;
-        
+
         top: 60px;
         left: 640px;
-        
+
         width: 220px;
-        
+
         padding: 10px 10px 0 10px;
-        
+
         border-top: 6px solid #f30;
-        
+
         background: #eee;
       }
-      
+
       #sidebar h2 {
         font-size: 14px;
-        
+
         text-transform: uppercase;
-        
+
         color: #333;
-        
+
         line-height: 20px;
       }
-      
+
       #sidebar ul {
         padding: 10px 0;
       }
-      
+
       #sidebar li {
         font-size: 14px;
         line-height: 20px;
-        
+
         list-style-type: none;
       }
     </style>

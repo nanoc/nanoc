@@ -16,7 +16,7 @@ class Hash
   #
   #   # Built-in
   #   filters_pre: [ 'foo', 'bar' ]
-  #    
+  #
   #   # Custom
   #   title: 'My Cool Page'
   #

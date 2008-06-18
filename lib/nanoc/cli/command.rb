@@ -95,7 +95,7 @@ module Nanoc::CLI
       text
     end
 
-    # Compares this command's name to the other given command's name. 
+    # Compares this command's name to the other given command's name.
     def <=>(other)
       self.name <=> other.name
     end
