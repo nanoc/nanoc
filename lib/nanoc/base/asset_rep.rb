@@ -90,6 +90,9 @@ module Nanoc
     # Returns true if this asset rep's output file is outdated and must be
     # regenerated, false otherwise.
     def outdated?
+      # Outdated if we don't know
+      return true if @asset.mtime.nil?
+
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
 
@@ -99,9 +102,13 @@ module Nanoc
       # Outdated if file too old
       return true if @asset.mtime > compiled_mtime
 
-      # Outdated if dependencies outdated
-      return true if @asset.site.asset_defaults.mtime and @asset.site.asset__defaults.mtime > compiled_mtime
-      return true if @asset.site.code.mtime and @asset.site.code.mtime > compiled_mtime
+      # Outdated if asset defaults outdated
+      return true if @asset.site.asset_defaults.mtime.nil?
+      return true if @asset.site.asset_defaults.mtime > compiled_mtime
+
+      # Outdated if code outdated
+      return true if @asset.site.code.mtime.nil?
+      return true if @asset.site.code.mtime > compiled_mtime
 
       return false
     end
