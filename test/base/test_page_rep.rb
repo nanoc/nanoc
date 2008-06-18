@@ -467,26 +467,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_do_layout
-    # TODO implement
-  end
-
-  def test_do_layout_without_layout
-    # TODO implement
-  end
-
-  def test_do_layout_with_unknown_filter
-    # TODO implement
-  end
-
-  def test_write_page
-    # TODO implement
-  end
-
-  def test_write_page_with_skip_output
-    # TODO implement
-  end
-
   def test_do_filter_with_outdated_filters_attribute
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
@@ -499,12 +479,92 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
     page.site = site
     page.build_reps
-    page_rep = page.reps.find { |r| r.name == :default }
+    page_rep = page.reps[0]
 
     # Filter
     assert_raise Nanoc::Errors::NoLongerSupportedError do
       page_rep.instance_eval { do_filter(:pre) }
     end
+  end
+
+  def test_do_layout
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:config).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:pages).returns([])
+    site.expects(:layouts).returns([])
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", {}, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Create layout
+    layout = Nanoc::Layout.new('this is a layout', { :filter => 'erb' }, '/foo/')
+    page_rep.expects(:layout).at_least_once.returns(layout)
+
+    # Layout
+    assert_nothing_raised { page_rep.instance_eval { do_layout } }
+    assert_equal('this is a layout', page_rep.instance_eval { @content[:post] })
+  end
+
+  def test_do_layout_without_layout
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", {}, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:attribute_named).with(:layout).returns(nil)
+
+    # Layout
+    page_rep.instance_eval { @content[:pre] = 'pre content' }
+    assert_nothing_raised { page_rep.instance_eval { do_layout } }
+    assert_equal('pre content', page_rep.instance_eval { @content[:post] })
+  end
+
+  def test_do_layout_with_unknown_filter
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", {}, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Create layout
+    layout = Nanoc::Layout.new('this is a layout', { :filter => 'sdfdfvarg' }, '/foo/')
+    page_rep.expects(:layout).at_least_once.returns(layout)
+
+    # Layout
+    assert_raise(Nanoc::Errors::CannotDetermineFilterError) do
+      page_rep.instance_eval { do_layout }
+    end
+  end
+
+  def test_write_page
+    # TODO implement
+  end
+
+  def test_write_page_with_skip_output
+    # TODO implement
   end
 
 end
