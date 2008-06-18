@@ -128,7 +128,7 @@ END
         },
         :fastcgi => { # FIXME buggy
           :proc => lambda { Rack::Handler::FastCGI }
-        }, 
+        },
         :lsws => { # FIXME test
           :proc => lambda { Rack::Handler::LSWS }
         },

@@ -55,7 +55,7 @@ module Nanoc::CLI
         @base.global_option_definitions.sort { |x,y| x[:long] <=> y[:long] }.each do |opt_def|
           text << sprintf("    -%1s --%-15s %s\n", opt_def[:short], opt_def[:long], opt_def[:desc])
         end
- 
+
         # Display text
         puts text
       elsif arguments.length == 1

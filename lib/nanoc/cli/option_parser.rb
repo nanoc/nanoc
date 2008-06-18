@@ -85,7 +85,7 @@ module Nanoc::CLI
       # Don't touch original argument
       unprocessed_arguments_and_options = arguments_and_options.dup
 
-      # Initialize 
+      # Initialize
       arguments = []
       options   = {}
 

@@ -227,7 +227,7 @@ module Nanoc
     rescue NotImplementedError
       # FIXME catch this error in a nicer way
       @assets = []
-    end  
+    end
 
     # Loads this site's layouts.
     def load_layouts
@@ -248,7 +248,7 @@ module Nanoc
     def load_templates
       # Get templates
       @templates = @data_source.templates
-      
+
       # Fix templates if outdated
       if @templates.any? { |t| t.is_a? Hash }
         warn_data_source('Template', 'templates', true)
