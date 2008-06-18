@@ -52,7 +52,60 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_created_modified_compiled
-    # TODO implement
+    # Create file
+    File.open('tmp/test.txt', 'w') { |io| io.write('old stuff') }
+
+    # Create data
+    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset = Nanoc::Asset.new(File.new('tmp/test.txt'), {}, '/foo/')
+
+    # Create site and other requisites
+    stack = []
+    compiler = mock
+    compiler.stubs(:stack).returns(stack)
+    router = mock
+    router.expects(:disk_path_for).returns('tmp/out/foo/index.html')
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:router).returns(router)
+    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    asset.site = site
+
+    # Get rep
+    asset.build_reps
+    asset_rep = asset.reps.first
+
+    # Check
+    assert(!asset_rep.created?)
+    assert(!asset_rep.modified?)
+    assert(!asset_rep.compiled?)
+
+    # Compile asset rep
+    asset_rep.compile(false, true)
+
+    # Check
+    assert(asset_rep.created?)
+    assert(asset_rep.modified?)
+    assert(asset_rep.compiled?)
+
+    # Compile asset rep
+    asset_rep.compile(false, true)
+
+    # Check
+    assert(!asset_rep.created?)
+    assert(!asset_rep.modified?)
+    assert(asset_rep.compiled?)
+
+    # Edit and compile asset rep
+    asset.instance_eval { @mtime = Time.now + 5 }
+    File.open('tmp/test.txt', 'w') { |io| io.write('new stuff') }
+    asset.instance_eval { @file = File.new('tmp/test.txt') }
+    asset_rep.compile(false, true)
+
+    # Check
+    assert(!asset_rep.created?)
+    assert(asset_rep.modified?)
+    assert(asset_rep.compiled?)
   end
 
   def test_outdated
@@ -75,7 +128,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_compile_even_when_outdated
+  def test_compile_even_when_not_outdated
     # TODO implement
   end
 
