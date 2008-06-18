@@ -24,7 +24,7 @@ def with_temp_site(data_source='filesystem')
       # Load site
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
       site.load_data
-      
+
       # Done
       yield site
     end
@@ -57,7 +57,7 @@ end
 def global_setup
   # Go quiet
   unless ENV['QUIET'] == 'false'
-    $log_level = :off 
+    $log_level = :off
     Nanoc::CLI::Logger.instance.level = :off
   end
 

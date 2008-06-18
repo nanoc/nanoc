@@ -5,75 +5,13 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestRouter < Nanoc::Router
-
-    def path_for_page_rep(page_rep)
-      path      = page_rep.page.path
-      filename  = page_rep.attribute_named(:filename)
-      extension = page_rep.attribute_named(:extension)
-
-      '/pages' + path + filename + '.' + extension
-    end
-
-  end
-
-  class TestSite
-
-    def config
-      @config ||= {
-        :output_dir       => 'tmp/output',
-        :index_filenames  => [ 'index.html' ]
-      }
-    end
-
-    def compiler
-      @compiler ||= Nanoc::Compiler.new(self)
-    end
-
-    def router
-      @router ||= TestRouter.new(self)
-    end
-
-    def load_data
-    end
-
-    def pages
-      []
-    end
-
-    def page_defaults
-      @page_defaults ||= Nanoc::PageDefaults.new(:foo => 'bar')
-    end
-
-    def assets
-      []
-    end
-
-    def layouts
-      [
-        Nanoc::Layout.new('Head <%= @page.content %> Foot', {}, '/default/')
-      ]
-    end
-
-  end
-
-  class TestAttributesSite
-
-    def page_defaults
-      @page_defaults ||= Nanoc::PageDefaults.new({
-        :four => 'four in page defaults',
-        :reps => {
-          :custom   => { :two   => 'two in page defaults rep'   },
-          :default  => { :three => 'three in page defaults rep' }
-        }
-      })
-    end
-
-  end
-
   def test_initialize
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
     # Create site
-    site = TestSite.new
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("some content", { 'foo' => 'bar' }, '/foo/')
@@ -96,8 +34,12 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   end
 
   def test_to_proxy
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
     # Create site
-    site = TestSite.new
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
@@ -114,115 +56,160 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     assert_equal('bar', page_rep_proxy.foo)
   end
 
-  def test_created
-    # Create site
-    site = TestSite.new
-
-    # Create page
+  def test_created_modified_compiled
+    # Create data
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    layout = Nanoc::Layout.new('[<%= @page.content %>]', {}, '/default/')
     page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
+
+    # Create site and other requisites
+    stack = []
+    compiler = mock
+    compiler.stubs(:stack).returns(stack)
+    router = mock
+    router.expects(:disk_path_for).returns('tmp/out/foo/index.html')
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:router).returns(router)
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/out' })
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.expects(:pages).at_least_once.returns([ page ])
+    site.expects(:assets).at_least_once.returns([])
+    site.expects(:layouts).at_least_once.returns([ layout ])
     page.site = site
 
     # Get rep
     page.build_reps
     page_rep = page.reps.first
 
-    # Assert not created
+    # Check
     assert(!page_rep.created?)
-
-    # Compile page rep
-    site.compiler.run(page, :from_scratch => true)
-
-    # Assert created
-    assert(page_rep.created?)
-
-    # Compile page rep again
-    site.compiler.run(page, :from_scratch => true)
-
-    # Assert not created
-    assert(!page_rep.created?)
-  end
-
-  def test_modified
-    # Create site
-    site = TestSite.new
-
-    # Create page
-    page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
-    page.site = site
-
-    # Get rep
-    page.build_reps
-    page_rep = page.reps.first
-
-    # Assert not modified
     assert(!page_rep.modified?)
-
-    # Compile page rep
-    site.compiler.run(page, :from_scratch => true)
-
-    # Assert modified
-    assert(page_rep.modified?)
-
-    # Compile page rep again
-    site.compiler.run(page, :from_scratch => true)
-
-    # Assert not modified
-    assert(!page_rep.modified?)
-
-    # Edit and compile page rep
-    page.instance_eval      { @mtime = Time.now + 5 }
-    page_rep.instance_eval  { @content[:pre] = 'new content' }
-    site.compiler.run(page, :from_scratch => true)
-
-    # Assert modified
-    assert(page_rep.modified?)
-  end
-
-  def test_compiled
-    # Create site
-    site = TestSite.new
-
-    # Create page
-    page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
-    page.site = site
-
-    # Get rep
-    page.build_reps
-    page_rep = page.reps.first
-
-    # Assert not compiled
     assert(!page_rep.compiled?)
 
     # Compile page rep
-    site.compiler.run(page, :from_scratch => true)
+    page_rep.compile(true, false, true)
 
-    # Assert compiled
+    # Check
+    assert(page_rep.created?)
+    assert(page_rep.modified?)
     assert(page_rep.compiled?)
 
-    # Compile page rep again
-    site.compiler.run(page, :from_scratch => true)
+    # Compile page rep
+    page_rep.compile(true, false, true)
 
-    # Assert not compiled
+    # Check
+    assert(!page_rep.created?)
+    assert(!page_rep.modified?)
     assert(page_rep.compiled?)
 
     # Edit and compile page rep
     page.instance_eval      { @mtime = Time.now + 5 }
     page_rep.instance_eval  { @content[:pre] = 'new content' }
-    site.compiler.run(page, :from_scratch => true)
+    page_rep.compile(true, false, true)
 
-    # Assert compiled
+    # Check
+    assert(!page_rep.created?)
+    assert(page_rep.modified?)
     assert(page_rep.compiled?)
   end
 
   def test_outdated
-    # TODO implement
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
 
-    # Also check data sources that don't provide mtimes
+    # Create layouts
+    layouts = [
+      Nanoc::Layout.new('layout 1', {}, '/layout1/'),
+      Nanoc::Layout.new('layout 2', {}, '/layout2/')
+    ]
+
+    # Create code
+    code = Nanoc::Code.new('def stuff ; "moo" ; end')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.expects(:layouts).at_least_once.returns(layouts)
+    site.expects(:code).at_least_once.returns(code)
+
+    # Create page
+    page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.stubs(:disk_path).returns('tmp/out/foo/index.html')
+
+    # Make everything up to date
+    page.instance_eval { @mtime = Time.now - 100 }
+    FileUtils.mkdir_p('tmp/out/foo')
+    File.open(page_rep.disk_path, 'w') { |io| }
+    File.utime(Time.now - 50, Time.now - 50, page_rep.disk_path)
+    page_defaults.instance_eval { @mtime = Time.now - 100 }
+    layouts.each { |l| l.instance_eval { @mtime = Time.now - 100 } }
+    code.instance_eval { @mtime = Time.now - 100 }
+
+    # Assert not outdated
+    assert(!page_rep.outdated?)
+
+    # Check with nil mtime
+    page.instance_eval { @mtime = nil }
+    assert(page_rep.outdated?)
+    page.instance_eval { @mtime = Time.now - 100 }
+    assert(!page_rep.outdated?)
+
+    # Check with non-existant output file
+    FileUtils.remove_entry_secure(page_rep.disk_path)
+    assert(page_rep.outdated?)
+    FileUtils.mkdir_p('tmp/out/foo')
+    File.open(page_rep.disk_path, 'w') { |io| }
+    assert(!page_rep.outdated?)
+
+    # Check with older mtime
+    page.instance_eval { @mtime = Time.now }
+    assert(page_rep.outdated?)
+    page.instance_eval { @mtime = Time.now - 100 }
+    assert(!page_rep.outdated?)
+
+    # Check with outdated layouts
+    layouts[0].instance_eval { @mtime = Time.now }
+    assert(page_rep.outdated?)
+    layouts[0].instance_eval { @mtime = nil }
+    assert(page_rep.outdated?)
+    layouts[0].instance_eval { @mtime = Time.now - 100 }
+    assert(!page_rep.outdated?)
+
+    # Check with outdated page defaults
+    page_defaults.instance_eval { @mtime = Time.now }
+    assert(page_rep.outdated?)
+    page_defaults.instance_eval { @mtime = nil }
+    assert(page_rep.outdated?)
+    page_defaults.instance_eval { @mtime = Time.now - 100 }
+    assert(!page_rep.outdated?)
+
+    # Check with outdated code
+    code.instance_eval { @mtime = Time.now }
+    assert(page_rep.outdated?)
+    code.instance_eval { @mtime = nil }
+    assert(page_rep.outdated?)
+    code.instance_eval { @mtime = Time.now - 100 }
+    assert(!page_rep.outdated?)
   end
 
   def test_disk_and_web_path
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create router
+    router = mock
+    router.expects(:disk_path_for).returns('tmp/out/pages/path/index.html')
+    router.expects(:web_path_for).returns('/pages/path/')
+
     # Create site
-    site = TestSite.new
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+    site.expects(:router).times(2).returns(router)
 
     # Create page
     page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
@@ -231,8 +218,8 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep = page.reps.find { |r| r.name == :default }
 
     # Check
-    assert_equal('tmp/output/pages/path/index.html', page_rep.disk_path)
-    assert_equal('/pages/path/',                     page_rep.web_path)
+    assert_equal('tmp/out/pages/path/index.html', page_rep.disk_path)
+    assert_equal('/pages/path/',                  page_rep.web_path)
   end
 
   def test_attribute_named_with_custom_rep
@@ -241,8 +228,17 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # 2. page default's page rep
     # 3. hardcoded defaults
 
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new({
+      :reps => { :custom => {
+        :one => 'one in page defaults rep',
+        :two => 'two in page defaults rep'
+      }}
+    })
+
     # Create site
-    site = TestAttributesSite.new
+    site = mock
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
 
     # Create page and rep
     page = Nanoc::Page.new(
@@ -272,18 +268,30 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # 4. page defaults
     # 5. hardcoded defaults
 
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new({
+      :one    => 'one in page defaults',
+      :two    => 'two in page defaults',
+      :three  => 'three in page defaults',
+      :four   => 'four in page defaults',
+      :reps => { :default => {
+        :one    => 'one in page defaults rep',
+        :two    => 'two in page defaults rep',
+        :three  => 'three in page defaults rep'
+      }}
+    })
+
     # Create site
-    site = TestAttributesSite.new
+    site = mock
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
 
     # Create page and rep
-    page = Nanoc::Page.new(
-      "content",
-      {
-        :two => 'two in page',
-        :reps => { :default => { :one => 'one in page rep' } }
-      },
-      '/path/'
-    )
+    page_attrs = {
+      :oen  => 'one in page',
+      :two  => 'two in page',
+      :reps => { :default => { :one => 'one in page rep' } }
+    }
+    page = Nanoc::Page.new('content', page_attrs, '/path/')
     page.site = site
     page.build_reps
     page_rep = page.reps.find { |r| r.name == :default }
@@ -304,19 +312,115 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     assert_equal('default', page_rep.attribute_named(:layout))
   end
 
-  def test_content
-    # TODO implement
+  def test_content_pre
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Mock compiler
+    page_rep.expects(:compile).with(false, false, false)
+    page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
+
+    # Check
+    assert_equal('pre!', page_rep.content(:pre))
   end
 
-  def test_layout
-    # TODO implement
+  def test_content_post
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Mock compiler
+    page_rep.expects(:compile).with(true, false, false)
+    page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
+
+    # Check
+    assert_equal('post!', page_rep.content(:post))
+  end
+
+  def test_layout_without_layout
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'none' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Check
+    assert_equal(nil, page_rep.layout)
+  end
+
+  def test_layout_with_unknown_layout
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:layouts).returns([])
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'dffrvsserg' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Check
+    assert_raise(Nanoc::Errors::UnknownLayoutError) { page_rep.layout }
+  end
+
+  def test_layout_normal
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create layout
+    layout = Nanoc::Layout.new('header <%= @page.content %> footer', {}, '/foo/')
+
+    # Create site
+    site = mock
+    site.expects(:layouts).returns([ layout ])
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Check
+    assert_equal(layout, page_rep.layout)
   end
 
   def test_compile
     # TODO implement
-    
-    # - check modified
+
     # - check stack
+    # - check recursive call
+    # - check notifications
   end
 
   def test_compile_without_layout
@@ -332,6 +436,18 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   end
 
   def test_compile_from_scratch
+    # TODO implement
+  end
+
+  def test_do_compile_pre
+    # TODO implement
+  end
+
+  def test_do_compile_post
+    # TODO implement
+  end
+
+  def test_do_write
     # TODO implement
   end
 
@@ -372,8 +488,12 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   end
 
   def test_do_filter_with_outdated_filters_attribute
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
     # Create site
-    site = TestSite.new
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
@@ -383,7 +503,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Filter
     assert_raise Nanoc::Errors::NoLongerSupportedError do
-      page_rep.instance_eval { filter!(:pre) }
+      page_rep.instance_eval { do_filter(:pre) }
     end
   end
 

@@ -15,14 +15,126 @@ class Nanoc::PageTest < Test::Unit::TestCase
     assert_equal('/foo/', page.path)
   end
 
-  def test_build_reps
-    # TODO implement
+  def test_build_reps_impl_page_impl_page_defaults
+    # Create page defaults
+    page_defaults = mock
+    page_defaults.expects(:attributes).returns({})
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new('blah', { :foo => 'bar' }, '/foo/')
+    page.site = site
+    page.build_reps
+
+    # Check
+    assert_equal(1, page.reps.size)
+    assert_equal(:default, page.reps[0].name)
+  end
+
+  def test_build_reps_impl_page_expl_page_defaults
+    # Create page defaults
+    page_defaults = mock
+    page_defaults.expects(:attributes).returns({
+      :reps => {
+        :default => {},
+        :raw => {}
+      }
+    })
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new('blah', { :foo => 'bar' }, '/foo/')
+    page.site = site
+    page.build_reps
+
+    # Check
+    assert_equal(2, page.reps.size)
+    assert(page.reps.any? { |r| r.name == :default })
+    assert(page.reps.any? { |r| r.name == :raw })
+  end
+
+  def test_build_reps_expl_page_impl_page_defaults
+    # Create page defaults
+    page_defaults = mock
+    page_defaults.expects(:attributes).returns({})
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    reps = { :default => {}, :raw => {} }
+    page = Nanoc::Page.new('blah', { :reps => reps }, '/foo/')
+    page.site = site
+    page.build_reps
+
+    # Check
+    assert_equal(2, page.reps.size)
+    assert(page.reps.any? { |r| r.name == :default })
+    assert(page.reps.any? { |r| r.name == :raw })
+  end
+
+  def test_build_reps_expl_page_expl_page_defaults
+    # Create page defaults
+    page_defaults = mock
+    page_defaults.expects(:attributes).returns({
+      :reps => {
+        :default => {},
+        :raw => {}
+      }
+    })
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    reps = { :default => {}, :something => {} }
+    page = Nanoc::Page.new('blah', { :reps => reps }, '/foo/')
+    page.site = site
+    page.build_reps
+
+    # Check
+    assert_equal(3, page.reps.size)
+    assert(page.reps.any? { |r| r.name == :default })
+    assert(page.reps.any? { |r| r.name == :raw })
+    assert(page.reps.any? { |r| r.name == :something })
+  end
+
+  def test_build_reps_expl_page_expl_page_defaults_no_default
+    # Create page defaults
+    page_defaults = mock
+    page_defaults.expects(:attributes).returns({
+      :reps => {
+        :foo => {},
+        :bar => {}
+      }
+    })
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    reps = { :baz => {}, :quux => {} }
+    page = Nanoc::Page.new('blah', { :reps => reps }, '/foo/')
+    page.site = site
+    page.build_reps
+
+    # Check
+    assert_equal(5, page.reps.size)
+    assert(page.reps.any? { |r| r.name == :default })
   end
 
   def test_to_proxy
     # Create page
     page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
-    assert_equal({ :foo => 'bar' }, page.attributes)
 
     # Create proxy
     page_proxy = page.to_proxy
