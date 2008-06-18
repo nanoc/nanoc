@@ -59,7 +59,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   def test_created_modified_compiled
     # Create data
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
     layout = Nanoc::Layout.new('[<%= @page.content %>]', {}, '/default/')
     page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
 
@@ -431,7 +430,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_compile_even_when_outdated
+  def test_compile_even_when_not_outdated
     # TODO implement
   end
 
