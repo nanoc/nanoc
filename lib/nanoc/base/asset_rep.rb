@@ -163,6 +163,7 @@ module Nanoc
       unless outdated? or even_when_not_outdated
         Nanoc::NotificationCenter.post(:compilation_started, self)
         Nanoc::NotificationCenter.post(:compilation_ended,   self)
+        return
       end
 
       # Reset flags
