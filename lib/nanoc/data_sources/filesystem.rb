@@ -277,6 +277,37 @@ module Nanoc::DataSources
       end
     end
 
+    ########## Asset Defaults ##########
+
+    def asset_defaults # :nodoc:
+      if File.file?('asset_defaults.yaml')
+        # Get attributes
+        attributes = YAML.load_file('asset_defaults.yaml') || {}
+
+        # Get mtime
+        mtime = File.stat('asset_defaults.yaml').mtime
+
+        # Build asset defaults
+        Nanoc::AssetDefaults.new(attributes, mtime)
+      else
+        Nanoc::AssetDefaults.new({})
+      end
+    end
+
+    def save_asset_defaults(asset_defaults) # :nodoc:
+      # Notify
+      if File.file?('asset_defaults.yaml')
+        Nanoc::NotificationCenter.post(:file_updated, 'asset_defaults.yaml')
+      else
+        Nanoc::NotificationCenter.post(:file_created, 'asset_defaults.yaml')
+      end
+
+      # Write
+      File.open('asset_defaults.yaml', 'w') do |io|
+        io.write(asset_defaults.attributes.to_split_yaml)
+      end
+    end
+
     ########## Layouts ##########
 
     def layouts # :nodoc:
