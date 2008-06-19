@@ -255,8 +255,10 @@ module Nanoc
       do_filter(:post)
 
       # Check status
-      @created  = !File.file?(self.disk_path)
-      @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+      unless attribute_named(:skip_output)
+        @created  = !File.file?(self.disk_path)
+        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+      end
 
       # Done
       @filtered_post = true
