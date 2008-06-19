@@ -89,26 +89,48 @@ module Nanoc::CLI
         asset_reps = @base.site.assets.map { |a| a.reps }.flatten
         reps       = page_reps + asset_reps
 
-        # Give feedback
+        # Give general feedback
+        puts
         puts "No pages were modified." unless reps.any? { |r| r.modified? }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
-        # Give profiling feedback
-        @filter_times.each_pair do |filter_name, samples|
-          # Calculate some stats
-          min = samples.min
-          avg = samples.inject { |memo, i| memo + i}/samples.size
-          max = samples.max
+        if options.has_key?(:verbose)
+          # Give page rep state feedback
+          rest            = reps
+          created, rest   = *rest.partition { |r| r.created? }
+          modified, rest  = *rest.partition { |r| r.modified? }
+          skipped, rest   = *rest.partition { |r| !r.compiled? }
+          identical       = rest
+          puts
+          puts format('  %4d  created',   created.size)
+          puts format('  %4d  modified',  modified.size)
+          puts format('  %4d  skipped',   skipped.size)
+          puts format('  %4d  identical', identical.size)
 
-          # Format stats
-          min = format('%.2f', min)
-          avg = format('%.2f', avg)
-          max = format('%.2f', max)
-          length = @filter_times.keys.map { |k| k.to_s.size }.max
-          filter_name = format("%#{length}s", filter_name)
+          # Give profiling feedback
+          puts
+          max_filter_name_length = @filter_times.keys.map { |k| k.to_s.size }.max
+          puts ' ' * max_filter_name_length + ' | count    min    avg    max     tot'
+          puts '-' * max_filter_name_length + '-+-----------------------------------'
+          @filter_times.each_pair do |filter_name, samples|
+            # Calculate some stats
+            count = samples.size
+            min   = samples.min
+            tot   = samples.inject { |memo, i| memo + i}
+            avg   = tot/count
+            max   = samples.max
 
-          # Output stats
-          puts "#{filter_name}: min/avg/max = #{min}/#{avg}/#{max}"
+            # Format stats
+            count = format('%4d',   count)
+            min   = format('%4.2f', min)
+            avg   = format('%4.2f', avg)
+            max   = format('%4.2f', max)
+            tot   = format('%5.2f', tot)
+
+            # Output stats
+            filter_name = format("%#{max_filter_name_length}s", filter_name)
+            puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
+          end
         end
      rescue Exception => e
         # Get page rep
