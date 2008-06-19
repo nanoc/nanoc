@@ -225,7 +225,9 @@ module Nanoc
         filter = klass.new(self.to_proxy, @asset.to_proxy, @asset.site)
 
         # Run filter
+        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
         current_file = filter.run(current_file)
+        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
 
       # Write asset
@@ -256,7 +258,9 @@ module Nanoc
         filter = klass.new(self)
 
         # Run filter
+        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
         current_content = filter.run(current_content)
+        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
 
       # Write asset
