@@ -16,6 +16,7 @@ class Nanoc::AssetRepProxyTest < Test::Unit::TestCase
 
     # Get asset rep
     asset_rep = mock
+    asset_rep.expects(:name).returns('asset rep name')
     asset_rep.expects(:asset).returns(asset)
     asset_rep.expects(:web_path).returns('asset rep web path')
     asset_rep.expects(:attribute_named).times(2).with(:blah).returns('asset rep attr blah')
@@ -25,6 +26,7 @@ class Nanoc::AssetRepProxyTest < Test::Unit::TestCase
     asset_rep_proxy = Nanoc::AssetRepProxy.new(asset_rep)
 
     # Test
+    assert_equal('asset rep name',        asset_rep_proxy.name)
     assert_equal('asset attr moo',        asset_rep_proxy.asset.moo)
     assert_equal('asset rep web path',    asset_rep_proxy.path)
     assert_equal('asset rep attr blah',   asset_rep_proxy.blah)

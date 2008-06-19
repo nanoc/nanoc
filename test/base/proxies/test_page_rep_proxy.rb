@@ -16,6 +16,7 @@ class Nanoc::PageRepProxyTest < Test::Unit::TestCase
 
     # Get page rep
     page_rep = mock
+    page_rep.expects(:name).returns('page rep name')
     page_rep.expects(:page).returns(page)
     page_rep.expects(:content).returns('page rep content')
     page_rep.expects(:web_path).returns('page rep web path')
@@ -26,6 +27,7 @@ class Nanoc::PageRepProxyTest < Test::Unit::TestCase
     page_rep_proxy = Nanoc::PageRepProxy.new(page_rep)
 
     # Test
+    assert_equal('page rep name',         page_rep_proxy.name)
     assert_equal('page rep content',      page_rep_proxy.content)
     assert_equal('page attr moo',         page_rep_proxy.page.moo)
     assert_equal('page rep web path',     page_rep_proxy.path)
