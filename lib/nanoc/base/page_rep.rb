@@ -197,8 +197,10 @@ module Nanoc
     def compile(also_layout, even_when_not_outdated, from_scratch)
       # Skip unless outdated
       unless outdated? or even_when_not_outdated
-        Nanoc::NotificationCenter.post(:compilation_started, self)
-        Nanoc::NotificationCenter.post(:compilation_ended,   self)
+        if also_layout
+          Nanoc::NotificationCenter.post(:compilation_started, self)
+          Nanoc::NotificationCenter.post(:compilation_ended,   self)
+        end
         return
       end
 
