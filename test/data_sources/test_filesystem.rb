@@ -140,6 +140,16 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     end
   end
 
+  # Test asset defaults
+
+  def test_asset_defaults
+    # TODO implement
+  end
+
+  def test_save_asset_defaults
+    # TODO implement
+  end
+
   # Test templates
 
   def test_templates
