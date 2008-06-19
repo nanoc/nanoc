@@ -283,7 +283,9 @@ module Nanoc
         filter = klass.new(self)
 
         # Run filter
+        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
         @content[stage] = filter.run(@content[stage])
+        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
     end
 
@@ -301,7 +303,9 @@ module Nanoc
       filter = klass.new(self)
 
       # Layout
+      Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
       @content[:post] = filter.run(layout.content)
+      Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
     end
 
     # Writes the compiled content to the disk.

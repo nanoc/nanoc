@@ -61,7 +61,11 @@ module Nanoc::CLI
       begin
         # Give feedback
         puts "Compiling #{page.nil? ? 'site' : 'page'}..."
+
+        # Initialize profiling stuff
         time_before = Time.now
+        @filter_times ||= {}
+        @times_stack  ||= []
 
         # Set notifications
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
@@ -69,6 +73,12 @@ module Nanoc::CLI
         end
         Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
           rep_compilation_ended(rep)
+        end
+        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+          rep_filtering_started(rep, filter_name)
+        end
+        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+          rep_filtering_ended(rep, filter_name)
         end
 
         # Compile
@@ -82,7 +92,25 @@ module Nanoc::CLI
         # Give feedback
         puts "No pages were modified." unless reps.any? { |r| r.modified? }
         puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
-      rescue Exception => e
+
+        # Give profiling feedback
+        @filter_times.each_pair do |filter_name, samples|
+          # Calculate some stats
+          min = samples.min
+          avg = samples.inject { |memo, i| memo + i}/samples.size
+          max = samples.max
+
+          # Format stats
+          min = format('%.2f', min)
+          avg = format('%.2f', avg)
+          max = format('%.2f', max)
+          length = @filter_times.keys.map { |k| k.to_s.size }.max
+          filter_name = format("%#{length}s", filter_name)
+
+          # Output stats
+          puts "#{filter_name}: min/avg/max = #{min}/#{avg}/#{max}"
+        end
+     rescue Exception => e
         # Get page rep
         page_rep = @base.site.compiler.stack.select { |i| i.is_a?(Nanoc::PageRep) }[-1]
         page_rep_name = page_rep.nil? ? 'the site' : "#{page_rep.page.path} (rep #{page_rep.name})"
@@ -131,14 +159,14 @@ module Nanoc::CLI
 
     def rep_compilation_started(rep)
       # Profile compilation
-      @times ||= {}
-      @times[rep.disk_path] = Time.now
+      @rep_times ||= {}
+      @rep_times[rep.disk_path] = Time.now
     end
 
     def rep_compilation_ended(rep)
       # Profile compilation
-      @times ||= {}
-      @times[rep.disk_path] = Time.now - @times[rep.disk_path]
+      @rep_times ||= {}
+      @rep_times[rep.disk_path] = Time.now - @rep_times[rep.disk_path]
 
       # Get action and level
       action, level = *if rep.created?
@@ -152,8 +180,21 @@ module Nanoc::CLI
       end
 
       # Log
-      duration = @times[rep.disk_path]
+      duration = @rep_times[rep.disk_path]
       Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path, duration)
+    end
+
+    def rep_filtering_started(rep, filter_name)
+      @times_stack.push(Time.now)
+    end
+
+    def rep_filtering_ended(rep, filter_name)
+      # Get last time
+      time_start = @times_stack.pop
+
+      # Update times
+      @filter_times[filter_name.to_sym] ||= []
+      @filter_times[filter_name.to_sym] << Time.now - time_start
     end
 
   end
