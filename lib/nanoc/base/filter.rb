@@ -21,19 +21,27 @@ module Nanoc
     #
     # +other_assigns+:: A hash containing other variables that should be made
     #                   available during filtering.
-    def initialize(kind, obj_rep, obj, site, other_assigns={})
-      if kind == :page
-        @page_rep     = obj_rep
-        @page         = obj
+    def initialize(obj_rep, other_assigns={})
+      # Determine kind
+      @kind = obj_rep.is_a?(Nanoc::PageRep) ? :page : :asset
+
+      # Set object
+      @obj_rep = obj_rep
+      @obj     = (@kind == :page ? @obj_rep.page : @obj_rep.asset)
+
+      # Set page/asset and page/asset reps
+      if @kind == :page
+        @page       = @obj
+        @page_rep   = @obj_rep
       else
-        @asset_rep    = obj_rep
-        @asset        = obj
+        @asset      = @obj
+        @asset_rep  = @obj_rep
       end
-      @assets         = site.assets.map  { |a| a.to_proxy }
-      @pages          = site.pages.map   { |p| p.to_proxy }
-      @layouts        = site.layouts.map { |l| l.to_proxy }
-      @config         = site.config
-      @site           = site
+
+      # Set site
+      @site = @obj.site
+
+      # Set other assigns
       @other_assigns  = other_assigns
     end
 
@@ -48,15 +56,17 @@ module Nanoc
 
     # Returns a hash with data that should be available.
     def assigns
-      @other_assigns.merge({
-        :page_rep   => @page_rep,
-        :page       => @page,
-        :asset_rep  => @asset_rep,
-        :asset      => @asset,
-        :pages      => @pages,
-        :assets     => @assets,
-        :layouts    => @layouts,
-        :config     => @config,
+      @assigns ||= @other_assigns.merge({
+        :_obj_rep   => @obj_rep,
+        :_obj       => @obj,
+        :page_rep   => @kind == :page  ? @page_rep.to_proxy  : nil,
+        :page       => @kind == :page  ? @page.to_proxy      : nil,
+        :asset_rep  => @kind == :asset ? @asset_rep.to_proxy : nil,
+        :asset      => @kind == :asset ? @asset.to_proxy     : nil,
+        :pages      => @site.pages.map    { |obj| obj.to_proxy },
+        :assets     => @site.assets.map   { |obj| obj.to_proxy },
+        :layouts    => @site.layouts.map  { |obj| obj.to_proxy },
+        :config     => @site.config,
         :site       => @site
       })
     end

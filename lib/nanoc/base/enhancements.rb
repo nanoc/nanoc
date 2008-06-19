@@ -14,18 +14,18 @@ end
 # Rendering nested layouts
 def render(name_or_path, other_assigns={})
   # Find layout
-  layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_path }
+  layout = @_obj.site.layouts.find { |l| l.path == name_or_path.cleaned_path }
   raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_path) if layout.nil?
 
   # Find filter
   klass = layout.filter_class
   raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
-  filter = klass.new(:page, @page_rep, @page, @site, other_assigns)
+  filter = klass.new(@_obj_rep, other_assigns)
 
   # Layout
-  @site.compiler.stack.push(layout)
+  @_obj.site.compiler.stack.push(layout)
   result = filter.run(layout.content)
-  @site.compiler.stack.pop
+  @_obj.site.compiler.stack.pop
   result
 end
 

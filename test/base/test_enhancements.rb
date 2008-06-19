@@ -24,23 +24,25 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
     )
 
     # Create site
-    @site = mock
-    @site.expects(:config).returns({})
-    @site.expects(:pages).returns([])
-    @site.expects(:assets).returns([])
-    @site.expects(:layouts).times(2).returns([ layout ])
+    site = mock
+    # site.expects(:config).returns({})
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:layouts).times(2).returns([ layout ])
+    site.expects(:config).returns({})
     compiler = mock
     compiler.expects(:stack).at_least_once.returns([])
-    @site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:compiler).at_least_once.returns(compiler)
 
     # Create pages
-    @page     = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
-    @page_rep = Nanoc::PageRep.new(@page, {}, :default)
-    @page.reps << @page_rep
+    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
+    page.site = site
+    page_rep = Nanoc::PageRep.new(page, {}, :default)
+    page.reps << page_rep
 
-    # Convert to proxy
-    @page     = @page.to_proxy
-    @page_rep = @page_rep.to_proxy
+    # Set object and its rep
+    @_obj     = page
+    @_obj_rep = page_rep
 
     # Render
     assert_nothing_raised do
@@ -57,23 +59,25 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
     )
 
     # Create site
-    @site = mock
-    @site.expects(:config).returns({})
-    @site.expects(:pages).returns([])
-    @site.expects(:assets).returns([])
-    @site.expects(:layouts).times(2).returns([ layout ])
+    site = mock
+    # site.expects(:config).returns({})
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:layouts).times(2).returns([ layout ])
+    site.expects(:config).returns({})
     compiler = mock
     compiler.expects(:stack).at_least_once.returns([])
-    @site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:compiler).at_least_once.returns(compiler)
 
     # Create pages
-    @page     = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
-    @page_rep = Nanoc::PageRep.new(@page, {}, :default)
-    @page.reps << @page_rep
+    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
+    page.site = site
+    page_rep = Nanoc::PageRep.new(page, {}, :default)
+    page.reps << page_rep
 
-    # Convert to proxy
-    @page     = @page.to_proxy
-    @page_rep = @page_rep.to_proxy
+    # Set object and its rep
+    @_obj     = page
+    @_obj_rep = page_rep
 
     # Render
     assert_nothing_raised do
@@ -82,16 +86,19 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
   end
 
   def test_render_with_unknown_layout
-    # Create layout
-    layout = Nanoc::Layout.new(
-      'Foo',
-      { :filter => 'erb' },
-      '/foo/'
-    )
-
     # Create site
-    @site = mock
-    @site.expects(:layouts).returns([ layout ])
+    site = mock
+    site.expects(:layouts).returns([])
+
+    # Create pages
+    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
+    page.site = site
+    page_rep = Nanoc::PageRep.new(page, {}, :default)
+    page.reps << page_rep
+
+    # Set object and its rep
+    @_obj     = page
+    @_obj_rep = page_rep
 
     # Render
     assert_raise(Nanoc::Errors::UnknownLayoutError) do
@@ -108,8 +115,18 @@ class Nanoc::EnhancementsTest < Test::Unit::TestCase
     )
 
     # Create site
-    @site = mock
-    @site.expects(:layouts).returns([ layout ])
+    site = mock
+    site.expects(:layouts).returns([ layout ])
+
+    # Create pages
+    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
+    page.site = site
+    page_rep = Nanoc::PageRep.new(page, {}, :default)
+    page.reps << page_rep
+
+    # Set object and its rep
+    @_obj     = page
+    @_obj_rep = page_rep
 
     # Render
     assert_raise(Nanoc::Errors::CannotDetermineFilterError) do

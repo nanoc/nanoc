@@ -7,16 +7,34 @@ class Nanoc::Filters::ERBTest < Test::Unit::TestCase
 
   def test_filter
     assert_nothing_raised do
-      with_temp_site do |site|
-        # Get filter
-        page_rep  = site.pages[0].reps[0].to_proxy
-        page      = site.pages[0].to_proxy
-        filter = ::Nanoc::Filters::ERB.new(:page, page_rep, page, site)
+      # Create site
+      site = mock
 
-        # Run filter
-        result = filter.run('<%= "Hello." %>')
-        assert_equal('Hello.', result)
-      end
+      # Create page
+      page = mock
+      page_proxy = Nanoc::Proxy.new(page)
+      page.expects(:site).returns(site)
+      page.expects(:to_proxy).returns(page_proxy)
+
+      # Create page rep
+      page_rep = mock
+      page_rep_proxy = Nanoc::Proxy.new(page_rep)
+      page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+      page_rep.expects(:page).returns(page)
+      page_rep.expects(:to_proxy).returns(page_rep_proxy)
+
+      # Mock site
+      site.expects(:pages).returns([])
+      site.expects(:assets).returns([])
+      site.expects(:layouts).returns([])
+      site.expects(:config).returns({})
+
+      # Get filter
+      filter = ::Nanoc::Filters::ERB.new(page_rep)
+
+      # Run filter
+      result = filter.run('<%= "Hello." %>')
+      assert_equal('Hello.', result)
     end
   end
 
