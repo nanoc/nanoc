@@ -8,24 +8,43 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
   def test_filter
     if_have 'haml' do
       assert_nothing_raised do
-        with_temp_site do |site|
-          # Get filter
-          page_rep  = site.pages[0].reps[0].to_proxy
-          page      = site.pages[0].to_proxy
-          filter = ::Nanoc::Filters::Haml.new(:page, page_rep, page, site)
+        # Create site
+        site = mock
 
-          # Run filter (no assigns)
-          result = filter.run('%html')
-          assert_match(/<html>.*<\/html>/, result)
+        # Create page
+        page = mock
+        page_proxy = Nanoc::Proxy.new(page)
+        page.expects(:site).returns(site)
+        page.expects(:to_proxy).returns(page_proxy)
+        page.expects(:attribute_named).times(5).returns({}, {}, 'Home', {}, 'Home')
 
-          # Run filter (assigns without @)
-          result = filter.run('%p= page.title')
-          assert_equal("<p>Home</p>\n", result)
+        # Create page rep
+        page_rep = mock
+        page_rep_proxy = Nanoc::Proxy.new(page_rep)
+        page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+        page_rep.expects(:page).returns(page)
+        page_rep.expects(:to_proxy).returns(page_rep_proxy)
 
-          # Run filter (assigns with @)
-          result = filter.run('%p= @page.title')
-          assert_equal("<p>Home</p>\n", result)
-        end
+        # Mock site
+        site.expects(:pages).returns([])
+        site.expects(:assets).returns([])
+        site.expects(:layouts).returns([])
+        site.expects(:config).returns({})
+
+        # Get filter
+        filter = ::Nanoc::Filters::Haml.new(page_rep)
+
+        # Run filter (no assigns)
+        result = filter.run('%html')
+        assert_match(/<html>.*<\/html>/, result)
+
+        # Run filter (assigns without @)
+        result = filter.run('%p= page.title')
+        assert_equal("<p>Home</p>\n", result)
+
+        # Run filter (assigns with @)
+        result = filter.run('%p= @page.title')
+        assert_equal("<p>Home</p>\n", result)
       end
     end
   end

@@ -7,15 +7,23 @@ class Nanoc::Filters::OldTest < Test::Unit::TestCase
 
   def test_filter
     assert_raise(Nanoc::Error) do
-      with_temp_site do |site|
-        # Get filter
-        page_rep  = site.pages[0].reps[0].to_proxy
-        page      = site.pages[0].to_proxy
-        filter = ::Nanoc::Filters::Old.new(:page, page_rep, page, site)
+      # Create site
+      site = mock
 
-        # Run filter
-        result = filter.run("blah")
-      end
+      # Create page
+      page = mock
+      page.expects(:site).returns(site)
+
+      # Create page rep
+      page_rep = mock
+      page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+      page_rep.expects(:page).returns(page)
+
+      # Get filter
+      filter = ::Nanoc::Filters::Old.new(page_rep)
+
+      # Run filter
+      result = filter.run("blah")
     end
   end
 
