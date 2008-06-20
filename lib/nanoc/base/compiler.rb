@@ -39,11 +39,11 @@ module Nanoc
     #                   filter) should be performed again even if they have
     #                   already been performed, false otherwise. Defaults to
     #                   false.
-    def run(obj=nil, params={})
+    def run(objects=nil, params={})
       # Parse params
-      also_layout         = params[:also_layout]        || true
+      also_layout             = params[:also_layout]            || true
       even_when_not_outdated  = params[:even_when_not_outdated] || false
-      from_scratch        = params[:from_scratch]       || false
+      from_scratch            = params[:from_scratch]           || false
 
       # Load data
       @site.load_data
@@ -55,7 +55,7 @@ module Nanoc
       @stack = []
 
       # Get pages and asset reps
-      objects = obj.nil? ? @site.pages + @site.assets : [ obj ]
+      objects = @site.pages + @site.assets if objects.nil?
       reps = objects.map { |o| o.reps }.flatten
 
       # Compile everything

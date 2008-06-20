@@ -63,8 +63,8 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
       @stack = []
     end
 
-    def run(page, include_outdated)
-      page.reps.each { |r| r.content(:post) }
+    def run(objects, include_outdated)
+      objects.each { |o| o.reps.each { |r| r.content(:post) } }
     end
 
   end
