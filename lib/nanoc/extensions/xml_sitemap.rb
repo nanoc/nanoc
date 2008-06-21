@@ -1,12 +1,3 @@
-class Time
-
-  # TODO document
-  def to_iso8601_date
-    self.strftime("%Y-%m-%d")
-  end
-
-end
-
 module Nanoc::Extensions
 
   # Nanoc::Extensions::XMLSitemap contains functionality for building XML
