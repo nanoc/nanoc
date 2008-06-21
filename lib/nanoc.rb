@@ -65,6 +65,11 @@ module Nanoc
 
 end
 
+# Load requirements
+begin ; require 'rubygems' ; rescue LoadError ; end
+require 'yaml'
+require 'fileutils'
+
 # Load base
 Nanoc.load('base', 'enhancements.rb')
 Nanoc.load('base', 'defaults.rb')
