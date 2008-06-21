@@ -68,7 +68,7 @@ class Nanoc::Extensions::BloggingTest < Test::Unit::TestCase
   def test_feed_url_without_custom_feed_url
     # Create feed page
     @page = mock
-    @page.expects(:feed_url).returns(nil)
+    @page.expects(:[]).with(:feed_url).returns(nil)
     @page.expects(:base_url).returns('http://example.com')
     @page.expects(:path).returns('/foo/bar/')
 
@@ -82,7 +82,7 @@ class Nanoc::Extensions::BloggingTest < Test::Unit::TestCase
   def test_feed_url_with_custom_feed_url
     # Create feed page
     @page = mock
-    @page.expects(:feed_url).returns('http://example.com/feed/')
+    @page.expects(:[]).with(:feed_url).returns('http://example.com/feed/')
 
     # Check
     assert_equal('http://example.com/feed/', feed_url)

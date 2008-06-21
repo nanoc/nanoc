@@ -165,7 +165,7 @@ module Nanoc::Extensions
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
-      @page.feed_url || @page.base_url + @page.path
+      @page[:feed_url] || @page.base_url + @page.path
     end
 
     # Returns an URI containing an unique ID for the given page. This will be
