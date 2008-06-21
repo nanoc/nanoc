@@ -7,17 +7,11 @@ class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
 
   include Nanoc::Extensions::Tagging
 
-  class TestSite
-
-    def page_defaults
-      @page_defaults ||= Nanoc::PageDefaults.new({})
-    end
-
-  end
-
   def test_tags_for_without_tags
     # Create site
-    site = TestSite.new
+    site = mock
+    page_defaults = Nanoc::PageDefaults.new({})
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new('content', {}, '/path/')
@@ -32,12 +26,8 @@ class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
   end
 
   def test_tags_for_with_custom_base_url
-    # Create site
-    site = TestSite.new
-
     # Create page
     page = Nanoc::Page.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
-    page.site = site
     page_proxy = page.to_proxy
 
     # Check
@@ -49,12 +39,8 @@ class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
   end
 
   def test_tags_for_with_custom_none_text
-    # Create site
-    site = TestSite.new
-
     # Create page
     page = Nanoc::Page.new('content', { :tags => [ ]}, '/path/')
-    page.site = site
     page_proxy = page.to_proxy
 
     # Check
@@ -65,12 +51,8 @@ class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
   end
 
   def test_tags_for_with_custom_separator
-    # Create site
-    site = TestSite.new
-
     # Create page
     page = Nanoc::Page.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
-    page.site = site
     page_proxy = page.to_proxy
 
     # Check
@@ -82,16 +64,12 @@ class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
   end
 
   def test_pages_with_tag
-    # Create site
-    site = TestSite.new
-
     # Create pages
     pages = [
       Nanoc::Page.new('page 1', { :tags => [ :foo ]}, '/page1/'),
       Nanoc::Page.new('page 2', { :tags => [ :bar ]}, '/page2/'),
       Nanoc::Page.new('page 3', { :tags => [ :foo, :bar ]}, '/page3/')
     ]
-    pages.each { |p| p.site = site }
     @pages = pages.map { |p| p.to_proxy }
 
     # Find pages
