@@ -31,8 +31,9 @@ module Nanoc
     #                  pre-filtered. Only applicable to page reps, and not to
     #                  asset reps. Defaults to true.
     #
-    # +:even_when_not_outdated+:: true if the rep should be compiled even if it is
-    #                         not outdated, false if not. Defaults to false.
+    # +:even_when_not_outdated+:: true if the rep should be compiled even if
+    #                             it is not outdated, false if not. Defaults
+    #                             to false.
     #
     # +:from_scratch+:: true if all compilation stages (for page reps:
     #                   pre-filter, layout, post-filter; for asset reps:
