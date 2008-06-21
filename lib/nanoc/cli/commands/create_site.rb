@@ -320,12 +320,7 @@ EOS
       # Fill code
       code = Nanoc::Code.new(
         "\# All files in the 'lib' directory will be loaded\n" +
-        "\# before nanoc starts compiling.\n" +
-        "\n" +
-        "def html_escape(str)\n" +
-        "  str.gsub('&', '&amp;').gsub('<', '&lt;').gsub('>', '&gt;').gsub('\"', '&quot;')\n" +
-        "end\n" +
-        "alias h html_escape\n"
+        "\# before nanoc starts compiling.\n"
       )
       code.site = site
       code.save

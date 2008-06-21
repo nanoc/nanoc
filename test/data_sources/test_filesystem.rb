@@ -240,28 +240,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_html_escape
-    in_dir %w{ tmp } do
-      create_site('site')
-
-      in_dir %w{ site } do
-        File.open('content/content.yaml', 'w') do |io|
-          io << %q{filters_pre: [ 'erb' ]} + "\n"
-          io << %q{title:       "<Hello>"} + "\n"
-        end
-        File.open('content/content.html', 'w') { |io| io << "<h1><%= h @page.title %></h1>" }
-
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-
-        assert_nothing_raised() { site.compiler.run }
-        assert_nothing_raised() { site.compiler.run }
-
-        assert(File.file?('output/index.html'))
-        assert_match(/<h1>&lt;Hello&gt;<\/h1>/, File.read('output/index.html'))
-      end
-    end
-  end
-
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_file_object' do |site|
       assert_nothing_raised() { site.compiler.run }
