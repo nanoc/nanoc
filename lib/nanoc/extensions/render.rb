@@ -1,9 +1,27 @@
 module Nanoc::Extensions
 
-  # TODO document
+  # Nanoc::Extensions::Render provides functionality for rendering layouts as
+  # partials.
   module Render
 
-    # TODO document
+    # Returns a string containing the rendered given layout.
+    #
+    # +name_or_path+:: the name or the path of the layout that should be
+    #                  rendered.
+    #
+    # +other_assigns+:: a hash containing assigns that will be made available
+    #                   as instance variables.
+    #
+    # Example 1: a layout 'head' with content "HEAD" and a layout 'foot' with
+    # content "FOOT":
+    #
+    #   <%= render 'head' %> - MIDDLE - <%= render 'foot' %>
+    #   # => "HEAD - MIDDLE - FOOT" 
+    #
+    # Example 2: a layout named 'head' with content "<h1><%= @title %></h1>":
+    #
+    #   <%= render 'head', :title => 'Foo' %>
+    #   # => "<h1>Foo</h1>"
     def render(name_or_path, other_assigns={})
       # Find layout
       layout = @_obj.site.layouts.find { |l| l.path == name_or_path.cleaned_path }
