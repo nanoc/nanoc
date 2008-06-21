@@ -47,6 +47,12 @@ module Nanoc::Extensions
     #
     # +limit+:: The maximum number of articles to show. Defaults to 5.
     #
+    # The following attributes must be set on blog articles:
+    #
+    # * 'title', containing the title of the blog post.
+    #
+    # * all other attributes mentioned above.
+    #
     # The following attributes can optionally be set on blog articles to
     # change the behaviour of the Atom feed:
     #
