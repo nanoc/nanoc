@@ -82,7 +82,10 @@ module Nanoc::CLI
         end
 
         # Compile
-        @base.site.compiler.run([ page ], :even_when_not_outdated => options.has_key?(:all))
+        @base.site.compiler.run(
+          page.nil? ? nil : [ page ],
+          :even_when_not_outdated => options.has_key?(:all)
+        )
 
         # Find reps
         page_reps  = @base.site.pages.map { |p| p.reps }.flatten
