@@ -1,6 +1,6 @@
 require 'helper'
 
-class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
+class Nanoc::Extensions::XMLSitemapTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
