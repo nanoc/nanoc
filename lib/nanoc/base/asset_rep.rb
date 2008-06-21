@@ -153,8 +153,8 @@ module Nanoc
     # Nanoc::Compiler#run instead, and pass this asset representation's asset
     # as its first argument.
     #
-    # +even_when_not_outdated+:: true if the asset rep should be compiled even if
-    #                        it is not outdated, false if not.
+    # +even_when_not_outdated+:: true if the asset rep should be compiled even
+    #                            if it is not outdated, false if not.
     #
     # +from_scratch+:: true if the asset rep should be filtered again even if
     #                  it has already been filtered, false otherwise.

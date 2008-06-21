@@ -188,8 +188,8 @@ module Nanoc
     #                 post-filtered, false if the page rep should only be
     #                 pre-filtered.
     #
-    # +even_when_not_outdated+:: true if the page rep should be compiled even if
-    #                        it is not outdated, false if not.
+    # +even_when_not_outdated+:: true if the page rep should be compiled even
+    #                            if it is not outdated, false if not.
     #
     # +from_scratch+:: true if all compilation stages (pre-filter, layout,
     #                  post-filter) should be performed again even if they
