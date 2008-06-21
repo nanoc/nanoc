@@ -1,22 +1,6 @@
-# This file is a large mess. It's basically the place where everything gets
-# dumped if it doesn't belong elsewhere. Embarrassing, really.
-
-# Get requirements
-begin ; require 'rubygems' ; rescue LoadError ; end
-require 'yaml'
-require 'fileutils'
-
 # Convenience function for printing warnings
 def warn(s, pre='WARNING')
   $stderr.puts "#{pre}: #{s}" unless ENV['QUIET']
-end
-
-# Convenience function for cd'ing in and out of a directory
-def in_dir(path)
-  FileUtils.cd(File.join(path))
-  yield
-ensure
-  FileUtils.cd(File.join(path.map { |n| '..' }))
 end
 
 ############################# OLD AND DEPRECATED #############################

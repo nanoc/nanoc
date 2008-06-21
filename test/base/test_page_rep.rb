@@ -5,6 +5,10 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  # TODO make sure compilation is always notified
+  # TODO make sure page compilation is only notified when layouting
+  # TODO make sure page is not set created/modified when skipping output
+
   def test_initialize
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')

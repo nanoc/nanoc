@@ -31,6 +31,14 @@ def with_temp_site(data_source='filesystem')
   end
 end
 
+# Convenience function for cd'ing in and out of a directory
+def in_dir(path)
+  FileUtils.cd(File.join(path))
+  yield
+ensure
+  FileUtils.cd(File.join(path.map { |n| '..' }))
+end
+
 def create_site(name, data_source='filesystem')
   Nanoc::CLI::Base.new.run(['create_site', name, '-d', data_source])
 end
