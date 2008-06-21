@@ -65,17 +65,17 @@ module Nanoc::Extensions
     #
     # The feed page will need to have the following attributes:
     #
-    # * 'base_url', containing the URL to your site, without trailing slash.
-    #   For example, if your site is at "http://example.com/", your base_url
+    # * 'base_url', containing the URL to the site, without trailing slash.
+    #   For example, if the site is at "http://example.com/", the base_url
     #   would be "http://example.com". It is probably a good idea to define
-    #   this in the page defaults, i.e. the 'meta.yaml' file (at least if you
-    #   are using the filesystem data source, which you probably are).
+    #   this in the page defaults, i.e. the 'meta.yaml' file (at least if the
+    #   filesystem data source is being used, which is probably the case).
     #
     # * 'title', containing the title of the feed, which is usually also the
     #   title of the blog.
     #
     # * 'author_name', containing the name of the page's author. This will
-    #   likely be a global attribute, unless your site is managed by several
+    #   likely be a global attribute, unless the site is managed by several
     #   people/
     #
     # * 'author_uri', containing the URI for the page's author, such as the
@@ -83,9 +83,9 @@ module Nanoc::Extensions
     #
     # The feed page can have the following optional attributes:
     #
-    # * 'feed_url', containing the URL of the feed. This can be useful when
-    #   you don't want to expose your private feed URL; for example, when
-    #   using FeedBurner you'd set this to the public FeedBurner URL.
+    # * 'feed_url', containing the custom URL of the feed. This can be useful
+    #   when the private feed URL shouldn't be exposed; for example, when
+    #   using FeedBurner this would be set to the public FeedBurner URL.
     #
     # To construct a feed, create a blank page with no layout, only the 'erb'
     # (or 'erubis') filter, and an 'xml' extension. It may also be useful to
