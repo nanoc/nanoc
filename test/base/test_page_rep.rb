@@ -330,7 +330,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep = page.reps[0]
 
     # Mock compiler
-    page_rep.expects(:compile).with(false, false, false)
+    page_rep.expects(:compile).with(false, true, false)
     page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
 
     # Check
@@ -352,7 +352,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep = page.reps[0]
 
     # Mock compiler
-    page_rep.expects(:compile).with(true, false, false)
+    page_rep.expects(:compile).with(true, true, false)
     page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
 
     # Check

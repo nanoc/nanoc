@@ -163,8 +163,9 @@ module Nanoc
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
     def content(stage=:pre)
-      compile(false, false, false) if stage == :pre  and !@filtered_pre
-      compile(true,  false, false) if stage == :post and !@filtered_post
+      compile(false, true, false) if stage == :pre  and !@filtered_pre
+      compile(true,  true, false) if stage == :post and !@filtered_post
+
       @content[stage]
     end
 
