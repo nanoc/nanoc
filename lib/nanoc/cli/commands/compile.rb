@@ -11,14 +11,14 @@ module Nanoc::CLI
     end
 
     def short_desc
-      'compile pages of this site'
+      'compile pages and assets of this site'
     end
 
     def long_desc
-      'Compile all pages of the current site. If a path is given, only ' +
-      'the page with the given path will be compiled. Additionally, only ' +
-      'pages that are outdated will be compiled, unless specified ' +
-      'otherwise with the -a option.'
+      'Compile all pages and all assets of the current site. If a path is ' +
+      'given, only the page or asset with the given path will be compiled. ' +
+      'Additionally, only pages and assets that are outdated will be ' +
+      'compiled, unless specified otherwise with the -a option.'
     end
 
     def usage
@@ -30,7 +30,7 @@ module Nanoc::CLI
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'compile all pages, even those that aren\'t outdated'
+          :desc => 'compile all pages and assets, even those that aren\'t outdated'
         }
       ]
     end
@@ -47,11 +47,12 @@ module Nanoc::CLI
 
       # Find page with given path
       if arguments[0].nil?
-        page = nil
+        obj = nil
       else
         path = arguments[0].cleaned_path
-        page = @base.site.pages.find { |page| page.path == path }
-        if page.nil?
+        obj = @base.site.pages.find { |page| page.path == path }
+        obj = @base.site.assets.find { |asset| asset.path == path } if obj.nil?
+        if obj.nil?
           puts "Unknown page: #{path}"
           exit 1
         end
@@ -60,7 +61,7 @@ module Nanoc::CLI
       # Compile site
       begin
         # Give feedback
-        puts "Compiling #{page.nil? ? 'site' : 'page'}..."
+        puts "Compiling #{obj.nil? ? 'site' : 'page/asset'}..."
 
         # Initialize profiling stuff
         time_before = Time.now
@@ -83,7 +84,7 @@ module Nanoc::CLI
 
         # Compile
         @base.site.compiler.run(
-          page.nil? ? nil : [ page ],
+          obj.nil? ? nil : [ obj ],
           :even_when_not_outdated => options.has_key?(:all)
         )
 
@@ -95,7 +96,7 @@ module Nanoc::CLI
         # Give general feedback
         puts
         puts "No pages were modified." unless reps.any? { |r| r.modified? }
-        puts "#{page.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
+        puts "#{obj.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
         if options.has_key?(:verbose)
           # Give page rep state feedback
