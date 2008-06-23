@@ -26,8 +26,8 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep = page.reps.first
 
     # Assert content set
-    assert_equal('some content', page_rep.instance_eval { @content[:pre] })
-    assert_equal(nil,            page_rep.instance_eval { @content[:post] })
+    assert_equal(nil, page_rep.instance_eval { @content[:pre]  })
+    assert_equal(nil, page_rep.instance_eval { @content[:post] })
 
     # Assert flags reset
     assert(page_rep.instance_eval { !@compiled })
@@ -108,8 +108,8 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     assert(page_rep.compiled?)
 
     # Edit and compile page rep
-    page.instance_eval      { @mtime = Time.now + 5 }
-    page_rep.instance_eval  { @content[:pre] = 'new content' }
+    page.instance_eval { @mtime = Time.now + 5 }
+    page.instance_eval { @content = 'new content' }
     page_rep.compile(true, false, true)
 
     # Check
@@ -315,7 +315,33 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     assert_equal('default', page_rep.attribute_named(:layout))
   end
 
-  def test_content_pre
+  def test_content_pre_not_yet_compiled
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new(
+      "content <%= 'foo' %>",
+      { :filters_pre => [ 'erb' ] },
+      '/path/'
+    )
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Mock compiler
+    page_rep.expects(:compile).with(false, true, false)
+
+    # Check
+    page_rep.content(:pre)
+    #assert_equal('content foo', page_rep.content(:pre))
+  end
+
+  def test_content_pre_already_compiled
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
 
@@ -328,16 +354,13 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page.site = site
     page.build_reps
     page_rep = page.reps[0]
-
-    # Mock compiler
-    page_rep.expects(:compile).with(false, true, false)
     page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
 
     # Check
     assert_equal('pre!', page_rep.content(:pre))
   end
 
-  def test_content_post
+  def test_content_post_not_yet_compiled
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
 
@@ -353,6 +376,24 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Mock compiler
     page_rep.expects(:compile).with(true, true, false)
+
+    # Check
+    page_rep.content(:post)
+  end
+
+  def test_content_post_already_compiled
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
     page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
 
     # Check
@@ -442,11 +483,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_do_compile_pre
-    # TODO implement
-  end
-
-  def test_do_compile_post
+  def test_compile_recursive
     # TODO implement
   end
 
