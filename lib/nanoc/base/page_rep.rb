@@ -6,13 +6,16 @@ module Nanoc
   # multiple output files, each run through a different set of filters with a
   # different layout.
   #
+  # FIXME this Observable description is outdated
   # A page representation is observable. Events will be notified through the
   # 'update' method (as specified by Observable) with the page representation
   # as its first argument, followed by a symbol describing the event (listed
   # in chronological order):
   #
-  # * :compile_start
-  # * :compile_end
+  # * :compilation_started
+  # * :compilation_ended
+  # * :filtering_started
+  # * :filtering_ended
   class PageRep
 
     # The page (Nanoc::Page) to which this representation belongs.
@@ -42,16 +45,12 @@ module Nanoc
       @name           = name
 
       # Get page content from page
-      @content        = { :pre => page.content, :post => nil }
+      @content        = { :pre => nil, :post => nil }
 
       # Reset flags
       @compiled       = false
       @modified       = false
       @created        = false
-
-      # Reset stages
-      @filtered_pre   = false
-      @filtered_post  = false
     end
 
     # Returns a proxy (Nanoc::PageRepProxy) for this page representation.
@@ -163,8 +162,7 @@ module Nanoc
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
     def content(stage=:pre)
-      compile(false, true, false) if stage == :pre  and !@filtered_pre
-      compile(true,  true, false) if stage == :post and !@filtered_post
+      compile(stage == :post, true, false) if @content[stage].nil?
 
       @content[stage]
     end
@@ -211,10 +209,7 @@ module Nanoc
       @created  = false
 
       # Forget progress if requested
-      if from_scratch
-        @filtered_pre  = false
-        @filtered_post = false
-      end
+      @content = { :pre => nil, :post => nil } if from_scratch
 
       # Check for recursive call
       if @page.site.compiler.stack.include?(self)
@@ -226,10 +221,23 @@ module Nanoc
       @page.site.compiler.stack.push(self)
       Nanoc::NotificationCenter.post(:compilation_started, self) if also_layout
 
-      # Compile
-      compile_pre  if !@filtered_pre
-      compile_post if !@filtered_post and also_layout
+      # Compile pre
+      if @content[:pre].nil?
+        do_filter(:pre)
+      end
+
+      # Compile post
+      if @content[:post].nil? and also_layout
+        do_layout
+        do_filter(:post)
+      end
+
+      # Set status
       @compiled = true
+      unless attribute_named(:skip_output)
+        @created  = !File.file?(self.disk_path)
+        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+      end
 
       # Write
       write unless attribute_named(:skip_output)
@@ -241,39 +249,13 @@ module Nanoc
 
   private
 
-    # Runs the uncompiled content through the pre-filters
-    def compile_pre
-      # Filter pre
-      do_filter(:pre)
-
-      # Done
-      @filtered_pre = true
-    end
-
-    def compile_post
-      # Layout and filter post
-      do_layout
-      do_filter(:post)
-
-      # Check status
-      unless attribute_named(:skip_output)
-        @created  = !File.file?(self.disk_path)
-        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
-      end
-
-      # Done
-      @filtered_post = true
-    end
-
     # Runs the content through the filters in the given stage.
     def do_filter(stage)
+      # Get content if necessary
+      content = (stage == :pre ? @page.content : @content[:post])
+
       # Get filters
-      unless attribute_named(:filters).nil?
-        raise Nanoc::Errors::NoLongerSupportedError.new(
-          'The `filters` property is no longer supported; please use ' +
-          '`filters_pre` instead.'
-        )
-      end
+      check_for_outdated_filters
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
       # Run each filter
@@ -285,9 +267,12 @@ module Nanoc
 
         # Run filter
         Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        @content[stage] = filter.run(@content[stage])
+        content = filter.run(content)
         Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
+
+      # Set content
+      @content[stage] = content
     end
 
     # Runs the content through this rep's layout.
@@ -314,6 +299,16 @@ module Nanoc
       # TODO add ruby 1.9 support
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
+    end
+
+    # Raises an error when the outdated 'filters' attribute is used.
+    def check_for_outdated_filters
+      unless attribute_named(:filters).nil?
+        raise Nanoc::Errors::NoLongerSupportedError.new(
+          'The `filters` property is no longer supported; please use ' +
+          '`filters_pre` instead.'
+        )
+      end
     end
 
   end
