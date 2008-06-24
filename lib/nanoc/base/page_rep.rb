@@ -6,16 +6,17 @@ module Nanoc
   # multiple output files, each run through a different set of filters with a
   # different layout.
   #
-  # FIXME this Observable description is outdated
-  # A page representation is observable. Events will be notified through the
-  # 'update' method (as specified by Observable) with the page representation
-  # as its first argument, followed by a symbol describing the event (listed
-  # in chronological order):
+  # A page representation is observable. The following events will be
+  # notified:
   #
   # * :compilation_started
   # * :compilation_ended
   # * :filtering_started
   # * :filtering_ended
+  #
+  # The compilation-related events have one parameters (the page
+  # representation); the filtering-related events have two (the page
+  # representation, and a symbol containing the filter class name).
   class PageRep
 
     # The page (Nanoc::Page) to which this representation belongs.
