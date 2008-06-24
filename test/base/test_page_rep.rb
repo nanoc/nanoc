@@ -5,10 +5,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  # TODO make sure compilation is always notified
-  # TODO make sure page compilation is only notified when layouting
-  # TODO make sure page is not set created/modified when skipping output
-
   def test_initialize
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
@@ -338,7 +334,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Check
     page_rep.content(:pre)
-    #assert_equal('content foo', page_rep.content(:pre))
   end
 
   def test_content_pre_already_compiled
@@ -459,36 +454,227 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     assert_equal(layout, page_rep.layout)
   end
 
-  def test_compile
-    # TODO implement
+  def test_compile_not_outdated
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
 
-    # - check stack
-    # - check recursive call
-    # - check notifications
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:outdated?).returns(false)
+
+    # Compile
+    page_rep.compile(false, false, false)
+  end
+
+  def test_compile_already_compiled
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    stack = []
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns(stack)
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:outdated?).returns(true)
+    page_rep.instance_eval do
+      @content[:pre]  = 'some pre content'
+      @content[:post] = 'some post content'
+    end
+
+    # Compile
+    page_rep.compile(true, false, false)
   end
 
   def test_compile_without_layout
-    # TODO implement
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    stack = []
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns(stack)
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:outdated?).returns(true)
+    page_rep.expects(:do_filter).with(:pre)
+
+    # Compile
+    page_rep.compile(false, false, false)
+
+    # Check
+    assert_equal(false, page_rep.instance_eval { @compiled })
+    assert_equal(false, page_rep.instance_eval { @created  })
+    assert_equal(false, page_rep.instance_eval { @modified })
   end
 
   def test_compile_also_layout
-    # TODO implement
-  end
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
 
-  def test_compile_even_when_not_outdated
-    # TODO implement
-  end
+    # Create site
+    stack = []
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns(stack)
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
 
-  def test_compile_from_scratch
-    # TODO implement
+    # Write temp page
+    File.open('tmp/blah.txt', 'w') { |io| io.write('testing 123') }
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:outdated?).returns(true)
+    page_rep.expects(:do_filter).times(2)
+    page_rep.expects(:do_layout)
+    page_rep.expects(:write)
+    page_rep.expects(:disk_path).times(2).returns('tmp/blah.txt')
+
+    # Compile
+    page_rep.compile(true, false, false)
+
+    # Check
+    assert_equal(true,  page_rep.instance_eval { @compiled })
+    assert_equal(false, page_rep.instance_eval { @created  })
+    assert_equal(true,  page_rep.instance_eval { @modified })
   end
 
   def test_compile_recursive
-    # TODO implement
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    stack = []
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns(stack)
+    site = mock
+    site.expects(:config).at_least_once.returns({ :index_filenames => [ 'index.html' ]})
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.expects(:assets).times(2).returns([])
+    site.expects(:layouts).times(2).returns([])
+
+    # Create router
+    router = Nanoc::Routers::Default.new(site)
+    site.expects(:router).times(2).returns(router)
+
+    # Create page 0
+    page_0 = Nanoc::Page.new(
+      "<%= @pages.find { |p| p.path == '/page1/' }.content %>",
+      { :filters_pre => [ 'erb' ] },
+      '/page0/'
+    )
+    page_0.site = site
+    page_0.build_reps
+    page_rep_0 = page_0.reps[0]
+    page_rep_0.expects(:outdated?).times(2).returns(true)
+
+    # Create page 1
+    page_1 = Nanoc::Page.new(
+      "<%= @pages.find { |p| p.path == '/page0/' }.content %>",
+      { :filters_pre => [ 'erb' ] },
+      '/page1/'
+    )
+    page_1.site = site
+    page_1.build_reps
+    page_rep_1 = page_1.reps[0]
+    page_rep_1.expects(:outdated?).returns(true)
+
+    # Set pages
+    pages = [ page_0, page_1 ]
+    site.expects(:pages).times(2).returns(pages)
+
+    # Compile
+    assert_raises(Nanoc::Errors::RecursiveCompilationError) do
+      page_rep_0.compile(false, false, false)
+    end
   end
 
-  def test_do_write
-    # TODO implement
+  def test_compile_even_when_not_outdated
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    stack = []
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns(stack)
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:outdated?).returns(false)
+    page_rep.expects(:do_filter).with(:pre)
+
+    # Compile
+    page_rep.compile(false, true, false)
+
+    # Check
+    assert_equal(false, page_rep.instance_eval { @compiled })
+    assert_equal(false, page_rep.instance_eval { @created  })
+    assert_equal(false, page_rep.instance_eval { @modified })
+  end
+
+  def test_compile_from_scratch
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    stack = []
+    compiler = mock
+    compiler.expects(:stack).at_least_once.returns(stack)
+    site = mock
+    site.expects(:compiler).at_least_once.returns(compiler)
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:outdated?).returns(true)
+    page_rep.expects(:do_filter).with(:pre)
+    page_rep.instance_eval do
+      @content[:pre]  = 'some pre content'
+      @content[:post] = 'some post content'
+    end
+
+    # Compile
+    page_rep.compile(false, false, true)
+
+    # Check
+    assert_equal(false, page_rep.instance_eval { @compiled })
+    assert_equal(false, page_rep.instance_eval { @created  })
+    assert_equal(false, page_rep.instance_eval { @modified })
   end
 
   def test_do_filter
@@ -506,6 +692,9 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
   def test_do_filter_with_unknown_filter
     # TODO implement
   end
+
+  # TODO make sure compilation is always notified
+  # TODO make sure page compilation is only notified when layouting
 
   def test_do_filter_with_outdated_filters_attribute
     # Create page defaults
@@ -599,12 +788,28 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
   end
 
-  def test_write_page
-    # TODO implement
-  end
+  def test_do_write
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:skip_output => true)
 
-  def test_write_page_with_skip_output
-    # TODO implement
+    # Create site
+    site = mock
+    site.expects(:page_defaults).returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+    page_rep.expects(:disk_path).times(2).returns('tmp/foo/bar/baz/quux.txt')
+
+    # Compile
+    assert_nothing_raised do
+      page_rep.instance_eval { write }
+    end
+
+    # Check
+    assert(File.file?('tmp/foo/bar/baz/quux.txt'))
   end
 
 end
