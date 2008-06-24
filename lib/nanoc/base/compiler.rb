@@ -2,13 +2,6 @@ module Nanoc
 
   # Nanoc::Compiler is responsible for compiling a site's page and asset
   # representations.
-  #
-  # A compiler can be observed. Events will be notified through the 'update'
-  # method (as specified by Observable) with the page representation as its
-  # first argument, followed by a symbol describing the event (described in
-  # the Nanoc::PageRep and Nanoc::AssetRep documentation), and followed by a
-  # boolean variable indicating whether outdated representations were compiled
-  # or not.
   class Compiler
 
     attr_reader :stack
