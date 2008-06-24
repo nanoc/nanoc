@@ -221,26 +221,26 @@ module Nanoc
       @page.site.compiler.stack.push(self)
       Nanoc::NotificationCenter.post(:compilation_started, self) if also_layout
 
-      # Compile pre
+      # Pre-filter if necesary
       if @content[:pre].nil?
         do_filter(:pre)
       end
 
-      # Compile post
+      # Post-filter if necessary
       if @content[:post].nil? and also_layout
         do_layout
         do_filter(:post)
-      end
 
-      # Set status
-      @compiled = true
-      unless attribute_named(:skip_output)
-        @created  = !File.file?(self.disk_path)
-        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
-      end
+        # Update status
+        @compiled = true
+        unless attribute_named(:skip_output)
+          @created  = !File.file?(self.disk_path)
+          @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+        end
 
-      # Write
-      write unless attribute_named(:skip_output)
+        # Write if necessary
+        write unless attribute_named(:skip_output)
+      end
 
       # Stop
       Nanoc::NotificationCenter.post(:compilation_ended, self) if also_layout
