@@ -1,13 +1,17 @@
 module Nanoc::Filters
   class Old < Nanoc::Filter
 
-    identifiers :markdown, :textile, :eruby
+    identifiers :eruby, :markdown, :smartypants, :textile
 
     def run(content)
       raise Nanoc::Error.new(
-        "The 'markdown', 'textile' and 'eruby' filters no longer exist. " +
-        "Instead, use 'bluecloth' for Markdown, 'redcloth' for Markdown or " +
-        "Textile, and 'erb' for eRuby."
+        "The 'eruby', markdown', 'smartypants' and 'textile' filters no " +
+        "longer exist. Instead, use the following filters:\n" +
+        "\n" +
+        "* for Markdown:      bluecloth, discount, redcloth\n" +
+        "* for Textile:       redcloth\n" +
+        "* for embedded Ruby: erb, erubis\n" +
+        "* for Smartypants:   rubypants"
       )
     end
 

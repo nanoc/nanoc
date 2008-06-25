@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class SmartyPants < Nanoc::Filter
 
-    identifiers :smartypants, :rubypants
+    identifiers :rubypants
 
     def run(content)
       require 'rubypants'
