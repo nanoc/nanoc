@@ -92,45 +92,10 @@ module Nanoc::DataSources
       FileUtils.remove_entry_secure('lib')
     end
 
-    def update # :nodoc :
-      # Update pages
-      # content/foo/bar/baz/index.ext -> content/foo/bar/baz/baz.ext
-      # content/foo/bar/baz/meta.yaml -> content/foo/bar/baz/baz.yaml
-      # TODO implement
-
-      # Update layouts
-      # layouts/abc.ext -> layouts/abc/abc.{html,yaml}
-      Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
-        # Get filter class
-        filter_class = Nanoc::PluginManager.instance.layout_processor(File.extname(filename))
-
-        # Get data
-        content     = File.read(filename)
-        attributes  = { :filter => filter_class.identifier.to_s }
-        path        = File.basename(filename, File.extname(filename))
-
-        # Get layout
-        tmp_layout = Nanoc::Layout.new(content, attributes, path)
-
-        # Get filenames
-        last_component    = tmp_layout.path.split('/')[-1]
-        dir_path          = 'layouts' + tmp_layout.path
-        meta_filename     = dir_path + last_component + '.yaml'
-        content_filename  = dir_path + last_component +  File.extname(filename)
-
-        # Create new files
-        FileUtils.mkdir_p(dir_path)
-        File.open(meta_filename,    'w') { |io| io.write(tmp_layout.attributes.to_split_yaml) }
-        File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
-
-        # Delete old files
-        FileUtils.remove_entry_secure(filename)
-      end
-
-      # Update templates
-      # templates/foo/index.ext -> templates/foo/foo.ext
-      # templates/foo/meta.yaml -> templates/foo/foo.yaml
-      # TODO implement
+    def update # :nodoc:
+      update_pages
+      update_layouts
+      update_templates
     end
 
     ########## Pages ##########
@@ -565,6 +530,91 @@ module Nanoc::DataSources
         'To do so, issue the \'nanoc update\' command. For help on ' +
         'updating a site\'s data, issue \'nanoc help update\'.'
       )
+    end
+
+    # Updates outdated pages (both content and meta file names).
+    def update_pages
+      # Update content files
+      # content/foo/bar/baz/index.ext -> content/foo/bar/baz/baz.ext
+      Dir['content/**/index.*'].select { |f| File.file?(f) }.each do |old_filename|
+        # Determine new name
+        if old_filename =~ /^content\/index\./
+          new_filename = old_filename.sub(/^content\/index\./, 'content/content.')
+        else
+          new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
+        end
+
+        # Move
+        FileUtils.mv(old_filename, new_filename)
+      end
+
+      # Update meta files
+      # content/foo/bar/baz/meta.yaml -> content/foo/bar/baz/baz.yaml
+      Dir['content/**/meta.yaml'].select { |f| File.file?(f) }.each do |old_filename|
+        # Determine new name
+        if old_filename == 'content/meta.yaml'
+          new_filename = 'content/content.yaml'
+        else
+          new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
+        end
+
+        # Move
+        FileUtils.mv(old_filename, new_filename)
+      end
+    end
+
+    # Updates outdated layouts.
+    def update_layouts # :nodoc :
+      # layouts/abc.ext -> layouts/abc/abc.{html,yaml}
+      Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
+        # Get filter class
+        filter_class = Nanoc::PluginManager.instance.layout_processor(File.extname(filename))
+
+        # Get data
+        content     = File.read(filename)
+        attributes  = { :filter => filter_class.identifier.to_s }
+        path        = File.basename(filename, File.extname(filename))
+
+        # Get layout
+        tmp_layout = Nanoc::Layout.new(content, attributes, path)
+
+        # Get filenames
+        last_component    = tmp_layout.path.split('/')[-1]
+        dir_path          = 'layouts' + tmp_layout.path
+        meta_filename     = dir_path + last_component + '.yaml'
+        content_filename  = dir_path + last_component +  File.extname(filename)
+
+        # Create new files
+        FileUtils.mkdir_p(dir_path)
+        File.open(meta_filename,    'w') { |io| io.write(tmp_layout.attributes.to_split_yaml) }
+        File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
+
+        # Delete old files
+        FileUtils.remove_entry_secure(filename)
+      end
+    end
+
+    # Updates outdated templates (both content and meta file names).
+    def update_templates # :nodoc :
+      # Update content files
+      # templates/foo/index.ext -> templates/foo/foo.ext
+      Dir['templates/**/index.*'].select { |f| File.file?(f) }.each do |old_filename|
+        # Determine new name
+        new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
+
+        # Move
+        FileUtils.mv(old_filename, new_filename)
+      end
+
+      # Update meta files
+      # templates/foo/meta.yaml -> templates/foo/foo.yaml
+      Dir['templates/**/meta.yaml'].select { |f| File.file?(f) }.each do |old_filename|
+        # Determine new name
+        new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
+
+        # Move
+        FileUtils.mv(old_filename, new_filename)
+      end
     end
 
   end

@@ -67,7 +67,100 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
   end
 
   def test_update
-    # TODO implement
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Set expectations
+    data_source.expects(:update_pages)
+    data_source.expects(:update_layouts)
+    data_source.expects(:update_templates)
+
+    # update
+    data_source.update
+  end
+
+  def test_update_pages
+    in_dir %w{ tmp } do
+      # Build some pages (outdated and up-to-date)
+      FileUtils.mkdir_p('content')
+      FileUtils.mkdir_p('content/foo')
+      FileUtils.mkdir_p('content/foo/bar')
+      File.open('content/index.erb',        'w') { |io| }
+      File.open('content/meta.yaml',        'w') { |io| }
+      File.open('content/foo/index.haml',   'w') { |io| }
+      File.open('content/foo/meta.yaml',    'w') { |io| }
+      File.open('content/foo/bar/bar.haml', 'w') { |io| }
+      File.open('content/foo/bar/bar.yaml', 'w') { |io| }
+
+      # Update
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.instance_eval { update_pages }
+
+      # Check old files
+      assert(!File.file?('content/index.erb'))
+      assert(!File.file?('content/meta.yaml'))
+      assert(!File.file?('content/foo/index.haml'))
+      assert(!File.file?('content/foo/meta.yaml'))
+
+      # Check new files
+      assert(File.file?('content/content.erb'))
+      assert(File.file?('content/content.yaml'))
+      assert(File.file?('content/foo/foo.haml'))
+      assert(File.file?('content/foo/foo.yaml'))
+      assert(File.file?('content/foo/bar/bar.haml'))
+      assert(File.file?('content/foo/bar/bar.yaml'))
+    end
+  end
+
+  def test_update_layouts
+    in_dir %w{ tmp } do
+      # Build some layouts (outdated and up-to-date)
+      FileUtils.mkdir_p('layouts')
+      FileUtils.mkdir_p('layouts/bar')
+      File.open('layouts/foo.erb',      'w') { |io| }
+      File.open('layouts/bar/bar.haml', 'w') { |io| }
+      File.open('layouts/bar/bar.yaml', 'w') { |io| }
+
+      # Update
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.instance_eval { update_layouts }
+
+      # Check old files
+      assert(!File.file?('layouts/foo.erb'))
+
+      # Check new files
+      assert(File.file?('layouts/foo/foo.erb'))
+      assert(File.file?('layouts/foo/foo.yaml'))
+      assert(File.file?('layouts/bar/bar.haml'))
+      assert(File.file?('layouts/bar/bar.yaml'))
+    end
+  end
+
+  def test_update_templates
+    in_dir %w{ tmp } do
+      # Build some templates (outdated and up-to-date)
+      FileUtils.mkdir_p('templates')
+      FileUtils.mkdir_p('templates/foo')
+      FileUtils.mkdir_p('templates/bar')
+      File.open('templates/foo/index.erb',  'w') { |io| }
+      File.open('templates/foo/meta.yaml',  'w') { |io| }
+      File.open('templates/bar/bar.haml',   'w') { |io| }
+      File.open('templates/bar/bar.yaml',   'w') { |io| }
+
+      # Update
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.instance_eval { update_templates }
+
+      # Check old files
+      assert(!File.file?('templates/foo/index.erb'))
+      assert(!File.file?('templates/foo/meta.yaml'))
+
+      # Check new files
+      assert(File.file?('templates/foo/foo.erb'))
+      assert(File.file?('templates/foo/foo.yaml'))
+      assert(File.file?('templates/bar/bar.haml'))
+      assert(File.file?('templates/bar/bar.yaml'))
+    end
   end
 
   # Test pages
