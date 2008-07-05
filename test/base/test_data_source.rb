@@ -34,6 +34,7 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
 
     # Test required methods - general
     assert_raise(NotImplementedError) { data_source.setup }
+    assert_raise(NotImplementedError) { data_source.destroy }
 
     # Test required methods - pages
     assert_raise(NotImplementedError) { data_source.pages }
@@ -44,6 +45,16 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
     # Test required methods - page defaults
     assert_raise(NotImplementedError) { data_source.page_defaults }
     assert_raise(NotImplementedError) { data_source.save_page_defaults(nil) }
+
+    # Test required methods - assets
+    assert_raise(NotImplementedError) { data_source.assets }
+    assert_raise(NotImplementedError) { data_source.save_asset(nil) }
+    assert_raise(NotImplementedError) { data_source.move_asset(nil, nil) }
+    assert_raise(NotImplementedError) { data_source.delete_asset(nil) }
+
+    # Test required methods - asset defaults
+    assert_raise(NotImplementedError) { data_source.asset_defaults }
+    assert_raise(NotImplementedError) { data_source.save_asset_defaults(nil) }
 
     # Test required methods - layouts
     assert_raise(NotImplementedError) { data_source.layouts }

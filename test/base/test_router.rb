@@ -15,6 +15,16 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     end
   end
 
+  def test_path_for_asset_rep
+    # Create router
+    router = Nanoc::Router.new(nil)
+
+    # Make sure an error is raised
+    assert_raise(NotImplementedError) do
+      router.path_for_asset_rep(nil)
+    end
+  end
+
   def test_disk_path_for_without_cp_without_index
     # Create page
     page_rep = mock
