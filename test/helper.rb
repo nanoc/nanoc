@@ -63,6 +63,9 @@ rescue LoadError
 end
 
 def global_setup
+  # Clean up
+  GC.start
+
   # Go quiet
   unless ENV['QUIET'] == 'false'
     $log_level = :off
