@@ -141,7 +141,7 @@ module Nanoc
     # a asset's path, this method must be used (save_asset will not work).
     #
     # Subclasses must implement this method.
-    def move_asset(asset)
+    def move_asset(asset, new_path)
       not_implemented('move_asset')
     end
 
