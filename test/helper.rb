@@ -68,7 +68,6 @@ def global_setup
 
   # Go quiet
   unless ENV['QUIET'] == 'false'
-    $log_level = :off
     Nanoc::CLI::Logger.instance.level = :off
   end
 
