@@ -48,6 +48,9 @@ module Nanoc
   module Extensions # :nodoc:
   end
 
+  module Extra # :nodoc:
+  end
+
   module Filters # :nodoc:
   end
 
