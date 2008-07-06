@@ -219,6 +219,9 @@ EOS
         Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
       end
 
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
+
       # Build entire site
       FileUtils.mkdir_p(path)
       begin

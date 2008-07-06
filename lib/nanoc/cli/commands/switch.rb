@@ -92,6 +92,9 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.file(:high, :update, file_path)
       end
 
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
+
       # Load data
       @base.site.load_data
 
