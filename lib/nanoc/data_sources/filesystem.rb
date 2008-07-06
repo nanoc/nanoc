@@ -546,7 +546,7 @@ module Nanoc::DataSources
 
     # Updated outdated page defaults (renames page defaults file)
     def update_page_defaults
-      FileUtils.mv('meta.yaml', 'page_defaults.yaml') if File.file?('meta.yaml')
+      move('meta.yaml', 'page_defaults.yaml') if File.file?('meta.yaml')
     end
 
     # Updates outdated pages (both content and meta file names).
@@ -562,7 +562,7 @@ module Nanoc::DataSources
         end
 
         # Move
-        FileUtils.mv(old_filename, new_filename)
+        move(old_filename, new_filename)
       end
 
       # Update meta files
@@ -576,7 +576,7 @@ module Nanoc::DataSources
         end
 
         # Move
-        FileUtils.mv(old_filename, new_filename)
+        move(old_filename, new_filename)
       end
     end
 
@@ -605,9 +605,12 @@ module Nanoc::DataSources
         FileUtils.mkdir_p(dir_path)
         File.open(meta_filename,    'w') { |io| io.write(tmp_layout.attributes.to_split_yaml) }
         File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
+        add(meta_filename)
+        add(content_filename)
 
         # Delete old files
         FileUtils.remove_entry_secure(filename)
+        remove(filename)
       end
     end
 
@@ -620,7 +623,7 @@ module Nanoc::DataSources
         new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
 
         # Move
-        FileUtils.mv(old_filename, new_filename)
+        move(old_filename, new_filename)
       end
 
       # Update meta files
@@ -630,7 +633,36 @@ module Nanoc::DataSources
         new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
 
         # Move
-        FileUtils.mv(old_filename, new_filename)
+        move(old_filename, new_filename)
+      end
+    end
+
+    # When the environment variable +VCS+ is set to +svn+, +git+, +hg+ or
+    # +bzr+, an +add+ operation will be performed using the given VCS. Does
+    # nothing if +VCS+ isn't set.
+    def add(filename)
+      if %w( svn git hg bzr ).include?(ENV['VCS'])
+        system(ENV['VCS'], 'add', filename)
+      end
+    end
+
+    # When the environment variable +VCS+ is set to +svn+, +git+, +hg+ or
+    # +bzr+, a +rm+ operation will be performed using the given VCS. Does
+    # nothing if +VCS+ isn't set.
+    def remove(filename)
+      if %w( svn git hg bzr ).include?(ENV['VCS'])
+        system(ENV['VCS'], 'rm', filename)
+      end
+    end
+
+    # Moves (or renames) the file at +src+ to +dst+. When the environment
+    # variable +VCS+ is set to +svn+, +git+, +hg+ or +bzr+, a +mv+ operation
+    # will be performed using the given VCS.
+    def move(src, dst)
+      if %w( svn git hg bzr ).include?(ENV['VCS'])
+        system(ENV['VCS'], 'mv', src, dst)
+      else
+        FileUtils.mv(src, dst)
       end
     end
 
