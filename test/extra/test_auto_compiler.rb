@@ -225,7 +225,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
         end
       ensure
         # Clean up
-        FileUtils.remove_entry_secure(page_rep.disk_path)
+        FileUtils.rm_rf(page_rep.disk_path)
       end
     end
   end
