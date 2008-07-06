@@ -37,7 +37,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.length != 1
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -51,7 +51,7 @@ module Nanoc::CLI
       # Find template
       template = @base.site.templates.find { |t| t.name == template_name }
       if template.nil?
-        puts "A template named '#{template_name}' was not found; aborting."
+        $stderr.puts "A template named '#{template_name}' was not found; aborting."
         exit 1
       end
 

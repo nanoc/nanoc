@@ -29,7 +29,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.length != 1
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -41,8 +41,8 @@ module Nanoc::CLI
 
       # Check whether layout is unique
       if !@base.site.layouts.find { |l| l.path == path }.nil?
-        puts "A layout already exists at #{path}. Please pick a unique name" +
-             " for the layout you are creating." unless ENV['QUIET']
+        $stderr.puts "A layout already exists at #{path}. Please pick a unique name " +
+                     "for the layout you are creating." unless ENV['QUIET']
         exit 1
       end
 

@@ -38,7 +38,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.size > 1
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -53,7 +53,7 @@ module Nanoc::CLI
         obj = @base.site.pages.find { |page| page.path == path }
         obj = @base.site.assets.find { |asset| asset.path == path } if obj.nil?
         if obj.nil?
-          puts "Unknown page: #{path}"
+          $stderr.puts "Unknown page: #{path}"
           exit 1
         end
       end
@@ -136,9 +136,9 @@ module Nanoc::CLI
 
       # Print warning if necessary
       if reps.any? { |r| !r.compiled? }
-        puts
-        puts "Warning: profiling information may not be accurate because " +
-             "some pages were not compiled."
+        $stderr.puts
+        $stderr.puts "Warning: profiling information may not be accurate because " +
+                     "some pages were not compiled."
       end
 
       # Print header
@@ -189,28 +189,28 @@ module Nanoc::CLI
       end
 
       # Print message
-      puts
-      puts "ERROR: An exception occured while compiling #{page_rep_name}."
-      puts
-      puts "If you think this is a bug in nanoc, please do report it at"
-      puts "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
-      puts
-      puts 'Message:'
-      puts '  ' + message
-      puts
-      puts 'Page compilation stack:'
+      $stderr.puts
+      $stderr.puts "ERROR: An exception occured while compiling #{page_rep_name}."
+      $stderr.puts
+      $stderr.puts "If you think this is a bug in nanoc, please do report it at " +
+                   "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
+      $stderr.puts
+      $stderr.puts 'Message:'
+      $stderr.puts '  ' + message
+      $stderr.puts
+      $stderr.puts 'Compilation stack:'
       @base.site.compiler.stack.reverse.each do |item|
         if item.is_a?(Nanoc::PageRep) # page rep
-          puts "  - [page]   #{item.page.path} (rep #{item.name})"
+          $stderr.puts "  - [page]   #{item.page.path} (rep #{item.name})"
         elsif item.is_a?(Nanoc::AssetRep) # asset rep
-          puts "  - [asset]  #{item.asset.path} (rep #{item.name})"
+          $stderr.puts "  - [asset]  #{item.asset.path} (rep #{item.name})"
         else # layout
-          puts "  - [layout] #{item.path}"
+          $stderr.puts "  - [layout] #{item.path}"
         end
       end
-      puts
-      puts 'Backtrace:'
-      puts error.backtrace.map { |t| '  - ' + t }.join("\n")
+      $stderr.puts
+      $stderr.puts 'Backtrace:'
+      $stderr.puts error.backtrace.map { |t| '  - ' + t }.join("\n")
     end
 
     def rep_compilation_started(rep)

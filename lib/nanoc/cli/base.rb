@@ -26,7 +26,7 @@ module Nanoc::CLI
         begin
           parsed_arguments = Nanoc::CLI::OptionParser.parse(args[0..1], global_option_definitions)
         rescue Nanoc::CLI::OptionParser::IllegalOptionError => e
-          puts "illegal option -- #{e}"
+          $stderr.puts "illegal option -- #{e}"
           exit 1
         end
 
@@ -61,10 +61,10 @@ module Nanoc::CLI
       begin
         parsed_arguments = Nanoc::CLI::OptionParser.parse(args[1..-1], extended_option_definitions)
       rescue Nanoc::CLI::OptionParser::IllegalOptionError => e
-        puts "illegal option -- #{e}"
+        $stderr.puts "illegal option -- #{e}"
         exit 1
       rescue Nanoc::CLI::OptionParser::OptionRequiresAnArgumentError => e
-        puts "option requires an argument -- #{e}"
+        $stderr.puts "option requires an argument -- #{e}"
         exit 1
       end
 
@@ -92,11 +92,11 @@ module Nanoc::CLI
       # Find by approximation
       commands = @commands.select { |c| c.name[0, name.length] == name }
       if commands.length > 1
-        puts "nanoc: '#{name}' is ambiguous:"
-        puts "  #{commands.map { |c| c.name }.join(' ') }"
+        $stderr.puts "nanoc: '#{name}' is ambiguous:"
+        $stderr.puts "  #{commands.map { |c| c.name }.join(' ') }"
         exit 1
       elsif commands.length == 0
-        puts "nanoc: unknown command '#{name}'\n"
+        $stderr.puts "nanoc: unknown command '#{name}'\n"
         show_help
         exit 1
       else
@@ -118,8 +118,8 @@ module Nanoc::CLI
     # requires a site, such as the compile command.
     def require_site
       if site.nil?
-        puts 'The current working directory does not seem to be a ' +
-             'valid/complete nanoc site directory; aborting.'
+        $stderr.puts 'The current working directory does not seem to be a ' +
+                     'valid/complete nanoc site directory; aborting.'
         exit 1
       end
     end
@@ -132,22 +132,22 @@ module Nanoc::CLI
           @site = Nanoc::Site.new(YAML.load_file('config.yaml'))
           @site.load_data
         rescue Nanoc::Errors::UnknownDataSourceError => e
-          puts "Unknown data source: #{e}"
+          $stderr.puts "Unknown data source: #{e}"
           exit 1
         rescue Nanoc::Errors::UnknownRouterError => e
-          puts "Unknown router: #{e}"
+          $stderr.puts "Unknown router: #{e}"
           exit 1
         rescue Exception => e
-          puts "ERROR: An exception occured while loading this site."
-          puts
-          puts "If you think this is a bug in nanoc, please do report it at"
-          puts "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
-          puts
-          puts 'Message:'
-          puts '  ' + e.message
-          puts
-          puts 'Backtrace:'
-          puts e.backtrace.map { |t| '  - ' + t }.join("\n")
+          $stderr.puts "ERROR: An exception occured while loading this site."
+          $stderr.puts
+          $stderr.puts "If you think this is a bug in nanoc, please do report it at " +
+                       "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
+          $stderr.puts
+          $stderr.puts 'Message:'
+          $stderr.puts '  ' + e.message
+          $stderr.puts
+          $stderr.puts 'Backtrace:'
+          $stderr.puts e.backtrace.map { |t| '  - ' + t }.join("\n")
           exit 1
         end
       end
