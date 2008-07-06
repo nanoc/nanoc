@@ -21,19 +21,13 @@ AUTHOR    = 'Denis Defreyne'
 EMAIL     = 'denis.defreyne@stoneship.org'
 
 MESSAGE   = <<EOS
-Thanks for installing nanoc! Here are some resources to help you get started:
+Thanks for installing nanoc 2.1! Here are some resources to help you get started:
 
-* There's a tutorial at <http://nanoc.stoneship.org/help/tutorial/>. This
-  tutorial will familiarize you with nanoc, so it is a must read if you
-  haven't used nanoc before.
+* The tutorial at <http://nanoc.stoneship.org/help/tutorial/>
+* The manual at <http://nanoc.stoneship.org/help/manual/>
+* The discussion group at <http://groups.google.com/group/nanoc>
 
-* The manual at <http://nanoc.stoneship.org/help/manual/> describing all of
-  nanoc's features in detail. It also has descriptions of the plugins that
-  come with nanoc.
-
-* The discussion group at <http://groups.google.com/group/nanoc> is extremely
-  useful if you have questions, or if you are running into trouble with
-  nanoc. Don't hesitate; just ask away.
+Because nanoc 2.1 has a lot of new features, be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for details about this release.
 
 Enjoy!
 EOS
