@@ -1,2 +1,2 @@
 output_dir:  "output"
-data_source: "filesystem2"
+data_source: "filesystem_combined"
