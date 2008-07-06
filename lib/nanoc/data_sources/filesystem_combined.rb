@@ -44,6 +44,14 @@ module Nanoc::DataSources
   # The page defaults are loaded from a YAML-formatted file named 'meta.yaml'
   # file at the top level of the nanoc site directory.
   #
+  # = Assets
+  #
+  # TODO write me
+  #
+  # = Asset defaults
+  #
+  # TODO write me
+  #
   # = Layouts
   #
   # Layouts are stored as files in the 'layouts' directory. Similar to pages,
@@ -60,11 +68,11 @@ module Nanoc::DataSources
   #
   # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
   # sub-directories.
-  class Filesystem2 < Nanoc::DataSource
+  class FilesystemCombined < Nanoc::DataSource
 
     ########## Attributes ##########
 
-    identifier :filesystem2
+    identifier :filesystem_combined
 
     ########## Preparation ##########
 
@@ -164,6 +172,24 @@ module Nanoc::DataSources
       # TODO implement
     end
 
+    ########## Assets ##########
+
+    # def assets # :nodoc:
+    #   # TODO implement (high)
+    # end
+    # 
+    # def save_asset(asset) # :nodoc:
+    #   # TODO implement (high)
+    # end
+    # 
+    # def move_asset(asset, new_path) # :nodoc:
+    #   # TODO implement
+    # end
+    # 
+    # def delete_asset(asset) # :nodoc:
+    #   # TODO implement
+    # end
+
     ########## Page Defaults ##########
 
      def page_defaults # :nodoc:
@@ -190,6 +216,16 @@ module Nanoc::DataSources
         io.write(page_defaults.attributes.to_split_yaml)
       end
     end
+
+    ########## Asset defaults ##########
+
+    # def asset_defaults # :nodoc:
+    #   # TODO implement (high)
+    # end
+    # 
+    # def save_asset_defaults(asset_defaults) # :nodoc:
+    #   # TODO implement (high)
+    # end
 
     ########## Layouts ##########
 

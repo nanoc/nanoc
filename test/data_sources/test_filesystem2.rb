@@ -1,6 +1,6 @@
 require 'helper'
 
-class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
+class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -24,8 +24,8 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         FileUtils.remove_entry_secure('layouts/default')
         FileUtils.remove_entry_secure('lib/default.rb')
 
-        # Convert site to filesystem2
-        open('config.yaml', 'w') { |io| io.write('data_source: filesystem2') }
+        # Convert site to filesystem_combined
+        open('config.yaml', 'w') { |io| io.write('data_source: filesystem_combined') }
 
         # Setup site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
@@ -48,7 +48,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   end
 
   def test_destroy
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       # Destroy
       site.data_source.destroy
 
@@ -68,7 +68,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test pages
 
   def test_pages
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       assert_nothing_raised do
         assert_equal(1, site.pages.size)
 
@@ -92,7 +92,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test page defaults
 
   def test_page_defaults
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       assert_nothing_raised do
         assert_equal('html', site.page_defaults.attributes[:extension])
       end
@@ -106,7 +106,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test templates
 
   def test_templates
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       assert_nothing_raised do
         template = site.templates[0]
         assert_equal('default', template.name)
@@ -131,7 +131,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test layouts
 
   def test_layouts
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       assert_nothing_raised do
         layout = site.layouts[0]
 
@@ -157,7 +157,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
   # Test code
 
   def test_code
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       assert_nothing_raised do
         assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
       end
@@ -211,7 +211,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
     # Threshold for mtimes in which files will be considered the same
     threshold = 2.0
 
-    with_temp_site('filesystem2') do |site|
+    with_temp_site('filesystem_combined') do |site|
       # Get timestamps
       distant_past = Time.parse('1992-10-14')
       recent_past  = Time.parse('1998-05-18')

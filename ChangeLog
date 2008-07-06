@@ -25,8 +25,8 @@ New:
 	  Mongrel instead of WEBrick now if you want (pass the `-H` option)
 * Much better source code documentation
 * Lots of new unit tests
-* A new filesystem data source named "filesystem2", which stores pages and
-  layouts in single files instead of directories
+* A new filesystem data source named "filesystem_combined", which stores pages
+  and layouts in single files instead of directories
 * Routers, which decide where compiled pages should be written to
 * Already compiled pages will no longer be re-compiled unless they have been
   updated in the mean time
