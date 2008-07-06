@@ -49,7 +49,7 @@ module Nanoc
         initialize_if_necessary(name)
 
         # Remove relevant observers
-        @notifications[name].reject! { |i| i[:id] == id}
+        @notifications[name].reject! { |i| i[:id] == id }
       end
 
     private
