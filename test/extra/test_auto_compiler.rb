@@ -21,7 +21,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
   end
 
   def test_handler_named
-    if_have('rack') do
+    if_have 'rack' do
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
 
@@ -30,18 +30,6 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
         Rack::Handler::WEBrick,
         autocompiler.instance_eval { handler_named(:webrick) }
       )
-
-      # Check handler with requirements
-      assert_raises(NameError) do
-        Rack::Handler::Thin
-      end
-      assert_nothing_raised do
-        autocompiler.instance_eval { handler_named(:thin) }
-        assert_equal(
-          Rack::Handler::Thin,
-          autocompiler.instance_eval { handler_named(:thin) }
-        )
-      end
     end
   end
 
