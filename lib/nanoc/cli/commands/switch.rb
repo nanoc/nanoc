@@ -77,10 +77,19 @@ module Nanoc::CLI
 
       # Check for -y switch
       unless options.has_key?(:yes)
-        $stderr.puts 'Are you absolutely sure you want to set up the data source ' +
-                     'for this site? Setting up the data source will remove ' +
-                     'existing data. To continue, use the -y/--yes option, like ' +
-                     '"nanoc setup -y".'
+        $stderr.puts '*************'
+        $stderr.puts '** WARNING **'
+        $stderr.puts '*************'
+        $stderr.puts
+        $stderr.puts 'Are you absolutely sure you want to set up the data ' +
+                     'source for this site? Setting up the data source ' +
+                     'will remove existing data. This operation is ' +
+                     'destructive and cannot be reverted. Please do not ' +
+                     'interrupt this operation; doing so can result in ' +
+                     'data loss. As always, consider making a backup copy.'
+        $stderr.puts
+        $stderr.puts 'To continue, use the -y/--yes option, like "nanoc ' +
+                     'setup -y".'
         exit 1
       end
 
