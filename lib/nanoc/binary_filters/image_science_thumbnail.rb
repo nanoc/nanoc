@@ -1,8 +1,8 @@
 module Nanoc::BinaryFilters
 
-  class Thumbnail < Nanoc::BinaryFilter
+  class ImageScienceThumbnail < Nanoc::BinaryFilter
 
-    identifier :thumbnail
+    identifier :image_science_thumbnail
 
     def run(file)
       require 'image_science'
