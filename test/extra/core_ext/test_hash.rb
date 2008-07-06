@@ -31,8 +31,8 @@ class Nanoc::ExtraCoreExtHashTest < Test::Unit::TestCase
 
   def test_to_split_yaml_arrays
     hash = { :filters_pre => %w( foo bar baz ), :filters_post => %w( xxx yyy zzz ) }
-    assert_equal(
-      "# Built-in \nfilters_pre: \n- foo\n- bar\n- baz\nfilters_post: \n- xxx\n- yyy\n- zzz\n\n# Custom\n",
+    assert_match(
+      /# Built-in.*(filters_pre: \n- foo\n- bar\n- baz|filters_post: \n- xxx\n- yyy\n- zzz){2}.*\n\n# Custom/x,
       hash.to_split_yaml
     )
   end
