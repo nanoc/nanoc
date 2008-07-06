@@ -92,9 +92,6 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.file(:high, :update, file_path)
       end
 
-      # Set VCS if possible
-      @base.set_vcs(options[:vcs])
-
       # Load data
       @base.site.load_data
 
@@ -105,6 +102,9 @@ module Nanoc::CLI
       @base.site.config[:data_source] = options[:datasource]
       @base.site.instance_eval { @data_source = data_source.new(self) }
       File.open('config.yaml', 'w') { |io| io.write(YAML.dump(@base.site.config.stringify_keys)) }
+
+      # Set VCS on new data source if possible
+      @base.set_vcs(options[:vcs])
 
       @base.site.data_source.loading do
         # Create initial data source
