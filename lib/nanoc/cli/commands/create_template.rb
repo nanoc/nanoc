@@ -29,7 +29,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.length != 1
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -38,7 +38,7 @@ module Nanoc::CLI
 
       # Check template name
       if name.include?('/')
-        puts 'Template names cannot contain slashes; aborting.'
+        $stderr.puts 'Template names cannot contain slashes; aborting.'
         exit 1
       end
 

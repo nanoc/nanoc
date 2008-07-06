@@ -29,7 +29,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.size > 1
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 

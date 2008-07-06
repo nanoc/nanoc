@@ -54,21 +54,21 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.size != 0
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
       # Check options
       unless options.has_key?(:datasource)
-        puts 'A new data source should be specified using the ' +
-             '-d/--datasource option.'
+        $stderr.puts 'A new data source should be specified using the ' +
+                     '-d/--datasource option.'
         exit 1
       end
 
       # Find data source
       data_source = Nanoc::PluginManager.instance.data_source(options[:datasource].to_sym)
       if data_source.nil?
-        puts "Unrecognised data source: #{options[:datasource]}"
+        $stderr.puts "Unrecognised data source: #{options[:datasource]}"
         exit 1
       end
 
@@ -77,10 +77,10 @@ module Nanoc::CLI
 
       # Check for -y switch
       unless options.has_key?(:yes)
-        puts 'Are you absolutely sure you want to set up the data source ' +
-             'for this site? Setting up the data source will remove ' +
-             'existing data. To continue, use the -y/--yes option, like ' +
-             '"nanoc setup -y".'
+        $stderr.puts 'Are you absolutely sure you want to set up the data source ' +
+                     'for this site? Setting up the data source will remove ' +
+                     'existing data. To continue, use the -y/--yes option, like ' +
+                     '"nanoc setup -y".'
         exit 1
       end
 

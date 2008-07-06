@@ -194,7 +194,7 @@ EOS
     def run(options, arguments)
       # Check arguments
       if arguments.length != 1
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -204,13 +204,13 @@ EOS
 
       # Check whether site exists
       if File.exist?(path)
-        puts "A site at '#{path}' already exists."
+        $stderr.puts "A site at '#{path}' already exists."
         exit 1
       end
 
       # Check whether data source exists
       if Nanoc::PluginManager.instance.data_source(data_source.to_sym).nil?
-        puts "Unrecognised data source: #{data_source}"
+        $stderr.puts "Unrecognised data source: #{data_source}"
         exit 1
       end
 

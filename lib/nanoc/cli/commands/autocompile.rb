@@ -52,7 +52,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.size != 0
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -67,11 +67,11 @@ module Nanoc::CLI
           options[:handler]
         )
       rescue LoadError
-        puts "'mime/types' and 'rack' are required to autocompile sites. " +
-             "You may want to install the 'mime-types' and 'rack' gems by " +
-             "running 'gem install mime-types' and 'gem install rack'."
+        $stderr.puts "'mime/types' and 'rack' are required to autocompile sites. " +
+                     "You may want to install the 'mime-types' and 'rack' gems by " +
+                     "running 'gem install mime-types' and 'gem install rack'."
       rescue Nanoc::AutoCompiler::UnknownHandlerError
-        puts "The requested handler, #{options[:handler]}, is not available."
+        $stderr.puts "The requested handler, #{options[:handler]}, is not available."
       end
     end
 

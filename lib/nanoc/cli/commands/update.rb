@@ -42,7 +42,7 @@ module Nanoc::CLI
     def run(options, arguments)
       # Check arguments
       if arguments.size != 0
-        puts "usage: #{usage}"
+        $stderr.puts "usage: #{usage}"
         exit 1
       end
 
@@ -51,10 +51,10 @@ module Nanoc::CLI
 
       # Check for -y switch
       unless options.has_key?(:yes)
-        puts 'Are you absolutely sure you want to update the content for ' +
-             'this site? Updating the content will change the structure ' +
-             'of existing data. To continue, use the -y/--yes option, like ' +
-             '"nanoc update -y".'
+        $stderr.puts 'Are you absolutely sure you want to update the content for ' +
+                     'this site? Updating the content will change the structure ' +
+                     'of existing data. To continue, use the -y/--yes option, like ' +
+                     '"nanoc update -y".'
         exit 1
       end
 
