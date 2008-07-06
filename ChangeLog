@@ -44,9 +44,10 @@ Changed:
 
 Removed:
 
-* The `eruby`, `markdown`, `textile` filters no longer exist; instead, use
-  `erb` or `erubis` (for embedded Ruby), `bluecloth`, `discount` or `maruku`
-  (for Markdown) and `redcloth` (for Markdown and Textile)
+* Several filters have been removed and replaced by newer filters:
+	* `eruby`: use `erb` or `erubis` instead
+	* `markdown`: use `bluecloth`, `discount` or `maruku` instead
+	* `textile`: use `redcloth` instead
 
 2.0.4
 -----
