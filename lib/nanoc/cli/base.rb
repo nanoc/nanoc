@@ -85,6 +85,9 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.level = :low
       end
 
+      # Set VCS if possible
+      set_vcs(parsed_arguments[:options][:vcs])
+
       # Find and run command
       command.run(parsed_arguments[:options], parsed_arguments[:arguments])
     end
