@@ -147,7 +147,9 @@ module Nanoc
       @code.site = self
 
       # Execute code
-      # FIXME move responsibility for loading site code elsewhere
+      # FIXME This could be dangerous when using nanoc as a framework
+      # (a separate ruby process should probably be forked, and the code
+      # should only be loaded in this forked process)
       @code.load
 
       # Set loaded
@@ -208,7 +210,6 @@ module Nanoc
       # Set site
       @asset_defaults.site = self
     rescue NotImplementedError
-      # FIXME catch this error in a nicer way
       @asset_defaults = AssetDefaults.new({})
       @asset_defaults.site = self
     end
@@ -225,7 +226,6 @@ module Nanoc
       # Build asset representations
       @assets.each { |p| p.build_reps }
     rescue NotImplementedError
-      # FIXME catch this error in a nicer way
       @assets = []
     end
 
