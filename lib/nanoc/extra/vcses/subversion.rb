@@ -12,7 +12,7 @@ module Nanoc::Extra::VCSes
       system('svn', 'rm', filename)
     end
 
-     def move(src, dst)
+    def move(src, dst)
       system('svn', 'mv', src, dst)
     end
 

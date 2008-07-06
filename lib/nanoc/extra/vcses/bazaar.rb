@@ -12,7 +12,7 @@ module Nanoc::Extra::VCSes
       system('bzr', 'rm', filename)
     end
 
-     def move(src, dst)
+    def move(src, dst)
       system('bzr', 'mv', src, dst)
     end
 

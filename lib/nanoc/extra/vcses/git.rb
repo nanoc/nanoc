@@ -12,7 +12,7 @@ module Nanoc::Extra::VCSes
       system('git', 'rm', filename)
     end
 
-     def move(src, dst)
+    def move(src, dst)
       system('git', 'mv', src, dst)
     end
 
