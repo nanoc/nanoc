@@ -8,7 +8,7 @@ module Nanoc::Filters
       require 'erb'
 
       # Create context
-      context = ::Nanoc::Context.new(assigns)
+      context = ::Nanoc::Extra::Context.new(assigns)
 
       # Get result
       ::ERB.new(content).result(context.get_binding)

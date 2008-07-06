@@ -1,6 +1,6 @@
 require 'helper'
 
-class Nanoc::AutoCompilerTest < Test::Unit::TestCase
+class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -11,7 +11,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_preferred_handler
     # Create autocompiler
-    aco = Nanoc::AutoCompiler.new(nil)
+    aco = Nanoc::Extra::AutoCompiler.new(nil)
 
     # Check preferred handler
     handlers = sequence('handlers')
@@ -23,7 +23,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
   def test_handler_named
     if_have('rack') do
       # Create autocompiler
-      autocompiler = Nanoc::AutoCompiler.new(nil)
+      autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
 
       # Check handler without requirements
       assert_equal(
@@ -62,7 +62,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:config).returns({ :output_dir => 'output/' })
 
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(site)
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_page_rep).with(page_reps[1])
 
     # Run
@@ -89,7 +89,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     File.open('tmp/somefile.txt', 'w') { |io| }
 
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(site)
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_file).with('tmp/somefile.txt')
 
     # Run
@@ -113,7 +113,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:config).returns({ :output_dir => 'tmp/' })
 
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(site)
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('someotherfile.txt')
 
     # Run
@@ -122,7 +122,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_h
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(nil)
+    autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
 
     # Check HTML escaping
     assert_equal(
@@ -134,7 +134,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
   def test_mime_type_of
     if_have('mime/types') do
       # Create autocompiler
-      autocompiler = Nanoc::AutoCompiler.new(nil)
+      autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
 
       # Create known test file
       File.open('tmp/foo.html', 'w') { |io| }
@@ -154,7 +154,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
 
   def test_serve_400
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(nil)
+    autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
 
     # Fill response for 404
     response = autocompiler.instance_eval { serve_404('/foo/bar/baz/') }
@@ -174,7 +174,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:compiler).returns(compiler)
 
     # Create autocompiler
-    autocompiler = Nanoc::AutoCompiler.new(site)
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
     # Fill response for 500
     response = autocompiler.instance_eval do
@@ -211,7 +211,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
       site.expects(:compiler).returns(compiler)
 
       # Create autocompiler
-      autocompiler = Nanoc::AutoCompiler.new(site)
+      autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
       begin
         assert_nothing_raised do
@@ -247,7 +247,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
       site.expects(:compiler).at_least_once.returns(compiler)
 
       # Create autocompiler
-      autocompiler = Nanoc::AutoCompiler.new(site)
+      autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
       assert_nothing_raised do
         # Serve
@@ -269,7 +269,7 @@ class Nanoc::AutoCompilerTest < Test::Unit::TestCase
       File.open('tmp/test',     'w') { |io| io.write("random blah blah stuff") }
 
       # Create autocompiler
-      autocompiler = Nanoc::AutoCompiler.new(self)
+      autocompiler = Nanoc::Extra::AutoCompiler.new(self)
 
       # Test file 1
       assert_nothing_raised do

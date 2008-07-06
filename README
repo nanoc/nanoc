@@ -45,12 +45,13 @@ The source code is structured in a few directories:
 The namespaces (modules) are organised like this:
 
 * *Nanoc* is the namespace for everything nanoc-related (obviously). The
-  classes in 'lib/nanoc/base' and 'lib/nanoc/extra' are part of this module
-  (not Nanoc::Base which does not exist)
+  classes in 'lib/nanoc/base' are part of this module (not Nanoc::Base which
+  does not exist)
   * *BinaryFilters* contains the binary filters
   * *CLI* containing everything related to the commandline tool.
   * *DataSources* contains the data sources
   * *Extensions* contains the extensions
+  * *Extra* contains useful stuff not needed by nanoc itself
   * *Filters* contains the (textual) filters
   * *Routers* contains the routers
 

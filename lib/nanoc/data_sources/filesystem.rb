@@ -122,7 +122,7 @@ module Nanoc::DataSources
           content = File.read(content_filename)
 
           # Get attributes
-          attributes = meta.merge(:file => Nanoc::FileProxy.new(content_filename))
+          attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(content_filename))
 
           # Get path
           path = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')

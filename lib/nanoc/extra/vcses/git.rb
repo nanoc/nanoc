@@ -1,6 +1,6 @@
-module Nanoc::VCSes
+module Nanoc::Extra::VCSes
 
-  class Git < Nanoc::VCS
+  class Git < Nanoc::Extra::VCS
 
     identifiers :git
 

@@ -11,7 +11,7 @@ module Nanoc::Filters
       options = @page.attribute_named(:haml_options) || {}
 
       # Create context
-      context = ::Nanoc::Context.new(assigns)
+      context = ::Nanoc::Extra::Context.new(assigns)
 
       # Get result
       ::Haml::Engine.new(content, options).render(context, assigns)

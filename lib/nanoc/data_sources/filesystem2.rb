@@ -107,7 +107,7 @@ module Nanoc::DataSources
         return nil if meta[:is_draft]
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc::FileProxy.new(filename))
+        attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(filename))
 
         # Get actual path
         if filename =~ /\/index\.[^\/]+$/

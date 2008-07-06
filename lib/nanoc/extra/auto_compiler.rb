@@ -1,10 +1,10 @@
 require 'webrick'
 
-module Nanoc
+module Nanoc::Extra
 
-  # Nanoc::AutoCompiler is a web server that will automatically compile pages
-  # as they are requested. It also serves static files such as stylesheets and
-  # images.
+  # Nanoc::Extra::AutoCompiler is a web server that will automatically compile
+  # pages as they are requested. It also serves static files such as
+  # stylesheets and images.
   class AutoCompiler
 
     # Error that is raised when the autocompiler is started if the specified

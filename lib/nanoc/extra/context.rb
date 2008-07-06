@@ -1,6 +1,6 @@
-module Nanoc
+module Nanoc::Extra
 
-  # Nanoc::Context provides a context and a Binding for use in various
+  # Nanoc::Extra::Context provides a context and a Binding for use in various
   # filters, such as the ERB and Haml one.
   class Context
 
