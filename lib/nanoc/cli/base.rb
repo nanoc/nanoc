@@ -175,20 +175,21 @@ module Nanoc::CLI
     def create_commands
       @commands = []
 
-      # Create specific commands
-      @help_command = HelpCommand.new
-      @commands << @help_command
+      # Find all command classes
+      command_classes = []
+      ObjectSpace.each_object(Class) do |klass|
+        command_classes << klass if klass < Nanoc::CLI::Command
+      end
 
-      # Create general commands
-      @commands << AutocompileCommand.new
-      @commands << CompileCommand.new
-      @commands << CreateLayoutCommand.new
-      @commands << CreatePageCommand.new
-      @commands << CreateSiteCommand.new
-      @commands << CreateTemplateCommand.new
-      @commands << InfoCommand.new
-      @commands << SwitchCommand.new
-      @commands << UpdateCommand.new
+      # Create commands
+      command_classes.each do |klass|
+        if klass.to_s == 'Nanoc::CLI::HelpCommand'
+          @help_command = HelpCommand.new
+          @commands << @help_command
+        else
+          @commands << klass.new
+        end
+      end
 
       # Set base
       @commands.each { |c| c.base = self }

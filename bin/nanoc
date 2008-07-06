@@ -4,5 +4,8 @@
 require File.dirname(__FILE__) + '/../lib/nanoc.rb'
 require File.dirname(__FILE__) + '/../lib/nanoc/cli/cli.rb'
 
+# Load custom commands
+Dir['lib/commands/*.rb'].each { |file| require file }
+
 # Run base
 Nanoc::CLI::Base.new.run(ARGV)
