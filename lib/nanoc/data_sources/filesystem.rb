@@ -85,7 +85,12 @@ module Nanoc::DataSources
     end
 
     def destroy # :nodoc:
-      FileUtils.remove_entry_secure('meta.yaml')
+      # Remove files
+      FileUtils.remove_entry_secure('asset_defaults.yaml')  if File.file?('asset_defaults.yaml')
+      FileUtils.remove_entry_secure('meta.yaml')            if File.file?('meta.yaml')
+      FileUtils.remove_entry_secure('page_defaults.yaml')   if File.file?('page_defaults.yaml')
+
+      # Remove directories
       FileUtils.remove_entry_secure('content')
       FileUtils.remove_entry_secure('templates')
       FileUtils.remove_entry_secure('layouts')
@@ -93,6 +98,7 @@ module Nanoc::DataSources
     end
 
     def update # :nodoc:
+      update_page_defaults
       update_pages
       update_layouts
       update_templates
@@ -219,10 +225,11 @@ module Nanoc::DataSources
 
     def page_defaults # :nodoc:
       # Get attributes
-      attributes = YAML.load_file('meta.yaml') || {}
+      filename = File.file?('page_defaults.yaml') ? 'page_defaults.yaml' : 'meta.yaml'
+      attributes = YAML.load_file(filename) || {}
 
       # Get mtime
-      mtime = File.stat('meta.yaml').mtime
+      mtime = File.stat(filename).mtime
 
       # Build page defaults
       Nanoc::PageDefaults.new(attributes, mtime)
@@ -230,14 +237,19 @@ module Nanoc::DataSources
 
     def save_page_defaults(page_defaults) # :nodoc:
       # Notify
-      if File.file?('meta.yaml')
-        Nanoc::NotificationCenter.post(:file_updated, 'meta.yaml')
+      if File.file?('page_defaults.yaml')
+        filename = 'page_defaults.yaml'
+        Nanoc::NotificationCenter.post(:file_updated, filename)
+      elsif File.file?('meta.yaml')
+        filename = 'meta.yaml'
+        Nanoc::NotificationCenter.post(:file_updated, filename)
       else
-        Nanoc::NotificationCenter.post(:file_created, 'meta.yaml')
+        filename = 'page_defaults.yaml'
+        Nanoc::NotificationCenter.post(:file_created, 'page_defaults.yaml')
       end
 
       # Write
-      File.open('meta.yaml', 'w') do |io|
+      File.open(filename, 'w') do |io|
         io.write(page_defaults.attributes.to_split_yaml)
       end
     end
@@ -530,6 +542,11 @@ module Nanoc::DataSources
         'To do so, issue the \'nanoc update\' command. For help on ' +
         'updating a site\'s data, issue \'nanoc help update\'.'
       )
+    end
+
+    # Updated outdated page defaults (renames page defaults file)
+    def update_page_defaults
+      FileUtils.mv('meta.yaml', 'page_defaults.yaml') if File.file?('meta.yaml')
     end
 
     # Updates outdated pages (both content and meta file names).
