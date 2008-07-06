@@ -17,12 +17,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files to make sure they are recreated
-        FileUtils.remove_entry_secure('content/content.html')
-        FileUtils.remove_entry_secure('content/content.yaml')
-        FileUtils.remove_entry_secure('page_defaults.yaml')
-        FileUtils.remove_entry_secure('templates/default')
-        FileUtils.remove_entry_secure('layouts/default')
-        FileUtils.remove_entry_secure('lib/default.rb')
+        FileUtils.rm_rf('content/content.html')
+        FileUtils.rm_rf('content/content.yaml')
+        FileUtils.rm_rf('page_defaults.yaml')
+        FileUtils.rm_rf('templates/default')
+        FileUtils.rm_rf('layouts/default')
+        FileUtils.rm_rf('lib/default.rb')
 
         # Recreate files
         site.data_source.loading { site.data_source.setup {} }
@@ -369,8 +369,8 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       assert_nothing_raised() { site.compiler.run }
       assert_nothing_raised() { site.compiler.run }
 
-      FileUtils.remove_entry_secure 'content/content.txt~' if File.exist?('content/content.txt~')
-      FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+      FileUtils.rm_rf 'content/content.txt~' if File.exist?('content/content.txt~')
+      FileUtils.rm_rf 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
     end
   end
 

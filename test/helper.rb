@@ -77,10 +77,10 @@ end
 
 def global_teardown
   # Remove tmp directory
-  FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
+  FileUtils.rm_rf 'tmp' if File.exist?('tmp')
 
   # Remove output
   Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
-    FileUtils.remove_entry_secure(f) if File.exist?(f)
+    FileUtils.rm_rf(f) if File.exist?(f)
   end
 end

@@ -97,11 +97,11 @@ module Nanoc::DataSources
     end
 
     def destroy # :nodoc:
-      FileUtils.remove_entry_secure('meta.yaml')
-      FileUtils.remove_entry_secure('content')
-      FileUtils.remove_entry_secure('templates')
-      FileUtils.remove_entry_secure('layouts')
-      FileUtils.remove_entry_secure('lib')
+      FileUtils.rm_rf('meta.yaml')
+      FileUtils.rm_rf('content')
+      FileUtils.rm_rf('templates')
+      FileUtils.rm_rf('layouts')
+      FileUtils.rm_rf('lib')
     end
 
     ########## Pages ##########
@@ -346,7 +346,7 @@ module Nanoc::DataSources
       existed = File.file?('lib/default.rb')
 
       # Remove all existing code files
-      Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
+      Dir['lib/**/*.rb'].each { |f| FileUtils.rm_rf(f) }
 
       # Notify
       if existed

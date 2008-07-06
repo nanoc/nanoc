@@ -88,15 +88,15 @@ module Nanoc::DataSources
       # FIXME add vcs support
 
       # Remove files
-      FileUtils.remove_entry_secure('asset_defaults.yaml')  if File.file?('asset_defaults.yaml')
-      FileUtils.remove_entry_secure('meta.yaml')            if File.file?('meta.yaml')
-      FileUtils.remove_entry_secure('page_defaults.yaml')   if File.file?('page_defaults.yaml')
+      FileUtils.rm_rf('asset_defaults.yaml')  if File.file?('asset_defaults.yaml')
+      FileUtils.rm_rf('meta.yaml')            if File.file?('meta.yaml')
+      FileUtils.rm_rf('page_defaults.yaml')   if File.file?('page_defaults.yaml')
 
       # Remove directories
-      FileUtils.remove_entry_secure('content')
-      FileUtils.remove_entry_secure('templates')
-      FileUtils.remove_entry_secure('layouts')
-      FileUtils.remove_entry_secure('lib')
+      FileUtils.rm_rf('content')
+      FileUtils.rm_rf('templates')
+      FileUtils.rm_rf('layouts')
+      FileUtils.rm_rf('lib')
     end
 
     def update # :nodoc:

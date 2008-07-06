@@ -159,7 +159,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     assert(!page_rep.outdated?)
 
     # Check with non-existant output file
-    FileUtils.remove_entry_secure(page_rep.disk_path)
+    FileUtils.rm_rf(page_rep.disk_path)
     assert(page_rep.outdated?)
     FileUtils.mkdir_p('tmp/out/foo')
     File.open(page_rep.disk_path, 'w') { |io| }

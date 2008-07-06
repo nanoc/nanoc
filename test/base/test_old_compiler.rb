@@ -52,7 +52,7 @@ class Nanoc::OldCompilerTest < Test::Unit::TestCase
       assert_equal(1, Dir[File.join('tmp', 'custom_output', '*')].size)
       assert(File.file?('tmp/custom_output/index.html'))
 
-      FileUtils.remove_entry_secure 'tmp' if File.exist?('tmp')
+      FileUtils.rm_rf 'tmp' if File.exist?('tmp')
     end
   end
 

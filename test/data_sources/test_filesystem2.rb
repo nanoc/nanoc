@@ -17,12 +17,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files
-        FileUtils.remove_entry_secure('content/content.html')
-        FileUtils.remove_entry_secure('content/content.yaml')
-        FileUtils.remove_entry_secure('page_defaults.yaml')
-        FileUtils.remove_entry_secure('templates/default')
-        FileUtils.remove_entry_secure('layouts/default')
-        FileUtils.remove_entry_secure('lib/default.rb')
+        FileUtils.rm_rf('content/content.html')
+        FileUtils.rm_rf('content/content.yaml')
+        FileUtils.rm_rf('page_defaults.yaml')
+        FileUtils.rm_rf('templates/default')
+        FileUtils.rm_rf('layouts/default')
+        FileUtils.rm_rf('lib/default.rb')
 
         # Convert site to filesystem_combined
         open('config.yaml', 'w') { |io| io.write('data_source: filesystem_combined') }
@@ -201,8 +201,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         assert_equal(2, site.pages.size)
         assert_equal(1, site.layouts.size)
       ensure
-        FileUtils.remove_entry_secure 'content/index.txt~' if File.exist?('content/index.txt~')
-        FileUtils.remove_entry_secure 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+        FileUtils.rm_rf 'content/index.txt~' if File.exist?('content/index.txt~')
+        FileUtils.rm_rf 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
       end
     end
   end
