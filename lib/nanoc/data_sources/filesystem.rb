@@ -62,6 +62,10 @@ module Nanoc::DataSources
 
     identifier :filesystem
 
+    ########## Custom ##########
+
+    attr_accessor :vcs
+
     ########## Preparation ##########
 
     def up # :nodoc:
@@ -71,20 +75,18 @@ module Nanoc::DataSources
     end
 
     def setup # :nodoc:
-      # Create pages
+      # FIXME add vcs support
+
+      # Create directories
       FileUtils.mkdir_p('content')
-
-      # Create templates
       FileUtils.mkdir_p('templates')
-
-      # Create layouts
       FileUtils.mkdir_p('layouts')
-
-      # Create code
       FileUtils.mkdir_p('lib')
     end
 
     def destroy # :nodoc:
+      # FIXME add vcs support
+
       # Remove files
       FileUtils.remove_entry_secure('asset_defaults.yaml')  if File.file?('asset_defaults.yaml')
       FileUtils.remove_entry_secure('meta.yaml')            if File.file?('meta.yaml')
@@ -172,6 +174,12 @@ module Nanoc::DataSources
       # Write files
       File.open(meta_filename,    'w') { |io| io.write(page.attributes.to_split_yaml) }
       File.open(content_filename, 'w') { |io| io.write(page.content) }
+
+      # Add to working copy if possible
+      if @vcs and existing_path.nil?
+        @vcs.add(meta_filename)
+        @vcs.add(content_filename)
+      end
     end
 
     def move_page(page, new_path) # :nodoc:
@@ -239,19 +247,25 @@ module Nanoc::DataSources
       # Notify
       if File.file?('page_defaults.yaml')
         filename = 'page_defaults.yaml'
+        created  = false
         Nanoc::NotificationCenter.post(:file_updated, filename)
       elsif File.file?('meta.yaml')
         filename = 'meta.yaml'
+        created  = false
         Nanoc::NotificationCenter.post(:file_updated, filename)
       else
         filename = 'page_defaults.yaml'
-        Nanoc::NotificationCenter.post(:file_created, 'page_defaults.yaml')
+        created  = true
+        Nanoc::NotificationCenter.post(:file_created, filename)
       end
 
       # Write
       File.open(filename, 'w') do |io|
         io.write(page_defaults.attributes.to_split_yaml)
       end
+
+      # Add to working copy if possible
+      @vcs.add(filename) if @vcs and created
     end
 
     ########## Asset Defaults ##########
@@ -275,14 +289,19 @@ module Nanoc::DataSources
       # Notify
       if File.file?('asset_defaults.yaml')
         Nanoc::NotificationCenter.post(:file_updated, 'asset_defaults.yaml')
+        created  = false
       else
         Nanoc::NotificationCenter.post(:file_created, 'asset_defaults.yaml')
+        created  = true
       end
 
       # Write
       File.open('asset_defaults.yaml', 'w') do |io|
         io.write(asset_defaults.attributes.to_split_yaml)
       end
+
+      # Add to working copy if possible
+      @vcs.add(filename) if @vcs and created
     end
 
     ########## Layouts ##########
@@ -350,10 +369,14 @@ module Nanoc::DataSources
       content_filename  = Dir[dir_path + last_component + '.*'][0]
 
       if File.file?(meta_filename)
+        created = false
+
         # Notify
         Nanoc::NotificationCenter.post(:file_updated, meta_filename)
         Nanoc::NotificationCenter.post(:file_updated, content_filename)
       else
+        created = true
+
         # Create dir
         FileUtils.mkdir_p(dir_path)
 
@@ -368,6 +391,12 @@ module Nanoc::DataSources
       # Write files
       File.open(meta_filename,    'w') { |io| io.write(layout.attributes.to_split_yaml) }
       File.open(content_filename, 'w') { |io| io.write(layout.content) }
+
+      # Add to working copy if possible
+      if @vcs and created
+        @vcs.add(meta_filename)
+        @vcs.add(content_filename)
+      end
     end
 
     def move_layout(layout, new_path) # :nodoc:
@@ -432,6 +461,12 @@ module Nanoc::DataSources
       # Write files
       File.open(meta_filename,    'w') { |io| io.write(template.page_attributes.to_split_yaml) }
       File.open(content_filename, 'w') { |io| io.write(template.page_content) }
+
+      # Add to working copy if possible
+      if @vcs and existing_path.nil?
+        @vcs.add(meta_filename)
+        @vcs.add(content_filename)
+      end
     end
 
     def move_template(template, new_name) # :nodoc:
@@ -464,7 +499,13 @@ module Nanoc::DataSources
       existed = File.file?('lib/default.rb')
 
       # Remove all existing code files
-      Dir['lib/**/*.rb'].each { |f| FileUtils.remove_entry_secure(f) }
+      Dir['lib/**/*.rb'].each do |file|
+        if @vcs
+          @vcs.remove(file) unless file == 'lib/default.rb'
+        else
+          FileUtils.remove_entry_secure(f)
+        end
+      end
 
       # Notify
       if existed
@@ -477,6 +518,9 @@ module Nanoc::DataSources
       File.open('lib/default.rb', 'w') do |io|
         io.write(code.data)
       end
+
+      # Add to working copy if possible
+      @vcs.add('lib/default.rb') if @vcs and !existed
     end
 
   private
@@ -546,7 +590,13 @@ module Nanoc::DataSources
 
     # Updated outdated page defaults (renames page defaults file)
     def update_page_defaults
-      move('meta.yaml', 'page_defaults.yaml') if File.file?('meta.yaml')
+      return unless File.file?('meta.yaml')
+
+      if @vcs
+        @vcs.move('meta.yaml', 'page_defaults.yaml')
+      else
+        FileUtils.mv('meta.yaml', 'page_defaults.yaml')
+      end
     end
 
     # Updates outdated pages (both content and meta file names).
@@ -562,7 +612,11 @@ module Nanoc::DataSources
         end
 
         # Move
-        move(old_filename, new_filename)
+        if @vcs
+          @vcs.move(old_filename, new_filename)
+        else
+          FileUtils.mv(old_filename, new_filename)
+        end
       end
 
       # Update meta files
@@ -576,12 +630,16 @@ module Nanoc::DataSources
         end
 
         # Move
-        move(old_filename, new_filename)
+        if @vcs
+          @vcs.move(old_filename, new_filename)
+        else
+          FileUtils.mv(old_filename, new_filename)
+        end
       end
     end
 
     # Updates outdated layouts.
-    def update_layouts # :nodoc :
+    def update_layouts
       # layouts/abc.ext -> layouts/abc/abc.{html,yaml}
       Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
         # Get filter class
@@ -605,17 +663,24 @@ module Nanoc::DataSources
         FileUtils.mkdir_p(dir_path)
         File.open(meta_filename,    'w') { |io| io.write(tmp_layout.attributes.to_split_yaml) }
         File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
-        add(meta_filename)
-        add(content_filename)
+
+        # Add
+        if @vcs
+          @vcs.add(meta_filename)
+          @vcs.add(content_filename)
+        end
 
         # Delete old files
-        FileUtils.remove_entry_secure(filename)
-        remove(filename)
+        if @vcs
+          @vcs.remove(filename)
+        else
+          FileUtils.remove_entry_secure(filename)
+        end
       end
     end
 
     # Updates outdated templates (both content and meta file names).
-    def update_templates # :nodoc :
+    def update_templates
       # Update content files
       # templates/foo/index.ext -> templates/foo/foo.ext
       Dir['templates/**/index.*'].select { |f| File.file?(f) }.each do |old_filename|
@@ -623,7 +688,11 @@ module Nanoc::DataSources
         new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
 
         # Move
-        move(old_filename, new_filename)
+        if @vcs
+          @vcs.move(old_filename, new_filename)
+        else
+          FileUtils.mv(old_filename, new_filename)
+        end
       end
 
       # Update meta files
@@ -633,36 +702,11 @@ module Nanoc::DataSources
         new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
 
         # Move
-        move(old_filename, new_filename)
-      end
-    end
-
-    # When the environment variable +VCS+ is set to +svn+, +git+, +hg+ or
-    # +bzr+, an +add+ operation will be performed using the given VCS. Does
-    # nothing if +VCS+ isn't set.
-    def add(filename)
-      if %w( svn git hg bzr ).include?(ENV['VCS'])
-        system(ENV['VCS'], 'add', filename)
-      end
-    end
-
-    # When the environment variable +VCS+ is set to +svn+, +git+, +hg+ or
-    # +bzr+, a +rm+ operation will be performed using the given VCS. Does
-    # nothing if +VCS+ isn't set.
-    def remove(filename)
-      if %w( svn git hg bzr ).include?(ENV['VCS'])
-        system(ENV['VCS'], 'rm', filename)
-      end
-    end
-
-    # Moves (or renames) the file at +src+ to +dst+. When the environment
-    # variable +VCS+ is set to +svn+, +git+, +hg+ or +bzr+, a +mv+ operation
-    # will be performed using the given VCS.
-    def move(src, dst)
-      if %w( svn git hg bzr ).include?(ENV['VCS'])
-        system(ENV['VCS'], 'mv', src, dst)
-      else
-        FileUtils.mv(src, dst)
+        if @vcs
+          @vcs.move(old_filename, new_filename)
+        else
+          FileUtils.mv(old_filename, new_filename)
+        end
       end
     end
 

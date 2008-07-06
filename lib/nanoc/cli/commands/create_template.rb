@@ -50,6 +50,9 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
       end
 
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
+
       # Create template
       template = Nanoc::Template.new(
         "Hi, I'm a new template. Please edit me!",

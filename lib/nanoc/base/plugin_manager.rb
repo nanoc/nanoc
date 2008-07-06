@@ -48,12 +48,8 @@ module Nanoc
       subclasses
     end
 
-  private
-
     def find(superclass, attribute, value)
-      subclasses = []
-      ObjectSpace.each_object(Class) { |subclass| subclasses << subclass if subclass < superclass }
-      subclasses.find { |klass| klass.send(attribute).include?(value) }
+      find_all(superclass).find { |c| c.send(attribute).include?(value) }
     end
 
   end

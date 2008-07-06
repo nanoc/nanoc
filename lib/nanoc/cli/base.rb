@@ -46,6 +46,12 @@ module Nanoc::CLI
 
       # Get extended option definitions (with help)
       extended_option_definitions = command.option_definitions + [
+        # --vcs
+        {
+          :long => 'vcs', :short => 'c', :argument => :required,
+          :desc => 'select the VCS to use'
+        },
+        # --help
         {
           :long => 'help', :short => 'h', :argument => :forbidden,
           :desc => 'show this help message and quit'
@@ -153,6 +159,25 @@ module Nanoc::CLI
       end
 
       @site
+    end
+
+    # Sets the data source's VCS to the VCS with the given name. Does nothing
+    # when the site's data source does not support VCSes (i.e. does not
+    # implement #vcs=).
+    def set_vcs(vcs_name)
+      # Skip if not possible
+      return if vcs_name.nil?
+      return if site.nil? or !site.data_source.respond_to?(:vcs=)
+
+      # Find VCS
+      vcs_class = Nanoc::VCS.named(vcs_name.to_sym)
+      if vcs_class.nil?
+        $stderr.puts "A VCS named #{vcs_name} was not found; aborting."
+        exit 1
+      end
+
+      # Set VCS
+      site.data_source.vcs = vcs_class.new
     end
 
     # Returns the list of global option definitions, which currently include

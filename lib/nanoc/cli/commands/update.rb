@@ -58,6 +58,9 @@ module Nanoc::CLI
         exit 1
       end
 
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
+
       # Update
       @base.site.data_source.update
     end

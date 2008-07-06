@@ -60,6 +60,9 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
       end
 
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
+
       # Create page
       page = Nanoc::Page.new(
         template.page_content,
