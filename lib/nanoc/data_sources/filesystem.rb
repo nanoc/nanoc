@@ -34,6 +34,14 @@ module Nanoc::DataSources
   # The page defaults are loaded from a YAML-formatted file named 'meta.yaml'
   # file at the top level of the nanoc site directory.
   #
+  # = Assets
+  #
+  # TODO write me
+  #
+  # = Asset defaults
+  #
+  # TODO write me
+  #
   # = Layouts
   #
   # Layouts are stored as directories in the 'layouts' directory. Each layout
@@ -62,9 +70,13 @@ module Nanoc::DataSources
 
     identifier :filesystem
 
-    ########## Custom ##########
+    ########## VCSes ##########
 
     attr_accessor :vcs
+
+    def vcs
+      @vcs ||= Nanoc::Extra::VCSes::Dummy.new
+    end
 
     ########## Preparation ##########
 
@@ -176,9 +188,9 @@ module Nanoc::DataSources
       File.open(content_filename, 'w') { |io| io.write(page.content) }
 
       # Add to working copy if possible
-      if @vcs and existing_path.nil?
-        @vcs.add(meta_filename)
-        @vcs.add(content_filename)
+      if existing_path.nil?
+        vcs.add(meta_filename)
+        vcs.add(content_filename)
       end
     end
 
@@ -218,7 +230,7 @@ module Nanoc::DataSources
     end
 
     def save_asset(asset) # :nodoc:
-      # TODO implement
+      # TODO implement (high)
     end
 
     def move_asset(asset, new_path) # :nodoc:
@@ -265,7 +277,7 @@ module Nanoc::DataSources
       end
 
       # Add to working copy if possible
-      @vcs.add(filename) if @vcs and created
+      vcs.add(filename) and created
     end
 
     ########## Asset Defaults ##########
@@ -301,7 +313,7 @@ module Nanoc::DataSources
       end
 
       # Add to working copy if possible
-      @vcs.add(filename) if @vcs and created
+      vcs.add(filename) if created
     end
 
     ########## Layouts ##########
@@ -393,9 +405,9 @@ module Nanoc::DataSources
       File.open(content_filename, 'w') { |io| io.write(layout.content) }
 
       # Add to working copy if possible
-      if @vcs and created
-        @vcs.add(meta_filename)
-        @vcs.add(content_filename)
+      if created
+        vcs.add(meta_filename)
+        vcs.add(content_filename)
       end
     end
 
@@ -463,9 +475,9 @@ module Nanoc::DataSources
       File.open(content_filename, 'w') { |io| io.write(template.page_content) }
 
       # Add to working copy if possible
-      if @vcs and existing_path.nil?
-        @vcs.add(meta_filename)
-        @vcs.add(content_filename)
+      if existing_path.nil?
+        vcs.add(meta_filename)
+        vcs.add(content_filename)
       end
     end
 
@@ -500,11 +512,7 @@ module Nanoc::DataSources
 
       # Remove all existing code files
       Dir['lib/**/*.rb'].each do |file|
-        if @vcs
-          @vcs.remove(file) unless file == 'lib/default.rb'
-        else
-          FileUtils.remove_entry_secure(f)
-        end
+        vcs.remove(file) unless file == 'lib/default.rb'
       end
 
       # Notify
@@ -520,7 +528,7 @@ module Nanoc::DataSources
       end
 
       # Add to working copy if possible
-      @vcs.add('lib/default.rb') if @vcs and !existed
+      vcs.add('lib/default.rb') unless existed
     end
 
   private
@@ -592,11 +600,7 @@ module Nanoc::DataSources
     def update_page_defaults
       return unless File.file?('meta.yaml')
 
-      if @vcs
-        @vcs.move('meta.yaml', 'page_defaults.yaml')
-      else
-        FileUtils.mv('meta.yaml', 'page_defaults.yaml')
-      end
+      vcs.move('meta.yaml', 'page_defaults.yaml')
     end
 
     # Updates outdated pages (both content and meta file names).
@@ -612,11 +616,7 @@ module Nanoc::DataSources
         end
 
         # Move
-        if @vcs
-          @vcs.move(old_filename, new_filename)
-        else
-          FileUtils.mv(old_filename, new_filename)
-        end
+        vcs.move(old_filename, new_filename)
       end
 
       # Update meta files
@@ -630,11 +630,7 @@ module Nanoc::DataSources
         end
 
         # Move
-        if @vcs
-          @vcs.move(old_filename, new_filename)
-        else
-          FileUtils.mv(old_filename, new_filename)
-        end
+        vcs.move(old_filename, new_filename)
       end
     end
 
@@ -665,17 +661,11 @@ module Nanoc::DataSources
         File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
 
         # Add
-        if @vcs
-          @vcs.add(meta_filename)
-          @vcs.add(content_filename)
-        end
+        vcs.add(meta_filename)
+        vcs.add(content_filename)
 
         # Delete old files
-        if @vcs
-          @vcs.remove(filename)
-        else
-          FileUtils.remove_entry_secure(filename)
-        end
+        vcs.remove(filename)
       end
     end
 
@@ -688,11 +678,7 @@ module Nanoc::DataSources
         new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
 
         # Move
-        if @vcs
-          @vcs.move(old_filename, new_filename)
-        else
-          FileUtils.mv(old_filename, new_filename)
-        end
+        vcs.move(old_filename, new_filename)
       end
 
       # Update meta files
@@ -702,11 +688,7 @@ module Nanoc::DataSources
         new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
 
         # Move
-        if @vcs
-          @vcs.move(old_filename, new_filename)
-        else
-          FileUtils.mv(old_filename, new_filename)
-        end
+        vcs.move(old_filename, new_filename)
       end
     end
 
