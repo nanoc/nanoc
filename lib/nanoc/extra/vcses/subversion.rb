@@ -1,6 +1,6 @@
-module Nanoc::VCSes
+module Nanoc::Extra::VCSes
 
-  class Subversion < Nanoc::VCS
+  class Subversion < Nanoc::Extra::VCS
 
     identifiers :subversion, :svn
 

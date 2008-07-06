@@ -1,6 +1,6 @@
-module Nanoc::VCSes
+module Nanoc::Extra::VCSes
 
-  class Bazaar < Nanoc::VCS
+  class Bazaar < Nanoc::Extra::VCS
 
     identifiers :bazaar, :bzr
 

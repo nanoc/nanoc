@@ -173,7 +173,7 @@ module Nanoc::CLI
       return if site.nil? or !site.data_source.respond_to?(:vcs=)
 
       # Find VCS
-      vcs_class = Nanoc::VCS.named(vcs_name.to_sym)
+      vcs_class = Nanoc::Extra::VCS.named(vcs_name.to_sym)
       if vcs_class.nil?
         $stderr.puts "A VCS named #{vcs_name} was not found; aborting."
         exit 1

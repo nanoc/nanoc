@@ -15,14 +15,14 @@ module Nanoc::CLI
     end
 
     def long_desc
-      handler_names = Nanoc::AutoCompiler::HANDLER_NAMES.join(', ')
+      handler_names = Nanoc::Extra::AutoCompiler::HANDLER_NAMES.join(', ')
 
       'Start the autocompiler web server. Unless specified, the web ' +
       'server will run on port 3000 and listen on all IP addresses. ' +
       'Running the autocompiler requires \'mime/types\' and \'rack\'.' +
       "\n" +
       'Available handlers are (in order of preference): ' + handler_names +
-      ' (default is ' + Nanoc::AutoCompiler::HANDLER_NAMES[0].to_s + ').'
+      ' (default is ' + Nanoc::Extra::AutoCompiler::HANDLER_NAMES[0].to_s + ').'
     end
 
     def usage
@@ -61,7 +61,7 @@ module Nanoc::CLI
 
       # Autocompile site
       begin
-        autocompiler = Nanoc::AutoCompiler.new(@base.site, options.has_key?(:all))
+        autocompiler = Nanoc::Extra::AutoCompiler.new(@base.site, options.has_key?(:all))
         autocompiler.start(
           options[:port],
           options[:handler]
@@ -70,7 +70,7 @@ module Nanoc::CLI
         $stderr.puts "'mime/types' and 'rack' are required to autocompile sites. " +
                      "You may want to install the 'mime-types' and 'rack' gems by " +
                      "running 'gem install mime-types' and 'gem install rack'."
-      rescue Nanoc::AutoCompiler::UnknownHandlerError
+      rescue Nanoc::Extra::AutoCompiler::UnknownHandlerError
         $stderr.puts "The requested handler, #{options[:handler]}, is not available."
       end
     end

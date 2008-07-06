@@ -1,4 +1,4 @@
-module Nanoc
+module Nanoc::Extra
 
   # A FileProxy is a proxy for a File object. It is used to prevent a File
   # object from being created until it is actually necessary.

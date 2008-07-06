@@ -1,6 +1,6 @@
-module Nanoc::VCSes
+module Nanoc::Extra::VCSes
 
-  class Mercurial < Nanoc::VCS
+  class Mercurial < Nanoc::Extra::VCS
 
     identifiers :mercurial, :hg
 

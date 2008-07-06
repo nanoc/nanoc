@@ -1,4 +1,4 @@
-module Nanoc
+module Nanoc::Extra
 
   # TODO document
   class VCS < Nanoc::Plugin
@@ -10,7 +10,7 @@ module Nanoc
 
       # Find VCS
       @vcses[identifier] ||= Nanoc::PluginManager.instance.find(
-        Nanoc::VCS, :identifiers, identifier
+        Nanoc::Extra::VCS, :identifiers, identifier
       )
     end
 
