@@ -22,23 +22,33 @@ class Hash
   #
   # as +filters_pre+ is considered a 'default' key while +title+ is not.
   def to_split_yaml
-    # Get list of built-in keys
-    builtin_keys = Nanoc::Page::DEFAULTS
-
-    # Stringify keys
+    # Skip irrelevant keys
     hash = self.reject { |k,v| k == :file }
 
     # Split keys
-    builtin_hash = hash.reject { |k,v| !builtin_keys.include?(k) }.stringify_keys
-    custom_hash  = hash.reject { |k,v| builtin_keys.include?(k) }.stringify_keys
+    hashes = { :builtin => {}, :custom => {} }
+    hash.each_pair do |key, value|
+      kind = Nanoc::Page::DEFAULTS.include?(key) ? :builtin : :custom
+      hashes[kind][key] = value
+    end
 
-    # Convert to YAML
-    # FIXME this is a hack, plz clean up
+    # Dump and clean hashes
+    dumps = { :builtin => '', :custom => '' }
+    [ :builtin, :custom ].each do |kind|
+      if hashes[kind].keys.empty?
+        dumps[kind] = "\n"
+      else
+        raw_dump = YAML.dump(hashes[kind].stringify_keys)
+        dumps[kind] = raw_dump.split('---')[1].gsub("\n\n", "\n")
+      end
+    end
+
+    # Built composite YAML file
     '# Built-in' +
-    (builtin_hash.keys.empty? ? "\n" : YAML.dump(builtin_hash).split('---')[1]) +
+    dumps[:builtin] +
     "\n" +
     '# Custom' +
-    (custom_hash.keys.empty? ? "\n" : YAML.dump(custom_hash).split('---')[1])
+    dumps[:custom]
   end
 
 end
