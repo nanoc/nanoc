@@ -19,7 +19,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         # Remove files to make sure they are recreated
         FileUtils.remove_entry_secure('content/content.html')
         FileUtils.remove_entry_secure('content/content.yaml')
-        FileUtils.remove_entry_secure('meta.yaml')
+        FileUtils.remove_entry_secure('page_defaults.yaml')
         FileUtils.remove_entry_secure('templates/default')
         FileUtils.remove_entry_secure('layouts/default')
         FileUtils.remove_entry_secure('lib/default.rb')
@@ -39,6 +39,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         assert(!File.directory?('templates/default/'))
         assert(!File.directory?('layouts/default/'))
         assert(!File.file?('meta.yaml'))
+        assert(!File.file?('page_defaults.yaml'))
         assert(!File.file?('lib/default.rb'))
       end
     end
@@ -59,6 +60,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         # Check files
         assert(!File.directory?('content/'))
         assert(!File.file?('meta.yaml'))
+        assert(!File.file?('page_defaults.yaml'))
         assert(!File.directory?('templates/'))
         assert(!File.directory?('layouts/'))
         assert(!File.directory?('lib/'))
@@ -71,12 +73,28 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil)
 
     # Set expectations
+    data_source.expects(:update_page_defaults)
     data_source.expects(:update_pages)
     data_source.expects(:update_layouts)
     data_source.expects(:update_templates)
 
     # update
     data_source.update
+  end
+
+  def test_update_page_defaults
+    in_dir %w{ tmp } do
+      # Build outdated page defaults
+      File.open('meta.yaml', 'w') { |io| }
+
+      # Update
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.instance_eval { update_page_defaults }
+
+      # Check files
+      assert(!File.file?('meta.yaml'))
+      assert(File.file?('page_defaults.yaml'))
+    end
   end
 
   def test_update_pages
@@ -392,7 +410,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(distant_past, distant_past, 'content/content.html')
       File.utime(distant_past, distant_past, 'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -412,7 +430,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(now,          now,          'content/content.html')
       File.utime(now,          now,          'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -432,7 +450,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(distant_past, distant_past, 'content/content.html')
       File.utime(now,          now,          'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -452,7 +470,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(now,          now,          'content/content.html')
       File.utime(distant_past, distant_past, 'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -472,7 +490,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(distant_past, distant_past, 'content/content.html')
       File.utime(distant_past, distant_past, 'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -492,7 +510,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(now,          now,          'layouts/default/default.yaml')
       File.utime(distant_past, distant_past, 'content/content.html')
       File.utime(distant_past, distant_past, 'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -512,7 +530,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(distant_past, distant_past, 'content/content.html')
       File.utime(distant_past, distant_past, 'content/content.yaml')
-      File.utime(now,          now,          'meta.yaml')
+      File.utime(now,          now,          'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -532,7 +550,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.utime(distant_past, distant_past, 'layouts/default/default.yaml')
       File.utime(distant_past, distant_past, 'content/content.html')
       File.utime(distant_past, distant_past, 'content/content.yaml')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(now,          now,          'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 

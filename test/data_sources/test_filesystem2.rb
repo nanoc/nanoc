@@ -19,7 +19,7 @@ class Nanoc::DataSources::Filesystem2Test < Test::Unit::TestCase
         # Remove files
         FileUtils.remove_entry_secure('content/content.html')
         FileUtils.remove_entry_secure('content/content.yaml')
-        FileUtils.remove_entry_secure('meta.yaml')
+        FileUtils.remove_entry_secure('page_defaults.yaml')
         FileUtils.remove_entry_secure('templates/default')
         FileUtils.remove_entry_secure('layouts/default')
         FileUtils.remove_entry_secure('lib/default.rb')
