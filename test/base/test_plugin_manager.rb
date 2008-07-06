@@ -35,7 +35,7 @@ class Nanoc::PluginManagerTest < Test::Unit::TestCase
 
   def test_binary_filter_right
     assert_nothing_raised do
-      filter = Nanoc::PluginManager.instance.binary_filter(:thumbnail)
+      filter = Nanoc::PluginManager.instance.binary_filter(:image_science_thumbnail)
       assert(!filter.nil?)
     end
   end
