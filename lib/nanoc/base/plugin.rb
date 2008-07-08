@@ -4,52 +4,56 @@ module Nanoc
   # layout processors and data sources.
   class Plugin
 
-    class << self
+    MAP = {}
 
-      attr_accessor :identifiers # :nodoc:
+    class << self
 
       # Sets or returns the identifiers for this plugin.
       #
       # When given a list of identifier symbols, sets the identifiers for
       # this plugin. When given nothing, returns an array of identifier
       # symbols for this plugin.
-      def identifiers(*idents)
+      def identifiers(*identifiers)
+        # Initialize
         @identifiers = [] unless instance_variables.include?('@identifiers')
-        idents.empty? ? @identifiers : @identifiers = idents
+
+        if identifiers.empty?
+          @identifiers
+        else
+          @identifiers = identifiers
+          @identifiers.each { |i| register(i, self) }
+        end
       end
 
       # Sets or returns the identifier for this plugin.
       #
       # When given an identifier symbols, sets the identifier for this plugin.
       # When given nothing, returns the identifier for this plugin.
-      def identifier(ident=nil)
+      def identifier(identifier=nil)
+        # Initialize
         @identifiers = [] unless instance_variables.include?('@identifiers')
-        ident.nil? ? @identifiers.first : identifiers(ident)
+
+        if identifier.nil?
+          @identifiers.first
+        else
+          @identifiers = [ identifier ]
+          register(identifier, self)
+        end
+      end
+
+      # Registers the given class +klass+ with the given name. This will allow
+      # the named method to find the class.
+      def register(name, klass)
+        MAP[klass.superclass] ||= {}
+        MAP[klass.superclass][name.to_sym] = klass
       end
 
       # Returns the the plugin with the given name. Only subclasses of this
       # class will be searched. For example, calling this method on
       # Nanoc::Filter will cause only Nanoc::Filter subclasses to be searched.
       def named(name)
-        # Initialize list of classes if necessary
-        @classes ||= {}
-        @classes[self] ||= {}
-
-        # Find plugin
-        @classes[self][name] ||= find(self, :identifiers, name.to_sym)
-      end
-
-      # Returns all subclasses of the given class.
-      def find_all(superclass)
-        classes = []
-        ObjectSpace.each_object(Class) { |c| classes << c if c < superclass }
-        classes
-      end
-
-      # Returns all subclasses of the given class, where the attribute named
-      # +attribute+ is an array containing +value+.
-      def find(superclass, attribute, value)
-        find_all(superclass).find { |c| c.send(attribute).include?(value) }
+        MAP[self] ||= {}
+        MAP[self][name.to_sym]
       end
 
     end

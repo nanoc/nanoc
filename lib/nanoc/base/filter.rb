@@ -6,15 +6,8 @@ module Nanoc
   # the +run+ method.
   class Filter < Plugin
 
-    # Returns the filter subclass, used as layout processor, with the given
-    # file extension. 
-    def self.with_extension(ext)
-      # Initialize list of classes if necessary
-      @lprocs ||= {}
-
-      # Find plugin
-      @lprocs[ext] ||= find(self, :extensions, ext)
-    end
+    # Deprecated
+    EXTENSIONS_MAP = {}
 
     # Creates a new filter for the given object (page or asset) and site.
     #
@@ -83,16 +76,40 @@ module Nanoc
 
     class << self
 
-      attr_accessor :extensions # :nodoc:
-
-      def extensions(*exts) # :nodoc:
+      # Deprecated
+      def extensions(*extensions) # :nodoc:
+        # Initialize
         @extensions = [] unless instance_variables.include?('@extensions')
-        exts.empty? ? @extensions : @extensions = exts
+
+        if extensions.empty?
+          @extensions
+        else
+          @extensions = extensions
+          @extensions.each { |e| register_extension(e, self) }
+        end
       end
 
-      def extension(ext=nil) # :nodoc:
+      # Deprecated
+      def extension(extension=nil) # :nodoc:
+        # Initialize
         @extensions = [] unless instance_variables.include?('@extensions')
-        ext.nil? ? @extensions.first : extensions(ext)
+
+        if extension.nil?
+          @extensions.first
+        else
+          @extensions = [ extension ]
+          register_extension(extension, self)
+        end
+      end
+
+      # Deprecated
+      def register_extension(extension, klass)
+        EXTENSIONS_MAP[extension] = klass
+      end
+
+      # Deprecated
+      def with_extension(extension)
+        EXTENSIONS_MAP[extension]
       end
 
     end

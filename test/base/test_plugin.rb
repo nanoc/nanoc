@@ -47,17 +47,4 @@ class Nanoc::PluginTest < Test::Unit::TestCase
     end
   end
 
-  def test_find_all
-    assert_nothing_raised do
-      # Get filters
-      filters = Nanoc::Plugin.find_all(Nanoc::Filter)
-
-      # Check
-      assert(!filters.nil?)
-      assert(filters.include?(Nanoc::Filters::ERB))
-      assert(!filters.include?(Nanoc::DataSources::Filesystem))
-      assert(!filters.include?(Nanoc::Routers::Default))
-    end
-  end
-
 end
