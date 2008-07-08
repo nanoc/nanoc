@@ -256,7 +256,7 @@ module Nanoc
 
     ########## Code
 
-    # Returns the custom code (represented by Nanoc:::Code) for this site.
+    # Returns the custom code (represented by Nanoc::Code) for this site.
     # This is an abstract method implemented by the subclass. This can be code
     # for custom filters and layout processors, but pretty much any code can
     # be put in there (global helper functions are very useful).
