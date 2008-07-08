@@ -73,7 +73,7 @@ module Nanoc
       @config = DEFAULT_CONFIG.merge(config.clean)
 
       # Create data source
-      @data_source_class = PluginManager.instance.data_source(@config[:data_source].to_sym)
+      @data_source_class = Nanoc::DataSource.named(@config[:data_source])
       raise Nanoc::Errors::UnknownDataSourceError.new(@config[:data_source]) if @data_source_class.nil?
       @data_source = @data_source_class.new(self)
 
@@ -84,7 +84,7 @@ module Nanoc
       load_code
 
       # Create router
-      @router_class = PluginManager.instance.router(@config[:router].to_sym)
+      @router_class = Nanoc::Router.named(@config[:router])
       raise Nanoc::Errors::UnknownRouterError.new(@config[:router]) if @router_class.nil?
       @router = @router_class.new(self)
 

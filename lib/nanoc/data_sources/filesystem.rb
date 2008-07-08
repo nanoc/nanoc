@@ -639,7 +639,7 @@ module Nanoc::DataSources
       # layouts/abc.ext -> layouts/abc/abc.{html,yaml}
       Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
         # Get filter class
-        filter_class = Nanoc::PluginManager.instance.layout_processor(File.extname(filename))
+        filter_class = Nanoc::Filter.with_extension(File.extname(filename))
 
         # Get data
         content     = File.read(filename)

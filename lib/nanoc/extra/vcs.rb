@@ -9,17 +9,6 @@ module Nanoc::Extra
   # the indicated methods. 
   class VCS < Nanoc::Plugin
 
-    # Returns the VCS with the given name. +name+ must be a symbol.
-    def self.named(name)
-      # Initialize list of VCSes if necessary
-      @vcses ||= {}
-
-      # Find VCS
-      @vcses[name] ||= Nanoc::PluginManager.instance.find(
-        Nanoc::Extra::VCS, :identifiers, name
-      )
-    end
-
     # Adds the file with the given filename to the working copy.
     #
     # Subclasses must implement this method.

@@ -224,7 +224,7 @@ module Nanoc
       current_file = @asset.file
       filters.each do |filter_name|
         # Create filter
-        klass = PluginManager.instance.binary_filter(filter_name.to_sym)
+        klass = Nanoc::BinaryFilter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
         filter = klass.new(self.to_proxy, @asset.to_proxy, @asset.site)
 
@@ -257,7 +257,7 @@ module Nanoc
       # Run each filter
       filters.each do |filter_name|
         # Create filter
-        klass = PluginManager.instance.filter(filter_name.to_sym)
+        klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
         filter = klass.new(self)
 

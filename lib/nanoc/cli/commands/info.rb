@@ -96,7 +96,7 @@ module Nanoc::CLI
 
     def find_all_plugins
       PLUGIN_CLASSES.keys.inject({}) do |memo, klass|
-        memo.merge(klass => Nanoc::PluginManager.instance.find_all(klass))
+        memo.merge(klass => Nanoc::Plugin.find_all(klass))
       end
     end
 
