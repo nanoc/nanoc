@@ -66,7 +66,7 @@ module Nanoc::CLI
       end
 
       # Find data source
-      data_source = Nanoc::PluginManager.instance.data_source(options[:datasource].to_sym)
+      data_source = Nanoc::DataSource.named(options[:datasource])
       if data_source.nil?
         $stderr.puts "Unrecognised data source: #{options[:datasource]}"
         exit 1

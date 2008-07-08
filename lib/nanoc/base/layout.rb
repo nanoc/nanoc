@@ -56,9 +56,9 @@ module Nanoc
     # Returns the filter class needed for this layout.
     def filter_class
       if attribute_named(:extension).nil?
-        PluginManager.instance.filter(attribute_named(:filter).to_sym)
+        Nanoc::Filter.named(attribute_named(:filter))
       else
-        PluginManager.instance.layout_processor(attribute_named(:extension))
+        Nanoc::Filter.with_extension(attribute_named(:extension))
       end
     end
 

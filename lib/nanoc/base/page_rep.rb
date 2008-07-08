@@ -262,7 +262,7 @@ module Nanoc
       # Run each filter
       filters.each do |filter_name|
         # Create filter
-        klass = PluginManager.instance.filter(filter_name.to_sym)
+        klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
         filter = klass.new(self)
 

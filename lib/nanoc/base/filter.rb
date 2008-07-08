@@ -6,6 +6,16 @@ module Nanoc
   # the +run+ method.
   class Filter < Plugin
 
+    # Returns the filter subclass, used as layout processor, with the given
+    # file extension. 
+    def self.with_extension(ext)
+      # Initialize list of classes if necessary
+      @lprocs ||= {}
+
+      # Find plugin
+      @lprocs[ext] ||= find(self, :extensions, ext)
+    end
+
     # Creates a new filter for the given object (page or asset) and site.
     #
     # +kind+:: The kind of object that is passed. Can be either +:page+ or

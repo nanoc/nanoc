@@ -209,7 +209,7 @@ EOS
       end
 
       # Check whether data source exists
-      if Nanoc::PluginManager.instance.data_source(data_source.to_sym).nil?
+      if Nanoc::DataSource.named(data_source).nil?
         $stderr.puts "Unrecognised data source: #{data_source}"
         exit 1
       end
