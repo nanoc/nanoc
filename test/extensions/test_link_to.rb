@@ -35,6 +35,14 @@ class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
     )
   end
 
+  def test_link_to_escape
+    # Check
+    assert_equal(
+      '<a title="Foo &amp; Bar" href="/foo/">Foo &amp; Bar</a>',
+      link_to('Foo &amp; Bar', '/foo/', :title => 'Foo & Bar')
+    )
+  end
+
   def test_link_to_unless_current_current
     # Create page
     @page_rep = mock

@@ -38,7 +38,7 @@ module Nanoc::Extensions
       end
 
       # Create link
-      "<a #{attributes}href=\"#{path}\">#{h text}</a>"
+      "<a #{attributes}href=\"#{path}\">#{text}</a>"
     end
 
     # Creates a HTML link using link_to, except when the linked page is the
@@ -58,7 +58,7 @@ module Nanoc::Extensions
 
       if @page_rep and @page_rep.path == path
         # Create message
-        "<span class=\"active\" title=\"You're here.\">#{h text}</span>"
+        "<span class=\"active\" title=\"You're here.\">#{text}</span>"
       else
         link_to(text, path_or_rep, attributes)
       end
