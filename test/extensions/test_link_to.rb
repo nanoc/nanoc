@@ -11,7 +11,7 @@ class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
     # Check
     assert_equal(
       '<a href="/foo/">Foo</a>',
-      link_to('/foo/', 'Foo')
+      link_to('Foo', '/foo/')
     )
   end
 
@@ -23,7 +23,7 @@ class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
     # Check
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to(rep, 'Bar')
+      link_to('Bar', rep)
     )
   end
 
@@ -31,7 +31,7 @@ class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
     # Check
     assert_equal(
       '<a title="Dis mai foo!" href="/foo/">Foo</a>',
-      link_to('/foo/', 'Foo', :title => 'Dis mai foo!')
+      link_to('Foo', '/foo/', :title => 'Dis mai foo!')
     )
   end
 
@@ -43,7 +43,7 @@ class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
     # Check
     assert_equal(
       '<span class="active" title="You\'re here.">Bar</span>',
-      link_to_unless_current(@page_rep, 'Bar')
+      link_to_unless_current('Bar', @page_rep)
     )
   ensure
     @page = nil
@@ -57,7 +57,7 @@ class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
     # Check
     assert_equal(
       '<a href="/abc/xyz/">Bar</a>',
-      link_to_unless_current('/abc/xyz/', 'Bar')
+      link_to_unless_current('Bar', '/abc/xyz/')
     )
   end
 

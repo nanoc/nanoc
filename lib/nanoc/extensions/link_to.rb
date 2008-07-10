@@ -19,16 +19,16 @@ module Nanoc::Extensions
     #
     # Examples:
     #
-    #   link_to('/blog/', 'Blog')
+    #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
     #   page_rep = @pages.find { |p| p.page_id == 'special' }.reps(:default)
-    #   link_to(page_rep, 'Special Page')
+    #   link_to('Special Page', page_rep)
     #   # => '<a href="/special_page/">Special Page</a>'
     #
-    #   link_to('/blog/', 'Blog', :title => 'My super cool blog')
+    #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a href="/blog/" title="My super cool blog">Blog</a>
-    def link_to(path_or_rep, text, attributes={})
+    def link_to(text, path_or_rep, attributes={})
       # Find path
       path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
 
@@ -47,12 +47,12 @@ module Nanoc::Extensions
     #
     # Examples:
     #
-    #   link_to('/blog/', 'Blog')
+    #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   link_to(@page_rep, 'This Page')
+    #   link_to('This Page', @page_rep)
     #   # => '<span class="active">This Page</span>'
-    def link_to_unless_current(path_or_rep, text, attributes={})
+    def link_to_unless_current(text, path_or_rep, attributes={})
       # Find path
       path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
 
@@ -60,7 +60,7 @@ module Nanoc::Extensions
         # Create message
         "<span class=\"active\" title=\"You're here.\">#{h text}</span>"
       else
-        link_to(path_or_rep, text, attributes)
+        link_to(text, path_or_rep, attributes)
       end
     end
 
