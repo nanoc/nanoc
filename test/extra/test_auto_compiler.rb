@@ -57,6 +57,30 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     autocompiler.instance_eval { handle_request('/foo/2/') }
   end
 
+  def test_handle_request_with_broken_url
+    # Create pages and reps
+    page_reps = [ mock, mock, mock ]
+    page_reps[0].expects(:web_path).at_most_once.returns('/foo/1/')
+    page_reps[1].expects(:web_path).returns('/foo/2/')
+    page_reps[2].expects(:web_path).at_most_once.returns('/bar/')
+    pages = [ mock, mock ]
+    pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
+    pages[1].expects(:reps).returns([ page_reps[2] ])
+
+    # Create site
+    site = mock
+    site.expects(:load_data).with(true)
+    site.expects(:pages).returns(pages)
+    site.expects(:config).returns({ :output_dir => 'output/' })
+
+    # Create autocompiler
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler.expects(:serve_page_rep).with(page_reps[1])
+
+    # Run
+    autocompiler.instance_eval { handle_request('/foo/2') }
+  end
+
   def test_handle_request_with_file
     # Create pages and reps
     page_reps = [ mock, mock, mock ]

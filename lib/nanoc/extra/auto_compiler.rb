@@ -171,7 +171,7 @@ END
 
       # Get page or file
       page_reps = @site.pages.map { |p| p.reps }.flatten
-      page_rep  = page_reps.find { |p| p.web_path == path }
+      page_rep  = page_reps.find { |p| p.web_path == path.cleaned_path }
       file_path = @site.config[:output_dir] + path
 
       if page_rep.nil?
