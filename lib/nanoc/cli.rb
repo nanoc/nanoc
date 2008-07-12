@@ -1,0 +1,1 @@
+Nanoc.load('cli', '*.rb')
