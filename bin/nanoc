@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
 # Load nanoc
-require File.dirname(__FILE__) + '/../lib/nanoc.rb'
-require File.dirname(__FILE__) + '/../lib/nanoc/cli/cli.rb'
+require 'nanoc'
+require 'nanoc/cli'
 
 # Load custom code that can't be load later
 Dir['lib/commands/*.rb'].each     { |f| require f }
