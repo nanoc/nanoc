@@ -36,32 +36,33 @@ module Nanoc::CLI
     end
 
     def run(options, arguments)
-      # Check arguments
-      if arguments.size > 1
-        $stderr.puts "usage: #{usage}"
-        exit 1
-      end
-
       # Make sure we are in a nanoc site directory
       @base.require_site
 
-      # Find page with given path
-      if arguments[0].nil?
-        obj = nil
+      # Find object with given path
+      if arguments.size == 0
+        objs = nil
       else
-        path = arguments[0].cleaned_path
-        obj = @base.site.pages.find { |page| page.path == path }
-        obj = @base.site.assets.find { |asset| asset.path == path } if obj.nil?
-        if obj.nil?
-          $stderr.puts "Unknown page: #{path}"
-          exit 1
+        objs = arguments.map do |path|
+          # Find object
+          path = path.cleaned_path
+          obj = @base.site.pages.find { |page| page.path == path }
+          obj = @base.site.assets.find { |asset| asset.path == path } if obj.nil?
+
+          # Ensure object
+          if obj.nil?
+            $stderr.puts "Unknown page: #{path}"
+            exit 1
+          end
+
+          obj
         end
       end
 
       # Compile site
       begin
         # Give feedback
-        puts "Compiling #{obj.nil? ? 'site' : 'page/asset'}..."
+        puts "Compiling #{objs.nil? ? 'site' : 'objects'}..."
 
         # Initialize profiling stuff
         time_before = Time.now
@@ -71,7 +72,7 @@ module Nanoc::CLI
 
         # Compile
         @base.site.compiler.run(
-          obj.nil? ? nil : [ obj ],
+          objs,
           :even_when_not_outdated => options.has_key?(:all)
         )
 
@@ -82,8 +83,8 @@ module Nanoc::CLI
 
         # Give general feedback
         puts
-        puts "No pages were modified." unless reps.any? { |r| r.modified? }
-        puts "#{obj.nil? ? 'Site' : 'Page'} compiled in #{format('%.2f', Time.now - time_before)}s."
+        puts "No objects were modified." unless reps.any? { |r| r.modified? }
+        puts "#{objs.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
         if options.has_key?(:verbose)
           print_state_feedback(reps)
@@ -138,7 +139,7 @@ module Nanoc::CLI
       if reps.any? { |r| !r.compiled? }
         $stderr.puts
         $stderr.puts "Warning: profiling information may not be accurate because " +
-                     "some pages were not compiled."
+                     "some objects were not compiled."
       end
 
       # Print header
@@ -168,9 +169,9 @@ module Nanoc::CLI
     end
 
     def print_error(error)
-      # Get page rep
-      page_rep = @base.site.compiler.stack.select { |i| i.is_a?(Nanoc::PageRep) }[-1]
-      page_rep_name = page_rep.nil? ? 'the site' : "#{page_rep.page.path} (rep #{page_rep.name})"
+      # Get rep
+      rep = @base.site.compiler.stack.select { |i| i.is_a?(Nanoc::PageRep) || i.is_a?(Nanoc::AssetRep) }[-1]
+      rep_name = rep.nil? ? 'the site' : "#{rep.is_a?(Nanoc::PageRep) ? rep.page.path : rep.asset.path} (rep #{rep.name})"
 
       # Build message
       case error
@@ -190,7 +191,7 @@ module Nanoc::CLI
 
       # Print message
       $stderr.puts
-      $stderr.puts "ERROR: An exception occured while compiling #{page_rep_name}."
+      $stderr.puts "ERROR: An exception occured while compiling #{rep_name}."
       $stderr.puts
       $stderr.puts "If you think this is a bug in nanoc, please do report it at " +
                    "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
