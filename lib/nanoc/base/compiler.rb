@@ -8,7 +8,8 @@ module Nanoc
 
     # Creates a new compiler for the given site.
     def initialize(site)
-      @site = site
+      @site  = site
+      @stack = []
     end
 
     # Compiles (part of) the site and writes out the compiled page and asset
