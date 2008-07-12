@@ -147,7 +147,10 @@ module Nanoc::CLI
       puts ' ' * max_filter_name_length + ' | count    min    avg    max     tot'
       puts '-' * max_filter_name_length + '-+-----------------------------------'
 
-      @filter_times.each_pair do |filter_name, samples|
+      @filter_times.to_a.sort_by { |r| r[1] }.each do |row|
+        # Extract data
+        filter_name, samples = *row
+
         # Calculate stats
         count = samples.size
         min   = samples.min
