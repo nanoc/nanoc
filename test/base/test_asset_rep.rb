@@ -113,7 +113,29 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_disk_and_web_path
-    # TODO implement
+    # Create asset defaults
+    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+
+    # Create router
+    router = mock
+    router.expects(:disk_path_for).returns('tmp/out/assets/path/index.html')
+    router.expects(:web_path_for).returns('/assets/path/')
+
+    # Create site
+    site = mock
+    site.expects(:asset_defaults).returns(asset_defaults)
+    site.expects(:router).times(2).returns(router)
+
+    # Create asset
+    asset = Nanoc::Asset.new(nil, { :attr => 'ibutes' }, '/path/')
+    asset.site = site
+    asset.build_reps
+    asset_rep = asset.reps.find { |r| r.name == :default }
+    asset_rep.expects(:compile).with(true, false)
+
+    # Check
+    assert_equal('tmp/out/assets/path/index.html', asset_rep.disk_path)
+    assert_equal('/assets/path/',                  asset_rep.web_path)
   end
 
   def test_attribute_named_with_custom_rep
