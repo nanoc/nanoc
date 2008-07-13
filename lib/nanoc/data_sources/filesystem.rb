@@ -90,6 +90,7 @@ module Nanoc::DataSources
       # FIXME add vcs support
 
       # Create directories
+      FileUtils.mkdir_p('assets')
       FileUtils.mkdir_p('content')
       FileUtils.mkdir_p('templates')
       FileUtils.mkdir_p('layouts')
