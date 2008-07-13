@@ -59,7 +59,7 @@ def if_have(x)
   require x
   yield
 rescue LoadError
-  $stderr.print "[ skipped -- requiring #{x} failed ]"
+  $stderr_real.print "[ skipped -- requiring #{x} failed ]"
 end
 
 def global_setup
@@ -67,8 +67,11 @@ def global_setup
   GC.start
 
   # Go quiet
+  $stdout_real = $stdout
+  $stderr_real = $stderr
   unless ENV['QUIET'] == 'false'
-    Nanoc::CLI::Logger.instance.level = :off
+    $stdout = StringIO.new
+    $stderr = StringIO.new
   end
 
   # Create tmp directory
@@ -78,6 +81,12 @@ end
 def global_teardown
   # Remove tmp directory
   FileUtils.rm_rf 'tmp' if File.exist?('tmp')
+
+  # Go unquiet
+  unless ENV['QUIET'] == 'false'
+    $stdout = $stdout_real
+    $stderr = $stderr_real
+  end
 
   # Remove output
   Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|

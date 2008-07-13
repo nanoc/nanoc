@@ -59,7 +59,7 @@ module Nanoc::CLI
       template.site = @base.site
       template.save
 
-      puts "A template named '#{name}' has been created." unless ENV['QUIET']
+      puts "A template named '#{name}' has been created."
     end
 
   end

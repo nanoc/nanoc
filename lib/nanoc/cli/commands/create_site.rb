@@ -231,7 +231,7 @@ EOS
         FileUtils.cd(File.join(path.map { |n| '..' }))
       end
 
-      puts "Created a blank nanoc site at '#{path}'. Enjoy!" unless ENV['QUIET']
+      puts "Created a blank nanoc site at '#{path}'. Enjoy!"
     end
 
   protected

@@ -69,7 +69,7 @@ module Nanoc::CLI
       page.site = @base.site
       page.save
 
-      puts "A page has been created at #{path}." unless ENV['QUIET']
+      puts "A page has been created at #{path}."
     end
 
   end
