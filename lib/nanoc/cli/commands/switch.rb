@@ -38,6 +38,11 @@ module Nanoc::CLI
 
     def option_definitions
       [
+        # --vcs
+        {
+          :long => 'vcs', :short => 'c', :argument => :required,
+          :desc => 'select the VCS to use'
+        },
         # --yes
         {
           :long => 'yes', :short => 'y', :argument => :forbidden,
@@ -74,6 +79,9 @@ module Nanoc::CLI
 
       # Make sure we are in a nanoc site directory
       @base.require_site
+
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
 
       # Check for -y switch
       unless options.has_key?(:yes)
