@@ -26,6 +26,11 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         FileUtils.rm_rf('layouts/default')
         FileUtils.rm_rf('lib/default.rb')
 
+        # Mock VCS
+        vcs = mock
+        vcs.expects(:add).times(5) # One time for each directory
+        site.data_source.vcs = vcs
+
         # Recreate files
         site.data_source.loading { site.data_source.setup {} }
 
@@ -50,26 +55,15 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
   end
 
   def test_destroy
-    in_dir %w{ tmp } do
-      # Create site
-      create_site('site')
+    with_temp_site do |site|
+      # Mock VCS
+      vcs = mock
+      vcs.expects(:remove).times(7) # One time for each directory
+      site.data_source.vcs = vcs
 
-      in_dir %w{ site } do
-        # Get site
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-
-        # Destroy
-        site.data_source.destroy
-
-        # Check files
-        assert(!File.directory?('content/'))
-        assert(!File.file?('meta.yaml'))
-        assert(!File.file?('page_defaults.yaml'))
-        assert(!File.directory?('templates/'))
-        assert(!File.directory?('layouts/'))
-        assert(!File.directory?('lib/'))
-      end
-    end
+      # Destroy
+      site.data_source.destroy
+     end
   end
 
   def test_update
@@ -91,13 +85,16 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       # Build outdated page defaults
       File.open('meta.yaml', 'w') { |io| }
 
-      # Update
+      # Get data source
       data_source = Nanoc::DataSources::Filesystem.new(nil)
-      data_source.instance_eval { update_page_defaults }
 
-      # Check files
-      assert(!File.file?('meta.yaml'))
-      assert(File.file?('page_defaults.yaml'))
+      # Mock VCS
+      vcs = mock
+      vcs.expects(:move).with('meta.yaml', 'page_defaults.yaml')
+      data_source.vcs = vcs
+
+      # Update page defaults
+      data_source.instance_eval { update_page_defaults }
     end
   end
 
