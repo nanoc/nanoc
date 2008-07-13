@@ -17,8 +17,9 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files
-        FileUtils.rm_rf('content/content.html')
-        FileUtils.rm_rf('content/content.yaml')
+        FileUtils.rm_rf('asset_defaults.yaml')
+        FileUtils.rm_rf('content')
+        FileUtils.rm_rf('meta.yaml')
         FileUtils.rm_rf('page_defaults.yaml')
         FileUtils.rm_rf('templates/default')
         FileUtils.rm_rf('layouts/default')
@@ -38,10 +39,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         assert(File.directory?('lib/'))
 
         # Ensure no non-essential files have been recreated
+        assert(!File.file?('asset_defaults.yaml'))
         assert(!File.file?('content/index.html'))
         assert(!File.file?('templates/default.html'))
         assert(!File.file?('layouts/default.html'))
         assert(!File.file?('meta.yaml'))
+        assert(!File.file?('page_defaults.yaml'))
         assert(!File.file?('lib/default.rb'))
       end
     end
