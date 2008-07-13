@@ -231,7 +231,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
       # Update file mtimes
       File.utime(distant_past, distant_past, 'layouts/default.html')
       File.utime(distant_past, distant_past, 'content/index.html')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -247,7 +247,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
       # Update file mtimes
       File.utime(distant_past, distant_past, 'layouts/default.html')
       File.utime(now,          now,          'content/index.html')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -263,7 +263,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
       # Update file mtimes
       File.utime(now,          now,          'layouts/default.html')
       File.utime(distant_past, distant_past, 'content/index.html')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -279,7 +279,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
       # Update file mtimes
       File.utime(distant_past, distant_past, 'layouts/default.html')
       File.utime(distant_past, distant_past, 'content/index.html')
-      File.utime(now,          now,          'meta.yaml')
+      File.utime(now,          now,          'page_defaults.yaml')
       File.utime(distant_past, distant_past, 'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
@@ -295,7 +295,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
       # Update file mtimes
       File.utime(distant_past, distant_past, 'layouts/default.html')
       File.utime(distant_past, distant_past, 'content/index.html')
-      File.utime(distant_past, distant_past, 'meta.yaml')
+      File.utime(distant_past, distant_past, 'page_defaults.yaml')
       File.utime(now,          now,          'lib/default.rb')
       File.utime(recent_past,  recent_past,  'output/index.html')
 
