@@ -282,7 +282,7 @@ module Nanoc::DataSources
       end
 
       # Add to working copy if possible
-      vcs.add(filename) and created
+      vcs.add(filename) if created
     end
 
     ########## Asset Defaults ##########
