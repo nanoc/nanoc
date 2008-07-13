@@ -26,6 +26,11 @@ module Nanoc::CLI
 
     def option_definitions
       [
+        # --vcs
+        {
+          :long => 'vcs', :short => 'c', :argument => :required,
+          :desc => 'select the VCS to use'
+        },
         # --template
         {
           :long => 'template', :short => 't', :argument => :required,
@@ -47,6 +52,9 @@ module Nanoc::CLI
 
       # Make sure we are in a nanoc site directory
       @base.require_site
+
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
 
       # Find template
       template = @base.site.templates.find { |t| t.name == template_name }

@@ -23,7 +23,13 @@ module Nanoc::CLI
     end
 
     def option_definitions
-      []
+      [
+        # --vcs
+        {
+          :long => 'vcs', :short => 'c', :argument => :required,
+          :desc => 'select the VCS to use'
+        }
+      ]
     end
 
     def run(options, arguments)
@@ -38,6 +44,9 @@ module Nanoc::CLI
 
       # Make sure we are in a nanoc site directory
       @base.require_site
+
+      # Set VCS if possible
+      @base.set_vcs(options[:vcs])
 
       # Check whether layout is unique
       if !@base.site.layouts.find { |l| l.path == path }.nil?

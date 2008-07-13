@@ -46,11 +46,6 @@ module Nanoc::CLI
 
       # Get extended option definitions (with help)
       extended_option_definitions = command.option_definitions + [
-        # --vcs
-        {
-          :long => 'vcs', :short => 'c', :argument => :required,
-          :desc => 'select the VCS to use'
-        },
         # --help
         {
           :long => 'help', :short => 'h', :argument => :forbidden,
@@ -84,9 +79,6 @@ module Nanoc::CLI
       if parsed_arguments[:options].has_key?(:verbose)
         Nanoc::CLI::Logger.instance.level = :low
       end
-
-      # Set VCS if possible
-      set_vcs(parsed_arguments[:options][:vcs])
 
       # Find and run command
       command.run(parsed_arguments[:options], parsed_arguments[:arguments])
@@ -183,8 +175,7 @@ module Nanoc::CLI
       site.data_source.vcs = vcs_class.new
     end
 
-    # Returns the list of global option definitions, which currently include
-    # the --help and --version options.
+    # Returns the list of global option definitionss.
     def global_option_definitions
       [
         {
