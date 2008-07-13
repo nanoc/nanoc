@@ -70,9 +70,21 @@ module Nanoc::DataSources
   # sub-directories.
   class FilesystemCombined < Nanoc::DataSource
 
+    PAGE_DEFAULTS_FILENAME     = 'page_defaults.yaml'
+    PAGE_DEFAULTS_FILENAME_OLD = 'meta.yaml'
+    ASSET_DEFAULTS_FILENAME    = 'asset_defaults.yaml'
+
     ########## Attributes ##########
 
     identifier :filesystem_combined
+
+    ########## VCSes ##########
+
+    attr_accessor :vcs
+
+    def vcs
+      @vcs ||= Nanoc::Extra::VCSes::Dummy.new
+    end
 
     ########## Preparation ##########
 
@@ -83,21 +95,25 @@ module Nanoc::DataSources
     end
 
     def setup # :nodoc:
-      # Create pages
+      # FIXME add vcs support
+
+      # Create directories
+      FileUtils.mkdir_p('assets')
       FileUtils.mkdir_p('content')
-
-      # Create template
       FileUtils.mkdir_p('templates')
-
-      # Create layout
       FileUtils.mkdir_p('layouts')
-
-      # Create code
       FileUtils.mkdir_p('lib')
     end
 
     def destroy # :nodoc:
-      FileUtils.rm_rf('meta.yaml')
+      # FIXME add vcs support
+
+      # Remove files
+      FileUtils.rm_rf(ASSET_DEFAULTS_FILENAME)    if File.file?(ASSET_DEFAULTS_FILENAME)
+      FileUtils.rm_rf(PAGE_DEFAULTS_FILENAME)     if File.file?(PAGE_DEFAULTS_FILENAME)
+      FileUtils.rm_rf(PAGE_DEFAULTS_FILENAME_OLD) if File.file?(PAGE_DEFAULTS_FILENAME_OLD)
+
+      # Remove directories
       FileUtils.rm_rf('content')
       FileUtils.rm_rf('templates')
       FileUtils.rm_rf('layouts')
@@ -149,8 +165,10 @@ module Nanoc::DataSources
 
       # Notify
       if File.file?(path)
+        created = false
         Nanoc::NotificationCenter.post(:file_updated, path)
       else
+        created = true
         Nanoc::NotificationCenter.post(:file_created, path)
       end
 
@@ -162,6 +180,9 @@ module Nanoc::DataSources
         io.write("-----\n")
         io.write(page.content)
       end
+
+      # Add to working copy if possible
+      vcs.add(path) if created
     end
 
     def move_page(page, new_path) # :nodoc:
@@ -192,12 +213,13 @@ module Nanoc::DataSources
 
     ########## Page Defaults ##########
 
-     def page_defaults # :nodoc:
+    def page_defaults # :nodoc:
       # Get attributes
-      attributes = YAML.load_file('meta.yaml') || {}
+      filename = File.file?(PAGE_DEFAULTS_FILENAME) ? PAGE_DEFAULTS_FILENAME : PAGE_DEFAULTS_FILENAME_OLD
+      attributes = YAML.load_file(filename) || {}
 
       # Get mtime
-      mtime = File.stat('meta.yaml').mtime
+      mtime = File.stat(filename).mtime
 
       # Build page defaults
       Nanoc::PageDefaults.new(attributes, mtime)
@@ -205,27 +227,64 @@ module Nanoc::DataSources
 
     def save_page_defaults(page_defaults) # :nodoc:
       # Notify
-      if File.file?('meta.yaml')
-        Nanoc::NotificationCenter.post(:file_updated, 'meta.yaml')
+      if File.file?(PAGE_DEFAULTS_FILENAME)
+        filename = PAGE_DEFAULTS_FILENAME
+        created  = false
+        Nanoc::NotificationCenter.post(:file_updated, filename)
+      elsif File.file?(PAGE_DEFAULTS_FILENAME_OLD)
+        filename = PAGE_DEFAULTS_FILENAME_OLD
+        created  = false
+        Nanoc::NotificationCenter.post(:file_updated, filename)
       else
-        Nanoc::NotificationCenter.post(:file_created, 'meta.yaml')
+        filename = PAGE_DEFAULTS_FILENAME
+        created  = true
+        Nanoc::NotificationCenter.post(:file_created, filename)
       end
 
-      # Write page defaults
-      File.open('meta.yaml', 'w') do |io|
+      # Write
+      File.open(filename, 'w') do |io|
         io.write(page_defaults.attributes.to_split_yaml)
       end
+
+      # Add to working copy if possible
+      vcs.add(filename) if created
     end
 
     ########## Asset defaults ##########
 
-    # def asset_defaults # :nodoc:
-    #   # TODO implement (high)
-    # end
-    # 
-    # def save_asset_defaults(asset_defaults) # :nodoc:
-    #   # TODO implement (high)
-    # end
+    def asset_defaults # :nodoc:
+      if File.file?(ASSET_DEFAULTS_FILENAME)
+        # Get attributes
+        attributes = YAML.load_file(ASSET_DEFAULTS_FILENAME) || {}
+
+        # Get mtime
+        mtime = File.stat(ASSET_DEFAULTS_FILENAME).mtime
+
+        # Build asset defaults
+        Nanoc::AssetDefaults.new(attributes, mtime)
+      else
+        Nanoc::AssetDefaults.new({})
+      end
+    end
+
+    def save_asset_defaults(asset_defaults) # :nodoc:
+      # Notify
+      if File.file?(ASSET_DEFAULTS_FILENAME)
+        Nanoc::NotificationCenter.post(:file_updated, ASSET_DEFAULTS_FILENAME)
+        created  = false
+      else
+        Nanoc::NotificationCenter.post(:file_created, ASSET_DEFAULTS_FILENAME)
+        created  = true
+      end
+
+      # Write
+      File.open(ASSET_DEFAULTS_FILENAME, 'w') do |io|
+        io.write(asset_defaults.attributes.to_split_yaml)
+      end
+
+      # Add to working copy if possible
+      vcs.add(ASSET_DEFAULTS_FILENAME) if created
+    end
 
     ########## Layouts ##########
 
@@ -260,8 +319,10 @@ module Nanoc::DataSources
 
       # Notify
       if File.file?(path)
+        created = false
         Nanoc::NotificationCenter.post(:file_updated, path)
       else
+        created = true
         Nanoc::NotificationCenter.post(:file_created, path)
       end
 
@@ -273,6 +334,9 @@ module Nanoc::DataSources
         io.write("-----\n")
         io.write(layout.content)
       end
+
+      # Add to working copy if possible
+      vcs.add(path) if created
     end
 
     def move_layout(layout, new_path) # :nodoc:
@@ -306,8 +370,10 @@ module Nanoc::DataSources
 
       # Notify
       if File.file?(path)
+        created = false
         Nanoc::NotificationCenter.post(:file_updated, path)
       else
+        created = true
         Nanoc::NotificationCenter.post(:file_created, path)
       end
 
@@ -318,6 +384,9 @@ module Nanoc::DataSources
         io.write("-----\n")
         io.write(template.page_content)
       end
+
+      # Add to working copy if possible
+      vcs.add(path) if created
     end
 
     def move_template(template, new_name) # :nodoc:
@@ -346,7 +415,9 @@ module Nanoc::DataSources
       existed = File.file?('lib/default.rb')
 
       # Remove all existing code files
-      Dir['lib/**/*.rb'].each { |f| FileUtils.rm_rf(f) }
+      Dir['lib/**/*.rb'].each do |file|
+        vcs.remove(file) unless file == 'lib/default.rb'
+      end
 
       # Notify
       if existed
@@ -355,10 +426,13 @@ module Nanoc::DataSources
         Nanoc::NotificationCenter.post(:file_created, 'lib/default.rb')
       end
 
-      # Write code
+      # Write new code
       File.open('lib/default.rb', 'w') do |io|
         io.write(code.data)
       end
+
+      # Add to working copy if possible
+      vcs.add('lib/default.rb') unless existed
     end
 
   private
