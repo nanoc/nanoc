@@ -91,29 +91,25 @@ module Nanoc::DataSources
     end
 
     def setup # :nodoc:
-      # FIXME add vcs support
-
       # Create directories
-      FileUtils.mkdir_p('assets')
-      FileUtils.mkdir_p('content')
-      FileUtils.mkdir_p('templates')
-      FileUtils.mkdir_p('layouts')
-      FileUtils.mkdir_p('lib')
+      %w( assets content templates layouts lib ).each do |dir|
+        FileUtils.mkdir_p(dir)
+        vcs.add(dir)
+      end
     end
 
     def destroy # :nodoc:
-      # FIXME add vcs support
-
       # Remove files
-      FileUtils.rm_rf(ASSET_DEFAULTS_FILENAME)    if File.file?(ASSET_DEFAULTS_FILENAME)
-      FileUtils.rm_rf(PAGE_DEFAULTS_FILENAME)     if File.file?(PAGE_DEFAULTS_FILENAME)
-      FileUtils.rm_rf(PAGE_DEFAULTS_FILENAME_OLD) if File.file?(PAGE_DEFAULTS_FILENAME_OLD)
+      vcs.remove(ASSET_DEFAULTS_FILENAME)    if File.file?(ASSET_DEFAULTS_FILENAME)
+      vcs.remove(PAGE_DEFAULTS_FILENAME)     if File.file?(PAGE_DEFAULTS_FILENAME)
+      vcs.remove(PAGE_DEFAULTS_FILENAME_OLD) if File.file?(PAGE_DEFAULTS_FILENAME_OLD)
 
       # Remove directories
-      FileUtils.rm_rf('content')
-      FileUtils.rm_rf('templates')
-      FileUtils.rm_rf('layouts')
-      FileUtils.rm_rf('lib')
+      vcs.remove('assets')
+      vcs.remove('content')
+      vcs.remove('templates')
+      vcs.remove('layouts')
+      vcs.remove('lib')
     end
 
     def update # :nodoc:
