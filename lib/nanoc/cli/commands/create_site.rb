@@ -297,6 +297,12 @@ EOS
       page.site = site
       page.save
 
+      # Fill asset defaults
+      Nanoc::Asset::DEFAULTS.each_pair do |key, value|
+        site.asset_defaults.attributes[key] = value
+      end
+      site.asset_defaults.save
+
       # Fill page defaults
       Nanoc::Page::DEFAULTS.each_pair do |key, value|
         site.page_defaults.attributes[key] = value
