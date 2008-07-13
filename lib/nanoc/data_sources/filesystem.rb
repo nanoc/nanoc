@@ -66,6 +66,10 @@ module Nanoc::DataSources
   # sub-directories.
   class Filesystem < Nanoc::DataSource
 
+    PAGE_DEFAULTS_FILENAME     = 'page_defaults.yaml'
+    PAGE_DEFAULTS_FILENAME_OLD = 'meta.yaml'
+    ASSET_DEFAULTS_FILENAME    = 'asset_defaults.yaml'
+
     ########## Attributes ##########
 
     identifier :filesystem
@@ -101,9 +105,9 @@ module Nanoc::DataSources
       # FIXME add vcs support
 
       # Remove files
-      FileUtils.rm_rf('asset_defaults.yaml')  if File.file?('asset_defaults.yaml')
-      FileUtils.rm_rf('meta.yaml')            if File.file?('meta.yaml')
-      FileUtils.rm_rf('page_defaults.yaml')   if File.file?('page_defaults.yaml')
+      FileUtils.rm_rf(ASSET_DEFAULTS_FILENAME)    if File.file?(ASSET_DEFAULTS_FILENAME)
+      FileUtils.rm_rf(PAGE_DEFAULTS_FILENAME)     if File.file?(PAGE_DEFAULTS_FILENAME)
+      FileUtils.rm_rf(PAGE_DEFAULTS_FILENAME_OLD) if File.file?(PAGE_DEFAULTS_FILENAME_OLD)
 
       # Remove directories
       FileUtils.rm_rf('content')
@@ -246,7 +250,7 @@ module Nanoc::DataSources
 
     def page_defaults # :nodoc:
       # Get attributes
-      filename = File.file?('page_defaults.yaml') ? 'page_defaults.yaml' : 'meta.yaml'
+      filename = File.file?(PAGE_DEFAULTS_FILENAME) ? PAGE_DEFAULTS_FILENAME : PAGE_DEFAULTS_FILENAME_OLD
       attributes = YAML.load_file(filename) || {}
 
       # Get mtime
@@ -258,16 +262,16 @@ module Nanoc::DataSources
 
     def save_page_defaults(page_defaults) # :nodoc:
       # Notify
-      if File.file?('page_defaults.yaml')
-        filename = 'page_defaults.yaml'
+      if File.file?(PAGE_DEFAULTS_FILENAME)
+        filename = PAGE_DEFAULTS_FILENAME
         created  = false
         Nanoc::NotificationCenter.post(:file_updated, filename)
-      elsif File.file?('meta.yaml')
-        filename = 'meta.yaml'
+      elsif File.file?(PAGE_DEFAULTS_FILENAME_OLD)
+        filename = PAGE_DEFAULTS_FILENAME_OLD
         created  = false
         Nanoc::NotificationCenter.post(:file_updated, filename)
       else
-        filename = 'page_defaults.yaml'
+        filename = PAGE_DEFAULTS_FILENAME
         created  = true
         Nanoc::NotificationCenter.post(:file_created, filename)
       end
@@ -284,12 +288,12 @@ module Nanoc::DataSources
     ########## Asset Defaults ##########
 
     def asset_defaults # :nodoc:
-      if File.file?('asset_defaults.yaml')
+      if File.file?(ASSET_DEFAULTS_FILENAME)
         # Get attributes
-        attributes = YAML.load_file('asset_defaults.yaml') || {}
+        attributes = YAML.load_file(ASSET_DEFAULTS_FILENAME) || {}
 
         # Get mtime
-        mtime = File.stat('asset_defaults.yaml').mtime
+        mtime = File.stat(ASSET_DEFAULTS_FILENAME).mtime
 
         # Build asset defaults
         Nanoc::AssetDefaults.new(attributes, mtime)
@@ -300,21 +304,21 @@ module Nanoc::DataSources
 
     def save_asset_defaults(asset_defaults) # :nodoc:
       # Notify
-      if File.file?('asset_defaults.yaml')
-        Nanoc::NotificationCenter.post(:file_updated, 'asset_defaults.yaml')
+      if File.file?(ASSET_DEFAULTS_FILENAME)
+        Nanoc::NotificationCenter.post(:file_updated, ASSET_DEFAULTS_FILENAME)
         created  = false
       else
-        Nanoc::NotificationCenter.post(:file_created, 'asset_defaults.yaml')
+        Nanoc::NotificationCenter.post(:file_created, ASSET_DEFAULTS_FILENAME)
         created  = true
       end
 
       # Write
-      File.open('asset_defaults.yaml', 'w') do |io|
+      File.open(ASSET_DEFAULTS_FILENAME, 'w') do |io|
         io.write(asset_defaults.attributes.to_split_yaml)
       end
 
       # Add to working copy if possible
-      vcs.add('asset_defaults.yaml') if created
+      vcs.add(ASSET_DEFAULTS_FILENAME) if created
     end
 
     ########## Layouts ##########
@@ -599,9 +603,9 @@ module Nanoc::DataSources
 
     # Updated outdated page defaults (renames page defaults file)
     def update_page_defaults
-      return unless File.file?('meta.yaml')
+      return unless File.file?(PAGE_DEFAULTS_FILENAME_OLD)
 
-      vcs.move('meta.yaml', 'page_defaults.yaml')
+      vcs.move(PAGE_DEFAULTS_FILENAME_OLD, PAGE_DEFAULTS_FILENAME)
     end
 
     # Updates outdated pages (both content and meta file names).
