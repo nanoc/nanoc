@@ -28,8 +28,15 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         # Convert site to filesystem_combined
         open('config.yaml', 'w') { |io| io.write('data_source: filesystem_combined') }
 
-        # Setup site
+        # Get site
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+
+        # Mock VCS
+        vcs = mock
+        vcs.expects(:add).times(5) # One time for each directory
+        site.data_source.vcs = vcs
+
+        # Setup site
         site.data_source.loading { site.data_source.setup {} }
 
         # Ensure essential files have been recreated
@@ -52,15 +59,13 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_destroy
     with_temp_site('filesystem_combined') do |site|
+      # Mock VCS
+      vcs = mock
+      vcs.expects(:remove).times(7) # One time for each directory
+      site.data_source.vcs = vcs
+
       # Destroy
       site.data_source.destroy
-
-      # Check files
-      assert(!File.directory?('content/'))
-      assert(!File.file?('meta.yaml'))
-      assert(!File.directory?('templates/'))
-      assert(!File.directory?('layouts/'))
-      assert(!File.directory?('lib/'))
     end
   end
 
