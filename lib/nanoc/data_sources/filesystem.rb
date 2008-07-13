@@ -313,7 +313,7 @@ module Nanoc::DataSources
       end
 
       # Add to working copy if possible
-      vcs.add(filename) if created
+      vcs.add('asset_defaults.yaml') if created
     end
 
     ########## Layouts ##########
