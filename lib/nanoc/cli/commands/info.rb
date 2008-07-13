@@ -50,7 +50,7 @@ module Nanoc::CLI
       end
 
       # Find longest name
-      max_length = plugins.values.map { |k| k.values }.flatten.map { |k| k.identifier.to_s.length }.max + 2
+      max_length = plugins.values.map { |k| k.values }.flatten.map { |k| k.identifiers.join(', ').length }.max + 2
 
       plugins.each_pair do |superclass, structured_plugins|
         # Print kind
@@ -75,7 +75,7 @@ module Nanoc::CLI
             # Get data
             is_custom   = !plugins_before[superclass].include?(klass)
             klass_name  = klass.to_s
-            klass_id    = klass.identifier.to_s
+            klass_id    = klass.identifiers.join(', ')
 
             # Display
             puts sprintf("    %-#{max_length}s (%s)", klass_id, klass_name)
@@ -97,7 +97,7 @@ module Nanoc::CLI
 
     def find_all_plugins
       plugin_classes.inject({}) do |memo, klass|
-        memo.merge(klass => Nanoc::Plugin::MAP[klass].values)
+        memo.merge(klass => Nanoc::Plugin::MAP[klass].values.uniq)
       end
     end
 
