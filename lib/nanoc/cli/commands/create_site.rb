@@ -22,119 +22,105 @@ EOS
       * {
         margin: 0;
         padding: 0;
-
-        font-family: Helvetica, Arial, sans-serif;
+      
+        font-family: Georgia, Palatino, Times, 'Times New Roman', sans-serif;
       }
-
+      
       body {
-        background: #ccc;
+        background: #fff;
       }
-
+      
       a {
         text-decoration: none;
       }
-
+      
       a:link,
       a:visited {
         color: #f30;
       }
-
+      
       a:hover {
         color: #f90;
       }
-
+      
       #main {
         position: absolute;
-
+      
         top: 20px;
-        left: 20px;
-
-        padding: 30px 40px 20px 20px;
-
-        width: 580px;
-
-        border-top: 10px solid #f90;
-
-        background: #fff;
+        left: 280px;
+      
+        width: 500px;
       }
-
+      
       #main h1 {
-        font-size: 50px;
-
-        letter-spacing: -3px;
-
-        border-bottom: 3px solid #f30;
-
-        padding-bottom: 7px;
-        margin-bottom: 20px;
+        font-size: 40px;
+        font-weight: normal;
+      
+        line-height: 40px;
+      
+        padding: 20px 0 20px 0;
+      
+        letter-spacing: -1px;
       }
-
+      
       #main p {
-        margin-top: 20px;
-
-        font-size: 16px;
-
+        margin: 0 0 20px 0;
+        
+        font-size: 15px;
+        
         line-height: 20px;
-
-        color: #333;
       }
-
-      #main strong {
-        text-transform: uppercase;
-
-        font-size: 14px;
-
-        color: #000;
-      }
-
+      
       #main ul {
-        margin: 20px 0;
+        padding: 0 0 0 20px;
       }
-
+      
       #main li {
-        margin: 20px 0 20px 20px;
-
-        font-size: 16px;
-
+        margin: 0 0 20px 0;
+      
+        list-style-type: square;
+      
+        font-size: 15px;
+        
         line-height: 20px;
-
-        color: #333;
       }
-
+      
       #sidebar {
         position: absolute;
-
-        top: 60px;
-        left: 640px;
-
-        width: 220px;
-
-        padding: 10px 10px 0 10px;
-
-        border-top: 6px solid #f30;
-
-        background: #eee;
+      
+        top: 40px;
+        left: 20px;
+        width: 200px;
+      
+        padding: 20px 20px 0 0;
+      
+        border-right: 1px solid #ccc;
+      
+        text-align: right;
       }
-
+      
       #sidebar h2 {
-        font-size: 14px;
-
         text-transform: uppercase;
-
+      
+        font-size: 13px;
+      
         color: #333;
-
+      
+        letter-spacing: 1px;
+      
         line-height: 20px;
       }
-
+      
       #sidebar ul {
-        padding: 10px 0;
+        list-style-type: none;
+      
+        margin: 20px 0;
       }
-
+      
       #sidebar li {
         font-size: 14px;
+      
         line-height: 20px;
-
-        list-style-type: none;
       }
     </style>
   </head>
@@ -151,7 +137,7 @@ EOS
       <h2>Community</h2>
       <ul>
         <li><a href="http://groups.google.com/group/nanoc/">Discussion Group</a></li>
-        <li><a href="http://groups.google.com/group/nanoc-es/">Discussion Group (Spanish)</a></li>
+        <li><a href="http://groups.google.com/group/nanoc-es/">Spanish Discussion Group</a></li>
         <li><a href="http://nanoc.stoneship.org/trac/">Wiki</a></li>
       </ul>
     </div>
