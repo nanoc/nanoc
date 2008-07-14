@@ -565,7 +565,9 @@ module Nanoc::DataSources
       good_filenames
     end
 
-    # Returns the filename of the content file in the given directory.
+    # Returns the filename of the content file in the given directory,
+    # ignoring any unwanted files (files that end with '~', '.orig', '.rej' or
+    # '.bak')
     def content_filename_for_dir(dir)
       # Find all files
       filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
