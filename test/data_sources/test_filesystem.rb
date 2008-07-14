@@ -351,12 +351,131 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   # Test private methods
 
-  def test_meta_filenamed
+  def test_meta_filenames
     # TODO implement
   end
 
-  def test_content_filename_for_dir
-    # TODO implement
+  def test_content_filename_for_dir_with_one_content_file
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/bar/baz')
+    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/foo/bar/baz/baz.html',
+        data_source.instance_eval do
+          content_filename_for_dir('tmp/foo/bar/baz')
+        end
+      )
+    end
+  end
+
+  def test_content_filename_for_dir_with_two_content_files
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/bar/baz')
+    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.xhtml', 'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_raises(RuntimeError) do
+      assert_equal(
+        'tmp/foo/bar/baz/baz.html',
+        data_source.instance_eval do
+          content_filename_for_dir('tmp/foo/bar/baz')
+        end
+      )
+    end
+  end
+
+  def test_content_filename_for_dir_with_one_content_and_one_meta_file
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/bar/baz')
+    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/foo/bar/baz/baz.html',
+        data_source.instance_eval do
+          content_filename_for_dir('tmp/foo/bar/baz')
+        end
+      )
+    end
+  end
+
+  def test_content_filename_for_dir_with_one_content_and_many_meta_files
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/bar/baz')
+    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/foo.yaml', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/zzz.yaml', 'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/foo/bar/baz/baz.html',
+        data_source.instance_eval do
+          content_filename_for_dir('tmp/foo/bar/baz')
+        end
+      )
+    end
+  end
+
+  def test_content_filename_for_dir_with_one_content_file_and_rejected_files
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/bar/baz')
+    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.html~', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.html.orig', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.html.rej', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/bar/baz/baz.html.bak', 'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/foo/bar/baz/baz.html',
+        data_source.instance_eval do
+          content_filename_for_dir('tmp/foo/bar/baz')
+        end
+      )
+    end
+  end
+
+  def test_content_filename_for_dir_with_one_index_content_file
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/bar/baz')
+    File.open('tmp/foo/bar/baz/index.html', 'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/foo/bar/baz/index.html',
+        data_source.instance_eval do
+          content_filename_for_dir('tmp/foo/bar/baz')
+        end
+      )
+    end
   end
 
   # Miscellaneous
