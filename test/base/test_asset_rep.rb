@@ -109,7 +109,76 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_outdated
-    # TODO implement
+    # Create asset defaults
+    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+
+    # Create layouts
+    layouts = [
+      Nanoc::Layout.new('layout 1', {}, '/layout1/'),
+      Nanoc::Layout.new('layout 2', {}, '/layout2/')
+    ]
+
+    # Create code
+    code = Nanoc::Code.new('def stuff ; "moo" ; end')
+
+    # Create site
+    site = mock
+    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.expects(:code).at_least_once.returns(code)
+
+    # Create asset
+    asset = Nanoc::Asset.new("content", { 'foo' => 'bar' }, '/foo/')
+    asset.site = site
+    asset.build_reps
+    asset_rep = asset.reps[0]
+    asset_rep.stubs(:disk_path).returns('tmp/out/foo/index.png')
+
+    # Make everything up to date
+    asset.instance_eval { @mtime = Time.now - 100 }
+    FileUtils.mkdir_p('tmp/out/foo')
+    File.open(asset_rep.disk_path, 'w') { |io| }
+    File.utime(Time.now - 50, Time.now - 50, asset_rep.disk_path)
+    asset_defaults.instance_eval { @mtime = Time.now - 100 }
+    layouts.each { |l| l.instance_eval { @mtime = Time.now - 100 } }
+    code.instance_eval { @mtime = Time.now - 100 }
+
+    # Assert not outdated
+    assert(!asset_rep.outdated?)
+
+    # Check with nil mtime
+    asset.instance_eval { @mtime = nil }
+    assert(asset_rep.outdated?)
+    asset.instance_eval { @mtime = Time.now - 100 }
+    assert(!asset_rep.outdated?)
+
+    # Check with non-existant output file
+    FileUtils.rm_rf(asset_rep.disk_path)
+    assert(asset_rep.outdated?)
+    FileUtils.mkdir_p('tmp/out/foo')
+    File.open(asset_rep.disk_path, 'w') { |io| }
+    assert(!asset_rep.outdated?)
+
+    # Check with older mtime
+    asset.instance_eval { @mtime = Time.now }
+    assert(asset_rep.outdated?)
+    asset.instance_eval { @mtime = Time.now - 100 }
+    assert(!asset_rep.outdated?)
+
+    # Check with outdated asset defaults
+    asset_defaults.instance_eval { @mtime = Time.now }
+    assert(asset_rep.outdated?)
+    asset_defaults.instance_eval { @mtime = nil }
+    assert(asset_rep.outdated?)
+    asset_defaults.instance_eval { @mtime = Time.now - 100 }
+    assert(!asset_rep.outdated?)
+
+    # Check with outdated code
+    code.instance_eval { @mtime = Time.now }
+    assert(asset_rep.outdated?)
+    code.instance_eval { @mtime = nil }
+    assert(asset_rep.outdated?)
+    code.instance_eval { @mtime = Time.now - 100 }
+    assert(!asset_rep.outdated?)
   end
 
   def test_disk_and_web_path
@@ -159,7 +228,27 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_digest
-    # TODO implement
+    # Create asset rep
+    asset_rep = Nanoc::AssetRep.new(nil, nil, nil)
+
+    # Get some known hashes
+    known_hashes = {
+      ''    => 'd41d8cd98f00b204e9800998ecf8427e',
+      'a'   => '0cc175b9c0f1b6a831c399e269772661',
+      'abc' => '900150983cd24fb0d6963f7d28e17f72'
+    }
+
+    # Create some files
+    known_hashes.each_pair do |string, digest|
+      # Write string
+      File.open('tmp/file.png', 'w') { |io| io.write(string) }
+
+      # Check digest
+      assert_equal(
+        digest,
+        asset_rep.instance_eval { digest(File.open('tmp/file.png')) }
+      )
+    end
   end
 
   def test_compile_binary
