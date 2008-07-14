@@ -41,16 +41,21 @@ module Nanoc::DataSources
   #
   # = Page defaults
   #
-  # The page defaults are loaded from a YAML-formatted file named 'meta.yaml'
-  # file at the top level of the nanoc site directory.
+  # The page defaults are loaded from a YAML-formatted file named
+  # 'page_defaults.yaml' at the top level of the nanoc site directory. For
+  # backward compatibility, the file can also be named 'meta.yaml'.
   #
   # = Assets
   #
-  # TODO write me
+  # Assets are stored in a way similar to pages. The attributes are merged
+  # into the asset. This does mean, however, that only textual assets are
+  # supported, as there is no way to embed attributes in binary assets.
   #
   # = Asset defaults
   #
-  # TODO write me
+  # The asset defaults are stored similar to the way page defaults are stored,
+  # except that the asset defaults file is named 'asset_defaults.yaml'
+  # instead.
   #
   # = Layouts
   #

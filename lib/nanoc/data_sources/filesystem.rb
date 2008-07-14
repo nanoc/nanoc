@@ -20,9 +20,9 @@ module Nanoc::DataSources
   # (i.e. page). For example, a page named 'foo' will have a directorynamed
   # 'foo', with e.g. a 'foo.markdown' content file and a 'foo.yaml' meta file.
   #
-  # Content file extensions are ignored by nanoc. The content file extension
-  # does not determine the filters to run on it; the meta file defines the
-  # list of filters. The meta file extension must always be 'yaml', though.
+  # Content file extensions are not used for determining the filter that
+  # should be run; the meta file defines the list of filters. The meta file
+  # extension must always be 'yaml', though.
   #
   # Content files can also have the 'index' basename. Similarly, meta files
   # can have the 'meta' basename. For example, a parent directory named 'foo'
@@ -31,16 +31,21 @@ module Nanoc::DataSources
   #
   # = Page defaults
   #
-  # The page defaults are loaded from a YAML-formatted file named 'meta.yaml'
-  # file at the top level of the nanoc site directory.
+  # The page defaults are loaded from a YAML-formatted file named
+  # 'page_defaults.yaml' at the top level of the nanoc site directory. For
+  # backward compatibility, the file can also be named 'meta.yaml'.
   #
   # = Assets
   #
-  # TODO write me
+  # Assets are stored in the 'assets' directory (surprise!). The structure is
+  # very similar to the structure of the 'content' directory, so see the Pages
+  # section for details on how this directory is structured.
   #
   # = Asset defaults
   #
-  # TODO write me
+  # The asset defaults are stored similar to the way page defaults are stored,
+  # except that the asset defaults file is named 'asset_defaults.yaml'
+  # instead.
   #
   # = Layouts
   #
