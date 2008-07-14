@@ -178,8 +178,56 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   # Test private methods
 
-  def test_files
-    # TODO implement
+  def test_files_without_recursion
+    # Create data source
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo')
+    FileUtils.mkdir_p('tmp/foo/a/b')
+    File.open('tmp/foo/bar.html',       'w') { |io| io.write('test') }
+    File.open('tmp/foo/baz.html',       'w') { |io| io.write('test') }
+    File.open('tmp/foo/a/b/c.html',     'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html~',     'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html.orig', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html.rej',  'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        [ 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+        data_source.instance_eval do
+          files('tmp/foo', false).sort
+        end
+      )
+    end
+  end
+
+  def test_files_with_recursion
+    # Create data source
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo')
+    FileUtils.mkdir_p('tmp/foo/a/b')
+    File.open('tmp/foo/bar.html',       'w') { |io| io.write('test') }
+    File.open('tmp/foo/baz.html',       'w') { |io| io.write('test') }
+    File.open('tmp/foo/a/b/c.html',     'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html~',     'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html.orig', 'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html.rej',  'w') { |io| io.write('test') }
+    File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_nothing_raised do
+      assert_equal(
+        [ 'tmp/foo/a/b/c.html', 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+        data_source.instance_eval do
+          files('tmp/foo', true).sort
+        end
+      )
+    end
   end
 
   def test_parse_file
