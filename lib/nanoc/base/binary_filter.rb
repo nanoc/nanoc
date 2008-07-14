@@ -3,7 +3,7 @@ module Nanoc
   # Nanoc::BinaryFilter is responsible for filtering binary assets. It is the
   # (abstract) superclass for all binary filters. Subclasses should override
   # the +run+ method.
-  class BinaryFilter < Nanoc::Plugin
+  class BinaryFilter < Plugin
 
     # Creates a new binary filter for the given asset and site.
     #
