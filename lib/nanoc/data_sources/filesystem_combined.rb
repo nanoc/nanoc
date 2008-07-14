@@ -441,7 +441,7 @@ module Nanoc::DataSources
     #                 itself.
     def files(dir, recursively)
       glob = File.join([dir] + (recursively ? [ '**', '*' ] : [ '*' ]))
-      Dir[glob].reject { |f| File.directory?(f) or f =~ /~$/ }
+      Dir[glob].reject { |f| File.directory?(f) or f =~ /(~|\.orig|\.rej|\.bak)$/ }
     end
 
     # Parses the file named +filename+ and returns an array with its first

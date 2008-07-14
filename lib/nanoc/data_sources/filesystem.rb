@@ -575,7 +575,7 @@ module Nanoc::DataSources
       filenames.reject! { |f| f =~ /\.yaml$/ }
 
       # Reject backups
-      filenames.reject! { |f| f =~ /~$/ }
+      filenames.reject! { |f| f =~ /(~|\.orig|\.rej|\.bak)$/ }
 
       # Make sure there is only one content file
       if filenames.size != 1
