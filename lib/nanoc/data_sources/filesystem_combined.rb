@@ -433,8 +433,8 @@ module Nanoc::DataSources
 
   private
 
-    # Returns a list of all files in +dir+, ignoring any backup files (files
-    # that end with a ~).
+    # Returns a list of all files in +dir+, ignoring any unwanted files (files
+    # that end with '~', '.orig', '.rej' or '.bak').
     #
     # +recursively+:: When +true+, finds files in +dir+ as well as its
     #                 subdirectories; when +false+, only searches +dir+

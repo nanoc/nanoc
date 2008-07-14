@@ -536,7 +536,8 @@ module Nanoc::DataSources
 
     ########## Custom functions ##########
 
-    # Returns the list of meta files in the given base directory.
+    # Returns the list of all meta files in the given base directory as well
+    # as its subdirectories.
     def meta_filenames(base)
       # Find all possible meta file names
       filenames = Dir[base + '/**/*.yaml']
@@ -564,7 +565,7 @@ module Nanoc::DataSources
       good_filenames
     end
 
-    # Returns a File object for the content file in the given directory
+    # Returns the filename of the content file in the given directory.
     def content_filename_for_dir(dir)
       # Find all files
       filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
