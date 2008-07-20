@@ -88,7 +88,7 @@ module Nanoc
     # including the filename and extension if they cannot be ignored (i.e.
     # they are not in the site configuration's list of index files).
     def web_path
-      compile(true, false) unless @compiled
+      compile(true, false)
 
       @web_path ||= @asset.site.router.web_path_for(self)
     end
@@ -159,12 +159,19 @@ module Nanoc
     # Nanoc::Compiler#run instead, and pass this asset representation's asset
     # as its first argument.
     #
+    # The asset representation will only be compiled if it wasn't compiled
+    # before yet. To force recompilation of the asset rep, forgetting any
+    # progress, set +from_scratch+ to true.
+    #
     # +even_when_not_outdated+:: true if the asset rep should be compiled even
     #                            if it is not outdated, false if not.
     #
     # +from_scratch+:: true if the asset rep should be filtered again even if
     #                  it has already been filtered, false otherwise.
     def compile(even_when_not_outdated, from_scratch)
+      # Don't compile if already compiled
+      return if @compiled and !from_scratch
+
       # Skip unless outdated
       unless outdated? or even_when_not_outdated
         Nanoc::NotificationCenter.post(:compilation_started, self)
@@ -216,15 +223,12 @@ module Nanoc
 
     # Compiles the asset rep, treating its contents as binary data.
     def compile_binary
-      # Get filters
-      filters = attribute_named(:filters)
-
       # Calculate digest before
       digest_before = File.file?(disk_path) ? digest(File.open(disk_path, 'r')) : nil
 
-      # Run each filter
+      # Run filters
       current_file = @asset.file
-      filters.each do |filter_name|
+      attribute_named(:filters).each do |filter_name|
         # Create filter
         klass = Nanoc::BinaryFilter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
@@ -247,17 +251,14 @@ module Nanoc
 
     # Compiles the asset rep, treating its contents as textual data.
     def compile_textual
-      # Get filters
-      filters = attribute_named(:filters)
-
-      # Prepare
+      # Get content
       current_content = @asset.file.read
 
       # Check modified
       @modified = @created ? true : File.read(self.disk_path) != current_content
 
-      # Run each filter
-      filters.each do |filter_name|
+      # Run filters
+      attribute_named(:filters).each do |filter_name|
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?

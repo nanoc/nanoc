@@ -351,6 +351,9 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep = page.reps[0]
     page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
 
+    # Mock compiler
+    page_rep.expects(:compile).with(false, true, false)
+
     # Check
     assert_equal('pre!', page_rep.content(:pre))
   end
@@ -390,6 +393,9 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page.build_reps
     page_rep = page.reps[0]
     page_rep.instance_eval { @content = { :pre => 'pre!', :post => 'post!' } }
+
+    # Mock compiler
+    page_rep.expects(:compile).with(true, true, false)
 
     # Check
     assert_equal('post!', page_rep.content(:post))
@@ -479,10 +485,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Create site
     stack = []
-    compiler = mock
-    compiler.expects(:stack).at_least_once.returns(stack)
     site = mock
-    site.expects(:compiler).at_least_once.returns(compiler)
     site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
@@ -490,7 +493,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page.site = site
     page.build_reps
     page_rep = page.reps[0]
-    page_rep.expects(:outdated?).returns(true)
     page_rep.instance_eval do
       @content[:pre]  = 'some pre content'
       @content[:post] = 'some post content'
