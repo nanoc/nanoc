@@ -163,7 +163,7 @@ module Nanoc
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
     def content(stage=:pre)
-      compile(stage == :post, true, false) if @content[stage].nil?
+      compile(stage == :post, true, false)
 
       @content[stage]
     end
@@ -184,6 +184,10 @@ module Nanoc
     # method should not be called directly; please use Nanoc::Compiler#run
     # instead, and pass this page representation's page as its first argument.
     #
+    # The page representation will only be compiled if it wasn't compiled
+    # before yet. To force recompilation of the page rep, forgetting any
+    # progress, set +from_scratch+ to true.
+    #
     # +also_layout+:: true if the page rep should also be laid out and
     #                 post-filtered, false if the page rep should only be
     #                 pre-filtered.
@@ -195,6 +199,9 @@ module Nanoc
     #                  post-filter) should be performed again even if they
     #                  have already been performed, false otherwise.
     def compile(also_layout, even_when_not_outdated, from_scratch)
+      # Don't compile if already compiled
+      return if @content[also_layout ? :post : :pre] and !from_scratch
+
       # Skip unless outdated
       unless outdated? or even_when_not_outdated
         if also_layout
