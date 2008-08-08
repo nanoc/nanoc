@@ -88,7 +88,7 @@ module Nanoc
     # including the filename and extension if they cannot be ignored (i.e.
     # they are not in the site configuration's list of index files).
     def web_path
-      compile(true, false)
+      compile(false, false)
 
       @web_path ||= @asset.site.router.web_path_for(self)
     end
