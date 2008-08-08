@@ -200,7 +200,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     asset.site = site
     asset.build_reps
     asset_rep = asset.reps.find { |r| r.name == :default }
-    asset_rep.expects(:compile).with(true, false)
+    asset_rep.expects(:compile).with(false, false)
 
     # Check
     assert_equal('tmp/out/assets/path/index.html', asset_rep.disk_path)
