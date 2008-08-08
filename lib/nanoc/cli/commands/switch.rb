@@ -97,7 +97,7 @@ module Nanoc::CLI
                      'data loss. As always, consider making a backup copy.'
         $stderr.puts
         $stderr.puts 'To continue, use the -y/--yes option, like "nanoc ' +
-                     'setup -y".'
+                     'switch -y".'
         exit 1
       end
 
