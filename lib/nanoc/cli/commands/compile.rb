@@ -51,7 +51,7 @@ module Nanoc::CLI
 
           # Ensure object
           if obj.nil?
-            $stderr.puts "Unknown page: #{path}"
+            $stderr.puts "Unknown page or asset: #{path}"
             exit 1
           end
 
