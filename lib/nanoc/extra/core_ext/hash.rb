@@ -28,7 +28,7 @@ class Hash
     # Split keys
     hashes = { :builtin => {}, :custom => {} }
     hash.each_pair do |key, value|
-      kind = Nanoc::Page::DEFAULTS.include?(key) ? :builtin : :custom
+      kind = Nanoc::Page::DEFAULTS.include?(key) || Nanoc::Asset::DEFAULTS.include?(key) ? :builtin : :custom
       hashes[kind][key] = value
     end
 
