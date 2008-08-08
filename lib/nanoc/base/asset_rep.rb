@@ -229,6 +229,9 @@ module Nanoc
       # Run filters
       current_file = @asset.file
       attribute_named(:filters).each do |filter_name|
+        # Free resources so that this filter won't fail
+        GC.start
+
         # Create filter
         klass = Nanoc::BinaryFilter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
