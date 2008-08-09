@@ -71,6 +71,9 @@ END
 
       # Set options
       @include_outdated = include_outdated
+
+      # Create mutex to prevent parallel requests
+      @mutex = Mutex.new
     end
 
     # Starts the server on the given port.
@@ -166,24 +169,26 @@ END
     end
 
     def handle_request(path)
-      # Reload site data
-      @site.load_data(true)
+      @mutex.synchronize do
+        # Reload site data
+        @site.load_data(true)
 
-      # Get page or file
-      page_reps = @site.pages.map { |p| p.reps }.flatten
-      page_rep  = page_reps.find { |p| p.web_path == path.cleaned_path }
-      file_path = @site.config[:output_dir] + path
+        # Get page or file
+        page_reps = @site.pages.map { |p| p.reps }.flatten
+        page_rep  = page_reps.find { |p| p.web_path == path.cleaned_path }
+        file_path = @site.config[:output_dir] + path
 
-      if page_rep.nil?
-        # Serve file
-        if File.file?(file_path)
-          serve_file(file_path)
+        if page_rep.nil?
+          # Serve file
+          if File.file?(file_path)
+            serve_file(file_path)
+          else
+            serve_404(path)
+          end
         else
-          serve_404(path)
+          # Serve page rep
+          serve_page_rep(page_rep)
         end
-      else
-        # Serve page rep
-        serve_page_rep(page_rep)
       end
     end
 
