@@ -123,21 +123,17 @@ module Nanoc
     # several places for the requested attribute:
     #
     # 1. This asset representation's attributes;
-    # 2. The attributes of this asset representation's asset (but only if this
-    #    is the default representation);
+    # 2. The attributes of this asset representation's asset;
     # 3. The asset defaults' representation corresponding to this asset
     #    representation;
-    # 4. The asset defaults in general (but only if this is the default asset
-    #    representation);
+    # 4. The asset defaults in general;
     # 5. The hardcoded asset defaults, if everything else fails.
     def attribute_named(name)
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
 
       # Check in asset
-      if @name == :default
-        return @asset.attributes[name] if @asset.attributes.has_key?(name)
-      end
+      return @asset.attributes[name] if @asset.attributes.has_key?(name)
 
       # Check in asset defaults' asset rep
       asset_default_reps = @asset.site.asset_defaults.attributes[:reps] || {}
@@ -145,10 +141,8 @@ module Nanoc
       return asset_default_rep[name] if asset_default_rep.has_key?(name)
 
       # Check in site defaults (global)
-      if @name == :default
-        asset_defaults_attrs = @asset.site.asset_defaults.attributes
-        return asset_defaults_attrs[name] if asset_defaults_attrs.has_key?(name)
-      end
+      asset_defaults_attrs = @asset.site.asset_defaults.attributes
+      return asset_defaults_attrs[name] if asset_defaults_attrs.has_key?(name)
 
       # Check in hardcoded defaults
       return Nanoc::Asset::DEFAULTS[name]
