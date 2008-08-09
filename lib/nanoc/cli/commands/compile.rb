@@ -81,6 +81,12 @@ module Nanoc::CLI
         asset_reps = @base.site.assets.map { |a| a.reps }.flatten
         reps       = page_reps + asset_reps
 
+        # Show skipped reps
+        reps.select { |r| !r.compiled? }.each do |rep|
+          duration = @rep_times[rep.disk_path]
+          Nanoc::CLI::Logger.instance.file(:low, :skip, rep.disk_path, duration)
+        end
+
         # Give general feedback
         puts
         puts "No objects were modified." unless reps.any? { |r| r.modified? }
@@ -237,14 +243,16 @@ module Nanoc::CLI
       elsif rep.modified?
         [ :update, :high ]
       elsif !rep.compiled?
-        [ :skip, :low ]
+        [ nil, nil ]
       else
         [ :identical, :low ]
       end
 
       # Log
-      duration = @rep_times[rep.disk_path]
-      Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path, duration)
+      unless action.nil?
+        duration = @rep_times[rep.disk_path]
+        Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path, duration)
+      end
     end
 
     def rep_filtering_started(rep, filter_name)
