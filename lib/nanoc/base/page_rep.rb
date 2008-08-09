@@ -126,21 +126,17 @@ module Nanoc
     # several places for the requested attribute:
     #
     # 1. This page representation's attributes;
-    # 2. The attributes of this page representation's page (but only if this
-    #    is the default representation);
+    # 2. The attributes of this page representation's page;
     # 3. The page defaults' representation corresponding to this page
     #    representation;
-    # 4. The page defaults in general (but only if this is the default page
-    #    representation);
+    # 4. The page defaults in general;
     # 5. The hardcoded page defaults, if everything else fails.
     def attribute_named(name)
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
 
       # Check in page
-      if @name == :default
-        return @page.attributes[name] if @page.attributes.has_key?(name)
-      end
+      return @page.attributes[name] if @page.attributes.has_key?(name)
 
       # Check in page defaults' page rep
       page_default_reps = @page.site.page_defaults.attributes[:reps] || {}
@@ -148,10 +144,8 @@ module Nanoc
       return page_default_rep[name] if page_default_rep.has_key?(name)
 
       # Check in site defaults (global)
-      if @name == :default
-        page_defaults_attrs = @page.site.page_defaults.attributes
-        return page_defaults_attrs[name] if page_defaults_attrs.has_key?(name)
-      end
+      page_defaults_attrs = @page.site.page_defaults.attributes
+      return page_defaults_attrs[name] if page_defaults_attrs.has_key?(name)
 
       # Check in hardcoded defaults
       return Nanoc::Page::DEFAULTS[name]
