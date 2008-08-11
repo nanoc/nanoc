@@ -111,6 +111,38 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     # TODO implement
   end
 
+  # Test assets
+
+  def test_assets
+    # TODO implement
+  end
+
+  def test_save_asset
+    # TODO implement
+  end
+
+  def test_move_asset
+    # TODO implement
+  end
+
+  def test_delete_asset
+    # TODO implement
+  end
+
+  # Test asset defaults
+
+  def test_asset_defaults
+    with_temp_site('filesystem_combined') do |site|
+      assert_nothing_raised do
+        assert_equal([], site.asset_defaults.attributes[:filters])
+      end
+    end
+  end
+
+  def test_save_asset_defaults
+    # TODO implement
+  end
+
   # Test templates
 
   def test_templates

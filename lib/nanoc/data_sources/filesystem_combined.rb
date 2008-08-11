@@ -196,21 +196,43 @@ module Nanoc::DataSources
 
     ########## Assets ##########
 
-    # def assets # :nodoc:
-    #   # TODO implement (high)
-    # end
-    # 
-    # def save_asset(asset) # :nodoc:
-    #   # TODO implement (high)
-    # end
-    # 
-    # def move_asset(asset, new_path) # :nodoc:
-    #   # TODO implement
-    # end
-    # 
-    # def delete_asset(asset) # :nodoc:
-    #   # TODO implement
-    # end
+    def assets # :nodoc:
+      files('assets', true).map do |filename|
+        # Read and parse data
+        meta, content = *parse_file(filename, 'asset')
+
+        # Skip drafts
+        return nil if meta[:is_draft]
+
+        # Get attributes
+        attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(filename))
+
+        # Get actual path
+        if filename =~ /\/index\.[^\/]+$/
+          path = filename.sub(/^assets/, '').sub(/index\.[^\/]+$/, '') + '/'
+        else
+          path = filename.sub(/^assets/, '').sub(/\.[^\/]+$/, '') + '/'
+        end
+
+        # Get mtime
+        mtime = File.stat(filename).mtime
+
+        # Build asset
+        Nanoc::Asset.new(content, attributes, path, mtime)
+      end.compact
+    end
+
+    def save_asset(asset) # :nodoc:
+      # TODO implement
+    end
+
+    def move_asset(asset, new_path) # :nodoc:
+      # TODO implement
+    end
+
+    def delete_asset(asset) # :nodoc:
+      # TODO implement
+    end
 
     ########## Page Defaults ##########
 
