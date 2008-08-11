@@ -1,6 +1,6 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::Render provides functionality for rendering layouts as
+  # Nanoc::Helpers::Render provides functionality for rendering layouts as
   # partials.
   module Render
 
@@ -44,4 +44,4 @@ module Nanoc::Extensions
 end
 
 # Include by default
-include Nanoc::Extensions::Render
+include Nanoc::Helpers::Render

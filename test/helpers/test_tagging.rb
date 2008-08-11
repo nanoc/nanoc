@@ -1,11 +1,11 @@
 require 'helper'
 
-class Nanoc::Extensions::TaggingTest < Test::Unit::TestCase
+class Nanoc::Helpers::TaggingTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Extensions::Tagging
+  include Nanoc::Helpers::Tagging
 
   def test_tags_for_without_tags
     # Create site

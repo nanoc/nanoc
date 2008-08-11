@@ -1,6 +1,6 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::HTMLEscape contains functionality for HTML-escaping
+  # Nanoc::Helpers::HTMLEscape contains functionality for HTML-escaping
   # strings.
   module HTMLEscape
 
@@ -20,4 +20,4 @@ module Nanoc::Extensions
 end
 
 # Include by default
-include Nanoc::Extensions::HTMLEscape
+include Nanoc::Helpers::HTMLEscape

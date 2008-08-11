@@ -1,11 +1,11 @@
 require 'helper'
 
-class Nanoc::Extensions::XMLSitemapTest < Test::Unit::TestCase
+class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Extensions::XMLSitemap
+  include Nanoc::Helpers::XMLSitemap
 
   def test_xml_sitemap
     if_have 'builder' do

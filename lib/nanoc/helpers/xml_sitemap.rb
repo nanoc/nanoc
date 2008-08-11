@@ -1,6 +1,6 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::XMLSitemap contains functionality for building XML
+  # Nanoc::Helpers::XMLSitemap contains functionality for building XML
   # sitemaps that will be crawled by search engines. See the Sitemaps protocol
   # web site, http://www.sitemaps.org, for details.
   module XMLSitemap

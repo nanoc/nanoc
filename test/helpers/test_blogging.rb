@@ -1,11 +1,11 @@
 require 'helper'
 
-class Nanoc::Extensions::BloggingTest < Test::Unit::TestCase
+class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Extensions::Blogging
+  include Nanoc::Helpers::Blogging
 
   def test_sorted_articles
     # Create pages

@@ -1,6 +1,6 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::Capturing provides a content_for method, which allows
+  # Nanoc::Helpers::Capturing provides a content_for method, which allows
   # content to be "captured" on one page and reused elsewhere.
   #
   # = Example
