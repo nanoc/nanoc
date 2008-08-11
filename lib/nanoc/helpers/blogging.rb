@@ -1,18 +1,18 @@
 module Nanoc::Helpers
 
-  # Nanoc::Helpers::Blogging provides some functionality for building
-  # blogs, such as finding articles and constructing feeds.
+  # Nanoc::Helpers::Blogging provides some functionality for building blogs,
+  # such as finding articles and constructing feeds.
   #
-  # This helper has a few requirements. First, all blog articles should
-  # have the following attributes:
+  # This helper has a few requirements. First, all blog articles should have
+  # the following attributes:
   #
   # * 'kind', set to 'article'.
   #
   # * 'created_at', set to the creation timestamp.
   #
-  # Some functions in this blogging helper, such as the +atom_feed+
-  # function, require additional attributes to be set; these attributes are
-  # described in the documentation for these functions.
+  # Some functions in this blogging helper, such as the +atom_feed+ function,
+  # require additional attributes to be set; these attributes are described in
+  # the documentation for these functions.
   #
   # The two main functions are sorted_articles and atom_feed.
   module Blogging
