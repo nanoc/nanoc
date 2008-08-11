@@ -1,12 +1,12 @@
 require 'helper'
 
-class Nanoc::Filters::DiscountTest < Test::Unit::TestCase
+class Nanoc::Filters::RDiscountTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
-    if_have 'discount' do
+    if_have 'rdiscount' do
       assert_nothing_raised do
         # Create site
         site = mock
@@ -21,7 +21,7 @@ class Nanoc::Filters::DiscountTest < Test::Unit::TestCase
         page_rep.expects(:page).returns(page)
 
         # Get filter
-        filter = ::Nanoc::Filters::Discount.new(page_rep)
+        filter = ::Nanoc::Filters::RDiscount.new(page_rep)
 
         # Run filter
         result = filter.run("> Quote")

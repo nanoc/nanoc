@@ -7,7 +7,7 @@ nanoc Release Notes
 New:
 
 * New filters
-	* Discount, a fast implementation of Markdown
+	* RDiscount, a fast implementation of Markdown
 	* Maruku, an implementation of a Markdown superset
 	* Erubis, a fast alternative to ERB
 * A better commandline frontend, ...
@@ -46,7 +46,7 @@ Removed:
 
 * Several filters have been removed and replaced by newer filters:
 	* `eruby`: use `erb` or `erubis` instead
-	* `markdown`: use `bluecloth`, `discount` or `maruku` instead
+	* `markdown`: use `bluecloth`, `rdiscount` or `maruku` instead
 	* `textile`: use `redcloth` instead
 
 2.0.4
