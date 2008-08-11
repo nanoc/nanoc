@@ -69,10 +69,8 @@ spec = Gem::Specification.new do |s|
                               '--charset' << 'utf-8'                    <<
                               '--exclude' << 'lib/nanoc/cli/commands'   <<
                               '--exclude' << 'lib/nanoc/binary_filters' <<
-                              '--exclude' << 'lib/nanoc/data_sources'   <<
                               '--exclude' << 'lib/nanoc/extra/vcses'    <<
                               '--exclude' << 'lib/nanoc/filters'        <<
-                              '--exclude' << 'lib/nanoc/routers'        <<
                               '--exclude' << 'test'                     <<
                               '--line-numbers'
 
