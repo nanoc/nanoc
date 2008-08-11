@@ -1,11 +1,11 @@
 require 'helper'
 
-class Nanoc::Extensions::HTMLEscapeTest < Test::Unit::TestCase
+class Nanoc::Helpers::HTMLEscapeTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Extensions::HTMLEscape
+  include Nanoc::Helpers::HTMLEscape
 
   def test_html_escape
     assert_nothing_raised do

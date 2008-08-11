@@ -45,7 +45,7 @@ module Nanoc
   module DataSources # :nodoc:
   end
 
-  module Extensions # :nodoc:
+  module Helpers # :nodoc:
   end
 
   module Extra # :nodoc:
@@ -92,4 +92,4 @@ Nanoc.load('data_sources', '*.rb')
 Nanoc.load('filters', '*.rb')
 Nanoc.load('binary_filters', '*.rb')
 Nanoc.load('routers', '*.rb')
-Nanoc.load('extensions', '*.rb')
+Nanoc.load('helpers', '*.rb')

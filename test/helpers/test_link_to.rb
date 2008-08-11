@@ -1,11 +1,11 @@
 require 'helper'
 
-class Nanoc::Extensions::LinkToTest < Test::Unit::TestCase
+class Nanoc::Helpers::LinkToTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Extensions::LinkTo
+  include Nanoc::Helpers::LinkTo
 
   def test_link_to_with_path
     # Check

@@ -1,16 +1,16 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::Blogging provides some functionality for building
+  # Nanoc::Helpers::Blogging provides some functionality for building
   # blogs, such as finding articles and constructing feeds.
   #
-  # This extension has a few requirements. First, all blog articles should
+  # This helper has a few requirements. First, all blog articles should
   # have the following attributes:
   #
   # * 'kind', set to 'article'.
   #
   # * 'created_at', set to the creation timestamp.
   #
-  # Some functions in this blogging extension, such as the +atom_feed+
+  # Some functions in this blogging helper, such as the +atom_feed+
   # function, require additional attributes to be set; these attributes are
   # described in the documentation for these functions.
   #
@@ -81,8 +81,8 @@ module Nanoc::Extensions
     #
     # To construct a feed, create a blank page with no layout, only the 'erb'
     # (or 'erubis') filter, and an 'xml' extension. It may also be useful to
-    # set 'is_hidden' to true, so that extensions such as the sitemap
-    # extension will ignore the page. The content of the feed page should be:
+    # set 'is_hidden' to true, so that helpers such as the sitemap helper will
+    # ignore the page. The content of the feed page should be:
     #
     #   <%= atom_feed %>
     def atom_feed(params={})

@@ -1,9 +1,9 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::LinkTo contains functions for linking to pages.
+  # Nanoc::Helpers::LinkTo contains functions for linking to pages.
   module LinkTo
 
-    include Nanoc::Extensions::HTMLEscape
+    include Nanoc::Helpers::HTMLEscape
 
     # Creates a HTML link to the given path or page/asset representation, and
     # with the given text.

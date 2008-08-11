@@ -1,6 +1,6 @@
-module Nanoc::Extensions
+module Nanoc::Helpers
 
-  # Nanoc::Extensions::Tagging provides some support for managing tags added
+  # Nanoc::Helpers::Tagging provides some support for managing tags added
   # to pages. To add tags to pages, set the +tags+ page attribute to an array
   # of tags that should be applied to the page. For example:
   #
