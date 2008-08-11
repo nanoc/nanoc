@@ -8,7 +8,7 @@ module Nanoc::Filters
         "The 'eruby', markdown', 'smartypants' and 'textile' filters no " +
         "longer exist. Instead, use the following filters:\n" +
         "\n" +
-        "* for Markdown:      bluecloth, discount, redcloth\n" +
+        "* for Markdown:      bluecloth, rdiscount, redcloth\n" +
         "* for Textile:       redcloth\n" +
         "* for embedded Ruby: erb, erubis\n" +
         "* for Smartypants:   rubypants"
