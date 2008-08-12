@@ -195,7 +195,7 @@ module Nanoc::CLI
       when Nanoc::Errors::NoLongerSupportedError
         message = "No longer supported: #{error.message}"
       else
-        message = "Unknown error: #{error.message}"
+        message = "Error: #{error.message}"
       end
 
       # Print message
