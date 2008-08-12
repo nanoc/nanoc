@@ -236,7 +236,44 @@ module Nanoc::DataSources
     end
 
     def save_asset(asset) # :nodoc:
-      # TODO implement (high)
+      # Determine meta file path
+      last_component = asset.path.split('/')[-1]
+      meta_filename  = 'assets' + asset.path + last_component + '.yaml'
+
+      # Get existing path
+      existing_path = nil
+      existing_path = meta_filename_best  if File.file?(meta_filename_best)
+      existing_path = meta_filename_worst if File.file?(meta_filename_worst)
+
+      if meta_filename.nil?
+        # Get filenames
+        dir_path         = 'assets' + asset.path
+        content_filename = 'assets' + asset.path + last_component + '.dat'
+
+        # Notify
+        Nanoc::NotificationCenter.post(:file_created, meta_filename)
+        Nanoc::NotificationCenter.post(:file_created, content_filename)
+
+        # Create directories if necessary
+        FileUtils.mkdir_p(dir_path)
+      else
+        # Get filenames
+        content_filename = content_filename_for_dir(File.dirname(meta_filename))
+
+        # Notify
+        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
+        Nanoc::NotificationCenter.post(:file_updated, content_filename)
+      end
+
+      # Write files
+      File.open(meta_filename,    'w') { |io| io.write(asset.attributes.to_split_yaml) }
+      File.open(content_filename, 'w') { }
+
+      # Add to working copy if possible
+      if meta_filename.nil?
+        vcs.add(meta_filename)
+        vcs.add(content_filename)
+      end
     end
 
     def move_asset(asset, new_path) # :nodoc:
