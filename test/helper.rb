@@ -4,6 +4,7 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 # Load unit testing stuff
 require 'test/unit'
 require 'mocha'
+require 'stringio'
 
 # Load nanoc
 require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc.rb')
