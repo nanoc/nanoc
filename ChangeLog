@@ -4,43 +4,25 @@ nanoc Release Notes
 2.1
 ---
 
+This is only a short summary of all changes in 2.1. For details, see the nanoc
+web site at <http://nanoc.stoneship.org/> -- especially the blog and the
+updated manual will be useful.
+
 New:
 
-* New filters
-	* RDiscount, a fast implementation of Markdown
-	* Maruku, an implementation of a Markdown superset
-	* Erubis, a fast alternative to ERB
-* A better commandline frontend, ...
-	* ... with much better commandline help (try `nanoc help` or
-	  `nanoc help <command>`  for command-specific help)
-	* ... that is extensible with custom commands
-	* ... with a new `update` command, which upgrades the site's data
-	  to a new format so you can take advantage of new features
-	* ... with a new `switch` command, which allows you to move data from one
-	  data source to another
-	* .... with a `compile` command that takes an optional path argument, so
-	  you can compile a single page instead of the entire site (for example,
-	  `nanoc compile /about/`)
-	* ... with an improved autocompiler that uses Rack now, so you can use
-	  Mongrel instead of WEBrick now if you want (pass the `-H` option)
-* Much better source code documentation
-* Lots of new unit tests
-* A new filesystem data source named "filesystem_combined", which stores pages
-  and layouts in single files instead of directories
+* New filters: RDiscount, Maruku, Erubis
+* A better commandline frontend
+* A new filesystem data source named "filesystem_combined"
 * Routers, which decide where compiled pages should be written to
-* Already compiled pages will no longer be re-compiled unless they have been
-  updated in the mean time
-* Page and layout mtimes can now be retrieved through page.mtime or
-  layout.mtime
-* The entire compilation stack, which now includes rendered layouts as well,
-  is shown when an error occurs
+* Page/layout mtimes can now be retrieved through page.mtime/layout.mtime
 
 Changed:
 
-* Layout processors and filters have been merged, so you don't have to write
-  the same code twice
+* Already compiled pages will no longer be re-compiled unless outdated
+* Layout processors and filters have been merged
 * Layouts no longer rely on file extensions to determine the layout processor
-  used, and layouts are now stored in directories instead of simple files
+* Greatly improved source code documentation
+* Greatly improved unit test suite
 
 Removed:
 
