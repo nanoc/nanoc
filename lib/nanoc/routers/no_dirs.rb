@@ -8,7 +8,7 @@ module Nanoc::Routers
   # instead of /about/index.html.
   class NoDirs < Nanoc::Router
 
-    identifier :stoneship
+    identifier :no_dirs
 
     def path_for_page_rep(page_rep)
       # Get data we need
