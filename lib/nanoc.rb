@@ -63,7 +63,7 @@ module Nanoc
   #          directory this file (nanoc.rb) is in. Can contain wildcards.
   def self.load(*path)
     full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
-    Dir[File.join(full_path)].each { |f| require f }
+    Dir[File.join(full_path)].sort.each { |f| require f }
   end
 
 end
