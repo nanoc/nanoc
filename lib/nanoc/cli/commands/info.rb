@@ -89,10 +89,11 @@ module Nanoc::CLI
   private
 
     PLUGIN_CLASSES = {
-      Nanoc::Filter     => 'Filters',
-      Nanoc::DataSource => 'Data Sources',
-      Nanoc::Router     => 'Routers',
-      Nanoc::Extra::VCS => 'VCSes'
+      Nanoc::BinaryFilter => 'Binary Filters',
+      Nanoc::Filter       => 'Filters',
+      Nanoc::DataSource   => 'Data Sources',
+      Nanoc::Router       => 'Routers',
+      Nanoc::Extra::VCS   => 'VCSes'
     }
 
     def find_all_plugins
