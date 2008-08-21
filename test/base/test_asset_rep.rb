@@ -246,7 +246,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
       # Check digest
       assert_equal(
         digest,
-        asset_rep.instance_eval { digest(File.open('tmp/file.png')) }
+        asset_rep.instance_eval { digest('tmp/file.png') }
       )
     end
   end
