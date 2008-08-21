@@ -121,8 +121,6 @@ module Nanoc
         load_layouts
         load_templates
       end
-
-      # Set loaded
       @data_loaded = true
     end
 
@@ -136,14 +134,6 @@ module Nanoc
 
       # Get code
       @code = @data_source.code
-
-      # Fix code if outdated
-      if @code.is_a? String
-        warn_data_source('Code', 'code', false)
-        @code = Code.new(code)
-      end
-
-      # Set site
       @code.site = self
 
       # Execute code
@@ -151,40 +141,23 @@ module Nanoc
       # (a separate ruby process should probably be forked, and the code
       # should only be loaded in this forked process)
       @code.load
-
-      # Set loaded
       @code_loaded = true
     end
 
     # Loads this site's page defaults.
     def load_page_defaults
-      # Get page defaults
       @page_defaults = @data_source.page_defaults
-
-      # Fix page defaults if outdated
-      if @page_defaults.is_a? Hash
-        warn_data_source('PageDefaults', 'page_defaults', false)
-        @page_defaults = PageDefaults.new(@page_defaults)
-      end
-
-      # Set site
       @page_defaults.site = self
     end
 
     # Loads this site's pages, sets up page child-parent relationships and
     # builds each page's list of page representations.
     def load_pages
-      # Get pages
       @pages = @data_source.pages
-
-      # Fix pages if outdated
-      if @pages.any? { |p| p.is_a? Hash }
-        warn_data_source('Page', 'pages', true)
-        @pages.map! { |p| Page.new(p[:uncompiled_content], p, p[:path]) }
-      end
-
-      # Set site
       @pages.each { |p| p.site = self }
+
+      # Build page representations
+      @pages.each { |p| p.build_reps }
 
       # Setup child-parent links
       @pages.each do |page|
@@ -197,74 +170,34 @@ module Nanoc
         page.parent = parent
         parent.children << page
       end
-
-      # Build page representations
-      @pages.each { |p| p.build_reps }
     end
 
     # Loads this site's asset defaults.
     def load_asset_defaults
-      # Get page defaults
       @asset_defaults = @data_source.asset_defaults
-
-      # Set site
-      @asset_defaults.site = self
-    rescue NotImplementedError
-      @asset_defaults = AssetDefaults.new({})
       @asset_defaults.site = self
     end
 
     # Loads this site's assets and builds each asset's list of asset
     # representations.
     def load_assets
-      # Get assets
       @assets = @data_source.assets
-
-      # Set site
       @assets.each { |a| a.site = self }
 
       # Build asset representations
       @assets.each { |p| p.build_reps }
-    rescue NotImplementedError
-      @assets = []
     end
 
     # Loads this site's layouts.
     def load_layouts
-      # Get layouts
       @layouts = @data_source.layouts
-
-      # Fix layouts if outdated
-      if @layouts.any? { |l| l.is_a? Hash }
-        warn_data_source('Layout', 'layouts', true)
-        @layouts.map! { |l| Layout.new(l[:content], l, l[:path] || l[:name]) }
-      end
-
-      # Set site
       @layouts.each { |l| l.site = self }
     end
 
     # Loads this site's templates.
     def load_templates
-      # Get templates
       @templates = @data_source.templates
-
-      # Fix templates if outdated
-      if @templates.any? { |t| t.is_a? Hash }
-        warn_data_source('Template', 'templates', true)
-        @templates.map! { |t| Template.new(t[:content], t[:meta].is_a?(String) ? YAML.load(t[:meta]) : t[:meta], t[:name]) }
-      end
-
-      # Set site
       @templates.each { |t| t.site = self }
-    end
-
-    # Raises a warning about an outdated data source method.
-    def warn_data_source(class_name, method_name, is_array)
-      warn(
-        "In nanoc 2.1, DataSource##{method_name} should return #{is_array ? 'an array of' : 'a' } Nanoc::#{class_name} object#{is_array ? 's' : ''}. Future versions will not support these outdated data sources.",
-        'DEPRECATION WARNING'
-      )
     end
 
   end
