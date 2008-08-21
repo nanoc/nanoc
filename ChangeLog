@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+2.1.1
+-----
+
+* Fixed issue which would cause files not to be required in the right order
+
 2.1
 ---
 
