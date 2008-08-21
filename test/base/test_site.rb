@@ -13,54 +13,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
   end
 
-  class TestOldschoolDataSource < Nanoc::DataSource
-
-    identifier :test_oldschool_data_source
-
-    def pages
-      [
-        { :uncompiled_content => 'Hi!',          :path => '/'       },
-        { :uncompiled_content => 'Hello there.', :path => '/about/' }
-      ]
-    end
-
-    def page_defaults
-      { :layout => 'quux' }
-    end
-
-    def layouts
-      [
-        {
-          :path       => '/quux/',
-          :content    => "<html>\n" +
-                         "  <head>\n" +
-                         "    <title><%= @page.title %></title>\n" +
-                         "  </head>\n" +
-                         "  <body>\n" +
-                         "<%= @page.content %>\n" +
-                         "  </body>\n" +
-                         "</html>",
-          :meta       => { :filter => 'erb' }
-        }
-      ]
-    end
-
-    def templates
-      [
-        {
-          :name     => 'default',
-          :content  => 'Hi, I am a new page. Please edit me!',
-          :meta     => { :title => 'A New Page' }
-        }
-      ]
-    end
-
-    def code
-      "def foo ; 'bar' ; end"
-    end
-
-  end
-
   class TestNewschoolDataSource < Nanoc::DataSource
 
     identifier :test_newschool_data_source
@@ -74,6 +26,16 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
     def page_defaults
       Nanoc::PageDefaults.new({ :foo => 'bar' })
+    end
+
+    def assets
+      [
+        Nanoc::Asset.new(File.open('/dev/null'), {}, '/something/')
+      ]
+    end
+
+    def asset_defaults
+      Nanoc::AssetDefaults.new({ :foo => 'baz' })
     end
 
     def layouts
@@ -194,27 +156,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
   end
 
   def test_load_data
-    # Create site with oldschool data source
-    site = nil
-    assert_nothing_raised do
-      site = Nanoc::Site.new(:data_source => 'test_oldschool_data_source')
-      site.load_data
-    end
-
-    # Check classes
-    assert(site.pages.all? { |p| p.is_a?(Nanoc::Page) })
-    assert(site.page_defaults.is_a?(Nanoc::PageDefaults))
-    assert(site.layouts.all? { |l| l.is_a?(Nanoc::Layout) })
-    assert(site.templates.all? { |t| t.is_a?(Nanoc::Template) })
-    assert(site.code.is_a?(Nanoc::Code))
-
-    # Check whether site is set
-    assert(site.pages.all? { |p| p.site == site })
-    assert(site.page_defaults.site == site)
-    assert(site.layouts.all? { |l| l.site == site })
-    assert(site.templates.all? { |t| t.site == site })
-    assert(site.code.site == site)
-
     # Create site with newschool data source
     site = nil
     assert_nothing_raised do
