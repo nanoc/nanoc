@@ -1,7 +1,7 @@
 module Nanoc
 
   # The current nanoc version.
-  VERSION = '2.1'
+  VERSION = '2.1.1'
 
   # Generic error. Superclass for all nanoc-specific errors.
   class Error < RuntimeError ; end
@@ -63,7 +63,7 @@ module Nanoc
   #          directory this file (nanoc.rb) is in. Can contain wildcards.
   def self.load(*path)
     full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
-    Dir[File.join(full_path)].each { |f| require f }
+    Dir[File.join(full_path)].sort.each { |f| require f }
   end
 
 end

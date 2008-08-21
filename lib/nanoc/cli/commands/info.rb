@@ -52,7 +52,9 @@ module Nanoc::CLI
       # Find longest name
       max_length = plugins.values.map { |k| k.values }.flatten.map { |k| k.identifiers.join(', ').length }.max + 2
 
-      plugins.each_pair do |superclass, structured_plugins|
+      PLUGIN_CLASS_ORDER.each do |superclass|
+        structured_plugins = plugins[superclass]
+
         # Print kind
         kind = name_for_plugin_class(superclass)
         puts "#{kind}:"
@@ -88,11 +90,20 @@ module Nanoc::CLI
 
   private
 
+    PLUGIN_CLASS_ORDER = [
+      Nanoc::Filter,
+      Nanoc::BinaryFilter,
+      Nanoc::Router,
+      Nanoc::Extra::VCS,
+      Nanoc::DataSource
+    ]
+
     PLUGIN_CLASSES = {
-      Nanoc::Filter     => 'Filters',
-      Nanoc::DataSource => 'Data Sources',
-      Nanoc::Router     => 'Routers',
-      Nanoc::Extra::VCS => 'VCSes'
+      Nanoc::BinaryFilter => 'Binary Filters',
+      Nanoc::Filter       => 'Filters',
+      Nanoc::DataSource   => 'Data Sources',
+      Nanoc::Router       => 'Routers',
+      Nanoc::Extra::VCS   => 'VCSes'
     }
 
     def find_all_plugins
