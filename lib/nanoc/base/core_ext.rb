@@ -1,1 +1,2 @@
-Dir[File.dirname(__FILE__) + '/core_ext/*.rb'].sort.each { |f| require f }
+require 'nanoc/base/core_ext/hash'
+require 'nanoc/base/core_ext/string'

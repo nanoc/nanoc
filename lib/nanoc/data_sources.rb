@@ -1,4 +1,5 @@
 module Nanoc::DataSources # :nodoc:
 end
 
-Dir[File.dirname(__FILE__) + '/data_sources/*.rb'].sort.each { |f| require f }
+require 'nanoc/data_sources/filesystem.rb'
+require 'nanoc/data_sources/filesystem_combined.rb'
