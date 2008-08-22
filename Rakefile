@@ -7,7 +7,10 @@ require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/testtask'
 
-require File.dirname(__FILE__) + '/lib/nanoc.rb'
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
+
+require 'nanoc'
+require 'nanoc/cli'
 
 ##### General details
 
