@@ -848,43 +848,6 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     Nanoc::NotificationCenter.remove(:filtering_ended, :test)
   end
 
-  def test_do_filter_with_outdated_filters_attribute
-    # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.expects(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :filters => [ 'asdf' ] }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Filter
-    assert_raise Nanoc::Errors::NoLongerSupportedError do
-      page_rep.instance_eval { do_filter(:pre) }
-    end
-
-    # Check notifications
-    assert_equal(0, @filtering_started_count)
-    assert_equal(0, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
   def test_do_layout
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')

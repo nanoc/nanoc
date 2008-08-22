@@ -257,7 +257,6 @@ module Nanoc
       content = (stage == :pre ? @page.content : @content[:post])
 
       # Get filters
-      check_for_outdated_filters
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
       # Run each filter
@@ -301,16 +300,6 @@ module Nanoc
       # TODO add ruby 1.9 support
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
-    end
-
-    # Raises an error when the outdated 'filters' attribute is used.
-    def check_for_outdated_filters
-      unless attribute_named(:filters).nil?
-        raise Nanoc::Errors::NoLongerSupportedError.new(
-          'The `filters` property is no longer supported; please use ' +
-          '`filters_pre` instead.'
-        )
-      end
     end
 
   end
