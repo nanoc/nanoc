@@ -2,7 +2,7 @@ module Nanoc::CLI # :nodoc:
 end
 
 # Load extensions
-require 'nanoc/cli/ext'
+require 'nanoc/cli/core_ext'
 require 'nanoc/cli/option_parser'
 
 # Load logger
