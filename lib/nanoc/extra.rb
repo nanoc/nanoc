@@ -1,3 +1,6 @@
+module Nanoc::Extra # :nodoc:
+end
+
 require 'nanoc/extra/core_ext'
 require 'nanoc/extra/auto_compiler'
 require 'nanoc/extra/context'

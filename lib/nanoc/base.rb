@@ -1,3 +1,4 @@
+require File.dirname(__FILE__) + '/base/error'
 require File.dirname(__FILE__) + '/base/core_ext'
 require File.dirname(__FILE__) + '/base/enhancements'
 require File.dirname(__FILE__) + '/base/defaults'
