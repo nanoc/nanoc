@@ -1,4 +1,10 @@
 module Nanoc::Helpers # :nodoc:
 end
 
-Dir[File.dirname(__FILE__) + '/helpers/*.rb'].sort.each { |f| require f }
+require 'nanoc/helpers/blogging'
+require 'nanoc/helpers/capturing'
+require 'nanoc/helpers/html_escape'
+require 'nanoc/helpers/link_to'
+require 'nanoc/helpers/render'
+require 'nanoc/helpers/tagging'
+require 'nanoc/helpers/xml_sitemap'

@@ -1,1 +1,5 @@
-Dir[File.dirname(__FILE__) + '/vcses/*.rb'].sort.each { |f| require f }
+require 'nanoc/extra/vcses/bazaar'
+require 'nanoc/extra/vcses/dummy'
+require 'nanoc/extra/vcses/git'
+require 'nanoc/extra/vcses/mercurial'
+require 'nanoc/extra/vcses/subversion'

@@ -1,4 +1,15 @@
 module Nanoc::Filters # :nodoc:
 end
 
-Dir[File.dirname(__FILE__) + '/filters/*.rb'].sort.each { |f| require f }
+require 'nanoc/filters/bluecloth'
+require 'nanoc/filters/erb'
+require 'nanoc/filters/erubis'
+require 'nanoc/filters/haml'
+require 'nanoc/filters/markaby'
+require 'nanoc/filters/maruku'
+require 'nanoc/filters/old'
+require 'nanoc/filters/rdiscount'
+require 'nanoc/filters/rdoc'
+require 'nanoc/filters/redcloth'
+require 'nanoc/filters/rubypants'
+require 'nanoc/filters/sass'

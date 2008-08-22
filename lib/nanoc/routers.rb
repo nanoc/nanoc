@@ -1,4 +1,6 @@
 module Nanoc::Routers # :nodoc:
 end
 
-Dir[File.dirname(__FILE__) + '/routers/*.rb'].sort.each { |f| require f }
+require 'nanoc/routers/default'
+require 'nanoc/routers/no_dirs'
+require 'nanoc/routers/versioned'
