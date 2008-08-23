@@ -4,7 +4,10 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
 require 'nanoc'
 require 'nanoc/cli'
 
-MESSAGE = <<EOS
+SUMMARY = 'a tool that runs on your local computer  and compiles Markdown, ' +
+          'Textile, Haml, ... documents into static web pages'
+
+POST_INSTALL_MESSAGE = <<EOS
 Thanks for installing nanoc 2.1! Here are some resources to help you get started:
 
 * The tutorial at <http://nanoc.stoneship.org/help/tutorial/>
@@ -20,18 +23,15 @@ GemSpec = Gem::Specification.new do |s|
   s.name                  = 'nanoc'
   s.version               = Nanoc::VERSION
   s.platform              = Gem::Platform::RUBY
-  s.summary               = 'a tool that runs on your local computer ' +
-                            'and compiles Markdown, Textile, Haml, ... ' +
-                            'documents into static web pages'
+  s.summary               = SUMMARY
   s.description           = s.summary
   s.homepage              = 'http://nanoc.stoneship.org/'
+  s.rubyforge_project     = 'nanoc'
 
   s.author                = 'Denis Defreyne'
   s.email                 = 'denis.defreyne@stoneship.org'
 
-  s.post_install_message  = '-' * 78 + "\n" + MESSAGE + '-' * 78
-
-  s.rubyforge_project     = 'nanoc'
+  s.post_install_message  = '-' * 78 + "\n" + POST_INSTALL_MESSAGE + '-' * 78
 
   s.required_ruby_version = '>= 1.8.5'
 
