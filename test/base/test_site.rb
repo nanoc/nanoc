@@ -109,42 +109,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
   end
 
-  def test_initialize
-    in_dir [ 'tmp' ] do
-      # Create temporary site
-      create_site('testing')
-
-      in_dir [ 'testing' ] do
-        # Test everything okay
-        assert_nothing_raised do
-          Nanoc::Site.new(
-            :output_dir   => 'output',
-            :data_source  => 'filesystem',
-            :router       => 'default'
-          )
-        end
-
-        # Test unknown data source
-        assert_raise(Nanoc::Errors::UnknownDataSourceError) do
-          Nanoc::Site.new(
-            :output_dir   => 'output',
-            :data_source  => 'kasdflksafjlksdjaklfkjdsjakf',
-            :router       => 'default'
-          )
-        end
-
-        # Test unknown router
-        assert_raise(Nanoc::Errors::UnknownRouterError) do
-          Nanoc::Site.new(
-            :output_dir   => 'output',
-            :data_source  => 'filesystem',
-            :router       => 'kasdflksafjlksdjaklfkjdsjakf'
-          )
-        end
-      end
-    end
-  end
-
   def test_initialize_custom_router
     assert_nothing_raised do
       Nanoc::Site.new(
@@ -176,7 +140,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     assert(site.layouts.all? { |l| l.site == site })
     assert(site.templates.all? { |t| t.site == site })
     assert(site.code.site == site)
-
   end
 
   def test_config
