@@ -7,4 +7,5 @@ CLEAN.include([
   File.join('test', 'fixtures', '*', 'output', '*'),
   File.join('test', 'fixtures', '*', 'tmp')
 ])
+
 CLOBBER.include([ 'pkg' ])
