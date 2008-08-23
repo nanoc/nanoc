@@ -1,29 +1,10 @@
-##### Requirements
-
 require 'rake'
 
-require 'rake/clean'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'rake/testtask'
-
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
-
 require 'nanoc'
 require 'nanoc/cli'
 
-##### General details
-
-NAME      = 'nanoc'
-VERS      = Nanoc::VERSION
-SUMMARY   = 'a tool that runs on your local computer and compiles ' +
-            'Markdown, Textile, Haml, ... documents into static web pages'
-HOMEPAGE  = 'http://nanoc.stoneship.org/'
-
-AUTHOR    = 'Denis Defreyne'
-EMAIL     = 'denis.defreyne@stoneship.org'
-
-MESSAGE   = <<EOS
+MESSAGE = <<EOS
 Thanks for installing nanoc 2.1! Here are some resources to help you get started:
 
 * The tutorial at <http://nanoc.stoneship.org/help/tutorial/>
@@ -35,29 +16,18 @@ Because nanoc 2.1 has a lot of new features, be sure to check out the nanoc blog
 Enjoy!
 EOS
 
-##### Cleaning
-
-CLEAN.include([
-  'coverage',
-  'rdoc',
-  'tmp',
-  File.join('test', 'fixtures', '*', 'output', '*'),
-  File.join('test', 'fixtures', '*', 'tmp')
-])
-CLOBBER.include([ 'pkg' ])
-
-##### Packaging
-
-spec = Gem::Specification.new do |s|
-  s.name                  = NAME
-  s.version               = VERS
+GemSpec = Gem::Specification.new do |s|
+  s.name                  = 'nanoc'
+  s.version               = Nanoc::VERSION
   s.platform              = Gem::Platform::RUBY
-  s.summary               = SUMMARY
+  s.summary               = 'a tool that runs on your local computer ' +
+                            'and compiles Markdown, Textile, Haml, ... ' +
+                            'documents into static web pages'
   s.description           = s.summary
-  s.homepage              = HOMEPAGE
+  s.homepage              = 'http://nanoc.stoneship.org/'
 
-  s.author                = AUTHOR
-  s.email                 = EMAIL
+  s.author                = 'Denis Defreyne'
+  s.email                 = 'denis.defreyne@stoneship.org'
 
   s.post_install_message  = '-' * 78 + "\n" + MESSAGE + '-' * 78
 
@@ -83,36 +53,6 @@ spec = Gem::Specification.new do |s|
   s.bindir                = 'bin'
 end
 
-Rake::GemPackageTask.new(spec) { |task| }
-
-task :install_gem do
-  sh %{rake package}
-  sh %{gem install pkg/#{NAME}-#{VERS}}
-end
-
-task :uninstall_gem do
-  sh %{gem uninstall #{NAME}}
-end
-
-### Documentation
-
-Rake::RDocTask.new do |task|
-  task.rdoc_files.include(spec.extra_rdoc_files + [ 'lib' ])
-  task.rdoc_dir = 'rdoc'
-  task.options = spec.rdoc_options
-end
-
-### Testing
-
-task :rcov do
-  sh %{rcov test/**/test_*.rb -I test -x /Library}
-end
-
-Rake::TestTask.new(:test) do |task|
-  ENV['QUIET'] = 'true'
-
-  task.libs       = [ 'lib', 'test' ]
-  task.test_files = Dir[ 'test/**/test_*.rb' ]
-end
+Dir.glob('tasks/**/*.rake').each { |r| Rake.application.add_import r }
 
 task :default => [ :test ]
