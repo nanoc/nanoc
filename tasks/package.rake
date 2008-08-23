@@ -1,12 +1,15 @@
 require 'rake/gempackagetask'
 
-Rake::GemPackageTask.new(GemSpec) { |task| }
+namespace :gem do
 
-task :install_gem do
-  sh %{rake package}
-  sh %{gem install pkg/#{NAME}-#{VERS}}
-end
+  Rake::GemPackageTask.new(GemSpec) { |task| }
 
-task :uninstall_gem do
-  sh %{gem uninstall #{NAME}}
+  task :install => [ :gem ] do
+    sh %{gem install pkg/#{GemSpec.name}-#{Nanoc::VERSION}}
+  end
+
+  task :uninstall do
+    sh %{gem uninstall #{GemSpec.name}}
+  end
+
 end
