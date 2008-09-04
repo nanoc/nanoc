@@ -178,16 +178,13 @@ END
         page_rep  = page_reps.find { |p| p.web_path == path.cleaned_path }
         file_path = @site.config[:output_dir] + path
 
-        if page_rep.nil?
-          # Serve file
-          if File.file?(file_path)
-            serve_file(file_path)
-          else
-            serve_404(path)
-          end
-        else
-          # Serve page rep
+        # Serve what's needed
+        if page_rep
           serve_page_rep(page_rep)
+        elsif File.file?(file_path)
+          serve_file(file_path)
+        else
+          serve_404(path)
         end
       end
     end
