@@ -6,7 +6,11 @@ module Nanoc::Filters
     def run(content)
       require 'sass'
 
-      ::Sass::Engine.new(content).render
+      # Get options
+      options = @page.attribute_named(:sass_options) || {}
+
+      # Get result
+      ::Sass::Engine.new(content, options).render
     end
 
   end
