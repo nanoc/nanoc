@@ -15,13 +15,13 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
         page = mock
         page_proxy = Nanoc::Proxy.new(page)
         page.expects(:site).returns(site)
-        page.expects(:attribute_named).with(:sass_options).returns({})
 
         # Create page rep
         page_rep = mock
         page_rep_proxy = Nanoc::Proxy.new(page_rep)
         page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
         page_rep.expects(:page).returns(page)
+        page_rep.expects(:attribute_named).with(:sass_options).returns({})
 
         # Get filter
         filter = ::Nanoc::Filters::Sass.new(page_rep)
