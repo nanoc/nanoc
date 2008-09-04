@@ -7,7 +7,7 @@ module Nanoc::Filters
       require 'sass'
 
       # Get options
-      options = @page.attribute_named(:sass_options) || {}
+      options = @page_rep.attribute_named(:sass_options) || {}
 
       # Get result
       ::Sass::Engine.new(content, options).render
