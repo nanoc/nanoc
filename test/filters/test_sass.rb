@@ -15,6 +15,7 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
         page = mock
         page_proxy = Nanoc::Proxy.new(page)
         page.expects(:site).returns(site)
+        page.expects(:attribute_named).with(:sass_options).returns({})
 
         # Create page rep
         page_rep = mock
