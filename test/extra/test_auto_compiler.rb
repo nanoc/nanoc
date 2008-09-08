@@ -47,14 +47,40 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
+    site.expects(:assets).returns([])
     site.expects(:config).returns({ :output_dir => 'output/' })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_page_rep).with(page_reps[1])
+    autocompiler.expects(:serve_rep).with(page_reps[1])
 
     # Run
     autocompiler.instance_eval { handle_request('/foo/2/') }
+  end
+
+  def test_handle_request_with_asset_rep
+    # Create assets and reps
+    asset_reps = [ mock, mock, mock ]
+    asset_reps[0].expects(:web_path).at_most_once.returns('/assets/foo/1/')
+    asset_reps[1].expects(:web_path).returns('/assets/foo/2/')
+    asset_reps[2].expects(:web_path).at_most_once.returns('/assets/bar/')
+    assets = [ mock, mock ]
+    assets[0].expects(:reps).returns([ asset_reps[0], asset_reps[1] ])
+    assets[1].expects(:reps).returns([ asset_reps[2] ])
+
+    # Create site
+    site = mock
+    site.expects(:load_data).with(true)
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns(assets)
+    site.expects(:config).returns({ :output_dir => 'output/' })
+
+    # Create autocompiler
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler.expects(:serve_rep).with(asset_reps[1])
+
+    # Run
+    autocompiler.instance_eval { handle_request('/assets/foo/2/') }
   end
 
   def test_handle_request_with_broken_url
@@ -71,11 +97,12 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
+    site.expects(:assets).returns([])
     site.expects(:config).returns({ :output_dir => 'output/' })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_page_rep).with(page_reps[1])
+    autocompiler.expects(:serve_rep).with(page_reps[1])
 
     # Run
     autocompiler.instance_eval { handle_request('/foo/2') }
@@ -95,6 +122,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
+    site.expects(:assets).returns([])
     site.expects(:config).returns({ :output_dir => 'tmp/' })
 
     # Create file
@@ -122,6 +150,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
+    site.expects(:assets).returns([])
     site.expects(:config).returns({ :output_dir => 'tmp/' })
 
     # Create autocompiler
@@ -204,7 +233,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     assert_match(/Unknown error: boink/,  response[2][0])
   end
 
-  def test_serve_page_rep_with_working_page
+  def test_serve_rep_with_working_page
     if_have('mime/types') do
       # Create page and page rep
       page = mock
@@ -228,7 +257,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       begin
         assert_nothing_raised do
           # Serve
-          response = autocompiler.instance_eval { serve_page_rep(page_rep) }
+          response = autocompiler.instance_eval { serve_rep(page_rep) }
 
           # Check response
           assert_equal(200,                     response[0])
@@ -242,7 +271,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_serve_page_rep_with_broken_page
+  def test_serve_rep_with_broken_page
     if_have('mime/types') do
       # Create page and page rep
       page = mock
@@ -263,7 +292,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
 
       assert_nothing_raised do
         # Serve
-        response = autocompiler.instance_eval { serve_page_rep(page_rep) }
+        response = autocompiler.instance_eval { serve_rep(page_rep) }
 
         # Check response
         assert_equal(500,                 response[0])
