@@ -91,9 +91,6 @@ module Nanoc::Helpers
       # Extract parameters
       limit = params[:limit] || 5
 
-      # Get most recent article
-      last_article = sorted_articles.first
-
       # Create builder
       buffer = ''
       xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
@@ -106,7 +103,8 @@ module Nanoc::Helpers
         xml.title   @page.title
 
         # Add date
-        xml.updated last_article.created_at.to_iso8601_time
+        last_article = sorted_articles.first
+        xml.updated last_article.mtime.to_iso8601_time unless last_article.nil?
 
         # Add links
         xml.link(:rel => 'alternate', :href => @page.base_url)
