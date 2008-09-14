@@ -5,8 +5,6 @@ module Nanoc
   # calling destructive methods.
   class Proxy
 
-    instance_methods.each { |m| undef_method m unless m =~ /^__/ }
-
     # Creates a proxy for the given object.
     def initialize(obj)
       @obj = obj
