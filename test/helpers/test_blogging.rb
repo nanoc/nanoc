@@ -45,7 +45,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       # Create page 1
       @pages[1].expects(:kind).times(2).returns('article')
       @pages[1].expects(:created_at).at_least_once.returns(Time.now - 1000)
-      @pages[1].expects(:mtime).returns(Time.now - 500)
+      @pages[1].expects(:mtime).at_least_once.returns(Time.now - 500)
       @pages[1].expects(:title).returns('Page One')
       @pages[1].expects(:custom_path_in_feed).returns(nil)
       @pages[1].expects(:path).at_least_once.returns('/page1/')
@@ -55,7 +55,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       # Create page 2
       @pages[2].expects(:kind).times(2).returns('article')
       @pages[2].expects(:created_at).at_least_once.returns(Time.now - 750)
-      @pages[2].expects(:mtime).returns(Time.now - 250)
+      @pages[2].expects(:mtime).at_least_once.returns(Time.now - 250)
       @pages[2].expects(:title).returns('Page Two')
       @pages[2].expects(:custom_path_in_feed).returns('/page2custom/')
       @pages[2].expects(:path).at_least_once.returns('/page2/')
