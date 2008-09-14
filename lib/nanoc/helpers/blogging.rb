@@ -126,7 +126,7 @@ module Nanoc::Helpers
             xml.title     a.title, :type => 'html'
 
             # Add dates
-            xml.published a.created_at.to_iso8601_time
+            xml.published a.created_at.to_iso8601_time unless a.created_at.nil?
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
