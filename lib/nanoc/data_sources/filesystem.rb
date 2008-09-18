@@ -614,7 +614,7 @@ module Nanoc::DataSources
       # Find all files
       filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
       filename_glob_2 = dir.sub(/([^\/]+)$/, '\1/index.*')
-      filenames = Dir[filename_glob_1] + Dir[filename_glob_2]
+      filenames = (Dir[filename_glob_1] + Dir[filename_glob_2]).uniq
 
       # Reject meta files
       filenames.reject! { |f| f =~ /\.yaml$/ }
