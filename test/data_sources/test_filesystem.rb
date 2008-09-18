@@ -488,6 +488,23 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # TODO implement
   end
 
+  def test_content_filename_for_dir_index_error
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil)
+
+    # Build directory
+    FileUtils.mkdir_p('tmp/foo/index')
+    File.open('tmp/foo/index/index.html', 'w') { |io| io.write('test') }
+
+    # Check
+    assert_nothing_raised do
+      assert_equal(
+        'tmp/foo/index/index.html',
+        data_source.instance_eval { content_filename_for_dir('tmp/foo/index') }
+      )
+    end
+  end
+
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_file_object' do |site|
       assert_nothing_raised() { site.compiler.run }
