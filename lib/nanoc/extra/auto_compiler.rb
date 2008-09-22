@@ -183,9 +183,17 @@ END
         rep = reps.find { |r| r.web_path == rep_path }
 
         if rep.nil?
+          # Get list of possible filenames
+          if file_path =~ /\/$/
+            all_file_paths = @site.config[:index_filenames].map { |f| file_path + f }
+          else
+            all_file_paths = [ file_path ]
+          end
+          good_file_path = all_file_paths.find { |f| File.file?(f) }
+
           # Serve file
-          if File.file?(file_path)
-            serve_file(file_path)
+          if good_file_path
+            serve_file(good_file_path)
           else
             serve_404(path)
           end

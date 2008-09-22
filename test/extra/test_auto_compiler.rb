@@ -48,7 +48,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns([])
-    site.expects(:config).returns({ :output_dir => 'output/' })
+    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
@@ -73,7 +73,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns([])
     site.expects(:assets).returns(assets)
-    site.expects(:config).returns({ :output_dir => 'output/' })
+    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
@@ -98,7 +98,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns([])
-    site.expects(:config).returns({ :output_dir => 'output/' })
+    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
@@ -123,7 +123,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns([])
-    site.expects(:config).returns({ :output_dir => 'tmp/' })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
 
     # Create file
     File.open('tmp/somefile.txt', 'w') { |io| }
@@ -136,22 +136,93 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     autocompiler.instance_eval { handle_request('somefile.txt') }
   end
 
-  def test_handle_request_with_404
-    # Create pages and reps
-    page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).returns('/bar/')
-    pages = [ mock, mock ]
-    pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
-    pages[1].expects(:reps).returns([ page_reps[2] ])
-
+  def test_handle_request_with_dir_with_slash_with_index_file
     # Create site
     site = mock
     site.expects(:load_data).with(true)
-    site.expects(:pages).returns(pages)
+    site.expects(:pages).returns([])
     site.expects(:assets).returns([])
-    site.expects(:config).returns({ :output_dir => 'tmp/' })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+
+    # Create file
+    FileUtils.mkdir_p('tmp/foo/bar')
+    File.open('tmp/foo/bar/index.html', 'w') { |io| }
+
+    # Create autocompiler
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler.expects(:serve_file).with('tmp/foo/bar/index.html')
+
+    # Run
+    autocompiler.instance_eval { handle_request('foo/bar/') }
+  end
+
+  def test_handle_request_with_dir_with_slash_without_index_file
+    # Create site
+    site = mock
+    site.expects(:load_data).with(true)
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+
+    # Create file
+    FileUtils.mkdir_p('tmp/foo/bar')
+    File.open('tmp/foo/bar/someotherfile.txt', 'w') { |io| }
+
+    # Create autocompiler
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler.expects(:serve_404).with('foo/bar/')
+
+    # Run
+    autocompiler.instance_eval { handle_request('foo/bar/') }
+  end
+
+  def test_handle_request_with_dir_without_slash_with_index_file
+    # Create site
+    site = mock
+    site.expects(:load_data).with(true)
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+
+    # Create file
+    FileUtils.mkdir_p('tmp/foo/bar')
+    File.open('tmp/foo/bar/index.html', 'w') { |io| }
+
+    # Create autocompiler
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler.expects(:serve_404).with('foo/bar')
+
+    # Run
+    autocompiler.instance_eval { handle_request('foo/bar') }
+  end
+
+  def test_handle_request_with_dir_without_slash_without_index_file
+    # Create site
+    site = mock
+    site.expects(:load_data).with(true)
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+
+    # Create file
+    FileUtils.mkdir_p('tmp/foo/bar')
+    File.open('tmp/foo/bar/someotherfile.txt', 'w') { |io| }
+
+    # Create autocompiler
+    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler.expects(:serve_404).with('foo/bar')
+
+    # Run
+    autocompiler.instance_eval { handle_request('foo/bar') }
+  end
+
+  def test_handle_request_with_404
+    # Create site
+    site = mock
+    site.expects(:load_data).with(true)
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
