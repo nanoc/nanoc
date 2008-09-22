@@ -203,13 +203,14 @@ module Nanoc
   private
 
     # Computes and returns the MD5 digest for the given file.
-    def digest(file)
+    def digest(filename)
       # Create hash
       incr_digest = Digest::MD5.new()
 
       # Collect data
-      file.rewind
-      incr_digest << file.read(1000) until file.eof?
+      File.open(filename, 'r') do |file|
+        incr_digest << file.read(1000) until file.eof?
+      end
 
       # Calculate hex hash
       incr_digest.hexdigest
@@ -218,7 +219,7 @@ module Nanoc
     # Compiles the asset rep, treating its contents as binary data.
     def compile_binary
       # Calculate digest before
-      digest_before = File.file?(disk_path) ? digest(File.open(disk_path, 'r')) : nil
+      digest_before = File.file?(disk_path) ? digest(disk_path) : nil
 
       # Run filters
       current_file = @asset.file
@@ -242,7 +243,7 @@ module Nanoc
       FileUtils.cp(current_file.path, disk_path)
 
       # Calculate digest after
-      digest_after = digest(current_file)
+      digest_after = digest(disk_path)
       @modified = (digest_after != digest_before)
     end
 
