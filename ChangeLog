@@ -1,6 +1,13 @@
 nanoc Release Notes
 ===================
 
+2.1.2
+-----
+
+* Autocompiler now compiles assets as well
+* Sass filter now takes options (just like the Haml filter)
+* Haml/Sass options are now taken from the page *rep* instead of the page
+
 2.2
 ---
 

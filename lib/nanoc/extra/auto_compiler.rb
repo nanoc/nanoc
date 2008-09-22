@@ -173,18 +173,33 @@ END
         # Reload site data
         @site.load_data(true)
 
-        # Get page or file
-        page_reps = @site.pages.map { |p| p.reps }.flatten
-        page_rep  = page_reps.find { |p| p.web_path == path.cleaned_path }
+        # Get paths
+        rep_path  = path.cleaned_path
         file_path = @site.config[:output_dir] + path
 
-        # Serve what's needed
-        if page_rep
-          serve_page_rep(page_rep)
-        elsif File.file?(file_path)
-          serve_file(file_path)
+        # Find rep
+        objs = @site.pages + @site.assets
+        reps = objs.map { |o| o.reps }.flatten
+        rep = reps.find { |r| r.web_path == rep_path }
+
+        if rep.nil?
+          # Get list of possible filenames
+          if file_path =~ /\/$/
+            all_file_paths = @site.config[:index_filenames].map { |f| file_path + f }
+          else
+            all_file_paths = [ file_path ]
+          end
+          good_file_path = all_file_paths.find { |f| File.file?(f) }
+
+          # Serve file
+          if good_file_path
+            serve_file(good_file_path)
+          else
+            serve_404(path)
+          end
         else
-          serve_404(path)
+          # Serve rep
+          serve_rep(rep)
         end
       end
     end
@@ -241,19 +256,22 @@ END
       ]
     end
 
-    def serve_page_rep(page_rep)
-      # Recompile page rep
+    def serve_rep(rep)
+      # Recompile rep
       begin
-        @site.compiler.run([ page_rep.page ], :even_when_not_outdated => @include_outdated)
+        @site.compiler.run(
+          [ rep.respond_to?(:page) ? rep.page : rep.asset ],
+          :even_when_not_outdated => @include_outdated
+        )
       rescue Exception => exception
-        return serve_500(page_rep.web_path, exception)
+        return serve_500(rep.web_path, exception)
       end
 
       # Build response
       [
         200,
-        { 'Content-Type' => mime_type_of(page_rep.disk_path, 'text/html') },
-        [ page_rep.content(:post) ]
+        { 'Content-Type' => mime_type_of(rep.disk_path, 'text/html') },
+        [ rep.content(:post) ]
       ]
     end
 
