@@ -5,7 +5,8 @@ nanoc Release Notes
 -----
 
 * The Haml and Sass filters now correctly take their options from assets
-...
+* Autocompiler now serves index files instead of 404s
+* Layouts named "index" are now handled correctly
 
 2.1.2
 -----
