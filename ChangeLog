@@ -1,6 +1,12 @@
 nanoc Release Notes
 ===================
 
+2.1.3
+-----
+
+* The Haml and Sass filters now correctly take their options from assets
+...
+
 2.1.2
 -----
 
