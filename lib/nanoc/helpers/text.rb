@@ -27,6 +27,12 @@ module Nanoc::Helpers
       (string.length > params[:length] ? string[0...length] + params[:omission] : string)
     end
 
+    # Strips all HTML tags out of the given string.
+    def strip_html(string)
+      # FIXME will need something more sophisticated than this, because it sucks
+      string.gsub(/<[^>]*(>+|\s*\z)/m, '').strip
+    end
+
   end
 
 end
