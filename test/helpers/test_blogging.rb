@@ -6,6 +6,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   include Nanoc::Helpers::Blogging
+  include Nanoc::Helpers::Text
 
   def test_sorted_articles
     # Create pages
@@ -111,7 +112,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       @pages[2].expects(:custom_path_in_feed).returns('/page2custom/')
       @pages[2].expects(:path).at_least_once.returns('/page2/')
       @pages[2].expects(:content).returns('page 2 content')
-      @pages[2].expects(:excerpt).times(2).returns('page 2 excerpt')
+      @pages[2].expects(:excerpt).returns('page 2 excerpt')
 
       # Create feed page
       @page = mock
@@ -150,7 +151,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       @pages[2].expects(:custom_path_in_feed).returns('/page2custom/')
       @pages[2].expects(:path).at_least_once.returns('/page2/')
       @pages[2].expects(:content).returns('page 2 content')
-      @pages[2].expects(:excerpt).times(2).returns('page 2 excerpt')
+      @pages[2].expects(:excerpt).returns('page 2 excerpt')
       @pages[2].expects(:feed_tag).returns('foobar')
 
       # Create feed page
@@ -165,6 +166,41 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       # Check
       assert_nothing_raised do
         atom_feed(:feed_tag => 'foobar')
+      end
+    end
+  end
+
+  def test_atom_feed_with_custom_procs
+    if_have 'builder' do
+      # Create page
+      @pages = [ mock ]
+      @pages[0].expects(:kind).at_least_once.returns('article')
+      @pages[0].expects(:created_at).at_least_once.returns(Time.now - 750)
+      @pages[0].expects(:mtime).at_least_once.returns(Time.now - 250)
+      @pages[0].expects(:title).returns('Page Two')
+      @pages[0].expects(:custom_path_in_feed).returns('/page2custom/')
+      @pages[0].expects(:path).at_least_once.returns('/page2/')
+      @pages[0].expects(:feed_tag).returns('foobar')
+      @pages[0].expects(:content).returns('blah blah this is a very long and boring text')
+
+      # Create feed page
+      @page = mock
+      @page.expects(:base_url).at_least_once.returns('http://example.com')
+      @page.expects(:title).returns('My Cool Blog')
+      @page.expects(:author_name).returns('Denis Defreyne')
+      @page.expects(:author_uri).returns('http://stoneship.org/')
+      @page.expects(:[]).with(:feed_url).returns(nil)
+      @page.expects(:path).returns('/journal/feed/')
+
+      # Create procs
+      content_proc = lambda { |article| excerpt(article.content, :length => 18) }
+      excerpt_proc = lambda { |article| 'this is the excerpt yarly' }
+
+      # Check
+      assert_nothing_raised do
+        result = atom_feed(:feed_tag => 'foobar', :content_proc => content_proc, :excerpt_proc => excerpt_proc)
+        assert_match(/blah blah this .../, result)
+        assert_match(/this is the excerpt yarly/, result)
       end
     end
   end

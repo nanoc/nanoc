@@ -53,6 +53,16 @@ module Nanoc::Helpers
     #               determine which articles to fetch. See sorted_articles for
     #               details.
     #
+    # +content_proc+:: A proc that returns the content of the given article,
+    #                  passed as a parameter. By default, given the argument
+    #                  +article+, this proc will return +article.content+.
+    #                  This function may not return nil.
+    #
+    # +excerpt_proc+:: A proc that returns the excerpt of the given article,
+    #                  passed as a parameter. By default, given the argument
+    #                  +article+, this proc will return +article.excerpt+.
+    #                  This function may return nil.
+    #
     # The following attributes must be set on blog articles:
     #
     # * 'title', containing the title of the blog post.
@@ -111,8 +121,10 @@ module Nanoc::Helpers
       require 'builder'
 
       # Extract parameters
-      limit     = params[:limit] || 5
-      feed_tags = [ params[:feed_tag] || params[:feed_tags] ].flatten.compact
+      limit         = params[:limit] || 5
+      feed_tags     = [ params[:feed_tag] || params[:feed_tags] ].flatten.compact
+      content_proc  = params[:content_proc] || lambda { |article| article.content }
+      excerpt_proc  = params[:excerpt_proc] || lambda { |article| article.excerpt }
 
       # Create builder
       buffer = ''
@@ -157,8 +169,9 @@ module Nanoc::Helpers
             xml.link(:rel => 'alternate', :href => url_for(a))
 
             # Add content
-            xml.content   a.content, :type => 'html'
-            xml.summary   a.excerpt, :type => 'html' unless a.excerpt.nil?
+            xml.content   content_proc.call(a), :type => 'html'
+            excerpt = excerpt_proc.call(a)
+            xml.summary   excerpt, :type => 'html' unless excerpt.nil?
           end
         end
       end
