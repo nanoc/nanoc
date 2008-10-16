@@ -193,7 +193,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       @page.expects(:path).returns('/journal/feed/')
 
       # Create procs
-      content_proc = lambda { |article| excerpt(article.content, :length => 18) }
+      content_proc = lambda { |article| excerptize(article.content, :length => 18) }
       excerpt_proc = lambda { |article| 'this is the excerpt yarly' }
 
       # Check

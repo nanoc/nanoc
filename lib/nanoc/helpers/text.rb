@@ -16,7 +16,7 @@ module Nanoc::Helpers
     #              shorter than the original string. Defaults to '...' (but in
     #              HTML, you may want to use something more fancy, like
     #              '&hellip;').
-    def excerpt(string, params={})
+    def excerptize(string, params={})
       # Initialize params
       params[:length]   ||= 25
       params[:omission] ||= '...'

@@ -169,9 +169,9 @@ module Nanoc::Helpers
             xml.link(:rel => 'alternate', :href => url_for(a))
 
             # Add content
+            summary = excerpt_proc.call(a)
             xml.content   content_proc.call(a), :type => 'html'
-            excerpt = excerpt_proc.call(a)
-            xml.summary   excerpt, :type => 'html' unless excerpt.nil?
+            xml.summary   summary, :type => 'html' unless summary.nil?
           end
         end
       end
