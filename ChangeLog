@@ -1,17 +1,30 @@
 nanoc Release Notes
 ===================
 
+2.2
+---
+
+...
+
+2.1.4
+-----
+
+* Fixed an issue where the autocompiler in Windows would serve broken assets
+
+2.1.3
+-----
+
+* The Haml and Sass filters now correctly take their options from assets
+* Autocompiler now serves index files instead of 404s
+* Layouts named "index" are now handled correctly
+* filesystem_combined now properly handles assets
+
 2.1.2
 -----
 
 * Autocompiler now compiles assets as well
 * Sass filter now takes options (just like the Haml filter)
 * Haml/Sass options are now taken from the page *rep* instead of the page
-
-2.2
----
-
-...
 
 2.1.1
 -----

@@ -205,7 +205,7 @@ module Nanoc::DataSources
         return nil if meta[:is_draft]
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(filename))
+        attributes = meta.merge(:extension => File.extname(filename)[1..-1])
 
         # Get actual path
         if filename =~ /\/index\.[^\/]+$/
@@ -218,7 +218,7 @@ module Nanoc::DataSources
         mtime = File.stat(filename).mtime
 
         # Build asset
-        Nanoc::Asset.new(content, attributes, path, mtime)
+        Nanoc::Asset.new(StringIO.new(content), attributes, path, mtime)
       end.compact
     end
 

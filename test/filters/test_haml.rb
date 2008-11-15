@@ -16,6 +16,7 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
         page_proxy = Nanoc::Proxy.new(page)
         page.expects(:site).returns(site)
         page.expects(:to_proxy).returns(page_proxy)
+        page.expects(:attribute_named).with(:title).times(2).returns('Home', 'Home')
 
         # Create page rep
         page_rep = mock
@@ -23,7 +24,7 @@ class Nanoc::Filters::HamlTest < Test::Unit::TestCase
         page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
         page_rep.expects(:page).returns(page)
         page_rep.expects(:to_proxy).returns(page_rep_proxy)
-        page_rep.expects(:attribute_named).times(5).returns({}, {}, 'Home', {}, 'Home')
+        page_rep.expects(:attribute_named).times(3).returns({}, {}, {})
 
         # Mock site
         site.expects(:pages).returns([])
