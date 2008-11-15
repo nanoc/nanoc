@@ -252,7 +252,7 @@ END
       [
         200,
         { 'Content-Type' => mime_type_of(path, 'application/octet-stream') },
-        [ File.read(path) ]
+        [ File.open(path, 'rb') { |io| io.read } ]
       ]
     end
 
