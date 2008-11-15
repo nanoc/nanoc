@@ -3,12 +3,16 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 
 # Load unit testing stuff
 require 'test/unit'
+require 'test/spec'
 require 'mocha'
-require 'stringio'
 
 # Load nanoc
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc.rb')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc', 'cli', 'cli.rb')
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
+require 'nanoc'
+require 'nanoc/cli'
+
+# Load miscellaneous requirements
+require 'stringio'
 
 def with_site_fixture(a_fixture)
   in_dir(['test', 'fixtures', a_fixture]) do
