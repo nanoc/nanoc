@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+2.1.4
+-----
+
+* Fixed an issue where the autocompiler in Windows would serve broken assets
+
 2.1.3
 -----
 
