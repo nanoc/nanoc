@@ -363,8 +363,7 @@ module Nanoc::DataSources
 
     def layouts # :nodoc:
       # Determine what layout directory structure is being used
-      dir_count = Dir[File.join('layouts', '*')].select { |f| File.directory?(f) }.size
-      is_old_school = (dir_count == 0)
+      is_old_school = (Dir['layouts/*'].select { |f| File.file?(f) }.size > 0)
 
       if is_old_school
         # Warn about deprecation
@@ -414,8 +413,8 @@ module Nanoc::DataSources
 
     def save_layout(layout) # :nodoc:
       # Determine what layout directory structure is being used
-      layout_file_count = Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.size
-      error_outdated if layout_file_count > 0
+      is_old_school = (Dir['layouts/*'].select { |f| File.file?(f) }.size > 0)
+      error_outdated if is_old_school
 
       # Get paths
       last_component    = layout.path.split('/')[-1]
