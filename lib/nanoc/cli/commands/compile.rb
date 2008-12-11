@@ -17,8 +17,16 @@ module Nanoc::CLI
     def long_desc
       'Compile all pages and all assets of the current site. If a path is ' +
       'given, only the page or asset with the given path will be compiled. ' +
-      'Additionally, only pages and assets that are outdated will be ' +
-      'compiled, unless specified otherwise with the -a option.'
+      "\n\n" +
+      'By default, only pages and assets that are outdated will be ' +
+      'compiled. This can speed up the compilation process quite a bit, ' +
+      'but pages that include content from other pages may have to be ' +
+      'recompiled manually. In order to compile objects even when they are ' +
+      'outdated, use the --force option.' +
+      "\n\n" +
+      'Both pages and assets will be compiled by default. To disable the ' +
+      'compilation of assets or pages, use the --no-assets and --no-pages ' +
+      'options, respectively.'
     end
 
     def usage
