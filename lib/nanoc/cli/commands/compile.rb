@@ -31,6 +31,16 @@ module Nanoc::CLI
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
           :desc => 'compile all pages and assets, even those that aren\'t outdated'
+        },
+        # --only-pages
+        {
+          :long => 'no-pages', :short => 'P', :argument => :forbidden,
+          :desc => 'don\'t compile pages'
+        },
+        # --only-assets
+        {
+          :long => 'no-assets', :short => 'A', :argument => :forbidden,
+          :desc => 'don\'t compile assets'
         }
       ]
     end
@@ -39,10 +49,18 @@ module Nanoc::CLI
       # Make sure we are in a nanoc site directory
       @base.require_site
 
-      # Find object with given path
+      # Find object(s) to compile
       if arguments.size == 0
-        objs = nil
+        # Find all pages and/or assets
+        if options.has_key?(:'no-pages')
+          objs = @base.site.assets
+        elsif options.has_key?(:'no-assets')
+          objs = @base.site.pages
+        else
+          objs = nil
+        end
       else
+        # Find object(s) with given path(s)
         objs = arguments.map do |path|
           # Find object
           path = path.cleaned_path
@@ -77,7 +95,7 @@ module Nanoc::CLI
         )
 
         # Find reps
-        page_reps  = @base.site.pages.map { |p| p.reps }.flatten
+        page_reps  = @base.site.pages.map  { |p| p.reps }.flatten
         asset_reps = @base.site.assets.map { |a| a.reps }.flatten
         reps       = page_reps + asset_reps
 
