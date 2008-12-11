@@ -362,11 +362,7 @@ module Nanoc::DataSources
     ########## Layouts ##########
 
     def layouts # :nodoc:
-      # Determine what layout directory structure is being used
-      dir_count = Dir[File.join('layouts', '*')].select { |f| File.directory?(f) }.size
-      is_old_school = (dir_count == 0)
-
-      if is_old_school
+      if uses_old_school_layouts?
         # Warn about deprecation
         warn(
           'nanoc 2.1 changes the way layouts are stored. Future versions will not support these outdated sites. To update your site, issue \'nanoc update\'.',
@@ -413,9 +409,8 @@ module Nanoc::DataSources
     end
 
     def save_layout(layout) # :nodoc:
-      # Determine what layout directory structure is being used
-      layout_file_count = Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.size
-      error_outdated if layout_file_count > 0
+      # Forbid old-school layouts
+      error_outdated if uses_old_school_layouts?
 
       # Get paths
       last_component    = layout.path.split('/')[-1]
@@ -736,6 +731,11 @@ module Nanoc::DataSources
         # Move
         vcs.move(old_filename, new_filename)
       end
+    end
+
+    # Returns true if the layouts are stored in an old-school way.
+    def uses_old_school_layouts?
+      Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.size > 0
     end
 
   end
