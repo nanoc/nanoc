@@ -2,9 +2,14 @@
 begin ; require 'rubygems' ; rescue LoadError ; end
 
 # Load unit testing stuff
-require 'test/unit'
-require 'test/spec'
-require 'mocha'
+begin
+  require 'test/unit'
+  require 'test/spec'
+  require 'mocha'
+rescue => e
+  $stderr.puts "To run the nanoc unit tests, you need test/unit, test/spec and mocha."
+  raise e
+end
 
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
