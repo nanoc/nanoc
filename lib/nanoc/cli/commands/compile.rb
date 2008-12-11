@@ -62,6 +62,11 @@ module Nanoc::CLI
       # Make sure we are in a nanoc site directory
       @base.require_site
 
+      # Check presence of --all option
+      if options.has_key?(:all)
+        $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
+      end
+
       # Find object(s) to compile
       if arguments.size == 0
         # Find all pages and/or assets
