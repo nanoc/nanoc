@@ -30,7 +30,12 @@ module Nanoc::CLI
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'compile all pages and assets, even those that aren\'t outdated'
+          :desc => 'alias for --force (DEPRECATED)'
+        },
+        # --force
+        {
+          :long => 'force', :short => 'f', :argument => :forbidden,
+          :desc => 'compile pages and assets even when they are not outdated'
         },
         # --only-pages
         {
@@ -91,7 +96,7 @@ module Nanoc::CLI
         # Compile
         @base.site.compiler.run(
           objs,
-          :even_when_not_outdated => options.has_key?(:all)
+          :even_when_not_outdated => options.has_key?(:all) || options.has_key?(:force)
         )
 
         # Find reps
