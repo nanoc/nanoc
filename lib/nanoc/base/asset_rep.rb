@@ -59,6 +59,11 @@ module Nanoc
       @proxy ||= AssetRepProxy.new(self)
     end
 
+    # Returns the asset for this page representation
+    def item
+      @asset
+    end
+
     # Returns true if this asset rep's output file was created during the last
     # compilation session, or false if the output file did already exist.
     def created?
