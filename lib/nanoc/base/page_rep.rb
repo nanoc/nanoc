@@ -13,6 +13,8 @@ module Nanoc
   # * :compilation_ended
   # * :filtering_started
   # * :filtering_ended
+  # * :visit_started
+  # * :visit_ended
   #
   # The compilation-related events have one parameters (the page
   # representation); the filtering-related events have two (the page
@@ -137,6 +139,9 @@ module Nanoc
     # 4. The page defaults in general;
     # 5. The hardcoded page defaults, if everything else fails.
     def attribute_named(name)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
 
@@ -161,8 +166,10 @@ module Nanoc
     # +stage+:: The stage at which the content should be fetched. Can be
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
-    def content(stage=:pre)
-      compile(stage == :post, true, false)
+    def content(stage = :pre, even_when_not_outdated = true, from_scratch = false)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      compile(stage == :post, even_when_not_outdated, from_scratch)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       @content[stage]
     end

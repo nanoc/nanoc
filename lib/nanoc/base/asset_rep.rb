@@ -13,6 +13,8 @@ module Nanoc
   # * :compilation_ended
   # * :filtering_started
   # * :filtering_ended
+  # * :visit_started
+  # * :visit_ended
   #
   # The compilation-related events have one parameters (the page
   # representation); the filtering-related events have two (the page
@@ -93,6 +95,9 @@ module Nanoc
     # including the filename and extension if they cannot be ignored (i.e.
     # they are not in the site configuration's list of index files).
     def web_path
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
       compile(false, false)
 
       @web_path ||= @asset.site.router.web_path_for(self)
@@ -134,6 +139,9 @@ module Nanoc
     # 4. The asset defaults in general;
     # 5. The hardcoded asset defaults, if everything else fails.
     def attribute_named(name)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
 
