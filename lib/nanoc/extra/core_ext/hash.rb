@@ -1,4 +1,4 @@
-class Hash
+module Nanoc::Extra::HashExtensions
 
   # Converts this hash into YAML format, splitting the YAML output into a
   # 'builtin' and a 'custom' section. A key that is present in
@@ -51,4 +51,8 @@ class Hash
     dumps[:custom]
   end
 
+end
+
+class Hash
+  include Nanoc::Extra::HashExtensions
 end

@@ -1,4 +1,4 @@
-class String
+module Nanoc::CLI::StringExtensions
 
   # Word-wraps and indents the string.
   #
@@ -34,4 +34,8 @@ class String
     end.join("\n\n")
   end
 
+end
+
+class String
+  include Nanoc::CLI::StringExtensions
 end
