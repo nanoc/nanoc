@@ -64,4 +64,5 @@ module Nanoc
     end
 
   end
+
 end
