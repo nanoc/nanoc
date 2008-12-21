@@ -98,7 +98,12 @@ def global_teardown
     $stderr = $stderr_real
   end
 
-  # Remove output
+  # Remove tmp per site
+  Dir[File.join('test', 'fixtures', '*', 'tmp')].each do |f|
+    FileUtils.rm_rf(f) if File.exist?(f)
+  end
+
+  # Remove output per site
   Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
     FileUtils.rm_rf(f) if File.exist?(f)
   end

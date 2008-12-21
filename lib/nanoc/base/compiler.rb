@@ -53,14 +53,24 @@ module Nanoc
       objects = @site.pages + @site.assets if objects.nil?
       reps = objects.map { |o| o.reps }.flatten
 
+      # Set up dependency tracker
+      dependency_tracker = Nanoc::DependencyTracker.new
+      dependency_tracker.load_state
+      dependency_tracker.mark_outdated_dependencies(reps)
+      dependency_tracker.start
+
       # Compile everything
       reps.each do |rep|
         if rep.is_a?(Nanoc::PageRep)
-          rep.compile(also_layout, even_when_not_outdated, from_scratch)
+          rep.content(also_layout ? :post : :pre, even_when_not_outdated, from_scratch)
         else
           rep.compile(even_when_not_outdated, from_scratch)
         end
       end
+
+      # Store dependencies
+      dependency_tracker.stop
+      dependency_tracker.store_state
     end
 
   end
