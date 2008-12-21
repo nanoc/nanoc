@@ -66,6 +66,11 @@ module Nanoc
       @asset
     end
 
+    # Returns the type of this object.
+    def type
+      :asset_rep
+    end
+
     # Returns true if this asset rep's output file was created during the last
     # compilation session, or false if the output file did already exist.
     def created?
