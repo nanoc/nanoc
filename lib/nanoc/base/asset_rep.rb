@@ -30,6 +30,10 @@ module Nanoc
     # This asset representation's unique name.
     attr_reader   :name
 
+    # Indicates whether this rep is forced to be dirty because of outdated
+    # dependencies.
+    attr_accessor :force_outdated
+    
     # Creates a new asset representation for the given asset and with the
     # given attributes.
     #
@@ -43,17 +47,18 @@ module Nanoc
     # +name+:: The unique name for the new asset representation.
     def initialize(asset, attributes, name)
       # Set primary attributes
-      @asset      = asset
-      @attributes = attributes
-      @name       = name
+      @asset          = asset
+      @attributes     = attributes
+      @name           = name
 
       # Reset flags
-      @compiled   = false
-      @modified   = false
-      @created    = false
+      @compiled       = false
+      @modified       = false
+      @created        = false
+      @force_outdated = false
 
       # Reset stages
-      @filtered   = false
+      @filtered       = false
     end
 
     # Returns a proxy (Nanoc::AssetRepProxy) for this asset representation.
@@ -113,6 +118,9 @@ module Nanoc
     def outdated?
       # Outdated if we don't know
       return true if @asset.mtime.nil?
+
+      # Outdated if the dependency tracker says so
+      return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)

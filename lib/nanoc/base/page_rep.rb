@@ -30,6 +30,10 @@ module Nanoc
     # This page representation's unique name.
     attr_reader   :name
 
+    # Indicates whether this rep is forced to be dirty because of outdated
+    # dependencies.
+    attr_accessor :force_outdated
+    
     # Creates a new page representation for the given page and with the given
     # attributes.
     #
@@ -54,6 +58,7 @@ module Nanoc
       @compiled       = false
       @modified       = false
       @created        = false
+      @force_outdated = false
     end
 
     # Returns a proxy (Nanoc::PageRepProxy) for this page representation.
@@ -93,6 +98,9 @@ module Nanoc
     def outdated?
       # Outdated if we don't know
       return true if @page.mtime.nil?
+
+      # Outdated if the dependency tracker says so
+      return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
