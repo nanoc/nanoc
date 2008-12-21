@@ -59,6 +59,11 @@ module Nanoc
       @proxy ||= PageRepProxy.new(self)
     end
 
+    # Returns the page for this page representation
+    def item
+      @page
+    end
+
     # Returns true if this page rep's output file was created during the last
     # compilation session, or false if the output file did already exist.
     def created?
