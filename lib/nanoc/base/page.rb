@@ -61,6 +61,11 @@ module Nanoc
       super(PageRep, @site.page_defaults)
     end
 
+    # Returns the type of this object.
+    def type
+      :page
+    end
+
     # Returns a proxy (Nanoc::PageProxy) for this page.
     def to_proxy
       super(PageProxy)

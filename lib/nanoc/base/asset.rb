@@ -46,6 +46,11 @@ module Nanoc
       super(AssetRep, @site.asset_defaults)
     end
 
+    # Returns the type of this object.
+    def type
+      :asset
+    end
+
     # Returns a proxy (Nanoc::AssetProxy) for this asset.
     def to_proxy
       super(AssetProxy)

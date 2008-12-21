@@ -66,6 +66,11 @@ module Nanoc
       @page
     end
 
+    # Returns the type of this object.
+    def type
+      :page_rep
+    end
+
     # Returns true if this page rep's output file was created during the last
     # compilation session, or false if the output file did already exist.
     def created?
