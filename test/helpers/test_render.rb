@@ -17,6 +17,7 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     site = mock
     # site.expects(:config).returns({})
     site.expects(:pages).returns([])
+    site.expects(:page_defaults).returns({})
     site.expects(:assets).returns([])
     site.expects(:layouts).times(2).returns([ layout ])
     site.expects(:config).returns({})

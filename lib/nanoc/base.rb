@@ -5,6 +5,7 @@ require 'nanoc/base/defaults.rb'
 require 'nanoc/base/proxy.rb'
 require 'nanoc/base/proxies.rb'
 require 'nanoc/base/plugin.rb'
+require 'nanoc/base/item.rb'
 
 require 'nanoc/base/asset.rb'
 require 'nanoc/base/asset_defaults.rb'

@@ -6,7 +6,7 @@ module Nanoc
   #
   # Each asset has a list of asset representations or reps (Nanoc::AssetRep);
   # compiling an asset actually compiles all of its assets.
-  class Asset
+  class Asset < Nanoc::Item
 
     # Defaults values for assets.
     DEFAULTS = {
@@ -15,23 +15,8 @@ module Nanoc
       :filters    => []
     }
 
-    # The Nanoc::Site this asset belongs to.
-    attr_accessor :site
-
     # This assets's file.
     attr_reader   :file
-
-    # A hash containing this asset's attributes.
-    attr_accessor :attributes
-
-    # This asset's path.
-    attr_reader   :path
-
-    # The time when this asset was last modified.
-    attr_reader   :mtime
-
-    # This asset's list of asset representations.
-    attr_reader   :reps
 
     # Creates a new asset.
     #
@@ -53,35 +38,17 @@ module Nanoc
     # Builds the individual asset representations (Nanoc::AssetRep) for this
     # asset.
     def build_reps
-      # Get list of rep names
-      rep_names_default = (@site.asset_defaults.attributes[:reps] || {}).keys
-      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
-      rep_names         = rep_names_default | rep_names_this
-
-      # Get list of reps
-      reps = rep_names.inject({}) do |memo, rep_name|
-        rep = (@attributes[:reps] || {})[rep_name]
-        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
-        is_bad ? memo : memo.merge(rep_name => rep || {})
-      end
-
-      # Build reps
-      @reps = []
-      reps.each_pair do |name, attrs|
-        @reps << AssetRep.new(self, attrs, name)
-      end
+      super(AssetRep, @site.asset_defaults)
     end
 
     # Returns a proxy (Nanoc::AssetProxy) for this asset.
     def to_proxy
-      @proxy ||= AssetProxy.new(self)
+      super(AssetProxy)
     end
 
     # Returns the attribute with the given name.
     def attribute_named(name)
-      return @attributes[name] if @attributes.has_key?(name)
-      return @site.asset_defaults.attributes[name] if @site.asset_defaults.attributes.has_key?(name)
-      return DEFAULTS[name]
+      super(name, @site ? @site.asset_defaults : nil, Nanoc::Asset::DEFAULTS)
     end
 
     # Saves the asset in the database, creating it if it doesn't exist yet or

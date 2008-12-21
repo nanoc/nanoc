@@ -6,7 +6,7 @@ module Nanoc
   #
   # Each page has a list of page representations or reps (Nanoc::PageRep);
   # compiling a page actually compiles all of its representations.
-  class Page
+  class Page < Nanoc::Item
 
     # Default values for pages.
     DEFAULTS = {
@@ -19,9 +19,6 @@ module Nanoc
       :skip_output  => false
     }
 
-    # The Nanoc::Site this page belongs to.
-    attr_accessor :site
-
     # The parent page of this page. This can be nil even for non-root pages.
     attr_accessor :parent
 
@@ -30,18 +27,6 @@ module Nanoc
 
     # This page's raw, uncompiled content.
     attr_reader   :content
-
-    # A hash containing this page's attributes.
-    attr_accessor :attributes
-
-    # This page's path.
-    attr_reader   :path
-
-    # The time when this page was last modified.
-    attr_reader   :mtime
-
-    # This page's list of page representations.
-    attr_reader   :reps
 
     # Creates a new page.
     #
@@ -68,35 +53,17 @@ module Nanoc
     # Builds the individual page representations (Nanoc::PageRep) for this
     # page.
     def build_reps
-      # Get list of rep names
-      rep_names_default = (@site.page_defaults.attributes[:reps] || {}).keys
-      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
-      rep_names         = rep_names_default | rep_names_this
-
-      # Get list of reps
-      reps = rep_names.inject({}) do |memo, rep_name|
-        rep = (@attributes[:reps] || {})[rep_name]
-        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
-        is_bad ? memo : memo.merge(rep_name => rep || {})
-      end
-
-      # Build reps
-      @reps = []
-      reps.each_pair do |name, attrs|
-        @reps << PageRep.new(self, attrs, name)
-      end
+      super(PageRep, @site.page_defaults)
     end
 
     # Returns a proxy (Nanoc::PageProxy) for this page.
     def to_proxy
-      @proxy ||= PageProxy.new(self)
+      super(PageProxy)
     end
 
     # Returns the attribute with the given name.
     def attribute_named(name)
-      return @attributes[name] if @attributes.has_key?(name)
-      return @site.page_defaults.attributes[name] if @site.page_defaults.attributes.has_key?(name)
-      return DEFAULTS[name]
+      super(name, @site ? @site.page_defaults : nil, Nanoc::Page::DEFAULTS)
     end
 
     # Saves the page in the database, creating it if it doesn't exist yet or
