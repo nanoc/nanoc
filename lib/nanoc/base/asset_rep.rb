@@ -247,9 +247,18 @@ module Nanoc
       # Calculate digest before
       digest_before = File.file?(disk_path) ? digest(disk_path) : nil
 
-      # Run filters
+      # Run each filter
       current_file = @asset.file
-      attribute_named(:filters).each do |filter_name|
+      attribute_named(:filters).each do |raw_filter|
+        # Get filter arguments, if any
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
+
         # Free resources so that this filter won't fail
         GC.start
 
