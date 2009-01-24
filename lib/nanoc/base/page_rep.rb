@@ -285,7 +285,16 @@ module Nanoc
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
       # Run each filter
-      filters.each do |filter_name|
+      filters.each do |raw_filter|
+        # Get filter arguments, if any
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
+
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
@@ -293,7 +302,7 @@ module Nanoc
 
         # Run filter
         Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        content = filter.run(content)
+        content = (filter.method(:run).arity == -2 ? filter.run(content, filter_args) : filter.run(content))
         Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
 
