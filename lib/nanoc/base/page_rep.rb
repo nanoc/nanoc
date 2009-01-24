@@ -103,26 +103,26 @@ module Nanoc
       return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
-      return true if !File.file?(disk_path)
+      return true if !File.file?(disk_path) && !attribute_named(:skip_output)
 
       # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime
+      compiled_mtime = File.stat(disk_path).mtime if !attribute_named(:skip_output)
 
       # Outdated if file too old
-      return true if @page.mtime > compiled_mtime
+      return true if !attribute_named(:skip_output) && @page.mtime > compiled_mtime
 
       # Outdated if layouts outdated
       return true if @page.site.layouts.any? do |l|
-        l.mtime.nil? or l.mtime > compiled_mtime
+        l.mtime.nil? || (!attribute_named(:skip_output) && l.mtime > compiled_mtime)
       end
 
       # Outdated if page defaults outdated
       return true if @page.site.page_defaults.mtime.nil?
-      return true if @page.site.page_defaults.mtime > compiled_mtime
+      return true if !attribute_named(:skip_output) && @page.site.page_defaults.mtime > compiled_mtime
 
       # Outdated if code outdated
       return true if @page.site.code.mtime.nil?
-      return true if @page.site.code.mtime > compiled_mtime
+      return true if !attribute_named(:skip_output) && @page.site.code.mtime > compiled_mtime
 
       return false
     end
