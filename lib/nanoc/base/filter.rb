@@ -53,7 +53,7 @@ module Nanoc
     # +content+:: The unprocessed content that should be filtered.
     #
     # Subclasses must implement this method.
-    def run(content)
+    def run(content, params={})
       raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
     end
 
