@@ -35,7 +35,7 @@ module Nanoc
     #          filtered. This file should _not_ be modified.
     #
     # Subclasses must implement this method.
-    def run(file)
+    def run(file, params={})
       raise NotImplementedError.new("Nanoc::BinaryFilter subclasses must implement #run")
     end
 
