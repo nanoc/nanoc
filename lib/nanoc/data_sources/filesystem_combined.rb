@@ -63,12 +63,6 @@ module Nanoc::DataSources
   # each layout consists of a metadata part and a content part, separated by
   # '-----'.
   #
-  # = Templates
-  #
-  # Templates are located in the 'templates' directory. Templates are, just
-  # like pages, files consisting of a metadata part and a content part,
-  # separated by '-----'.
-  #
   # = Code
   #
   # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
@@ -101,7 +95,7 @@ module Nanoc::DataSources
 
     def setup # :nodoc:
       # Create directories
-      %w( assets content templates layouts lib ).each do |dir|
+      %w( assets content layouts lib ).each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
@@ -116,7 +110,6 @@ module Nanoc::DataSources
       # Remove directories
       vcs.remove('assets')
       vcs.remove('content')
-      vcs.remove('templates')
       vcs.remove('layouts')
       vcs.remove('lib')
     end
@@ -367,56 +360,6 @@ module Nanoc::DataSources
     end
 
     def delete_layout(layout) # :nodoc:
-      # TODO implement
-    end
-
-    ########## Templates ##########
-
-    def templates # :nodoc:
-      files('templates', false).map do |filename|
-        # Read and parse data
-        meta, content = *parse_file(filename, 'template')
-
-        # Get name
-        name = filename.sub(/^templates\//, '').sub(/\.[^\/]+$/, '')
-
-        # Build template
-        Nanoc::Template.new(content, meta, name)
-      end.compact
-    end
-
-    def save_template(template) # :nodoc:
-      # Get template path
-      paths         = Dir[File.join('templates', template.name) + '.*']
-      path_default  = File.join('templates', template.name) + '.html'
-      path          = paths[0] || path_default
-
-      # Notify
-      if File.file?(path)
-        created = false
-        Nanoc::NotificationCenter.post(:file_updated, path)
-      else
-        created = true
-        Nanoc::NotificationCenter.post(:file_created, path)
-      end
-
-      # Write template
-      File.open(path, 'w') do |io|
-        io.write("-----\n")
-        io.write(template.page_attributes.to_split_yaml + "\n")
-        io.write("-----\n")
-        io.write(template.page_content)
-      end
-
-      # Add to working copy if possible
-      vcs.add(path) if created
-    end
-
-    def move_template(template, new_name) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_template(template) # :nodoc:
       # TODO implement
     end
 

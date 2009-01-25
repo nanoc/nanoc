@@ -58,13 +58,6 @@ module Nanoc::DataSources
   # 'layouts' directory. Such a layout cannot have any metadata; the filter
   # used for this layout is determined from the file extension.
   #
-  # = Templates
-  #
-  # Templates are located in the 'templates' directroy. Every template is a
-  # directory consisting of a content file and a meta file, both named after
-  # the template. This is very similar to the way pages are stored, except
-  # that templates cannot be nested.
-  #
   # = Code
   #
   # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
@@ -97,7 +90,7 @@ module Nanoc::DataSources
 
     def setup # :nodoc:
       # Create directories
-      %w( assets content templates layouts lib ).each do |dir|
+      %w( assets content layouts lib ).each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
@@ -112,7 +105,6 @@ module Nanoc::DataSources
       # Remove directories
       vcs.remove('assets')
       vcs.remove('content')
-      vcs.remove('templates')
       vcs.remove('layouts')
       vcs.remove('lib')
     end
@@ -121,7 +113,6 @@ module Nanoc::DataSources
       update_page_defaults
       update_pages
       update_layouts
-      update_templates
     end
 
     ########## Pages ##########
@@ -457,76 +448,6 @@ module Nanoc::DataSources
       # TODO implement
     end
 
-    ########## Templates ##########
-
-    def templates # :nodoc:
-      meta_filenames('templates').map do |meta_filename|
-        # Get name
-        name = meta_filename.sub(/^templates\/(.*)\/[^\/]+\.yaml$/, '\1')
-
-        # Get content
-        content_filename  = content_filename_for_dir(File.dirname(meta_filename))
-        content           = File.read(content_filename)
-
-        # Get attributes
-        attributes = YAML.load_file(meta_filename) || {}
-
-        # Build template
-        Nanoc::Template.new(content, attributes, name)
-      end
-    end
-
-    def save_template(template) # :nodoc:
-      # Determine possible meta file paths
-      meta_filename_worst = 'templates/' + template.name + '/index.yaml'
-      meta_filename_best  = 'templates/' + template.name + '/' + template.name + '.yaml'
-
-      # Get existing path
-      existing_path = nil
-      existing_path = meta_filename_best  if File.file?(meta_filename_best)
-      existing_path = meta_filename_worst if File.file?(meta_filename_worst)
-
-      if existing_path.nil?
-        # Get filenames
-        dir_path         = 'templates/' + template.name
-        meta_filename    = meta_filename_best
-        content_filename = 'templates/' + template.name + '/' + template.name + '.html'
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_created, meta_filename)
-        Nanoc::NotificationCenter.post(:file_created, content_filename)
-
-        # Create directories if necessary
-        FileUtils.mkdir_p(dir_path)
-      else
-        # Get filenames
-        meta_filename    = existing_path
-        content_filename = content_filename_for_dir(File.dirname(existing_path))
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
-        Nanoc::NotificationCenter.post(:file_updated, content_filename)
-      end
-
-      # Write files
-      File.open(meta_filename,    'w') { |io| io.write(template.page_attributes.to_split_yaml) }
-      File.open(content_filename, 'w') { |io| io.write(template.page_content) }
-
-      # Add to working copy if possible
-      if existing_path.nil?
-        vcs.add(meta_filename)
-        vcs.add(content_filename)
-      end
-    end
-
-    def move_template(template, new_name) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_template(template) # :nodoc:
-      # TODO implement
-    end
-
     ########## Code ##########
 
     def code # :nodoc:
@@ -707,29 +628,6 @@ module Nanoc::DataSources
 
         # Delete old files
         vcs.remove(filename)
-      end
-    end
-
-    # Updates outdated templates (both content and meta file names).
-    def update_templates
-      # Update content files
-      # templates/foo/index.ext -> templates/foo/foo.ext
-      Dir['templates/**/index.*'].select { |f| File.file?(f) }.each do |old_filename|
-        # Determine new name
-        new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
-
-        # Move
-        vcs.move(old_filename, new_filename)
-      end
-
-      # Update meta files
-      # templates/foo/meta.yaml -> templates/foo/foo.yaml
-      Dir['templates/**/meta.yaml'].select { |f| File.file?(f) }.each do |old_filename|
-        # Determine new name
-        new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
-
-        # Move
-        vcs.move(old_filename, new_filename)
       end
     end
 

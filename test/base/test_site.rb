@@ -48,12 +48,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
       ]
     end
 
-    def templates
-      [
-        Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
-      ]
-    end
-
     def code
       Nanoc::Code.new("def something_random ; 'something random, yah' ; end")
     end
@@ -82,12 +76,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
           { :filter => 'erb' },
           '/quux/'
         )
-      ]
-    end
-
-    def templates
-      [
-        Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
       ]
     end
 

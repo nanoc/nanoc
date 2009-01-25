@@ -61,10 +61,6 @@ def create_page(name)
   Nanoc::CLI::Base.new.run(['create_page', name])
 end
 
-def create_template(name)
-  Nanoc::CLI::Base.new.run(['create_template', name])
-end
-
 def if_have(x)
   require x
   yield

@@ -79,9 +79,6 @@ describe 'Nanoc::Site#initialize' do
         '/quux/'
       )
     ])
-    site.data_source.expects(:templates).returns([
-      Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
-    ])
     site.load_data
 
     # Check classes
@@ -91,7 +88,6 @@ describe 'Nanoc::Site#initialize' do
     site.pages.each     { |p| p.should.be.an.instance_of Nanoc::Page     }
     site.assets.each    { |p| p.should.be.an.instance_of Nanoc::Asset    }
     site.layouts.each   { |l| l.should.be.an.instance_of Nanoc::Layout   }
-    site.templates.each { |t| t.should.be.an.instance_of Nanoc::Template }
 
     # Check whether site is set
     site.page_defaults.site.should  == site
@@ -100,7 +96,6 @@ describe 'Nanoc::Site#initialize' do
     site.pages.each     { |p| p.site.should == site }
     site.assets.each    { |p| p.site.should == site }
     site.layouts.each   { |l| l.site.should == site }
-    site.templates.each { |t| t.site.should == site }
   end
 
 end
