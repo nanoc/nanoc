@@ -27,8 +27,6 @@ The source code is structured in a few directories:
 * *lib*
   * *nanoc*
     * *base* contains the bare essentials necessary for nanoc to function
-    * *binary_filters* contains the standard binary filters
-      (Nanoc::BinaryFilter subclasses) such as the thumbnail filter
     * *cli* contains the commandline interface
     * *data_sources* contains the standard data sources (Nanoc::DataSource
       subclasses), such as the filesystem data source
@@ -47,7 +45,6 @@ The namespaces (modules) are organised like this:
 * *Nanoc* is the namespace for everything nanoc-related (obviously). The
   classes in 'lib/nanoc/base' are part of this module (not Nanoc::Base which
   does not exist)
-  * *BinaryFilters* contains the binary filters
   * *CLI* containing everything related to the commandline tool.
   * *DataSources* contains the data sources
   * *Helpers* contains the helpers

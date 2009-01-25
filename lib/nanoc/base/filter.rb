@@ -1,9 +1,8 @@
 module Nanoc
 
-  # Nanoc::Filter is responsible for filtering pages and textual assets
-  # (binary assets are filtered using Nanoc::BinaryFilter). It is the
-  # (abstract) superclass for all textual filters. Subclasses should override
-  # the +run+ method.
+  # Nanoc::Filter is responsible for filtering pages and textual assets. It is
+  # the (abstract) superclass for all textual filters. Subclasses should
+  # override the +run+ method.
   class Filter < Plugin
 
     # Deprecated

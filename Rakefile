@@ -41,7 +41,6 @@ GemSpec = Gem::Specification.new do |s|
                               '--main'    << 'README'                   <<
                               '--charset' << 'utf-8'                    <<
                               '--exclude' << 'lib/nanoc/cli/commands'   <<
-                              '--exclude' << 'lib/nanoc/binary_filters' <<
                               '--exclude' << 'lib/nanoc/extra/vcses'    <<
                               '--exclude' << 'lib/nanoc/filters'        <<
                               '--exclude' << 'test'                     <<

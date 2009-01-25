@@ -1,11 +1,10 @@
 module Nanoc
 
   # Nanoc::Plugin is the superclass for all plugins, such as filters
-  # (Nanoc::Filter), binary filters (Nanoc::BinaryFilter), routers
-  # (Nanoc::Router), data sources (Nanoc::DataSource) and VCSes
-  # (Nanoc::Extra::VCS). Each plugin has one or more unique identifiers, and
-  # several methods in this class provides functionality for finding plugins
-  # with given identifiers.
+  # (Nanoc::Filter), routers (Nanoc::Router), data sources (Nanoc::DataSource)
+  # and VCSes (Nanoc::Extra::VCS). Each plugin has one or more unique
+  # identifiers, and several methods in this class provides functionality for
+  # finding plugins with given identifiers.
   class Plugin
 
     MAP = {}
