@@ -60,7 +60,7 @@ module Nanoc::CLI
         path
       )
       page.site = @base.site
-      page.save
+      @base.site.data_source.save_page(page)
 
       puts "A page has been created at #{path}."
     end
