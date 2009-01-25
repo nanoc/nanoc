@@ -269,7 +269,7 @@ EOS
     end
 
     # Populates the site with some initial data, such as a root page, a
-    # default layout, a default template, and so on.
+    # default layout, and so on.
     def site_populate
       # Get site
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
@@ -303,15 +303,6 @@ EOS
       )
       layout.site = site
       layout.save
-
-      # Create template
-      template = Nanoc::Template.new(
-        "Hi, I'm a new page!\n",
-        { :title => "A New Page" },
-        'default'
-      )
-      template.site = site
-      template.save
 
       # Fill code
       code = Nanoc::Code.new(

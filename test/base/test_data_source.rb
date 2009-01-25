@@ -62,12 +62,6 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
     assert_raise(NotImplementedError) { data_source.move_layout(nil, nil) }
     assert_raise(NotImplementedError) { data_source.delete_layout(nil) }
 
-    # Test required methods - templates
-    assert_raise(NotImplementedError) { data_source.templates }
-    assert_raise(NotImplementedError) { data_source.save_template(nil) }
-    assert_raise(NotImplementedError) { data_source.move_template(nil, nil) }
-    assert_raise(NotImplementedError) { data_source.delete_template(nil) }
-
     # Test required methods - code
     assert_raise(NotImplementedError) { data_source.code }
     assert_raise(NotImplementedError) { data_source.save_code(nil) }

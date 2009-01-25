@@ -10,7 +10,6 @@ module Nanoc
   # * +asset_defaults+ is a Nanoc::AssetDefaults instance representing asset
   #   defaults
   # * +layouts+ is a list of Nanoc::Layout instances representing layouts
-  # * +templates+ is a list of Nanoc::Template representing templates
   # * +code+ is a Nanoc::Code instance representing custom site code
   #
   # In addition, each site has a +config+ hash which stores the site
@@ -62,7 +61,7 @@ module Nanoc
     attr_reader :config
     attr_reader :compiler, :data_source, :router
     attr_reader :page_defaults, :asset_defaults
-    attr_reader :pages, :assets, :layouts, :templates, :code
+    attr_reader :pages, :assets, :layouts, :code
 
     # Returns a Nanoc::Site object for the site specified by the given
     # configuration hash +config+.
@@ -96,7 +95,6 @@ module Nanoc
       @pages                = []
       @assets               = []
       @layouts              = []
-      @templates            = []
     end
 
     # Loads the site data. This will query the Nanoc::DataSource associated
@@ -119,7 +117,6 @@ module Nanoc
         load_asset_defaults
         load_assets
         load_layouts
-        load_templates
       end
       @data_loaded = true
     end
@@ -192,12 +189,6 @@ module Nanoc
     def load_layouts
       @layouts = @data_source.layouts
       @layouts.each { |l| l.site = self }
-    end
-
-    # Loads this site's templates.
-    def load_templates
-      @templates = @data_source.templates
-      @templates.each { |t| t.site = self }
     end
 
   end
