@@ -5,9 +5,8 @@ module Nanoc
   #
   # * +pages+ is a list of Nanoc::Page instances representing pages
   # * +assets+ is a list of Nanoc::Asset instances representing assets
-  # * +page_defaults+ is a Nanoc::PageDefaults instance representing page
-  #   defaults
-  # * +asset_defaults+ is a Nanoc::AssetDefaults instance representing asset
+  # * +page_defaults+ is a Nanoc::Defaults instance representing page defaults
+  # * +asset_defaults+ is a Nanoc::Defaults instance representing asset
   #   defaults
   # * +layouts+ is a list of Nanoc::Layout instances representing layouts
   # * +code+ is a Nanoc::Code instance representing custom site code
@@ -88,9 +87,9 @@ module Nanoc
       @router = @router_class.new(self)
 
       # Initialize data
-      @page_defaults        = PageDefaults.new({})
+      @page_defaults        = Defaults.new({})
       @page_defaults.site   = self
-      @asset_defaults       = AssetDefaults.new({})
+      @asset_defaults       = Defaults.new({})
       @asset_defaults.site  = self
       @pages                = []
       @assets               = []

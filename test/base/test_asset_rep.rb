@@ -7,7 +7,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_initialize
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -30,7 +30,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_to_proxy
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -56,7 +56,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     File.open('tmp/test.txt', 'w') { |io| io.write('old stuff') }
 
     # Create data
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
     asset = Nanoc::Asset.new(File.new('tmp/test.txt'), {}, '/foo/')
 
     # Create site and other requisites
@@ -110,7 +110,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_outdated
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create layouts
     layouts = [
@@ -183,7 +183,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_disk_and_web_path
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create router
     router = mock

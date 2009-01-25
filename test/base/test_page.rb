@@ -153,7 +153,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
         site = Nanoc::Site.new({})
 
         # Create page defaults (hacky...)
-        page_defaults = Nanoc::PageDefaults.new({ :quux => 'stfu' })
+        page_defaults = Nanoc::Defaults.new({ :quux => 'stfu' })
         site.instance_eval { @page_defaults = page_defaults }
 
         # Create page
