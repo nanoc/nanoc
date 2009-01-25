@@ -5,6 +5,7 @@ nanoc Release Notes
 ---
 
 * The compile command now takes --no-assets and --no-pages options
+* Dependencies between pages are now tracked properly
 
 2.1.4
 -----
