@@ -63,30 +63,6 @@ module Nanoc
       super(name, @site ? @site.asset_defaults : nil, Nanoc::Asset::DEFAULTS)
     end
 
-    # Saves the asset in the database, creating it if it doesn't exist yet or
-    # updating it if it already exists. Tells the site's data source to save
-    # the asset.
-    def save
-      @site.data_source.loading do
-        @site.data_source.save_asset(self)
-      end
-    end
-
-    # Moves the asset to a new path. Tells the site's data source to move the
-    # asset.
-    def move_to(new_path)
-      @site.data_source.loading do
-        @site.data_source.move_asset(self, new_path)
-      end
-    end
-
-    # Deletes the asset. Tells the site's data source to delete the asset.
-    def delete
-      @site.data_source.loading do
-        @site.data_source.delete_asset(self)
-      end
-    end
-
   end
 
 end
