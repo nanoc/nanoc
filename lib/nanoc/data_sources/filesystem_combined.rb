@@ -48,8 +48,7 @@ module Nanoc::DataSources
   # = Assets
   #
   # Assets are stored in a way similar to pages. The attributes are merged
-  # into the asset. This does mean, however, that only textual assets are
-  # supported, as there is no way to embed attributes in binary assets.
+  # into the asset.
   #
   # = Asset defaults
   #

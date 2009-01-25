@@ -16,7 +16,6 @@ module Nanoc
     # Defaults values for assets.
     DEFAULTS = {
       :extension  => 'dat',
-      :binary     => true,
       :filters    => []
     }
 

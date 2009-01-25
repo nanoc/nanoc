@@ -227,34 +227,6 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     # TODO implement
   end
 
-  def test_digest
-    # Create asset rep
-    asset_rep = Nanoc::AssetRep.new(nil, nil, nil)
-
-    # Get some known hashes
-    known_hashes = {
-      ''    => 'd41d8cd98f00b204e9800998ecf8427e',
-      'a'   => '0cc175b9c0f1b6a831c399e269772661',
-      'abc' => '900150983cd24fb0d6963f7d28e17f72'
-    }
-
-    # Create some files
-    known_hashes.each_pair do |string, digest|
-      # Write string
-      File.open('tmp/file.png', 'w') { |io| io.write(string) }
-
-      # Check digest
-      assert_equal(
-        digest,
-        asset_rep.instance_eval { digest('tmp/file.png') }
-      )
-    end
-  end
-
-  def test_compile_binary
-    # TODO implement
-  end
-
   def test_compile_textual
     # TODO implement
   end

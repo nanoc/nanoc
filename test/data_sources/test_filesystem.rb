@@ -226,7 +226,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
   def test_asset_defaults
     with_temp_site do |site|
       assert_nothing_raised do
-        assert_equal(true, site.asset_defaults.attributes[:binary])
+        assert_equal([], site.asset_defaults.attributes[:filters])
       end
     end
   end
@@ -238,12 +238,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         asset_defaults = site.asset_defaults
 
         # Update asset defaults
-        asset_defaults.attributes[:binary] = 'false'
+        asset_defaults.attributes[:foo] = 'bar'
         site.data_source.save_asset_defaults(asset_defaults)
         site.load_data(true)
 
         # Check asset defaults
-        assert_equal(false, site.asset_defaults.attributes[:binary])
+        assert_equal('bar', site.asset_defaults.attributes[:foo])
       end
     end
   end

@@ -212,13 +212,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:compilation_started, self)
 
       # Compile
-      unless @filtered
-        if attribute_named(:binary) == true
-          compile_binary
-        else
-          compile_textual
-        end
-      end
+      compile_textual unless @filtered
       @compiled = true
 
       # Stop
@@ -227,60 +221,6 @@ module Nanoc
     end
 
   private
-
-    # Computes and returns the MD5 digest for the given file.
-    def digest(filename)
-      # Create hash
-      incr_digest = Digest::MD5.new()
-
-      # Collect data
-      File.open(filename, 'r') do |file|
-        incr_digest << file.read(1000) until file.eof?
-      end
-
-      # Calculate hex hash
-      incr_digest.hexdigest
-    end
-
-    # Compiles the asset rep, treating its contents as binary data.
-    def compile_binary
-      # Calculate digest before
-      digest_before = File.file?(disk_path) ? digest(disk_path) : nil
-
-      # Run each filter
-      current_file = @asset.file
-      attribute_named(:filters).each do |raw_filter|
-        # Get filter arguments, if any
-        if raw_filter.is_a?(String)
-          filter_name = raw_filter
-          filter_args = {}
-        else
-          filter_name = raw_filter['name']
-          filter_args = raw_filter['args'] || {}
-        end
-
-        # Free resources so that this filter won't fail
-        GC.start
-
-        # Create filter
-        klass = Nanoc::BinaryFilter.named(filter_name)
-        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self.to_proxy, @asset.to_proxy, @asset.site)
-
-        # Run filter
-        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        current_file = filter.run(current_file)
-        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
-      end
-
-      # Write asset
-      FileUtils.mkdir_p(File.dirname(self.disk_path))
-      FileUtils.cp(current_file.path, disk_path)
-
-      # Calculate digest after
-      digest_after = digest(disk_path)
-      @modified = (digest_after != digest_before)
-    end
 
     # Compiles the asset rep, treating its contents as textual data.
     def compile_textual

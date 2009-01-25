@@ -17,7 +17,7 @@ test = namespace :test do
   end
 
   # test:base
-  %w( base binary_filters cli data_sources extra filters helpers routers ).each do |dir|
+  %w( base cli data_sources extra filters helpers routers ).each do |dir|
     Rake::TestTask.new(dir) do |task|
       ENV['QUIET'] = 'true'
 
