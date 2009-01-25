@@ -25,7 +25,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     end
 
     def page_defaults
-      Nanoc::PageDefaults.new({ :foo => 'bar' })
+      Nanoc::Defaults.new({ :foo => 'bar' })
     end
 
     def assets
@@ -35,7 +35,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     end
 
     def asset_defaults
-      Nanoc::AssetDefaults.new({ :foo => 'baz' })
+      Nanoc::Defaults.new({ :foo => 'baz' })
     end
 
     def layouts
@@ -66,7 +66,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     end
 
     def page_defaults
-      Nanoc::PageDefaults.new({ :foo => 'bar' })
+      Nanoc::Defaults.new({ :foo => 'bar' })
     end
 
     def layouts

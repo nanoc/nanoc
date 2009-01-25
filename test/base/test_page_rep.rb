@@ -7,7 +7,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_initialize
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -35,7 +35,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_to_proxy
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -58,7 +58,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_created_modified_compiled
     # Create data
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
     layout = Nanoc::Layout.new('[<%= @page.content %>]', {}, '/default/')
     page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
 
@@ -116,7 +116,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_outdated
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create layouts
     layouts = [
@@ -198,7 +198,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_disk_and_web_path
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create router
     router = mock
@@ -228,7 +228,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # 3. hardcoded defaults
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new({
+    page_defaults = Nanoc::Defaults.new({
       :reps => { :custom => {
         :one => 'one in page defaults rep',
         :two => 'two in page defaults rep'
@@ -268,7 +268,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     # 5. hardcoded defaults
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new({
+    page_defaults = Nanoc::Defaults.new({
       :one    => 'one in page defaults',
       :two    => 'two in page defaults',
       :three  => 'three in page defaults',
@@ -313,7 +313,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_content_pre_not_yet_compiled
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -338,7 +338,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_content_pre_already_compiled
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -360,7 +360,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_content_post_not_yet_compiled
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -381,7 +381,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_content_post_already_compiled
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -403,7 +403,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_layout_without_layout
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -421,7 +421,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_layout_with_unknown_layout
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -440,7 +440,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_layout_normal
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create layout
     layout = Nanoc::Layout.new('header <%= @page.content %> footer', {}, '/foo/')
@@ -462,7 +462,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_not_outdated
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -481,7 +481,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_already_compiled
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     stack = []
@@ -504,7 +504,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_without_layout
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     stack = []
@@ -533,7 +533,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_also_layout
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     stack = []
@@ -568,7 +568,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_recursive
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     stack = []
@@ -619,7 +619,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_even_when_not_outdated
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     stack = []
@@ -648,7 +648,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_compile_from_scratch
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     stack = []
@@ -681,7 +681,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_filter_get_content_for_stage_pre
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -723,7 +723,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_filter_get_content_for_stage_post
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -765,7 +765,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_filter_chained
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -813,7 +813,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_filter_with_unknown_filter
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -850,7 +850,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_layout
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -894,7 +894,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_layout_without_layout
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -932,7 +932,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_layout_with_unknown_filter
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -973,7 +973,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
   def test_do_write
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:skip_output => true)
+    page_defaults = Nanoc::Defaults.new(:skip_output => true)
 
     # Create site
     site = mock

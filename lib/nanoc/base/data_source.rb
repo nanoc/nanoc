@@ -154,8 +154,8 @@ module Nanoc
 
     ########## Page defaults
 
-    # Returns the page defaults (represented by Nanoc::PageDefaults) of this
-    # site. This is an abstract method implemented by the subclass.
+    # Returns the page defaults (represented by Nanoc::Defaults) of this site.
+    # This is an abstract method implemented by the subclass.
     #
     # Subclasses must implement this method.
     def page_defaults
@@ -171,7 +171,7 @@ module Nanoc
 
     ########## Asset defaults
 
-    # Returns the asset defaults (represented by Nanoc::AssetDefaults) of this
+    # Returns the asset defaults (represented by Nanoc::Defaults) of this
     # site. This is an abstract method implemented by the subclass.
     #
     # Subclasses must implement this method.

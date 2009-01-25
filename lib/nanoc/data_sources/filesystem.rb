@@ -286,7 +286,7 @@ module Nanoc::DataSources
       mtime = File.stat(filename).mtime
 
       # Build page defaults
-      Nanoc::PageDefaults.new(attributes, mtime)
+      Nanoc::Defaults.new(attributes, mtime)
     end
 
     def save_page_defaults(page_defaults) # :nodoc:
@@ -325,9 +325,9 @@ module Nanoc::DataSources
         mtime = File.stat(ASSET_DEFAULTS_FILENAME).mtime
 
         # Build asset defaults
-        Nanoc::AssetDefaults.new(attributes, mtime)
+        Nanoc::Defaults.new(attributes, mtime)
       else
-        Nanoc::AssetDefaults.new({})
+        Nanoc::Defaults.new({})
       end
     end
 

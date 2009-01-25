@@ -10,7 +10,7 @@ class Nanoc::Helpers::TaggingTest < Test::Unit::TestCase
   def test_tags_for_without_tags
     # Create site
     site = mock
-    page_defaults = Nanoc::PageDefaults.new({})
+    page_defaults = Nanoc::Defaults.new({})
     site.expects(:page_defaults).at_least_once.returns(page_defaults)
 
     # Create page

@@ -153,7 +153,7 @@ class Nanoc::AssetTest < Test::Unit::TestCase
         site = Nanoc::Site.new({})
 
         # Create asset defaults (hacky...)
-        asset_defaults = Nanoc::AssetDefaults.new({ :quux => 'stfu' })
+        asset_defaults = Nanoc::Defaults.new({ :quux => 'stfu' })
         site.instance_eval { @asset_defaults = asset_defaults }
 
         # Create asset

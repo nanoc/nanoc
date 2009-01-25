@@ -64,13 +64,13 @@ describe 'Nanoc::Site#initialize' do
       Nanoc::Page.new("Hello there.", {}, '/about/')
     ])
     site.data_source.expects(:page_defaults).returns(
-      Nanoc::PageDefaults.new({ :foo => 'bar' })
+      Nanoc::Defaults.new({ :foo => 'bar' })
     )
     site.data_source.expects(:assets).returns([
       Nanoc::Asset.new(File.open('/dev/null'), {}, '/something/')
     ])
     site.data_source.expects(:asset_defaults).returns(
-      Nanoc::AssetDefaults.new({ :foo => 'baz' })
+      Nanoc::Defaults.new({ :foo => 'baz' })
     )
     site.data_source.expects(:layouts).returns([
       Nanoc::Layout.new(
@@ -82,8 +82,8 @@ describe 'Nanoc::Site#initialize' do
     site.load_data
 
     # Check classes
-    site.page_defaults.should.be.an.instance_of  Nanoc::PageDefaults
-    site.asset_defaults.should.be.an.instance_of Nanoc::AssetDefaults
+    site.page_defaults.should.be.an.instance_of  Nanoc::Defaults
+    site.asset_defaults.should.be.an.instance_of Nanoc::Defaults
     site.code.should.be.an.instance_of           Nanoc::Code
     site.pages.each     { |p| p.should.be.an.instance_of Nanoc::Page     }
     site.assets.each    { |p| p.should.be.an.instance_of Nanoc::Asset    }

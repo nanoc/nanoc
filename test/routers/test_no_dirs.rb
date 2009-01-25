@@ -10,7 +10,7 @@ class Nanoc::Routers::NoDirsTest < Test::Unit::TestCase
     router = Nanoc::Routers::NoDirs.new(nil)
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -35,7 +35,7 @@ class Nanoc::Routers::NoDirsTest < Test::Unit::TestCase
     router = Nanoc::Routers::NoDirs.new(nil)
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -60,7 +60,7 @@ class Nanoc::Routers::NoDirsTest < Test::Unit::TestCase
     router = Nanoc::Routers::NoDirs.new(nil)
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -85,7 +85,7 @@ class Nanoc::Routers::NoDirsTest < Test::Unit::TestCase
 
   def test_path_for_asset_rep_with_default_rep
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -111,7 +111,7 @@ class Nanoc::Routers::NoDirsTest < Test::Unit::TestCase
 
   def test_path_for_asset_rep_with_custom_rep
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
