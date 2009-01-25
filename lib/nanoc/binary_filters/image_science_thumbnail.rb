@@ -4,7 +4,7 @@ module Nanoc::BinaryFilters
 
     identifier :image_science_thumbnail
 
-    def run(file)
+    def run(file, params={})
       require 'image_science'
 
       # Get temporary file path
@@ -14,7 +14,7 @@ module Nanoc::BinaryFilters
 
       # Create thumbnail
       ImageScience.with_image(file.path) do |img|
-        img.thumbnail(@asset_rep.thumbnail_size || 150) do |thumbnail|
+        img.thumbnail(params[:thumbnail_size] || @asset_rep.thumbnail_size || 150) do |thumbnail|
           thumbnail.save(tmp_path)
         end
       end
