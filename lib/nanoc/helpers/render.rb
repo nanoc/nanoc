@@ -2,6 +2,8 @@ module Nanoc::Helpers
 
   # Nanoc::Helpers::Render provides functionality for rendering layouts as
   # partials.
+  #
+  # This helper is activated automatically.
   module Render
 
     # Returns a string containing the rendered given layout.

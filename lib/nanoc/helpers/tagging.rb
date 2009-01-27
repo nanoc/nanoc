@@ -5,6 +5,10 @@ module Nanoc::Helpers
   # tags that should be applied to the page. For example:
   #
   #   tags: [ 'foo', 'bar', 'baz' ]
+  #
+  # To activate this helper, +include+ it, like this:
+  #
+  #   include Nanoc::Helpers::Tagging
   module Tagging
 
     # Returns a formatted list of tags for the given page as a string. Several

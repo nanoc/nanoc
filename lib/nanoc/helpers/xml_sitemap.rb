@@ -3,6 +3,10 @@ module Nanoc::Helpers
   # Nanoc::Helpers::XMLSitemap contains functionality for building XML
   # sitemaps that will be crawled by search engines. See the Sitemaps protocol
   # web site, http://www.sitemaps.org, for details.
+  #
+  # To activate this helper, +include+ it, like this:
+  #
+  #   include Nanoc::Helpers::XMLSitemap
   module XMLSitemap
 
     # Returns the XML sitemap as a string.

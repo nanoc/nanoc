@@ -30,6 +30,10 @@ module Nanoc::Helpers
   # When the site is compiled, the sidebar of the about page will say “On
   # this page, the purpose of nanoc is described, blah blah blah,” as
   # expected.
+  #
+  # To activate this helper, +include+ it, like this:
+  #
+  #   include Nanoc::Helpers::Capturing
   module Capturing
 
     # Captures the content inside the block into a page attribute named
