@@ -1,6 +1,10 @@
 module Nanoc::Helpers
 
   # Nanoc::Helpers::LinkTo contains functions for linking to pages.
+  #
+  # To activate this helper, +include+ it, like this:
+  #
+  #   include Nanoc::Helpers::LinkTo
   module LinkTo
 
     include Nanoc::Helpers::HTMLEscape
