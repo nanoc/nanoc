@@ -111,7 +111,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     site = mock
     site.expects(:config).returns({
       :output_dir       => 'tmp/out',
-      :index_filenames  => 'index.html'
+      :index_filenames  => [ 'index.html' ]
     })
 
     # Create router
@@ -133,7 +133,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     site = mock
     site.expects(:config).returns({
       :output_dir       => 'tmp/out',
-      :index_filenames  => 'index.html'
+      :index_filenames  => [ 'index.html' ]
     })
 
     # Create router
@@ -155,7 +155,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     site = mock
     site.expects(:config).returns({
       :output_dir       => 'tmp/out',
-      :index_filenames  => 'index.html'
+      :index_filenames  => [ 'index.html' ]
     })
 
     # Create router
@@ -177,7 +177,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     site = mock
     site.expects(:config).returns({
       :output_dir       => 'tmp/out',
-      :index_filenames  => 'index.html'
+      :index_filenames  => [ 'index.html' ]
     })
 
     # Create router
