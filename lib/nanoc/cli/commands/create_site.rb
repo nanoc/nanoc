@@ -214,7 +214,7 @@ EOS
         site_setup
         site_populate
       ensure
-        FileUtils.cd(File.join(path.map { |n| '..' }))
+        FileUtils.cd(File.join(path.split('/').map { |n| '..' }))
       end
 
       puts "Created a blank nanoc site at '#{path}'. Enjoy!"
