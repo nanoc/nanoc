@@ -8,7 +8,7 @@ module Nanoc::Extra
   # proxy will make sure the File object is not created until it is used.
   class FileProxy
 
-    instance_methods.each { |m| undef_method m unless m =~ /^__/ }
+    instance_methods.each { |m| undef_method m unless m =~ /^__/ || m.to_s == 'object_id' }
 
     # Creates a new file proxy for the given path. This is similar to
     # creating a File object with the same path, except that the File object
