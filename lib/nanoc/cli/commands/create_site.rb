@@ -207,14 +207,10 @@ EOS
 
       # Build entire site
       FileUtils.mkdir_p(path)
-      begin
-        FileUtils.cd(File.join(path))
-
+      FileUtils.cd(File.join(path)) do
         site_create_minimal(data_source)
         site_setup
         site_populate
-      ensure
-        FileUtils.cd(File.join(path.map { |n| '..' }))
       end
 
       puts "Created a blank nanoc site at '#{path}'. Enjoy!"
