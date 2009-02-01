@@ -1,6 +1,12 @@
 nanoc Release Notes
 ===================
 
+2.1.5
+-----
+
+* The Filesystem and FilesystemCombined data source now preserve custom
+  extensions
+
 2.1.4
 -----
 
