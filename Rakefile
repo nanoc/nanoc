@@ -113,3 +113,16 @@ Rake::TestTask.new(:test) do |task|
 end
 
 task :default => [ :test ]
+
+### Ruby 1.9 compatibility
+
+task :fetch_dependencies do
+  # Fetch mocha
+  if File.directory?('vendor/mocha')
+    puts "Skipping mocha (already in vendor)"
+  else
+    puts "Fetching mocha..."
+    sh %{git clone git://github.com/floehopper/mocha.git vendor/mocha}
+    puts "Fetched mocha."
+  end
+end
