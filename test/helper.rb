@@ -67,7 +67,11 @@ def if_have(x)
   require x
   yield
 rescue LoadError
-  skip "requiring #{x} failed"
+  begin
+    skip "requiring #{x} failed"
+  rescue NoMethodError
+    $stderr_real.print "[ skipped -- requiring #{x} failed ]"
+  end
 end
 
 def global_setup
