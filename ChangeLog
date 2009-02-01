@@ -5,7 +5,7 @@ nanoc Release Notes
 -----
 
 * Added Ruby 1.9 compatibility
-* The Filesystem and FilesystemCombined data source now preserve custom
+* The Filesystem and FilesystemCombined data sources now preserve custom
   extensions
 
 2.1.4
