@@ -24,9 +24,7 @@ if RUBY_VERSION >= '1.9'
   unless File.directory?('vendor/mocha')
     warn "You appear to be running Ruby 1.9. Please make sure that, before " +
          "running the tests, you have a version of mocha that is " +
-         "compatible with Ruby 1.9. If you have git, you can run the " +
-         "'fetch_dependencies' Rake task to fetch a version of mocha that " +
-         "is compatible with 1.9."
+         "compatible with Ruby 1.9."
   end
 end
 
@@ -134,16 +132,3 @@ Rake::TestTask.new(:test) do |task|
 end
 
 task :default => [ :test ]
-
-### Ruby 1.9 compatibility
-
-task :fetch_dependencies do
-  # Fetch mocha
-  if File.directory?('vendor/mocha')
-    puts "Skipping mocha (already in vendor)"
-  else
-    puts "Fetching mocha..."
-    sh %{git clone git://github.com/floehopper/mocha.git vendor/mocha}
-    puts "Fetched mocha."
-  end
-end
