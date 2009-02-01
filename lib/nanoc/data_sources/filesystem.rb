@@ -220,7 +220,7 @@ module Nanoc::DataSources
         content_file = File.new(content_filename)
 
         # Get attributes
-        attributes = meta.merge(:extension => File.extname(content_filename)[1..-1])
+        attributes = { :extension => File.extname(content_filename)[1..-1] }.merge(meta)
 
         # Get path
         path = meta_filename.sub(/^assets/, '').sub(/[^\/]+\.yaml$/, '')
