@@ -1528,7 +1528,7 @@ _re = %r{
   $
 }x
 
-data_mime_type.lines.each do |i|
+data_mime_type.each_line do |i|
   item = i.chomp.strip.gsub(%r{#.*}o, '')
   next if item.empty?
 
