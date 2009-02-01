@@ -19,7 +19,9 @@ module Nanoc
       # symbols for this plugin.
       def identifiers(*identifiers)
         # Initialize
-        @identifiers = [] unless instance_variables.include?('@identifiers')
+        if !instance_variables.include?('@identifiers') && !instance_variables.include?(:'@identifiers')
+          @identifiers = []
+        end
 
         if identifiers.empty?
           @identifiers
@@ -35,7 +37,9 @@ module Nanoc
       # When given nothing, returns the identifier for this plugin.
       def identifier(identifier=nil)
         # Initialize
-        @identifiers = [] unless instance_variables.include?('@identifiers')
+        if !instance_variables.include?('@identifiers') && !instance_variables.include?(:'@identifiers')
+          @identifiers = []
+        end
 
         if identifier.nil?
           @identifiers.first
