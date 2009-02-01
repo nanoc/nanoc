@@ -33,6 +33,7 @@ module Nanoc::CLI
         # Handle version option
         if parsed_arguments[:options].has_key?(:version)
           puts "nanoc #{Nanoc::VERSION} (c) 2007-2009 Denis Defreyne."
+          puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
           exit 1
         # Handle help option
         elsif parsed_arguments[:options].has_key?(:help)
