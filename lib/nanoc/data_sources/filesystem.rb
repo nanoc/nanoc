@@ -122,29 +122,24 @@ module Nanoc::DataSources
         # Read metadata
         meta = YAML.load_file(meta_filename) || {}
 
-        if meta['is_draft']
-          # Skip drafts
-          nil
-        else
-          # Get content
-          content_filename = content_filename_for_dir(File.dirname(meta_filename))
-          content = File.read(content_filename)
+        # Get content
+        content_filename = content_filename_for_dir(File.dirname(meta_filename))
+        content = File.read(content_filename)
 
-          # Get attributes
-          attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(content_filename))
+        # Get attributes
+        attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(content_filename))
 
-          # Get path
-          path = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
+        # Get path
+        path = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
 
-          # Get modification times
-          meta_mtime    = File.stat(meta_filename).mtime
-          content_mtime = File.stat(content_filename).mtime
-          mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
+        # Get modification times
+        meta_mtime    = File.stat(meta_filename).mtime
+        content_mtime = File.stat(content_filename).mtime
+        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
-          # Create page object
-          Nanoc::Page.new(content, attributes, path, mtime)
-        end
-      end.compact
+        # Create page object
+        Nanoc::Page.new(content, attributes, path, mtime)
+      end
     end
 
     def save_page(page) # :nodoc:

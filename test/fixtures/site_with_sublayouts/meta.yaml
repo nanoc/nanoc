@@ -7,7 +7,6 @@ extension:    "html"
 filename:     "index"
 filters_post: []
 filters_pre:  []
-is_draft:     false
 layout:       "default"
 skip_output:  false
 

@@ -67,17 +67,6 @@ class Nanoc::OldCompilerTest < Test::Unit::TestCase
     end
   end
 
-  def test_compile_site_with_draft_pages
-    with_site_fixture 'site_with_draft_pages' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
-
-      assert_equal(1, Dir[File.join('output', '*')].size)
-      assert(File.file?('output/index.html'))
-      assert(!File.file?('output/about/index.html'))
-    end
-  end
-
   def test_compile_site_with_double_extensions
     with_site_fixture 'site_with_double_extensions' do |site|
       assert_nothing_raised() { site.compiler.run }
