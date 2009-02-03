@@ -4,11 +4,11 @@ module Nanoc::Filters
     identifiers :rdoc
 
     def run(content)
-      require 'rdoc/markup/simple_markup'
-      require 'rdoc/markup/simple_markup/to_html'
+      require 'rdoc/markup'
+      require 'rdoc/markup/to_html'
 
       # Get result
-      ::SM::SimpleMarkup.new.convert(content, SM::ToHtml.new)
+      ::RDoc::Markup.new.convert(content, ::RDoc::Markup::ToHtml.new)
     end
 
   end

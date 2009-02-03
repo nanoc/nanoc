@@ -78,7 +78,9 @@ module Nanoc
       # Deprecated
       def extensions(*extensions) # :nodoc:
         # Initialize
-        @extensions = [] unless instance_variables.include?('@extensions')
+        if !instance_variables.include?('@extensions') && !instance_variables.include?(:'@extensions')
+          @extensions = []
+        end
 
         if extensions.empty?
           @extensions
@@ -91,7 +93,9 @@ module Nanoc
       # Deprecated
       def extension(extension=nil) # :nodoc:
         # Initialize
-        @extensions = [] unless instance_variables.include?('@extensions')
+        if !instance_variables.include?('@extensions') && !instance_variables.include?(:'@extensions')
+          @extensions = []
+        end
 
         if extension.nil?
           @extensions.first

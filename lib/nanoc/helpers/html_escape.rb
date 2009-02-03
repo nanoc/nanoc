@@ -2,6 +2,8 @@ module Nanoc::Helpers
 
   # Nanoc::Helpers::HTMLEscape contains functionality for HTML-escaping
   # strings.
+  #
+  # This helper is activated automatically.
   module HTMLEscape
 
     # Returns the HTML-escaped representation of the given string. Only &, <,

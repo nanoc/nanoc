@@ -111,7 +111,32 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
   # Test assets
 
   def test_assets
-    # TODO implement
+    with_temp_site('filesystem_combined') do |site|
+      # Create asset with extension
+      File.open('assets/foo.fooext', 'w') do |io|
+        io.write("-----\n")
+        io.write("filters: []\n")
+        io.write("extension: newfooext\n")
+        io.write("-----\n")
+        io.write("Lorem ipsum dolor sit amet...")
+      end
+
+      # Create asset without extension
+      File.open('assets/bar.barext', 'w') do |io|
+        io.write("-----\n")
+        io.write("filters: []\n")
+        io.write("-----\n")
+        io.write("Lorem ipsum dolor sit amet...")
+      end
+
+      # Reload data
+      site.load_data(true)
+
+      # Check assets
+      assert_equal(2, site.assets.size)
+      assert(site.assets.any? { |a| a.attribute_named(:extension) == 'newfooext' })
+      assert(site.assets.any? { |a| a.attribute_named(:extension) == 'barext' })
+    end
   end
 
   def test_save_asset

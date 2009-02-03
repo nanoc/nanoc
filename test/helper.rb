@@ -1,6 +1,13 @@
 # Try getting RubyGems
 begin ; require 'rubygems' ; rescue LoadError ; end
 
+# Add vendor to load path
+[ 'mocha', 'mime-types' ].each do |e|
+  path = File.join(File.dirname(__FILE__), '..', 'vendor', e, 'lib')
+  next unless File.directory?(path)
+  $LOAD_PATH.unshift(File.expand_path(path))
+end
+
 # Load unit testing stuff
 begin
   require 'test/unit'
@@ -65,7 +72,11 @@ def if_have(x)
   require x
   yield
 rescue LoadError
-  $stderr_real.print "[ skipped -- requiring #{x} failed ]"
+  begin
+    skip "requiring #{x} failed"
+  rescue NoMethodError
+    $stderr_real.print "[ skipped -- requiring #{x} failed ]"
+  end
 end
 
 def global_setup

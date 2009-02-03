@@ -194,6 +194,51 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # TODO implement
   end
 
+  # Test assets
+
+  def test_assets
+    with_temp_site do |site|
+      # Create asset with extension
+      FileUtils.mkdir_p('assets/foo')
+      File.open('assets/foo/foo.yaml', 'w') do |io|
+        io.write("filters: []\n")
+        io.write("extension: newfooext\n")
+      end
+      File.open('assets/foo/foo.fooext', 'w') do |io|
+        io.write('Lorem ipsum dolor sit amet...')
+      end
+
+      # Create asset without extension
+      FileUtils.mkdir_p('assets/bar')
+      File.open('assets/bar/bar.yaml', 'w') do |io|
+        io.write("filters: []\n")
+      end
+      File.open('assets/bar/bar.barext', 'w') do |io|
+        io.write("Lorem ipsum dolor sit amet...")
+      end
+
+      # Reload data
+      site.load_data(true)
+
+      # Check assets
+      assert_equal(2, site.assets.size)
+      assert(site.assets.any? { |a| a.attribute_named(:extension) == 'newfooext' })
+      assert(site.assets.any? { |a| a.attribute_named(:extension) == 'barext' })
+    end
+  end
+
+  def test_save_asset
+    # TODO implement
+  end
+
+  def test_move_asset
+    # TODO implement
+  end
+
+  def test_delete_asset
+    # TODO implement
+  end
+
   # Test page defaults
 
   def test_page_defaults
