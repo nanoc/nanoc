@@ -230,12 +230,27 @@ module Nanoc
       # Check modified
       @modified = @created ? true : File.read(self.disk_path) != current_content
 
+      # Get assigns
+      assigns = {
+        :_obj_rep   => self,
+        :_obj       => self.asset,
+        :page_rep   => nil,
+        :page       => nil,
+        :asset_rep  => self.to_proxy,
+        :asset      => self.asset.to_proxy,
+        :pages      => self.asset.site.pages.map    { |obj| obj.to_proxy },
+        :assets     => self.asset.site.assets.map   { |obj| obj.to_proxy },
+        :layouts    => self.asset.site.layouts.map  { |obj| obj.to_proxy },
+        :config     => self.asset.site.config,
+        :site       => self.asset.site
+      }
+
       # Run filters
       attribute_named(:filters).each do |filter_name|
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self)
+        filter = klass.new(assigns)
 
         # Run filter
         Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)

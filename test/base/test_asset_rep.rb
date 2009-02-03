@@ -61,14 +61,16 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
     # Create site and other requisites
     stack = []
-    compiler = mock
-    compiler.stubs(:stack).returns(stack)
-    router = mock
-    router.expects(:disk_path_for).returns('tmp/out/foo/index.html')
-    site = mock
-    site.expects(:compiler).at_least_once.returns(compiler)
-    site.expects(:router).returns(router)
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    compiler = MiniTest::Mock.new.expect(:stack, stack)
+    router = MiniTest::Mock.new.expect(:disk_path_for, 'tmp/out/foo/index.html', [ nil ])
+    site = MiniTest::Mock.new
+    site.expect(:compiler, compiler)
+    site.expect(:router, router)
+    site.expect(:asset_defaults, asset_defaults)
+    site.expect(:pages, [])
+    site.expect(:assets, [])
+    site.expect(:layouts, [])
+    site.expect(:config, {})
     asset.site = site
 
     # Get rep

@@ -8,43 +8,19 @@ module Nanoc
     # Deprecated
     EXTENSIONS_MAP = {}
 
-    # Creates a new filter for the given object (page or asset) and site.
+    # A hash containing variables that will be made available during
+    # filtering.
+    attr_reader :assigns
+
+    # Creates a new filter for the given item (page or asset) and assigns.
     #
-    # +kind+:: The kind of object that is passed. Can be either +:page+ or
-    #          +:asset+.
-    #
-    # +obj_rep+:: A proxy for the page or asset representation (Nanoc::PageRep
-    #             or Nanoc::AssetRep) that should be compiled by this filter.
-    #
-    # +obj+:: A proxy for the page or asset's page (Nanoc::Page or
-    #         Nanoc::Asset).
-    #
-    # +site+:: The site (Nanoc::Site) this filter belongs to.
+    # +obj_rep+:: The page or asset representation (Nanoc::PageRep or
+    #             Nanoc::AssetRep) that should be compiled by this filter.
     #
     # +other_assigns+:: A hash containing other variables that should be made
     #                   available during filtering.
-    def initialize(obj_rep, other_assigns={})
-      # Determine kind
-      @kind = obj_rep.is_a?(Nanoc::PageRep) ? :page : :asset
-
-      # Set object
-      @obj_rep = obj_rep
-      @obj     = (@kind == :page ? @obj_rep.page : @obj_rep.asset)
-
-      # Set page/asset and page/asset reps
-      if @kind == :page
-        @page       = @obj
-        @page_rep   = @obj_rep
-      else
-        @asset      = @obj
-        @asset_rep  = @obj_rep
-      end
-
-      # Set site
-      @site = @obj.site
-
-      # Set other assigns
-      @other_assigns  = other_assigns
+    def initialize(a_assigns={})
+      @assigns = a_assigns
     end
 
     # Runs the filter. This method returns the filtered content.
@@ -54,23 +30,6 @@ module Nanoc
     # Subclasses must implement this method.
     def run(content, params={})
       raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
-    end
-
-    # Returns a hash with data that should be available.
-    def assigns
-      @assigns ||= @other_assigns.merge({
-        :_obj_rep   => @obj_rep,
-        :_obj       => @obj,
-        :page_rep   => @kind == :page  ? @page_rep.to_proxy  : nil,
-        :page       => @kind == :page  ? @page.to_proxy      : nil,
-        :asset_rep  => @kind == :asset ? @asset_rep.to_proxy : nil,
-        :asset      => @kind == :asset ? @asset.to_proxy     : nil,
-        :pages      => @site.pages.map    { |obj| obj.to_proxy },
-        :assets     => @site.assets.map   { |obj| obj.to_proxy },
-        :layouts    => @site.layouts.map  { |obj| obj.to_proxy },
-        :config     => @site.config,
-        :site       => @site
-      })
     end
 
     class << self

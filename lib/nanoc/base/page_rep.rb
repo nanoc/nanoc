@@ -284,6 +284,21 @@ module Nanoc
       # Get filters
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
+      # Get assigns
+      assigns = {
+        :_obj_rep   => self,
+        :_obj       => self.page,
+        :page_rep   => self.to_proxy,
+        :page       => self.page.to_proxy,
+        :asset_rep  => nil,
+        :asset      => nil,
+        :pages      => self.page.site.pages.map    { |obj| obj.to_proxy },
+        :assets     => self.page.site.assets.map   { |obj| obj.to_proxy },
+        :layouts    => self.page.site.layouts.map  { |obj| obj.to_proxy },
+        :config     => self.page.site.config,
+        :site       => self.page.site
+      }
+
       # Run each filter
       filters.each do |raw_filter|
         # Get filter arguments, if any
@@ -298,7 +313,7 @@ module Nanoc
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self)
+        filter = klass.new(assigns)
 
         # Run filter
         Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
@@ -318,10 +333,25 @@ module Nanoc
         return
       end
 
+      # Get assigns
+      assigns = {
+        :_obj_rep   => self,
+        :_obj       => self.page,
+        :page_rep   => self.to_proxy,
+        :page       => self.page.to_proxy,
+        :asset_rep  => nil,
+        :asset      => nil,
+        :pages      => self.page.site.pages.map    { |obj| obj.to_proxy },
+        :assets     => self.page.site.assets.map   { |obj| obj.to_proxy },
+        :layouts    => self.page.site.layouts.map  { |obj| obj.to_proxy },
+        :config     => self.page.site.config,
+        :site       => self.page.site
+      }
+
       # Create filter
       klass = layout.filter_class
       raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
-      filter = klass.new(self)
+      filter = klass.new(assigns)
 
       # Layout
       Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
