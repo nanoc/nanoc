@@ -2,7 +2,6 @@ module Nanoc::Filters
   class Haml < Nanoc::Filter
 
     identifiers :haml
-    extensions  '.haml'
 
     def run(content)
       require 'haml'

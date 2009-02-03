@@ -31,22 +31,4 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     end
   end
 
-  def test_extensions
-    # Create filter
-    filter = Nanoc::Filter.new
-
-    # Update extension
-    filter.class.class_eval { extension :foo }
-
-    # Check
-    assert_equal(:foo, filter.class.class_eval { extension })
-    assert_equal([ :foo ], filter.class.class_eval { extensions })
-
-    # Update extension
-    filter.class.class_eval { extensions :foo, :bar }
-
-    # Check
-    assert_equal([ :foo, :bar ], filter.class.class_eval { extensions })
-  end
-
 end

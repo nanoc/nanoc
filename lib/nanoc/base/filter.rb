@@ -5,9 +5,6 @@ module Nanoc
   # override the +run+ method.
   class Filter < Plugin
 
-    # Deprecated
-    EXTENSIONS_MAP = {}
-
     # A hash containing variables that will be made available during
     # filtering.
     attr_reader :assigns
@@ -30,50 +27,6 @@ module Nanoc
     # Subclasses must implement this method.
     def run(content, params={})
       raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
-    end
-
-    class << self
-
-      # Deprecated
-      def extensions(*extensions) # :nodoc:
-        # Initialize
-        if !instance_variables.include?('@extensions') && !instance_variables.include?(:'@extensions')
-          @extensions = []
-        end
-
-        if extensions.empty?
-          @extensions
-        else
-          @extensions = extensions
-          @extensions.each { |e| register_extension(e, self) }
-        end
-      end
-
-      # Deprecated
-      def extension(extension=nil) # :nodoc:
-        # Initialize
-        if !instance_variables.include?('@extensions') && !instance_variables.include?(:'@extensions')
-          @extensions = []
-        end
-
-        if extension.nil?
-          @extensions.first
-        else
-          @extensions = [ extension ]
-          register_extension(extension, self)
-        end
-      end
-
-      # Deprecated
-      def register_extension(extension, klass)
-        EXTENSIONS_MAP[extension] = klass
-      end
-
-      # Deprecated
-      def with_extension(extension)
-        EXTENSIONS_MAP[extension]
-      end
-
     end
 
   end
