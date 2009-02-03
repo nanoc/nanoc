@@ -1,4 +1,4 @@
-require 'helper'
+require 'test/helper'
 
 class Nanoc::CLI::InfoCommandTest < Test::Unit::TestCase
 

@@ -10,11 +10,11 @@ end
 
 # Load unit testing stuff
 begin
-  require 'test/unit'
-  require 'test/spec'
+  require 'minitest/unit'
+  require 'minitest/spec'
   require 'mocha'
 rescue => e
-  $stderr.puts "To run the nanoc unit tests, you need test/unit, test/spec and mocha."
+  $stderr.puts "To run the nanoc unit tests, you need minitest and mocha."
   raise e
 end
 

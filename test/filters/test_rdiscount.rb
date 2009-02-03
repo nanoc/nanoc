@@ -1,4 +1,4 @@
-require 'helper'
+require 'test/helper'
 
 class Nanoc::Filters::RDiscountTest < Test::Unit::TestCase
 

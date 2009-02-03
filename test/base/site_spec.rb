@@ -11,50 +11,44 @@ describe 'Nanoc::Site#initialize' do
   after  { global_teardown }
 
   it 'should merge default config' do
-    should.not.raise do
-      site = Nanoc::Site.new(:router => 'versioned')
-      site.config.should == Nanoc::Site::DEFAULT_CONFIG.merge(:router => 'versioned')
-    end
+    site = Nanoc::Site.new(:router => 'versioned')
+    site.config.must_equal Nanoc::Site::DEFAULT_CONFIG.merge(:router => 'versioned')
   end
 
   it 'should not raise in normal situations' do
-    should.not.raise do
-      Nanoc::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'filesystem',
-        :router       => 'default'
-      )
-    end
+    Nanoc::Site.new(
+      :output_dir   => 'output',
+      :data_source  => 'filesystem',
+      :router       => 'default'
+    )
   end
 
   it 'should not raise for non-existant output directory' do
-    should.not.raise do
-      Nanoc::Site.new(
-        :output_dir   => 'non_existant_output_dir',
-        :data_source  => 'filesystem',
-        :router       => 'default'
-      )
-    end
+    Nanoc::Site.new(
+      :output_dir   => 'non_existant_output_dir',
+      :data_source  => 'filesystem',
+      :router       => 'default'
+    )
   end
 
   it 'should raise for unknown data sources' do
-    should.raise(Nanoc::Errors::UnknownDataSourceError) do
+    proc do
       Nanoc::Site.new(
         :output_dir   => 'output',
         :data_source  => 'unknown_data_source',
         :router       => 'default'
       )
-    end
+    end.must_raise Nanoc::Errors::UnknownDataSourceError
   end
 
   it 'should raise for unknown routers' do
-    should.raise(Nanoc::Errors::UnknownRouterError) do
+    proc do
       Nanoc::Site.new(
         :output_dir   => 'output',
         :data_source  => 'filesystem',
         :router       => 'unknown_router'
       )
-    end
+    end.must_raise Nanoc::Errors::UnknownRouterError
   end
 
   it 'should query the data source when loading data' do
@@ -82,20 +76,20 @@ describe 'Nanoc::Site#initialize' do
     site.load_data
 
     # Check classes
-    site.page_defaults.should.be.an.instance_of  Nanoc::Defaults
-    site.asset_defaults.should.be.an.instance_of Nanoc::Defaults
-    site.code.should.be.an.instance_of           Nanoc::Code
-    site.pages.each     { |p| p.should.be.an.instance_of Nanoc::Page     }
-    site.assets.each    { |p| p.should.be.an.instance_of Nanoc::Asset    }
-    site.layouts.each   { |l| l.should.be.an.instance_of Nanoc::Layout   }
+    site.page_defaults.must_be_instance_of  Nanoc::Defaults
+    site.asset_defaults.must_be_instance_of Nanoc::Defaults
+    site.code.must_be_instance_of           Nanoc::Code
+    site.pages.each     { |p| p.must_be_instance_of Nanoc::Page     }
+    site.assets.each    { |p| p.must_be_instance_of Nanoc::Asset    }
+    site.layouts.each   { |l| l.must_be_instance_of Nanoc::Layout   }
 
     # Check whether site is set
-    site.page_defaults.site.should  == site
-    site.asset_defaults.site.should == site
-    site.code.site.should           == site
-    site.pages.each     { |p| p.site.should == site }
-    site.assets.each    { |p| p.site.should == site }
-    site.layouts.each   { |l| l.site.should == site }
+    site.page_defaults.site.must_equal  site
+    site.asset_defaults.site.must_equal site
+    site.code.site.must_equal           site
+    site.pages.each     { |p| p.site.must_equal site }
+    site.assets.each    { |p| p.site.must_equal site }
+    site.layouts.each   { |l| l.site.must_equal site }
   end
 
 end

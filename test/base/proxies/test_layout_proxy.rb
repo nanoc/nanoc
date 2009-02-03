@@ -1,4 +1,4 @@
-require 'helper'
+require 'test/helper'
 
 class Nanoc::LayoutProxyTest < Test::Unit::TestCase
 
