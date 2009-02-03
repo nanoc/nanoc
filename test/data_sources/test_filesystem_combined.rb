@@ -21,7 +21,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         FileUtils.rm_rf('content')
         FileUtils.rm_rf('meta.yaml')
         FileUtils.rm_rf('page_defaults.yaml')
-        FileUtils.rm_rf('templates/default')
         FileUtils.rm_rf('layouts/default')
         FileUtils.rm_rf('lib/default.rb')
 
@@ -33,7 +32,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
         # Mock VCS
         vcs = mock
-        vcs.expects(:add).times(5) # One time for each directory
+        vcs.expects(:add).times(4) # One time for each directory
         site.data_source.vcs = vcs
 
         # Setup site
@@ -41,14 +40,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
         # Ensure essential files have been recreated
         assert(File.directory?('content/'))
-        assert(File.directory?('templates/'))
         assert(File.directory?('layouts/'))
         assert(File.directory?('lib/'))
 
         # Ensure no non-essential files have been recreated
         assert(!File.file?('asset_defaults.yaml'))
         assert(!File.file?('content/index.html'))
-        assert(!File.file?('templates/default.html'))
         assert(!File.file?('layouts/default.html'))
         assert(!File.file?('meta.yaml'))
         assert(!File.file?('page_defaults.yaml'))
@@ -61,7 +58,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     with_temp_site('filesystem_combined') do |site|
       # Mock VCS
       vcs = mock
-      vcs.expects(:remove).times(7) # One time for each directory
+      vcs.expects(:remove).times(6) # One time for each directory
       site.data_source.vcs = vcs
 
       # Destroy
@@ -165,31 +162,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
   end
 
   def test_save_asset_defaults
-    # TODO implement
-  end
-
-  # Test templates
-
-  def test_templates
-    with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        template = site.templates[0]
-        assert_equal('default', template.name)
-        assert_equal({ :title => 'A New Page' }, template.page_attributes)
-        assert_equal('Hi, I\'m a new page!', template.page_content)
-      end
-    end
-  end
-
-  def test_save_template
-    # TODO implement
-  end
-
-  def test_move_template
-    # TODO implement
-  end
-
-  def test_delete_template
     # TODO implement
   end
 

@@ -17,8 +17,16 @@ module Nanoc::CLI
     def long_desc
       'Compile all pages and all assets of the current site. If a path is ' +
       'given, only the page or asset with the given path will be compiled. ' +
-      'Additionally, only pages and assets that are outdated will be ' +
-      'compiled, unless specified otherwise with the -a option.'
+      "\n\n" +
+      'By default, only pages and assets that are outdated will be ' +
+      'compiled. This can speed up the compilation process quite a bit, ' +
+      'but pages that include content from other pages may have to be ' +
+      'recompiled manually. In order to compile objects even when they are ' +
+      'outdated, use the --force option.' +
+      "\n\n" +
+      'Both pages and assets will be compiled by default. To disable the ' +
+      'compilation of assets or pages, use the --no-assets and --no-pages ' +
+      'options, respectively.'
     end
 
     def usage
@@ -30,7 +38,22 @@ module Nanoc::CLI
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'compile all pages and assets, even those that aren\'t outdated'
+          :desc => 'alias for --force (DEPRECATED)'
+        },
+        # --force
+        {
+          :long => 'force', :short => 'f', :argument => :forbidden,
+          :desc => 'compile pages and assets even when they are not outdated'
+        },
+        # --only-pages
+        {
+          :long => 'no-pages', :short => 'P', :argument => :forbidden,
+          :desc => 'don\'t compile pages'
+        },
+        # --only-assets
+        {
+          :long => 'no-assets', :short => 'A', :argument => :forbidden,
+          :desc => 'don\'t compile assets'
         }
       ]
     end
@@ -39,10 +62,23 @@ module Nanoc::CLI
       # Make sure we are in a nanoc site directory
       @base.require_site
 
-      # Find object with given path
+      # Check presence of --all option
+      if options.has_key?(:all)
+        $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
+      end
+
+      # Find object(s) to compile
       if arguments.size == 0
-        objs = nil
+        # Find all pages and/or assets
+        if options.has_key?(:'no-pages')
+          objs = @base.site.assets
+        elsif options.has_key?(:'no-assets')
+          objs = @base.site.pages
+        else
+          objs = nil
+        end
       else
+        # Find object(s) with given path(s)
         objs = arguments.map do |path|
           # Find object
           path = path.cleaned_path
@@ -73,11 +109,11 @@ module Nanoc::CLI
         # Compile
         @base.site.compiler.run(
           objs,
-          :even_when_not_outdated => options.has_key?(:all)
+          :even_when_not_outdated => options.has_key?(:all) || options.has_key?(:force)
         )
 
         # Find reps
-        page_reps  = @base.site.pages.map { |p| p.reps }.flatten
+        page_reps  = @base.site.pages.map  { |p| p.reps }.flatten
         asset_reps = @base.site.assets.map { |a| a.reps }.flatten
         reps       = page_reps + asset_reps
 

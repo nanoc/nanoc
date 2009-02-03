@@ -9,13 +9,22 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 end
 
 # Load unit testing stuff
-require 'test/unit'
-require 'mocha'
-require 'stringio'
+begin
+  require 'test/unit'
+  require 'test/spec'
+  require 'mocha'
+rescue => e
+  $stderr.puts "To run the nanoc unit tests, you need test/unit, test/spec and mocha."
+  raise e
+end
 
 # Load nanoc
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc.rb')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc', 'cli', 'cli.rb')
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
+require 'nanoc'
+require 'nanoc/cli'
+
+# Load miscellaneous requirements
+require 'stringio'
 
 def with_site_fixture(a_fixture)
   in_dir(['test', 'fixtures', a_fixture]) do
@@ -59,10 +68,6 @@ def create_page(name)
   Nanoc::CLI::Base.new.run(['create_page', name])
 end
 
-def create_template(name)
-  Nanoc::CLI::Base.new.run(['create_template', name])
-end
-
 def if_have(x)
   require x
   yield
@@ -100,7 +105,12 @@ def global_teardown
     $stderr = $stderr_real
   end
 
-  # Remove output
+  # Remove tmp per site
+  Dir[File.join('test', 'fixtures', '*', 'tmp')].each do |f|
+    FileUtils.rm_rf(f) if File.exist?(f)
+  end
+
+  # Remove output per site
   Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
     FileUtils.rm_rf(f) if File.exist?(f)
   end

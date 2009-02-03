@@ -13,6 +13,8 @@ module Nanoc
   # * :compilation_ended
   # * :filtering_started
   # * :filtering_ended
+  # * :visit_started
+  # * :visit_ended
   #
   # The compilation-related events have one parameters (the page
   # representation); the filtering-related events have two (the page
@@ -28,6 +30,10 @@ module Nanoc
     # This page representation's unique name.
     attr_reader   :name
 
+    # Indicates whether this rep is forced to be dirty because of outdated
+    # dependencies.
+    attr_accessor :force_outdated
+    
     # Creates a new page representation for the given page and with the given
     # attributes.
     #
@@ -52,11 +58,22 @@ module Nanoc
       @compiled       = false
       @modified       = false
       @created        = false
+      @force_outdated = false
     end
 
     # Returns a proxy (Nanoc::PageRepProxy) for this page representation.
     def to_proxy
       @proxy ||= PageRepProxy.new(self)
+    end
+
+    # Returns the page for this page representation
+    def item
+      @page
+    end
+
+    # Returns the type of this object.
+    def type
+      :page_rep
     end
 
     # Returns true if this page rep's output file was created during the last
@@ -82,27 +99,30 @@ module Nanoc
       # Outdated if we don't know
       return true if @page.mtime.nil?
 
+      # Outdated if the dependency tracker says so
+      return true if @force_outdated
+
       # Outdated if compiled file doesn't exist
-      return true if !File.file?(disk_path)
+      return true if !File.file?(disk_path) && !attribute_named(:skip_output)
 
       # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime
+      compiled_mtime = File.stat(disk_path).mtime if !attribute_named(:skip_output)
 
       # Outdated if file too old
-      return true if @page.mtime > compiled_mtime
+      return true if !attribute_named(:skip_output) && @page.mtime > compiled_mtime
 
       # Outdated if layouts outdated
       return true if @page.site.layouts.any? do |l|
-        l.mtime.nil? or l.mtime > compiled_mtime
+        l.mtime.nil? || (!attribute_named(:skip_output) && l.mtime > compiled_mtime)
       end
 
       # Outdated if page defaults outdated
       return true if @page.site.page_defaults.mtime.nil?
-      return true if @page.site.page_defaults.mtime > compiled_mtime
+      return true if !attribute_named(:skip_output) && @page.site.page_defaults.mtime > compiled_mtime
 
       # Outdated if code outdated
       return true if @page.site.code.mtime.nil?
-      return true if @page.site.code.mtime > compiled_mtime
+      return true if !attribute_named(:skip_output) && @page.site.code.mtime > compiled_mtime
 
       return false
     end
@@ -132,6 +152,9 @@ module Nanoc
     # 4. The page defaults in general;
     # 5. The hardcoded page defaults, if everything else fails.
     def attribute_named(name)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
 
@@ -156,8 +179,10 @@ module Nanoc
     # +stage+:: The stage at which the content should be fetched. Can be
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
-    def content(stage=:pre)
-      compile(stage == :post, true, false)
+    def content(stage = :pre, even_when_not_outdated = true, from_scratch = false)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      compile(stage == :post, even_when_not_outdated, from_scratch)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       @content[stage]
     end
@@ -257,11 +282,19 @@ module Nanoc
       content = (stage == :pre ? @page.content : @content[:post])
 
       # Get filters
-      check_for_outdated_filters
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
       # Run each filter
-      filters.each do |filter_name|
+      filters.each do |raw_filter|
+        # Get filter arguments, if any
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
+
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
@@ -269,7 +302,7 @@ module Nanoc
 
         # Run filter
         Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        content = filter.run(content)
+        content = (filter.method(:run).arity == -2 ? filter.run(content, filter_args) : filter.run(content))
         Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
 
@@ -301,16 +334,6 @@ module Nanoc
       # TODO add ruby 1.9 support
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
-    end
-
-    # Raises an error when the outdated 'filters' attribute is used.
-    def check_for_outdated_filters
-      unless attribute_named(:filters).nil?
-        raise Nanoc::Errors::NoLongerSupportedError.new(
-          'The `filters` property is no longer supported; please use ' +
-          '`filters_pre` instead.'
-        )
-      end
     end
 
   end

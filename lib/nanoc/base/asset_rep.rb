@@ -13,6 +13,8 @@ module Nanoc
   # * :compilation_ended
   # * :filtering_started
   # * :filtering_ended
+  # * :visit_started
+  # * :visit_ended
   #
   # The compilation-related events have one parameters (the page
   # representation); the filtering-related events have two (the page
@@ -28,6 +30,10 @@ module Nanoc
     # This asset representation's unique name.
     attr_reader   :name
 
+    # Indicates whether this rep is forced to be dirty because of outdated
+    # dependencies.
+    attr_accessor :force_outdated
+    
     # Creates a new asset representation for the given asset and with the
     # given attributes.
     #
@@ -41,22 +47,33 @@ module Nanoc
     # +name+:: The unique name for the new asset representation.
     def initialize(asset, attributes, name)
       # Set primary attributes
-      @asset      = asset
-      @attributes = attributes
-      @name       = name
+      @asset          = asset
+      @attributes     = attributes
+      @name           = name
 
       # Reset flags
-      @compiled   = false
-      @modified   = false
-      @created    = false
+      @compiled       = false
+      @modified       = false
+      @created        = false
+      @force_outdated = false
 
       # Reset stages
-      @filtered   = false
+      @filtered       = false
     end
 
     # Returns a proxy (Nanoc::AssetRepProxy) for this asset representation.
     def to_proxy
       @proxy ||= AssetRepProxy.new(self)
+    end
+
+    # Returns the asset for this page representation
+    def item
+      @asset
+    end
+
+    # Returns the type of this object.
+    def type
+      :asset_rep
     end
 
     # Returns true if this asset rep's output file was created during the last
@@ -88,6 +105,9 @@ module Nanoc
     # including the filename and extension if they cannot be ignored (i.e.
     # they are not in the site configuration's list of index files).
     def web_path
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
       compile(false, false)
 
       @web_path ||= @asset.site.router.web_path_for(self)
@@ -98,6 +118,9 @@ module Nanoc
     def outdated?
       # Outdated if we don't know
       return true if @asset.mtime.nil?
+
+      # Outdated if the dependency tracker says so
+      return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
       return true if !File.file?(disk_path)
@@ -129,6 +152,9 @@ module Nanoc
     # 4. The asset defaults in general;
     # 5. The hardcoded asset defaults, if everything else fails.
     def attribute_named(name)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
       # Check in here
       return @attributes[name] if @attributes.has_key?(name)
 
@@ -186,13 +212,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:compilation_started, self)
 
       # Compile
-      unless @filtered
-        if attribute_named(:binary) == true
-          compile_binary
-        else
-          compile_textual
-        end
-      end
+      compile_textual unless @filtered
       @compiled = true
 
       # Stop
@@ -201,50 +221,6 @@ module Nanoc
     end
 
   private
-
-    # Computes and returns the MD5 digest for the given file.
-    def digest(file)
-      # Create hash
-      incr_digest = Digest::MD5.new()
-
-      # Collect data
-      file.rewind
-      incr_digest << file.read(1000) until file.eof?
-
-      # Calculate hex hash
-      incr_digest.hexdigest
-    end
-
-    # Compiles the asset rep, treating its contents as binary data.
-    def compile_binary
-      # Calculate digest before
-      digest_before = File.file?(disk_path) ? digest(File.open(disk_path, 'r')) : nil
-
-      # Run filters
-      current_file = @asset.file
-      attribute_named(:filters).each do |filter_name|
-        # Free resources so that this filter won't fail
-        GC.start
-
-        # Create filter
-        klass = Nanoc::BinaryFilter.named(filter_name)
-        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(self.to_proxy, @asset.to_proxy, @asset.site)
-
-        # Run filter
-        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        current_file = filter.run(current_file)
-        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
-      end
-
-      # Write asset
-      FileUtils.mkdir_p(File.dirname(self.disk_path))
-      FileUtils.cp(current_file.path, disk_path)
-
-      # Calculate digest after
-      digest_after = digest(current_file)
-      @modified = (digest_after != digest_before)
-    end
 
     # Compiles the asset rep, treating its contents as textual data.
     def compile_textual

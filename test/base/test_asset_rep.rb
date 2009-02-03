@@ -7,7 +7,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_initialize
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -30,7 +30,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_to_proxy
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -56,7 +56,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     File.open('tmp/test.txt', 'w') { |io| io.write('old stuff') }
 
     # Create data
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
     asset = Nanoc::Asset.new(File.new('tmp/test.txt'), {}, '/foo/')
 
     # Create site and other requisites
@@ -110,7 +110,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_outdated
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create layouts
     layouts = [
@@ -183,7 +183,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_disk_and_web_path
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create router
     router = mock
@@ -224,34 +224,6 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_compile_from_scratch
-    # TODO implement
-  end
-
-  def test_digest
-    # Create asset rep
-    asset_rep = Nanoc::AssetRep.new(nil, nil, nil)
-
-    # Get some known hashes
-    known_hashes = {
-      ''    => 'd41d8cd98f00b204e9800998ecf8427e',
-      'a'   => '0cc175b9c0f1b6a831c399e269772661',
-      'abc' => '900150983cd24fb0d6963f7d28e17f72'
-    }
-
-    # Create some files
-    known_hashes.each_pair do |string, digest|
-      # Write string
-      File.open('tmp/file.png', 'w') { |io| io.write(string) }
-
-      # Check digest
-      assert_equal(
-        digest,
-        asset_rep.instance_eval { digest(File.open('tmp/file.png')) }
-      )
-    end
-  end
-
-  def test_compile_binary
     # TODO implement
   end
 

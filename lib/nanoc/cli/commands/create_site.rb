@@ -265,7 +265,7 @@ EOS
     end
 
     # Populates the site with some initial data, such as a root page, a
-    # default layout, a default template, and so on.
+    # default layout, and so on.
     def site_populate
       # Get site
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
@@ -277,19 +277,19 @@ EOS
         '/'
       )
       page.site = site
-      page.save
+      site.data_source.save_page(page)
 
       # Fill asset defaults
       Nanoc::Asset::DEFAULTS.each_pair do |key, value|
         site.asset_defaults.attributes[key] = value
       end
-      site.asset_defaults.save
+      site.data_source.save_asset_defaults(site.asset_defaults)
 
       # Fill page defaults
       Nanoc::Page::DEFAULTS.each_pair do |key, value|
         site.page_defaults.attributes[key] = value
       end
-      site.page_defaults.save
+      site.data_source.save_page_defaults(site.page_defaults)
 
       # Create layout
       layout = Nanoc::Layout.new(
@@ -298,16 +298,7 @@ EOS
         '/default/'
       )
       layout.site = site
-      layout.save
-
-      # Create template
-      template = Nanoc::Template.new(
-        "Hi, I'm a new page!\n",
-        { :title => "A New Page" },
-        'default'
-      )
-      template.site = site
-      template.save
+      site.data_source.save_layout(layout)
 
       # Fill code
       code = Nanoc::Code.new(
@@ -315,7 +306,7 @@ EOS
         "\# before nanoc starts compiling.\n"
       )
       code.site = site
-      code.save
+      site.data_source.save_code(code)
     end
 
   end

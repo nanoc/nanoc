@@ -153,7 +153,7 @@ class Nanoc::PageTest < Test::Unit::TestCase
         site = Nanoc::Site.new({})
 
         # Create page defaults (hacky...)
-        page_defaults = Nanoc::PageDefaults.new({ :quux => 'stfu' })
+        page_defaults = Nanoc::Defaults.new({ :quux => 'stfu' })
         site.instance_eval { @page_defaults = page_defaults }
 
         # Create page
@@ -175,60 +175,6 @@ class Nanoc::PageTest < Test::Unit::TestCase
         assert_equal('stfu', page.attribute_named(:quux))
       end
     end
-  end
-
-  def test_save
-    # Create site
-    site = mock
-
-    # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
-    page.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:save_page).with(page)
-
-    # Save
-    page.save
-  end
-
-  def test_move_to
-    # Create site
-    site = mock
-
-    # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
-    page.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:move_page).with(page, '/new_path/')
-
-    # Move
-    page.move_to('/new_path/')
-  end
-
-  def test_delete
-    # Create site
-    site = mock
-
-    # Create page
-    page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
-    page.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:delete_page).with(page)
-
-    # Delete
-    page.delete
   end
 
 end

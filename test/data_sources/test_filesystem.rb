@@ -22,13 +22,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         FileUtils.rm_rf('content')
         FileUtils.rm_rf('page_defaults.yaml')
         FileUtils.rm_rf('meta.yaml')
-        FileUtils.rm_rf('templates/default')
         FileUtils.rm_rf('layouts/default')
         FileUtils.rm_rf('lib/default.rb')
 
         # Mock VCS
         vcs = mock
-        vcs.expects(:add).times(5) # One time for each directory
+        vcs.expects(:add).times(4) # One time for each directory
         site.data_source.vcs = vcs
 
         # Recreate files
@@ -37,7 +36,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         # Ensure essential files have been recreated
         assert(File.directory?('assets/'))
         assert(File.directory?('content/'))
-        assert(File.directory?('templates/'))
         assert(File.directory?('layouts/'))
         assert(File.directory?('lib/'))
 
@@ -45,7 +43,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         assert(!File.file?('asset_defaults.yaml'))
         assert(!File.file?('content/content.html'))
         assert(!File.file?('content/content.yaml'))
-        assert(!File.directory?('templates/default/'))
         assert(!File.directory?('layouts/default/'))
         assert(!File.file?('meta.yaml'))
         assert(!File.file?('page_defaults.yaml'))
@@ -58,7 +55,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     with_temp_site do |site|
       # Mock VCS
       vcs = mock
-      vcs.expects(:remove).times(7) # One time for each directory
+      vcs.expects(:remove).times(6) # One time for each directory
       site.data_source.vcs = vcs
 
       # Destroy
@@ -74,7 +71,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     data_source.expects(:update_page_defaults)
     data_source.expects(:update_pages)
     data_source.expects(:update_layouts)
-    data_source.expects(:update_templates)
 
     # update
     data_source.update
@@ -152,33 +148,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       assert(File.file?('layouts/foo/foo.yaml'))
       assert(File.file?('layouts/bar/bar.haml'))
       assert(File.file?('layouts/bar/bar.yaml'))
-    end
-  end
-
-  def test_update_templates
-    in_dir %w{ tmp } do
-      # Build some templates (outdated and up-to-date)
-      FileUtils.mkdir_p('templates')
-      FileUtils.mkdir_p('templates/foo')
-      FileUtils.mkdir_p('templates/bar')
-      File.open('templates/foo/index.erb',  'w') { |io| }
-      File.open('templates/foo/meta.yaml',  'w') { |io| }
-      File.open('templates/bar/bar.haml',   'w') { |io| }
-      File.open('templates/bar/bar.yaml',   'w') { |io| }
-
-      # Update
-      data_source = Nanoc::DataSources::Filesystem.new(nil)
-      data_source.instance_eval { update_templates }
-
-      # Check old files
-      assert(!File.file?('templates/foo/index.erb'))
-      assert(!File.file?('templates/foo/meta.yaml'))
-
-      # Check new files
-      assert(File.file?('templates/foo/foo.erb'))
-      assert(File.file?('templates/foo/foo.yaml'))
-      assert(File.file?('templates/bar/bar.haml'))
-      assert(File.file?('templates/bar/bar.yaml'))
     end
   end
 
@@ -302,7 +271,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
   def test_asset_defaults
     with_temp_site do |site|
       assert_nothing_raised do
-        assert_equal(true, site.asset_defaults.attributes[:binary])
+        assert_equal([], site.asset_defaults.attributes[:filters])
       end
     end
   end
@@ -314,44 +283,14 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
         asset_defaults = site.asset_defaults
 
         # Update asset defaults
-        asset_defaults.attributes[:binary] = 'false'
+        asset_defaults.attributes[:foo] = 'bar'
         site.data_source.save_asset_defaults(asset_defaults)
         site.load_data(true)
 
         # Check asset defaults
-        assert_equal(false, site.asset_defaults.attributes[:binary])
+        assert_equal('bar', site.asset_defaults.attributes[:foo])
       end
     end
-  end
-
-  # Test templates
-
-  def test_templates
-    with_temp_site do |site|
-      assert_nothing_raised do
-        # Find template
-        templates = site.templates
-
-        # Check number of templates
-        assert_equal(1, templates.size)
-
-        # Check template attributes
-        assert_equal('default', templates[0].name)
-        assert_equal("Hi, I'm a new page!\n", templates[0].page_content)
-      end
-    end
-  end
-
-  def test_save_template
-    # TODO implement
-  end
-
-  def test_move_template
-    # TODO implement
-  end
-
-  def test_delete_template
-    # TODO implement
   end
 
   # Test layouts

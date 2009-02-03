@@ -5,16 +5,6 @@ class Nanoc::ProxyTest < Test::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_remove_methods
-    # Create object and proxy
-    obj = mock
-    obj.expects(:attribute_named).with(:class).returns('no attr class')
-    obj_proxy = Nanoc::Proxy.new(obj)
-
-    # Check removed methods
-    assert_equal('no attr class', obj_proxy.class)
-  end
-
   def test_get_with_symbol
     # Create object and proxy
     obj = mock

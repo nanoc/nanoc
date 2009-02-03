@@ -1,6 +1,11 @@
 nanoc Release Notes
 ===================
 
+2.2
+---
+
+* The compile command now takes --no-assets and --no-pages options
+
 2.1.5
 -----
 
