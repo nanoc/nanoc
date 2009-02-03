@@ -201,9 +201,9 @@ module Nanoc::DataSources
         # Read metadata
         meta = YAML.load_file(meta_filename) || {}
 
-        # Get content file
+        # Get content
         content_filename = content_filename_for_dir(File.dirname(meta_filename))
-        content_file = File.new(content_filename)
+        content = File.read(content_filename)
 
         # Get attributes
         attributes = { 'extension' => File.extname(content_filename)[1..-1] }.merge(meta)
@@ -217,24 +217,26 @@ module Nanoc::DataSources
         mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
         # Create asset object
-        Nanoc::Asset.new(content_file, attributes, path, mtime)
+        Nanoc::Asset.new(content, attributes, path, mtime)
       end
     end
 
     def save_asset(asset) # :nodoc:
-      # Determine meta file path
+      # Determine possible meta file paths
       last_component = asset.path.split('/')[-1]
-      meta_filename  = 'assets' + asset.path + last_component + '.yaml'
+      meta_filename_worst = 'assets' + asset.path + 'index.yaml'
+      meta_filename_best  = 'assets' + asset.path + (last_component || 'assets') + '.yaml'
 
       # Get existing path
       existing_path = nil
       existing_path = meta_filename_best  if File.file?(meta_filename_best)
       existing_path = meta_filename_worst if File.file?(meta_filename_worst)
 
-      if meta_filename.nil?
+      if existing_path.nil?
         # Get filenames
         dir_path         = 'assets' + asset.path
-        content_filename = 'assets' + asset.path + last_component + '.dat'
+        meta_filename    = meta_filename_best
+        content_filename = 'assets' + asset.path + (last_component || 'assets') + '.html'
 
         # Notify
         Nanoc::NotificationCenter.post(:file_created, meta_filename)
@@ -244,7 +246,8 @@ module Nanoc::DataSources
         FileUtils.mkdir_p(dir_path)
       else
         # Get filenames
-        content_filename = content_filename_for_dir(File.dirname(meta_filename))
+        meta_filename    = existing_path
+        content_filename = content_filename_for_dir(File.dirname(existing_path))
 
         # Notify
         Nanoc::NotificationCenter.post(:file_updated, meta_filename)
@@ -253,10 +256,10 @@ module Nanoc::DataSources
 
       # Write files
       File.open(meta_filename,    'w') { |io| io.write(asset.attributes.to_split_yaml) }
-      File.open(content_filename, 'w') { }
+      File.open(content_filename, 'w') { |io| io.write(asset.content) }
 
       # Add to working copy if possible
-      if meta_filename.nil?
+      if existing_path.nil?
         vcs.add(meta_filename)
         vcs.add(content_filename)
       end

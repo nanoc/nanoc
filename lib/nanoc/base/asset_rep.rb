@@ -225,7 +225,7 @@ module Nanoc
     # Compiles the asset rep, treating its contents as textual data.
     def compile_textual
       # Get content
-      current_content = @asset.file.read
+      current_content = @asset.content
 
       # Check modified
       @modified = @created ? true : File.read(self.disk_path) != current_content

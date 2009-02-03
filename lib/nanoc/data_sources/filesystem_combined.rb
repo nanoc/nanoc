@@ -204,7 +204,7 @@ module Nanoc::DataSources
         mtime = File.stat(filename).mtime
 
         # Build asset
-        Nanoc::Asset.new(StringIO.new(content), attributes, path, mtime)
+        Nanoc::Asset.new(content, attributes, path, mtime)
       end
     end
 
