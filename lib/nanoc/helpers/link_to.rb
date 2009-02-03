@@ -51,10 +51,10 @@ module Nanoc::Helpers
     #
     # Examples:
     #
-    #   link_to('Blog', '/blog/')
+    #   link_to_unless_current('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   link_to('This Page', @page_rep)
+    #   link_to_unless_current('This Page', @page_rep)
     #   # => '<span class="active">This Page</span>'
     def link_to_unless_current(text, path_or_rep, attributes={})
       # Find path
