@@ -120,9 +120,6 @@ module Nanoc::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'page')
 
-        # Skip drafts
-        return nil if meta[:is_draft]
-
         # Get attributes
         attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(filename))
 
@@ -138,7 +135,7 @@ module Nanoc::DataSources
 
         # Build page
         Nanoc::Page.new(content, attributes, path, mtime)
-      end.compact
+      end
     end
 
     def save_page(page) # :nodoc:
@@ -193,9 +190,6 @@ module Nanoc::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'asset')
 
-        # Skip drafts
-        return nil if meta[:is_draft]
-
         # Get attributes
         attributes = { 'extension' => File.extname(filename)[1..-1] }.merge(meta)
 
@@ -211,7 +205,7 @@ module Nanoc::DataSources
 
         # Build asset
         Nanoc::Asset.new(StringIO.new(content), attributes, path, mtime)
-      end.compact
+      end
     end
 
     def save_asset(asset) # :nodoc:
