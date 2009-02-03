@@ -2,7 +2,6 @@ module Nanoc::Filters
   class ERB < Nanoc::Filter
 
     identifiers :erb
-    extensions  '.erb', '.rhtml'
 
     def run(content)
       require 'erb'
