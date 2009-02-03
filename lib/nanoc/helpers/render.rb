@@ -37,6 +37,7 @@ module Nanoc::Helpers
         :page       => @page,
         :asset_rep  => @asset_rep,
         :asset      => @asset,
+        :layout     => layout.to_proxy,
         :pages      => @pages,
         :assets     => @assets,
         :layouts    => @layouts,

@@ -895,12 +895,12 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Create layout
-    layout = Nanoc::Layout.new('this is a layout', { :filter => 'erb' }, '/foo/')
+    layout = Nanoc::Layout.new('this is the <%= @layout.path %> layout', { :filter => 'erb' }, '/foo/')
     page_rep.expects(:layout).at_least_once.returns(layout)
 
     # Layout
     assert_nothing_raised { page_rep.instance_eval { do_layout } }
-    assert_equal('this is a layout', page_rep.instance_eval { @content[:post] })
+    assert_equal('this is the /foo/ layout', page_rep.instance_eval { @content[:post] })
 
     # Check notifications
     assert_equal(1, @filtering_started_count)

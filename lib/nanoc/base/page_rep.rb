@@ -341,6 +341,7 @@ module Nanoc
         :page       => self.page.to_proxy,
         :asset_rep  => nil,
         :asset      => nil,
+        :layout     => layout.to_proxy,
         :pages      => self.page.site.pages.map    { |obj| obj.to_proxy },
         :assets     => self.page.site.assets.map   { |obj| obj.to_proxy },
         :layouts    => self.page.site.layouts.map  { |obj| obj.to_proxy },

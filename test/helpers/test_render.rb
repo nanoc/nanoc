@@ -11,8 +11,11 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     # Mock layouts
     layout = MiniTest::Mock.new
     layout.expect(:path,         '/foo/')
-    layout.expect(:content,      'This is the <%= "foo" %> layout.')
+    layout.expect(:content,      'This is the <%= @layout.path %> layout.')
     layout.expect(:filter_class, Nanoc::Filters::ERB)
+    layout_proxy = MiniTest::Mock.new
+    layout_proxy.expect(:path, '/foo/')
+    layout.expect(:to_proxy, layout_proxy)
 
     # Mock site, compiler and stack
     stack    = []
@@ -20,7 +23,7 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     @site    = MiniTest::Mock.new.expect(:compiler, compiler).expect(:layouts, [ layout ])
 
     # Render
-    assert_equal('This is the foo layout.', render('/foo/'))
+    assert_equal('This is the /foo/ layout.', render('/foo/'))
   end
 
   def test_render_with_unknown_layout
@@ -39,6 +42,8 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     layout.expect(:path,         '/foo/')
     layout.expect(:content,      'This is the <%= "foo" %> layout.')
     layout.expect(:filter_class, nil)
+    layout_proxy = MiniTest::Mock.new
+    layout.expect(:to_proxy, layout_proxy)
 
     # Mock site
     @site = MiniTest::Mock.new.expect(:layouts, [ layout ])
