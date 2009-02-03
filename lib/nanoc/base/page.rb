@@ -24,37 +24,6 @@ module Nanoc
       :skip_output  => false
     }
 
-    # The parent page of this page. This can be nil even for non-root pages.
-    attr_accessor :parent
-
-    # The child pages of this page.
-    attr_accessor :children
-
-    # This page's raw, uncompiled content.
-    attr_reader   :content
-
-    # Creates a new page.
-    #
-    # +content+:: This page's unprocessed content.
-    #
-    # +attributes+:: A hash containing this page's attributes.
-    #
-    # +path+:: This page's path.
-    #
-    # +mtime+:: The time when this page was last modified.
-    def initialize(content, attributes, path, mtime=nil)
-      # Set primary attributes
-      @attributes     = attributes.clean
-      @content        = content
-      @path           = path.cleaned_path
-      @mtime          = mtime
-
-      # Start disconnected
-      @parent         = nil
-      @children       = []
-      @reps           = []
-    end
-
     # Builds the individual page representations (Nanoc::PageRep) for this
     # page.
     def build_reps
