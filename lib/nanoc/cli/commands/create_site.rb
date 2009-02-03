@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreateSiteCommand < Command # :nodoc:
+  class CreateSiteCommand < Cri::Command # :nodoc:
 
     DEFAULT_PAGE = <<EOS
 <h1>A Brand New nanoc Site</h1>

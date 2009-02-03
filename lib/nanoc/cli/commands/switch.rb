@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class SwitchCommand < Command # :nodoc:
+  class SwitchCommand < Cri::Command # :nodoc:
 
     def name
       'switch'
