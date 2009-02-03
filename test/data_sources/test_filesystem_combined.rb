@@ -267,8 +267,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/index.txt').mtime}."))
     end
@@ -280,8 +280,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         File.open('content/index.txt~',   'w') { |io| }
         File.open('layouts/default.erb~', 'w') { |io| }
 
-        assert_nothing_raised() { site.compiler.run }
-        assert_nothing_raised() { site.compiler.run }
+        site.compiler.run
+        site.compiler.run
 
         assert_equal(2, site.pages.size)
         assert_equal(1, site.layouts.size)
@@ -306,7 +306,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       ########## EVERYTHING UP TO DATE
 
@@ -319,7 +319,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (shouldn't have changed)
       assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
@@ -335,7 +335,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -351,7 +351,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -367,7 +367,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -383,7 +383,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)

@@ -8,20 +8,8 @@ class Nanoc::Filters::MarukuTest < Test::Unit::TestCase
   def test_filter
     if_have 'maruku' do
       assert_nothing_raised do
-        # Create site
-        site = mock
-
-        # Create page
-        page = mock
-        page.expects(:site).returns(site)
-
-        # Create page rep
-        page_rep = mock
-        page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-        page_rep.expects(:page).returns(page)
-
-        # Get filter
-        filter = ::Nanoc::Filters::Maruku.new(page_rep)
+        # Create filter
+        filter = ::Nanoc::Filters::Maruku.new
 
         # Run filter
         result = filter.run("This is _so_ *cool*!")

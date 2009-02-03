@@ -8,7 +8,7 @@ module Nanoc::Filters
       require 'haml'
 
       # Get options
-      options = @obj_rep.attribute_named(:haml_options) || {}
+      options = assigns[:_obj_rep].attribute_named(:haml_options) || {}
 
       # Create context
       context = ::Nanoc::Extra::Context.new(assigns)

@@ -491,7 +491,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_file_object' do |site|
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir[File.join('output', '*')].size)
@@ -504,8 +504,8 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       File.open('content/content.txt~', 'w') { |io| }
       File.open('layouts/default.erb~', 'w') { |io| }
 
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       FileUtils.rm_rf 'content/content.txt~' if File.exist?('content/content.txt~')
       FileUtils.rm_rf 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
@@ -514,8 +514,8 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_compile_site_with_new_layout_structure
     with_site_fixture 'site_with_new_layout_structure' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir[File.join('output', '*')].size)
@@ -715,7 +715,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Load and compile site
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
     end
   end
 

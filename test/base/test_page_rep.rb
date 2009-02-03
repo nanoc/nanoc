@@ -685,7 +685,13 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
+    site.stubs(:pages).returns([])
+    site.stubs(:compiler).returns(nil)
+    site.stubs(:pages).returns([])
+    site.stubs(:assets).returns([])
+    site.stubs(:layouts).returns([])
+    site.stubs(:config).returns({})
 
     # Create page
     page = Nanoc::Page.new('blah', { :filters_pre => [] }, '/path/')
@@ -727,7 +733,13 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
+    site.stubs(:pages).returns([])
+    site.stubs(:compiler).returns(nil)
+    site.stubs(:pages).returns([])
+    site.stubs(:assets).returns([])
+    site.stubs(:layouts).returns([])
+    site.stubs(:config).returns({})
 
     # Create page
     page = Nanoc::Page.new('blah', { :filters_post => [] }, '/path/')
@@ -817,7 +829,13 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
+    site.stubs(:pages).returns([])
+    site.stubs(:compiler).returns(nil)
+    site.stubs(:pages).returns([])
+    site.stubs(:assets).returns([])
+    site.stubs(:layouts).returns([])
+    site.stubs(:config).returns({})
 
     # Create page
     page = Nanoc::Page.new("blah", { :filters_pre => [ 'asdf' ] }, '/path/')
@@ -936,7 +954,13 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
+    site.stubs(:pages).returns([])
+    site.stubs(:compiler).returns(nil)
+    site.stubs(:pages).returns([])
+    site.stubs(:assets).returns([])
+    site.stubs(:layouts).returns([])
+    site.stubs(:config).returns({})
 
     # Create page
     page = Nanoc::Page.new("content", {}, '/path/')

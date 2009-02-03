@@ -12,6 +12,7 @@ end
 begin
   require 'minitest/unit'
   require 'minitest/spec'
+  require 'minitest/mock'
   require 'mocha'
 rescue => e
   $stderr.puts "To run the nanoc unit tests, you need minitest and mocha."

@@ -8,20 +8,8 @@ class Nanoc::Filters::RedClothTest < Test::Unit::TestCase
   def test_filter
     if_have 'redcloth' do
       assert_nothing_raised do
-        # Create site
-        site = mock
-
-        # Create page
-        page = mock
-        page.expects(:site).returns(site)
-
-        # Create page rep
-        page_rep = mock
-        page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-        page_rep.expects(:page).returns(page)
-
         # Get filter
-        filter = ::Nanoc::Filters::RedCloth.new(page_rep)
+        filter = ::Nanoc::Filters::RedCloth.new
 
         # Run filter
         result = filter.run("h1. Foo")
