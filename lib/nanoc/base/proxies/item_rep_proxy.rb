@@ -1,10 +1,9 @@
 module Nanoc
 
-  # Nanoc::PageRepProxy is a proxy object for a page representation
-  # (Nanoc::PageRep).
-  class PageRepProxy < Proxy
+  # Nanoc::ItemRepProxy is a proxy object for an item representation.
+  class ItemRepProxy < Proxy
 
-    # Requests the page representation attribute with the given name. +key+
+    # Requests the item representation attribute with the given name. +key+
     # can be a string or a symbol, and it can contain a trailing question mark
     # (which will be stripped).
     def [](key)
@@ -16,8 +15,8 @@ module Nanoc
         @obj.content
       elsif real_key == :path
         @obj.web_path
-      elsif real_key == :page
-        @obj.page.to_proxy
+      elsif real_key == :item
+        @obj.item.to_proxy
       else
         super(key)
       end

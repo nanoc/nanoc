@@ -61,9 +61,9 @@ module Nanoc
       @filtered       = false
     end
 
-    # Returns a proxy (Nanoc::AssetRepProxy) for this asset representation.
+    # Returns a proxy (Nanoc::ItemRepProxy) for this asset representation.
     def to_proxy
-      @proxy ||= AssetRepProxy.new(self)
+      @proxy ||= ItemRepProxy.new(self)
     end
 
     # Returns the asset for this page representation

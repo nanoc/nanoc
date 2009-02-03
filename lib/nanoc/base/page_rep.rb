@@ -61,9 +61,9 @@ module Nanoc
       @force_outdated = false
     end
 
-    # Returns a proxy (Nanoc::PageRepProxy) for this page representation.
+    # Returns a proxy (Nanoc::ItemRepProxy) for this page representation.
     def to_proxy
-      @proxy ||= PageRepProxy.new(self)
+      @proxy ||= ItemRepProxy.new(self)
     end
 
     # Returns the page for this page representation
