@@ -52,18 +52,6 @@ module Nanoc
       @content[stage]
     end
 
-    # Returns the layout used for this page representation.
-    def layout
-      # Check whether layout is present
-      return nil if attribute_named(:layout).nil?
-
-      # Find layout
-      @layout ||= @item.site.layouts.find { |l| l.path == attribute_named(:layout).cleaned_path }
-      raise Nanoc::Errors::UnknownLayoutError.new(attribute_named(:layout)) if @layout.nil?
-
-      @layout
-    end
-
     # Compiles the page representation and writes the result to the disk. This
     # method should not be called directly; please use Nanoc::Compiler#run
     # instead, and pass this page representation's page as its first argument.

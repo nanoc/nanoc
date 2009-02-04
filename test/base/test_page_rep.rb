@@ -401,65 +401,6 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     assert_equal('post!', page_rep.content(:post))
   end
 
-  def test_layout_without_layout
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => 'none' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Check
-    assert_equal(nil, page_rep.layout)
-  end
-
-  def test_layout_with_unknown_layout
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.expects(:layouts).returns([])
-    site.stubs(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => 'dffrvsserg' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Check
-    assert_raises(Nanoc::Errors::UnknownLayoutError) { page_rep.layout }
-  end
-
-  def test_layout_normal
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create layout
-    layout = Nanoc::Layout.new('header <%= @page.content %> footer', {}, '/foo/')
-
-    # Create site
-    site = mock
-    site.expects(:layouts).returns([ layout ])
-    site.stubs(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Check
-    assert_equal(layout, page_rep.layout)
-  end
-
   def test_compile_not_outdated
     # Create page defaults
     page_defaults = Nanoc::Defaults.new(:foo => 'bar')
