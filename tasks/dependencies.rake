@@ -1,3 +1,4 @@
+desc 'Fetch all dependencies for nanoc'
 task :fetch_dependencies do
   # Get Cri
   puts "=== Fetching Cri..."

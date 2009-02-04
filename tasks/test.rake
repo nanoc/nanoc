@@ -9,7 +9,7 @@ test = namespace :test do
   end
 
   # test:all
-  desc 'Runs all tests'
+  desc 'Run all tests'
   task :all do
     ENV['QUIET'] ||= 'true'
 
@@ -23,6 +23,7 @@ test = namespace :test do
 
   # test:...
   %w( base cli data_sources extra filters helpers routers ).each do |dir|
+    desc "Run all #{dir} tests"
     task dir.to_sym do |task|
       ENV['QUIET'] ||= 'true'
 
@@ -37,4 +38,5 @@ test = namespace :test do
 
 end
 
+desc 'Alias for test:all'
 task :test => [ :'test:all' ]
