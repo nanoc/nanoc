@@ -61,7 +61,7 @@ GemSpec = Gem::Specification.new do |s|
                               '--exclude' << 'test'                     <<
                               '--line-numbers'
 
-  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib}', '**', '*')]
+  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib,vendor}', '**', '*')]
   s.executables           = [ 'nanoc' ]
   s.require_path          = 'lib'
   s.bindir                = 'bin'
