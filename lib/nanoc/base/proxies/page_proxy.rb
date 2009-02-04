@@ -16,12 +16,17 @@ module Nanoc
       elsif real_key == :children
         @obj.children.map { |page| page.to_proxy }
       elsif real_key == :content # backward compatibility
-        @obj.reps.find { |r| r.name == :default }.content
+        content
       elsif real_key == :path # backward compatibility
         @obj.reps.find { |r| r.name == :default }.web_path
       else
         super(key)
       end
+    end
+
+    # Returns the compiled page content at the given snapshot.
+    def content(snapshot=:pre) # backward compatibility
+      @obj.reps.find { |r| r.name == :default }.content(snapshot)
     end
 
     # Returns the page representation with the given name.

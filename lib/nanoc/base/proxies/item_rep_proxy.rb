@@ -11,15 +11,20 @@ module Nanoc
 
       if real_key == :name
         @obj.name
-      elsif real_key == :content
-        @obj.content
       elsif real_key == :path
         @obj.web_path
+      elsif real_key == :content # backward compatibility
+        content
       elsif real_key == :item
         @obj.item.to_proxy
       else
         super(key)
       end
+    end
+
+    # Returns the compiled iten rep content at the given snapshot.
+    def content(snapshot=:pre) # backward compatibility
+      @obj.content(snapshot)
     end
 
   end
