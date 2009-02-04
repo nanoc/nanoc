@@ -744,7 +744,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page.site = site
     page.build_reps
     page_rep = page.reps[0]
-    page_rep.instance_eval { @content[:post] = 'post content' }
+    page_rep.instance_eval { @content[:last] = 'post content' }
 
     # Setup notifications
     @filtering_started_count = 0
@@ -864,16 +864,19 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Create page defaults
     page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
+    # Create layout
+    layout = Nanoc::Layout.new('this is the <%= @layout.path %> layout', { :filter => 'erb' }, '/foo/')
+
     # Create site
     site = mock
-    site.expects(:config).returns([])
-    site.expects(:assets).returns([])
-    site.expects(:pages).returns([])
-    site.expects(:layouts).returns([])
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+    site.stubs(:config).returns({})
+    site.stubs(:assets).returns([])
+    site.stubs(:layouts).returns([ layout ])
+    site.stubs(:pages).returns([])
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Create page
-    page = Nanoc::Page.new("content", {}, '/path/')
+    page = Nanoc::Page.new("content", { :layout => '/foo/' }, '/path/')
     page.site = site
     page.build_reps
     page_rep = page.reps[0]
@@ -887,10 +890,6 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     Nanoc::NotificationCenter.on(:filtering_ended, :test) do
       @filtering_ended_count += 1
     end
-
-    # Create layout
-    layout = Nanoc::Layout.new('this is the <%= @layout.path %> layout', { :filter => 'erb' }, '/foo/')
-    page_rep.expects(:layout).at_least_once.returns(layout)
 
     # Layout
     page_rep.instance_eval { do_layout }
@@ -946,6 +945,9 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Create page defaults
     page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
+    # Create layout
+    layout = Nanoc::Layout.new('this is a layout', { :filter => 'sdfdfvarg' }, '/foo/')
+
     # Create site
     site = mock
     site.stubs(:page_defaults).returns(page_defaults)
@@ -953,18 +955,14 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     site.stubs(:compiler).returns(nil)
     site.stubs(:pages).returns([])
     site.stubs(:assets).returns([])
-    site.stubs(:layouts).returns([])
+    site.stubs(:layouts).returns([ layout ])
     site.stubs(:config).returns({})
 
     # Create page
-    page = Nanoc::Page.new("content", {}, '/path/')
+    page = Nanoc::Page.new("content", { :layout => '/foo/' }, '/path/')
     page.site = site
     page.build_reps
     page_rep = page.reps[0]
-
-    # Create layout
-    layout = Nanoc::Layout.new('this is a layout', { :filter => 'sdfdfvarg' }, '/foo/')
-    page_rep.expects(:layout).at_least_once.returns(layout)
 
     # Setup notifications
     @filtering_started_count = 0

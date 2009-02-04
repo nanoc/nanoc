@@ -52,8 +52,7 @@ module Nanoc
       @name           = name
 
       # Initialize content
-      # FIXME assets don't have this
-      @content        = { :pre => nil, :post => nil }
+      @content        = {}
 
       # Reset flags
       @compiled       = false
@@ -159,6 +158,55 @@ module Nanoc
 
       # Check in hardcoded defaults
       return defaults[name]
+    end
+
+    def assigns
+      {
+        :_obj_rep   => self,
+        :_obj       => self.page,
+        :page_rep   => self.type == :page_rep  ? self.to_proxy       : nil,
+        :page       => self.type == :page_rep  ? self.page.to_proxy  : nil,
+        :asset_rep  => self.type == :asset_rep ? self.to_proxy       : nil,
+        :asset      => self.type == :asset_rep ? self.asset.to_proxy : nil,
+        :pages      => self.page.site.pages.map   { |obj| obj.to_proxy },
+        :assets     => self.page.site.assets.map  { |obj| obj.to_proxy },
+        :layouts    => self.page.site.layouts.map { |obj| obj.to_proxy },
+        :config     => self.page.site.config,
+        :site       => self.page.site
+      }
+    end
+
+    # Runs the page content through the given filter with the given arguments.
+    def filter!(filter_name, filter_args={})
+      # Create filter
+      klass = Nanoc::Filter.named(filter_name)
+      raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
+      filter = klass.new(assigns)
+
+      # Run filter
+      Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
+      if filter.method(:run).arity == -2
+        @content[:last] = filter.run(@content[:last], filter_args)
+      else
+        @content[:last] = filter.run(@content[:last])
+      end
+      Nanoc::NotificationCenter.post(:filtering_ended, self, klass.identifier)
+    end
+
+    def layout!(layout_name)
+      # Get layout
+      layout ||= @item.site.layouts.find { |l| l.path == layout_name.cleaned_path }
+      raise Nanoc::Errors::UnknownLayoutError.new(layout_name) if layout.nil?
+
+      # Create filter
+      klass = layout.filter_class
+      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
+      filter = klass.new(assigns.merge({ :layout => layout.to_proxy }))
+
+      # Layout
+      Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
+      @content[:last] = filter.run(layout.content)
+      Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
     end
 
   end
