@@ -39,7 +39,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { 'foo' => 'bar' }, '/foo/')
@@ -407,7 +407,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :layout => 'none' }, '/path/')
@@ -426,7 +426,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:layouts).returns([])
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :layout => 'dffrvsserg' }, '/path/')
@@ -448,7 +448,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:layouts).returns([ layout ])
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')

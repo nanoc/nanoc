@@ -34,7 +34,7 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).returns(asset_defaults)
+    site.stubs(:asset_defaults).returns(asset_defaults)
 
     # Create asset
     asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')

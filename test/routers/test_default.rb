@@ -14,7 +14,7 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -39,7 +39,7 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -64,7 +64,7 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
@@ -90,7 +90,7 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
