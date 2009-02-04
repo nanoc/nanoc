@@ -1,0 +1,166 @@
+module Nanoc
+
+  # A Nanoc::ItemRep is a single representation (rep) of an item
+  # (Nanoc::Item). An item can have multiple representations. A representation
+  # has its own attributes and its own output file. A single item can
+  # therefore have multiple output files, each run through a different set of
+  # filters with a different layout.
+  #
+  # An item representation is observable. The following events will be
+  # notified:
+  #
+  # * :compilation_started
+  # * :compilation_ended
+  # * :filtering_started
+  # * :filtering_ended
+  # * :visit_started
+  # * :visit_ended
+  #
+  # The compilation-related events have one parameters (the item
+  # representation); the filtering-related events have two (the item
+  # representation, and a symbol containing the filter class name).
+  class ItemRep
+
+    # The item (Nanoc::Item) to which this representation belongs.
+    attr_reader   :item
+
+    # A hash containing this item representation's attributes.
+    attr_accessor :attributes
+
+    # This item representation's unique name.
+    attr_reader   :name
+
+    # Indicates whether this rep is forced to be dirty because of outdated
+    # dependencies.
+    attr_accessor :force_outdated
+    
+    # Creates a new item representation for the given item and with the given
+    # attributes.
+    #
+    # +item+:: The item (Nanoc::Item) to which the new representation will
+    #          belong.
+    #
+    # +attributes+:: A hash containing the new item representation's
+    #                attributes. This hash must have been run through
+    #                Hash#clean before using it here.
+    #
+    # +name+:: The unique name for the new item representation.
+    def initialize(item, attributes, name)
+      # Set primary attributes
+      @item           = item
+      @attributes     = attributes
+      @name           = name
+
+      # Initialize content
+      # FIXME assets don't have this
+      @content        = { :pre => nil, :post => nil }
+
+      # Reset flags
+      @compiled       = false
+      @modified       = false
+      @created        = false
+      @force_outdated = false
+    end
+
+    # Returns a proxy (Nanoc::ItemRepProxy) for this item representation.
+    def to_proxy
+      @proxy ||= ItemRepProxy.new(self)
+    end
+
+    # Returns true if this item rep's output file was created during the last
+    # compilation session, or false if the output file did already exist.
+    def created?
+      @created
+    end
+
+    # Returns true if this item rep's output file was modified during the last
+    # compilation session, or false if the output file wasn't changed.
+    def modified?
+      @modified
+    end
+
+    # Returns true if this item rep has been compiled, false otherwise.
+    def compiled?
+      @compiled
+    end
+
+    # Returns the path to the output file, including the path to the output
+    # directory specified in the site configuration, and including the
+    # filename and extension.
+    def disk_path
+      @disk_path ||= @item.site.router.disk_path_for(self)
+    end
+
+    # Returns the path to the output file as it would be used in a web
+    # browser: starting with a slash (representing the web root), and only
+    # including the filename and extension if they cannot be ignored (i.e.
+    # they are not in the site configuration's list of index files).
+    def web_path
+      @web_path ||= @item.site.router.web_path_for(self)
+    end
+
+    # Returns true if this item rep's output file is outdated and must be
+    # regenerated, false otherwise.
+    def outdated?
+      # Outdated if we don't know
+      return true if @item.mtime.nil?
+
+      # Outdated if the dependency tracker says so
+      return true if @force_outdated
+
+      # Outdated if compiled file doesn't exist
+      return true if !File.file?(disk_path) && !attribute_named(:skip_output)
+
+      # Get compiled mtime
+      compiled_mtime = File.stat(disk_path).mtime if !attribute_named(:skip_output)
+
+      # Outdated if file too old
+      return true if !attribute_named(:skip_output) && @item.mtime > compiled_mtime
+
+      # Outdated if layouts outdated
+      return true if @item.site.layouts.any? do |l|
+        l.mtime.nil? || (!attribute_named(:skip_output) && l.mtime > compiled_mtime)
+      end
+
+      # Outdated if code outdated
+      return true if @item.site.code.mtime.nil?
+      return true if !attribute_named(:skip_output) && @item.site.code.mtime > compiled_mtime
+
+      return false
+    end
+
+    # Returns the attribute with the given name. This method will look in
+    # several places for the requested attribute:
+    #
+    # 1. This item representation's attributes;
+    # 2. The attributes of this item representation's item;
+    # 3. The item defaults' representation corresponding to this item
+    #    representation;
+    # 4. The item defaults in general;
+    # 5. The hardcoded item defaults, if everything else fails.
+    def attribute_named(name, item_defaults, defaults)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
+      # Check in here
+      return @attributes[name] if @attributes.has_key?(name)
+
+      # Check in item
+      return @item.attributes[name] if @item.attributes.has_key?(name)
+
+      # Check in item defaults' item rep
+      item_default_reps = item_defaults.attributes[:reps] || {}
+      item_default_rep  = item_default_reps[@name] || {}
+      return item_default_rep[name] if item_default_rep.has_key?(name)
+
+      # Check in site defaults (global)
+      item_defaults_attrs = item_defaults.attributes
+      return item_defaults_attrs[name] if item_defaults_attrs.has_key?(name)
+
+      # Check in hardcoded defaults
+      return defaults[name]
+    end
+
+  end
+
+end
