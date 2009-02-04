@@ -160,6 +160,7 @@ module Nanoc
       return defaults[name]
     end
 
+    # Returns the assignments that should be available when compiling the content.
     def assigns
       {
         :_obj_rep   => self,
@@ -193,6 +194,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:filtering_ended, self, klass.identifier)
     end
 
+    # Lays out the page using the given layout.
     def layout!(layout_name)
       # Get layout
       layout ||= @item.site.layouts.find { |l| l.path == layout_name.cleaned_path }
