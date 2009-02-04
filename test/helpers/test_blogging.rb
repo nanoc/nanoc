@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
+class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -124,9 +124,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       @page.expects(:path).returns('/journal/feed/')
 
       # Check
-      assert_nothing_raised do
-        atom_feed
-      end
+      atom_feed
     end
   end
 
@@ -164,9 +162,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       @page.expects(:path).returns('/journal/feed/')
 
       # Check
-      assert_nothing_raised do
-        atom_feed(:feed_tag => 'foobar')
-      end
+      atom_feed(:feed_tag => 'foobar')
     end
   end
 
@@ -197,11 +193,9 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       excerpt_proc = lambda { |article| 'this is the excerpt yarly' }
 
       # Check
-      assert_nothing_raised do
-        result = atom_feed(:feed_tag => 'foobar', :content_proc => content_proc, :excerpt_proc => excerpt_proc)
-        assert_match(/blah blah this .../, result)
-        assert_match(/this is the excerpt yarly/, result)
-      end
+      result = atom_feed(:feed_tag => 'foobar', :content_proc => content_proc, :excerpt_proc => excerpt_proc)
+      assert_match(/blah blah this .../, result)
+      assert_match(/this is the excerpt yarly/, result)
     end
   end
 

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::CLI::InfoCommandTest < Test::Unit::TestCase
+class Nanoc::CLI::InfoCommandTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

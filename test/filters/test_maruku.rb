@@ -1,20 +1,18 @@
 require 'test/helper'
 
-class Nanoc::Filters::MarukuTest < Test::Unit::TestCase
+class Nanoc::Filters::MarukuTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
     if_have 'maruku' do
-      assert_nothing_raised do
-        # Create filter
-        filter = ::Nanoc::Filters::Maruku.new
+      # Create filter
+      filter = ::Nanoc::Filters::Maruku.new
 
-        # Run filter
-        result = filter.run("This is _so_ *cool*!")
-        assert_equal("<p>This is <em>so</em> <em>cool</em>!</p>", result)
-      end
+      # Run filter
+      result = filter.run("This is _so_ *cool*!")
+      assert_equal("<p>This is <em>so</em> <em>cool</em>!</p>", result)
     end
   end
 

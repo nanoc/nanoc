@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
+class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -130,9 +130,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_pages
     with_temp_site do |site|
-      assert_nothing_raised do
-        assert_equal([ 'Home' ], site.pages.map { |page| page.attribute_named(:title) })
-      end
+      assert_equal([ 'Home' ], site.pages.map { |page| page.attribute_named(:title) })
     end
   end
 
@@ -218,26 +216,22 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_page_defaults
     with_temp_site do |site|
-      assert_nothing_raised do
-        assert_equal('html', site.page_defaults.attributes[:extension])
-      end
+      assert_equal('html', site.page_defaults.attributes[:extension])
     end
   end
 
   def test_save_page_defaults
     with_temp_site do |site|
-      assert_nothing_raised do
-        # Get page defaults
-        page_defaults = site.page_defaults
+      # Get page defaults
+      page_defaults = site.page_defaults
 
-        # Update page defaults
-        page_defaults.attributes[:extension] = 'php' # eww, php! :D
-        site.data_source.save_page_defaults(page_defaults)
-        site.load_data(true)
+      # Update page defaults
+      page_defaults.attributes[:extension] = 'php' # eww, php! :D
+      site.data_source.save_page_defaults(page_defaults)
+      site.load_data(true)
 
-        # Check page defaults
-        assert_equal('php', site.page_defaults.attributes[:extension])
-      end
+      # Check page defaults
+      assert_equal('php', site.page_defaults.attributes[:extension])
     end
   end
 
@@ -245,26 +239,22 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_asset_defaults
     with_temp_site do |site|
-      assert_nothing_raised do
-        assert_equal([], site.asset_defaults.attributes[:filters])
-      end
+      assert_equal([], site.asset_defaults.attributes[:filters])
     end
   end
 
   def test_save_asset_defaults
     with_temp_site do |site|
-      assert_nothing_raised do
-        # Get asset defaults
-        asset_defaults = site.asset_defaults
+      # Get asset defaults
+      asset_defaults = site.asset_defaults
 
-        # Update asset defaults
-        asset_defaults.attributes[:foo] = 'bar'
-        site.data_source.save_asset_defaults(asset_defaults)
-        site.load_data(true)
+      # Update asset defaults
+      asset_defaults.attributes[:foo] = 'bar'
+      site.data_source.save_asset_defaults(asset_defaults)
+      site.load_data(true)
 
-        # Check asset defaults
-        assert_equal('bar', site.asset_defaults.attributes[:foo])
-      end
+      # Check asset defaults
+      assert_equal('bar', site.asset_defaults.attributes[:foo])
     end
   end
 
@@ -272,13 +262,11 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_layouts
     with_temp_site do |site|
-      assert_nothing_raised do
-        layout = site.layouts[0]
+      layout = site.layouts[0]
 
-        assert_equal('/default/', layout.path)
-        assert_equal('erb', layout.attribute_named(:filter))
-        assert(layout.content.include?('<%= @page.title %></title>'))
-      end
+      assert_equal('/default/', layout.path)
+      assert_equal('erb', layout.attribute_named(:filter))
+      assert(layout.content.include?('<%= @page.title %></title>'))
     end
   end
 
@@ -298,9 +286,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
   def test_code
     with_temp_site do |site|
-      assert_nothing_raised do
-        assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
-      end
+      assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
     end
   end
 
@@ -323,14 +309,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        'tmp/foo/bar/baz/baz.html',
-        data_source.instance_eval do
-          content_filename_for_dir('tmp/foo/bar/baz')
-        end
-      )
-    end
+    assert_equal(
+      'tmp/foo/bar/baz/baz.html',
+      data_source.instance_eval do
+        content_filename_for_dir('tmp/foo/bar/baz')
+      end
+    )
   end
 
   def test_content_filename_for_dir_with_two_content_files
@@ -363,14 +347,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     File.open('tmp/foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        'tmp/foo/bar/baz/baz.html',
-        data_source.instance_eval do
-          content_filename_for_dir('tmp/foo/bar/baz')
-        end
-      )
-    end
+    assert_equal(
+      'tmp/foo/bar/baz/baz.html',
+      data_source.instance_eval do
+        content_filename_for_dir('tmp/foo/bar/baz')
+      end
+    )
   end
 
   def test_content_filename_for_dir_with_one_content_and_many_meta_files
@@ -385,14 +367,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     File.open('tmp/foo/bar/baz/zzz.yaml', 'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        'tmp/foo/bar/baz/baz.html',
-        data_source.instance_eval do
-          content_filename_for_dir('tmp/foo/bar/baz')
-        end
-      )
-    end
+    assert_equal(
+      'tmp/foo/bar/baz/baz.html',
+      data_source.instance_eval do
+        content_filename_for_dir('tmp/foo/bar/baz')
+      end
+    )
   end
 
   def test_content_filename_for_dir_with_one_content_file_and_rejected_files
@@ -408,14 +388,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     File.open('tmp/foo/bar/baz/baz.html.bak', 'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        'tmp/foo/bar/baz/baz.html',
-        data_source.instance_eval do
-          content_filename_for_dir('tmp/foo/bar/baz')
-        end
-      )
-    end
+    assert_equal(
+      'tmp/foo/bar/baz/baz.html',
+      data_source.instance_eval do
+        content_filename_for_dir('tmp/foo/bar/baz')
+      end
+    )
   end
 
   def test_content_filename_for_dir_with_one_index_content_file
@@ -427,14 +405,12 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     File.open('tmp/foo/bar/baz/index.html', 'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        'tmp/foo/bar/baz/index.html',
-        data_source.instance_eval do
-          content_filename_for_dir('tmp/foo/bar/baz')
-        end
-      )
-    end
+    assert_equal(
+      'tmp/foo/bar/baz/index.html',
+      data_source.instance_eval do
+        content_filename_for_dir('tmp/foo/bar/baz')
+      end
+    )
   end
 
   # Miscellaneous
@@ -456,12 +432,10 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     File.open('tmp/foo/index/index.html', 'w') { |io| io.write('test') }
 
     # Check
-    assert_nothing_raised do
-      assert_equal(
-        'tmp/foo/index/index.html',
-        data_source.instance_eval { content_filename_for_dir('tmp/foo/index') }
-      )
-    end
+    assert_equal(
+      'tmp/foo/index/index.html',
+      data_source.instance_eval { content_filename_for_dir('tmp/foo/index') }
+    )
   end
 
   def test_compile_site_with_file_object
@@ -512,9 +486,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       ########## EVERYTHING UP TO DATE
 
@@ -529,9 +501,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (shouldn't have changed)
       assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
@@ -549,9 +519,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -569,9 +537,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -589,9 +555,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -609,9 +573,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -629,9 +591,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -649,9 +609,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -669,9 +627,7 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() do
-        site.compiler.run(nil, :from_scratch => true)
-      end
+      site.compiler.run(nil, :from_scratch => true)
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)

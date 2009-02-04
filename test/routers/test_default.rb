@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
+class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

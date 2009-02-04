@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
+class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -74,11 +74,9 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_pages
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_equal(1, site.pages.size)
+      assert_equal(1, site.pages.size)
 
-        assert_equal('Home', site.pages[0].attribute_named(:title))
-      end
+      assert_equal('Home', site.pages[0].attribute_named(:title))
     end
   end
 
@@ -98,9 +96,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_page_defaults
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_equal('html', site.page_defaults.attributes[:extension])
-      end
+      assert_equal('html', site.page_defaults.attributes[:extension])
     end
   end
 
@@ -155,9 +151,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_asset_defaults
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_equal([], site.asset_defaults.attributes[:filters])
-      end
+      assert_equal([], site.asset_defaults.attributes[:filters])
     end
   end
 
@@ -169,13 +163,11 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_layouts
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        layout = site.layouts[0]
+      layout = site.layouts[0]
 
-        assert_equal('/default/', layout.path)
-        assert_equal('erb', layout.attribute_named(:filter))
-        assert(layout.content.include?('<%= @page.title %></title>'))
-      end
+      assert_equal('/default/', layout.path)
+      assert_equal('erb', layout.attribute_named(:filter))
+      assert(layout.content.include?('<%= @page.title %></title>'))
     end
   end
 
@@ -195,9 +187,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_code
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
-      end
+      assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
     end
   end
 
@@ -223,14 +213,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        [ 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
-        data_source.instance_eval do
-          files('tmp/foo', false).sort
-        end
-      )
-    end
+    assert_equal(
+      [ 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+      data_source.instance_eval do
+        files('tmp/foo', false).sort
+      end
+    )
   end
 
   def test_files_with_recursion
@@ -249,14 +237,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        [ 'tmp/foo/a/b/c.html', 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
-        data_source.instance_eval do
-          files('tmp/foo', true).sort
-        end
-      )
-    end
+    assert_equal(
+      [ 'tmp/foo/a/b/c.html', 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+      data_source.instance_eval do
+        files('tmp/foo', true).sort
+      end
+    )
   end
 
   def test_parse_file

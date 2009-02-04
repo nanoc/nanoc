@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::CompilerTest < Test::Unit::TestCase
+class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -44,7 +44,7 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     compiler = Nanoc::Compiler.new(site)
 
     # Run
-    assert_nothing_raised { compiler.run }
+    compiler.run
 
     # Make sure output dir is created
     assert(File.directory?('tmp/blah'))
@@ -72,7 +72,7 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     compiler = Nanoc::Compiler.new(site)
 
     # Run
-    assert_nothing_raised { compiler.run([ page ]) }
+    compiler.run([ page ])
 
     # Make sure output dir is created
     assert(File.directory?('tmp/blah'))
@@ -100,7 +100,7 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     compiler = Nanoc::Compiler.new(site)
 
     # Run
-    assert_nothing_raised { compiler.run([ asset ]) }
+    compiler.run([ asset ])
 
     # Make sure output dir is created
     assert(File.directory?('tmp/blah'))
