@@ -95,19 +95,6 @@ module Nanoc
       @item.site.compiler.stack.push(self)
       Nanoc::NotificationCenter.post(:compilation_started, self)
 
-      # Compile
-      compile_textual unless @filtered
-      @compiled = true
-
-      # Stop
-      @item.site.compiler.stack.pop
-      Nanoc::NotificationCenter.post(:compilation_ended, self)
-    end
-
-  private
-
-    # Compiles the asset rep, treating its contents as textual data.
-    def compile_textual
       # Create raw and last snapshots if necessary
       # FIXME probably shouldn't belong here
       @content[:raw]  ||= @item.content
@@ -131,6 +118,13 @@ module Nanoc
       # Write asset
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
+
+      # Done
+      @compiled = true
+
+      # Stop
+      @item.site.compiler.stack.pop
+      Nanoc::NotificationCenter.post(:compilation_ended, self)
     end
 
   end
