@@ -106,4 +106,25 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal(%[blah],                        item_rep.instance_eval { @content[:qux] })
   end
 
+  def test_write
+    # Mock site, router and item
+    router = MiniTest::Mock.new
+    router.expect(:disk_path_for, 'tmp/foo/bar/baz/quux.txt', [ nil ])
+    site = MiniTest::Mock.new
+    site.expect(:router, router)
+    item = MiniTest::Mock.new
+    item.expect(:site, site)
+
+    # Create rep
+    item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
+    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+
+    # Write
+    item_rep.write!
+
+    # Check
+    assert(File.file?('tmp/foo/bar/baz/quux.txt'))
+    assert_equal('Lorem ipsum, etc.', File.read('tmp/foo/bar/baz/quux.txt'))
+  end
+
 end
