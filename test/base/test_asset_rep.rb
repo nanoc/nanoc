@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::AssetRepTest < Test::Unit::TestCase
+class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -126,6 +126,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     # Create site
     site = mock
     site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.expects(:layouts).at_least_once.returns(layouts)
     site.expects(:code).at_least_once.returns(code)
 
     # Create asset

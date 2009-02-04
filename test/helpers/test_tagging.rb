@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Helpers::TaggingTest < Test::Unit::TestCase
+class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
