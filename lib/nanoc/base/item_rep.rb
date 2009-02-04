@@ -216,6 +216,12 @@ module Nanoc
       @content[snapshot_name] = @content[:last]
     end
 
+    # Writes the item rep's compiled content to the rep's output file.
+    def write!
+      FileUtils.mkdir_p(File.dirname(self.disk_path))
+      File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
+    end
+
   end
 
 end

@@ -495,7 +495,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep.expects(:outdated?).returns(true)
     page_rep.expects(:do_filter).times(2)
     page_rep.expects(:do_layout)
-    page_rep.expects(:write)
+    page_rep.expects(:write!)
     page_rep.expects(:disk_path).times(2).returns('tmp/blah.txt')
 
     # Compile
@@ -926,28 +926,6 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
   ensure
     Nanoc::NotificationCenter.remove(:filtering_started, :test)
     Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_write
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:skip_output => true)
-
-    # Create site
-    site = mock
-    site.expects(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-    page_rep.expects(:disk_path).times(2).returns('tmp/foo/bar/baz/quux.txt')
-
-    # Compile
-    page_rep.instance_eval { write }
-
-    # Check
-    assert(File.file?('tmp/foo/bar/baz/quux.txt'))
   end
 
 end

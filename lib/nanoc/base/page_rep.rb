@@ -119,7 +119,7 @@ module Nanoc
         end
 
         # Write if necessary
-        write unless attribute_named(:skip_output)
+        write! unless attribute_named(:skip_output)
       end
 
       # Stop
@@ -171,13 +171,6 @@ module Nanoc
 
       # Set content
       @content[:post] = @content[:last]
-    end
-
-    # Writes the compiled content to the disk.
-    def write
-      # TODO add ruby 1.9 support
-      FileUtils.mkdir_p(File.dirname(self.disk_path))
-      File.open(self.disk_path, 'w') { |io| io.write(@content[:post]) }
     end
 
   end

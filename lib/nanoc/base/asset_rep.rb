@@ -115,9 +115,8 @@ module Nanoc
         filter!(filter_name, filter_args)
       end
 
-      # Write asset
-      FileUtils.mkdir_p(File.dirname(self.disk_path))
-      File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
+      # Write
+      write!
 
       # Done
       @compiled = true
