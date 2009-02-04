@@ -163,16 +163,16 @@ module Nanoc
     def assigns
       {
         :_obj_rep   => self,
-        :_obj       => self.page,
-        :page_rep   => self.type == :page_rep  ? self.to_proxy       : nil,
-        :page       => self.type == :page_rep  ? self.page.to_proxy  : nil,
-        :asset_rep  => self.type == :asset_rep ? self.to_proxy       : nil,
-        :asset      => self.type == :asset_rep ? self.asset.to_proxy : nil,
-        :pages      => self.page.site.pages.map   { |obj| obj.to_proxy },
-        :assets     => self.page.site.assets.map  { |obj| obj.to_proxy },
-        :layouts    => self.page.site.layouts.map { |obj| obj.to_proxy },
-        :config     => self.page.site.config,
-        :site       => self.page.site
+        :_obj       => self.item,
+        :page_rep   => self.type == :page_rep  ? self.to_proxy      : nil,
+        :page       => self.type == :page_rep  ? self.item.to_proxy : nil,
+        :asset_rep  => self.type == :asset_rep ? self.to_proxy      : nil,
+        :asset      => self.type == :asset_rep ? self.item.to_proxy : nil,
+        :pages      => self.item.site.pages.map   { |obj| obj.to_proxy },
+        :assets     => self.item.site.assets.map  { |obj| obj.to_proxy },
+        :layouts    => self.item.site.layouts.map { |obj| obj.to_proxy },
+        :config     => self.item.site.config,
+        :site       => self.item.site
       }
     end
 
