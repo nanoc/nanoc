@@ -61,6 +61,12 @@ module Nanoc
       @force_outdated = false
     end
 
+    # Returns this representation's type (either :page_rep or :asset_rep).
+    # Should be overridden in subclasses.
+    def type
+      nil
+    end
+
     # Returns a proxy (Nanoc::ItemRepProxy) for this item representation.
     def to_proxy
       @proxy ||= ItemRepProxy.new(self)
