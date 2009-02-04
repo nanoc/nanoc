@@ -211,6 +211,11 @@ module Nanoc
       Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
     end
 
+    # Creates a snapshot of the current compiled item content.
+    def snapshot!(snapshot_name)
+      @content[snapshot_name] = @content[:last]
+    end
+
   end
 
 end
