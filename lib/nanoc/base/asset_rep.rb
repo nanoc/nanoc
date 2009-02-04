@@ -108,43 +108,29 @@ module Nanoc
 
     # Compiles the asset rep, treating its contents as textual data.
     def compile_textual
-      # Get content
-      current_content = @item.content
+      # Create raw and last snapshots if necessary
+      # FIXME probably shouldn't belong here
+      @content[:raw]  ||= @item.content
+      @content[:last] ||= @content[:raw]
 
-      # Check modified
-      @modified = @created ? true : File.read(self.disk_path) != current_content
+      # Run each filter
+      attribute_named(:filters).each do |raw_filter|
+        # Get filter arguments, if any
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
 
-      # Get assigns
-      assigns = {
-        :_obj_rep   => self,
-        :_obj       => self.asset,
-        :page_rep   => nil,
-        :page       => nil,
-        :asset_rep  => self.to_proxy,
-        :asset      => self.asset.to_proxy,
-        :pages      => self.asset.site.pages.map    { |obj| obj.to_proxy },
-        :assets     => self.asset.site.assets.map   { |obj| obj.to_proxy },
-        :layouts    => self.asset.site.layouts.map  { |obj| obj.to_proxy },
-        :config     => self.asset.site.config,
-        :site       => self.asset.site
-      }
-
-      # Run filters
-      attribute_named(:filters).each do |filter_name|
-        # Create filter
-        klass = Nanoc::Filter.named(filter_name)
-        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(assigns)
-
-        # Run filter
-        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        current_content = filter.run(current_content)
-        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
+        # Filter
+        filter!(filter_name, filter_args)
       end
 
       # Write asset
       FileUtils.mkdir_p(File.dirname(self.disk_path))
-      File.open(self.disk_path, 'w') { |io| io.write(current_content) }
+      File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
     end
 
   end

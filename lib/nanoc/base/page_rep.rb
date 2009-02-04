@@ -101,7 +101,7 @@ module Nanoc
       @created  = false
 
       # Forget progress if requested
-      @content = { :pre => nil, :post => nil } if from_scratch
+      @content = {} if from_scratch
 
       # Check for recursive call
       if @item.site.compiler.stack.include?(self)
@@ -143,26 +143,13 @@ module Nanoc
 
     # Runs the content through the filters in the given stage.
     def do_filter(stage)
-      # Get content if necessary
-      content = (stage == :pre ? @item.content : @content[:post])
-
       # Get filters
       filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
 
-      # Get assigns
-      assigns = {
-        :_obj_rep   => self,
-        :_obj       => self.page,
-        :page_rep   => self.to_proxy,
-        :page       => self.page.to_proxy,
-        :asset_rep  => nil,
-        :asset      => nil,
-        :pages      => self.page.site.pages.map    { |obj| obj.to_proxy },
-        :assets     => self.page.site.assets.map   { |obj| obj.to_proxy },
-        :layouts    => self.page.site.layouts.map  { |obj| obj.to_proxy },
-        :config     => self.page.site.config,
-        :site       => self.page.site
-      }
+      # Create raw and last snapshots if necessary
+      # FIXME probably shouldn't belong here
+      @content[:raw]  ||= @item.content
+      @content[:last] ||= @content[:raw]
 
       # Run each filter
       filters.each do |raw_filter|
@@ -175,19 +162,12 @@ module Nanoc
           filter_args = raw_filter['args'] || {}
         end
 
-        # Create filter
-        klass = Nanoc::Filter.named(filter_name)
-        raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
-        filter = klass.new(assigns)
-
-        # Run filter
-        Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-        content = (filter.method(:run).arity == -2 ? filter.run(content, filter_args) : filter.run(content))
-        Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
+        # Filter
+        filter!(filter_name, filter_args)
       end
 
       # Set content
-      @content[stage] = content
+      @content[stage] = @content[:last]
     end
 
     # Runs the content through this rep's layout.
@@ -198,31 +178,11 @@ module Nanoc
         return
       end
 
-      # Get assigns
-      assigns = {
-        :_obj_rep   => self,
-        :_obj       => self.page,
-        :page_rep   => self.to_proxy,
-        :page       => self.page.to_proxy,
-        :asset_rep  => nil,
-        :asset      => nil,
-        :layout     => layout.to_proxy,
-        :pages      => self.page.site.pages.map    { |obj| obj.to_proxy },
-        :assets     => self.page.site.assets.map   { |obj| obj.to_proxy },
-        :layouts    => self.page.site.layouts.map  { |obj| obj.to_proxy },
-        :config     => self.page.site.config,
-        :site       => self.page.site
-      }
-
-      # Create filter
-      klass = layout.filter_class
-      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
-      filter = klass.new(assigns)
-
       # Layout
-      Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
-      @content[:post] = filter.run(layout.content)
-      Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
+      layout!(attribute_named(:layout))
+
+      # Set content
+      @content[:post] = @content[:last]
     end
 
     # Writes the compiled content to the disk.
