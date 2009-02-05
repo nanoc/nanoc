@@ -201,26 +201,29 @@ module Nanoc
       @content[:raw]  ||= @item.content
       @content[:last] ||= @content[:raw]
 
-      # Pre-filter if necesary
-      if @content[:pre].nil?
-        do_filter(:pre)
-      end
+      # Check if file will be created
+      output_file_exists = File.file?(self.disk_path)
 
-      # Post-filter if necessary
-      if @content[:post].nil?
-        do_layout
-        do_filter(:post)
+      # Run instructions
+      processing_instructions.each do |instruction|
+        case instruction[0]
+          when :filter
+            filter!(instruction[1], instruction[2])
+          when :layout
+            layout!(instruction[1])
+          when :snapshot
+            snapshot!(instruction[1])
+          when :write
+            write!
+        end
       end
 
       # Update status
       @compiled = true
       unless attribute_named(:skip_output)
-        @created  = !File.file?(self.disk_path)
+        @created  = !output_file_exists
         @modified = @created ? true : File.read(self.disk_path) != @content[:post]
       end
-
-      # Write if necessary
-      write! if @modified
 
       # Stop
       Nanoc::NotificationCenter.post(:compilation_ended, self)
@@ -287,51 +290,6 @@ module Nanoc
     def write!
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
-    end
-
-  private
-
-    # Runs the content through the filters in the given stage.
-    def do_filter(stage)
-      # Get filters
-      if type == :asset_rep
-        filters = attribute_named(:filters)
-      else
-        filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
-      end
-
-      # Run each filter
-      filters.each do |raw_filter|
-        # Get filter arguments, if any
-        if raw_filter.is_a?(String)
-          filter_name = raw_filter
-          filter_args = {}
-        else
-          filter_name = raw_filter['name']
-          filter_args = raw_filter['args'] || {}
-        end
-
-        # Filter
-        filter!(filter_name, filter_args)
-      end
-
-      # Set content
-      @content[stage] = @content[:last]
-    end
-
-    # Runs the content through this rep's layout.
-    def do_layout
-      # Don't layout if not necessary
-      if attribute_named(:layout).nil?
-        @content[:post] = @content[:pre]
-        return
-      end
-
-      # Layout
-      layout!(attribute_named(:layout))
-
-      # Set content
-      @content[:post] = @content[:last]
     end
 
   end
