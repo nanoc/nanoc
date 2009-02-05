@@ -25,7 +25,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     assert(asset_rep.instance_eval { !@compiled })
     assert(asset_rep.instance_eval { !@modified })
     assert(asset_rep.instance_eval { !@created })
-    assert(asset_rep.instance_eval { !@filtered })
   end
 
   def test_to_proxy

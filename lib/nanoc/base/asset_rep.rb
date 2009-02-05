@@ -4,13 +4,6 @@ module Nanoc
 
     alias_method :asset, :item
 
-    def initialize(asset, attributes, name)
-      super(asset, attributes, name)
-
-      # Reset stages
-      @filtered       = false
-    end
-
     # Returns the type of this object.
     def type
       :asset_rep
