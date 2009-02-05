@@ -300,11 +300,6 @@ module Nanoc
         filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
       end
 
-      # Create raw and last snapshots if necessary
-      # FIXME probably shouldn't belong here
-      @content[:raw]  ||= @item.content
-      @content[:last] ||= @content[:raw]
-
       # Run each filter
       filters.each do |raw_filter|
         # Get filter arguments, if any

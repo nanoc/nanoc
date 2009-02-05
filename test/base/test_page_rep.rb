@@ -563,8 +563,8 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page = Nanoc::Page.new('blah', { :filters_pre => [] }, '/path/')
     page.site = site
     page.build_reps
-    page.expects(:content).returns('pre content')
     page_rep = page.reps[0]
+    page_rep.instance_eval { @content[:last] = 'pre content' }
 
     # Setup notifications
     @filtering_started_count = 0
@@ -654,6 +654,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page.site = site
     page.build_reps
     page_rep = page.reps[0]
+    page_rep.instance_eval { @content[:last] = %[<%= '<%= "foo" %' + '>' %>] }
 
     # Update site expectations
     site.expects(:config).at_least_once.returns({})
