@@ -29,8 +29,6 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     assert(page_rep.instance_eval { !@compiled })
     assert(page_rep.instance_eval { !@modified })
     assert(page_rep.instance_eval { !@created })
-    assert(page_rep.instance_eval { !@filtered_pre })
-    assert(page_rep.instance_eval { !@filtered_post })
   end
 
   def test_to_proxy
