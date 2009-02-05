@@ -23,13 +23,13 @@ require 'nanoc'
 SUMMARY = 'a tool that runs on your local computer  and compiles Markdown, ' +
           'Textile, Haml, ... documents into static web pages'
 POST_INSTALL_MESSAGE = <<EOS
-Thanks for installing nanoc 2.1! Here are some resources to help you get started:
+Thanks for installing nanoc 3.0! Here are some resources to help you get started:
 
 * The tutorial at <http://nanoc.stoneship.org/help/tutorial/>
 * The manual at <http://nanoc.stoneship.org/help/manual/>
 * The discussion group at <http://groups.google.com/group/nanoc>
 
-Because nanoc 2.1 has a lot of new features, be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for details about this release.
+Because nanoc 3.0 has a lot of new features, be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for details about this release.
 
 Enjoy!
 EOS
