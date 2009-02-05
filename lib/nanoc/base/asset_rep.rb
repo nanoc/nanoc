@@ -58,64 +58,6 @@ module Nanoc
       super(name, @item.site.asset_defaults, Nanoc::Asset::DEFAULTS)
     end
 
-    # Compiles the asset representation and writes the result to the disk.
-    # This method should not be called directly; please use
-    # Nanoc::Compiler#run instead, and pass this asset representation's asset
-    # as its first argument.
-    #
-    # +even_when_not_outdated+:: true if the asset rep should be compiled even
-    #                            if it is not outdated, false if not.
-    def compile(even_when_not_outdated)
-      # Don't compile if already compiled
-      return if @compiled
-
-      # Skip unless outdated
-      unless outdated? or even_when_not_outdated
-        Nanoc::NotificationCenter.post(:compilation_started, self)
-        Nanoc::NotificationCenter.post(:compilation_ended,   self)
-        return
-      end
-
-      # Reset flags
-      @compiled = false
-      @modified = false
-      @created  = !File.file?(self.disk_path)
-
-      # Start
-      @item.site.compiler.stack.push(self)
-      Nanoc::NotificationCenter.post(:compilation_started, self)
-
-      # Create raw and last snapshots if necessary
-      # FIXME probably shouldn't belong here
-      @content[:raw]  ||= @item.content
-      @content[:last] ||= @content[:raw]
-
-      # Run each filter
-      attribute_named(:filters).each do |raw_filter|
-        # Get filter arguments, if any
-        if raw_filter.is_a?(String)
-          filter_name = raw_filter
-          filter_args = {}
-        else
-          filter_name = raw_filter['name']
-          filter_args = raw_filter['args'] || {}
-        end
-
-        # Filter
-        filter!(filter_name, filter_args)
-      end
-
-      # Write
-      write!
-
-      # Done
-      @compiled = true
-
-      # Stop
-      @item.site.compiler.stack.pop
-      Nanoc::NotificationCenter.post(:compilation_ended, self)
-    end
-
   end
 
 end
