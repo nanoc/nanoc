@@ -27,12 +27,12 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     # Filter once
-    item_rep.filter!(:erb)
+    item_rep.filter(:erb)
     # FIXME ugly
     assert_equal(%[<%= "blah" %>], item_rep.instance_eval { @content[:last] })
 
     # Filter twice
-    item_rep.filter!(:erb)
+    item_rep.filter(:erb)
     # FIXME ugly
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
@@ -66,7 +66,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     # Layout
-    item_rep.layout!('/somelayout/')
+    item_rep.layout('/somelayout/')
     # FIXME ugly
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
@@ -93,11 +93,11 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     # Filter while taking snapshots
-    item_rep.snapshot!(:foo)
-    item_rep.filter!(:erb)
-    item_rep.snapshot!(:bar)
-    item_rep.filter!(:erb)
-    item_rep.snapshot!(:qux)
+    item_rep.snapshot(:foo)
+    item_rep.filter(:erb)
+    item_rep.snapshot(:bar)
+    item_rep.filter(:erb)
+    item_rep.snapshot(:qux)
 
     # Check snapshots
     # FIXME ugly
@@ -120,7 +120,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
 
     # Write
-    item_rep.write!
+    item_rep.write
 
     # Check
     assert(File.file?('tmp/foo/bar/baz/quux.txt'))
