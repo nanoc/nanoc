@@ -24,7 +24,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
-      compile(false, false)
+      compile(false)
 
       @web_path ||= @item.site.router.web_path_for(self)
     end
@@ -63,18 +63,11 @@ module Nanoc
     # Nanoc::Compiler#run instead, and pass this asset representation's asset
     # as its first argument.
     #
-    # The asset representation will only be compiled if it wasn't compiled
-    # before yet. To force recompilation of the asset rep, forgetting any
-    # progress, set +from_scratch+ to true.
-    #
     # +even_when_not_outdated+:: true if the asset rep should be compiled even
     #                            if it is not outdated, false if not.
-    #
-    # +from_scratch+:: true if the asset rep should be filtered again even if
-    #                  it has already been filtered, false otherwise.
-    def compile(even_when_not_outdated, from_scratch)
+    def compile(even_when_not_outdated)
       # Don't compile if already compiled
-      return if @compiled and !from_scratch
+      return if @compiled
 
       # Skip unless outdated
       unless outdated? or even_when_not_outdated
@@ -87,9 +80,6 @@ module Nanoc
       @compiled = false
       @modified = false
       @created  = !File.file?(self.disk_path)
-
-      # Forget progress if requested
-      @filtered = false if from_scratch
 
       # Start
       @item.site.compiler.stack.push(self)

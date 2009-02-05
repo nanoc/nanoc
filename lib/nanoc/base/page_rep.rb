@@ -44,9 +44,9 @@ module Nanoc
     # +stage+:: The stage at which the content should be fetched. Can be
     #           either +:pre+ or +:post+. To get the raw, uncompiled content,
     #           use Nanoc::Page#content.
-    def content(stage = :pre, even_when_not_outdated = true, from_scratch = false)
+    def content(stage = :pre, even_when_not_outdated = true)
       Nanoc::NotificationCenter.post(:visit_started, self)
-      compile(even_when_not_outdated, from_scratch) unless @content[stage]
+      compile(even_when_not_outdated) unless @content[stage]
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       @content[stage]
@@ -56,19 +56,15 @@ module Nanoc
     # method should not be called directly; please use Nanoc::Compiler#run
     # instead, and pass this page representation's page as its first argument.
     #
-    # The page representation will only be compiled if it wasn't compiled
-    # before yet. To force recompilation of the page rep, forgetting any
-    # progress, set +from_scratch+ to true.
-    #
     # +even_when_not_outdated+:: true if the page rep should be compiled even
     #                            if it is not outdated, false if not.
-    #
-    # +from_scratch+:: true if all compilation stages (pre-filter, layout,
-    #                  post-filter) should be performed again even if they
-    #                  have already been performed, false otherwise.
-    def compile(even_when_not_outdated, from_scratch)
+    def compile(even_when_not_outdated)
+      # Reset flags
+      @modified = false
+      @created  = false
+
       # Don't compile if already compiled
-      return if @compiled and !from_scratch
+      return if @compiled
 
       # Skip unless outdated
       unless outdated? or even_when_not_outdated
@@ -76,14 +72,6 @@ module Nanoc
         Nanoc::NotificationCenter.post(:compilation_ended,   self)
         return
       end
-
-      # Reset flags
-      @compiled = false
-      @modified = false
-      @created  = false
-
-      # Forget progress if requested
-      @content = {} if from_scratch
 
       # Check for recursive call
       if @item.site.compiler.stack.include?(self)
