@@ -23,16 +23,9 @@ module Nanoc
     # +:even_when_not_outdated+:: true if the rep should be compiled even if
     #                             it is not outdated, false if not. Defaults
     #                             to false.
-    #
-    # +:from_scratch+:: true if all compilation stages (for page reps:
-    #                   pre-filter, layout, post-filter; for asset reps:
-    #                   filter) should be performed again even if they have
-    #                   already been performed, false otherwise. Defaults to
-    #                   false.
     def run(objects=nil, params={})
       # Parse params
-      even_when_not_outdated  = params[:even_when_not_outdated] || false
-      from_scratch            = params[:from_scratch]           || false
+      even_when_not_outdated = params[:even_when_not_outdated] || false
 
       # Load data
       @site.load_data
@@ -49,7 +42,7 @@ module Nanoc
 
       # Compile everything
       reps.each do |rep|
-        rep.compile(even_when_not_outdated, from_scratch)
+        rep.compile(even_when_not_outdated)
       end
     end
 

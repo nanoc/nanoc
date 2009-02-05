@@ -66,12 +66,9 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     stack = []
     compiler = mock
     compiler.stubs(:stack).returns(stack)
-    router = mock
-    router.expects(:disk_path_for).returns('tmp/out/foo/index.html')
     site = mock
     site.expects(:compiler).at_least_once.returns(compiler)
-    site.expects(:router).returns(router)
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/out' })
+    site.expects(:config).at_least_once.returns({})
     site.expects(:page_defaults).at_least_once.returns(page_defaults)
     site.expects(:pages).at_least_once.returns([ page ])
     site.expects(:assets).at_least_once.returns([])
@@ -81,6 +78,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Get rep
     page.build_reps
     page_rep = page.reps.first
+    page_rep.stubs(:disk_path).returns('tmp/out/foo/index.html')
 
     # Check
     assert(!page_rep.created?)
@@ -88,7 +86,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     assert(!page_rep.compiled?)
 
     # Compile page rep
-    page_rep.compile(false, true)
+    page_rep.compile(false)
 
     # Check
     assert(page_rep.created?)
@@ -96,21 +94,11 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     assert(page_rep.compiled?)
 
     # Compile page rep
-    page_rep.compile(false, true)
+    page_rep.compile(false)
 
     # Check
     assert(!page_rep.created?)
     assert(!page_rep.modified?)
-    assert(page_rep.compiled?)
-
-    # Edit and compile page rep
-    page.instance_eval { @mtime = Time.now + 5 }
-    page.instance_eval { @content = 'new content' }
-    page_rep.compile(false, true)
-
-    # Check
-    assert(!page_rep.created?)
-    assert(page_rep.modified?)
     assert(page_rep.compiled?)
   end
 
@@ -330,7 +318,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep = page.reps[0]
 
     # Mock compiler
-    page_rep.expects(:compile).with(true, false)
+    page_rep.expects(:compile).with(true)
 
     # Check
     page_rep.content(:pre)
@@ -370,7 +358,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep = page.reps[0]
 
     # Mock compiler
-    page_rep.expects(:compile).with(true, false)
+    page_rep.expects(:compile).with(true)
 
     # Check
     page_rep.content(:post)
@@ -415,7 +403,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep.expects(:outdated?).returns(false)
 
     # Compile
-    page_rep.compile(false, false)
+    page_rep.compile(false)
   end
 
   def test_compile_already_compiled
@@ -438,7 +426,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep.instance_eval { @compiled = true }
 
     # Compile
-    page_rep.compile(false, false)
+    page_rep.compile(false)
   end
 
   def test_compile_also_layout
@@ -465,10 +453,10 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep.expects(:do_filter).times(2)
     page_rep.expects(:do_layout)
     page_rep.expects(:write!)
-    page_rep.expects(:disk_path).times(2).returns('tmp/blah.txt')
+    page_rep.stubs(:disk_path).returns('tmp/blah.txt')
 
     # Compile
-    page_rep.compile(false, false)
+    page_rep.compile(false)
 
     # Check
     assert_equal(true,  page_rep.instance_eval { @compiled })
@@ -523,7 +511,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
 
     # Compile
     assert_raises(Nanoc::Errors::RecursiveCompilationError) do
-      page_rep_0.compile(false, false)
+      page_rep_0.compile(false)
     end
   end
 
@@ -550,41 +538,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_rep.stubs(:disk_path).returns('tmp/blahblah.txt')
 
     # Compile
-    page_rep.compile(true, false)
-
-    # Check
-    assert_equal(true, page_rep.instance_eval { @compiled })
-    assert_equal(true, page_rep.instance_eval { @created  })
-  end
-
-  def test_compile_from_scratch
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    stack = []
-    compiler = mock
-    compiler.stubs(:stack).returns(stack)
-    site = mock
-    site.stubs(:compiler).returns(compiler)
-    site.stubs(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => 'foo' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-    page_rep.expects(:outdated?).returns(true)
-    page_rep.expects(:do_filter).times(2)
-    page_rep.expects(:do_layout)
-    page_rep.stubs(:disk_path).returns('tmp/blahblah.txt')
-    page_rep.instance_eval do
-      @content[:pre]  = 'some pre content'
-      @content[:post] = 'some post content'
-    end
-
-    # Compile
-    page_rep.compile(false, true)
+    page_rep.compile(true)
 
     # Check
     assert_equal(true, page_rep.instance_eval { @compiled })
