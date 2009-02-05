@@ -166,6 +166,67 @@ module Nanoc
       return defaults[name]
     end
 
+    # Compiles the item representation and writes the result to the disk. This
+    # method should not be called directly; please use Nanoc::Compiler#run
+    # instead, and pass this item representation's item as its first argument.
+    #
+    # +even_when_not_outdated+:: true if the item rep should be compiled even
+    #                            if it is not outdated, false if not.
+    def compile(even_when_not_outdated)
+      # Reset flags
+      @modified = false
+      @created  = false
+
+      # Don't compile if already compiled
+      return if @compiled
+
+      # Skip unless outdated
+      unless outdated? or even_when_not_outdated
+        Nanoc::NotificationCenter.post(:compilation_started, self)
+        Nanoc::NotificationCenter.post(:compilation_ended,   self)
+        return
+      end
+
+      # Check for recursive call
+      if @item.site.compiler.stack.include?(self)
+        @item.site.compiler.stack.push(self)
+        raise Nanoc::Errors::RecursiveCompilationError.new
+      end
+
+      # Start
+      @item.site.compiler.stack.push(self)
+      Nanoc::NotificationCenter.post(:compilation_started, self)
+
+      # Create raw and last snapshots if necessary
+      @content[:raw]  ||= @item.content
+      @content[:last] ||= @content[:raw]
+
+      # Pre-filter if necesary
+      if @content[:pre].nil?
+        do_filter(:pre)
+      end
+
+      # Post-filter if necessary
+      if @content[:post].nil?
+        do_layout
+        do_filter(:post)
+      end
+
+      # Update status
+      @compiled = true
+      unless attribute_named(:skip_output)
+        @created  = !File.file?(self.disk_path)
+        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+      end
+
+      # Write if necessary
+      write! if @modified
+
+      # Stop
+      Nanoc::NotificationCenter.post(:compilation_ended, self)
+      @item.site.compiler.stack.pop
+    end
+
     # Returns the assignments that should be available when compiling the content.
     def assigns
       {
@@ -183,7 +244,7 @@ module Nanoc
       }
     end
 
-    # Runs the page content through the given filter with the given arguments.
+    # Runs the item content through the given filter with the given arguments.
     def filter!(filter_name, filter_args={})
       # Create filter
       klass = Nanoc::Filter.named(filter_name)
@@ -200,7 +261,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:filtering_ended, self, klass.identifier)
     end
 
-    # Lays out the page using the given layout.
+    # Lays out the item using the given layout.
     def layout!(layout_name)
       # Get layout
       layout ||= @item.site.layouts.find { |l| l.path == layout_name.cleaned_path }
@@ -226,6 +287,56 @@ module Nanoc
     def write!
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
+    end
+
+  private
+
+    # Runs the content through the filters in the given stage.
+    def do_filter(stage)
+      # Get filters
+      if type == :asset_rep
+        filters = attribute_named(:filters)
+      else
+        filters = attribute_named(stage == :pre ? :filters_pre : :filters_post)
+      end
+
+      # Create raw and last snapshots if necessary
+      # FIXME probably shouldn't belong here
+      @content[:raw]  ||= @item.content
+      @content[:last] ||= @content[:raw]
+
+      # Run each filter
+      filters.each do |raw_filter|
+        # Get filter arguments, if any
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
+
+        # Filter
+        filter!(filter_name, filter_args)
+      end
+
+      # Set content
+      @content[stage] = @content[:last]
+    end
+
+    # Runs the content through this rep's layout.
+    def do_layout
+      # Don't layout if not necessary
+      if attribute_named(:layout).nil?
+        @content[:post] = @content[:pre]
+        return
+      end
+
+      # Layout
+      layout!(attribute_named(:layout))
+
+      # Set content
+      @content[:post] = @content[:last]
     end
 
   end

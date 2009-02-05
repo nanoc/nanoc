@@ -97,17 +97,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     assert(!asset_rep.created?)
     assert(!asset_rep.modified?)
     assert(asset_rep.compiled?)
-
-    # Edit and compile asset rep
-    asset.instance_eval { @mtime = Time.now + 5 }
-    File.open('tmp/test.txt', 'w') { |io| io.write('new stuff') }
-    asset.instance_eval { @file = File.new('tmp/test.txt') }
-    asset_rep.compile(false)
-
-    # Check
-    assert(!asset_rep.created?)
-    assert(asset_rep.modified?)
-    assert(asset_rep.compiled?)
   end
 
   def test_outdated
