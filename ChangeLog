@@ -1,12 +1,24 @@
 nanoc Release Notes
 ===================
 
-2.2
+3.0
 ---
+
+Changed:
 
 * The compile command now takes --no-assets and --no-pages options
 * Dependencies between pages are now tracked properly
+
+New:
+
 * Filters can now optionally take arguments
+* The current layout is now accessible through the @layout variable
+
+Removed:
+
+* Removed support for drafts
+* Removed support for binary assets
+* Removed support for templates
 
 2.1.5
 -----
