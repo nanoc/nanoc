@@ -350,57 +350,28 @@ module Nanoc::DataSources
     ########## Layouts ##########
 
     def layouts # :nodoc:
-      if uses_old_school_layouts?
-        # Warn about deprecation
-        warn(
-          'DEPRECATION WARNING: nanoc 2.1 changes the way layouts are ' +
-          'stored. Future versions will not support these outdated sites. ' +
-          'To update your site, issue \'nanoc update\'.'
-        )
+      meta_filenames('layouts').map do |meta_filename|
+        # Get content
+        content_filename  = content_filename_for_dir(File.dirname(meta_filename))
+        content           = File.read(content_filename)
 
-        Dir[File.join('layouts', '*')].reject { |f| f =~ /~$/ }.map do |filename|
-          # Get content
-          content = File.read(filename)
+        # Get attributes
+        attributes = YAML.load_file(meta_filename) || {}
 
-          # Get attributes
-          attributes = { :extension => File.extname(filename)}
+        # Get path
+        path = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
 
-          # Get path
-          path = File.basename(filename, attributes[:extension])
+        # Get modification times
+        meta_mtime    = File.stat(meta_filename).mtime
+        content_mtime = File.stat(content_filename).mtime
+        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
-          # Get modification time
-          mtime = File.stat(filename).mtime
-
-          # Create layout object
-          Nanoc::Layout.new(content, attributes, path, mtime)
-        end
-      else
-        meta_filenames('layouts').map do |meta_filename|
-          # Get content
-          content_filename  = content_filename_for_dir(File.dirname(meta_filename))
-          content           = File.read(content_filename)
-
-          # Get attributes
-          attributes = YAML.load_file(meta_filename) || {}
-
-          # Get path
-          path = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
-
-          # Get modification times
-          meta_mtime    = File.stat(meta_filename).mtime
-          content_mtime = File.stat(content_filename).mtime
-          mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
-
-          # Create layout object
-          Nanoc::Layout.new(content, attributes, path, mtime)
-        end
+        # Create layout object
+        Nanoc::Layout.new(content, attributes, path, mtime)
       end
     end
 
     def save_layout(layout) # :nodoc:
-      # Forbid old-school layouts
-      error_outdated if uses_old_school_layouts?
-
       # Get paths
       last_component    = layout.path.split('/')[-1]
       dir_path          = 'layouts' + layout.path
@@ -592,11 +563,6 @@ module Nanoc::DataSources
         # Move
         vcs.move(old_filename, new_filename)
       end
-    end
-
-    # Returns true if the layouts are stored in an old-school way.
-    def uses_old_school_layouts?
-      Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.size > 0
     end
 
   end
