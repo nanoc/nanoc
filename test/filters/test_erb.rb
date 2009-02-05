@@ -1,41 +1,17 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Filters::ERBTest < Test::Unit::TestCase
+class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
-    assert_nothing_raised do
-      # Create site
-      site = mock
+    # Create filter
+    filter = ::Nanoc::Filters::ERB.new({ :location => 'a cheap motel' })
 
-      # Create page
-      page = mock
-      page_proxy = Nanoc::Proxy.new(page)
-      page.expects(:site).returns(site)
-      page.expects(:to_proxy).returns(page_proxy)
-
-      # Create page rep
-      page_rep = mock
-      page_rep_proxy = Nanoc::Proxy.new(page_rep)
-      page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-      page_rep.expects(:page).returns(page)
-      page_rep.expects(:to_proxy).returns(page_rep_proxy)
-
-      # Mock site
-      site.expects(:pages).returns([])
-      site.expects(:assets).returns([])
-      site.expects(:layouts).returns([])
-      site.expects(:config).returns({})
-
-      # Get filter
-      filter = ::Nanoc::Filters::ERB.new(page_rep)
-
-      # Run filter
-      result = filter.run('<%= "Hello." %>')
-      assert_equal('Hello.', result)
-    end
+    # Run filter
+    result = filter.run('<%= "I was hiding in #{@location}." %>')
+    assert_equal('I was hiding in a cheap motel.', result)
   end
 
 end

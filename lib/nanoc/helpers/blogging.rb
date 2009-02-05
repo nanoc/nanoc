@@ -11,6 +11,10 @@ module Nanoc::Helpers
   # the documentation for these functions.
   #
   # The two main functions are sorted_articles and atom_feed.
+  #
+  # To activate this helper, +include+ it, like this:
+  #
+  #   include Nanoc::Helpers::Blogging
   module Blogging
 
     # Returns the list of articles, sorted by descending creation date (so

@@ -1,13 +1,21 @@
 # Try getting RubyGems
 begin ; require 'rubygems' ; rescue LoadError ; end
 
+# Add vendor to load path
+[ 'mocha', 'mime-types' ].each do |e|
+  path = File.join(File.dirname(__FILE__), '..', 'vendor', e, 'lib')
+  next unless File.directory?(path)
+  $LOAD_PATH.unshift(File.expand_path(path))
+end
+
 # Load unit testing stuff
 begin
-  require 'test/unit'
-  require 'test/spec'
+  require 'minitest/unit'
+  require 'minitest/spec'
+  require 'minitest/mock'
   require 'mocha'
 rescue => e
-  $stderr.puts "To run the nanoc unit tests, you need test/unit, test/spec and mocha."
+  $stderr.puts "To run the nanoc unit tests, you need minitest and mocha."
   raise e
 end
 
@@ -61,15 +69,15 @@ def create_page(name)
   Nanoc::CLI::Base.new.run(['create_page', name])
 end
 
-def create_template(name)
-  Nanoc::CLI::Base.new.run(['create_template', name])
-end
-
 def if_have(x)
   require x
   yield
 rescue LoadError
-  $stderr_real.print "[ skipped -- requiring #{x} failed ]"
+  begin
+    skip "requiring #{x} failed"
+  rescue NoMethodError
+    $stderr_real.print "[ skipped -- requiring #{x} failed ]"
+  end
 end
 
 def global_setup

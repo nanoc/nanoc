@@ -1,12 +1,27 @@
-require 'rake'
+##### Requirements
 
+# Rake etc
+require 'rake'
+require 'rake/clean'
+require 'rake/gempackagetask'
+require 'rake/testtask'
+
+# Rdoc
+begin
+  require 'hanna/rdoctask'
+rescue LoadError
+  warn "Tried loading hanna but failed; falling back to the normal RDoc template"
+  require 'rake/rdoctask'
+end
+
+# nanoc itself
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
 require 'nanoc'
-require 'nanoc/cli'
+
+##### General details
 
 SUMMARY = 'a tool that runs on your local computer  and compiles Markdown, ' +
           'Textile, Haml, ... documents into static web pages'
-
 POST_INSTALL_MESSAGE = <<EOS
 Thanks for installing nanoc 2.1! Here are some resources to help you get started:
 
@@ -41,13 +56,12 @@ GemSpec = Gem::Specification.new do |s|
                               '--main'    << 'README'                   <<
                               '--charset' << 'utf-8'                    <<
                               '--exclude' << 'lib/nanoc/cli/commands'   <<
-                              '--exclude' << 'lib/nanoc/binary_filters' <<
                               '--exclude' << 'lib/nanoc/extra/vcses'    <<
                               '--exclude' << 'lib/nanoc/filters'        <<
                               '--exclude' << 'test'                     <<
                               '--line-numbers'
 
-  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib}', '**', '*')]
+  s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib,vendor}', '**', '*')]
   s.executables           = [ 'nanoc' ]
   s.require_path          = 'lib'
   s.bindir                = 'bin'

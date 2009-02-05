@@ -1,11 +1,10 @@
 module Nanoc
 
   # Nanoc::Plugin is the superclass for all plugins, such as filters
-  # (Nanoc::Filter), binary filters (Nanoc::BinaryFilter), routers
-  # (Nanoc::Router), data sources (Nanoc::DataSource) and VCSes
-  # (Nanoc::Extra::VCS). Each plugin has one or more unique identifiers, and
-  # several methods in this class provides functionality for finding plugins
-  # with given identifiers.
+  # (Nanoc::Filter), routers (Nanoc::Router), data sources (Nanoc::DataSource)
+  # and VCSes (Nanoc::Extra::VCS). Each plugin has one or more unique
+  # identifiers, and several methods in this class provides functionality for
+  # finding plugins with given identifiers.
   class Plugin
 
     MAP = {}
@@ -19,7 +18,9 @@ module Nanoc
       # symbols for this plugin.
       def identifiers(*identifiers)
         # Initialize
-        @identifiers = [] unless instance_variables.include?('@identifiers')
+        if !instance_variables.include?('@identifiers') && !instance_variables.include?(:'@identifiers')
+          @identifiers = []
+        end
 
         if identifiers.empty?
           @identifiers
@@ -35,7 +36,9 @@ module Nanoc
       # When given nothing, returns the identifier for this plugin.
       def identifier(identifier=nil)
         # Initialize
-        @identifiers = [] unless instance_variables.include?('@identifiers')
+        if !instance_variables.include?('@identifiers') && !instance_variables.include?(:'@identifiers')
+          @identifiers = []
+        end
 
         if identifier.nil?
           @identifiers.first

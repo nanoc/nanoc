@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::CompilerTest < Test::Unit::TestCase
+class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -20,8 +20,8 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'tmp/blah' })
-    site.expects(:asset_defaults).times(2).returns(Nanoc::AssetDefaults.new({}))
-    site.expects(:page_defaults).times(2).returns(Nanoc::PageDefaults.new({}))
+    site.expects(:asset_defaults).times(2).returns(Nanoc::Defaults.new({}))
+    site.expects(:page_defaults).times(2).returns(Nanoc::Defaults.new({}))
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns(assets)
 
@@ -33,18 +33,14 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
       rep = obj.reps[0]
 
       # Setup compilation
-      if rep.is_a?(Nanoc::PageRep)
-        rep.expects(:compile).with(true, false, false)
-      else
-        rep.expects(:compile).with(false, false)
-      end
+      rep.expects(:compile).with(false)
     end
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
 
     # Run
-    assert_nothing_raised { compiler.run }
+    compiler.run
 
     # Make sure output dir is created
     assert(File.directory?('tmp/blah'))
@@ -58,7 +54,7 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'tmp/blah' })
-    site.expects(:page_defaults).returns(Nanoc::PageDefaults.new({}))
+    site.expects(:page_defaults).returns(Nanoc::Defaults.new({}))
 
     # Build reps
     page.site = site
@@ -66,13 +62,13 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     page_rep = page.reps[0]
 
     # Setup compilation
-    page_rep.expects(:compile).with(true, false, false)
+    page_rep.expects(:compile).with(false)
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
 
     # Run
-    assert_nothing_raised { compiler.run([ page ]) }
+    compiler.run([ page ])
 
     # Make sure output dir is created
     assert(File.directory?('tmp/blah'))
@@ -86,7 +82,7 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     site = mock
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'tmp/blah' })
-    site.expects(:asset_defaults).returns(Nanoc::AssetDefaults.new({}))
+    site.expects(:asset_defaults).returns(Nanoc::Defaults.new({}))
 
     # Build reps
     asset.site = site
@@ -94,13 +90,13 @@ class Nanoc::CompilerTest < Test::Unit::TestCase
     asset_rep = asset.reps[0]
 
     # Setup compilation
-    asset_rep.expects(:compile).with(false, false)
+    asset_rep.expects(:compile).with(false)
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
 
     # Run
-    assert_nothing_raised { compiler.run([ asset ]) }
+    compiler.run([ asset ])
 
     # Make sure output dir is created
     assert(File.directory?('tmp/blah'))

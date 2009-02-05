@@ -1,16 +1,14 @@
+# Add Cri to load path
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../../vendor/cri/lib'))
+
+# Load Cri
+require 'cri'
+
+# Module for CLI
 module Nanoc::CLI # :nodoc:
 end
 
-# Load extensions
-require 'nanoc/cli/core_ext'
-require 'nanoc/cli/option_parser'
-
-# Load logger
+# Load CLI
 require 'nanoc/cli/logger'
-
-# Load commands
-require 'nanoc/cli/command'
 require 'nanoc/cli/commands'
-
-# Load base
 require 'nanoc/cli/base'

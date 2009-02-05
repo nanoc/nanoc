@@ -1,126 +1,55 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
+class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  include Nanoc::Helpers::Render
+
   def test_render
-    # Create layout
-    layout = Nanoc::Layout.new(
-      'Hi, this is the <%= @page.title %> page',
-      { :filter => 'erb' },
-      '/foo/'
-    )
+    # Mock layouts
+    layout = MiniTest::Mock.new
+    layout.expect(:path,         '/foo/')
+    layout.expect(:content,      'This is the <%= @layout.path %> layout.')
+    layout.expect(:filter_class, Nanoc::Filters::ERB)
+    layout_proxy = MiniTest::Mock.new
+    layout_proxy.expect(:path, '/foo/')
+    layout.expect(:to_proxy, layout_proxy)
 
-    # Create site
-    site = mock
-    # site.expects(:config).returns({})
-    site.expects(:pages).returns([])
-    site.expects(:page_defaults).returns({})
-    site.expects(:assets).returns([])
-    site.expects(:layouts).times(2).returns([ layout ])
-    site.expects(:config).returns({})
-    compiler = mock
-    compiler.expects(:stack).at_least_once.returns([])
-    site.expects(:compiler).at_least_once.returns(compiler)
-
-    # Create pages
-    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
-    page.site = site
-    page_rep = Nanoc::PageRep.new(page, {}, :default)
-    page.reps << page_rep
-
-    # Set object and its rep
-    @_obj     = page
-    @_obj_rep = page_rep
+    # Mock site, compiler and stack
+    stack    = []
+    compiler = MiniTest::Mock.new.expect(:stack, stack)
+    @site    = MiniTest::Mock.new.expect(:compiler, compiler).expect(:layouts, [ layout ])
 
     # Render
-    assert_nothing_raised do
-      assert_equal('Hi, this is the Sample page', render('/foo/'))
-    end
-  end
-
-  def test_render_with_other_assigns
-    # Create layout
-    layout = Nanoc::Layout.new(
-      'Foo <%= @middle %> Baz',
-      { :filter => 'erb' },
-      '/foo/'
-    )
-
-    # Create site
-    site = mock
-    # site.expects(:config).returns({})
-    site.expects(:pages).returns([])
-    site.expects(:assets).returns([])
-    site.expects(:layouts).times(2).returns([ layout ])
-    site.expects(:config).returns({})
-    compiler = mock
-    compiler.expects(:stack).at_least_once.returns([])
-    site.expects(:compiler).at_least_once.returns(compiler)
-
-    # Create pages
-    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
-    page.site = site
-    page_rep = Nanoc::PageRep.new(page, {}, :default)
-    page.reps << page_rep
-
-    # Set object and its rep
-    @_obj     = page
-    @_obj_rep = page_rep
-
-    # Render
-    assert_nothing_raised do
-      assert_equal('Foo Bar Baz', render('/foo/', :middle => 'Bar'))
-    end
+    assert_equal('This is the /foo/ layout.', render('/foo/'))
   end
 
   def test_render_with_unknown_layout
-    # Create site
-    site = mock
-    site.expects(:layouts).returns([])
-
-    # Create pages
-    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
-    page.site = site
-    page_rep = Nanoc::PageRep.new(page, {}, :default)
-    page.reps << page_rep
-
-    # Set object and its rep
-    @_obj     = page
-    @_obj_rep = page_rep
+    # Mock site
+    @site = MiniTest::Mock.new.expect(:layouts, [])
 
     # Render
-    assert_raise(Nanoc::Errors::UnknownLayoutError) do
+    assert_raises(Nanoc::Errors::UnknownLayoutError) do
       render('/fawgooafwagwfe/')
     end
   end
 
   def test_render_with_unknown_filter
-    # Create layout
-    layout = Nanoc::Layout.new(
-      'Foo',
-      { :filter => 'afafedhrdjdhrwegfwe' },
-      '/foo/'
-    )
+    # Mock layouts
+    layout = MiniTest::Mock.new
+    layout.expect(:path,         '/foo/')
+    layout.expect(:content,      'This is the <%= "foo" %> layout.')
+    layout.expect(:filter_class, nil)
+    layout_proxy = MiniTest::Mock.new
+    layout.expect(:to_proxy, layout_proxy)
 
-    # Create site
-    site = mock
-    site.expects(:layouts).returns([ layout ])
-
-    # Create pages
-    page = Nanoc::Page.new('page content', { :title => 'Sample' }, '/')
-    page.site = site
-    page_rep = Nanoc::PageRep.new(page, {}, :default)
-    page.reps << page_rep
-
-    # Set object and its rep
-    @_obj     = page
-    @_obj_rep = page_rep
+    # Mock site
+    @site = MiniTest::Mock.new.expect(:layouts, [ layout ])
 
     # Render
-    assert_raise(Nanoc::Errors::CannotDetermineFilterError) do
+    assert_raises(Nanoc::Errors::CannotDetermineFilterError) do
       render '/foo/'
     end
   end

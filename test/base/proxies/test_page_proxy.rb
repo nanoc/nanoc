@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::PageProxyTest < Test::Unit::TestCase
+class Nanoc::PageProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -39,9 +39,9 @@ class Nanoc::PageProxyTest < Test::Unit::TestCase
     page_rep_1.expects(:attribute_named).with(:baz).returns('quux')
 
     # Get page reps proxies
-    page_rep_0_proxy = Nanoc::PageRepProxy.new(page_rep_0)
+    page_rep_0_proxy = Nanoc::ItemRepProxy.new(page_rep_0)
     page_rep_0.expects(:to_proxy).returns(page_rep_0_proxy)
-    page_rep_1_proxy = Nanoc::PageRepProxy.new(page_rep_1)
+    page_rep_1_proxy = Nanoc::ItemRepProxy.new(page_rep_1)
     page_rep_1.expects(:to_proxy).returns(page_rep_1_proxy)
 
     # Get page

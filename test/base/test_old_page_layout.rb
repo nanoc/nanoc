@@ -1,14 +1,14 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::OldPageLayoutTest < Test::Unit::TestCase
+class Nanoc::OldPageLayoutTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_compile_site_with_no_layout
     with_site_fixture 'site_with_no_layout' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir[File.join('output', '*')].size)
@@ -18,8 +18,8 @@ class Nanoc::OldPageLayoutTest < Test::Unit::TestCase
 
   def test_compile_site_with_nested_layouts
     with_site_fixture 'site_with_nested_layouts' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
@@ -30,8 +30,8 @@ class Nanoc::OldPageLayoutTest < Test::Unit::TestCase
 
   def test_compile_site_with_other_assigns
     with_site_fixture 'site_with_other_assigns' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
@@ -41,8 +41,8 @@ class Nanoc::OldPageLayoutTest < Test::Unit::TestCase
 
   def test_compile_site_with_sublayouts
     with_site_fixture 'site_with_sublayouts' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert_equal(1, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))

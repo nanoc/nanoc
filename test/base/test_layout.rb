@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::LayoutTest < Test::Unit::TestCase
+class Nanoc::LayoutTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -53,60 +53,6 @@ class Nanoc::LayoutTest < Test::Unit::TestCase
     # Check nonexistant filter class
     layout = Nanoc::Layout.new("content", { 'filter' => 'klasdfhl' }, '/foo/')
     assert_equal(nil, layout.filter_class)
-  end
-
-  def test_save
-    # Create site
-    site = mock
-
-    # Create layout
-    layout = Nanoc::Layout.new("content", { :attr => 'ibutes'}, '/path/')
-    layout.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:save_layout).with(layout)
-
-    # Save
-    layout.save
-  end
-
-  def test_move_to
-    # Create site
-    site = mock
-
-    # Create layout
-    layout = Nanoc::Layout.new("content", { :attr => 'ibutes'}, '/path/')
-    layout.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:move_layout).with(layout, '/new_path/')
-
-    # Move
-    layout.move_to('/new_path/')
-  end
-
-  def test_delete
-    # Create site
-    site = mock
-
-    # Create layout
-    layout = Nanoc::Layout.new("content", { :attr => 'ibutes'}, '/path/')
-    layout.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:delete_layout).with(layout)
-
-    # Delete
-    layout.delete
   end
 
 end

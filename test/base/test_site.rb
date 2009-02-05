@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::SiteTest < Test::Unit::TestCase
+class Nanoc::SiteTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -25,7 +25,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     end
 
     def page_defaults
-      Nanoc::PageDefaults.new({ :foo => 'bar' })
+      Nanoc::Defaults.new({ :foo => 'bar' })
     end
 
     def assets
@@ -35,7 +35,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     end
 
     def asset_defaults
-      Nanoc::AssetDefaults.new({ :foo => 'baz' })
+      Nanoc::Defaults.new({ :foo => 'baz' })
     end
 
     def layouts
@@ -45,12 +45,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
           { :filter => 'erb' },
           '/quux/'
         )
-      ]
-    end
-
-    def templates
-      [
-        Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
       ]
     end
 
@@ -72,7 +66,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     end
 
     def page_defaults
-      Nanoc::PageDefaults.new({ :foo => 'bar' })
+      Nanoc::Defaults.new({ :foo => 'bar' })
     end
 
     def layouts
@@ -82,12 +76,6 @@ class Nanoc::SiteTest < Test::Unit::TestCase
           { :filter => 'erb' },
           '/quux/'
         )
-      ]
-    end
-
-    def templates
-      [
-        Nanoc::Template.new('Content Here', { :foo => 'bar' }, 'default')
       ]
     end
 
@@ -104,13 +92,11 @@ class Nanoc::SiteTest < Test::Unit::TestCase
   end
 
   def test_initialize_custom_router
-    assert_nothing_raised do
-      Nanoc::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'early_loading_code_data_source',
-        :router       => 'early_loading_code_router'
-      )
-    end
+    Nanoc::Site.new(
+      :output_dir   => 'output',
+      :data_source  => 'early_loading_code_data_source',
+      :router       => 'early_loading_code_router'
+    )
   end
 
 end

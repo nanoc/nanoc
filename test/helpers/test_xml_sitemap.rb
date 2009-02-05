@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
+class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -34,9 +34,7 @@ class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
       @page.expects(:base_url).times(2).returns('http://example.com')
 
       # Check
-      assert_nothing_raised do
-        xml_sitemap
-      end
+      xml_sitemap
     end
   ensure
     @pages = nil

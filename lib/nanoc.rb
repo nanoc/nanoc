@@ -1,7 +1,7 @@
 module Nanoc
 
   # The current nanoc version.
-  VERSION = '2.2'
+  VERSION = '3.0'
 
 end
 
@@ -15,6 +15,5 @@ require 'nanoc/base'
 require 'nanoc/extra'
 require 'nanoc/data_sources'
 require 'nanoc/filters'
-require 'nanoc/binary_filters'
 require 'nanoc/routers'
 require 'nanoc/helpers'

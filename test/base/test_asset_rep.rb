@@ -1,13 +1,13 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::AssetRepTest < Test::Unit::TestCase
+class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_initialize
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
@@ -25,16 +25,15 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     assert(asset_rep.instance_eval { !@compiled })
     assert(asset_rep.instance_eval { !@modified })
     assert(asset_rep.instance_eval { !@created })
-    assert(asset_rep.instance_eval { !@filtered })
   end
 
   def test_to_proxy
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).returns(asset_defaults)
+    site.stubs(:asset_defaults).returns(asset_defaults)
 
     # Create asset
     asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')
@@ -56,19 +55,21 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     File.open('tmp/test.txt', 'w') { |io| io.write('old stuff') }
 
     # Create data
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
     asset = Nanoc::Asset.new(File.new('tmp/test.txt'), {}, '/foo/')
 
     # Create site and other requisites
     stack = []
-    compiler = mock
-    compiler.stubs(:stack).returns(stack)
-    router = mock
-    router.expects(:disk_path_for).returns('tmp/out/foo/index.html')
-    site = mock
-    site.expects(:compiler).at_least_once.returns(compiler)
-    site.expects(:router).returns(router)
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    compiler = MiniTest::Mock.new.expect(:stack, stack)
+    router = MiniTest::Mock.new.expect(:disk_path_for, 'tmp/out/foo/index.html', [ nil ])
+    site = MiniTest::Mock.new
+    site.expect(:compiler, compiler)
+    site.expect(:router, router)
+    site.expect(:asset_defaults, asset_defaults)
+    site.expect(:pages, [])
+    site.expect(:assets, [])
+    site.expect(:layouts, [])
+    site.expect(:config, {})
     asset.site = site
 
     # Get rep
@@ -81,7 +82,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     assert(!asset_rep.compiled?)
 
     # Compile asset rep
-    asset_rep.compile(false, true)
+    asset_rep.compile(false)
 
     # Check
     assert(asset_rep.created?)
@@ -89,28 +90,17 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     assert(asset_rep.compiled?)
 
     # Compile asset rep
-    asset_rep.compile(false, true)
+    asset_rep.compile(false)
 
     # Check
     assert(!asset_rep.created?)
     assert(!asset_rep.modified?)
     assert(asset_rep.compiled?)
-
-    # Edit and compile asset rep
-    asset.instance_eval { @mtime = Time.now + 5 }
-    File.open('tmp/test.txt', 'w') { |io| io.write('new stuff') }
-    asset.instance_eval { @file = File.new('tmp/test.txt') }
-    asset_rep.compile(false, true)
-
-    # Check
-    assert(!asset_rep.created?)
-    assert(asset_rep.modified?)
-    assert(asset_rep.compiled?)
   end
 
   def test_outdated
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create layouts
     layouts = [
@@ -124,6 +114,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     # Create site
     site = mock
     site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.expects(:layouts).at_least_once.returns(layouts)
     site.expects(:code).at_least_once.returns(code)
 
     # Create asset
@@ -183,7 +174,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
 
   def test_disk_and_web_path
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create router
     router = mock
@@ -200,7 +191,7 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
     asset.site = site
     asset.build_reps
     asset_rep = asset.reps.find { |r| r.name == :default }
-    asset_rep.expects(:compile).with(false, false)
+    asset_rep.expects(:compile).with(false)
 
     # Check
     assert_equal('tmp/out/assets/path/index.html', asset_rep.disk_path)
@@ -220,38 +211,6 @@ class Nanoc::AssetRepTest < Test::Unit::TestCase
   end
 
   def test_compile_even_when_not_outdated
-    # TODO implement
-  end
-
-  def test_compile_from_scratch
-    # TODO implement
-  end
-
-  def test_digest
-    # Create asset rep
-    asset_rep = Nanoc::AssetRep.new(nil, nil, nil)
-
-    # Get some known hashes
-    known_hashes = {
-      ''    => 'd41d8cd98f00b204e9800998ecf8427e',
-      'a'   => '0cc175b9c0f1b6a831c399e269772661',
-      'abc' => '900150983cd24fb0d6963f7d28e17f72'
-    }
-
-    # Create some files
-    known_hashes.each_pair do |string, digest|
-      # Write string
-      File.open('tmp/file.png', 'w') { |io| io.write(string) }
-
-      # Check digest
-      assert_equal(
-        digest,
-        asset_rep.instance_eval { digest('tmp/file.png') }
-      )
-    end
-  end
-
-  def test_compile_binary
     # TODO implement
   end
 

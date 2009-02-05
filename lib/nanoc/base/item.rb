@@ -20,6 +20,36 @@ module Nanoc
     # This item's list of item representations.
     attr_reader   :reps
 
+    # This item's raw, uncompiled content.
+    attr_reader   :content
+
+    # The parent item of this item. This can be nil even for non-root items.
+    attr_accessor :parent
+
+    # The child items of this page.
+    attr_accessor :children
+
+    # Creates a new item.
+    #
+    # +content+:: The uncompiled item content.
+    #
+    # +attributes+:: A hash containing this item's attributes.
+    #
+    # +path+:: This item's path.
+    #
+    # +mtime+:: The time when this item was last modified.
+    def initialize(content, attributes, path, mtime=nil)
+      @content    = content
+      @attributes = attributes.clean
+      @path       = path.cleaned_path
+      @mtime      = mtime
+
+      @parent     = nil
+      @children   = []
+
+      @reps       = []
+    end
+
     # Builds the individual item representations (either Nanoc::PageRep or
     # Nanoc::AssetRep) for this item.
     def build_reps(klass, site_defaults)

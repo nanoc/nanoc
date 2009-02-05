@@ -1,4 +1,4 @@
-require 'rake/testtask'
+require 'minitest/unit'
 
 test = namespace :test do
 
@@ -9,23 +9,34 @@ test = namespace :test do
   end
 
   # test:all
-  Rake::TestTask.new(:all) do |task|
-    ENV['QUIET'] = 'true'
+  desc 'Run all tests'
+  task :all do
+    ENV['QUIET'] ||= 'true'
 
-    task.libs       = [ 'lib', 'test' ]
-    task.test_files = Dir['test/**/*_spec.rb'] + Dir['test/**/test_*.rb']
+    $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
+
+    MiniTest::Unit.autorun
+
+    test_files = Dir['test/**/*_spec.rb'] + Dir['test/**/test_*.rb']
+    test_files.each { |f| require f }
   end
 
-  # test:base
-  %w( base binary_filters cli data_sources extra filters helpers routers ).each do |dir|
-    Rake::TestTask.new(dir) do |task|
-      ENV['QUIET'] = 'true'
+  # test:...
+  %w( base cli data_sources extra filters helpers routers ).each do |dir|
+    desc "Run all #{dir} tests"
+    task dir.to_sym do |task|
+      ENV['QUIET'] ||= 'true'
 
-      task.libs       = [ 'lib', 'test' ]
-      task.test_files = Dir["test/#{dir}/**/*_spec.rb"] + Dir["test/#{dir}/**/test_*.rb"]
+      $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
+
+      MiniTest::Unit.autorun
+
+      test_files = Dir["test/#{dir}/**/*_spec.rb"] + Dir["test/#{dir}/**/test_*.rb"]
+      test_files.each { |f| require f }
     end
   end
 
 end
 
-task :test => [ 'test:all' ]
+desc 'Alias for test:all'
+task :test => [ :'test:all' ]

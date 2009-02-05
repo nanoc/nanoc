@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreateLayoutCommand < Command # :nodoc:
+  class CreateLayoutCommand < Cri::Command # :nodoc:
 
     def name
       'create_layout'
@@ -75,7 +75,7 @@ module Nanoc::CLI
         path
       )
       layout.site = @base.site
-      layout.save
+      @base.site.data_source.save_layout(layout)
 
       puts "A layout has been created at #{path}."
     end

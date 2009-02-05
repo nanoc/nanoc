@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Helpers::TaggingTest < Test::Unit::TestCase
+class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -10,7 +10,7 @@ class Nanoc::Helpers::TaggingTest < Test::Unit::TestCase
   def test_tags_for_without_tags
     # Create site
     site = mock
-    page_defaults = Nanoc::PageDefaults.new({})
+    page_defaults = Nanoc::Defaults.new({})
     site.expects(:page_defaults).at_least_once.returns(page_defaults)
 
     # Create page

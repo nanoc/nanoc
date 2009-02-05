@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
+class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -10,11 +10,11 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
     router = Nanoc::Routers::Default.new(nil)
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -35,11 +35,11 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
     router = Nanoc::Routers::Default.new(nil)
 
     # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
+    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -60,11 +60,11 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
 
   def test_path_for_asset_rep_with_default_rep
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
@@ -86,11 +86,11 @@ class Nanoc::Routers::DefaultTest < Test::Unit::TestCase
 
   def test_path_for_asset_rep_with_custom_rep
     # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
+    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
+    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router

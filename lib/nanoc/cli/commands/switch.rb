@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class SwitchCommand < Command # :nodoc:
+  class SwitchCommand < Cri::Command # :nodoc:
 
     def name
       'switch'
@@ -131,7 +131,6 @@ module Nanoc::CLI
         @base.site.pages.each { |p| @base.site.data_source.save_page(p) }
         @base.site.data_source.save_page_defaults(@base.site.page_defaults)
         @base.site.layouts.each { |l| @base.site.data_source.save_layout(l) }
-        @base.site.templates.each { |t| @base.site.data_source.save_template(t) }
         @base.site.data_source.save_code(@base.site.code)
       end
     end
