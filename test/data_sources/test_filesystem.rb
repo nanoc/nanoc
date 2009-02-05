@@ -450,14 +450,16 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_compile_site_with_backup_files
     with_site_fixture 'site_with_backup_files' do |site|
-      File.open('content/content.txt~', 'w') { |io| }
-      File.open('layouts/default.erb~', 'w') { |io| }
+      File.open('content/content.txt~', 'w')          { |io| }
+      File.open('layouts/default/default.erb~', 'w')  { |io| }
+      File.open('layouts/default/default.yaml~', 'w') { |io| }
 
       site.compiler.run
       site.compiler.run
 
-      FileUtils.rm_rf 'content/content.txt~' if File.exist?('content/content.txt~')
-      FileUtils.rm_rf 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
+      FileUtils.rm_rf 'content/content.txt~'          if File.exist?('content/content.txt~')
+      FileUtils.rm_rf 'layouts/default/default.erb~'  if File.exist?('layouts/default/default.erb~')
+      FileUtils.rm_rf 'layouts/default/default.yaml~' if File.exist?('layouts/default/default.yaml~')
     end
   end
 
