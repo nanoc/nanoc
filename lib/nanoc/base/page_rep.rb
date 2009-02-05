@@ -52,6 +52,51 @@ module Nanoc
       @content[stage]
     end
 
+    # Returns the processing instructions for this asset representation.
+    def processing_instructions
+      instructions = []
+
+      # Add pre filters
+      attribute_named(:filters_pre).each do |raw_filter|
+        # Get filter name and arguments
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
+
+        # Add to instructions
+        instructions << [ :filter, filter_name, filter_args ]
+      end
+      instructions << [ :snapshot, :pre ]
+
+      # Add layout
+      instructions << [ :layout, attribute_named(:layout) ] unless attribute_named(:layout).nil?
+
+      # Add post filters
+      attribute_named(:filters_post).each do |raw_filter|
+        # Get filter name and arguments
+        if raw_filter.is_a?(String)
+          filter_name = raw_filter
+          filter_args = {}
+        else
+          filter_name = raw_filter['name']
+          filter_args = raw_filter['args'] || {}
+        end
+
+        # Add to instructions
+        instructions << [ :filter, filter_name, filter_args ]
+      end
+      instructions << [ :snapshot, :post ]
+
+      # Add write
+      instructions << [ :write ]
+
+      instructions
+    end
+
   end
 
 end

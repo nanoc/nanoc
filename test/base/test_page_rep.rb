@@ -448,8 +448,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page.build_reps
     page_rep = page.reps[0]
     page_rep.expects(:outdated?).returns(true)
-    page_rep.expects(:do_filter).times(2)
-    page_rep.expects(:do_layout)
+    page_rep.expects(:layout!).with('foo')
     page_rep.expects(:write!)
     page_rep.stubs(:disk_path).returns('tmp/blah.txt')
 
@@ -469,17 +468,17 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Create site
     stack = []
     compiler = mock
-    compiler.expects(:stack).at_least_once.returns(stack)
+    compiler.stubs(:stack).returns(stack)
     site = mock
-    site.expects(:config).at_least_once.returns({ :index_filenames => [ 'index.html' ]})
-    site.expects(:compiler).at_least_once.returns(compiler)
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
-    site.expects(:assets).times(2).returns([])
-    site.expects(:layouts).times(2).returns([])
+    site.stubs(:config).returns({ :index_filenames => [ 'index.html' ], :output_dir => 'output' })
+    site.stubs(:compiler).returns(compiler)
+    site.stubs(:page_defaults).returns(page_defaults)
+    site.stubs(:assets).returns([])
+    site.stubs(:layouts).returns([])
 
     # Create router
     router = Nanoc::Routers::Default.new(site)
-    site.expects(:router).times(2).returns(router)
+    site.stubs(:router).returns(router)
 
     # Create page 0
     page_0 = Nanoc::Page.new(
@@ -490,7 +489,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_0.site = site
     page_0.build_reps
     page_rep_0 = page_0.reps[0]
-    page_rep_0.expects(:outdated?).times(2).returns(true)
+    page_rep_0.stubs(:outdated?).returns(true)
 
     # Create page 1
     page_1 = Nanoc::Page.new(
@@ -501,11 +500,11 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page_1.site = site
     page_1.build_reps
     page_rep_1 = page_1.reps[0]
-    page_rep_1.expects(:outdated?).returns(true)
+    page_rep_1.stubs(:outdated?).returns(true)
 
     # Set pages
     pages = [ page_0, page_1 ]
-    site.expects(:pages).times(2).returns(pages)
+    site.stubs(:pages).returns(pages)
 
     # Compile
     assert_raises(Nanoc::Errors::RecursiveCompilationError) do
@@ -531,8 +530,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page.build_reps
     page_rep = page.reps[0]
     page_rep.expects(:outdated?).returns(false)
-    page_rep.expects(:do_filter).times(2)
-    page_rep.expects(:do_layout)
+    page_rep.expects(:layout!).with('foo')
     page_rep.stubs(:disk_path).returns('tmp/blahblah.txt')
 
     # Compile
@@ -541,315 +539,6 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     # Check
     assert_equal(true, page_rep.instance_eval { @compiled })
     assert_equal(true, page_rep.instance_eval { @created  })
-  end
-
-  def test_do_filter_get_content_for_stage_pre
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
-    site.stubs(:pages).returns([])
-    site.stubs(:compiler).returns(nil)
-    site.stubs(:pages).returns([])
-    site.stubs(:assets).returns([])
-    site.stubs(:layouts).returns([])
-    site.stubs(:config).returns({})
-
-    # Create page
-    page = Nanoc::Page.new('blah', { :filters_pre => [] }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-    page_rep.instance_eval { @content[:last] = 'pre content' }
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Filter
-    page_rep.instance_eval { do_filter(:pre) }
-    assert_equal(
-      'pre content',
-      page_rep.instance_eval { @content[:pre] }
-    )
-
-    # Check notifications
-    assert_equal(0, @filtering_started_count)
-    assert_equal(0, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_filter_get_content_for_stage_post
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
-    site.stubs(:pages).returns([])
-    site.stubs(:compiler).returns(nil)
-    site.stubs(:pages).returns([])
-    site.stubs(:assets).returns([])
-    site.stubs(:layouts).returns([])
-    site.stubs(:config).returns({})
-
-    # Create page
-    page = Nanoc::Page.new('blah', { :filters_post => [] }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-    page_rep.instance_eval { @content[:last] = 'post content' }
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Filter
-    page_rep.instance_eval { do_filter(:post) }
-    assert_equal(
-      'post content',
-      page_rep.instance_eval { @content[:post] }
-    )
-
-    # Check notifications
-    assert_equal(0, @filtering_started_count)
-    assert_equal(0, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_filter_chained
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new(
-      %[<%= '<%= "foo" %' + '>' %>],
-      { :filters_pre => [ 'erb', 'erb' ] },
-      '/path/'
-    )
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-    page_rep.instance_eval { @content[:last] = %[<%= '<%= "foo" %' + '>' %>] }
-
-    # Update site expectations
-    site.expects(:config).at_least_once.returns({})
-    site.expects(:pages).at_least_once.returns([page])
-    site.expects(:assets).at_least_once.returns([])
-    site.expects(:layouts).at_least_once.returns([])
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Filter
-    page_rep.instance_eval { do_filter(:pre) }
-    assert_equal('foo', page_rep.instance_eval { @content[:pre] })
-
-    # Check notifications
-    assert_equal(2, @filtering_started_count)
-    assert_equal(2, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_filter_with_unknown_filter
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
-    site.stubs(:pages).returns([])
-    site.stubs(:compiler).returns(nil)
-    site.stubs(:pages).returns([])
-    site.stubs(:assets).returns([])
-    site.stubs(:layouts).returns([])
-    site.stubs(:config).returns({})
-
-    # Create page
-    page = Nanoc::Page.new("blah", { :filters_pre => [ 'asdf' ] }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Filter
-    assert_raises(Nanoc::Errors::UnknownFilterError) do
-      page_rep.instance_eval { do_filter(:pre) }
-    end
-
-    # Check notifications
-    assert_equal(0, @filtering_started_count)
-    assert_equal(0, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_layout
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create layout
-    layout = Nanoc::Layout.new('this is the <%= @layout.path %> layout', { :filter => 'erb' }, '/foo/')
-
-    # Create site
-    site = mock
-    site.stubs(:config).returns({})
-    site.stubs(:assets).returns([])
-    site.stubs(:layouts).returns([ layout ])
-    site.stubs(:pages).returns([])
-    site.stubs(:page_defaults).returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => '/foo/' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Layout
-    page_rep.instance_eval { do_layout }
-    assert_equal('this is the /foo/ layout', page_rep.instance_eval { @content[:post] })
-
-    # Check notifications
-    assert_equal(1, @filtering_started_count)
-    assert_equal(1, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_layout_without_layout
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
-
-    # Create page
-    page = Nanoc::Page.new("content", {}, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-    page_rep.expects(:attribute_named).with(:layout).returns(nil)
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Layout
-    page_rep.instance_eval { @content[:pre] = 'pre content' }
-    page_rep.instance_eval { do_layout }
-    assert_equal('pre content', page_rep.instance_eval { @content[:post] })
-
-    # Check notifications
-    assert_equal(0, @filtering_started_count)
-    assert_equal(0, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
-  end
-
-  def test_do_layout_with_unknown_filter
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create layout
-    layout = Nanoc::Layout.new('this is a layout', { :filter => 'sdfdfvarg' }, '/foo/')
-
-    # Create site
-    site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
-    site.stubs(:pages).returns([])
-    site.stubs(:compiler).returns(nil)
-    site.stubs(:pages).returns([])
-    site.stubs(:assets).returns([])
-    site.stubs(:layouts).returns([ layout ])
-    site.stubs(:config).returns({})
-
-    # Create page
-    page = Nanoc::Page.new("content", { :layout => '/foo/' }, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
-
-    # Setup notifications
-    @filtering_started_count = 0
-    Nanoc::NotificationCenter.on(:filtering_started, :test) do
-      @filtering_started_count += 1
-    end
-    @filtering_ended_count = 0
-    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
-      @filtering_ended_count += 1
-    end
-
-    # Layout
-    assert_raises(Nanoc::Errors::CannotDetermineFilterError) do
-      page_rep.instance_eval { do_layout }
-    end
-
-    # Check notifications
-    assert_equal(0, @filtering_started_count)
-    assert_equal(0, @filtering_ended_count)
-  ensure
-    Nanoc::NotificationCenter.remove(:filtering_started, :test)
-    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
   end
 
 end
