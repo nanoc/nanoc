@@ -448,8 +448,8 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page.build_reps
     page_rep = page.reps[0]
     page_rep.expects(:outdated?).returns(true)
-    page_rep.expects(:layout!).with('foo')
-    page_rep.expects(:write!)
+    page_rep.expects(:layout).with('foo')
+    page_rep.expects(:write)
     page_rep.stubs(:disk_path).returns('tmp/blah.txt')
 
     # Compile
@@ -530,7 +530,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     page.build_reps
     page_rep = page.reps[0]
     page_rep.expects(:outdated?).returns(false)
-    page_rep.expects(:layout!).with('foo')
+    page_rep.expects(:layout).with('foo')
     page_rep.stubs(:disk_path).returns('tmp/blahblah.txt')
 
     # Compile

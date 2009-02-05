@@ -208,13 +208,13 @@ module Nanoc
       processing_instructions.each do |instruction|
         case instruction[0]
           when :filter
-            filter!(instruction[1], instruction[2])
+            filter(instruction[1], instruction[2])
           when :layout
-            layout!(instruction[1])
+            layout(instruction[1])
           when :snapshot
-            snapshot!(instruction[1])
+            snapshot(instruction[1])
           when :write
-            write!
+            write
         end
       end
 
@@ -248,7 +248,7 @@ module Nanoc
     end
 
     # Runs the item content through the given filter with the given arguments.
-    def filter!(filter_name, filter_args={})
+    def filter(filter_name, filter_args={})
       # Create filter
       klass = Nanoc::Filter.named(filter_name)
       raise Nanoc::Errors::UnknownFilterError.new(filter_name) if klass.nil?
@@ -265,7 +265,7 @@ module Nanoc
     end
 
     # Lays out the item using the given layout.
-    def layout!(layout_name)
+    def layout(layout_name)
       # Get layout
       layout ||= @item.site.layouts.find { |l| l.path == layout_name.cleaned_path }
       raise Nanoc::Errors::UnknownLayoutError.new(layout_name) if layout.nil?
@@ -282,12 +282,12 @@ module Nanoc
     end
 
     # Creates a snapshot of the current compiled item content.
-    def snapshot!(snapshot_name)
+    def snapshot(snapshot_name)
       @content[snapshot_name] = @content[:last]
     end
 
     # Writes the item rep's compiled content to the rep's output file.
-    def write!
+    def write
       FileUtils.mkdir_p(File.dirname(self.disk_path))
       File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
     end
