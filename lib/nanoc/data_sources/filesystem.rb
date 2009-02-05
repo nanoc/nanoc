@@ -353,8 +353,9 @@ module Nanoc::DataSources
       if uses_old_school_layouts?
         # Warn about deprecation
         warn(
-          'nanoc 2.1 changes the way layouts are stored. Future versions will not support these outdated sites. To update your site, issue \'nanoc update\'.',
-          'DEPRECATION WARNING'
+          'DEPRECATION WARNING: nanoc 2.1 changes the way layouts are ' +
+          'stored. Future versions will not support these outdated sites. ' +
+          'To update your site, issue \'nanoc update\'.'
         )
 
         Dir[File.join('layouts', '*')].reject { |f| f =~ /~$/ }.map do |filename|
