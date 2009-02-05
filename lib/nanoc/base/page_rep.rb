@@ -46,7 +46,7 @@ module Nanoc
     #           use Nanoc::Page#content.
     def content(stage = :pre, even_when_not_outdated = true, from_scratch = false)
       Nanoc::NotificationCenter.post(:visit_started, self)
-      compile(stage == :post, even_when_not_outdated, from_scratch)
+      compile(even_when_not_outdated, from_scratch) unless @content[stage]
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       @content[stage]
@@ -60,26 +60,20 @@ module Nanoc
     # before yet. To force recompilation of the page rep, forgetting any
     # progress, set +from_scratch+ to true.
     #
-    # +also_layout+:: true if the page rep should also be laid out and
-    #                 post-filtered, false if the page rep should only be
-    #                 pre-filtered.
-    #
     # +even_when_not_outdated+:: true if the page rep should be compiled even
     #                            if it is not outdated, false if not.
     #
     # +from_scratch+:: true if all compilation stages (pre-filter, layout,
     #                  post-filter) should be performed again even if they
     #                  have already been performed, false otherwise.
-    def compile(also_layout, even_when_not_outdated, from_scratch)
+    def compile(even_when_not_outdated, from_scratch)
       # Don't compile if already compiled
-      return if @content[also_layout ? :post : :pre] and !from_scratch
+      return if @compiled and !from_scratch
 
       # Skip unless outdated
       unless outdated? or even_when_not_outdated
-        if also_layout
-          Nanoc::NotificationCenter.post(:compilation_started, self)
-          Nanoc::NotificationCenter.post(:compilation_ended,   self)
-        end
+        Nanoc::NotificationCenter.post(:compilation_started, self)
+        Nanoc::NotificationCenter.post(:compilation_ended,   self)
         return
       end
 
@@ -99,7 +93,7 @@ module Nanoc
 
       # Start
       @item.site.compiler.stack.push(self)
-      Nanoc::NotificationCenter.post(:compilation_started, self) if also_layout
+      Nanoc::NotificationCenter.post(:compilation_started, self)
 
       # Pre-filter if necesary
       if @content[:pre].nil?
@@ -107,23 +101,23 @@ module Nanoc
       end
 
       # Post-filter if necessary
-      if @content[:post].nil? and also_layout
+      if @content[:post].nil?
         do_layout
         do_filter(:post)
-
-        # Update status
-        @compiled = true
-        unless attribute_named(:skip_output)
-          @created  = !File.file?(self.disk_path)
-          @modified = @created ? true : File.read(self.disk_path) != @content[:post]
-        end
-
-        # Write if necessary
-        write! unless attribute_named(:skip_output)
       end
 
+      # Update status
+      @compiled = true
+      unless attribute_named(:skip_output)
+        @created  = !File.file?(self.disk_path)
+        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+      end
+
+      # Write if necessary
+      write! if @modified
+
       # Stop
-      Nanoc::NotificationCenter.post(:compilation_ended, self) if also_layout
+      Nanoc::NotificationCenter.post(:compilation_ended, self)
       @item.site.compiler.stack.pop
     end
 
