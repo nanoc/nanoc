@@ -129,13 +129,13 @@ module Nanoc::Helpers
       feed_tags     = [ params[:feed_tag] || params[:feed_tags] ].flatten.compact
       content_proc  = params[:content_proc] || lambda { |article| article.content }
       excerpt_proc  = params[:excerpt_proc] || lambda { |article| article.excerpt }
+      articles      = params[:articles] || sorted_articles(feed_tags)
 
       # Create builder
       buffer = ''
       xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
 
       # Get articles
-      articles = sorted_articles(feed_tags)
       last_article = articles.first
 
       # Build feed
