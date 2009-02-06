@@ -60,6 +60,3 @@ module Nanoc::Helpers
   end
 
 end
-
-# Include by default
-include Nanoc::Helpers::Render
