@@ -202,7 +202,7 @@ module Nanoc
       @content[:last] ||= @content[:raw]
 
       # Check if file will be created
-      output_file_exists = File.file?(self.disk_path)
+      old_content = File.file?(self.disk_path) ? File.read(self.disk_path) : nil
 
       # Run instructions
       processing_instructions.each do |instruction|
@@ -221,8 +221,8 @@ module Nanoc
       # Update status
       @compiled = true
       unless attribute_named(:skip_output)
-        @created  = !output_file_exists
-        @modified = @created ? true : File.read(self.disk_path) != @content[:post]
+        @created  = old_content.nil?
+        @modified = @created ? true : old_content != @content[:last]
       end
 
       # Stop
