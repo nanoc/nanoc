@@ -512,7 +512,7 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_compile_even_when_not_outdated
+  def test_compile_force
     # Create page defaults
     page_defaults = Nanoc::Defaults.new(:foo => 'bar')
 
