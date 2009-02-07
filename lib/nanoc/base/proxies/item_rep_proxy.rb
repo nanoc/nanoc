@@ -24,7 +24,7 @@ module Nanoc
 
     # Returns the compiled iten rep content at the given snapshot.
     def content(snapshot=:pre) # backward compatibility
-      @obj.content(snapshot)
+      @obj.content_at_snapshot(snapshot)
     end
 
   end

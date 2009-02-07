@@ -310,8 +310,8 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       page = mock
       page_rep = mock
       page_rep.expects(:disk_path).at_least_once.returns('tmp/somefile.html')
-      page_rep.expects(:page).returns(page)
-      page_rep.expects(:content).with(:post).returns('compiled page content')
+      page_rep.expects(:item).returns(page)
+      page_rep.expects(:content_at_snapshot).with(:post).returns('compiled page content')
 
       # Create file
       File.open(page_rep.disk_path, 'w') { |io| }
@@ -346,7 +346,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       page = mock
       page_rep = mock
       page_rep.expects(:web_path).returns('somefile.html')
-      page_rep.expects(:page).returns(page)
+      page_rep.expects(:item).returns(page)
 
       # Create site
       stack = []

@@ -18,7 +18,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
-      compile(false)
+      @item.site.compiler.compile_rep(self, false)
 
       @web_path ||= @item.site.router.web_path_for(self)
     end
