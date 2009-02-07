@@ -48,6 +48,8 @@ module Nanoc
     # directly; please use Nanoc::Compiler#run instead, and pass this item
     # representation's item as its first argument.
     #
+    # +rep+:: The rep that is to be compiled.
+    #
     # +force+:: true if the item rep should be compiled even if it is not
     #                            outdated, false if not.
     def compile_rep(rep, force)

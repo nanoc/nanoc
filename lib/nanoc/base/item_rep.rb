@@ -34,9 +34,20 @@ module Nanoc
     # dependencies.
     attr_accessor :force_outdated
 
+    # Indicates whether this rep's output file has changed the last time it
+    # was compiled.
     attr_accessor :modified
+
+    # Indicates whether this rep's output file was created the last time it
+    # was compiled.
     attr_accessor :created
+
+    # Indicates whether this rep has already been compiled.
     attr_accessor :compiled
+
+    # A hash containing this rep's content for each snapshot. Snapshot names
+    # can be anything; some predefines ones are +:raw+, +:pre+, +:post+ and
+    # +:last+.
     attr_accessor :content
 
     # Creates a new item representation for the given item and with the given
