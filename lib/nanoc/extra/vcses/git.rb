@@ -2,7 +2,7 @@ module Nanoc::Extra::VCSes
 
   class Git < Nanoc::Extra::VCS
 
-    identifiers :git
+    identifier :git
 
     def add(filename)
       system('git', 'add', filename)
