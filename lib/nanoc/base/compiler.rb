@@ -20,12 +20,12 @@ module Nanoc
     #
     # This method also accepts a few parameters:
     #
-    # +:even_when_not_outdated+:: true if the rep should be compiled even if
+    # +:force+:: true if the rep should be compiled even if
     #                             it is not outdated, false if not. Defaults
     #                             to false.
     def run(objects=nil, params={})
       # Parse params
-      even_when_not_outdated = params[:even_when_not_outdated] || false
+      force = params[:force] || false
 
       # Load data
       @site.load_data
@@ -42,7 +42,7 @@ module Nanoc
 
       # Compile everything
       reps.each do |rep|
-        rep.compile(even_when_not_outdated)
+        rep.compile(force)
       end
     end
 

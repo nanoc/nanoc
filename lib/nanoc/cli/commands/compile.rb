@@ -109,7 +109,7 @@ module Nanoc::CLI
         # Compile
         @base.site.compiler.run(
           objs,
-          :even_when_not_outdated => options.has_key?(:all) || options.has_key?(:force)
+          :force => options.has_key?(:all) || options.has_key?(:force)
         )
 
         # Find reps

@@ -210,7 +210,7 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  def test_compile_even_when_not_outdated
+  def test_compile_force
     # TODO implement
   end
 

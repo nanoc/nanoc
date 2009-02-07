@@ -170,9 +170,9 @@ module Nanoc
     # method should not be called directly; please use Nanoc::Compiler#run
     # instead, and pass this item representation's item as its first argument.
     #
-    # +even_when_not_outdated+:: true if the item rep should be compiled even
-    #                            if it is not outdated, false if not.
-    def compile(even_when_not_outdated)
+    # +force+:: true if the item rep should be compiled even if it is not
+    #                            outdated, false if not.
+    def compile(force)
       # Reset flags
       @modified = false
       @created  = false
@@ -181,7 +181,7 @@ module Nanoc
       return if @compiled
 
       # Skip unless outdated
-      unless outdated? or even_when_not_outdated
+      unless outdated? or force
         Nanoc::NotificationCenter.post(:compilation_started, self)
         Nanoc::NotificationCenter.post(:compilation_ended,   self)
         return

@@ -261,7 +261,7 @@ END
       begin
         @site.compiler.run(
           [ rep.respond_to?(:page) ? rep.page : rep.asset ],
-          :even_when_not_outdated => @include_outdated
+          :force => @include_outdated
         )
       rescue Exception => exception
         return serve_500(rep.web_path, exception)

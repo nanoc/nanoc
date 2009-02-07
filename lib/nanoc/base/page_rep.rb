@@ -43,9 +43,9 @@ module Nanoc
     #
     # +snapshot+:: The snapshot from which the content should be fetched. To
     #              get the raw, uncompiled content, use +:raw+.
-    def content(snapshot = :pre, even_when_not_outdated = true)
+    def content(snapshot = :pre, force = true)
       Nanoc::NotificationCenter.post(:visit_started, self)
-      compile(even_when_not_outdated) unless @content[snapshot]
+      compile(force) unless @content[snapshot]
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       @content[snapshot]
