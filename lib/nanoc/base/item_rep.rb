@@ -33,7 +33,12 @@ module Nanoc
     # Indicates whether this rep is forced to be dirty because of outdated
     # dependencies.
     attr_accessor :force_outdated
-    
+
+    attr_accessor :modified
+    attr_accessor :created
+    attr_accessor :compiled
+    attr_accessor :content
+
     # Creates a new item representation for the given item and with the given
     # attributes.
     #
@@ -164,70 +169,6 @@ module Nanoc
 
       # Check in hardcoded defaults
       return defaults[name]
-    end
-
-    # Compiles the item representation and writes the result to the disk. This
-    # method should not be called directly; please use Nanoc::Compiler#run
-    # instead, and pass this item representation's item as its first argument.
-    #
-    # +force+:: true if the item rep should be compiled even if it is not
-    #                            outdated, false if not.
-    def compile(force)
-      # Reset flags
-      @modified = false
-      @created  = false
-
-      # Don't compile if already compiled
-      return if @compiled
-
-      # Skip unless outdated
-      unless outdated? or force
-        Nanoc::NotificationCenter.post(:compilation_started, self)
-        Nanoc::NotificationCenter.post(:compilation_ended,   self)
-        return
-      end
-
-      # Check for recursive call
-      if @item.site.compiler.stack.include?(self)
-        @item.site.compiler.stack.push(self)
-        raise Nanoc::Errors::RecursiveCompilationError.new
-      end
-
-      # Start
-      @item.site.compiler.stack.push(self)
-      Nanoc::NotificationCenter.post(:compilation_started, self)
-
-      # Create raw and last snapshots if necessary
-      @content[:raw]  ||= @item.content
-      @content[:last] ||= @content[:raw]
-
-      # Check if file will be created
-      old_content = File.file?(self.disk_path) ? File.read(self.disk_path) : nil
-
-      # Run instructions
-      processing_instructions.each do |instruction|
-        case instruction[0]
-          when :filter
-            filter(instruction[1], instruction[2])
-          when :layout
-            layout(instruction[1])
-          when :snapshot
-            snapshot(instruction[1])
-          when :write
-            write
-        end
-      end
-
-      # Update status
-      @compiled = true
-      unless attribute_named(:skip_output)
-        @created  = old_content.nil?
-        @modified = @created ? true : old_content != @content[:last]
-      end
-
-      # Stop
-      Nanoc::NotificationCenter.post(:compilation_ended, self)
-      @item.site.compiler.stack.pop
     end
 
     # Returns the assignments that should be available when compiling the content.

@@ -260,7 +260,7 @@ END
       # Recompile rep
       begin
         @site.compiler.run(
-          [ rep.respond_to?(:page) ? rep.page : rep.asset ],
+          [ rep.item ],
           :force => @include_outdated
         )
       rescue Exception => exception
@@ -271,7 +271,7 @@ END
       [
         200,
         { 'Content-Type' => mime_type_of(rep.disk_path, 'text/html') },
-        [ rep.content(:post) ]
+        [ rep.content_at_snapshot(:post) ]
       ]
     end
 

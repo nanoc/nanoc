@@ -26,7 +26,7 @@ module Nanoc
 
     # Returns the compiled page content at the given snapshot.
     def content(snapshot=:pre) # backward compatibility
-      @obj.reps.find { |r| r.name == :default }.content(snapshot)
+      @obj.reps.find { |r| r.name == :default }.content_at_snapshot(snapshot)
     end
 
     # Returns the page representation with the given name.

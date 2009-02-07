@@ -27,17 +27,14 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
     # Create reps and setup compilation
     (pages + assets).each do |obj|
-      # Build reps
       obj.site = site
       obj.build_reps
       rep = obj.reps[0]
-
-      # Setup compilation
-      rep.expects(:compile).with(false)
     end
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
+    compiler.expects(:compile_rep).times(4)
 
     # Run
     compiler.run
@@ -61,11 +58,9 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     page.build_reps
     page_rep = page.reps[0]
 
-    # Setup compilation
-    page_rep.expects(:compile).with(false)
-
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
+    compiler.expects(:compile_rep).with(page_rep, false)
 
     # Run
     compiler.run([ page ])
@@ -89,11 +84,9 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     asset.build_reps
     asset_rep = asset.reps[0]
 
-    # Setup compilation
-    asset_rep.expects(:compile).with(false)
-
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
+    compiler.expects(:compile_rep).with(asset_rep, false)
 
     # Run
     compiler.run([ asset ])

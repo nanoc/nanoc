@@ -59,11 +59,8 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     asset = Nanoc::Asset.new(File.new('tmp/test.txt'), {}, '/foo/')
 
     # Create site and other requisites
-    stack = []
-    compiler = MiniTest::Mock.new.expect(:stack, stack)
     router = MiniTest::Mock.new.expect(:disk_path_for, 'tmp/out/foo/index.html', [ nil ])
     site = MiniTest::Mock.new
-    site.expect(:compiler, compiler)
     site.expect(:router, router)
     site.expect(:asset_defaults, asset_defaults)
     site.expect(:pages, [])
@@ -71,6 +68,10 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     site.expect(:layouts, [])
     site.expect(:config, {})
     asset.site = site
+
+    # Create compiler
+    compiler = Nanoc::Compiler.new(nil)
+    compiler.instance_eval { @stack = [] }
 
     # Get rep
     asset.build_reps
@@ -82,7 +83,7 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     assert(!asset_rep.compiled?)
 
     # Compile asset rep
-    asset_rep.compile(false)
+    compiler.compile_rep(asset_rep, false)
 
     # Check
     assert(asset_rep.created?)
@@ -90,7 +91,7 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     assert(asset_rep.compiled?)
 
     # Compile asset rep
-    asset_rep.compile(false)
+    compiler.compile_rep(asset_rep, false)
 
     # Check
     assert(!asset_rep.created?)
@@ -178,20 +179,22 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
 
     # Create router
     router = mock
-    router.expects(:disk_path_for).returns('tmp/out/assets/path/index.html')
-    router.expects(:web_path_for).returns('/assets/path/')
+    router.stubs(:disk_path_for).returns('tmp/out/assets/path/index.html')
+    router.stubs(:web_path_for).returns('/assets/path/')
 
-    # Create site
+    # Create site and compiler
+    compiler = mock
     site = mock
-    site.expects(:asset_defaults).returns(asset_defaults)
-    site.expects(:router).times(2).returns(router)
+    site.stubs(:asset_defaults).returns(asset_defaults)
+    site.stubs(:router).returns(router)
+    site.stubs(:compiler).returns(compiler)
 
     # Create asset
     asset = Nanoc::Asset.new(nil, { :attr => 'ibutes' }, '/path/')
     asset.site = site
     asset.build_reps
     asset_rep = asset.reps.find { |r| r.name == :default }
-    asset_rep.expects(:compile).with(false)
+    compiler.stubs(:compile_rep).with(asset_rep, false)
 
     # Check
     assert_equal('tmp/out/assets/path/index.html', asset_rep.disk_path)
