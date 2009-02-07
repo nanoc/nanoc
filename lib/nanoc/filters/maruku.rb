@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class Maruku < Nanoc::Filter
 
-    identifiers :maruku
+    identifier :maruku
 
     def run(content)
       require 'maruku'

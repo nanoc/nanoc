@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class Erubis < Nanoc::Filter
 
-    identifiers :erubis
+    identifier :erubis
 
     def run(content)
       require 'erubis'

@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class ERB < Nanoc::Filter
 
-    identifiers :erb
+    identifier :erb
 
     def run(content)
       require 'erb'

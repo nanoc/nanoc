@@ -2,7 +2,7 @@ module Nanoc::Extra::VCSes
 
   class Dummy < Nanoc::Extra::VCS
 
-    identifiers :dummy
+    identifier :dummy
 
     def add(filename)
     end

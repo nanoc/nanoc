@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class RedCloth < Nanoc::Filter
 
-    identifiers :redcloth
+    identifier :redcloth
 
     def run(content)
       require 'redcloth'

@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class Sass < Nanoc::Filter
 
-    identifiers :sass
+    identifier :sass
 
     def run(content)
       require 'sass'
