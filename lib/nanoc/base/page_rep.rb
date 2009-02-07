@@ -39,17 +39,16 @@ module Nanoc
       super(name, @item.site.page_defaults, Nanoc::Page::DEFAULTS)
     end
 
-    # Returns the page representation content at the given stage.
+    # Returns the page representation content in the given snapshot.
     #
-    # +stage+:: The stage at which the content should be fetched. Can be
-    #           either +:pre+ or +:post+. To get the raw, uncompiled content,
-    #           use Nanoc::Page#content.
-    def content(stage = :pre, even_when_not_outdated = true)
+    # +snapshot+:: The snapshot from which the content should be fetched. To
+    #              get the raw, uncompiled content, use +:raw+.
+    def content(snapshot = :pre, even_when_not_outdated = true)
       Nanoc::NotificationCenter.post(:visit_started, self)
-      compile(even_when_not_outdated) unless @content[stage]
+      compile(even_when_not_outdated) unless @content[snapshot]
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
-      @content[stage]
+      @content[snapshot]
     end
 
     # Returns the processing instructions for this asset representation.
