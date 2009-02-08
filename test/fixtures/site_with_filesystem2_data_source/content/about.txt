@@ -1,4 +1,0 @@
------
-title: About
------
-Dis mai about page!
