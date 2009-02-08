@@ -1,8 +1,0 @@
-# Built-in
-filters_pre:
-
-  - "erb"
-
-# Custom
-title: "A New Page"
-page_id: "about"
