@@ -249,33 +249,4 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  # Miscellaneous
-
-  def test_compile_site_with_file_object
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      site.compiler.run
-      site.compiler.run
-
-      assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/index.txt').mtime}."))
-    end
-  end
-
-  def test_compile_site_with_backup_files
-    with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      begin
-        File.open('content/index.txt~',   'w') { |io| }
-        File.open('layouts/default.erb~', 'w') { |io| }
-
-        site.compiler.run
-        site.compiler.run
-
-        assert_equal(2, site.pages.size)
-        assert_equal(1, site.layouts.size)
-      ensure
-        FileUtils.rm_rf 'content/index.txt~' if File.exist?('content/index.txt~')
-        FileUtils.rm_rf 'layouts/default.erb~' if File.exist?('layouts/default.erb~')
-      end
-    end
-  end
-
 end

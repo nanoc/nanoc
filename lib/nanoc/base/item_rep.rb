@@ -214,6 +214,9 @@ module Nanoc
         @content[:last] = filter.run(@content[:last])
       end
       Nanoc::NotificationCenter.post(:filtering_ended, self, klass.identifier)
+
+      # Create snapshot
+      snapshot(@content[:post] ? :post : :pre)
     end
 
     # Lays out the item using the given layout.
@@ -226,6 +229,9 @@ module Nanoc
       klass = layout.filter_class
       raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
       filter = klass.new(assigns.merge({ :layout => layout.to_proxy }))
+
+      # Create "pre" snapshot
+      snapshot(:pre)
 
       # Layout
       Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)

@@ -34,21 +34,17 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
   def test_created_modified_compiled
     # Create data
     page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-    layout = Nanoc::Layout.new('[<%= @page.content %>]', {}, '/default/')
     page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
 
     # Create site and other requisites
     site = mock
-    site.expects(:config).at_least_once.returns({})
     site.expects(:page_defaults).at_least_once.returns(page_defaults)
-    site.expects(:pages).at_least_once.returns([ page ])
-    site.expects(:assets).at_least_once.returns([])
-    site.expects(:layouts).at_least_once.returns([ layout ])
     page.site = site
 
     # Create compiler
     compiler = Nanoc::Compiler.new(nil)
     compiler.instance_eval { @stack = [] }
+    compiler.add_page_rule('*', lambda { |p| p.write })
 
     # Get rep
     page.build_reps

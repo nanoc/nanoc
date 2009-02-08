@@ -72,6 +72,7 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc::Compiler.new(nil)
     compiler.instance_eval { @stack = [] }
+    compiler.add_asset_rule('*', lambda { |p| p.write })
 
     # Get rep
     asset.build_reps

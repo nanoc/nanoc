@@ -52,31 +52,6 @@ module Nanoc
       super(name, @item.site.asset_defaults, Nanoc::Asset::DEFAULTS)
     end
 
-    # Returns the processing instructions for this asset representation.
-    def processing_instructions
-      instructions = []
-
-      # Add filters
-      attribute_named(:filters).each do |raw_filter|
-        # Get filter name and arguments
-        if raw_filter.is_a?(String)
-          filter_name = raw_filter
-          filter_args = {}
-        else
-          filter_name = raw_filter['name']
-          filter_args = raw_filter['args'] || {}
-        end
-
-        # Add to instructions
-        instructions << [ :filter, filter_name, filter_args ]
-      end
-
-      # Add write
-      instructions << [ :write ]
-
-      instructions
-    end
-
   end
 
 end

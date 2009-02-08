@@ -438,42 +438,6 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     )
   end
 
-  def test_compile_site_with_file_object
-    with_site_fixture 'site_with_file_object' do |site|
-      site.compiler.run
-
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir[File.join('output', '*')].size)
-      assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/content.erb').mtime}."))
-    end
-  end
-
-  def test_compile_site_with_backup_files
-    with_site_fixture 'site_with_backup_files' do |site|
-      File.open('content/content.txt~', 'w')          { |io| }
-      File.open('layouts/default/default.erb~', 'w')  { |io| }
-      File.open('layouts/default/default.yaml~', 'w') { |io| }
-
-      site.compiler.run
-      site.compiler.run
-
-      FileUtils.rm_rf 'content/content.txt~'          if File.exist?('content/content.txt~')
-      FileUtils.rm_rf 'layouts/default/default.erb~'  if File.exist?('layouts/default/default.erb~')
-      FileUtils.rm_rf 'layouts/default/default.yaml~' if File.exist?('layouts/default/default.yaml~')
-    end
-  end
-
-  def test_compile_site_with_new_layout_structure
-    with_site_fixture 'site_with_new_layout_structure' do |site|
-      site.compiler.run
-      site.compiler.run
-
-      assert(File.file?('output/index.html'))
-      assert_equal(1, Dir[File.join('output', '*')].size)
-      assert(File.read('output/index.html').include?('<div class="supercool">Blah blah blah this is a page blah blah blah.</div>'))
-    end
-  end
-
   def test_compile_huge_site
     with_temp_site do |site|
       # Create a lot of pages
@@ -482,6 +446,13 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
         FileUtils.mkdir("content/#{i}")
         File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is page #{i}." }
         File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Page #{i}"   }
+      end
+
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write("page '*' do |p|\n")
+        io.write("  p.write\n")
+        io.write("end\n")
       end
 
       # Load and compile site
