@@ -6,7 +6,19 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_attribute_named
-    # TODO implement
+    # Create item and rep
+    item = Nanoc::Item.new(
+      "content",
+      { :one => 'one in item' },
+      '/path/'
+    )
+    item_rep = Nanoc::ItemRep.new(item, {}, :custom)
+
+    # Test finding one
+    assert_equal('one in item', item_rep.attribute_named(:one))
+
+    # Test finding two
+    assert_equal(nil, item_rep.attribute_named(:two))
   end
 
   def test_to_proxy
@@ -66,6 +78,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]
@@ -99,6 +112,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, nil)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]
@@ -132,6 +146,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]
@@ -166,6 +181,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]
@@ -195,6 +211,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-100)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]
@@ -228,6 +245,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]
@@ -261,6 +279,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
+    item.expect(:attributes, {})
 
     # Mock layouts
     layouts = [ mock ]

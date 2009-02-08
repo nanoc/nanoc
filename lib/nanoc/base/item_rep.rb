@@ -150,36 +150,14 @@ module Nanoc
       return false
     end
 
-    # Returns the attribute with the given name. This method will look in
-    # several places for the requested attribute:
-    #
-    # 1. This item representation's attributes;
-    # 2. The attributes of this item representation's item;
-    # 3. The item defaults' representation corresponding to this item
-    #    representation;
-    # 4. The item defaults in general;
-    # 5. The hardcoded item defaults, if everything else fails.
-    def attribute_named(name, item_defaults={}, defaults={})
+    # Returns the attribute with the given name. This method will look in this
+    # rep's attributes first, and then in the rep's item's attributes if the
+    # attribute can't be found in the rep.
+    def attribute_named(name)
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
-      # Check in here
-      return @attributes[name] if @attributes.has_key?(name)
-
-      # Check in item
-      return @item.attributes[name] if @item.attributes.has_key?(name)
-
-      # Check in item defaults' item rep
-      item_default_reps = item_defaults.attributes[:reps] || {}
-      item_default_rep  = item_default_reps[@name] || {}
-      return item_default_rep[name] if item_default_rep.has_key?(name)
-
-      # Check in site defaults (global)
-      item_defaults_attrs = item_defaults.attributes
-      return item_defaults_attrs[name] if item_defaults_attrs.has_key?(name)
-
-      # Check in hardcoded defaults
-      return defaults[name]
+      @attributes[name] || @item.attributes[name]
     end
 
     # Returns the assignments that should be available when compiling the content.

@@ -12,8 +12,8 @@ module Nanoc::Routers
 
     def path_for_page_rep(page_rep)
       # Get data we need
-      filename   = page_rep.attribute_named(:filename)
-      extension  = page_rep.attribute_named(:extension)
+      filename   = page_rep.attribute_named(:filename)  || 'index'
+      extension  = page_rep.attribute_named(:extension) || 'html'
 
       # Initialize path
       if page_rep.page.path == '/'

@@ -2,8 +2,8 @@ module Nanoc
 
   # Nanoc::DataSource is responsible for loading data. It is the (abstract)
   # superclass for all data sources. Subclasses must at least implement the
-  # data reading methods (+pages+, +page_defaults+, +layouts+, and +code+);
-  # all other methods involving data manipulation are optional.
+  # data reading methods (+pages+, +layouts+, and +code+); all other methods
+  # involving data manipulation are optional.
   #
   # Apart from the methods for loading and storing data, there are the +up+
   # and +down+ methods for bringing up and tearing down the connection to the
@@ -150,40 +150,6 @@ module Nanoc
     # Subclasses must implement this method.
     def delete_asset(asset)
       not_implemented('delete_asset')
-    end
-
-    ########## Page defaults
-
-    # Returns the page defaults (represented by Nanoc::Defaults) of this site.
-    # This is an abstract method implemented by the subclass.
-    #
-    # Subclasses must implement this method.
-    def page_defaults
-      not_implemented('page_defaults')
-    end
-
-    # Saves the given page defaults in the data source.
-    #
-    # Subclasses must implement this method.
-    def save_page_defaults(page_defaults)
-      not_implemented('save_page_defaults')
-    end
-
-    ########## Asset defaults
-
-    # Returns the asset defaults (represented by Nanoc::Defaults) of this
-    # site. This is an abstract method implemented by the subclass.
-    #
-    # Subclasses must implement this method.
-    def asset_defaults
-      not_implemented('asset_defaults')
-    end
-
-    # Saves the given asset defaults in the data source.
-    #
-    # Subclasses must implement this method.
-    def save_asset_defaults(asset_defaults)
-      not_implemented('save_asset_defaults')
     end
 
     ########## Layouts

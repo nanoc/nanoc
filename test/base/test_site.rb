@@ -24,18 +24,10 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
       ]
     end
 
-    def page_defaults
-      Nanoc::Defaults.new({ :foo => 'bar' })
-    end
-
     def assets
       [
         Nanoc::Asset.new(File.open('/dev/null'), {}, '/something/')
       ]
-    end
-
-    def asset_defaults
-      Nanoc::Defaults.new({ :foo => 'baz' })
     end
 
     def layouts
@@ -63,10 +55,6 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
         Nanoc::Page.new("Hi!",          {}, '/'),
         Nanoc::Page.new("Hello there.", {}, '/about/')
       ]
-    end
-
-    def page_defaults
-      Nanoc::Defaults.new({ :foo => 'bar' })
     end
 
     def layouts

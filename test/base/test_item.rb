@@ -8,4 +8,12 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
   def test_stub
   end
 
+  def test_to_proxy
+    # TODO implement
+  end
+
+  def test_attribute_named
+    # TODO implement
+  end
+
 end

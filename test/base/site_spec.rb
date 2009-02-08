@@ -57,15 +57,9 @@ describe 'Nanoc::Site#initialize' do
       Nanoc::Page.new("Hi!",          {}, '/'),
       Nanoc::Page.new("Hello there.", {}, '/about/')
     ])
-    site.data_source.expects(:page_defaults).returns(
-      Nanoc::Defaults.new({ :foo => 'bar' })
-    )
     site.data_source.expects(:assets).returns([
       Nanoc::Asset.new(File.open('/dev/null'), {}, '/something/')
     ])
-    site.data_source.expects(:asset_defaults).returns(
-      Nanoc::Defaults.new({ :foo => 'baz' })
-    )
     site.data_source.expects(:layouts).returns([
       Nanoc::Layout.new(
         'HEADER <%= @page.content %> FOOTER',
@@ -76,16 +70,12 @@ describe 'Nanoc::Site#initialize' do
     site.load_data
 
     # Check classes
-    site.page_defaults.must_be_instance_of  Nanoc::Defaults
-    site.asset_defaults.must_be_instance_of Nanoc::Defaults
-    site.code.must_be_instance_of           Nanoc::Code
-    site.pages.each     { |p| p.must_be_instance_of Nanoc::Page     }
-    site.assets.each    { |p| p.must_be_instance_of Nanoc::Asset    }
-    site.layouts.each   { |l| l.must_be_instance_of Nanoc::Layout   }
+    site.code.must_be_instance_of Nanoc::Code
+    site.pages.each   { |p| p.must_be_instance_of Nanoc::Page     }
+    site.assets.each  { |p| p.must_be_instance_of Nanoc::Asset    }
+    site.layouts.each { |l| l.must_be_instance_of Nanoc::Layout   }
 
     # Check whether site is set
-    site.page_defaults.site.must_equal  site
-    site.asset_defaults.site.must_equal site
     site.code.site.must_equal           site
     site.pages.each     { |p| p.site.must_equal site }
     site.assets.each    { |p| p.site.must_equal site }

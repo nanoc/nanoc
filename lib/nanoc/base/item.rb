@@ -52,11 +52,9 @@ module Nanoc
 
     # Builds the individual item representations (either Nanoc::PageRep or
     # Nanoc::AssetRep) for this item.
-    def build_reps(klass, site_defaults)
+    def build_reps(klass)
       # Get list of rep names
-      rep_names_default = (site_defaults.attributes[:reps] || {}).keys
-      rep_names_this    = (@attributes[:reps] || {}).keys + [ :default ]
-      rep_names         = rep_names_default | rep_names_this
+      rep_names = (@attributes[:reps] || {}).keys + [ :default ]
 
       # Get list of reps
       reps = rep_names.inject({}) do |memo, rep_name|
@@ -73,10 +71,11 @@ module Nanoc
     end
 
     # Returns the attribute with the given name.
-    def attribute_named(name, site_defaults, defaults)
-      return @attributes[name] if @attributes.has_key?(name)
-      return site_defaults.attributes[name] if site_defaults.attributes.has_key?(name)
-      return defaults[name]
+    def attribute_named(name)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
+      @attributes[name]
     end
 
     # Returns a proxy (either Nanoc::PageProxy or Nanoc::AssetProxy) for this
