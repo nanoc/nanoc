@@ -13,16 +13,10 @@ module Nanoc
   # compiling an asset actually compiles all of its assets.
   class Asset < Nanoc::Item
 
-    # Defaults values for assets.
-    DEFAULTS = {
-      :extension  => 'dat',
-      :filters    => []
-    }
-
     # Builds the individual asset representations (Nanoc::AssetRep) for this
     # asset.
     def build_reps
-      super(AssetRep, @site.asset_defaults)
+      super(AssetRep)
     end
 
     # Returns the type of this object.
@@ -33,14 +27,6 @@ module Nanoc
     # Returns a proxy (Nanoc::AssetProxy) for this asset.
     def to_proxy
       super(AssetProxy)
-    end
-
-    # Returns the attribute with the given name.
-    def attribute_named(name)
-      Nanoc::NotificationCenter.post(:visit_started, self)
-      Nanoc::NotificationCenter.post(:visit_ended,   self)
-
-      super(name, @site ? @site.asset_defaults : nil, Nanoc::Asset::DEFAULTS)
     end
 
   end

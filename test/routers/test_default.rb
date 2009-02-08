@@ -9,20 +9,12 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
     # Create default router
     router = Nanoc::Routers::Default.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
-    # Create site
-    site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
-
     # Get page
     page = Nanoc::Page.new(
       'some content',
       { :filename => 'home', :extension => 'htm' },
       '/foo/'
     )
-    page.site = site
     page.build_reps
     page_rep = page.reps[0]
 
@@ -34,12 +26,8 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
     # Create default router
     router = Nanoc::Routers::Default.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -59,12 +47,8 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_default_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
@@ -85,12 +69,8 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_custom_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router

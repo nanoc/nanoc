@@ -279,18 +279,6 @@ EOS
       page.site = site
       site.data_source.save_page(page)
 
-      # Fill asset defaults
-      Nanoc::Asset::DEFAULTS.each_pair do |key, value|
-        site.asset_defaults.attributes[key] = value
-      end
-      site.data_source.save_asset_defaults(site.asset_defaults)
-
-      # Fill page defaults
-      Nanoc::Page::DEFAULTS.each_pair do |key, value|
-        site.page_defaults.attributes[key] = value
-      end
-      site.data_source.save_page_defaults(site.page_defaults)
-
       # Create layout
       layout = Nanoc::Layout.new(
         DEFAULT_LAYOUT,

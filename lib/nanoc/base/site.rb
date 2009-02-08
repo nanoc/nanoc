@@ -5,9 +5,6 @@ module Nanoc
   #
   # * +pages+ is a list of Nanoc::Page instances representing pages
   # * +assets+ is a list of Nanoc::Asset instances representing assets
-  # * +page_defaults+ is a Nanoc::Defaults instance representing page defaults
-  # * +asset_defaults+ is a Nanoc::Defaults instance representing asset
-  #   defaults
   # * +layouts+ is a list of Nanoc::Layout instances representing layouts
   # * +code+ is a Nanoc::Code instance representing custom site code
   #
@@ -59,7 +56,6 @@ module Nanoc
 
     attr_reader :config
     attr_reader :compiler, :data_source, :router
-    attr_reader :page_defaults, :asset_defaults
     attr_reader :pages, :assets, :layouts, :code
 
     # Returns a Nanoc::Site object for the site specified by the given
@@ -87,10 +83,6 @@ module Nanoc
       @router = @router_class.new(self)
 
       # Initialize data
-      @page_defaults        = Defaults.new({})
-      @page_defaults.site   = self
-      @asset_defaults       = Defaults.new({})
-      @asset_defaults.site  = self
       @pages                = []
       @assets               = []
       @layouts              = []
@@ -111,9 +103,7 @@ module Nanoc
       # Load all data
       @data_source.loading do
         load_code(force)
-        load_page_defaults
         load_pages
-        load_asset_defaults
         load_assets
         load_layouts
       end
@@ -140,12 +130,6 @@ module Nanoc
       @code_loaded = true
     end
 
-    # Loads this site's page defaults.
-    def load_page_defaults
-      @page_defaults = @data_source.page_defaults
-      @page_defaults.site = self
-    end
-
     # Loads this site's pages, sets up page child-parent relationships and
     # builds each page's list of page representations.
     def load_pages
@@ -166,12 +150,6 @@ module Nanoc
         page.parent = parent
         parent.children << page
       end
-    end
-
-    # Loads this site's asset defaults.
-    def load_asset_defaults
-      @asset_defaults = @data_source.asset_defaults
-      @asset_defaults.site = self
     end
 
     # Loads this site's assets and builds each asset's list of asset

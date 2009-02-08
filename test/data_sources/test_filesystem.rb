@@ -18,10 +18,7 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
         # Remove files to make sure they are recreated
         FileUtils.rm_rf('assets')
-        FileUtils.rm_rf('asset_defaults.yaml')
         FileUtils.rm_rf('content')
-        FileUtils.rm_rf('page_defaults.yaml')
-        FileUtils.rm_rf('meta.yaml')
         FileUtils.rm_rf('layouts/default')
         FileUtils.rm_rf('lib/default.rb')
 
@@ -40,12 +37,9 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
         assert(File.directory?('lib/'))
 
         # Ensure no non-essential files have been recreated
-        assert(!File.file?('asset_defaults.yaml'))
         assert(!File.file?('content/content.html'))
         assert(!File.file?('content/content.yaml'))
         assert(!File.directory?('layouts/default/'))
-        assert(!File.file?('meta.yaml'))
-        assert(!File.file?('page_defaults.yaml'))
         assert(!File.file?('lib/default.rb'))
       end
     end
@@ -55,7 +49,7 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     with_temp_site do |site|
       # Mock VCS
       vcs = mock
-      vcs.expects(:remove).times(6) # One time for each directory
+      vcs.expects(:remove).times(4) # One time for each directory
       site.data_source.vcs = vcs
 
       # Destroy
@@ -68,29 +62,10 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil)
 
     # Set expectations
-    data_source.expects(:update_page_defaults)
     data_source.expects(:update_pages)
 
     # update
     data_source.update
-  end
-
-  def test_update_page_defaults
-    in_dir %w{ tmp } do
-      # Build outdated page defaults
-      File.open('meta.yaml', 'w') { |io| }
-
-      # Get data source
-      data_source = Nanoc::DataSources::Filesystem.new(nil)
-
-      # Mock VCS
-      vcs = mock
-      vcs.expects(:move).with('meta.yaml', 'page_defaults.yaml')
-      data_source.vcs = vcs
-
-      # Update page defaults
-      data_source.instance_eval { update_page_defaults }
-    end
   end
 
   def test_update_pages
@@ -210,52 +185,6 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_delete_asset
     # TODO implement
-  end
-
-  # Test page defaults
-
-  def test_page_defaults
-    with_temp_site do |site|
-      assert_equal('html', site.page_defaults.attributes[:extension])
-    end
-  end
-
-  def test_save_page_defaults
-    with_temp_site do |site|
-      # Get page defaults
-      page_defaults = site.page_defaults
-
-      # Update page defaults
-      page_defaults.attributes[:extension] = 'php' # eww, php! :D
-      site.data_source.save_page_defaults(page_defaults)
-      site.load_data(true)
-
-      # Check page defaults
-      assert_equal('php', site.page_defaults.attributes[:extension])
-    end
-  end
-
-  # Test asset defaults
-
-  def test_asset_defaults
-    with_temp_site do |site|
-      assert_equal([], site.asset_defaults.attributes[:filters])
-    end
-  end
-
-  def test_save_asset_defaults
-    with_temp_site do |site|
-      # Get asset defaults
-      asset_defaults = site.asset_defaults
-
-      # Update asset defaults
-      asset_defaults.attributes[:foo] = 'bar'
-      site.data_source.save_asset_defaults(asset_defaults)
-      site.load_data(true)
-
-      # Check asset defaults
-      assert_equal('bar', site.asset_defaults.attributes[:foo])
-    end
   end
 
   # Test layouts

@@ -20,8 +20,6 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:asset_defaults).times(2).returns(Nanoc::Defaults.new({}))
-    site.expects(:page_defaults).times(2).returns(Nanoc::Defaults.new({}))
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns(assets)
 
@@ -58,7 +56,6 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:page_defaults).returns(Nanoc::Defaults.new({}))
 
     # Build reps
     page.site = site
@@ -91,7 +88,6 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:asset_defaults).returns(Nanoc::Defaults.new({}))
 
     # Build reps
     asset.site = site

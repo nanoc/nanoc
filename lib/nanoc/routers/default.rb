@@ -9,8 +9,8 @@ module Nanoc::Routers
 
     def path_for_page_rep(page_rep)
       # Get data we need
-      filename   = page_rep.attribute_named(:filename)
-      extension  = page_rep.attribute_named(:extension)
+      filename   = page_rep.attribute_named(:filename)  || 'index'
+      extension  = page_rep.attribute_named(:extension) || 'html'
 
       # Initialize path
       path = page_rep.page.path + filename
@@ -31,7 +31,6 @@ module Nanoc::Routers
       # Get data we need
       extension     = asset_rep.attribute_named(:extension)
       modified_path = asset_rep.asset.path[0..-2]
-      version       = asset_rep.attribute_named(:version)
 
       # Initialize path
       assets_prefix = @site.config[:assets_prefix] || '/assets'

@@ -32,24 +32,7 @@ module Nanoc
       # Get compiled mtime
       compiled_mtime = File.stat(disk_path).mtime if !attribute_named(:skip_output)
 
-      # Outdated if asset defaults outdated
-      return true if @item.site.asset_defaults.mtime.nil?
-      return true if !attribute_named(:skip_output) && @item.site.asset_defaults.mtime > compiled_mtime
-
       return false
-    end
-
-    # Returns the attribute with the given name. This method will look in
-    # several places for the requested attribute:
-    #
-    # 1. This item representation's attributes;
-    # 2. The attributes of this item representation's item;
-    # 3. The item defaults' representation corresponding to this item
-    #    representation;
-    # 4. The item defaults in general;
-    # 5. The hardcoded item defaults, if everything else fails.
-    def attribute_named(name)
-      super(name, @item.site.asset_defaults, Nanoc::Asset::DEFAULTS)
     end
 
   end

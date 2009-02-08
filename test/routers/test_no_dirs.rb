@@ -9,12 +9,8 @@ class Nanoc::Routers::NoDirsTest < MiniTest::Unit::TestCase
     # Create no-dirs router
     router = Nanoc::Routers::NoDirs.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -34,12 +30,8 @@ class Nanoc::Routers::NoDirsTest < MiniTest::Unit::TestCase
     # Create no-dirs router
     router = Nanoc::Routers::NoDirs.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -59,12 +51,8 @@ class Nanoc::Routers::NoDirsTest < MiniTest::Unit::TestCase
     # Create no-dirs router
     router = Nanoc::Routers::NoDirs.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -84,12 +72,8 @@ class Nanoc::Routers::NoDirsTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_default_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
@@ -110,12 +94,8 @@ class Nanoc::Routers::NoDirsTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_custom_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router

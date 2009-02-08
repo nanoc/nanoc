@@ -9,12 +9,8 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     # Create versioned router
     router = Nanoc::Routers::Versioned.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -38,12 +34,8 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     # Create versioned router
     router = Nanoc::Routers::Versioned.new(nil)
 
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Get page
     page = Nanoc::Page.new(
@@ -68,12 +60,8 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_default_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
@@ -100,12 +88,8 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_custom_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
@@ -136,12 +120,8 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_default_rep_without_version
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
@@ -165,12 +145,8 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_custom_rep_without_version
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router

@@ -6,12 +6,8 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_initialize
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).returns(asset_defaults)
 
     # Create asset
     asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')
@@ -28,12 +24,8 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
   end
 
   def test_to_proxy
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
 
     # Create asset
     asset = Nanoc::Asset.new(nil, { 'foo' => 'bar' }, '/foo/')
@@ -55,14 +47,12 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     File.open('tmp/test.txt', 'w') { |io| io.write('old stuff') }
 
     # Create data
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
     asset = Nanoc::Asset.new(File.new('tmp/test.txt'), {}, '/foo/')
 
     # Create site and other requisites
     router = MiniTest::Mock.new.expect(:disk_path_for, 'tmp/out/foo/index.html', [ nil ])
     site = MiniTest::Mock.new
     site.expect(:router, router)
-    site.expect(:asset_defaults, asset_defaults)
     site.expect(:pages, [])
     site.expect(:assets, [])
     site.expect(:layouts, [])
@@ -101,9 +91,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create layouts
     layouts = [
       Nanoc::Layout.new('layout 1', {}, '/layout1/'),
@@ -115,7 +102,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:layouts).at_least_once.returns(layouts)
     site.expects(:code).at_least_once.returns(code)
 
@@ -131,7 +117,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp/out/foo')
     File.open(asset_rep.disk_path, 'w') { |io| }
     File.utime(Time.now - 50, Time.now - 50, asset_rep.disk_path)
-    asset_defaults.instance_eval { @mtime = Time.now - 100 }
     layouts.each { |l| l.instance_eval { @mtime = Time.now - 100 } }
     code.instance_eval { @mtime = Time.now - 100 }
 
@@ -157,14 +142,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     asset.instance_eval { @mtime = Time.now - 100 }
     assert(!asset_rep.outdated?)
 
-    # Check with outdated asset defaults
-    asset_defaults.instance_eval { @mtime = Time.now }
-    assert(asset_rep.outdated?)
-    asset_defaults.instance_eval { @mtime = nil }
-    assert(asset_rep.outdated?)
-    asset_defaults.instance_eval { @mtime = Time.now - 100 }
-    assert(!asset_rep.outdated?)
-
     # Check with outdated code
     code.instance_eval { @mtime = Time.now }
     assert(asset_rep.outdated?)
@@ -175,9 +152,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
   end
 
   def test_disk_and_web_path
-    # Create asset defaults
-    asset_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create router
     router = mock
     router.stubs(:disk_path_for).returns('tmp/out/assets/path/index.html')
@@ -186,7 +160,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     # Create site and compiler
     compiler = mock
     site = mock
-    site.stubs(:asset_defaults).returns(asset_defaults)
     site.stubs(:router).returns(router)
     site.stubs(:compiler).returns(compiler)
 
@@ -200,26 +173,6 @@ class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
     # Check
     assert_equal('tmp/out/assets/path/index.html', asset_rep.disk_path)
     assert_equal('/assets/path/',                  asset_rep.web_path)
-  end
-
-  def test_attribute_named_with_custom_rep
-    # TODO implement
-  end
-
-  def test_attribute_named_with_default_rep
-    # TODO implement
-  end
-
-  def test_compile
-    # TODO implement
-  end
-
-  def test_compile_force
-    # TODO implement
-  end
-
-  def test_compile_textual
-    # TODO implement
   end
 
 end

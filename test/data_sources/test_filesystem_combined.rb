@@ -17,10 +17,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
         site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files
-        FileUtils.rm_rf('asset_defaults.yaml')
         FileUtils.rm_rf('content')
-        FileUtils.rm_rf('meta.yaml')
-        FileUtils.rm_rf('page_defaults.yaml')
         FileUtils.rm_rf('layouts/default')
         FileUtils.rm_rf('lib/default.rb')
 
@@ -44,11 +41,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
         assert(File.directory?('lib/'))
 
         # Ensure no non-essential files have been recreated
-        assert(!File.file?('asset_defaults.yaml'))
         assert(!File.file?('content/index.html'))
         assert(!File.file?('layouts/default.html'))
-        assert(!File.file?('meta.yaml'))
-        assert(!File.file?('page_defaults.yaml'))
         assert(!File.file?('lib/default.rb'))
       end
     end
@@ -58,7 +52,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     with_temp_site('filesystem_combined') do |site|
       # Mock VCS
       vcs = mock
-      vcs.expects(:remove).times(6) # One time for each directory
+      vcs.expects(:remove).times(4) # One time for each directory
       site.data_source.vcs = vcs
 
       # Destroy
@@ -89,18 +83,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   end
 
   def test_delete_page
-    # TODO implement
-  end
-
-  # Test page defaults
-
-  def test_page_defaults
-    with_temp_site('filesystem_combined') do |site|
-      assert_equal('html', site.page_defaults.attributes[:extension])
-    end
-  end
-
-  def test_save_page_defaults
     # TODO implement
   end
 
@@ -144,18 +126,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   end
 
   def test_delete_asset
-    # TODO implement
-  end
-
-  # Test asset defaults
-
-  def test_asset_defaults
-    with_temp_site('filesystem_combined') do |site|
-      assert_equal([], site.asset_defaults.attributes[:filters])
-    end
-  end
-
-  def test_save_asset_defaults
     # TODO implement
   end
 

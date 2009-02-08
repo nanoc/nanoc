@@ -6,12 +6,8 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_initialize
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("some content", { 'foo' => 'bar' }, '/foo/')
@@ -33,12 +29,10 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
 
   def test_created_modified_compiled
     # Create data
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
     page = Nanoc::Page.new('content', { 'foo' => 'bar' }, '/foo/')
 
     # Create site and other requisites
     site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
     page.site = site
 
     # Create compiler
@@ -73,103 +67,9 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
     assert(page_rep.compiled?)
   end
 
-  def test_attribute_named_with_custom_rep
-    # Should check in
-    # 1. page rep
-    # 2. page default's page rep
-    # 3. hardcoded defaults
-
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new({
-      :reps => { :custom => {
-        :one => 'one in page defaults rep',
-        :two => 'two in page defaults rep'
-      }}
-    })
-
-    # Create site
-    site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
-
-    # Create page and rep
-    page = Nanoc::Page.new(
-      "content",
-      { :reps => { :custom => { :one => 'one in page rep' } } },
-      '/path/'
-    )
-    page.site = site
-    page.build_reps
-    page_rep = page.reps.find { |r| r.name == :custom }
-
-    # Test finding one
-    assert_equal('one in page rep', page_rep.attribute_named(:one))
-
-    # Test finding two
-    assert_equal('two in page defaults rep', page_rep.attribute_named(:two))
-
-    # Test finding three
-    assert_equal('default', page_rep.attribute_named(:layout))
-  end
-
-  def test_attribute_named_with_default_rep
-    # Should check in
-    # 1. page rep
-    # 2. page
-    # 3. page defaults' page rep
-    # 4. page defaults
-    # 5. hardcoded defaults
-
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new({
-      :one    => 'one in page defaults',
-      :two    => 'two in page defaults',
-      :three  => 'three in page defaults',
-      :four   => 'four in page defaults',
-      :reps => { :default => {
-        :one    => 'one in page defaults rep',
-        :two    => 'two in page defaults rep',
-        :three  => 'three in page defaults rep'
-      }}
-    })
-
-    # Create site
-    site = mock
-    site.expects(:page_defaults).at_least_once.returns(page_defaults)
-
-    # Create page and rep
-    page_attrs = {
-      :oen  => 'one in page',
-      :two  => 'two in page',
-      :reps => { :default => { :one => 'one in page rep' } }
-    }
-    page = Nanoc::Page.new('content', page_attrs, '/path/')
-    page.site = site
-    page.build_reps
-    page_rep = page.reps.find { |r| r.name == :default }
-
-    # Test finding one
-    assert_equal('one in page rep', page_rep.attribute_named(:one))
-
-    # Test finding two
-    assert_equal('two in page', page_rep.attribute_named(:two))
-
-    # Test finding three
-    assert_equal('three in page defaults rep', page_rep.attribute_named(:three))
-
-    # Test finding four
-    assert_equal('four in page defaults', page_rep.attribute_named(:four))
-
-    # Test finding five
-    assert_equal('default', page_rep.attribute_named(:layout))
-  end
-
   def test_content_pre_not_yet_compiled
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new(
@@ -191,12 +91,8 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
   end
 
   def test_content_pre_already_compiled
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.stubs(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
@@ -210,12 +106,8 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
   end
 
   def test_content_post_not_yet_compiled
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')
@@ -233,12 +125,8 @@ class Nanoc::PageRepTest < MiniTest::Unit::TestCase
   end
 
   def test_content_post_already_compiled
-    # Create page defaults
-    page_defaults = Nanoc::Defaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
 
     # Create page
     page = Nanoc::Page.new("content", { :attr => 'ibutes' }, '/path/')

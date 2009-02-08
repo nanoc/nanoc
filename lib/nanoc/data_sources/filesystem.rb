@@ -29,23 +29,11 @@ module Nanoc::DataSources
   # can have an 'index.txt' content file and a 'meta.yaml' meta file. This is
   # to preserve backward compatibility.
   #
-  # = Page defaults
-  #
-  # The page defaults are loaded from a YAML-formatted file named
-  # 'page_defaults.yaml' at the top level of the nanoc site directory. For
-  # backward compatibility, the file can also be named 'meta.yaml'.
-  #
   # = Assets
   #
   # Assets are stored in the 'assets' directory (surprise!). The structure is
   # very similar to the structure of the 'content' directory, so see the Pages
   # section for details on how this directory is structured.
-  #
-  # = Asset defaults
-  #
-  # The asset defaults are stored similar to the way page defaults are stored,
-  # except that the asset defaults file is named 'asset_defaults.yaml'
-  # instead.
   #
   # = Layouts
   #
@@ -63,10 +51,6 @@ module Nanoc::DataSources
   # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
   # sub-directories.
   class Filesystem < Nanoc::DataSource
-
-    PAGE_DEFAULTS_FILENAME     = 'page_defaults.yaml'
-    PAGE_DEFAULTS_FILENAME_OLD = 'meta.yaml'
-    ASSET_DEFAULTS_FILENAME    = 'asset_defaults.yaml'
 
     ########## Attributes ##########
 
@@ -97,11 +81,6 @@ module Nanoc::DataSources
     end
 
     def destroy # :nodoc:
-      # Remove files
-      vcs.remove(ASSET_DEFAULTS_FILENAME)    if File.file?(ASSET_DEFAULTS_FILENAME)
-      vcs.remove(PAGE_DEFAULTS_FILENAME)     if File.file?(PAGE_DEFAULTS_FILENAME)
-      vcs.remove(PAGE_DEFAULTS_FILENAME_OLD) if File.file?(PAGE_DEFAULTS_FILENAME_OLD)
-
       # Remove directories
       vcs.remove('assets')
       vcs.remove('content')
@@ -110,7 +89,6 @@ module Nanoc::DataSources
     end
 
     def update # :nodoc:
-      update_page_defaults
       update_pages
     end
 
@@ -175,7 +153,7 @@ module Nanoc::DataSources
       end
 
       # Write files
-      File.open(meta_filename,    'w') { |io| io.write(page.attributes.to_split_yaml) }
+      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(page.attributes.stringify_keys)) }
       File.open(content_filename, 'w') { |io| io.write(page.content) }
 
       # Add to working copy if possible
@@ -254,7 +232,7 @@ module Nanoc::DataSources
       end
 
       # Write files
-      File.open(meta_filename,    'w') { |io| io.write(asset.attributes.to_split_yaml) }
+      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(asset.attributes.stringify_keys)) }
       File.open(content_filename, 'w') { |io| io.write(asset.content) }
 
       # Add to working copy if possible
@@ -270,81 +248,6 @@ module Nanoc::DataSources
 
     def delete_asset(asset) # :nodoc:
       # TODO implement
-    end
-
-    ########## Page Defaults ##########
-
-    def page_defaults # :nodoc:
-      # Get attributes
-      filename = File.file?(PAGE_DEFAULTS_FILENAME) ? PAGE_DEFAULTS_FILENAME : PAGE_DEFAULTS_FILENAME_OLD
-      attributes = YAML.load_file(filename) || {}
-
-      # Get mtime
-      mtime = File.stat(filename).mtime
-
-      # Build page defaults
-      Nanoc::Defaults.new(attributes, mtime)
-    end
-
-    def save_page_defaults(page_defaults) # :nodoc:
-      # Notify
-      if File.file?(PAGE_DEFAULTS_FILENAME)
-        filename = PAGE_DEFAULTS_FILENAME
-        created  = false
-        Nanoc::NotificationCenter.post(:file_updated, filename)
-      elsif File.file?(PAGE_DEFAULTS_FILENAME_OLD)
-        filename = PAGE_DEFAULTS_FILENAME_OLD
-        created  = false
-        Nanoc::NotificationCenter.post(:file_updated, filename)
-      else
-        filename = PAGE_DEFAULTS_FILENAME
-        created  = true
-        Nanoc::NotificationCenter.post(:file_created, filename)
-      end
-
-      # Write
-      File.open(filename, 'w') do |io|
-        io.write(page_defaults.attributes.to_split_yaml)
-      end
-
-      # Add to working copy if possible
-      vcs.add(filename) if created
-    end
-
-    ########## Asset Defaults ##########
-
-    def asset_defaults # :nodoc:
-      if File.file?(ASSET_DEFAULTS_FILENAME)
-        # Get attributes
-        attributes = YAML.load_file(ASSET_DEFAULTS_FILENAME) || {}
-
-        # Get mtime
-        mtime = File.stat(ASSET_DEFAULTS_FILENAME).mtime
-
-        # Build asset defaults
-        Nanoc::Defaults.new(attributes, mtime)
-      else
-        Nanoc::Defaults.new({})
-      end
-    end
-
-    def save_asset_defaults(asset_defaults) # :nodoc:
-      # Notify
-      if File.file?(ASSET_DEFAULTS_FILENAME)
-        Nanoc::NotificationCenter.post(:file_updated, ASSET_DEFAULTS_FILENAME)
-        created  = false
-      else
-        Nanoc::NotificationCenter.post(:file_created, ASSET_DEFAULTS_FILENAME)
-        created  = true
-      end
-
-      # Write
-      File.open(ASSET_DEFAULTS_FILENAME, 'w') do |io|
-        io.write(asset_defaults.attributes.to_split_yaml)
-      end
-
-      # Add to working copy if possible
-      vcs.add(ASSET_DEFAULTS_FILENAME) if created
     end
 
     ########## Layouts ##########
@@ -399,7 +302,7 @@ module Nanoc::DataSources
       end
 
       # Write files
-      File.open(meta_filename,    'w') { |io| io.write(layout.attributes.to_split_yaml) }
+      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(layout.attributes.stringify_keys)) }
       File.open(content_filename, 'w') { |io| io.write(layout.content) }
 
       # Add to working copy if possible
@@ -525,13 +428,6 @@ module Nanoc::DataSources
         'To do so, issue the \'nanoc update\' command. For help on ' +
         'updating a site\'s data, issue \'nanoc help update\'.'
       )
-    end
-
-    # Updated outdated page defaults (renames page defaults file)
-    def update_page_defaults
-      return unless File.file?(PAGE_DEFAULTS_FILENAME_OLD)
-
-      vcs.move(PAGE_DEFAULTS_FILENAME_OLD, PAGE_DEFAULTS_FILENAME)
     end
 
     # Updates outdated pages (both content and meta file names).
