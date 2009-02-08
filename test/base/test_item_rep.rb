@@ -305,7 +305,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create item rep
     item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
-    # FIXME ugly
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -313,12 +312,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Filter once
     item_rep.filter(:erb)
-    # FIXME ugly
     assert_equal(%[<%= "blah" %>], item_rep.instance_eval { @content[:last] })
 
     # Filter twice
     item_rep.filter(:erb)
-    # FIXME ugly
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
 
@@ -344,7 +341,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create item rep
     item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
-    # FIXME ugly
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -352,7 +348,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Layout
     item_rep.layout('/somelayout/')
-    # FIXME ugly
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
 
@@ -371,7 +366,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create item rep
     item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
-    # FIXME ugly
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -385,7 +379,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item_rep.snapshot(:qux)
 
     # Check snapshots
-    # FIXME ugly
     assert_equal(%[<%= '<%= "blah" %' + '>' %>], item_rep.instance_eval { @content[:foo] })
     assert_equal(%[<%= "blah" %>],               item_rep.instance_eval { @content[:bar] })
     assert_equal(%[blah],                        item_rep.instance_eval { @content[:qux] })
