@@ -35,6 +35,10 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
       io.write("page '*' do |p|\n")
       io.write("  p.write\n")
       io.write("end\n")
+      io.write("\n")
+      io.write("asset '*' do |a|\n")
+      io.write("  a.write\n")
+      io.write("end\n")
     end
 
     # Run
