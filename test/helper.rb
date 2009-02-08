@@ -27,12 +27,6 @@ require 'nanoc/cli'
 # Load miscellaneous requirements
 require 'stringio'
 
-def with_site_fixture(a_fixture)
-  in_dir(['test', 'fixtures', a_fixture]) do
-    yield(Nanoc::Site.new(YAML.load_file('config.yaml')))
-  end
-end
-
 def with_temp_site(data_source='filesystem')
   in_dir %w{ tmp } do
     # Create site
@@ -104,15 +98,5 @@ def global_teardown
   unless ENV['QUIET'] == 'false'
     $stdout = $stdout_real
     $stderr = $stderr_real
-  end
-
-  # Remove tmp per site
-  Dir[File.join('test', 'fixtures', '*', 'tmp')].each do |f|
-    FileUtils.rm_rf(f) if File.exist?(f)
-  end
-
-  # Remove output per site
-  Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
-    FileUtils.rm_rf(f) if File.exist?(f)
   end
 end

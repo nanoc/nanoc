@@ -37,8 +37,7 @@ The source code is structured in a few directories:
     * *filters* contains the standard filters (Nanoc::Filter subclasses) such
       as ERB, Markdown, Haml, ...
     * *routers* contains the standard routers (Nanoc::Router subclasses)
-* *test* contains test fixtures as well as testing code, structured in the
-  same way as lib/nanoc
+* *test* contains testing code, structured in the same way as lib/nanoc
 
 The namespaces (modules) are organised like this:
 
