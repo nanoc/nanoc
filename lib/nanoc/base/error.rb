@@ -34,6 +34,14 @@ module Nanoc
     # no longer supported by nanoc.
     class NoLongerSupportedError < Error ; end
 
+    # Error that is raised when no rules file can be found in the current
+    # working directory.
+    class NoRulesFileFoundError < Error ; end
+
+    # Error that is raised when no compilation rule that can be applied to the
+    # current page can be found.
+    class NoMatchingRuleFoundError < Error ; end
+
   end
 
 end

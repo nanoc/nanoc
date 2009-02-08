@@ -215,7 +215,7 @@ module Nanoc::CLI
 
     def print_error(error)
       # Get rep
-      rep = @base.site.compiler.stack.select { |i| i.is_a?(Nanoc::PageRep) || i.is_a?(Nanoc::AssetRep) }[-1]
+      rep = (@base.site.compiler.stack || []).select { |i| i.is_a?(Nanoc::PageRep) || i.is_a?(Nanoc::AssetRep) }[-1]
       rep_name = rep.nil? ? 'the site' : "#{rep.is_a?(Nanoc::PageRep) ? rep.page.path : rep.asset.path} (rep #{rep.name})"
 
       # Build message
@@ -230,6 +230,10 @@ module Nanoc::CLI
         message = "Recursive call to page content."
       when Nanoc::Errors::NoLongerSupportedError
         message = "No longer supported: #{error.message}"
+      when Nanoc::Errors::NoRulesFileFoundError
+        message = "No rules file found"
+      when Nanoc::Errors::NoMatchingRuleFoundError
+        message = "No matching rule found"
       else
         message = "Error: #{error.message}"
       end
@@ -245,7 +249,7 @@ module Nanoc::CLI
       $stderr.puts '  ' + message
       $stderr.puts
       $stderr.puts 'Compilation stack:'
-      @base.site.compiler.stack.reverse.each do |item|
+      (@base.site.compiler.stack || []).reverse.each do |item|
         if item.is_a?(Nanoc::PageRep) # page rep
           $stderr.puts "  - [page]   #{item.page.path} (rep #{item.name})"
         elsif item.is_a?(Nanoc::AssetRep) # asset rep

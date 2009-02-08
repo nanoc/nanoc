@@ -19,7 +19,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:load_data)
-    site.expects(:config).returns({ :output_dir => 'tmp/blah' })
+    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.expects(:asset_defaults).times(2).returns(Nanoc::Defaults.new({}))
     site.expects(:page_defaults).times(2).returns(Nanoc::Defaults.new({}))
     site.expects(:pages).returns(pages)
@@ -36,11 +36,18 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     compiler = Nanoc::Compiler.new(site)
     compiler.expects(:compile_rep).times(4)
 
+    # Create rules
+    File.open('tmp/Rules', 'w') do |io|
+      io.write("page '*' do |p|\n")
+      io.write("  p.write\n")
+      io.write("end\n")
+    end
+
     # Run
-    compiler.run
+    FileUtils.cd('tmp') { compiler.run }
 
     # Make sure output dir is created
-    assert(File.directory?('tmp/blah'))
+    assert(File.directory?('tmp/foo/bar/baz'))
   end
 
   def test_run_with_page_rep
@@ -50,7 +57,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:load_data)
-    site.expects(:config).returns({ :output_dir => 'tmp/blah' })
+    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.expects(:page_defaults).returns(Nanoc::Defaults.new({}))
 
     # Build reps
@@ -62,11 +69,18 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     compiler = Nanoc::Compiler.new(site)
     compiler.expects(:compile_rep).with(page_rep, false)
 
+    # Create rules
+    File.open('tmp/Rules', 'w') do |io|
+      io.write("page '*' do |p|\n")
+      io.write("  p.write\n")
+      io.write("end\n")
+    end
+
     # Run
-    compiler.run([ page ])
+    FileUtils.cd('tmp') { compiler.run([ page ]) }
 
     # Make sure output dir is created
-    assert(File.directory?('tmp/blah'))
+    assert(File.directory?('tmp/foo/bar/baz'))
   end
 
   def test_run_with_asset_rep
@@ -76,7 +90,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:load_data)
-    site.expects(:config).returns({ :output_dir => 'tmp/blah' })
+    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.expects(:asset_defaults).returns(Nanoc::Defaults.new({}))
 
     # Build reps
@@ -88,11 +102,18 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     compiler = Nanoc::Compiler.new(site)
     compiler.expects(:compile_rep).with(asset_rep, false)
 
+    # Create rules
+    File.open('tmp/Rules', 'w') do |io|
+      io.write("asset '*' do |a|\n")
+      io.write("  a.write\n")
+      io.write("end\n")
+    end
+
     # Run
-    compiler.run([ asset ])
+    FileUtils.cd('tmp') { compiler.run([ asset ]) }
 
     # Make sure output dir is created
-    assert(File.directory?('tmp/blah'))
+    assert(File.directory?('tmp/foo/bar/baz'))
   end
 
 end

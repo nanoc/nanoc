@@ -10,6 +10,9 @@ module Nanoc
     # FIXME compiler doesn't need to know about the site
     def initialize(site)
       @site = site
+
+      @page_rules  = []
+      @asset_rules = []
     end
 
     # Compiles (part of) the site and writes out the compiled page and asset
@@ -26,6 +29,14 @@ module Nanoc
     def run(objects=nil, params={})
       # Parse params
       force = params[:force] || false
+
+      # Find rules file
+      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
+      raise Nanoc::Errors::NoRulesFileFoundError.new if rules_filename.nil?
+
+      # Load DSL
+      dsl = Nanoc::CompilerDSL.new(self)
+      eval(File.read(rules_filename), dsl.get_binding, rules_filename)
 
       # Load data
       @site.load_data
@@ -84,19 +95,11 @@ module Nanoc
       # Check if file will be created
       old_content = File.file?(rep.disk_path) ? File.read(rep.disk_path) : nil
 
-      # Run instructions
-      rep.processing_instructions.each do |instruction|
-        case instruction[0]
-          when :filter
-            rep.filter(instruction[1], instruction[2])
-          when :layout
-            rep.layout(instruction[1])
-          when :snapshot
-            rep.snapshot(instruction[1])
-          when :write
-            rep.write
-        end
-      end
+      # Find and apply matching page rule
+      rules = (rep.type == :page_rep ? @page_rules : @asset_rules)
+      rule = rules.find { |r| r.applicable_to?(rep) }
+      raise Nanoc::Errors::NoMatchingRuleFoundError.new if rule.nil?
+      rule.apply_to(rep)
 
       # Update status
       rep.compiled = true
@@ -108,6 +111,29 @@ module Nanoc
       # Stop
       Nanoc::NotificationCenter.post(:compilation_ended, rep)
       @stack.pop
+    end
+
+    def add_page_rule(path, block)
+      @page_rules << ItemRule.new(path_to_regex(path), self, block)
+    end
+
+    def add_asset_rule(path, block)
+      @asset_rules << ItemRule.new(path_to_regex(path), self, block)
+    end
+
+    def add_layout_rule(path, block)
+      # TODO implement
+    end
+
+  private
+
+    # TODO document
+    def path_to_regex(path)
+      if path.is_a? String
+        /^#{path.gsub('*', '(.*?)')}$/
+      else
+        path
+      end
     end
 
   end
