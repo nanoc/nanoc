@@ -123,9 +123,6 @@ module Nanoc
       @code.site = self
 
       # Execute code
-      # FIXME This could be dangerous when using nanoc as a framework
-      # (a separate ruby process should probably be forked, and the code
-      # should only be loaded in this forked process)
       @code.load
       @code_loaded = true
     end
