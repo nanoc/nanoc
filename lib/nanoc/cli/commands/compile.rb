@@ -275,7 +275,7 @@ module Nanoc::CLI
       @rep_times[rep.disk_path] = Time.now - @rep_times[rep.disk_path]
 
       # Skip if not outputted
-      return if rep.attribute_named(:skip_output)
+      return if rep.item.attribute_named(:skip_output)
 
       # Get action and level
       action, level = *if rep.created?
