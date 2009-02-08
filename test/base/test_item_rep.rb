@@ -5,6 +5,291 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
+  def test_attribute_named
+    # TODO implement
+  end
+
+  def test_to_proxy
+    # Create item rep
+    rep = Nanoc::ItemRep.new(nil, { :foo => 'bar' }, 'blah')
+
+    # Create proxy
+    rep_proxy = rep.to_proxy
+
+    # Test
+    assert_equal(rep, rep_proxy.instance_eval { @obj })
+  end
+
+  def test_disk_path
+    # Create site
+    site = MiniTest::Mock.new
+
+    # Create item and rep
+    item = MiniTest::Mock.new
+    item.expect(:site, site)
+    rep = Nanoc::ItemRep.new(item, { :foo => 'bar' }, 'blah')
+
+    # Create site and router
+    router = MiniTest::Mock.new
+    site.expect(:router, router)
+    router.expect(:disk_path_for, 'output/blah/test.html', [ rep ])
+
+    # Test
+    assert_equal('output/blah/test.html', rep.disk_path)
+    item.verify
+    site.verify
+    router.verify
+  end
+
+  def test_web_path
+    # Create site
+    site = MiniTest::Mock.new
+
+    # Create item and rep
+    item = MiniTest::Mock.new
+    item.expect(:site, site)
+    rep = Nanoc::ItemRep.new(item, { :foo => 'bar' }, 'blah')
+
+    # Create site and router
+    router = MiniTest::Mock.new
+    site.expect(:router, router)
+    router.expect(:web_path_for, '/foo/bar/baz/', [ rep ])
+
+    # Test
+    assert_equal('/foo/bar/baz/', rep.web_path)
+    item.verify
+    site.verify
+    router.verify
+  end
+
+  def test_not_outdated
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-500)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-100, Time.now-200, 'output.html')
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+
+    # Test
+    refute(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
+  def test_outdated_if_mtime_nil
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, nil)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-100, Time.now-200, 'output.html')
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
+  def test_outdated_if_force_outdated
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-500)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-100, Time.now-200, 'output.html')
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @force_outdated = true }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
+  def test_outdated_if_compiled_file_doesnt_exist
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-500)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
+  def test_outdated_if_source_file_too_old
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-100)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-500, Time.now-600, 'output.html')
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
+  def test_outdated_if_layouts_outdated
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-500)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-100)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-200, Time.now-300, 'output.html')
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
+  def test_outdated_if_code_outdated
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-500)
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-100)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-200, Time.now-300, 'output.html')
+
+    # Create rep
+    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep.instance_eval { @disk_path = 'output.html' }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
   def test_filter
     # Mock site
     site = MiniTest::Mock.new
