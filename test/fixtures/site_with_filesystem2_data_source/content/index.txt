@@ -1,6 +1,0 @@
------
-title: Home
-filters_pre: [ 'erb' ]
------
-Dis mai home page!
-This page was last modified at <%= @page.file.mtime %>.
