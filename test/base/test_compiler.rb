@@ -5,7 +5,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_run_without_obj
+  def test_run_without_item
     # Create pages
     pages = [
       Nanoc::Page.new('page one', {}, '/page1/'),
@@ -23,12 +23,8 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns(assets)
 
-    # Create reps and setup compilation
-    (pages + assets).each do |obj|
-      obj.site = site
-      obj.build_reps
-      rep = obj.reps[0]
-    end
+    # Set items' site
+    (pages + assets).each { |item| item.site = site }
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
@@ -57,14 +53,12 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
 
-    # Build reps
+    # Set item's site
     page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.expects(:compile_rep).with(page_rep, false)
+    compiler.expects(:compile_rep)
 
     # Create rules
     File.open('tmp/Rules', 'w') do |io|
@@ -89,14 +83,12 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
 
-    # Build reps
+    # Set item's site
     asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps[0]
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.expects(:compile_rep).with(asset_rep, false)
+    compiler.expects(:compile_rep)
 
     # Create rules
     File.open('tmp/Rules', 'w') do |io|

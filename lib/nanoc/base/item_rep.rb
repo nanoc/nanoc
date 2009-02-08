@@ -2,9 +2,9 @@ module Nanoc
 
   # A Nanoc::ItemRep is a single representation (rep) of an item
   # (Nanoc::Item). An item can have multiple representations. A representation
-  # has its own attributes and its own output file. A single item can
-  # therefore have multiple output files, each run through a different set of
-  # filters with a different layout.
+  # has its own output file. A single item can therefore have multiple output
+  # files, each run through a different set of filters with a different
+  # layout.
   #
   # An item representation is observable. The following events will be
   # notified:
@@ -23,9 +23,6 @@ module Nanoc
 
     # The item (Nanoc::Item) to which this representation belongs.
     attr_reader   :item
-
-    # A hash containing this item representation's attributes.
-    attr_accessor :attributes
 
     # This item representation's unique name.
     attr_reader   :name
@@ -50,21 +47,15 @@ module Nanoc
     # +:last+.
     attr_accessor :content
 
-    # Creates a new item representation for the given item and with the given
-    # attributes.
+    # Creates a new item representation for the given item.
     #
     # +item+:: The item (Nanoc::Item) to which the new representation will
     #          belong.
     #
-    # +attributes+:: A hash containing the new item representation's
-    #                attributes. This hash must have been run through
-    #                Hash#clean before using it here.
-    #
     # +name+:: The unique name for the new item representation.
-    def initialize(item, attributes, name)
+    def initialize(item, name)
       # Set primary attributes
       @item           = item
-      @attributes     = attributes
       @name           = name
 
       # Initialize content
@@ -130,34 +121,24 @@ module Nanoc
       return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
-      return true if !File.file?(disk_path) && !attribute_named(:skip_output)
+      return true if !File.file?(disk_path) && !@item.attribute_named(:skip_output)
 
       # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime if !attribute_named(:skip_output)
+      compiled_mtime = File.stat(disk_path).mtime if !@item.attribute_named(:skip_output)
 
       # Outdated if file too old
-      return true if !attribute_named(:skip_output) && @item.mtime > compiled_mtime
+      return true if !@item.attribute_named(:skip_output) && @item.mtime > compiled_mtime
 
       # Outdated if layouts outdated
       return true if @item.site.layouts.any? do |l|
-        l.mtime.nil? || (!attribute_named(:skip_output) && l.mtime > compiled_mtime)
+        l.mtime.nil? || (!@item.attribute_named(:skip_output) && l.mtime > compiled_mtime)
       end
 
       # Outdated if code outdated
       return true if @item.site.code.mtime.nil?
-      return true if !attribute_named(:skip_output) && @item.site.code.mtime > compiled_mtime
+      return true if !@item.attribute_named(:skip_output) && @item.site.code.mtime > compiled_mtime
 
       return false
-    end
-
-    # Returns the attribute with the given name. This method will look in this
-    # rep's attributes first, and then in the rep's item's attributes if the
-    # attribute can't be found in the rep.
-    def attribute_named(name)
-      Nanoc::NotificationCenter.post(:visit_started, self)
-      Nanoc::NotificationCenter.post(:visit_ended,   self)
-
-      @attributes[name] || @item.attributes[name]
     end
 
     # Returns the assignments that should be available when compiling the content.

@@ -13,12 +13,6 @@ module Nanoc
   # compiling an asset actually compiles all of its assets.
   class Asset < Nanoc::Item
 
-    # Builds the individual asset representations (Nanoc::AssetRep) for this
-    # asset.
-    def build_reps
-      super(AssetRep)
-    end
-
     # Returns the type of this object.
     def type
       :asset

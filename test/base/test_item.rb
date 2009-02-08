@@ -13,7 +13,18 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
   end
 
   def test_attribute_named
-    # TODO implement
+    # Create item and rep
+    item = Nanoc::Item.new(
+      "content",
+      { :one => 'one in item' },
+      '/path/'
+    )
+
+    # Test finding one
+    assert_equal('one in item', item.attribute_named(:one))
+
+    # Test finding two
+    assert_equal(nil, item.attribute_named(:two))
   end
 
 end

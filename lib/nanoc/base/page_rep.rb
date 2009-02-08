@@ -17,7 +17,7 @@ module Nanoc
       return true if super
 
       # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime if !attribute_named(:skip_output)
+      compiled_mtime = File.stat(disk_path).mtime if !@item.attribute_named(:skip_output)
 
       return false
     end

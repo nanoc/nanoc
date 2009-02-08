@@ -5,25 +5,13 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_attribute_named
-    # Create item and rep
-    item = Nanoc::Item.new(
-      "content",
-      { :one => 'one in item' },
-      '/path/'
-    )
-    item_rep = Nanoc::ItemRep.new(item, {}, :custom)
-
-    # Test finding one
-    assert_equal('one in item', item_rep.attribute_named(:one))
-
-    # Test finding two
-    assert_equal(nil, item_rep.attribute_named(:two))
+  def test_created_modified_compiled
+    # TODO implement
   end
 
   def test_to_proxy
     # Create item rep
-    rep = Nanoc::ItemRep.new(nil, { :foo => 'bar' }, 'blah')
+    rep = Nanoc::ItemRep.new(nil, 'blah')
 
     # Create proxy
     rep_proxy = rep.to_proxy
@@ -39,7 +27,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Create item and rep
     item = MiniTest::Mock.new
     item.expect(:site, site)
-    rep = Nanoc::ItemRep.new(item, { :foo => 'bar' }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
 
     # Create site and router
     router = MiniTest::Mock.new
@@ -60,7 +48,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Create item and rep
     item = MiniTest::Mock.new
     item.expect(:site, site)
-    rep = Nanoc::ItemRep.new(item, { :foo => 'bar' }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
 
     # Create site and router
     router = MiniTest::Mock.new
@@ -78,7 +66,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -99,7 +87,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
 
     # Test
@@ -112,7 +100,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, nil)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -133,7 +121,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
 
     # Test
@@ -146,7 +134,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -167,7 +155,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
     rep.instance_eval { @force_outdated = true }
 
@@ -181,7 +169,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -198,7 +186,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.stubs(:site).returns(site)
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
 
     # Test
@@ -211,7 +199,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-100)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -232,7 +220,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-500, Time.now-600, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
 
     # Test
@@ -245,7 +233,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -266,7 +254,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-200, Time.now-300, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
 
     # Test
@@ -279,7 +267,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:attributes, {})
+    item.expect(:attribute_named, false, [ :skip_output ])
 
     # Mock layouts
     layouts = [ mock ]
@@ -300,7 +288,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-200, Time.now-300, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, { :skip_output => false }, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
     rep.instance_eval { @disk_path = 'output.html' }
 
     # Test
@@ -323,7 +311,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:site, site)
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
+    item_rep = Nanoc::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -359,7 +347,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.stubs(:site).returns(site)
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
+    item_rep = Nanoc::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -384,7 +372,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:site, site)
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
+    item_rep = Nanoc::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -413,7 +401,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:site, site)
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, {}, '/foo/')
+    item_rep = Nanoc::ItemRep.new(item, '/foo/')
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
 
     # Write
