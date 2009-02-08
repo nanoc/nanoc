@@ -136,9 +136,6 @@ module Nanoc
       @pages = @data_source.pages
       @pages.each { |p| p.site = self }
 
-      # Build page representations
-      @pages.each { |p| p.build_reps }
-
       # Setup child-parent links
       @pages.each do |page|
         # Get parent
@@ -157,9 +154,6 @@ module Nanoc
     def load_assets
       @assets = @data_source.assets
       @assets.each { |a| a.site = self }
-
-      # Build asset representations
-      @assets.each { |p| p.build_reps }
     end
 
     # Loads this site's layouts.

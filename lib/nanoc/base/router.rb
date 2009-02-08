@@ -35,13 +35,13 @@ module Nanoc
     # Returns the web path for the given page or asset representation, i.e.
     # the page or asset rep's custom path or routed path with index filenames
     # stripped.
-    def web_path_for(obj)
+    def web_path_for(rep)
       # Get actual path
-      path ||= obj.attribute_named(:custom_path)
-      if obj.is_a?(Nanoc::PageRep) # Page rep
-        path ||= path_for_page_rep(obj)
+      path ||= rep.item.attribute_named(:custom_path)
+      if rep.is_a?(Nanoc::PageRep) # Page rep
+        path ||= path_for_page_rep(rep)
       else # Asset rep
-        path ||= path_for_asset_rep(obj)
+        path ||= path_for_asset_rep(rep)
       end
 
       # Try stripping each index filename
@@ -60,10 +60,10 @@ module Nanoc
     # Returns the disk path for the given page or asset representation, i.e.
     # the page or asset's custom path or routed path relative to the output
     # directory.
-    def disk_path_for(obj)
+    def disk_path_for(rep)
       @site.config[:output_dir] + (
-        obj.attribute_named(:custom_path) ||
-        (obj.is_a?(Nanoc::PageRep) ? path_for_page_rep(obj) : path_for_asset_rep(obj))
+        rep.item.attribute_named(:custom_path) ||
+        (rep.is_a?(Nanoc::PageRep) ? path_for_page_rep(rep) : path_for_asset_rep(rep))
       )
     end
 

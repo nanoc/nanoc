@@ -50,26 +50,6 @@ module Nanoc
       @reps       = []
     end
 
-    # Builds the individual item representations (either Nanoc::PageRep or
-    # Nanoc::AssetRep) for this item.
-    def build_reps(klass)
-      # Get list of rep names
-      rep_names = (@attributes[:reps] || {}).keys + [ :default ]
-
-      # Get list of reps
-      reps = rep_names.inject({}) do |memo, rep_name|
-        rep = (@attributes[:reps] || {})[rep_name]
-        is_bad = (@attributes[:reps] || {}).has_key?(rep_name) && rep.nil?
-        is_bad ? memo : memo.merge(rep_name => rep || {})
-      end
-
-      # Build reps
-      @reps = []
-      reps.each_pair do |name, attrs|
-        @reps << klass.new(self, attrs, name)
-      end
-    end
-
     # Returns the attribute with the given name.
     def attribute_named(name)
       Nanoc::NotificationCenter.post(:visit_started, self)

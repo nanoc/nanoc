@@ -13,12 +13,6 @@ module Nanoc
   # compiling a page actually compiles all of its representations.
   class Page < Nanoc::Item
 
-    # Builds the individual page representations (Nanoc::PageRep) for this
-    # page.
-    def build_reps
-      super(PageRep)
-    end
-
     # Returns the type of this object.
     def type
       :page

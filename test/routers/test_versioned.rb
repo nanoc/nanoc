@@ -22,9 +22,7 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       },
       '/foo/'
     )
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
+    page_rep = Nanoc::PageRep.new(page, :default)
 
     # Check
     assert_equal('/foo/home.htm', router.path_for_page_rep(page_rep))
@@ -41,19 +39,13 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     page = Nanoc::Page.new(
       'some content',
       {
-        :reps => {
-          :raw => {
-            :filename   => 'home',
-            :extension  => 'htm',
-            :version    => 123
-          }
-        }
+        :filename   => 'home',
+        :extension  => 'htm',
+        :version    => 123
       },
       '/foo/'
     )
-    page.site = site
-    page.build_reps
-    page_rep = page.reps.find { |r| r.name == :raw }
+    page_rep = Nanoc::PageRep.new(page, :raw)
 
     # Check
     assert_equal('/foo/home-raw.htm', router.path_for_page_rep(page_rep))
@@ -72,13 +64,11 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       nil,
       {
         :extension => 'png',
-        :version => 123
+        :version   => 123
       },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps[0]
+    asset_rep = Nanoc::AssetRep.new(asset, :default)
 
     # Check
     assert_equal(
@@ -99,18 +89,12 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     asset = Nanoc::Asset.new(
       nil,
       {
-        :reps => {
-          :raw => {
-            :extension => 'png', 
-            :version => 123
-          }
-        }
+        :extension => 'png', 
+        :version => 123
       },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps.find { |r| r.name == :raw }
+    asset_rep = Nanoc::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal(
@@ -133,9 +117,7 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       { :extension => 'png' },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps[0]
+    asset_rep = Nanoc::AssetRep.new(asset, :default)
 
     # Check
     assert_equal(
@@ -156,17 +138,11 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     asset = Nanoc::Asset.new(
       nil,
       {
-        :reps => {
-          :raw => {
-            :extension => 'png'
-          }
-        }
+        :extension => 'png'
       },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps.find { |r| r.name == :raw }
+    asset_rep = Nanoc::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal(

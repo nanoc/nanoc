@@ -18,15 +18,15 @@ module Nanoc
     # Compiles (part of) the site and writes out the compiled page and asset
     # representations.
     #
-    # +obj+:: The page or asset that should be compiled, along with their
-    #         dependencies, or +nil+ if the entire site should be compiled.
+    # +items+:: The items that should be compiled, along with their
+    #           edpendencies. Pass +nil+ if the entire site should be
+    #           compiled.
     #
     # This method also accepts a few parameters:
     #
-    # +:force+:: true if the rep should be compiled even if
-    #                             it is not outdated, false if not. Defaults
-    #                             to false.
-    def run(objects=nil, params={})
+    # +:force+:: true if the rep should be compiled even if it is not
+    #                             outdated, false if not. Defaults to false.
+    def run(items=nil, params={})
       # Parse params
       force = params[:force] || false
 
@@ -47,9 +47,17 @@ module Nanoc
       # Initialize
       @stack = []
 
-      # Get pages and asset reps
-      objects = @site.pages + @site.assets if objects.nil?
-      reps = objects.map { |o| o.reps }.flatten
+      # Get items to compile
+      items ||= @site.pages + @site.assets
+
+      # Get reps to compile
+      reps = items.map do |item|
+        if item.type == :page
+          PageRep.new(item, :default)
+        elsif item.type == :asset
+          AssetRep.new(item, :default)
+        end
+      end
 
       # Compile everything
       reps.each { |rep| compile_rep(rep, force) }
@@ -103,7 +111,7 @@ module Nanoc
 
       # Update status
       rep.compiled = true
-      unless rep.attribute_named(:skip_output)
+      unless rep.item.attribute_named(:skip_output)
         rep.created  = old_content.nil?
         rep.modified = rep.created ? true : old_content != rep.content[:last]
       end
