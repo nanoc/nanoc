@@ -159,7 +159,7 @@ module Nanoc
     #    representation;
     # 4. The item defaults in general;
     # 5. The hardcoded item defaults, if everything else fails.
-    def attribute_named(name, item_defaults, defaults)
+    def attribute_named(name, item_defaults={}, defaults={})
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
