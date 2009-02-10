@@ -6,10 +6,6 @@ module Nanoc
       @compiler = compiler
     end
 
-    def get_binding
-      binding
-    end
-
     def page(path, params={}, &block)
       # Require block
       raise ArgumentError.new("#page requires a block") unless block_given?

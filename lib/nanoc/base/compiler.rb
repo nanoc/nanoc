@@ -37,7 +37,7 @@ module Nanoc
 
       # Load DSL
       dsl = Nanoc::CompilerDSL.new(self)
-      eval(File.read(rules_filename), dsl.get_binding, rules_filename)
+      dsl.instance_eval(File.read(rules_filename), rules_filename)
 
       # Load data
       @site.load_data
