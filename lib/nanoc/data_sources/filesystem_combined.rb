@@ -484,7 +484,7 @@ module Nanoc::DataSources
       end
 
       # Parse
-      meta    = YAML.load(pieces[1])
+      meta    = YAML.load(pieces[1]) || {}
       content = pieces[2..-1].join.strip
 
       [ meta, content ]
