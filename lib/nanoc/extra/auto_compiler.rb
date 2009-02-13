@@ -98,7 +98,13 @@ END
       end
 
       # Build Rack app
-      app = lambda { |env| handle_request(env['PATH_INFO']) }
+      app = lambda do |env|
+        begin
+          handle_request(env['PATH_INFO'])
+        rescue Exception => exception
+          return serve_500(nil, exception)
+        end
+      end
 
       # Run Rack app
       port ||= 3000
