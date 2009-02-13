@@ -102,7 +102,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_rep).with(page_reps[1])
+    autocompiler.expects(:serve_404).with('/foo/2')
 
     # Run
     autocompiler.instance_eval { handle_request('/foo/2') }
