@@ -276,7 +276,7 @@ END
       [
         200,
         { 'Content-Type' => mime_type_of(rep.disk_path, 'text/html') },
-        [ rep.content(:post) ]
+        [ File.read(rep.disk_path) ]
       ]
     end
 

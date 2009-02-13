@@ -62,11 +62,20 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     # Create assets and reps
     asset_reps = [ mock, mock, mock ]
     asset_reps[0].expects(:web_path).at_most_once.returns('/assets/foo/1/')
-    asset_reps[1].expects(:web_path).returns('/assets/foo/2/')
+    asset_reps[1].stubs(:web_path).returns('/assets/foo/2/')
+    asset_reps[1].stubs(:disk_path).returns('output/assets/foo/2/index.html')
     asset_reps[2].expects(:web_path).at_most_once.returns('/assets/bar/')
     assets = [ mock, mock ]
     assets[0].expects(:reps).returns([ asset_reps[0], asset_reps[1] ])
     assets[1].expects(:reps).returns([ asset_reps[2] ])
+    asset_reps[1].expects(:asset).returns(assets[0])
+
+    # Create compiler
+    compiler = Object.new
+    def compiler.run(objs, params={})
+      FileUtils.mkdir_p('output/assets/foo/2')
+      File.open('output/assets/foo/2/index.html', 'w') { |io| io.write("moo.") }
+    end
 
     # Create site
     site = mock
@@ -74,13 +83,22 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     site.expects(:pages).returns([])
     site.expects(:assets).returns(assets)
     site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
+    site.expects(:compiler).returns(compiler)
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_rep).with(asset_reps[1])
+    autocompiler.expects(:mime_type_of).returns('text/plain')
 
     # Run
-    autocompiler.instance_eval { handle_request('/assets/foo/2/') }
+    result = autocompiler.instance_eval { handle_request('/assets/foo/2/') }
+    assert_equal(
+      result,
+      [
+        200,
+        { 'Content-Type' => 'text/plain' },
+        [ 'moo.' ]
+      ]
+    )
   end
 
   def test_handle_request_with_broken_url
@@ -311,14 +329,17 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       page_rep = mock
       page_rep.expects(:disk_path).at_least_once.returns('tmp/somefile.html')
       page_rep.expects(:page).returns(page)
-      page_rep.expects(:content).with(:post).returns('compiled page content')
 
       # Create file
       File.open(page_rep.disk_path, 'w') { |io| }
 
+      # Create compiler
+      compiler = Object.new
+      def compiler.run(objs, params={})
+        File.open('tmp/somefile.html', 'w') { |io| io.write("... compiled page content ...") }
+      end
+
       # Create site
-      compiler = mock
-      compiler.expects(:run)
       site = mock
       site.expects(:compiler).returns(compiler)
 
