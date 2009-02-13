@@ -173,14 +173,13 @@ END
         # Reload site data
         @site.load_data(true)
 
-        # Get paths
-        rep_path  = path.cleaned_path
+        # Get file path
         file_path = @site.config[:output_dir] + path
 
         # Find rep
         objs = @site.pages + @site.assets
         reps = objs.map { |o| o.reps }.flatten
-        rep = reps.find { |r| r.web_path == rep_path }
+        rep = reps.find { |r| r.web_path == path }
 
         if rep.nil?
           # Get list of possible filenames
