@@ -69,4 +69,52 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_relative_path_to_with_self
+    # Mock item
+    @item = MiniTest::Mock.new
+    @item.expect(:path, '/foo/bar/baz/')
+
+    # Test
+    assert_equal(
+      './',
+      relative_path_to('/foo/bar/baz/')
+    )
+  end
+
+  def test_relative_path_to_with_root
+    # Mock item
+    @item = MiniTest::Mock.new
+    @item.expect(:path, '/foo/bar/baz/')
+
+    # Test
+    assert_equal(
+      '../../../',
+      relative_path_to('/')
+    )
+  end
+
+  def test_relative_path_to_file
+    # Mock item
+    @item = MiniTest::Mock.new
+    @item.expect(:path, '/foo/bar/baz/')
+
+    # Test
+    assert_equal(
+      '../../quux',
+      relative_path_to('/foo/quux')
+    )
+  end
+
+  def test_relative_path_to_dir
+    # Mock item
+    @item = MiniTest::Mock.new
+    @item.expect(:path, '/foo/bar/baz/')
+
+    # Test
+    assert_equal(
+      '../../quux/',
+      relative_path_to('/foo/quux/')
+    )
+  end
+
 end
