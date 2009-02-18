@@ -18,11 +18,6 @@ module Nanoc
       :asset
     end
 
-    # Returns a proxy (Nanoc::AssetProxy) for this asset.
-    def to_proxy
-      super(AssetProxy)
-    end
-
   end
 
 end

@@ -18,11 +18,6 @@ module Nanoc
       :page
     end
 
-    # Returns a proxy (Nanoc::PageProxy) for this page.
-    def to_proxy
-      super(PageProxy)
-    end
-
   end
 
 end

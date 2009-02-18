@@ -1,9 +1,9 @@
 module Nanoc
 
-  # Nanoc::PageProxy is a proxy object for a page (Nanoc::Page).
-  class PageProxy < Proxy
+  # Nanoc::ItemProxy is a proxy object for a item (Nanoc::Item).
+  class ItemProxy < Proxy
 
-    # Requests the page attribute with the given name. +key+ can be a string
+    # Requests the item attribute with the given name. +key+ can be a string
     # or a symbol, and it can contain a trailing question mark (which will be
     # stripped).
     def [](key)
@@ -14,7 +14,7 @@ module Nanoc
       elsif real_key == :parent
         @obj.parent.nil? ? nil : @obj.parent.to_proxy
       elsif real_key == :children
-        @obj.children.map { |page| page.to_proxy }
+        @obj.children.map { |item| item.to_proxy }
       elsif real_key == :content # backward compatibility
         content
       elsif real_key == :path # backward compatibility
@@ -24,12 +24,12 @@ module Nanoc
       end
     end
 
-    # Returns the compiled page content at the given snapshot.
+    # Returns the compiled item content at the given snapshot.
     def content(snapshot=:pre) # backward compatibility
       @obj.reps.find { |r| r.name == :default }.content_at_snapshot(snapshot)
     end
 
-    # Returns the page representation with the given name.
+    # Returns the item representation with the given name.
     def reps(name)
       rep = @obj.reps.find { |r| r.name == name }
       rep.nil? ? nil : rep.to_proxy
