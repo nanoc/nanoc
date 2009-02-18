@@ -58,10 +58,9 @@ module Nanoc
       @attributes[name]
     end
 
-    # Returns a proxy (either Nanoc::PageProxy or Nanoc::AssetProxy) for this
-    # item.
-    def to_proxy(klass)
-      @proxy ||= klass.new(self)
+    # Returns a proxy (Nanoc::ItemProxy) for this item.
+    def to_proxy
+      @proxy ||= ItemProxy.new(self)
     end
 
   end
