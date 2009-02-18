@@ -61,7 +61,7 @@ module Nanoc
     #                            outdated, false if not.
     def compile_item(item, force)
       # Find matching rules
-      all_rules = (item.type == :page ? @page_rules : @asset_rules)
+      all_rules = (item.is_a?(Nanoc::Page) ? @page_rules : @asset_rules)
       matching_rules = all_rules.inject({}) do |memo, rule|
         # Skip rule if an existing rule for this rep name already exists
         next unless memo[rule.rep_name].nil?
@@ -77,7 +77,7 @@ module Nanoc
       # Create reps for each rep name
       rep_names = matching_rules.keys
       reps = rep_names.map do |rep_name|
-        if item.type == :page
+        if item.is_a?(Nanoc::Page)
           PageRep.new(item, rep_name)
         else
           AssetRep.new(item, rep_name)

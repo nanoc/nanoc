@@ -12,12 +12,6 @@ module Nanoc
   # Each page has a list of page representations or reps (Nanoc::PageRep);
   # compiling a page actually compiles all of its representations.
   class Page < Nanoc::Item
-
-    # Returns the type of this object.
-    def type
-      :page
-    end
-
   end
 
 end
