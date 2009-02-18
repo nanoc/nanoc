@@ -13,6 +13,8 @@ New:
 
 * Filters can now optionally take arguments
 * The current layout is now accessible through the @layout variable
+* relative_path_to function in LinkTo helper
+* relativize_paths filter
 
 Removed:
 
