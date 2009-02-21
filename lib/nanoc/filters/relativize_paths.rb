@@ -8,9 +8,18 @@ module Nanoc::Filters
 
     # TODO also relativize paths in CSS
 
-    def run(content)
-      content.gsub(/(src|href)=(['"]?)(\/.+?)\2([ >])/) do
-        $1 + '=' + $2 + relative_path_to($3) + $2 + $4
+    def run(content, params={})
+      type = params[:type] || :html
+
+      case type
+      when :html
+        content.gsub(/(src|href)=(['"]?)(\/.+?)\2([ >])/) do
+          $1 + '=' + $2 + relative_path_to($3) + $2 + $4
+        end
+      when :css
+        content.gsub(/url\((['"]?)(\/.+?)\1\)/) do
+          'url(' + $1 + relative_path_to($2) + $1 + ')'
+        end
       end
     end
 
