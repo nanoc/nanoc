@@ -2,7 +2,16 @@ module Nanoc
 
   # Nanoc::Item is the (abstract) superclass for any compileable item in a
   # site. Currently, there are only two subclasses, Nanoc::Page and
-  # Nanoc::Asset.
+  # Nanoc::Asset. It has content and attributes, as well as a path. It can
+  # also store the modification time to speed up compilation.
+  #
+  # An item is observable. The following events will be notified:
+  #
+  # * :visit_started
+  # * :visit_ended
+  #
+  # Each item has a list of item representations or reps (Nanoc::ItemRep);
+  # compiling an item actually compiles all of its representations.
   class Item
 
     # The Nanoc::Site this item belongs to.
