@@ -263,16 +263,23 @@ module Nanoc::DataSources
     ########## Code ##########
 
     def code # :nodoc:
-      # Get data
-      data = Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
+      # Get files
+      filenames = Dir['lib/**/*.rb'].sort
+
+      # Read snippets
+      snippets = filenames.map do |fn|
+        { :filename => fn, :code => File.read(fn) }
+      end
 
       # Get modification time
-      mtime = Dir['lib/**/*.rb'].map { |filename| File.stat(filename).mtime }.inject { |memo, mtime| memo > mtime ? mtime : memo}
+      mtimes = filenames.map { |filename| File.stat(filename).mtime }
+      mtime = mtimes.inject { |memo, mtime| memo > mtime ? mtime : memo }
 
       # Build code
-      Nanoc::Code.new(data, mtime)
+      Nanoc::Code.new(snippets, mtime)
     end
 
+    # FIXME update
     def save_code(code) # :nodoc:
       # Check whether code existed
       existed = File.file?('lib/default.rb')
