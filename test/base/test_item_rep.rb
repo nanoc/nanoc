@@ -43,12 +43,15 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_web_path
     # Create site
+    compiler = MiniTest::Mock.new
     site = MiniTest::Mock.new
+    site.expect(:compiler, compiler)
 
     # Create item and rep
     item = MiniTest::Mock.new
     item.expect(:site, site)
     rep = Nanoc::ItemRep.new(item, 'blah')
+    compiler.expect(:compile_rep, true, [ rep, false ])
 
     # Create site and router
     router = MiniTest::Mock.new
