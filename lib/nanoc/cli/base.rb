@@ -38,7 +38,6 @@ module Nanoc::CLI
       if File.file?('config.yaml') and @site.nil?
         begin
           @site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-          @site.load_data
         rescue Nanoc::Errors::UnknownDataSourceError => e
           $stderr.puts "Unknown data source: #{e}"
           exit 1

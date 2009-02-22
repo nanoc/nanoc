@@ -57,6 +57,10 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
       ]
     end
 
+    def assets
+      []
+    end
+
     def layouts
       [
         Nanoc::Layout.new(

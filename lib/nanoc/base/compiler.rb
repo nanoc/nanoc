@@ -39,9 +39,6 @@ module Nanoc
       dsl = Nanoc::CompilerDSL.new(self)
       dsl.instance_eval(File.read(rules_filename), rules_filename)
 
-      # Load data
-      @site.load_data
-
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
