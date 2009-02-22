@@ -23,18 +23,6 @@ module Nanoc
       @web_path ||= @item.site.router.web_path_for(self)
     end
 
-    # Returns true if this asset rep's output file is outdated and must be
-    # regenerated, false otherwise.
-    def outdated?
-      # Make super run a few checks
-      return true if super
-
-      # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime if !@item.attribute_named(:skip_output)
-
-      return false
-    end
-
   end
 
 end
