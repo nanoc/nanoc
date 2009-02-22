@@ -108,6 +108,11 @@ module Nanoc
     # including the filename and extension if they cannot be ignored (i.e.
     # they are not in the site configuration's list of index files).
     def web_path
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      Nanoc::NotificationCenter.post(:visit_ended,   self)
+
+      @item.site.compiler.compile_rep(self, false)
+
       @web_path ||= @item.site.router.web_path_for(self)
     end
 
@@ -156,6 +161,18 @@ module Nanoc
         :config     => self.item.site.config,
         :site       => self.item.site
       }
+    end
+
+    # Returns the item representation content at the given snapshot.
+    #
+    # +snapshot+:: The snapshot from which the content should be fetched. To
+    #              get the raw, uncompiled content, use +:raw+.
+    def content_at_snapshot(snapshot=:pre)
+      Nanoc::NotificationCenter.post(:visit_started, self)
+      @item.site.compiler.compile_rep(self, false) unless @content[snapshot]
+      Nanoc::NotificationCenter.post(:visit_ended, self)
+
+      @content[snapshot]
     end
 
     # Runs the item content through the given filter with the given arguments.
