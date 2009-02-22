@@ -8,6 +8,7 @@ Changed:
 
 * The compile command now takes --no-assets and --no-pages options
 * Dependencies between pages are now tracked properly
+* The commandline option parser is now a lot more reliable
 
 New:
 
