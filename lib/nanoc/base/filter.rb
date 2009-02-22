@@ -29,6 +29,18 @@ module Nanoc
       raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
     end
 
+    # Returns the filename associated with the item that is being filtered.
+    # The returned filename is in the format "page <path> (rep <name>)".
+    def filename
+      if @assigns[:page]
+        "page #{assigns[:_obj].path} (rep #{assigns[:_obj_rep].name})"
+      elsif @assigns[:asset]
+        "asset #{assigns[:_obj].path} (rep #{assigns[:_obj_rep].name})"
+      else
+        '?'
+      end
+    end
+
   end
 
 end

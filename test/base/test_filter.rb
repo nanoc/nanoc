@@ -31,4 +31,40 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filename_page
+    # Mock items
+    item = mock
+    item.expects(:path).returns('/foo/bar/baz/')
+    item_rep = mock
+    item_rep.expects(:name).returns(:quux)
+
+    # Create filter
+    filter = Nanoc::Filter.new({ :_obj => item, :_obj_rep => item_rep, :page => mock })
+
+    # Check filename
+    assert_equal('page /foo/bar/baz/ (rep quux)', filter.filename)
+  end
+
+  def test_filename_asset
+    # Mock items
+    item = mock
+    item.expects(:path).returns('/foo/bar/baz/')
+    item_rep = mock
+    item_rep.expects(:name).returns(:quux)
+
+    # Create filter
+    filter = Nanoc::Filter.new({ :_obj => item, :_obj_rep => item_rep, :asset => mock })
+
+    # Check filename
+    assert_equal('asset /foo/bar/baz/ (rep quux)', filter.filename)
+  end
+
+  def test_filename_unknown
+    # Create filter
+    filter = Nanoc::Filter.new({})
+
+    # Check filename
+    assert_equal('?', filter.filename)
+  end
+
 end
