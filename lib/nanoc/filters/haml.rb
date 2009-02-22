@@ -8,6 +8,7 @@ module Nanoc::Filters
 
       # Get options
       options = assigns[:_obj_rep].attribute_named(:haml_options) || {}
+      options[:filename] = filename
 
       # Create context
       context = ::Nanoc::Extra::Context.new(assigns)

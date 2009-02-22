@@ -28,4 +28,25 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_error
+    if_have 'haml' do
+      # Mock object rep
+      obj_rep = MiniTest::Mock.new
+      obj_rep.expect(:attribute_named, {}, [ :haml_options ])
+
+      # Create filter
+      filter = ::Nanoc::Filters::Haml.new({ :_obj_rep => obj_rep })
+
+      # Run filter
+      raised = false
+      begin
+        filter.run('%p= this isn\'t really ruby so it\'ll break, muahaha')
+      rescue SyntaxError => e
+        assert_match '?', e.backtrace[0]
+        raised = true
+      end
+      assert raised
+    end
+  end
+
 end

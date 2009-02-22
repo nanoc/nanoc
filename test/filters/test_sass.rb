@@ -20,4 +20,25 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_error
+    if_have 'sass' do
+      # Mock object rep
+      obj_rep = MiniTest::Mock.new
+      obj_rep.expect(:attribute_named, {}, [ :sass_options ])
+
+      # Create filter
+      filter = ::Nanoc::Filters::Sass.new({ :_obj_rep => obj_rep })
+
+      # Run filter
+      raised = false
+      begin
+        filter.run('$*#&!@($')
+      rescue Sass::SyntaxError => e
+        assert_match '?', e.backtrace[0]
+        raised = true
+      end
+      assert raised
+    end
+  end
+
 end
