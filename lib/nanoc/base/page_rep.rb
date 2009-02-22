@@ -10,18 +10,6 @@ module Nanoc
       :page_rep
     end
 
-    # Returns true if this page rep's output file is outdated and must be
-    # regenerated, false otherwise.
-    def outdated?
-      # Make super run a few checks
-      return true if super
-
-      # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime if !@item.attribute_named(:skip_output)
-
-      return false
-    end
-
     # Returns the page representation content in the given snapshot.
     #
     # +snapshot+:: The snapshot from which the content should be fetched. To
