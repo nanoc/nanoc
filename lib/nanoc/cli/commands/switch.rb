@@ -109,9 +109,6 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.file(:high, :update, file_path)
       end
 
-      # Load data
-      @base.site.load_data
-
       # Destroy existing data
       @base.site.data_source.destroy
 

@@ -52,7 +52,7 @@ describe 'Nanoc::Site#initialize' do
   end
 
   it 'should query the data source when loading data' do
-    site = Nanoc::Site.new({})
+    site = Nanoc::Site.new({}, :load_data => false)
     site.data_source.expects(:pages).returns([
       Nanoc::Page.new("Hi!",          {}, '/'),
       Nanoc::Page.new("Hello there.", {}, '/about/')

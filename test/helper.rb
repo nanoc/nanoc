@@ -35,7 +35,6 @@ def with_temp_site(data_source='filesystem')
     in_dir %w{ site } do
       # Load site
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-      site.load_data
 
       # Done
       yield site

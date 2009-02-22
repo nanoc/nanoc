@@ -62,7 +62,7 @@ module Nanoc
     # configuration hash +config+.
     #
     # +config+:: A hash containing the site configuration.
-    def initialize(config)
+    def initialize(config, params={})
       # Load configuration
       @config = DEFAULT_CONFIG.merge(config.clean)
 
@@ -83,9 +83,10 @@ module Nanoc
       @router = @router_class.new(self)
 
       # Initialize data
-      @pages                = []
-      @assets               = []
-      @layouts              = []
+      @pages   = []
+      @assets  = []
+      @layouts = []
+      load_data if params[:load_data] || !params.has_key?(:load_data)
     end
 
     # Loads the site data. This will query the Nanoc::DataSource associated

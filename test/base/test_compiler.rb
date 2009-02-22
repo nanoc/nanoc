@@ -18,7 +18,6 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns(assets)
@@ -54,7 +53,6 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
 
     # Set item's site
@@ -84,7 +82,6 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:load_data)
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
 
     # Set item's site
