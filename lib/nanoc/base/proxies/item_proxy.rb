@@ -18,7 +18,7 @@ module Nanoc
       elsif real_key == :content # backward compatibility
         content
       elsif real_key == :path # backward compatibility
-        @obj.reps.find { |r| r.name == :default }.web_path
+        @obj.reps.find { |r| r.name == :default }.path
       else
         super(key)
       end

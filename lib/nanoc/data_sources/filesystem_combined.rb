@@ -15,17 +15,17 @@ module Nanoc::DataSources
   #   -----
   #   h1. Hello!
   #
-  # The path of a page is determined as follows. A file with an 'index.*'
-  # filename, such as 'index.txt', will have the filesystem path with the
-  # 'index.*' part stripped as a path. For example, 'foo/bar/index.html' will
-  # have '/foo/bar/' as path.
+  # The identifier of a page is determined as follows. A file with an
+  # 'index.*' filename, such as 'index.txt', will have the filesystem path
+  # with the 'index.*' part stripped as a identifier. For example,
+  # 'foo/bar/index.html' will have '/foo/bar/' as identifier.
   #
   # A file with a filename not starting with 'index.', such as 'foo.html',
-  # will have a path ending in 'foo/'. For example, 'foo/bar.html' will have
-  # '/foo/bar/' as path.
+  # will have an identifier ending in 'foo/'. For example, 'foo/bar.html' will have
+  # '/foo/bar/' as identifier.
   #
   # Note that it is possible for two different, separate files to have the
-  # same path. It is therefore recommended to avoid such situations.
+  # same identifier. It is therefore recommended to avoid such situations.
   #
   # Some more examples:
   #
@@ -102,34 +102,34 @@ module Nanoc::DataSources
         # Get attributes
         attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(filename))
 
-        # Get actual path
+        # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          path = filename.sub(/^content/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^content/, '').sub(/index\.[^\/]+$/, '') + '/'
         else
-          path = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
         end
 
         # Get mtime
         mtime = File.stat(filename).mtime
 
         # Build page
-        Nanoc::Page.new(content, attributes, path, mtime)
+        Nanoc::Page.new(content, attributes, identifier, mtime)
       end
     end
 
     def save_page(page) # :nodoc:
       # Find page path
-      if page.path == '/'
+      if page.identifier == '/'
         paths         = Dir['content/index.*']
         path          = paths[0] || 'content/index.html'
         parent_path   = '/'
       else
-        last_path_component = page.path.split('/')[-1]
-        paths_best    = Dir['content' + page.path[0..-2] + '.*']
-        paths_worst   = Dir['content' + page.path + 'index.*']
-        path_default  = 'content' + page.path[0..-2] + '.html'
+        last_path_component = page.identifier.split('/')[-1]
+        paths_best    = Dir['content' + page.identifier[0..-2] + '.*']
+        paths_worst   = Dir['content' + page.identifier + 'index.*']
+        path_default  = 'content' + page.identifier[0..-2] + '.html'
         path          = paths_best[0] || paths_worst[0] || path_default
-        parent_path   = '/' + File.join(page.path.split('/')[0..-2])
+        parent_path   = '/' + File.join(page.identifier.split('/')[0..-2])
       end
 
       # Notify
@@ -154,7 +154,7 @@ module Nanoc::DataSources
       vcs.add(path) if created
     end
 
-    def move_page(page, new_path) # :nodoc:
+    def move_page(page, new_identifier) # :nodoc:
       # TODO implement
     end
 
@@ -172,18 +172,18 @@ module Nanoc::DataSources
         # Get attributes
         attributes = { 'extension' => File.extname(filename)[1..-1] }.merge(meta)
 
-        # Get actual path
+        # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          path = filename.sub(/^assets/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^assets/, '').sub(/index\.[^\/]+$/, '') + '/'
         else
-          path = filename.sub(/^assets/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^assets/, '').sub(/\.[^\/]+$/, '') + '/'
         end
 
         # Get mtime
         mtime = File.stat(filename).mtime
 
         # Build asset
-        Nanoc::Asset.new(content, attributes, path, mtime)
+        Nanoc::Asset.new(content, attributes, identifier, mtime)
       end
     end
 
@@ -191,7 +191,7 @@ module Nanoc::DataSources
       # TODO implement
     end
 
-    def move_asset(asset, new_path) # :nodoc:
+    def move_asset(asset, new_identifier) # :nodoc:
       # TODO implement
     end
 
@@ -206,29 +206,29 @@ module Nanoc::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'layout')
 
-        # Get actual path
+        # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          path = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
         else
-          path = filename.sub(/^layouts/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^layouts/, '').sub(/\.[^\/]+$/, '') + '/'
         end
 
         # Get mtime
         mtime = File.stat(filename).mtime
 
         # Build layout
-        Nanoc::Layout.new(content, meta, path, mtime)
+        Nanoc::Layout.new(content, meta, identifier, mtime)
       end.compact
     end
 
     def save_layout(layout) # :nodoc:
       # Find layout path
-      last_path_component = layout.path.split('/')[-1]
-      paths_best    = Dir['layouts' + layout.path[0..-2] + '.*']
-      paths_worst   = Dir['layouts' + layout.path + 'index.*']
-      path_default  = 'layouts' + layout.path[0..-2] + '.html'
+      last_path_component = layout.identifier.split('/')[-1]
+      paths_best    = Dir['layouts' + layout.identifier[0..-2] + '.*']
+      paths_worst   = Dir['layouts' + layout.identifier + 'index.*']
+      path_default  = 'layouts' + layout.identifier[0..-2] + '.html'
       path          = paths_best[0] || paths_worst[0] || path_default
-      parent_path   = '/' + File.join(layout.path.split('/')[0..-2])
+      parent_path   = '/' + File.join(layout.identifier.split('/')[0..-2])
 
       # Notify
       if File.file?(path)
@@ -252,7 +252,7 @@ module Nanoc::DataSources
       vcs.add(path) if created
     end
 
-    def move_layout(layout, new_path) # :nodoc:
+    def move_layout(layout, new_identifier) # :nodoc:
       # TODO implement
     end
 

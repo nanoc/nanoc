@@ -12,7 +12,7 @@ module Nanoc
       if real_key == :name
         @obj.name
       elsif real_key == :path
-        @obj.web_path
+        @obj.path
       elsif real_key == :content # backward compatibility
         content
       elsif real_key == :item

@@ -135,7 +135,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     with_temp_site('filesystem_combined') do |site|
       layout = site.layouts[0]
 
-      assert_equal('/default/', layout.path)
+      assert_equal('/default/', layout.identifier)
       assert_equal('erb', layout.attribute_named(:filter))
       assert(layout.content.include?('<%= @page.title %></title>'))
     end

@@ -90,7 +90,7 @@ module Nanoc
           dependencies_raw = @dependency_graph[obj_to_id(rep)]
           dependencies = dependencies_raw.map do |dependency|
             reps.find do |rep|
-              rep.item.path == dependency[1] && (rep.is_a?(Nanoc::PageRep) ? :page : :asset) == dependency[0]
+              rep.item.identifier == dependency[1] && (rep.is_a?(Nanoc::PageRep) ? :page : :asset) == dependency[0]
             end
           end
 
@@ -108,13 +108,13 @@ module Nanoc
     # Returns an unique identifier for the given object. This identifier is stored in the dependency graph file.
     def obj_to_id(obj)
       if obj.is_a?(Nanoc::PageRep)
-        [ :page, obj.item.path ]
+        [ :page, obj.item.identifier ]
       elsif obj.is_a?(Nanoc::Page)
-        [ :page, obj.path ]
+        [ :page, obj.identifier ]
       elsif obj.is_a?(Nanoc::AssetRep)
-        [ :asset, obj.item.path ]
+        [ :asset, obj.item.identifier ]
       elsif obj.is_a?(Nanoc::Asset)
-        [ :asset, obj.path ]
+        [ :asset, obj.identifier ]
       end
     end
 

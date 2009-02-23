@@ -11,8 +11,8 @@ module Nanoc
 
       if real_key == :content
         @obj.content
-      elsif real_key == :path
-        @obj.path
+      elsif real_key == :identifier
+        @obj.identifier
       elsif real_key == :mtime
         @obj.mtime
       else

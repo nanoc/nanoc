@@ -106,8 +106,8 @@ module Nanoc::DataSources
         # Get attributes
         attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(content_filename))
 
-        # Get path
-        path = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
+        # Get identifier
+        identifier = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -115,15 +115,15 @@ module Nanoc::DataSources
         mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
         # Create page object
-        Nanoc::Page.new(content, attributes, path, mtime)
+        Nanoc::Page.new(content, attributes, identifier, mtime)
       end
     end
 
     def save_page(page) # :nodoc:
       # Determine possible meta file paths
-      last_component = page.path.split('/')[-1]
-      meta_filename_worst = 'content' + page.path + 'index.yaml'
-      meta_filename_best  = 'content' + page.path + (last_component || 'content') + '.yaml'
+      last_component = page.identifier.split('/')[-1]
+      meta_filename_worst = 'content' + page.identifier + 'index.yaml'
+      meta_filename_best  = 'content' + page.identifier + (last_component || 'content') + '.yaml'
 
       # Get existing path
       existing_path = nil
@@ -132,9 +132,9 @@ module Nanoc::DataSources
 
       if existing_path.nil?
         # Get filenames
-        dir_path         = 'content' + page.path
+        dir_path         = 'content' + page.identifier
         meta_filename    = meta_filename_best
-        content_filename = 'content' + page.path + (last_component || 'content') + '.html'
+        content_filename = 'content' + page.identifier + (last_component || 'content') + '.html'
 
         # Notify
         Nanoc::NotificationCenter.post(:file_created, meta_filename)
@@ -163,7 +163,7 @@ module Nanoc::DataSources
       end
     end
 
-    def move_page(page, new_path) # :nodoc:
+    def move_page(page, new_identifier) # :nodoc:
       # TODO implement
     end
 
@@ -185,8 +185,8 @@ module Nanoc::DataSources
         # Get attributes
         attributes = { 'extension' => File.extname(content_filename)[1..-1] }.merge(meta)
 
-        # Get path
-        path = meta_filename.sub(/^assets/, '').sub(/[^\/]+\.yaml$/, '')
+        # Get identifier
+        identifier = meta_filename.sub(/^assets/, '').sub(/[^\/]+\.yaml$/, '')
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -194,15 +194,15 @@ module Nanoc::DataSources
         mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
         # Create asset object
-        Nanoc::Asset.new(content, attributes, path, mtime)
+        Nanoc::Asset.new(content, attributes, identifier, mtime)
       end
     end
 
     def save_asset(asset) # :nodoc:
       # Determine possible meta file paths
-      last_component = asset.path.split('/')[-1]
-      meta_filename_worst = 'assets' + asset.path + 'index.yaml'
-      meta_filename_best  = 'assets' + asset.path + (last_component || 'assets') + '.yaml'
+      last_component = asset.identifier.split('/')[-1]
+      meta_filename_worst = 'assets' + asset.identifier + 'index.yaml'
+      meta_filename_best  = 'assets' + asset.identifier + (last_component || 'assets') + '.yaml'
 
       # Get existing path
       existing_path = nil
@@ -211,9 +211,9 @@ module Nanoc::DataSources
 
       if existing_path.nil?
         # Get filenames
-        dir_path         = 'assets' + asset.path
+        dir_path         = 'assets' + asset.identifier
         meta_filename    = meta_filename_best
-        content_filename = 'assets' + asset.path + (last_component || 'assets') + '.html'
+        content_filename = 'assets' + asset.identifier + (last_component || 'assets') + '.html'
 
         # Notify
         Nanoc::NotificationCenter.post(:file_created, meta_filename)
@@ -242,7 +242,7 @@ module Nanoc::DataSources
       end
     end
 
-    def move_asset(asset, new_path) # :nodoc:
+    def move_asset(asset, new_identifier) # :nodoc:
       # TODO implement
     end
 
@@ -261,8 +261,8 @@ module Nanoc::DataSources
         # Get attributes
         attributes = YAML.load_file(meta_filename) || {}
 
-        # Get path
-        path = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
+        # Get identifier
+        identifier = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -270,14 +270,14 @@ module Nanoc::DataSources
         mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
         # Create layout object
-        Nanoc::Layout.new(content, attributes, path, mtime)
+        Nanoc::Layout.new(content, attributes, identifier, mtime)
       end
     end
 
     def save_layout(layout) # :nodoc:
       # Get paths
-      last_component    = layout.path.split('/')[-1]
-      dir_path          = 'layouts' + layout.path
+      last_component    = layout.identifier.split('/')[-1]
+      dir_path          = 'layouts' + layout.identifier
       meta_filename     = dir_path + last_component + '.yaml'
       content_filename  = Dir[dir_path + last_component + '.*'][0]
 
@@ -312,7 +312,7 @@ module Nanoc::DataSources
       end
     end
 
-    def move_layout(layout, new_path) # :nodoc:
+    def move_layout(layout, new_identifier) # :nodoc:
       # TODO implement
     end
 

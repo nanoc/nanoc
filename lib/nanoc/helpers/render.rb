@@ -26,8 +26,8 @@ module Nanoc::Helpers
     #   # => "<h1>Foo</h1>"
     def render(name_or_path, other_assigns={})
       # Find layout
-      layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_path }
-      raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_path) if layout.nil?
+      layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_identifier }
+      raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_identifier) if layout.nil?
 
       # Get assigns
       assigns = {

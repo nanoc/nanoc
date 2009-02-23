@@ -75,8 +75,8 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
       Nanoc::Code.new(
         "class TestEarlyLoadingCodeRouter < Nanoc::Router\n" +
         "  identifier :early_loading_code_router\n" +
-        "  def web_path_for(page)  ; 'web path'  ; end\n" +
-        "  def disk_path_for(page) ; 'disk path' ; end\n" +
+        "  def path_for(page)  ; 'web path'  ; end\n" +
+        "  def raw_path_for(page) ; 'disk path' ; end\n" +
         "end"
       )
     end

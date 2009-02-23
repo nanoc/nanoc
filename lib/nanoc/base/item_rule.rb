@@ -4,27 +4,27 @@ module Nanoc
   class ItemRule
 
     # The regex that determines which items this rule can be applied to. This
-    # rule can be applied to items with a path matching this regex.
-    attr_reader :path_regex
+    # rule can be applied to items with a identifier matching this regex.
+    attr_reader :identifier_regex
 
     # The name of the representation that will be compiled using this rule.
     attr_reader :rep_name
 
-    # Creates a new item compilation rule with the given path regex, compiler
+    # Creates a new item compilation rule with the given identifier regex, compiler
     # and block. The block will be called during compilation with the item rep
     # as its argument.
-    def initialize(path_regex, rep_name, compiler, block)
-      @path_regex = path_regex
-      @rep_name   = rep_name.to_sym
+    def initialize(identifier_regex, rep_name, compiler, block)
+      @identifier_regex = identifier_regex
+      @rep_name         = rep_name.to_sym
 
-      @compiler   = compiler
+      @compiler = compiler
 
-      @block      = block
+      @block = block
     end
 
     # Returns true if this rule can be applied to the given item rep.
     def applicable_to?(item)
-      item.path =~ @path_regex
+      item.identifier =~ @identifier_regex
     end
 
     # Applies this rule to the given item rep.

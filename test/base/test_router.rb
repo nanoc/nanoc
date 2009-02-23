@@ -30,7 +30,7 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
   #   (rep.is_a?(Nanoc::PageRep) ? path_for_page_rep(rep) : path_for_asset_rep(rep))
   # )
 
-  def test_disk_path_for_without_custom_path
+  def test_raw_path_for_without_custom_path
     # Create page and page rep
     page = Nanoc::Page.new('content', {}, '/foobar/')
     page_rep = Nanoc::PageRep.new(page, :foo)
@@ -44,10 +44,10 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
 
     # Check
-    assert_equal('tmp/out/foo.html', router.disk_path_for(page_rep))
+    assert_equal('tmp/out/foo.html', router.raw_path_for(page_rep))
   end
 
-  def test_disk_path_for_with_custom_path
+  def test_raw_path_for_with_custom_path
     # Create page and page rep
     page = Nanoc::Page.new('content', { :custom_path => '/foo.html' }, '/foobar/')
     page_rep = Nanoc::PageRep.new(page, :foo)
@@ -60,10 +60,10 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_equal('tmp/out/foo.html', router.disk_path_for(page_rep))
+    assert_equal('tmp/out/foo.html', router.raw_path_for(page_rep))
   end
 
-  def test_web_path_for_without_custom_path_without_index
+  def test_path_for_without_custom_path_without_index
     # Create page and page rep
     page = Nanoc::Page.new('content', {}, '/foobar/')
     page_rep = Nanoc::PageRep.new(page, :foo)
@@ -80,10 +80,10 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
 
     # Check
-    assert_equal('/foo.html', router.web_path_for(page_rep))
+    assert_equal('/foo.html', router.path_for(page_rep))
   end
 
-  def test_web_path_for_with_custom_path_without_index
+  def test_path_for_with_custom_path_without_index
     # Create page and page rep
     page = Nanoc::Page.new('content', { :custom_path => '/foo.html' }, '/foobar/')
     page_rep = Nanoc::PageRep.new(page, :foo)
@@ -99,10 +99,10 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_equal('/foo.html', router.web_path_for(page_rep))
+    assert_equal('/foo.html', router.path_for(page_rep))
   end
 
-  def test_web_path_for_without_custom_path_with_index
+  def test_path_for_without_custom_path_with_index
     # Create page and page rep
     page = Nanoc::Page.new('content', {}, '/foobar/')
     page_rep = Nanoc::PageRep.new(page, :foo)
@@ -119,10 +119,10 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo/index.html')
 
     # Check
-    assert_equal('/foo/', router.web_path_for(page_rep))
+    assert_equal('/foo/', router.path_for(page_rep))
   end
 
-  def test_web_path_for_with_custom_path_with_index
+  def test_path_for_with_custom_path_with_index
     # Create page and page rep
     page = Nanoc::Page.new('content', { :custom_path => '/foo/index.html' }, '/foobar/')
     page_rep = Nanoc::PageRep.new(page, :foo)
@@ -138,7 +138,7 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_equal('/foo/', router.web_path_for(page_rep))
+    assert_equal('/foo/', router.path_for(page_rep))
   end
 
 end

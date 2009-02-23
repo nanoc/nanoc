@@ -34,7 +34,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
   def test_filename_page
     # Mock items
     item = mock
-    item.expects(:path).returns('/foo/bar/baz/')
+    item.expects(:identifier).returns('/foo/bar/baz/')
     item_rep = mock
     item_rep.expects(:name).returns(:quux)
 
@@ -48,7 +48,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
   def test_filename_asset
     # Mock items
     item = mock
-    item.expects(:path).returns('/foo/bar/baz/')
+    item.expects(:identifier).returns('/foo/bar/baz/')
     item_rep = mock
     item_rep.expects(:name).returns(:quux)
 
