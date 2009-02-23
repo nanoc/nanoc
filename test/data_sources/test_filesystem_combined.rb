@@ -215,8 +215,54 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     )
   end
 
-  def test_parse_file
-    # TODO implement
+  def test_parse_file_invalid
+    # Create a file
+    File.open('tmp/test.html', 'w') do |io|
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+
+    # Parse it
+    assert_raises(RuntimeError) do
+      data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
+    end
+  end
+
+  def test_parse_file_full_meta
+    # Create a file
+    File.open('tmp/test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "foo: bar\n"
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
+    assert_equal({ 'foo' => 'bar' }, result[0])
+    assert_equal('blah blah', result[1])
+  end
+
+  def test_parse_file_empty_meta
+    # Create a file
+    File.open('tmp/test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
+    assert_equal({}, result[0])
+    assert_equal('blah blah', result[1])
   end
 
 end

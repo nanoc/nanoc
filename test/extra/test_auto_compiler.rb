@@ -36,19 +36,19 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_page_rep
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:path).at_most_once.returns('/foo/1/')
-    page_reps[1].expects(:path).returns('/foo/2/')
-    page_reps[2].expects(:path).at_most_once.returns('/bar/')
+    page_reps[0].stubs(:path).returns('/foo/1/')
+    page_reps[1].stubs(:path).returns('/foo/2/')
+    page_reps[2].stubs(:path).returns('/bar/')
     pages = [ mock, mock ]
-    pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
-    pages[1].expects(:reps).returns([ page_reps[2] ])
+    pages[0].stubs(:reps).returns([ page_reps[0], page_reps[1] ])
+    pages[1].stubs(:reps).returns([ page_reps[2] ])
 
     # Create site
     site = mock
-    site.expects(:load_data).with(true)
-    site.expects(:pages).returns(pages)
-    site.expects(:assets).returns([])
-    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:load_data).with(true)
+    site.stubs(:pages).returns(pages)
+    site.stubs(:assets).returns([])
+    site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
@@ -61,19 +61,19 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_asset_rep
     # Create assets and reps
     asset_reps = [ mock, mock, mock ]
-    asset_reps[0].expects(:path).at_most_once.returns('/assets/foo/1/')
-    asset_reps[1].expects(:path).returns('/assets/foo/2/')
-    asset_reps[2].expects(:path).at_most_once.returns('/assets/bar/')
+    asset_reps[0].stubs(:path).returns('/assets/foo/1/')
+    asset_reps[1].stubs(:path).returns('/assets/foo/2/')
+    asset_reps[2].stubs(:path).returns('/assets/bar/')
     assets = [ mock, mock ]
-    assets[0].expects(:reps).returns([ asset_reps[0], asset_reps[1] ])
-    assets[1].expects(:reps).returns([ asset_reps[2] ])
+    assets[0].stubs(:reps).returns([ asset_reps[0], asset_reps[1] ])
+    assets[1].stubs(:reps).returns([ asset_reps[2] ])
 
     # Create site
     site = mock
-    site.expects(:load_data).with(true)
-    site.expects(:pages).returns([])
-    site.expects(:assets).returns(assets)
-    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:load_data).with(true)
+    site.stubs(:pages).returns([])
+    site.stubs(:assets).returns(assets)
+    site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
@@ -102,7 +102,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_rep).with(page_reps[1])
+    autocompiler.expects(:serve_404).with('/foo/2')
 
     # Run
     autocompiler.instance_eval { handle_request('/foo/2') }
@@ -316,9 +316,13 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create file
       File.open(page_rep.raw_path, 'w') { |io| }
 
+      # Create compiler
+      compiler = Object.new
+      def compiler.run(objs, params={})
+        File.open('tmp/somefile.html', 'w') { |io| io.write("... compiled page content ...") }
+      end
+
       # Create site
-      compiler = mock
-      compiler.expects(:run)
       site = mock
       site.expects(:compiler).returns(compiler)
 

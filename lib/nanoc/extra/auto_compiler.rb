@@ -100,7 +100,13 @@ END
       end
 
       # Build Rack app
-      app = lambda { |env| handle_request(env['PATH_INFO']) }
+      app = lambda do |env|
+        begin
+          handle_request(env['PATH_INFO'])
+        rescue Exception => exception
+          return serve_500(nil, exception)
+        end
+      end
 
       # Run Rack app
       port ||= 3000
@@ -175,15 +181,13 @@ END
         # Reload site data
         @site.load_data(true)
 
-        # Get paths
-        # FIXME this is wrong wrong and wrong again
-        rep_path  = path.cleaned_identifier
+        # Get file path
         file_path = @site.config[:output_dir] + path
 
         # Find rep
         objs = @site.pages + @site.assets
         reps = objs.map { |o| o.reps }.flatten
-        rep = reps.find { |r| r.path == rep_path }
+        rep = reps.find { |r| r.path == path }
 
         if rep.nil?
           # Get list of possible filenames
