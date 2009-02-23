@@ -36,9 +36,9 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_page_rep
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).at_most_once.returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).at_most_once.returns('/bar/')
+    page_reps[0].expects(:path).at_most_once.returns('/foo/1/')
+    page_reps[1].expects(:path).returns('/foo/2/')
+    page_reps[2].expects(:path).at_most_once.returns('/bar/')
     pages = [ mock, mock ]
     pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
     pages[1].expects(:reps).returns([ page_reps[2] ])
@@ -61,9 +61,9 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_asset_rep
     # Create assets and reps
     asset_reps = [ mock, mock, mock ]
-    asset_reps[0].expects(:web_path).at_most_once.returns('/assets/foo/1/')
-    asset_reps[1].expects(:web_path).returns('/assets/foo/2/')
-    asset_reps[2].expects(:web_path).at_most_once.returns('/assets/bar/')
+    asset_reps[0].expects(:path).at_most_once.returns('/assets/foo/1/')
+    asset_reps[1].expects(:path).returns('/assets/foo/2/')
+    asset_reps[2].expects(:path).at_most_once.returns('/assets/bar/')
     assets = [ mock, mock ]
     assets[0].expects(:reps).returns([ asset_reps[0], asset_reps[1] ])
     assets[1].expects(:reps).returns([ asset_reps[2] ])
@@ -86,9 +86,9 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_broken_url
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).at_most_once.returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).at_most_once.returns('/bar/')
+    page_reps[0].expects(:path).at_most_once.returns('/foo/1/')
+    page_reps[1].expects(:path).returns('/foo/2/')
+    page_reps[2].expects(:path).at_most_once.returns('/bar/')
     pages = [ mock, mock ]
     pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
     pages[1].expects(:reps).returns([ page_reps[2] ])
@@ -111,9 +111,9 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_file
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).returns('/bar/')
+    page_reps[0].expects(:path).returns('/foo/1/')
+    page_reps[1].expects(:path).returns('/foo/2/')
+    page_reps[2].expects(:path).returns('/bar/')
     pages = [ mock, mock ]
     pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
     pages[1].expects(:reps).returns([ page_reps[2] ])
@@ -309,12 +309,12 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create page and page rep
       page = mock
       page_rep = mock
-      page_rep.expects(:disk_path).at_least_once.returns('tmp/somefile.html')
+      page_rep.expects(:raw_path).at_least_once.returns('tmp/somefile.html')
       page_rep.expects(:item).returns(page)
       page_rep.expects(:content_at_snapshot).with(:post).returns('compiled page content')
 
       # Create file
-      File.open(page_rep.disk_path, 'w') { |io| }
+      File.open(page_rep.raw_path, 'w') { |io| }
 
       # Create site
       compiler = mock
@@ -335,7 +335,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         assert_match(/compiled page content/, response[2][0])
       ensure
         # Clean up
-        FileUtils.rm_rf(page_rep.disk_path)
+        FileUtils.rm_rf(page_rep.raw_path)
       end
     end
   end
@@ -345,7 +345,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create page and page rep
       page = mock
       page_rep = mock
-      page_rep.expects(:web_path).returns('somefile.html')
+      page_rep.expects(:path).returns('somefile.html')
       page_rep.expects(:item).returns(page)
 
       # Create site

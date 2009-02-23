@@ -16,10 +16,10 @@ module Nanoc::Routers
       extension  = page_rep.item.attribute_named(:extension) || 'html'
 
       # Initialize path
-      if page_rep.page.path == '/'
+      if page_rep.page.identifier == '/'
         path = '/' + filename
       else
-        path = page_rep.page.path[0..-2]
+        path = page_rep.page.identifier[0..-2]
       end
 
       # Add rep name if necessary
@@ -37,7 +37,7 @@ module Nanoc::Routers
     def path_for_asset_rep(asset_rep)
       # Get data we need
       extension     = asset_rep.item.attribute_named(:extension)
-      modified_path = asset_rep.item.path[0..-2]
+      modified_path = asset_rep.item.identifier[0..-2]
       version       = asset_rep.item.attribute_named(:version)
 
       # Initialize path

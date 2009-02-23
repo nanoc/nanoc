@@ -104,11 +104,12 @@ module Nanoc
       not_implemented('save_page')
     end
 
-    # Changes the path of the given page to the given new path. When changing
-    # a page's path, this method must be used (save_page will not work).
+    # Changes the identifier of the given page to the given new identifier.
+    # When changing a page's identifier, this method must be used (save_page
+    # will not work).
     #
     # Subclasses must implement this method.
-    def move_page(page, new_path)
+    def move_page(page, new_identifier)
       not_implemented('move_page')
     end
 
@@ -137,11 +138,12 @@ module Nanoc
       not_implemented('save_asset')
     end
 
-    # Changes the path of the given asset to the given new path. When changing
-    # a asset's path, this method must be used (save_asset will not work).
+    # Changes the identifier of the given asset to the given new identifier.
+    # When changing a asset's identifier, this method must be used (save_asset
+    # will not work).
     #
     # Subclasses must implement this method.
-    def move_asset(asset, new_path)
+    def move_asset(asset, new_identifier)
       not_implemented('move_asset')
     end
 
@@ -170,12 +172,12 @@ module Nanoc
       not_implemented('save_layout')
     end
 
-    # Changes the path of the given layout to the given new path. When
-    # changing a layout's path, this method must be used (save_layout will not
-    # work).
+    # Changes the identifier of the given layout to the given new identifier.
+    # When changing a layout's identifier, this method must be used
+    # (save_layout will not work).
     #
     # Subclasses must implement this method.
-    def move_layout(layout, new_path)
+    def move_layout(layout, new_identifier)
       not_implemented('move_layout')
     end
 

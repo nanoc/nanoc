@@ -93,9 +93,9 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
   def test_get_with_path
     # Mock item and reps
     item_reps = [ mock, mock ]
-    item_reps[0].expects(:web_path).returns('/foo/bar/baz/')
+    item_reps[0].expects(:path).returns('/foo/bar/baz/')
     item_reps[0].expects(:name).returns(:default)
-    item_reps[1].stubs(:web_path).returns('/blah/lorem/ipsum/')
+    item_reps[1].stubs(:path).returns('/blah/lorem/ipsum/')
     item_reps[1].stubs(:name).returns(:lorem)
     item = mock
     item.expects(:reps).returns(item_reps)
@@ -146,7 +146,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     # Get item rep
     item_rep = mock
     item_rep.expects(:name).returns(:default)
-    item_rep.expects(:web_path).returns('item rep web path')
+    item_rep.expects(:path).returns('item rep web path')
 
     # Get item
     item = mock

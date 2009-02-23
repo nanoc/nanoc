@@ -137,9 +137,9 @@ module Nanoc
       # Setup child-parent links
       @pages.each do |page|
         # Get parent
-        parent_path = page.path.sub(/[^\/]+\/$/, '')
-        parent = @pages.find { |p| p.path == parent_path }
-        next if parent.nil? or page.path == '/'
+        parent_identifier = page.identifier.sub(/[^\/]+\/$/, '')
+        parent = @pages.find { |p| p.identifier == parent_identifier }
+        next if parent.nil? or page.identifier == '/'
 
         # Link
         page.parent = parent

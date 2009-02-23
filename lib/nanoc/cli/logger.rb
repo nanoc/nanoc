@@ -31,8 +31,8 @@ module Nanoc::CLI
     # +action+:: The kind of file action. Can be :create, :update or
     #            :identical.
     #
-    # +path+:: The path to the file the action was performed on.
-    def file(level, action, path, duration=nil)
+    # +identifier+:: The identifier of the item the action was performed on.
+    def file(level, action, identifier, duration=nil)
       log(
         level,
         '%s%12s%s  %s%s' % [
@@ -40,7 +40,7 @@ module Nanoc::CLI
           action,
           "\e[0m",
           duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
-          path
+          identifier
         ]
       )
     end

@@ -10,9 +10,9 @@ class Nanoc::LayoutTest < MiniTest::Unit::TestCase
     layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
     assert_equal({ :foo => 'bar' }, layout.attributes)
 
-    # Make sure path is fixed
+    # Make sure identifier is cleaned
     layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, 'foo')
-    assert_equal('/foo/', layout.path)
+    assert_equal('/foo/', layout.identifier)
   end
 
   def test_to_proxy

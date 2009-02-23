@@ -20,7 +20,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal(rep, rep_proxy.instance_eval { @obj })
   end
 
-  def test_disk_path
+  def test_raw_path
     # Create site
     site = MiniTest::Mock.new
 
@@ -32,16 +32,16 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Create site and router
     router = MiniTest::Mock.new
     site.expect(:router, router)
-    router.expect(:disk_path_for, 'output/blah/test.html', [ rep ])
+    router.expect(:raw_path_for, 'output/blah/test.html', [ rep ])
 
     # Test
-    assert_equal('output/blah/test.html', rep.disk_path)
+    assert_equal('output/blah/test.html', rep.raw_path)
     item.verify
     site.verify
     router.verify
   end
 
-  def test_web_path
+  def test_path
     # Create site
     compiler = MiniTest::Mock.new
     site = MiniTest::Mock.new
@@ -56,10 +56,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Create site and router
     router = MiniTest::Mock.new
     site.expect(:router, router)
-    router.expect(:web_path_for, '/foo/bar/baz/', [ rep ])
+    router.expect(:path_for, '/foo/bar/baz/', [ rep ])
 
     # Test
-    assert_equal('/foo/bar/baz/', rep.web_path)
+    assert_equal('/foo/bar/baz/', rep.path)
     item.verify
     site.verify
     router.verify
@@ -91,7 +91,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
     refute(rep.outdated?)
@@ -125,7 +125,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
     assert(rep.outdated?)
@@ -159,7 +159,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
     rep.instance_eval { @force_outdated = true }
 
     # Test
@@ -190,7 +190,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
     assert(rep.outdated?)
@@ -224,7 +224,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
     assert(rep.outdated?)
@@ -258,7 +258,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
     assert(rep.outdated?)
@@ -292,7 +292,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, 'blah')
-    rep.instance_eval { @disk_path = 'output.html' }
+    rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
     assert(rep.outdated?)
@@ -332,7 +332,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   def test_layout
     # Mock layout
     layout = mock
-    layout.stubs(:path).returns('/somelayout/')
+    layout.stubs(:identifier).returns('/somelayout/')
     layout.stubs(:filter_class).returns(Nanoc::Filters::ERB)
     layout.stubs(:to_proxy).returns(nil)
     layout.stubs(:content).returns(%[<%= "blah" %>])
@@ -397,7 +397,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   def test_write
     # Mock site, router and item
     router = MiniTest::Mock.new
-    router.expect(:disk_path_for, 'tmp/foo/bar/baz/quux.txt', [ nil ])
+    router.expect(:raw_path_for, 'tmp/foo/bar/baz/quux.txt', [ nil ])
     site = MiniTest::Mock.new
     site.expect(:router, router)
     item = MiniTest::Mock.new

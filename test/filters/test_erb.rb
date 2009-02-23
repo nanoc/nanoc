@@ -17,7 +17,7 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
   def test_filter_error_page
     # Create item and item rep
     item = MiniTest::Mock.new
-    item.expect(:path, '/foo/bar/baz/')
+    item.expect(:identifier, '/foo/bar/baz/')
     item_rep = MiniTest::Mock.new
     item_rep.expect(:name, :quux)
 
@@ -43,7 +43,7 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
   def test_filter_error_asset
     # Create item and item rep
     item = MiniTest::Mock.new
-    item.expect(:path, '/foo/bar/baz/')
+    item.expect(:identifier, '/foo/bar/baz/')
     item_rep = MiniTest::Mock.new
     item_rep.expect(:name, :quux)
 

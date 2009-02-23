@@ -2,8 +2,8 @@ module Nanoc
 
   # Nanoc::Item is the (abstract) superclass for any compileable item in a
   # site. Currently, there are only two subclasses, Nanoc::Page and
-  # Nanoc::Asset. It has content and attributes, as well as a path. It can
-  # also store the modification time to speed up compilation.
+  # Nanoc::Asset. It has content and attributes, as well as an identifier. It
+  # can also store the modification time to speed up compilation.
   #
   # An item is observable. The following events will be notified:
   #
@@ -20,8 +20,8 @@ module Nanoc
     # A hash containing this item's attributes.
     attr_accessor :attributes
 
-    # This item's path.
-    attr_reader   :path
+    # This item's identifier.
+    attr_reader   :identifier
 
     # The time when this item was last modified.
     attr_reader   :mtime
@@ -44,13 +44,13 @@ module Nanoc
     #
     # +attributes+:: A hash containing this item's attributes.
     #
-    # +path+:: This item's path.
+    # +identifier+:: This item's identifier.
     #
     # +mtime+:: The time when this item was last modified.
-    def initialize(content, attributes, path, mtime=nil)
+    def initialize(content, attributes, identifier, mtime=nil)
       @content    = content
       @attributes = attributes.clean
-      @path       = path.cleaned_path
+      @identifier = identifier.cleaned_identifier
       @mtime      = mtime
 
       @parent     = nil

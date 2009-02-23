@@ -99,21 +99,21 @@ module Nanoc
     # Returns the path to the output file, including the path to the output
     # directory specified in the site configuration, and including the
     # filename and extension.
-    def disk_path
-      @disk_path ||= @item.site.router.disk_path_for(self)
+    def raw_path
+      @raw_path ||= @item.site.router.raw_path_for(self)
     end
 
     # Returns the path to the output file as it would be used in a web
     # browser: starting with a slash (representing the web root), and only
     # including the filename and extension if they cannot be ignored (i.e.
     # they are not in the site configuration's list of index files).
-    def web_path
+    def path
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       @item.site.compiler.compile_rep(self, false)
 
-      @web_path ||= @item.site.router.web_path_for(self)
+      @path ||= @item.site.router.path_for(self)
     end
 
     # Returns true if this item rep's output file is outdated and must be
@@ -126,10 +126,10 @@ module Nanoc
       return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
-      return true if !File.file?(disk_path) && !@item.attribute_named(:skip_output)
+      return true if !File.file?(raw_path) && !@item.attribute_named(:skip_output)
 
       # Get compiled mtime
-      compiled_mtime = File.stat(disk_path).mtime if !@item.attribute_named(:skip_output)
+      compiled_mtime = File.stat(raw_path).mtime if !@item.attribute_named(:skip_output)
 
       # Outdated if file too old
       return true if !@item.attribute_named(:skip_output) && @item.mtime > compiled_mtime
@@ -196,14 +196,14 @@ module Nanoc
     end
 
     # Lays out the item using the given layout.
-    def layout(layout_name)
+    def layout(layout_identifier)
       # Get layout
-      layout ||= @item.site.layouts.find { |l| l.path == layout_name.cleaned_path }
-      raise Nanoc::Errors::UnknownLayoutError.new(layout_name) if layout.nil?
+      layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
+      raise Nanoc::Errors::UnknownLayoutError.new(layout_identifier) if layout.nil?
 
       # Create filter
       klass = layout.filter_class
-      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
+      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.identifier) if klass.nil?
       filter = klass.new(assigns.merge({ :layout => layout.to_proxy }))
 
       # Create "pre" snapshot
@@ -222,8 +222,8 @@ module Nanoc
 
     # Writes the item rep's compiled content to the rep's output file.
     def write
-      FileUtils.mkdir_p(File.dirname(self.disk_path))
-      File.open(self.disk_path, 'w') { |io| io.write(@content[:last]) }
+      FileUtils.mkdir_p(File.dirname(self.raw_path))
+      File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
     end
 
   end

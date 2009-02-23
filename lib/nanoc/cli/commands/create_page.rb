@@ -19,7 +19,7 @@ module Nanoc::CLI
     end
 
     def usage
-      "nanoc create_page [options] [path]"
+      "nanoc create_page [options] [identifier]"
     end
 
     def option_definitions
@@ -40,7 +40,7 @@ module Nanoc::CLI
       end
 
       # Extract arguments and options
-      path = arguments[0].cleaned_path
+      identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
       @base.require_site
@@ -57,12 +57,12 @@ module Nanoc::CLI
       page = Nanoc::Page.new(
         "Hi, I'm a new page!\n",
         { :title => "A New Page" },
-        path
+        identifier
       )
       page.site = @base.site
       @base.site.data_source.save_page(page)
 
-      puts "A page has been created at #{path}."
+      puts "A page has been created at #{identifier}."
     end
 
   end

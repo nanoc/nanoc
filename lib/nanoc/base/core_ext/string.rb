@@ -1,7 +1,7 @@
 module Nanoc::StringExtensions
 
-  # Transforms string into an actual path
-  def cleaned_path
+  # Transforms string into an actual identifier
+  def cleaned_identifier
     "/#{self}/".gsub(/^\/+|\/+$/, '/')
   end
 

@@ -124,7 +124,7 @@ module Nanoc
 
       # Check if file will be created
       # FIXME temporary
-      old_content = '' # File.file?(rep.disk_path) ? File.read(rep.disk_path) : nil
+      old_content = '' # File.file?(rep.raw_path) ? File.read(rep.raw_path) : nil
 
       # Apply matching rule
       rule.apply_to(rep)
@@ -141,27 +141,27 @@ module Nanoc
       @stack.pop
     end
 
-    def add_page_rule(path, rep_name, block)
-      @page_rules << ItemRule.new(path_to_regex(path), rep_name, self, block)
+    def add_page_rule(identifier, rep_name, block)
+      @page_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
     end
 
-    def add_asset_rule(path, rep_name, block)
-      @asset_rules << ItemRule.new(path_to_regex(path), rep_name, self, block)
+    def add_asset_rule(identifier, rep_name, block)
+      @asset_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
     end
 
-    def add_layout_rule(path, block)
+    def add_layout_rule(identifier, block)
       # TODO implement
     end
 
   private
 
-    # Converts the given path, which can contain the '*' wildcard, to a regex.
+    # Converts the given identifier, which can contain the '*' wildcard, to a regex.
     # For example, 'foo/*/bar' is transformed into /^foo\/(.*?)\/bar$/.
-    def path_to_regex(path)
-      if path.is_a? String
-        /^#{path.gsub('*', '(.*?)')}$/
+    def identifier_to_regex(identifier)
+      if identifier.is_a? String
+        /^#{identifier.gsub('*', '(.*?)')}$/
       else
-        path
+        identifier
       end
     end
 

@@ -6,7 +6,7 @@ module Nanoc
       @compiler = compiler
     end
 
-    def page(path, params={}, &block)
+    def page(identifier, params={}, &block)
       # Require block
       raise ArgumentError.new("#page requires a block") unless block_given?
 
@@ -14,10 +14,10 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      @compiler.add_page_rule(path, rep_name, block)
+      @compiler.add_page_rule(identifier, rep_name, block)
     end
 
-    def asset(path, params={}, &block)
+    def asset(identifier, params={}, &block)
       # Require block
       raise ArgumentError.new("#asset requires a block") unless block_given?
 
@@ -25,15 +25,15 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      @compiler.add_asset_rule(path, rep_name, block)
+      @compiler.add_asset_rule(identifier, rep_name, block)
     end
 
-    def layout(path, &block)
+    def layout(identifier, &block)
       # Require block
       raise ArgumentError.new("#layout requires a block") unless block_given?
 
       # Create rule
-      @compiler.add_layout_rule(path, block)
+      @compiler.add_layout_rule(identifier, block)
     end
 
   end
