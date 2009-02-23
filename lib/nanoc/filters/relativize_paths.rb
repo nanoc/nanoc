@@ -6,8 +6,6 @@ module Nanoc::Filters
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
-    # TODO also relativize paths in CSS
-
     def run(content, params={})
       type = params[:type] || :html
 
