@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
+class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -36,19 +36,19 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
   def test_handle_request_with_page_rep
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).at_most_once.returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).at_most_once.returns('/bar/')
+    page_reps[0].stubs(:path).returns('/foo/1/')
+    page_reps[1].stubs(:path).returns('/foo/2/')
+    page_reps[2].stubs(:path).returns('/bar/')
     pages = [ mock, mock ]
-    pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
-    pages[1].expects(:reps).returns([ page_reps[2] ])
+    pages[0].stubs(:reps).returns([ page_reps[0], page_reps[1] ])
+    pages[1].stubs(:reps).returns([ page_reps[2] ])
 
     # Create site
     site = mock
-    site.expects(:load_data).with(true)
-    site.expects(:pages).returns(pages)
-    site.expects(:assets).returns([])
-    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:load_data).with(true)
+    site.stubs(:pages).returns(pages)
+    site.stubs(:assets).returns([])
+    site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
@@ -61,52 +61,34 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
   def test_handle_request_with_asset_rep
     # Create assets and reps
     asset_reps = [ mock, mock, mock ]
-    asset_reps[0].expects(:web_path).at_most_once.returns('/assets/foo/1/')
-    asset_reps[1].stubs(:web_path).returns('/assets/foo/2/')
-    asset_reps[1].stubs(:disk_path).returns('output/assets/foo/2/index.html')
-    asset_reps[2].expects(:web_path).at_most_once.returns('/assets/bar/')
+    asset_reps[0].stubs(:path).returns('/assets/foo/1/')
+    asset_reps[1].stubs(:path).returns('/assets/foo/2/')
+    asset_reps[2].stubs(:path).returns('/assets/bar/')
     assets = [ mock, mock ]
-    assets[0].expects(:reps).returns([ asset_reps[0], asset_reps[1] ])
-    assets[1].expects(:reps).returns([ asset_reps[2] ])
-    asset_reps[1].expects(:asset).returns(assets[0])
-
-    # Create compiler
-    compiler = Object.new
-    def compiler.run(objs, params={})
-      FileUtils.mkdir_p('output/assets/foo/2')
-      File.open('output/assets/foo/2/index.html', 'w') { |io| io.write("moo.") }
-    end
+    assets[0].stubs(:reps).returns([ asset_reps[0], asset_reps[1] ])
+    assets[1].stubs(:reps).returns([ asset_reps[2] ])
 
     # Create site
     site = mock
-    site.expects(:load_data).with(true)
-    site.expects(:pages).returns([])
-    site.expects(:assets).returns(assets)
-    site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
-    site.expects(:compiler).returns(compiler)
+    site.stubs(:load_data).with(true)
+    site.stubs(:pages).returns([])
+    site.stubs(:assets).returns(assets)
+    site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:mime_type_of).returns('text/plain')
+    autocompiler.expects(:serve_rep).with(asset_reps[1])
 
     # Run
-    result = autocompiler.instance_eval { handle_request('/assets/foo/2/') }
-    assert_equal(
-      result,
-      [
-        200,
-        { 'Content-Type' => 'text/plain' },
-        [ 'moo.' ]
-      ]
-    )
+    autocompiler.instance_eval { handle_request('/assets/foo/2/') }
   end
 
   def test_handle_request_with_broken_url
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).at_most_once.returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).at_most_once.returns('/bar/')
+    page_reps[0].expects(:path).at_most_once.returns('/foo/1/')
+    page_reps[1].expects(:path).returns('/foo/2/')
+    page_reps[2].expects(:path).at_most_once.returns('/bar/')
     pages = [ mock, mock ]
     pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
     pages[1].expects(:reps).returns([ page_reps[2] ])
@@ -129,9 +111,9 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
   def test_handle_request_with_file
     # Create pages and reps
     page_reps = [ mock, mock, mock ]
-    page_reps[0].expects(:web_path).returns('/foo/1/')
-    page_reps[1].expects(:web_path).returns('/foo/2/')
-    page_reps[2].expects(:web_path).returns('/bar/')
+    page_reps[0].expects(:path).returns('/foo/1/')
+    page_reps[1].expects(:path).returns('/foo/2/')
+    page_reps[2].expects(:path).returns('/bar/')
     pages = [ mock, mock ]
     pages[0].expects(:reps).returns([ page_reps[0], page_reps[1] ])
     pages[1].expects(:reps).returns([ page_reps[2] ])
@@ -327,11 +309,12 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       # Create page and page rep
       page = mock
       page_rep = mock
-      page_rep.expects(:disk_path).at_least_once.returns('tmp/somefile.html')
-      page_rep.expects(:page).returns(page)
+      page_rep.expects(:raw_path).at_least_once.returns('tmp/somefile.html')
+      page_rep.expects(:item).returns(page)
+      page_rep.expects(:content_at_snapshot).with(:post).returns('compiled page content')
 
       # Create file
-      File.open(page_rep.disk_path, 'w') { |io| }
+      File.open(page_rep.raw_path, 'w') { |io| }
 
       # Create compiler
       compiler = Object.new
@@ -347,18 +330,16 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
       begin
-        assert_nothing_raised do
-          # Serve
-          response = autocompiler.instance_eval { serve_rep(page_rep) }
+        # Serve
+        response = autocompiler.instance_eval { serve_rep(page_rep) }
 
-          # Check response
-          assert_equal(200,                     response[0])
-          assert_equal('text/html',             response[1]['Content-Type'])
-          assert_match(/compiled page content/, response[2][0])
-        end
+        # Check response
+        assert_equal(200,                     response[0])
+        assert_equal('text/html',             response[1]['Content-Type'])
+        assert_match(/compiled page content/, response[2][0])
       ensure
         # Clean up
-        FileUtils.rm_rf(page_rep.disk_path)
+        FileUtils.rm_rf(page_rep.raw_path)
       end
     end
   end
@@ -368,8 +349,8 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       # Create page and page rep
       page = mock
       page_rep = mock
-      page_rep.expects(:web_path).returns('somefile.html')
-      page_rep.expects(:page).returns(page)
+      page_rep.expects(:path).returns('somefile.html')
+      page_rep.expects(:item).returns(page)
 
       # Create site
       stack = []
@@ -382,16 +363,14 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
-      assert_nothing_raised do
-        # Serve
-        response = autocompiler.instance_eval { serve_rep(page_rep) }
+      # Serve
+      response = autocompiler.instance_eval { serve_rep(page_rep) }
 
-        # Check response
-        assert_equal(500,                 response[0])
-        assert_equal('text/html',         response[1]['Content-Type'])
-        assert_match(/aah! fail!/,        response[2][0])
-        assert_match(/500 Server Error/,  response[2][0])
-      end
+      # Check response
+      assert_equal(500,                 response[0])
+      assert_equal('text/html',         response[1]['Content-Type'])
+      assert_match(/aah! fail!/,        response[2][0])
+      assert_match(/500 Server Error/,  response[2][0])
     end
   end
 
@@ -404,27 +383,21 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new(self)
 
-      # Test file 1
-      assert_nothing_raised do
-        # Serve
-        response = autocompiler.instance_eval { serve_file('tmp/test.css') }
+      # Serve file 1
+      response = autocompiler.instance_eval { serve_file('tmp/test.css') }
 
-        # Check response
-        assert_equal(200,         response[0])
-        assert_equal('text/css',  response[1]['Content-Type'])
-        assert(response[2][0].include?('body { color: blue; }'))
-      end
+      # Check response for file 1
+      assert_equal(200,         response[0])
+      assert_equal('text/css',  response[1]['Content-Type'])
+      assert(response[2][0].include?('body { color: blue; }'))
 
-      # Test file 2
-      assert_nothing_raised do
-        # Serve
-        response = autocompiler.instance_eval { serve_file('tmp/test') }
+      # Serve file 2
+      response = autocompiler.instance_eval { serve_file('tmp/test') }
 
-        # Check response
-        assert_equal(200,                         response[0])
-        assert_equal('application/octet-stream',  response[1]['Content-Type'])
-        assert(response[2][0].include?('random blah blah stuff'))
-      end
+      # Check response for file 2
+      assert_equal(200,                         response[0])
+      assert_equal('application/octet-stream',  response[1]['Content-Type'])
+      assert(response[2][0].include?('random blah blah stuff'))
     end
   end
 

@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class RDoc < Nanoc::Filter
 
-    identifiers :rdoc
+    identifier :rdoc
 
     def run(content)
       require 'rdoc/markup'

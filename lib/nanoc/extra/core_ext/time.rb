@@ -1,4 +1,4 @@
-class Time
+module Nanoc::Extra::TimeExtensions
 
   # Returns a string with the time in an ISO-8601 date format.
   def to_iso8601_date
@@ -10,4 +10,8 @@ class Time
     self.gmtime.strftime("%Y-%m-%dT%H:%M:%SZ")
   end
 
+end
+
+class Time
+  include Nanoc::Extra::TimeExtensions
 end

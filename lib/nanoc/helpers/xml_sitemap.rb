@@ -29,9 +29,7 @@ module Nanoc::Helpers
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
-    #   would be "http://example.com". It is probably a good idea to define
-    #   this in the page defaults, i.e. the 'meta.yaml' file (at least if the
-    #   filesystem data source is being used, which is probably the case).
+    #   would be "http://example.com".
     def xml_sitemap
       require 'builder'
 
@@ -43,7 +41,7 @@ module Nanoc::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
         # Add page
-        @pages.reject { |p| p.is_hidden }.each do |page|
+        @pages.reject { |p| p.is_hidden || p.skip_output }.each do |page|
           xml.url do
             xml.loc         @page.base_url + page.path
             xml.lastmod     page.mtime.to_iso8601_date unless page.mtime.nil?

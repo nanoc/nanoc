@@ -1,9 +1,0 @@
-# Built-in
-filters_pre:
-
-  - "erb"
-
-# Custom
-title: "Foobar"
-o_rly: "true"
-sucks: "false"

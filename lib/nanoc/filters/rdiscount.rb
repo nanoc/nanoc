@@ -1,7 +1,7 @@
 module Nanoc::Filters
   class RDiscount < Nanoc::Filter
 
-    identifiers :rdiscount
+    identifier :rdiscount
 
     def run(content)
       require 'rdiscount'

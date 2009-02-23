@@ -26,24 +26,37 @@ module Nanoc::Helpers
     #   # => "<h1>Foo</h1>"
     def render(name_or_path, other_assigns={})
       # Find layout
-      layout = @_obj.site.layouts.find { |l| l.path == name_or_path.cleaned_path }
-      raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_path) if layout.nil?
+      layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_identifier }
+      raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_identifier) if layout.nil?
 
-      # Find filter
+      # Get assigns
+      assigns = {
+        :_obj_rep   => @_obj_rep,
+        :_obj       => @_obj,
+        :page_rep   => @page_rep,
+        :page       => @page,
+        :asset_rep  => @asset_rep,
+        :asset      => @asset,
+        :layout     => layout.to_proxy,
+        :pages      => @pages,
+        :assets     => @assets,
+        :layouts    => @layouts,
+        :config     => @config,
+        :site       => @site
+      }.merge(other_assigns)
+
+      # Create filter
       klass = layout.filter_class
       raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
-      filter = klass.new(@_obj_rep, other_assigns)
+      filter = klass.new(assigns)
 
       # Layout
-      @_obj.site.compiler.stack.push(layout)
+      @site.compiler.stack.push(layout)
       result = filter.run(layout.content)
-      @_obj.site.compiler.stack.pop
+      @site.compiler.stack.pop
       result
     end
 
   end
 
 end
-
-# Include by default
-include Nanoc::Helpers::Render

@@ -1,7 +1,0 @@
-# Built-in
-filters_pre:
-
-  - 'censor'
-
-# Custom
-title: My New Homepage

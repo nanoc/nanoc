@@ -8,60 +8,163 @@ module Nanoc
 
     # Creates a new compiler for the given site.
     def initialize(site)
-      @site  = site
+      @site = site
+
       @stack = []
+
+      @page_rules  = []
+      @asset_rules = []
     end
 
     # Compiles (part of) the site and writes out the compiled page and asset
     # representations.
     #
-    # +obj+:: The page or asset that should be compiled, along with their
-    #         dependencies, or +nil+ if the entire site should be compiled.
+    # +items+:: The items that should be compiled, along with their
+    #           edpendencies. Pass +nil+ if the entire site should be
+    #           compiled.
     #
     # This method also accepts a few parameters:
     #
-    # +:also_layout+:: true if the page rep should also be laid out and
-    #                  post-filtered, false if the page rep should only be
-    #                  pre-filtered. Only applicable to page reps, and not to
-    #                  asset reps. Defaults to true.
-    #
-    # +:even_when_not_outdated+:: true if the rep should be compiled even if
-    #                             it is not outdated, false if not. Defaults
-    #                             to false.
-    #
-    # +:from_scratch+:: true if all compilation stages (for page reps:
-    #                   pre-filter, layout, post-filter; for asset reps:
-    #                   filter) should be performed again even if they have
-    #                   already been performed, false otherwise. Defaults to
-    #                   false.
-    def run(objects=nil, params={})
+    # +:force+:: true if the rep should be compiled even if it is not
+    #                             outdated, false if not. Defaults to false.
+    def run(items=nil, params={})
       # Parse params
-      also_layout             = params[:also_layout]            || true
-      even_when_not_outdated  = params[:even_when_not_outdated] || false
-      from_scratch            = params[:from_scratch]           || false
+      force = params[:force] || false
 
-      # Load data
-      @site.load_data
+      # Find rules file
+      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
+      raise Nanoc::Errors::NoRulesFileFoundError.new if rules_filename.nil?
+
+      # Load DSL
+      dsl = Nanoc::CompilerDSL.new(self)
+      dsl.instance_eval(File.read(rules_filename), rules_filename)
 
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Initialize
-      @stack = []
-
-      # Get pages and asset reps
-      objects = @site.pages + @site.assets if objects.nil?
-      reps = objects.map { |o| o.reps }.flatten
+      # Get items to compile
+      items ||= @site.pages + @site.assets
 
       # Compile everything
-      reps.each do |rep|
-        if rep.is_a?(Nanoc::PageRep)
-          rep.compile(also_layout, even_when_not_outdated, from_scratch)
+      @stack = []
+      items.each { |i| compile_item(i, force) }
+    end
+
+    # Compiles the given item and all its representations. This method should
+    # not be called directly; please use Nanoc::Compiler#run instead, and pass
+    # the items to compile as the first argument.
+    #
+    # +force+:: true if the item rep should be compiled even if it is not
+    #                            outdated, false if not.
+    def compile_item(item, force)
+      # Find matching rules
+      all_rules = (item.is_a?(Nanoc::Page) ? @page_rules : @asset_rules)
+      matching_rules = all_rules.inject({}) do |memo, rule|
+        # Skip rule if an existing rule for this rep name already exists
+        next unless memo[rule.rep_name].nil?
+
+        # Skip rule if not applicable to this rep
+        next unless rule.applicable_to?(item)
+
+        # Add rule
+        memo.merge({ rule.rep_name => rule })
+      end
+      raise Nanoc::Errors::NoMatchingRuleFoundError.new if matching_rules.keys.empty?
+
+      # Create reps for each rep name
+      rep_names = matching_rules.keys
+      reps = rep_names.map do |rep_name|
+        if item.is_a?(Nanoc::Page)
+          PageRep.new(item, rep_name)
         else
-          rep.compile(even_when_not_outdated, from_scratch)
+          AssetRep.new(item, rep_name)
         end
+      end
+
+      # Compile reps
+      reps.each { |rep| compile_rep(rep, matching_rules[rep.name.to_sym], force) }
+    end
+
+    # Compiles the given item representation. This method should not be called
+    # directly; please use Nanoc::Compiler#run instead, and pass this item
+    # representation's item as its first argument.
+    #
+    # +rep+:: The rep that is to be compiled.
+    #
+    # +force+:: true if the item rep should be compiled even if it is not
+    #                            outdated, false if not.
+    def compile_rep(rep, rule, force)
+      # Reset compilation status
+      rep.modified = false
+      rep.created  = false
+
+      # Don't compile if already compiled
+      return if rep.compiled?
+
+      # Skip unless outdated
+      unless rep.outdated? or force
+        Nanoc::NotificationCenter.post(:compilation_started, rep)
+        Nanoc::NotificationCenter.post(:compilation_ended,   rep)
+        return
+      end
+
+      # Check for recursive call
+      if @stack.include?(rep)
+        @stack.push(rep)
+        raise Nanoc::Errors::RecursiveCompilationError.new
+      end
+
+      # Start
+      @stack.push(rep)
+      Nanoc::NotificationCenter.post(:compilation_started, rep)
+
+      # Create raw and last snapshots if necessary
+      rep.content[:raw]  ||= rep.item.content
+      rep.content[:last] ||= rep.content[:raw]
+
+      # Check if file will be created
+      # FIXME temporary
+      old_content = '' # File.file?(rep.raw_path) ? File.read(rep.raw_path) : nil
+
+      # Apply matching rule
+      rule.apply_to(rep)
+
+      # Update status
+      rep.compiled = true
+      unless rep.item.attribute_named(:skip_output)
+        rep.created  = old_content.nil?
+        rep.modified = rep.created ? true : old_content != rep.content[:last]
+      end
+
+      # Stop
+      Nanoc::NotificationCenter.post(:compilation_ended, rep)
+      @stack.pop
+    end
+
+    def add_page_rule(identifier, rep_name, block)
+      @page_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    end
+
+    def add_asset_rule(identifier, rep_name, block)
+      @asset_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    end
+
+    def add_layout_rule(identifier, block)
+      # TODO implement
+    end
+
+  private
+
+    # Converts the given identifier, which can contain the '*' wildcard, to a regex.
+    # For example, 'foo/*/bar' is transformed into /^foo\/(.*?)\/bar$/.
+    def identifier_to_regex(identifier)
+      if identifier.is_a? String
+        /^#{identifier.gsub('*', '(.*?)')}$/
+      else
+        identifier
       end
     end
 
   end
+
 end

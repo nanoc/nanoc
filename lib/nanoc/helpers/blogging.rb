@@ -3,12 +3,8 @@ module Nanoc::Helpers
   # Nanoc::Helpers::Blogging provides some functionality for building blogs,
   # such as finding articles and constructing feeds.
   #
-  # This helper has a few requirements. First, all blog articles should have
-  # the following attributes:
-  #
-  # * 'kind', set to 'article'.
-  #
-  # * 'created_at', set to the creation timestamp.
+  # In order to use this helper, all blog articles should have the +kind+
+  # attribute set to 'article'.
   #
   # Some functions in this blogging helper, such as the +atom_feed+ function,
   # require additional attributes to be set; these attributes are described in
@@ -23,10 +19,27 @@ module Nanoc::Helpers
 
     # Returns the list of articles, sorted by descending creation date (so
     # newer articles appear first).
-    def sorted_articles
-      @pages.select do |page|
-        page.kind == 'article'
-      end.sort do |x,y|
+    #
+    # The +feed_tag_or_tags+ variable is a string or an array of strings
+    # containing the feed tag(s) for which the articles should be fetched. For
+    # example, the following two statements will fetch the articles that have
+    # a feed_tag equal to 'foobar' or a feed_tags array containing 'foobar':
+    #
+    #   sorted_articles('foobar')
+    #   sorted_articles([ 'foobar' ])
+    def sorted_articles(feed_tag_or_tags=nil)
+      feed_tags = [ feed_tag_or_tags ].flatten.compact
+
+      # Get all articles
+      articles = @pages.select { |page| page.kind == 'article' }
+
+      # Reject articles without given feed tag
+      articles.delete_if do |article|
+        !feed_tags.empty? && (feed_tags & [ article.feed_tag || article.feed_tags ].flatten.compact).empty?
+      end
+
+      # Sort by creation date
+      articles.sort do |x,y|
         y.created_at <=> x.created_at
       end
     end
@@ -37,6 +50,23 @@ module Nanoc::Helpers
     #
     # +limit+:: The maximum number of articles to show. Defaults to 5.
     #
+    # +feed_tag+:: A string containing the feed tag that determines which
+    #              articles to fetch. See sorted_articles for details.
+    #
+    # +feed_tags+:: An array of strings containing the feed tags that
+    #               determine which articles to fetch. See sorted_articles for
+    #               details.
+    #
+    # +content_proc+:: A proc that returns the content of the given article,
+    #                  passed as a parameter. By default, given the argument
+    #                  +article+, this proc will return +article.content+.
+    #                  This function may not return nil.
+    #
+    # +excerpt_proc+:: A proc that returns the excerpt of the given article,
+    #                  passed as a parameter. By default, given the argument
+    #                  +article+, this proc will return +article.excerpt+.
+    #                  This function may return nil.
+    #
     # The following attributes must be set on blog articles:
     #
     # * 'title', containing the title of the blog post.
@@ -45,6 +75,8 @@ module Nanoc::Helpers
     #
     # The following attributes can optionally be set on blog articles to
     # change the behaviour of the Atom feed:
+    #
+    # * 'created_at', containing the datetime the article was published.
     #
     # * 'excerpt', containing an excerpt of the article, usually only a few
     #   lines long.
@@ -63,9 +95,7 @@ module Nanoc::Helpers
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
-    #   would be "http://example.com". It is probably a good idea to define
-    #   this in the page defaults, i.e. the 'meta.yaml' file (at least if the
-    #   filesystem data source is being used, which is probably the case).
+    #   would be "http://example.com".
     #
     # * 'title', containing the title of the feed, which is usually also the
     #   title of the blog.
@@ -93,14 +123,18 @@ module Nanoc::Helpers
       require 'builder'
 
       # Extract parameters
-      limit = params[:limit] || 5
-
-      # Get most recent article
-      last_article = sorted_articles.first
+      limit         = params[:limit] || 5
+      feed_tags     = [ params[:feed_tag] || params[:feed_tags] ].flatten.compact
+      content_proc  = params[:content_proc] || lambda { |article| article.content }
+      excerpt_proc  = params[:excerpt_proc] || lambda { |article| article.excerpt }
+      articles      = params[:articles] || sorted_articles(feed_tags)
 
       # Create builder
       buffer = ''
       xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
+
+      # Get articles
+      last_article = articles.first
 
       # Build feed
       xml.instruct!
@@ -110,7 +144,7 @@ module Nanoc::Helpers
         xml.title   @page.title
 
         # Add date
-        xml.updated last_article.created_at.to_iso8601_time
+        xml.updated last_article.mtime.to_iso8601_time unless last_article.nil?
 
         # Add links
         xml.link(:rel => 'alternate', :href => @page.base_url)
@@ -123,22 +157,23 @@ module Nanoc::Helpers
         end
 
         # Add articles
-        sorted_articles.first(limit).each do |a|
+        articles.first(limit).each do |a|
           xml.entry do
             # Add primary attributes
             xml.id        atom_tag_for(a)
             xml.title     a.title, :type => 'html'
 
             # Add dates
-            xml.published a.created_at.to_iso8601_time
+            xml.published a.created_at.to_iso8601_time unless a.created_at.nil?
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
             xml.link(:rel => 'alternate', :href => url_for(a))
 
             # Add content
-            xml.content   a.content, :type => 'html'
-            xml.summary   a.excerpt, :type => 'html' unless a.excerpt.nil?
+            summary = excerpt_proc.call(a)
+            xml.content   content_proc.call(a), :type => 'html'
+            xml.summary   summary, :type => 'html' unless summary.nil?
           end
         end
       end

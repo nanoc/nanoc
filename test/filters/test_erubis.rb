@@ -1,42 +1,35 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Filters::ErubisTest < Test::Unit::TestCase
+class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
     if_have 'erubis' do
-      assert_nothing_raised do
-        # Create site
-        site = mock
+      # Create filter
+      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
 
-        # Create page
-        page = mock
-        page_proxy = Nanoc::Proxy.new(page)
-        page.expects(:site).returns(site)
-        page.expects(:to_proxy).returns(page_proxy)
+      # Run filter
+      result = filter.run('<%= "I was hiding in #{@location}." %>')
+      assert_equal('I was hiding in a cheap motel.', result)
+    end
+  end
 
-        # Create page rep
-        page_rep = mock
-        page_rep_proxy = Nanoc::Proxy.new(page_rep)
-        page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-        page_rep.expects(:page).returns(page)
-        page_rep.expects(:to_proxy).returns(page_rep_proxy)
+  def test_filter_error
+    if_have 'erubis' do
+      # Create filter
+      filter = ::Nanoc::Filters::Erubis.new
 
-        # Mock site
-        site.expects(:pages).returns([])
-        site.expects(:assets).returns([])
-        site.expects(:layouts).returns([])
-        site.expects(:config).returns({})
-
-        # Get filter
-        filter = ::Nanoc::Filters::Erubis.new(page_rep)
-
-        # Run filter
-        result = filter.run('<%= "Hello." %>')
-        assert_equal('Hello.', result)
+      # Run filter
+      raised = false
+      begin
+        filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
+      rescue SyntaxError => e
+        assert_match '?', e.backtrace[0]
+        raised = true
       end
+      assert raised
     end
   end
 

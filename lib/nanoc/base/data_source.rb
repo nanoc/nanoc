@@ -2,8 +2,8 @@ module Nanoc
 
   # Nanoc::DataSource is responsible for loading data. It is the (abstract)
   # superclass for all data sources. Subclasses must at least implement the
-  # data reading methods (+pages+, +page_defaults+, +layouts+, +templates+,
-  # and +code+); all other methods involving data manipulation are optional.
+  # data reading methods (+pages+, +layouts+, and +code+); all other methods
+  # involving data manipulation are optional.
   #
   # Apart from the methods for loading and storing data, there are the +up+
   # and +down+ methods for bringing up and tearing down the connection to the
@@ -104,11 +104,12 @@ module Nanoc
       not_implemented('save_page')
     end
 
-    # Changes the path of the given page to the given new path. When changing
-    # a page's path, this method must be used (save_page will not work).
+    # Changes the identifier of the given page to the given new identifier.
+    # When changing a page's identifier, this method must be used (save_page
+    # will not work).
     #
     # Subclasses must implement this method.
-    def move_page(page, new_path)
+    def move_page(page, new_identifier)
       not_implemented('move_page')
     end
 
@@ -137,11 +138,12 @@ module Nanoc
       not_implemented('save_asset')
     end
 
-    # Changes the path of the given asset to the given new path. When changing
-    # a asset's path, this method must be used (save_asset will not work).
+    # Changes the identifier of the given asset to the given new identifier.
+    # When changing a asset's identifier, this method must be used (save_asset
+    # will not work).
     #
     # Subclasses must implement this method.
-    def move_asset(asset, new_path)
+    def move_asset(asset, new_identifier)
       not_implemented('move_asset')
     end
 
@@ -150,40 +152,6 @@ module Nanoc
     # Subclasses must implement this method.
     def delete_asset(asset)
       not_implemented('delete_asset')
-    end
-
-    ########## Page defaults
-
-    # Returns the page defaults (represented by Nanoc::PageDefaults) of this
-    # site. This is an abstract method implemented by the subclass.
-    #
-    # Subclasses must implement this method.
-    def page_defaults
-      not_implemented('page_defaults')
-    end
-
-    # Saves the given page defaults in the data source.
-    #
-    # Subclasses must implement this method.
-    def save_page_defaults(page_defaults)
-      not_implemented('save_page_defaults')
-    end
-
-    ########## Asset defaults
-
-    # Returns the asset defaults (represented by Nanoc::AssetDefaults) of this
-    # site. This is an abstract method implemented by the subclass.
-    #
-    # Subclasses must implement this method.
-    def asset_defaults
-      not_implemented('asset_defaults')
-    end
-
-    # Saves the given asset defaults in the data source.
-    #
-    # Subclasses must implement this method.
-    def save_asset_defaults(asset_defaults)
-      not_implemented('save_asset_defaults')
     end
 
     ########## Layouts
@@ -204,12 +172,12 @@ module Nanoc
       not_implemented('save_layout')
     end
 
-    # Changes the path of the given layout to the given new path. When
-    # changing a layout's path, this method must be used (save_layout will not
-    # work).
+    # Changes the identifier of the given layout to the given new identifier.
+    # When changing a layout's identifier, this method must be used
+    # (save_layout will not work).
     #
     # Subclasses must implement this method.
-    def move_layout(layout, new_path)
+    def move_layout(layout, new_identifier)
       not_implemented('move_layout')
     end
 
@@ -218,40 +186,6 @@ module Nanoc
     # Subclasses must implement this method.
     def delete_layout(layout)
       not_implemented('delete_layout')
-    end
-
-    ########## Templates
-
-    # Returns the list of templates (represented by Nanoc::Template) in this
-    # site. This is an abstract method implemented by the subclass.
-    #
-    # Subclasses must implement this method.
-    def templates
-      not_implemented('templates')
-    end
-
-    # Saves the given template in the data source, creating it if it doesn't
-    # exist yet and updating the existing copy otherwise.
-    #
-    # Subclasses must implement this method.
-    def save_template(template)
-      not_implemented('save_template')
-    end
-
-    # Changes the name of the given template to the given new name. When
-    # changing a template's name, this method must be used (save_template will
-    # not work).
-    #
-    # Subclasses must implement this method.
-    def move_template(template, new_name)
-      not_implemented('move_template')
-    end
-
-    # Removes the given template from the data source.
-    #
-    # Subclasses must implement this method.
-    def delete_template(template)
-      not_implemented('delete_template')
     end
 
     ########## Code
