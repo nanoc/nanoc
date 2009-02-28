@@ -3,9 +3,6 @@ module Nanoc::Helpers
   # Nanoc::Helpers::Blogging provides some functionality for building blogs,
   # such as finding articles and constructing feeds.
   #
-  # In order to use this helper, all blog articles should have the +kind+
-  # attribute set to 'article'.
-  #
   # Some functions in this blogging helper, such as the +atom_feed+ function,
   # require additional attributes to be set; these attributes are described in
   # the documentation for these functions.
@@ -19,6 +16,9 @@ module Nanoc::Helpers
 
     # Returns the list of articles, sorted by descending creation date (so
     # newer articles appear first).
+    #
+    # This function will consider a page to be an article when its "kind"
+    # argument equals "article".
     #
     # The +feed_tag_or_tags+ variable is a string or an array of strings
     # containing the feed tag(s) for which the articles should be fetched. For
