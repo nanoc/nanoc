@@ -137,6 +137,7 @@ module Nanoc
       {
         :_obj_rep   => self,
         :_obj       => self.item,
+        :content    => @content[:last],
         :page_rep   => self.is_a?(Nanoc::PageRep)  ? self.to_proxy      : nil,
         :page       => self.is_a?(Nanoc::PageRep)  ? self.item.to_proxy : nil,
         :asset_rep  => self.is_a?(Nanoc::AssetRep) ? self.to_proxy      : nil,
