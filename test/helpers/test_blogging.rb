@@ -116,12 +116,17 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
       # Create feed page
       @page = mock
-      @page.expects(:base_url).at_least_once.returns('http://example.com')
       @page.expects(:title).returns('My Cool Blog')
       @page.expects(:author_name).returns('Denis Defreyne')
       @page.expects(:author_uri).returns('http://stoneship.org/')
       @page.expects(:[]).with(:feed_url).returns(nil)
       @page.expects(:path).returns('/journal/feed/')
+
+      # Create site
+      config = mock
+      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+      @site = mock
+      @site.expects(:config).at_least_once.returns(config)
 
       # Check
       atom_feed
@@ -154,12 +159,17 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
       # Create feed page
       @page = mock
-      @page.expects(:base_url).at_least_once.returns('http://example.com')
       @page.expects(:title).returns('My Cool Blog')
       @page.expects(:author_name).returns('Denis Defreyne')
       @page.expects(:author_uri).returns('http://stoneship.org/')
       @page.expects(:[]).with(:feed_url).returns(nil)
       @page.expects(:path).returns('/journal/feed/')
+
+      # Create site
+      config = mock
+      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+      @site = mock
+      @site.expects(:config).at_least_once.returns(config)
 
       # Check
       atom_feed(:feed_tag => 'foobar')
@@ -181,12 +191,17 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
       # Create feed page
       @page = mock
-      @page.expects(:base_url).at_least_once.returns('http://example.com')
       @page.expects(:title).returns('My Cool Blog')
       @page.expects(:author_name).returns('Denis Defreyne')
       @page.expects(:author_uri).returns('http://stoneship.org/')
       @page.expects(:[]).with(:feed_url).returns(nil)
       @page.expects(:path).returns('/journal/feed/')
+
+      # Create site
+      config = mock
+      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+      @site = mock
+      @site.expects(:config).at_least_once.returns(config)
 
       # Create procs
       content_proc = lambda { |article| excerptize(article.content, :length => 18) }
@@ -202,12 +217,17 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
   def test_url_for_without_custom_path_in_feed
     # Create feed page
     @page = mock
-    @page.expects(:base_url).returns('http://example.com')
 
     # Create article
     page = mock
     page.expects(:custom_path_in_feed).returns(nil)
     page.expects(:path).returns('/foo/bar/')
+
+    # Create site
+    config = mock
+    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+    @site = mock
+    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('http://example.com/foo/bar/', url_for(page))
@@ -219,11 +239,16 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
   def test_url_for_with_custom_path_in_feed
     # Create feed page
     @page = mock
-    @page.expects(:base_url).returns('http://example.com')
 
     # Create article
     page = mock
     page.expects(:custom_path_in_feed).returns('/meow/woof/')
+
+    # Create site
+    config = mock
+    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+    @site = mock
+    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('http://example.com/meow/woof/', url_for(page))
@@ -236,8 +261,13 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create feed page
     @page = mock
     @page.expects(:[]).with(:feed_url).returns(nil)
-    @page.expects(:base_url).returns('http://example.com')
     @page.expects(:path).returns('/foo/bar/')
+
+    # Create site
+    config = mock
+    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+    @site = mock
+    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
@@ -261,12 +291,17 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
   def test_atom_tag_for
     # Create feed page
     @page = mock
-    @page.expects(:base_url).returns('http://example.com')
 
     # Create article
     page = mock
     page.expects(:created_at).returns(Time.parse('2008-05-19'))
     page.expects(:path).returns('/foo/bar/')
+
+    # Create site
+    config = mock
+    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+    @site = mock
+    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(page))
