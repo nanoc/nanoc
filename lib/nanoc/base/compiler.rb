@@ -19,11 +19,6 @@ module Nanoc
       @asset_compilation_rules = []
     end
 
-    # TODO compilation should happen in three steps:
-    # 1. determining each item's reps
-    # 2. mapping each rep to its output path
-    # 3. compiling each rep
-
     # Compiles (part of) the site and writes out the compiled page and asset
     # representations.
     #
