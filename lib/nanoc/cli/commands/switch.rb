@@ -125,8 +125,8 @@ module Nanoc::CLI
         @base.site.data_source.setup
 
         # Store all data
-        # FIXME store assets
-        @base.site.pages.each { |p| @base.site.data_source.save_page(p) }
+        @base.site.assets.each  { |a| @base.site.data_source.save_asset(a)  }
+        @base.site.pages.each   { |p| @base.site.data_source.save_page(p)   }
         @base.site.layouts.each { |l| @base.site.data_source.save_layout(l) }
         @base.site.data_source.save_code(@base.site.code)
       end
