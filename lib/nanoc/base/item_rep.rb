@@ -63,7 +63,11 @@ module Nanoc
       @name           = name
 
       # Initialize content
-      @content        = {}
+      @content = {
+        :raw  => @item.content,
+        :last => @item.content,
+        :pre  => @item.content
+      }
 
       # Reset flags
       @compiled       = false
