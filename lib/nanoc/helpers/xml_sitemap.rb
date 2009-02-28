@@ -25,7 +25,7 @@ module Nanoc::Helpers
     # used data source (the filesystem data source checks the file mtimes, for
     # instance).
     #
-    # The sitemap page will need to have the following attributes:
+    # The site configuration will need to have the following attributes:
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
@@ -43,7 +43,7 @@ module Nanoc::Helpers
         # Add page
         @pages.reject { |p| p.is_hidden || p.skip_output }.each do |page|
           xml.url do
-            xml.loc         @page.base_url + page.path
+            xml.loc         @site.config[:base_url] + page.path
             xml.lastmod     page.mtime.to_iso8601_date unless page.mtime.nil?
             xml.changefreq  page.changefreq unless page.changefreq.nil?
             xml.priority    page.priority unless page.priority.nil?
