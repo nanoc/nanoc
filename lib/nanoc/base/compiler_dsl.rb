@@ -14,7 +14,7 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      @compiler.add_page_rule(identifier, rep_name, block)
+      @compiler.add_page_compilation_rule(identifier, rep_name, block)
     end
 
     def asset(identifier, params={}, &block)
@@ -25,7 +25,7 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      @compiler.add_asset_rule(identifier, rep_name, block)
+      @compiler.add_asset_compilation_rule(identifier, rep_name, block)
     end
 
     def layout(identifier, &block)
@@ -33,7 +33,7 @@ module Nanoc
       raise ArgumentError.new("#layout requires a block") unless block_given?
 
       # Create rule
-      @compiler.add_layout_rule(identifier, block)
+      @compiler.add_layout_compilation_rule(identifier, block)
     end
 
   end

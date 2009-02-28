@@ -4,6 +4,9 @@ module Nanoc
   # representations.
   class Compiler
 
+    # The compilation stack. When the compiler begins compiling a rep, it will
+    # be placed on the stack; when it is done compiling the rep, it will be
+    # removed from the stack.
     attr_reader :stack
 
     # Creates a new compiler for the given site.
@@ -12,88 +15,114 @@ module Nanoc
 
       @stack = []
 
-      @page_rules  = []
-      @asset_rules = []
+      @page_compilation_rules  = []
+      @asset_compilation_rules = []
     end
+
+    # TODO compilation should happen in three steps:
+    # 1. determining each item's reps
+    # 2. mapping each rep to its output path
+    # 3. compiling each rep
 
     # Compiles (part of) the site and writes out the compiled page and asset
     # representations.
     #
     # +items+:: The items that should be compiled, along with their
-    #           edpendencies. Pass +nil+ if the entire site should be
+    #           dependencies. Pass +nil+ if the entire site should be
     #           compiled.
     #
-    # This method also accepts a few parameters:
+    # This method also accepts a few optional parameters:
     #
     # +:force+:: true if the rep should be compiled even if it is not
-    #                             outdated, false if not. Defaults to false.
+    #            outdated, false if not. Defaults to false.
     def run(items=nil, params={})
-      # Parse params
-      force = params[:force] || false
-
-      # Find rules file
-      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
-      raise Nanoc::Errors::NoRulesFileFoundError.new if rules_filename.nil?
-
-      # Load DSL
-      dsl = Nanoc::CompilerDSL.new(self)
-      dsl.instance_eval(File.read(rules_filename), rules_filename)
+      # Load rules
+      load_rules
 
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Get items to compile
-      items ||= @site.pages + @site.assets
+      # Get items
+      @items = items ? items : @site.pages + @site.assets
 
-      # Compile everything
-      @stack = []
-      items.each { |i| compile_item(i, force) }
-    end
+      # Build reps
+      @items.each { |i| build_reps_for(i) }
+      @reps = @items.map { |i| i.reps }.flatten
 
-    # Compiles the given item and all its representations. This method should
-    # not be called directly; please use Nanoc::Compiler#run instead, and pass
-    # the items to compile as the first argument.
-    #
-    # +force+:: true if the item rep should be compiled even if it is not
-    #                            outdated, false if not.
-    def compile_item(item, force)
-      # Find matching rules
-      all_rules = (item.is_a?(Nanoc::Page) ? @page_rules : @asset_rules)
-      matching_rules = all_rules.inject({}) do |memo, rule|
-        # Skip rule if an existing rule for this rep name already exists
-        next unless memo[rule.rep_name].nil?
-
-        # Skip rule if not applicable to this rep
-        next unless rule.applicable_to?(item)
-
-        # Add rule
-        memo.merge({ rule.rep_name => rule })
-      end
-      raise Nanoc::Errors::NoMatchingRuleFoundError.new if matching_rules.keys.empty?
-
-      # Create reps for each rep name
-      rep_names = matching_rules.keys
-      reps = rep_names.map do |rep_name|
-        if item.is_a?(Nanoc::Page)
-          PageRep.new(item, rep_name)
-        else
-          AssetRep.new(item, rep_name)
-        end
-      end
+      # Map reps
+      @reps.each { |r| map_rep(r) }
 
       # Compile reps
-      reps.each { |rep| compile_rep(rep, matching_rules[rep.name.to_sym], force) }
+      @stack = []
+      @reps.each do |rep|
+        compile_rep(rep, params.has_key?(:force) ? params[:force] : false)
+      end
     end
 
-    # Compiles the given item representation. This method should not be called
-    # directly; please use Nanoc::Compiler#run instead, and pass this item
-    # representation's item as its first argument.
+    # Loads the DSL rules from the rules file in the site's directory.
+    #
+    # This method should not be called directly; please use
+    # Nanoc::Compiler#run instead, and pass this item representation's item as
+    # its first argument.
+   def load_rules
+      # Find rules file
+      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
+      raise Nanoc::Errors::NoRulesFileFoundError.new if rules_filename.nil?
+
+      # Initialize rules
+      @page_compilation_rules  = []
+      @asset_compilation_rules = []
+
+      # Load DSL
+      dsl = Nanoc::CompilerDSL.new(self)
+      dsl.instance_eval(File.read(rules_filename), rules_filename)
+    end
+
+    # Builds the representations for thet given item.
+    #
+    # This method should not be called directly; please use
+    # Nanoc::Compiler#run instead, and pass this item representation's item as
+    # its first argument.
+    def build_reps_for(item)
+      # Find matching rules
+      all_rules = (item.is_a?(Nanoc::Page) ? @page_compilation_rules : @asset_compilation_rules)
+      matching_rules = all_rules.select { |r| r.applicable_to?(item) }
+      raise Nanoc::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
+
+      # Build reps
+      rep_names = matching_rules.map { |r| r.rep_name }.uniq
+      rep_names.each do |rep_name|
+        if item.is_a?(Nanoc::Page)
+          item.reps << PageRep.new(item, rep_name)
+        else
+          item.reps << AssetRep.new(item, rep_name)
+        end
+      end
+    end
+
+    # Gives the given rep a disk path and a web path.
+    #
+    # This method should not be called directly; please use
+    # Nanoc::Compiler#run instead, and pass this item representation's item as
+    # its first argument.
+    def map_rep(rep)
+      # TODO use mapping rules instead of using the router
+
+      rep.raw_path = @site.router.raw_path_for(rep)
+      rep.path     = @site.router.path_for(rep)
+    end
+
+    # Compiles the given item representation.
+    #
+    # This method should not be called directly; please use
+    # Nanoc::Compiler#run instead, and pass this item representation's item as
+    # its first argument.
     #
     # +rep+:: The rep that is to be compiled.
     #
     # +force+:: true if the item rep should be compiled even if it is not
-    #                            outdated, false if not.
-    def compile_rep(rep, rule, force)
+    #           outdated, false if not.
+    def compile_rep(rep, force)
       # Reset compilation status
       rep.modified = false
       rep.created  = false
@@ -123,11 +152,10 @@ module Nanoc
       rep.content[:last] ||= rep.content[:raw]
 
       # Check if file will be created
-      # FIXME temporary
-      old_content = '' # File.file?(rep.raw_path) ? File.read(rep.raw_path) : nil
+      old_content = File.file?(rep.raw_path) ? File.read(rep.raw_path) : nil
 
       # Apply matching rule
-      rule.apply_to(rep)
+      compilation_rule_for(rep).apply_to(rep)
 
       # Update status
       rep.compiled = true
@@ -141,15 +169,22 @@ module Nanoc
       @stack.pop
     end
 
-    def add_page_rule(identifier, rep_name, block)
-      @page_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    # Returns the compilation rule for the given rep.
+    def compilation_rule_for(rep)
+      (rep.is_a?(Nanoc::PageRep) ? @page_compilation_rules : @asset_compilation_rules).find do |rule|
+        rule.applicable_to?(rep.item) && rule.rep_name == rep.name
+      end
     end
 
-    def add_asset_rule(identifier, rep_name, block)
-      @asset_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    def add_page_compilation_rule(identifier, rep_name, block)
+      @page_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
     end
 
-    def add_layout_rule(identifier, block)
+    def add_asset_compilation_rule(identifier, rep_name, block)
+      @asset_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    end
+
+    def add_layout_compilation_rule(identifier, block)
       # TODO implement
     end
 
