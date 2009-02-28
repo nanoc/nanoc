@@ -37,14 +37,20 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
       # Create sitemap page
       @page = mock
-      @page.expects(:base_url).times(2).returns('http://example.com')
+
+      # Create site
+      config = mock
+      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+      @site = mock
+      @site.expects(:config).at_least_once.returns(config)
 
       # Check
       xml_sitemap
     end
   ensure
     @pages = nil
-    @page = nil
+    @page  = nil
+    @site  = nil
   end
 
 end
