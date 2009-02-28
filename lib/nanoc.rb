@@ -1,7 +1,7 @@
 module Nanoc
 
   # The current nanoc version.
-  VERSION = '2.1.5'
+  VERSION = '2.1.6'
 
   # Generic error. Superclass for all nanoc-specific errors.
   class Error < RuntimeError ; end
