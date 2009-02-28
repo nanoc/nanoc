@@ -200,6 +200,9 @@ module Nanoc
       Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
       @content[:last] = filter.run(layout.content)
       Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
+
+      # Create "post" snapshot
+      snapshot(:post)
     end
 
     # Creates a snapshot of the current compiled item content.
