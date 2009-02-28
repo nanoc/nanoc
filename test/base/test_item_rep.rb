@@ -10,8 +10,12 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_to_proxy
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:content, "blah blah blah")
+
     # Create item rep
-    rep = Nanoc::ItemRep.new(nil, 'blah')
+    rep = Nanoc::ItemRep.new(item, 'blah')
 
     # Create proxy
     rep_proxy = rep.to_proxy
@@ -25,6 +29,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -59,6 +64,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, nil)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -93,6 +99,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -128,6 +135,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -158,6 +166,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-100)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -192,6 +201,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -226,6 +236,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
     item.expect(:attribute_named, false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -352,6 +363,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
   def test_write
     # Mock site, router and item
     item = MiniTest::Mock.new
+    item.expect(:content, "blah blah blah")
 
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, '/foo/')
