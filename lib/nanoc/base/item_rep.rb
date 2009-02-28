@@ -34,13 +34,16 @@ module Nanoc
     # Indicates whether this rep's output file has changed the last time it
     # was compiled.
     attr_accessor :modified
+    alias :modified?, :modified
 
     # Indicates whether this rep's output file was created the last time it
     # was compiled.
     attr_accessor :created
+    alias :created?, :created
 
     # Indicates whether this rep has already been compiled.
     attr_accessor :compiled
+    alias :compiled?, :compiled
 
     attr_accessor :path
 
@@ -85,21 +88,6 @@ module Nanoc
     # Returns a proxy (Nanoc::ItemRepProxy) for this item representation.
     def to_proxy
       @proxy ||= ItemRepProxy.new(self)
-    end
-
-    # Alias for created.
-    def created?
-      @created
-    end
-
-    # Alias for modified.
-    def modified?
-      @modified
-    end
-
-    # Alias for compiled.
-    def compiled?
-      @compiled
     end
 
     # Returns true if this item rep's output file is outdated and must be
