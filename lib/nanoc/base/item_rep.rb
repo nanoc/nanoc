@@ -42,6 +42,10 @@ module Nanoc
     # Indicates whether this rep has already been compiled.
     attr_accessor :compiled
 
+    attr_accessor :path
+
+    attr_accessor :raw_path
+
     # A hash containing this rep's content for each snapshot. Snapshot names
     # can be anything; some predefines ones are +:raw+, +:pre+, +:post+ and
     # +:last+.
@@ -79,41 +83,19 @@ module Nanoc
       @proxy ||= ItemRepProxy.new(self)
     end
 
-    # Returns true if this item rep's output file was created during the last
-    # compilation session, or false if the output file did already exist.
+    # Alias for created.
     def created?
       @created
     end
 
-    # Returns true if this item rep's output file was modified during the last
-    # compilation session, or false if the output file wasn't changed.
+    # Alias for modified.
     def modified?
       @modified
     end
 
-    # Returns true if this item rep has been compiled, false otherwise.
+    # Alias for compiled.
     def compiled?
       @compiled
-    end
-
-    # Returns the path to the output file, including the path to the output
-    # directory specified in the site configuration, and including the
-    # filename and extension.
-    def raw_path
-      @raw_path ||= @item.site.router.raw_path_for(self)
-    end
-
-    # Returns the path to the output file as it would be used in a web
-    # browser: starting with a slash (representing the web root), and only
-    # including the filename and extension if they cannot be ignored (i.e.
-    # they are not in the site configuration's list of index files).
-    def path
-      Nanoc::NotificationCenter.post(:visit_started, self)
-      Nanoc::NotificationCenter.post(:visit_ended,   self)
-
-      @item.site.compiler.compile_rep(self, false)
-
-      @path ||= @item.site.router.path_for(self)
     end
 
     # Returns true if this item rep's output file is outdated and must be
