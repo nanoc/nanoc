@@ -91,11 +91,13 @@ module Nanoc::Helpers
     # used data source (the filesystem data source checks the file mtimes, for
     # instance).
     #
-    # The feed page will need to have the following attributes:
+    # The site configuration will need to have the following attributes:
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
     #   would be "http://example.com".
+    #
+    # The feed page will need to have the following attributes:
     #
     # * 'title', containing the title of the feed, which is usually also the
     #   title of the blog.
@@ -140,14 +142,14 @@ module Nanoc::Helpers
       xml.instruct!
       xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
         # Add primary attributes
-        xml.id      @page.base_url + '/'
+        xml.id      @site.config[:base_url] + '/'
         xml.title   @page.title
 
         # Add date
         xml.updated last_article.mtime.to_iso8601_time unless last_article.nil?
 
         # Add links
-        xml.link(:rel => 'alternate', :href => @page.base_url)
+        xml.link(:rel => 'alternate', :href => @site.config[:base_url])
         xml.link(:rel => 'self',      :href => feed_url)
 
         # Add author information
@@ -184,13 +186,13 @@ module Nanoc::Helpers
     # Returns the URL for the given page. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
     def url_for(page)
-      @page.base_url + (page.custom_path_in_feed || page.path)
+      @site.config[:base_url] + (page.custom_path_in_feed || page.path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
-      @page[:feed_url] || @page.base_url + @page.path
+      @page[:feed_url] || @site.config[:base_url] + @page.path
     end
 
     # Returns an URI containing an unique ID for the given page. This will be
@@ -198,7 +200,7 @@ module Nanoc::Helpers
     # created using a procedure suggested by Mark Pilgrim in this blog post:
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
     def atom_tag_for(page)
-      hostname        = @page.base_url.sub(/.*:\/\/(.+?)\/?$/, '\1')
+      hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
       formatted_date  = page.created_at.to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + page.path
