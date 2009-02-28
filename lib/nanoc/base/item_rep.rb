@@ -59,8 +59,8 @@ module Nanoc
     # +name+:: The unique name for the new item representation.
     def initialize(item, name)
       # Set primary attributes
-      @item           = item
-      @name           = name
+      @item = item
+      @name = name
 
       # Initialize content
       @content = {
