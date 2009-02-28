@@ -34,16 +34,16 @@ module Nanoc
     # Indicates whether this rep's output file has changed the last time it
     # was compiled.
     attr_accessor :modified
-    alias :modified?, :modified
+    alias_method :modified?, :modified
 
     # Indicates whether this rep's output file was created the last time it
     # was compiled.
     attr_accessor :created
-    alias :created?, :created
+    alias_method :created?, :created
 
     # Indicates whether this rep has already been compiled.
     attr_accessor :compiled
-    alias :compiled?, :compiled
+    alias_method :compiled?, :compiled
 
     # The item rep's path, as used when being linked to. It starts with a
     # slash and it is relative to the output directory. It does not include
