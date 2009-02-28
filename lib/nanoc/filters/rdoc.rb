@@ -15,7 +15,7 @@ module Nanoc::Filters
         require 'rdoc/markup/simple_markup'
         require 'rdoc/markup/simple_markup/to_html'
 
-        ::SM::SimpleMarkup.new.convert(content, SM::ToHtml.new)
+        ::SM::SimpleMarkup.new.convert(content, ::SM::ToHtml.new)
       end
     end
 
