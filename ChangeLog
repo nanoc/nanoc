@@ -1,6 +1,17 @@
 nanoc Release Notes
 ===================
 
+2.1.6
+-----
+
+* The FilesystemCombined data source now supports empty metadata sections
+* The RDoc filter now works for both RDoc 1.x and 2.x
+* The autocompiler now serves a 500 when an exception occurs outside
+  compilation
+* The autocompiler no longer serves index files when the request path does not
+  end with a slash
+* The autocompiler now always serves asset content correctly
+
 2.1.5
 -----
 
