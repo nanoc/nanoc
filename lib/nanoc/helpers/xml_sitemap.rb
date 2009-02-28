@@ -37,6 +37,11 @@ module Nanoc::Helpers
       buffer = ''
       xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
 
+      # Check for required attributes
+      if @site.config[:base_url].nil?
+        raise RuntimeError.new("The Nanoc::Helpers::XMLSitemap helper requires the site configuration to specify the base URL for the site.")
+      end
+
       # Build sitemap
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
