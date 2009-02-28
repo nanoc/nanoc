@@ -142,10 +142,6 @@ module Nanoc
       @stack.push(rep)
       Nanoc::NotificationCenter.post(:compilation_started, rep)
 
-      # Create raw and last snapshots if necessary
-      rep.content[:raw]  ||= rep.item.content
-      rep.content[:last] ||= rep.content[:raw]
-
       # Check if file will be created
       old_content = File.file?(rep.raw_path) ? File.read(rep.raw_path) : nil
 
