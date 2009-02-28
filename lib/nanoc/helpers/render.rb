@@ -8,8 +8,7 @@ module Nanoc::Helpers
 
     # Returns a string containing the rendered given layout.
     #
-    # +name_or_path+:: the name or the path of the layout that should be
-    #                  rendered.
+    # +identifier+:: the identifier of the layout that should be rendered.
     #
     # +other_assigns+:: a hash containing assigns that will be made available
     #                   as instance variables.
@@ -24,10 +23,10 @@ module Nanoc::Helpers
     #
     #   <%= render 'head', :title => 'Foo' %>
     #   # => "<h1>Foo</h1>"
-    def render(name_or_path, other_assigns={})
+    def render(identifier, other_assigns={})
       # Find layout
-      layout = @site.layouts.find { |l| l.path == name_or_path.cleaned_identifier }
-      raise Nanoc::Errors::UnknownLayoutError.new(name_or_path.cleaned_identifier) if layout.nil?
+      layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
+      raise Nanoc::Errors::UnknownLayoutError.new(identifier.cleaned_identifier) if layout.nil?
 
       # Get assigns
       assigns = {
@@ -47,7 +46,7 @@ module Nanoc::Helpers
 
       # Create filter
       klass = layout.filter_class
-      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
+      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.identifier) if klass.nil?
       filter = klass.new(assigns)
 
       # Layout

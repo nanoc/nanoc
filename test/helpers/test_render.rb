@@ -10,7 +10,7 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
   def test_render
     # Mock layouts
     layout = MiniTest::Mock.new
-    layout.expect(:path,         '/foo/')
+    layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= @layout.path %> layout.')
     layout.expect(:filter_class, Nanoc::Filters::ERB)
     layout_proxy = MiniTest::Mock.new
@@ -39,7 +39,7 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
   def test_render_with_unknown_filter
     # Mock layouts
     layout = MiniTest::Mock.new
-    layout.expect(:path,         '/foo/')
+    layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= "foo" %> layout.')
     layout.expect(:filter_class, nil)
     layout_proxy = MiniTest::Mock.new
