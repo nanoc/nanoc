@@ -45,8 +45,15 @@ module Nanoc
     attr_accessor :compiled
     alias :compiled?, :compiled
 
+    # The item rep's path, as used when being linked to. It starts with a
+    # slash and it is relative to the output directory. It does not include
+    # the path to the output directory. It will not include the filename if
+    # the filename is an index filename.
     attr_accessor :path
 
+    # The item rep's raw path. It is relative to the current working directory
+    # and includes the path to the output directory. It also includes the
+    # filename, even if it is an index filename.
     attr_accessor :raw_path
 
     # A hash containing this rep's content for each snapshot. Snapshot names
