@@ -351,16 +351,12 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_write
     # Mock site, router and item
-    router = MiniTest::Mock.new
-    router.expect(:raw_path_for, 'tmp/foo/bar/baz/quux.txt', [ nil ])
-    site = MiniTest::Mock.new
-    site.expect(:router, router)
     item = MiniTest::Mock.new
-    item.expect(:site, site)
 
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, '/foo/')
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    item_rep.raw_path = 'tmp/foo/bar/baz/quux.txt'
 
     # Write
     item_rep.write
