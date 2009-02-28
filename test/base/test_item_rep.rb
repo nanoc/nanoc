@@ -20,51 +20,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal(rep, rep_proxy.instance_eval { @obj })
   end
 
-  def test_raw_path
-    # Create site
-    site = MiniTest::Mock.new
-
-    # Create item and rep
-    item = MiniTest::Mock.new
-    item.expect(:site, site)
-    rep = Nanoc::ItemRep.new(item, 'blah')
-
-    # Create site and router
-    router = MiniTest::Mock.new
-    site.expect(:router, router)
-    router.expect(:raw_path_for, 'output/blah/test.html', [ rep ])
-
-    # Test
-    assert_equal('output/blah/test.html', rep.raw_path)
-    item.verify
-    site.verify
-    router.verify
-  end
-
-  def test_path
-    # Create site
-    compiler = MiniTest::Mock.new
-    site = MiniTest::Mock.new
-    site.expect(:compiler, compiler)
-
-    # Create item and rep
-    item = MiniTest::Mock.new
-    item.expect(:site, site)
-    rep = Nanoc::ItemRep.new(item, 'blah')
-    compiler.expect(:compile_rep, true, [ rep, false ])
-
-    # Create site and router
-    router = MiniTest::Mock.new
-    site.expect(:router, router)
-    router.expect(:path_for, '/foo/bar/baz/', [ rep ])
-
-    # Test
-    assert_equal('/foo/bar/baz/', rep.path)
-    item.verify
-    site.verify
-    router.verify
-  end
-
   def test_not_outdated
     # Mock item
     item = MiniTest::Mock.new
