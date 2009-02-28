@@ -156,7 +156,7 @@ module Nanoc
     #              get the raw, uncompiled content, use +:raw+.
     def content_at_snapshot(snapshot=:pre)
       Nanoc::NotificationCenter.post(:visit_started, self)
-      @item.site.compiler.compile_rep(self, false) unless @content[snapshot]
+      @item.site.compiler.compile_rep(self, false) unless compiled?
       Nanoc::NotificationCenter.post(:visit_ended, self)
 
       @content[snapshot]
