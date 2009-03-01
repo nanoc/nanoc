@@ -2,8 +2,6 @@ require 'test/helper'
 
 describe 'Nanoc::Site#initialize' do
 
-  # FIXME causes warnings for some odd reason
-
   # TODO implement should load code
   # TODO implement should not raise for custom routers
 
