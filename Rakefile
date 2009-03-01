@@ -2,17 +2,7 @@
 
 # Rake etc
 require 'rake'
-require 'rake/clean'
 require 'rake/gempackagetask'
-require 'rake/testtask'
-
-# Rdoc
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  warn "Tried loading hanna but failed; falling back to the normal RDoc template"
-  require 'rake/rdoctask'
-end
 
 # nanoc itself
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
@@ -20,7 +10,7 @@ require 'nanoc'
 
 ##### General details
 
-SUMMARY = 'a tool that runs on your local computer  and compiles Markdown, ' +
+SUMMARY = 'a tool that runs on your local computer and compiles Markdown, ' +
           'Textile, Haml, ... documents into static web pages'
 POST_INSTALL_MESSAGE = <<EOS
 Thanks for installing nanoc 3.0! Here are some resources to help you get started:
