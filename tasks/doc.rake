@@ -3,7 +3,7 @@ namespace :doc do
   desc 'Build the RDoc documentation'
   task :rdoc do
     # Clean
-    FileUtils.rm_r 'doc'
+    FileUtils.rm_r 'doc' if File.exist?('doc')
 
     # Build
     rdoc_files   = GemSpec.extra_rdoc_files + [ 'lib' ]
