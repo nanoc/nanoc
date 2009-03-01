@@ -2,9 +2,6 @@ require 'test/helper'
 
 describe 'Hash#clean' do
 
-  before { global_setup    }
-  after  { global_teardown }
-
   it 'should convert keys to symbols' do
     hash_old = { 'foo' => 'bar' }
     hash_new = { :foo  => 'bar' }

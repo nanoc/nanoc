@@ -2,9 +2,6 @@ require 'test/helper'
 
 describe 'String#cleaned_identifier' do
 
-  before { global_setup    }
-  after  { global_teardown }
-
   it 'should not convert already clean paths' do
     '/foo/bar/'.cleaned_identifier.must_equal '/foo/bar/'
   end
