@@ -150,7 +150,7 @@ module Nanoc
 
       # Update status
       rep.compiled = true
-      unless rep.item.attribute_named(:skip_output)
+      if rep.written?
         rep.created  = old_content.nil?
         rep.modified = rep.created ? true : old_content != rep.content[:last]
       end

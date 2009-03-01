@@ -45,6 +45,11 @@ module Nanoc
     attr_accessor :compiled
     alias_method :compiled?, :compiled
 
+    # Indicates whether this rep's compiled content has been written during
+    # the current or last compilation session.
+    attr_reader :written
+    alias_method :written?, :written
+
     # The item rep's path, as used when being linked to. It starts with a
     # slash and it is relative to the output directory. It does not include
     # the path to the output directory. It will not include the filename if
@@ -83,6 +88,7 @@ module Nanoc
       @compiled       = false
       @modified       = false
       @created        = false
+      @written        = false
       @force_outdated = false
     end
 
@@ -151,7 +157,7 @@ module Nanoc
     #              get the raw, uncompiled content, use +:raw+.
     def content_at_snapshot(snapshot=:pre)
       Nanoc::NotificationCenter.post(:visit_started, self)
-      @item.site.compiler.compile_rep(self, false) unless compiled?
+      @item.site.compiler.compile_rep(self) unless compiled?
       Nanoc::NotificationCenter.post(:visit_ended, self)
 
       @content[snapshot]
@@ -207,8 +213,14 @@ module Nanoc
 
     # Writes the item rep's compiled content to the rep's output file.
     def write
+      # Create parent directory
       FileUtils.mkdir_p(File.dirname(self.raw_path))
+
+      # Write
       File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
+
+      # Set written
+      @written = true
     end
 
   end
