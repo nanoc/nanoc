@@ -118,10 +118,6 @@ module Nanoc
     #
     # +rep+:: The rep that is to be compiled.
     def compile_rep(rep)
-      # Reset compilation status
-      rep.modified = false
-      rep.created  = false
-
       # Don't compile if already compiled
       return if rep.compiled?
 
@@ -142,18 +138,9 @@ module Nanoc
       @stack.push(rep)
       Nanoc::NotificationCenter.post(:compilation_started, rep)
 
-      # Check if file will be created
-      old_content = File.file?(rep.raw_path) ? File.read(rep.raw_path) : nil
-
       # Apply matching rule
       compilation_rule_for(rep).apply_to(rep)
-
-      # Update status
       rep.compiled = true
-      if rep.written?
-        rep.created  = old_content.nil?
-        rep.modified = rep.created ? true : old_content != rep.content[:last]
-      end
 
       # Stop
       Nanoc::NotificationCenter.post(:compilation_ended, rep)

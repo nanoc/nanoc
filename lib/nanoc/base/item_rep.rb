@@ -216,11 +216,20 @@ module Nanoc
       # Create parent directory
       FileUtils.mkdir_p(File.dirname(self.raw_path))
 
+      # Check if file will be created
+      @created = !File.file?(self.raw_path)
+
+      # Remember old content
+      if File.file?(self.raw_path)
+        old_content = File.read(self.raw_path)
+      end
+
       # Write
       File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
-
-      # Set written
       @written = true
+
+      # Check if file was modified
+      @modified = File.read(self.raw_path) != old_content
     end
 
   end
