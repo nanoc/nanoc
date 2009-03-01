@@ -5,9 +5,6 @@ class Nanoc::ItemRuleTest < MiniTest::Unit::TestCase
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  def test_stub
-  end
-
   def test_initialize
     # TODO implement
   end
