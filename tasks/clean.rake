@@ -2,7 +2,7 @@ require 'rake/clean'
 
 CLEAN.include([
   'coverage',
-  'rdoc',
+  'doc',
   'tmp'
 ])
 
