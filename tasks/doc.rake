@@ -1,11 +1,14 @@
-require 'rake/rdoctask'
-
 namespace :doc do
 
-  Rake::RDocTask.new do |task|
-    task.rdoc_files.include(GemSpec.extra_rdoc_files + [ 'lib' ])
-    task.rdoc_dir = 'rdoc'
-    task.options = GemSpec.rdoc_options
+  desc 'Build the RDoc documentation'
+  task :rdoc do
+    # Clean
+    FileUtils.rm_r 'doc'
+
+    # Build
+    rdoc_files   = GemSpec.extra_rdoc_files + [ 'lib' ]
+    rdoc_options = GemSpec.rdoc_options
+    system *[ 'rdoc', rdoc_files, rdoc_options ].flatten
   end
 
 end
