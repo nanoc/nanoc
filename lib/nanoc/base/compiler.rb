@@ -47,11 +47,14 @@ module Nanoc
       # Map reps
       @reps.each { |r| map_rep(r) }
 
+      # Mark all reps as outdated if necessary
+      if params.has_key?(:force) && params[:force]
+        @reps.each { |r| r.force_outdated = true }
+      end
+
       # Compile reps
       @stack = []
-      @reps.each do |rep|
-        compile_rep(rep, params.has_key?(:force) ? params[:force] : false)
-      end
+      @reps.each { |rep| compile_rep(rep) }
     end
 
     # Loads the DSL rules from the rules file in the site's directory.
@@ -114,10 +117,7 @@ module Nanoc
     # its first argument.
     #
     # +rep+:: The rep that is to be compiled.
-    #
-    # +force+:: true if the item rep should be compiled even if it is not
-    #           outdated, false if not.
-    def compile_rep(rep, force)
+    def compile_rep(rep)
       # Reset compilation status
       rep.modified = false
       rep.created  = false
@@ -126,7 +126,7 @@ module Nanoc
       return if rep.compiled?
 
       # Skip unless outdated
-      unless rep.outdated? or force
+      unless rep.outdated?
         Nanoc::NotificationCenter.post(:compilation_started, rep)
         Nanoc::NotificationCenter.post(:compilation_ended,   rep)
         return
