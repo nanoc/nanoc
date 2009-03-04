@@ -1,6 +1,5 @@
 require 'nanoc/base/error.rb'
 require 'nanoc/base/core_ext.rb'
-require 'nanoc/base/enhancements.rb'
 require 'nanoc/base/proxy.rb'
 require 'nanoc/base/proxies.rb'
 require 'nanoc/base/plugin.rb'
