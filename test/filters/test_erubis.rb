@@ -26,7 +26,8 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
       begin
         filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
       rescue SyntaxError => e
-        assert_match '?', e.backtrace[0]
+        e.message =~ /(.+?):\d+: /
+        assert_match '?', $1
         raised = true
       end
       assert raised
