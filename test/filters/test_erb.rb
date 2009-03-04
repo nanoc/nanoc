@@ -34,7 +34,8 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
     begin
       filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
     rescue SyntaxError => e
-      assert_match 'page /foo/bar/baz/ (rep quux)', e.backtrace[0]
+      e.message =~ /(.+?):\d+: /
+      assert_match 'page /foo/bar/baz/ (rep quux)', $1
       raised = true
     end
     assert raised
@@ -60,7 +61,8 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
     begin
       filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
     rescue SyntaxError => e
-      assert_match 'asset /foo/bar/baz/ (rep quux)', e.backtrace[0]
+      e.message =~ /(.+?):\d+: /
+      assert_match 'asset /foo/bar/baz/ (rep quux)', $1
       raised = true
     end
     assert raised
