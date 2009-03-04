@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Extra::FileProxyTest < Test::Unit::TestCase
+class Nanoc::Extra::FileProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

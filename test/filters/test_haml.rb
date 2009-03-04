@@ -1,52 +1,51 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Filters::HamlTest < Test::Unit::TestCase
+class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
     if_have 'haml' do
-      assert_nothing_raised do
-        # Create site
-        site = mock
+      # Mock object rep
+      obj_rep = MiniTest::Mock.new
+      obj_rep.expect(:attribute_named, {}, [ :haml_options ])
 
-        # Create page
-        page = mock
-        page_proxy = Nanoc::Proxy.new(page)
-        page.expects(:site).returns(site)
-        page.expects(:to_proxy).returns(page_proxy)
-        page.expects(:attribute_named).with(:title).times(2).returns('Home', 'Home')
+      # Create filter
+      filter = ::Nanoc::Filters::Haml.new({ :_obj_rep => obj_rep, :question => 'Is this the Payne residence?' })
 
-        # Create page rep
-        page_rep = mock
-        page_rep_proxy = Nanoc::Proxy.new(page_rep)
-        page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-        page_rep.expects(:page).returns(page)
-        page_rep.expects(:to_proxy).returns(page_rep_proxy)
-        page_rep.expects(:attribute_named).times(3).returns({}, {}, {})
+      # Run filter (no assigns)
+      result = filter.run('%html')
+      assert_match(/<html>.*<\/html>/, result)
 
-        # Mock site
-        site.expects(:pages).returns([])
-        site.expects(:assets).returns([])
-        site.expects(:layouts).returns([])
-        site.expects(:config).returns({})
+      # Run filter (assigns without @)
+      result = filter.run('%p= question')
+      assert_equal("<p>Is this the Payne residence?</p>\n", result)
 
-        # Get filter
-        filter = ::Nanoc::Filters::Haml.new(page_rep)
+      # Run filter (assigns with @)
+      result = filter.run('%p= @question')
+      assert_equal("<p>Is this the Payne residence?</p>\n", result)
+    end
+  end
 
-        # Run filter (no assigns)
-        result = filter.run('%html')
-        assert_match(/<html>.*<\/html>/, result)
+  def test_filter_error
+    if_have 'haml' do
+      # Mock object rep
+      obj_rep = MiniTest::Mock.new
+      obj_rep.expect(:attribute_named, {}, [ :haml_options ])
 
-        # Run filter (assigns without @)
-        result = filter.run('%p= page.title')
-        assert_equal("<p>Home</p>\n", result)
+      # Create filter
+      filter = ::Nanoc::Filters::Haml.new({ :_obj_rep => obj_rep })
 
-        # Run filter (assigns with @)
-        result = filter.run('%p= @page.title')
-        assert_equal("<p>Home</p>\n", result)
+      # Run filter
+      raised = false
+      begin
+        filter.run('%p= this isn\'t really ruby so it\'ll break, muahaha')
+      rescue SyntaxError => e
+        assert_match '?', e.backtrace[0]
+        raised = true
       end
+      assert raised
     end
   end
 

@@ -1,13 +1,13 @@
 module Nanoc::Filters
   class Erubis < Nanoc::Filter
 
-    identifiers :erubis
+    identifier :erubis
 
     def run(content)
       require 'erubis'
 
       # Get result
-      ::Erubis::Eruby.new(content).evaluate(assigns)
+      ::Erubis::Eruby.new(content, :filename => filename).evaluate(assigns)
     end
 
   end

@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreatePageCommand < Command # :nodoc:
+  class CreatePageCommand < Cri::Command # :nodoc:
 
     def name
       'create_page'
@@ -15,13 +15,11 @@ module Nanoc::CLI
     end
 
     def long_desc
-      'Create a new page in the current site. The template that will be ' +
-      'used for generating the page will be \'default\', unless otherwise ' +
-      'specified.'
+      'Create a new page in the current site.'
     end
 
     def usage
-      "nanoc create_page [options] [path]"
+      "nanoc create_page [options] [identifier]"
     end
 
     def option_definitions
@@ -30,11 +28,6 @@ module Nanoc::CLI
         {
           :long => 'vcs', :short => 'c', :argument => :required,
           :desc => 'select the VCS to use'
-        },
-        # --template
-        {
-          :long => 'template', :short => 't', :argument => :required,
-          :desc => 'specify the template for the new page'
         }
       ]
     end
@@ -47,21 +40,13 @@ module Nanoc::CLI
       end
 
       # Extract arguments and options
-      path          = arguments[0].cleaned_path
-      template_name = options[:template] || 'default'
+      identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
       @base.require_site
 
       # Set VCS if possible
       @base.set_vcs(options[:vcs])
-
-      # Find template
-      template = @base.site.templates.find { |t| t.name == template_name }
-      if template.nil?
-        $stderr.puts "A template named '#{template_name}' was not found; aborting."
-        exit 1
-      end
 
       # Setup notifications
       Nanoc::NotificationCenter.on(:file_created) do |file_path|
@@ -70,14 +55,14 @@ module Nanoc::CLI
 
       # Create page
       page = Nanoc::Page.new(
-        template.page_content,
-        template.page_attributes,
-        path
+        "Hi, I'm a new page!\n",
+        { :title => "A New Page" },
+        identifier
       )
       page.site = @base.site
-      page.save
+      @base.site.data_source.save_page(page)
 
-      puts "A page has been created at #{path}."
+      puts "A page has been created at #{identifier}."
     end
 
   end

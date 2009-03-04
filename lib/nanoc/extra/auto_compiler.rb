@@ -46,11 +46,13 @@ END
 		<blockquote><p><%=h message %></p></blockquote>
 		<p>Page compilation stack:</p>
 		<ol>
-<% @site.compiler.stack.reverse.each do |item| %>
-<%   if item.is_a?(Nanoc::PageRep) # page rep %>
-			<li><strong>Page</strong> <%= item.page.path %> (rep <%= item.name %>)</li>
+<% @site.compiler.stack.reverse.each do |obj| %>
+<% if item.is_a?(Nanoc::PageRep) # page rep %>
+			<li><strong>Page</strong> <%= obj.page.identifier %> (rep <%= obj.name %>)</li>
+<% elsif item.is_a?(Nanoc::AssetRep) # asset rep %>
+			<li><strong>Asset</strong> <%= obj.asset.identifier %> (rep <%= obj.name %>)</li>
 <% else # layout %>
-			<li><strong>Layout</strong> <%= item.path %></li>
+			<li><strong>Layout</strong> <%= obj.identifier %></li>
 <% end %>
 <% end %>
 		</ol>
@@ -185,7 +187,7 @@ END
         # Find rep
         objs = @site.pages + @site.assets
         reps = objs.map { |o| o.reps }.flatten
-        rep = reps.find { |r| r.web_path == path }
+        rep = reps.find { |r| r.path == path }
 
         if rep.nil?
           # Get list of possible filenames
@@ -265,18 +267,18 @@ END
       # Recompile rep
       begin
         @site.compiler.run(
-          [ rep.respond_to?(:page) ? rep.page : rep.asset ],
-          :even_when_not_outdated => @include_outdated
+          [ rep.item ],
+          :force => @include_outdated
         )
       rescue Exception => exception
-        return serve_500(rep.web_path, exception)
+        return serve_500(rep.path, exception)
       end
 
       # Build response
       [
         200,
-        { 'Content-Type' => mime_type_of(rep.disk_path, 'text/html') },
-        [ File.read(rep.disk_path) ]
+        { 'Content-Type' => mime_type_of(rep.raw_path, 'text/html') },
+        [ rep.content_at_snapshot(:post) ]
       ]
     end
 

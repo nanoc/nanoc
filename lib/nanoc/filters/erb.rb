@@ -1,8 +1,7 @@
 module Nanoc::Filters
   class ERB < Nanoc::Filter
 
-    identifiers :erb
-    extensions  '.erb', '.rhtml'
+    identifier :erb
 
     def run(content)
       require 'erb'
@@ -11,7 +10,9 @@ module Nanoc::Filters
       context = ::Nanoc::Extra::Context.new(assigns)
 
       # Get result
-      ::ERB.new(content).result(context.get_binding)
+      erb = ::ERB.new(content)
+      erb.filename = filename
+      erb.result(context.get_binding)
     end
 
   end

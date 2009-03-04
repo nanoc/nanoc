@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class SwitchCommand < Command # :nodoc:
+  class SwitchCommand < Cri::Command # :nodoc:
 
     def name
       'switch'
@@ -109,9 +109,6 @@ module Nanoc::CLI
         Nanoc::CLI::Logger.instance.file(:high, :update, file_path)
       end
 
-      # Load data
-      @base.site.load_data
-
       # Destroy existing data
       @base.site.data_source.destroy
 
@@ -128,10 +125,9 @@ module Nanoc::CLI
         @base.site.data_source.setup
 
         # Store all data
-        @base.site.pages.each { |p| @base.site.data_source.save_page(p) }
-        @base.site.data_source.save_page_defaults(@base.site.page_defaults)
+        @base.site.assets.each  { |a| @base.site.data_source.save_asset(a)  }
+        @base.site.pages.each   { |p| @base.site.data_source.save_page(p)   }
         @base.site.layouts.each { |l| @base.site.data_source.save_layout(l) }
-        @base.site.templates.each { |t| @base.site.data_source.save_template(t) }
         @base.site.data_source.save_code(@base.site.code)
       end
     end

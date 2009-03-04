@@ -15,17 +15,17 @@ module Nanoc::DataSources
   #   -----
   #   h1. Hello!
   #
-  # The path of a page is determined as follows. A file with an 'index.*'
-  # filename, such as 'index.txt', will have the filesystem path with the
-  # 'index.*' part stripped as a path. For example, 'foo/bar/index.html' will
-  # have '/foo/bar/' as path.
+  # The identifier of a page is determined as follows. A file with an
+  # 'index.*' filename, such as 'index.txt', will have the filesystem path
+  # with the 'index.*' part stripped as a identifier. For example,
+  # 'foo/bar/index.html' will have '/foo/bar/' as identifier.
   #
   # A file with a filename not starting with 'index.', such as 'foo.html',
-  # will have a path ending in 'foo/'. For example, 'foo/bar.html' will have
-  # '/foo/bar/' as path.
+  # will have an identifier ending in 'foo/'. For example, 'foo/bar.html' will have
+  # '/foo/bar/' as identifier.
   #
   # Note that it is possible for two different, separate files to have the
-  # same path. It is therefore recommended to avoid such situations.
+  # same identifier. It is therefore recommended to avoid such situations.
   #
   # Some more examples:
   #
@@ -39,23 +39,10 @@ module Nanoc::DataSources
   # determine the filters to run on it; the metadata in the file defines the
   # list of filters.
   #
-  # = Page defaults
-  #
-  # The page defaults are loaded from a YAML-formatted file named
-  # 'page_defaults.yaml' at the top level of the nanoc site directory. For
-  # backward compatibility, the file can also be named 'meta.yaml'.
-  #
   # = Assets
   #
   # Assets are stored in a way similar to pages. The attributes are merged
-  # into the asset. This does mean, however, that only textual assets are
-  # supported, as there is no way to embed attributes in binary assets.
-  #
-  # = Asset defaults
-  #
-  # The asset defaults are stored similar to the way page defaults are stored,
-  # except that the asset defaults file is named 'asset_defaults.yaml'
-  # instead.
+  # into the asset.
   #
   # = Layouts
   #
@@ -63,21 +50,11 @@ module Nanoc::DataSources
   # each layout consists of a metadata part and a content part, separated by
   # '-----'.
   #
-  # = Templates
-  #
-  # Templates are located in the 'templates' directory. Templates are, just
-  # like pages, files consisting of a metadata part and a content part,
-  # separated by '-----'.
-  #
   # = Code
   #
   # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
   # sub-directories.
   class FilesystemCombined < Nanoc::DataSource
-
-    PAGE_DEFAULTS_FILENAME     = 'page_defaults.yaml'
-    PAGE_DEFAULTS_FILENAME_OLD = 'meta.yaml'
-    ASSET_DEFAULTS_FILENAME    = 'asset_defaults.yaml'
 
     ########## Attributes ##########
 
@@ -101,22 +78,16 @@ module Nanoc::DataSources
 
     def setup # :nodoc:
       # Create directories
-      %w( assets content templates layouts lib ).each do |dir|
+      %w( assets content layouts lib ).each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
     end
 
     def destroy # :nodoc:
-      # Remove files
-      vcs.remove(ASSET_DEFAULTS_FILENAME)    if File.file?(ASSET_DEFAULTS_FILENAME)
-      vcs.remove(PAGE_DEFAULTS_FILENAME)     if File.file?(PAGE_DEFAULTS_FILENAME)
-      vcs.remove(PAGE_DEFAULTS_FILENAME_OLD) if File.file?(PAGE_DEFAULTS_FILENAME_OLD)
-
       # Remove directories
       vcs.remove('assets')
       vcs.remove('content')
-      vcs.remove('templates')
       vcs.remove('layouts')
       vcs.remove('lib')
     end
@@ -128,40 +99,37 @@ module Nanoc::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'page')
 
-        # Skip drafts
-        return nil if meta[:is_draft]
-
         # Get attributes
         attributes = meta.merge(:file => Nanoc::Extra::FileProxy.new(filename))
 
-        # Get actual path
+        # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          path = filename.sub(/^content/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^content/, '').sub(/index\.[^\/]+$/, '') + '/'
         else
-          path = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
         end
 
         # Get mtime
         mtime = File.stat(filename).mtime
 
         # Build page
-        Nanoc::Page.new(content, attributes, path, mtime)
-      end.compact
+        Nanoc::Page.new(content, attributes, identifier, mtime)
+      end
     end
 
     def save_page(page) # :nodoc:
       # Find page path
-      if page.path == '/'
+      if page.identifier == '/'
         paths         = Dir['content/index.*']
         path          = paths[0] || 'content/index.html'
         parent_path   = '/'
       else
-        last_path_component = page.path.split('/')[-1]
-        paths_best    = Dir['content' + page.path[0..-2] + '.*']
-        paths_worst   = Dir['content' + page.path + 'index.*']
-        path_default  = 'content' + page.path[0..-2] + '.html'
+        last_path_component = page.identifier.split('/')[-1]
+        paths_best    = Dir['content' + page.identifier[0..-2] + '.*']
+        paths_worst   = Dir['content' + page.identifier + 'index.*']
+        path_default  = 'content' + page.identifier[0..-2] + '.html'
         path          = paths_best[0] || paths_worst[0] || path_default
-        parent_path   = '/' + File.join(page.path.split('/')[0..-2])
+        parent_path   = '/' + File.join(page.identifier.split('/')[0..-2])
       end
 
       # Notify
@@ -177,7 +145,7 @@ module Nanoc::DataSources
       FileUtils.mkdir_p('content' + parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
-        io.write(page.attributes.to_split_yaml + "\n")
+        io.write(YAML.dump(page.attributes.stringify_keys) + "\n")
         io.write("-----\n")
         io.write(page.content)
       end
@@ -186,7 +154,7 @@ module Nanoc::DataSources
       vcs.add(path) if created
     end
 
-    def move_page(page, new_path) # :nodoc:
+    def move_page(page, new_identifier) # :nodoc:
       # TODO implement
     end
 
@@ -201,112 +169,34 @@ module Nanoc::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'asset')
 
-        # Skip drafts
-        return nil if meta[:is_draft]
-
         # Get attributes
         attributes = { 'extension' => File.extname(filename)[1..-1] }.merge(meta)
 
-        # Get actual path
+        # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          path = filename.sub(/^assets/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^assets/, '').sub(/index\.[^\/]+$/, '') + '/'
         else
-          path = filename.sub(/^assets/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^assets/, '').sub(/\.[^\/]+$/, '') + '/'
         end
 
         # Get mtime
         mtime = File.stat(filename).mtime
 
         # Build asset
-        Nanoc::Asset.new(StringIO.new(content), attributes, path, mtime)
-      end.compact
+        Nanoc::Asset.new(content, attributes, identifier, mtime)
+      end
     end
 
     def save_asset(asset) # :nodoc:
       # TODO implement
     end
 
-    def move_asset(asset, new_path) # :nodoc:
+    def move_asset(asset, new_identifier) # :nodoc:
       # TODO implement
     end
 
     def delete_asset(asset) # :nodoc:
       # TODO implement
-    end
-
-    ########## Page Defaults ##########
-
-    def page_defaults # :nodoc:
-      # Get attributes
-      filename = File.file?(PAGE_DEFAULTS_FILENAME) ? PAGE_DEFAULTS_FILENAME : PAGE_DEFAULTS_FILENAME_OLD
-      attributes = YAML.load_file(filename) || {}
-
-      # Get mtime
-      mtime = File.stat(filename).mtime
-
-      # Build page defaults
-      Nanoc::PageDefaults.new(attributes, mtime)
-    end
-
-    def save_page_defaults(page_defaults) # :nodoc:
-      # Notify
-      if File.file?(PAGE_DEFAULTS_FILENAME)
-        filename = PAGE_DEFAULTS_FILENAME
-        created  = false
-        Nanoc::NotificationCenter.post(:file_updated, filename)
-      elsif File.file?(PAGE_DEFAULTS_FILENAME_OLD)
-        filename = PAGE_DEFAULTS_FILENAME_OLD
-        created  = false
-        Nanoc::NotificationCenter.post(:file_updated, filename)
-      else
-        filename = PAGE_DEFAULTS_FILENAME
-        created  = true
-        Nanoc::NotificationCenter.post(:file_created, filename)
-      end
-
-      # Write
-      File.open(filename, 'w') do |io|
-        io.write(page_defaults.attributes.to_split_yaml)
-      end
-
-      # Add to working copy if possible
-      vcs.add(filename) if created
-    end
-
-    ########## Asset defaults ##########
-
-    def asset_defaults # :nodoc:
-      if File.file?(ASSET_DEFAULTS_FILENAME)
-        # Get attributes
-        attributes = YAML.load_file(ASSET_DEFAULTS_FILENAME) || {}
-
-        # Get mtime
-        mtime = File.stat(ASSET_DEFAULTS_FILENAME).mtime
-
-        # Build asset defaults
-        Nanoc::AssetDefaults.new(attributes, mtime)
-      else
-        Nanoc::AssetDefaults.new({})
-      end
-    end
-
-    def save_asset_defaults(asset_defaults) # :nodoc:
-      # Notify
-      if File.file?(ASSET_DEFAULTS_FILENAME)
-        Nanoc::NotificationCenter.post(:file_updated, ASSET_DEFAULTS_FILENAME)
-        created  = false
-      else
-        Nanoc::NotificationCenter.post(:file_created, ASSET_DEFAULTS_FILENAME)
-        created  = true
-      end
-
-      # Write
-      File.open(ASSET_DEFAULTS_FILENAME, 'w') do |io|
-        io.write(asset_defaults.attributes.to_split_yaml)
-      end
-
-      # Add to working copy if possible
-      vcs.add(ASSET_DEFAULTS_FILENAME) if created
     end
 
     ########## Layouts ##########
@@ -316,29 +206,29 @@ module Nanoc::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'layout')
 
-        # Get actual path
+        # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          path = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
         else
-          path = filename.sub(/^layouts/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^layouts/, '').sub(/\.[^\/]+$/, '') + '/'
         end
 
         # Get mtime
         mtime = File.stat(filename).mtime
 
         # Build layout
-        Nanoc::Layout.new(content, meta, path, mtime)
+        Nanoc::Layout.new(content, meta, identifier, mtime)
       end.compact
     end
 
     def save_layout(layout) # :nodoc:
       # Find layout path
-      last_path_component = layout.path.split('/')[-1]
-      paths_best    = Dir['layouts' + layout.path[0..-2] + '.*']
-      paths_worst   = Dir['layouts' + layout.path + 'index.*']
-      path_default  = 'layouts' + layout.path[0..-2] + '.html'
+      last_path_component = layout.identifier.split('/')[-1]
+      paths_best    = Dir['layouts' + layout.identifier[0..-2] + '.*']
+      paths_worst   = Dir['layouts' + layout.identifier + 'index.*']
+      path_default  = 'layouts' + layout.identifier[0..-2] + '.html'
       path          = paths_best[0] || paths_worst[0] || path_default
-      parent_path   = '/' + File.join(layout.path.split('/')[0..-2])
+      parent_path   = '/' + File.join(layout.identifier.split('/')[0..-2])
 
       # Notify
       if File.file?(path)
@@ -353,7 +243,7 @@ module Nanoc::DataSources
       FileUtils.mkdir_p('layouts' + parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
-        io.write(layout.attributes.to_split_yaml + "\n")
+        io.write(YAML.dump(layout.attributes.stringify_keys) + "\n")
         io.write("-----\n")
         io.write(layout.content)
       end
@@ -362,7 +252,7 @@ module Nanoc::DataSources
       vcs.add(path) if created
     end
 
-    def move_layout(layout, new_path) # :nodoc:
+    def move_layout(layout, new_identifier) # :nodoc:
       # TODO implement
     end
 
@@ -370,69 +260,26 @@ module Nanoc::DataSources
       # TODO implement
     end
 
-    ########## Templates ##########
-
-    def templates # :nodoc:
-      files('templates', false).map do |filename|
-        # Read and parse data
-        meta, content = *parse_file(filename, 'template')
-
-        # Get name
-        name = filename.sub(/^templates\//, '').sub(/\.[^\/]+$/, '')
-
-        # Build template
-        Nanoc::Template.new(content, meta, name)
-      end.compact
-    end
-
-    def save_template(template) # :nodoc:
-      # Get template path
-      paths         = Dir[File.join('templates', template.name) + '.*']
-      path_default  = File.join('templates', template.name) + '.html'
-      path          = paths[0] || path_default
-
-      # Notify
-      if File.file?(path)
-        created = false
-        Nanoc::NotificationCenter.post(:file_updated, path)
-      else
-        created = true
-        Nanoc::NotificationCenter.post(:file_created, path)
-      end
-
-      # Write template
-      File.open(path, 'w') do |io|
-        io.write("-----\n")
-        io.write(template.page_attributes.to_split_yaml + "\n")
-        io.write("-----\n")
-        io.write(template.page_content)
-      end
-
-      # Add to working copy if possible
-      vcs.add(path) if created
-    end
-
-    def move_template(template, new_name) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_template(template) # :nodoc:
-      # TODO implement
-    end
-
     ########## Code ##########
 
     def code # :nodoc:
-      # Get data
-      data = Dir['lib/**/*.rb'].sort.map { |filename| File.read(filename) + "\n" }.join('')
+      # Get files
+      filenames = Dir['lib/**/*.rb'].sort
+
+      # Read snippets
+      snippets = filenames.map do |fn|
+        { :filename => fn, :code => File.read(fn) }
+      end
 
       # Get modification time
-      mtime = Dir['lib/**/*.rb'].map { |filename| File.stat(filename).mtime }.inject { |memo, mtime| memo > mtime ? mtime : memo}
+      mtimes = filenames.map { |filename| File.stat(filename).mtime }
+      mtime = mtimes.inject { |memo, mtime| memo > mtime ? mtime : memo }
 
       # Build code
-      Nanoc::Code.new(data, mtime)
+      Nanoc::Code.new(snippets, mtime)
     end
 
+    # FIXME update
     def save_code(code) # :nodoc:
       # Check whether code existed
       existed = File.file?('lib/default.rb')

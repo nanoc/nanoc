@@ -7,6 +7,7 @@ module Nanoc::Helpers
   #   include Nanoc::Helpers::LinkTo
   module LinkTo
 
+    require 'nanoc/helpers/html_escape'
     include Nanoc::Helpers::HTMLEscape
 
     # Creates a HTML link to the given path or page/asset representation, and
@@ -67,6 +68,30 @@ module Nanoc::Helpers
         link_to(text, path_or_rep, attributes)
       end
     end
+
+    def relative_path_to(path_or_rep)
+      require 'pathname'
+
+      # Get source and destination paths
+      dst_path   = Pathname.new(path_or_rep)
+      src_path   = Pathname.new(@item.path)
+
+      # Calculate elative path (method depends on whether destination is a
+      # directory or not).
+      if src_path.to_s[-1,1] != '/'
+        relative_path = dst_path.relative_path_from(src_path.dirname).to_s
+      else
+        relative_path = dst_path.relative_path_from(src_path).to_s
+      end
+
+      # Add trailing slash if necessary
+      if dst_path.to_s[-1,1] == '/'
+        relative_path += '/'
+      end
+
+      # Done
+      relative_path
+     end
 
   end
 

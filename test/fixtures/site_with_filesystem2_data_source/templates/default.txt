@@ -1,7 +1,0 @@
------
-# Built-in
-
-# Custom
-title: A New Page
------
-This is a new page. Please edit me!

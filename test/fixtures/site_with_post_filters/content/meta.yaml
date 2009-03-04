@@ -1,8 +1,0 @@
-# Built-in
-filters_pre:
-  - 'erb'
-filters_post:
-  - 'erb'
-
-# Custom
-title: My New Homepage

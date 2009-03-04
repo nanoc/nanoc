@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CompileCommand < Command # :nodoc:
+  class CompileCommand < Cri::Command # :nodoc:
 
     def name
       'compile'
@@ -15,14 +15,22 @@ module Nanoc::CLI
     end
 
     def long_desc
-      'Compile all pages and all assets of the current site. If a path is ' +
-      'given, only the page or asset with the given path will be compiled. ' +
-      'Additionally, only pages and assets that are outdated will be ' +
-      'compiled, unless specified otherwise with the -a option.'
+      'Compile all pages and all assets of the current site. If an identifier is ' +
+      'given, only the page or asset with the given identifier will be compiled. ' +
+      "\n\n" +
+      'By default, only pages and assets that are outdated will be ' +
+      'compiled. This can speed up the compilation process quite a bit, ' +
+      'but pages that include content from other pages may have to be ' +
+      'recompiled manually. In order to compile objects even when they are ' +
+      'outdated, use the --force option.' +
+      "\n\n" +
+      'Both pages and assets will be compiled by default. To disable the ' +
+      'compilation of assets or pages, use the --no-assets and --no-pages ' +
+      'options, respectively.'
     end
 
     def usage
-      "nanoc compile [options] [path]"
+      "nanoc compile [options] [identifier]"
     end
 
     def option_definitions
@@ -30,7 +38,22 @@ module Nanoc::CLI
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'compile all pages and assets, even those that aren\'t outdated'
+          :desc => 'alias for --force (DEPRECATED)'
+        },
+        # --force
+        {
+          :long => 'force', :short => 'f', :argument => :forbidden,
+          :desc => 'compile pages and assets even when they are not outdated'
+        },
+        # --only-pages
+        {
+          :long => 'no-pages', :short => 'P', :argument => :forbidden,
+          :desc => 'don\'t compile pages'
+        },
+        # --only-assets
+        {
+          :long => 'no-assets', :short => 'A', :argument => :forbidden,
+          :desc => 'don\'t compile assets'
         }
       ]
     end
@@ -39,19 +62,32 @@ module Nanoc::CLI
       # Make sure we are in a nanoc site directory
       @base.require_site
 
-      # Find object with given path
+      # Check presence of --all option
+      if options.has_key?(:all)
+        $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
+      end
+
+      # Find object(s) to compile
       if arguments.size == 0
-        objs = nil
+        # Find all pages and/or assets
+        if options.has_key?(:'no-pages')
+          objs = @base.site.assets
+        elsif options.has_key?(:'no-assets')
+          objs = @base.site.pages
+        else
+          objs = nil
+        end
       else
-        objs = arguments.map do |path|
+        # Find object(s) with given identifier(s)
+        objs = arguments.map do |identifier|
           # Find object
-          path = path.cleaned_path
-          obj = @base.site.pages.find { |page| page.path == path }
-          obj = @base.site.assets.find { |asset| asset.path == path } if obj.nil?
+          identifier = identifier.cleaned_identifier
+          obj = @base.site.pages.find { |page| page.identifier == identifier }
+          obj = @base.site.assets.find { |asset| asset.identifier == identifier } if obj.nil?
 
           # Ensure object
           if obj.nil?
-            $stderr.puts "Unknown page or asset: #{path}"
+            $stderr.puts "Unknown page or asset: #{identifier}"
             exit 1
           end
 
@@ -73,18 +109,18 @@ module Nanoc::CLI
         # Compile
         @base.site.compiler.run(
           objs,
-          :even_when_not_outdated => options.has_key?(:all)
+          :force => options.has_key?(:all) || options.has_key?(:force)
         )
 
         # Find reps
-        page_reps  = @base.site.pages.map { |p| p.reps }.flatten
+        page_reps  = @base.site.pages.map  { |p| p.reps }.flatten
         asset_reps = @base.site.assets.map { |a| a.reps }.flatten
         reps       = page_reps + asset_reps
 
         # Show skipped reps
         reps.select { |r| !r.compiled? }.each do |rep|
-          duration = @rep_times[rep.disk_path]
-          Nanoc::CLI::Logger.instance.file(:low, :skip, rep.disk_path, duration)
+          duration = @rep_times[rep.raw_path]
+          Nanoc::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
         end
 
         # Give general feedback
@@ -179,8 +215,8 @@ module Nanoc::CLI
 
     def print_error(error)
       # Get rep
-      rep = @base.site.compiler.stack.select { |i| i.is_a?(Nanoc::PageRep) || i.is_a?(Nanoc::AssetRep) }[-1]
-      rep_name = rep.nil? ? 'the site' : "#{rep.is_a?(Nanoc::PageRep) ? rep.page.path : rep.asset.path} (rep #{rep.name})"
+      rep = (@base.site.compiler.stack || []).select { |i| i.is_a?(Nanoc::PageRep) || i.is_a?(Nanoc::AssetRep) }[-1]
+      rep_name = rep.nil? ? 'the site' : "#{rep.item.identifier} (rep #{rep.name})"
 
       # Build message
       case error
@@ -194,6 +230,10 @@ module Nanoc::CLI
         message = "Recursive call to page content."
       when Nanoc::Errors::NoLongerSupportedError
         message = "No longer supported: #{error.message}"
+      when Nanoc::Errors::NoRulesFileFoundError
+        message = "No rules file found"
+      when Nanoc::Errors::NoMatchingRuleFoundError
+        message = "No matching rule found"
       else
         message = "Error: #{error.message}"
       end
@@ -209,13 +249,13 @@ module Nanoc::CLI
       $stderr.puts '  ' + message
       $stderr.puts
       $stderr.puts 'Compilation stack:'
-      @base.site.compiler.stack.reverse.each do |item|
+      (@base.site.compiler.stack || []).reverse.each do |item|
         if item.is_a?(Nanoc::PageRep) # page rep
-          $stderr.puts "  - [page]   #{item.page.path} (rep #{item.name})"
+          $stderr.puts "  - [page]   #{item.page.identifier} (rep #{item.name})"
         elsif item.is_a?(Nanoc::AssetRep) # asset rep
-          $stderr.puts "  - [asset]  #{item.asset.path} (rep #{item.name})"
+          $stderr.puts "  - [asset]  #{item.asset.identifier} (rep #{item.name})"
         else # layout
-          $stderr.puts "  - [layout] #{item.path}"
+          $stderr.puts "  - [layout] #{item.identifier}"
         end
       end
       $stderr.puts
@@ -226,16 +266,16 @@ module Nanoc::CLI
     def rep_compilation_started(rep)
       # Profile compilation
       @rep_times ||= {}
-      @rep_times[rep.disk_path] = Time.now
+      @rep_times[rep.raw_path] = Time.now
     end
 
     def rep_compilation_ended(rep)
       # Profile compilation
       @rep_times ||= {}
-      @rep_times[rep.disk_path] = Time.now - @rep_times[rep.disk_path]
+      @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
 
       # Skip if not outputted
-      return if rep.attribute_named(:skip_output)
+      return unless rep.written?
 
       # Get action and level
       action, level = *if rep.created?
@@ -250,8 +290,8 @@ module Nanoc::CLI
 
       # Log
       unless action.nil?
-        duration = @rep_times[rep.disk_path]
-        Nanoc::CLI::Logger.instance.file(level, action, rep.disk_path, duration)
+        duration = @rep_times[rep.raw_path]
+        Nanoc::CLI::Logger.instance.file(level, action, rep.raw_path, duration)
       end
     end
 

@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class InfoCommand < Command # :nodoc:
+  class InfoCommand < Cri::Command # :nodoc:
 
     def name
       'info'
@@ -92,14 +92,12 @@ module Nanoc::CLI
 
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,
-      Nanoc::BinaryFilter,
       Nanoc::Router,
       Nanoc::Extra::VCS,
       Nanoc::DataSource
     ]
 
     PLUGIN_CLASSES = {
-      Nanoc::BinaryFilter => 'Binary Filters',
       Nanoc::Filter       => 'Filters',
       Nanoc::DataSource   => 'Data Sources',
       Nanoc::Router       => 'Routers',

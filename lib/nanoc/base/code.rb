@@ -8,8 +8,9 @@ module Nanoc
     # The Nanoc::Site this code belongs to.
     attr_accessor :site
 
-    # The textual source code representation.
-    attr_reader :data
+    # The snippets that make up the code, consisting of a an array of hashes
+    # with +:filename+ and +:code+ keys.
+    attr_reader :snippets
 
     # The time where the code was last modified.
     attr_reader :mtime
@@ -17,23 +18,26 @@ module Nanoc
     # Creates a new code object. +data+ is the raw source code, which will be
     # executed before compilation. +mtime+ is the time when the code was last
     # modified (optional).
-    def initialize(data, mtime=nil)
-      @data  = data
+    def initialize(arg, mtime=nil)
+      if arg.is_a? String
+        @snippets = [ { :filename => nil, :code => arg } ]
+      else
+        @snippets = arg
+      end
+
       @mtime = mtime
     end
 
     # Loads the code by executing it.
     def load
-      eval(@data, TOPLEVEL_BINDING)
+      @snippets.each do |snippet|
+        eval(snippet[:code], TOPLEVEL_BINDING, snippet[:filename] || '?')
+      end
     end
 
-    # Saves the code in the database, creating it if it doesn't exist yet or
-    # updating it if it already exists. Tells the site's data source to save
-    # the code.
-    def save
-      @site.data_source.loading do
-        @site.data_source.save_code(self)
-      end
+    # For backward compatibility
+    def data
+      @snippets.map { |s| s[:code] }.join("\n")
     end
 
   end

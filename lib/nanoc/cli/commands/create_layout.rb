@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreateLayoutCommand < Command # :nodoc:
+  class CreateLayoutCommand < Cri::Command # :nodoc:
 
     def name
       'create_layout'
@@ -19,7 +19,7 @@ module Nanoc::CLI
     end
 
     def usage
-      "nanoc create_layout [path]"
+      "nanoc create_layout [identifier]"
     end
 
     def option_definitions
@@ -40,7 +40,7 @@ module Nanoc::CLI
       end
 
       # Extract arguments
-      path = arguments[0].cleaned_path
+      identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
       @base.require_site
@@ -49,9 +49,9 @@ module Nanoc::CLI
       @base.set_vcs(options[:vcs])
 
       # Check whether layout is unique
-      if !@base.site.layouts.find { |l| l.path == path }.nil?
-        $stderr.puts "A layout already exists at #{path}. Please pick a unique name " +
-                     "for the layout you are creating."
+      if !@base.site.layouts.find { |l| l.identifier == identifier }.nil?
+        $stderr.puts "A layout already exists at #{identifier}. Please " +
+                     "pick a unique name for the layout you are creating."
         exit 1
       end
 
@@ -72,12 +72,12 @@ module Nanoc::CLI
         "  </body>\n" +
         "</html>\n",
         { :filter => 'erb' },
-        path
+        identifier
       )
       layout.site = @base.site
-      layout.save
+      @base.site.data_source.save_layout(layout)
 
-      puts "A layout has been created at #{path}."
+      puts "A layout has been created at #{identifier}."
     end
 
   end

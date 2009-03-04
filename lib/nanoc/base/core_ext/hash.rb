@@ -1,6 +1,6 @@
 require 'time'
 
-class Hash
+module Nanoc::HashExtensions
 
   # Cleans up the hash and returns the result. It performs the following
   # operations:
@@ -75,4 +75,8 @@ class Hash
     end
   end
 
+end
+
+class Hash
+  include Nanoc::HashExtensions
 end

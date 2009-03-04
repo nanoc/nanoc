@@ -9,19 +9,23 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 end
 
 # Load unit testing stuff
-require 'test/unit'
-require 'mocha'
-require 'stringio'
+begin
+  require 'minitest/unit'
+  require 'minitest/spec'
+  require 'minitest/mock'
+  require 'mocha'
+rescue => e
+  $stderr.puts "To run the nanoc unit tests, you need minitest and mocha."
+  raise e
+end
 
 # Load nanoc
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc.rb')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc', 'cli', 'cli.rb')
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
+require 'nanoc'
+require 'nanoc/cli'
 
-def with_site_fixture(a_fixture)
-  in_dir(['test', 'fixtures', a_fixture]) do
-    yield(Nanoc::Site.new(YAML.load_file('config.yaml')))
-  end
-end
+# Load miscellaneous requirements
+require 'stringio'
 
 def with_temp_site(data_source='filesystem')
   in_dir %w{ tmp } do
@@ -31,7 +35,6 @@ def with_temp_site(data_source='filesystem')
     in_dir %w{ site } do
       # Load site
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-      site.load_data
 
       # Done
       yield site
@@ -57,10 +60,6 @@ end
 
 def create_page(name)
   Nanoc::CLI::Base.new.run(['create_page', name])
-end
-
-def create_template(name)
-  Nanoc::CLI::Base.new.run(['create_template', name])
 end
 
 def if_have(x)
@@ -98,10 +97,5 @@ def global_teardown
   unless ENV['QUIET'] == 'false'
     $stdout = $stdout_real
     $stderr = $stderr_real
-  end
-
-  # Remove output
-  Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
-    FileUtils.rm_rf(f) if File.exist?(f)
   end
 end

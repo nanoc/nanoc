@@ -1,8 +1,7 @@
 module Nanoc::Filters
   class Markaby < Nanoc::Filter
 
-    identifiers :markaby
-    extensions  '.mab'
+    identifier :markaby
 
     def run(content)
       require 'markaby'
