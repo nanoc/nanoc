@@ -304,7 +304,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Mock compiler
     compiler = mock
-    compiler.expects(:filter_class_for_layout).with(layout).returns(Nanoc::Filters::ERB)
+    compiler.expects(:filter_name_for_layout).with(layout).returns(:erb)
 
     # Mock site
     site = mock
