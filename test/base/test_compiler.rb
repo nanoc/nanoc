@@ -203,7 +203,63 @@ EOF
     # TODO implement
   end
 
-  def test_filter_class_for_layout
+  def test_filter_name_for_layout_with_existant_layout
+    # Mock site
+    site = mock
+
+    # Create compiler
+    compiler = Nanoc::Compiler.new(site)
+    compiler.add_layout_compilation_rule('*', :erb)
+
+    # Mock layout
+    layout = MiniTest::Mock.new
+    layout.expect(:identifier, 'some_layout')
+
+    # Check
+    assert_equal(:erb, compiler.filter_name_for_layout(layout))
+  end
+
+  def test_filter_name_for_layout_with_existant_layout_and_unknown_filter
+    # Mock site
+    site = mock
+
+    # Create compiler
+    compiler = Nanoc::Compiler.new(site)
+    compiler.add_layout_compilation_rule('*', :some_unknown_filter)
+
+    # Mock layout
+    layout = MiniTest::Mock.new
+    layout.expect(:identifier, 'some_layout')
+
+    # Check
+    assert_equal(:some_unknown_filter, compiler.filter_name_for_layout(layout))
+  end
+
+  def test_filter_name_for_layout_with_nonexistant_layout
+    # Mock site
+    site = mock
+
+    # Create compiler
+    compiler = Nanoc::Compiler.new(site)
+    compiler.add_layout_compilation_rule('foo', :erb)
+
+    # Mock layout
+    layout = MiniTest::Mock.new
+    layout.expect(:identifier, 'bar')
+
+    # Check
+    assert_equal(nil, compiler.filter_name_for_layout(layout))
+  end
+
+  def test_add_page_compilation_rule
+    # TODO implement
+  end
+
+  def test_add_asset_compilation_rule
+    # TODO implement
+  end
+
+  def test_add_layout_compilation_rule
     # TODO implement
   end
 

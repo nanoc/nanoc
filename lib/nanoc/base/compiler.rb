@@ -155,21 +155,13 @@ module Nanoc
       end
     end
 
-    # Returns the filter for the given layout.
-    def filter_class_for_layout(layout)
-      # FIXME this should not raise any exceptions
-
-      # Get filter name
+    # Returns the filter name for the given layout
+    def filter_name_for_layout(layout)
       filter_name = nil
       @layout_filter_mapping.each_pair do |lr, fn|
         filter_name = fn if layout.identifier =~ lr
       end
-      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.identifier) if filter_name.nil?
-
-      # Get filter
-      filter_class = Nanoc::Filter.named(filter_name)
-      raise Nanoc::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
-      filter_class
+      filter_name
     end
 
     def add_page_compilation_rule(identifier, rep_name, block)

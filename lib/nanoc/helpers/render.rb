@@ -44,8 +44,15 @@ module Nanoc::Helpers
         :site       => @site
       }.merge(other_assigns)
 
+      # Get filter name
+      filter_name  = @site.compiler.filter_name_for_layout(layout)
+      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.identifier) if filter_name.nil?
+
+      # Get filter class
+      filter_class = Nanoc::Filter.named(filter_name)
+      raise Nanoc::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
+
       # Create filter
-      filter_class = @site.compiler.filter_class_for_layout(layout)
       filter = filter_class.new(assigns)
 
       # Layout

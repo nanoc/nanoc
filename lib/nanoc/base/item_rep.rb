@@ -189,8 +189,13 @@ module Nanoc
       layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
       raise Nanoc::Errors::UnknownLayoutError.new(layout_identifier) if layout.nil?
 
+      # Get filter name
+      filter_name  = @item.site.compiler.filter_name_for_layout(layout)
+      raise Nanoc::Errors::CannotDetermineFilterError.new(layout_identifier) if filter_name.nil?
+
       # Get filter class
-      filter_class = @item.site.compiler.filter_class_for_layout(layout)
+      filter_class = Nanoc::Filter.named(filter_name)
+      raise Nanoc::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
 
       # Create filter
       filter = filter_class.new(assigns.merge({ :layout => layout.to_proxy }))
