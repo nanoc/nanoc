@@ -203,4 +203,8 @@ EOF
     # TODO implement
   end
 
+  def test_filter_class_for_layout
+    # TODO implement
+  end
+
 end

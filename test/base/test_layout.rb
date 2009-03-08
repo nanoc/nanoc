@@ -27,32 +27,20 @@ class Nanoc::LayoutTest < MiniTest::Unit::TestCase
     assert_equal('bar', layout_proxy.foo)
   end
 
-  def test_attribute_named
+  def test_attribute_named_with_known_attribute
     # Create layout
     layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
 
     # Check attributes
-    assert_equal({ :foo => 'bar' }, layout.attributes)
     assert_equal('bar', layout.attribute_named(:foo))
-    assert_equal('erb', layout.attribute_named(:filter))
-
-    # Create layout
-    layout = Nanoc::Layout.new("content", { 'filter' => 'bar' }, '/foo/')
-
-    # Check attributes
-    assert_equal({ :filter => 'bar' }, layout.attributes)
-    assert_equal(nil,   layout.attribute_named(:foo))
-    assert_equal('bar', layout.attribute_named(:filter))
   end
 
-  def test_filter_class
-    # Check existant filter class
-    layout = Nanoc::Layout.new("content", { 'filter' => 'erb' }, '/foo/')
-    assert_equal(Nanoc::Filters::ERB, layout.filter_class)
+  def test_attribute_named_with_unknown_attribute
+    # Create layout
+    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
 
-    # Check nonexistant filter class
-    layout = Nanoc::Layout.new("content", { 'filter' => 'klasdfhl' }, '/foo/')
-    assert_equal(nil, layout.filter_class)
+    # Check attributes
+    assert_equal(nil, layout.attribute_named(:filter))
   end
 
 end

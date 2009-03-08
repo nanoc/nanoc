@@ -6,11 +6,6 @@ module Nanoc
   # modification time (to speed up compilation).
   class Layout
 
-    # Default values for layouts.
-    DEFAULTS = {
-      :filter => 'erb'
-    }
-
     # The Nanoc::Site this layout belongs to.
     attr_accessor :site
 
@@ -49,13 +44,7 @@ module Nanoc
 
     # Returns the attribute with the given name.
     def attribute_named(name)
-      return @attributes[name] if @attributes.has_key?(name)
-      return DEFAULTS[name]
-    end
-
-    # Returns the filter class needed for this layout.
-    def filter_class
-      Nanoc::Filter.named(attribute_named(:filter))
+      @attributes[name]
     end
 
   end

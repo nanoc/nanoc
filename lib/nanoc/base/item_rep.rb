@@ -189,18 +189,19 @@ module Nanoc
       layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
       raise Nanoc::Errors::UnknownLayoutError.new(layout_identifier) if layout.nil?
 
+      # Get filter class
+      filter_class = @item.site.compiler.filter_class_for_layout(layout)
+
       # Create filter
-      klass = layout.filter_class
-      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.identifier) if klass.nil?
-      filter = klass.new(assigns.merge({ :layout => layout.to_proxy }))
+      filter = filter_class.new(assigns.merge({ :layout => layout.to_proxy }))
 
       # Create "pre" snapshot
       snapshot(:pre)
 
       # Layout
-      Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
+      Nanoc::NotificationCenter.post(:filtering_started, self, filter_class.identifier)
       @content[:last] = filter.run(layout.content)
-      Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
+      Nanoc::NotificationCenter.post(:filtering_ended,   self, filter_class.identifier)
 
       # Create "post" snapshot
       snapshot(:post)

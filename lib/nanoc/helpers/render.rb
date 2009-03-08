@@ -45,9 +45,8 @@ module Nanoc::Helpers
       }.merge(other_assigns)
 
       # Create filter
-      klass = layout.filter_class
-      raise Nanoc::Errors::CannotDetermineFilterError.new(layout.identifier) if klass.nil?
-      filter = klass.new(assigns)
+      filter_class = @site.compiler.filter_class_for_layout(layout)
+      filter = filter_class.new(assigns)
 
       # Layout
       @site.compiler.stack.push(layout)
