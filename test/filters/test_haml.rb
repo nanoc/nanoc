@@ -7,12 +7,8 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
 
   def test_filter
     if_have 'haml' do
-      # Mock object rep
-      obj_rep = MiniTest::Mock.new
-      obj_rep.expect(:attribute_named, {}, [ :haml_options ])
-
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :_obj_rep => obj_rep, :question => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
 
       # Run filter (no assigns)
       result = filter.run('%html')
@@ -28,14 +24,25 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_params
+    if_have 'haml' do
+      # Create filter
+      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
+
+      # Check with HTML5
+      result = filter.run('%img', :format => 'html5')
+      assert_match(/<img>/, result)
+
+      # Check with XHTML
+      result = filter.run('%img', :format => 'xhtml')
+      assert_match(/<img\s*\/>/, result)
+    end
+  end
+
   def test_filter_error
     if_have 'haml' do
-      # Mock object rep
-      obj_rep = MiniTest::Mock.new
-      obj_rep.expect(:attribute_named, {}, [ :haml_options ])
-
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :_obj_rep => obj_rep })
+      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
 
       # Run filter
       raised = false
