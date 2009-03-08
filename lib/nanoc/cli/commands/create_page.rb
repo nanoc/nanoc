@@ -50,7 +50,7 @@ module Nanoc::CLI
 
       # Setup notifications
       Nanoc::NotificationCenter.on(:file_created) do |file_path|
-        Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
+        Nanoc::CLI::Logger.instance.file(:high, :create, file_path, :color => @base.color?)
       end
 
       # Create page
