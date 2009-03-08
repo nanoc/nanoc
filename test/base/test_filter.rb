@@ -59,6 +59,18 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
     assert_equal('asset /foo/bar/baz/ (rep quux)', filter.filename)
   end
 
+  def test_filename_layout
+    # Mock items
+    layout = mock
+    layout.expects(:identifier).returns('/wohba/')
+
+    # Create filter
+    filter = Nanoc::Filter.new({ :_obj => mock, :_obj_rep => mock, :page => mock, :layout => layout })
+
+    # Check filename
+    assert_equal('layout /wohba/', filter.filename)
+  end
+
   def test_filename_unknown
     # Create filter
     filter = Nanoc::Filter.new({})

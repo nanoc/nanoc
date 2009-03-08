@@ -32,7 +32,9 @@ module Nanoc
     # Returns the filename associated with the item that is being filtered.
     # The returned filename is in the format "page <identifier> (rep <name>)".
     def filename
-      if @assigns[:page]
+      if @assigns[:layout]
+        "layout #{assigns[:layout].identifier}"
+      elsif @assigns[:page]
         "page #{assigns[:_obj].identifier} (rep #{assigns[:_obj_rep].name})"
       elsif @assigns[:asset]
         "asset #{assigns[:_obj].identifier} (rep #{assigns[:_obj_rep].name})"
