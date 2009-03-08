@@ -4,6 +4,9 @@ module Nanoc::CLI
 
     attr_reader :site
 
+    attr_reader :color
+    alias_method :color?, :color
+
     def initialize
       super('nanoc')
 
@@ -20,6 +23,9 @@ module Nanoc::CLI
       add_command(Nanoc::CLI::InfoCommand.new)
       add_command(Nanoc::CLI::SwitchCommand.new)
       add_command(Nanoc::CLI::UpdateCommand.new)
+
+      # Set flags
+      @color = true
     end
 
     # Helper function which can be called when a command is executed that
@@ -89,6 +95,10 @@ module Nanoc::CLI
           :desc => 'show this help message and quit'
         },
         {
+          :long => 'no-color', :short => 'C', :argument => :forbidden,
+          :desc => 'disable color'
+        },
+        {
           :long => 'version', :short => 'v', :argument => :forbidden,
           :desc => 'show version information and quit'
         },
@@ -108,6 +118,9 @@ module Nanoc::CLI
       # Handle verbose option
       elsif option == :verbose
         Nanoc::CLI::Logger.instance.level = :low
+      # Handle no-color option
+      elsif option == :'no-color'
+        @color = false
       # Handle help option
       elsif option == :help
         show_help

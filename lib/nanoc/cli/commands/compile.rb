@@ -120,7 +120,7 @@ module Nanoc::CLI
         # Show skipped reps
         reps.select { |r| !r.compiled? }.each do |rep|
           duration = @rep_times[rep.raw_path]
-          Nanoc::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
+          Nanoc::CLI::Logger.instance.file(:low, :skip, rep.raw_path, :duration => duration, :color => @base.color?)
         end
 
         # Give general feedback
@@ -291,7 +291,7 @@ module Nanoc::CLI
       # Log
       unless action.nil?
         duration = @rep_times[rep.raw_path]
-        Nanoc::CLI::Logger.instance.file(level, action, rep.raw_path, duration)
+        Nanoc::CLI::Logger.instance.file(level, action, rep.raw_path, :duration => duration, :color => @base.color?)
       end
     end
 

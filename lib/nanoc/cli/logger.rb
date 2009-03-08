@@ -32,13 +32,16 @@ module Nanoc::CLI
     #            :identical.
     #
     # +identifier+:: The identifier of the item the action was performed on.
-    def file(level, action, identifier, duration=nil)
+    def file(level, action, identifier, params={})
+      duration = params.has_key?(:duration) ? params[:duration] : nil
+      color    = params.has_key?(:color)    ? params[:color]    : true
+
       log(
         level,
         '%s%12s%s  %s%s' % [
-          ACTION_COLORS[action.to_sym],
+          color ? ACTION_COLORS[action.to_sym] : '',
           action,
-          "\e[0m",
+          color ? "\e[0m" : '',
           duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
           identifier
         ]
