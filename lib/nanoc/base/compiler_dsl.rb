@@ -28,12 +28,13 @@ module Nanoc
       @compiler.add_asset_compilation_rule(identifier, rep_name, block)
     end
 
-    def layout(identifier, &block)
-      # Require block
-      raise ArgumentError.new("#layout requires a block") unless block_given?
+    def layout(params={})
+      # Get layout identifier and filter name
+      identifier  = params.keys[0]
+      filter_name = params.values[0]
 
       # Create rule
-      @compiler.add_layout_compilation_rule(identifier, block)
+      @compiler.add_layout_compilation_rule(identifier, filter_name)
     end
 
   end

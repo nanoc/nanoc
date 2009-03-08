@@ -299,9 +299,12 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Mock layout
     layout = mock
     layout.stubs(:identifier).returns('/somelayout/')
-    layout.stubs(:filter_class).returns(Nanoc::Filters::ERB)
     layout.stubs(:to_proxy).returns(nil)
     layout.stubs(:content).returns(%[<%= "blah" %>])
+
+    # Mock compiler
+    compiler = mock
+    compiler.expects(:filter_class_for_layout).with(layout).returns(Nanoc::Filters::ERB)
 
     # Mock site
     site = mock
@@ -309,6 +312,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:assets).returns([])
     site.stubs(:config).returns([])
     site.stubs(:layouts).returns([ layout ])
+    site.expects(:compiler).returns(compiler)
 
     # Mock item
     item = mock

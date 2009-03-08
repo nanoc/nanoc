@@ -12,15 +12,18 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= @layout.path %> layout.')
-    layout.expect(:filter_class, Nanoc::Filters::ERB)
     layout_proxy = MiniTest::Mock.new
     layout_proxy.expect(:path, '/foo/')
     layout.expect(:to_proxy, layout_proxy)
 
     # Mock site, compiler and stack
     stack    = []
-    compiler = MiniTest::Mock.new.expect(:stack, stack)
-    @site    = MiniTest::Mock.new.expect(:compiler, compiler).expect(:layouts, [ layout ])
+    compiler = MiniTest::Mock.new
+    compiler.expect(:stack, stack)
+    compiler.expects(:filter_class_for_layout).with(layout).returns(Nanoc::Filters::ERB)
+    @site    = MiniTest::Mock.new
+    @site.expect(:compiler, compiler)
+    @site.expect(:layouts, [ layout ])
 
     # Render
     assert_equal('This is the /foo/ layout.', render('/foo/'))
@@ -41,15 +44,20 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= "foo" %> layout.')
-    layout.expect(:filter_class, nil)
     layout_proxy = MiniTest::Mock.new
     layout.expect(:to_proxy, layout_proxy)
 
+    # Mock compiler
+    compiler = mock
+    compiler.expects(:filter_class_for_layout).with(layout).raises(Nanoc::Errors::UnknownFilterError)
+
     # Mock site
-    @site = MiniTest::Mock.new.expect(:layouts, [ layout ])
+    @site = MiniTest::Mock.new
+    @site.expect(:layouts, [ layout ])
+    @site.expect(:compiler, compiler)
 
     # Render
-    assert_raises(Nanoc::Errors::CannotDetermineFilterError) do
+    assert_raises(Nanoc::Errors::UnknownFilterError) do
       render '/foo/'
     end
   end
