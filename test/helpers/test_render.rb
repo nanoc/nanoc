@@ -11,9 +11,9 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
     # Mock layouts
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
-    layout.expect(:content,      'This is the <%= @layout.path %> layout.')
+    layout.expect(:content,      'This is the <%= @layout.identifier %> layout.')
     layout_proxy = MiniTest::Mock.new
-    layout_proxy.expect(:path, '/foo/')
+    layout_proxy.expect(:identifier, '/foo/')
     layout.expect(:to_proxy, layout_proxy)
 
     # Mock site, compiler and stack
