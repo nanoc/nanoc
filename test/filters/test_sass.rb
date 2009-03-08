@@ -7,12 +7,8 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
 
   def test_filter
     if_have 'sass' do
-      # Mock object rep
-      obj_rep = MiniTest::Mock.new
-      obj_rep.expect(:attribute_named, {}, [ :sass_options ])
-
       # Get filter
-      filter = ::Nanoc::Filters::Sass.new({ :_obj_rep => obj_rep })
+      filter = ::Nanoc::Filters::Sass.new({ :foo => 'bar' })
 
       # Run filter
       result = filter.run(".foo #bar\n  color: #f00")
@@ -20,14 +16,25 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_params
+    if_have 'sass' do
+      # Create filter
+      filter = ::Nanoc::Filters::Sass.new({ :foo => 'bar' })
+
+      # Check with compact
+      result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
+      assert_equal(".foo #bar { color: #f00; }\n", result)
+
+      # Check with compressed
+      result = filter.run(".foo #bar\n  color: #f00", :style => 'compressed')
+      assert_match(".foo #bar{color:#f00}\n", result)
+    end
+  end
+
   def test_filter_error
     if_have 'sass' do
-      # Mock object rep
-      obj_rep = MiniTest::Mock.new
-      obj_rep.expect(:attribute_named, {}, [ :sass_options ])
-
       # Create filter
-      filter = ::Nanoc::Filters::Sass.new({ :_obj_rep => obj_rep })
+      filter = ::Nanoc::Filters::Sass.new({ :foo => 'bar' })
 
       # Run filter
       raised = false

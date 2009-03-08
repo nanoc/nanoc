@@ -3,11 +3,12 @@ module Nanoc::Filters
 
     identifier :sass
 
-    def run(content)
+    def run(content, params={})
       require 'sass'
 
       # Get options
-      options = assigns[:_obj_rep].attribute_named(:sass_options) || {}
+      symbolized_params = params.inject({}) { |m,(k,v)| m.merge(k => v.to_sym) }
+      options = symbolized_params
       options[:filename] = filename
 
       # Get result
