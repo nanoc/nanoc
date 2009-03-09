@@ -163,14 +163,6 @@ module Nanoc::DataSources
       end
     end
 
-    def move_page(page, new_identifier) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_page(page) # :nodoc:
-      # TODO implement
-    end
-
     ########## Assets ##########
 
     def assets # :nodoc:
@@ -242,14 +234,6 @@ module Nanoc::DataSources
       end
     end
 
-    def move_asset(asset, new_identifier) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_asset(asset) # :nodoc:
-      # TODO implement
-    end
-
     ########## Layouts ##########
 
     def layouts # :nodoc:
@@ -310,14 +294,6 @@ module Nanoc::DataSources
         vcs.add(meta_filename)
         vcs.add(content_filename)
       end
-    end
-
-    def move_layout(layout, new_identifier) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_layout(layout) # :nodoc:
-      # TODO implement
     end
 
     ########## Code ##########
