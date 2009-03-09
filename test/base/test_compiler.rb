@@ -263,4 +263,37 @@ EOF
     # TODO implement
   end
 
+  def test_identifier_to_regex_without_wildcards
+    # Create compiler
+    compiler = Nanoc::Compiler.new(nil)
+
+    # Check
+    assert_equal(
+      /^foo$/,
+      compiler.instance_eval { identifier_to_regex('foo') }
+    )
+  end
+
+  def test_identifier_to_regex_with_one_wildcard
+    # Create compiler
+    compiler = Nanoc::Compiler.new(nil)
+
+    # Check
+    assert_equal(
+      /^foo\/(.*?)\/bar$/.to_s,
+      compiler.instance_eval { identifier_to_regex('foo/*/bar') }.to_s
+    )
+  end
+
+  def test_identifier_to_regex_with_two_wildcards
+    # Create compiler
+    compiler = Nanoc::Compiler.new(nil)
+
+    # Check
+    assert_equal(
+      /^foo\/(.*?)\/bar\/(.*?)\/qux$/.to_s,
+      compiler.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }.to_s
+    )
+  end
+
 end
