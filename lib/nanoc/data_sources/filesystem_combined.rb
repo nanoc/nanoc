@@ -154,14 +154,6 @@ module Nanoc::DataSources
       vcs.add(path) if created
     end
 
-    def move_page(page, new_identifier) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_page(page) # :nodoc:
-      # TODO implement
-    end
-
     ########## Assets ##########
 
     def assets # :nodoc:
@@ -188,14 +180,6 @@ module Nanoc::DataSources
     end
 
     def save_asset(asset) # :nodoc:
-      # TODO implement
-    end
-
-    def move_asset(asset, new_identifier) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_asset(asset) # :nodoc:
       # TODO implement
     end
 
@@ -250,14 +234,6 @@ module Nanoc::DataSources
 
       # Add to working copy if possible
       vcs.add(path) if created
-    end
-
-    def move_layout(layout, new_identifier) # :nodoc:
-      # TODO implement
-    end
-
-    def delete_layout(layout) # :nodoc:
-      # TODO implement
     end
 
     ########## Code ##########

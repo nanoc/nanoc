@@ -104,22 +104,6 @@ module Nanoc
       not_implemented('save_page')
     end
 
-    # Changes the identifier of the given page to the given new identifier.
-    # When changing a page's identifier, this method must be used (save_page
-    # will not work).
-    #
-    # Subclasses must implement this method.
-    def move_page(page, new_identifier)
-      not_implemented('move_page')
-    end
-
-    # Removes the given page from the data source.
-    #
-    # Subclasses must implement this method.
-    def delete_page(page)
-      not_implemented('delete_page')
-    end
-
     ########## Assets
 
     # Returns the list of assets (represented by Nanoc::Asset) in this site.
@@ -138,22 +122,6 @@ module Nanoc
       not_implemented('save_asset')
     end
 
-    # Changes the identifier of the given asset to the given new identifier.
-    # When changing a asset's identifier, this method must be used (save_asset
-    # will not work).
-    #
-    # Subclasses must implement this method.
-    def move_asset(asset, new_identifier)
-      not_implemented('move_asset')
-    end
-
-    # Removes the given asset from the data source.
-    #
-    # Subclasses must implement this method.
-    def delete_asset(asset)
-      not_implemented('delete_asset')
-    end
-
     ########## Layouts
 
     # Returns the list of layouts (represented by Nanoc::Layout) in this site.
@@ -170,22 +138,6 @@ module Nanoc
     # Subclasses must implement this method.
     def save_layout(layout)
       not_implemented('save_layout')
-    end
-
-    # Changes the identifier of the given layout to the given new identifier.
-    # When changing a layout's identifier, this method must be used
-    # (save_layout will not work).
-    #
-    # Subclasses must implement this method.
-    def move_layout(layout, new_identifier)
-      not_implemented('move_layout')
-    end
-
-    # Removes the given layout from the data source.
-    #
-    # Subclasses must implement this method.
-    def delete_layout(layout)
-      not_implemented('delete_layout')
     end
 
     ########## Code

@@ -134,14 +134,6 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_move_page
-    # TODO implement
-  end
-
-  def test_delete_page
-    # TODO implement
-  end
-
   # Test assets
 
   def test_assets
@@ -179,14 +171,6 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  def test_move_asset
-    # TODO implement
-  end
-
-  def test_delete_asset
-    # TODO implement
-  end
-
   # Test layouts
 
   def test_layouts
@@ -200,14 +184,6 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
   end
 
   def test_save_layout
-    # TODO implement
-  end
-
-  def test_move_layout
-    # TODO implement
-  end
-
-  def test_delete_layout
     # TODO implement
   end
 
