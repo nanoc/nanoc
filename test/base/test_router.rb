@@ -25,11 +25,6 @@ class Nanoc::RouterTest < MiniTest::Unit::TestCase
     end
   end
 
-  # @site.config[:output_dir] + (
-  #   rep.item.attribute_named(:custom_path) ||
-  #   (rep.is_a?(Nanoc::PageRep) ? path_for_page_rep(rep) : path_for_asset_rep(rep))
-  # )
-
   def test_raw_path_for_without_custom_path
     # Create page and page rep
     page = Nanoc::Page.new('content', {}, '/foobar/')
