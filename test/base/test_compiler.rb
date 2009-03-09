@@ -275,25 +275,29 @@ EOF
   end
 
   def test_identifier_to_regex_with_one_wildcard
-    # Create compiler
     compiler = Nanoc::Compiler.new(nil)
 
-    # Check
-    assert_equal(
-      /^foo\/(.*?)\/bar$/.to_s,
-      compiler.instance_eval { identifier_to_regex('foo/*/bar') }.to_s
-    )
+    actual   = compiler.instance_eval { identifier_to_regex('foo/*/bar') }
+    expected = %r{^foo/(.*?)/bar$}
+
+    assert_equal(expected.to_s,      actual.to_s)
+    assert_equal(expected.source,    actual.source)
+    assert_equal(expected.kcode,     actual.kcode)
+    assert_equal(expected.casefold?, actual.casefold?)
+    assert_equal(expected.options,   actual.options)
   end
 
   def test_identifier_to_regex_with_two_wildcards
-    # Create compiler
     compiler = Nanoc::Compiler.new(nil)
 
-    # Check
-    assert_equal(
-      /^foo\/(.*?)\/bar\/(.*?)\/qux$/.to_s,
-      compiler.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }.to_s
-    )
+    actual   = compiler.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
+    expected = %r{^foo/(.*?)/bar/(.*?)/qux$}
+
+    assert_equal(expected.to_s,      actual.to_s)
+    assert_equal(expected.source,    actual.source)
+    assert_equal(expected.kcode,     actual.kcode)
+    assert_equal(expected.casefold?, actual.casefold?)
+    assert_equal(expected.options,   actual.options)
   end
 
 end
