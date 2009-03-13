@@ -34,7 +34,6 @@ class Nanoc::DataSourceTest < MiniTest::Unit::TestCase
 
     # Test required methods - general
     assert_raises(NotImplementedError) { data_source.setup }
-    assert_raises(NotImplementedError) { data_source.destroy }
 
     # Test required methods - loading data
     assert_raises(NotImplementedError) { data_source.pages }

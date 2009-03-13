@@ -84,14 +84,6 @@ module Nanoc::DataSources
       end
     end
 
-    def destroy # :nodoc:
-      # Remove directories
-      vcs.remove('assets')
-      vcs.remove('content')
-      vcs.remove('layouts')
-      vcs.remove('lib')
-    end
-
     ########## Loading data ##########
 
     def pages # :nodoc:

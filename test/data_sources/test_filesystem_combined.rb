@@ -48,18 +48,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_destroy
-    with_temp_site('filesystem_combined') do |site|
-      # Mock VCS
-      vcs = mock
-      vcs.expects(:remove).times(4) # One time for each directory
-      site.data_source.vcs = vcs
-
-      # Destroy
-      site.data_source.destroy
-    end
-  end
-
   def test_update
     # TODO implement
   end
