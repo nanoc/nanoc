@@ -55,7 +55,12 @@ module Nanoc::CLI
         exit 1
       end
 
-      # TODO check whether layout is not at /
+      # Check whether layout is not at /
+      if identifier == '/'
+        $stderr.puts "There cannot be a layout with the identifier '/'; " +
+                     "please pick a different identifier for this layout."
+        exit 1
+      end
 
       # Setup notifications
       Nanoc::NotificationCenter.on(:file_created) do |file_path|
