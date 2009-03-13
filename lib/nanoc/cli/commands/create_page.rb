@@ -48,7 +48,12 @@ module Nanoc::CLI
       # Set VCS if possible
       @base.set_vcs(options[:vcs])
 
-      # TODO check whether page already exists
+      # Check whether page is unique
+      if !@base.site.pages.find { |l| l.identifier == identifier }.nil?
+        $stderr.puts "A page already exists at #{identifier}. Please " +
+                     "pick a unique name for the page you are creating."
+        exit 1
+      end
 
       # Setup notifications
       Nanoc::NotificationCenter.on(:file_created) do |file_path|
