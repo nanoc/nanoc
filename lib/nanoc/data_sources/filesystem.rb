@@ -88,10 +88,6 @@ module Nanoc::DataSources
       vcs.remove('lib')
     end
 
-    def update # :nodoc:
-      update_pages
-    end
-
     ########## Loading data ##########
 
     def pages # :nodoc:
@@ -284,46 +280,6 @@ module Nanoc::DataSources
 
       # Return content filename
       filenames.first
-    end
-
-    # Raises an "outdated data format" error.
-    def error_outdated
-      raise RuntimeError.new(
-        'This site\'s data is stored in an old format and must be updated. ' +
-        'To do so, issue the \'nanoc update\' command. For help on ' +
-        'updating a site\'s data, issue \'nanoc help update\'.'
-      )
-    end
-
-    # Updates outdated pages (both content and meta file names).
-    def update_pages
-      # Update content files
-      # content/foo/bar/baz/index.ext -> content/foo/bar/baz/baz.ext
-      Dir['content/**/index.*'].select { |f| File.file?(f) }.each do |old_filename|
-        # Determine new name
-        if old_filename =~ /^content\/index\./
-          new_filename = old_filename.sub(/^content\/index\./, 'content/content.')
-        else
-          new_filename = old_filename.sub(/([^\/]+)\/index\.([^\/]+)$/, '\1/\1.\2')
-        end
-
-        # Move
-        vcs.move(old_filename, new_filename)
-      end
-
-      # Update meta files
-      # content/foo/bar/baz/meta.yaml -> content/foo/bar/baz/baz.yaml
-      Dir['content/**/meta.yaml'].select { |f| File.file?(f) }.each do |old_filename|
-        # Determine new name
-        if old_filename == 'content/meta.yaml'
-          new_filename = 'content/content.yaml'
-        else
-          new_filename = old_filename.sub(/([^\/]+)\/meta.yaml$/, '\1/\1.yaml')
-        end
-
-        # Move
-        vcs.move(old_filename, new_filename)
-      end
     end
 
   end
