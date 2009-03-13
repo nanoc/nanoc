@@ -48,19 +48,19 @@ module Nanoc::CLI
       # Set VCS if possible
       @base.set_vcs(options[:vcs])
 
+      # TODO check whether page already exists
+
       # Setup notifications
       Nanoc::NotificationCenter.on(:file_created) do |file_path|
         Nanoc::CLI::Logger.instance.file(:high, :create, file_path, :color => @base.color?)
       end
 
       # Create page
-      page = Nanoc::Page.new(
+      base.site.data_source.create_page(
         "Hi, I'm a new page!\n",
         { :title => "A New Page" },
         identifier
       )
-      page.site = @base.site
-      @base.site.data_source.save_page(page)
 
       puts "A page has been created at #{identifier}."
     end

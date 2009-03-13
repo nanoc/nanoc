@@ -92,7 +92,7 @@ module Nanoc::DataSources
       update_pages
     end
 
-    ########## Pages ##########
+    ########## Loading data ##########
 
     def pages # :nodoc:
       meta_filenames('content').map do |meta_filename|
@@ -119,52 +119,6 @@ module Nanoc::DataSources
       end
     end
 
-    def save_page(page) # :nodoc:
-      # Determine possible meta file paths
-      last_component = page.identifier.split('/')[-1]
-      meta_filename_worst = 'content' + page.identifier + 'index.yaml'
-      meta_filename_best  = 'content' + page.identifier + (last_component || 'content') + '.yaml'
-
-      # Get existing path
-      existing_path = nil
-      existing_path = meta_filename_best  if File.file?(meta_filename_best)
-      existing_path = meta_filename_worst if File.file?(meta_filename_worst)
-
-      if existing_path.nil?
-        # Get filenames
-        dir_path         = 'content' + page.identifier
-        meta_filename    = meta_filename_best
-        content_filename = 'content' + page.identifier + (last_component || 'content') + '.html'
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_created, meta_filename)
-        Nanoc::NotificationCenter.post(:file_created, content_filename)
-
-        # Create directories if necessary
-        FileUtils.mkdir_p(dir_path)
-      else
-        # Get filenames
-        meta_filename    = existing_path
-        content_filename = content_filename_for_dir(File.dirname(existing_path))
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
-        Nanoc::NotificationCenter.post(:file_updated, content_filename)
-      end
-
-      # Write files
-      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(page.attributes.stringify_keys)) }
-      File.open(content_filename, 'w') { |io| io.write(page.content) }
-
-      # Add to working copy if possible
-      if existing_path.nil?
-        vcs.add(meta_filename)
-        vcs.add(content_filename)
-      end
-    end
-
-    ########## Assets ##########
-
     def assets # :nodoc:
       meta_filenames('assets').map do |meta_filename|
         # Read metadata
@@ -190,52 +144,6 @@ module Nanoc::DataSources
       end
     end
 
-    def save_asset(asset) # :nodoc:
-      # Determine possible meta file paths
-      last_component = asset.identifier.split('/')[-1]
-      meta_filename_worst = 'assets' + asset.identifier + 'index.yaml'
-      meta_filename_best  = 'assets' + asset.identifier + (last_component || 'assets') + '.yaml'
-
-      # Get existing path
-      existing_path = nil
-      existing_path = meta_filename_best  if File.file?(meta_filename_best)
-      existing_path = meta_filename_worst if File.file?(meta_filename_worst)
-
-      if existing_path.nil?
-        # Get filenames
-        dir_path         = 'assets' + asset.identifier
-        meta_filename    = meta_filename_best
-        content_filename = 'assets' + asset.identifier + (last_component || 'assets') + '.html'
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_created, meta_filename)
-        Nanoc::NotificationCenter.post(:file_created, content_filename)
-
-        # Create directories if necessary
-        FileUtils.mkdir_p(dir_path)
-      else
-        # Get filenames
-        meta_filename    = existing_path
-        content_filename = content_filename_for_dir(File.dirname(existing_path))
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
-        Nanoc::NotificationCenter.post(:file_updated, content_filename)
-      end
-
-      # Write files
-      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(asset.attributes.stringify_keys)) }
-      File.open(content_filename, 'w') { |io| io.write(asset.content) }
-
-      # Add to working copy if possible
-      if existing_path.nil?
-        vcs.add(meta_filename)
-        vcs.add(content_filename)
-      end
-    end
-
-    ########## Layouts ##########
-
     def layouts # :nodoc:
       meta_filenames('layouts').map do |meta_filename|
         # Get content
@@ -258,46 +166,6 @@ module Nanoc::DataSources
       end
     end
 
-    def save_layout(layout) # :nodoc:
-      # Get paths
-      last_component    = layout.identifier.split('/')[-1]
-      dir_path          = 'layouts' + layout.identifier
-      meta_filename     = dir_path + last_component + '.yaml'
-      content_filename  = Dir[dir_path + last_component + '.*'][0]
-
-      if File.file?(meta_filename)
-        created = false
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_updated, meta_filename)
-        Nanoc::NotificationCenter.post(:file_updated, content_filename)
-      else
-        created = true
-
-        # Create dir
-        FileUtils.mkdir_p(dir_path)
-
-        # Get content filename
-        content_filename = dir_path + last_component + '.html'
-
-        # Notify
-        Nanoc::NotificationCenter.post(:file_created, meta_filename)
-        Nanoc::NotificationCenter.post(:file_created, content_filename)
-      end
-
-      # Write files
-      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(layout.attributes.stringify_keys)) }
-      File.open(content_filename, 'w') { |io| io.write(layout.content) }
-
-      # Add to working copy if possible
-      if created
-        vcs.add(meta_filename)
-        vcs.add(content_filename)
-      end
-    end
-
-    ########## Code ##########
-
     def code # :nodoc:
       # Get files
       filenames = Dir['lib/**/*.rb'].sort
@@ -315,30 +183,48 @@ module Nanoc::DataSources
       Nanoc::Code.new(snippets, mtime)
     end
 
-    # FIXME update
-    def save_code(code) # :nodoc:
-      # Check whether code existed
-      existed = File.file?('lib/default.rb')
+    ########## Creating data ##########
 
-      # Remove all existing code files
-      Dir['lib/**/*.rb'].each do |file|
-        vcs.remove(file) unless file == 'lib/default.rb'
-      end
+    # Creates a new page with the given page content, attributes and identifier.
+    def create_page(content, attributes, identifier)
+      # Determine base path
+      last_component = identifier.split('/')[-1] || 'content'
+      base_path = 'content' + identifier + last_component
+
+      # Get filenames
+      dir_path         = 'content' + identifier
+      meta_filename    = 'content' + identifier + last_component + '.yaml'
+      content_filename = 'content' + identifier + last_component + '.html'
+                                     
+      # Notify
+      Nanoc::NotificationCenter.post(:file_created, meta_filename)
+      Nanoc::NotificationCenter.post(:file_created, content_filename)
+
+      # Create files
+      FileUtils.mkdir_p(dir_path)
+      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.stringify_keys)) }
+      File.open(content_filename, 'w') { |io| io.write(content) }
+    end
+
+    # Creates a new layout with the given page content, attributes and identifier.
+    def create_layout(content, attributes, identifier)
+      # Determine base path
+      last_component = identifier.split('/')[-1]
+      base_path = 'layouts' + identifier + last_component
+
+      # Get filenames
+      dir_path         = 'layouts' + identifier
+      meta_filename    = 'layouts' + identifier + last_component + '.yaml'
+      content_filename = 'layouts' + identifier + last_component + '.html'
 
       # Notify
-      if existed
-        Nanoc::NotificationCenter.post(:file_updated, 'lib/default.rb')
-      else
-        Nanoc::NotificationCenter.post(:file_created, 'lib/default.rb')
-      end
+      Nanoc::NotificationCenter.post(:file_created, meta_filename)
+      Nanoc::NotificationCenter.post(:file_created, content_filename)
 
-      # Write new code
-      File.open('lib/default.rb', 'w') do |io|
-        io.write(code.data)
-      end
-
-      # Add to working copy if possible
-      vcs.add('lib/default.rb') unless existed
+      # Create files
+      FileUtils.mkdir_p(dir_path)
+      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.stringify_keys)) }
+      File.open(content_filename, 'w') { |io| io.write(content) }
     end
 
   private

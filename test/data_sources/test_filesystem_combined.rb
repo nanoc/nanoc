@@ -64,7 +64,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  # Test pages
+  # Test loading data
 
   def test_pages
     with_temp_site('filesystem_combined') do |site|
@@ -73,12 +73,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
       assert_equal('Home', site.pages[0].attribute_named(:title))
     end
   end
-
-  def test_save_page
-    # TODO implement
-  end
-
-  # Test assets
 
   def test_assets
     with_temp_site('filesystem_combined') do |site|
@@ -109,12 +103,6 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_save_asset
-    # TODO implement
-  end
-
-  # Test layouts
-
   def test_layouts
     with_temp_site('filesystem_combined') do |site|
       layout = site.layouts[0]
@@ -125,20 +113,65 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_save_layout
-    # TODO implement
-  end
-
-  # Test code
-
   def test_code
     with_temp_site('filesystem_combined') do |site|
       assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
     end
   end
 
-  def test_save_code
-    # TODO implement
+  # Test creating data
+
+  def test_create_page_at_root
+    in_dir 'tmp' do
+      # Create page
+      data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+      data_source.create_page('content here', { :foo => 'bar' }, '/')
+
+      # Check file existance
+      assert File.directory?('content')
+      assert !File.directory?('content/content')
+      assert File.file?('content/index.html')
+
+      # Check file content
+      expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+      assert_equal expected, File.read('content/index.html')
+    end
+  end
+
+  def test_create_page_not_at_root
+    in_dir 'tmp' do
+      # Create page
+      data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+      data_source.create_page('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
+
+      # Check file existance
+      assert File.directory?('content/xxx/yyy')
+      assert !File.directory?('content/xxx/yyy/zzz')
+      assert File.file?('content/xxx/yyy/zzz.html')
+      assert !File.file?('content/xxx/yyy/zzz.yaml')
+
+      # Check file content
+      expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+      assert_equal expected, File.read('content/xxx/yyy/zzz.html')
+    end
+  end
+
+  def test_create_layout
+    in_dir 'tmp' do
+      # Create layout
+      data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+      data_source.create_layout('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
+
+      # Check file existance
+      assert File.directory?('layouts/xxx/yyy')
+      assert !File.directory?('layouts/xxx/yyy/zzz')
+      assert File.file?('layouts/xxx/yyy/zzz.html')
+      assert !File.file?('layouts/xxx/yyy/zzz.yaml')
+
+      # Check file content
+      expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+      assert_equal expected, File.read('layouts/xxx/yyy/zzz.html')
+    end
   end
 
   # Test private methods

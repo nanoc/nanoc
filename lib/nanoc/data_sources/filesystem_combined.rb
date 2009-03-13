@@ -92,7 +92,7 @@ module Nanoc::DataSources
       vcs.remove('lib')
     end
 
-    ########## Pages ##########
+    ########## Loading data ##########
 
     def pages # :nodoc:
       files('content', true).map do |filename|
@@ -117,45 +117,6 @@ module Nanoc::DataSources
       end
     end
 
-    def save_page(page) # :nodoc:
-      # Find page path
-      if page.identifier == '/'
-        paths         = Dir['content/index.*']
-        path          = paths[0] || 'content/index.html'
-        parent_path   = '/'
-      else
-        last_path_component = page.identifier.split('/')[-1]
-        paths_best    = Dir['content' + page.identifier[0..-2] + '.*']
-        paths_worst   = Dir['content' + page.identifier + 'index.*']
-        path_default  = 'content' + page.identifier[0..-2] + '.html'
-        path          = paths_best[0] || paths_worst[0] || path_default
-        parent_path   = '/' + File.join(page.identifier.split('/')[0..-2])
-      end
-
-      # Notify
-      if File.file?(path)
-        created = false
-        Nanoc::NotificationCenter.post(:file_updated, path)
-      else
-        created = true
-        Nanoc::NotificationCenter.post(:file_created, path)
-      end
-
-      # Write page
-      FileUtils.mkdir_p('content' + parent_path)
-      File.open(path, 'w') do |io|
-        io.write("-----\n")
-        io.write(YAML.dump(page.attributes.stringify_keys) + "\n")
-        io.write("-----\n")
-        io.write(page.content)
-      end
-
-      # Add to working copy if possible
-      vcs.add(path) if created
-    end
-
-    ########## Assets ##########
-
     def assets # :nodoc:
       files('assets', true).map do |filename|
         # Read and parse data
@@ -179,12 +140,6 @@ module Nanoc::DataSources
       end
     end
 
-    def save_asset(asset) # :nodoc:
-      # TODO implement
-    end
-
-    ########## Layouts ##########
-
     def layouts # :nodoc:
       files('layouts', true).map do |filename|
         # Read and parse data
@@ -205,39 +160,6 @@ module Nanoc::DataSources
       end.compact
     end
 
-    def save_layout(layout) # :nodoc:
-      # Find layout path
-      last_path_component = layout.identifier.split('/')[-1]
-      paths_best    = Dir['layouts' + layout.identifier[0..-2] + '.*']
-      paths_worst   = Dir['layouts' + layout.identifier + 'index.*']
-      path_default  = 'layouts' + layout.identifier[0..-2] + '.html'
-      path          = paths_best[0] || paths_worst[0] || path_default
-      parent_path   = '/' + File.join(layout.identifier.split('/')[0..-2])
-
-      # Notify
-      if File.file?(path)
-        created = false
-        Nanoc::NotificationCenter.post(:file_updated, path)
-      else
-        created = true
-        Nanoc::NotificationCenter.post(:file_created, path)
-      end
-
-      # Write layout
-      FileUtils.mkdir_p('layouts' + parent_path)
-      File.open(path, 'w') do |io|
-        io.write("-----\n")
-        io.write(YAML.dump(layout.attributes.stringify_keys) + "\n")
-        io.write("-----\n")
-        io.write(layout.content)
-      end
-
-      # Add to working copy if possible
-      vcs.add(path) if created
-    end
-
-    ########## Code ##########
-
     def code # :nodoc:
       # Get files
       filenames = Dir['lib/**/*.rb'].sort
@@ -255,30 +177,48 @@ module Nanoc::DataSources
       Nanoc::Code.new(snippets, mtime)
     end
 
-    # FIXME update
-    def save_code(code) # :nodoc:
-      # Check whether code existed
-      existed = File.file?('lib/default.rb')
+    ########## Creating data ##########
 
-      # Remove all existing code files
-      Dir['lib/**/*.rb'].each do |file|
-        vcs.remove(file) unless file == 'lib/default.rb'
+    # Creates a new page with the given page content, attributes and identifier.
+    def create_page(content, attributes, identifier)
+      # Determine path
+      if identifier == '/'
+        path = 'content/index.html'
+      else
+        path = 'content' + identifier[0..-2] + '.html'
       end
+      parent_path = File.dirname(path)
 
       # Notify
-      if existed
-        Nanoc::NotificationCenter.post(:file_updated, 'lib/default.rb')
-      else
-        Nanoc::NotificationCenter.post(:file_created, 'lib/default.rb')
-      end
+      Nanoc::NotificationCenter.post(:file_created, path)
 
-      # Write new code
-      File.open('lib/default.rb', 'w') do |io|
-        io.write(code.data)
+      # Write page
+      FileUtils.mkdir_p(parent_path)
+      File.open(path, 'w') do |io|
+        io.write("-----\n")
+        io.write(YAML.dump(attributes.stringify_keys) + "\n")
+        io.write("-----\n")
+        io.write(content)
       end
+    end
 
-      # Add to working copy if possible
-      vcs.add('lib/default.rb') unless existed
+    # Creates a new layout with the given page content, attributes and identifier.
+    def create_layout(content, attributes, identifier)
+      # Determine path
+      path = 'layouts' + identifier[0..-2] + '.html'
+      parent_path = File.dirname(path)
+
+      # Notify
+      Nanoc::NotificationCenter.post(:file_created, path)
+
+      # Write page
+      FileUtils.mkdir_p(parent_path)
+      File.open(path, 'w') do |io|
+        io.write("-----\n")
+        io.write(YAML.dump(attributes.stringify_keys) + "\n")
+        io.write("-----\n")
+        io.write(content)
+      end
     end
 
   private

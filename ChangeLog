@@ -16,6 +16,7 @@ New:
 * The current layout is now accessible through the @layout variable
 * relative_path_to function in LinkTo helper
 * relativize_paths filter
+* create_page and create_layout methods in data sources
 
 Removed:
 
@@ -23,6 +24,7 @@ Removed:
 * Removed support for binary assets
 * Removed support for templates
 * Removed everything that was deprecated in nanoc 2.x
+* save_*, move_* and delete_* methods in data sources
 
 2.1.6
 -----
