@@ -271,30 +271,25 @@ EOS
       site = Nanoc::Site.new(YAML.load_file('config.yaml'))
 
       # Create page
-      page = Nanoc::Page.new(
+      site.data_source.create_page(
         DEFAULT_PAGE,
-        { :title => 'Home' },
+        { :title => "Home" },
         '/'
       )
-      page.site = site
-      site.data_source.save_page(page)
 
       # Create layout
-      layout = Nanoc::Layout.new(
+      site.data_source.create_layout(
         DEFAULT_LAYOUT,
         { :filter => 'erb' },
         '/default/'
       )
-      layout.site = site
-      site.data_source.save_layout(layout)
 
-      # Fill code
-      code = Nanoc::Code.new(
-        "\# All files in the 'lib' directory will be loaded\n" +
-        "\# before nanoc starts compiling.\n"
-      )
-      code.site = site
-      site.data_source.save_code(code)
+      # Create code
+      FileUtils.mkdir_p('lib')
+      File.open('lib/default.rb', 'w') do |io|
+        io.write "\# All files in the 'lib' directory will be loaded\n"
+        io.write "\# before nanoc starts compiling.\n"
+      end
     end
 
   end

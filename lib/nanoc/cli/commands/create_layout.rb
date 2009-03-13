@@ -55,13 +55,15 @@ module Nanoc::CLI
         exit 1
       end
 
+      # TODO check whether layout is not at /
+
       # Setup notifications
       Nanoc::NotificationCenter.on(:file_created) do |file_path|
         Nanoc::CLI::Logger.instance.file(:high, :create, file_path, :color => @base.color?)
       end
 
       # Create layout
-      layout = Nanoc::Layout.new(
+      @base.site.data_source.create_layout(
         "<html>\n" +
         "  <head>\n" +
         "    <title><%= @page.title %></title>\n" +
@@ -74,8 +76,6 @@ module Nanoc::CLI
         { :filter => 'erb' },
         identifier
       )
-      layout.site = @base.site
-      @base.site.data_source.save_layout(layout)
 
       puts "A layout has been created at #{identifier}."
     end

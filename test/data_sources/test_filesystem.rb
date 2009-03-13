@@ -101,40 +101,13 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
-  # Test pages
+  # Test loading data
 
   def test_pages
     with_temp_site do |site|
       assert_equal([ 'Home' ], site.pages.map { |page| page.attribute_named(:title) })
     end
   end
-
-  def test_save_page
-    with_temp_site do |site|
-      # Check pages
-      assert_equal(1, site.pages.size)
-      old_page = site.pages[0]
-
-      # Create page
-      new_page = Nanoc::Page.new('Hello, I am a noob.', { :foo => 'bar' }, '/noob/')
-      site.data_source.save_page(new_page)
-      site.load_data(true)
-
-      # Check pages
-      assert_equal(2, site.pages.size)
-
-      # Update page
-      old_page.attributes = { :xyzzy => 'abba' }
-      site.data_source.save_page(old_page)
-      site.load_data(true)
-
-      # Check pages
-      assert_equal(2, site.pages.size)
-      assert(site.pages.any? { |p| p.attribute_named(:xyzzy) == 'abba' })
-    end
-  end
-
-  # Test assets
 
   def test_assets
     with_temp_site do |site|
@@ -167,12 +140,6 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_save_asset
-    # TODO implement
-  end
-
-  # Test layouts
-
   def test_layouts
     with_temp_site do |site|
       layout = site.layouts[0]
@@ -183,20 +150,63 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_save_layout
-    # TODO implement
-  end
-
-  # Test code
-
   def test_code
     with_temp_site do |site|
       assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
     end
   end
 
-  def test_save_code
-    # TODO implement
+  # Test creating data
+
+  def test_create_page_at_root
+    in_dir 'tmp' do
+      # Create page
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.create_page('content here', { :foo => 'bar' }, '/')
+
+      # Check file existance
+      assert File.directory?('content')
+      assert File.file?('content/content.html')
+      assert File.file?('content/content.yaml')
+
+      # Check file content
+      assert_equal 'content here', File.read('content/content.html')
+      assert_match 'foo: bar',     File.read('content/content.yaml')
+    end
+  end
+
+  def test_create_page_not_at_root
+    in_dir 'tmp' do
+      # Create page
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.create_page('content here', { :foo => 'bar' }, '/moo/')
+
+      # Check file existance
+      assert File.directory?('content/moo')
+      assert File.file?('content/moo/moo.html')
+      assert File.file?('content/moo/moo.yaml')
+
+      # Check file content
+      assert_equal 'content here', File.read('content/moo/moo.html')
+      assert_match 'foo: bar',     File.read('content/moo/moo.yaml')
+    end
+  end
+
+  def test_create_layout
+    in_dir 'tmp' do
+      # Create layout
+      data_source = Nanoc::DataSources::Filesystem.new(nil)
+      data_source.create_layout('content here', { :foo => 'bar' }, '/moo/')
+
+      # Check file existance
+      assert File.directory?('layouts/moo')
+      assert File.file?('layouts/moo/moo.html')
+      assert File.file?('layouts/moo/moo.yaml')
+
+      # Check file content
+      assert_equal 'content here', File.read('layouts/moo/moo.html')
+      assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
+    end
   end
 
   # Test private methods

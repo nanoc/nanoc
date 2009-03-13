@@ -21,7 +21,6 @@ module Nanoc::CLI
       add_command(Nanoc::CLI::CreatePageCommand.new)
       add_command(Nanoc::CLI::CreateSiteCommand.new)
       add_command(Nanoc::CLI::InfoCommand.new)
-      add_command(Nanoc::CLI::SwitchCommand.new)
       add_command(Nanoc::CLI::UpdateCommand.new)
 
       # Set flags

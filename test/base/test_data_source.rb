@@ -36,21 +36,15 @@ class Nanoc::DataSourceTest < MiniTest::Unit::TestCase
     assert_raises(NotImplementedError) { data_source.setup }
     assert_raises(NotImplementedError) { data_source.destroy }
 
-    # Test required methods - pages
+    # Test required methods - loading data
     assert_raises(NotImplementedError) { data_source.pages }
-    assert_raises(NotImplementedError) { data_source.save_page(nil) }
-
-    # Test required methods - assets
     assert_raises(NotImplementedError) { data_source.assets }
-    assert_raises(NotImplementedError) { data_source.save_asset(nil) }
-
-    # Test required methods - layouts
     assert_raises(NotImplementedError) { data_source.layouts }
-    assert_raises(NotImplementedError) { data_source.save_layout(nil) }
-
-    # Test required methods - code
     assert_raises(NotImplementedError) { data_source.code }
-    assert_raises(NotImplementedError) { data_source.save_code(nil) }
+
+    # Test required method - creating data
+    assert_raises(NotImplementedError) { data_source.create_page(nil, nil, nil) }
+    assert_raises(NotImplementedError) { data_source.create_layout(nil, nil, nil) }
   end
 
 end

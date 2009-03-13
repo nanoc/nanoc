@@ -86,7 +86,7 @@ module Nanoc
     def update
     end
 
-    ########## Pages
+    ########## Loading data
 
     # Returns the list of pages (represented by Nanoc::Page) in this site.
     # This is an abstract method implemented by the subclass.
@@ -96,16 +96,6 @@ module Nanoc
       not_implemented('pages')
     end
 
-    # Saves the given page in the data source, creating it if it doesn't exist
-    # yet and updating the existing copy otherwise.
-    #
-    # Subclasses must implement this method.
-    def save_page(page)
-      not_implemented('save_page')
-    end
-
-    ########## Assets
-
     # Returns the list of assets (represented by Nanoc::Asset) in this site.
     # This is an abstract method implemented by the subclass.
     #
@@ -114,16 +104,6 @@ module Nanoc
       not_implemented('assets')
     end
 
-    # Saves the given asset in the data source, creating it if it doesn't
-    # exist yet and updating the existing copy otherwise.
-    #
-    # Subclasses must implement this method.
-    def save_asset(asset)
-      not_implemented('save_asset')
-    end
-
-    ########## Layouts
-
     # Returns the list of layouts (represented by Nanoc::Layout) in this site.
     # This is an abstract method implemented by the subclass.
     #
@@ -131,16 +111,6 @@ module Nanoc
     def layouts
       not_implemented('layouts')
     end
-
-    # Saves the given layout in the data source, creating it if it doesn't
-    # exist yet and updating the existing copy otherwise.
-    #
-    # Subclasses must implement this method.
-    def save_layout(layout)
-      not_implemented('save_layout')
-    end
-
-    ########## Code
 
     # Returns the custom code (represented by Nanoc::Code) for this site.
     # This is an abstract method implemented by the subclass. This can be code
@@ -152,11 +122,16 @@ module Nanoc
       not_implemented('code')
     end
 
-    # Saves the given code in the data source.
-    #
-    # Subclasses must implement this method.
-    def save_code(code)
-      not_implemented('save_code')
+    ########## Creating data
+
+    # Creates a new page with the given page content, attributes and identifier.
+    def create_page(content, attributes, identifier)
+      not_implemented('create_page')
+    end
+
+    # Creates a new layout with the given page content, attributes and identifier.
+    def create_layout(content, attributes, identifier)
+      not_implemented('create_layout')
     end
 
   private
