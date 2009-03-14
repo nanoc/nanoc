@@ -22,7 +22,7 @@ test = namespace :test do
   end
 
   # test:...
-  %w( base cli data_sources extra filters helpers routers ).each do |dir|
+  %w( base cli data_sources extra filters helpers routers tasks ).each do |dir|
     desc "Run all #{dir} tests"
     task dir.to_sym do |task|
       ENV['QUIET'] ||= 'true'
