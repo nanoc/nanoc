@@ -2,7 +2,8 @@ namespace :deploy do
 
   desc 'Upload the compiled site using rsync'
   task :rsync do
-    # TODO implement
+    deploy_task = Nanoc::Tasks::Deploy::Rsync.new
+    deploy_task.run :dry_run => !!ENV['DRY_RUN']
   end
 
   desc 'Upload the compiled site using sitecopy'
