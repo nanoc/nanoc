@@ -23,6 +23,7 @@ end
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'nanoc'
 require 'nanoc/cli'
+require 'nanoc/tasks'
 
 # Load miscellaneous requirements
 require 'stringio'
