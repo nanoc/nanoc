@@ -39,7 +39,9 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     in_dir 'tmp' do
       # Create config
       File.open('config.yaml', 'w') do |io|
-        io.write "deploy: moo\n"
+        io.write "deploy:\n"
+        io.write "  blahblah:\n"
+        io.write "    stuff: more stuff\n"
       end
 
       # Create site
@@ -59,7 +61,9 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     in_dir 'tmp' do
       # Create config
       File.open('config.yaml', 'w') do |io|
-        io.write "deploy: moo\n"
+        io.write "deploy:\n"
+        io.write "  blahblah:\n"
+        io.write "    stuff: more stuff\n"
       end
 
       # Create site
