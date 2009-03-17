@@ -8,7 +8,7 @@ class Nanoc3::Filters::RubyPantsTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'rubypants' do
       # Get filter
-      filter = ::Nanoc3::Filters::SmartyPants.new
+      filter = ::Nanoc3::Filters::RubyPants.new
 
       # Run filter
       result = filter.run("Wait---what?")

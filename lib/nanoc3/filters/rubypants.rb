@@ -1,5 +1,5 @@
 module Nanoc3::Filters
-  class SmartyPants < Nanoc3::Filter
+  class RubyPants < Nanoc3::Filter
 
     identifier :rubypants
 
