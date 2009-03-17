@@ -138,7 +138,7 @@ EOS
       <ul>
         <li><a href="http://groups.google.com/group/nanoc/">Discussion Group</a></li>
         <li><a href="http://groups.google.com/group/nanoc-es/">Spanish Discussion Group</a></li>
-        <li><a href="http://nanoc.stoneship.org/trac/">Wiki</a></li>
+        <li><a href="http://projects.stoneship.org/trac/nanoc/">Wiki</a></li>
       </ul>
     </div>
   </body>
