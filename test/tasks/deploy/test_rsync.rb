@@ -123,6 +123,62 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_run_with_custom_deploy_config_string
+    in_dir 'tmp' do
+      # Create config
+      File.open('config.yaml', 'w') do |io|
+        io.write "deploy:\n"
+        io.write "  foobar:\n"
+        io.write "    dst: asdf\n"
+      end
+
+      # Create site
+      rsync = Nanoc3::Tasks::Deploy::Rsync.new
+
+      # Mock run_shell_cmd
+      def rsync.run_shell_cmd(args)
+        @shell_cms_args = args
+      end
+
+      # Run
+      rsync.run(:config_name => 'foobar')
+
+      # Check args
+      assert_equal(
+        [ 'rsync', File.expand_path('output') + '/', 'asdf' ],
+        rsync.instance_eval { @shell_cms_args }
+      )
+    end
+  end
+
+  def test_run_with_custom_deploy_config_symbol
+    in_dir 'tmp' do
+      # Create config
+      File.open('config.yaml', 'w') do |io|
+        io.write "deploy:\n"
+        io.write "  foobar:\n"
+        io.write "    dst: asdf\n"
+      end
+
+      # Create site
+      rsync = Nanoc3::Tasks::Deploy::Rsync.new
+
+      # Mock run_shell_cmd
+      def rsync.run_shell_cmd(args)
+        @shell_cms_args = args
+      end
+
+      # Run
+      rsync.run(:config_name => :foobar)
+
+      # Check args
+      assert_equal(
+        [ 'rsync', File.expand_path('output') + '/', 'asdf' ],
+        rsync.instance_eval { @shell_cms_args }
+      )
+    end
+  end
+
   def test_run_everything_okay
     in_dir 'tmp' do
       # Create config

@@ -20,8 +20,8 @@ module Nanoc3::Tasks::Deploy # :nodoc:
     #                  Defaults to +:default+ (surprise!).
     def run(params={})
       # Extract params
-      config_name = params.has_key?(:config_name) ? params[:config_name] : :default
-      dry_run     = params.has_key?(:dry_run)     ? params[:dry_run]     : false
+      config_name = params.has_key?(:config_name) ? params[:config_name].to_sym : :default
+      dry_run     = params.has_key?(:dry_run)     ? params[:dry_run]            : false
 
       # Validate config
       error 'No deploy configuration found'                    if @site.config[:deploy].nil?
