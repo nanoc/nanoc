@@ -1,13 +1,13 @@
 require 'test/helper'
 
-class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter_html_with_double_quotes
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -26,7 +26,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_with_single_quotes
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -45,7 +45,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_without_quotes
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -64,7 +64,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_multiple
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -83,7 +83,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_implicit
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -102,7 +102,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_with_double_quotes
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -121,7 +121,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_with_single_quotes
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -140,7 +140,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_without_quotes
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -159,7 +159,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_multiple
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc3::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do

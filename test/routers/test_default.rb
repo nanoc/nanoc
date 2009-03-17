@@ -1,21 +1,21 @@
 require 'test/helper'
 
-class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
+class Nanoc3::Routers::DefaultTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_path_for_page_rep_with_default_rep
     # Create default router
-    router = Nanoc::Routers::Default.new(nil)
+    router = Nanoc3::Routers::Default.new(nil)
 
     # Get page
-    page = Nanoc::Page.new(
+    page = Nanoc3::Page.new(
       'some content',
       { :filename => 'home', :extension => 'htm' },
       '/foo/'
     )
-    page_rep = Nanoc::PageRep.new(page, :default)
+    page_rep = Nanoc3::PageRep.new(page, :default)
 
     # Check
     assert_equal('/foo/home.htm', router.path_for_page_rep(page_rep))
@@ -23,10 +23,10 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
 
   def test_path_for_page_rep_with_custom_rep
     # Create default router
-    router = Nanoc::Routers::Default.new(nil)
+    router = Nanoc3::Routers::Default.new(nil)
 
     # Get page
-    page = Nanoc::Page.new(
+    page = Nanoc3::Page.new(
       'some content',
       {
         :filename => 'home',
@@ -34,7 +34,7 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
       },
       '/foo/'
     )
-    page_rep = Nanoc::PageRep.new(page, :raw)
+    page_rep = Nanoc3::PageRep.new(page, :raw)
 
     # Check
     assert_equal('/foo/home-raw.htm', router.path_for_page_rep(page_rep))
@@ -46,15 +46,15 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
-    router = Nanoc::Routers::Default.new(site)
+    router = Nanoc3::Routers::Default.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       { :extension => 'png' },
       '/foo/'
     )
-    asset_rep = Nanoc::AssetRep.new(asset, :default)
+    asset_rep = Nanoc3::AssetRep.new(asset, :default)
 
     # Check
     assert_equal('/imuhgez/foo.png', router.path_for_asset_rep(asset_rep))
@@ -66,15 +66,15 @@ class Nanoc::Routers::DefaultTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create default router
-    router = Nanoc::Routers::Default.new(site)
+    router = Nanoc3::Routers::Default.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       { :extension => 'png' },
       '/foo/'
     )
-    asset_rep = Nanoc::AssetRep.new(asset, :raw)
+    asset_rep = Nanoc3::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal('/imuhgez/foo-raw.png', router.path_for_asset_rep(asset_rep))

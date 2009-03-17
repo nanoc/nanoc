@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
+class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -11,7 +11,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   def test_preferred_handler
     # Create autocompiler
-    aco = Nanoc::Extra::AutoCompiler.new(nil)
+    aco = Nanoc3::Extra::AutoCompiler.new(nil)
 
     # Check preferred handler
     handlers = sequence('handlers')
@@ -23,7 +23,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handler_named
     if_have 'rack' do
       # Create autocompiler
-      autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
 
       # Check handler without requirements
       assert_equal(
@@ -51,7 +51,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_rep).with(page_reps[1])
 
     # Run
@@ -76,7 +76,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_rep).with(asset_reps[1])
 
     # Run
@@ -101,7 +101,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('/foo/2')
 
     # Run
@@ -129,7 +129,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     File.open('tmp/somefile.txt', 'w') { |io| }
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_file).with('tmp/somefile.txt')
 
     # Run
@@ -149,7 +149,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     File.open('tmp/foo/bar/index.html', 'w') { |io| }
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_file).with('tmp/foo/bar/index.html')
 
     # Run
@@ -169,7 +169,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     File.open('tmp/foo/bar/someotherfile.txt', 'w') { |io| }
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('foo/bar/')
 
     # Run
@@ -189,7 +189,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     File.open('tmp/foo/bar/index.html', 'w') { |io| }
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('foo/bar')
 
     # Run
@@ -209,7 +209,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     File.open('tmp/foo/bar/someotherfile.txt', 'w') { |io| }
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('foo/bar')
 
     # Run
@@ -225,7 +225,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('someotherfile.txt')
 
     # Run
@@ -234,7 +234,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   def test_h
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
 
     # Check HTML escaping
     assert_equal(
@@ -246,7 +246,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_mime_type_of
     if_have('mime/types') do
       # Create autocompiler
-      autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
 
       # Create known test file
       File.open('tmp/foo.html', 'w') { |io| }
@@ -266,7 +266,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   def test_serve_400
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
 
     # Fill response for 404
     response = autocompiler.instance_eval { serve_404('/foo/bar/baz/') }
@@ -286,7 +286,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:compiler).returns(compiler)
 
     # Create autocompiler
-    autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
 
     # Fill response for 500
     response = autocompiler.instance_eval do
@@ -327,7 +327,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:compiler).returns(compiler)
 
       # Create autocompiler
-      autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
 
       begin
         # Serve
@@ -361,7 +361,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:compiler).at_least_once.returns(compiler)
 
       # Create autocompiler
-      autocompiler = Nanoc::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
 
       # Serve
       response = autocompiler.instance_eval { serve_rep(page_rep) }
@@ -381,7 +381,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       File.open('tmp/test',     'w') { |io| io.write("random blah blah stuff") }
 
       # Create autocompiler
-      autocompiler = Nanoc::Extra::AutoCompiler.new(self)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new(self)
 
       # Serve file 1
       response = autocompiler.instance_eval { serve_file('tmp/test.css') }

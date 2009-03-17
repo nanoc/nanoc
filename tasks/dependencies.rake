@@ -1,4 +1,4 @@
-desc 'Fetch all dependencies for nanoc'
+desc 'Fetch all dependencies for nanoc3'
 task :fetch_dependencies do
   # Get Cri
   unless File.directory?('vendor/cri')

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::CompilerTest < MiniTest::Unit::TestCase
+class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,12 +8,12 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
   def test_run_without_item
     # Create items
     pages = [
-      Nanoc::Page.new('page one', {}, '/page1/'),
-      Nanoc::Page.new('page two', {}, '/page2/')
+      Nanoc3::Page.new('page one', {}, '/page1/'),
+      Nanoc3::Page.new('page two', {}, '/page2/')
     ]
     assets = [
-      Nanoc::Asset.new(nil, {}, '/asset1/'),
-      Nanoc::Asset.new(nil, {}, '/asset2/')
+      Nanoc3::Asset.new(nil, {}, '/asset1/'),
+      Nanoc3::Asset.new(nil, {}, '/asset2/')
     ]
 
     # Mock reps
@@ -32,7 +32,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     (pages + assets).each { |item| item.site = site }
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:load_rules)
     compiler.expects(:build_reps_for).times(4)
     compiler.expects(:map_rep).times(6)
@@ -51,7 +51,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
   def test_run_with_page_rep
     # Create page
-    page = Nanoc::Page.new('page one', {}, '/page1/')
+    page = Nanoc3::Page.new('page one', {}, '/page1/')
 
     # Mock reps
     page.expects(:reps).returns([ mock, mock, mock ])
@@ -64,7 +64,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     page.site = site
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:load_rules)
     compiler.expects(:build_reps_for).times(1)
     compiler.expects(:map_rep).times(3)
@@ -83,7 +83,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
   def test_run_with_asset_rep
     # Create asset
-    asset = Nanoc::Asset.new('asset one', {}, '/asset1/')
+    asset = Nanoc3::Asset.new('asset one', {}, '/asset1/')
 
     # Mock reps
     asset.expects(:reps).returns([ mock, mock, mock ])
@@ -96,7 +96,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     asset.site = site
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:load_rules)
     compiler.expects(:build_reps_for).times(1)
     compiler.expects(:map_rep).times(3)
@@ -118,7 +118,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
 
     FileUtils.cd('tmp') do
       # Create rules file
@@ -149,7 +149,7 @@ EOF
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
 
     FileUtils.cd('tmp') do
       # Create rules file
@@ -177,11 +177,11 @@ EOF
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
 
     FileUtils.cd('tmp') do
       # Try loading rules
-      assert_raises(Nanoc::Errors::NoRulesFileFoundError) do
+      assert_raises(Nanoc3::Errors::NoRulesFileFoundError) do
         compiler.load_rules
       end
     end
@@ -208,7 +208,7 @@ EOF
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.add_layout_compilation_rule('*', :erb)
 
     # Mock layout
@@ -224,7 +224,7 @@ EOF
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.add_layout_compilation_rule('*', :some_unknown_filter)
 
     # Mock layout
@@ -240,7 +240,7 @@ EOF
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.add_layout_compilation_rule('foo', :erb)
 
     # Mock layout
@@ -265,7 +265,7 @@ EOF
 
   def test_identifier_to_regex_without_wildcards
     # Create compiler
-    compiler = Nanoc::Compiler.new(nil)
+    compiler = Nanoc3::Compiler.new(nil)
 
     # Check
     assert_equal(
@@ -275,7 +275,7 @@ EOF
   end
 
   def test_identifier_to_regex_with_one_wildcard
-    compiler = Nanoc::Compiler.new(nil)
+    compiler = Nanoc3::Compiler.new(nil)
 
     actual   = compiler.instance_eval { identifier_to_regex('foo/*/bar') }
     expected = %r{^foo/(.*?)/bar$}
@@ -288,7 +288,7 @@ EOF
   end
 
   def test_identifier_to_regex_with_two_wildcards
-    compiler = Nanoc::Compiler.new(nil)
+    compiler = Nanoc3::Compiler.new(nil)
 
     actual   = compiler.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
     expected = %r{^foo/(.*?)/bar/(.*?)/qux$}

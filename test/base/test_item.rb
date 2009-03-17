@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::ItemTest < MiniTest::Unit::TestCase
+class Nanoc3::ItemTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -11,7 +11,7 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
 
   def test_attribute_named
     # Create item and rep
-    item = Nanoc::Item.new(
+    item = Nanoc3::Item.new(
       "content",
       { :one => 'one in item' },
       '/path/'

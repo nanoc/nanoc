@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::MarukuTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::MarukuTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::MarukuTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'maruku' do
       # Create filter
-      filter = ::Nanoc::Filters::Maruku.new
+      filter = ::Nanoc3::Filters::Maruku.new
 
       # Run filter
       result = filter.run("This is _so_ *cool*!")

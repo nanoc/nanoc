@@ -1,38 +1,38 @@
 require 'test/helper'
 
-class Nanoc::SiteTest < MiniTest::Unit::TestCase
+class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  class TestDataSource < Nanoc::DataSource
+  class TestDataSource < Nanoc3::DataSource
 
     identifier :test_data_source
 
-    def code ; Nanoc::Code.new('') ; end
+    def code ; Nanoc3::Code.new('') ; end
 
   end
 
-  class TestNewschoolDataSource < Nanoc::DataSource
+  class TestNewschoolDataSource < Nanoc3::DataSource
 
     identifier :test_newschool_data_source
 
     def pages
       [
-        Nanoc::Page.new("Hi!",          {}, '/'),
-        Nanoc::Page.new("Hello there.", {}, '/about/')
+        Nanoc3::Page.new("Hi!",          {}, '/'),
+        Nanoc3::Page.new("Hello there.", {}, '/about/')
       ]
     end
 
     def assets
       [
-        Nanoc::Asset.new(File.open('/dev/null'), {}, '/something/')
+        Nanoc3::Asset.new(File.open('/dev/null'), {}, '/something/')
       ]
     end
 
     def layouts
       [
-        Nanoc::Layout.new(
+        Nanoc3::Layout.new(
           'HEADER <%= @page.content %> FOOTER',
           { :filter => 'erb' },
           '/quux/'
@@ -41,19 +41,19 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
     end
 
     def code
-      Nanoc::Code.new("def something_random ; 'something random, yah' ; end")
+      Nanoc3::Code.new("def something_random ; 'something random, yah' ; end")
     end
 
   end
 
-  class TestEarlyLoadingCodeDataSource < Nanoc::DataSource
+  class TestEarlyLoadingCodeDataSource < Nanoc3::DataSource
 
     identifier :early_loading_code_data_source
 
     def pages
       [
-        Nanoc::Page.new("Hi!",          {}, '/'),
-        Nanoc::Page.new("Hello there.", {}, '/about/')
+        Nanoc3::Page.new("Hi!",          {}, '/'),
+        Nanoc3::Page.new("Hello there.", {}, '/about/')
       ]
     end
 
@@ -63,7 +63,7 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
 
     def layouts
       [
-        Nanoc::Layout.new(
+        Nanoc3::Layout.new(
           'HEADER <%= @page.content %> FOOTER',
           { :filter => 'erb' },
           '/quux/'
@@ -72,8 +72,8 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
     end
 
     def code
-      Nanoc::Code.new(
-        "class TestEarlyLoadingCodeRouter < Nanoc::Router\n" +
+      Nanoc3::Code.new(
+        "class TestEarlyLoadingCodeRouter < Nanoc3::Router\n" +
         "  identifier :early_loading_code_router\n" +
         "  def path_for(page)  ; 'web path'  ; end\n" +
         "  def raw_path_for(page) ; 'disk path' ; end\n" +
@@ -84,7 +84,7 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
   end
 
   def test_initialize_custom_router
-    Nanoc::Site.new(
+    Nanoc3::Site.new(
       :output_dir   => 'output',
       :data_source  => 'early_loading_code_data_source',
       :router       => 'early_loading_code_router'

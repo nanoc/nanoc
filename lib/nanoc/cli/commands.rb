@@ -1,8 +1,0 @@
-require 'nanoc/cli/commands/autocompile'
-require 'nanoc/cli/commands/compile'
-require 'nanoc/cli/commands/create_layout'
-require 'nanoc/cli/commands/create_page'
-require 'nanoc/cli/commands/create_site'
-require 'nanoc/cli/commands/help'
-require 'nanoc/cli/commands/info'
-require 'nanoc/cli/commands/update'

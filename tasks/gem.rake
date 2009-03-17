@@ -6,7 +6,7 @@ namespace :gem do
 
   desc 'Install the gem'
   task :install => [ :gem ] do
-    sh %{gem install pkg/#{GemSpec.name}-#{Nanoc::VERSION}}
+    sh %{gem install pkg/#{GemSpec.name}-#{Nanoc3::VERSION}}
   end
 
   desc 'Uninstall the gem'

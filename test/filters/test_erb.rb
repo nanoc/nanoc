@@ -1,13 +1,13 @@
 require 'test/helper'
 
-class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ :location => 'a cheap motel' })
+    filter = ::Nanoc3::Filters::ERB.new({ :location => 'a cheap motel' })
 
     # Run filter
     result = filter.run('<%= "I was hiding in #{@location}." %>')
@@ -22,7 +22,7 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
     item_rep.expect(:name, :quux)
 
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({
+    filter = ::Nanoc3::Filters::ERB.new({
       :_obj     => item,
       :_obj_rep => item_rep,
       :page     => MiniTest::Mock.new,
@@ -49,7 +49,7 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
     item_rep.expect(:name, :quux)
 
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({
+    filter = ::Nanoc3::Filters::ERB.new({
       :_obj     => item,
       :_obj_rep => item_rep,
       :asset    => MiniTest::Mock.new,

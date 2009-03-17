@@ -1,13 +1,13 @@
 require 'test/helper'
 
-class Nanoc::FilterTest < MiniTest::Unit::TestCase
+class Nanoc3::FilterTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_initialize
     # Create filter
-    filter = Nanoc::Filter.new
+    filter = Nanoc3::Filter.new
 
     # Test assigns
     assert_equal({}, filter.instance_eval { @assigns })
@@ -15,7 +15,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
 
   def test_assigns
     # Create filter
-    filter = Nanoc::Filter.new({ :foo => 'bar' })
+    filter = Nanoc3::Filter.new({ :foo => 'bar' })
 
     # Check assigns
     assert_equal('bar', filter.assigns[:foo])
@@ -23,7 +23,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
 
   def test_run
     # Create filter
-    filter = Nanoc::Filter.new
+    filter = Nanoc3::Filter.new
 
     # Make sure an error is raised
     assert_raises(NotImplementedError) do
@@ -39,7 +39,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
     item_rep.expects(:name).returns(:quux)
 
     # Create filter
-    filter = Nanoc::Filter.new({ :_obj => item, :_obj_rep => item_rep, :page => mock })
+    filter = Nanoc3::Filter.new({ :_obj => item, :_obj_rep => item_rep, :page => mock })
 
     # Check filename
     assert_equal('page /foo/bar/baz/ (rep quux)', filter.filename)
@@ -53,7 +53,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
     item_rep.expects(:name).returns(:quux)
 
     # Create filter
-    filter = Nanoc::Filter.new({ :_obj => item, :_obj_rep => item_rep, :asset => mock })
+    filter = Nanoc3::Filter.new({ :_obj => item, :_obj_rep => item_rep, :asset => mock })
 
     # Check filename
     assert_equal('asset /foo/bar/baz/ (rep quux)', filter.filename)
@@ -65,7 +65,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
     layout.expects(:identifier).returns('/wohba/')
 
     # Create filter
-    filter = Nanoc::Filter.new({ :_obj => mock, :_obj_rep => mock, :page => mock, :layout => layout })
+    filter = Nanoc3::Filter.new({ :_obj => mock, :_obj_rep => mock, :page => mock, :layout => layout })
 
     # Check filename
     assert_equal('layout /wohba/', filter.filename)
@@ -73,7 +73,7 @@ class Nanoc::FilterTest < MiniTest::Unit::TestCase
 
   def test_filename_unknown
     # Create filter
-    filter = Nanoc::Filter.new({})
+    filter = Nanoc3::Filter.new({})
 
     # Check filename
     assert_equal('?', filter.filename)

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::RubyPantsTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::RubyPantsTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::RubyPantsTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'rubypants' do
       # Get filter
-      filter = ::Nanoc::Filters::SmartyPants.new
+      filter = ::Nanoc3::Filters::SmartyPants.new
 
       # Run filter
       result = filter.run("Wait---what?")

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
       result = filter.run('<%= "I was hiding in #{@location}." %>')
@@ -19,7 +19,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter_error
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc::Filters::Erubis.new
+      filter = ::Nanoc3::Filters::Erubis.new
 
       # Run filter
       raised = false

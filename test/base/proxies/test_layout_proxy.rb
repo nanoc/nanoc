@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::LayoutProxyTest < MiniTest::Unit::TestCase
+class Nanoc3::LayoutProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -15,7 +15,7 @@ class Nanoc::LayoutProxyTest < MiniTest::Unit::TestCase
     layout.expects(:attribute_named).with(:'blah!').returns('layout attr blah!')
 
     # Get layout proxy
-    layout_proxy = Nanoc::LayoutProxy.new(layout)
+    layout_proxy = Nanoc3::LayoutProxy.new(layout)
 
     # Test
     assert_equal('layout content',          layout_proxy.content)

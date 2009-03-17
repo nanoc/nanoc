@@ -1,11 +1,11 @@
 require 'test/helper'
 
-class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
+class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Helpers::Render
+  include Nanoc3::Helpers::Render
 
   def test_render
     # Mock layouts
@@ -34,7 +34,7 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
     @site = MiniTest::Mock.new.expect(:layouts, [])
 
     # Render
-    assert_raises(Nanoc::Errors::UnknownLayoutError) do
+    assert_raises(Nanoc3::Errors::UnknownLayoutError) do
       render('/fawgooafwagwfe/')
     end
   end
@@ -57,7 +57,7 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
     @site.expect(:compiler, compiler)
 
     # Render
-    assert_raises(Nanoc::Errors::CannotDetermineFilterError) do
+    assert_raises(Nanoc3::Errors::CannotDetermineFilterError) do
       render '/foo/'
     end
   end
@@ -80,7 +80,7 @@ class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
     @site.expect(:compiler, compiler)
 
     # Render
-    assert_raises(Nanoc::Errors::UnknownFilterError) do
+    assert_raises(Nanoc3::Errors::UnknownFilterError) do
       render '/foo/'
     end
   end

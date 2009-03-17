@@ -1,19 +1,19 @@
 require 'test/helper'
 
-class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
+class Nanoc3::Routers::VersionedTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_path_for_page_rep_with_default_rep
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(nil)
+    router = Nanoc3::Routers::Versioned.new(nil)
 
     # Create site
     site = mock
 
     # Get page
-    page = Nanoc::Page.new(
+    page = Nanoc3::Page.new(
       'some content',
       {
         :filename   => 'home',
@@ -22,7 +22,7 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       },
       '/foo/'
     )
-    page_rep = Nanoc::PageRep.new(page, :default)
+    page_rep = Nanoc3::PageRep.new(page, :default)
 
     # Check
     assert_equal('/foo/home.htm', router.path_for_page_rep(page_rep))
@@ -30,13 +30,13 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
 
   def test_path_for_page_rep_with_custom_rep
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(nil)
+    router = Nanoc3::Routers::Versioned.new(nil)
 
     # Create site
     site = mock
 
     # Get page
-    page = Nanoc::Page.new(
+    page = Nanoc3::Page.new(
       'some content',
       {
         :filename   => 'home',
@@ -45,7 +45,7 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       },
       '/foo/'
     )
-    page_rep = Nanoc::PageRep.new(page, :raw)
+    page_rep = Nanoc3::PageRep.new(page, :raw)
 
     # Check
     assert_equal('/foo/home-raw.htm', router.path_for_page_rep(page_rep))
@@ -57,10 +57,10 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       {
         :extension => 'png',
@@ -68,7 +68,7 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       },
       '/foo/'
     )
-    asset_rep = Nanoc::AssetRep.new(asset, :default)
+    asset_rep = Nanoc3::AssetRep.new(asset, :default)
 
     # Check
     assert_equal(
@@ -83,10 +83,10 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       {
         :extension => 'png', 
@@ -94,7 +94,7 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
       },
       '/foo/'
     )
-    asset_rep = Nanoc::AssetRep.new(asset, :raw)
+    asset_rep = Nanoc3::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal(
@@ -109,15 +109,15 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       { :extension => 'png' },
       '/foo/'
     )
-    asset_rep = Nanoc::AssetRep.new(asset, :default)
+    asset_rep = Nanoc3::AssetRep.new(asset, :default)
 
     # Check
     assert_equal(
@@ -132,17 +132,17 @@ class Nanoc::Routers::VersionedTest < MiniTest::Unit::TestCase
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       {
         :extension => 'png'
       },
       '/foo/'
     )
-    asset_rep = Nanoc::AssetRep.new(asset, :raw)
+    asset_rep = Nanoc3::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal(
