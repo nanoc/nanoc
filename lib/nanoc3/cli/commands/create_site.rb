@@ -126,7 +126,7 @@ EOS
   </head>
   <body>
     <div id="main">
-<%= @page.content %>
+<%= @content %>
     </div>
     <div id="sidebar">
       <h2>Documentation</h2>
@@ -250,6 +250,20 @@ EOS
         io.write "end\n"
       end
       Nanoc3::NotificationCenter.post(:file_created, 'tasks/default.rake')
+
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write "#!/usr/bin/env ruby\n"
+        io.write "\n"
+        io.write "page '*' do |p|\n"
+        io.write "  p.filter(:erb)\n"
+        io.write "  p.layout('default')\n"
+        io.write "  p.write\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*' => :erb\n"
+      end
+      Nanoc3::NotificationCenter.post(:file_created, 'Rules')
     end
 
     # Sets up the site's data source, i.e. creates the bare essentials for
