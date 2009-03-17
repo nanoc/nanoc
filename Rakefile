@@ -42,12 +42,12 @@ GemSpec = Gem::Specification.new do |s|
 
   s.has_rdoc              = true
   s.extra_rdoc_files      = [ 'README' ]
-  s.rdoc_options          <<  '--title'   << 'nanoc3'                    <<
+  s.rdoc_options          <<  '--title'   << 'nanoc'                    <<
                               '--main'    << 'README'                   <<
                               '--charset' << 'utf-8'                    <<
-                              '--exclude' << 'lib/nanoc3/cli/commands'   <<
-                              '--exclude' << 'lib/nanoc3/extra/vcses'    <<
-                              '--exclude' << 'lib/nanoc3/filters'        <<
+                              '--exclude' << 'lib/nanoc3/cli/commands'  <<
+                              '--exclude' << 'lib/nanoc3/extra/vcses'   <<
+                              '--exclude' << 'lib/nanoc3/filters'       <<
                               '--exclude' << 'test'                     <<
                               '--line-numbers'
 
