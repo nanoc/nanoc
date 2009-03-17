@@ -45,10 +45,10 @@ end
 
 # Convenience function for cd'ing in and out of a directory
 def in_dir(path)
-  FileUtils.cd(File.join(path))
+  FileUtils.cd(File.join([ path ].flatten))
   yield
 ensure
-  FileUtils.cd(File.join(path.map { |n| '..' }))
+  FileUtils.cd(File.join([ path ].flatten.map { |n| '..' }))
 end
 
 def create_site(name, data_source='filesystem')
