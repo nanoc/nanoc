@@ -53,7 +53,7 @@ module Nanoc3::CLI
           $stderr.puts "ERROR: An exception occured while loading this site."
           $stderr.puts
           $stderr.puts "If you think this is a bug in nanoc, please do report it at " +
-                       "<http://nanoc.stoneship.org/trac/newticket> -- thanks!"
+                       "<http://projects.stoneship.org/trac/nanoc/newticket> -- thanks!"
           $stderr.puts
           $stderr.puts 'Message:'
           $stderr.puts '  ' + e.message
