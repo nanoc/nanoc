@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'sass' do
       # Get filter
-      filter = ::Nanoc::Filters::Sass.new({ :foo => 'bar' })
+      filter = ::Nanoc3::Filters::Sass.new({ :foo => 'bar' })
 
       # Run filter
       result = filter.run(".foo #bar\n  color: #f00")
@@ -19,7 +19,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_with_params
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc::Filters::Sass.new({ :foo => 'bar' })
+      filter = ::Nanoc3::Filters::Sass.new({ :foo => 'bar' })
 
       # Check with compact
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
@@ -34,7 +34,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_error
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc::Filters::Sass.new({ :foo => 'bar' })
+      filter = ::Nanoc3::Filters::Sass.new({ :foo => 'bar' })
 
       # Run filter
       raised = false

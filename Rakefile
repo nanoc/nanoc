@@ -6,7 +6,7 @@ require 'rake/gempackagetask'
 
 # nanoc itself
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
-require 'nanoc'
+require 'nanoc3'
 
 ##### General details
 
@@ -25,13 +25,13 @@ Enjoy!
 EOS
 
 GemSpec = Gem::Specification.new do |s|
-  s.name                  = 'nanoc'
-  s.version               = Nanoc::VERSION
+  s.name                  = 'nanoc3'
+  s.version               = Nanoc3::VERSION
   s.platform              = Gem::Platform::RUBY
   s.summary               = SUMMARY
   s.description           = s.summary
   s.homepage              = 'http://nanoc.stoneship.org/'
-  s.rubyforge_project     = 'nanoc'
+  s.rubyforge_project     = 'nanoc3'
 
   s.author                = 'Denis Defreyne'
   s.email                 = 'denis.defreyne@stoneship.org'
@@ -42,17 +42,17 @@ GemSpec = Gem::Specification.new do |s|
 
   s.has_rdoc              = true
   s.extra_rdoc_files      = [ 'README' ]
-  s.rdoc_options          <<  '--title'   << 'nanoc'                    <<
+  s.rdoc_options          <<  '--title'   << 'nanoc3'                    <<
                               '--main'    << 'README'                   <<
                               '--charset' << 'utf-8'                    <<
-                              '--exclude' << 'lib/nanoc/cli/commands'   <<
-                              '--exclude' << 'lib/nanoc/extra/vcses'    <<
-                              '--exclude' << 'lib/nanoc/filters'        <<
+                              '--exclude' << 'lib/nanoc3/cli/commands'   <<
+                              '--exclude' << 'lib/nanoc3/extra/vcses'    <<
+                              '--exclude' << 'lib/nanoc3/filters'        <<
                               '--exclude' << 'test'                     <<
                               '--line-numbers'
 
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib,vendor}', '**', '*')]
-  s.executables           = [ 'nanoc' ]
+  s.executables           = [ 'nanoc3' ]
   s.require_path          = 'lib'
   s.bindir                = 'bin'
 end

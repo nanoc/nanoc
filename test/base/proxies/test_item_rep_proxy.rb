@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::ItemRepProxyTest < MiniTest::Unit::TestCase
+class Nanoc3::ItemRepProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -24,7 +24,7 @@ class Nanoc::ItemRepProxyTest < MiniTest::Unit::TestCase
     item_rep.expects(:attribute_named).with(:'blah!').returns('item rep attr blah!')
 
     # Get item rep proxy
-    item_rep_proxy = Nanoc::ItemRepProxy.new(item_rep)
+    item_rep_proxy = Nanoc3::ItemRepProxy.new(item_rep)
 
     # Test
     assert_equal('item rep name',         item_rep_proxy.name)

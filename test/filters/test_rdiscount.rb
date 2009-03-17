@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::RDiscountTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::RDiscountTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::RDiscountTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'rdiscount' do
       # Create filter
-      filter = ::Nanoc::Filters::RDiscount.new
+      filter = ::Nanoc3::Filters::RDiscount.new
 
       # Run filter
       result = filter.run("> Quote")

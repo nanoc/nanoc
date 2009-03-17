@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
+class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -15,7 +15,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:content, "blah blah blah")
 
     # Create item rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
 
     # Create proxy
     rep_proxy = rep.to_proxy
@@ -50,7 +50,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
@@ -85,7 +85,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
@@ -120,7 +120,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
     rep.instance_eval { @force_outdated = true }
 
@@ -152,7 +152,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.stubs(:site).returns(site)
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
@@ -187,7 +187,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-500, Time.now-600, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
@@ -222,7 +222,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-200, Time.now-300, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
@@ -257,7 +257,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     File.utime(Time.now-200, Time.now-300, 'output.html')
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, 'blah')
+    rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.instance_eval { @raw_path = 'output.html' }
 
     # Test
@@ -280,7 +280,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:site, site)
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -320,7 +320,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.stubs(:site).returns(site)
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -345,7 +345,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:site, site)
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
       @content[:raw]  = item.content
       @content[:last] = @content[:raw]
@@ -370,7 +370,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item.expect(:content, "blah blah blah")
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
     item_rep.raw_path = 'tmp/foo/bar/baz/quux.txt'
 

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::CLI::CompileCommandTest < MiniTest::Unit::TestCase
+class Nanoc3::CLI::CompileCommandTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

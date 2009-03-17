@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::ProxyTest < MiniTest::Unit::TestCase
+class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -9,7 +9,7 @@ class Nanoc::ProxyTest < MiniTest::Unit::TestCase
     # Create object and proxy
     obj = mock
     obj.expects(:attribute_named).with(:foo).returns('no attr foo')
-    obj_proxy = Nanoc::Proxy.new(obj)
+    obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
     assert_equal('no attr foo', obj_proxy[:foo])
@@ -19,7 +19,7 @@ class Nanoc::ProxyTest < MiniTest::Unit::TestCase
     # Create object and proxy
     obj = mock
     obj.expects(:attribute_named).with(:foo).returns('no attr foo')
-    obj_proxy = Nanoc::Proxy.new(obj)
+    obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
     assert_equal('no attr foo', obj_proxy['foo'])
@@ -29,7 +29,7 @@ class Nanoc::ProxyTest < MiniTest::Unit::TestCase
     # Create object and proxy
     obj = mock
     obj.expects(:attribute_named).with(:foo).returns('no attr foo')
-    obj_proxy = Nanoc::Proxy.new(obj)
+    obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
     assert_equal('no attr foo', obj_proxy['foo?'])
@@ -42,7 +42,7 @@ class Nanoc::ProxyTest < MiniTest::Unit::TestCase
     obj = mock
     obj.expects(:attributes).returns(attributes)
     obj.expects(:attribute_named).with(:foo).returns('new value')
-    obj_proxy = Nanoc::Proxy.new(obj)
+    obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
     obj_proxy[:foo] = 'new value'
@@ -53,7 +53,7 @@ class Nanoc::ProxyTest < MiniTest::Unit::TestCase
     # Create object and proxy
     obj = mock
     obj.expects(:attribute_named).with(:foo).returns('no attr foo')
-    obj_proxy = Nanoc::Proxy.new(obj)
+    obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
     assert_equal('no attr foo', obj_proxy.foo)

@@ -21,9 +21,9 @@ end
 
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
-require 'nanoc'
-require 'nanoc/cli'
-require 'nanoc/tasks'
+require 'nanoc3'
+require 'nanoc3/cli'
+require 'nanoc3/tasks'
 
 # Load miscellaneous requirements
 require 'stringio'
@@ -35,7 +35,7 @@ def with_temp_site(data_source='filesystem')
 
     in_dir %w{ site } do
       # Load site
-      site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
       # Done
       yield site
@@ -52,15 +52,15 @@ ensure
 end
 
 def create_site(name, data_source='filesystem')
-  Nanoc::CLI::Base.new.run(['create_site', name, '-d', data_source])
+  Nanoc3::CLI::Base.new.run(['create_site', name, '-d', data_source])
 end
 
 def create_layout(name)
-  Nanoc::CLI::Base.new.run(['create_layout', name])
+  Nanoc3::CLI::Base.new.run(['create_layout', name])
 end
 
 def create_page(name)
-  Nanoc::CLI::Base.new.run(['create_page', name])
+  Nanoc3::CLI::Base.new.run(['create_page', name])
 end
 
 def if_have(x)

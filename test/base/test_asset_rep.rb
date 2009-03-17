@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::AssetRepTest < MiniTest::Unit::TestCase
+class Nanoc3::AssetRepTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

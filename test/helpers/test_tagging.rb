@@ -1,15 +1,15 @@
 require 'test/helper'
 
-class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
+class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Helpers::Tagging
+  include Nanoc3::Helpers::Tagging
 
   def test_tags_for_without_tags
     # Create page
-    page = Nanoc::Page.new('content', {}, '/path/')
+    page = Nanoc3::Page.new('content', {}, '/path/')
     page_proxy = page.to_proxy
 
     # Check
@@ -21,7 +21,7 @@ class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create page
-    page = Nanoc::Page.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
+    page = Nanoc3::Page.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
     page_proxy = page.to_proxy
 
     # Check
@@ -34,7 +34,7 @@ class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create page
-    page = Nanoc::Page.new('content', { :tags => [ ]}, '/path/')
+    page = Nanoc3::Page.new('content', { :tags => [ ]}, '/path/')
     page_proxy = page.to_proxy
 
     # Check
@@ -46,7 +46,7 @@ class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def test_tags_for_with_custom_separator
     # Create page
-    page = Nanoc::Page.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
+    page = Nanoc3::Page.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
     page_proxy = page.to_proxy
 
     # Check
@@ -60,9 +60,9 @@ class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
   def test_pages_with_tag
     # Create pages
     pages = [
-      Nanoc::Page.new('page 1', { :tags => [ :foo ]}, '/page1/'),
-      Nanoc::Page.new('page 2', { :tags => [ :bar ]}, '/page2/'),
-      Nanoc::Page.new('page 3', { :tags => [ :foo, :bar ]}, '/page3/')
+      Nanoc3::Page.new('page 1', { :tags => [ :foo ]}, '/page1/'),
+      Nanoc3::Page.new('page 2', { :tags => [ :bar ]}, '/page2/'),
+      Nanoc3::Page.new('page 3', { :tags => [ :foo, :bar ]}, '/page3/')
     ]
     @pages = pages.map { |p| p.to_proxy }
 

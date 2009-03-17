@@ -1,11 +1,11 @@
 require 'test/helper'
 
-class Nanoc::Helpers::TextTest < MiniTest::Unit::TestCase
+class Nanoc3::Helpers::TextTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Helpers::Text
+  include Nanoc3::Helpers::Text
 
   def test_excerpt_length
     assert_equal('...',                         excerptize('Foo bar baz quux meow woof', :length => 3))

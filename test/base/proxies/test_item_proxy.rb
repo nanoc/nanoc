@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
+class Nanoc3::ItemProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -11,7 +11,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expect(:mtime, Time.parse('2008-05-19'))
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal(Time.parse('2008-05-19'), item_proxy.mtime)
@@ -31,7 +31,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expect(:parent, parent)
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal(parent_proxy, item_proxy.parent)
@@ -46,7 +46,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expect(:parent, nil)
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal(nil, item_proxy.parent)
@@ -66,7 +66,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expect(:children, [ child ])
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal([ child_proxy ], item_proxy.children)
@@ -80,7 +80,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
     def item_proxy.content ; 'some content and stuff' ; end
 
     # Test
@@ -101,7 +101,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expects(:reps).returns(item_reps)
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
     def item_proxy.reps ; [ item_rep ] ; end
 
     # Test
@@ -119,7 +119,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expects(:reps).returns(item_reps)
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal('blah blah lorem ipsum', item_proxy.content)
@@ -136,7 +136,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expects(:reps).returns(item_reps)
 
     # Create proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal('blah blah lorem ipsum', item_proxy.content(:zomg))
@@ -156,7 +156,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expects(:attribute_named).with(:'blah!').returns('item attr blah!')
 
     # Get item proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal('item rep web path',       item_proxy.path)
@@ -176,9 +176,9 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item_rep_1.expects(:attribute_named).with(:baz).returns('quux')
 
     # Get item reps proxies
-    item_rep_0_proxy = Nanoc::ItemRepProxy.new(item_rep_0)
+    item_rep_0_proxy = Nanoc3::ItemRepProxy.new(item_rep_0)
     item_rep_0.expects(:to_proxy).returns(item_rep_0_proxy)
-    item_rep_1_proxy = Nanoc::ItemRepProxy.new(item_rep_1)
+    item_rep_1_proxy = Nanoc3::ItemRepProxy.new(item_rep_1)
     item_rep_1.expects(:to_proxy).returns(item_rep_1_proxy)
 
     # Get item
@@ -186,7 +186,7 @@ class Nanoc::ItemProxyTest < MiniTest::Unit::TestCase
     item.expects(:reps).times(2).returns([ item_rep_0, item_rep_1 ])
 
     # Get item proxy
-    item_proxy = Nanoc::ItemProxy.new(item)
+    item_proxy = Nanoc3::ItemProxy.new(item)
 
     # Test
     assert_equal('bar',  item_proxy.reps(:default).foo)

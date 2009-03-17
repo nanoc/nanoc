@@ -1,13 +1,13 @@
 require 'test/helper'
 
-class Nanoc::Filters::RDocTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::RDocTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
     # Get filter
-    filter = ::Nanoc::Filters::RDoc.new
+    filter = ::Nanoc3::Filters::RDoc.new
 
     # Run filter
     result = filter.run("= Foo")

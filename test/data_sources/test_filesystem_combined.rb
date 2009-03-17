@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
+class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -14,7 +14,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
       in_dir %w{ site } do
         # Get site
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
         # Remove files
         FileUtils.rm_rf('content')
@@ -25,7 +25,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
         open('config.yaml', 'w') { |io| io.write('data_source: filesystem_combined') }
 
         # Get site
-        site = Nanoc::Site.new(YAML.load_file('config.yaml'))
+        site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
         # Mock VCS
         vcs = mock
@@ -112,7 +112,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   def test_create_page_at_root
     in_dir 'tmp' do
       # Create page
-      data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+      data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
       data_source.create_page('content here', { :foo => 'bar' }, '/')
 
       # Check file existance
@@ -129,7 +129,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   def test_create_page_not_at_root
     in_dir 'tmp' do
       # Create page
-      data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+      data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
       data_source.create_page('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
       # Check file existance
@@ -147,7 +147,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   def test_create_layout
     in_dir 'tmp' do
       # Create layout
-      data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+      data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
       data_source.create_layout('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
       # Check file existance
@@ -166,7 +166,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_files_without_recursion
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Build directory
     FileUtils.mkdir_p('tmp/foo')
@@ -190,7 +190,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_files_with_recursion
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Build directory
     FileUtils.mkdir_p('tmp/foo')
@@ -219,7 +219,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Parse it
     assert_raises(RuntimeError) do
@@ -237,7 +237,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Parse it
     result = data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
@@ -254,7 +254,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Parse it
     result = data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }

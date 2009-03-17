@@ -1,13 +1,13 @@
 require 'test/helper'
 
-class Nanoc::DataSourceTest < MiniTest::Unit::TestCase
+class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_loading
     # Create data source
-    data_source = Nanoc::DataSource.new(nil)
+    data_source = Nanoc3::DataSource.new(nil)
     data_source.expects(:up).times(1)
     data_source.expects(:down).times(1)
 
@@ -25,7 +25,7 @@ class Nanoc::DataSourceTest < MiniTest::Unit::TestCase
 
   def test_not_implemented
     # Create data source
-    data_source = Nanoc::DataSource.new(nil)
+    data_source = Nanoc3::DataSource.new(nil)
 
     # Test optional methods
     data_source.up

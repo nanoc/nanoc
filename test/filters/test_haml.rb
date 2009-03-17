@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
+      filter = ::Nanoc3::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
 
       # Run filter (no assigns)
       result = filter.run('%html')
@@ -27,7 +27,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter_with_params
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
+      filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
 
       # Check with HTML5
       result = filter.run('%img', :format => 'html5')
@@ -42,7 +42,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter_error
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
+      filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
 
       # Run filter
       raised = false

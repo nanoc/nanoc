@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::BlueClothTest < MiniTest::Unit::TestCase
+class Nanoc3::Filters::BlueClothTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -8,7 +8,7 @@ class Nanoc::Filters::BlueClothTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'bluecloth' do
       # Create filter
-      filter = ::Nanoc::Filters::BlueCloth.new
+      filter = ::Nanoc3::Filters::BlueCloth.new
 
       # Run filter
       result = filter.run("> Quote")

@@ -1,34 +1,34 @@
 require 'test/helper'
 
-class Nanoc::NotificationCenterTest < MiniTest::Unit::TestCase
+class Nanoc3::NotificationCenterTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_post
     # Set up notification
-    Nanoc::NotificationCenter.on :ping_received, :test do
+    Nanoc3::NotificationCenter.on :ping_received, :test do
       @ping_received = true
     end
 
     # Post
     @ping_received = false
-    Nanoc::NotificationCenter.post :ping_received
+    Nanoc3::NotificationCenter.post :ping_received
     assert(@ping_received)
   end
 
   def test_remove
     # Set up notification
-    Nanoc::NotificationCenter.on :ping_received, :test do
+    Nanoc3::NotificationCenter.on :ping_received, :test do
       @ping_received = true
     end
 
     # Remove observer
-    Nanoc::NotificationCenter.remove :ping_received, :test
+    Nanoc3::NotificationCenter.remove :ping_received, :test
 
     # Post
     @ping_received = false
-    Nanoc::NotificationCenter.post :ping_received
+    Nanoc3::NotificationCenter.post :ping_received
     assert(!@ping_received)
   end
 
