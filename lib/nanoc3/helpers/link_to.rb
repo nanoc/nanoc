@@ -69,6 +69,18 @@ module Nanoc3::Helpers
       end
     end
 
+    # Returns the relative path from the current page to the given path or
+    # page/asset representation.
+    #
+    # +path_or_rep+:: the URL or path (a String) to where the relative should
+    #                 point, or the page or asset representation to which the
+    #                 relative should point.
+    #
+    # Example:
+    #
+    #   # if the current item's path is /foo/bar/
+    #   relative_path('/foo/qux/')
+    #   # => '../qux/'
     def relative_path_to(path_or_rep)
       require 'pathname'
 
