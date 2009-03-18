@@ -72,8 +72,11 @@ module Nanoc3::Helpers
     def relative_path_to(path_or_rep)
       require 'pathname'
 
+      # Find path
+      path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
+
       # Get source and destination paths
-      dst_path   = Pathname.new(path_or_rep)
+      dst_path   = Pathname.new(path)
       src_path   = Pathname.new(@item.path)
 
       # Calculate elative path (method depends on whether destination is a

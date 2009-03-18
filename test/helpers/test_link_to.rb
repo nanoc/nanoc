@@ -117,4 +117,20 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_relative_path_to_rep
+    # Mock self
+    @item = mock
+    @item.expects(:path).returns('/foo/bar/baz/')
+
+    # Mock other
+    other = mock
+    other.expects(:path).returns('/foo/quux/')
+
+    # Test
+    assert_equal(
+      '../../quux/',
+      relative_path_to(other)
+    )
+  end
+
 end
