@@ -6,7 +6,6 @@ module Nanoc3
 end
 
 # Load requirements
-begin ; require 'rubygems' ; rescue LoadError ; end
 require 'yaml'
 require 'fileutils'
 
