@@ -9,7 +9,7 @@ module Nanoc3::Extra
 
     # Error that is raised when the autocompiler is started if the specified
     # handler cannot be found.
-    class UnknownHandlerError < Nanoc3::Error ; end
+    class UnknownHandlerError < Nanoc3::Errors::GenericError ; end
 
     HANDLER_NAMES = [ :thin, :mongrel, :webrick, :ebb, :cgi, :fastcgi, :lsws, :scgi ]
 
