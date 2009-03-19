@@ -16,6 +16,7 @@ New:
 * The current layout is now accessible through the @layout variable
 * relative_path_to function in LinkTo helper
 * relativize_paths filter
+* rainpress filter
 * create_page and create_layout methods in data sources
 
 Removed:
