@@ -60,7 +60,7 @@ describe 'Nanoc3::Site#initialize' do
     ])
     site.data_source.expects(:layouts).returns([
       Nanoc3::Layout.new(
-        'HEADER <%= @page.content %> FOOTER',
+        'HEADER <%= yield %> FOOTER',
         { :filter => 'erb' },
         '/quux/'
       )

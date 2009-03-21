@@ -34,4 +34,15 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_yield
+    if_have 'erubis' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Erubis.new({ :content => 'a cheap motel' })
+
+      # Run filter
+      result = filter.run('<%= "I was hiding in #{yield}." %>')
+      assert_equal('I was hiding in a cheap motel.', result)
+    end
+  end
+
 end

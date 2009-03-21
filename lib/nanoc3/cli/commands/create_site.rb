@@ -126,7 +126,7 @@ EOS
   </head>
   <body>
     <div id="main">
-<%= @content %>
+<%= yield %>
     </div>
     <div id="sidebar">
       <h2>Documentation</h2>

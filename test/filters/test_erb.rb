@@ -68,4 +68,13 @@ class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
     assert raised
   end
 
+  def test_filter_with_yield
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({ :content => 'a cheap motel' })
+
+    # Run filter
+    result = filter.run('<%= "I was hiding in #{yield}." %>')
+    assert_equal('I was hiding in a cheap motel.', result)
+  end
+
 end

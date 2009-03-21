@@ -12,7 +12,7 @@ module Nanoc3::Filters
       # Get result
       erb = ::ERB.new(content)
       erb.filename = filename
-      erb.result(context.get_binding)
+      erb.result(context.get_binding { assigns[:content] })
     end
 
   end
