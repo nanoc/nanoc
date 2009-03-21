@@ -75,7 +75,7 @@ module Nanoc3::CLI
         "  </head>\n" +
         "  <body>\n" +
         "    <p>Hi, I'm a new layout. Please customize me!</p>\n" +
-        "<%= @page.content %>\n" +
+        "<%= yield %>\n" +
         "  </body>\n" +
         "</html>\n",
         { :filter => 'erb' },

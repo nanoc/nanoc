@@ -57,4 +57,15 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_yield
+    if_have 'haml' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
+
+      # Run filter 
+      result = filter.run('%p= yield')
+      assert_equal("<p>Is this the Payne residence?</p>\n", result)
+    end
+  end
+
 end

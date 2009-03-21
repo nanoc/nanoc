@@ -15,7 +15,7 @@ module Nanoc3::Filters
       context = ::Nanoc3::Extra::Context.new(assigns)
 
       # Get result
-      ::Haml::Engine.new(content, options).render(context, assigns)
+      ::Haml::Engine.new(content, options).render(context, assigns) { assigns[:content] }
     end
 
   end

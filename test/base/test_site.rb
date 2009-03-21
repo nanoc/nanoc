@@ -33,7 +33,7 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
     def layouts
       [
         Nanoc3::Layout.new(
-          'HEADER <%= @page.content %> FOOTER',
+          'HEADER <%= yield %> FOOTER',
           { :filter => 'erb' },
           '/quux/'
         )
@@ -64,7 +64,7 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
     def layouts
       [
         Nanoc3::Layout.new(
-          'HEADER <%= @page.content %> FOOTER',
+          'HEADER <%= yield %> FOOTER',
           { :filter => 'erb' },
           '/quux/'
         )
