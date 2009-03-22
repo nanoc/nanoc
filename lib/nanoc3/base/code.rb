@@ -35,11 +35,6 @@ module Nanoc3
       end
     end
 
-    # For backward compatibility
-    def data
-      @snippets.map { |s| s[:code] }.join("\n")
-    end
-
   end
 
 end

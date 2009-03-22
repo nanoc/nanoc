@@ -103,7 +103,10 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_code
     with_temp_site('filesystem_combined') do |site|
-      assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
+      assert_match(
+        /# All files in the 'lib' directory will be loaded/,
+        site.code.snippets[0][:code]
+      )
     end
   end
 
