@@ -21,14 +21,15 @@ module Nanoc::Helpers
   #   include Nanoc::Helpers::Blogging
   module Blogging
 
-    # Returns the list of articles, sorted by descending creation date (so
-    # newer articles appear first).
+    # Returns an unsorted list of articles.
+    def articles
+      @pages.select { |page| page.kind == 'article' }
+    end
+
+    # Returns a list of articles, sorted by descending creation date (so newer
+    # articles appear first).
     def sorted_articles
-      @pages.select do |page|
-        page.kind == 'article'
-      end.sort do |x,y|
-        y.created_at <=> x.created_at
-      end
+      articles.sort_by { |a| a.created_at }.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,
@@ -95,8 +96,36 @@ module Nanoc::Helpers
       # Extract parameters
       limit = params[:limit] || 5
 
+      # Check feed page attributes
+      if @page.base_url.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no base_url')
+      end
+      if @page.title.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no title')
+      end
+      if @page.author_name.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no author_name')
+      end
+      if @page.author_uri.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no author_uri')
+      end
+
+      # Get relevant articles
+      relevant_articles = articles.first(limit)
+
+      # Check article attributes
+      if relevant_articles.empty?
+        raise RuntimeError.new('Cannot build Atom feed: no articles')
+      end
+      if relevant_articles.any? { |a| a.created_at.nil? }
+        raise RuntimeError.new('Cannot build Atom feed: one or more articles lack created_at')
+      end
+
+      # Get sorted relevant articles
+      sorted_relevant_articles = sorted_articles.first(limit)
+
       # Get most recent article
-      last_article = sorted_articles.first
+      last_article = sorted_relevant_articles.first
 
       # Create builder
       buffer = ''
@@ -123,7 +152,7 @@ module Nanoc::Helpers
         end
 
         # Add articles
-        sorted_articles.first(limit).each do |a|
+        sorted_relevant_articles.each do |a|
           xml.entry do
             # Add primary attributes
             xml.id        atom_tag_for(a)
