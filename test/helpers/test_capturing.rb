@@ -8,6 +8,8 @@ class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
   include Nanoc3::Helpers::Capturing
 
   def test_content_for
+    require 'erb'
+
     # Build content to be evaluated
     content = "head <% content_for :sidebar do %>\n" +
               "  <%= 1+2 %>\n" +
