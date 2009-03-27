@@ -31,6 +31,8 @@ module Nanoc3::Helpers
   # this page, the purpose of nanoc is described, blah blah blah,” as
   # expected.
   #
+  # This helper likely only works with ERB (and perhaps Erubis).
+  #
   # To activate this helper, +include+ it, like this:
   #
   #   include Nanoc3::Helpers::Capturing
