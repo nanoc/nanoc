@@ -5,14 +5,7 @@ require 'rake'
 require 'rake/clean'
 require 'rake/gempackagetask'
 require 'rake/testtask'
-
-# Rdoc
-begin
-  require 'hanna/rdoctask'
-rescue LoadError
-  warn "Tried loading hanna but failed; falling back to the normal RDoc template"
-  require 'rake/rdoctask'
-end
+require 'rake/rdoctask'
 
 # nanoc itself
 require File.dirname(__FILE__) + '/lib/nanoc.rb'
