@@ -31,6 +31,16 @@ module Nanoc::CLI
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
           :desc => 'compile all pages and assets, even those that aren\'t outdated'
+        },
+        # --pages
+        {
+          :long => 'pages', :short => 'P', :argument => :forbidden,
+          :desc => 'only compile pages (no assets)'
+        },
+        # --assets
+        {
+          :long => 'assets', :short => 'A', :argument => :forbidden,
+          :desc => 'only compile assets (no pages)'
         }
       ]
     end
@@ -41,7 +51,14 @@ module Nanoc::CLI
 
       # Find object with given path
       if arguments.size == 0
-        objs = nil
+        # Find all pages and/or assets
+        if options.has_key?(:pages)
+          objs = @base.site.pages
+        elsif options.has_key?(:assets)
+          objs = @base.site.assets
+        else
+          objs = nil
+        end
       else
         objs = arguments.map do |path|
           # Find object
