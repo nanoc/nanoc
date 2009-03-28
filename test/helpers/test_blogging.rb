@@ -1,11 +1,12 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
+class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Helpers::Blogging
+  include Nanoc3::Helpers::Blogging
+  include Nanoc3::Helpers::Text
 
   def test_articles
     # Create pages
@@ -99,9 +100,7 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
       @page.expects(:path).returns('/journal/feed/')
 
       # Check
-      assert_nothing_raised do
-        atom_feed
-      end
+      atom_feed
     end
   end
 

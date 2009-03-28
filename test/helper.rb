@@ -1,6 +1,3 @@
-# Try getting RubyGems
-begin ; require 'rubygems' ; rescue LoadError ; end
-
 # Add vendor to load path
 [ 'mocha', 'mime-types' ].each do |e|
   path = File.join(File.dirname(__FILE__), '..', 'vendor', e, 'lib')
@@ -9,19 +6,24 @@ begin ; require 'rubygems' ; rescue LoadError ; end
 end
 
 # Load unit testing stuff
-require 'test/unit'
-require 'mocha'
-require 'stringio'
+begin
+  require 'minitest/unit'
+  require 'minitest/spec'
+  require 'minitest/mock'
+  require 'mocha'
+rescue => e
+  $stderr.puts "To run the nanoc unit tests, you need minitest and mocha."
+  raise e
+end
 
 # Load nanoc
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc.rb')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'nanoc', 'cli', 'cli.rb')
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
+require 'nanoc3'
+require 'nanoc3/cli'
+require 'nanoc3/tasks'
 
-def with_site_fixture(a_fixture)
-  in_dir(['test', 'fixtures', a_fixture]) do
-    yield(Nanoc::Site.new(YAML.load_file('config.yaml')))
-  end
-end
+# Load miscellaneous requirements
+require 'stringio'
 
 def with_temp_site(data_source='filesystem')
   in_dir %w{ tmp } do
@@ -30,8 +32,7 @@ def with_temp_site(data_source='filesystem')
 
     in_dir %w{ site } do
       # Load site
-      site = Nanoc::Site.new(YAML.load_file('config.yaml'))
-      site.load_data
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
       # Done
       yield site
@@ -41,26 +42,22 @@ end
 
 # Convenience function for cd'ing in and out of a directory
 def in_dir(path)
-  FileUtils.cd(File.join(path))
+  FileUtils.cd(File.join([ path ].flatten))
   yield
 ensure
-  FileUtils.cd(File.join(path.map { |n| '..' }))
+  FileUtils.cd(File.join([ path ].flatten.map { |n| '..' }))
 end
 
 def create_site(name, data_source='filesystem')
-  Nanoc::CLI::Base.new.run(['create_site', name, '-d', data_source])
+  Nanoc3::CLI::Base.new.run(['create_site', name, '-d', data_source])
 end
 
 def create_layout(name)
-  Nanoc::CLI::Base.new.run(['create_layout', name])
+  Nanoc3::CLI::Base.new.run(['create_layout', name])
 end
 
 def create_page(name)
-  Nanoc::CLI::Base.new.run(['create_page', name])
-end
-
-def create_template(name)
-  Nanoc::CLI::Base.new.run(['create_template', name])
+  Nanoc3::CLI::Base.new.run(['create_page', name])
 end
 
 def if_have(x)
@@ -98,10 +95,5 @@ def global_teardown
   unless ENV['QUIET'] == 'false'
     $stdout = $stdout_real
     $stderr = $stderr_real
-  end
-
-  # Remove output
-  Dir[File.join('test', 'fixtures', '*', 'output', '*')].each do |f|
-    FileUtils.rm_rf(f) if File.exist?(f)
   end
 end

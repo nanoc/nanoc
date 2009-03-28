@@ -1,0 +1,248 @@
+nanoc News
+==========
+
+3.0
+---
+
+Changed:
+
+* The compile command now takes --no-assets and --no-pages options
+* Dependencies between pages are now tracked properly
+* The commandline option parser is now a lot more reliable
+
+New:
+
+* Filters can now optionally take arguments
+* The current layout is now accessible through the @layout variable
+* relative_path_to function in LinkTo helper
+* relativize_paths filter
+* rainpress filter
+* create_page and create_layout methods in data sources
+* Filtering helper
+
+Removed:
+
+* Removed support for drafts
+* Removed support for binary assets
+* Removed support for templates
+* Removed everything that was deprecated in nanoc 2.x
+* save_*, move_* and delete_* methods in data sources
+
+2.1.6
+-----
+
+* The FilesystemCombined data source now supports empty metadata sections
+* The RDoc filter now works for both RDoc 1.x and 2.x
+* The autocompiler now serves a 500 when an exception occurs outside
+  compilation
+* The autocompiler no longer serves index files when the request path does not
+  end with a slash
+* The autocompiler now always serves asset content correctly
+
+2.1.5
+-----
+
+* Added Ruby 1.9 compatibility
+* The Filesystem and FilesystemCombined data sources now preserve custom
+  extensions
+
+2.1.4
+-----
+
+* Fixed an issue where the autocompiler in Windows would serve broken assets
+
+2.1.3
+-----
+
+* The Haml and Sass filters now correctly take their options from assets
+* Autocompiler now serves index files instead of 404s
+* Layouts named "index" are now handled correctly
+* filesystem_combined now properly handles assets
+
+2.1.2
+-----
+
+* Autocompiler now compiles assets as well
+* Sass filter now takes options (just like the Haml filter)
+* Haml/Sass options are now taken from the page *rep* instead of the page
+
+2.1.1
+-----
+
+* Fixed issue which would cause files not to be required in the right order
+
+2.1
+---
+
+This is only a short summary of all changes in 2.1. For details, see the nanoc
+web site at <http://nanoc.stoneship.org/> -- especially the blog and the
+updated manual will be useful.
+
+New:
+
+* New filters: RDiscount, Maruku, Erubis
+* A better commandline frontend
+* A new filesystem data source named "filesystem_combined"
+* Routers, which decide where compiled pages should be written to
+* Page/layout mtimes can now be retrieved through page.mtime/layout.mtime
+
+Changed:
+
+* Already compiled pages will no longer be re-compiled unless outdated
+* Layout processors and filters have been merged
+* Layouts no longer rely on file extensions to determine the layout processor
+* Greatly improved source code documentation
+* Greatly improved unit test suite
+
+Removed:
+
+* Several filters have been removed and replaced by newer filters:
+	* `eruby`: use `erb` or `erubis` instead
+	* `markdown`: use `bluecloth`, `rdiscount` or `maruku` instead
+	* `textile`: use `redcloth` instead
+
+2.0.4
+-----
+
+* Fixed default.rb's `html_escape`
+* Updated Haml filter and layout processor so that @page, @pages and @config
+  are now available as instance variables instead of local variables
+
+2.0.3
+-----
+
+* The autocompiler now honors custom paths
+* The autocompiler now attempts to serve pages with the most appropriate MIME
+  type, instead of always serving everything as "text/html"
+
+2.0.2
+-----
+
+* nanoc now requires Ruby 1.8.5 instead of 1.8.6
+
+2.0.1
+-----
+
+* Fixed a "too many open files" error that could appear during (auto)compiling
+
+2.0
+---
+
+New:
+
+* Support for custom layout processors
+* Support for custom data sources
+* Database data source
+* Auto-compiler
+* Pages have `parent` and `children`
+
+Changed:
+
+* The source has been restructured and cleaned up a great deal
+* Filters are defined in a different way now
+* The 'eruby' filter now uses ERB instead of Erubis
+
+Removed:
+
+* The `filters` property; use `filters_pre` instead
+* Support for Liquid
+
+1.6.2
+-----
+
+* Fixed an issue which prevented the content capturing plugin from working
+
+1.6.1
+-----
+
+* Removed a stray debug message
+
+1.6
+---
+
+* Added support for post-layout filters
+* Added support for getting a File object for the page, so you can now e.g.
+  easily get the modification time for a given page (`@page.file.mtime`)
+* Cleaned up the source code a lot
+* Removed deprecated asset-copying functionality
+
+1.5
+---
+
+* Added support for custom filters
+* Improved Liquid support -- Liquid is now a first-class nanoc citizen
+* Deprecated assets -- use something like rsync instead
+* Added eruby_engine option, which can be 'erb' or 'erubis'
+
+1.4
+---
+
+* nanoc now supports ERB (as well as Erubis); Erubis no longer is a dependency
+* meta.yaml can now have haml_options property, which is passed to Haml
+* Pages can now have a 'filename' property, which defaults to 'index' [Dennis
+  Sutch]
+* Pages now know in what order they should be compiled, eliminating the need
+  for custom page ordering [Dennis Sutch]
+
+1.3.1
+-----
+
+* The contents of the 'assets' directory are now copied into the output
+  directory specified in 'config.yaml'
+
+1.3
+---
+
+* The @pages array now also contains uncompiled pages
+* Pages with 'skip_output' set to true will not be outputted
+* Added new filters
+	* Textile/RedCloth
+	* Sass
+* nanoc now warns before overwriting in create_site, create_page and
+  create_template (but not in compile)
+
+1.2
+---
+
+* Sites now have an 'assets' directory, whose contents are copied to the
+  'output' directory when compiling [Soryu]
+* Added support for non-eRuby layouts (Markaby, Haml, Liquid, ...)
+* Added more filters (Markaby, Haml, Liquid, RDoc [Dmitry Bilunov])
+* Improved error reporting
+* Accessing page attributes using instance variables, and not through @page,
+  is no longer possible
+* Page attributes can now be accessed using dot notation, i.e. @page.title as
+  well as @page[:title]
+
+1.1.3
+-----
+
+* Fixed bug which would cause layoutless pages to be outputted incorrectly
+
+1.1.2
+-----
+
+* Backup files (files ending with a “~”) are now ignored
+* Fixed bug which would cause subpages not to be generated correctly
+
+1.1
+---
+
+* Added support for nested layouts
+* Added coloured logging
+* @page now hold the page that is currently being processed
+* Index files are now called “content” files and are now named after the
+  directory they are in [Colin Barrett]
+* It is now possible to access @page in the page’s content file
+
+1.0.1
+-----
+
+* Fixed a bug which would cause a “no such template” error to be displayed
+  when the template existed but compiling it would raise an exception
+* Fixed bug which would cause pages not to be sorted by order before compiling
+
+1.0
+---
+
+* Initial release

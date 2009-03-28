@@ -1,13 +1,13 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::PluginTest < Test::Unit::TestCase
+class Nanoc3::PluginTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_identifiers
     # Create plugin
-    plugin = Nanoc::Plugin.new
+    plugin = Nanoc3::Plugin.new
 
     # Update identifier
     plugin.class.class_eval { identifier :foo }
@@ -24,27 +24,23 @@ class Nanoc::PluginTest < Test::Unit::TestCase
   end
 
   def test_named
-    assert_nothing_raised do
-      # Find existant filter
-      filter = Nanoc::Filter.named(:erb)
-      assert(!filter.nil?)
+    # Find existant filter
+    filter = Nanoc3::Filter.named(:erb)
+    assert(!filter.nil?)
 
-      # Find non-existant filter
-      filter = Nanoc::Filter.named(:lksdaffhdlkashlgkskahf)
-      assert(filter.nil?)
-    end
+    # Find non-existant filter
+    filter = Nanoc3::Filter.named(:lksdaffhdlkashlgkskahf)
+    assert(filter.nil?)
   end
 
   def test_find
-    assert_nothing_raised do
-      # Find existant filter
-      filter = Nanoc::Filter.named(:erb)
-      assert(!filter.nil?)
+    # Find existant filter
+    filter = Nanoc3::Filter.named(:erb)
+    assert(!filter.nil?)
 
-      # Find non-existant filter
-      filter = Nanoc::Filter.named(:lksdaffhdlkashlgkskahf)
-      assert(filter.nil?)
-    end
+    # Find non-existant filter
+    filter = Nanoc3::Filter.named(:lksdaffhdlkashlgkskahf)
+    assert(filter.nil?)
   end
 
 end

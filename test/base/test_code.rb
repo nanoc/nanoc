@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::CodeTest < Test::Unit::TestCase
+class Nanoc3::CodeTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -10,7 +10,7 @@ class Nanoc::CodeTest < Test::Unit::TestCase
     $complete_insane_parrot = 'meow'
 
     # Create code and load it
-    code = Nanoc::Code.new("$complete_insane_parrot = 'woof'")
+    code = Nanoc3::Code.new("$complete_insane_parrot = 'woof'")
     code.load
 
     # Ensure code is loaded
@@ -22,29 +22,11 @@ class Nanoc::CodeTest < Test::Unit::TestCase
     @foo = 'meow'
 
     # Create code and load it
-    code = Nanoc::Code.new("@foo = 'woof'")
+    code = Nanoc3::Code.new("@foo = 'woof'")
     code.load
 
     # Ensure binding is correct
     assert_equal('meow', @foo)
-  end
-
-  def test_save
-    # Create site
-    site = mock
-
-    # Create code
-    code = Nanoc::Code.new("@foo = 'woof'")
-    code.site = site
-
-    # Create data source
-    data_source = mock
-    site.stubs(:data_source).returns(data_source)
-    data_source.expects(:loading).yields
-    data_source.expects(:save_code).with(code)
-
-    # Save
-    code.save
   end
 
 end

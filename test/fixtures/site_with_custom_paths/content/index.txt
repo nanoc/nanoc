@@ -1,3 +1,0 @@
-This is a sample root page. Please edit me!
-
-Other pages: <%= @pages.map { |page| page.path }.join(', ') %>

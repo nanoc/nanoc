@@ -1,13 +1,15 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Helpers::CapturingTest < Test::Unit::TestCase
+class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Helpers::Capturing
+  include Nanoc3::Helpers::Capturing
 
   def test_content_for
+    require 'erb'
+
     # Build content to be evaluated
     content = "head <% content_for :sidebar do %>\n" +
               "  <%= 1+2 %>\n" +

@@ -1,23 +1,19 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Routers::VersionedTest < Test::Unit::TestCase
+class Nanoc3::Routers::VersionedTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_path_for_page_rep_with_default_rep
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(nil)
-
-    # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    router = Nanoc3::Routers::Versioned.new(nil)
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
 
     # Get page
-    page = Nanoc::Page.new(
+    page = Nanoc3::Page.new(
       'some content',
       {
         :filename   => 'home',
@@ -26,9 +22,7 @@ class Nanoc::Routers::VersionedTest < Test::Unit::TestCase
       },
       '/foo/'
     )
-    page.site = site
-    page.build_reps
-    page_rep = page.reps[0]
+    page_rep = Nanoc3::PageRep.new(page, :default)
 
     # Check
     assert_equal('/foo/home.htm', router.path_for_page_rep(page_rep))
@@ -36,61 +30,45 @@ class Nanoc::Routers::VersionedTest < Test::Unit::TestCase
 
   def test_path_for_page_rep_with_custom_rep
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(nil)
-
-    # Create page defaults
-    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+    router = Nanoc3::Routers::Versioned.new(nil)
 
     # Create site
     site = mock
-    site.expects(:page_defaults).returns(page_defaults)
 
     # Get page
-    page = Nanoc::Page.new(
+    page = Nanoc3::Page.new(
       'some content',
       {
-        :reps => {
-          :raw => {
-            :filename   => 'home',
-            :extension  => 'htm',
-            :version    => 123
-          }
-        }
+        :filename   => 'home',
+        :extension  => 'htm',
+        :version    => 123
       },
       '/foo/'
     )
-    page.site = site
-    page.build_reps
-    page_rep = page.reps.find { |r| r.name == :raw }
+    page_rep = Nanoc3::PageRep.new(page, :raw)
 
     # Check
     assert_equal('/foo/home-raw.htm', router.path_for_page_rep(page_rep))
   end
 
   def test_path_for_asset_rep_with_default_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       {
         :extension => 'png',
-        :version => 123
+        :version   => 123
       },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps[0]
+    asset_rep = Nanoc3::AssetRep.new(asset, :default)
 
     # Check
     assert_equal(
@@ -100,33 +78,23 @@ class Nanoc::Routers::VersionedTest < Test::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_custom_rep
-    # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       {
-        :reps => {
-          :raw => {
-            :extension => 'png', 
-            :version => 123
-          }
-        }
+        :extension => 'png', 
+        :version => 123
       },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps.find { |r| r.name == :raw }
+    asset_rep = Nanoc3::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal(
@@ -136,26 +104,20 @@ class Nanoc::Routers::VersionedTest < Test::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_default_rep_without_version
-    # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       { :extension => 'png' },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps[0]
+    asset_rep = Nanoc3::AssetRep.new(asset, :default)
 
     # Check
     assert_equal(
@@ -165,32 +127,22 @@ class Nanoc::Routers::VersionedTest < Test::Unit::TestCase
   end
 
   def test_path_for_asset_rep_with_custom_rep_without_version
-    # Create asset defaults
-    asset_defaults = Nanoc::AssetDefaults.new(:foo => 'bar')
-
     # Create site
     site = mock
-    site.expects(:asset_defaults).at_least_once.returns(asset_defaults)
     site.expects(:config).returns({ :assets_prefix => '/imuhgez' })
 
     # Create versioned router
-    router = Nanoc::Routers::Versioned.new(site)
+    router = Nanoc3::Routers::Versioned.new(site)
 
     # Get asset
-    asset = Nanoc::Asset.new(
+    asset = Nanoc3::Asset.new(
       nil,
       {
-        :reps => {
-          :raw => {
-            :extension => 'png'
-          }
-        }
+        :extension => 'png'
       },
       '/foo/'
     )
-    asset.site = site
-    asset.build_reps
-    asset_rep = asset.reps.find { |r| r.name == :raw }
+    asset_rep = Nanoc3::AssetRep.new(asset, :raw)
 
     # Check
     assert_equal(

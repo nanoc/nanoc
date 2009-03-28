@@ -1,52 +1,70 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Filters::HamlTest < Test::Unit::TestCase
+class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
     if_have 'haml' do
-      assert_nothing_raised do
-        # Create site
-        site = mock
+      # Create filter
+      filter = ::Nanoc3::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
 
-        # Create page
-        page = mock
-        page_proxy = Nanoc::Proxy.new(page)
-        page.expects(:site).returns(site)
-        page.expects(:to_proxy).returns(page_proxy)
-        page.expects(:attribute_named).with(:title).times(2).returns('Home', 'Home')
+      # Run filter (no assigns)
+      result = filter.run('%html')
+      assert_match(/<html>.*<\/html>/, result)
 
-        # Create page rep
-        page_rep = mock
-        page_rep_proxy = Nanoc::Proxy.new(page_rep)
-        page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-        page_rep.expects(:page).returns(page)
-        page_rep.expects(:to_proxy).returns(page_rep_proxy)
-        page_rep.expects(:attribute_named).times(3).returns({}, {}, {})
+      # Run filter (assigns without @)
+      result = filter.run('%p= question')
+      assert_equal("<p>Is this the Payne residence?</p>\n", result)
 
-        # Mock site
-        site.expects(:pages).returns([])
-        site.expects(:assets).returns([])
-        site.expects(:layouts).returns([])
-        site.expects(:config).returns({})
+      # Run filter (assigns with @)
+      result = filter.run('%p= @question')
+      assert_equal("<p>Is this the Payne residence?</p>\n", result)
+    end
+  end
 
-        # Get filter
-        filter = ::Nanoc::Filters::Haml.new(page_rep)
+  def test_filter_with_params
+    if_have 'haml' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
 
-        # Run filter (no assigns)
-        result = filter.run('%html')
-        assert_match(/<html>.*<\/html>/, result)
+      # Check with HTML5
+      result = filter.run('%img', :format => 'html5')
+      assert_match(/<img>/, result)
 
-        # Run filter (assigns without @)
-        result = filter.run('%p= page.title')
-        assert_equal("<p>Home</p>\n", result)
+      # Check with XHTML
+      result = filter.run('%img', :format => 'xhtml')
+      assert_match(/<img\s*\/>/, result)
+    end
+  end
 
-        # Run filter (assigns with @)
-        result = filter.run('%p= @page.title')
-        assert_equal("<p>Home</p>\n", result)
+  def test_filter_error
+    if_have 'haml' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
+
+      # Run filter
+      raised = false
+      begin
+        filter.run('%p= this isn\'t really ruby so it\'ll break, muahaha')
+      rescue SyntaxError => e
+        e.message =~ /(.+?):\d+: /
+        assert_match '?', $1
+        raised = true
       end
+      assert raised
+    end
+  end
+
+  def test_filter_with_yield
+    if_have 'haml' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
+
+      # Run filter 
+      result = filter.run('%p= yield')
+      assert_equal("<p>Is this the Payne residence?</p>\n", result)
     end
   end
 

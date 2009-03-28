@@ -1,23 +1,23 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Extra::VCSTest < Test::Unit::TestCase
+class Nanoc3::Extra::VCSTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_named
-    assert_nil(Nanoc::Extra::VCS.named(:lkasjdlkfjlkasdfkj))
+    assert_nil(Nanoc3::Extra::VCS.named(:lkasjdlkfjlkasdfkj))
 
-    assert_not_nil(Nanoc::Extra::VCS.named(:svn))
-    assert_not_nil(Nanoc::Extra::VCS.named(:subversion))
+    refute_nil(Nanoc3::Extra::VCS.named(:svn))
+    refute_nil(Nanoc3::Extra::VCS.named(:subversion))
   end
 
   def test_not_implemented
-    vcs = Nanoc::Extra::VCS.new
+    vcs = Nanoc3::Extra::VCS.new
 
-    assert_raise(NotImplementedError) { vcs.add('x')       }
-    assert_raise(NotImplementedError) { vcs.remove('x')    }
-    assert_raise(NotImplementedError) { vcs.move('x', 'y') }
+    assert_raises(NotImplementedError) { vcs.add('x')       }
+    assert_raises(NotImplementedError) { vcs.remove('x')    }
+    assert_raises(NotImplementedError) { vcs.move('x', 'y') }
   end
 
 end

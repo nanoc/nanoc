@@ -1,41 +1,80 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Filters::ERBTest < Test::Unit::TestCase
+class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
-    assert_nothing_raised do
-      # Create site
-      site = mock
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({ :location => 'a cheap motel' })
 
-      # Create page
-      page = mock
-      page_proxy = Nanoc::Proxy.new(page)
-      page.expects(:site).returns(site)
-      page.expects(:to_proxy).returns(page_proxy)
+    # Run filter
+    result = filter.run('<%= "I was hiding in #{@location}." %>')
+    assert_equal('I was hiding in a cheap motel.', result)
+  end
 
-      # Create page rep
-      page_rep = mock
-      page_rep_proxy = Nanoc::Proxy.new(page_rep)
-      page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-      page_rep.expects(:page).returns(page)
-      page_rep.expects(:to_proxy).returns(page_rep_proxy)
+  def test_filter_error_page
+    # Create item and item rep
+    item = MiniTest::Mock.new
+    item.expect(:identifier, '/foo/bar/baz/')
+    item_rep = MiniTest::Mock.new
+    item_rep.expect(:name, :quux)
 
-      # Mock site
-      site.expects(:pages).returns([])
-      site.expects(:assets).returns([])
-      site.expects(:layouts).returns([])
-      site.expects(:config).returns({})
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({
+      :_obj     => item,
+      :_obj_rep => item_rep,
+      :page     => MiniTest::Mock.new,
+      :location => 'a cheap motel'
+    })
 
-      # Get filter
-      filter = ::Nanoc::Filters::ERB.new(page_rep)
-
-      # Run filter
-      result = filter.run('<%= "Hello." %>')
-      assert_equal('Hello.', result)
+    # Run filter
+    raised = false
+    begin
+      filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
+    rescue SyntaxError => e
+      e.message =~ /(.+?):\d+: /
+      assert_match 'page /foo/bar/baz/ (rep quux)', $1
+      raised = true
     end
+    assert raised
+  end
+
+  def test_filter_error_asset
+    # Create item and item rep
+    item = MiniTest::Mock.new
+    item.expect(:identifier, '/foo/bar/baz/')
+    item_rep = MiniTest::Mock.new
+    item_rep.expect(:name, :quux)
+
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({
+      :_obj     => item,
+      :_obj_rep => item_rep,
+      :asset    => MiniTest::Mock.new,
+      :location => 'a cheap motel'
+    })
+
+    # Run filter
+    raised = false
+    begin
+      filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
+    rescue SyntaxError => e
+      e.message =~ /(.+?):\d+: /
+      assert_match 'asset /foo/bar/baz/ (rep quux)', $1
+      raised = true
+    end
+    assert raised
+  end
+
+  def test_filter_with_yield
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({ :content => 'a cheap motel' })
+
+    # Run filter
+    result = filter.run('<%= "I was hiding in #{yield}." %>')
+    assert_equal('I was hiding in a cheap motel.', result)
   end
 
 end

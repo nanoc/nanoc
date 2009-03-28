@@ -1,6 +1,6 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::ExtraCoreExtTimeTest < Test::Unit::TestCase
+class Nanoc3::ExtraCoreExtTimeTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

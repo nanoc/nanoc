@@ -1,19 +1,20 @@
-require 'helper'
+require 'test/helper'
 
-class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
+class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
-  include Nanoc::Helpers::XMLSitemap
+  include Nanoc3::Helpers::XMLSitemap
 
   def test_xml_sitemap
     if_have 'builder' do
       # Create pages
-      @pages = [ mock, mock, mock ]
+      @pages = [ mock, mock, mock, mock ]
 
       # Create page 0
       @pages[0].expects(:is_hidden).returns(false)
+      @pages[0].expects(:skip_output).returns(false)
       @pages[0].expects(:path).returns('/foo/')
       @pages[0].expects(:mtime).returns(nil)
       @pages[0].expects(:changefreq).returns(nil)
@@ -24,23 +25,32 @@ class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
 
       # Create page 2
       @pages[2].expects(:is_hidden).returns(false)
+      @pages[2].expects(:skip_output).returns(false)
       @pages[2].expects(:path).returns('/baz/')
       @pages[2].expects(:mtime).times(2).returns(Time.parse('12/07/2004'))
       @pages[2].expects(:changefreq).times(2).returns('daily')
       @pages[2].expects(:priority).times(2).returns(0.5)
 
+      # Create page 3
+      @pages[3].expects(:is_hidden).returns(false)
+      @pages[3].expects(:skip_output).returns(true)
+
       # Create sitemap page
       @page = mock
-      @page.expects(:base_url).times(2).returns('http://example.com')
+
+      # Create site
+      config = mock
+      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+      @site = mock
+      @site.expects(:config).at_least_once.returns(config)
 
       # Check
-      assert_nothing_raised do
-        xml_sitemap
-      end
+      xml_sitemap
     end
   ensure
     @pages = nil
-    @page = nil
+    @page  = nil
+    @site  = nil
   end
 
 end
