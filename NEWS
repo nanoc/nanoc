@@ -1,6 +1,15 @@
 nanoc Release Notes
 ===================
 
+2.2
+---
+
+* --pages and --assets compiler options
+* Filtering helper
+* relative_path_to function in LinkTo helper
+* Rainpress filter
+* RelativizePaths filter
+
 2.1.6
 -----
 
