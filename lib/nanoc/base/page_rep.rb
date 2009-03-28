@@ -270,6 +270,8 @@ module Nanoc
         # Run filter
         Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
         content = filter.run(content)
+        # FIXME hacky
+        content.force_encoding('utf-8') if content.respond_to?(:'force_encoding')
         Nanoc::NotificationCenter.post(:filtering_ended,   self, klass.identifier)
       end
 

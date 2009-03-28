@@ -8,7 +8,8 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 # nanoc itself
-require File.dirname(__FILE__) + '/lib/nanoc.rb'
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
+require 'nanoc'
 
 ##### Test Ruby 1.9
 

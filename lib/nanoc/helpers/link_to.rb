@@ -7,6 +7,7 @@ module Nanoc::Helpers
   #   include Nanoc::Helpers::LinkTo
   module LinkTo
 
+    require 'nanoc/helpers/html_escape'
     include Nanoc::Helpers::HTMLEscape
 
     # Creates a HTML link to the given path or page/asset representation, and

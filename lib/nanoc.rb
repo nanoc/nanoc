@@ -57,39 +57,17 @@ module Nanoc
   module Routers # :nodoc:
   end
 
-  # Requires the given Ruby files at the specified path.
-  #
-  # +path+:: An array containing path segments. This path is relative to the
-  #          directory this file (nanoc.rb) is in. Can contain wildcards.
-  def self.load(*path)
-    full_path = [ File.dirname(__FILE__), 'nanoc' ] + path
-    Dir[File.join(full_path)].sort.each { |f| require f }
-  end
-
 end
 
 # Load requirements
-begin ; require 'rubygems' ; rescue LoadError ; end
 require 'yaml'
 require 'fileutils'
 
-# Load base
-Nanoc.load('base', 'enhancements.rb')
-Nanoc.load('base', 'defaults.rb')
-Nanoc.load('base', 'proxy.rb')
-Nanoc.load('base', 'proxies', '*.rb')
-Nanoc.load('base', 'core_ext', '*.rb')
-Nanoc.load('base', 'plugin.rb')
-Nanoc.load('base', '*.rb')
-
-# Load extra's
-Nanoc.load('extra', 'core_ext', '*.rb')
-Nanoc.load('extra', '*.rb')
-Nanoc.load('extra', 'vcses', '*.rb')
-
-# Load plugins
-Nanoc.load('data_sources', '*.rb')
-Nanoc.load('filters', '*.rb')
-Nanoc.load('binary_filters', '*.rb')
-Nanoc.load('routers', '*.rb')
-Nanoc.load('helpers', '*.rb')
+# Load nanoc
+require 'nanoc/base'
+require 'nanoc/extra'
+require 'nanoc/data_sources'
+require 'nanoc/binary_filters'
+require 'nanoc/filters'
+require 'nanoc/routers'
+require 'nanoc/helpers'
