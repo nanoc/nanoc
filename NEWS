@@ -4,11 +4,17 @@ nanoc Release Notes
 2.2
 ---
 
+New:
+
 * --pages and --assets compiler options
 * Filtering helper
 * relative_path_to function in LinkTo helper
 * Rainpress filter
 * RelativizePaths filter
+
+Changed:
+
+* The commandline option parser is now a lot more reliable
 
 2.1.6
 -----
