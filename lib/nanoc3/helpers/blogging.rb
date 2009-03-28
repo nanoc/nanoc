@@ -38,6 +38,9 @@ module Nanoc3::Helpers
     #
     # +limit+:: The maximum number of articles to show. Defaults to 5.
     #
+    # +articles+:: A list of articles to include in the feed. Defaults to the
+    #              list of articles returned by the articles function.
+    #
     # The following attributes must be set on blog articles:
     #
     # * 'title', containing the title of the blog post.
