@@ -41,6 +41,16 @@ module Nanoc3::Helpers
     # +articles+:: A list of articles to include in the feed. Defaults to the
     #              list of articles returned by the articles function.
     #
+    # +content_proc+:: A proc that returns the content of the given article,
+    #                  passed as a parameter. By default, given the argument
+    #                  +article+, this proc will return +article.content+.
+    #                  This function may not return nil.
+    #
+    # +excerpt_proc+:: A proc that returns the excerpt of the given article,
+    #                  passed as a parameter. By default, given the argument
+    #                  +article+, this proc will return +article.excerpt+.
+    #                  This function may return nil.
+    #
     # The following attributes must be set on blog articles:
     #
     # * 'title', containing the title of the blog post.
@@ -99,6 +109,8 @@ module Nanoc3::Helpers
       # Extract parameters
       limit             = params[:limit] || 5
       relevant_articles = (params[:articles] || articles || []).first(limit)
+      content_proc      = params[:content_proc] || lambda { |a| a.content }
+      excerpt_proc      = params[:excerpt_proc] || lambda { |a| a.excerpt }
 
       # Check feed page attributes
       if @page.base_url.nil?
@@ -167,8 +179,9 @@ module Nanoc3::Helpers
             xml.link(:rel => 'alternate', :href => url_for(a))
 
             # Add content
-            xml.content   a.content, :type => 'html'
-            xml.summary   a.excerpt, :type => 'html' unless a.excerpt.nil?
+            summary = excerpt_proc.call(a)
+            xml.content   content_proc.call(a), :type => 'html'
+            xml.summary   summary, :type => 'html' unless summary.nil?
           end
         end
       end

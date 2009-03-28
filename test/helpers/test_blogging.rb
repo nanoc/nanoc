@@ -280,6 +280,54 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     atom_feed :articles => [ @pages[4] ]
   end
 
+  def test_atom_feed_with_content_proc_param
+    # Mock article
+    @pages = [ mock ]
+    @pages[0].stubs(:kind).returns('article')
+    @pages[0].stubs(:created_at).returns(Time.now - 1000)
+    @pages[0].stubs(:mtime).returns(Time.now - 500)
+    @pages[0].stubs(:title).returns('Page One')
+    @pages[0].stubs(:custom_path_in_feed).returns(nil)
+    @pages[0].stubs(:path).returns('/page1/')
+    @pages[0].stubs(:excerpt).returns(nil)
+
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
+    @page.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+    # Check
+    result = atom_feed :content_proc => lambda { |a| 'foobar!' }
+    assert_match 'foobar!</content>', result
+  end
+
+  def test_atom_feed_with_excerpt_proc_param
+    # Mock article
+    @pages = [ mock ]
+    @pages[0].stubs(:kind).returns('article')
+    @pages[0].stubs(:created_at).returns(Time.now - 1000)
+    @pages[0].stubs(:mtime).returns(Time.now - 500)
+    @pages[0].stubs(:title).returns('Page One')
+    @pages[0].stubs(:custom_path_in_feed).returns(nil)
+    @pages[0].stubs(:path).returns('/page1/')
+    @pages[0].stubs(:content).returns('some content')
+
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
+    @page.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+    # Check
+    result = atom_feed :excerpt_proc => lambda { |a| 'foobar!' }
+    assert_match 'foobar!</summary>', result
+  end
+
   def test_url_for_without_custom_path_in_feed
     # Create feed page
     @page = mock
