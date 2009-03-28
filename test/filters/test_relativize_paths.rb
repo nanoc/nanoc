@@ -6,13 +6,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter_html_with_double_quotes
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -25,13 +33,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_html_with_single_quotes
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -44,13 +60,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_html_without_quotes
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -63,13 +87,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_html_multiple
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -82,13 +114,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_implicit
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -101,13 +141,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_css_with_double_quotes
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -120,13 +168,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_css_with_single_quotes
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -139,13 +195,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_css_without_quotes
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -158,13 +222,21 @@ class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
   end
 
   def test_filter_css_multiple
+    # Mock page and site
+    page = mock
+    site = mock
+    page.expects(:site).returns(site)
+    obj_rep = mock
+    obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    obj_rep.expects(:page).returns(page)
+
     # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new(obj_rep)
 
     # Mock item
     filter.instance_eval do
-      @item = mock
-      @item.expects(:path).returns('/foo/bar/baz/')
+      @item = Object.new
+      def @item.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
