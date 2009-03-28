@@ -15,8 +15,15 @@ class Nanoc::Helpers::FilteringTest < Test::Unit::TestCase
                 " <p>Bar...</p>\n" +
                 "<% end %>\n"
 
+      # Mock page and site
+      page = mock
+      site = mock
+      page.expects(:site).returns(site)
+      @_obj_rep = mock
+      @_obj_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+      @_obj_rep.expects(:page).returns(page)
+
       # Evaluate content
-      @page = {}
       result = ::ERB.new(content).result(binding)
 
       # Check
