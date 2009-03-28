@@ -1,6 +1,6 @@
 module Nanoc::CLI
 
-  class CreateTemplateCommand < Command # :nodoc:
+  class CreateTemplateCommand < Cri::Command # :nodoc:
 
     def name
       'create_template'

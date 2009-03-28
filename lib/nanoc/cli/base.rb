@@ -2,118 +2,28 @@ module Nanoc::CLI
 
   # Nanoc::CLI::Base is the central class representing a commandline nanoc
   # tool. It has a list of commands, and is linked to a specific nanoc site.
-  class Base
+  class Base < Cri::Base
 
     attr_reader :commands, :site
 
     # Creates a new instance of the commandline nanoc tool.
     def initialize
-      create_commands
-    end
+      super('nanoc')
 
-    # Parses the given commandline arguments and executes the requested
-    # command.
-    def run(args)
-      # Check arguments
-      if args.length == 0
-        @help_command.run([], [])
-        exit 1
-      end
+      # Add help command
+      self.help_command = Nanoc::CLI::HelpCommand.new
+      add_command(self.help_command)
 
-      # Find version or help options
-      if args.length == 1
-        # Parse arguments
-        begin
-          parsed_arguments = Nanoc::CLI::OptionParser.parse(args[0..1], global_option_definitions)
-        rescue Nanoc::CLI::OptionParser::IllegalOptionError => e
-          $stderr.puts "illegal option -- #{e}"
-          exit 1
-        end
-
-        # Handle version option
-        if parsed_arguments[:options].has_key?(:version)
-          puts "nanoc #{Nanoc::VERSION} (c) 2007-2009 Denis Defreyne."
-          puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
-          exit 1
-        # Handle help option
-        elsif parsed_arguments[:options].has_key?(:help)
-          show_help
-          exit 1
-        end
-      end
-
-      # Find command
-      command = command_named(args[0])
-
-      # Get extended option definitions (with help)
-      extended_option_definitions = command.option_definitions + [
-        # --help
-        {
-          :long => 'help', :short => 'h', :argument => :forbidden,
-          :desc => 'show this help message and quit'
-        },
-        # --verbose
-        {
-          :long => 'verbose', :short => 'V', :argument => :forbidden,
-          :desc => 'enable more detailed output'
-        }
-      ]
-
-      # Parse arguments
-      begin
-        parsed_arguments = Nanoc::CLI::OptionParser.parse(args[1..-1], extended_option_definitions)
-      rescue Nanoc::CLI::OptionParser::IllegalOptionError => e
-        $stderr.puts "illegal option -- #{e}"
-        exit 1
-      rescue Nanoc::CLI::OptionParser::OptionRequiresAnArgumentError => e
-        $stderr.puts "option requires an argument -- #{e}"
-        exit 1
-      end
-
-      # Check help option
-      if parsed_arguments[:options].has_key?(:help)
-        show_help(command)
-        exit 1
-      end
-
-      # Check verbose option
-      if parsed_arguments[:options].has_key?(:verbose)
-        Nanoc::CLI::Logger.instance.level = :low
-      end
-
-      # Find and run command
-      command.run(parsed_arguments[:options], parsed_arguments[:arguments])
-    end
-
-    # Returns the command with the given name.
-    def command_named(name)
-      # Find by exact name or alias
-      command = @commands.find { |c| c.name == name or c.aliases.include?(name) }
-      return command unless command.nil?
-
-      # Find by approximation
-      commands = @commands.select { |c| c.name[0, name.length] == name }
-      if commands.length > 1
-        $stderr.puts "nanoc: '#{name}' is ambiguous:"
-        $stderr.puts "  #{commands.map { |c| c.name }.join(' ') }"
-        exit 1
-      elsif commands.length == 0
-        $stderr.puts "nanoc: unknown command '#{name}'\n"
-        show_help
-        exit 1
-      else
-        return commands[0]
-      end
-    end
-
-    # Shows the help text for the given command, or shows the general help
-    # text if no command is given.
-    def show_help(command=nil)
-      if command.nil?
-        @help_command.run([], [])
-      else
-        @help_command.run([], [ command.name ])
-      end
+      # Add other commands
+      add_command(Nanoc::CLI::AutocompileCommand.new)
+      add_command(Nanoc::CLI::CompileCommand.new)
+      add_command(Nanoc::CLI::CreateLayoutCommand.new)
+      add_command(Nanoc::CLI::CreatePageCommand.new)
+      add_command(Nanoc::CLI::CreateSiteCommand.new)
+      add_command(Nanoc::CLI::CreateTemplateCommand.new)
+      add_command(Nanoc::CLI::InfoCommand.new)
+      add_command(Nanoc::CLI::SwitchCommand.new)
+      add_command(Nanoc::CLI::UpdateCommand.new)
     end
 
     # Helper function which can be called when a command is executed that
@@ -190,29 +100,17 @@ module Nanoc::CLI
       ]
     end
 
-  protected
-
-    def create_commands
-      @commands = []
-
-      # Find all command classes
-      command_classes = []
-      ObjectSpace.each_object(Class) do |klass|
-        command_classes << klass if klass < Nanoc::CLI::Command
+    def handle_option(option)
+      # Handle version option
+      if option == :version
+        puts "nanoc #{Nanoc::VERSION} (c) 2007-2009 Denis Defreyne."
+        puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
+        exit 0
+      # Handle help option
+      elsif option == :help
+        show_help
+        exit 0
       end
-
-      # Create commands
-      command_classes.each do |klass|
-        if klass.to_s == 'Nanoc::CLI::HelpCommand'
-          @help_command = HelpCommand.new
-          @commands << @help_command
-        else
-          @commands << klass.new
-        end
-      end
-
-      # Set base
-      @commands.each { |c| c.base = self }
     end
 
   end
