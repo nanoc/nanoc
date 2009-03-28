@@ -8,6 +8,33 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   include Nanoc3::Helpers::Blogging
   include Nanoc3::Helpers::Text
 
+  def test_articles
+    # Create pages
+    @pages = [ mock, mock, mock ]
+
+    # Create page 0
+    @pages[0].expects(:kind).returns('page')
+
+    # Create page 1
+    @pages[1].expects(:kind).returns('article')
+    @pages[1].expects(:created_at).returns(Time.now - 1000)
+
+    # Create page 2
+    @pages[2].expects(:kind).returns('article')
+    @pages[2].expects(:created_at).returns(Time.now - 500)
+
+    # Get articles
+    articles = sorted_articles
+
+    # Check
+    assert_equal(2, articles.size)
+    assert articles.include?(@pages[1])
+    assert articles.include?(@pages[2])
+  ensure
+    # Cleanup
+    @pages = nil
+  end
+
   def test_sorted_articles
     # Create pages
     @pages = [ mock, mock, mock ]
@@ -35,69 +62,18 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @pages = nil
   end
 
-  def test_sorted_articles_with_feed_tag
-    # Create pages
-    @pages = [ mock, mock, mock, mock, mock ]
-
-    # Create page 0
-    @pages[0].expects(:kind).times(2).returns('page')
-    @pages[0].stubs(:feed_tag).returns('foobar')
-    @pages[0].stubs(:feed_tags).returns(nil)
-
-    # Create page 1
-    @pages[1].expects(:kind).times(2).returns('article')
-    @pages[1].expects(:created_at).times(2).returns(Time.now - 500)
-    @pages[1].stubs(:feed_tag).returns('foobar')
-    @pages[1].stubs(:feed_tags).returns(nil)
-
-    # Create page 2
-    @pages[2].expects(:kind).times(2).returns('article')
-    @pages[2].stubs(:feed_tag).returns('barbaz')
-    @pages[2].stubs(:feed_tags).returns(nil)
-
-    # Create page 3
-    @pages[3].expects(:kind).times(2).returns('article')
-    @pages[3].expects(:created_at).times(2).returns(Time.now - 250)
-    @pages[3].stubs(:feed_tag).returns(nil)
-    @pages[3].stubs(:feed_tags).returns([ 'foobar' ])
-
-    # Create page 4
-    @pages[4].expects(:kind).times(2).returns('article')
-    @pages[4].stubs(:feed_tag).returns(nil)
-    @pages[4].stubs(:feed_tags).returns([ 'blabla' ])
-
-    # Get articles
-    articles = sorted_articles('foobar')
-
-    # Check
-    assert_equal(2,         articles.size)
-    assert_equal(@pages[3], articles[0])
-    assert_equal(@pages[1], articles[1])
-
-    # Get articles
-    articles = sorted_articles([ 'foobar' ])
-
-    # Check
-    assert_equal(2,         articles.size)
-    assert_equal(@pages[3], articles[0])
-    assert_equal(@pages[1], articles[1])
-   ensure
-    # Cleanup
-    @pages = nil
-  end
-
   def test_atom_feed
     if_have 'builder' do
       # Create pages
       @pages = [ mock, mock, mock ]
 
       # Create page 0
-      @pages[0].expects(:kind).at_least_once.returns('page')
+      @pages[0].expects(:kind).times(2).returns('page')
 
       # Create page 1
-      @pages[1].expects(:kind).at_least_once.returns('article')
+      @pages[1].expects(:kind).times(2).returns('article')
       @pages[1].expects(:created_at).at_least_once.returns(Time.now - 1000)
-      @pages[1].expects(:mtime).at_least_once.returns(Time.now - 500)
+      @pages[1].expects(:mtime).returns(Time.now - 500)
       @pages[1].expects(:title).returns('Page One')
       @pages[1].expects(:custom_path_in_feed).returns(nil)
       @pages[1].expects(:path).at_least_once.returns('/page1/')
@@ -105,129 +81,184 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @pages[1].expects(:excerpt).returns(nil)
 
       # Create page 2
-      @pages[2].expects(:kind).at_least_once.returns('article')
+      @pages[2].expects(:kind).times(2).returns('article')
       @pages[2].expects(:created_at).at_least_once.returns(Time.now - 750)
-      @pages[2].expects(:mtime).at_least_once.returns(Time.now - 250)
+      @pages[2].expects(:mtime).returns(Time.now - 250)
       @pages[2].expects(:title).returns('Page Two')
       @pages[2].expects(:custom_path_in_feed).returns('/page2custom/')
       @pages[2].expects(:path).at_least_once.returns('/page2/')
       @pages[2].expects(:content).returns('page 2 content')
-      @pages[2].expects(:excerpt).returns('page 2 excerpt')
+      @pages[2].expects(:excerpt).times(2).returns('page 2 excerpt')
 
       # Create feed page
       @page = mock
-      @page.expects(:title).returns('My Cool Blog')
-      @page.expects(:author_name).returns('Denis Defreyne')
-      @page.expects(:author_uri).returns('http://stoneship.org/')
+      @page.expects(:base_url).at_least_once.returns('http://example.com')
+      @page.expects(:title).times(2).returns('My Cool Blog')
+      @page.expects(:author_name).times(2).returns('Denis Defreyne')
+      @page.expects(:author_uri).times(2).returns('http://stoneship.org/')
       @page.expects(:[]).with(:feed_url).returns(nil)
       @page.expects(:path).returns('/journal/feed/')
-
-      # Create site
-      config = mock
-      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-      @site = mock
-      @site.expects(:config).at_least_once.returns(config)
 
       # Check
       atom_feed
     end
   end
 
-  def test_atom_feed_with_feed_tag
-    if_have 'builder' do
-      # Create pages
-      @pages = [ mock, mock, mock ]
+  def test_atom_feed_without_articles
+    # Mock pages
+    @pages = [ mock, mock, mock ]
+    @pages[0].stubs(:kind).returns('page')
+    @pages[1].stubs(:kind).returns('page')
+    @pages[2].stubs(:kind).returns('page')
 
-      # Create page 0
-      @pages[0].expects(:kind).at_least_once.returns('page')
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
 
-      # Create page 1
-      @pages[1].expects(:kind).at_least_once.returns('article')
-      @pages[1].expects(:feed_tag).returns(nil)
-      @pages[1].expects(:feed_tags).returns(nil)
-
-      # Create page 2
-      @pages[2].expects(:kind).at_least_once.returns('article')
-      @pages[2].expects(:created_at).at_least_once.returns(Time.now - 750)
-      @pages[2].expects(:mtime).at_least_once.returns(Time.now - 250)
-      @pages[2].expects(:title).returns('Page Two')
-      @pages[2].expects(:custom_path_in_feed).returns('/page2custom/')
-      @pages[2].expects(:path).at_least_once.returns('/page2/')
-      @pages[2].expects(:content).returns('page 2 content')
-      @pages[2].expects(:excerpt).returns('page 2 excerpt')
-      @pages[2].expects(:feed_tag).returns('foobar')
-
-      # Create feed page
-      @page = mock
-      @page.expects(:title).returns('My Cool Blog')
-      @page.expects(:author_name).returns('Denis Defreyne')
-      @page.expects(:author_uri).returns('http://stoneship.org/')
-      @page.expects(:[]).with(:feed_url).returns(nil)
-      @page.expects(:path).returns('/journal/feed/')
-
-      # Create site
-      config = mock
-      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-      @site = mock
-      @site.expects(:config).at_least_once.returns(config)
-
-      # Check
-      atom_feed(:feed_tag => 'foobar')
+    # Check
+    error = assert_raises(RuntimeError) do
+      atom_feed
     end
+    assert_equal(
+      'Cannot build Atom feed: no articles',
+      error.message
+    )
   end
 
-  def test_atom_feed_with_custom_procs
-    if_have 'builder' do
-      # Create page
-      @pages = [ mock ]
-      @pages[0].expects(:kind).at_least_once.returns('article')
-      @pages[0].expects(:created_at).at_least_once.returns(Time.now - 750)
-      @pages[0].expects(:mtime).at_least_once.returns(Time.now - 250)
-      @pages[0].expects(:title).returns('Page Two')
-      @pages[0].expects(:custom_path_in_feed).returns('/page2custom/')
-      @pages[0].expects(:path).at_least_once.returns('/page2/')
-      @pages[0].expects(:feed_tag).returns('foobar')
-      @pages[0].expects(:content).returns('blah blah this is a very long and boring text')
+  def test_atom_feed_without_base_url
+    # Create pages
+    @pages = [ mock, mock ]
+    @pages[0].stubs(:kind).returns('page')
+    @pages[1].stubs(:kind).returns('article')
 
-      # Create feed page
-      @page = mock
-      @page.expects(:title).returns('My Cool Blog')
-      @page.expects(:author_name).returns('Denis Defreyne')
-      @page.expects(:author_uri).returns('http://stoneship.org/')
-      @page.expects(:[]).with(:feed_url).returns(nil)
-      @page.expects(:path).returns('/journal/feed/')
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns(nil)
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
 
-      # Create site
-      config = mock
-      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-      @site = mock
-      @site.expects(:config).at_least_once.returns(config)
-
-      # Create procs
-      content_proc = lambda { |article| excerptize(article.content, :length => 18) }
-      excerpt_proc = lambda { |article| 'this is the excerpt yarly' }
-
-      # Check
-      result = atom_feed(:feed_tag => 'foobar', :content_proc => content_proc, :excerpt_proc => excerpt_proc)
-      assert_match(/blah blah this .../, result)
-      assert_match(/this is the excerpt yarly/, result)
+    # Check
+    error = assert_raises(RuntimeError) do
+      atom_feed
     end
+    assert_equal(
+      'Cannot build Atom feed: feed page has no base_url',
+      error.message
+    )
+  end
+
+  def test_atom_feed_without_title
+    # Create pages
+    @pages = [ mock, mock ]
+    @pages[0].stubs(:kind).returns('page')
+    @pages[1].stubs(:kind).returns('article')
+
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns(nil)
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
+
+    # Check
+    error = assert_raises(RuntimeError) do
+      atom_feed
+    end
+    assert_equal(
+      'Cannot build Atom feed: feed page has no title',
+      error.message
+    )
+  end
+
+  def test_atom_feed_without_author_name
+    # Create pages
+    @pages = [ mock, mock ]
+    @pages[0].stubs(:kind).returns('page')
+    @pages[1].stubs(:kind).returns('article')
+
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns(nil)
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
+
+    # Check
+    error = assert_raises(RuntimeError) do
+      atom_feed
+    end
+    assert_equal(
+      'Cannot build Atom feed: feed page has no author_name',
+      error.message
+    )
+  end
+
+  def test_atom_feed_without_author_uri
+    # Create pages
+    @pages = [ mock, mock ]
+    @pages[0].stubs(:kind).returns('page')
+    @pages[1].stubs(:kind).returns('article')
+
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns(nil)
+
+    # Check
+    error = assert_raises(RuntimeError) do
+      atom_feed
+    end
+    assert_equal(
+      'Cannot build Atom feed: feed page has no author_uri',
+      error.message
+    )
+  end
+
+  def test_atom_feed_without_articles_created_at
+    # Create pages
+    @pages = [ mock, mock, mock, mock, mock ]
+    @pages[0].stubs(:kind).returns('page')
+    @pages[1].stubs(:kind).returns('article')
+    @pages[1].stubs(:created_at).returns(Time.now)
+    @pages[2].stubs(:kind).returns('article')
+    @pages[2].stubs(:created_at).returns(Time.now)
+    @pages[3].stubs(:kind).returns('article')
+    @pages[3].stubs(:created_at).returns(Time.now)
+    @pages[4].stubs(:kind).returns('article')
+    @pages[4].stubs(:created_at).returns(nil)
+
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
+
+    # Check
+    error = assert_raises(RuntimeError) do
+      atom_feed
+    end
+    assert_equal(
+      'Cannot build Atom feed: one or more articles lack created_at',
+      error.message
+    )
   end
 
   def test_url_for_without_custom_path_in_feed
     # Create feed page
     @page = mock
+    @page.expects(:base_url).returns('http://example.com')
 
     # Create article
     page = mock
     page.expects(:custom_path_in_feed).returns(nil)
     page.expects(:path).returns('/foo/bar/')
-
-    # Create site
-    config = mock
-    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-    @site = mock
-    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('http://example.com/foo/bar/', url_for(page))
@@ -239,16 +270,11 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   def test_url_for_with_custom_path_in_feed
     # Create feed page
     @page = mock
+    @page.expects(:base_url).returns('http://example.com')
 
     # Create article
     page = mock
     page.expects(:custom_path_in_feed).returns('/meow/woof/')
-
-    # Create site
-    config = mock
-    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-    @site = mock
-    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('http://example.com/meow/woof/', url_for(page))
@@ -261,13 +287,8 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create feed page
     @page = mock
     @page.expects(:[]).with(:feed_url).returns(nil)
+    @page.expects(:base_url).returns('http://example.com')
     @page.expects(:path).returns('/foo/bar/')
-
-    # Create site
-    config = mock
-    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-    @site = mock
-    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
@@ -291,17 +312,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   def test_atom_tag_for
     # Create feed page
     @page = mock
+    @page.expects(:base_url).returns('http://example.com')
 
     # Create article
     page = mock
     page.expects(:created_at).returns(Time.parse('2008-05-19'))
     page.expects(:path).returns('/foo/bar/')
-
-    # Create site
-    config = mock
-    config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-    @site = mock
-    @site.expects(:config).at_least_once.returns(config)
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(page))

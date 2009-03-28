@@ -3,6 +3,13 @@ module Nanoc3::Helpers
   # Nanoc3::Helpers::Blogging provides some functionality for building blogs,
   # such as finding articles and constructing feeds.
   #
+  # This helper has a few requirements. First, all blog articles should have
+  # the following attributes:
+  #
+  # * 'kind', set to 'article'.
+  #
+  # * 'created_at', set to the creation timestamp.
+  #
   # Some functions in this blogging helper, such as the +atom_feed+ function,
   # require additional attributes to be set; these attributes are described in
   # the documentation for these functions.
@@ -14,34 +21,15 @@ module Nanoc3::Helpers
   #   include Nanoc3::Helpers::Blogging
   module Blogging
 
-    # Returns the list of articles, sorted by descending creation date (so
-    # newer articles appear first).
-    #
-    # This function will consider a page to be an article when its "kind"
-    # argument equals "article".
-    #
-    # The +feed_tag_or_tags+ variable is a string or an array of strings
-    # containing the feed tag(s) for which the articles should be fetched. For
-    # example, the following two statements will fetch the articles that have
-    # a feed_tag equal to 'foobar' or a feed_tags array containing 'foobar':
-    #
-    #   sorted_articles('foobar')
-    #   sorted_articles([ 'foobar' ])
-    def sorted_articles(feed_tag_or_tags=nil)
-      feed_tags = [ feed_tag_or_tags ].flatten.compact
+    # Returns an unsorted list of articles.
+    def articles
+      @pages.select { |page| page.kind == 'article' }
+    end
 
-      # Get all articles
-      articles = @pages.select { |page| page.kind == 'article' }
-
-      # Reject articles without given feed tag
-      articles.delete_if do |article|
-        !feed_tags.empty? && (feed_tags & [ article.feed_tag || article.feed_tags ].flatten.compact).empty?
-      end
-
-      # Sort by creation date
-      articles.sort do |x,y|
-        y.created_at <=> x.created_at
-      end
+    # Returns a list of articles, sorted by descending creation date (so newer
+    # articles appear first).
+    def sorted_articles
+      articles.sort_by { |a| a.created_at }.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,
@@ -49,23 +37,6 @@ module Nanoc3::Helpers
     # following keys can be set:
     #
     # +limit+:: The maximum number of articles to show. Defaults to 5.
-    #
-    # +feed_tag+:: A string containing the feed tag that determines which
-    #              articles to fetch. See sorted_articles for details.
-    #
-    # +feed_tags+:: An array of strings containing the feed tags that
-    #               determine which articles to fetch. See sorted_articles for
-    #               details.
-    #
-    # +content_proc+:: A proc that returns the content of the given article,
-    #                  passed as a parameter. By default, given the argument
-    #                  +article+, this proc will return +article.content+.
-    #                  This function may not return nil.
-    #
-    # +excerpt_proc+:: A proc that returns the excerpt of the given article,
-    #                  passed as a parameter. By default, given the argument
-    #                  +article+, this proc will return +article.excerpt+.
-    #                  This function may return nil.
     #
     # The following attributes must be set on blog articles:
     #
@@ -75,8 +46,6 @@ module Nanoc3::Helpers
     #
     # The following attributes can optionally be set on blog articles to
     # change the behaviour of the Atom feed:
-    #
-    # * 'created_at', containing the datetime the article was published.
     #
     # * 'excerpt', containing an excerpt of the article, usually only a few
     #   lines long.
@@ -91,13 +60,13 @@ module Nanoc3::Helpers
     # used data source (the filesystem data source checks the file mtimes, for
     # instance).
     #
-    # The site configuration will need to have the following attributes:
+    # The feed page will need to have the following attributes:
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
-    #   would be "http://example.com".
-    #
-    # The feed page will need to have the following attributes:
+    #   would be "http://example.com". It is probably a good idea to define
+    #   this in the page defaults, i.e. the 'meta.yaml' file (at least if the
+    #   filesystem data source is being used, which is probably the case).
     #
     # * 'title', containing the title of the feed, which is usually also the
     #   title of the blog.
@@ -125,31 +94,55 @@ module Nanoc3::Helpers
       require 'builder'
 
       # Extract parameters
-      limit         = params[:limit] || 5
-      feed_tags     = [ params[:feed_tag] || params[:feed_tags] ].flatten.compact
-      content_proc  = params[:content_proc] || lambda { |article| article.content }
-      excerpt_proc  = params[:excerpt_proc] || lambda { |article| article.excerpt }
-      articles      = params[:articles] || sorted_articles(feed_tags)
+      limit = params[:limit] || 5
+
+      # Check feed page attributes
+      if @page.base_url.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no base_url')
+      end
+      if @page.title.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no title')
+      end
+      if @page.author_name.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no author_name')
+      end
+      if @page.author_uri.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed page has no author_uri')
+      end
+
+      # Get relevant articles
+      relevant_articles = articles.first(limit)
+
+      # Check article attributes
+      if relevant_articles.empty?
+        raise RuntimeError.new('Cannot build Atom feed: no articles')
+      end
+      if relevant_articles.any? { |a| a.created_at.nil? }
+        raise RuntimeError.new('Cannot build Atom feed: one or more articles lack created_at')
+      end
+
+      # Get sorted relevant articles
+      sorted_relevant_articles = sorted_articles.first(limit)
+
+      # Get most recent article
+      last_article = sorted_relevant_articles.first
 
       # Create builder
       buffer = ''
       xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
 
-      # Get articles
-      last_article = articles.first
-
       # Build feed
       xml.instruct!
       xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
         # Add primary attributes
-        xml.id      @site.config[:base_url] + '/'
+        xml.id      @page.base_url + '/'
         xml.title   @page.title
 
         # Add date
-        xml.updated last_article.mtime.to_iso8601_time unless last_article.nil?
+        xml.updated last_article.created_at.to_iso8601_time
 
         # Add links
-        xml.link(:rel => 'alternate', :href => @site.config[:base_url])
+        xml.link(:rel => 'alternate', :href => @page.base_url)
         xml.link(:rel => 'self',      :href => feed_url)
 
         # Add author information
@@ -159,23 +152,22 @@ module Nanoc3::Helpers
         end
 
         # Add articles
-        articles.first(limit).each do |a|
+        sorted_relevant_articles.each do |a|
           xml.entry do
             # Add primary attributes
             xml.id        atom_tag_for(a)
             xml.title     a.title, :type => 'html'
 
             # Add dates
-            xml.published a.created_at.to_iso8601_time unless a.created_at.nil?
+            xml.published a.created_at.to_iso8601_time
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
             xml.link(:rel => 'alternate', :href => url_for(a))
 
             # Add content
-            summary = excerpt_proc.call(a)
-            xml.content   content_proc.call(a), :type => 'html'
-            xml.summary   summary, :type => 'html' unless summary.nil?
+            xml.content   a.content, :type => 'html'
+            xml.summary   a.excerpt, :type => 'html' unless a.excerpt.nil?
           end
         end
       end
@@ -186,13 +178,13 @@ module Nanoc3::Helpers
     # Returns the URL for the given page. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
     def url_for(page)
-      @site.config[:base_url] + (page.custom_path_in_feed || page.path)
+      @page.base_url + (page.custom_path_in_feed || page.path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
-      @page[:feed_url] || @site.config[:base_url] + @page.path
+      @page[:feed_url] || @page.base_url + @page.path
     end
 
     # Returns an URI containing an unique ID for the given page. This will be
@@ -200,7 +192,7 @@ module Nanoc3::Helpers
     # created using a procedure suggested by Mark Pilgrim in this blog post:
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
     def atom_tag_for(page)
-      hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
+      hostname        = @page.base_url.sub(/.*:\/\/(.+?)\/?$/, '\1')
       formatted_date  = page.created_at.to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + page.path
