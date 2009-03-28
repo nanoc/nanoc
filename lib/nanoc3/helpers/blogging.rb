@@ -94,7 +94,8 @@ module Nanoc3::Helpers
       require 'builder'
 
       # Extract parameters
-      limit = params[:limit] || 5
+      limit             = params[:limit] || 5
+      relevant_articles = (params[:articles] || articles || []).first(limit)
 
       # Check feed page attributes
       if @page.base_url.nil?
@@ -110,9 +111,6 @@ module Nanoc3::Helpers
         raise RuntimeError.new('Cannot build Atom feed: feed page has no author_uri')
       end
 
-      # Get relevant articles
-      relevant_articles = articles.first(limit)
-
       # Check article attributes
       if relevant_articles.empty?
         raise RuntimeError.new('Cannot build Atom feed: no articles')
@@ -122,7 +120,7 @@ module Nanoc3::Helpers
       end
 
       # Get sorted relevant articles
-      sorted_relevant_articles = sorted_articles.first(limit)
+      sorted_relevant_articles = relevant_articles.sort_by { |a| a.created_at }.reverse
 
       # Get most recent article
       last_article = sorted_relevant_articles.first
