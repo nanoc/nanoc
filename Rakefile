@@ -83,7 +83,9 @@ spec = Gem::Specification.new do |s|
                               '--exclude' << 'lib/nanoc/binary_filters' <<
                               '--exclude' << 'lib/nanoc/extra/vcses'    <<
                               '--exclude' << 'lib/nanoc/filters'        <<
+                              '--exclude' << 'doc'                      <<
                               '--exclude' << 'test'                     <<
+                              '--exclude' << 'vendor'                   <<
                               '--line-numbers'
 
   s.files                 = %w( README LICENSE ChangeLog Rakefile ) + Dir[File.join('{bin,lib}', '**', '*')]
