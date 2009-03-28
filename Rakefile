@@ -34,13 +34,14 @@ AUTHOR    = 'Denis Defreyne'
 EMAIL     = 'denis.defreyne@stoneship.org'
 
 MESSAGE   = <<EOS
-Thanks for installing nanoc 2.1! Here are some resources to help you get started:
+Thanks for installing nanoc 2.2! Here are some resources to help you get started:
 
 * The tutorial at <http://nanoc.stoneship.org/help/tutorial/>
 * The manual at <http://nanoc.stoneship.org/help/manual/>
 * The discussion group at <http://groups.google.com/group/nanoc>
 
-Because nanoc 2.1 has a lot of new features, be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for details about this release.
+Be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for
+details about this release.
 
 Enjoy!
 EOS
