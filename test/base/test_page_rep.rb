@@ -929,6 +929,57 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     Nanoc::NotificationCenter.remove(:filtering_ended, :test)
   end
 
+  def test_do_layout_with_layout_variable
+    # Create page defaults
+    page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')
+
+    # Create site
+    site = mock
+    site.expects(:config).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:pages).returns([])
+    site.expects(:layouts).returns([])
+    site.expects(:page_defaults).at_least_once.returns(page_defaults)
+
+    # Create page
+    page = Nanoc::Page.new("content", {}, '/path/')
+    page.site = site
+    page.build_reps
+    page_rep = page.reps[0]
+
+    # Setup notifications
+    @filtering_started_count = 0
+    Nanoc::NotificationCenter.on(:filtering_started, :test) do
+      @filtering_started_count += 1
+    end
+    @filtering_ended_count = 0
+    Nanoc::NotificationCenter.on(:filtering_ended, :test) do
+      @filtering_ended_count += 1
+    end
+
+    # Create layout
+    layout = Nanoc::Layout.new(
+      'this layout uses the <%= @layout.filter %> filter',
+      { :filter => 'erb' },
+      '/foo/'
+    )
+    page_rep.expects(:layout).at_least_once.returns(layout)
+
+    # Layout
+    assert_nothing_raised { page_rep.instance_eval { do_layout } }
+    assert_equal(
+      'this layout uses the erb filter',
+      page_rep.instance_eval { @content[:post] }
+    )
+
+    # Check notifications
+    assert_equal(1, @filtering_started_count)
+    assert_equal(1, @filtering_ended_count)
+  ensure
+    Nanoc::NotificationCenter.remove(:filtering_started, :test)
+    Nanoc::NotificationCenter.remove(:filtering_ended, :test)
+  end
+
   def test_do_layout_without_layout
     # Create page defaults
     page_defaults = Nanoc::PageDefaults.new(:foo => 'bar')

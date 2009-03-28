@@ -290,7 +290,7 @@ module Nanoc
       # Create filter
       klass = layout.filter_class
       raise Nanoc::Errors::CannotDetermineFilterError.new(layout.path) if klass.nil?
-      filter = klass.new(self)
+      filter = klass.new(self, :layout => layout.to_proxy)
 
       # Layout
       Nanoc::NotificationCenter.post(:filtering_started, self, klass.identifier)
