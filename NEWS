@@ -11,6 +11,7 @@ New:
 * relative_path_to function in LinkTo helper
 * Rainpress filter
 * RelativizePaths filter
+* The current layout is now accessible through the @layout variable
 
 Changed:
 
