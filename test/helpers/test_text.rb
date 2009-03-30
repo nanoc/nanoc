@@ -1,6 +1,6 @@
 require 'helper'
 
-class Nanoc::Helpers::TextTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::TextTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
