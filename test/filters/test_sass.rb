@@ -1,6 +1,6 @@
 require 'helper'
 
-class Nanoc::Filters::HamlTest < Test::Unit::TestCase
+class Nanoc::Filters::SassTest < Test::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
