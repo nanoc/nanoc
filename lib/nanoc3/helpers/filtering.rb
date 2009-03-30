@@ -3,7 +3,8 @@ module Nanoc3::Helpers
   # Nanoc3::Helpers::Filtering provides a filter method, which allows parts of
   # a page to be filtered.
   #
-  # For example, the following piece of code only runs the "rubypants" filter on the second paragraph:
+  # For example, the following piece of code only runs the "rubypants" filter
+  # on the second paragraph:
   #
   #   <p>Lorem ipsum dolor sit amet...</p>
   #   <% filter :rubypants do %>

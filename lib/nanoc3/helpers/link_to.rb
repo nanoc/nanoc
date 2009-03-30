@@ -106,7 +106,7 @@ module Nanoc3::Helpers
 
       # Done
       relative_path
-     end
+    end
 
   end
 
