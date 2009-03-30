@@ -110,11 +110,46 @@ describe 'Nanoc::Site#load_data' do
 
 end
 
+describe 'Nanoc::Site#code' do
+
+  it 'should raise when data is not loaded yet' do
+    site = Nanoc3::Site.new({})
+    proc do
+      site.code
+    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
+  end
+
+end
+
 describe 'Nanoc::Site#pages' do
 
-  it 'should be empty when data is not loaded yet' do
+  it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
-    site.pages.must_equal []
+    proc do
+      site.pages
+    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
+  end
+
+end
+
+describe 'Nanoc::Site#assets' do
+
+  it 'should raise when data is not loaded yet' do
+    site = Nanoc3::Site.new({})
+    proc do
+      site.assets
+    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
+  end
+
+end
+
+describe 'Nanoc::Site#layouts' do
+
+  it 'should raise when data is not loaded yet' do
+    site = Nanoc3::Site.new({})
+    proc do
+      site.layouts
+    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
   end
 
 end

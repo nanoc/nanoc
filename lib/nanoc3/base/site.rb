@@ -55,22 +55,13 @@ module Nanoc3
     }
 
     attr_reader :config
-    attr_reader :data_source, :router
-    attr_reader :pages, :assets, :layouts, :code
 
     # Returns a Nanoc3::Site object for the site specified by the given
     # configuration hash +config+.
     #
     # +config+:: A hash containing the site configuration.
     def initialize(config)
-      # Load configuration
       @config = DEFAULT_CONFIG.merge(config.clean)
-
-      # Initialize data
-      @code    = nil
-      @pages   = []
-      @assets  = []
-      @layouts = []
     end
 
     # Returns the compiler for this site. Will create a new compiler if none
@@ -122,6 +113,30 @@ module Nanoc3
 
       # Done
       @data_loaded = true
+    end
+
+    # Returns this site's code. Raises an exception if data hasn't been loaded yet.
+    def code
+      raise Nanoc3::Errors::DataNotYetAvailableError.new('Code', false) unless @data_loaded
+      @code
+    end
+
+    # Returns this site's pages. Raises an exception if data hasn't been loaded yet.
+    def pages
+      raise Nanoc3::Errors::DataNotYetAvailableError.new('Pages', true) unless @data_loaded
+      @pages
+    end
+
+    # Returns this site's assets. Raises an exception if data hasn't been loaded yet.
+    def assets
+      raise Nanoc3::Errors::DataNotYetAvailableError.new('Assets', true) unless @data_loaded
+      @assets
+    end
+
+    # Returns this site's layouts. Raises an exception if data hasn't been loaded yet.
+    def layouts
+      raise Nanoc3::Errors::DataNotYetAvailableError.new('Layouts', true) unless @data_loaded
+      @layouts
     end
 
   private
