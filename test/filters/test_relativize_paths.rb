@@ -1,4 +1,4 @@
-require 'test/helper'
+require 'helper'
 
 class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
 

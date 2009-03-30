@@ -1,4 +1,4 @@
-require 'test/helper'
+require 'helper'
 
 class Nanoc::Helpers::TextTest < MiniTest::Unit::TestCase
 
