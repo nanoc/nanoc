@@ -11,6 +11,27 @@ namespace :doc do
     system *[ 'rdoc', rdoc_files, rdoc_options ].flatten
   end
 
+  desc 'Build the YARD documentation'
+  task :yardoc do
+    # Clean
+    FileUtils.rm_r 'doc' if File.exist?('doc')
+
+    # Get options
+    yardoc_files   = Dir.glob('lib/nanoc3/base/**/*.rb') +
+                     Dir.glob('lib/nanoc3/data_sources/**/*.rb') +
+                     Dir.glob('lib/nanoc3/extra/**/*.rb') +
+                     Dir.glob('lib/nanoc3/helpers/**/*.rb')
+    puts yardoc_files.join("\n- ")
+    yardoc_options = [
+      '--verbose',
+      '--readme', 'README'
+    ]
+
+    # Build
+    puts *[ 'yardoc', yardoc_files, yardoc_options ].flatten.inspect
+    system *[ 'yardoc', yardoc_files, yardoc_options ].flatten
+  end
+
 end
 
 desc 'Alias for doc:rdoc'
