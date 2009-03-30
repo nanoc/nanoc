@@ -150,6 +150,104 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     end
   end
 
+  def test_filename_page
+    # Create site
+    site = mock
+
+    # Create page
+    page = mock
+    page_proxy = Nanoc::Proxy.new(page)
+    page.expects(:path).returns('/foo/bar/baz/')
+    page.expects(:site).returns(site)
+    page.expects(:to_proxy).returns(page_proxy)
+
+    # Create page rep
+    page_rep = mock
+    page_rep_proxy = Nanoc::Proxy.new(page_rep)
+    page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    page_rep.expects(:page).returns(page)
+    page_rep.expects(:name).returns(:quux)
+    page_rep.expects(:to_proxy).returns(page_rep_proxy)
+
+    # Mock pages, layouts, assets
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:layouts).returns([])
+    site.expects(:config).returns({})
+
+    # Create filter
+    filter = Nanoc::Filter.new(page_rep)
+
+    # Check filename
+    assert_equal('page /foo/bar/baz/ (rep quux)', filter.filename)
+  end
+
+  def test_filename_asset
+    # Create site
+    site = mock
+
+    # Create asset
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:path).returns('/foo/bar/baz/')
+    asset.expects(:site).returns(site)
+    asset.expects(:to_proxy).returns(asset_proxy)
+
+    # Create asset rep
+    asset_rep = mock
+    asset_rep_proxy = Nanoc::Proxy.new(asset_rep)
+    asset_rep.expects(:is_a?).with(Nanoc::PageRep).returns(false)
+    asset_rep.expects(:asset).returns(asset)
+    asset_rep.expects(:name).returns(:quux)
+    asset_rep.expects(:to_proxy).returns(asset_rep_proxy)
+
+    # Mock pages, layouts, assets
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:layouts).returns([])
+    site.expects(:config).returns({})
+
+    # Create filter
+    filter = Nanoc::Filter.new(asset_rep)
+
+    # Check filename
+    assert_equal('asset /foo/bar/baz/ (rep quux)', filter.filename)
+  end
+
+  def test_filename_layout
+    # Create site
+    site = mock
+
+    # Create asset
+    asset = mock
+    asset_proxy = Nanoc::Proxy.new(asset)
+    asset.expects(:site).returns(site)
+    asset.expects(:to_proxy).returns(asset_proxy)
+
+    # Create asset rep
+    asset_rep = mock
+    asset_rep_proxy = Nanoc::Proxy.new(asset_rep)
+    asset_rep.expects(:is_a?).with(Nanoc::PageRep).returns(false)
+    asset_rep.expects(:asset).returns(asset)
+    asset_rep.expects(:to_proxy).returns(asset_rep_proxy)
+
+    # Mock layout
+    layout = mock
+    layout.expects(:path).returns('/wohba/')
+
+    # Mock pages, layouts, assets
+    site.expects(:pages).returns([])
+    site.expects(:assets).returns([])
+    site.expects(:layouts).returns([])
+    site.expects(:config).returns({})
+
+    # Create filter
+    filter = Nanoc::Filter.new(asset_rep, :layout => layout)
+
+    # Check filename
+    assert_equal('layout /wohba/', filter.filename)
+  end
+
   def test_extensions
     # Create site
     site = mock
