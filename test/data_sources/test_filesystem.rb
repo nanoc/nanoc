@@ -49,6 +49,8 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_pages
     with_temp_site do |site|
+      site.load_data
+
       assert_equal([ 'Home' ], site.pages.map { |page| page.attribute_named(:title) })
     end
   end
@@ -86,6 +88,8 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_layouts
     with_temp_site do |site|
+      site.load_data
+
       layout = site.layouts[0]
 
       assert_equal('/default/', layout.identifier)
@@ -96,6 +100,8 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_code
     with_temp_site do |site|
+      site.load_data
+
       assert_match(
         /# All files in the 'lib' directory will be loaded/,
         site.code.snippets[0][:code]

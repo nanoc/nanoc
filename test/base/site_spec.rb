@@ -2,9 +2,6 @@ require 'test/helper'
 
 describe 'Nanoc3::Site#initialize' do
 
-  # TODO implement should load code
-  # TODO implement should not raise for custom routers
-
   before { global_setup    }
   after  { global_teardown }
 
@@ -13,71 +10,152 @@ describe 'Nanoc3::Site#initialize' do
     site.config.must_equal Nanoc3::Site::DEFAULT_CONFIG.merge(:router => 'versioned')
   end
 
-  it 'should not raise in normal situations' do
-    Nanoc3::Site.new(
-      :output_dir   => 'output',
-      :data_source  => 'filesystem',
-      :router       => 'default'
-    )
+  it 'should not raise under normal circumstances' do
+    Nanoc3::Site.new({})
   end
 
   it 'should not raise for non-existant output directory' do
-    Nanoc3::Site.new(
-      :output_dir   => 'non_existant_output_dir',
-      :data_source  => 'filesystem',
-      :router       => 'default'
-    )
+    Nanoc3::Site.new(:output_dir => 'fklsdhailfdjalghlkasdflhagjskajdf')
   end
 
-  it 'should raise for unknown data sources' do
+  it 'should not raise for unknown data sources' do
     proc do
-      Nanoc3::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'unknown_data_source',
-        :router       => 'default'
-      )
-    end.must_raise Nanoc3::Errors::UnknownDataSourceError
+      Nanoc3::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
+    end
+  end
+
+  it 'should not raise for unknown routers' do
+    proc do
+      Nanoc3::Site.new(:router => 'fklsdhailfdjalghlkasdflhagjskajdf')
+    end
+  end
+
+end
+
+describe 'Nanoc::Site#load_data' do
+
+  it 'should load the data source' do
+    site = Nanoc3::Site.new({})
+
+    # Mock data source
+    data_source = mock
+    data_source.expects(:loading).yields
+    site.expects(:data_source).returns(data_source)
+
+    # Mock load_* methods
+    site.stubs(:load_code).with(false)
+    site.stubs(:load_pages)
+    site.stubs(:load_assets)
+    site.stubs(:load_layouts)
+
+    # Load data
+    site.load_data
+  end
+
+  it 'should call load_* methods' do
+    site = Nanoc3::Site.new({})
+
+    # Mock data source
+    data_source = mock
+    data_source.expects(:loading).yields
+    site.stubs(:data_source).returns(data_source)
+
+    # Mock load_* methods
+    site.expects(:load_code).with(false)
+    site.expects(:load_pages)
+    site.expects(:load_assets)
+    site.expects(:load_layouts)
+
+    # Load data
+    site.load_data
+  end
+
+  it 'should not load data twice if not forced' do
+    site = Nanoc3::Site.new({})
+
+    # Mock data source
+    data_source = mock
+    data_source.expects(:loading).once.yields
+    site.expects(:data_source).returns(data_source)
+
+    # Mock load_* methods
+    site.expects(:load_code).with(false).once
+    site.expects(:load_pages).once
+    site.expects(:load_assets).once
+    site.expects(:load_layouts).once
+
+    # Load data twice
+    site.load_data
+    site.load_data
+  end
+
+  it 'should load data twice if forced' do
+    site = Nanoc3::Site.new({})
+
+    # Mock data source
+    data_source = mock
+    data_source.expects(:loading).times(2).yields
+    site.expects(:data_source).times(2).returns(data_source)
+
+    # Mock load_* methods
+    site.expects(:load_code).with(true).times(2)
+    site.expects(:load_pages).times(2)
+    site.expects(:load_assets).times(2)
+    site.expects(:load_layouts).times(2)
+
+    # Load data twice
+    site.load_data(true)
+    site.load_data(true)
+  end
+
+end
+
+describe 'Nanoc::Site#pages' do
+
+  it 'should be empty when data is not loaded yet' do
+    site = Nanoc3::Site.new({})
+    site.pages.must_equal []
+  end
+
+end
+
+describe 'Nanoc::Site#compiler' do
+
+  it 'should not raise under normal circumstances' do
+    site = Nanoc3::Site.new({})
+    site.compiler
+  end
+
+end
+
+describe 'Nanoc::Site#router' do
+
+  it 'should not raise for known routers' do
+    site = Nanoc3::Site.new({})
+    site.router
   end
 
   it 'should raise for unknown routers' do
     proc do
-      Nanoc3::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'filesystem',
-        :router       => 'unknown_router'
-      )
+      site = Nanoc3::Site.new(:router => 'fklsdhailfdjalghlkasdflhagjskajdf')
+      site.router
     end.must_raise Nanoc3::Errors::UnknownRouterError
   end
 
-  it 'should query the data source when loading data' do
-    site = Nanoc3::Site.new({}, :load_data => false)
-    site.data_source.expects(:pages).returns([
-      Nanoc3::Page.new("Hi!",          {}, '/'),
-      Nanoc3::Page.new("Hello there.", {}, '/about/')
-    ])
-    site.data_source.expects(:assets).returns([
-      Nanoc3::Asset.new(File.open('/dev/null'), {}, '/something/')
-    ])
-    site.data_source.expects(:layouts).returns([
-      Nanoc3::Layout.new(
-        'HEADER <%= yield %> FOOTER',
-        { :filter => 'erb' },
-        '/quux/'
-      )
-    ])
-    site.load_data
+end
 
-    # Check classes
-    site.code.must_be_instance_of Nanoc3::Code
-    site.pages.each   { |p| p.must_be_instance_of Nanoc3::Page     }
-    site.assets.each  { |p| p.must_be_instance_of Nanoc3::Asset    }
-    site.layouts.each { |l| l.must_be_instance_of Nanoc3::Layout   }
+describe 'Nanoc::Site#data_source' do
 
-    # Check whether site is set
-    site.code.site.must_equal           site
-    site.pages.each     { |p| p.site.must_equal site }
-    site.assets.each    { |p| p.site.must_equal site }
-    site.layouts.each   { |l| l.site.must_equal site }
+  it 'should not raise for known data sources' do
+    site = Nanoc3::Site.new({})
+    site.data_source
+  end
+
+  it 'should raise for unknown data sources' do
+    proc do
+      site = Nanoc3::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
+      site.data_source
+    end.must_raise Nanoc3::Errors::UnknownDataSourceError
   end
 
 end

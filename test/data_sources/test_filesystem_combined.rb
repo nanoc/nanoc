@@ -56,6 +56,8 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_pages
     with_temp_site('filesystem_combined') do |site|
+      site.load_data
+
       assert_equal(1, site.pages.size)
 
       assert_equal('Home', site.pages[0].attribute_named(:title))
@@ -64,6 +66,8 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_assets
     with_temp_site('filesystem_combined') do |site|
+      site.load_data
+
       # Create asset with extension
       File.open('assets/foo.fooext', 'w') do |io|
         io.write("-----\n")
@@ -93,6 +97,8 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_layouts
     with_temp_site('filesystem_combined') do |site|
+      site.load_data
+
       layout = site.layouts[0]
 
       assert_equal('/default/', layout.identifier)
@@ -103,6 +109,8 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_code
     with_temp_site('filesystem_combined') do |site|
+      site.load_data
+
       assert_match(
         /# All files in the 'lib' directory will be loaded/,
         site.code.snippets[0][:code]
