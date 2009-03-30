@@ -12,10 +12,13 @@ New:
 * Rainpress filter
 * RelativizePaths filter
 * The current layout is now accessible through the @layout variable
+* Much more informative stack traces when something goes wrong
 
 Changed:
 
 * The commandline option parser is now a lot more reliable
+* atom_feed now takes optional :content_proc, :excerpt_proc and :articles
+  parameters
 
 2.1.6
 -----
