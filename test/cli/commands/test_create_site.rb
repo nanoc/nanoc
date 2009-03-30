@@ -18,6 +18,7 @@ class Nanoc3::CLI::CreateSiteCommandTest < MiniTest::Unit::TestCase
       
       in_dir %w{ foo } do
         site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+        site.load_data
         site.compiler.run
       end
     end

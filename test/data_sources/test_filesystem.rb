@@ -325,6 +325,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
       # Load and compile site
       site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+      site.load_data
       site.compiler.run
     end
   end

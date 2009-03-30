@@ -26,6 +26,14 @@ module Nanoc3
     # UnknownFilterError, but specific for filters for layouts.
     class CannotDetermineFilterError < GenericError ; end
 
+    # Error that is raised when data is requested when the data is not yet
+    # available (possibly due to a missing Nanoc::Site#load_data).
+    class DataNotYetAvailableError < GenericError
+      def initialize(type, plural)
+        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.")
+      end
+    end
+
     # Error that is raised during site compilation when a page (directly or
     # indirectly) includes its own page content, leading to endless recursion.
     class RecursiveCompilationError < GenericError ; end
