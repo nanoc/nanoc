@@ -14,6 +14,7 @@ class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
 
       # Create page 0
       @pages[0].expects(:is_hidden).returns(false)
+      @pages[0].expects(:skip_output).returns(false)
       @pages[0].expects(:path).returns('/foo/')
       @pages[0].expects(:mtime).returns(nil)
       @pages[0].expects(:changefreq).returns(nil)
@@ -24,6 +25,7 @@ class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
 
       # Create page 2
       @pages[2].expects(:is_hidden).returns(false)
+      @pages[2].expects(:skip_output).returns(false)
       @pages[2].expects(:path).returns('/baz/')
       @pages[2].expects(:mtime).times(2).returns(Time.parse('12/07/2004'))
       @pages[2].expects(:changefreq).times(2).returns('daily')
@@ -32,6 +34,10 @@ class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
       # Create sitemap page
       @page = mock
       @page.expects(:base_url).times(2).returns('http://example.com')
+
+      # Create site
+      @site = mock
+      @site.expects(:config).times(2).returns({ :base_url => nil })
 
       # Check
       assert_nothing_raised do

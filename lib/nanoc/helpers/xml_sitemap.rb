@@ -43,9 +43,10 @@ module Nanoc::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
         # Add page
-        @pages.reject { |p| p.is_hidden }.each do |page|
+        @pages.reject { |p| p.is_hidden || p.skip_output }.each do |page|
           xml.url do
-            xml.loc         @page.base_url + page.path
+            loc = (@site.config[:base_url] || @page.base_url) + page.path
+            xml.loc         loc
             xml.lastmod     page.mtime.to_iso8601_date unless page.mtime.nil?
             xml.changefreq  page.changefreq unless page.changefreq.nil?
             xml.priority    page.priority unless page.priority.nil?
