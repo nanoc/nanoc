@@ -55,38 +55,50 @@ module Nanoc3
     }
 
     attr_reader :config
-    attr_reader :compiler, :data_source, :router
+    attr_reader :data_source, :router
     attr_reader :pages, :assets, :layouts, :code
 
     # Returns a Nanoc3::Site object for the site specified by the given
     # configuration hash +config+.
     #
     # +config+:: A hash containing the site configuration.
-    def initialize(config, params={})
+    def initialize(config)
       # Load configuration
       @config = DEFAULT_CONFIG.merge(config.clean)
 
-      # Create data source
-      @data_source_class = Nanoc3::DataSource.named(@config[:data_source])
-      raise Nanoc3::Errors::UnknownDataSourceError.new(@config[:data_source]) if @data_source_class.nil?
-      @data_source = @data_source_class.new(self)
-
-      # Create compiler
-      @compiler = Compiler.new(self)
-
-      # Load code (necessary for custom routers)
-      load_code
-
-      # Create router
-      @router_class = Nanoc3::Router.named(@config[:router])
-      raise Nanoc3::Errors::UnknownRouterError.new(@config[:router]) if @router_class.nil?
-      @router = @router_class.new(self)
-
       # Initialize data
+      @code    = nil
       @pages   = []
       @assets  = []
       @layouts = []
-      load_data if params[:load_data] || !params.has_key?(:load_data)
+    end
+
+    # Returns the compiler for this site. Will create a new compiler if none
+    # exists yet.
+    def compiler
+      @compiler ||= Compiler.new(self)
+    end
+
+    # Returns the data source for this site. Will create a new data source if
+    # none exists yet. Raises Nanoc3::Errors::UnknownDataSourceError if the
+    # site configuration specifies an unknown data source.
+    def data_source
+      return @data_source if @data_source
+
+      data_source_class = Nanoc3::DataSource.named(@config[:data_source])
+      raise Nanoc3::Errors::UnknownDataSourceError.new(@config[:data_source]) if data_source_class.nil?
+      @data_source = data_source_class.new(self)
+    end
+
+    # Returns the router for this site. Will create a new router if none
+    # exists yet. Raises Nanoc3::Errors::UnknownRouterError if the site
+    # configuration specifies an unknown router.
+    def router
+      return @router if @router
+
+      router_class = Nanoc3::Router.named(@config[:router])
+      raise Nanoc3::Errors::UnknownRouterError.new(@config[:router]) if router_class.nil?
+      @router ||= router_class.new(self)
     end
 
     # Loads the site data. This will query the Nanoc3::DataSource associated
@@ -98,16 +110,17 @@ module Nanoc3
     #           loaded before, to circumvent caching issues.
     def load_data(force=false)
       # Don't load data twice
-      @data_loaded ||= false
       return if @data_loaded and !force
 
       # Load all data
-      @data_source.loading do
+      data_source.loading do
         load_code(force)
         load_pages
         load_assets
         load_layouts
       end
+
+      # Done
       @data_loaded = true
     end
 
@@ -120,7 +133,7 @@ module Nanoc3
       return if @code_loaded and !force
 
       # Get code
-      @code = @data_source.code
+      @code = data_source.code
       @code.site = self
 
       # Execute code
@@ -131,7 +144,7 @@ module Nanoc3
     # Loads this site's pages, sets up page child-parent relationships and
     # builds each page's list of page representations.
     def load_pages
-      @pages = @data_source.pages
+      @pages = data_source.pages
       @pages.each { |p| p.site = self }
 
       # Setup child-parent links
@@ -150,13 +163,13 @@ module Nanoc3
     # Loads this site's assets and builds each asset's list of asset
     # representations.
     def load_assets
-      @assets = @data_source.assets
+      @assets = data_source.assets
       @assets.each { |a| a.site = self }
     end
 
     # Loads this site's layouts.
     def load_layouts
-      @layouts = @data_source.layouts
+      @layouts = data_source.layouts
       @layouts.each { |l| l.site = self }
     end
 
