@@ -24,27 +24,23 @@ class Nanoc::PluginTest < Test::Unit::TestCase
   end
 
   def test_named
-    assert_nothing_raised do
-      # Find existant filter
-      filter = Nanoc::Filter.named(:erb)
-      assert(!filter.nil?)
+    # Find existant filter
+    filter = Nanoc::Filter.named(:erb)
+    assert(!filter.nil?)
 
-      # Find non-existant filter
-      filter = Nanoc::Filter.named(:lksdaffhdlkashlgkskahf)
-      assert(filter.nil?)
-    end
+    # Find non-existant filter
+    filter = Nanoc::Filter.named(:lksdaffhdlkashlgkskahf)
+    assert(filter.nil?)
   end
 
   def test_find
-    assert_nothing_raised do
-      # Find existant filter
-      filter = Nanoc::Filter.named(:erb)
-      assert(!filter.nil?)
+    # Find existant filter
+    filter = Nanoc::Filter.named(:erb)
+    assert(!filter.nil?)
 
-      # Find non-existant filter
-      filter = Nanoc::Filter.named(:lksdaffhdlkashlgkskahf)
-      assert(filter.nil?)
-    end
+    # Find non-existant filter
+    filter = Nanoc::Filter.named(:lksdaffhdlkashlgkskahf)
+    assert(filter.nil?)
   end
 
 end

@@ -7,8 +7,8 @@ class Nanoc::OldPageFilterTest < Test::Unit::TestCase
 
   def test_compile_site_with_filters
     with_site_fixture 'site_with_filters' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert_equal(2, Dir[File.join('output', '*')].size)
       assert(File.file?('output/index.html'))
@@ -20,8 +20,8 @@ class Nanoc::OldPageFilterTest < Test::Unit::TestCase
 
   def test_compile_site_with_custom_filters
     with_site_fixture 'site_with_custom_filters' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir[File.join('output', '*')].size)
@@ -31,8 +31,8 @@ class Nanoc::OldPageFilterTest < Test::Unit::TestCase
 
   def test_compile_site_with_post_filters
     with_site_fixture 'site_with_post_filters' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir[File.join('output', '*')].size)
@@ -43,8 +43,8 @@ class Nanoc::OldPageFilterTest < Test::Unit::TestCase
 
   def test_compile_site_with_layouts_variable
     with_site_fixture 'site_with_layouts_variable' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.file?('output/index.html'))
       assert_equal(1, Dir[File.join('output', '*')].size)

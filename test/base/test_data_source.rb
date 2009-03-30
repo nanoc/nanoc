@@ -28,9 +28,9 @@ class Nanoc::DataSourceTest < Test::Unit::TestCase
     data_source = Nanoc::DataSource.new(nil)
 
     # Test optional methods
-    assert_nothing_raised { data_source.up }
-    assert_nothing_raised { data_source.down }
-    assert_nothing_raised { data_source.update }
+    data_source.up
+    data_source.down
+    data_source.update
 
     # Test required methods - general
     assert_raise(NotImplementedError) { data_source.setup }

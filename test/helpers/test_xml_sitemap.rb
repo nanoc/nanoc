@@ -40,9 +40,7 @@ class Nanoc::Helpers::XMLSitemapTest < Test::Unit::TestCase
       @site.expects(:config).times(2).returns({ :base_url => nil })
 
       # Check
-      assert_nothing_raised do
-        xml_sitemap
-      end
+      xml_sitemap
     end
   ensure
     @pages = nil

@@ -705,9 +705,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Filter
-    assert_nothing_raised do
-      page_rep.instance_eval { do_filter(:pre) }
-    end
+    page_rep.instance_eval { do_filter(:pre) }
     assert_equal(
       'pre content',
       page_rep.instance_eval { @content[:pre] }
@@ -747,9 +745,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Filter
-    assert_nothing_raised do
-      page_rep.instance_eval { do_filter(:post) }
-    end
+    page_rep.instance_eval { do_filter(:post) }
     assert_equal(
       'post content',
       page_rep.instance_eval { @content[:post] }
@@ -798,9 +794,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Filter
-    assert_nothing_raised do
-      page_rep.instance_eval { do_filter(:pre) }
-    end
+    page_rep.instance_eval { do_filter(:pre) }
     assert_equal('foo', page_rep.instance_eval { @content[:pre] })
 
     # Check notifications
@@ -918,7 +912,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep.expects(:layout).at_least_once.returns(layout)
 
     # Layout
-    assert_nothing_raised { page_rep.instance_eval { do_layout } }
+    page_rep.instance_eval { do_layout }
     assert_equal('this is a layout', page_rep.instance_eval { @content[:post] })
 
     # Check notifications
@@ -966,7 +960,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep.expects(:layout).at_least_once.returns(layout)
 
     # Layout
-    assert_nothing_raised { page_rep.instance_eval { do_layout } }
+    page_rep.instance_eval { do_layout }
     assert_equal(
       'this layout uses the erb filter',
       page_rep.instance_eval { @content[:post] }
@@ -1007,7 +1001,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
 
     # Layout
     page_rep.instance_eval { @content[:pre] = 'pre content' }
-    assert_nothing_raised { page_rep.instance_eval { do_layout } }
+    page_rep.instance_eval { do_layout }
     assert_equal('pre content', page_rep.instance_eval { @content[:post] })
 
     # Check notifications
@@ -1075,9 +1069,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep.expects(:disk_path).times(2).returns('tmp/foo/bar/baz/quux.txt')
 
     # Compile
-    assert_nothing_raised do
-      page_rep.instance_eval { write }
-    end
+    page_rep.instance_eval { write }
 
     # Check
     assert(File.file?('tmp/foo/bar/baz/quux.txt'))

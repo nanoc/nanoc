@@ -35,9 +35,7 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     @_obj_rep = page_rep
 
     # Render
-    assert_nothing_raised do
-      assert_equal('Hi, this is the Sample page', render('/foo/'))
-    end
+    assert_equal('Hi, this is the Sample page', render('/foo/'))
   end
 
   def test_render_with_other_assigns
@@ -70,9 +68,7 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     @_obj_rep = page_rep
 
     # Render
-    assert_nothing_raised do
-      assert_equal('Foo Bar Baz', render('/foo/', :middle => 'Bar'))
-    end
+    assert_equal('Foo Bar Baz', render('/foo/', :middle => 'Bar'))
   end
 
   def test_render_with_unknown_layout

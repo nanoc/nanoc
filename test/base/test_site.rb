@@ -154,13 +154,11 @@ class Nanoc::SiteTest < Test::Unit::TestCase
 
       in_dir [ 'testing' ] do
         # Test everything okay
-        assert_nothing_raised do
-          Nanoc::Site.new(
-            :output_dir   => 'output',
-            :data_source  => 'filesystem',
-            :router       => 'default'
-          )
-        end
+        Nanoc::Site.new(
+          :output_dir   => 'output',
+          :data_source  => 'filesystem',
+          :router       => 'default'
+        )
 
         # Test unknown data source
         assert_raise(Nanoc::Errors::UnknownDataSourceError) do
@@ -184,22 +182,17 @@ class Nanoc::SiteTest < Test::Unit::TestCase
   end
 
   def test_initialize_custom_router
-    assert_nothing_raised do
-      Nanoc::Site.new(
-        :output_dir   => 'output',
-        :data_source  => 'early_loading_code_data_source',
-        :router       => 'early_loading_code_router'
-      )
-    end
+    Nanoc::Site.new(
+      :output_dir   => 'output',
+      :data_source  => 'early_loading_code_data_source',
+      :router       => 'early_loading_code_router'
+    )
   end
 
   def test_load_data
     # Create site with oldschool data source
-    site = nil
-    assert_nothing_raised do
-      site = Nanoc::Site.new(:data_source => 'test_oldschool_data_source')
-      site.load_data
-    end
+    site = Nanoc::Site.new(:data_source => 'test_oldschool_data_source')
+    site.load_data
 
     # Check classes
     assert(site.pages.all? { |p| p.is_a?(Nanoc::Page) })
@@ -216,11 +209,8 @@ class Nanoc::SiteTest < Test::Unit::TestCase
     assert(site.code.site == site)
 
     # Create site with newschool data source
-    site = nil
-    assert_nothing_raised do
-      site = Nanoc::Site.new(:data_source => 'test_newschool_data_source')
-      site.load_data
-    end
+    site = Nanoc::Site.new(:data_source => 'test_newschool_data_source')
+    site.load_data
 
     # Check classes
     assert(site.pages.all? { |p| p.is_a?(Nanoc::Page) })

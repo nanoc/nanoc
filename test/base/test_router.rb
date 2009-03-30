@@ -40,9 +40,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
 
     # Check
-    assert_nothing_raised do
-      assert_equal('tmp/out/foo.html', router.disk_path_for(page_rep))
-    end
+    assert_equal('tmp/out/foo.html', router.disk_path_for(page_rep))
   end
 
   def test_disk_path_for_with_cp_without_index
@@ -58,9 +56,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_nothing_raised do
-      assert_equal('tmp/out/foo.html', router.disk_path_for(page_rep))
-    end
+    assert_equal('tmp/out/foo.html', router.disk_path_for(page_rep))
   end
 
   def test_disk_path_for_without_cp_with_index
@@ -78,9 +74,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo/index.html')
 
     # Check
-    assert_nothing_raised do
-      assert_equal('tmp/out/foo/index.html', router.disk_path_for(page_rep))
-    end
+    assert_equal('tmp/out/foo/index.html', router.disk_path_for(page_rep))
   end
 
   def test_disk_path_for_with_cp_with_index
@@ -96,9 +90,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_nothing_raised do
-      assert_equal('tmp/out/foo/index.html', router.disk_path_for(page_rep))
-    end
+    assert_equal('tmp/out/foo/index.html', router.disk_path_for(page_rep))
   end
 
   def test_web_path_for_without_cp_without_index
@@ -119,9 +111,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
 
     # Check
-    assert_nothing_raised do
-      assert_equal('/foo.html', router.web_path_for(page_rep))
-    end
+    assert_equal('/foo.html', router.web_path_for(page_rep))
   end
 
   def test_web_path_for_with_cp_without_index
@@ -140,9 +130,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_nothing_raised do
-      assert_equal('/foo.html', router.web_path_for(page_rep))
-    end
+    assert_equal('/foo.html', router.web_path_for(page_rep))
   end
 
   def test_web_path_for_without_cp_with_index
@@ -163,9 +151,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo/index.html')
 
     # Check
-    assert_nothing_raised do
-      assert_equal('/foo/', router.web_path_for(page_rep))
-    end
+    assert_equal('/foo/', router.web_path_for(page_rep))
   end
 
   def test_web_path_for_with_cp_with_index
@@ -184,9 +170,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router = Nanoc::Router.new(site)
 
     # Check
-    assert_nothing_raised do
-      assert_equal('/foo/', router.web_path_for(page_rep))
-    end
+    assert_equal('/foo/', router.web_path_for(page_rep))
   end
 
 end

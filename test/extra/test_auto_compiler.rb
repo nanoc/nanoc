@@ -347,15 +347,13 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
       begin
-        assert_nothing_raised do
-          # Serve
-          response = autocompiler.instance_eval { serve_rep(page_rep) }
+        # Serve
+        response = autocompiler.instance_eval { serve_rep(page_rep) }
 
-          # Check response
-          assert_equal(200,                     response[0])
-          assert_equal('text/html',             response[1]['Content-Type'])
-          assert_match(/compiled page content/, response[2][0])
-        end
+        # Check response
+        assert_equal(200,                     response[0])
+        assert_equal('text/html',             response[1]['Content-Type'])
+        assert_match(/compiled page content/, response[2][0])
       ensure
         # Clean up
         FileUtils.rm_rf(page_rep.disk_path)
@@ -382,16 +380,14 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new(site)
 
-      assert_nothing_raised do
-        # Serve
-        response = autocompiler.instance_eval { serve_rep(page_rep) }
+      # Serve
+      response = autocompiler.instance_eval { serve_rep(page_rep) }
 
-        # Check response
-        assert_equal(500,                 response[0])
-        assert_equal('text/html',         response[1]['Content-Type'])
-        assert_match(/aah! fail!/,        response[2][0])
-        assert_match(/500 Server Error/,  response[2][0])
-      end
+      # Check response
+      assert_equal(500,                 response[0])
+      assert_equal('text/html',         response[1]['Content-Type'])
+      assert_match(/aah! fail!/,        response[2][0])
+      assert_match(/500 Server Error/,  response[2][0])
     end
   end
 
@@ -404,27 +400,21 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new(self)
 
-      # Test file 1
-      assert_nothing_raised do
-        # Serve
-        response = autocompiler.instance_eval { serve_file('tmp/test.css') }
+      # Serve file 1
+      response = autocompiler.instance_eval { serve_file('tmp/test.css') }
 
-        # Check response
-        assert_equal(200,         response[0])
-        assert_equal('text/css',  response[1]['Content-Type'])
-        assert(response[2][0].include?('body { color: blue; }'))
-      end
+      # Check response for file 1
+      assert_equal(200,         response[0])
+      assert_equal('text/css',  response[1]['Content-Type'])
+      assert(response[2][0].include?('body { color: blue; }'))
 
-      # Test file 2
-      assert_nothing_raised do
-        # Serve
-        response = autocompiler.instance_eval { serve_file('tmp/test') }
+      # Serve file 2
+      response = autocompiler.instance_eval { serve_file('tmp/test') }
 
-        # Check response
-        assert_equal(200,                         response[0])
-        assert_equal('application/octet-stream',  response[1]['Content-Type'])
-        assert(response[2][0].include?('random blah blah stuff'))
-      end
+      # Check response for file 2
+      assert_equal(200,                         response[0])
+      assert_equal('application/octet-stream',  response[1]['Content-Type'])
+      assert(response[2][0].include?('random blah blah stuff'))
     end
   end
 

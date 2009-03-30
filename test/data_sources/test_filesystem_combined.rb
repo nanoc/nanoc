@@ -77,11 +77,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_pages
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_equal(1, site.pages.size)
-
-        assert_equal('Home', site.pages[0].attribute_named(:title))
-      end
+      assert_equal(1, site.pages.size)
+      assert_equal('Home', site.pages[0].attribute_named(:title))
     end
   end
 
@@ -101,9 +98,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_page_defaults
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_equal('html', site.page_defaults.attributes[:extension])
-      end
+      assert_equal('html', site.page_defaults.attributes[:extension])
     end
   end
 
@@ -158,9 +153,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_asset_defaults
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_equal([], site.asset_defaults.attributes[:filters])
-      end
+      assert_equal([], site.asset_defaults.attributes[:filters])
     end
   end
 
@@ -172,12 +165,10 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_templates
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        template = site.templates[0]
-        assert_equal('default', template.name)
-        assert_equal({ :title => 'A New Page' }, template.page_attributes)
-        assert_equal('Hi, I\'m a new page!', template.page_content)
-      end
+      template = site.templates[0]
+      assert_equal('default', template.name)
+      assert_equal({ :title => 'A New Page' }, template.page_attributes)
+      assert_equal('Hi, I\'m a new page!', template.page_content)
     end
   end
 
@@ -197,13 +188,11 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_layouts
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        layout = site.layouts[0]
+      layout = site.layouts[0]
 
-        assert_equal('/default/', layout.path)
-        assert_equal('erb', layout.attribute_named(:filter))
-        assert(layout.content.include?('<%= @page.title %></title>'))
-      end
+      assert_equal('/default/', layout.path)
+      assert_equal('erb', layout.attribute_named(:filter))
+      assert(layout.content.include?('<%= @page.title %></title>'))
     end
   end
 
@@ -223,9 +212,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_code
     with_temp_site('filesystem_combined') do |site|
-      assert_nothing_raised do
-        assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
-      end
+      assert_match(/# All files in the 'lib' directory will be loaded/, site.code.data)
     end
   end
 
@@ -251,14 +238,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        [ 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
-        data_source.instance_eval do
-          files('tmp/foo', false).sort
-        end
-      )
-    end
+    assert_equal(
+      [ 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+      data_source.instance_eval do
+        files('tmp/foo', false).sort
+      end
+    )
   end
 
   def test_files_with_recursion
@@ -277,14 +262,12 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_nothing_raised do
-      assert_equal(
-        [ 'tmp/foo/a/b/c.html', 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
-        data_source.instance_eval do
-          files('tmp/foo', true).sort
-        end
-      )
-    end
+    assert_equal(
+      [ 'tmp/foo/a/b/c.html', 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+      data_source.instance_eval do
+        files('tmp/foo', true).sort
+      end
+    )
   end
 
   def test_parse_file_invalid
@@ -341,8 +324,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
   def test_compile_site_with_file_object
     with_site_fixture 'site_with_filesystem2_data_source' do |site|
-      assert_nothing_raised() { site.compiler.run }
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
+      site.compiler.run
 
       assert(File.read('output/index.html').include?("This page was last modified at #{File.new('content/index.txt').mtime}."))
     end
@@ -354,8 +337,8 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
         File.open('content/index.txt~',   'w') { |io| }
         File.open('layouts/default.erb~', 'w') { |io| }
 
-        assert_nothing_raised() { site.compiler.run }
-        assert_nothing_raised() { site.compiler.run }
+        site.compiler.run
+        site.compiler.run
 
         assert_equal(2, site.pages.size)
         assert_equal(1, site.layouts.size)
@@ -380,7 +363,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       ########## EVERYTHING UP TO DATE
 
@@ -393,7 +376,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (shouldn't have changed)
       assert((recent_past - File.new('output/index.html').mtime).abs < threshold)
@@ -409,7 +392,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -425,7 +408,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -441,7 +424,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)
@@ -457,7 +440,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
 
       # Compile
       site.load_data(true)
-      assert_nothing_raised() { site.compiler.run }
+      site.compiler.run
 
       # Check compiled file's mtime (should be now)
       assert((now - File.new('output/index.html').mtime).abs < threshold)

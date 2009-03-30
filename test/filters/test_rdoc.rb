@@ -6,26 +6,24 @@ class Nanoc::Filters::RDocTest < Test::Unit::TestCase
   def teardown ; global_teardown ; end
 
   def test_filter
-    assert_nothing_raised do
-      # Create site
-      site = mock
+    # Create site
+    site = mock
 
-      # Create page
-      page = mock
-      page.expects(:site).returns(site)
+    # Create page
+    page = mock
+    page.expects(:site).returns(site)
 
-      # Create page rep
-      page_rep = mock
-      page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
-      page_rep.expects(:page).returns(page)
+    # Create page rep
+    page_rep = mock
+    page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
+    page_rep.expects(:page).returns(page)
 
-      # Get filter
-      filter = ::Nanoc::Filters::RDoc.new(page_rep)
+    # Get filter
+    filter = ::Nanoc::Filters::RDoc.new(page_rep)
 
-      # Run filter
-      result = filter.run("= Foo")
-      assert_equal("<h1>Foo</h1>\n", result)
-    end
+    # Run filter
+    result = filter.run("= Foo")
+    assert_equal("<h1>Foo</h1>\n", result)
   end
 
 end
