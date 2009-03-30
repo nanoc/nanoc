@@ -15,6 +15,7 @@ class Nanoc::Filters::ERBTest < Test::Unit::TestCase
       page_proxy = Nanoc::Proxy.new(page)
       page.expects(:site).returns(site)
       page.expects(:to_proxy).returns(page_proxy)
+      page.expects(:path).returns('/moo/')
 
       # Create page rep
       page_rep = mock
@@ -22,6 +23,7 @@ class Nanoc::Filters::ERBTest < Test::Unit::TestCase
       page_rep.expects(:is_a?).with(Nanoc::PageRep).returns(true)
       page_rep.expects(:page).returns(page)
       page_rep.expects(:to_proxy).returns(page_rep_proxy)
+      page_rep.expects(:name).returns(:foobar)
 
       # Mock site
       site.expects(:pages).returns([])

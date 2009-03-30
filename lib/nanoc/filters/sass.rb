@@ -8,6 +8,7 @@ module Nanoc::Filters
 
       # Get options
       options = @obj_rep.attribute_named(:sass_options) || {}
+      options[:filename] = filename
 
       # Get result
       ::Sass::Engine.new(content, options).render
