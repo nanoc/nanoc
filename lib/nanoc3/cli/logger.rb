@@ -15,13 +15,18 @@ module Nanoc3::CLI
 
     include Singleton
 
-    # The log leve, which can be :high, :low or :off (which will log all
+    # The log level, which can be :high, :low or :off (which will log all
     # messages, only high-priority messages, or no messages at all,
     # respectively).
     attr_accessor :level
 
+    # Whether to use color in log messages or not
+    attr_accessor :color
+    alias_method :color?, :color
+
     def initialize # :nodoc:
       @level = :high
+      @color = true
     end
 
     # Logs a file-related action.
@@ -32,16 +37,13 @@ module Nanoc3::CLI
     #            :identical.
     #
     # +identifier+:: The identifier of the item the action was performed on.
-    def file(level, action, identifier, params={})
-      duration = params.has_key?(:duration) ? params[:duration] : nil
-      color    = params.has_key?(:color)    ? params[:color]    : true
-
+    def file(level, action, identifier, duration=nil)
       log(
         level,
         '%s%12s%s  %s%s' % [
-          color ? ACTION_COLORS[action.to_sym] : '',
+          color? ? ACTION_COLORS[action.to_sym] : '',
           action,
-          color ? "\e[0m" : '',
+          color? ? "\e[0m" : '',
           duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
           identifier
         ]
