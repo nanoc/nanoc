@@ -4,9 +4,6 @@ module Nanoc3::CLI
 
     attr_reader :site
 
-    attr_reader :color
-    alias_method :color?, :color
-
     def initialize
       super('nanoc3')
 
@@ -22,9 +19,6 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::CreateSiteCommand.new)
       add_command(Nanoc3::CLI::InfoCommand.new)
       add_command(Nanoc3::CLI::UpdateCommand.new)
-
-      # Set flags
-      @color = true
     end
 
     # Helper function which can be called when a command is executed that
@@ -119,7 +113,7 @@ module Nanoc3::CLI
         Nanoc3::CLI::Logger.instance.level = :low
       # Handle no-color option
       elsif option == :'no-color'
-        @color = false
+        Nanoc3::CLI::Logger.instance.color = false
       # Handle help option
       elsif option == :help
         show_help
