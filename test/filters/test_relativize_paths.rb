@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::RelativizePathsTest < Test::Unit::TestCase
+class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

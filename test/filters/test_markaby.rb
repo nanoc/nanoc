@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::MarkabyTest < Test::Unit::TestCase
+class Nanoc::Filters::MarkabyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

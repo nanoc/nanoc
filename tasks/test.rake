@@ -1,4 +1,4 @@
-require 'test/unit'
+require 'minitest/unit'
 
 test = namespace :test do
 
@@ -15,6 +15,8 @@ test = namespace :test do
 
     $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
 
+    MiniTest::Unit.autorun
+
     test_files = Dir['test/**/*_spec.rb'] + Dir['test/**/test_*.rb']
     test_files.each { |f| require f }
   end
@@ -26,6 +28,8 @@ test = namespace :test do
       ENV['QUIET'] ||= 'true'
 
       $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
+
+      MiniTest::Unit.autorun
 
       test_files = Dir["test/#{dir}/**/*_spec.rb"] + Dir["test/#{dir}/**/test_*.rb"]
       test_files.each { |f| require f }

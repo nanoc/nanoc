@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::OldPageFilterTest < Test::Unit::TestCase
+class Nanoc::OldPageFilterTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

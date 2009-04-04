@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::AssetRepProxyTest < Test::Unit::TestCase
+class Nanoc::AssetRepProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

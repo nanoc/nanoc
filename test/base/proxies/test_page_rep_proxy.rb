@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::PageRepProxyTest < Test::Unit::TestCase
+class Nanoc::PageRepProxyTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::RouterTest < Test::Unit::TestCase
+class Nanoc::RouterTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -10,7 +10,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router = Nanoc::Router.new(nil)
 
     # Make sure an error is raised
-    assert_raise(NotImplementedError) do
+    assert_raises(NotImplementedError) do
       router.path_for_page_rep(nil)
     end
   end
@@ -20,7 +20,7 @@ class Nanoc::RouterTest < Test::Unit::TestCase
     router = Nanoc::Router.new(nil)
 
     # Make sure an error is raised
-    assert_raise(NotImplementedError) do
+    assert_raises(NotImplementedError) do
       router.path_for_asset_rep(nil)
     end
   end

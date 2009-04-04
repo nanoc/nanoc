@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::OldCompilerTest < Test::Unit::TestCase
+class Nanoc::OldCompilerTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -139,7 +139,7 @@ class Nanoc::OldCompilerTest < Test::Unit::TestCase
 
   def test_compile_site_with_circular_dependencies
     with_site_fixture 'site_with_circular_dependencies' do |site|
-      assert_raise(Nanoc::Errors::RecursiveCompilationError) { site.compiler.run }
+      assert_raises(Nanoc::Errors::RecursiveCompilationError) { site.compiler.run }
     end
   end
 

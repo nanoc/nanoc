@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::PageRepTest < Test::Unit::TestCase
+class Nanoc::PageRepTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -435,7 +435,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     page_rep = page.reps[0]
 
     # Check
-    assert_raise(Nanoc::Errors::UnknownLayoutError) { page_rep.layout }
+    assert_raises(Nanoc::Errors::UnknownLayoutError) { page_rep.layout }
   end
 
   def test_layout_normal
@@ -830,7 +830,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Filter
-    assert_raise Nanoc::Errors::UnknownFilterError do
+    assert_raises(Nanoc::Errors::UnknownFilterError) do
       page_rep.instance_eval { do_filter(:pre) }
     end
 
@@ -867,7 +867,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Filter
-    assert_raise Nanoc::Errors::NoLongerSupportedError do
+    assert_raises(Nanoc::Errors::NoLongerSupportedError) do
       page_rep.instance_eval { do_filter(:pre) }
     end
 
@@ -1041,7 +1041,7 @@ class Nanoc::PageRepTest < Test::Unit::TestCase
     end
 
     # Layout
-    assert_raise(Nanoc::Errors::CannotDetermineFilterError) do
+    assert_raises(Nanoc::Errors::CannotDetermineFilterError) do
       page_rep.instance_eval { do_layout }
     end
 

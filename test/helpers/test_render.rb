@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
+class Nanoc::Helpers::RenderTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -87,7 +87,7 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     @_obj_rep = page_rep
 
     # Render
-    assert_raise(Nanoc::Errors::UnknownLayoutError) do
+    assert_raises(Nanoc::Errors::UnknownLayoutError) do
       render('/fawgooafwagwfe/')
     end
   end
@@ -115,7 +115,7 @@ class Nanoc::Helpers::RenderTest < Test::Unit::TestCase
     @_obj_rep = page_rep
 
     # Render
-    assert_raise(Nanoc::Errors::CannotDetermineFilterError) do
+    assert_raises(Nanoc::Errors::CannotDetermineFilterError) do
       render '/foo/'
     end
   end

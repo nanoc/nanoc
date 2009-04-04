@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::BinaryFilterTest < Test::Unit::TestCase
+class Nanoc::BinaryFilterTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -97,7 +97,7 @@ class Nanoc::BinaryFilterTest < Test::Unit::TestCase
     filter = Nanoc::BinaryFilter.new(asset_rep, asset, site)
 
     # Make sure an error is raised
-    assert_raise(NotImplementedError) do
+    assert_raises(NotImplementedError) do
       filter.run(nil)
     end
   end

@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::BinaryFilters::ThumbnailTest < Test::Unit::TestCase
+class Nanoc::BinaryFilters::ThumbnailTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

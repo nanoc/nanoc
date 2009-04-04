@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::RDiscountTest < Test::Unit::TestCase
+class Nanoc::Filters::RDiscountTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

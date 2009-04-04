@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::SiteTest < Test::Unit::TestCase
+class Nanoc::SiteTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -161,7 +161,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
         )
 
         # Test unknown data source
-        assert_raise(Nanoc::Errors::UnknownDataSourceError) do
+        assert_raises(Nanoc::Errors::UnknownDataSourceError) do
           Nanoc::Site.new(
             :output_dir   => 'output',
             :data_source  => 'kasdflksafjlksdjaklfkjdsjakf',
@@ -170,7 +170,7 @@ class Nanoc::SiteTest < Test::Unit::TestCase
         end
 
         # Test unknown router
-        assert_raise(Nanoc::Errors::UnknownRouterError) do
+        assert_raises(Nanoc::Errors::UnknownRouterError) do
           Nanoc::Site.new(
             :output_dir   => 'output',
             :data_source  => 'filesystem',

@@ -1,12 +1,12 @@
 require 'test/helper'
 
-class Nanoc::Filters::OldTest < Test::Unit::TestCase
+class Nanoc::Filters::OldTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
 
   def test_filter
-    assert_raise(Nanoc::Error) do
+    assert_raises(Nanoc::Error) do
       # Create site
       site = mock
 

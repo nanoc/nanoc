@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::Filters::RubyPantsTest < Test::Unit::TestCase
+class Nanoc::Filters::RubyPantsTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end

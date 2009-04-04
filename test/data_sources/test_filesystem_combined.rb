@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
+class Nanoc::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def setup    ; global_setup    ; end
   def teardown ; global_teardown ; end
@@ -280,7 +280,7 @@ class Nanoc::DataSources::FilesystemCombinedTest < Test::Unit::TestCase
     data_source = Nanoc::DataSources::FilesystemCombined.new(nil)
 
     # Parse it
-    assert_raise(RuntimeError) do
+    assert_raises(RuntimeError) do
       data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
     end
   end
