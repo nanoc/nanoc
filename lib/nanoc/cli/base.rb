@@ -94,6 +94,10 @@ module Nanoc::CLI
           :desc => 'show this help message and quit'
         },
         {
+          :long => 'verbose', :short => 'V', :argument => :forbidden,
+          :desc => 'make nanoc output more detailed'
+        },
+        {
           :long => 'version', :short => 'v', :argument => :forbidden,
           :desc => 'show version information and quit'
         }
