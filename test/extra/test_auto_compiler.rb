@@ -63,7 +63,7 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     asset_reps = [ mock, mock, mock ]
     asset_reps[0].expects(:web_path).at_most_once.returns('/assets/foo/1/')
     asset_reps[1].stubs(:web_path).returns('/assets/foo/2/')
-    asset_reps[1].stubs(:disk_path).returns('output/assets/foo/2/index.html')
+    asset_reps[1].stubs(:disk_path).returns('tmp/output/assets/foo/2/index.html')
     asset_reps[2].expects(:web_path).at_most_once.returns('/assets/bar/')
     assets = [ mock, mock ]
     assets[0].expects(:reps).returns([ asset_reps[0], asset_reps[1] ])
@@ -73,8 +73,8 @@ class Nanoc::Extra::AutoCompilerTest < Test::Unit::TestCase
     # Create compiler
     compiler = Object.new
     def compiler.run(objs, params={})
-      FileUtils.mkdir_p('output/assets/foo/2')
-      File.open('output/assets/foo/2/index.html', 'w') { |io| io.write("moo.") }
+      FileUtils.mkdir_p('tmp/output/assets/foo/2')
+      File.open('tmp/output/assets/foo/2/index.html', 'w') { |io| io.write("moo.") }
     end
 
     # Create site
