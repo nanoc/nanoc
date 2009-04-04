@@ -1,4 +1,4 @@
-require 'helper'
+require 'test/helper'
 
 class Nanoc::SiteTest < Test::Unit::TestCase
 

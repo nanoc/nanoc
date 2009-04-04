@@ -1,4 +1,4 @@
-require 'helper'
+require 'test/helper'
 
 class Nanoc::Extra::VCSTest < Test::Unit::TestCase
 

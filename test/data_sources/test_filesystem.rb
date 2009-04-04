@@ -1,4 +1,4 @@
-require 'helper'
+require 'test/helper'
 
 class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
 
