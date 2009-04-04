@@ -262,8 +262,10 @@ module Nanoc
     # Raises a warning about an outdated data source method.
     def warn_data_source(class_name, method_name, is_array)
       warn(
-        "In nanoc 2.1, DataSource##{method_name} should return #{is_array ? 'an array of' : 'a' } Nanoc::#{class_name} object#{is_array ? 's' : ''}. Future versions will not support these outdated data sources.",
-        'DEPRECATION WARNING'
+        "DEPRECATION WARNING: In nanoc 2.1, DataSource##{method_name} " +
+        "should return #{is_array ? 'an array of' : 'a' } " +
+        "Nanoc::#{class_name} object#{is_array ? 's' : ''}. Future " +
+        "versions will not support these outdated data sources."
       )
     end
 

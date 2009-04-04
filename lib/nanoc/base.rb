@@ -21,7 +21,6 @@ module Nanoc
   autoload :Template,           'nanoc/base/template'
 
   require 'nanoc/base/core_ext'
-  require 'nanoc/base/enhancements'
   require 'nanoc/base/proxies'
 
 end
