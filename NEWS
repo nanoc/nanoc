@@ -7,6 +7,7 @@ nanoc Release Notes
 New:
 
 * --pages and --assets compiler options
+* --no-color commandline option
 * Filtering helper
 * relative_path_to function in LinkTo helper
 * Rainpress filter
@@ -19,6 +20,10 @@ Changed:
 * The commandline option parser is now a lot more reliable
 * atom_feed now takes optional :content_proc, :excerpt_proc and :articles
   parameters
+
+Removed:
+
+* deprecated extension-based code
 
 2.1.6
 -----
