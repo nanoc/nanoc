@@ -248,36 +248,4 @@ class Nanoc::FilterTest < Test::Unit::TestCase
     assert_equal('layout /wohba/', filter.filename)
   end
 
-  def test_extensions
-    # Create site
-    site = mock
-
-    # Create asset
-    asset = mock
-    asset_proxy = Nanoc::Proxy.new(asset)
-    asset.expects(:site).returns(site)
-
-    # Create asset rep
-    asset_rep = mock
-    asset_rep_proxy = Nanoc::Proxy.new(asset_rep)
-    asset_rep.expects(:is_a?).with(Nanoc::PageRep).returns(false)
-    asset_rep.expects(:asset).returns(asset)
-
-    # Create filter
-    filter = Nanoc::Filter.new(asset_rep)
-
-    # Update extension
-    filter.class.class_eval { extension :foo }
-
-    # Check
-    assert_equal(:foo, filter.class.class_eval { extension })
-    assert_equal([ :foo ], filter.class.class_eval { extensions })
-
-    # Update extension
-    filter.class.class_eval { extensions :foo, :bar }
-
-    # Check
-    assert_equal([ :foo, :bar ], filter.class.class_eval { extensions })
-  end
-
 end

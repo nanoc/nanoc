@@ -120,7 +120,6 @@ module Nanoc::DataSources
     def update # :nodoc:
       update_page_defaults
       update_pages
-      update_layouts
       update_templates
     end
 
@@ -677,41 +676,6 @@ module Nanoc::DataSources
 
         # Move
         vcs.move(old_filename, new_filename)
-      end
-    end
-
-    # Updates outdated layouts.
-    def update_layouts
-      # layouts/abc.ext -> layouts/abc/abc.{html,yaml}
-      Dir[File.join('layouts', '*')].select { |f| File.file?(f) }.each do |filename|
-        # Get filter class
-        filter_class = Nanoc::Filter.with_extension(File.extname(filename))
-
-        # Get data
-        content     = File.read(filename)
-        attributes  = { :filter => filter_class.identifier.to_s }
-        path        = File.basename(filename, File.extname(filename))
-
-        # Get layout
-        tmp_layout = Nanoc::Layout.new(content, attributes, path)
-
-        # Get filenames
-        last_component    = tmp_layout.path.split('/')[-1]
-        dir_path          = 'layouts' + tmp_layout.path
-        meta_filename     = dir_path + last_component + '.yaml'
-        content_filename  = dir_path + last_component +  File.extname(filename)
-
-        # Create new files
-        FileUtils.mkdir_p(dir_path)
-        File.open(meta_filename,    'w') { |io| io.write(tmp_layout.attributes.to_split_yaml) }
-        File.open(content_filename, 'w') { |io| io.write(tmp_layout.content) }
-
-        # Add
-        vcs.add(meta_filename)
-        vcs.add(content_filename)
-
-        # Delete old files
-        vcs.remove(filename)
       end
     end
 

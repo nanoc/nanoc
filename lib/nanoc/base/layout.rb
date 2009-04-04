@@ -55,11 +55,7 @@ module Nanoc
 
     # Returns the filter class needed for this layout.
     def filter_class
-      if attribute_named(:extension).nil?
-        Nanoc::Filter.named(attribute_named(:filter))
-      else
-        Nanoc::Filter.with_extension(attribute_named(:extension))
-      end
+      Nanoc::Filter.named(attribute_named(:filter))
     end
 
     # Saves the layout in the database, creating it if it doesn't exist yet or

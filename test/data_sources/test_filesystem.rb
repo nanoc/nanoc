@@ -73,7 +73,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
     # Set expectations
     data_source.expects(:update_page_defaults)
     data_source.expects(:update_pages)
-    data_source.expects(:update_layouts)
     data_source.expects(:update_templates)
 
     # update
@@ -128,30 +127,6 @@ class Nanoc::DataSources::FilesystemTest < Test::Unit::TestCase
       assert(File.file?('content/foo/foo.yaml'))
       assert(File.file?('content/foo/bar/bar.haml'))
       assert(File.file?('content/foo/bar/bar.yaml'))
-    end
-  end
-
-  def test_update_layouts
-    in_dir %w{ tmp } do
-      # Build some layouts (outdated and up-to-date)
-      FileUtils.mkdir_p('layouts')
-      FileUtils.mkdir_p('layouts/bar')
-      File.open('layouts/foo.erb',      'w') { |io| }
-      File.open('layouts/bar/bar.haml', 'w') { |io| }
-      File.open('layouts/bar/bar.yaml', 'w') { |io| }
-
-      # Update
-      data_source = Nanoc::DataSources::Filesystem.new(nil)
-      data_source.instance_eval { update_layouts }
-
-      # Check old files
-      assert(!File.file?('layouts/foo.erb'))
-
-      # Check new files
-      assert(File.file?('layouts/foo/foo.erb'))
-      assert(File.file?('layouts/foo/foo.yaml'))
-      assert(File.file?('layouts/bar/bar.haml'))
-      assert(File.file?('layouts/bar/bar.yaml'))
     end
   end
 
