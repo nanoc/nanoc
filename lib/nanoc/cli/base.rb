@@ -94,6 +94,10 @@ module Nanoc::CLI
           :desc => 'show this help message and quit'
         },
         {
+          :long => 'no-color', :short => 'C', :argument => :forbidden,
+          :desc => 'disable color'
+        },
+        {
           :long => 'verbose', :short => 'V', :argument => :forbidden,
           :desc => 'make nanoc output more detailed'
         },
@@ -105,8 +109,11 @@ module Nanoc::CLI
     end
 
     def handle_option(option)
+      # Handle no-color option
+      if option == :'no-color'
+        Nanoc::CLI::Logger.instance.color = false
       # Handle verbose option
-      if option == :verbose
+      elsif option == :verbose
         Nanoc::CLI::Logger.instance.level = :low
       # Handle version option
       elsif option == :version
