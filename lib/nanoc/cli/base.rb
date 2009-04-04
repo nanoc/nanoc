@@ -105,8 +105,11 @@ module Nanoc::CLI
     end
 
     def handle_option(option)
+      # Handle verbose option
+      if option == :verbose
+        Nanoc::CLI::Logger.instance.level = :low
       # Handle version option
-      if option == :version
+      elsif option == :version
         puts "nanoc #{Nanoc::VERSION} (c) 2007-2009 Denis Defreyne."
         puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
         exit 0
