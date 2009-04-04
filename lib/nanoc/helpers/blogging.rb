@@ -108,7 +108,7 @@ module Nanoc::Helpers
 
       # Extract parameters
       limit             = params[:limit] || 5
-      relevant_articles = (params[:articles] || articles || []).first(limit)
+      relevant_articles = params[:articles] || articles || []
       content_proc      = params[:content_proc] || lambda { |a| a.content }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a.excerpt }
 
@@ -135,7 +135,7 @@ module Nanoc::Helpers
       end
 
       # Get sorted relevant articles
-      sorted_relevant_articles = relevant_articles.sort_by { |a| a.created_at }.reverse
+      sorted_relevant_articles = relevant_articles.sort_by { |a| a.created_at }.reverse.first(limit)
 
       # Get most recent article
       last_article = sorted_relevant_articles.first

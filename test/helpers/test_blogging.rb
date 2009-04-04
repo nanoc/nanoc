@@ -280,6 +280,36 @@ class Nanoc::Helpers::BloggingTest < Test::Unit::TestCase
     atom_feed :articles => [ @pages[4] ]
   end
 
+  def test_atom_feed_with_limit_param
+    # Mock articles
+    @pages = [ mock, mock, mock, mock, mock ]
+    @pages.each_with_index do |article, i|
+      article.stubs(:kind).returns('article')
+      article.stubs(:created_at).returns(Time.now - 1000*i)
+      article.stubs(:mtime).returns(Time.now - 500)
+      article.stubs(:title).returns("Article #{i}")
+      article.stubs(:custom_path_in_feed).returns(nil)
+      article.stubs(:path).returns("/articles/#{i}/")
+      article.stubs(:content).returns("page #{i} content")
+      article.stubs(:excerpt).returns(nil)
+    end
+  
+    # Create feed page
+    @page = mock
+    @page.stubs(:base_url).returns('http://example.com')
+    @page.stubs(:title).returns('My Blog Or Something')
+    @page.stubs(:author_name).returns('J. Doe')
+    @page.stubs(:author_uri).returns('http://example.com/~jdoe')
+    @page.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+  
+    # Check
+    result = atom_feed :limit => 3, :articles => @pages
+    assert_match(
+      Regexp.new('Article 0.*Article 1.*Article 2', Regexp::MULTILINE),
+      result
+    )
+  end
+
   def test_atom_feed_with_content_proc_param
     # Mock article
     @pages = [ mock ]
