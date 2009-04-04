@@ -2,10 +2,7 @@
 
 # Rake etc
 require 'rake'
-require 'rake/clean'
 require 'rake/gempackagetask'
-require 'rake/testtask'
-require 'rake/rdoctask'
 
 # nanoc itself
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
@@ -46,20 +43,9 @@ details about this release.
 Enjoy!
 EOS
 
-##### Cleaning
-
-CLEAN.include([
-  'coverage',
-  'rdoc',
-  'tmp',
-  File.join('test', 'fixtures', '*', 'output', '*'),
-  File.join('test', 'fixtures', '*', 'tmp')
-])
-CLOBBER.include([ 'pkg' ])
-
 ##### Packaging
 
-spec = Gem::Specification.new do |s|
+GemSpec = Gem::Specification.new do |s|
   s.name                  = NAME
   s.version               = VERS
   s.platform              = Gem::Platform::RUBY
@@ -96,47 +82,6 @@ spec = Gem::Specification.new do |s|
   s.bindir                = 'bin'
 end
 
-Rake::GemPackageTask.new(spec) { |task| }
+Dir.glob('tasks/**/*.rake').each { |r| Rake.application.add_import r }
 
-task :install_gem do
-  sh %{rake package}
-  sh %{gem install pkg/#{NAME}-#{VERS}}
-end
-
-task :uninstall_gem do
-  sh %{gem uninstall #{NAME}}
-end
-
-### Documentation
-
-Rake::RDocTask.new do |task|
-  task.rdoc_files.include(spec.extra_rdoc_files + [ 'lib' ])
-  task.rdoc_dir = 'rdoc'
-  task.options = spec.rdoc_options
-end
-
-### Dependencies
-
-task :fetch_dependencies do
-  # Get Cri
-  unless File.directory?('vendor/cri')
-    puts "=== Fetching Cri..."
-    system('hg', 'clone', 'http://projects.stoneship.org/hg/shared/cri', 'vendor/cri')
-    puts '=== Fetching Cri: done.'
-  end
-end
-
-### Testing
-
-task :rcov do
-  sh %{rcov test/**/test_*.rb -I test -x /Library}
-end
-
-Rake::TestTask.new(:test) do |task|
-  ENV['QUIET'] = 'true'
-
-  task.libs       = [ 'lib', 'test' ]
-  task.test_files = Dir[ 'test/**/test_*.rb' ]
-end
-
-task :default => [ :test ]
+task :default => [ :fetch_dependencies, :test ]
