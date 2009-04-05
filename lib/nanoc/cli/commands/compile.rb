@@ -41,7 +41,12 @@ module Nanoc::CLI
         {
           :long => 'assets', :short => 'A', :argument => :forbidden,
           :desc => 'only compile assets (no pages)'
-        }
+        },
+        # --only-outdated
+        {
+          :long => 'only-outdated', :short => 'o', :argument => :forbidden,
+          :desc => 'only compile outdated pages and assets'
+        },
       ]
     end
 
@@ -87,10 +92,18 @@ module Nanoc::CLI
         @times_stack  ||= []
         setup_notifications
 
+        # Parse all/only-outdated options
+        if options.has_key?(:all)
+          warn "WARNING: The --all option is no longer necessary as nanoc " +
+               "2.2 compiles all pages and assets by default. To change this " +
+               "behaviour, use the --only-outdated option."
+        end
+        compile_all = options.has_key?(:'only-outdated') ? false : true
+
         # Compile
         @base.site.compiler.run(
           objs,
-          :even_when_not_outdated => options.has_key?(:all)
+          :even_when_not_outdated => compile_all
         )
 
         # Find reps
