@@ -117,6 +117,12 @@ module Nanoc::CLI
           Nanoc::CLI::Logger.instance.file(:low, :skip, rep.disk_path, duration)
         end
 
+        # Show non-written reps
+        reps.select { |r| r.compiled? && r.attribute_named(:skip_output) }.each do |rep|
+          duration = @rep_times[rep.disk_path]
+          Nanoc::CLI::Logger.instance.file(:low, :'not written', rep.disk_path, duration)
+        end
+
         # Give general feedback
         puts
         puts "No objects were modified." unless reps.any? { |r| r.modified? }
@@ -152,18 +158,20 @@ module Nanoc::CLI
 
     def print_state_feedback(reps)
       # Categorise reps
-      rest            = reps
-      created, rest   = *rest.partition { |r| r.created? }
-      modified, rest  = *rest.partition { |r| r.modified? }
-      skipped, rest   = *rest.partition { |r| !r.compiled? }
-      identical       = rest
+      rest              = reps
+      created,     rest = *rest.partition { |r| r.created? }
+      modified,    rest = *rest.partition { |r| r.modified? }
+      skipped,     rest = *rest.partition { |r| !r.compiled? }
+      not_written, rest = *rest.partition { |r| r.compiled? && r.attribute_named(:skip_output) }
+      identical         = rest
 
       # Print
       puts
-      puts format('  %4d  created',   created.size)
-      puts format('  %4d  modified',  modified.size)
-      puts format('  %4d  skipped',   skipped.size)
-      puts format('  %4d  identical', identical.size)
+      puts format('  %4d  created',     created.size)
+      puts format('  %4d  modified',    modified.size)
+      puts format('  %4d  skipped',     skipped.size)
+      puts format('  %4d  not written', not_written.size)
+      puts format('  %4d  identical',   identical.size)
     end
 
     def print_profiling_feedback(reps)
