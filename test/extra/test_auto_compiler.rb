@@ -122,14 +122,15 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns(pages)
     site.expects(:assets).returns([])
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
     # Create file
-    File.open('tmp/somefile.txt', 'w') { |io| }
+    FileUtils.mkdir_p('out')
+    File.open('out/somefile.txt', 'w') { |io| }
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_file).with('tmp/somefile.txt')
+    autocompiler.expects(:serve_file).with('out/somefile.txt')
 
     # Run
     autocompiler.instance_eval { handle_request('somefile.txt') }
@@ -141,15 +142,15 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns([])
     site.expects(:assets).returns([])
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
     # Create file
-    FileUtils.mkdir_p('tmp/foo/bar')
-    File.open('tmp/foo/bar/index.html', 'w') { |io| }
+    FileUtils.mkdir_p('out/foo/bar')
+    File.open('out/foo/bar/index.html', 'w') { |io| }
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
-    autocompiler.expects(:serve_file).with('tmp/foo/bar/index.html')
+    autocompiler.expects(:serve_file).with('out/foo/bar/index.html')
 
     # Run
     autocompiler.instance_eval { handle_request('foo/bar/') }
@@ -161,11 +162,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns([])
     site.expects(:assets).returns([])
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
     # Create file
-    FileUtils.mkdir_p('tmp/foo/bar')
-    File.open('tmp/foo/bar/someotherfile.txt', 'w') { |io| }
+    FileUtils.mkdir_p('out/foo/bar')
+    File.open('out/foo/bar/someotherfile.txt', 'w') { |io| }
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
@@ -181,11 +182,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns([])
     site.expects(:assets).returns([])
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
     # Create file
-    FileUtils.mkdir_p('tmp/foo/bar')
-    File.open('tmp/foo/bar/index.html', 'w') { |io| }
+    FileUtils.mkdir_p('out/foo/bar')
+    File.open('out/foo/bar/index.html', 'w') { |io| }
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
@@ -201,11 +202,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns([])
     site.expects(:assets).returns([])
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
     # Create file
-    FileUtils.mkdir_p('tmp/foo/bar')
-    File.open('tmp/foo/bar/someotherfile.txt', 'w') { |io| }
+    FileUtils.mkdir_p('out/foo/bar')
+    File.open('out/foo/bar/someotherfile.txt', 'w') { |io| }
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
@@ -221,7 +222,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     site.expects(:load_data).with(true)
     site.expects(:pages).returns([])
     site.expects(:assets).returns([])
-    site.expects(:config).at_least_once.returns({ :output_dir => 'tmp/', :index_filenames => [ 'index.html' ] })
+    site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
@@ -248,17 +249,17 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
 
       # Create known test file
-      File.open('tmp/foo.html', 'w') { |io| }
+      File.open('foo.html', 'w') { |io| }
       assert_equal(
         'text/html',
-        autocompiler.instance_eval { mime_type_of('tmp/foo.html', 'huh') }
+        autocompiler.instance_eval { mime_type_of('foo.html', 'huh') }
       )
 
       # Create unknown test file
-      File.open('tmp/foo', 'w') { |io| }
+      File.open('foo', 'w') { |io| }
       assert_equal(
         'huh',
-        autocompiler.instance_eval { mime_type_of('tmp/foo', 'huh') }
+        autocompiler.instance_eval { mime_type_of('foo', 'huh') }
       )
     end
   end
@@ -308,7 +309,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create page and page rep
       page = mock
       page_rep = mock
-      page_rep.expects(:raw_path).at_least_once.returns('tmp/somefile.html')
+      page_rep.expects(:raw_path).at_least_once.returns('somefile.html')
       page_rep.expects(:item).returns(page)
       page_rep.expects(:content_at_snapshot).with(:post).returns('compiled page content')
 
@@ -318,7 +319,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create compiler
       compiler = Object.new
       def compiler.run(objs, params={})
-        File.open('tmp/somefile.html', 'w') { |io| io.write("... compiled page content ...") }
+        File.open('somefile.html', 'w') { |io| io.write("... compiled page content ...") }
       end
 
       # Create site
@@ -376,14 +377,14 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_serve_file
     if_have('mime/types') do
       # Create test files
-      File.open('tmp/test.css', 'w') { |io| io.write("body { color: blue; }")  }
-      File.open('tmp/test',     'w') { |io| io.write("random blah blah stuff") }
+      File.open('test.css', 'w') { |io| io.write("body { color: blue; }")  }
+      File.open('test',     'w') { |io| io.write("random blah blah stuff") }
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new(self)
 
       # Serve file 1
-      response = autocompiler.instance_eval { serve_file('tmp/test.css') }
+      response = autocompiler.instance_eval { serve_file('test.css') }
 
       # Check response for file 1
       assert_equal(200,         response[0])
@@ -391,7 +392,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       assert(response[2][0].include?('body { color: blue; }'))
 
       # Serve file 2
-      response = autocompiler.instance_eval { serve_file('tmp/test') }
+      response = autocompiler.instance_eval { serve_file('test') }
 
       # Check response for file 2
       assert_equal(200,                         response[0])

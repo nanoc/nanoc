@@ -371,14 +371,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Create rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
-    item_rep.raw_path = 'tmp/foo/bar/baz/quux.txt'
+    item_rep.raw_path = 'foo/bar/baz/quux.txt'
 
     # Write
     item_rep.write
 
     # Check
-    assert(File.file?('tmp/foo/bar/baz/quux.txt'))
-    assert_equal('Lorem ipsum, etc.', File.read('tmp/foo/bar/baz/quux.txt'))
+    assert(File.file?('foo/bar/baz/quux.txt'))
+    assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
   end
 
 end
