@@ -44,14 +44,6 @@ module Nanoc3::TestHelpers
     Nanoc3::CLI::Base.new.run(['create_site', name, '-d', data_source])
   end
 
-  def create_layout(name)
-    Nanoc3::CLI::Base.new.run(['create_layout', name])
-  end
-
-  def create_page(name)
-    Nanoc3::CLI::Base.new.run(['create_page', name])
-  end
-
   def if_have(x)
     require x
     yield
