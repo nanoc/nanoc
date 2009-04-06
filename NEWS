@@ -20,6 +20,9 @@ Changed:
 * The commandline option parser is now a lot more reliable
 * atom_feed now takes optional :content_proc, :excerpt_proc and :articles
   parameters
+* The compile command show non-written items (those with skip_output: true)
+* The compile command compiles everything by default
+* Added --only-outdated option to compile only outdated pages
 
 Removed:
 
