@@ -2,8 +2,7 @@ require 'test/helper'
 
 describe 'Nanoc3::Site#initialize' do
 
-  before { global_setup    }
-  after  { global_teardown }
+  include Nanoc3::TestHelpers
 
   it 'should merge default config' do
     site = Nanoc3::Site.new(:router => 'versioned')
@@ -33,6 +32,8 @@ describe 'Nanoc3::Site#initialize' do
 end
 
 describe 'Nanoc::Site#load_data' do
+
+  include Nanoc3::TestHelpers
 
   it 'should load the data source' do
     site = Nanoc3::Site.new({})
@@ -112,6 +113,8 @@ end
 
 describe 'Nanoc::Site#code' do
 
+  include Nanoc3::TestHelpers
+
   it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
     proc do
@@ -122,6 +125,8 @@ describe 'Nanoc::Site#code' do
 end
 
 describe 'Nanoc::Site#pages' do
+
+  include Nanoc3::TestHelpers
 
   it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
@@ -134,6 +139,8 @@ end
 
 describe 'Nanoc::Site#assets' do
 
+  include Nanoc3::TestHelpers
+
   it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
     proc do
@@ -144,6 +151,8 @@ describe 'Nanoc::Site#assets' do
 end
 
 describe 'Nanoc::Site#layouts' do
+
+  include Nanoc3::TestHelpers
 
   it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
@@ -156,6 +165,8 @@ end
 
 describe 'Nanoc::Site#compiler' do
 
+  include Nanoc3::TestHelpers
+
   it 'should not raise under normal circumstances' do
     site = Nanoc3::Site.new({})
     site.compiler
@@ -164,6 +175,8 @@ describe 'Nanoc::Site#compiler' do
 end
 
 describe 'Nanoc::Site#router' do
+
+  include Nanoc3::TestHelpers
 
   it 'should not raise for known routers' do
     site = Nanoc3::Site.new({})
@@ -180,6 +193,8 @@ describe 'Nanoc::Site#router' do
 end
 
 describe 'Nanoc::Site#data_source' do
+
+  include Nanoc3::TestHelpers
 
   it 'should not raise for known data sources' do
     site = Nanoc3::Site.new({})

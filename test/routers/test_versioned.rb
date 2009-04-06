@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Routers::VersionedTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_path_for_page_rep_with_default_rep
     # Create versioned router

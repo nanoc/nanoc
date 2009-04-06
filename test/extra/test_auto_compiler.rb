@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_start
     # TODO implement
