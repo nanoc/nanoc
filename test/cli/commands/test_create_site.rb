@@ -11,8 +11,8 @@ class Nanoc3::CLI::CreateSiteCommandTest < MiniTest::Unit::TestCase
 
   def test_can_compile_new_site
     Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
-    
-    in_dir %w{ foo } do
+
+    FileUtils.cd('foo') do
       site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
       site.load_data
       site.compiler.run
