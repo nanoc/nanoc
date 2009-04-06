@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_filter
     # Create filter

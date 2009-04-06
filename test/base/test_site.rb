@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   class TestDataSource < Nanoc3::DataSource
 

@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::ItemRepProxyTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_get
     # Get item

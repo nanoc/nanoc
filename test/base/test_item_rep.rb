@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_created_modified_compiled
     # TODO implement

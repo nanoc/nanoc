@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_filter_html_with_double_quotes
     # Create filter with mock item

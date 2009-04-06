@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   include Nanoc3::Helpers::LinkTo
 

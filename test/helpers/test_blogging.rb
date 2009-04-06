@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   include Nanoc3::Helpers::Blogging
   include Nanoc3::Helpers::Text

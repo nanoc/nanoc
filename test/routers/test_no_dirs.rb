@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::Routers::NoDirsTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_path_for_root_page_rep
     # Create no-dirs router

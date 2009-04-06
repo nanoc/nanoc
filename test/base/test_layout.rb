@@ -2,8 +2,7 @@ require 'test/helper'
 
 class Nanoc3::LayoutTest < MiniTest::Unit::TestCase
 
-  def setup    ; global_setup    ; end
-  def teardown ; global_teardown ; end
+  include Nanoc3::TestHelpers
 
   def test_initialize
     # Make sure attributes are cleaned
