@@ -7,40 +7,38 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
   # Test preparation
 
   def test_setup
-    in_dir %w{ tmp } do
-      # Create site
-      create_site('site')
+    # Create site
+    create_site('site')
 
-      in_dir %w{ site } do
-        # Get site
-        site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+    in_dir %w{ site } do
+      # Get site
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
-        # Remove files to make sure they are recreated
-        FileUtils.rm_rf('assets')
-        FileUtils.rm_rf('content')
-        FileUtils.rm_rf('layouts/default')
-        FileUtils.rm_rf('lib/default.rb')
+      # Remove files to make sure they are recreated
+      FileUtils.rm_rf('assets')
+      FileUtils.rm_rf('content')
+      FileUtils.rm_rf('layouts/default')
+      FileUtils.rm_rf('lib/default.rb')
 
-        # Mock VCS
-        vcs = mock
-        vcs.expects(:add).times(4) # One time for each directory
-        site.data_source.vcs = vcs
+      # Mock VCS
+      vcs = mock
+      vcs.expects(:add).times(4) # One time for each directory
+      site.data_source.vcs = vcs
 
-        # Recreate files
-        site.data_source.loading { site.data_source.setup {} }
+      # Recreate files
+      site.data_source.loading { site.data_source.setup {} }
 
-        # Ensure essential files have been recreated
-        assert(File.directory?('assets/'))
-        assert(File.directory?('content/'))
-        assert(File.directory?('layouts/'))
-        assert(File.directory?('lib/'))
+      # Ensure essential files have been recreated
+      assert(File.directory?('assets/'))
+      assert(File.directory?('content/'))
+      assert(File.directory?('layouts/'))
+      assert(File.directory?('lib/'))
 
-        # Ensure no non-essential files have been recreated
-        assert(!File.file?('content/content.html'))
-        assert(!File.file?('content/content.yaml'))
-        assert(!File.directory?('layouts/default/'))
-        assert(!File.file?('lib/default.rb'))
-      end
+      # Ensure no non-essential files have been recreated
+      assert(!File.file?('content/content.html'))
+      assert(!File.file?('content/content.yaml'))
+      assert(!File.directory?('layouts/default/'))
+      assert(!File.file?('lib/default.rb'))
     end
   end
 
@@ -111,54 +109,48 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
   # Test creating data
 
   def test_create_page_at_root
-    in_dir 'tmp' do
-      # Create page
-      data_source = Nanoc3::DataSources::Filesystem.new(nil)
-      data_source.create_page('content here', { :foo => 'bar' }, '/')
+    # Create page
+    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source.create_page('content here', { :foo => 'bar' }, '/')
 
-      # Check file existance
-      assert File.directory?('content')
-      assert File.file?('content/content.html')
-      assert File.file?('content/content.yaml')
+    # Check file existance
+    assert File.directory?('content')
+    assert File.file?('content/content.html')
+    assert File.file?('content/content.yaml')
 
-      # Check file content
-      assert_equal 'content here', File.read('content/content.html')
-      assert_match 'foo: bar',     File.read('content/content.yaml')
-    end
+    # Check file content
+    assert_equal 'content here', File.read('content/content.html')
+    assert_match 'foo: bar',     File.read('content/content.yaml')
   end
 
   def test_create_page_not_at_root
-    in_dir 'tmp' do
-      # Create page
-      data_source = Nanoc3::DataSources::Filesystem.new(nil)
-      data_source.create_page('content here', { :foo => 'bar' }, '/moo/')
+    # Create page
+    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source.create_page('content here', { :foo => 'bar' }, '/moo/')
 
-      # Check file existance
-      assert File.directory?('content/moo')
-      assert File.file?('content/moo/moo.html')
-      assert File.file?('content/moo/moo.yaml')
+    # Check file existance
+    assert File.directory?('content/moo')
+    assert File.file?('content/moo/moo.html')
+    assert File.file?('content/moo/moo.yaml')
 
-      # Check file content
-      assert_equal 'content here', File.read('content/moo/moo.html')
-      assert_match 'foo: bar',     File.read('content/moo/moo.yaml')
-    end
+    # Check file content
+    assert_equal 'content here', File.read('content/moo/moo.html')
+    assert_match 'foo: bar',     File.read('content/moo/moo.yaml')
   end
 
   def test_create_layout
-    in_dir 'tmp' do
-      # Create layout
-      data_source = Nanoc3::DataSources::Filesystem.new(nil)
-      data_source.create_layout('content here', { :foo => 'bar' }, '/moo/')
+    # Create layout
+    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source.create_layout('content here', { :foo => 'bar' }, '/moo/')
 
-      # Check file existance
-      assert File.directory?('layouts/moo')
-      assert File.file?('layouts/moo/moo.html')
-      assert File.file?('layouts/moo/moo.yaml')
+    # Check file existance
+    assert File.directory?('layouts/moo')
+    assert File.file?('layouts/moo/moo.html')
+    assert File.file?('layouts/moo/moo.yaml')
 
-      # Check file content
-      assert_equal 'content here', File.read('layouts/moo/moo.html')
-      assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
-    end
+    # Check file content
+    assert_equal 'content here', File.read('layouts/moo/moo.html')
+    assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
   end
 
   # Test private methods
@@ -172,14 +164,14 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/bar/baz')
-    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/bar/baz')
+    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      'tmp/foo/bar/baz/baz.html',
+      'foo/bar/baz/baz.html',
       data_source.instance_eval do
-        content_filename_for_dir('tmp/foo/bar/baz')
+        content_filename_for_dir('foo/bar/baz')
       end
     )
   end
@@ -189,16 +181,16 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/bar/baz')
-    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.xhtml', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/bar/baz')
+    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.xhtml', 'w') { |io| io.write('test') }
 
     # Check content filename
     assert_raises(RuntimeError) do
       assert_equal(
-        'tmp/foo/bar/baz/baz.html',
+        'foo/bar/baz/baz.html',
         data_source.instance_eval do
-          content_filename_for_dir('tmp/foo/bar/baz')
+          content_filename_for_dir('foo/bar/baz')
         end
       )
     end
@@ -209,15 +201,15 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/bar/baz')
-    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/bar/baz')
+    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      'tmp/foo/bar/baz/baz.html',
+      'foo/bar/baz/baz.html',
       data_source.instance_eval do
-        content_filename_for_dir('tmp/foo/bar/baz')
+        content_filename_for_dir('foo/bar/baz')
       end
     )
   end
@@ -227,17 +219,17 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/bar/baz')
-    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/foo.yaml', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/zzz.yaml', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/bar/baz')
+    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/foo.yaml', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/zzz.yaml', 'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      'tmp/foo/bar/baz/baz.html',
+      'foo/bar/baz/baz.html',
       data_source.instance_eval do
-        content_filename_for_dir('tmp/foo/bar/baz')
+        content_filename_for_dir('foo/bar/baz')
       end
     )
   end
@@ -247,18 +239,18 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/bar/baz')
-    File.open('tmp/foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.html~', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.html.orig', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.html.rej', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/bar/baz/baz.html.bak', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/bar/baz')
+    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.html~', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.html.orig', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.html.rej', 'w') { |io| io.write('test') }
+    File.open('foo/bar/baz/baz.html.bak', 'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      'tmp/foo/bar/baz/baz.html',
+      'foo/bar/baz/baz.html',
       data_source.instance_eval do
-        content_filename_for_dir('tmp/foo/bar/baz')
+        content_filename_for_dir('foo/bar/baz')
       end
     )
   end
@@ -268,14 +260,14 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/bar/baz')
-    File.open('tmp/foo/bar/baz/index.html', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/bar/baz')
+    File.open('foo/bar/baz/index.html', 'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      'tmp/foo/bar/baz/index.html',
+      'foo/bar/baz/index.html',
       data_source.instance_eval do
-        content_filename_for_dir('tmp/foo/bar/baz')
+        content_filename_for_dir('foo/bar/baz')
       end
     )
   end
@@ -295,13 +287,13 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::Filesystem.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo/index')
-    File.open('tmp/foo/index/index.html', 'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo/index')
+    File.open('foo/index/index.html', 'w') { |io| io.write('test') }
 
     # Check
     assert_equal(
-      'tmp/foo/index/index.html',
-      data_source.instance_eval { content_filename_for_dir('tmp/foo/index') }
+      'foo/index/index.html',
+      data_source.instance_eval { content_filename_for_dir('foo/index') }
     )
   end
 

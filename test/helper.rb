@@ -28,17 +28,15 @@ require 'stringio'
 module Nanoc3::TestHelpers
 
   def with_temp_site(data_source='filesystem')
-    in_dir %w{ tmp } do
-      # Create site
-      create_site('site', data_source)
+    # Create site
+    create_site('site', data_source)
 
-      in_dir %w{ site } do
-        # Load site
-        site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+    in_dir %w{ site } do
+      # Load site
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
-        # Done
-        yield site
-      end
+      # Done
+      yield site
     end
   end
 
@@ -81,13 +79,15 @@ module Nanoc3::TestHelpers
       $stderr = StringIO.new
     end
 
-    # Create tmp directory
+    # Enter tmp
     FileUtils.mkdir_p('tmp')
+    FileUtils.cd('tmp')
   end
 
   def teardown
-    # Remove tmp directory
-    FileUtils.rm_rf 'tmp' if File.exist?('tmp')
+    # Exit tmp
+    FileUtils.cd('..')
+    FileUtils.rm_rf('tmp')
 
     # Go unquiet
     unless ENV['QUIET'] == 'false'

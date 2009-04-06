@@ -31,14 +31,14 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
 
     # Mock site
     site = mock
-    site.expects(:config).returns({ :output_dir => 'tmp/out' })
+    site.expects(:config).returns({ :output_dir => 'out' })
 
     # Create router
     router = Nanoc3::Router.new(site)
     router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
 
     # Check
-    assert_equal('tmp/out/foo.html', router.raw_path_for(page_rep))
+    assert_equal('out/foo.html', router.raw_path_for(page_rep))
   end
 
   def test_raw_path_for_with_custom_path
@@ -48,13 +48,13 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
 
     # Create site
     site = mock
-    site.expects(:config).returns({:output_dir => 'tmp/out'})
+    site.expects(:config).returns({:output_dir => 'out'})
 
     # Create router
     router = Nanoc3::Router.new(site)
 
     # Check
-    assert_equal('tmp/out/foo.html', router.raw_path_for(page_rep))
+    assert_equal('out/foo.html', router.raw_path_for(page_rep))
   end
 
   def test_path_for_without_custom_path_without_index
@@ -65,7 +65,7 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:config).returns({
-      :output_dir       => 'tmp/out',
+      :output_dir       => 'out',
       :index_filenames  => [ 'index.html' ]
     })
 
@@ -85,7 +85,7 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:config).returns({
-      :output_dir       => 'tmp/out',
+      :output_dir       => 'out',
       :index_filenames  => [ 'index.html' ]
     })
 
@@ -104,7 +104,7 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:config).returns({
-      :output_dir       => 'tmp/out',
+      :output_dir       => 'out',
       :index_filenames  => [ 'index.html' ]
     })
 
@@ -124,7 +124,7 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:config).returns({
-      :output_dir       => 'tmp/out',
+      :output_dir       => 'out',
       :index_filenames  => [ 'index.html' ]
     })
 

@@ -7,43 +7,41 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   # Test preparation
 
   def test_setup
-    in_dir %w{ tmp } do
-      # Create site
-      create_site('site')
+    # Create site
+    create_site('site')
 
-      in_dir %w{ site } do
-        # Get site
-        site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+    in_dir %w{ site } do
+      # Get site
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
-        # Remove files
-        FileUtils.rm_rf('content')
-        FileUtils.rm_rf('layouts/default')
-        FileUtils.rm_rf('lib/default.rb')
+      # Remove files
+      FileUtils.rm_rf('content')
+      FileUtils.rm_rf('layouts/default')
+      FileUtils.rm_rf('lib/default.rb')
 
-        # Convert site to filesystem_combined
-        open('config.yaml', 'w') { |io| io.write('data_source: filesystem_combined') }
+      # Convert site to filesystem_combined
+      open('config.yaml', 'w') { |io| io.write('data_source: filesystem_combined') }
 
-        # Get site
-        site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+      # Get site
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
-        # Mock VCS
-        vcs = mock
-        vcs.expects(:add).times(4) # One time for each directory
-        site.data_source.vcs = vcs
+      # Mock VCS
+      vcs = mock
+      vcs.expects(:add).times(4) # One time for each directory
+      site.data_source.vcs = vcs
 
-        # Setup site
-        site.data_source.loading { site.data_source.setup {} }
+      # Setup site
+      site.data_source.loading { site.data_source.setup {} }
 
-        # Ensure essential files have been recreated
-        assert(File.directory?('content/'))
-        assert(File.directory?('layouts/'))
-        assert(File.directory?('lib/'))
+      # Ensure essential files have been recreated
+      assert(File.directory?('content/'))
+      assert(File.directory?('layouts/'))
+      assert(File.directory?('lib/'))
 
-        # Ensure no non-essential files have been recreated
-        assert(!File.file?('content/index.html'))
-        assert(!File.file?('layouts/default.html'))
-        assert(!File.file?('lib/default.rb'))
-      end
+      # Ensure no non-essential files have been recreated
+      assert(!File.file?('content/index.html'))
+      assert(!File.file?('layouts/default.html'))
+      assert(!File.file?('lib/default.rb'))
     end
   end
 
@@ -120,56 +118,50 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
   # Test creating data
 
   def test_create_page_at_root
-    in_dir 'tmp' do
-      # Create page
-      data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
-      data_source.create_page('content here', { :foo => 'bar' }, '/')
+    # Create page
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
+    data_source.create_page('content here', { :foo => 'bar' }, '/')
 
-      # Check file existance
-      assert File.directory?('content')
-      assert !File.directory?('content/content')
-      assert File.file?('content/index.html')
+    # Check file existance
+    assert File.directory?('content')
+    assert !File.directory?('content/content')
+    assert File.file?('content/index.html')
 
-      # Check file content
-      expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
-      assert_equal expected, File.read('content/index.html')
-    end
+    # Check file content
+    expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+    assert_equal expected, File.read('content/index.html')
   end
 
   def test_create_page_not_at_root
-    in_dir 'tmp' do
-      # Create page
-      data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
-      data_source.create_page('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
+    # Create page
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
+    data_source.create_page('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
-      # Check file existance
-      assert File.directory?('content/xxx/yyy')
-      assert !File.directory?('content/xxx/yyy/zzz')
-      assert File.file?('content/xxx/yyy/zzz.html')
-      assert !File.file?('content/xxx/yyy/zzz.yaml')
+    # Check file existance
+    assert File.directory?('content/xxx/yyy')
+    assert !File.directory?('content/xxx/yyy/zzz')
+    assert File.file?('content/xxx/yyy/zzz.html')
+    assert !File.file?('content/xxx/yyy/zzz.yaml')
 
-      # Check file content
-      expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
-      assert_equal expected, File.read('content/xxx/yyy/zzz.html')
-    end
+    # Check file content
+    expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+    assert_equal expected, File.read('content/xxx/yyy/zzz.html')
   end
 
   def test_create_layout
-    in_dir 'tmp' do
-      # Create layout
-      data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
-      data_source.create_layout('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
+    # Create layout
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
+    data_source.create_layout('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
-      # Check file existance
-      assert File.directory?('layouts/xxx/yyy')
-      assert !File.directory?('layouts/xxx/yyy/zzz')
-      assert File.file?('layouts/xxx/yyy/zzz.html')
-      assert !File.file?('layouts/xxx/yyy/zzz.yaml')
+    # Check file existance
+    assert File.directory?('layouts/xxx/yyy')
+    assert !File.directory?('layouts/xxx/yyy/zzz')
+    assert File.file?('layouts/xxx/yyy/zzz.html')
+    assert !File.file?('layouts/xxx/yyy/zzz.yaml')
 
-      # Check file content
-      expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
-      assert_equal expected, File.read('layouts/xxx/yyy/zzz.html')
-    end
+    # Check file content
+    expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+    assert_equal expected, File.read('layouts/xxx/yyy/zzz.html')
   end
 
   # Test private methods
@@ -179,21 +171,21 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo')
-    FileUtils.mkdir_p('tmp/foo/a/b')
-    File.open('tmp/foo/bar.html',       'w') { |io| io.write('test') }
-    File.open('tmp/foo/baz.html',       'w') { |io| io.write('test') }
-    File.open('tmp/foo/a/b/c.html',     'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html~',     'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html.orig', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html.rej',  'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo')
+    FileUtils.mkdir_p('foo/a/b')
+    File.open('foo/bar.html',       'w') { |io| io.write('test') }
+    File.open('foo/baz.html',       'w') { |io| io.write('test') }
+    File.open('foo/a/b/c.html',     'w') { |io| io.write('test') }
+    File.open('foo/ugly.html~',     'w') { |io| io.write('test') }
+    File.open('foo/ugly.html.orig', 'w') { |io| io.write('test') }
+    File.open('foo/ugly.html.rej',  'w') { |io| io.write('test') }
+    File.open('foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      [ 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+      [ 'foo/bar.html', 'foo/baz.html' ],
       data_source.instance_eval do
-        files('tmp/foo', false).sort
+        files('foo', false).sort
       end
     )
   end
@@ -203,28 +195,28 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Build directory
-    FileUtils.mkdir_p('tmp/foo')
-    FileUtils.mkdir_p('tmp/foo/a/b')
-    File.open('tmp/foo/bar.html',       'w') { |io| io.write('test') }
-    File.open('tmp/foo/baz.html',       'w') { |io| io.write('test') }
-    File.open('tmp/foo/a/b/c.html',     'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html~',     'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html.orig', 'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html.rej',  'w') { |io| io.write('test') }
-    File.open('tmp/foo/ugly.html.bak',  'w') { |io| io.write('test') }
+    FileUtils.mkdir_p('foo')
+    FileUtils.mkdir_p('foo/a/b')
+    File.open('foo/bar.html',       'w') { |io| io.write('test') }
+    File.open('foo/baz.html',       'w') { |io| io.write('test') }
+    File.open('foo/a/b/c.html',     'w') { |io| io.write('test') }
+    File.open('foo/ugly.html~',     'w') { |io| io.write('test') }
+    File.open('foo/ugly.html.orig', 'w') { |io| io.write('test') }
+    File.open('foo/ugly.html.rej',  'w') { |io| io.write('test') }
+    File.open('foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
     # Check content filename
     assert_equal(
-      [ 'tmp/foo/a/b/c.html', 'tmp/foo/bar.html', 'tmp/foo/baz.html' ],
+      [ 'foo/a/b/c.html', 'foo/bar.html', 'foo/baz.html' ],
       data_source.instance_eval do
-        files('tmp/foo', true).sort
+        files('foo', true).sort
       end
     )
   end
 
   def test_parse_file_invalid
     # Create a file
-    File.open('tmp/test.html', 'w') do |io|
+    File.open('test.html', 'w') do |io|
       io.write "blah blah\n"
     end
 
@@ -233,13 +225,13 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
     # Parse it
     assert_raises(RuntimeError) do
-      data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
+      data_source.instance_eval { parse_file('test.html', 'foobar') }
     end
   end
 
   def test_parse_file_full_meta
     # Create a file
-    File.open('tmp/test.html', 'w') do |io|
+    File.open('test.html', 'w') do |io|
       io.write "-----\n"
       io.write "foo: bar\n"
       io.write "-----\n"
@@ -250,14 +242,14 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Parse it
-    result = data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
+    result = data_source.instance_eval { parse_file('test.html', 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('blah blah', result[1])
   end
 
   def test_parse_file_empty_meta
     # Create a file
-    File.open('tmp/test.html', 'w') do |io|
+    File.open('test.html', 'w') do |io|
       io.write "-----\n"
       io.write "-----\n"
       io.write "blah blah\n"
@@ -267,7 +259,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Parse it
-    result = data_source.instance_eval { parse_file('tmp/test.html', 'foobar') }
+    result = data_source.instance_eval { parse_file('test.html', 'foobar') }
     assert_equal({}, result[0])
     assert_equal('blah blah', result[1])
   end

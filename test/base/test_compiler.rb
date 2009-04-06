@@ -38,10 +38,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).times(6)
 
     # Run
-    FileUtils.cd('tmp') { compiler.run }
+    compiler.run
 
     # Make sure output dir is created
-    assert(File.directory?('tmp/foo/bar/baz'))
+    assert(File.directory?('foo/bar/baz'))
 
     # Check items
     assert_equal(4, compiler.instance_eval { @items }.size)
@@ -70,10 +70,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).times(3)
 
     # Run
-    FileUtils.cd('tmp') { compiler.run([ page ]) }
+    compiler.run([ page ])
 
     # Make sure output dir is created
-    assert(File.directory?('tmp/foo/bar/baz'))
+    assert(File.directory?('foo/bar/baz'))
 
     # Check items
     assert_equal(1, compiler.instance_eval { @items }.size)
@@ -102,10 +102,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).times(3)
 
     # Run
-    FileUtils.cd('tmp') { compiler.run([ asset ]) }
+    compiler.run([ asset ])
 
     # Make sure output dir is created
-    assert(File.directory?('tmp/foo/bar/baz'))
+    assert(File.directory?('foo/bar/baz'))
 
     # Check items
     assert_equal(1, compiler.instance_eval { @items }.size)
@@ -119,28 +119,26 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
 
-    FileUtils.cd('tmp') do
-      # Create rules file
-      File.open('Rules', 'w') do |io|
-        io.write <<-EOF
+    # Create rules file
+    File.open('Rules', 'w') do |io|
+      io.write <<-EOF
 page '*' do |p|
-  p.write
+p.write
 end
 EOF
-      end
-
-      # Load rules
-      compiler.load_rules
-
-      # Check rule counts
-      assert_equal(1, compiler.instance_eval { @page_compilation_rules  }.size)
-      assert_equal(0, compiler.instance_eval { @asset_compilation_rules }.size)
-
-      # Check rule
-      rule = compiler.instance_eval { @page_compilation_rules }[0]
-      assert_equal(:default,  rule.rep_name)
-      assert_equal(/^(.*?)$/, rule.identifier_regex)
     end
+
+    # Load rules
+    compiler.load_rules
+
+    # Check rule counts
+    assert_equal(1, compiler.instance_eval { @page_compilation_rules  }.size)
+    assert_equal(0, compiler.instance_eval { @asset_compilation_rules }.size)
+
+    # Check rule
+    rule = compiler.instance_eval { @page_compilation_rules }[0]
+    assert_equal(:default,  rule.rep_name)
+    assert_equal(/^(.*?)$/, rule.identifier_regex)
   end
 
   def test_load_rules_with_broken_rules_file
@@ -150,25 +148,23 @@ EOF
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
 
-    FileUtils.cd('tmp') do
-      # Create rules file
-      File.open('Rules', 'w') do |io|
-        io.write <<-EOF
+    # Create rules file
+    File.open('Rules', 'w') do |io|
+      io.write <<-EOF
 some_function_that_doesn_really_exist(
-  weird_param_number_one,
-  mysterious_param_number_two
+weird_param_number_one,
+mysterious_param_number_two
 )
 EOF
-      end
-
-      # Try loading rules
-      error = assert_raises(NameError) do
-        compiler.load_rules
-      end
-
-      # Check error
-      assert_match 'Rules', error.backtrace.join(', ')
     end
+
+    # Try loading rules
+    error = assert_raises(NameError) do
+      compiler.load_rules
+    end
+
+    # Check error
+    assert_match 'Rules', error.backtrace.join(', ')
   end
 
   def test_load_rules_with_missing_rules_file
@@ -178,11 +174,9 @@ EOF
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
 
-    FileUtils.cd('tmp') do
-      # Try loading rules
-      assert_raises(Nanoc3::Errors::NoRulesFileFoundError) do
-        compiler.load_rules
-      end
+    # Try loading rules
+    assert_raises(Nanoc3::Errors::NoRulesFileFoundError) do
+      compiler.load_rules
     end
   end
 

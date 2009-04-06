@@ -6,12 +6,12 @@ class Nanoc3::Extra::FileProxyTest < MiniTest::Unit::TestCase
 
   def test_stub
     # Create test file
-    File.open('tmp/test.txt', 'w') { |io| }
+    File.open('test.txt', 'w') { |io| }
 
     # Create lots of file proxies
     count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
     file_proxies = []
-    count.times { file_proxies << Nanoc3::Extra::FileProxy.new('tmp/test.txt') }
+    count.times { file_proxies << Nanoc3::Extra::FileProxy.new('test.txt') }
   end
 
 end
