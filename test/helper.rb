@@ -27,23 +27,6 @@ require 'stringio'
 
 module Nanoc3::TestHelpers
 
-  def with_temp_site(data_source='filesystem')
-    # Create site
-    create_site('site', data_source)
-
-    FileUtils.cd('site') do
-      # Load site
-      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
-
-      # Done
-      yield site
-    end
-  end
-
-  def create_site(name, data_source='filesystem')
-    Nanoc3::CLI::Base.new.run(['create_site', name, '-d', data_source])
-  end
-
   def if_have(x)
     require x
     yield
