@@ -31,21 +31,13 @@ module Nanoc3::TestHelpers
     # Create site
     create_site('site', data_source)
 
-    in_dir %w{ site } do
+    FileUtils.cd('site') do
       # Load site
       site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
       # Done
       yield site
     end
-  end
-
-  # Convenience function for cd'ing in and out of a directory
-  def in_dir(path)
-    FileUtils.cd(File.join([ path ].flatten))
-    yield
-  ensure
-    FileUtils.cd(File.join([ path ].flatten.map { |n| '..' }))
   end
 
   def create_site(name, data_source='filesystem')

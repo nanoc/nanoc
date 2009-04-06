@@ -10,7 +10,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # Create site
     create_site('site')
 
-    in_dir %w{ site } do
+    FileUtils.cd('site') do
       # Get site
       site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
