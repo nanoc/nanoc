@@ -19,8 +19,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -46,8 +46,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -73,8 +73,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -100,8 +100,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -127,8 +127,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -154,8 +154,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -181,8 +181,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -208,8 +208,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content
@@ -235,8 +235,8 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = Object.new
-      def @item.path ; '/foo/bar/baz/' ; end
+      @page = Object.new
+      def @page.path ; '/foo/bar/baz/' ; end
     end
 
     # Set content

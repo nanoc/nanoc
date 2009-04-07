@@ -71,8 +71,8 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_with_self
     # Mock item
-    @item = mock
-    @item.expects(:path).returns('/foo/bar/baz/')
+    @page = mock
+    @page.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -83,8 +83,8 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_with_root
     # Mock item
-    @item = mock
-    @item.expects(:path).returns('/foo/bar/baz/')
+    @page = mock
+    @page.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -95,8 +95,8 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_file
     # Mock item
-    @item = mock
-    @item.expects(:path).returns('/foo/bar/baz/')
+    @page = mock
+    @page.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -107,8 +107,8 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_dir
     # Mock item
-    @item = mock
-    @item.expects(:path).returns('/foo/bar/baz/')
+    @page = mock
+    @page.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -119,8 +119,8 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_rep
     # Mock self
-    @item = mock
-    @item.expects(:path).returns('/foo/bar/baz/')
+    @page = mock
+    @page.expects(:path).returns('/foo/bar/baz/')
 
     # Mock other
     other = mock
@@ -130,6 +130,30 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
     assert_equal(
       '../../quux/',
       relative_path_to(other)
+    )
+  end
+
+  def test_relative_path_to_with_page
+    # Mock item
+    @page = mock
+    @page.expects(:path).returns('/foo/bar/baz/')
+
+    # Test
+    assert_equal(
+      '../../quux',
+      relative_path_to('/foo/quux')
+    )
+  end
+
+  def test_relative_path_to_with_asset
+    # Mock item
+    @asset = mock
+    @asset.expects(:path).returns('/foo/bar/baz/')
+
+    # Test
+    assert_equal(
+      '../../quux',
+      relative_path_to('/foo/quux')
     )
   end
 
