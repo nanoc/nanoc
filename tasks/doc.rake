@@ -21,14 +21,12 @@ namespace :doc do
                      Dir.glob('lib/nanoc/data_sources/**/*.rb') +
                      Dir.glob('lib/nanoc/extra/**/*.rb') +
                      Dir.glob('lib/nanoc/helpers/**/*.rb')
-    puts yardoc_files.join("\n- ")
     yardoc_options = [
       '--verbose',
       '--readme', 'README'
     ]
 
     # Build
-    puts *[ 'yardoc', yardoc_files, yardoc_options ].flatten.inspect
     system *[ 'yardoc', yardoc_files, yardoc_options ].flatten
   end
 
