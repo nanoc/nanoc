@@ -126,7 +126,7 @@ EOS
   </head>
   <body>
     <div id="main">
-<%= @page.content %>
+<%= @page_rep.content %>
     </div>
     <div id="sidebar">
       <h2>Documentation</h2>
