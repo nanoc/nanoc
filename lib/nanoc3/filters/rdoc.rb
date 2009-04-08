@@ -1,8 +1,6 @@
 module Nanoc3::Filters
   class RDoc < Nanoc3::Filter
 
-    identifier :rdoc
-
     def run(content)
       begin
         # new RDoc

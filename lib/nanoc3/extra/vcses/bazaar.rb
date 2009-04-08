@@ -2,8 +2,6 @@ module Nanoc3::Extra::VCSes
 
   class Bazaar < Nanoc3::Extra::VCS
 
-    identifiers :bazaar, :bzr
-
     def add(filename)
       system('bzr', 'add', filename)
     end

@@ -1,8 +1,6 @@
 module Nanoc3::Filters
   class RubyPants < Nanoc3::Filter
 
-    identifier :rubypants
-
     def run(content)
       require 'rubypants'
 

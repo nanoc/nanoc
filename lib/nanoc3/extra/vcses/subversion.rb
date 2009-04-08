@@ -2,8 +2,6 @@ module Nanoc3::Extra::VCSes
 
   class Subversion < Nanoc3::Extra::VCS
 
-    identifiers :subversion, :svn
-
     def add(filename)
       system('svn', 'add', filename)
     end

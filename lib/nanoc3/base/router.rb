@@ -10,6 +10,21 @@ module Nanoc3
       @site = site
     end
 
+    # Sets the identifiers for this router.
+    def self.identifiers(*identifiers)
+      Nanoc3::Router.register(self, *identifiers)
+    end
+
+    # Sets the identifier for this router.
+    def self.identifier(identifier)
+      Nanoc3::Router.register(self, identifier)
+    end
+
+    # Registers the given class as a router with the given identifier.
+    def self.register(class_or_name, *identifiers)
+      Nanoc3::Plugin.register(Nanoc3::Router, class_or_name, *identifiers)
+    end
+
     # Returns the routed path for the given page representation, including the
     # filename and the extension. It should start with a slash, and should be
     # relative to the web root (i.e. should not include any references to the

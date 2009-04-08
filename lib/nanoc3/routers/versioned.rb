@@ -25,8 +25,6 @@ module Nanoc3::Routers
   #         href="<%= @assets.find { |a| a.asset_id == 'style' }.path %>">
   class Versioned < Nanoc3::Router
 
-    identifier :versioned
-
     def path_for_page_rep(page_rep)
       # Get data we need
       filename   = page_rep.item.attribute_named(:filename)  || 'index'

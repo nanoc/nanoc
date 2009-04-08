@@ -1,8 +1,6 @@
 module Nanoc3::Filters
   class RelativizePaths < Nanoc3::Filter
 
-    identifier :relativize_paths
-
     require 'nanoc3/helpers/link_to'
     include Nanoc3::Helpers::LinkTo
 

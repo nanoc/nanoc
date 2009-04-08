@@ -5,8 +5,6 @@ module Nanoc3::Routers
   # the same as the hierarchy of uncompiled pages and assets.
   class Default < Nanoc3::Router
 
-    identifier :default
-
     def path_for_page_rep(page_rep)
       # Get data we need
       filename   = page_rep.item.attribute_named(:filename)  || 'index'

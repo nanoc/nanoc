@@ -20,6 +20,21 @@ module Nanoc3
       @references = 0
     end
 
+    # Sets the identifiers for this data source.
+    def self.identifiers(*identifiers)
+      Nanoc3::DataSource.register(self, *identifiers)
+    end
+
+    # Sets the identifier for this data source.
+    def self.identifier(identifier)
+      Nanoc3::DataSource.register(self, identifier)
+    end
+
+    # Registers the given class as a data source with the given identifier.
+    def self.register(class_or_name, *identifiers)
+      Nanoc3::Plugin.register(Nanoc3::DataSource, class_or_name, *identifiers)
+    end
+
     # Loads the data source when necessary (calling +up+), yields, and unloads
     # the data source when it is not being used elsewhere. All data source
     # queries and data manipulations should be wrapped in a +loading+ block;

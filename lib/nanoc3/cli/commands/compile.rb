@@ -61,6 +61,7 @@ module Nanoc3::CLI
     def run(options, arguments)
       # Make sure we are in a nanoc site directory
       @base.require_site
+      @base.site.load_data
 
       # Check presence of --all option
       if options.has_key?(:all)

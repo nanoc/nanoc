@@ -1,5 +1,9 @@
 module Nanoc3::DataSources # :nodoc:
-end
 
-require 'nanoc3/data_sources/filesystem'
-require 'nanoc3/data_sources/filesystem_combined'
+  autoload 'Filesystem',         'nanoc3/data_sources/filesystem'
+  autoload 'FilesystemCombined', 'nanoc3/data_sources/filesystem_combined'
+
+  Nanoc3::DataSource.register '::Nanoc3::DataSources::Filesystem',         :filesystem
+  Nanoc3::DataSource.register '::Nanoc3::DataSources::FilesystemCombined', :filesystem_combined
+
+end

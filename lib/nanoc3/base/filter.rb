@@ -20,6 +20,21 @@ module Nanoc3
       @assigns = a_assigns
     end
 
+    # Sets the identifiers for this filter.
+    def self.identifiers(*identifiers)
+      Nanoc3::Filter.register(self, *identifiers)
+    end
+
+    # Sets the identifier for this filter.
+    def self.identifier(identifier)
+      Nanoc3::Filter.register(self, identifier)
+    end
+
+    # Registers the given class as a filter with the given identifier.
+    def self.register(class_or_name, *identifiers)
+      Nanoc3::Plugin.register(Nanoc3::Filter, class_or_name, *identifiers)
+    end
+
     # Runs the filter. This method returns the filtered content.
     #
     # +content+:: The unprocessed content that should be filtered.
