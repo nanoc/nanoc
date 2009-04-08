@@ -56,10 +56,6 @@ module Nanoc3::DataSources
   # sub-directories.
   class FilesystemCombined < Nanoc3::DataSource
 
-    ########## Attributes ##########
-
-    identifier :filesystem_combined
-
     ########## VCSes ##########
 
     attr_accessor :vcs

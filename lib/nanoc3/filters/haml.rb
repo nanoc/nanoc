@@ -1,8 +1,6 @@
 module Nanoc3::Filters
   class Haml < Nanoc3::Filter
 
-    identifier :haml
-
     def run(content, params={})
       require 'haml'
 

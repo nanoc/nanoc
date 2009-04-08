@@ -52,10 +52,6 @@ module Nanoc3::DataSources
   # sub-directories.
   class Filesystem < Nanoc3::DataSource
 
-    ########## Attributes ##########
-
-    identifier :filesystem
-
     ########## VCSes ##########
 
     attr_accessor :vcs

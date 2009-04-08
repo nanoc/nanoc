@@ -11,56 +11,42 @@ module Nanoc3
 
     class << self
 
-      # Sets or returns the identifiers for this plugin.
+      # Registers the given class as a plugin.
       #
-      # When given a list of identifier symbols, sets the identifiers for
-      # this plugin. When given nothing, returns an array of identifier
-      # symbols for this plugin.
-      def identifiers(*identifiers)
-        # Initialize
-        if !instance_variables.include?('@identifiers') && !instance_variables.include?(:'@identifiers')
-          @identifiers = []
-        end
-
-        if identifiers.empty?
-          @identifiers
-        else
-          @identifiers = identifiers
-          @identifiers.each { |i| register(i, self) }
-        end
-      end
-
-      # Sets or returns the identifier for this plugin.
+      # +superclass+:: The superclass of the plugin. For example:
+      #                Nanoc::Filter, Nanoc::Router.
       #
-      # When given an identifier symbols, sets the identifier for this plugin.
-      # When given nothing, returns the identifier for this plugin.
-      def identifier(identifier=nil)
-        # Initialize
-        if !instance_variables.include?('@identifiers') && !instance_variables.include?(:'@identifiers')
-          @identifiers = []
-        end
+      # +class_or_name+:: The class to register. This can be a string, in
+      #                   which case it will be automatically converted to a
+      #                   proper class at lookup. For example:
+      #                   'Nanoc::Filters::ERB', Nanoc::Filters::Haml.
+      #
+      # +identifiers+:: One or more symbols identifying the class. For
+      #                 example: :haml, :erb.
+      def register(superclass, class_or_name, *identifiers)
+        MAP[superclass] ||= {}
 
-        if identifier.nil?
-          @identifiers.first
-        else
-          @identifiers = [ identifier ]
-          register(identifier, self)
+        identifiers.each do |identifier|
+          MAP[superclass][identifier.to_sym] = class_or_name
         end
-      end
-
-      # Registers the given class +klass+ with the given name. This will allow
-      # the named method to find the class.
-      def register(name, klass)
-        MAP[klass.superclass] ||= {}
-        MAP[klass.superclass][name.to_sym] = klass
       end
 
       # Returns the the plugin with the given name. Only subclasses of this
       # class will be searched. For example, calling this method on
       # Nanoc3::Filter will cause only Nanoc3::Filter subclasses to be searched.
       def named(name)
+        # Initialize
         MAP[self] ||= {}
-        MAP[self][name.to_sym]
+
+        # Lookup
+        class_or_name = MAP[self][name.to_sym]
+
+        # Get class
+        if class_or_name.is_a?(String)
+          class_or_name.scan(/\w+/).inject(self) { |memo, part| memo.const_get(part) }
+        else
+          class_or_name
+        end
       end
 
     end

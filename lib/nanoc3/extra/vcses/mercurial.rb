@@ -2,8 +2,6 @@ module Nanoc3::Extra::VCSes
 
   class Mercurial < Nanoc3::Extra::VCS
 
-    identifiers :mercurial, :hg
-
     def add(filename)
       system('hg', 'add', filename)
     end

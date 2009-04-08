@@ -8,8 +8,6 @@ module Nanoc3::Routers
   # instead of /about/index.html.
   class NoDirs < Nanoc3::Router
 
-    identifier :no_dirs
-
     def path_for_page_rep(page_rep)
       # Get data we need
       filename   = page_rep.item.attribute_named(:filename)  || 'index'

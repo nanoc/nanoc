@@ -171,13 +171,13 @@ module Nanoc3
       filter = klass.new(assigns)
 
       # Run filter
-      Nanoc3::NotificationCenter.post(:filtering_started, self, klass.identifier)
+      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
       if filter.method(:run).arity == -2
         @content[:last] = filter.run(@content[:last], filter_args)
       else
         @content[:last] = filter.run(@content[:last])
       end
-      Nanoc3::NotificationCenter.post(:filtering_ended, self, klass.identifier)
+      Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
       # Create snapshot
       snapshot(@content[:post] ? :post : :pre)
@@ -204,9 +204,9 @@ module Nanoc3
       snapshot(:pre)
 
       # Layout
-      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_class.identifier)
+      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
       @content[:last] = filter.run(layout.content)
-      Nanoc3::NotificationCenter.post(:filtering_ended,   self, filter_class.identifier)
+      Nanoc3::NotificationCenter.post(:filtering_ended,   self, filter_name)
 
       # Create "post" snapshot
       snapshot(:post)

@@ -1,8 +1,6 @@
 module Nanoc3::Filters
   class Markaby < Nanoc3::Filter
 
-    identifier :markaby
-
     def run(content)
       require 'markaby'
 
