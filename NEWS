@@ -1,6 +1,14 @@
 nanoc Release Notes
 ===================
 
+2.2.1
+-----
+
+* Fixed bug which prevented relative_path_to from working
+* Split relativize_paths filter into two filter: relativize_paths_in_html
+  and relativize_paths_in_css
+* Removed bundled mime-types library
+
 2.2
 ---
 
