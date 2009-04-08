@@ -8,17 +8,6 @@ require 'rake/gempackagetask'
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
 require 'nanoc'
 
-##### Test Ruby 1.9
-
-if RUBY_VERSION >= '1.9'
-  # Check presence of vendor/mocha
-  unless File.directory?('vendor/mocha')
-    warn "You appear to be running Ruby 1.9. Please make sure that, before " +
-         "running the tests, you have a version of mocha that is " +
-         "compatible with Ruby 1.9."
-  end
-end
-
 ##### General details
 
 NAME      = 'nanoc'
