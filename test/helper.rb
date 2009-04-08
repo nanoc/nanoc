@@ -1,13 +1,6 @@
 # Try getting RubyGems
 begin ; require 'rubygems' ; rescue LoadError ; end
 
-# Add vendor to load path
-[ 'mocha' ].each do |e|
-  path = File.join(File.dirname(__FILE__), '..', 'vendor', e, 'lib')
-  next unless File.directory?(path)
-  $LOAD_PATH.unshift(File.expand_path(path))
-end
-
 # Load unit testing stuff
 begin
   require 'minitest/unit'
