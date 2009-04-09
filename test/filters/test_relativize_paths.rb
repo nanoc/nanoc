@@ -84,19 +84,10 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     # Create filter with mock item
     filter = Nanoc3::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
-    end
-
-    # Set content
-    raw_content      = %[<a href="/foo">foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
-
     # Test
-    actual_content = filter.run(raw_content)
-    assert_equal(expected_content, actual_content)
+    assert_raises(RuntimeError) do
+      filter.run("moo")
+    end
   end
 
   def test_filter_css_with_double_quotes
