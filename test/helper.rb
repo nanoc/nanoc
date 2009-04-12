@@ -32,8 +32,6 @@ module Nanoc3::TestHelpers
     GC.start
 
     # Go quiet
-    $stdout_real = $stdout
-    $stderr_real = $stderr
     unless ENV['QUIET'] == 'false'
       $stdout = StringIO.new
       $stderr = StringIO.new
@@ -51,8 +49,8 @@ module Nanoc3::TestHelpers
 
     # Go unquiet
     unless ENV['QUIET'] == 'false'
-      $stdout = $stdout_real
-      $stderr = $stderr_real
+      $stdout = STDOUT
+      $stderr = STDERR
     end
   end
 
