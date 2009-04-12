@@ -36,24 +36,26 @@ module Nanoc3::CLI
       end
 
       # Get list of plugins (before and after)
-      plugins_before  = find_all_plugins
+      plugins_before = Nanoc3::Plugin.all
       @base.site
-      plugins_after   = find_all_plugins
+      @base.site.load_data
+      plugins_after  = Nanoc3::Plugin.all
 
-      # Get structured list of plugins
-      plugins = {}
-      plugin_classes.each do |klass|
-        plugins[klass] = {
-          :builtin  => plugins_before[klass],
-          :custom   => plugins_after[klass] - plugins_before[klass]
-        }
+      # Divide list of plugins into builtin and custom
+      plugins_builtin = plugins_before
+      plugins_custom  = plugins_after - plugins_before
+
+      # Find max identifiers length
+      plugin_with_longest_identifiers = plugins_after.inject do |longest, current|
+        longest[:identifiers].join(', ').size > current[:identifiers].join(', ').size ? longest : current
       end
-
-      # Find longest name
-      max_length = plugins.values.map { |k| k.values }.flatten.map { |k| k.identifiers.join(', ').length }.max + 2
+      max_identifiers_length = plugin_with_longest_identifiers[:identifiers].join(', ').size
 
       PLUGIN_CLASS_ORDER.each do |superclass|
-        structured_plugins = plugins[superclass]
+        plugins_with_this_superclass = {
+          :builtin => plugins_builtin.select { |p| p[:superclass] == superclass },
+          :custom  => plugins_custom.select  { |p| p[:superclass] == superclass }
+        }
 
         # Print kind
         kind = name_for_plugin_class(superclass)
@@ -63,24 +65,23 @@ module Nanoc3::CLI
         # Print plugins organised by subtype
         [ :builtin, :custom ].each do |type|
           # Find relevant plugins
-          subclasses = structured_plugins[type]
+          relevant_plugins = plugins_with_this_superclass[type]
 
           # Print type
           puts "  #{type}:"
-          if subclasses.empty?
+          if relevant_plugins.empty?
             puts "    (none)"
             next
           end
 
           # Print plugins
-          subclasses.sort_by { |k| k.identifier.to_s }.each do |klass|
-            # Get data
-            is_custom   = !plugins_before[superclass].include?(klass)
-            klass_name  = klass.to_s
-            klass_id    = klass.identifiers.join(', ')
-
+          relevant_plugins.sort_by { |k| k[:identifiers].join(', ') }.each do |plugin|
             # Display
-            puts sprintf("    %-#{max_length}s (%s)", klass_id, klass_name)
+            puts sprintf(
+              "    %-#{max_identifiers_length}s (%s)",
+              plugin[:identifiers].join(', '),
+              plugin[:class].to_s.sub(/^::/, '')
+            )
           end
         end
 
@@ -103,16 +104,6 @@ module Nanoc3::CLI
       Nanoc3::Router       => 'Routers',
       Nanoc3::Extra::VCS   => 'VCSes'
     }
-
-    def find_all_plugins
-      plugin_classes.inject({}) do |memo, klass|
-        memo.merge(klass => Nanoc3::Plugin::MAP[klass].values.uniq)
-      end
-    end
-
-    def plugin_classes
-      PLUGIN_CLASSES.keys
-    end
 
     def name_for_plugin_class(klass)
       PLUGIN_CLASSES[klass]
