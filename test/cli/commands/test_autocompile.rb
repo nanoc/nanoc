@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc3::CLI::AutocompileCommandTest < MiniTest::Unit::TestCase
+class Nanoc3::CLI::Commands::AutocompileTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 

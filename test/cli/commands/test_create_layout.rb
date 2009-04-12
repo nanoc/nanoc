@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc3::CLI::CreateLayoutCommandTest < MiniTest::Unit::TestCase
+class Nanoc3::CLI::Commands::CreateLayoutTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 

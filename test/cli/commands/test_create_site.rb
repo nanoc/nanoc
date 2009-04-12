@@ -1,6 +1,6 @@
 require 'test/helper'
 
-class Nanoc3::CLI::CreateSiteCommandTest < MiniTest::Unit::TestCase
+class Nanoc3::CLI::Commands::CreateSiteTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
