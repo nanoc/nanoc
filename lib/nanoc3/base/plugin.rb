@@ -49,6 +49,36 @@ module Nanoc3
         end
       end
 
+      # Returns a list of all plugins in the following format:
+      #
+      #   { :class => ..., :superclass => ..., :identifiers => ... }
+      def all
+        plugins = []
+        MAP.each_pair do |superclass, submap|
+          submap.each_pair do |identifier, klass|
+            # Find existing plugin
+            existing_plugin = plugins.find do |p|
+              p[:class] == klass && p[:superclass] == superclass
+            end
+
+            if existing_plugin
+              # Add identifier to existing plugin
+              existing_plugin[:identifiers] << identifier
+              existing_plugin[:identifiers] = existing_plugin[:identifiers].sort_by { |s| s.to_s }
+            else
+              # Create new plugin
+              plugins << {
+                :class       => klass,
+                :superclass  => superclass,
+                :identifiers => [ identifier ]
+              }
+            end
+          end
+        end
+
+        plugins
+      end
+
     end
 
   end
