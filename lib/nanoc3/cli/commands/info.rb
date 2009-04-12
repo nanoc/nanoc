@@ -1,6 +1,6 @@
-module Nanoc3::CLI
+module Nanoc3::CLI::Commands
 
-  class InfoCommand < Cri::Command # :nodoc:
+  class Info < Cri::Command # :nodoc:
 
     def name
       'info'

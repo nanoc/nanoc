@@ -8,17 +8,17 @@ module Nanoc3::CLI
       super('nanoc3')
 
       # Add help command
-      self.help_command = Nanoc3::CLI::HelpCommand.new
+      self.help_command = Nanoc3::CLI::Commands::Help.new
       add_command(self.help_command)
 
       # Add other commands
-      add_command(Nanoc3::CLI::AutocompileCommand.new)
-      add_command(Nanoc3::CLI::CompileCommand.new)
-      add_command(Nanoc3::CLI::CreateLayoutCommand.new)
-      add_command(Nanoc3::CLI::CreatePageCommand.new)
-      add_command(Nanoc3::CLI::CreateSiteCommand.new)
-      add_command(Nanoc3::CLI::InfoCommand.new)
-      add_command(Nanoc3::CLI::UpdateCommand.new)
+      add_command(Nanoc3::CLI::Commands::Autocompile.new)
+      add_command(Nanoc3::CLI::Commands::Compile.new)
+      add_command(Nanoc3::CLI::Commands::CreateLayout.new)
+      add_command(Nanoc3::CLI::Commands::CreatePage.new)
+      add_command(Nanoc3::CLI::Commands::CreateSite.new)
+      add_command(Nanoc3::CLI::Commands::Info.new)
+      add_command(Nanoc3::CLI::Commands::Update.new)
     end
 
     # Helper function which can be called when a command is executed that
