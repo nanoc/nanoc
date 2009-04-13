@@ -79,7 +79,7 @@ module Nanoc3::CLI::Commands
         "<%= yield %>\n" +
         "  </body>\n" +
         "</html>\n",
-        { :filter => 'erb' },
+        {},
         identifier
       )
 
