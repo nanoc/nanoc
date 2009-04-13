@@ -24,7 +24,7 @@ module Nanoc3::Helpers
       data = capture(&block)
 
       # Find filter
-      filter = Nanoc3::Filter.named(filter_name).new(@_obj_rep)
+      filter = Nanoc3::Filter.named(filter_name).new(@_item_rep)
 
       # Filter captured data
       filtered_data = filter.run(data)

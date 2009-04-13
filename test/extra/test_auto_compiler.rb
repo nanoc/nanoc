@@ -318,7 +318,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create compiler
       compiler = Object.new
-      def compiler.run(objs, params={})
+      def compiler.run(items, params={})
         File.open('somefile.html', 'w') { |io| io.write("... compiled page content ...") }
       end
 

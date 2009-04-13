@@ -136,8 +136,8 @@ module Nanoc3
     # Returns the assignments that should be available when compiling the content.
     def assigns
       {
-        :_obj_rep   => self,
-        :_obj       => self.item,
+        :_item_rep  => self,
+        :_item      => self.item,
         :content    => @content[:last],
         :page_rep   => self.is_a?(Nanoc3::PageRep)  ? self.to_proxy      : nil,
         :page       => self.is_a?(Nanoc3::PageRep)  ? self.item.to_proxy : nil,

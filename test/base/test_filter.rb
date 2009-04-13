@@ -38,7 +38,7 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     item_rep.expects(:name).returns(:quux)
 
     # Create filter
-    filter = Nanoc3::Filter.new({ :_obj => item, :_obj_rep => item_rep, :page => mock })
+    filter = Nanoc3::Filter.new({ :_item => item, :_item_rep => item_rep, :page => mock })
 
     # Check filename
     assert_equal('page /foo/bar/baz/ (rep quux)', filter.filename)
@@ -52,7 +52,7 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     item_rep.expects(:name).returns(:quux)
 
     # Create filter
-    filter = Nanoc3::Filter.new({ :_obj => item, :_obj_rep => item_rep, :asset => mock })
+    filter = Nanoc3::Filter.new({ :_item => item, :_item_rep => item_rep, :asset => mock })
 
     # Check filename
     assert_equal('asset /foo/bar/baz/ (rep quux)', filter.filename)
@@ -64,7 +64,7 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     layout.expects(:identifier).returns('/wohba/')
 
     # Create filter
-    filter = Nanoc3::Filter.new({ :_obj => mock, :_obj_rep => mock, :page => mock, :layout => layout })
+    filter = Nanoc3::Filter.new({ :_item => mock, :_item_rep => mock, :page => mock, :layout => layout })
 
     # Check filename
     assert_equal('layout /wohba/', filter.filename)
