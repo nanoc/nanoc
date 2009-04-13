@@ -44,6 +44,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # Create foo item
     FileUtils.mkdir_p('content/foo')
     File.open('content/foo/foo.yaml', 'w') do |io|
+      io.write("---\n")
       io.write("title: Foo\n")
     end
     File.open('content/foo/foo.html', 'w') do |io|
@@ -53,6 +54,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # Create bar item
     FileUtils.mkdir_p('content/bar')
     File.open('content/bar/bar.yaml', 'w') do |io|
+      io.write("---\n")
       io.write("title: Bar\n")
     end
     File.open('content/bar/bar.html', 'w') do |io|
@@ -75,6 +77,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # Create layout
     FileUtils.mkdir_p('layouts/foo')
     File.open('layouts/foo/foo.yaml', 'w') do |io|
+      io.write("---\n")
       io.write("filter: erb\n")
     end
     File.open('layouts/foo/foo.rhtml', 'w') do |io|

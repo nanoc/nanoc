@@ -17,6 +17,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_without_general_deploy_config
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "foo: bar\n"
     end
 
@@ -35,6 +36,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_without_special_deploy_config
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  blahblah:\n"
       io.write "    stuff: more stuff\n"
@@ -55,6 +57,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_without_special_deploy_config_with_custom_deploy_config
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  blahblah:\n"
       io.write "    stuff: more stuff\n"
@@ -75,6 +78,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_without_dst
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  default:\n"
       io.write "    foo: bar\n"
@@ -95,6 +99,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_with_erroneous_dst
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  default:\n"
       io.write "    dst: asdf/\n"
@@ -115,6 +120,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_with_custom_deploy_config_string
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  foobar:\n"
       io.write "    dst: asdf\n"
@@ -141,6 +147,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_with_custom_deploy_config_symbol
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  foobar:\n"
       io.write "    dst: asdf\n"
@@ -167,6 +174,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_everything_okay
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  default:\n"
       io.write "    dst: asdf\n"
@@ -193,6 +201,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
   def test_run_everything_okay_dry
     # Create config
     File.open('config.yaml', 'w') do |io|
+      io.write "---\n"
       io.write "deploy:\n"
       io.write "  default:\n"
       io.write "    dst: asdf\n"
