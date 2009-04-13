@@ -30,8 +30,8 @@ module Nanoc3::Helpers
 
       # Get assigns
       assigns = {
-        :_obj_rep   => @_obj_rep,
-        :_obj       => @_obj,
+        :_item_rep   => @_item_rep,
+        :_item       => @_item,
         :page_rep   => @page_rep,
         :page       => @page,
         :asset_rep  => @asset_rep,

@@ -21,7 +21,7 @@ module Nanoc3::CLI::Commands
       'By default, only pages and assets that are outdated will be ' +
       'compiled. This can speed up the compilation process quite a bit, ' +
       'but pages that include content from other pages may have to be ' +
-      'recompiled manually. In order to compile objects even when they are ' +
+      'recompiled manually. In order to compile items even when they are ' +
       'outdated, use the --force option.' +
       "\n\n" +
       'Both pages and assets will be compiled by default. To disable the ' +
@@ -68,38 +68,38 @@ module Nanoc3::CLI::Commands
         $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
       end
 
-      # Find object(s) to compile
+      # Find item(s) to compile
       if arguments.size == 0
         # Find all pages and/or assets
         if options.has_key?(:'no-pages')
-          objs = @base.site.assets
+          items = @base.site.assets
         elsif options.has_key?(:'no-assets')
-          objs = @base.site.pages
+          items = @base.site.pages
         else
-          objs = nil
+          items = nil
         end
       else
-        # Find object(s) with given identifier(s)
-        objs = arguments.map do |identifier|
-          # Find object
+        # Find item(s) with given identifier(s)
+        items = arguments.map do |identifier|
+          # Find item
           identifier = identifier.cleaned_identifier
-          obj = @base.site.pages.find { |page| page.identifier == identifier }
-          obj = @base.site.assets.find { |asset| asset.identifier == identifier } if obj.nil?
+          item = @base.site.pages.find { |page| page.identifier == identifier }
+          item = @base.site.assets.find { |asset| asset.identifier == identifier } if item.nil?
 
-          # Ensure object
-          if obj.nil?
+          # Ensure item
+          if item.nil?
             $stderr.puts "Unknown page or asset: #{identifier}"
             exit 1
           end
 
-          obj
+          item
         end
       end
 
       # Compile site
       begin
         # Give feedback
-        puts "Compiling #{objs.nil? ? 'site' : 'objects'}..."
+        puts "Compiling #{items.nil? ? 'site' : 'items'}..."
 
         # Initialize profiling stuff
         time_before = Time.now
@@ -109,7 +109,7 @@ module Nanoc3::CLI::Commands
 
         # Compile
         @base.site.compiler.run(
-          objs,
+          items,
           :force => options.has_key?(:all) || options.has_key?(:force)
         )
 
@@ -132,8 +132,8 @@ module Nanoc3::CLI::Commands
 
         # Give general feedback
         puts
-        puts "No objects were modified." unless reps.any? { |r| r.modified? }
-        puts "#{objs.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
+        puts "No items were modified." unless reps.any? { |r| r.modified? }
+        puts "#{items.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
         if options.has_key?(:verbose)
           print_state_feedback(reps)
@@ -190,7 +190,7 @@ module Nanoc3::CLI::Commands
       if reps.any? { |r| !r.compiled? }
         $stderr.puts
         $stderr.puts "Warning: profiling information may not be accurate because " +
-                     "some objects were not compiled."
+                     "some items were not compiled."
       end
 
       # Print header

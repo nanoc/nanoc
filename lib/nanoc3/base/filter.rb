@@ -50,9 +50,9 @@ module Nanoc3
       if @assigns[:layout]
         "layout #{assigns[:layout].identifier}"
       elsif @assigns[:page]
-        "page #{assigns[:_obj].identifier} (rep #{assigns[:_obj_rep].name})"
+        "page #{assigns[:_item].identifier} (rep #{assigns[:_item_rep].name})"
       elsif @assigns[:asset]
-        "asset #{assigns[:_obj].identifier} (rep #{assigns[:_obj_rep].name})"
+        "asset #{assigns[:_item].identifier} (rep #{assigns[:_item_rep].name})"
       else
         '?'
       end

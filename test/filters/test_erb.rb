@@ -22,8 +22,8 @@ class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
 
     # Create filter
     filter = ::Nanoc3::Filters::ERB.new({
-      :_obj     => item,
-      :_obj_rep => item_rep,
+      :_item     => item,
+      :_item_rep => item_rep,
       :page     => MiniTest::Mock.new,
       :location => 'a cheap motel'
     })
@@ -49,8 +49,8 @@ class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
 
     # Create filter
     filter = ::Nanoc3::Filters::ERB.new({
-      :_obj     => item,
-      :_obj_rep => item_rep,
+      :_item     => item,
+      :_item_rep => item_rep,
       :asset    => MiniTest::Mock.new,
       :location => 'a cheap motel'
     })
