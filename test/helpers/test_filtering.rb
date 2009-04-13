@@ -15,7 +15,7 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
                 "<% end %>\n"
 
       # Evaluate content
-      @page = {}
+      @item = {}
       result = ::ERB.new(content).result(binding)
 
       # Check

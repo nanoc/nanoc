@@ -3,37 +3,36 @@ module Nanoc3
   # A Nanoc3::Site is the in-memory representation of a nanoc site. It holds
   # references to the following site data:
   #
-  # * +pages+ is a list of Nanoc3::Page instances representing pages
-  # * +assets+ is a list of Nanoc3::Asset instances representing assets
+  # * +items+ is a list of Nanoc3::Item instances representing items
   # * +layouts+ is a list of Nanoc3::Layout instances representing layouts
   # * +code+ is a Nanoc3::Code instance representing custom site code
   #
   # In addition, each site has a +config+ hash which stores the site
   # configuration. This configuration hash can have the following keys:
   #
-  # +output_dir+:: The directory to which compiled pages and assets will be
-  #                written. This path is relative to the current working
-  #                directory, but can also be an absolute path.
+  # +output_dir+:: The directory to which compiled items will be written. This
+  #                path is relative to the current working directory, but can
+  #                also be an absolute path.
   #
   # +data_source+:: The identifier of the data source that will be used for
   #                 loading site data.
   #
   # +router+:: The identifier of the router that will be used for determining
-  #            page and asset representation paths.
+  #            item representation paths.
   #
   # +index_filenames+:: A list of filenames that will be stripped off full
-  #                     page and asset paths to create cleaner URLs (for
-  #                     example, '/about/' will be used instead of
+  #                     item paths to create cleaner URLs (for example,
+  #                     '/about/' will be used instead of
   #                     '/about/index.html'). The default value should be okay
   #                     in most cases.
   #
   # A site also has several helper classes:
   #
-  # * +router+ is a Nanoc3::Router subclass instance used for determining page
-  #   and asset paths.
-  # * +data_source+ is a Nanoc3::DataSource subclass instance used for managing
+  # * +router+ is a Nanoc3::Router subclass instance used for determining item
+  #   paths.
+  # * +data_source+ is a Nanoc3::DataSource subclass instance used for loading
   #   site data.
-  # * +compiler+ is a Nanoc3::Compiler instance that compiles page and asset
+  # * +compiler+ is a Nanoc3::Compiler instance that compiles item
   #   representations.
   #
   # The physical representation of a Nanoc3::Site is usually a directory that
@@ -106,8 +105,7 @@ module Nanoc3
       # Load all data
       data_source.loading do
         load_code(force)
-        load_pages
-        load_assets
+        load_items
         load_layouts
       end
 
@@ -121,16 +119,10 @@ module Nanoc3
       @code
     end
 
-    # Returns this site's pages. Raises an exception if data hasn't been loaded yet.
-    def pages
-      raise Nanoc3::Errors::DataNotYetAvailableError.new('Pages', true) unless @data_loaded
-      @pages
-    end
-
-    # Returns this site's assets. Raises an exception if data hasn't been loaded yet.
-    def assets
-      raise Nanoc3::Errors::DataNotYetAvailableError.new('Assets', true) unless @data_loaded
-      @assets
+    # Returns this site's items. Raises an exception if data hasn't been loaded yet.
+    def items
+      raise Nanoc3::Errors::DataNotYetAvailableError.new('Items', true) unless @data_loaded
+      @items
     end
 
     # Returns this site's layouts. Raises an exception if data hasn't been loaded yet.
@@ -156,30 +148,23 @@ module Nanoc3
       @code_loaded = true
     end
 
-    # Loads this site's pages, sets up page child-parent relationships and
-    # builds each page's list of page representations.
-    def load_pages
-      @pages = data_source.pages
-      @pages.each { |p| p.site = self }
+    # Loads this site's items, sets up item child-parent relationships and
+    # builds each item's list of item representations.
+    def load_items
+      @items = data_source.items
+      @items.each { |p| p.site = self }
 
       # Setup child-parent links
-      @pages.each do |page|
+      @items.each do |item|
         # Get parent
-        parent_identifier = page.identifier.sub(/[^\/]+\/$/, '')
-        parent = @pages.find { |p| p.identifier == parent_identifier }
-        next if parent.nil? or page.identifier == '/'
+        parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
+        parent = @items.find { |p| p.identifier == parent_identifier }
+        next if parent.nil? or item.identifier == '/'
 
         # Link
-        page.parent = parent
-        parent.children << page
+        item.parent = parent
+        parent.children << item
       end
-    end
-
-    # Loads this site's assets and builds each asset's list of asset
-    # representations.
-    def load_assets
-      @assets = data_source.assets
-      @assets.each { |a| a.site = self }
     end
 
     # Loads this site's layouts.

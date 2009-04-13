@@ -35,13 +35,12 @@ class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
     assert_raises(NotImplementedError) { data_source.setup }
 
     # Test required methods - loading data
-    assert_raises(NotImplementedError) { data_source.pages }
-    assert_raises(NotImplementedError) { data_source.assets }
+    assert_raises(NotImplementedError) { data_source.items }
     assert_raises(NotImplementedError) { data_source.layouts }
     assert_raises(NotImplementedError) { data_source.code }
 
     # Test required method - creating data
-    assert_raises(NotImplementedError) { data_source.create_page(nil, nil, nil) }
+    assert_raises(NotImplementedError) { data_source.create_item(nil, nil, nil) }
     assert_raises(NotImplementedError) { data_source.create_layout(nil, nil, nil) }
   end
 

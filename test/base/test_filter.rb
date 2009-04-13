@@ -30,7 +30,7 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_filename_page
+  def test_filename_item
     # Mock items
     item = mock
     item.expects(:identifier).returns('/foo/bar/baz/')
@@ -38,24 +38,10 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     item_rep.expects(:name).returns(:quux)
 
     # Create filter
-    filter = Nanoc3::Filter.new({ :_item => item, :_item_rep => item_rep, :page => mock })
+    filter = Nanoc3::Filter.new({ :_item => item, :_item_rep => item_rep, :item => mock })
 
     # Check filename
-    assert_equal('page /foo/bar/baz/ (rep quux)', filter.filename)
-  end
-
-  def test_filename_asset
-    # Mock items
-    item = mock
-    item.expects(:identifier).returns('/foo/bar/baz/')
-    item_rep = mock
-    item_rep.expects(:name).returns(:quux)
-
-    # Create filter
-    filter = Nanoc3::Filter.new({ :_item => item, :_item_rep => item_rep, :asset => mock })
-
-    # Check filename
-    assert_equal('asset /foo/bar/baz/ (rep quux)', filter.filename)
+    assert_equal('item /foo/bar/baz/ (rep quux)', filter.filename)
   end
 
   def test_filename_layout
@@ -64,7 +50,7 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     layout.expects(:identifier).returns('/wohba/')
 
     # Create filter
-    filter = Nanoc3::Filter.new({ :_item => mock, :_item_rep => mock, :page => mock, :layout => layout })
+    filter = Nanoc3::Filter.new({ :_item => mock, :_item_rep => mock, :item => mock, :layout => layout })
 
     # Check filename
     assert_equal('layout /wohba/', filter.filename)

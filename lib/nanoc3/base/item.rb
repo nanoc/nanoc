@@ -1,9 +1,8 @@
 module Nanoc3
 
-  # Nanoc3::Item is the (abstract) superclass for any compileable item in a
-  # site. Currently, there are only two subclasses, Nanoc3::Page and
-  # Nanoc3::Asset. It has content and attributes, as well as an identifier. It
-  # can also store the modification time to speed up compilation.
+  # Nanoc3::Item is represents all compileable items in a site. It has content
+  # and attributes, as well as an identifier. It can also store the
+  # modification time to speed up compilation.
   #
   # An item is observable. The following events will be notified:
   #
@@ -35,7 +34,7 @@ module Nanoc3
     # The parent item of this item. This can be nil even for non-root items.
     attr_accessor :parent
 
-    # The child items of this page.
+    # The child items of this item.
     attr_accessor :children
 
     # Creates a new item.

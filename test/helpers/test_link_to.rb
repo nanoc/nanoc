@@ -43,23 +43,23 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   end
 
   def test_link_to_unless_current_current
-    # Create page
-    @page_rep = mock
-    @page_rep.expects(:path).at_least_once.returns('/foo/')
+    # Create item
+    @item_rep = mock
+    @item_rep.expects(:path).at_least_once.returns('/foo/')
 
     # Check
     assert_equal(
       '<span class="active" title="You\'re here.">Bar</span>',
-      link_to_unless_current('Bar', @page_rep)
+      link_to_unless_current('Bar', @item_rep)
     )
   ensure
-    @page = nil
+    @item = nil
   end
 
   def test_link_to_unless_current_not_current
-    # Create page
-    @page_rep = mock
-    @page_rep.expects(:path).at_least_once.returns('/foo/')
+    # Create item
+    @item_rep = mock
+    @item_rep.expects(:path).at_least_once.returns('/foo/')
 
     # Check
     assert_equal(

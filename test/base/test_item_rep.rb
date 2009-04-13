@@ -268,8 +268,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_filter
     # Mock site
     site = MiniTest::Mock.new
-    site.expect(:pages, [])
-    site.expect(:assets, [])
+    site.expect(:items, [])
     site.expect(:config, [])
     site.expect(:layouts, [])
 
@@ -277,6 +276,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:content, %[<%= '<%= "blah" %' + '>' %>])
     item.expect(:site, site)
+    item.stubs(:to_proxy).returns(nil)
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -307,8 +307,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Mock site
     site = mock
-    site.stubs(:pages).returns([])
-    site.stubs(:assets).returns([])
+    site.stubs(:items).returns([])
     site.stubs(:config).returns([])
     site.stubs(:layouts).returns([ layout ])
     site.expects(:compiler).returns(compiler)
@@ -317,6 +316,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = mock
     item.stubs(:content).returns(%[Hello.])
     item.stubs(:site).returns(site)
+    item.stubs(:to_proxy).returns(nil)
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -333,8 +333,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_snapshot
     # Mock site
     site = MiniTest::Mock.new
-    site.expect(:pages, [])
-    site.expect(:assets, [])
+    site.expect(:items, [])
     site.expect(:config, [])
     site.expect(:layouts, [])
 
@@ -342,6 +341,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:content, %[<%= '<%= "blah" %' + '>' %>])
     item.expect(:site, site)
+    item.stubs(:to_proxy).returns(nil)
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')

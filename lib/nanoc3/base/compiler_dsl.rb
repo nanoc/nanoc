@@ -6,26 +6,15 @@ module Nanoc3
       @compiler = compiler
     end
 
-    def page(identifier, params={}, &block)
+    def item(identifier, params={}, &block)
       # Require block
-      raise ArgumentError.new("#page requires a block") unless block_given?
+      raise ArgumentError.new("#item requires a block") unless block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
 
       # Create rule
-      @compiler.add_page_compilation_rule(identifier, rep_name, block)
-    end
-
-    def asset(identifier, params={}, &block)
-      # Require block
-      raise ArgumentError.new("#asset requires a block") unless block_given?
-
-      # Get rep name
-      rep_name = params[:rep] || :default
-
-      # Create rule
-      @compiler.add_asset_compilation_rule(identifier, rep_name, block)
+      @compiler.add_item_compilation_rule(identifier, rep_name, block)
     end
 
     def layout(params={})

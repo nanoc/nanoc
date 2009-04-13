@@ -1,6 +1,6 @@
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::LinkTo contains functions for linking to pages.
+  # Nanoc3::Helpers::LinkTo contains functions for linking to items.
   #
   # To activate this helper, +include+ it, like this:
   #
@@ -10,12 +10,11 @@ module Nanoc3::Helpers
     require 'nanoc3/helpers/html_escape'
     include Nanoc3::Helpers::HTMLEscape
 
-    # Creates a HTML link to the given path or page/asset representation, and
-    # with the given text.
+    # Creates a HTML link to the given path or item representation, and with
+    # the given text.
     #
     # +path_or_rep+:: the URL or path (a String) that should be linked to, or
-    #                 the page or asset representation that should be linked
-    #                 to.
+    #                 the item representation that should be linked to.
     #
     # +text+:: the visible link text.
     #
@@ -27,9 +26,9 @@ module Nanoc3::Helpers
     #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   page_rep = @pages.find { |p| p.page_id == 'special' }.reps(:default)
-    #   link_to('Special Page', page_rep)
-    #   # => '<a href="/special_page/">Special Page</a>'
+    #   item_rep = @items.find { |i| i.item_id == 'special' }.reps(:default)
+    #   link_to('Special Item', item_rep)
+    #   # => '<a href="/special_item/">Special Item</a>'
     #
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a href="/blog/" title="My super cool blog">Blog</a>
@@ -46,7 +45,7 @@ module Nanoc3::Helpers
       "<a #{attributes}href=\"#{path}\">#{text}</a>"
     end
 
-    # Creates a HTML link using link_to, except when the linked page is the
+    # Creates a HTML link using link_to, except when the linked item is the
     # current one. In this case, a span element with class "active" and with
     # the given text will be returned.
     #
@@ -55,13 +54,13 @@ module Nanoc3::Helpers
     #   link_to_unless_current('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   link_to_unless_current('This Page', @page_rep)
-    #   # => '<span class="active">This Page</span>'
+    #   link_to_unless_current('This Item', @item_rep)
+    #   # => '<span class="active">This Item</span>'
     def link_to_unless_current(text, path_or_rep, attributes={})
       # Find path
       path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
 
-      if @page_rep and @page_rep.path == path
+      if @item_rep and @item_rep.path == path
         # Create message
         "<span class=\"active\" title=\"You're here.\">#{text}</span>"
       else
@@ -69,12 +68,12 @@ module Nanoc3::Helpers
       end
     end
 
-    # Returns the relative path from the current page to the given path or
-    # page/asset representation.
+    # Returns the relative path from the current item to the given path or
+    # item representation.
     #
     # +path_or_rep+:: the URL or path (a String) to where the relative should
-    #                 point, or the page or asset representation to which the
-    #                 relative should point.
+    #                 point, or the item representation to which the relative
+    #                 should point.
     #
     # Example:
     #

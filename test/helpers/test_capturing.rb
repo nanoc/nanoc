@@ -15,11 +15,11 @@ class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
               "<% end %> foot"
 
     # Evaluate content
-    @page = {}
+    @item = {}
     result = ::ERB.new(content).result(binding)
 
     # Check
-    assert(@page[:content_for_sidebar].strip == '3')
+    assert(@item[:content_for_sidebar].strip == '3')
     assert_match(/^head\s+foot$/, result)
   end
 

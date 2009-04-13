@@ -2,9 +2,9 @@ require 'pstore'
 
 module Nanoc3
 
-  # Nanoc3::DependencyTracker records the dependencies between pages, assets
-  # and their representations. It does so by keeping track of "visit_started"
-  # and "visit_ended" events.
+  # Nanoc3::DependencyTracker records the dependencies between items and their
+  # representations. It does so by keeping track of "visit_started" and
+  # "visit_ended" events.
   class DependencyTracker
 
     # Name of the file that contains the dependency data.
@@ -90,7 +90,7 @@ module Nanoc3
           dependencies_raw = @dependency_graph[obj_to_id(rep)]
           dependencies = dependencies_raw.map do |dependency|
             reps.find do |rep|
-              rep.item.identifier == dependency[1] && (rep.is_a?(Nanoc3::PageRep) ? :page : :asset) == dependency[0]
+              rep.item.identifier == dependency[1] && :item == dependency[0]
             end
           end
 
@@ -107,14 +107,10 @@ module Nanoc3
 
     # Returns an unique identifier for the given object. This identifier is stored in the dependency graph file.
     def obj_to_id(obj)
-      if obj.is_a?(Nanoc3::PageRep)
-        [ :page, obj.item.identifier ]
-      elsif obj.is_a?(Nanoc3::Page)
-        [ :page, obj.identifier ]
-      elsif obj.is_a?(Nanoc3::AssetRep)
-        [ :asset, obj.item.identifier ]
-      elsif obj.is_a?(Nanoc3::Asset)
-        [ :asset, obj.identifier ]
+      if obj.is_a?(Nanoc3::ItemRep)
+        [ :item, obj.item.identifier ]
+      elsif obj.is_a?(Nanoc3::Item)
+        [ :item, obj.identifier ]
       end
     end
 

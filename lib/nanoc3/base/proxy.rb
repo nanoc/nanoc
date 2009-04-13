@@ -1,7 +1,7 @@
 module Nanoc3
 
-  # Nanoc3::Proxy is used when making data available to pages and layouts.
-  # It provides an easy way to access data without the risk of accidentally
+  # Nanoc3::Proxy is used when making data available to items and layouts. It
+  # provides an easy way to access data without the risk of accidentally
   # calling destructive methods.
   class Proxy
 

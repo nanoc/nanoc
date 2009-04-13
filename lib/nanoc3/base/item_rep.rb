@@ -92,12 +92,6 @@ module Nanoc3
       @force_outdated = false
     end
 
-    # Returns this representation's type (either :page_rep or :asset_rep).
-    # Should be overridden in subclasses.
-    def type
-      nil
-    end
-
     # Returns a proxy (Nanoc3::ItemRepProxy) for this item representation.
     def to_proxy
       @proxy ||= ItemRepProxy.new(self)
@@ -139,12 +133,9 @@ module Nanoc3
         :_item_rep  => self,
         :_item      => self.item,
         :content    => @content[:last],
-        :page_rep   => self.is_a?(Nanoc3::PageRep)  ? self.to_proxy      : nil,
-        :page       => self.is_a?(Nanoc3::PageRep)  ? self.item.to_proxy : nil,
-        :asset_rep  => self.is_a?(Nanoc3::AssetRep) ? self.to_proxy      : nil,
-        :asset      => self.is_a?(Nanoc3::AssetRep) ? self.item.to_proxy : nil,
-        :pages      => self.item.site.pages.map   { |obj| obj.to_proxy },
-        :assets     => self.item.site.assets.map  { |obj| obj.to_proxy },
+        :item       => self.item.to_proxy,
+        :item_rep   => self.to_proxy,
+        :items      => self.item.site.items.map   { |obj| obj.to_proxy },
         :layouts    => self.item.site.layouts.map { |obj| obj.to_proxy },
         :config     => self.item.site.config,
         :site       => self.item.site

@@ -13,11 +13,11 @@ module Nanoc3
     # an unknown identifier.
     class UnknownRouterError < GenericError ; end
 
-    # Error that is raised during site compilation when a page uses a layout
+    # Error that is raised during site compilation when an item uses a layout
     # that is not present in the site.
     class UnknownLayoutError < GenericError ; end
 
-    # Error that is raised during site compilation when a page uses a filter
+    # Error that is raised during site compilation when an item uses a filter
     # that is not known.
     class UnknownFilterError < GenericError ; end
 
@@ -34,8 +34,8 @@ module Nanoc3
       end
     end
 
-    # Error that is raised during site compilation when a page (directly or
-    # indirectly) includes its own page content, leading to endless recursion.
+    # Error that is raised during site compilation when an item (directly or
+    # indirectly) includes its own item content, leading to endless recursion.
     class RecursiveCompilationError < GenericError ; end
 
     # Error that is raised when a certain function or feature is used that is
@@ -47,7 +47,7 @@ module Nanoc3
     class NoRulesFileFoundError < GenericError ; end
 
     # Error that is raised when no compilation rule that can be applied to the
-    # current page can be found.
+    # current item can be found.
     class NoMatchingRuleFoundError < GenericError ; end
 
   end

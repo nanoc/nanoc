@@ -11,16 +11,16 @@ module Nanoc3::Helpers
 
     # Returns the XML sitemap as a string.
     #
-    # The following attributes can optionally be set on pages to change the
+    # The following attributes can optionally be set on items to change the
     # behaviour of the sitemap:
     #
     # * 'changefreq', containing the estimated change frequency as defined by
     #   the Sitemaps protocol.
     #
-    # * 'priority', containing the page's priority, ranging from 0.0 to 1.0,
+    # * 'priority', containing the item's priority, ranging from 0.0 to 1.0,
     #   as defined by the Sitemaps protocol.
     #
-    # The sitemap will also include dates on which the pages were updated.
+    # The sitemap will also include dates on which the items were updated.
     # These are generated automatically; the way this happens depends on the
     # used data source (the filesystem data source checks the file mtimes, for
     # instance).
@@ -45,13 +45,13 @@ module Nanoc3::Helpers
       # Build sitemap
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
-        # Add page
-        @pages.reject { |p| p.is_hidden || p.skip_output }.each do |page|
+        # Add item
+        @items.reject { |p| p.is_hidden || p.skip_output }.each do |item|
           xml.url do
-            xml.loc         @site.config[:base_url] + page.path
-            xml.lastmod     page.mtime.to_iso8601_date unless page.mtime.nil?
-            xml.changefreq  page.changefreq unless page.changefreq.nil?
-            xml.priority    page.priority unless page.priority.nil?
+            xml.loc         @site.config[:base_url] + item.path
+            xml.lastmod     item.mtime.to_iso8601_date unless item.mtime.nil?
+            xml.changefreq  item.changefreq unless item.changefreq.nil?
+            xml.priority    item.priority unless item.priority.nil?
           end
         end
       end

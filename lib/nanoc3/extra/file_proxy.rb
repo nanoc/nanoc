@@ -3,7 +3,7 @@ module Nanoc3::Extra
   # A FileProxy is a proxy for a File object. It is used to prevent a File
   # object from being created until it is actually necessary.
   #
-  # For example, a site with a few thousand pages would fail to compile
+  # For example, a site with a few thousand items would fail to compile
   # because the massive amount of file descriptors necessary, but the file
   # proxy will make sure the File object is not created until it is used.
   class FileProxy

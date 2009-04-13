@@ -1,8 +1,8 @@
 module Nanoc3
 
   # A Nanoc3::Layout represents a layout in a nanoc site. It has content,
-  # attributes (for determining which filter to use for laying out a page), an
-  # identifier (because layouts are organised hierarchically), and a
+  # attributes (for determining which filter to use for laying out an item),
+  # an identifier (because layouts are organised hierarchically), and a
   # modification time (to speed up compilation).
   class Layout
 

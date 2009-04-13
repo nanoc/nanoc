@@ -11,22 +11,17 @@ module Nanoc3::CLI::Commands
     end
 
     def short_desc
-      'compile pages and assets of this site'
+      'compile items of this site'
     end
 
     def long_desc
-      'Compile all pages and all assets of the current site. If an identifier is ' +
-      'given, only the page or asset with the given identifier will be compiled. ' +
+      'Compile all items of the current site. If an identifier is given, ' +
+      'only the item with the given identifier will be compiled. ' +
       "\n\n" +
-      'By default, only pages and assets that are outdated will be ' +
-      'compiled. This can speed up the compilation process quite a bit, ' +
-      'but pages that include content from other pages may have to be ' +
-      'recompiled manually. In order to compile items even when they are ' +
-      'outdated, use the --force option.' +
-      "\n\n" +
-      'Both pages and assets will be compiled by default. To disable the ' +
-      'compilation of assets or pages, use the --no-assets and --no-pages ' +
-      'options, respectively.'
+      'By default, only item that are outdated will be compiled. This can ' +
+      'speed up the compilation process quite a bit, but items that include ' +
+      'content from other items may have to be recompiled manually. In ' +
+      'order to compile items even when they are outdated, use the --force option.'
     end
 
     def usage
@@ -43,17 +38,7 @@ module Nanoc3::CLI::Commands
         # --force
         {
           :long => 'force', :short => 'f', :argument => :forbidden,
-          :desc => 'compile pages and assets even when they are not outdated'
-        },
-        # --only-pages
-        {
-          :long => 'no-pages', :short => 'P', :argument => :forbidden,
-          :desc => 'don\'t compile pages'
-        },
-        # --only-assets
-        {
-          :long => 'no-assets', :short => 'A', :argument => :forbidden,
-          :desc => 'don\'t compile assets'
+          :desc => 'compile items even when they are not outdated'
         }
       ]
     end
@@ -70,25 +55,17 @@ module Nanoc3::CLI::Commands
 
       # Find item(s) to compile
       if arguments.size == 0
-        # Find all pages and/or assets
-        if options.has_key?(:'no-pages')
-          items = @base.site.assets
-        elsif options.has_key?(:'no-assets')
-          items = @base.site.pages
-        else
-          items = nil
-        end
+        items = nil
       else
         # Find item(s) with given identifier(s)
         items = arguments.map do |identifier|
           # Find item
           identifier = identifier.cleaned_identifier
-          item = @base.site.pages.find { |page| page.identifier == identifier }
-          item = @base.site.assets.find { |asset| asset.identifier == identifier } if item.nil?
+          item = @base.site.items.find { |item| item.identifier == identifier }
 
           # Ensure item
           if item.nil?
-            $stderr.puts "Unknown page or asset: #{identifier}"
+            $stderr.puts "Unknown item: #{identifier}"
             exit 1
           end
 
@@ -114,9 +91,7 @@ module Nanoc3::CLI::Commands
         )
 
         # Find reps
-        page_reps  = @base.site.pages.map  { |p| p.reps }.flatten
-        asset_reps = @base.site.assets.map { |a| a.reps }.flatten
-        reps       = page_reps + asset_reps
+        reps = @base.site.items.map  { |i| i.reps }.flatten
 
         # Show skipped reps
         reps.select { |r| !r.compiled? }.each do |rep|
@@ -224,7 +199,7 @@ module Nanoc3::CLI::Commands
 
     def print_error(error)
       # Get rep
-      rep = (@base.site.compiler.stack || []).select { |i| i.is_a?(Nanoc3::PageRep) || i.is_a?(Nanoc3::AssetRep) }[-1]
+      rep = (@base.site.compiler.stack || []).select { |i| i.is_a?(Nanoc3::ItemRep) }[-1]
       rep_name = rep.nil? ? 'the site' : "#{rep.item.identifier} (rep #{rep.name})"
 
       # Build message
@@ -236,7 +211,7 @@ module Nanoc3::CLI::Commands
       when Nanoc3::Errors::CannotDetermineFilterError
         message = "Cannot determine filter for layout: #{error.message}"
       when Nanoc3::Errors::RecursiveCompilationError
-        message = "Recursive call to page content."
+        message = "Recursive call to item content."
       when Nanoc3::Errors::NoLongerSupportedError
         message = "No longer supported: #{error.message}"
       when Nanoc3::Errors::NoRulesFileFoundError
@@ -258,13 +233,11 @@ module Nanoc3::CLI::Commands
       $stderr.puts '  ' + message
       $stderr.puts
       $stderr.puts 'Compilation stack:'
-      (@base.site.compiler.stack || []).reverse.each do |item|
-        if item.is_a?(Nanoc3::PageRep) # page rep
-          $stderr.puts "  - [page]   #{item.page.identifier} (rep #{item.name})"
-        elsif item.is_a?(Nanoc3::AssetRep) # asset rep
-          $stderr.puts "  - [asset]  #{item.asset.identifier} (rep #{item.name})"
+      (@base.site.compiler.stack || []).reverse.each do |obj|
+        if obj.is_a?(Nanoc3::ItemRep)
+          $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
         else # layout
-          $stderr.puts "  - [layout] #{item.identifier}"
+          $stderr.puts "  - [layout] #{obj.identifier}"
         end
       end
       $stderr.puts

@@ -1,6 +1,6 @@
 module Nanoc3
 
-  # Nanoc3::Compiler is responsible for compiling a site's page and asset
+  # Nanoc3::Compiler is responsible for compiling a site's item
   # representations.
   class Compiler
 
@@ -15,12 +15,11 @@ module Nanoc3
 
       @stack = []
 
-      @page_compilation_rules  = []
-      @asset_compilation_rules = []
+      @item_compilation_rules  = []
       @layout_filter_mapping   = {}
     end
 
-    # Compiles (part of) the site and writes out the compiled page and asset
+    # Compiles (part of) the site and writes out the compiled item
     # representations.
     #
     # +items+:: The items that should be compiled, along with their
@@ -39,7 +38,7 @@ module Nanoc3
       FileUtils.mkdir_p(@site.config[:output_dir])
 
       # Get items
-      @items = items ? items : @site.pages + @site.assets
+      @items = items || @site.items
 
       # Build reps
       @items.each { |i| build_reps_for(i) }
@@ -69,8 +68,7 @@ module Nanoc3
       raise Nanoc3::Errors::NoRulesFileFoundError.new if rules_filename.nil?
 
       # Initialize rules
-      @page_compilation_rules  = []
-      @asset_compilation_rules = []
+      @item_compilation_rules  = []
 
       # Load DSL
       dsl = Nanoc3::CompilerDSL.new(self)
@@ -84,18 +82,14 @@ module Nanoc3
     # its first argument.
     def build_reps_for(item)
       # Find matching rules
-      all_rules = (item.is_a?(Nanoc3::Page) ? @page_compilation_rules : @asset_compilation_rules)
+      all_rules = @item_compilation_rules
       matching_rules = all_rules.select { |r| r.applicable_to?(item) }
       raise Nanoc3::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
 
       # Build reps
       rep_names = matching_rules.map { |r| r.rep_name }.uniq
       rep_names.each do |rep_name|
-        if item.is_a?(Nanoc3::Page)
-          item.reps << PageRep.new(item, rep_name)
-        else
-          item.reps << AssetRep.new(item, rep_name)
-        end
+        item.reps << ItemRep.new(item, rep_name)
       end
     end
 
@@ -150,7 +144,7 @@ module Nanoc3
 
     # Returns the compilation rule for the given rep.
     def compilation_rule_for(rep)
-      (rep.is_a?(Nanoc3::PageRep) ? @page_compilation_rules : @asset_compilation_rules).find do |rule|
+      @item_compilation_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end
@@ -164,12 +158,8 @@ module Nanoc3
       filter_name
     end
 
-    def add_page_compilation_rule(identifier, rep_name, block)
-      @page_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
-    end
-
-    def add_asset_compilation_rule(identifier, rep_name, block)
-      @asset_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    def add_item_compilation_rule(identifier, rep_name, block)
+      @item_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
     end
 
     def add_layout_compilation_rule(identifier, filter_name)

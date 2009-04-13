@@ -23,7 +23,7 @@ module Nanoc3::Helpers
 
     # Returns an unsorted list of articles.
     def articles
-      @pages.select { |page| page.kind == 'article' }
+      @items.select { |item| item.kind == 'article' }
     end
 
     # Returns a list of articles, sorted by descending creation date (so newer
@@ -65,7 +65,7 @@ module Nanoc3::Helpers
     #
     # * 'custom_path_in_feed', containing the path that will be used instead
     #   of the normal path in the feed. This can be useful when including
-    #   non-outputted pages in a feed; such pages could have their custom feed
+    #   non-outputted items in a feed; such items could have their custom feed
     #   path set to the blog path instead, for example.
     #
     # The feed will also include dates on which the articles were updated.
@@ -73,34 +73,32 @@ module Nanoc3::Helpers
     # used data source (the filesystem data source checks the file mtimes, for
     # instance).
     #
-    # The feed page will need to have the following attributes:
+    # The feed item will need to have the following attributes:
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
-    #   would be "http://example.com". It is probably a good idea to define
-    #   this in the page defaults, i.e. the 'meta.yaml' file (at least if the
-    #   filesystem data source is being used, which is probably the case).
+    #   would be "http://example.com".
     #
     # * 'title', containing the title of the feed, which is usually also the
     #   title of the blog.
     #
-    # * 'author_name', containing the name of the page's author. This will
+    # * 'author_name', containing the name of the item's author. This will
     #   likely be a global attribute, unless the site is managed by several
     #   people/
     #
-    # * 'author_uri', containing the URI for the page's author, such as the
+    # * 'author_uri', containing the URI for the item's author, such as the
     #   author's web site URL. This will also likely be a global attribute.
     #
-    # The feed page can have the following optional attributes:
+    # The feed item can have the following optional attributes:
     #
     # * 'feed_url', containing the custom URL of the feed. This can be useful
     #   when the private feed URL shouldn't be exposed; for example, when
     #   using FeedBurner this would be set to the public FeedBurner URL.
     #
-    # To construct a feed, create a blank page with no layout, only the 'erb'
+    # To construct a feed, create a blank item with no layout, only the 'erb'
     # (or 'erubis') filter, and an 'xml' extension. It may also be useful to
     # set 'is_hidden' to true, so that helpers such as the sitemap helper will
-    # ignore the page. The content of the feed page should be:
+    # ignore the item. The content of the feed item should be:
     #
     #   <%= atom_feed %>
     def atom_feed(params={})
@@ -112,18 +110,18 @@ module Nanoc3::Helpers
       content_proc      = params[:content_proc] || lambda { |a| a.content }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a.excerpt }
 
-      # Check feed page attributes
-      if @page.base_url.nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed page has no base_url')
+      # Check feed item attributes
+      if @item.base_url.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed item has no base_url')
       end
-      if @page.title.nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed page has no title')
+      if @item.title.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed item has no title')
       end
-      if @page.author_name.nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed page has no author_name')
+      if @item.author_name.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed item has no author_name')
       end
-      if @page.author_uri.nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed page has no author_uri')
+      if @item.author_uri.nil?
+        raise RuntimeError.new('Cannot build Atom feed: feed item has no author_uri')
       end
 
       # Check article attributes
@@ -148,20 +146,20 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
         # Add primary attributes
-        xml.id      @page.base_url + '/'
-        xml.title   @page.title
+        xml.id      @item.base_url + '/'
+        xml.title   @item.title
 
         # Add date
         xml.updated last_article.created_at.to_iso8601_time
 
         # Add links
-        xml.link(:rel => 'alternate', :href => @page.base_url)
+        xml.link(:rel => 'alternate', :href => @item.base_url)
         xml.link(:rel => 'self',      :href => feed_url)
 
         # Add author information
         xml.author do
-          xml.name  @page.author_name
-          xml.uri   @page.author_uri
+          xml.name  @item.author_name
+          xml.uri   @item.author_uri
         end
 
         # Add articles
@@ -189,27 +187,27 @@ module Nanoc3::Helpers
       buffer
     end
 
-    # Returns the URL for the given page. It will return the URL containing
+    # Returns the URL for the given item. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
-    def url_for(page)
-      @page.base_url + (page.custom_path_in_feed || page.path)
+    def url_for(item)
+      @item.base_url + (item.custom_path_in_feed || item.path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
-      @page[:feed_url] || @page.base_url + @page.path
+      @item[:feed_url] || @item.base_url + @item.path
     end
 
-    # Returns an URI containing an unique ID for the given page. This will be
+    # Returns an URI containing an unique ID for the given item. This will be
     # used in the Atom feed to uniquely identify articles. These IDs are
     # created using a procedure suggested by Mark Pilgrim in this blog post:
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
-    def atom_tag_for(page)
-      hostname        = @page.base_url.sub(/.*:\/\/(.+?)\/?$/, '\1')
-      formatted_date  = page.created_at.to_iso8601_date
+    def atom_tag_for(item)
+      hostname        = @item.base_url.sub(/.*:\/\/(.+?)\/?$/, '\1')
+      formatted_date  = item.created_at.to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + page.path
+      'tag:' + hostname + ',' + formatted_date + ':' + item.path
     end
 
   end

@@ -3,7 +3,7 @@ require 'webrick'
 module Nanoc3::Extra
 
   # Nanoc3::Extra::AutoCompiler is a web server that will automatically compile
-  # pages as they are requested. It also serves static files such as
+  # items as they are requested. It also serves static files such as
   # stylesheets and images.
   class AutoCompiler
 
@@ -40,17 +40,15 @@ END
 	</head>
 	<body>
 		<h1>500 Server Error</h1>
-		<p>An error occurred while compiling the page you requested, <i><%=h path %></i>.</p>
+		<p>An error occurred while compiling the item you requested, <i><%=h path %></i>.</p>
 		<p>If you think this is a bug in nanoc, please do <a href="http://projects.stoneship.org/trac/nanoc/newticket">report it</a>&mdash;thanks!</p>
 		<p>Message:</p>
 		<blockquote><p><%=h message %></p></blockquote>
-		<p>Page compilation stack:</p>
+		<p>Item compilation stack:</p>
 		<ol>
 <% @site.compiler.stack.reverse.each do |obj| %>
-<% if item.is_a?(Nanoc3::PageRep) # page rep %>
-			<li><strong>Page</strong> <%= obj.page.identifier %> (rep <%= obj.name %>)</li>
-<% elsif item.is_a?(Nanoc3::AssetRep) # asset rep %>
-			<li><strong>Asset</strong> <%= obj.asset.identifier %> (rep <%= obj.name %>)</li>
+<% if item.is_a?(Nanoc3::ItemRep) %>
+			<li><strong>Item</strong> <%= obj.item.identifier %> (rep <%= obj.name %>)</li>
 <% else # layout %>
 			<li><strong>Layout</strong> <%= obj.identifier %></li>
 <% end %>
@@ -185,8 +183,7 @@ END
         file_path = @site.config[:output_dir] + path
 
         # Find rep
-        objs = @site.pages + @site.assets
-        reps = objs.map { |o| o.reps }.flatten
+        reps = @site.items.map { |o| o.reps }.flatten
         rep = reps.find { |r| r.path == path }
 
         if rep.nil?
@@ -239,7 +236,7 @@ END
       when Nanoc3::Errors::CannotDetermineFilterError
         message = "Cannot determine filter for layout: #{exception.message}"
       when Nanoc3::Errors::RecursiveCompilationError
-        message = "Recursive call to page content. Page stack:"
+        message = "Recursive call to item content. Item stack:"
       when Nanoc3::Errors::NoLongerSupportedError
         message = "No longer supported: #{exception.message}"
       else
