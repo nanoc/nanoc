@@ -4,12 +4,16 @@ module Nanoc3::CLI::Commands
 
     DEFAULT_ITEM = <<EOS
 <h1>A Brand New nanoc Site</h1>
+
 <p>You&#8217;ve just created a new nanoc site. The page you are looking at right now is the home page for your site (and it&#8217;s probably the only page).</p>
+
 <p>To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
+
 <ul>
   <li><strong>Change this page&#8217;s content</strong> by editing &#8220;content.html&#8221; file in the &#8220;content&#8221; directory. This is the actual page content, and therefore doesn&#8217;t include the header, sidebar or style information (those are part of the layout).</li>
   <li><strong>Change the layout</strong>, which is the &#8220;default.txt&#8221; file in the &#8220;layouts/default&#8221; directory, and create something unique (and hopefully less bland).</li>
 </ul>
+
 <p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
 EOS
 
