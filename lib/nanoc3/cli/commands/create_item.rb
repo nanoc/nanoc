@@ -44,6 +44,7 @@ module Nanoc3::CLI::Commands
 
       # Make sure we are in a nanoc site directory
       @base.require_site
+      @base.site.load_data
 
       # Set VCS if possible
       @base.set_vcs(options[:vcs])
