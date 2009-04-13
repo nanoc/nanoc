@@ -11,14 +11,13 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
     # Remove files to make sure they are recreated
-    FileUtils.rm_rf('assets')
     FileUtils.rm_rf('content')
     FileUtils.rm_rf('layouts/default')
     FileUtils.rm_rf('lib/default.rb')
 
     # Mock VCS
     vcs = mock
-    vcs.expects(:add).times(4) # One time for each directory
+    vcs.expects(:add).times(3) # One time for each directory
     data_source.vcs = vcs
 
     # Recreate files
@@ -41,11 +40,11 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   # Test loading data
 
-  def test_pages
+  def test_items
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
 
-    # Create foo page
+    # Create foo item
     FileUtils.mkdir_p('content/foo')
     File.open('content/foo.yaml', 'w') do |io|
       io.write("-----\n")
@@ -54,7 +53,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
       io.write("Lorem ipsum dolor sit amet...\n")
     end
 
-    # Create bar page
+    # Create bar item
     FileUtils.mkdir_p('content/bar')
     File.open('content/bar.yaml', 'w') do |io|
       io.write("-----\n")
@@ -63,45 +62,13 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
       io.write("Lorem ipsum dolor sit amet...\n")
     end
 
-    # Load pages
-    pages = data_source.pages
+    # Load items
+    items = data_source.items
 
-    # Check pages
-    assert_equal(2, pages.size)
-    assert(pages.any? { |a| a.attribute_named(:title) == 'Foo' })
-    assert(pages.any? { |a| a.attribute_named(:title) == 'Bar' })
-  end
-
-  def test_assets
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
-
-    # Create asset with extension
-    FileUtils.mkdir_p('assets')
-    File.open('assets/foo.fooext', 'w') do |io|
-      io.write("-----\n")
-      io.write("filters: []\n")
-      io.write("extension: newfooext\n")
-      io.write("-----\n")
-      io.write("Lorem ipsum dolor sit amet...\n")
-    end
-
-    # Create asset without extension
-    FileUtils.mkdir_p('assets')
-    File.open('assets/bar.barext', 'w') do |io|
-      io.write("-----\n")
-      io.write("filters: []\n")
-      io.write("-----\n")
-      io.write("Lorem ipsum dolor sit amet...\n")
-    end
-
-    # Load assets
-    assets = data_source.assets
-
-    # Check assets
-    assert_equal(2, assets.size)
-    assert(assets.any? { |a| a.attribute_named(:extension) == 'newfooext' })
-    assert(assets.any? { |a| a.attribute_named(:extension) == 'barext' })
+    # Check items
+    assert_equal(2, items.size)
+    assert(items.any? { |a| a.attribute_named(:title) == 'Foo' })
+    assert(items.any? { |a| a.attribute_named(:title) == 'Bar' })
   end
 
   def test_layouts
@@ -147,10 +114,10 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   # Test creating data
 
-  def test_create_page_at_root
-    # Create page
+  def test_create_item_at_root
+    # Create item
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
-    data_source.create_page('content here', { :foo => 'bar' }, '/')
+    data_source.create_item('content here', { :foo => 'bar' }, '/')
 
     # Check file existance
     assert File.directory?('content')
@@ -162,10 +129,10 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert_equal expected, File.read('content/index.html')
   end
 
-  def test_create_page_not_at_root
-    # Create page
+  def test_create_item_not_at_root
+    # Create item
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil)
-    data_source.create_page('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
+    data_source.create_item('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
     # Check file existance
     assert File.directory?('content/xxx/yyy')

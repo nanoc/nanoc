@@ -16,16 +16,10 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
     identifier :test_newschool_data_source
 
-    def pages
+    def items
       [
-        Nanoc3::Page.new("Hi!",          {}, '/'),
-        Nanoc3::Page.new("Hello there.", {}, '/about/')
-      ]
-    end
-
-    def assets
-      [
-        Nanoc3::Asset.new(File.open('/dev/null'), {}, '/something/')
+        Nanoc3::Item.new("Hi!",          {}, '/'),
+        Nanoc3::Item.new("Hello there.", {}, '/about/')
       ]
     end
 
@@ -49,15 +43,11 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
     identifier :early_loading_code_data_source
 
-    def pages
+    def items
       [
-        Nanoc3::Page.new("Hi!",          {}, '/'),
-        Nanoc3::Page.new("Hello there.", {}, '/about/')
+        Nanoc3::Item.new("Hi!",          {}, '/'),
+        Nanoc3::Item.new("Hello there.", {}, '/about/')
       ]
-    end
-
-    def assets
-      []
     end
 
     def layouts
@@ -74,8 +64,8 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
       Nanoc3::Code.new(
         "class TestEarlyLoadingCodeRouter < Nanoc3::Router\n" +
         "  identifier :early_loading_code_router\n" +
-        "  def path_for(page)  ; 'web path'  ; end\n" +
-        "  def raw_path_for(page) ; 'disk path' ; end\n" +
+        "  def path_for(item)     ; 'web path'  ; end\n" +
+        "  def raw_path_for(item) ; 'disk path' ; end\n" +
         "end"
       )
     end

@@ -6,36 +6,29 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_run_without_item
     # Create items
-    pages = [
-      Nanoc3::Page.new('page one', {}, '/page1/'),
-      Nanoc3::Page.new('page two', {}, '/page2/')
-    ]
-    assets = [
-      Nanoc3::Asset.new(nil, {}, '/asset1/'),
-      Nanoc3::Asset.new(nil, {}, '/asset2/')
+    items = [
+      Nanoc3::Item.new('item one', {}, '/item1/'),
+      Nanoc3::Item.new('item two', {}, '/item2/')
     ]
 
     # Mock reps
-    pages[0].expects(:reps).returns([ mock ])
-    pages[1].expects(:reps).returns([ mock, mock ])
-    assets[0].expects(:reps).returns([ mock ])
-    assets[1].expects(:reps).returns([ mock, mock ])
+    items[0].expects(:reps).returns([ mock ])
+    items[1].expects(:reps).returns([ mock, mock ])
 
     # Create site
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:pages).returns(pages)
-    site.expects(:assets).returns(assets)
+    site.expects(:items).returns(items)
 
     # Set items' site
-    (pages + assets).each { |item| item.site = site }
+    items.each { |item| item.site = site }
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:load_rules)
-    compiler.expects(:build_reps_for).times(4)
-    compiler.expects(:map_rep).times(6)
-    compiler.expects(:compile_rep).times(6)
+    compiler.expects(:build_reps_for).times(2)
+    compiler.expects(:map_rep).times(3)
+    compiler.expects(:compile_rep).times(3)
 
     # Run
     compiler.run
@@ -44,23 +37,23 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert(File.directory?('foo/bar/baz'))
 
     # Check items
-    assert_equal(4, compiler.instance_eval { @items }.size)
-    assert_equal(6, compiler.instance_eval { @reps  }.size)
+    assert_equal(2, compiler.instance_eval { @items }.size)
+    assert_equal(3, compiler.instance_eval { @reps  }.size)
   end
 
-  def test_run_with_page_rep
-    # Create page
-    page = Nanoc3::Page.new('page one', {}, '/page1/')
+  def test_run_with_item_rep
+    # Create item
+    item = Nanoc3::Item.new('item one', {}, '/item1/')
 
     # Mock reps
-    page.expects(:reps).returns([ mock, mock, mock ])
+    item.expects(:reps).returns([ mock, mock, mock ])
 
     # Create site and router
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
 
     # Set item's site
-    page.site = site
+    item.site = site
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
@@ -70,39 +63,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).times(3)
 
     # Run
-    compiler.run([ page ])
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-
-    # Check items
-    assert_equal(1, compiler.instance_eval { @items }.size)
-    assert_equal(3, compiler.instance_eval { @reps  }.size)
-  end
-
-  def test_run_with_asset_rep
-    # Create asset
-    asset = Nanoc3::Asset.new('asset one', {}, '/asset1/')
-
-    # Mock reps
-    asset.expects(:reps).returns([ mock, mock, mock ])
-
-    # Create site
-    site = mock
-    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-
-    # Set item's site
-    asset.site = site
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:load_rules)
-    compiler.expects(:build_reps_for).times(1)
-    compiler.expects(:map_rep).times(3)
-    compiler.expects(:compile_rep).times(3)
-
-    # Run
-    compiler.run([ asset ])
+    compiler.run([ item ])
 
     # Make sure output dir is created
     assert(File.directory?('foo/bar/baz'))
@@ -122,9 +83,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create rules file
     File.open('Rules', 'w') do |io|
       io.write <<-EOF
-page '*' do |p|
-p.write
-end
+item '*' do |p|
+  p.write
+  end
 EOF
     end
 
@@ -132,11 +93,10 @@ EOF
     compiler.load_rules
 
     # Check rule counts
-    assert_equal(1, compiler.instance_eval { @page_compilation_rules  }.size)
-    assert_equal(0, compiler.instance_eval { @asset_compilation_rules }.size)
+    assert_equal(1, compiler.instance_eval { @item_compilation_rules  }.size)
 
     # Check rule
-    rule = compiler.instance_eval { @page_compilation_rules }[0]
+    rule = compiler.instance_eval { @item_compilation_rules }[0]
     assert_equal(:default,  rule.rep_name)
     assert_equal(/^(.*?)$/, rule.identifier_regex)
   end
@@ -244,11 +204,7 @@ EOF
     assert_equal(nil, compiler.filter_name_for_layout(layout))
   end
 
-  def test_add_page_compilation_rule
-    # TODO implement
-  end
-
-  def test_add_asset_compilation_rule
+  def test_add_item_compilation_rule
     # TODO implement
   end
 

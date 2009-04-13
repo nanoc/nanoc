@@ -32,9 +32,10 @@ module Nanoc3::CLI::Commands
     def option_definitions
       [
         # --all
+        # FIXME is this option even necessary?
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'compile all pages, even those that aren\'t outdated'
+          :desc => 'compile all items, even those that aren\'t outdated'
         },
         # --port
         {

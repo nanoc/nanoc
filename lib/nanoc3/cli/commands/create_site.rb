@@ -2,12 +2,12 @@ module Nanoc3::CLI::Commands
 
   class CreateSite < Cri::Command # :nodoc:
 
-    DEFAULT_PAGE = <<EOS
+    DEFAULT_ITEM = <<EOS
 <h1>A Brand New nanoc Site</h1>
 <p>You&#8217;ve just created a new nanoc site. The page you are looking at right now is the home page for your site (and it&#8217;s probably the only page).</p>
 <p>To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
 <ul>
-  <li><strong>Change this page&#8217;s content</strong> by editing &#8220;content.txt&#8221; file in the &#8220;content&#8221; directory. This is the actual page content, and therefore doesn&#8217;t include the header, sidebar or style information (those are part of the layout).</li>
+  <li><strong>Change this page&#8217;s content</strong> by editing &#8220;content.html&#8221; file in the &#8220;content&#8221; directory. This is the actual page content, and therefore doesn&#8217;t include the header, sidebar or style information (those are part of the layout).</li>
   <li><strong>Change the layout</strong>, which is the &#8220;default.txt&#8221; file in the &#8220;layouts/default&#8221; directory, and create something unique (and hopefully less bland).</li>
 </ul>
 <p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
@@ -17,7 +17,7 @@ EOS
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
-    <title>A Brand New nanoc Site - <%= @page.title %></title>
+    <title>A Brand New nanoc Site - <%= @item.title %></title>
     <style type="text/css" media="screen">
       * {
         margin: 0;
@@ -255,7 +255,7 @@ EOS
       File.open('Rules', 'w') do |io|
         io.write "#!/usr/bin/env ruby\n"
         io.write "\n"
-        io.write "page '*' do |p|\n"
+        io.write "item '*' do |p|\n"
         io.write "  p.filter(:erb)\n"
         io.write "  p.layout('default')\n"
         io.write "  p.write\n"
@@ -278,15 +278,15 @@ EOS
       end
     end
 
-    # Populates the site with some initial data, such as a root page, a
+    # Populates the site with some initial data, such as a root item, a
     # default layout, and so on.
     def site_populate
       # Get site
       site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
 
-      # Create page
-      site.data_source.create_page(
-        DEFAULT_PAGE,
+      # Create item
+      site.data_source.create_item(
+        DEFAULT_ITEM,
         { :title => "Home" },
         '/'
       )

@@ -1,8 +1,8 @@
 module Nanoc3
 
   # A Nanoc3::Router is an abstract superclass that determines the paths of
-  # page and asset representations, both the path on the disk (relative to the
-  # site's output directory) and the path as it appears on the web site.
+  # item representations, both the path on the disk (relative to the site's
+  # output directory) and the path as it appears on the web site.
   class Router < Plugin
 
     # Creates a new router for the given site.
@@ -25,39 +25,23 @@ module Nanoc3
       Nanoc3::Plugin.register(Nanoc3::Router, class_or_name, *identifiers)
     end
 
-    # Returns the routed path for the given page representation, including the
+    # Returns the routed path for the given item representation, including the
     # filename and the extension. It should start with a slash, and should be
     # relative to the web root (i.e. should not include any references to the
     # output directory). There is no need to let this method handle custom
     # paths.
     #
     # Subclasses must implement this method.
-    def path_for_page_rep(page_rep)
-      raise NotImplementedError.new("Nanoc3::Router subclasses must implement #path_for_page_rep.")
+    def path_for_item_rep(item_rep)
+      raise NotImplementedError.new("Nanoc3::Router subclasses must implement #path_for_item_rep.")
     end
 
-    # Returns the routed path for the given asset representation, including
-    # the filename and the extension. It should start with a slash, and should
-    # be relative to the web root (i.e. should not include any references to
-    # the output directory). There is no need to let this method handle custom
-    # paths.
-    #
-    # Subclasses must implement this method.
-    def path_for_asset_rep(asset_rep)
-      raise NotImplementedError.new("Nanoc3::Router subclasses must implement #path_for_asset_rep.")
-    end
-
-    # Returns the web path for the given page or asset representation, i.e.
-    # the page or asset rep's custom path or routed path with index filenames
-    # stripped.
+    # Returns the web path for the given item representation, i.e. the item
+    # rep's custom path or routed path with index filenames stripped.
     def path_for(rep)
       # Get actual path
       path ||= rep.item.attribute_named(:custom_path)
-      if rep.is_a?(Nanoc3::PageRep) # Page rep
-        path ||= path_for_page_rep(rep)
-      else # Asset rep
-        path ||= path_for_asset_rep(rep)
-      end
+      path ||= path_for_item_rep(rep)
 
       # Try stripping each index filename
       @site.config[:index_filenames].each do |index_filename|
@@ -72,13 +56,12 @@ module Nanoc3
       path
     end
 
-    # Returns the disk path for the given page or asset representation, i.e.
-    # the page or asset's custom path or routed path relative to the output
-    # directory.
+    # Returns the disk path for the given item representation, i.e. the item's
+    # custom path or routed path relative to the output directory.
     def raw_path_for(rep)
       @site.config[:output_dir] + (
         rep.item.attribute_named(:custom_path) ||
-        (rep.is_a?(Nanoc3::PageRep) ? path_for_page_rep(rep) : path_for_asset_rep(rep))
+        path_for_item_rep(rep)
       )
     end
 

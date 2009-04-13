@@ -2,7 +2,7 @@ module Nanoc3
 
   # Nanoc3::DataSource is responsible for loading data. It is the (abstract)
   # superclass for all data sources. Subclasses must at least implement the
-  # data reading methods (+pages+, +layouts+, and +code+); all other methods
+  # data reading methods (+items+, +layouts+, and +code+); all other methods
   # involving data manipulation are optional.
   #
   # Apart from the methods for loading and storing data, there are the +up+
@@ -95,20 +95,12 @@ module Nanoc3
 
     ########## Loading data
 
-    # Returns the list of pages (represented by Nanoc3::Page) in this site.
+    # Returns the list of items (represented by Nanoc3::Item) in this site.
     # This is an abstract method implemented by the subclass.
     #
     # Subclasses must implement this method.
-    def pages
-      not_implemented('pages')
-    end
-
-    # Returns the list of assets (represented by Nanoc3::Asset) in this site.
-    # This is an abstract method implemented by the subclass.
-    #
-    # Subclasses must implement this method.
-    def assets
-      not_implemented('assets')
+    def items
+      not_implemented('items')
     end
 
     # Returns the list of layouts (represented by Nanoc3::Layout) in this site.
@@ -131,12 +123,12 @@ module Nanoc3
 
     ########## Creating data
 
-    # Creates a new page with the given page content, attributes and identifier.
-    def create_page(content, attributes, identifier)
-      not_implemented('create_page')
+    # Creates a new item with the given content, attributes and identifier.
+    def create_item(content, attributes, identifier)
+      not_implemented('create_item')
     end
 
-    # Creates a new layout with the given page content, attributes and identifier.
+    # Creates a new layout with the given content, attributes and identifier.
     def create_layout(content, attributes, identifier)
       not_implemented('create_layout')
     end

@@ -3,21 +3,21 @@ module Nanoc3::DataSources
   # The filesystem data source is the default data source for a new nanoc
   # site. It stores all data as files on the hard disk.
   #
-  # None of the methods are documented in this file. See Nanoc3::DataSource for
-  # documentation on the overridden methods instead.
+  # None of the methods are documented in this file. See Nanoc3::DataSource
+  # for documentation on the overridden methods instead.
   #
-  # = Pages
+  # = Items
   #
-  # The filesystem data source stores its pages in nested directories. Each
-  # directory represents a single page. The root directory is the 'content'
+  # The filesystem data source stores its items in nested directories. Each
+  # directory represents a single item. The root directory is the 'content'
   # directory.
   #
   # Every directory has a content file and a meta file. The content file
-  # contains the actual page content, while the meta file contains the page's
+  # contains the actual item content, while the meta file contains the item's
   # metadata, formatted as YAML.
   #
   # Both content files and meta files are named after its parent directory
-  # (i.e. page). For example, a page named 'foo' will have a directorynamed
+  # (i.e. item). For example, a item named 'foo' will have a directory named
   # 'foo', with e.g. a 'foo.markdown' content file and a 'foo.yaml' meta file.
   #
   # Content file extensions are not used for determining the filter that
@@ -29,17 +29,11 @@ module Nanoc3::DataSources
   # can have an 'index.txt' content file and a 'meta.yaml' meta file. This is
   # to preserve backward compatibility.
   #
-  # = Assets
-  #
-  # Assets are stored in the 'assets' directory (surprise!). The structure is
-  # very similar to the structure of the 'content' directory, so see the Pages
-  # section for details on how this directory is structured.
-  #
   # = Layouts
   #
   # Layouts are stored as directories in the 'layouts' directory. Each layout
   # contains a content file and a meta file. The content file contain the
-  # actual layout, and the meta file describes how the page should be handled
+  # actual layout, and the meta file describes how the item should be handled
   # (contains the filter that should be used).
   #
   # For backward compatibility, a layout can also be a single file in the
@@ -70,7 +64,7 @@ module Nanoc3::DataSources
 
     def setup # :nodoc:
       # Create directories
-      %w( assets content layouts lib ).each do |dir|
+      %w( content layouts lib ).each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
@@ -78,7 +72,7 @@ module Nanoc3::DataSources
 
     ########## Loading data ##########
 
-    def pages # :nodoc:
+    def items # :nodoc:
       meta_filenames('content').map do |meta_filename|
         # Read metadata
         meta = YAML.load_file(meta_filename) || {}
@@ -98,33 +92,8 @@ module Nanoc3::DataSources
         content_mtime = File.stat(content_filename).mtime
         mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
 
-        # Create page object
-        Nanoc3::Page.new(content, attributes, identifier, mtime)
-      end
-    end
-
-    def assets # :nodoc:
-      meta_filenames('assets').map do |meta_filename|
-        # Read metadata
-        meta = YAML.load_file(meta_filename) || {}
-
-        # Get content
-        content_filename = content_filename_for_dir(File.dirname(meta_filename))
-        content = File.read(content_filename)
-
-        # Get attributes
-        attributes = { 'extension' => File.extname(content_filename)[1..-1] }.merge(meta)
-
-        # Get identifier
-        identifier = meta_filename.sub(/^assets/, '').sub(/[^\/]+\.yaml$/, '')
-
-        # Get modification times
-        meta_mtime    = File.stat(meta_filename).mtime
-        content_mtime = File.stat(content_filename).mtime
-        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
-
-        # Create asset object
-        Nanoc3::Asset.new(content, attributes, identifier, mtime)
+        # Create item object
+        Nanoc3::Item.new(content, attributes, identifier, mtime)
       end
     end
 
@@ -169,8 +138,8 @@ module Nanoc3::DataSources
 
     ########## Creating data ##########
 
-    # Creates a new page with the given page content, attributes and identifier.
-    def create_page(content, attributes, identifier)
+    # Creates a new item with the given content, attributes and identifier.
+    def create_item(content, attributes, identifier)
       # Determine base path
       last_component = identifier.split('/')[-1] || 'content'
       base_path = 'content' + identifier + last_component
@@ -190,7 +159,7 @@ module Nanoc3::DataSources
       File.open(content_filename, 'w') { |io| io.write(content) }
     end
 
-    # Creates a new layout with the given page content, attributes and identifier.
+    # Creates a new layout with the given content, attributes and identifier.
     def create_layout(content, attributes, identifier)
       # Determine base path
       last_component = identifier.split('/')[-1]

@@ -1,25 +1,25 @@
 module Nanoc3::CLI::Commands
 
-  class CreatePage < Cri::Command # :nodoc:
+  class CreateItem < Cri::Command # :nodoc:
 
     def name
-      'create_page'
+      'create_item'
     end
 
     def aliases
-      [ 'cp' ]
+      [ 'ci' ]
     end
 
     def short_desc
-      'create a page'
+      'create a item'
     end
 
     def long_desc
-      'Create a new page in the current site.'
+      'Create a new item in the current site.'
     end
 
     def usage
-      "nanoc create_page [options] [identifier]"
+      "nanoc create_item [options] [identifier]"
     end
 
     def option_definitions
@@ -48,10 +48,10 @@ module Nanoc3::CLI::Commands
       # Set VCS if possible
       @base.set_vcs(options[:vcs])
 
-      # Check whether page is unique
-      if !@base.site.pages.find { |l| l.identifier == identifier }.nil?
-        $stderr.puts "A page already exists at #{identifier}. Please " +
-                     "pick a unique name for the page you are creating."
+      # Check whether item is unique
+      if !@base.site.items.find { |i| i.identifier == identifier }.nil?
+        $stderr.puts "An item already exists at #{identifier}. Please " +
+                     "pick a unique name for the item you are creating."
         exit 1
       end
 
@@ -60,14 +60,14 @@ module Nanoc3::CLI::Commands
         Nanoc3::CLI::Logger.instance.file(:high, :create, file_path)
       end
 
-      # Create page
-      base.site.data_source.create_page(
-        "Hi, I'm a new page!\n",
-        { :title => "A New Page" },
+      # Create item
+      base.site.data_source.create_item(
+        "Hi, I'm a new item!\n",
+        { :title => "A New Item" },
         identifier
       )
 
-      puts "A page has been created at #{identifier}."
+      puts "An item has been created at #{identifier}."
     end
 
   end

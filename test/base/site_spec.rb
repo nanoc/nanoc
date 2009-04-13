@@ -45,8 +45,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.stubs(:load_code).with(false)
-    site.stubs(:load_pages)
-    site.stubs(:load_assets)
+    site.stubs(:load_items)
     site.stubs(:load_layouts)
 
     # Load data
@@ -63,8 +62,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.expects(:load_code).with(false)
-    site.expects(:load_pages)
-    site.expects(:load_assets)
+    site.expects(:load_items)
     site.expects(:load_layouts)
 
     # Load data
@@ -81,8 +79,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.expects(:load_code).with(false).once
-    site.expects(:load_pages).once
-    site.expects(:load_assets).once
+    site.expects(:load_items).once
     site.expects(:load_layouts).once
 
     # Load data twice
@@ -100,8 +97,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.expects(:load_code).with(true).times(2)
-    site.expects(:load_pages).times(2)
-    site.expects(:load_assets).times(2)
+    site.expects(:load_items).times(2)
     site.expects(:load_layouts).times(2)
 
     # Load data twice
@@ -124,27 +120,14 @@ describe 'Nanoc::Site#code' do
 
 end
 
-describe 'Nanoc::Site#pages' do
+describe 'Nanoc::Site#items' do
 
   include Nanoc3::TestHelpers
 
   it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
     proc do
-      site.pages
-    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
-  end
-
-end
-
-describe 'Nanoc::Site#assets' do
-
-  include Nanoc3::TestHelpers
-
-  it 'should raise when data is not loaded yet' do
-    site = Nanoc3::Site.new({})
-    proc do
-      site.assets
+      site.items
     end.must_raise Nanoc3::Errors::DataNotYetAvailableError
   end
 

@@ -4,30 +4,20 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_path_for_page_rep
+  def test_path_for_item_rep
     # Create router
     router = Nanoc3::Router.new(nil)
 
     # Make sure an error is raised
     assert_raises(NotImplementedError) do
-      router.path_for_page_rep(nil)
-    end
-  end
-
-  def test_path_for_asset_rep
-    # Create router
-    router = Nanoc3::Router.new(nil)
-
-    # Make sure an error is raised
-    assert_raises(NotImplementedError) do
-      router.path_for_asset_rep(nil)
+      router.path_for_item_rep(nil)
     end
   end
 
   def test_raw_path_for_without_custom_path
-    # Create page and page rep
-    page = Nanoc3::Page.new('content', {}, '/foobar/')
-    page_rep = Nanoc3::PageRep.new(page, :foo)
+    # Create item and item rep
+    item = Nanoc3::Item.new('content', {}, '/foobar/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
 
     # Mock site
     site = mock
@@ -35,16 +25,16 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
 
     # Create router
     router = Nanoc3::Router.new(site)
-    router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
+    router.expects(:path_for_item_rep).with(item_rep).returns('/foo.html')
 
     # Check
-    assert_equal('out/foo.html', router.raw_path_for(page_rep))
+    assert_equal('out/foo.html', router.raw_path_for(item_rep))
   end
 
   def test_raw_path_for_with_custom_path
-    # Create page and page rep
-    page = Nanoc3::Page.new('content', { :custom_path => '/foo.html' }, '/foobar/')
-    page_rep = Nanoc3::PageRep.new(page, :foo)
+    # Create item and item rep
+    item = Nanoc3::Item.new('content', { :custom_path => '/foo.html' }, '/foobar/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
 
     # Create site
     site = mock
@@ -54,13 +44,13 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     router = Nanoc3::Router.new(site)
 
     # Check
-    assert_equal('out/foo.html', router.raw_path_for(page_rep))
+    assert_equal('out/foo.html', router.raw_path_for(item_rep))
   end
 
   def test_path_for_without_custom_path_without_index
-    # Create page and page rep
-    page = Nanoc3::Page.new('content', {}, '/foobar/')
-    page_rep = Nanoc3::PageRep.new(page, :foo)
+    # Create item and item rep
+    item = Nanoc3::Item.new('content', {}, '/foobar/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
 
     # Create site
     site = mock
@@ -71,16 +61,16 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
 
     # Create router
     router = Nanoc3::Router.new(site)
-    router.expects(:path_for_page_rep).with(page_rep).returns('/foo.html')
+    router.expects(:path_for_item_rep).with(item_rep).returns('/foo.html')
 
     # Check
-    assert_equal('/foo.html', router.path_for(page_rep))
+    assert_equal('/foo.html', router.path_for(item_rep))
   end
 
   def test_path_for_with_custom_path_without_index
-    # Create page and page rep
-    page = Nanoc3::Page.new('content', { :custom_path => '/foo.html' }, '/foobar/')
-    page_rep = Nanoc3::PageRep.new(page, :foo)
+    # Create item and item rep
+    item = Nanoc3::Item.new('content', { :custom_path => '/foo.html' }, '/foobar/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
 
     # Create site
     site = mock
@@ -93,13 +83,13 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     router = Nanoc3::Router.new(site)
 
     # Check
-    assert_equal('/foo.html', router.path_for(page_rep))
+    assert_equal('/foo.html', router.path_for(item_rep))
   end
 
   def test_path_for_without_custom_path_with_index
-    # Create page and page rep
-    page = Nanoc3::Page.new('content', {}, '/foobar/')
-    page_rep = Nanoc3::PageRep.new(page, :foo)
+    # Create item and item rep
+    item = Nanoc3::Item.new('content', {}, '/foobar/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
 
     # Create site
     site = mock
@@ -110,16 +100,16 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
 
     # Create router
     router = Nanoc3::Router.new(site)
-    router.expects(:path_for_page_rep).with(page_rep).returns('/foo/index.html')
+    router.expects(:path_for_item_rep).with(item_rep).returns('/foo/index.html')
 
     # Check
-    assert_equal('/foo/', router.path_for(page_rep))
+    assert_equal('/foo/', router.path_for(item_rep))
   end
 
   def test_path_for_with_custom_path_with_index
-    # Create page and page rep
-    page = Nanoc3::Page.new('content', { :custom_path => '/foo/index.html' }, '/foobar/')
-    page_rep = Nanoc3::PageRep.new(page, :foo)
+    # Create item and item rep
+    item = Nanoc3::Item.new('content', { :custom_path => '/foo/index.html' }, '/foobar/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
 
     # Create site
     site = mock
@@ -132,7 +122,7 @@ class Nanoc3::RouterTest < MiniTest::Unit::TestCase
     router = Nanoc3::Router.new(site)
 
     # Check
-    assert_equal('/foo/', router.path_for(page_rep))
+    assert_equal('/foo/', router.path_for(item_rep))
   end
 
 end

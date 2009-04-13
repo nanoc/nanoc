@@ -2,8 +2,6 @@ module Nanoc3
 
   require 'nanoc3/base/core_ext'
 
-  autoload :Asset,              'nanoc3/base/asset'
-  autoload :AssetRep,           'nanoc3/base/asset_rep'
   autoload :Code,               'nanoc3/base/code'
   autoload :Compiler,           'nanoc3/base/compiler'
   autoload :CompilerDSL,        'nanoc3/base/compiler_dsl'
@@ -16,8 +14,6 @@ module Nanoc3
   autoload :ItemRule,           'nanoc3/base/item_rule'
   autoload :Layout,             'nanoc3/base/layout'
   autoload :NotificationCenter, 'nanoc3/base/notification_center'
-  autoload :Page,               'nanoc3/base/page'
-  autoload :PageRep,            'nanoc3/base/page_rep'
   autoload :Plugin,             'nanoc3/base/plugin'
   autoload :Proxy,              'nanoc3/base/proxy'
   autoload :Router,             'nanoc3/base/router'

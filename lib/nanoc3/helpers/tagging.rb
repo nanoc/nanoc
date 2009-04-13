@@ -1,8 +1,8 @@
 module Nanoc3::Helpers
 
   # Nanoc3::Helpers::Tagging provides some support for managing tags added to
-  # pages. To add tags to pages, set the +tags+ page attribute to an array of
-  # tags that should be applied to the page. For example:
+  # items. To add tags to items, set the +tags+ attribute to an array of
+  # tags that should be applied to the item. For example:
   #
   #   tags: [ 'foo', 'bar', 'baz' ]
   #
@@ -11,32 +11,32 @@ module Nanoc3::Helpers
   #   include Nanoc3::Helpers::Tagging
   module Tagging
 
-    # Returns a formatted list of tags for the given page as a string. Several
+    # Returns a formatted list of tags for the given item as a string. Several
     # parameters allow customization:
     #
     # :base_url:: The URL to which the tag will be appended to construct the
     #             link URL. This URL must have a trailing slash. Defaults to
     #             "http://technorati.com/tag/".
     #
-    # :none_text:: The text to display when the page has no tags. Defaults to
+    # :none_text:: The text to display when the item has no tags. Defaults to
     #              "(none)".
     #
     # :separator:: The separator to put between tags. Defaults to ", ".
-    def tags_for(page, params={})
+    def tags_for(item, params={})
       base_url  = params[:base_url]  || 'http://technorati.com/tag/'
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 
-      if page.tags.nil? or page.tags.empty?
+      if item.tags.nil? or item.tags.empty?
         none_text
       else
-        page.tags.collect { |tag| link_for_tag(tag, base_url) }.join(separator)
+        item.tags.collect { |tag| link_for_tag(tag, base_url) }.join(separator)
       end
     end
 
-    # Returns all pages with the given tag.
-    def pages_with_tag(tag)
-      @pages.select { |p| (p.tags || []).include?(tag) }
+    # Returns all items with the given tag.
+    def items_with_tag(tag)
+      @items.select { |p| (p.tags || []).include?(tag) }
     end
 
     # Returns a link to to the specified tag. The link is marked up using the

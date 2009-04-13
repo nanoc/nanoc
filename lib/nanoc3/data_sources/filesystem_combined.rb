@@ -1,12 +1,12 @@
 module Nanoc3::DataSources
 
-  # = Pages
+  # = Items
   #
-  # The filesystem data source stores its pages in nested directories. A page
+  # The filesystem data source stores its items in nested directories. A item
   # is represented by a single file. The root directory is the 'content'
   # directory.
   #
-  # The metadata for a page is embedded into the file itself. It is stored at
+  # The metadata for a item is embedded into the file itself. It is stored at
   # the top of the file, between '-----' (five dashes) separators. For
   # example:
   #
@@ -15,14 +15,14 @@ module Nanoc3::DataSources
   #   -----
   #   h1. Hello!
   #
-  # The identifier of a page is determined as follows. A file with an
+  # The identifier of a item is determined as follows. A file with an
   # 'index.*' filename, such as 'index.txt', will have the filesystem path
   # with the 'index.*' part stripped as a identifier. For example,
   # 'foo/bar/index.html' will have '/foo/bar/' as identifier.
   #
   # A file with a filename not starting with 'index.', such as 'foo.html',
-  # will have an identifier ending in 'foo/'. For example, 'foo/bar.html' will have
-  # '/foo/bar/' as identifier.
+  # will have an identifier ending in 'foo/'. For example, 'foo/bar.html' will
+  # have '/foo/bar/' as identifier.
   #
   # Note that it is possible for two different, separate files to have the
   # same identifier. It is therefore recommended to avoid such situations.
@@ -39,14 +39,9 @@ module Nanoc3::DataSources
   # determine the filters to run on it; the metadata in the file defines the
   # list of filters.
   #
-  # = Assets
-  #
-  # Assets are stored in a way similar to pages. The attributes are merged
-  # into the asset.
-  #
   # = Layouts
   #
-  # Layouts are stored as files in the 'layouts' directory. Similar to pages,
+  # Layouts are stored as files in the 'layouts' directory. Similar to items,
   # each layout consists of a metadata part and a content part, separated by
   # '-----'.
   #
@@ -74,7 +69,7 @@ module Nanoc3::DataSources
 
     def setup # :nodoc:
       # Create directories
-      %w( assets content layouts lib ).each do |dir|
+      %w( content layouts lib ).each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
@@ -82,10 +77,10 @@ module Nanoc3::DataSources
 
     ########## Loading data ##########
 
-    def pages # :nodoc:
+    def items # :nodoc:
       files('content', true).map do |filename|
         # Read and parse data
-        meta, content = *parse_file(filename, 'page')
+        meta, content = *parse_file(filename, 'item')
 
         # Get attributes
         attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(filename))
@@ -100,31 +95,8 @@ module Nanoc3::DataSources
         # Get mtime
         mtime = File.stat(filename).mtime
 
-        # Build page
-        Nanoc3::Page.new(content, attributes, identifier, mtime)
-      end
-    end
-
-    def assets # :nodoc:
-      files('assets', true).map do |filename|
-        # Read and parse data
-        meta, content = *parse_file(filename, 'asset')
-
-        # Get attributes
-        attributes = { 'extension' => File.extname(filename)[1..-1] }.merge(meta)
-
-        # Get actual identifier
-        if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^assets/, '').sub(/index\.[^\/]+$/, '') + '/'
-        else
-          identifier = filename.sub(/^assets/, '').sub(/\.[^\/]+$/, '') + '/'
-        end
-
-        # Get mtime
-        mtime = File.stat(filename).mtime
-
-        # Build asset
-        Nanoc3::Asset.new(content, attributes, identifier, mtime)
+        # Build item
+        Nanoc3::Item.new(content, attributes, identifier, mtime)
       end
     end
 
@@ -167,8 +139,8 @@ module Nanoc3::DataSources
 
     ########## Creating data ##########
 
-    # Creates a new page with the given page content, attributes and identifier.
-    def create_page(content, attributes, identifier)
+    # Creates a new item with the given content, attributes and identifier.
+    def create_item(content, attributes, identifier)
       # Determine path
       if identifier == '/'
         path = 'content/index.html'
@@ -180,7 +152,7 @@ module Nanoc3::DataSources
       # Notify
       Nanoc3::NotificationCenter.post(:file_created, path)
 
-      # Write page
+      # Write item
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
@@ -190,7 +162,7 @@ module Nanoc3::DataSources
       end
     end
 
-    # Creates a new layout with the given page content, attributes and identifier.
+    # Creates a new layout with the given content, attributes and identifier.
     def create_layout(content, attributes, identifier)
       # Determine path
       path = 'layouts' + identifier[0..-2] + '.html'
@@ -199,7 +171,7 @@ module Nanoc3::DataSources
       # Notify
       Nanoc3::NotificationCenter.post(:file_created, path)
 
-      # Write page
+      # Write layout
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
         io.write("-----\n")
