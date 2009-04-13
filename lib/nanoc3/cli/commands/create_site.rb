@@ -226,6 +226,7 @@ EOS
 
       # Create config
       File.open('config.yaml', 'w') do |io|
+        io.write "---\n"
         io.write "output_dir:  \"output\"\n"
         io.write "data_source: \"#{data_source}\"\n"
         io.write "router:      \"default\"\n"
