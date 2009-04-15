@@ -65,12 +65,9 @@ END
 END
 
     # Creates a new autocompiler for the given site.
-    def initialize(site, include_outdated=false)
+    def initialize(site)
       # Set site
       @site = site
-
-      # Set options
-      @include_outdated = include_outdated
 
       # Create mutex to prevent parallel requests
       @mutex = Mutex.new
@@ -263,10 +260,7 @@ END
     def serve_rep(rep)
       # Recompile rep
       begin
-        @site.compiler.run(
-          [ rep.item ],
-          :force => @include_outdated
-        )
+        @site.compiler.run([ rep.item ], :force => true)
       rescue Exception => exception
         return serve_500(rep.path, exception)
       end
