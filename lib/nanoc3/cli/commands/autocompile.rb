@@ -31,12 +31,6 @@ module Nanoc3::CLI::Commands
 
     def option_definitions
       [
-        # --all
-        # FIXME is this option even necessary?
-        {
-          :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'compile all items, even those that aren\'t outdated'
-        },
         # --port
         {
           :long => 'port', :short => 'p', :argument => :required,
@@ -62,7 +56,7 @@ module Nanoc3::CLI::Commands
 
       # Autocompile site
       begin
-        autocompiler = Nanoc3::Extra::AutoCompiler.new(@base.site, options.has_key?(:all))
+        autocompiler = Nanoc3::Extra::AutoCompiler.new(@base.site)
         autocompiler.start(
           options[:port],
           options[:handler]
