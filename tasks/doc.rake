@@ -6,7 +6,7 @@ namespace :doc do
 
   RDoc::Task.new(:rdoc => 'rdoc', :clobber_rdoc => 'rdoc:clean', :rerdoc => 'rdoc:force') do |rd|
     rd.main       = Nanoc3::Package.instance.main_documentation_file
-    rd.rdoc_files = Nanoc3::Package.instance.files
+    rd.rdoc_files = Nanoc3::Package.instance.files_in_documentation
     rd.rdoc_dir   = 'doc/rdoc'
     rd.title      = Nanoc3::Package.instance.name
   end

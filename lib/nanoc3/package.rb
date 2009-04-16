@@ -17,22 +17,32 @@ module Nanoc3
     # will be included in the documentation (with the exception of the files
     # in undocumented_files).
     def files
-      %w( ChangeLog LICENSE NEWS Rakefile README ) +
-      Dir['bin/**/*'] +
-      Dir['lib/**/*'] +
-      Dir['vendor/**/*']
+      @files ||= (%w( ChangeLog LICENSE NEWS Rakefile README ) +
+        Dir['bin/**/*'] +
+        Dir['lib/**/*'] +
+        Dir['vendor/**/*']).reject { |f| File.directory?(f) }
+    end
+
+    # The files that are included in the documentation by default.
+    def files_documented_by_default
+      Dir['lib/**/*'].reject { |f| File.directory?(f) }
     end
 
     # The files that should not be included in the documentation.
-    def undocumented_files
+    def files_not_in_documentation
       Dir['lib/**/*.rake'] +
-      Dir['vendor/**/*']
+      Dir['vendor/**/*'].reject { |f| File.directory?(f) }
+    end
+
+    # The files that should be included in the documentation.
+    def files_in_documentation
+      files - files_not_in_documentation
     end
 
     # The files that are not documented by RDoc by default, but should still
     # be included in the documentation.
     def extra_rdoc_files
-      files - Dir['lib/**/*']
+      files_in_documentation - files_documented_by_default
     end
 
     # The name of the file that should be used as entry point for the
@@ -79,8 +89,8 @@ EOS
         s.rdoc_options          = []
         s.rdoc_options          += [ '--title', self.name                    ]
         s.rdoc_options          += [ '--main',  self.main_documentation_file ]
-        self.undocumented_files.each do |undocumented_file|
-          s.rdoc_options        += [ '--exclude', undocumented_file ]
+        self.files_not_in_documentation.each do |file|
+          s.rdoc_options        += [ '--exclude', file ]
         end
 
         s.files                 = self.files
