@@ -1,4 +1,4 @@
-== Overview
+= nanoc 3
 
 nanoc is a simple but very flexible static site generator written in Ruby.
 It operates on local files, and therefore does not run on the server. nanoc
