@@ -1,3 +1,5 @@
+require 'nanoc3/package'
+
 namespace :doc do
 
   desc 'Build the RDoc documentation'
@@ -6,8 +8,8 @@ namespace :doc do
     FileUtils.rm_r 'doc' if File.exist?('doc')
 
     # Build
-    rdoc_files   = GemSpec.extra_rdoc_files + [ 'lib' ]
-    rdoc_options = GemSpec.rdoc_options
+    rdoc_files   = Nanoc3::Package.instance.gem_spec.extra_rdoc_files + [ 'lib' ]
+    rdoc_options = Nanoc3::Package.instance.gem_spec.rdoc_options
     system *[ 'rdoc', rdoc_files, rdoc_options ].flatten
   end
 
