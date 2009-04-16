@@ -1,6 +1,7 @@
 require 'nanoc3/package'
 
 require 'rdoc/task'
+require 'yard'
 
 namespace :doc do
 
@@ -11,23 +12,12 @@ namespace :doc do
     rd.title      = Nanoc3::Package.instance.name
   end
 
-  desc 'Build the YARD documentation'
-  task :yardoc do
-    # Clean
-    FileUtils.rm_r 'doc' if File.exist?('doc')
-
-    # Get options
-    yardoc_files   = Dir.glob('lib/nanoc3/base/**/*.rb') +
-                     Dir.glob('lib/nanoc3/data_sources/**/*.rb') +
-                     Dir.glob('lib/nanoc3/extra/**/*.rb') +
-                     Dir.glob('lib/nanoc3/helpers/**/*.rb')
-    yardoc_options = [
-      '--verbose',
-      '--readme', 'README'
+  YARD::Rake::YardocTask.new do |yard|
+    yard.files   = Nanoc3::Package.instance.files_in_documentation
+    yard.options = [
+      '--readme',     Nanoc3::Package.instance.main_documentation_file,
+      '--output-dir', 'doc/yardoc'
     ]
-
-    # Build
-    system *[ 'yardoc', yardoc_files, yardoc_options ].flatten
   end
 
 end
