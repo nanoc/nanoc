@@ -1,6 +1,6 @@
 module Nanoc3::CLI::Commands
 
-  class CreateLayout < Cri::Command # :nodoc:
+  class CreateLayout < Cri::Command
 
     def name
       'create_layout'

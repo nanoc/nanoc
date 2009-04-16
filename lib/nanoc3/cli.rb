@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../../vendor/cri/
 require 'cri'
 
 # Module for CLI
-module Nanoc3::CLI # :nodoc:
+module Nanoc3::CLI
 end
 
 # Load CLI

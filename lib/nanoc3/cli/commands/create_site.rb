@@ -1,6 +1,6 @@
 module Nanoc3::CLI::Commands
 
-  class CreateSite < Cri::Command # :nodoc:
+  class CreateSite < Cri::Command
 
     DEFAULT_ITEM = <<EOS
 <h1>A Brand New nanoc Site</h1>

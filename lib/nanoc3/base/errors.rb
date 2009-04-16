@@ -1,6 +1,6 @@
 module Nanoc3
 
-  module Errors # :nodoc:
+  module Errors
 
     # Generic error. Superclass for all nanoc-specific errors.
     class GenericError < ::RuntimeError ; end

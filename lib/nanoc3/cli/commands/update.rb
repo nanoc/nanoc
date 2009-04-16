@@ -1,6 +1,6 @@
 module Nanoc3::CLI::Commands
 
-  class Update < Cri::Command # :nodoc:
+  class Update < Cri::Command
 
     def name
       'update'

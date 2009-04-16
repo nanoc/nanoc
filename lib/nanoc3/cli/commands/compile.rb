@@ -1,6 +1,6 @@
 module Nanoc3::CLI::Commands
 
-  class Compile < Cri::Command # :nodoc:
+  class Compile < Cri::Command
 
     def name
       'compile'
