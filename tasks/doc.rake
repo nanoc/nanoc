@@ -1,16 +1,14 @@
 require 'nanoc3/package'
 
+require 'rdoc/task'
+
 namespace :doc do
 
-  desc 'Build the RDoc documentation'
-  task :rdoc do
-    # Clean
-    FileUtils.rm_r 'doc' if File.exist?('doc')
-
-    # Build
-    rdoc_files   = Nanoc3::Package.instance.gem_spec.extra_rdoc_files + [ 'lib' ]
-    rdoc_options = Nanoc3::Package.instance.gem_spec.rdoc_options
-    system *[ 'rdoc', rdoc_files, rdoc_options ].flatten
+  RDoc::Task.new(:rdoc => 'rdoc', :clobber_rdoc => 'rdoc:clean', :rerdoc => 'rdoc:force') do |rd|
+    rd.main       = Nanoc3::Package.instance.main_documentation_file
+    rd.rdoc_files = Nanoc3::Package.instance.files
+    rd.rdoc_dir   = 'doc/rdoc'
+    rd.title      = Nanoc3::Package.instance.name
   end
 
   desc 'Build the YARD documentation'
