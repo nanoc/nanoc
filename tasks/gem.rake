@@ -1,17 +1,19 @@
-require 'rake/gempackagetask'
+require 'nanoc3/package'
+
+require 'rubygems/package_task'
 
 namespace :gem do
 
-  Rake::GemPackageTask.new(GemSpec) { |task| }
+  package_task = Gem::PackageTask.new(Nanoc3::Package.instance.gem_spec) { |pkg| }
 
   desc 'Install the gem'
-  task :install => [ :gem ] do
-    sh %{gem install pkg/#{GemSpec.name}-#{Nanoc3::VERSION}}
+  task :install => [ :package ] do
+    sh %{gem install pkg/#{package_task.name}-#{Nanoc3::VERSION}}
   end
 
   desc 'Uninstall the gem'
   task :uninstall do
-    sh %{gem uninstall #{GemSpec.name}}
+    sh %{gem uninstall #{package_task.name}}
   end
 
 end
