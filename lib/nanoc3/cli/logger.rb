@@ -25,7 +25,7 @@ module Nanoc3::CLI
     attr_accessor :color
     alias_method :color?, :color
 
-    def initialize # :nodoc:
+    def initialize
       @level = :high
       @color = true
     end

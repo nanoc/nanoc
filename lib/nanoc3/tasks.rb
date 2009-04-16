@@ -1,4 +1,4 @@
-module Nanoc3::Tasks # :nodoc:
+module Nanoc3::Tasks
 end
 
 Dir[File.dirname(__FILE__) + '/tasks/*.rb'].each { |f| load f }

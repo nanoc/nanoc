@@ -1,6 +1,6 @@
 module Nanoc3::CLI::Commands
 
-  class CreateItem < Cri::Command # :nodoc:
+  class CreateItem < Cri::Command
 
     def name
       'create_item'

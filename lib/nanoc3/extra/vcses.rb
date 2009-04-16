@@ -1,4 +1,4 @@
-module Nanoc3::Extra::VCSes # :nodoc:
+module Nanoc3::Extra::VCSes
 
   autoload 'Bazaar',     'nanoc3/extra/vcses/bazaar'
   autoload 'Dummy',      'nanoc3/extra/vcses/dummy'

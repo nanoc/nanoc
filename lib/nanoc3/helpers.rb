@@ -1,4 +1,4 @@
-module Nanoc3::Helpers # :nodoc:
+module Nanoc3::Helpers
 
   autoload :Blogging,   'nanoc3/helpers/blogging'
   autoload :Capturing,  'nanoc3/helpers/capturing'

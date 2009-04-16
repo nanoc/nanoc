@@ -61,13 +61,13 @@ module Nanoc3::DataSources
 
     ########## Preparation ##########
 
-    def up # :nodoc:
+    def up
     end
 
-    def down # :nodoc:
+    def down
     end
 
-    def setup # :nodoc:
+    def setup
       # Create directories
       %w( content layouts lib ).each do |dir|
         FileUtils.mkdir_p(dir)
@@ -77,7 +77,7 @@ module Nanoc3::DataSources
 
     ########## Loading data ##########
 
-    def items # :nodoc:
+    def items
       files('content', true).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'item')
@@ -100,7 +100,7 @@ module Nanoc3::DataSources
       end
     end
 
-    def layouts # :nodoc:
+    def layouts
       files('layouts', true).map do |filename|
         # Read and parse data
         meta, content = *parse_file(filename, 'layout')
@@ -120,7 +120,7 @@ module Nanoc3::DataSources
       end.compact
     end
 
-    def code # :nodoc:
+    def code
       # Get files
       filenames = Dir['lib/**/*.rb'].sort
 

@@ -1,4 +1,4 @@
-module Nanoc3::Routers # :nodoc:
+module Nanoc3::Routers
 
   autoload 'Default',   'nanoc3/routers/default'
   autoload 'NoDirs',    'nanoc3/routers/no_dirs'

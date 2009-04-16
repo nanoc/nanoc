@@ -1,4 +1,4 @@
-module Nanoc3::Extra # :nodoc:
+module Nanoc3::Extra
 
   autoload :AutoCompiler, 'nanoc3/extra/auto_compiler'
   autoload :Context,      'nanoc3/extra/context'

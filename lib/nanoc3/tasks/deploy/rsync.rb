@@ -1,4 +1,4 @@
-module Nanoc3::Tasks::Deploy # :nodoc:
+module Nanoc3::Tasks::Deploy
 
   # Nanoc3::Tasks::Deploy::Rsync is a task that deploys a site using rsync.
   class Rsync

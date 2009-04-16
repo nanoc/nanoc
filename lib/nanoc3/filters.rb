@@ -1,4 +1,4 @@
-module Nanoc3::Filters # :nodoc:
+module Nanoc3::Filters
 
   autoload 'BlueCloth',       'nanoc3/filters/bluecloth'
   autoload 'ERB',             'nanoc3/filters/erb'

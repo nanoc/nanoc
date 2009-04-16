@@ -1,4 +1,4 @@
-module Nanoc3::Tasks::Validate # :nodoc:
+module Nanoc3::Tasks::Validate
 end
 
 require 'nanoc3/tasks/validate/base'
