@@ -17,7 +17,7 @@ module Nanoc3
     # will be included in the documentation (with the exception of the files
     # in undocumented_files).
     def files
-      @files ||= (%w( ChangeLog LICENSE NEWS Rakefile README ) +
+      @files ||= (%w( ChangeLog LICENSE NEWS.rdoc Rakefile README.rdoc ) +
         Dir['bin/**/*'] +
         Dir['lib/**/*'] +
         Dir['vendor/**/*']).reject { |f| File.directory?(f) }
@@ -48,8 +48,7 @@ module Nanoc3
     # The name of the file that should be used as entry point for the
     # documentation.
     def main_documentation_file
-      # FIXME rename this to README.rdoc or so
-      'README'
+      'README.rdoc'
     end
 
     # The Gem::Specification used for packaging.
