@@ -46,7 +46,7 @@ module Nanoc3
     def filename
       if @assigns[:layout]
         "layout #{assigns[:layout].identifier}"
-      elsif @assigns[:_item]
+      elsif @assigns[:item]
         "item #{assigns[:_item].identifier} (rep #{assigns[:_item_rep].name})"
       else
         '?'
