@@ -24,7 +24,7 @@ module Nanoc3::Helpers
       data = capture(&block)
 
       # Find filter
-      filter = Nanoc3::Filter.named(filter_name).new(@_item_rep.assigns)
+      filter = ::Nanoc3::Filter.named(filter_name).new(@_item_rep.assigns)
 
       # Filter captured data
       filtered_data = filter.run(data)
@@ -37,16 +37,21 @@ module Nanoc3::Helpers
   private
 
     def capture(*args, &block)
-      buffer = eval('_erbout', block.binding)
+      # Get erbout so far
+      erbout = eval('_erbout', block.binding)
+      erbout_length = erbout.length
 
-      pos = buffer.length
+      # Execute block
       block.call(*args)
 
-      data = buffer[pos..-1]
+      # Get new piece of erbout
+      erbout_addition = erbout[erbout_length..-1]
 
-      buffer[pos..-1] = ''
+      # Remove addition
+      erbout[erbout_length..-1] = ''
 
-      data
+      # Done
+      erbout_addition
     end
 
   end
