@@ -34,10 +34,6 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert(!File.file?('lib/default.rb'))
   end
 
-  def test_update
-    # TODO implement
-  end
-
   # Test loading data
 
   def test_items
