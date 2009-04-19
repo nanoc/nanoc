@@ -38,8 +38,14 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
       # Mock item and rep
       item = mock
       item.expects(:title).returns('Bar...')
+      item.expects(:identifier).returns('/blah/')
       @_item_rep = mock
-      @_item_rep.expects(:assigns).returns({ :item => item })
+      @_item_rep.expects(:name).returns('default')
+      @_item_rep.expects(:assigns).returns({
+        :_item      => item,
+        :_item_rep  => @_item_rep,
+        :item       => item
+      })
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
