@@ -2,8 +2,6 @@ module Nanoc3::CLI
 
   class Base < Cri::Base
 
-    attr_reader :site
-
     def initialize
       super('nanoc3')
 
