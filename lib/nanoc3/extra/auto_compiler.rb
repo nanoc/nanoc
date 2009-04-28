@@ -79,17 +79,7 @@ END
       @mutex.synchronize do
         # Reload site data
         @site.load_data(true)
-
-        # Build reps for each item
-        # FIXME ugly
-        @site.compiler.instance_eval do
-          load_rules
-          @site.items.each do |item|
-            item.reps.clear
-            build_reps_for(item)
-            item.reps.each { |r| map_rep(r) }
-          end
-        end
+        build_reps
 
         # Get file path
         file_path = @site.config[:output_dir] + path
@@ -122,6 +112,18 @@ END
 
     def h(s)
       ERB::Util.html_escape(s)
+    end
+
+    def build_reps
+      # FIXME ugly
+      @site.compiler.instance_eval do
+        load_rules
+        @site.items.each do |item|
+          item.reps.clear
+          build_reps_for(item)
+          item.reps.each { |r| map_rep(r) }
+        end
+      end
     end
 
     def mime_type_of(path, fallback)
