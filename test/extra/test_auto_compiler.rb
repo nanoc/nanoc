@@ -23,6 +23,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_rep).with(item_reps[1])
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => '/foo/2/') }
@@ -47,6 +48,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('/foo/2')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => '/foo/2') }
@@ -75,6 +77,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_file).with('out/somefile.txt')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => 'somefile.txt') }
@@ -94,6 +97,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_file).with('out/foo/bar/index.html')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar/') }
@@ -113,6 +117,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('foo/bar/')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar/') }
@@ -132,6 +137,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('foo/bar')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar') }
@@ -151,6 +157,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('foo/bar')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar') }
@@ -166,6 +173,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
     autocompiler.expects(:serve_404).with('someotherfile.txt')
+    autocompiler.stubs(:build_reps)
 
     # Run
     autocompiler.instance_eval { call('PATH_INFO' => 'someotherfile.txt') }
