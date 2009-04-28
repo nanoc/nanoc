@@ -5,7 +5,14 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
   include Nanoc3::TestHelpers
 
   def test_to_proxy
-    # TODO implement
+    # Mock item
+    item = Nanoc3::Item.new('sample content', { :sample => 'attributes' }, '/sample/path/')
+
+    # Create proxy
+    item_proxy = item.to_proxy
+
+    # Test
+    assert_equal(item, item_proxy.instance_eval { @obj })
   end
 
   def test_attribute_named
