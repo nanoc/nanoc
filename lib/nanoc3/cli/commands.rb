@@ -1,7 +1,6 @@
 module Nanoc3::CLI::Commands
 end
 
-require 'nanoc3/cli/commands/autocompile'
 require 'nanoc3/cli/commands/compile'
 require 'nanoc3/cli/commands/create_layout'
 require 'nanoc3/cli/commands/create_item'
