@@ -10,9 +10,6 @@ module Nanoc3::Extra
 <html>
 	<head>
 		<title>404 File Not Found</title>
-		<style type="text/css">
-			body { padding: 10px; border: 10px solid #f00; margin: 10px; font-family: Helvetica, Arial, sans-serif; }
-		</style>
 	</head>
 	<body>
 		<h1>404 File Not Found</h1>
