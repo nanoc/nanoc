@@ -158,10 +158,28 @@ module Nanoc3
       filter_name
     end
 
+    # Adds an item compilation rule to the compiler.
+    #
+    # +identifier+:: The identifier for the item that should be compiled using
+    #                this rule. Can contain the '*' wildcard, which matches
+    #                zero or more characters.
+    #
+    # +rep_name+:: The name of the representation this compilation rule
+    #              applies to.
+    #
+    # +block+:: A Proc that should be used to compile the matching items.
     def add_item_compilation_rule(identifier, rep_name, block)
       @item_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
     end
 
+    # Adds a layout compilation rule to the compiler.
+    #
+    # +identifier+:: The identifier for the layout that should be compiled
+    #                using this rule. Can contain the '*' wildcard, which
+    #                matches zero or more characters.
+    #
+    # +filter_name+:: The name of the filter that should be used to compile
+    #                 the matching layouts.
     def add_layout_compilation_rule(identifier, filter_name)
       @layout_filter_mapping[identifier_to_regex(identifier)] = filter_name
     end
