@@ -224,33 +224,6 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     assert_match(/404 File Not Found/,  response[2][0])
   end
 
-  def test_serve_500
-    # Create site
-    stack = []
-    compiler = mock
-    compiler.expects(:stack).returns(stack)
-    site = mock
-    site.expects(:compiler).returns(compiler)
-
-    # Create autocompiler
-    autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
-
-    # Fill response for 500
-    response = autocompiler.instance_eval do
-      begin
-        raise RuntimeError.new("boink")
-      rescue RuntimeError => e
-        serve_500('/foo/bar/baz/', e)
-      end
-    end
-
-    # Check response
-    assert_equal(500,                     response[0])
-    assert_equal('text/html',             response[1]['Content-Type'])
-    assert_match(/500 Server Error/,      response[2][0])
-    assert_match(/Unknown error: boink/,  response[2][0])
-  end
-
   def test_serve_rep_with_working_item
     if_have('mime/types') do
       # Create item and item rep
@@ -296,13 +269,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create item and item rep
       item = mock
       item_rep = mock
-      item_rep.expects(:path).returns('somefile.html')
       item_rep.expects(:item).returns(item)
 
       # Create site
       stack = []
       compiler = mock
-      compiler.expects(:stack).returns(stack)
       compiler.expects(:run).raises(RuntimeError, 'aah! fail!')
       site = mock
       site.expects(:compiler).at_least_once.returns(compiler)
@@ -311,13 +282,9 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
 
       # Serve
-      response = autocompiler.instance_eval { serve_rep(item_rep) }
-
-      # Check response
-      assert_equal(500,                 response[0])
-      assert_equal('text/html',         response[1]['Content-Type'])
-      assert_match(/aah! fail!/,        response[2][0])
-      assert_match(/500 Server Error/,  response[2][0])
+      assert_raises(RuntimeError) do
+        autocompiler.instance_eval { serve_rep(item_rep) }
+      end
     end
   end
 
