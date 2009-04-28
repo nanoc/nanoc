@@ -80,6 +80,17 @@ END
         # Reload site data
         @site.load_data(true)
 
+        # Build reps for each item
+        # FIXME ugly
+        @site.compiler.instance_eval do
+          load_rules
+          @site.items.each do |item|
+            item.reps.clear
+            build_reps_for(item)
+            item.reps.each { |r| map_rep(r) }
+          end
+        end
+
         # Get file path
         file_path = @site.config[:output_dir] + path
 
