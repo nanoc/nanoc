@@ -25,7 +25,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_rep).with(item_reps[1])
 
     # Run
-    autocompiler.instance_eval { handle_request('/foo/2/') }
+    autocompiler.instance_eval { call('PATH_INFO' => '/foo/2/') }
   end
 
   def test_handle_request_with_broken_url
@@ -49,7 +49,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_404).with('/foo/2')
 
     # Run
-    autocompiler.instance_eval { handle_request('/foo/2') }
+    autocompiler.instance_eval { call('PATH_INFO' => '/foo/2') }
   end
 
   def test_handle_request_with_file
@@ -77,7 +77,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_file).with('out/somefile.txt')
 
     # Run
-    autocompiler.instance_eval { handle_request('somefile.txt') }
+    autocompiler.instance_eval { call('PATH_INFO' => 'somefile.txt') }
   end
 
   def test_handle_request_with_dir_with_slash_with_index_file
@@ -96,7 +96,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_file).with('out/foo/bar/index.html')
 
     # Run
-    autocompiler.instance_eval { handle_request('foo/bar/') }
+    autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar/') }
   end
 
   def test_handle_request_with_dir_with_slash_without_index_file
@@ -115,7 +115,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_404).with('foo/bar/')
 
     # Run
-    autocompiler.instance_eval { handle_request('foo/bar/') }
+    autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar/') }
   end
 
   def test_handle_request_with_dir_without_slash_with_index_file
@@ -134,7 +134,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_404).with('foo/bar')
 
     # Run
-    autocompiler.instance_eval { handle_request('foo/bar') }
+    autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar') }
   end
 
   def test_handle_request_with_dir_without_slash_without_index_file
@@ -153,7 +153,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_404).with('foo/bar')
 
     # Run
-    autocompiler.instance_eval { handle_request('foo/bar') }
+    autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar') }
   end
 
   def test_handle_request_with_404
@@ -168,7 +168,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     autocompiler.expects(:serve_404).with('someotherfile.txt')
 
     # Run
-    autocompiler.instance_eval { handle_request('someotherfile.txt') }
+    autocompiler.instance_eval { call('PATH_INFO' => 'someotherfile.txt') }
   end
 
   def test_h
