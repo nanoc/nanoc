@@ -4,34 +4,6 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_start
-    # TODO implement
-  end
-
-  def test_preferred_handler
-    # Create autocompiler
-    aco = Nanoc3::Extra::AutoCompiler.new(nil)
-
-    # Check preferred handler
-    handlers = sequence('handlers')
-    aco.expects(:handler_named).with(:thin).returns(nil).in_sequence(handlers)
-    aco.expects(:handler_named).with(:mongrel).returns(':D').in_sequence(handlers)
-    assert_equal(':D', aco.instance_eval { preferred_handler })
-  end
-
-  def test_handler_named
-    if_have 'rack' do
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
-
-      # Check handler without requirements
-      assert_equal(
-        Rack::Handler::WEBrick,
-        autocompiler.instance_eval { handler_named(:webrick) }
-      )
-    end
-  end
-
   def test_handle_request_with_item_rep
     # Create items and reps
     item_reps = [ mock, mock, mock ]

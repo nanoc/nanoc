@@ -1,17 +1,9 @@
-require 'webrick'
-
 module Nanoc3::Extra
 
   # Nanoc3::Extra::AutoCompiler is a web server that will automatically compile
   # items as they are requested. It also serves static files such as
   # stylesheets and images.
   class AutoCompiler
-
-    # Error that is raised when the autocompiler is started if the specified
-    # handler cannot be found.
-    class UnknownHandlerError < Nanoc3::Errors::GenericError ; end
-
-    HANDLER_NAMES = [ :thin, :mongrel, :webrick, :ebb, :cgi, :fastcgi, :lsws, :scgi ]
 
     ERROR_404 = <<END
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -73,103 +65,15 @@ END
       @mutex = Mutex.new
     end
 
-    # Starts the server on the given port.
-    #
-    # +port+:: The port the autocompiler web server should be started on. Can
-    #          be nil; in this case the server will be started on port 3000.
-    #
-    # +handler_name+:: A symbol containing the name of the handler to use. See
-    #                  HANDLER_NAMES for a list of supported handlers. Can be
-    #                  set to nil; in this case the best handler will be
-    #                  picked.
-    def start(port, handler_name)
+    def call(env)
       require 'mime/types'
-      require 'rack'
 
-      # Determine handler
-      if handler_name.nil?
-        handler = preferred_handler
-      else
-        handler = handler_named(handler_name.to_sym)
-        raise UnknownHandlerError.new(handler_name) if handler.nil?
-      end
-
-      # Build Rack app
-      app = lambda do |env|
-        begin
-          handle_request(env['PATH_INFO'])
-        rescue Exception => exception
-          return serve_500(nil, exception)
-        end
-      end
-
-      # Run Rack app
-      port ||= 3000
-      handler.run(app, :Port => port, :port => port) do |server|
-        trap(:INT) { server.stop }
-      end
+      handle_request(env['PATH_INFO'])
+    rescue Exception => exception
+      return serve_500(nil, exception)
     end
 
   private
-
-    def preferred_handler
-      return @preferred_handler unless @preferred_handler.nil?
-
-      HANDLER_NAMES.each do |handler_name|
-        # Get handler
-        @preferred_handler = handler_named(handler_name)
-
-        # Make sure we have one
-        break unless @preferred_handler.nil?
-      end
-
-      @preferred_handler
-    end
-
-    def handler_named(handler_name)
-      # Build list of handlers
-      @handlers ||= {
-        :cgi => {
-          :proc => lambda { Rack::Handler::CGI }
-        },
-        :fastcgi => { # FIXME buggy
-          :proc => lambda { Rack::Handler::FastCGI }
-        },
-        :lsws => { # FIXME test
-          :proc => lambda { Rack::Handler::LSWS }
-        },
-        :mongrel => {
-          :proc => lambda { Rack::Handler::Mongrel }
-        },
-        :scgi => { # FIXME buggy
-          :proc => lambda { Rack::Handler::SCGI }
-        },
-        :webrick => {
-          :proc => lambda { Rack::Handler::WEBrick }
-        },
-        :thin => {
-          :proc => lambda { Rack::Handler::Thin },
-          :requires => [ 'thin' ]
-        },
-        :ebb => {
-          :proc => lambda { Rack::Handler::Ebb },
-          :requires => [ 'ebb' ]
-        }
-      }
-
-      begin
-        # Lookup handler
-        handler = @handlers[handler_name]
-
-        # Load requirements
-        (handler[:requires] || []).each { |r| require r }
-
-        # Get handler class
-        handler[:proc].call
-      rescue NameError, LoadError
-        nil
-      end
-    end
 
     def handle_request(path)
       @mutex.synchronize do
