@@ -1,8 +1,8 @@
 module Nanoc3::Extra
 
-  autoload :AutoCompiler, 'nanoc3/extra/auto_compiler'
-  autoload :Context,      'nanoc3/extra/context'
-  autoload :FileProxy,    'nanoc3/extra/file_proxy'
+  autoload 'AutoCompiler', 'nanoc3/extra/auto_compiler'
+  autoload 'Context',      'nanoc3/extra/context'
+  autoload 'FileProxy',    'nanoc3/extra/file_proxy'
 
 end
 
