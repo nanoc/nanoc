@@ -4,7 +4,7 @@ class Nanoc3::Extra::FileProxyTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_stub
+  def test_create_many
     # Create test file
     File.open('test.txt', 'w') { |io| }
 
