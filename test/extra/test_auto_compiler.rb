@@ -14,11 +14,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
     items[1].stubs(:reps).returns([ item_reps[2] ])
 
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.stubs(:load_data).with(true)
     site.stubs(:items).returns(items)
     site.stubs(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
@@ -39,11 +46,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     items[0].expects(:reps).returns([ item_reps[0], item_reps[1] ])
     items[1].expects(:reps).returns([ item_reps[2] ])
 
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns(items)
     site.expects(:config).returns({ :output_dir => 'output/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
@@ -64,11 +78,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     items[0].expects(:reps).returns([ item_reps[0], item_reps[1] ])
     items[1].expects(:reps).returns([ item_reps[2] ])
 
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns(items)
     site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create file
     FileUtils.mkdir_p('out')
@@ -84,11 +105,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_with_slash_with_index_file
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns([])
     site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create file
     FileUtils.mkdir_p('out/foo/bar')
@@ -104,11 +132,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_with_slash_without_index_file
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns([])
     site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create file
     FileUtils.mkdir_p('out/foo/bar')
@@ -124,11 +159,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_without_slash_with_index_file
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns([])
     site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create file
     FileUtils.mkdir_p('out/foo/bar')
@@ -144,11 +186,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_without_slash_without_index_file
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns([])
     site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create file
     FileUtils.mkdir_p('out/foo/bar')
@@ -164,11 +213,18 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_404
+    # Create compiler
+    compiler = mock
+    compiler.expects(:load_rules)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
+
     # Create site
     site = mock
     site.expects(:load_data).with(true)
     site.expects(:items).returns([])
     site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+    site.stubs(:compiler).returns(compiler)
 
     # Create autocompiler
     autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
