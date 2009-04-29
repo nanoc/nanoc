@@ -12,13 +12,13 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     ]
 
     # Mock reps
-    items[0].expects(:reps).returns([ mock ])
-    items[1].expects(:reps).returns([ mock, mock ])
+    items[0].stubs(:reps).returns([ mock ])
+    items[1].stubs(:reps).returns([ mock, mock ])
 
     # Create site
     site = mock
-    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:items).returns(items)
+    site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
+    site.stubs(:items).returns(items)
 
     # Set items' site
     items.each { |item| item.site = site }
@@ -26,8 +26,8 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:load_rules)
-    compiler.expects(:build_reps_for).times(2)
-    compiler.expects(:map_rep).times(3)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
     compiler.expects(:compile_rep).times(3)
 
     # Run
@@ -58,8 +58,8 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:load_rules)
-    compiler.expects(:build_reps_for).times(1)
-    compiler.expects(:map_rep).times(3)
+    compiler.expects(:build_reps)
+    compiler.expects(:map_reps)
     compiler.expects(:compile_rep).times(3)
 
     # Run
@@ -140,11 +140,11 @@ EOF
     end
   end
 
-  def test_build_reps_for
+  def test_build_reps
     # TODO implement
   end
 
-  def test_map_rep
+  def test_map_reps
     # TODO implement
   end
 

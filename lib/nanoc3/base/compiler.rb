@@ -40,12 +40,10 @@ module Nanoc3
       # Get items
       @items = items || @site.items
 
-      # Build reps
-      @items.each { |i| build_reps_for(i) }
+      # Build and map reps
+      build_reps
       @reps = @items.map { |i| i.reps }.flatten
-
-      # Map reps
-      @reps.each { |r| map_rep(r) }
+      map_reps
 
       # Mark all reps as outdated if necessary
       if params.has_key?(:force) && params[:force]
@@ -75,34 +73,33 @@ module Nanoc3
       dsl.instance_eval(File.read(rules_filename), rules_filename)
     end
 
-    # Builds the representations for thet given item.
-    #
-    # This method should not be called directly; please use
-    # Nanoc3::Compiler#run instead, and pass this item representation's item as
-    # its first argument.
-    def build_reps_for(item)
-      # Find matching rules
-      all_rules = @item_compilation_rules
-      matching_rules = all_rules.select { |r| r.applicable_to?(item) }
-      raise Nanoc3::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
+    # Builds the representations for all items.
+    def build_reps
+      @items.each do |item|
+        # Delete existing reps
+        item.reps.clear
 
-      # Build reps
-      rep_names = matching_rules.map { |r| r.rep_name }.uniq
-      rep_names.each do |rep_name|
-        item.reps << ItemRep.new(item, rep_name)
+        # Find matching rules
+        all_rules = @item_compilation_rules
+        matching_rules = all_rules.select { |r| r.applicable_to?(item) }
+        raise Nanoc3::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
+
+        # Create reps
+        rep_names = matching_rules.map { |r| r.rep_name }.uniq
+        rep_names.each do |rep_name|
+          item.reps << ItemRep.new(item, rep_name)
+        end
       end
     end
 
-    # Gives the given rep a disk path and a web path.
-    #
-    # This method should not be called directly; please use
-    # Nanoc3::Compiler#run instead, and pass this item representation's item as
-    # its first argument.
-    def map_rep(rep)
-      # TODO use mapping rules instead of using the router
+    # Gives the each item rep a disk path and a web path.
+    def map_reps
+      @reps.each do |rep|
+        # TODO use mapping rules instead of using the router
 
-      rep.raw_path = @site.router.raw_path_for(rep)
-      rep.path     = @site.router.path_for(rep)
+        rep.raw_path = @site.router.raw_path_for(rep)
+        rep.path     = @site.router.path_for(rep)
+      end
     end
 
     # Compiles the given item representation.
