@@ -1,7 +1,7 @@
 module Nanoc3::Filters
   class RDoc < Nanoc3::Filter
 
-    def run(content)
+    def run(content, params={})
       begin
         # new RDoc
         require 'rdoc/markup'

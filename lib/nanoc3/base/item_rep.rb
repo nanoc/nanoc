@@ -156,11 +156,7 @@ module Nanoc3
 
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      if filter.method(:run).arity == -2
-        @content[:last] = filter.run(@content[:last], filter_args)
-      else
-        @content[:last] = filter.run(@content[:last])
-      end
+      @content[:last] = filter.run(@content[:last], filter_args)
       Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
       # Create snapshot
