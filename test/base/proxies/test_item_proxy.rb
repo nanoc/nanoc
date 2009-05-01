@@ -151,7 +151,8 @@ class Nanoc3::ItemProxyTest < MiniTest::Unit::TestCase
     item = mock
     item.expects(:reps).returns([ item_rep ])
     item.expects(:mtime).returns(Time.parse('2008-05-19'))
-    item.expects(:[]).times(2).with(:blah).returns('item attr blah')
+    item.expects(:[]).with(:'blah' ).returns('item attr blah')
+    item.expects(:[]).with(:'blah?').returns('item attr blah?')
     item.expects(:[]).with(:'blah!').returns('item attr blah!')
 
     # Get item proxy
@@ -161,7 +162,7 @@ class Nanoc3::ItemProxyTest < MiniTest::Unit::TestCase
     assert_equal('item rep web path',       item_proxy.path)
     assert_equal(Time.parse('2008-05-19'),  item_proxy.mtime)
     assert_equal('item attr blah',          item_proxy.blah)
-    assert_equal('item attr blah',          item_proxy.blah?)
+    assert_equal('item attr blah?',         item_proxy.blah?)
     assert_equal('item attr blah!',         item_proxy.blah!)
   end
 

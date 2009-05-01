@@ -42,9 +42,9 @@ module Nanoc3
       @proxy ||= LayoutProxy.new(self)
     end
 
-    # Returns the attribute with the given name.
-    def [](name)
-      @attributes[name]
+    # Requests the attribute with the given key.
+    def [](key)
+      @attributes[key]
     end
 
   end

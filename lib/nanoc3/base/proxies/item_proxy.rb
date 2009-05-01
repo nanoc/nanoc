@@ -3,21 +3,17 @@ module Nanoc3
   # Nanoc3::ItemProxy is a proxy object for a item (Nanoc3::Item).
   class ItemProxy < Proxy
 
-    # Requests the item attribute with the given name. +key+ can be a string
-    # or a symbol, and it can contain a trailing question mark (which will be
-    # stripped).
+    # Requests the item attribute with the given key.
     def [](key)
-      real_key = key.to_s.sub(/\?$/, '').to_sym
-
-      if real_key == :mtime
+      if key == :mtime
         @obj.mtime
-      elsif real_key == :parent
+      elsif key == :parent
         @obj.parent.nil? ? nil : @obj.parent.to_proxy
-      elsif real_key == :children
+      elsif key == :children
         @obj.children.map { |item| item.to_proxy }
-      elsif real_key == :content # backward compatibility
+      elsif key == :content # backward compatibility
         content
-      elsif real_key == :path # backward compatibility
+      elsif key == :path # backward compatibility
         @obj.reps.find { |r| r.name == :default }.path
       else
         super(key)
