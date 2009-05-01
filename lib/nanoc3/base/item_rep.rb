@@ -218,6 +218,10 @@ module Nanoc3
       @modified = File.read(self.raw_path) != old_content
     end
 
+    def inspect
+      "<#{self.class} name=#{self.name} item.identifier=#{self.item.identifier}>"
+    end
+
   end
 
 end
