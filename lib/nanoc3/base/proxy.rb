@@ -10,13 +10,9 @@ module Nanoc3
       @obj = obj
     end
 
-    # Requests the attribute with the given name. +key+ can be a string or a
-    # symbol, and it can contain a trailing question mark (which will be
-    # stripped).
+    # Requests the attribute with the given key.
     def [](key)
-      real_key = key.to_s.sub(/\?$/, '').to_sym
-
-      @obj[real_key]
+      @obj[key]
     end
 
     # Sets a given attribute. The use of setting an object's attributes is not
@@ -27,7 +23,7 @@ module Nanoc3
 
     # Used for requesting attributes without accessing the proxy like a hash.
     def method_missing(method, *args)
-      self[method]
+      self[method.to_sym]
     end
 
   end

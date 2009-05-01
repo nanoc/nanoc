@@ -3,19 +3,15 @@ module Nanoc3
   # Nanoc3::ItemRepProxy is a proxy object for an item representation.
   class ItemRepProxy < Proxy
 
-    # Requests the item representation attribute with the given name. +key+
-    # can be a string or a symbol, and it can contain a trailing question mark
-    # (which will be stripped).
+    # Requests the item representation attribute with the given key.
     def [](key)
-      real_key = key.to_s.sub(/\?$/, '').to_sym
-
-      if real_key == :name
+      if key == :name
         @obj.name
-      elsif real_key == :path
+      elsif key == :path
         @obj.path
-      elsif real_key == :content # backward compatibility
+      elsif key == :content # backward compatibility
         content
-      elsif real_key == :item
+      elsif key == :item
         @obj.item.to_proxy
       else
         super(key)

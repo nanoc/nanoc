@@ -10,7 +10,8 @@ class Nanoc3::LayoutProxyTest < MiniTest::Unit::TestCase
     layout.expects(:content).returns('layout content')
     layout.expects(:identifier).returns('layout identifier')
     layout.expects(:mtime).returns(Time.parse('2008-05-19'))
-    layout.expects(:[]).times(2).with(:blah).returns('layout attr blah')
+    layout.expects(:[]).with(:'blah' ).returns('layout attr blah')
+    layout.expects(:[]).with(:'blah?').returns('layout attr blah?')
     layout.expects(:[]).with(:'blah!').returns('layout attr blah!')
 
     # Get layout proxy
@@ -21,7 +22,7 @@ class Nanoc3::LayoutProxyTest < MiniTest::Unit::TestCase
     assert_equal('layout identifier',       layout_proxy.identifier)
     assert_equal(Time.parse('2008-05-19'),  layout_proxy.mtime)
     assert_equal('layout attr blah',        layout_proxy.blah)
-    assert_equal('layout attr blah',        layout_proxy.blah?)
+    assert_equal('layout attr blah?',       layout_proxy.blah?)
     assert_equal('layout attr blah!',       layout_proxy.blah!)
   end
 

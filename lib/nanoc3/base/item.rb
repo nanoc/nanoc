@@ -58,12 +58,12 @@ module Nanoc3
       @reps       = []
     end
 
-    # Returns the attribute with the given name.
-    def [](name)
+    # Requests the attribute with the given key.
+    def [](key)
       Nanoc3::NotificationCenter.post(:visit_started, self)
       Nanoc3::NotificationCenter.post(:visit_ended,   self)
 
-      @attributes[name]
+      @attributes[key]
     end
 
     # Returns a proxy (Nanoc3::ItemProxy) for this item.
