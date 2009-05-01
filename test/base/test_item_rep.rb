@@ -8,21 +8,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  def test_to_proxy
-    # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:content, "blah blah blah")
-
-    # Create item rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-
-    # Create proxy
-    rep_proxy = rep.to_proxy
-
-    # Test
-    assert_equal(rep, rep_proxy.instance_eval { @obj })
-  end
-
   def test_not_outdated
     # Mock item
     item = MiniTest::Mock.new
@@ -276,7 +261,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:content, %[<%= '<%= "blah" %' + '>' %>])
     item.expect(:site, site)
-    item.stubs(:to_proxy).returns(nil)
+    item.expect(:identifier, '/foobar/')
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -298,7 +283,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock layout
     layout = mock
     layout.stubs(:identifier).returns('/somelayout/')
-    layout.stubs(:to_proxy).returns(nil)
     layout.stubs(:content).returns(%[<%= "blah" %>])
 
     # Mock compiler
@@ -316,7 +300,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = mock
     item.stubs(:content).returns(%[Hello.])
     item.stubs(:site).returns(site)
-    item.stubs(:to_proxy).returns(nil)
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -341,7 +324,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = MiniTest::Mock.new
     item.expect(:content, %[<%= '<%= "blah" %' + '>' %>])
     item.expect(:site, site)
-    item.stubs(:to_proxy).returns(nil)
+    item.expect(:identifier, '/foobar/')
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')

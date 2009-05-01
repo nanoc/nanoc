@@ -37,11 +37,6 @@ module Nanoc3
       @mtime      = mtime
     end
 
-    # Returns a proxy (Nanoc3::LayoutProxy) for this layout.
-    def to_proxy
-      @proxy ||= LayoutProxy.new(self)
-    end
-
     # Requests the attribute with the given key.
     def [](key)
       @attributes[key]

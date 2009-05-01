@@ -27,16 +27,16 @@ module Nanoc3::Helpers
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 
-      if item.tags.nil? or item.tags.empty?
+      if item[:tags].nil? or item[:tags].empty?
         none_text
       else
-        item.tags.collect { |tag| link_for_tag(tag, base_url) }.join(separator)
+        item[:tags].map { |tag| link_for_tag(tag, base_url) }.join(separator)
       end
     end
 
     # Returns all items with the given tag.
     def items_with_tag(tag)
-      @items.select { |p| (p.tags || []).include?(tag) }
+      @items.select { |i| (i[:tags] || []).include?(tag) }
     end
 
     # Returns a link to to the specified tag. The link is marked up using the

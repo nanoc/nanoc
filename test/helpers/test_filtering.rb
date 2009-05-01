@@ -15,8 +15,8 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
                 "<% end %>\n"
 
       # Mock item and rep
-      @_item_rep = mock
-      @_item_rep.expects(:assigns).returns({})
+      @item_rep = mock
+      @item_rep.expects(:assigns).returns({})
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -32,19 +32,18 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
       # Build content to be evaluated
       content = "<p>Foo...</p>\n" +
                 "<% filter :erb do %>\n" +
-                " <p><%%= @item.title %></p>\n" +
+                " <p><%%= @item[:title] %></p>\n" +
                 "<% end %>\n"
 
       # Mock item and rep
-      item = mock
-      item.expects(:title).returns('Bar...')
-      item.expects(:identifier).returns('/blah/')
-      @_item_rep = mock
-      @_item_rep.expects(:name).returns('default')
-      @_item_rep.expects(:assigns).returns({
-        :_item      => item,
-        :_item_rep  => @_item_rep,
-        :item       => item
+      @item = mock
+      @item.expects(:[]).with(:title).returns('Bar...')
+      @item.expects(:identifier).returns('/blah/')
+      @item_rep = mock
+      @item_rep.expects(:name).returns('default')
+      @item_rep.expects(:assigns).returns({
+        :item     => @item,
+        :item_rep => @item_rep
       })
 
       # Evaluate content

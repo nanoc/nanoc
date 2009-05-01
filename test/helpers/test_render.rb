@@ -11,9 +11,6 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= @layout.identifier %> layout.')
-    layout_proxy = MiniTest::Mock.new
-    layout_proxy.expect(:identifier, '/foo/')
-    layout.expect(:to_proxy, layout_proxy)
 
     # Mock site, compiler and stack
     stack    = []
@@ -43,8 +40,6 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= "foo" %> layout.')
-    layout_proxy = MiniTest::Mock.new
-    layout.expect(:to_proxy, layout_proxy)
 
     # Mock compiler
     compiler = mock
@@ -66,8 +61,6 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
     layout.expect(:content,      'This is the <%= "foo" %> layout.')
-    layout_proxy = MiniTest::Mock.new
-    layout.expect(:to_proxy, layout_proxy)
 
     # Mock compiler
     compiler = mock

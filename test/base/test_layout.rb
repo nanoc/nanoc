@@ -14,18 +14,6 @@ class Nanoc3::LayoutTest < MiniTest::Unit::TestCase
     assert_equal('/foo/', layout.identifier)
   end
 
-  def test_to_proxy
-    # Create layout
-    layout = Nanoc3::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
-    assert_equal({ :foo => 'bar' }, layout.attributes)
-
-    # Create proxy
-    layout_proxy = layout.to_proxy
-
-    # Check values
-    assert_equal('bar', layout_proxy.foo)
-  end
-
   def test_lookup_with_known_attribute
     # Create layout
     layout = Nanoc3::Layout.new("content", { 'foo' => 'bar' }, '/foo/')

@@ -30,12 +30,10 @@ module Nanoc3::Helpers
 
       # Get assigns
       assigns = {
-        :_item      => @_item,
-        :_item_rep  => @_item_rep,
         :item       => @item,
         :item_rep   => @item_rep,
         :items      => @items,
-        :layout     => layout.to_proxy,
+        :layout     => layout,
         :layouts    => @layouts,
         :config     => @config,
         :site       => @site

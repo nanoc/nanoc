@@ -44,10 +44,10 @@ module Nanoc3
     # Returns the filename associated with the item that is being filtered.
     # The returned filename is in the format "item <identifier> (rep <name>)".
     def filename
-      if @assigns[:layout]
+      if assigns[:layout]
         "layout #{assigns[:layout].identifier}"
-      elsif @assigns[:item]
-        "item #{assigns[:_item].identifier} (rep #{assigns[:_item_rep].name})"
+      elsif assigns[:item]
+        "item #{assigns[:item].identifier} (rep #{assigns[:item_rep].name})"
       else
         '?'
       end
