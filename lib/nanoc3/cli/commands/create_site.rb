@@ -21,7 +21,7 @@ EOS
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
-    <title>A Brand New nanoc Site - <%= @item.title %></title>
+    <title>A Brand New nanoc Site - <%= @item[:title] %></title>
     <style type="text/css" media="screen">
       * {
         margin: 0;

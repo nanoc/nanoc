@@ -92,11 +92,6 @@ module Nanoc3
       @force_outdated = false
     end
 
-    # Returns a proxy (Nanoc3::ItemRepProxy) for this item representation.
-    def to_proxy
-      @proxy ||= ItemRepProxy.new(self)
-    end
-
     # Returns true if this item rep's output file is outdated and must be
     # regenerated, false otherwise.
     def outdated?
@@ -130,13 +125,11 @@ module Nanoc3
     # Returns the assignments that should be available when compiling the content.
     def assigns
       {
-        :_item_rep  => self,
-        :_item      => self.item,
         :content    => @content[:last],
-        :item       => self.item.to_proxy,
-        :item_rep   => self.to_proxy,
-        :items      => self.item.site.items.map   { |obj| obj.to_proxy },
-        :layouts    => self.item.site.layouts.map { |obj| obj.to_proxy },
+        :item       => self.item,
+        :item_rep   => self,
+        :items      => self.item.site.items,
+        :layouts    => self.item.site.layouts,
         :config     => self.item.site.config,
         :site       => self.item.site
       }
@@ -189,7 +182,7 @@ module Nanoc3
       raise Nanoc3::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
 
       # Create filter
-      filter = filter_class.new(assigns.merge({ :layout => layout.to_proxy }))
+      filter = filter_class.new(assigns.merge({ :layout => layout }))
 
       # Create "pre" snapshot
       snapshot(:pre)
