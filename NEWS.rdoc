@@ -25,6 +25,46 @@ Removed:
 * Removed everything that was deprecated in nanoc 2.x
 * save_*, move_* and delete_* methods in data sources
 
+== 2.2.2
+
+* Removed relativize_paths filter; use relativize_paths_in_html or
+  relativize_paths_in_css instead
+* Fixed bug which could cause nanoc to eat massive amounts of memory when an
+  exception occurs
+
+== 2.2.1
+
+* Fixed bug which prevented relative_path_to from working
+* Split relativize_paths filter into two filter: relativize_paths_in_html
+  and relativize_paths_in_css
+* Removed bundled mime-types library
+
+== 2.2
+
+New:
+
+* --pages and --assets compiler options
+* --no-color commandline option
+* Filtering helper
+* relative_path_to function in LinkTo helper
+* Rainpress filter
+* RelativizePaths filter
+* The current layout is now accessible through the @layout variable
+* Much more informative stack traces when something goes wrong
+
+Changed:
+
+* The commandline option parser is now a lot more reliable
+* atom_feed now takes optional :content_proc, :excerpt_proc and :articles
+  parameters
+* The compile command show non-written items (those with skip_output: true)
+* The compile command compiles everything by default
+* Added --only-outdated option to compile only outdated pages
+
+Removed:
+
+* deprecated extension-based code
+
 == 2.1.6
 
 * The FilesystemCombined data source now supports empty metadata sections
