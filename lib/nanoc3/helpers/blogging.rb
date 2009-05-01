@@ -23,13 +23,13 @@ module Nanoc3::Helpers
 
     # Returns an unsorted list of articles.
     def articles
-      @items.select { |item| item.kind == 'article' }
+      @items.select { |item| item[:kind] == 'article' }
     end
 
     # Returns a list of articles, sorted by descending creation date (so newer
     # articles appear first).
     def sorted_articles
-      articles.sort_by { |a| a.created_at }.reverse
+      articles.sort_by { |a| a[:created_at] }.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,
@@ -107,20 +107,20 @@ module Nanoc3::Helpers
       # Extract parameters
       limit             = params[:limit] || 5
       relevant_articles = params[:articles] || articles || []
-      content_proc      = params[:content_proc] || lambda { |a| a.content }
-      excerpt_proc      = params[:excerpt_proc] || lambda { |a| a.excerpt }
+      content_proc      = params[:content_proc] || lambda { |a| a.content   }
+      excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
 
       # Check feed item attributes
-      if @item.base_url.nil?
+      if @item[:base_url].nil?
         raise RuntimeError.new('Cannot build Atom feed: feed item has no base_url')
       end
-      if @item.title.nil?
+      if @item[:title].nil?
         raise RuntimeError.new('Cannot build Atom feed: feed item has no title')
       end
-      if @item.author_name.nil?
+      if @item[:author_name].nil?
         raise RuntimeError.new('Cannot build Atom feed: feed item has no author_name')
       end
-      if @item.author_uri.nil?
+      if @item[:author_uri].nil?
         raise RuntimeError.new('Cannot build Atom feed: feed item has no author_uri')
       end
 
@@ -128,12 +128,12 @@ module Nanoc3::Helpers
       if relevant_articles.empty?
         raise RuntimeError.new('Cannot build Atom feed: no articles')
       end
-      if relevant_articles.any? { |a| a.created_at.nil? }
+      if relevant_articles.any? { |a| a[:created_at].nil? }
         raise RuntimeError.new('Cannot build Atom feed: one or more articles lack created_at')
       end
 
       # Get sorted relevant articles
-      sorted_relevant_articles = relevant_articles.sort_by { |a| a.created_at }.reverse.first(limit)
+      sorted_relevant_articles = relevant_articles.sort_by { |a| a[:created_at] }.reverse.first(limit)
 
       # Get most recent article
       last_article = sorted_relevant_articles.first
@@ -146,20 +146,20 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
         # Add primary attributes
-        xml.id      @item.base_url + '/'
-        xml.title   @item.title
+        xml.id      @item[:base_url] + '/'
+        xml.title   @item[:title]
 
         # Add date
-        xml.updated last_article.created_at.to_iso8601_time
+        xml.updated last_article[:created_at].to_iso8601_time
 
         # Add links
-        xml.link(:rel => 'alternate', :href => @item.base_url)
+        xml.link(:rel => 'alternate', :href => @item[:base_url])
         xml.link(:rel => 'self',      :href => feed_url)
 
         # Add author information
         xml.author do
-          xml.name  @item.author_name
-          xml.uri   @item.author_uri
+          xml.name  @item[:author_name]
+          xml.uri   @item[:author_uri]
         end
 
         # Add articles
@@ -167,10 +167,10 @@ module Nanoc3::Helpers
           xml.entry do
             # Add primary attributes
             xml.id        atom_tag_for(a)
-            xml.title     a.title, :type => 'html'
+            xml.title     a[:title], :type => 'html'
 
             # Add dates
-            xml.published a.created_at.to_iso8601_time
+            xml.published a[:created_at].to_iso8601_time
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
@@ -190,13 +190,13 @@ module Nanoc3::Helpers
     # Returns the URL for the given item. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
     def url_for(item)
-      @item.base_url + (item.custom_path_in_feed || item.path)
+      @item[:base_url] + (item[:custom_path_in_feed] || item.reps[0].path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
-      @item[:feed_url] || @item.base_url + @item.path
+      @item[:feed_url] || @item[:base_url] + @item.reps[0].path
     end
 
     # Returns an URI containing an unique ID for the given item. This will be
@@ -204,10 +204,10 @@ module Nanoc3::Helpers
     # created using a procedure suggested by Mark Pilgrim in this blog post:
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
     def atom_tag_for(item)
-      hostname        = @item.base_url.sub(/.*:\/\/(.+?)\/?$/, '\1')
-      formatted_date  = item.created_at.to_iso8601_date
+      hostname        = @item[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
+      formatted_date  = item[:created_at].to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + item.path
+      'tag:' + hostname + ',' + formatted_date + ':' + item.reps[0].path
     end
 
   end
