@@ -46,12 +46,13 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
         # Add item
-        @items.reject { |p| p.is_hidden || p.skip_output }.each do |item|
+        @items.reject { |i| i[:is_hidden] || i[:skip_output] }.each do |item|
+          # FIXME repeat this for every rep
           xml.url do
-            xml.loc         @site.config[:base_url] + item.path
+            xml.loc         @site.config[:base_url] + item.reps[0].path
             xml.lastmod     item.mtime.to_iso8601_date unless item.mtime.nil?
-            xml.changefreq  item.changefreq unless item.changefreq.nil?
-            xml.priority    item.priority unless item.priority.nil?
+            xml.changefreq  item[:changefreq] unless item[:changefreq].nil?
+            xml.priority    item[:priority] unless item[:priority].nil?
           end
         end
       end
