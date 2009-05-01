@@ -42,6 +42,10 @@ module Nanoc3
       @attributes[key]
     end
 
+    def inspect
+      "<#{self.class} identifier=#{self.identifier}>"
+    end
+
   end
 
 end
