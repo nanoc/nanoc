@@ -40,7 +40,7 @@ module Nanoc3
     # rep's custom path or routed path with index filenames stripped.
     def path_for(rep)
       # Get actual path
-      path ||= rep.item.attribute_named(:custom_path)
+      path ||= rep.item[:custom_path]
       path ||= path_for_item_rep(rep)
 
       # Try stripping each index filename
@@ -60,7 +60,7 @@ module Nanoc3
     # custom path or routed path relative to the output directory.
     def raw_path_for(rep)
       @site.config[:output_dir] + (
-        rep.item.attribute_named(:custom_path) ||
+        rep.item[:custom_path] ||
         path_for_item_rep(rep)
       )
     end

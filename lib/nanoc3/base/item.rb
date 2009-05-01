@@ -59,7 +59,7 @@ module Nanoc3
     end
 
     # Returns the attribute with the given name.
-    def attribute_named(name)
+    def [](name)
       Nanoc3::NotificationCenter.post(:visit_started, self)
       Nanoc3::NotificationCenter.post(:visit_ended,   self)
 

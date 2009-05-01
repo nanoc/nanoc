@@ -43,7 +43,7 @@ module Nanoc3
     end
 
     # Returns the attribute with the given name.
-    def attribute_named(name)
+    def [](name)
       @attributes[name]
     end
 

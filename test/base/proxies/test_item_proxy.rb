@@ -151,8 +151,8 @@ class Nanoc3::ItemProxyTest < MiniTest::Unit::TestCase
     item = mock
     item.expects(:reps).returns([ item_rep ])
     item.expects(:mtime).returns(Time.parse('2008-05-19'))
-    item.expects(:attribute_named).times(2).with(:blah).returns('item attr blah')
-    item.expects(:attribute_named).with(:'blah!').returns('item attr blah!')
+    item.expects(:[]).times(2).with(:blah).returns('item attr blah')
+    item.expects(:[]).with(:'blah!').returns('item attr blah!')
 
     # Get item proxy
     item_proxy = Nanoc3::ItemProxy.new(item)
@@ -169,10 +169,10 @@ class Nanoc3::ItemProxyTest < MiniTest::Unit::TestCase
     # Get item reps
     item_rep_0 = mock
     item_rep_0.expects(:name).at_least_once.returns(:default)
-    item_rep_0.expects(:attribute_named).with(:foo).returns('bar')
+    item_rep_0.expects(:[]).with(:foo).returns('bar')
     item_rep_1 = mock
     item_rep_1.expects(:name).at_least_once.returns(:raw)
-    item_rep_1.expects(:attribute_named).with(:baz).returns('quux')
+    item_rep_1.expects(:[]).with(:baz).returns('quux')
 
     # Get item reps proxies
     item_rep_0_proxy = Nanoc3::ItemRepProxy.new(item_rep_0)

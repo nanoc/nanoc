@@ -16,7 +16,7 @@ module Nanoc3
     def [](key)
       real_key = key.to_s.sub(/\?$/, '').to_sym
 
-      @obj.attribute_named(real_key)
+      @obj[real_key]
     end
 
     # Sets a given attribute. The use of setting an object's attributes is not
