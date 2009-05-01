@@ -19,8 +19,8 @@ class Nanoc3::ItemRepProxyTest < MiniTest::Unit::TestCase
     item_rep.expects(:item).returns(item)
     item_rep.expects(:content_at_snapshot).returns('item rep content')
     item_rep.expects(:path).returns('item rep web path')
-    item_rep.expects(:attribute_named).times(2).with(:blah).returns('item rep attr blah')
-    item_rep.expects(:attribute_named).with(:'blah!').returns('item rep attr blah!')
+    item_rep.expects(:[]).times(2).with(:blah).returns('item rep attr blah')
+    item_rep.expects(:[]).with(:'blah!').returns('item rep attr blah!')
 
     # Get item rep proxy
     item_rep_proxy = Nanoc3::ItemRepProxy.new(item_rep)

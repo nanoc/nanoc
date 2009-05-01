@@ -7,7 +7,7 @@ class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
   def test_get_with_symbol
     # Create object and proxy
     obj = mock
-    obj.expects(:attribute_named).with(:foo).returns('no attr foo')
+    obj.expects(:[]).with(:foo).returns('no attr foo')
     obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
@@ -17,7 +17,7 @@ class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
   def test_get_with_string
     # Create object and proxy
     obj = mock
-    obj.expects(:attribute_named).with(:foo).returns('no attr foo')
+    obj.expects(:[]).with(:foo).returns('no attr foo')
     obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
@@ -27,7 +27,7 @@ class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
   def test_get_with_question_mark
     # Create object and proxy
     obj = mock
-    obj.expects(:attribute_named).with(:foo).returns('no attr foo')
+    obj.expects(:[]).with(:foo).returns('no attr foo')
     obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
@@ -40,7 +40,7 @@ class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
     attributes.expects(:'[]=').with(:foo, 'new value')
     obj = mock
     obj.expects(:attributes).returns(attributes)
-    obj.expects(:attribute_named).with(:foo).returns('new value')
+    obj.expects(:[]).with(:foo).returns('new value')
     obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check
@@ -51,7 +51,7 @@ class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
   def test_method_missing
     # Create object and proxy
     obj = mock
-    obj.expects(:attribute_named).with(:foo).returns('no attr foo')
+    obj.expects(:[]).with(:foo).returns('no attr foo')
     obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check

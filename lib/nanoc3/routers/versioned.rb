@@ -26,9 +26,9 @@ module Nanoc3::Routers
 
     def path_for_item_rep(item_rep)
       # Get data we need
-      filename  = item_rep.item.attribute_named(:filename)  || 'index'
-      extension = item_rep.item.attribute_named(:extension) || 'html'
-      version   = item_rep.item.attribute_named(:version)
+      filename  = item_rep.item[:filename]  || 'index'
+      extension = item_rep.item[:extension] || 'html'
+      version   = item_rep.item[:version]
 
       # Init path
       path = item_rep.item.identifier + filename

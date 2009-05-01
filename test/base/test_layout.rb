@@ -26,20 +26,20 @@ class Nanoc3::LayoutTest < MiniTest::Unit::TestCase
     assert_equal('bar', layout_proxy.foo)
   end
 
-  def test_attribute_named_with_known_attribute
+  def test_lookup_with_known_attribute
     # Create layout
     layout = Nanoc3::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
 
     # Check attributes
-    assert_equal('bar', layout.attribute_named(:foo))
+    assert_equal('bar', layout[:foo])
   end
 
-  def test_attribute_named_with_unknown_attribute
+  def test_lookup_with_unknown_attribute
     # Create layout
     layout = Nanoc3::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
 
     # Check attributes
-    assert_equal(nil, layout.attribute_named(:filter))
+    assert_equal(nil, layout[:filter])
   end
 
 end

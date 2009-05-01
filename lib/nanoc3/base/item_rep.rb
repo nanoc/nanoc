@@ -107,22 +107,22 @@ module Nanoc3
       return true if @force_outdated
 
       # Outdated if compiled file doesn't exist
-      return true if !File.file?(raw_path) && !@item.attribute_named(:skip_output)
+      return true if !File.file?(raw_path) && !@item[:skip_output]
 
       # Get compiled mtime
-      compiled_mtime = File.stat(raw_path).mtime if !@item.attribute_named(:skip_output)
+      compiled_mtime = File.stat(raw_path).mtime if !@item[:skip_output]
 
       # Outdated if file too old
-      return true if !@item.attribute_named(:skip_output) && @item.mtime > compiled_mtime
+      return true if !@item[:skip_output] && @item.mtime > compiled_mtime
 
       # Outdated if layouts outdated
       return true if @item.site.layouts.any? do |l|
-        l.mtime.nil? || (!@item.attribute_named(:skip_output) && l.mtime > compiled_mtime)
+        l.mtime.nil? || (!@item[:skip_output] && l.mtime > compiled_mtime)
       end
 
       # Outdated if code outdated
       return true if @item.site.code.mtime.nil?
-      return true if !@item.attribute_named(:skip_output) && @item.site.code.mtime > compiled_mtime
+      return true if !@item[:skip_output] && @item.site.code.mtime > compiled_mtime
 
       return false
     end

@@ -66,8 +66,8 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
     # Check items
     assert_equal(2, items.size)
-    assert(items.any? { |a| a.attribute_named(:title) == 'Foo' })
-    assert(items.any? { |a| a.attribute_named(:title) == 'Bar' })
+    assert(items.any? { |a| a[:title] == 'Foo' })
+    assert(items.any? { |a| a[:title] == 'Bar' })
   end
 
   def test_layouts
@@ -89,7 +89,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
     # Check layouts
     assert_equal(1,     layouts.size)
-    assert_equal('erb', layouts[0].attribute_named(:filter))
+    assert_equal('erb', layouts[0][:filter])
   end
 
   def test_code
