@@ -1,7 +1,7 @@
 module Nanoc3::Filters
   class Markaby < Nanoc3::Filter
 
-    def run(content)
+    def run(content, params={})
       require 'markaby'
 
       # Get result

@@ -1,7 +1,7 @@
 module Nanoc3::Filters
   class ERB < Nanoc3::Filter
 
-    def run(content)
+    def run(content, params={})
       require 'erb'
 
       # Create context

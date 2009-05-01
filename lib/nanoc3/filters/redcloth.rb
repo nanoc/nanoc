@@ -1,7 +1,7 @@
 module Nanoc3::Filters
   class RedCloth < Nanoc3::Filter
 
-    def run(content)
+    def run(content, params={})
       require 'redcloth'
 
       # Get result
