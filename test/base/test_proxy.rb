@@ -26,11 +26,9 @@ class Nanoc3::ProxyTest < MiniTest::Unit::TestCase
 
   def test_set
     # Create object and proxy
-    attributes = mock
-    attributes.expects(:'[]=').with(:foo, 'new value')
     obj = mock
-    obj.expects(:attributes).returns(attributes)
     obj.expects(:[]).with(:foo).returns('new value')
+    obj.expects(:[]=).with(:foo, 'new value')
     obj_proxy = Nanoc3::Proxy.new(obj)
 
     # Check

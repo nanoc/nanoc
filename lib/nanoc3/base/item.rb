@@ -66,6 +66,11 @@ module Nanoc3
       @attributes[key]
     end
 
+    # Sets the attribute with the given key to the given value.
+    def []=(key, value)
+      @attributes[key] = value
+    end
+
     # Returns a proxy (Nanoc3::ItemProxy) for this item.
     def to_proxy
       @proxy ||= ItemProxy.new(self)

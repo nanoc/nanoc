@@ -18,7 +18,7 @@ module Nanoc3
     # Sets a given attribute. The use of setting an object's attributes is not
     # recommended but may be necessary in some cases.
     def []=(key, value)
-      @obj.attributes[key.to_sym] = value
+      @obj[key] = value
     end
 
     # Used for requesting attributes without accessing the proxy like a hash.
