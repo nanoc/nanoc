@@ -8,8 +8,6 @@ module Nanoc3::HashExtensions
   # * Values with keys ending in +_at+ and +_on+ are converted into +Time+ and
   #   and +Date+ objects, respectively
   # * All keys are converted to symbols
-  # * Value strings 'true', 'false' and 'none' are converted into +true+,
-  #   +false+ and +nil+, respectively
   #
   # Hashes are cleaned recursively, so the value of a hash pair will also be
   # cleaned if the value is a hash.
@@ -18,16 +16,14 @@ module Nanoc3::HashExtensions
   #
   #   {
   #     'foo'       => 'bar',
-  #     :created_on => '2008-05-19',
-  #     :layout     => 'none'
+  #     :created_on => '2008-05-19'
   #   }
   #
   # will be converted into:
   #
   #   {
   #     :foo        => 'bar',
-  #     :created_on => Date.parse('2008-05-19'),
-  #     :layout     => nil
+  #     :created_on => Date.parse('2008-05-19')
   #   }
   def clean
     inject({}) do |hash, (key, value)|
@@ -37,12 +33,6 @@ module Nanoc3::HashExtensions
         hash.merge(key.to_sym => Date.parse(value))
       elsif real_key =~ /_at$/ and value.is_a?(String)
         hash.merge(key.to_sym => Time.parse(value.to_s))
-      elsif value == 'true'
-        hash.merge(key.to_sym => true)
-      elsif value == 'false'
-        hash.merge(key.to_sym => false)
-      elsif value == 'none'
-        hash.merge(key.to_sym => nil)
       elsif value.is_a?(Hash)
         hash.merge(key.to_sym => value.clean)
       else

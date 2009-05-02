@@ -32,24 +32,6 @@ describe 'Hash#clean' do
     hash_old.clean.must_equal hash_new
   end
 
-  it 'should convert booleans' do
-    hash_old = { :foo => 'true', :bar => 'false' }
-    hash_new = { :foo => true, :bar => false }
-    hash_old.clean.must_equal hash_new
-  end
-
-  it 'should convert "none" to nil' do
-    hash_old = { :foo => 'none' }
-    hash_new = { :foo => nil }
-    hash_old.clean.must_equal hash_new
-  end
-
-  it 'should not convert "nil" to nil' do
-    hash_old = { :foo => 'nil' }
-    hash_new = { :foo => 'nil' }
-    hash_old.clean.must_equal hash_new
-  end
-
 end
 
 describe 'Hash#stringify_keys' do
