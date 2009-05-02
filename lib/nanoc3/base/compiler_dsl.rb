@@ -6,9 +6,9 @@ module Nanoc3
       @compiler = compiler
     end
 
-    def item(identifier, params={}, &block)
+    def compile(identifier, params={}, &block)
       # Require block
-      raise ArgumentError.new("#item requires a block") unless block_given?
+      raise ArgumentError.new("#compile requires a block") unless block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
