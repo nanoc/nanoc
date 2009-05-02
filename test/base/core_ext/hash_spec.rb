@@ -8,30 +8,6 @@ describe 'Hash#clean' do
     hash_old.clean.must_equal hash_new
   end
 
-  it 'should convert dates' do
-    hash_old = { 'created_on' => '12/07/2004' }
-    hash_new = { :created_on  => Date.parse('12/07/2004') }
-    hash_old.clean.must_equal hash_new
-  end
-
-  it 'should convert times' do
-    hash_old = { 'created_at' => '12/07/2004' }
-    hash_new = { :created_at  => Time.parse('12/07/2004') }
-    hash_old.clean.must_equal hash_new
-  end
-
-  it 'should not re-convert already parsed dates' do
-    hash_old = { :created_on => Date.parse('12/07/2004') }
-    hash_new = { :created_on => Date.parse('12/07/2004') }
-    hash_old.clean.must_equal hash_new
-  end
-
-  it 'should not re-convert already parsed times' do
-    hash_old = { :created_at => Time.parse('12/07/2004') }
-    hash_new = { :created_at => Time.parse('12/07/2004') }
-    hash_old.clean.must_equal hash_new
-  end
-
 end
 
 describe 'Hash#stringify_keys' do
