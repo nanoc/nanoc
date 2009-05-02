@@ -83,7 +83,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create rules file
     File.open('Rules', 'w') do |io|
       io.write <<-EOF
-item '*' do |p|
+compile '*' do |p|
   p.write
   end
 EOF

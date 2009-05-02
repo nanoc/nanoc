@@ -276,7 +276,7 @@ EOS
       File.open('Rules', 'w') do |io|
         io.write "#!/usr/bin/env ruby\n"
         io.write "\n"
-        io.write "item '*' do |i|\n"
+        io.write "compile '*' do |i|\n"
         io.write "  i.filter :erb\n"
         io.write "  i.layout 'default'\n"
         io.write "  i.write\n"
