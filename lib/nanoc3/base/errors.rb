@@ -48,7 +48,7 @@ module Nanoc3
 
     # Error that is raised when no compilation rule that can be applied to the
     # current item can be found.
-    class NoMatchingRuleFoundError < GenericError ; end
+    class NoMatchingCompilationRuleFoundError < GenericError ; end
 
   end
 

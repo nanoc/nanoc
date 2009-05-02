@@ -216,7 +216,7 @@ module Nanoc3::CLI::Commands
         message = "No longer supported: #{error.message}"
       when Nanoc3::Errors::NoRulesFileFoundError
         message = "No rules file found"
-      when Nanoc3::Errors::NoMatchingRuleFoundError
+      when Nanoc3::Errors::NoMatchingCompilationRuleFoundError
         message = "No matching rule found"
       else
         message = "Error: #{error.message}"
