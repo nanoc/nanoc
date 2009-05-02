@@ -6,7 +6,7 @@ module Nanoc3::Filters
 
     def run(content, params={})
       # Set assigns so helper function can be used
-      @item = assigns[:item] if @item.nil?
+      @item_rep = assigns[:item_rep] if @item_rep.nil?
 
       # Filter
       case params[:type]
