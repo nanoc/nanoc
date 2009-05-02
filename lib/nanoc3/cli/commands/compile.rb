@@ -198,51 +198,39 @@ module Nanoc3::CLI::Commands
     end
 
     def print_error(error)
-      # Get rep
-      rep = (@base.site.compiler.stack || []).select { |i| i.is_a?(Nanoc3::ItemRep) }[-1]
-      rep_name = rep.nil? ? 'the site' : "#{rep.item.identifier} (rep #{rep.name})"
-
-      # Build message
-      case error
-      when Nanoc3::Errors::UnknownLayoutError
-        message = "Unknown layout: #{error.message}"
-      when Nanoc3::Errors::UnknownFilterError
-        message = "Unknown filter: #{error.message}"
-      when Nanoc3::Errors::CannotDetermineFilterError
-        message = "Cannot determine filter for layout: #{error.message}"
-      when Nanoc3::Errors::RecursiveCompilationError
-        message = "Recursive call to item content."
-      when Nanoc3::Errors::NoLongerSupportedError
-        message = "No longer supported: #{error.message}"
-      when Nanoc3::Errors::NoRulesFileFoundError
-        message = "No rules file found"
-      when Nanoc3::Errors::NoMatchingCompilationRuleFoundError
-        message = "No matching rule found"
-      else
-        message = "Error: #{error.message}"
-      end
-
-      # Print message
       $stderr.puts
-      $stderr.puts "ERROR: An exception occured while compiling #{rep_name}."
-      $stderr.puts
-      $stderr.puts "If you think this is a bug in nanoc, please do report it at " +
+
+      # Header
+      $stderr.puts '=== /!\ ERROR /!\ ==='
+      $stderr.puts "An exception occured while compiling the site. If you " +
+                   "think this is a bug in nanoc, please do report it at " +
                    "<http://projects.stoneship.org/trac/nanoc/newticket> -- thanks!"
+
+      # Exception
       $stderr.puts
       $stderr.puts 'Message:'
-      $stderr.puts '  ' + message
+      $stderr.puts "  #{error.class}: #{error.message}"
+
+      # Compilation stack
       $stderr.puts
       $stderr.puts 'Compilation stack:'
-      (@base.site.compiler.stack || []).reverse.each do |obj|
-        if obj.is_a?(Nanoc3::ItemRep)
-          $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
-        else # layout
-          $stderr.puts "  - [layout] #{obj.identifier}"
+      if (@base.site.compiler.stack || []).empty?
+        $stderr.puts "  (empty)"
+      else
+        @base.site.compiler.stack.reverse.each do |obj|
+          if obj.is_a?(Nanoc3::ItemRep)
+            $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
+          else # layout
+            $stderr.puts "  - [layout] #{obj.identifier}"
+          end
         end
       end
+
+      # Backtrace
+      require 'enumerator'
       $stderr.puts
       $stderr.puts 'Backtrace:'
-      $stderr.puts error.backtrace.map { |t| '  - ' + t }.join("\n")
+      $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
     end
 
     def rep_compilation_started(rep)
