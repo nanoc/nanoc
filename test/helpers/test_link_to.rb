@@ -70,8 +70,8 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_with_self
     # Mock item
-    @item = MiniTest::Mock.new
-    @item.expect(:path, '/foo/bar/baz/')
+    @item_rep = mock
+    @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -82,8 +82,8 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_with_root
     # Mock item
-    @item = MiniTest::Mock.new
-    @item.expect(:path, '/foo/bar/baz/')
+    @item_rep = mock
+    @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -94,8 +94,8 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_file
     # Mock item
-    @item = MiniTest::Mock.new
-    @item.expect(:path, '/foo/bar/baz/')
+    @item_rep = mock
+    @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -106,8 +106,8 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_dir
     # Mock item
-    @item = MiniTest::Mock.new
-    @item.expect(:path, '/foo/bar/baz/')
+    @item_rep = mock
+    @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -118,17 +118,36 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_relative_path_to_rep
     # Mock self
-    @item = mock
-    @item.expects(:path).returns('/foo/bar/baz/')
+    @item_rep = mock
+    @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Mock other
-    other = mock
-    other.expects(:path).returns('/foo/quux/')
+    other_item_rep = mock
+    other_item_rep.expects(:path).returns('/foo/quux/')
 
     # Test
     assert_equal(
       '../../quux/',
-      relative_path_to(other)
+      relative_path_to(other_item_rep)
+    )
+  end
+
+  def test_relative_path_to_item
+    # Mock self
+    @item_rep = mock
+    @item_rep.expects(:path).returns('/foo/bar/baz/')
+
+    # Mock other
+    other_item_rep = mock
+    other_item_rep.expects(:name).returns(:default)
+    other_item_rep.expects(:path).returns('/foo/quux/')
+    other_item = mock
+    other_item.expects(:reps).returns([ other_item_rep ])
+
+    # Test
+    assert_equal(
+      '../../quux/',
+      relative_path_to(other_item)
     )
   end
 

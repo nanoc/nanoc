@@ -80,15 +80,21 @@ module Nanoc3::Helpers
     #   # if the current item's path is /foo/bar/
     #   relative_path('/foo/qux/')
     #   # => '../qux/'
-    def relative_path_to(path_or_rep)
+    def relative_path_to(target)
       require 'pathname'
 
       # Find path
-      path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
+      if target.is_a?(String)
+        path = target
+      elsif target.respond_to?(:reps)
+        path = target.reps.find { |r| r.name == :default }.path
+      else
+        path = target.path
+      end
 
       # Get source and destination paths
       dst_path   = Pathname.new(path)
-      src_path   = Pathname.new(@item.path)
+      src_path   = Pathname.new(@item_rep.path)
 
       # Calculate elative path (method depends on whether destination is a
       # directory or not).
