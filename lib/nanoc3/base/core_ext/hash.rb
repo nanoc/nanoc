@@ -3,9 +3,9 @@ require 'time'
 module Nanoc3::HashExtensions
 
   # Returns a new hash where all keys are recursively converted into symbols.
-  def clean
+  def symbolize_keys
     inject({}) do |hash, (key, value)|
-      hash.merge(key.to_sym => value.is_a?(Hash) ? value.clean : value)
+      hash.merge(key.to_sym => value.is_a?(Hash) ? value.symbolize_keys : value)
     end
   end
 

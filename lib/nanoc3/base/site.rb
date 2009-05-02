@@ -60,7 +60,7 @@ module Nanoc3
     #
     # +config+:: A hash containing the site configuration.
     def initialize(config)
-      @config = DEFAULT_CONFIG.merge(config.clean)
+      @config = DEFAULT_CONFIG.merge(config.symbolize_keys)
     end
 
     # Returns the compiler for this site. Will create a new compiler if none

@@ -48,7 +48,7 @@ module Nanoc3
     # +mtime+:: The time when this item was last modified.
     def initialize(content, attributes, identifier, mtime=nil)
       @content    = content
-      @attributes = attributes.clean
+      @attributes = attributes.symbolize_keys
       @identifier = identifier.cleaned_identifier
       @mtime      = mtime
 

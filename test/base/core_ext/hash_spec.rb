@@ -1,11 +1,11 @@
 require 'test/helper'
 
-describe 'Hash#clean' do
+describe 'Hash#symbolize_keys' do
 
   it 'should convert keys to symbols' do
     hash_old = { 'foo' => 'bar' }
     hash_new = { :foo  => 'bar' }
-    hash_old.clean.must_equal hash_new
+    hash_old.symbolize_keys.must_equal hash_new
   end
 
 end
