@@ -10,8 +10,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -29,8 +29,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -48,8 +48,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -67,8 +67,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -96,8 +96,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -115,8 +115,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -134,8 +134,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
@@ -153,8 +153,8 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item = MiniTest::Mock.new
-      @item.expect(:path, '/foo/bar/baz/')
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
     end
 
     # Set content
