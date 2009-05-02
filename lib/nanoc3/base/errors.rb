@@ -63,10 +63,6 @@ module Nanoc3
       end
     end
 
-    # Error that is raised when a certain function or feature is used that is
-    # no longer supported by nanoc.
-    class NoLongerSupportedError < GenericError ; end
-
     # Error that is raised when no rules file can be found in the current
     # working directory.
     class NoRulesFileFoundError < GenericError
