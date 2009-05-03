@@ -247,17 +247,6 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     assert_equal(file_server.expected_path_info, file_server.actual_path_info)
   end
 
-  def test_h
-    # Create autocompiler
-    autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
-
-    # Check HTML escaping
-    assert_equal(
-      '&lt; &amp; &gt; \' &quot;',
-      autocompiler.instance_eval { h('< & > \' "') }
-    )
-  end
-
   def test_mime_type_of
     if_have('mime/types') do
       # Create autocompiler

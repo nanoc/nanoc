@@ -62,10 +62,6 @@ module Nanoc3::Extra
 
   private
 
-    def h(s)
-      ERB::Util.html_escape(s)
-    end
-
     def mime_type_of(path, fallback)
       mime_type = MIME::Types.of(path).first
       mime_type = mime_type.nil? ? fallback : mime_type.simplified
