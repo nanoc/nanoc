@@ -73,22 +73,22 @@ module Nanoc3
     # none exists yet. Raises Nanoc3::Errors::UnknownDataSourceError if the
     # site configuration specifies an unknown data source.
     def data_source
-      return @data_source if @data_source
-
-      data_source_class = Nanoc3::DataSource.named(@config[:data_source])
-      raise Nanoc3::Errors::UnknownDataSourceError.new(@config[:data_source]) if data_source_class.nil?
-      @data_source = data_source_class.new(self)
+      @data_source ||= begin
+        data_source_class = Nanoc3::DataSource.named(@config[:data_source])
+        raise Nanoc3::Errors::UnknownDataSourceError.new(@config[:data_source]) if data_source_class.nil?
+        data_source_class.new(self)
+      end
     end
 
     # Returns the router for this site. Will create a new router if none
     # exists yet. Raises Nanoc3::Errors::UnknownRouterError if the site
     # configuration specifies an unknown router.
     def router
-      return @router if @router
-
-      router_class = Nanoc3::Router.named(@config[:router])
-      raise Nanoc3::Errors::UnknownRouterError.new(@config[:router]) if router_class.nil?
-      @router ||= router_class.new(self)
+      @router ||= begin
+        router_class = Nanoc3::Router.named(@config[:router])
+        raise Nanoc3::Errors::UnknownRouterError.new(@config[:router]) if router_class.nil?
+        router_class.new(self)
+      end
     end
 
     # Loads the site data. This will query the Nanoc3::DataSource associated
