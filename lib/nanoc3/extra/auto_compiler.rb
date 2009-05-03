@@ -33,9 +33,6 @@ END
       @mutex.synchronize do
         # Reload site data
         @site.load_data(true)
-        @site.compiler.load_rules
-        @site.compiler.build_reps
-        @site.compiler.map_reps
 
         # Get file path
         path = env['PATH_INFO']

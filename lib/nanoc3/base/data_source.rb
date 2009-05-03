@@ -121,6 +121,13 @@ module Nanoc3
       not_implemented('code')
     end
 
+    # Returns the rules for compiling the site as a string containing code.
+    #
+    # Subclasses must implement this method.
+    def rules
+      not_implemented('rules')
+    end
+
     ########## Creating data
 
     # Creates a new item with the given content, attributes and identifier.

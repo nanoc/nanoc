@@ -112,6 +112,10 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_rules
+    # TODO implement
+  end
+
   # Test creating data
 
   def test_create_item_at_root

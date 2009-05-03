@@ -25,9 +25,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:load_rules)
-    compiler.expects(:build_reps)
-    compiler.expects(:map_reps)
     compiler.expects(:compile_rep).times(3)
 
     # Run
@@ -35,10 +32,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Make sure output dir is created
     assert(File.directory?('foo/bar/baz'))
-
-    # Check items
-    assert_equal(2, compiler.instance_eval { @items }.size)
-    assert_equal(3, compiler.instance_eval { @reps  }.size)
   end
 
   def test_run_with_item_rep
@@ -57,9 +50,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:load_rules)
-    compiler.expects(:build_reps)
-    compiler.expects(:map_reps)
     compiler.expects(:compile_rep).times(3)
 
     # Run
@@ -67,85 +57,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Make sure output dir is created
     assert(File.directory?('foo/bar/baz'))
-
-    # Check items
-    assert_equal(1, compiler.instance_eval { @items }.size)
-    assert_equal(3, compiler.instance_eval { @reps  }.size)
-  end
-
-  def test_load_rules_with_existing_rules_file
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-
-    # Create rules file
-    File.open('Rules', 'w') do |io|
-      io.write <<-EOF
-compile '*' do |rep|
-  rep.write
-end
-EOF
-    end
-
-    # Load rules
-    compiler.load_rules
-
-    # Check rule counts
-    assert_equal(1, compiler.instance_eval { @item_compilation_rules  }.size)
-
-    # Check rule
-    rule = compiler.instance_eval { @item_compilation_rules }[0]
-    assert_equal(:default,  rule.rep_name)
-    assert_equal(/^(.*?)$/, rule.identifier_regex)
-  end
-
-  def test_load_rules_with_broken_rules_file
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-
-    # Create rules file
-    File.open('Rules', 'w') do |io|
-      io.write <<-EOF
-some_function_that_doesn_really_exist(
-weird_param_number_one,
-mysterious_param_number_two
-)
-EOF
-    end
-
-    # Try loading rules
-    error = assert_raises(NameError) do
-      compiler.load_rules
-    end
-
-    # Check error
-    assert_match 'Rules', error.backtrace.join(', ')
-  end
-
-  def test_load_rules_with_missing_rules_file
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-
-    # Try loading rules
-    assert_raises(Nanoc3::Errors::NoRulesFileFoundError) do
-      compiler.load_rules
-    end
-  end
-
-  def test_build_reps
-    # TODO implement
-  end
-
-  def test_map_reps
-    # TODO implement
   end
 
   def test_compile_rep
