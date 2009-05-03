@@ -45,6 +45,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.stubs(:load_code).with(false)
+    site.stubs(:load_rules)
     site.stubs(:load_items)
     site.stubs(:load_layouts)
 
@@ -62,6 +63,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.expects(:load_code).with(false)
+    site.expects(:load_rules)
     site.expects(:load_items)
     site.expects(:load_layouts)
 
@@ -79,6 +81,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.expects(:load_code).with(false).once
+    site.expects(:load_rules)
     site.expects(:load_items).once
     site.expects(:load_layouts).once
 
@@ -97,6 +100,7 @@ describe 'Nanoc::Site#load_data' do
 
     # Mock load_* methods
     site.expects(:load_code).with(true).times(2)
+    site.expects(:load_rules).times(2)
     site.expects(:load_items).times(2)
     site.expects(:load_layouts).times(2)
 

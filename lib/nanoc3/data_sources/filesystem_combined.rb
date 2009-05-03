@@ -49,6 +49,11 @@ module Nanoc3::DataSources
   #
   # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
   # sub-directories.
+  #
+  # = Rules
+  #
+  # Rules are stored in a file named 'Rules', 'rules', 'Rules.rb' or
+  # 'rules.rb' at the top level of the site directory.
   class FilesystemCombined < Nanoc3::DataSource
 
     ########## VCSes ##########
@@ -135,6 +140,15 @@ module Nanoc3::DataSources
 
       # Build code
       Nanoc3::Code.new(snippets, mtime)
+    end
+
+    def rules
+      # Find rules file
+      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
+      raise Nanoc3::Errors::NoRulesFileFoundError.new if rules_filename.nil?
+
+      # Get contents
+      File.read(rules_filename)
     end
 
     ########## Creating data ##########

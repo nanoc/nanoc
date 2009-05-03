@@ -105,6 +105,7 @@ module Nanoc3
       # Load all data
       data_source.loading do
         load_code(force)
+        load_rules
         load_items
         load_layouts
       end
@@ -148,13 +149,28 @@ module Nanoc3
       @code_loaded = true
     end
 
+    # Loads this site's rules.
+    def load_rules
+      # Get rules
+      @rules = data_source.rules
+
+      # Load DSL
+      dsl = Nanoc3::CompilerDSL.new(compiler)
+      dsl.instance_eval(@rules)
+    end
+
     # Loads this site's items, sets up item child-parent relationships and
     # builds each item's list of item representations.
     def load_items
       @items = data_source.items
       @items.each { |p| p.site = self }
 
-      # Setup child-parent links
+      setup_child_parent_links
+      build_reps
+      map_reps
+    end
+
+    def setup_child_parent_links
       @items.each do |item|
         # Get parent
         parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
@@ -164,6 +180,29 @@ module Nanoc3
         # Link
         item.parent = parent
         parent.children << item
+      end
+    end
+
+    def build_reps
+      @items.each do |item|
+        # Find matching rules
+        matching_rules = self.compiler.item_compilation_rules.select { |r| r.applicable_to?(item) }
+        raise Nanoc3::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
+
+        # Create reps
+        rep_names = matching_rules.map { |r| r.rep_name }.uniq
+        rep_names.each do |rep_name|
+          item.reps << ItemRep.new(item, rep_name)
+        end
+      end
+    end
+
+    def map_reps
+      reps = @items.map { |i| i.reps }.flatten
+      reps.each do |rep|
+        # TODO use mapping rules instead of using the router
+        rep.raw_path = self.router.raw_path_for(rep)
+        rep.path     = self.router.path_for(rep)
       end
     end
 

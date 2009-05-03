@@ -9,6 +9,14 @@ module Nanoc3
     # removed from the stack.
     attr_reader :stack
 
+    # The list of compilation rules that will be used to compile items. This
+    # array will be filled by Nanoc3::Site#load_data.
+    attr_reader :item_compilation_rules
+
+    # The list of mapping rules that will be used to give all items a path.
+    # This array willb e filled by Nanoc3::Site#load_data.
+    attr_reader :item_mapping_rules
+
     # Creates a new compiler for the given site.
     def initialize(site)
       @site = site
@@ -31,75 +39,21 @@ module Nanoc3
     # +:force+:: true if the rep should be compiled even if it is not
     #            outdated, false if not. Defaults to false.
     def run(items=nil, params={})
-      # Load rules
-      load_rules
-
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Get items
-      @items = items || @site.items
-
-      # Build and map reps
-      build_reps
-      @reps = @items.map { |i| i.reps }.flatten
-      map_reps
+      # Get items and reps
+      items ||= @site.items
+      reps = items.map { |i| i.reps }.flatten
 
       # Mark all reps as outdated if necessary
       if params.has_key?(:force) && params[:force]
-        @reps.each { |r| r.force_outdated = true }
+        reps.each { |r| r.force_outdated = true }
       end
 
       # Compile reps
       @stack = []
-      @reps.each { |rep| compile_rep(rep) }
-    end
-
-    # Loads the DSL rules from the rules file in the site's directory.
-    #
-    # This method should not be called directly; please use
-    # Nanoc3::Compiler#run instead, and pass this item representation's item as
-    # its first argument.
-   def load_rules
-      # Find rules file
-      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
-      raise Nanoc3::Errors::NoRulesFileFoundError.new if rules_filename.nil?
-
-      # Initialize rules
-      @item_compilation_rules  = []
-
-      # Load DSL
-      dsl = Nanoc3::CompilerDSL.new(self)
-      dsl.instance_eval(File.read(rules_filename), rules_filename)
-    end
-
-    # Builds the representations for all items.
-    def build_reps
-      @items.each do |item|
-        # Delete existing reps
-        item.reps.clear
-
-        # Find matching rules
-        all_rules = @item_compilation_rules
-        matching_rules = all_rules.select { |r| r.applicable_to?(item) }
-        raise Nanoc3::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
-
-        # Create reps
-        rep_names = matching_rules.map { |r| r.rep_name }.uniq
-        rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name)
-        end
-      end
-    end
-
-    # Gives the each item rep a disk path and a web path.
-    def map_reps
-      @reps.each do |rep|
-        # TODO use mapping rules instead of using the router
-
-        rep.raw_path = @site.router.raw_path_for(rep)
-        rep.path     = @site.router.path_for(rep)
-      end
+      reps.each { |rep| compile_rep(rep) }
     end
 
     # Compiles the given item representation.
