@@ -150,7 +150,7 @@ module Nanoc3::Helpers
         xml.title   @item[:title]
 
         # Add date
-        xml.updated last_article[:created_at].to_iso8601_time
+        xml.updated Time.parse(last_article[:created_at]).to_iso8601_time
 
         # Add links
         xml.link(:rel => 'alternate', :href => @item[:base_url])
@@ -170,7 +170,7 @@ module Nanoc3::Helpers
             xml.title     a[:title], :type => 'html'
 
             # Add dates
-            xml.published a[:created_at].to_iso8601_time
+            xml.published Time.parse(a[:created_at]).to_iso8601_time
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
@@ -205,7 +205,7 @@ module Nanoc3::Helpers
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
     def atom_tag_for(item)
       hostname        = @item[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
-      formatted_date  = item[:created_at].to_iso8601_date
+      formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + item.reps[0].path
     end
