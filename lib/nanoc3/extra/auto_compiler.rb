@@ -5,19 +5,6 @@ module Nanoc3::Extra
   # stylesheets and images.
   class AutoCompiler
 
-    ERROR_404 = <<END
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-	<head>
-		<title>404 File Not Found</title>
-	</head>
-	<body>
-		<h1>404 File Not Found</h1>
-		<p>The file you requested, <i><%=h path %></i>, was not found on this server.</p>
-	</body>
-</html>
-END
-
     # Creates a new autocompiler for the given site.
     def initialize(site)
       require 'rack'
