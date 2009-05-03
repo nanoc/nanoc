@@ -20,6 +20,9 @@ END
 
     # Creates a new autocompiler for the given site.
     def initialize(site)
+      require 'rack'
+      require 'mime/types'
+
       # Set site
       @site = site
 
@@ -28,38 +31,31 @@ END
     end
 
     def call(env)
-      require 'mime/types'
-
       @mutex.synchronize do
         # Reload site data
         @site.load_data(true)
 
-        # Get file path
-        path = env['PATH_INFO']
-        file_path = @site.config[:output_dir] + path
-
         # Find rep
+        path = env['PATH_INFO']
         reps = @site.items.map { |i| i.reps }.flatten
         rep = reps.find { |r| r.path == path }
 
-        if rep.nil?
-          # Get list of possible filenames
-          if file_path =~ /\/$/
-            all_file_paths = @site.config[:index_filenames].map { |f| file_path + f }
-          else
-            all_file_paths = [ file_path ]
-          end
-          good_file_path = all_file_paths.find { |f| File.file?(f) }
-
-          # Serve file
-          if good_file_path
-            serve_file(good_file_path)
-          else
-            serve_404(path)
-          end
+        if rep
+          serve(rep)
         else
-          # Serve rep
-          serve_rep(rep)
+          # Get paths by appending index filenames
+          if path =~ /\/$/
+            possible_paths = @site.config[:index_filenames].map { |f| path + f }
+          else
+            possible_paths = [ path ]
+          end
+
+          # Find matching file
+          modified_path = possible_paths.find { |f| File.file?(@site.config[:output_dir] + f) }
+          modified_path ||= path
+
+          # Serve using Rack::File
+          file_server.call(env.merge('PATH_INFO' => modified_path))
         end
       end
     rescue StandardError, LoadError, SyntaxError => e
@@ -88,25 +84,11 @@ END
       mime_type = mime_type.nil? ? fallback : mime_type.simplified
     end
 
-    def serve_404(path)
-      # Build response
-      [
-        404,
-        { 'Content-Type' => 'text/html' },
-        [ ERB.new(ERROR_404).result(binding) ]
-      ]
+    def file_server
+      @file_server ||= ::Rack::File.new(@site.config[:output_dir])
     end
 
-    def serve_file(path)
-      # Build response
-      [
-        200,
-        { 'Content-Type' => mime_type_of(path, 'application/octet-stream') },
-        [ File.open(path, 'rb') { |io| io.read } ]
-      ]
-    end
-
-    def serve_rep(rep)
+    def serve(rep)
       # Recompile rep
       @site.compiler.run([ rep.item ], :force => true)
 
