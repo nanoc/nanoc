@@ -286,7 +286,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       item_rep = mock
       item_rep.expects(:raw_path).at_least_once.returns('somefile.html')
       item_rep.expects(:item).returns(item)
-      item_rep.expects(:content_at_snapshot).with(:post).returns('compiled item content')
+      item_rep.expects(:content_at_snapshot).with(:last).returns('compiled item content')
 
       # Create file
       File.open(item_rep.raw_path, 'w') { |io| io.write('hello') }

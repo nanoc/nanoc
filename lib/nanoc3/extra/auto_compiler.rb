@@ -96,7 +96,7 @@ END
       [
         200,
         { 'Content-Type' => mime_type_of(rep.raw_path, 'text/html') },
-        [ rep.content_at_snapshot(:post) ]
+        [ rep.content_at_snapshot(:last) ]
       ]
     end
 
