@@ -250,6 +250,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     FileUtils.rm_f('output.html')
   end
 
+  def test_content_at_snapshot_with_valid_snapshot
+    # TODO implement
+  end
+
+  def test_content_at_snapshot_with_invalid_snapshot
+    # TODO implement
+  end
+
   def test_filter
     # Mock site
     site = MiniTest::Mock.new

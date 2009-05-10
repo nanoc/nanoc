@@ -4,6 +4,10 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
+  def test_content
+    # TODO implement
+  end
+
   def test_lookup
     # Create item and rep
     item = Nanoc3::Item.new(
