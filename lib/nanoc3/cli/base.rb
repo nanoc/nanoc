@@ -34,10 +34,10 @@ module Nanoc3::CLI
       if File.file?('config.yaml') and @site.nil?
         begin
           @site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
-        rescue Nanoc3::Errors::UnknownDataSourceError => e
+        rescue Nanoc3::Errors::UnknownDataSource => e
           $stderr.puts "Unknown data source: #{e}"
           exit 1
-        rescue Nanoc3::Errors::UnknownRouterError => e
+        rescue Nanoc3::Errors::UnknownRouter => e
           $stderr.puts "Unknown router: #{e}"
           exit 1
         rescue Exception => e

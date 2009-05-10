@@ -26,7 +26,7 @@ module Nanoc3::Helpers
     def render(identifier, other_assigns={})
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
-      raise Nanoc3::Errors::UnknownLayoutError.new(identifier.cleaned_identifier) if layout.nil?
+      raise Nanoc3::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?
 
       # Get assigns
       assigns = {
@@ -41,11 +41,11 @@ module Nanoc3::Helpers
 
       # Get filter name
       filter_name  = @site.compiler.filter_name_for_layout(layout)
-      raise Nanoc3::Errors::CannotDetermineFilterError.new(layout.identifier) if filter_name.nil?
+      raise Nanoc3::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
       filter_class = Nanoc3::Filter.named(filter_name)
-      raise Nanoc3::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
+      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
 
       # Create filter
       filter = filter_class.new(assigns)

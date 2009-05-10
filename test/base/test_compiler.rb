@@ -204,7 +204,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       when 0
         @_invocation_id = 1
         @_called_reps[0] = rep
-        raise Nanoc3::Errors::UnmetDependencyError.new(@_reps[1])
+        raise Nanoc3::Errors::UnmetDependency.new(@_reps[1])
       when 1
         @_invocation_id = 2
         @_called_reps[1] = rep
@@ -241,16 +241,16 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.instance_eval { @_reps = reps }
     def compiler.compile_rep(rep)
       if rep == @_reps[0]
-        raise Nanoc3::Errors::UnmetDependencyError.new(@_reps[1])
+        raise Nanoc3::Errors::UnmetDependency.new(@_reps[1])
       elsif rep == @_reps[1]
-        raise Nanoc3::Errors::UnmetDependencyError.new(@_reps[0])
+        raise Nanoc3::Errors::UnmetDependency.new(@_reps[0])
       else
         raise RuntimeError.new("this shouldn't have happened")
       end
     end
 
     # Compile
-    assert_raises Nanoc3::Errors::RecursiveCompilationError do
+    assert_raises Nanoc3::Errors::RecursiveCompilation do
       compiler.send :compile_reps, reps
     end
   end

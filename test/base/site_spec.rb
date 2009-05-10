@@ -119,7 +119,7 @@ describe 'Nanoc::Site#code' do
     site = Nanoc3::Site.new({})
     proc do
       site.code
-    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
+    end.must_raise Nanoc3::Errors::DataNotYetAvailable
   end
 
 end
@@ -132,7 +132,7 @@ describe 'Nanoc::Site#items' do
     site = Nanoc3::Site.new({})
     proc do
       site.items
-    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
+    end.must_raise Nanoc3::Errors::DataNotYetAvailable
   end
 
 end
@@ -145,7 +145,7 @@ describe 'Nanoc::Site#layouts' do
     site = Nanoc3::Site.new({})
     proc do
       site.layouts
-    end.must_raise Nanoc3::Errors::DataNotYetAvailableError
+    end.must_raise Nanoc3::Errors::DataNotYetAvailable
   end
 
 end
@@ -174,7 +174,7 @@ describe 'Nanoc::Site#router' do
     proc do
       site = Nanoc3::Site.new(:router => 'fklsdhailfdjalghlkasdflhagjskajdf')
       site.router
-    end.must_raise Nanoc3::Errors::UnknownRouterError
+    end.must_raise Nanoc3::Errors::UnknownRouter
   end
 
 end
@@ -192,7 +192,7 @@ describe 'Nanoc::Site#data_source' do
     proc do
       site = Nanoc3::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
       site.data_source
-    end.must_raise Nanoc3::Errors::UnknownDataSourceError
+    end.must_raise Nanoc3::Errors::UnknownDataSource
   end
 
 end
