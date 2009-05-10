@@ -3,7 +3,7 @@ module Nanoc3
   module Errors
 
     # Generic error. Superclass for all nanoc-specific errors.
-    class GenericError < ::RuntimeError
+    class GenericError < ::StandardError
     end
 
     # Error that is raised when a site is loaded that uses a data source with
