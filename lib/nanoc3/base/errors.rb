@@ -8,7 +8,7 @@ module Nanoc3
 
     # Error that is raised when a site is loaded that uses a data source with
     # an unknown identifier.
-    class UnknownDataSourceError < GenericError
+    class UnknownDataSource < GenericError
       def initialize(data_source_name)
         super("The data source specified in the site's configuration file, #{data_source_name}, does not exist.")
       end
@@ -16,7 +16,7 @@ module Nanoc3
 
     # Error that is raised when a site is loaded that uses a data source with
     # an unknown identifier.
-    class UnknownRouterError < GenericError
+    class UnknownRouter < GenericError
       def initialize(router_name)
         super("The router specified in the site's configuration file, #{router_name}, does not exist.")
       end
@@ -24,7 +24,7 @@ module Nanoc3
 
     # Error that is raised during site compilation when an item uses a layout
     # that is not present in the site.
-    class UnknownLayoutError < GenericError
+    class UnknownLayout < GenericError
       def initialize(layout_identifier)
         super("The site does not have a layout with identifier '#{layout_identifier}'.")
       end
@@ -32,7 +32,7 @@ module Nanoc3
 
     # Error that is raised during site compilation when an item uses a filter
     # that is not known.
-    class UnknownFilterError < GenericError
+    class UnknownFilter < GenericError
       def initialize(filter_name)
         super("The requested filter, #{filter_name}, does not exist.")
       end
@@ -41,7 +41,7 @@ module Nanoc3
     # Error that is raised during site compilation when a layout is compiled
     # for which the filter cannot be determined. This is similar to the
     # UnknownFilterError, but specific for filters for layouts.
-    class CannotDetermineFilterError < GenericError
+    class CannotDetermineFilter < GenericError
       def initialize(layout_identifier)
         super("The filter to be used for the '#{layout_identifier}' could not be determined. Make sure the layout does have a filter.")
       end
@@ -49,7 +49,7 @@ module Nanoc3
 
     # Error that is raised when data is requested when the data is not yet
     # available (possibly due to a missing Nanoc::Site#load_data).
-    class DataNotYetAvailableError < GenericError
+    class DataNotYetAvailable < GenericError
       def initialize(type, plural)
         super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.")
       end
@@ -57,7 +57,7 @@ module Nanoc3
 
     # Error that is raised during site compilation when an item (directly or
     # indirectly) includes its own item content, leading to endless recursion.
-    class RecursiveCompilationError < GenericError
+    class RecursiveCompilation < GenericError
       def initialize
         super("A recursive call to item content was detected. Items cannot (directly or indirectly) contain their own content.")
       end
@@ -65,7 +65,7 @@ module Nanoc3
 
     # Error that is raised when no rules file can be found in the current
     # working directory.
-    class NoRulesFileFoundError < GenericError
+    class NoRulesFileFound < GenericError
       def initialize
         super("This site does not have a rules file, which is required for nanoc sites.")
       end
@@ -73,14 +73,14 @@ module Nanoc3
 
     # Error that is raised when no compilation rule that can be applied to the
     # current item can be found.
-    class NoMatchingCompilationRuleFoundError < GenericError
+    class NoMatchingCompilationRuleFound < GenericError
       def initialize(item)
         super("No compilation rules were found for the '#{item.identifier}' item.")
       end
     end
 
     # Error that is raised when an rep cannot be compiled because it depends on other representations.
-    class UnmetDependencyError < GenericError
+    class UnmetDependency < GenericError
       attr_reader :rep
       def initialize(rep)
         @rep = rep

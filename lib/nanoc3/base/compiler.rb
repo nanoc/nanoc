@@ -114,13 +114,13 @@ module Nanoc3
           # Check for recursive call
           if @stack.include?(rep)
             @stack.push(rep)
-            raise Nanoc3::Errors::RecursiveCompilationError.new
+            raise Nanoc3::Errors::RecursiveCompilation.new
           end
 
           # Compile it
           @stack.push(rep)
           compile_rep(rep)
-        rescue Nanoc3::Errors::UnmetDependencyError => e
+        rescue Nanoc3::Errors::UnmetDependency => e
           # Ensure the dependency is recompiled as soon as possible
           if e.rep
             # Add rep as 2nd element of queue

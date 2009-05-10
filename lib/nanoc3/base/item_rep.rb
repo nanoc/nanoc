@@ -141,7 +141,7 @@ module Nanoc3
     #              get the raw, uncompiled content, use +:raw+.
     def content_at_snapshot(snapshot=:pre)
       Nanoc3::NotificationCenter.post(:visit_started, self)
-      raise Nanoc3::Errors::UnmetDependencyError.new(self) unless compiled?
+      raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
       Nanoc3::NotificationCenter.post(:visit_ended, self)
 
       @content[snapshot]
@@ -151,7 +151,7 @@ module Nanoc3
     def filter(filter_name, filter_args={})
       # Create filter
       klass = Nanoc3::Filter.named(filter_name)
-      raise Nanoc3::Errors::UnknownFilterError.new(filter_name) if klass.nil?
+      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(assigns)
 
       # Run filter
@@ -167,15 +167,15 @@ module Nanoc3
     def layout(layout_identifier)
       # Get layout
       layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
-      raise Nanoc3::Errors::UnknownLayoutError.new(layout_identifier) if layout.nil?
+      raise Nanoc3::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
 
       # Get filter name
       filter_name  = @item.site.compiler.filter_name_for_layout(layout)
-      raise Nanoc3::Errors::CannotDetermineFilterError.new(layout_identifier) if filter_name.nil?
+      raise Nanoc3::Errors::CannotDetermineFilter.new(layout_identifier) if filter_name.nil?
 
       # Get filter class
       filter_class = Nanoc3::Filter.named(filter_name)
-      raise Nanoc3::Errors::UnknownFilterError.new(filter_name) if filter_class.nil?
+      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
 
       # Create filter
       filter = filter_class.new(assigns.merge({ :layout => layout }))

@@ -145,7 +145,7 @@ module Nanoc3::DataSources
     def rules
       # Find rules file
       rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
-      raise Nanoc3::Errors::NoRulesFileFoundError.new if rules_filename.nil?
+      raise Nanoc3::Errors::NoRulesFileFound.new if rules_filename.nil?
 
       # Get contents
       File.read(rules_filename)

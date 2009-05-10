@@ -30,7 +30,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     @site = MiniTest::Mock.new.expect(:layouts, [])
 
     # Render
-    assert_raises(Nanoc3::Errors::UnknownLayoutError) do
+    assert_raises(Nanoc3::Errors::UnknownLayout) do
       render('/fawgooafwagwfe/')
     end
   end
@@ -51,7 +51,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     @site.expect(:compiler, compiler)
 
     # Render
-    assert_raises(Nanoc3::Errors::CannotDetermineFilterError) do
+    assert_raises(Nanoc3::Errors::CannotDetermineFilter) do
       render '/foo/'
     end
   end
@@ -72,7 +72,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     @site.expect(:compiler, compiler)
 
     # Render
-    assert_raises(Nanoc3::Errors::UnknownFilterError) do
+    assert_raises(Nanoc3::Errors::UnknownFilter) do
       render '/foo/'
     end
   end

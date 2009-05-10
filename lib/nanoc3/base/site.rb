@@ -70,23 +70,23 @@ module Nanoc3
     end
 
     # Returns the data source for this site. Will create a new data source if
-    # none exists yet. Raises Nanoc3::Errors::UnknownDataSourceError if the
+    # none exists yet. Raises Nanoc3::Errors::UnknownDataSource if the
     # site configuration specifies an unknown data source.
     def data_source
       @data_source ||= begin
         data_source_class = Nanoc3::DataSource.named(@config[:data_source])
-        raise Nanoc3::Errors::UnknownDataSourceError.new(@config[:data_source]) if data_source_class.nil?
+        raise Nanoc3::Errors::UnknownDataSource.new(@config[:data_source]) if data_source_class.nil?
         data_source_class.new(self)
       end
     end
 
     # Returns the router for this site. Will create a new router if none
-    # exists yet. Raises Nanoc3::Errors::UnknownRouterError if the site
+    # exists yet. Raises Nanoc3::Errors::UnknownRouter if the site
     # configuration specifies an unknown router.
     def router
       @router ||= begin
         router_class = Nanoc3::Router.named(@config[:router])
-        raise Nanoc3::Errors::UnknownRouterError.new(@config[:router]) if router_class.nil?
+        raise Nanoc3::Errors::UnknownRouter.new(@config[:router]) if router_class.nil?
         router_class.new(self)
       end
     end
@@ -116,19 +116,19 @@ module Nanoc3
 
     # Returns this site's code. Raises an exception if data hasn't been loaded yet.
     def code
-      raise Nanoc3::Errors::DataNotYetAvailableError.new('Code', false) unless @data_loaded
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Code', false) unless @data_loaded
       @code
     end
 
     # Returns this site's items. Raises an exception if data hasn't been loaded yet.
     def items
-      raise Nanoc3::Errors::DataNotYetAvailableError.new('Items', true) unless @data_loaded
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @data_loaded
       @items
     end
 
     # Returns this site's layouts. Raises an exception if data hasn't been loaded yet.
     def layouts
-      raise Nanoc3::Errors::DataNotYetAvailableError.new('Layouts', true) unless @data_loaded
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @data_loaded
       @layouts
     end
 
@@ -187,7 +187,7 @@ module Nanoc3
       @items.each do |item|
         # Find matching rules
         matching_rules = self.compiler.item_compilation_rules.select { |r| r.applicable_to?(item) }
-        raise Nanoc3::Errors::NoMatchingCompilationRuleFoundError.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
+        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
 
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
