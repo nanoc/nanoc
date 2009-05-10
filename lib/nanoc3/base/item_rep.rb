@@ -13,8 +13,6 @@ module Nanoc3
   # * :compilation_ended
   # * :filtering_started
   # * :filtering_ended
-  # * :visit_started
-  # * :visit_ended
   #
   # The compilation-related events have one parameters (the item
   # representation); the filtering-related events have two (the item
@@ -140,9 +138,7 @@ module Nanoc3
     # +snapshot+:: The snapshot from which the content should be fetched. To
     #              get the raw, uncompiled content, use +:raw+.
     def content_at_snapshot(snapshot=:pre)
-      Nanoc3::NotificationCenter.post(:visit_started, self)
       raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
-      Nanoc3::NotificationCenter.post(:visit_ended, self)
 
       @content[snapshot]
     end

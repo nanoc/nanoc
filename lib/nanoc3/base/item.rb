@@ -3,14 +3,6 @@ module Nanoc3
   # Nanoc3::Item is represents all compileable items in a site. It has content
   # and attributes, as well as an identifier. It can also store the
   # modification time to speed up compilation.
-  #
-  # An item is observable. The following events will be notified:
-  #
-  # * :visit_started
-  # * :visit_ended
-  #
-  # Each item has a list of item representations or reps (Nanoc3::ItemRep);
-  # compiling an item actually compiles all of its representations.
   class Item
 
     # The Nanoc3::Site this item belongs to.
