@@ -52,45 +52,7 @@ module Nanoc3
       end
 
       # Compile reps
-      @stack = []
-      reps.each { |rep| compile_rep(rep) }
-    end
-
-    # Compiles the given item representation.
-    #
-    # This method should not be called directly; please use
-    # Nanoc3::Compiler#run instead, and pass this item representation's item as
-    # its first argument.
-    #
-    # +rep+:: The rep that is to be compiled.
-    def compile_rep(rep)
-      # Don't compile if already compiled
-      return if rep.compiled?
-
-      # Skip unless outdated
-      unless rep.outdated?
-        Nanoc3::NotificationCenter.post(:compilation_started, rep)
-        Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
-        return
-      end
-
-      # Check for recursive call
-      if @stack.include?(rep)
-        @stack.push(rep)
-        raise Nanoc3::Errors::RecursiveCompilationError.new
-      end
-
-      # Start
-      @stack.push(rep)
-      Nanoc3::NotificationCenter.post(:compilation_started, rep)
-
-      # Apply matching rule
-      compilation_rule_for(rep).apply_to(rep)
-      rep.compiled = true
-
-      # Stop
-      Nanoc3::NotificationCenter.post(:compilation_ended, rep)
-      @stack.pop
+      compile_reps(reps)
     end
 
     # Returns the compilation rule for the given rep.
@@ -136,6 +98,73 @@ module Nanoc3
     end
 
   private
+
+    # Compiles all item representations in the site.
+    def compile_reps(reps)
+      @stack.clear
+
+      uncompiled_reps = reps.dup
+      compiled_reps   = []
+
+      until uncompiled_reps.empty?
+        begin
+          # Find an uncompiled rep
+          rep = uncompiled_reps.shift
+
+          # Check for recursive call
+          if @stack.include?(rep)
+            @stack.push(rep)
+            raise Nanoc3::Errors::RecursiveCompilationError.new
+          end
+
+          # Compile it
+          @stack.push(rep)
+          compile_rep(rep)
+        rescue Nanoc3::Errors::UnmetDependencyError => e
+          # Ensure the dependency is recompiled as soon as possible
+          if e.rep
+            # Add rep as 2nd element of queue
+            uncompiled_reps.unshift(rep)
+
+            # Add dependency as 1st element of queue
+            uncompiled_reps.delete(e.rep)
+            uncompiled_reps.unshift(e.rep)
+          else
+            uncompiled_reps << rep
+          end
+        else
+          # Compilation was successful, so clear the stack and mark the rep as compiled
+          compiled_reps << rep
+          @stack.clear
+        end
+      end
+    end
+
+    # Compiles the given item representation.
+    #
+    # This method should not be called directly; please use
+    # Nanoc3::Compiler#run instead, and pass this item representation's item as
+    # its first argument.
+    #
+    # +rep+:: The rep that is to be compiled.
+    def compile_rep(rep)
+      # Skip unless outdated
+      unless rep.outdated?
+        Nanoc3::NotificationCenter.post(:compilation_started, rep)
+        Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
+        return
+      end
+
+      # Start
+      Nanoc3::NotificationCenter.post(:compilation_started, rep)
+
+      # Apply matching rule
+      compilation_rule_for(rep).apply_to(rep)
+      rep.compiled = true
+
+      # Stop
+      Nanoc3::NotificationCenter.post(:compilation_ended, rep)
+    end
 
     # Converts the given identifier, which can contain the '*' wildcard, to a regex.
     # For example, 'foo/*/bar' is transformed into /^foo\/(.*?)\/bar$/.
