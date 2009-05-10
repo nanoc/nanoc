@@ -149,13 +149,17 @@ module Nanoc3
       @code_loaded = true
     end
 
+    # Returns the Nanoc3::CompilerDSL that should be used for this site.
+    def dsl
+      @dsl ||= Nanoc3::CompilerDSL.new(compiler)
+    end
+
     # Loads this site's rules.
     def load_rules
       # Get rules
       @rules = data_source.rules
 
       # Load DSL
-      dsl = Nanoc3::CompilerDSL.new(compiler)
       dsl.instance_eval(@rules)
     end
 
