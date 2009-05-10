@@ -79,6 +79,15 @@ module Nanoc3
       end
     end
 
+    # Error that is raised when an rep cannot be compiled because it depends on other representations.
+    class UnmetDependencyError < GenericError
+      attr_reader :rep
+      def initialize(rep)
+        @rep = rep
+        super("The '#{rep.item.identifier}' item (rep '#{rep.name}') cannot currently be compiled yet due to an unmet dependency.")
+      end
+    end
+
   end
 
 end

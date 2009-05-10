@@ -141,7 +141,7 @@ module Nanoc3
     #              get the raw, uncompiled content, use +:raw+.
     def content_at_snapshot(snapshot=:pre)
       Nanoc3::NotificationCenter.post(:visit_started, self)
-      @item.site.compiler.compile_rep(self) unless compiled?
+      raise Nanoc3::Errors::UnmetDependencyError.new(self) unless compiled?
       Nanoc3::NotificationCenter.post(:visit_ended, self)
 
       @content[snapshot]
