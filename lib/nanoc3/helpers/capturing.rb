@@ -47,19 +47,23 @@ module Nanoc3::Helpers
       eval("@item[:content_for_#{name.to_s}] = capture(&block)")
     end
 
-  private
-
+    # Evaluates the given block and returns the result. The block is not outputted.
     def capture(*args, &block)
-      buffer = eval('_erbout', block.binding)
+      # Get erbout so far
+      erbout = eval('_erbout', block.binding)
+      erbout_length = erbout.length
 
-      pos = buffer.length
+      # Execute block
       block.call(*args)
 
-      data = buffer[pos..-1]
+      # Get new piece of erbout
+      erbout_addition = erbout[erbout_length..-1]
 
-      buffer[pos..-1] = ''
+      # Remove addition
+      erbout[erbout_length..-1] = ''
 
-      data
+      # Done
+      erbout_addition
     end
 
   end
