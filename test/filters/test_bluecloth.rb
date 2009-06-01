@@ -11,7 +11,7 @@ class Nanoc3::Filters::BlueClothTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.run("> Quote")
-      assert_equal("<blockquote>\n    <p>Quote</p>\n</blockquote>", result)
+      assert_match %r{<blockquote>\s*<p>Quote</p>\s*</blockquote>}, result
     end
   end
 
