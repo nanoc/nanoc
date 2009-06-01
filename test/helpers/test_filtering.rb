@@ -70,4 +70,21 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_arguments
+    if_have 'coderay' do
+      # Build content to be evaluated
+      content = "<% filter :coderay, :language => 'ruby' do %>\n" +
+                "   def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end\n" +
+                "<% end %>\n"
+
+      # Mock item and rep
+      @item_rep = mock
+      @item_rep.expects(:assigns).returns({})
+
+      # Evaluate content
+      result = ::ERB.new(content).result(binding)
+      assert_match(%r{<span class="r">def</span> <span class="fu">some_function</span>}, result)
+    end
+  end
+
 end

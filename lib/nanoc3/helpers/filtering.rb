@@ -24,7 +24,7 @@ module Nanoc3::Helpers
     include Nanoc3::Helpers::Capturing
 
     # Filters the content in the given block and outputs it.
-    def filter(filter_name, &block)
+    def filter(filter_name, arguments={}, &block)
       # Capture block
       data = capture(&block)
 
@@ -34,7 +34,7 @@ module Nanoc3::Helpers
       filter = klass.new(@item_rep.assigns)
 
       # Filter captured data
-      filtered_data = filter.run(data)
+      filtered_data = filter.run(data, arguments)
 
       # Append filtered data to buffer
       buffer = eval('_erbout', block.binding)
