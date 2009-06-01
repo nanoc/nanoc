@@ -19,7 +19,7 @@ module Nanoc3::Helpers
   #
   #   <div id="sidebar">
   #     <h3>Summary</h3>
-  #     <%= @item.content_for_summary || '(no summary)' %>
+  #     <%= @item[:content_for_summary] || '(no summary)' %>
   #   </div>
   #
   # To put something inside that content_for_summary variable, capture it
