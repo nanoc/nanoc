@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # A Nanoc3::Layout represents a layout in a nanoc site. It has content,

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra::VCSes
 
   autoload 'Bazaar',     'nanoc3/extra/vcses/bazaar'

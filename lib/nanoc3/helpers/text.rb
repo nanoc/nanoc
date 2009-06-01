@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Helpers
 
   # Nanoc3::Helpers::Text contains several useful text-related helper functions.

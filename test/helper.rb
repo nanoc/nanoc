@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Load unit testing stuff
 begin
   require 'minitest/unit'

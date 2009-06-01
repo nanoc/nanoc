@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # Nanoc3::Plugin is the superclass for all plugins, such as filters

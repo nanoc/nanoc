@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # Nanoc3::Code represent the custom code of a nanoc site. It contains the

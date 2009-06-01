@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/helper'
 
 class Nanoc3::Filters::RDocTest < MiniTest::Unit::TestCase

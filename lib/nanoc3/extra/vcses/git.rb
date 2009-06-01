@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra::VCSes
 
   class Git < Nanoc3::Extra::VCS

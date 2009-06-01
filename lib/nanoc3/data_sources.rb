@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::DataSources
 
   autoload 'Filesystem',         'nanoc3/data_sources/filesystem'

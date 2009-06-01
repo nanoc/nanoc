@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/helper'
 
 describe 'Hash#symbolize_keys' do

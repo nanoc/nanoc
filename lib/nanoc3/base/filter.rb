@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # Nanoc3::Filter is responsible for filtering items. It is

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # A Nanoc3::ItemRep is a single representation (rep) of an item

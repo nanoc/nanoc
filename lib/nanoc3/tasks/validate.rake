@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :validate do
 
   desc 'Validate the site\'s HTML files'

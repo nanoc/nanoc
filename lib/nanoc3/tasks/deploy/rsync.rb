@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Tasks::Deploy
 
   # Nanoc3::Tasks::Deploy::Rsync is a task that deploys a site using rsync.

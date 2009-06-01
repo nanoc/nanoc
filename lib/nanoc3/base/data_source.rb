@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # Nanoc3::DataSource is responsible for loading data. It is the (abstract)

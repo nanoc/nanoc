@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra
 
   # A FileProxy is a proxy for a File object. It is used to prevent a File

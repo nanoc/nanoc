@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # Nanoc3::Item is represents all compileable items in a site. It has content

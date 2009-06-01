@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::StringExtensions
 
   # Transforms string into an actual identifier

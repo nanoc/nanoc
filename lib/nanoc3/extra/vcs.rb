@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra
 
   # Nanoc3::Extra::VCS is a very simple representation of a version control
