@@ -55,4 +55,17 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_unknown_filter_name
+    # Build content to be evaluated
+    content = "<p>Foo...</p>\n" +
+              "<% filter :askjdflkawgjlkwaheflnvz do %>\n" +
+              " <p>Blah blah blah.</p>\n" +
+              "<% end %>\n"
+
+    # Evaluate content
+    error = assert_raises(Nanoc3::Errors::UnknownFilter) do
+      ::ERB.new(content).result(binding)
+    end
+  end
+
 end
