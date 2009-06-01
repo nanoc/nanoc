@@ -20,6 +20,9 @@ module Nanoc3::Helpers
   #   include Nanoc3::Helpers::Filtering
   module Filtering
 
+    require 'nanoc3/helpers/capturing'
+    include Nanoc3::Helpers::Capturing
+
     # Filters the content in the given block and outputs it.
     def filter(filter_name, &block)
       # Capture block
@@ -36,26 +39,6 @@ module Nanoc3::Helpers
       # Append filtered data to buffer
       buffer = eval('_erbout', block.binding)
       buffer << filtered_data
-    end
-
-  private
-
-    def capture(*args, &block)
-      # Get erbout so far
-      erbout = eval('_erbout', block.binding)
-      erbout_length = erbout.length
-
-      # Execute block
-      block.call(*args)
-
-      # Get new piece of erbout
-      erbout_addition = erbout[erbout_length..-1]
-
-      # Remove addition
-      erbout[erbout_length..-1] = ''
-
-      # Done
-      erbout_addition
     end
 
   end
