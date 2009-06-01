@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Filters
   class Erubis < Nanoc3::Filter
 

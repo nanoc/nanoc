@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Routers
 
   # The default router organises items in the most obvious, but sometimes

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/helper'
 
 class Nanoc3::CompilerTest < MiniTest::Unit::TestCase

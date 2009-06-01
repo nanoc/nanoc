@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Filters
   class Markaby < Nanoc3::Filter
 

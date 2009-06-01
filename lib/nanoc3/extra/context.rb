@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra
 
   # Nanoc3::Extra::Context provides a context and a Binding for use in various

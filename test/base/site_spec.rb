@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/helper'
 
 describe 'Nanoc3::Site#initialize' do

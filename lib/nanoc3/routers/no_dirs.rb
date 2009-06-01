@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Routers
 
   # The no-directories router organises items very similarly to the default

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra::TimeExtensions
 
   # Returns a string with the time in an ISO-8601 date format.

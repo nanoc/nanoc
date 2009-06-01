@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   require 'nanoc3/base/core_ext'

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra
 
   # Nanoc3::Extra::AutoCompiler is a web server that will automatically compile

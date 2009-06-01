@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Routers
 
   # The versioned router behaves pretty much like the default router, with the

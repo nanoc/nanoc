@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # A Nanoc3::Site is the in-memory representation of a nanoc site. It holds

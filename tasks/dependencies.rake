@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 desc 'Fetch all dependencies for nanoc3'
 task :fetch_dependencies do
   # Get Cri

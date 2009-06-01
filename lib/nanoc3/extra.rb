@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Extra
 
   autoload 'AutoCompiler', 'nanoc3/extra/auto_compiler'

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/helper'
 
 class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase

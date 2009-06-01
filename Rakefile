@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
 require 'nanoc3'

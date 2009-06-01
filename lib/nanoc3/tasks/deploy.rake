@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 namespace :deploy do
 
   desc 'Upload the compiled site using rsync'

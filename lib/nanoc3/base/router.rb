@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # A Nanoc3::Router is an abstract superclass that determines the paths of

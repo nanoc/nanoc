@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'singleton'
 
 module Nanoc3::CLI

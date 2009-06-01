@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::DataSources
 
   # The filesystem data source is the default data source for a new nanoc

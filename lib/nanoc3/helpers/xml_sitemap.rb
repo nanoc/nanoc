@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3::Helpers
 
   # Nanoc3::Helpers::XMLSitemap contains functionality for building XML
