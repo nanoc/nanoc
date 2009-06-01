@@ -25,4 +25,18 @@ class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
     assert_match(/^head\s+foot$/, result)
   end
 
+  def test_capture
+    require 'erb'
+
+    # Capture
+    _erbout = 'foo'
+    captured_content = capture do
+      _erbout << 'bar'
+    end
+
+    # Check
+    assert_equal 'foo', _erbout
+    assert_equal 'bar', captured_content
+  end
+
 end
