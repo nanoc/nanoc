@@ -15,11 +15,9 @@ module Nanoc3
     # Creates a new item compilation rule with the given identifier regex, compiler
     # and block. The block will be called during compilation with the item rep
     # as its argument.
-    def initialize(identifier_regex, rep_name, compiler, block)
+    def initialize(identifier_regex, rep_name, block)
       @identifier_regex = identifier_regex
       @rep_name         = rep_name.to_sym
-
-      @compiler = compiler
 
       @block = block
     end
