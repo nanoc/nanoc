@@ -19,6 +19,17 @@ module Nanoc3
       @compiler.add_item_compilation_rule(identifier, rep_name, block)
     end
 
+    def map(identifier, params={}, &block)
+      # Require block
+      raise ArgumentError.new("#map requires a block") unless block_given?
+
+      # Get rep name
+      rep_name = params[:rep] || :default
+
+      # Create rule
+      @compiler.add_item_mapping_rule(identifier, rep_name, block)
+    end
+
     def layout(params={})
       # Get layout identifier and filter name
       identifier  = params.keys[0]

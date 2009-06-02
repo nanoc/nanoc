@@ -115,8 +115,8 @@ module Nanoc3
 
     # Returns the custom code (represented by Nanoc3::Code) for this site.
     # This is an abstract method implemented by the subclass. This can be code
-    # for custom filters, routers, and more, but pretty much any code can
-    # be put in there (global helper functions are very useful).
+    # for custom filters and more, but pretty much any code can be put in
+    # there (global helper functions are very useful).
     #
     # Subclasses must implement this method.
     def code

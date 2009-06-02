@@ -63,23 +63,9 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
     end
 
     def code
-      Nanoc3::Code.new(
-        "class TestEarlyLoadingCodeRouter < Nanoc3::Router\n" +
-        "  identifier :early_loading_code_router\n" +
-        "  def path_for(item)     ; 'web path'  ; end\n" +
-        "  def raw_path_for(item) ; 'disk path' ; end\n" +
-        "end"
-      )
+      Nanoc3::Code.new('')
     end
 
-  end
-
-  def test_initialize_custom_router
-    Nanoc3::Site.new(
-      :output_dir   => 'output',
-      :data_source  => 'early_loading_code_data_source',
-      :router       => 'early_loading_code_router'
-    )
   end
 
   def test_load_rules_with_existing_rules_file

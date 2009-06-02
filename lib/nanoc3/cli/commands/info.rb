@@ -18,7 +18,7 @@ module Nanoc3::CLI::Commands
 
     def long_desc
       'Show a list of available plugins, including filters, data sources ' +
-      'and routers. If the current directory contains a nanoc web site, ' +
+      'and VCSes. If the current directory contains a nanoc web site, ' +
       'the plugins defined in this site will be shown as well.'
     end
 
@@ -95,7 +95,6 @@ module Nanoc3::CLI::Commands
 
     PLUGIN_CLASS_ORDER = [
       Nanoc3::Filter,
-      Nanoc3::Router,
       Nanoc3::Extra::VCS,
       Nanoc3::DataSource
     ]
@@ -103,7 +102,6 @@ module Nanoc3::CLI::Commands
     PLUGIN_CLASSES = {
       Nanoc3::Filter       => 'Filters',
       Nanoc3::DataSource   => 'Data Sources',
-      Nanoc3::Router       => 'Routers',
       Nanoc3::Extra::VCS   => 'VCSes'
     }
 

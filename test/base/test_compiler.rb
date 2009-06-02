@@ -43,7 +43,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock reps
     item.expects(:reps).returns([ mock, mock, mock ])
 
-    # Create site and router
+    # Create site
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
 
@@ -62,6 +62,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compilation_rule_for
+    # TODO implement
+  end
+
+  def test_mapping_rule_for
     # TODO implement
   end
 
@@ -114,6 +118,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_add_item_compilation_rule
+    # TODO implement
+  end
+
+  def test_add_item_mapping_rule
     # TODO implement
   end
 

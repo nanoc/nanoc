@@ -39,9 +39,6 @@ module Nanoc3::CLI
         rescue Nanoc3::Errors::UnknownDataSource => e
           $stderr.puts "Unknown data source: #{e}"
           exit 1
-        rescue Nanoc3::Errors::UnknownRouter => e
-          $stderr.puts "Unknown router: #{e}"
-          exit 1
         rescue Exception => e
           $stderr.puts "ERROR: An exception occured while loading this site."
           $stderr.puts
