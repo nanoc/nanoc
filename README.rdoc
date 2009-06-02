@@ -33,10 +33,9 @@ The source code is structured in a few directories:
     * *helpers* contains helpers, which provide functionality some sites
       may find useful, such as the blogging and tagging helpers
     * *extra* contains stuff that is not needed by nanoc itself, but which may
-      be used by helpers, data sources, filters or routers.
+      be used by helpers, data sources, filters or VCSes.
     * *filters* contains the standard filters (Nanoc3::Filter subclasses) such
       as ERB, Markdown, Haml, ...
-    * *routers* contains the standard routers (Nanoc3::Router subclasses)
 * *test* contains testing code, structured in the same way as lib/nanoc
 
 The namespaces (modules) are organised like this:
@@ -49,7 +48,6 @@ The namespaces (modules) are organised like this:
   * *Helpers* contains the helpers
   * *Extra* contains useful stuff not needed by nanoc itself
   * *Filters* contains the (textual) filters
-  * *Routers* contains the routers
 
 The central class in nanoc is Nanoc3::Site, so you should start there if you
 want to explore nanoc from a technical perspective.

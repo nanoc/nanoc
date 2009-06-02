@@ -357,7 +357,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_write
-    # Mock site, router and item
+    # Mock item
     item = MiniTest::Mock.new
     item.expect(:content, "blah blah blah")
 

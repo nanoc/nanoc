@@ -26,6 +26,7 @@ module Nanoc3
       @stack = []
 
       @item_compilation_rules  = []
+      @item_mapping_rules      = []
       @layout_filter_mapping   = {}
     end
 
@@ -57,9 +58,16 @@ module Nanoc3
       compile_reps(reps)
     end
 
-    # Returns the compilation rule for the given rep.
+    # Returns the first matching compilation rule for the given rep.
     def compilation_rule_for(rep)
       @item_compilation_rules.find do |rule|
+        rule.applicable_to?(rep.item) && rule.rep_name == rep.name
+      end
+    end
+
+    # Returns the first matching mapping rule for the given rep.
+    def mapping_rule_for(rep)
+      @item_mapping_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end
@@ -82,9 +90,23 @@ module Nanoc3
     # +rep_name+:: The name of the representation this compilation rule
     #              applies to.
     #
-    # +block+:: A Proc that should be used to compile the matching items.
+    # +block+:: A Proc that should be used to compile the matching item reps.
     def add_item_compilation_rule(identifier, rep_name, block)
       @item_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+    end
+
+    # Adds an item mapping rule to the compiler.
+    #
+    # +identifier+:: The identifier for the item that should be maped using
+    #                this rule. Can contain the '*' wildcard, which matches
+    #                zero or more characters.
+    #
+    # +rep_name+:: The name of the representation this mapping rule
+    #              applies to.
+    #
+    # +block+:: A Proc that should be used to map the matching item reps.
+    def add_item_mapping_rule(identifier, rep_name, block)
+      @item_mapping_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
     end
 
     # Adds a layout compilation rule to the compiler.

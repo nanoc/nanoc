@@ -16,14 +16,6 @@ module Nanoc3
       end
     end
 
-    # Error that is raised when a site is loaded that uses a data source with
-    # an unknown identifier.
-    class UnknownRouter < Generic
-      def initialize(router_name)
-        super("The router specified in the site's configuration file, #{router_name}, does not exist.")
-      end
-    end
-
     # Error that is raised during site compilation when an item uses a layout
     # that is not present in the site.
     class UnknownLayout < Generic
@@ -76,8 +68,16 @@ module Nanoc3
     # Error that is raised when no compilation rule that can be applied to the
     # current item can be found.
     class NoMatchingCompilationRuleFound < Generic
-      def initialize(item)
-        super("No compilation rules were found for the '#{item.identifier}' item.")
+      def initialize(rep)
+        super("No compilation rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
+      end
+    end
+
+    # Error that is raised when no mapping rule that can be applied to the
+    # current item can be found.
+    class NoMatchingMappingRuleFound < Generic
+      def initialize(rep)
+        super("No mapping rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
       end
     end
 

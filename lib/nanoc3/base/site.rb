@@ -19,9 +19,6 @@ module Nanoc3
   # +data_source+:: The identifier of the data source that will be used for
   #                 loading site data.
   #
-  # +router+:: The identifier of the router that will be used for determining
-  #            item representation paths.
-  #
   # +index_filenames+:: A list of filenames that will be stripped off full
   #                     item paths to create cleaner URLs (for example,
   #                     '/about/' will be used instead of
@@ -30,8 +27,6 @@ module Nanoc3
   #
   # A site also has several helper classes:
   #
-  # * +router+ is a Nanoc3::Router subclass instance used for determining item
-  #   paths.
   # * +data_source+ is a Nanoc3::DataSource subclass instance used for loading
   #   site data.
   # * +compiler+ is a Nanoc3::Compiler instance that compiles item
@@ -51,7 +46,6 @@ module Nanoc3
     DEFAULT_CONFIG = {
       :output_dir       => 'output',
       :data_source      => 'filesystem',
-      :router           => 'default',
       :index_filenames  => [ 'index.html' ]
     }
 
@@ -79,17 +73,6 @@ module Nanoc3
         data_source_class = Nanoc3::DataSource.named(@config[:data_source])
         raise Nanoc3::Errors::UnknownDataSource.new(@config[:data_source]) if data_source_class.nil?
         data_source_class.new(self)
-      end
-    end
-
-    # Returns the router for this site. Will create a new router if none
-    # exists yet. Raises Nanoc3::Errors::UnknownRouter if the site
-    # configuration specifies an unknown router.
-    def router
-      @router ||= begin
-        router_class = Nanoc3::Router.named(@config[:router])
-        raise Nanoc3::Errors::UnknownRouter.new(@config[:router]) if router_class.nil?
-        router_class.new(self)
       end
     end
 
@@ -193,7 +176,7 @@ module Nanoc3
       @items.each do |item|
         # Find matching rules
         matching_rules = self.compiler.item_compilation_rules.select { |r| r.applicable_to?(item) }
-        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new("#{rep.item.path} (rep #{rep.name})") if matching_rules.empty?
+        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new(rep) if matching_rules.empty?
 
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
@@ -206,9 +189,25 @@ module Nanoc3
     def map_reps
       reps = @items.map { |i| i.reps }.flatten
       reps.each do |rep|
-        # TODO use mapping rules instead of using the router
-        rep.raw_path = self.router.raw_path_for(rep)
-        rep.path     = self.router.path_for(rep)
+        # Find matching rule
+        rule = self.compiler.mapping_rule_for(rep)
+        raise Nanoc3::Errors::NoMatchingMappingRuleFound.new(rep) if rule.nil?
+
+        # Get basic path by applying matching rule
+        basic_path = rule.apply_to(rep)
+
+        # Get raw path by prepending output directory
+        rep.raw_path = self.config[:output_dir] + basic_path
+
+        # Get normal path by stripping index filename
+        rep.path = basic_path
+        self.config[:index_filenames].each do |index_filename|
+          if rep.path[-index_filename.length..-1] == index_filename
+            # Strip and stop
+            rep.path = rep.path[0..-index_filename.length-1]
+            break
+          end
+        end
       end
     end
 

@@ -235,7 +235,6 @@ EOS
         io.write "---\n"
         io.write "output_dir:  \"output\"\n"
         io.write "data_source: \"#{data_source}\"\n"
-        io.write "router:      \"default\"\n"
       end
       Nanoc3::NotificationCenter.post(:file_created, 'config.yaml')
 
@@ -282,6 +281,10 @@ EOS
         io.write "  rep.filter :erb\n"
         io.write "  rep.layout 'default'\n"
         io.write "  rep.write\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "map '*' do |rep|\n"
+        io.write "  rep.item.identifier + 'index.html'\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '*' => :erb\n"

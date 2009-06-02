@@ -7,8 +7,8 @@ describe 'Nanoc3::Site#initialize' do
   include Nanoc3::TestHelpers
 
   it 'should merge default config' do
-    site = Nanoc3::Site.new(:router => 'versioned')
-    site.config.must_equal Nanoc3::Site::DEFAULT_CONFIG.merge(:router => 'versioned')
+    site = Nanoc3::Site.new(:foo => 'bar')
+    site.config.must_equal Nanoc3::Site::DEFAULT_CONFIG.merge(:foo => 'bar')
   end
 
   it 'should not raise under normal circumstances' do
@@ -22,12 +22,6 @@ describe 'Nanoc3::Site#initialize' do
   it 'should not raise for unknown data sources' do
     proc do
       Nanoc3::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
-    end
-  end
-
-  it 'should not raise for unknown routers' do
-    proc do
-      Nanoc3::Site.new(:router => 'fklsdhailfdjalghlkasdflhagjskajdf')
     end
   end
 
@@ -159,24 +153,6 @@ describe 'Nanoc::Site#compiler' do
   it 'should not raise under normal circumstances' do
     site = Nanoc3::Site.new({})
     site.compiler
-  end
-
-end
-
-describe 'Nanoc::Site#router' do
-
-  include Nanoc3::TestHelpers
-
-  it 'should not raise for known routers' do
-    site = Nanoc3::Site.new({})
-    site.router
-  end
-
-  it 'should raise for unknown routers' do
-    proc do
-      site = Nanoc3::Site.new(:router => 'fklsdhailfdjalghlkasdflhagjskajdf')
-      site.router
-    end.must_raise Nanoc3::Errors::UnknownRouter
   end
 
 end

@@ -3,10 +3,10 @@
 module Nanoc3
 
   # Nanoc3::Plugin is the superclass for all plugins, such as filters
-  # (Nanoc3::Filter), routers (Nanoc3::Router), data sources (Nanoc3::DataSource)
-  # and VCSes (Nanoc3::Extra::VCS). Each plugin has one or more unique
-  # identifiers, and several methods in this class provides functionality for
-  # finding plugins with given identifiers.
+  # (Nanoc3::Filter), data sources (Nanoc3::DataSource) and VCSes
+  # (Nanoc3::Extra::VCS). Each plugin has one or more unique identifiers,
+  # and several methods in this class provides functionality for finding
+  # plugins with given identifiers.
   class Plugin
 
     MAP = {}
@@ -16,7 +16,7 @@ module Nanoc3
       # Registers the given class as a plugin.
       #
       # +superclass+:: The superclass of the plugin. For example:
-      #                Nanoc::Filter, Nanoc::Router.
+      #                Nanoc::Filter, Nanoc::VCS.
       #
       # +class_or_name+:: The class to register. This can be a string, in
       #                   which case it will be automatically converted to a
