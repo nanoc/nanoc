@@ -17,7 +17,7 @@ module Nanoc3
       rep_name = params[:rep] || :default
 
       # Create rule
-      rule = ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+      rule = ItemRule.new(identifier_to_regex(identifier), rep_name, block)
       @compiler.item_compilation_rules << rule
     end
 
@@ -30,7 +30,7 @@ module Nanoc3
       rep_name = params[:rep] || :default
 
       # Create rule
-      rule = ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
+      rule = ItemRule.new(identifier_to_regex(identifier), rep_name, block)
       @compiler.item_mapping_rules << rule
     end
 
