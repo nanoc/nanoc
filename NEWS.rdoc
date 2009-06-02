@@ -7,6 +7,7 @@ New:
 * Filters can now optionally take arguments
 * create_page and create_layout methods in data sources
 * A new way to specify compilation/mapping rules using a Rules file
+* Coderay filter
 
 Changed:
 
