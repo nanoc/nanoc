@@ -75,11 +75,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.add_layout_compilation_rule('*', :erb)
+    compiler.layout_filter_mapping[/.*/] = :erb
 
     # Mock layout
     layout = MiniTest::Mock.new
-    layout.expect(:identifier, 'some_layout')
+    layout.expect(:identifier, '/some_layout/')
 
     # Check
     assert_equal(:erb, compiler.filter_name_for_layout(layout))
@@ -91,11 +91,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.add_layout_compilation_rule('*', :some_unknown_filter)
+    compiler.layout_filter_mapping[/.*/] = :some_unknown_filter
 
     # Mock layout
     layout = MiniTest::Mock.new
-    layout.expect(:identifier, 'some_layout')
+    layout.expect(:identifier, '/some_layout/')
 
     # Check
     assert_equal(:some_unknown_filter, compiler.filter_name_for_layout(layout))
@@ -107,26 +107,14 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.add_layout_compilation_rule('foo', :erb)
+    compiler.layout_filter_mapping[%r{^/foo/$}] = :erb
 
     # Mock layout
     layout = MiniTest::Mock.new
-    layout.expect(:identifier, 'bar')
+    layout.expect(:identifier, '/bar/')
 
     # Check
     assert_equal(nil, compiler.filter_name_for_layout(layout))
-  end
-
-  def test_add_item_compilation_rule
-    # TODO implement
-  end
-
-  def test_add_item_mapping_rule
-    # TODO implement
-  end
-
-  def test_add_layout_compilation_rule
-    # TODO implement
   end
 
   def test_compile_rep_with_not_outdated_rep
@@ -263,43 +251,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_raises Nanoc3::Errors::RecursiveCompilation do
       compiler.send :compile_reps, reps
     end
-  end
-
-  def test_identifier_to_regex_without_wildcards
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-
-    # Check
-    assert_equal(
-      /^foo$/,
-      compiler.instance_eval { identifier_to_regex('foo') }
-    )
-  end
-
-  def test_identifier_to_regex_with_one_wildcard
-    compiler = Nanoc3::Compiler.new(nil)
-
-    actual   = compiler.instance_eval { identifier_to_regex('foo/*/bar') }
-    expected = %r{^foo/(.*?)/bar$}
-
-    assert_equal(expected.to_s,      actual.to_s)
-    assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
-    assert_equal(expected.casefold?, actual.casefold?)
-    assert_equal(expected.options,   actual.options)
-  end
-
-  def test_identifier_to_regex_with_two_wildcards
-    compiler = Nanoc3::Compiler.new(nil)
-
-    actual   = compiler.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
-    expected = %r{^foo/(.*?)/bar/(.*?)/qux$}
-
-    assert_equal(expected.to_s,      actual.to_s)
-    assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
-    assert_equal(expected.casefold?, actual.casefold?)
-    assert_equal(expected.options,   actual.options)
   end
 
 end
