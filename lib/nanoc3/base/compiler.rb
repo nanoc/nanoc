@@ -19,6 +19,9 @@ module Nanoc3
     # This array willb e filled by Nanoc3::Site#load_data.
     attr_reader :item_mapping_rules
 
+    # The hash containing layout-to-filter mapping rules.
+    attr_reader :layout_filter_mapping
+
     # Creates a new compiler for the given site.
     def initialize(site)
       @site = site
@@ -79,46 +82,6 @@ module Nanoc3
         filter_name = fn if layout.identifier =~ lr
       end
       filter_name
-    end
-
-    # Adds an item compilation rule to the compiler.
-    #
-    # +identifier+:: The identifier for the item that should be compiled using
-    #                this rule. Can contain the '*' wildcard, which matches
-    #                zero or more characters.
-    #
-    # +rep_name+:: The name of the representation this compilation rule
-    #              applies to.
-    #
-    # +block+:: A Proc that should be used to compile the matching item reps.
-    def add_item_compilation_rule(identifier, rep_name, block)
-      @item_compilation_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
-    end
-
-    # Adds an item mapping rule to the compiler.
-    #
-    # +identifier+:: The identifier for the item that should be maped using
-    #                this rule. Can contain the '*' wildcard, which matches
-    #                zero or more characters.
-    #
-    # +rep_name+:: The name of the representation this mapping rule
-    #              applies to.
-    #
-    # +block+:: A Proc that should be used to map the matching item reps.
-    def add_item_mapping_rule(identifier, rep_name, block)
-      @item_mapping_rules << ItemRule.new(identifier_to_regex(identifier), rep_name, self, block)
-    end
-
-    # Adds a layout compilation rule to the compiler.
-    #
-    # +identifier+:: The identifier for the layout that should be compiled
-    #                using this rule. Can contain the '*' wildcard, which
-    #                matches zero or more characters.
-    #
-    # +filter_name+:: The name of the filter that should be used to compile
-    #                 the matching layouts.
-    def add_layout_compilation_rule(identifier, filter_name)
-      @layout_filter_mapping[identifier_to_regex(identifier)] = filter_name
     end
 
   private
@@ -188,16 +151,6 @@ module Nanoc3
 
       # Stop
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
-    end
-
-    # Converts the given identifier, which can contain the '*' wildcard, to a regex.
-    # For example, 'foo/*/bar' is transformed into /^foo\/(.*?)\/bar$/.
-    def identifier_to_regex(identifier)
-      if identifier.is_a? String
-        /^#{identifier.gsub('*', '(.*?)')}$/
-      else
-        identifier
-      end
     end
 
   end
