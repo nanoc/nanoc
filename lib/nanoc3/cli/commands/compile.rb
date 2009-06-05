@@ -75,53 +75,50 @@ module Nanoc3::CLI::Commands
         end
       end
 
-      # Compile site
-      begin
-        # Give feedback
-        puts "Compiling #{items.nil? ? 'site' : 'items'}..."
+      # Give feedback
+      puts "Compiling #{items.nil? ? 'site' : 'items'}..."
 
-        # Initialize profiling stuff
-        time_before = Time.now
-        @filter_times ||= {}
-        @times_stack  ||= []
-        setup_notifications
+      # Initialize profiling stuff
+      time_before = Time.now
+      @filter_times ||= {}
+      @times_stack  ||= []
+      setup_notifications
 
-        # Compile
-        @base.site.compiler.run(
-          items,
-          :force => options.has_key?(:all) || options.has_key?(:force)
-        )
+      # Compile
+      @base.site.compiler.run(
+        items,
+        :force => options.has_key?(:all) || options.has_key?(:force)
+      )
 
-        # Find reps
-        reps = @base.site.items.map  { |i| i.reps }.flatten
+      # Find reps
+      reps = @base.site.items.map  { |i| i.reps }.flatten
 
-        # Show skipped reps
-        reps.select { |r| !r.compiled? }.each do |rep|
-          duration = @rep_times[rep.raw_path]
-          Nanoc3::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
-        end
-
-        # Show non-written reps
-        reps.select { |r| r.compiled? && !r.written? }.each do |rep|
-          duration = @rep_times[rep.raw_path]
-          Nanoc3::CLI::Logger.instance.file(:low, :'not written', rep.raw_path, duration)
-        end
-
-        # Give general feedback
-        puts
-        puts "No items were modified." unless reps.any? { |r| r.modified? }
-        puts "#{items.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
-
-        if options.has_key?(:verbose)
-          print_state_feedback(reps)
-          print_profiling_feedback(reps)
-        end
-      rescue Interrupt => e
-        exit(1)
-      rescue Exception => e
-        print_error(e)
-        exit(1)
+      # Show skipped reps
+      reps.select { |r| !r.compiled? }.each do |rep|
+        duration = @rep_times[rep.raw_path]
+        Nanoc3::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
       end
+
+      # Show non-written reps
+      reps.select { |r| r.compiled? && !r.written? }.each do |rep|
+        duration = @rep_times[rep.raw_path]
+        Nanoc3::CLI::Logger.instance.file(:low, :'not written', rep.raw_path, duration)
+      end
+
+      # Give general feedback
+      puts
+      puts "No items were modified." unless reps.any? { |r| r.modified? }
+      puts "#{items.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
+
+      if options.has_key?(:verbose)
+        print_state_feedback(reps)
+        print_profiling_feedback(reps)
+      end
+    rescue Interrupt => e
+      exit(1)
+    rescue Exception => e
+      print_error(e)
+      exit(1)
     end
 
   private
