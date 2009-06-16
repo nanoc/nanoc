@@ -12,6 +12,7 @@ module Nanoc3::CLI
       add_command(self.help_command)
 
       # Add other commands
+      add_command(Nanoc3::CLI::Commands::Autocompile.new)
       add_command(Nanoc3::CLI::Commands::Compile.new)
       add_command(Nanoc3::CLI::Commands::CreateLayout.new)
       add_command(Nanoc3::CLI::Commands::CreateItem.new)
