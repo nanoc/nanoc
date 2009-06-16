@@ -54,8 +54,6 @@ module Nanoc3::CLI::Commands
     def run(options, arguments)
       require 'rack'
 
-      # FIXME mongrel doesn't output anything (no access log)
-
       # Make sure we are in a nanoc site directory
       @base.require_site
 
@@ -74,9 +72,16 @@ module Nanoc3::CLI::Commands
         end
       end
 
-      # Run autocompiler
+      # Build app
       autocompiler = Nanoc3::Extra::AutoCompiler.new(@base.site)
-      handler.run(autocompiler, options_for_rack)
+      app = Rack::Builder.new do
+        use Rack::CommonLogger, $stderr
+        use Rack::ShowExceptions
+        run autocompiler
+      end.to_app
+
+      # Run autocompiler
+      handler.run(app, options_for_rack)
     end
 
   end
