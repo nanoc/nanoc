@@ -15,9 +15,9 @@ module Nanoc3
     # array will be filled by Nanoc3::Site#load_data.
     attr_reader :item_compilation_rules
 
-    # The list of mapping rules that will be used to give all items a path.
+    # The list of routing rules that will be used to give all items a path.
     # This array willb e filled by Nanoc3::Site#load_data.
-    attr_reader :item_mapping_rules
+    attr_reader :item_routing_rules
 
     # The hash containing layout-to-filter mapping rules.
     attr_reader :layout_filter_mapping
@@ -29,7 +29,7 @@ module Nanoc3
       @stack = []
 
       @item_compilation_rules  = []
-      @item_mapping_rules      = []
+      @item_routing_rules      = []
       @layout_filter_mapping   = {}
     end
 
@@ -68,9 +68,9 @@ module Nanoc3
       end
     end
 
-    # Returns the first matching mapping rule for the given rep.
-    def mapping_rule_for(rep)
-      @item_mapping_rules.find do |rule|
+    # Returns the first matching routing rule for the given rep.
+    def routing_rule_for(rep)
+      @item_routing_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end

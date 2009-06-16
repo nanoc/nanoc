@@ -154,7 +154,7 @@ module Nanoc3
 
       setup_child_parent_links
       build_reps
-      map_reps
+      route_reps
     end
 
     # Fills each item's parent reference and children array with the
@@ -189,12 +189,12 @@ module Nanoc3
     end
 
     # Determines the paths of all item representations.
-    def map_reps
+    def route_reps
       reps = @items.map { |i| i.reps }.flatten
       reps.each do |rep|
         # Find matching rule
-        rule = self.compiler.mapping_rule_for(rep)
-        raise Nanoc3::Errors::NoMatchingMappingRuleFound.new(rep) if rule.nil?
+        rule = self.compiler.routing_rule_for(rep)
+        raise Nanoc3::Errors::NoMatchingRoutingRuleFound.new(rep) if rule.nil?
 
         # Get basic path by applying matching rule
         basic_path = rule.apply_to(rep)

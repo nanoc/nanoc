@@ -65,7 +65,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  def test_mapping_rule_for
+  def test_routing_rule_for
     # TODO implement
   end
 
