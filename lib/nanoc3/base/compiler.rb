@@ -16,7 +16,7 @@ module Nanoc3
     attr_reader :item_compilation_rules
 
     # The list of routing rules that will be used to give all items a path.
-    # This array willb e filled by Nanoc3::Site#load_data.
+    # This array will be filled by Nanoc3::Site#load_data.
     attr_reader :item_routing_rules
 
     # The hash containing layout-to-filter mapping rules.
