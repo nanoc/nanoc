@@ -33,10 +33,8 @@ module Nanoc3
   #   representations.
   #
   # The physical representation of a Nanoc3::Site is usually a directory that
-  # contains a configuration file, site data, and some rake tasks. However,
-  # different frontends may store data differently. For example, a web-based
-  # frontend would probably store the configuration and the site content in a
-  # database, and would not have rake tasks at all.
+  # contains a configuration file, site data, a rakefile, a rules file, etc.
+  # The way site data is stored depends on the data source.
   class Site
 
     # The default configuration for a site. A site's configuration overrides
@@ -159,6 +157,8 @@ module Nanoc3
       map_reps
     end
 
+    # Fills each item's parent reference and children array with the
+    # appropriate items.
     def setup_child_parent_links
       @items.each do |item|
         # Get parent
@@ -172,6 +172,8 @@ module Nanoc3
       end
     end
 
+    # Creates the representations of all items as defined by the compilation
+    # rules.
     def build_reps
       @items.each do |item|
         # Find matching rules
@@ -186,6 +188,7 @@ module Nanoc3
       end
     end
 
+    # Determines the paths of all item representations.
     def map_reps
       reps = @items.map { |i| i.reps }.flatten
       reps.each do |rep|
