@@ -34,7 +34,7 @@ module Nanoc3::CLI
     # Gets the site (Nanoc3::Site) in the current directory and loads its data.
     def site
       # Load site if possible
-      if File.file?('config.yaml') and @site.nil?
+      if File.file?('config.yaml') && (!self.instance_variable_defined?(:@site) || @site.nil?)
         begin
           @site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
         rescue Nanoc3::Errors::UnknownDataSource => e
