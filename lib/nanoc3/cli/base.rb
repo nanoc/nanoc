@@ -107,25 +107,20 @@ module Nanoc3::CLI
     end
 
     def handle_option(option)
-      # Handle version option
-      if option == :version
+      case option
+      when :version
         puts "nanoc #{Nanoc3::VERSION} (c) 2007-2009 Denis Defreyne."
         puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
         exit 0
-      # Handle verbose option
-      elsif option == :verbose
+      when :verbose
         Nanoc3::CLI::Logger.instance.level = :low
-      # Handle debug option
-      elsif option == :debug
+      when :debug
         $DEBUG = true
-      # Handle warn option
-      elsif option == :warn
+      when :warn
         $-w = true
-      # Handle no-color option
-      elsif option == :'no-color'
+      when :'no-color'
         Nanoc3::CLI::Logger.instance.color = false
-      # Handle help option
-      elsif option == :help
+      when :help
         show_help
         exit 0
       end
