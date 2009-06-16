@@ -244,22 +244,6 @@ EOS
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rakefile')
 
-      # Create autocompiler rackup file
-      File.open('autocompile.ru', 'w') do |io|
-        io.write "#!/usr/bin/env ruby\n"
-        io.write "\n"
-        io.write "# Load nanoc\n"
-        io.write "require 'nanoc3'\n"
-        io.write "\n"
-        io.write "# Create autocompiler\n"
-        io.write "site = Nanoc3::Site.new(YAML.load_file('config.yaml'))\n"
-        io.write "autocompiler = Nanoc3::Extra::AutoCompiler.new(site)\n"
-        io.write "\n"
-        io.write "# Run!\n"
-        io.write "run autocompiler\n"
-      end
-      Nanoc3::NotificationCenter.post(:file_created, 'autocompile.ru')
-
       # Create rules
       File.open('Rules', 'w') do |io|
         io.write "#!/usr/bin/env ruby\n"
