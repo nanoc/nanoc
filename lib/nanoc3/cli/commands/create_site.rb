@@ -165,8 +165,8 @@ EOS
 
     def long_desc
       'Create a new site at the given path. The site will use the ' +
-      'filesystem data source (but this can be changed later on). It will ' +
-      'also include a few stub rakefiles to make adding new tasks easier.'
+      'filesystem data source by default, but this ccan be changed by ' +
+      'using the --datasource commandline option.'
     end
 
     def usage
@@ -225,7 +225,7 @@ EOS
   protected
 
     # Creates a configuration file and a output directory for this site, as
-    # well as a rakefile and a 'tasks' directory because raking is fun.
+    # well as a rakefile that loads the standard nanoc tasks.
     def site_create_minimal(data_source)
       # Create output
       FileUtils.mkdir_p('output')
@@ -240,22 +240,9 @@ EOS
 
       # Create rakefile
       File.open('Rakefile', 'w') do |io|
-        io.write "Dir['tasks/**/*.rake'].sort.each { |rakefile| load rakefile }\n"
-        io.write "\n"
-        io.write "task :default do\n"
-        io.write "  puts 'This is an example rake task.'\n"
-        io.write "end\n"
+        io.write "require 'nanoc3/tasks'"
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rakefile')
-
-      # Create tasks
-      FileUtils.mkdir_p('tasks')
-      File.open('tasks/default.rake', 'w') do |io|
-        io.write "task :example do\n"
-        io.write "  puts 'This is an example rake task in tasks/default.rake.'\n"
-        io.write "end\n"
-      end
-      Nanoc3::NotificationCenter.post(:file_created, 'tasks/default.rake')
 
       # Create autocompiler rackup file
       File.open('autocompile.ru', 'w') do |io|
