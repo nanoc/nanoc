@@ -58,6 +58,8 @@ module Nanoc3::DataSources
   # 'rules.rb' at the top level of the site directory.
   class FilesystemCombined < Nanoc3::DataSource
 
+    include Nanoc3::DataSources::FilesystemCommon
+
     ########## VCSes ##########
 
     attr_accessor :vcs
@@ -125,32 +127,6 @@ module Nanoc3::DataSources
         # Build layout
         Nanoc3::Layout.new(content, meta, identifier, mtime)
       end.compact
-    end
-
-    def code
-      # Get files
-      filenames = Dir['lib/**/*.rb'].sort
-
-      # Read snippets
-      snippets = filenames.map do |fn|
-        { :filename => fn, :code => File.read(fn) }
-      end
-
-      # Get modification time
-      mtimes = filenames.map { |filename| File.stat(filename).mtime }
-      mtime = mtimes.inject { |memo, mtime| memo > mtime ? mtime : memo }
-
-      # Build code
-      Nanoc3::Code.new(snippets, mtime)
-    end
-
-    def rules
-      # Find rules file
-      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
-      raise Nanoc3::Errors::NoRulesFileFound.new if rules_filename.nil?
-
-      # Get contents
-      File.read(rules_filename)
     end
 
     ########## Creating data ##########
