@@ -254,7 +254,7 @@ EOS
         io.write "  rep.write\n"
         io.write "end\n"
         io.write "\n"
-        io.write "map '*' do |rep|\n"
+        io.write "route '*' do |rep|\n"
         io.write "  rep.item.identifier + 'index.html'\n"
         io.write "end\n"
         io.write "\n"

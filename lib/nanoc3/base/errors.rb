@@ -73,11 +73,11 @@ module Nanoc3
       end
     end
 
-    # Error that is raised when no mapping rule that can be applied to the
+    # Error that is raised when no routing rule that can be applied to the
     # current item can be found.
-    class NoMatchingMappingRuleFound < Generic
+    class NoMatchingRoutingRuleFound < Generic
       def initialize(rep)
-        super("No mapping rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
+        super("No routing rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
       end
     end
 

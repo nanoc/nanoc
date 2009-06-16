@@ -22,16 +22,16 @@ module Nanoc3
     end
 
     # TODO document
-    def map(identifier, params={}, &block)
+    def route(identifier, params={}, &block)
       # Require block
-      raise ArgumentError.new("#map requires a block") unless block_given?
+      raise ArgumentError.new("#route requires a block") unless block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
 
       # Create rule
       rule = ItemRule.new(identifier_to_regex(identifier), rep_name, block)
-      @compiler.item_mapping_rules << rule
+      @compiler.item_routing_rules << rule
     end
 
     # TODO document

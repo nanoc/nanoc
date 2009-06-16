@@ -10,7 +10,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  def test_map
+  def test_route
     # TODO implement
   end
 
