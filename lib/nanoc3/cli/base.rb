@@ -94,6 +94,14 @@ module Nanoc3::CLI
         {
           :long => 'verbose', :short => 'V', :argument => :forbidden,
           :desc => 'make nanoc output more detailed'
+        },
+        {
+          :long => 'debug', :short => 'd', :argument => :forbidden,
+          :desc => 'enable debugging (set $DEBUG to true)'
+        },
+        {
+          :long => 'warn', :short => 'w', :argument => :forbidden,
+          :desc => 'enable warnings'
         }
       ]
     end
@@ -107,6 +115,12 @@ module Nanoc3::CLI
       # Handle verbose option
       elsif option == :verbose
         Nanoc3::CLI::Logger.instance.level = :low
+      # Handle debug option
+      elsif option == :debug
+        $DEBUG = true
+      # Handle warn option
+      elsif option == :warn
+        $-w = true
       # Handle no-color option
       elsif option == :'no-color'
         Nanoc3::CLI::Logger.instance.color = false
