@@ -85,7 +85,7 @@ module Nanoc3
     #           loaded before, to circumvent caching issues.
     def load_data(force=false)
       # Don't load data twice
-      return if @data_loaded and !force
+      return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
 
       # Load all data
       data_source.loading do
