@@ -201,19 +201,23 @@ module Nanoc3::CLI::Commands
       $stderr.puts
 
       # Header
-      $stderr.puts '=== /!\ ERROR /!\ ==='
-      $stderr.puts "An exception occured while compiling the site. If you " +
-                   "think this is a bug in nanoc, please do report it at " +
-                   "<http://projects.stoneship.org/trac/nanoc/newticket> -- thanks!"
+      $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
+      $stderr.puts '| An exception occured while compiling the site. If you think |'
+      $stderr.puts '| this is a bug in nanoc, please do report it at              |'
+      $stderr.puts '| <http://projects.stoneship.org/trac/nanoc/newticket> --     |'
+      $stderr.puts '| thanks in advance!                                          |'
+      $stderr.puts '+-------------------------------------------------------------+'
 
       # Exception
       $stderr.puts
-      $stderr.puts 'Message:'
-      $stderr.puts "  #{error.class}: #{error.message}"
+      $stderr.puts '=== MESSAGE:'
+      $stderr.puts
+      $stderr.puts "#{error.class}: #{error.message}"
 
       # Compilation stack
       $stderr.puts
-      $stderr.puts 'Compilation stack:'
+      $stderr.puts '=== COMPILATION STACK:'
+      $stderr.puts
       if (@base.site.compiler.stack || []).empty?
         $stderr.puts "  (empty)"
       else
@@ -229,7 +233,8 @@ module Nanoc3::CLI::Commands
       # Backtrace
       require 'enumerator'
       $stderr.puts
-      $stderr.puts 'Backtrace:'
+      $stderr.puts '=== BACKTRACE:'
+      $stderr.puts
       $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
     end
 
