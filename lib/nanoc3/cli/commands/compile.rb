@@ -218,7 +218,7 @@ module Nanoc3::CLI::Commands
       $stderr.puts
       $stderr.puts '=== COMPILATION STACK:'
       $stderr.puts
-      if (@base.site.compiler.stack || []).empty?
+      if ((@base.site && @base.site.compiler.stack) || []).empty?
         $stderr.puts "  (empty)"
       else
         @base.site.compiler.stack.reverse.each do |obj|
