@@ -88,42 +88,39 @@ module Nanoc3
 
     # Compiles all item representations in the site.
     def compile_reps(reps)
-      @stack.clear
-
-      uncompiled_reps = reps.dup
+      active_reps     = reps.dup
+      inactive_reps   = []
       compiled_reps   = []
 
-      until uncompiled_reps.empty?
-        begin
-          # Find an uncompiled rep
-          rep = uncompiled_reps.shift
+      # Repeat as long as something is successfully compiled...
+      changed = true
+      until !changed
+        changed = false
 
-          # Check for recursive call
-          if @stack.include?(rep)
-            @stack.push(rep)
-            raise Nanoc3::Errors::RecursiveCompilation.new
-          end
-
-          # Compile it
-          @stack.push(rep)
-          compile_rep(rep)
-        rescue Nanoc3::Errors::UnmetDependency => e
-          # Ensure the dependency is recompiled as soon as possible
-          if e.rep
-            # Add rep as 2nd element of queue
-            uncompiled_reps.unshift(rep)
-
-            # Add dependency as 1st element of queue
-            uncompiled_reps.delete(e.rep)
-            uncompiled_reps.unshift(e.rep)
-          else
-            uncompiled_reps << rep
-          end
-        else
-          # Compilation was successful, so clear the stack and mark the rep as compiled
-          compiled_reps << rep
+        # Attempt to compile all active reps
+        until active_reps.empty?
           @stack.clear
+          begin
+            rep = active_reps.shift
+            @stack.push(rep)
+            compile_rep(rep)
+          rescue Nanoc3::Errors::UnmetDependency => e
+            inactive_reps << rep
+          else
+            changed = true
+            compiled_reps << rep
+          end
         end
+
+        # Retry
+        active_reps   = inactive_reps
+        inactive_reps = []
+      end
+
+      # Raise error if some active but non-compileable reps are left
+      if !active_reps.empty?
+        # FIXME as a workaround, check whether the reps param is complete
+        raise Nanoc3::Errors::RecursiveCompilation.new(active_reps)
       end
     end
 

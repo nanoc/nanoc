@@ -52,8 +52,8 @@ module Nanoc3
     # Error that is raised during site compilation when an item (directly or
     # indirectly) includes its own item content, leading to endless recursion.
     class RecursiveCompilation < Generic
-      def initialize
-        super("A recursive call to item content was detected. Items cannot (directly or indirectly) contain their own content.")
+      def initialize(reps)
+        super("The site cannot be compiled because the following items mutually depend on each other: #{reps.inspect}.")
       end
     end
 
