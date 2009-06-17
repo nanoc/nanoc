@@ -47,7 +47,7 @@ module Nanoc3::Extra
           file_server.call(env.merge('PATH_INFO' => modified_path))
         end
       end
-    rescue StandardError, LoadError, SyntaxError => e
+    rescue StandardError, ScriptError => e
       # Add compilation stack to env
       env['nanoc.stack'] = []
       @site.compiler.stack.reverse.each do |obj|

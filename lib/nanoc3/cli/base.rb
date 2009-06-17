@@ -40,7 +40,7 @@ module Nanoc3::CLI
         rescue Nanoc3::Errors::UnknownDataSource => e
           $stderr.puts "Unknown data source: #{e}"
           exit 1
-        rescue Exception => e
+        rescue StandardError, ScriptError => e
           # Header
           $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
           $stderr.puts '| An exception occured while loading the site. If you think   |'

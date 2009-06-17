@@ -116,7 +116,7 @@ module Nanoc3::CLI::Commands
       end
     rescue Interrupt => e
       exit(1)
-    rescue Exception => e
+    rescue StandardError, ScriptError => e
       print_error(e)
       exit(1)
     end
