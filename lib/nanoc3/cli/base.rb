@@ -41,16 +41,27 @@ module Nanoc3::CLI
           $stderr.puts "Unknown data source: #{e}"
           exit 1
         rescue Exception => e
-          $stderr.puts "ERROR: An exception occured while loading this site."
+          # Header
+          $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
+          $stderr.puts '| An exception occured while loading the site. If you think   |'
+          $stderr.puts '| this is a bug in nanoc, please do report it at              |'
+          $stderr.puts '| <http://projects.stoneship.org/trac/nanoc/newticket> --     |'
+          $stderr.puts '| thanks in advance!                                          |'
+          $stderr.puts '+-------------------------------------------------------------+'
+
+          # Exception
           $stderr.puts
-          $stderr.puts "If you think this is a bug in nanoc, please do report it at " +
-                       "<http://projects.stoneship.org/trac/nanoc/newticket> -- thanks!"
+          $stderr.puts '=== MESSAGE:'
           $stderr.puts
-          $stderr.puts 'Message:'
-          $stderr.puts '  ' + e.message
+          $stderr.puts "#{error.class}: #{error.message}"
+
+          # Backtrace
+          require 'enumerator'
           $stderr.puts
-          $stderr.puts 'Backtrace:'
-          $stderr.puts e.backtrace.map { |t| '  - ' + t }.join("\n")
+          $stderr.puts '=== BACKTRACE:'
+          $stderr.puts
+          $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
+
           exit 1
         end
       end
