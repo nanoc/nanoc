@@ -19,116 +19,118 @@ module Nanoc3::CLI::Commands
 <p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
 EOS
 
+    DEFAULT_STYLESHEET = <<EOS
+* {
+  margin: 0;
+  padding: 0;
+
+  font-family: Georgia, Palatino, Times, 'Times New Roman', sans-serif;
+}
+
+body {
+  background: #fff;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link,
+a:visited {
+  color: #f30;
+}
+
+a:hover {
+  color: #f90;
+}
+
+#main {
+  position: absolute;
+
+  top: 20px;
+  left: 280px;
+
+  width: 500px;
+}
+
+#main h1 {
+  font-size: 40px;
+  font-weight: normal;
+
+  line-height: 40px;
+
+  padding: 20px 0 20px 0;
+
+  letter-spacing: -1px;
+}
+
+#main p {
+  margin: 0 0 20px 0;
+  
+  font-size: 15px;
+  
+  line-height: 20px;
+}
+
+#main ul {
+  padding: 0 0 0 20px;
+}
+
+#main li {
+  margin: 0 0 20px 0;
+
+  list-style-type: square;
+
+  font-size: 15px;
+  
+  line-height: 20px;
+}
+
+#sidebar {
+  position: absolute;
+
+  top: 40px;
+  left: 20px;
+  width: 200px;
+
+  padding: 20px 20px 0 0;
+
+  border-right: 1px solid #ccc;
+
+  text-align: right;
+}
+
+#sidebar h2 {
+  text-transform: uppercase;
+
+  font-size: 13px;
+
+  color: #333;
+
+  letter-spacing: 1px;
+
+  line-height: 20px;
+}
+
+#sidebar ul {
+  list-style-type: none;
+
+  margin: 20px 0;
+}
+
+#sidebar li {
+  font-size: 14px;
+
+  line-height: 20px;
+}
+EOS
+
     DEFAULT_LAYOUT = <<EOS
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
-    <style type="text/css" media="screen">
-      * {
-        margin: 0;
-        padding: 0;
-      
-        font-family: Georgia, Palatino, Times, 'Times New Roman', sans-serif;
-      }
-      
-      body {
-        background: #fff;
-      }
-      
-      a {
-        text-decoration: none;
-      }
-      
-      a:link,
-      a:visited {
-        color: #f30;
-      }
-      
-      a:hover {
-        color: #f90;
-      }
-      
-      #main {
-        position: absolute;
-      
-        top: 20px;
-        left: 280px;
-      
-        width: 500px;
-      }
-      
-      #main h1 {
-        font-size: 40px;
-        font-weight: normal;
-      
-        line-height: 40px;
-      
-        padding: 20px 0 20px 0;
-      
-        letter-spacing: -1px;
-      }
-      
-      #main p {
-        margin: 0 0 20px 0;
-        
-        font-size: 15px;
-        
-        line-height: 20px;
-      }
-      
-      #main ul {
-        padding: 0 0 0 20px;
-      }
-      
-      #main li {
-        margin: 0 0 20px 0;
-      
-        list-style-type: square;
-      
-        font-size: 15px;
-        
-        line-height: 20px;
-      }
-      
-      #sidebar {
-        position: absolute;
-      
-        top: 40px;
-        left: 20px;
-        width: 200px;
-      
-        padding: 20px 20px 0 0;
-      
-        border-right: 1px solid #ccc;
-      
-        text-align: right;
-      }
-      
-      #sidebar h2 {
-        text-transform: uppercase;
-      
-        font-size: 13px;
-      
-        color: #333;
-      
-        letter-spacing: 1px;
-      
-        line-height: 20px;
-      }
-      
-      #sidebar ul {
-        list-style-type: none;
-      
-        margin: 20px 0;
-      }
-      
-      #sidebar li {
-        font-size: 14px;
-      
-        line-height: 20px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
   </head>
   <body>
     <div id="main">
@@ -294,6 +296,12 @@ EOS
         { :filter => 'erb' },
         '/default/'
       )
+
+      # Create stylesheet
+      FileUtils.mkdir_p('output')
+      File.open('output/style.css', 'w') do |io|
+        io.write DEFAULT_STYLESHEET
+      end
 
       # Create code
       FileUtils.mkdir_p('lib')
