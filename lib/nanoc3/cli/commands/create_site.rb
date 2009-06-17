@@ -12,8 +12,8 @@ module Nanoc3::CLI::Commands
 <p>To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
 
 <ul>
-  <li><strong>Change this page&#8217;s content</strong> by editing &#8220;content.html&#8221; file in the &#8220;content&#8221; directory. This is the actual page content, and therefore doesn&#8217;t include the header, sidebar or style information (those are part of the layout).</li>
-  <li><strong>Change the layout</strong>, which is the &#8220;default.txt&#8221; file in the &#8220;layouts/default&#8221; directory, and create something unique (and hopefully less bland).</li>
+  <li><p><strong>Change this page&#8217;s content</strong> by editing &#8220;content.html&#8221; file in the &#8220;content&#8221; directory. This is the actual page content, and therefore doesn&#8217;t include the header, sidebar or style information (those are part of the layout).</p></li>
+  <li><p><strong>Change the layout</strong>, which is the &#8220;default.txt&#8221; file in the &#8220;layouts/default&#8221; directory, and create something unique (and hopefully less bland).</p></li>
 </ul>
 
 <p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
@@ -47,7 +47,7 @@ a:hover {
 #main {
   position: absolute;
 
-  top: 20px;
+  top: 40px;
   left: 280px;
 
   width: 500px;
@@ -59,13 +59,11 @@ a:hover {
 
   line-height: 40px;
 
-  padding: 20px 0 20px 0;
-
   letter-spacing: -1px;
 }
 
 #main p {
-  margin: 0 0 20px 0;
+  margin: 20px 0;
   
   font-size: 15px;
   
@@ -73,12 +71,10 @@ a:hover {
 }
 
 #main ul {
-  padding: 0 0 0 20px;
+  margin: 20px;
 }
 
 #main li {
-  margin: 0 0 20px 0;
-
   list-style-type: square;
 
   font-size: 15px;
