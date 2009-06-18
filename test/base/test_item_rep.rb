@@ -296,7 +296,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layout.stubs(:content).returns(%[<%= "blah" %>])
 
     # Mock compiler
+    stack = mock
+    stack.expects(:push).with(layout)
+    stack.expects(:pop)
     compiler = mock
+    compiler.stubs(:stack).returns(stack)
     compiler.expects(:filter_name_for_layout).with(layout).returns(:erb)
 
     # Mock site
@@ -304,7 +308,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:items).returns([])
     site.stubs(:config).returns([])
     site.stubs(:layouts).returns([ layout ])
-    site.expects(:compiler).returns(compiler)
+    site.stubs(:compiler).returns(compiler)
 
     # Mock item
     item = mock
