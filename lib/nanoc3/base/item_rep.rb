@@ -182,9 +182,11 @@ module Nanoc3
       snapshot(:pre)
 
       # Layout
+      @item.site.compiler.stack.push(layout)
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
       @content[:last] = filter.run(layout.content)
       Nanoc3::NotificationCenter.post(:filtering_ended,   self, filter_name)
+      @item.site.compiler.stack.pop
 
       # Create "post" snapshot
       snapshot(:post)
