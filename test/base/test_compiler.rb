@@ -62,11 +62,49 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compilation_rule_for
-    # TODO implement
+    # Mock rules
+    rules = [ mock, mock, mock ]
+    rules[0].expects(:applicable_to?).returns(false)
+    rules[1].expects(:applicable_to?).returns(true)
+    rules[1].expects(:rep_name).returns('wrong')
+    rules[2].expects(:applicable_to?).returns(true)
+    rules[2].expects(:rep_name).returns('right')
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval { @item_compilation_rules = rules }
+
+    # Mock rep
+    rep = mock
+    rep.stubs(:name).returns('right')
+    item = mock
+    rep.stubs(:item).returns(item)
+
+    # Test
+    assert_equal rules[2], compiler.compilation_rule_for(rep)
   end
 
   def test_routing_rule_for
-    # TODO implement
+    # Mock rules
+    rules = [ mock, mock, mock ]
+    rules[0].expects(:applicable_to?).returns(false)
+    rules[1].expects(:applicable_to?).returns(true)
+    rules[1].expects(:rep_name).returns('wrong')
+    rules[2].expects(:applicable_to?).returns(true)
+    rules[2].expects(:rep_name).returns('right')
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval { @item_routing_rules = rules }
+
+    # Mock rep
+    rep = mock
+    rep.stubs(:name).returns('right')
+    item = mock
+    rep.stubs(:item).returns(item)
+
+    # Test
+    assert_equal rules[2], compiler.routing_rule_for(rep)
   end
 
   def test_filter_name_for_layout_with_existant_layout
