@@ -31,6 +31,9 @@ module Nanoc3
     # The child items of this item.
     attr_accessor :children
 
+    # A boolean indicating whether or not this item is outdated because of its dependencies are outdated.
+    attr_accessor :dependencies_outdated
+
     # Creates a new item.
     #
     # +content+:: The uncompiled item content.
@@ -63,6 +66,16 @@ module Nanoc3
     # Sets the attribute with the given key to the given value.
     def []=(key, value)
       @attributes[key] = value
+    end
+
+    # True if any reps are outdated; false otherwise.
+    def outdated?
+      @reps.any? { |r| r.outdated? }
+    end
+
+    # Alias for #dependencies_outdated.
+    def dependencies_outdated?
+      self.dependencies_outdated
     end
 
     def inspect
