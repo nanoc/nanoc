@@ -48,17 +48,39 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Get items and reps
+      # Get dependency tracker
+      dependency_tracker = Nanoc3::DependencyTracker.new(@site.items)
+      dependency_tracker.load_graph
+
+      # Get items and reps to compile
       items ||= @site.items
       reps = items.map { |i| i.reps }.flatten
 
-      # Mark all reps as outdated if necessary
       if params.has_key?(:force) && params[:force]
-        reps.each { |r| r.force_outdated = true }
+        # Mark all reps as outdated if necessary
+        items.each { |i| dependency_tracker.forget_dependencies_for(i) }
+        reps.each  { |r| r.force_outdated = true }
+      else
+        dependency_tracker.mark_outdated_items
       end
 
+      # # Debug
+      # graph = dependency_tracker.instance_eval { @graph }
+      # graph.each_pair do |key, values|
+      #   puts "#{key.inspect}:"
+      #   values.each do |value|
+      #     puts "    #{value.inspect}"
+      #   end
+      #   puts
+      # end
+
       # Compile reps
+      dependency_tracker.start
       compile_reps(reps)
+      dependency_tracker.stop
+
+      # Store dependencies
+      dependency_tracker.store_graph
     end
 
     # Returns the first matching compilation rule for the given rep.
@@ -133,20 +155,24 @@ module Nanoc3
     # +rep+:: The rep that is to be compiled.
     def compile_rep(rep)
       # Skip unless outdated
-      unless rep.outdated?
+      if !rep.outdated? && !rep.item.dependencies_outdated?
         Nanoc3::NotificationCenter.post(:compilation_started, rep)
+        Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
+        Nanoc3::NotificationCenter.post(:visit_ended,         rep.item)
         Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
         return
       end
 
       # Start
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
+      Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
       # Apply matching rule
       compilation_rule_for(rep).apply_to(rep)
       rep.compiled = true
 
       # Stop
+      Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
     end
 

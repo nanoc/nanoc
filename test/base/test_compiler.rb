@@ -46,6 +46,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create site
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
+    site.expects(:items).returns([ item ])
 
     # Set item's site
     item.site = site
@@ -157,8 +158,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_compile_rep_with_not_outdated_rep
     # Mock rep
+    item = mock
     rep = mock
     rep.expects(:outdated?).returns(false)
+    rep.stubs(:item).returns(item)
+    item.expects(:dependencies_outdated?).returns(false)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -169,9 +173,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_compile_rep_with_outdated_rep
     # Mock rep
+    item = mock
     rep = mock
     rep.expects(:outdated?).returns(true)
     rep.expects(:compiled=).with(true)
+    rep.stubs(:item).returns(item)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)

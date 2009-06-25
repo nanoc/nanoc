@@ -27,8 +27,7 @@ module Nanoc3
     # This item representation's unique name.
     attr_reader   :name
 
-    # Indicates whether this rep is forced to be dirty because of outdated
-    # dependencies.
+    # Indicates whether this rep is forced to be dirty by the user.
     attr_accessor :force_outdated
 
     # Indicates whether this rep's output file has changed the last time it
@@ -140,6 +139,9 @@ module Nanoc3
     # +snapshot+:: The snapshot from which the content should be fetched. To
     #              get the raw, uncompiled content, use +:raw+.
     def content_at_snapshot(snapshot=:pre)
+      Nanoc3::NotificationCenter.post(:visit_started, self.item)
+      Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
+
       raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
 
       @content[snapshot]
