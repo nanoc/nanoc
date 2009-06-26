@@ -7,6 +7,7 @@ module Nanoc3::Filters
   autoload 'ERB',             'nanoc3/filters/erb'
   autoload 'Erubis',          'nanoc3/filters/erubis'
   autoload 'Haml',            'nanoc3/filters/haml'
+  autoload 'Less',            'nanoc3/filters/less'
   autoload 'Markaby',         'nanoc3/filters/markaby'
   autoload 'Maruku',          'nanoc3/filters/maruku'
   autoload 'Rainpress',       'nanoc3/filters/rainpress'
@@ -22,6 +23,7 @@ module Nanoc3::Filters
   Nanoc3::Filter.register '::Nanoc3::Filters::ERB',             :erb
   Nanoc3::Filter.register '::Nanoc3::Filters::Erubis',          :erubis
   Nanoc3::Filter.register '::Nanoc3::Filters::Haml',            :haml
+  Nanoc3::Filter.register '::Nanoc3::Filters::Less',            :less
   Nanoc3::Filter.register '::Nanoc3::Filters::Markaby',         :markaby
   Nanoc3::Filter.register '::Nanoc3::Filters::Maruku',          :maruku
   Nanoc3::Filter.register '::Nanoc3::Filters::Rainpress',       :rainpress
