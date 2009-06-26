@@ -64,15 +64,19 @@ module Nanoc3
         dependency_tracker.mark_outdated_items
       end
 
-      # # Debug
-      # graph = dependency_tracker.instance_eval { @graph }
-      # graph.each_pair do |key, values|
-      #   puts "#{key.inspect}:"
-      #   values.each do |value|
-      #     puts "    #{value.inspect}"
-      #   end
-      #   puts
-      # end
+      # Debug
+      if $DEBUG
+        graph = dependency_tracker.instance_eval { @graph }
+        puts "DEPENDENCY GRAPH:"
+        graph.each_pair do |key, values|
+          puts "#{key.inspect} depends on:"
+          values.each do |value|
+            puts "    #{value.inspect}"
+          end
+          puts "    (nothing!)" if values.empty?
+          puts
+        end
+      end
 
       # Compile reps
       dependency_tracker.start
