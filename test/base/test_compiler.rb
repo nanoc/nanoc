@@ -36,7 +36,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert(File.directory?('foo/bar/baz'))
   end
 
-  def test_run_with_item_rep
+  def test_run_with_item
     # Create item
     item = Nanoc3::Item.new('item one', {}, '/item1/')
 
