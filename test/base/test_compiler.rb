@@ -7,27 +7,34 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   include Nanoc3::TestHelpers
 
   def test_run_without_item
-    # Create items
-    items = [
-      Nanoc3::Item.new('item one', {}, '/item1/'),
-      Nanoc3::Item.new('item two', {}, '/item2/')
-    ]
+    # Mock items
+    items = [ mock, mock ]
+    items[0]
+    items[1]
 
     # Mock reps
     items[0].stubs(:reps).returns([ mock ])
     items[1].stubs(:reps).returns([ mock, mock ])
+    reps = items[0].reps + items[1].reps
 
-    # Create site
+    # Mock site
     site = mock
     site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.stubs(:items).returns(items)
 
-    # Set items' site
-    items.each { |item| item.site = site }
-
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_rep).times(3)
+    compiler.expects(:compile_reps).with(reps)
+    compiler.expects(:mark_outdated_items).with(reps, false)
+    compiler.expects(:forget_dependencies_if_outdated).with(items)
+
+    # Mock dependency tracker
+    dependency_tracker = mock
+    dependency_tracker.expects(:load_graph)
+    dependency_tracker.expects(:store_graph)
+    dependency_tracker.expects(:start)
+    dependency_tracker.expects(:stop)
+    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
     compiler.run
@@ -37,26 +44,70 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_run_with_item
-    # Create item
-    item = Nanoc3::Item.new('item one', {}, '/item1/')
+    # Mock item
+    item = mock
 
     # Mock reps
-    item.expects(:reps).returns([ mock, mock, mock ])
+    item.stubs(:reps).returns([ mock, mock, mock ])
+    reps = item.reps
 
-    # Create site
+    # Mock site
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:items).returns([ item ])
-
-    # Set item's site
-    item.site = site
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_rep).times(3)
+    compiler.expects(:compile_reps).with(reps)
+    compiler.expects(:mark_outdated_items).with(reps, false)
+    compiler.expects(:forget_dependencies_if_outdated).with([ item ])
+
+    # Mock dependency tracker
+    dependency_tracker = mock
+    dependency_tracker.expects(:load_graph)
+    dependency_tracker.expects(:store_graph)
+    dependency_tracker.expects(:start)
+    dependency_tracker.expects(:stop)
+    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
     compiler.run([ item ])
+
+    # Make sure output dir is created
+    assert(File.directory?('foo/bar/baz'))
+  end
+
+  def test_run_with_force
+    # Mock items
+    items = [ mock, mock ]
+    items[0]
+    items[1]
+
+    # Mock reps
+    items[0].stubs(:reps).returns([ mock ])
+    items[1].stubs(:reps).returns([ mock, mock ])
+    reps = items[0].reps + items[1].reps
+
+    # Mock site
+    site = mock
+    site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
+    site.stubs(:items).returns(items)
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.expects(:compile_reps).with(reps)
+    compiler.expects(:mark_outdated_items).with(reps, true)
+    compiler.expects(:forget_dependencies_if_outdated).with(items)
+
+    # Mock dependency tracker
+    dependency_tracker = mock
+    dependency_tracker.expects(:load_graph)
+    dependency_tracker.expects(:store_graph)
+    dependency_tracker.expects(:start)
+    dependency_tracker.expects(:stop)
+    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
+
+    # Run
+    compiler.run(nil, :force => true)
 
     # Make sure output dir is created
     assert(File.directory?('foo/bar/baz'))
@@ -295,6 +346,52 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_raises Nanoc3::Errors::RecursiveCompilation do
       compiler.send :compile_reps, reps
     end
+  end
+
+  def test_mark_outdated_items_without_force
+    # Mock reps
+    reps = [ mock, mock ]
+
+    # Mock dependency tracker
+    dependency_tracker = mock
+    dependency_tracker.expects(:mark_outdated_items)
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.expects(:dependency_tracker).returns(dependency_tracker)
+    compiler.send :mark_outdated_items, reps, false
+  end
+
+  def test_mark_outdated_items_with_force
+    # Mock reps
+    reps = [ mock, mock ]
+    reps.each { |r| r.expects(:force_outdated=).with(true) }
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.send :mark_outdated_items, reps, true
+  end
+
+  def test_forget_dependencies_if_outdated
+    # Mock items
+    items = [ mock, mock, mock, mock ]
+    items[0].stubs(:outdated?).returns(false)
+    items[0].stubs(:dependencies_outdated?).returns(false)
+    items[1].stubs(:outdated?).returns(true)
+    items[1].stubs(:dependencies_outdated?).returns(false)
+    items[2].stubs(:outdated?).returns(false)
+    items[2].stubs(:dependencies_outdated?).returns(true)
+    items[3].stubs(:outdated?).returns(true)
+    items[3].stubs(:dependencies_outdated?).returns(true)
+
+    # Mock dependency tracker
+    dependency_tracker = mock
+    dependency_tracker.expects(:forget_dependencies_for).times(3)
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
+    compiler.send :forget_dependencies_if_outdated, items
   end
 
 end
