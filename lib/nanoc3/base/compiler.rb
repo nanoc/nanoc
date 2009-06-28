@@ -48,8 +48,7 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Get dependency tracker
-      dependency_tracker = Nanoc3::DependencyTracker.new(@site.items)
+      # Load dependencies
       dependency_tracker.load_graph
 
       # Get items and reps to compile
@@ -178,6 +177,11 @@ module Nanoc3
       # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
+    end
+
+    # Returns the dependency tracker for this site.
+    def dependency_tracker
+      @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
     end
 
   end
