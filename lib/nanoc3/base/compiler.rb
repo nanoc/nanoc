@@ -57,10 +57,16 @@ module Nanoc3
 
       if params.has_key?(:force) && params[:force]
         # Mark all reps as outdated if necessary
-        items.each { |i| dependency_tracker.forget_dependencies_for(i) }
         reps.each  { |r| r.force_outdated = true }
       else
         dependency_tracker.mark_outdated_items
+      end
+
+      # Forget dependencies for that which will be recompiled
+      items.each do |i|
+        if i.outdated? || i.dependencies_outdated?
+          dependency_tracker.forget_dependencies_for(i)
+        end
       end
 
       # Debug
