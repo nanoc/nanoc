@@ -6,9 +6,9 @@ module Nanoc3
   # representations.
   class Compiler
 
-    # The compilation stack. When the compiler begins compiling a rep, it will
-    # be placed on the stack; when it is done compiling the rep, it will be
-    # removed from the stack.
+    # The compilation stack. When the compiler begins compiling a rep or a
+    # layout, it will be placed on the stack; when it is done compiling the
+    # rep or layout, it will be removed from the stack.
     attr_reader :stack
 
     # The list of compilation rules that will be used to compile items. This
