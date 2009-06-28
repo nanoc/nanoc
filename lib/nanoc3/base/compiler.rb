@@ -48,40 +48,19 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Load dependencies
-      dependency_tracker.load_graph
-
       # Get items and reps to compile
       items ||= @site.items
       reps = items.map { |i| i.reps }.flatten
 
-      if params.has_key?(:force) && params[:force]
-        # Mark all reps as outdated if necessary
-        reps.each  { |r| r.force_outdated = true }
-      else
-        dependency_tracker.mark_outdated_items
-      end
+      # Load dependencies
+      dependency_tracker.load_graph
 
-      # Forget dependencies for that which will be recompiled
-      items.each do |i|
-        if i.outdated? || i.dependencies_outdated?
-          dependency_tracker.forget_dependencies_for(i)
-        end
-      end
+      # Prepare dependencies
+      mark_outdated_items(reps, params.has_key?(:force) && params[:force])
+      forget_dependencies_if_outdated(items)
 
       # Debug
-      if $DEBUG
-        graph = dependency_tracker.instance_eval { @graph }
-        puts "DEPENDENCY GRAPH:"
-        graph.each_pair do |key, values|
-          puts "#{key.inspect} depends on:"
-          values.each do |value|
-            puts "    #{value.inspect}"
-          end
-          puts "    (nothing!)" if values.empty?
-          puts
-        end
-      end
+      print_dependency_graph if $DEBUG
 
       # Compile reps
       dependency_tracker.start
@@ -188,6 +167,38 @@ module Nanoc3
     # Returns the dependency tracker for this site.
     def dependency_tracker
       @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
+    end
+
+    # Marks the necessary items as outdated.
+    def mark_outdated_items(reps, force)
+      if force
+        reps.each { |r| r.force_outdated = true }
+      else
+        dependency_tracker.mark_outdated_items
+      end
+    end
+
+    # Clears the list of dependencies for items that will be recompiled.
+    def forget_dependencies_if_outdated(items)
+      items.each do |i|
+        if i.outdated? || i.dependencies_outdated?
+          dependency_tracker.forget_dependencies_for(i)
+        end
+      end
+    end
+
+    # Prints the dependency graph.
+    def print_dependency_graph
+      graph = dependency_tracker.instance_eval { @graph }
+      puts "DEPENDENCY GRAPH:"
+      graph.each_pair do |key, values|
+        puts "#{key.inspect} depends on:"
+        values.each do |value|
+          puts "    #{value.inspect}"
+        end
+        puts "    (nothing!)" if values.empty?
+        puts
+      end
     end
 
   end
