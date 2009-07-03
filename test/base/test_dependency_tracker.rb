@@ -209,6 +209,64 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert_equal [],                tracker.direct_dependencies_for(items[3])
   end
 
+  def test_store_graph_with_nils_in_dst
+    # Mock items
+    items = [ mock, mock, mock ]
+    items[0].stubs(:identifier).returns('/aaa/')
+    items[1].stubs(:identifier).returns('/bbb/')
+    items[2].stubs(:identifier).returns('/ccc/')
+
+    # Create
+    tracker = Nanoc3::DependencyTracker.new(items)
+
+    # Record some dependencies
+    tracker.record_dependency(items[0], items[1])
+    tracker.record_dependency(items[1], nil)
+
+    # Store
+    tracker.store_graph
+    assert File.file?(tracker.filename)
+
+    # Re-create
+    tracker = Nanoc3::DependencyTracker.new(items)
+
+    # Load
+    tracker.load_graph
+
+    # Check loaded graph
+    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ ],          tracker.direct_dependencies_for(items[1])
+  end
+
+  def test_store_graph_with_nils_in_src
+    # Mock items
+    items = [ mock, mock, mock ]
+    items[0].stubs(:identifier).returns('/aaa/')
+    items[1].stubs(:identifier).returns('/bbb/')
+    items[2].stubs(:identifier).returns('/ccc/')
+
+    # Create
+    tracker = Nanoc3::DependencyTracker.new(items)
+
+    # Record some dependencies
+    tracker.record_dependency(items[0], items[1])
+    tracker.record_dependency(nil,      items[2])
+
+    # Store
+    tracker.store_graph
+    assert File.file?(tracker.filename)
+
+    # Re-create
+    tracker = Nanoc3::DependencyTracker.new(items)
+
+    # Load
+    tracker.load_graph
+
+    # Check loaded graph
+    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ ],          tracker.direct_dependencies_for(items[1])
+  end
+
   def test_load_graph_without_file
     # Mock items
     item_0 = Object.new
