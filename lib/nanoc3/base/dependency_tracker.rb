@@ -104,7 +104,13 @@ module Nanoc3
       # Convert graph of items into graph of item identifiers
       new_graph = {}
       @graph.each_pair do |second_item, first_items|
-        new_graph[second_item.identifier] = first_items.map { |f| f.identifier }
+        # Don't store nil because that would be pointless (if first_item is
+        # outdated, something that does not exist is also outdated… makes no
+        # sense).
+        # FIXME can second_item really be nil?
+        next if second_item.nil?
+
+        new_graph[second_item.identifier] = first_items.map { |f| f && f.identifier }.compact
       end
 
       # Store dependencies
