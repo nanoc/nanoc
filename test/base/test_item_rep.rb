@@ -297,6 +297,46 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     FileUtils.rm_f('output.html')
   end
 
+  def test_outdated_if_config_mtime_missing
+    # Mock item
+    item = MiniTest::Mock.new
+    item.expect(:mtime, Time.now-500)
+    item.expect(:[], false, [ :skip_output ])
+    item.expect(:content, "blah blah blah")
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:mtime).returns(Time.now-800)
+
+    # Mock code
+    code = mock
+    code.stubs(:mtime).returns(Time.now-900)
+
+    # Mock config
+    config = mock
+    config.stubs(:mtime).returns(nil)
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code).returns(code)
+    site.stubs(:config).returns(config)
+    item.stubs(:site).returns(site)
+
+    # Create output file
+    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
+    File.utime(Time.now-200, Time.now-300, 'output.html')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.instance_eval { @raw_path = 'output.html' }
+
+    # Test
+    assert(rep.outdated?)
+  ensure
+    FileUtils.rm_f('output.html')
+  end
+
   def test_content_at_snapshot_with_valid_snapshot
     # TODO implement
   end
