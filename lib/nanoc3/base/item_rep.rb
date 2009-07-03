@@ -118,6 +118,9 @@ module Nanoc3
       return true if @item.site.code.mtime.nil?
       return true if !@item[:skip_output] && @item.site.code.mtime > compiled_mtime
 
+      # Outdated if config outdated
+      return true if @item.site.config.mtime > compiled_mtime
+
       return false
     end
 
