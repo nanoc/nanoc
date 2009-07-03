@@ -131,7 +131,6 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
     tracker.record_dependency(items[1], items[2])
     tracker.record_dependency(items[1], items[3])
-    tracker.send :complete_graph
 
     # Store
     tracker.store_graph
@@ -166,7 +165,6 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
     tracker.record_dependency(items[1], items[2])
     tracker.record_dependency(items[1], items[3])
-    tracker.send :complete_graph
 
     # Store
     tracker.store_graph
@@ -193,7 +191,6 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(old_items[0], old_items[1])
     tracker.record_dependency(old_items[1], old_items[2])
     tracker.record_dependency(old_items[1], old_items[3])
-    tracker.send :complete_graph
 
     # Store
     tracker.store_graph
