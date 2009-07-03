@@ -166,6 +166,9 @@ module Nanoc3
              first_item.outdated? ||           # item itself is outdated
              first_item.dependencies_outdated? # item is outdated because of its dependencies
             second_items.each do |item|
+              # Ignore this item
+              next if item.nil?
+
               something_changed = true if !item.dependencies_outdated?
               item.dependencies_outdated = true
             end
