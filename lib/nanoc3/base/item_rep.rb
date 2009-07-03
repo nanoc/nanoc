@@ -100,6 +100,8 @@ module Nanoc3
       # Outdated if the dependency tracker says so
       return true if @force_outdated
 
+      # FIXME get rid of this skip_output stuff!
+
       # Outdated if compiled file doesn't exist
       return true if !File.file?(raw_path) && !@item[:skip_output]
 
@@ -120,7 +122,7 @@ module Nanoc3
 
       # Outdated if config outdated
       return true if @item.site.config.mtime.nil?
-      return true if @item.site.config.mtime > compiled_mtime
+      return true if !@item[:skip_output] && @item.site.config.mtime > compiled_mtime
 
       return false
     end
