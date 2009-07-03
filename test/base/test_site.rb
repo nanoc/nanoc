@@ -61,7 +61,8 @@ describe 'Nanoc3::Site#initialize' do
 
   it 'should merge default config' do
     site = Nanoc3::Site.new(:foo => 'bar')
-    site.config.must_equal Nanoc3::Site::DEFAULT_CONFIG.merge(:foo => 'bar')
+    site.config[:foo].must_equal 'bar'
+    site.config[:output_dir].must_equal 'output'
   end
 
   it 'should not raise under normal circumstances' do
