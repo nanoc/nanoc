@@ -37,24 +37,14 @@ module Nanoc3
   # The way site data is stored depends on the data source.
   class Site
 
-    # The default configuration for a site. A site's configuration overrides
-    # these options: when a Nanoc3::Site is created with a configuration that
-    # lacks some options, the default value will be taken from
-    # +DEFAULT_CONFIG+.
-    DEFAULT_CONFIG = {
-      :output_dir       => 'output',
-      :data_source      => 'filesystem',
-      :index_filenames  => [ 'index.html' ]
-    }
-
     attr_reader :config
 
     # Returns a Nanoc3::Site object for the site specified by the given
-    # configuration hash +config+.
+    # configuration hash +config_hash+.
     #
-    # +config+:: A hash containing the site configuration.
-    def initialize(config)
-      @config = DEFAULT_CONFIG.merge(config.symbolize_keys)
+    # +config_hash+:: A hash containing the site configuration.
+    def initialize(config_hash)
+      @config = Nanoc3::Config.new(config_hash)
     end
 
     # Returns the compiler for this site. Will create a new compiler if none

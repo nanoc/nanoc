@@ -7,6 +7,7 @@ module Nanoc3
   autoload 'Code',               'nanoc3/base/code'
   autoload 'Compiler',           'nanoc3/base/compiler'
   autoload 'CompilerDSL',        'nanoc3/base/compiler_dsl'
+  autoload 'Config',             'nanoc3/base/config'
   autoload 'DataSource',         'nanoc3/base/data_source'
   autoload 'DependencyTracker',  'nanoc3/base/dependency_tracker'
   autoload 'Errors',             'nanoc3/base/errors'
