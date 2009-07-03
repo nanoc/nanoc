@@ -101,7 +101,7 @@ module Nanoc3
       # Complete the graph
       complete_graph
 
-      # Convert graph into something more storeable
+      # Convert graph of items into graph of item identifiers
       new_graph = {}
       @graph.each_pair do |second_item, first_items|
         new_graph[second_item.identifier] = first_items.map { |f| f.identifier }
@@ -126,10 +126,8 @@ module Nanoc3
       # Load dependencies
       store = PStore.new(self.filename)
       store.transaction do
-        old_graph = store[:dependencies]
-
-        # Convert graph into something more usable
-        old_graph.each_pair do |second_item_identifier, first_item_identifiers|
+        # Convert graph of identifiers into graph of items
+        store[:dependencies].each_pair do |second_item_identifier, first_item_identifiers|
           # Convert second and first item identifiers into items
           second_item = item_with_identifier(second_item_identifier)
           first_items = first_item_identifiers.map { |p| item_with_identifier(p) }
