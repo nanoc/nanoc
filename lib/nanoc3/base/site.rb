@@ -43,8 +43,8 @@ module Nanoc3
     # configuration hash +config_hash+.
     #
     # +config_hash+:: A hash containing the site configuration.
-    def initialize(config_hash)
-      @config = Nanoc3::Config.new(config_hash)
+    def initialize(config_hash, config_mtime=nil)
+      @config = Nanoc3::Config.new(config_hash, config_mtime)
     end
 
     # Returns the compiler for this site. Will create a new compiler if none
