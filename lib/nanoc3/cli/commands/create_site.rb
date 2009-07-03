@@ -265,7 +265,7 @@ EOS
     # this data source to work.
     def site_setup
       # Get site
-      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'), File.stat('config.yaml').mtime)
 
       # Set up data source
       site.data_source.loading do
@@ -277,7 +277,7 @@ EOS
     # default layout, and so on.
     def site_populate
       # Get site
-      site = Nanoc3::Site.new(YAML.load_file('config.yaml'))
+      site = Nanoc3::Site.new(YAML.load_file('config.yaml'), File.stat('config.yaml').mtime)
 
       # Create item
       site.data_source.create_item(
