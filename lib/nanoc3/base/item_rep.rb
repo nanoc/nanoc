@@ -123,6 +123,10 @@ module Nanoc3
       return true if @item.site.config.mtime.nil?
       return true if @item.site.config.mtime > compiled_mtime
 
+      # Outdated if rules outdated
+      return true if @item.site.rules_mtime.nil?
+      return true if @item.site.rules_mtime > compiled_mtime
+
       return false
     end
 
