@@ -13,7 +13,7 @@ module Nanoc3::DataSources
   # example:
   #
   #   -----
-  #   filters_pre: [ 'redcloth' ]
+  #   title: "Moo!"
   #   -----
   #   h1. Hello!
   #
