@@ -159,6 +159,9 @@ module Nanoc3
       compilation_rule_for(rep).apply_to(rep)
       rep.compiled = true
 
+      # Write if rep is routed
+      rep.write unless rep.raw_path.nil?
+
       # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)

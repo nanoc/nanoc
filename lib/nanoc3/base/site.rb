@@ -188,6 +188,7 @@ module Nanoc3
 
         # Get basic path by applying matching rule
         basic_path = rule.apply_to(rep)
+        next if basic_path.nil?
 
         # Get raw path by prepending output directory
         rep.raw_path = self.config[:output_dir] + basic_path

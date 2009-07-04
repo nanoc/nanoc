@@ -289,6 +289,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[4].stubs(:[]).with(:excerpt).returns(nil)
       item_rep = mock
       item_rep.stubs(:path).returns('/asdf/fdsa/')
+      item_rep.stubs(:raw_path).returns('output/asdf/fdsa/index.html')
       @items[4].stubs(:reps).returns([ item_rep ])
 
       # Create feed item
@@ -319,6 +320,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         article.stubs(:[]).with(:excerpt).returns(nil)
         item_rep = mock
         item_rep.stubs(:path).returns("/articles/#{i}/")
+        item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
         article.stubs(:reps).returns([ item_rep ])
       end
 
@@ -351,6 +353,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:excerpt).returns(nil)
       item_rep = mock
       item_rep.stubs(:path).returns('/item1/')
+      item_rep.stubs(:raw_path).returns('output/item1/index.html')
       @items[0].stubs(:reps).returns([ item_rep ])
 
       # Create feed item
@@ -379,6 +382,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:content).returns('some content')
       item_rep = mock
       item_rep.stubs(:path).returns('/item1/')
+      item_rep.stubs(:raw_path).returns('output/item1/index.html')
       @items[0].stubs(:reps).returns([ item_rep ])
 
       # Create feed item
@@ -458,7 +462,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @item = nil
   end
 
-  def test_atom_tag_for
+  def test_atom_tag_for_with_path
     # Create feed item
     @item = mock
     @item.expects(:[]).with(:base_url).returns('http://example.com')
@@ -474,6 +478,25 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
+  end
+
+  def test_atom_tag_for_without_path
+    # Create feed item
+    @item = mock
+    @item.expects(:[]).with(:base_url).returns('http://example.com')
+
+    # Create article reps
+    item_rep = mock
+    item_rep.expects(:path).returns(nil)
+
+    # Create article
+    item = mock
+    item.expects(:[]).with(:created_at).returns('2008-05-19')
+    item.expects(:reps).returns([ item_rep ])
+    item.expects(:identifier).returns('/baz/qux/')
+
+    # Check
+    assert_equal('tag:example.com,2008-05-19:/baz/qux/', atom_tag_for(item))
   end
 
 end

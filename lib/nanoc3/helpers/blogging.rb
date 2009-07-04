@@ -209,7 +209,7 @@ module Nanoc3::Helpers
       hostname        = @item[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
       formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + item.reps[0].path
+      'tag:' + hostname + ',' + formatted_date + ':' + (item.reps[0].path || item.identifier)
     end
 
   end

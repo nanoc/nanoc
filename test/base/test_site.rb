@@ -19,7 +19,7 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
     File.open('Rules', 'w') do |io|
       io.write <<-EOF
 compile '*' do |rep|
-  rep.write
+  # ... do nothing ...
 end
 EOF
     end

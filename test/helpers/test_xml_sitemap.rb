@@ -15,13 +15,14 @@ class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
       # Create item 0
       @items[0].expects(:[]).with(:is_hidden).returns(false)
-      @items[0].expects(:[]).with(:skip_output).returns(false)
       @items[0].expects(:mtime).times(2).returns(nil)
       @items[0].expects(:[]).times(2).with(:changefreq).returns(nil)
       @items[0].expects(:[]).times(2).with(:priority).returns(nil)
       item_reps = [ mock, mock ]
       item_reps[0].expects(:path).returns('/kkk/')
+      item_reps[0].expects(:raw_path).returns('output/kkk/index.html')
       item_reps[1].expects(:path).returns('/lll/')
+      item_reps[1].expects(:raw_path).returns('output/lll/index.html')
       @items[0].expects(:reps).returns(item_reps)
 
       # Create item 1
@@ -29,18 +30,21 @@ class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
       # Create item 2
       @items[2].expects(:[]).with(:is_hidden).returns(false)
-      @items[2].expects(:[]).with(:skip_output).returns(false)
       @items[2].expects(:mtime).times(4).returns(Time.parse('12/07/2004'))
       @items[2].expects(:[]).with(:changefreq).times(4).returns('daily')
       @items[2].expects(:[]).with(:priority).times(4).returns(0.5)
       item_reps = [ mock, mock ]
       item_reps[0].expects(:path).returns('/aaa/')
+      item_reps[0].expects(:raw_path).returns('output/aaa/index.html')
       item_reps[1].expects(:path).returns('/bbb/')
+      item_reps[1].expects(:raw_path).returns('output/bbb/index.html')
       @items[2].expects(:reps).returns(item_reps)
 
       # Create item 3
       @items[3].expects(:[]).with(:is_hidden).returns(false)
-      @items[3].expects(:[]).with(:skip_output).returns(true)
+      item_rep = mock
+      item_rep.expects(:raw_path).returns(nil)
+      @items[3].expects(:reps).returns([ item_rep ])
 
       # Create sitemap item
       @item = mock
