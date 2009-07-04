@@ -6,6 +6,23 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
+  def test_initialize_with_dir_without_config_yaml
+    assert_raises(Errno::ENOENT) do
+      site = Nanoc3::Site.new('.')
+    end
+  end
+
+  def test_initialize_with_dir_with_config_yaml
+    File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
+    site = Nanoc3::Site.new('.')
+    assert_equal 'public_html', site.config[:output_dir]
+  end
+
+  def test_initialize_with_config_hash
+    site = Nanoc3::Site.new(:foo => 'bar')
+    assert_equal 'bar', site.config[:foo]
+  end
+
   def test_load_rules_with_existing_rules_file
     # Mock DSL
     dsl = mock

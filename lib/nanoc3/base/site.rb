@@ -39,12 +39,21 @@ module Nanoc3
 
     attr_reader :config
 
-    # Returns a Nanoc3::Site object for the site specified by the given
-    # configuration hash +config_hash+.
+    # Creates a Nanoc3::Site object for the site specified by the given
+    # +dir_or_config_hash+ argument.
     #
-    # +config_hash+:: A hash containing the site configuration.
-    def initialize(config_hash, config_mtime=nil)
-      @config = Nanoc3::Config.new(config_hash, config_mtime)
+    # +dir_or_config_hash+:: If a string, contains the path to the site
+    #                        directory; if a hash, contains the site
+    #                        configuration.
+    def initialize(dir_or_config_hash)
+      if dir_or_config_hash.is_a? String
+        # Read config from config.yaml in given dir
+        config_path = File.join(dir_or_config_hash, 'config.yaml')
+        @config = Nanoc3::Config.new(YAML.load_file(config_path), File.stat(config_path).mtime)
+      else
+        # Use passed config hash
+        @config = Nanoc3::Config.new(dir_or_config_hash)
+      end
     end
 
     # Returns the compiler for this site. Will create a new compiler if none

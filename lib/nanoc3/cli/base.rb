@@ -36,7 +36,7 @@ module Nanoc3::CLI
       # Load site if possible
       if File.file?('config.yaml') && (!self.instance_variable_defined?(:@site) || @site.nil?)
         begin
-          @site = Nanoc3::Site.new(YAML.load_file('config.yaml'), File.stat('config.yaml').mtime)
+          @site = Nanoc3::Site.new('.')
         rescue Nanoc3::Errors::UnknownDataSource => e
           $stderr.puts "Unknown data source: #{e}"
           exit 1
