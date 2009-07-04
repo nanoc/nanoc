@@ -14,7 +14,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -54,7 +53,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, nil)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -89,7 +87,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -125,7 +122,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -156,7 +152,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-100)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -191,7 +186,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -226,7 +220,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -261,7 +254,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts
@@ -301,7 +293,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:[], false, [ :skip_output ])
     item.expect(:content, "blah blah blah")
 
     # Mock layouts

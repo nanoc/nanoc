@@ -48,8 +48,8 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
         # Add item
-        @items.reject { |i| i[:is_hidden] || i[:skip_output] }.each do |item|
-          item.reps.each do |rep|
+        @items.reject { |i| i[:is_hidden] }.each do |item|
+          item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
               xml.lastmod     item.mtime.to_iso8601_date unless item.mtime.nil?

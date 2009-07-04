@@ -22,11 +22,10 @@ module Nanoc3
     #
     #   compile '/foo/*' do |rep|
     #     rep.filter :erb
-    #     rep.write
     #   end
     #   
     #   compile '/bar/*', :rep => 'raw' do |rep|
-    #     rep.write
+    #     # do nothing
     #   end
     def compile(identifier, params={}, &block)
       # Require block
