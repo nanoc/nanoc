@@ -24,15 +24,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     code = mock
     code.stubs(:mtime).returns(Time.now-900)
 
-    # Mock config
-    config = mock
-    config.stubs(:mtime).returns(Time.now-1100)
-
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code).returns(code)
-    site.stubs(:config).returns(config)
+    site.stubs(:config_mtime).returns(Time.now-1100)
     site.stubs(:rules_mtime).returns(Time.now-1200)
     item.stubs(:site).returns(site)
 
@@ -265,15 +261,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     code = mock
     code.stubs(:mtime).returns(Time.now-900)
 
-    # Mock config
-    config = mock
-    config.stubs(:mtime).returns(Time.now-100)
-
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code).returns(code)
-    site.stubs(:config).returns(config)
+    site.stubs(:config_mtime).returns(Time.now-100)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -304,15 +296,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     code = mock
     code.stubs(:mtime).returns(Time.now-900)
 
-    # Mock config
-    config = mock
-    config.stubs(:mtime).returns(nil)
-
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code).returns(code)
-    site.stubs(:config).returns(config)
+    site.stubs(:config_mtime).returns(nil)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -343,15 +331,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     code = mock
     code.stubs(:mtime).returns(Time.now-900)
 
-    # Mock config
-    config = mock
-    config.stubs(:mtime).returns(Time.now-1100)
-
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code).returns(code)
-    site.stubs(:config).returns(config)
+    site.stubs(:config_mtime).returns(Time.now-1100)
     site.stubs(:rules_mtime).returns(Time.now-100)
     item.stubs(:site).returns(site)
 

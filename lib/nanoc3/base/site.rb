@@ -37,8 +37,21 @@ module Nanoc3
   # The way site data is stored depends on the data source.
   class Site
 
+    # The default configuration for a site. A site's configuration overrides
+    # these options: when a Nanoc3::Site is created with a configuration that
+    # lacks some options, the default value will be taken from
+    # +DEFAULT_CONFIG+.
+    DEFAULT_CONFIG = {
+      :output_dir       => 'output',
+      :data_source      => 'filesystem',
+      :index_filenames  => [ 'index.html' ]
+    }
+
     # The site configuration.
     attr_reader :config
+
+    # The timestamp when the site configuration was last modified.
+    attr_reader :config_mtime
 
     # The timestamp when the rules were last modified.
     attr_reader :rules_mtime
@@ -53,10 +66,12 @@ module Nanoc3
       if dir_or_config_hash.is_a? String
         # Read config from config.yaml in given dir
         config_path = File.join(dir_or_config_hash, 'config.yaml')
-        @config = Nanoc3::Config.new(YAML.load_file(config_path), File.stat(config_path).mtime)
+        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
+        @config_mtime = File.stat(config_path).mtime
       else
         # Use passed config hash
-        @config = Nanoc3::Config.new(dir_or_config_hash)
+        @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
+        @config_mtime = nil
       end
     end
 
