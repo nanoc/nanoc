@@ -10,7 +10,7 @@ module Nanoc3::Tasks::Deploy
     def initialize
       # Get site
       error 'No site configuration found' unless File.file?('config.yaml')
-      @site = Nanoc3::Site.new(YAML.load_file('config.yaml'), File.stat('config.yaml').mtime)
+      @site = Nanoc3::Site.new('.')
     end
 
     # Runs the task. Possible params:
