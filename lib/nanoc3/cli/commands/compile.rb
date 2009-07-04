@@ -95,6 +95,7 @@ module Nanoc3::CLI::Commands
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
+        next if rep.raw_path.nil?
         duration = @rep_times[rep.raw_path]
         Nanoc3::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
       end
