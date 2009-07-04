@@ -29,6 +29,8 @@ Removed:
   relativize_paths_in_css instead
 * Fixed bug which could cause nanoc to eat massive amounts of memory when an
   exception occurs
+* Fixed bug which would cause nanoc to complain about the open file limit
+  being reached when using a large amount of assets
 
 == 2.2.1
 
