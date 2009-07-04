@@ -37,7 +37,11 @@ module Nanoc3
   # The way site data is stored depends on the data source.
   class Site
 
+    # The site configuration.
     attr_reader :config
+
+    # The timestamp when the rules were last modified.
+    attr_reader :rules_mtime
 
     # Creates a Nanoc3::Site object for the site specified by the given
     # +dir_or_config_hash+ argument.
@@ -139,7 +143,7 @@ module Nanoc3
     # Loads this site's rules.
     def load_rules
       # Get rules
-      @rules = data_source.rules
+      @rules, @rules_mtime = data_source.rules
 
       # Load DSL
       dsl.instance_eval(@rules)

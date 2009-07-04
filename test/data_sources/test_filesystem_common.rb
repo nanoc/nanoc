@@ -40,7 +40,8 @@ class Nanoc3::DataSources::FilesystemCommonTest < MiniTest::Unit::TestCase
         File.open(filename, 'w') { |io| io.write("This is #{filename}.") }
         
         # Attempt to read it
-        assert_equal "This is #{filename}.", data_source.rules
+        assert_equal "This is #{filename}.", data_source.rules[0]
+        assert_equal File.stat(filename).mtime, data_source.rules[1]
       ensure
         FileUtils.rm(filename)
       end

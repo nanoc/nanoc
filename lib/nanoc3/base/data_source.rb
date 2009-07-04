@@ -123,7 +123,8 @@ module Nanoc3
       not_implemented('code')
     end
 
-    # Returns the rules for compiling the site as a string containing code.
+    # Returns an array containing two elements: the rules for compiling the
+    # site, and the mtime of the rules.
     #
     # Subclasses must implement this method.
     def rules
