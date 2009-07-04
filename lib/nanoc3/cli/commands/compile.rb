@@ -99,12 +99,6 @@ module Nanoc3::CLI::Commands
         Nanoc3::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
       end
 
-      # Show non-written reps
-      reps.select { |r| r.compiled? && !r.written? }.each do |rep|
-        duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:low, :'not written', rep.raw_path, duration)
-      end
-
       # Give general feedback
       puts
       puts "No items were modified." unless reps.any? { |r| r.modified? }
@@ -149,11 +143,11 @@ module Nanoc3::CLI::Commands
 
       # Print
       puts
-      puts format('  %4d  created',   created.size)
-      puts format('  %4d  modified',  modified.size)
-      puts format('  %4d  skipped',   skipped.size)
+      puts format('  %4d  created',     created.size)
+      puts format('  %4d  modified',    modified.size)
+      puts format('  %4d  skipped',     skipped.size)
       puts format('  %4d  not written', not_written.size)
-      puts format('  %4d  identical', identical.size)
+      puts format('  %4d  identical',   identical.size)
     end
 
     def print_profiling_feedback(reps)

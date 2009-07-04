@@ -12,8 +12,7 @@ module Nanoc3::CLI
       :create         => "\e[1m" + "\e[32m", # bold + green
       :update         => "\e[1m" + "\e[33m", # bold + yellow
       :identical      => "\e[1m",            # bold
-      :skip           => "\e[1m",            # bold
-      :'not written'  => "\e[1m"             # bold
+      :skip           => "\e[1m"             # bold
     }
 
     include Singleton
