@@ -49,6 +49,7 @@ module Nanoc3
       FileUtils.mkdir_p(@site.config[:output_dir])
 
       # Get items and reps to compile
+      # FIXME also add items that are depended upon
       items ||= @site.items
       reps = items.map { |i| i.reps }.flatten
 

@@ -2,26 +2,19 @@
 
 module Nanoc3::DataSources
 
-  # The Nanoc3::DataSources::FilesystemCommon module provides code- and
-  # rule-loading methods that are used by both the filesystem and the
-  # filesystem_combined data sources.
+  # The Nanoc3::DataSources::FilesystemCommon module provides code
+  # snippet-loading and rule-loading methods that are used by both the
+  # filesystem and the filesystem_combined data sources.
   module FilesystemCommon
 
-    def code
-      # Get files
-      filenames = Dir['lib/**/*.rb'].sort
-
-      # Read snippets
-      snippets = filenames.map do |fn|
-        { :filename => fn, :code => File.read(fn) }
+    def code_snippets
+      Dir['lib/**/*.rb'].sort.map do |filename|
+        Nanoc3::CodeSnippet.new(
+          File.read(filename),
+          filename.sub(/^lib\//, ''),
+          File.stat(filename).mtime
+        )
       end
-
-      # Get modification time
-      mtimes = filenames.map { |filename| File.stat(filename).mtime }
-      mtime = mtimes.inject { |memo, mtime| memo > mtime ? mtime : memo }
-
-      # Build code
-      Nanoc3::Code.new(snippets, mtime)
     end
 
     def rules

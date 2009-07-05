@@ -116,8 +116,9 @@ module Nanoc3
       end
 
       # Outdated if code outdated
-      return true if @item.site.code.mtime.nil?
-      return true if @item.site.code.mtime > compiled_mtime
+      return true if @item.site.code_snippets.any? do |cs|
+        cs.mtime.nil? || cs.mtime > compiled_mtime
+      end
 
       # Outdated if config outdated
       return true if @item.site.config_mtime.nil?

@@ -4,8 +4,8 @@ module Nanoc3
 
   # Nanoc3::DataSource is responsible for loading data. It is the (abstract)
   # superclass for all data sources. Subclasses must at least implement the
-  # data reading methods (+items+, +layouts+, and +code+); all other methods
-  # involving data manipulation are optional.
+  # data reading methods (+items+, +layouts+, and +code_snippets+); all other
+  # methods involving data manipulation are optional.
   #
   # Apart from the methods for loading and storing data, there are the +up+
   # and +down+ methods for bringing up and tearing down the connection to the
@@ -113,14 +113,14 @@ module Nanoc3
       not_implemented('layouts')
     end
 
-    # Returns the custom code (represented by Nanoc3::Code) for this site.
-    # This is an abstract method implemented by the subclass. This can be code
-    # for custom filters and more, but pretty much any code can be put in
-    # there (global helper functions are very useful).
+    # Returns the custom code snippets (represented by Nanoc3::CodeSnippet)
+    # for this site. This is an abstract method implemented by the subclass.
+    # This can be code for custom filters and more, but pretty much any code
+    # can be put in there (global helper functions are very useful).
     #
     # Subclasses must implement this method.
-    def code
-      not_implemented('code')
+    def code_snippets
+      not_implemented('code_snippets')
     end
 
     # Returns an array containing two elements: the rules for compiling the
