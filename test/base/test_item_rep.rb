@@ -20,14 +20,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_mtime).returns(Time.now-1100)
     site.stubs(:rules_mtime).returns(Time.now-1200)
     item.stubs(:site).returns(site)
@@ -56,14 +56,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -90,14 +90,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -125,14 +125,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -155,14 +155,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -189,14 +189,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-100)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -213,7 +213,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     FileUtils.rm_f('output.html')
   end
 
-  def test_outdated_if_code_outdated
+  def test_outdated_if_code_snippets_outdated
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
@@ -223,14 +223,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-100)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-100)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     item.stubs(:site).returns(site)
 
     # Create output file
@@ -257,14 +257,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_mtime).returns(Time.now-100)
     item.stubs(:site).returns(site)
 
@@ -292,14 +292,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_mtime).returns(nil)
     item.stubs(:site).returns(site)
 
@@ -327,14 +327,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layouts = [ mock ]
     layouts[0].stubs(:mtime).returns(Time.now-800)
 
-    # Mock code
-    code = mock
-    code.stubs(:mtime).returns(Time.now-900)
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:mtime).returns(Time.now-900)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
-    site.stubs(:code).returns(code)
+    site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_mtime).returns(Time.now-1100)
     site.stubs(:rules_mtime).returns(Time.now-100)
     item.stubs(:site).returns(site)

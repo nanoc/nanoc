@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::CodeTest < MiniTest::Unit::TestCase
+class Nanoc3::CodeSnippetTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
@@ -11,8 +11,8 @@ class Nanoc3::CodeTest < MiniTest::Unit::TestCase
     $complete_insane_parrot = 'meow'
 
     # Create code and load it
-    code = Nanoc3::Code.new("$complete_insane_parrot = 'woof'")
-    code.load
+    code_snippet = Nanoc3::CodeSnippet.new("$complete_insane_parrot = 'woof'", 'parrot.rb')
+    code_snippet.load
 
     # Ensure code is loaded
     assert_equal('woof', $complete_insane_parrot)
@@ -23,8 +23,8 @@ class Nanoc3::CodeTest < MiniTest::Unit::TestCase
     @foo = 'meow'
 
     # Create code and load it
-    code = Nanoc3::Code.new("@foo = 'woof'")
-    code.load
+    code_snippet = Nanoc3::CodeSnippet.new("@foo = 'woof'", 'dog.rb')
+    code_snippet.load
 
     # Ensure binding is correct
     assert_equal('meow', @foo)

@@ -39,7 +39,7 @@ class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
     # Test required methods - loading data
     assert_raises(NotImplementedError) { data_source.items }
     assert_raises(NotImplementedError) { data_source.layouts }
-    assert_raises(NotImplementedError) { data_source.code }
+    assert_raises(NotImplementedError) { data_source.code_snippets }
 
     # Test required method - creating data
     assert_raises(NotImplementedError) { data_source.create_item(nil, nil, nil) }

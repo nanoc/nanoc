@@ -42,10 +42,10 @@ module Nanoc3::DataSources
   # 'layouts' directory. Such a layout cannot have any metadata; the filter
   # used for this layout is determined from the file extension.
   #
-  # = Code
+  # = Code Snippets
   #
-  # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
-  # sub-directories.
+  # Code snippets are stored in '.rb' files in the 'lib' directory. Code
+  # snippets can reside in sub-directories.
   #
   # = Rules
   #

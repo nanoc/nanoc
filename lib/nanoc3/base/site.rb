@@ -7,7 +7,8 @@ module Nanoc3
   #
   # * +items+ is a list of Nanoc3::Item instances representing items
   # * +layouts+ is a list of Nanoc3::Layout instances representing layouts
-  # * +code+ is a Nanoc3::Code instance representing custom site code
+  # * +code_snippets+ is list of Nanoc3::CodeSnippet instance representing
+  #   custom site code
   #
   # In addition, each site has a +config+ hash which stores the site
   # configuration. This configuration hash can have the following keys:
@@ -105,7 +106,7 @@ module Nanoc3
 
       # Load all data
       data_source.loading do
-        load_code(force)
+        load_code_snippets(force)
         load_rules
         load_items
         load_layouts
@@ -115,10 +116,10 @@ module Nanoc3
       @data_loaded = true
     end
 
-    # Returns this site's code. Raises an exception if data hasn't been loaded yet.
-    def code
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Code', false) unless @data_loaded
-      @code
+    # Returns this site's code snippets. Raises an exception if data hasn't been loaded yet.
+    def code_snippets
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @data_loaded
+      @code_snippets
     end
 
     # Returns this site's items. Raises an exception if data hasn't been loaded yet.
@@ -135,19 +136,20 @@ module Nanoc3
 
   private
 
-    # Loads this site's code and executes it.
-    def load_code(force=false)
-      # Don't load code twice
-      @code_loaded ||= false
-      return if @code_loaded and !force
+    # Loads this site's code snippets and executes it.
+    def load_code_snippets(force=false)
+      # Don't load code snippets twice
+      @code_snippets_loaded ||= false
+      return if @code_snippets_loaded and !force
 
-      # Get code
-      @code = data_source.code
-      @code.site = self
+      # Get code snippets
+      @code_snippets = data_source.code_snippets
+      @code_snippets.each { |cs| cs.site = self }
 
-      # Execute code
-      @code.load
-      @code_loaded = true
+      # Execute code snippets
+      @code_snippets.each { |cs| cs.load }
+
+      @code_snippets_loaded = true
     end
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.

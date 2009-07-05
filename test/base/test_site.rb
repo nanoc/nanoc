@@ -111,7 +111,7 @@ describe 'Nanoc::Site#load_data' do
     site.expects(:data_source).returns(data_source)
 
     # Mock load_* methods
-    site.stubs(:load_code).with(false)
+    site.stubs(:load_code_snippets).with(false)
     site.stubs(:load_rules)
     site.stubs(:load_items)
     site.stubs(:load_layouts)
@@ -129,7 +129,7 @@ describe 'Nanoc::Site#load_data' do
     site.stubs(:data_source).returns(data_source)
 
     # Mock load_* methods
-    site.expects(:load_code).with(false)
+    site.expects(:load_code_snippets).with(false)
     site.expects(:load_rules)
     site.expects(:load_items)
     site.expects(:load_layouts)
@@ -147,7 +147,7 @@ describe 'Nanoc::Site#load_data' do
     site.expects(:data_source).returns(data_source)
 
     # Mock load_* methods
-    site.expects(:load_code).with(false).once
+    site.expects(:load_code_snippets).with(false).once
     site.expects(:load_rules)
     site.expects(:load_items).once
     site.expects(:load_layouts).once
@@ -166,7 +166,7 @@ describe 'Nanoc::Site#load_data' do
     site.expects(:data_source).times(2).returns(data_source)
 
     # Mock load_* methods
-    site.expects(:load_code).with(true).times(2)
+    site.expects(:load_code_snippets).with(true).times(2)
     site.expects(:load_rules).times(2)
     site.expects(:load_items).times(2)
     site.expects(:load_layouts).times(2)
@@ -178,14 +178,14 @@ describe 'Nanoc::Site#load_data' do
 
 end
 
-describe 'Nanoc::Site#code' do
+describe 'Nanoc::Site#code_snippets' do
 
   include Nanoc3::TestHelpers
 
   it 'should raise when data is not loaded yet' do
     site = Nanoc3::Site.new({})
     proc do
-      site.code
+      site.code_snippets
     end.must_raise Nanoc3::Errors::DataNotYetAvailable
   end
 

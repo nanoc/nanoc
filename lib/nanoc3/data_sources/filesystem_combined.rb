@@ -47,10 +47,10 @@ module Nanoc3::DataSources
   # each layout consists of a metadata part and a content part, separated by
   # '-----'.
   #
-  # = Code
+  # = Code Snippets
   #
-  # Code is stored in '.rb' files in the 'lib' directory. Code can reside in
-  # sub-directories.
+  # Code snippets are stored in '.rb' files in the 'lib' directory. Code
+  # snippets can reside in sub-directories.
   #
   # = Rules
   #

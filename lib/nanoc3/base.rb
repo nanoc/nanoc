@@ -4,7 +4,7 @@ module Nanoc3
 
   require 'nanoc3/base/core_ext'
 
-  autoload 'Code',               'nanoc3/base/code'
+  autoload 'CodeSnippet',        'nanoc3/base/code_snippet'
   autoload 'Compiler',           'nanoc3/base/compiler'
   autoload 'CompilerDSL',        'nanoc3/base/compiler_dsl'
   autoload 'Config',             'nanoc3/base/config'
