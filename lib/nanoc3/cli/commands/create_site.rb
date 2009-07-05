@@ -249,7 +249,6 @@ EOS
         io.write "compile '*' do |rep|\n"
         io.write "  rep.filter :erb\n"
         io.write "  rep.layout 'default'\n"
-        io.write "  rep.write\n"
         io.write "end\n"
         io.write "\n"
         io.write "route '*' do |rep|\n"
