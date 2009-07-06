@@ -1,0 +1,45 @@
+# encoding: utf-8
+
+module Nanoc3::DataSources
+
+  # Nanoc3::DataSources::Delicious provides for a delicious.com bookmarks from
+  # a single user as items (Nanoc3::Item instances).
+  #
+  # The configuration must have a "username" attribute containing the username
+  # of the account from which to fetch the bookmarks.
+  class Delicious < Nanoc3::DataSource
+
+    def items
+      @items ||= begin
+        # Get data
+        @http_client ||= Nanoc3::Extra::CachingHTTPClient.new
+        data = @http_client.get("http://feeds.delicious.com/v2/json/#{self.config[:username]}")
+
+        # Parse as JSON
+        require 'json'
+        raw_items = JSON.parse(data)
+
+        # Convert to items
+        raw_items.enum_with_index.map do |raw_item, i|
+          # Get data
+          content = raw_item['n']
+          attributes = {
+            :url         => raw_item['u'],
+            :description => raw_item['d'],
+            :tags        => raw_item['t'],
+            :date        => raw_item['dt'],
+            :note        => raw_item['n'],
+            :author      => raw_item['a']
+          }
+          identifier = File.join(self.root, i.to_s)
+          mtime = nil
+
+          # Build item
+          Nanoc3::Item.new(content, attributes, identifier, mtime)
+        end
+      end
+    end
+
+  end
+
+end

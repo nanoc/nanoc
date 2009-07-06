@@ -86,7 +86,9 @@ module Nanoc3::CLI::Commands
       end
 
       # Update
-      @base.site.data_source.update
+      @base.site.data_sources.each do |data_source|
+        data_source.update
+      end
     end
 
   end

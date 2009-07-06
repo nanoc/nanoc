@@ -10,7 +10,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_setup
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Remove files to make sure they are recreated
     FileUtils.rm_rf('content')
@@ -41,7 +41,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_items
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Create foo item
     FileUtils.mkdir_p('content/foo')
@@ -74,7 +74,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_layouts
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Create layout
     FileUtils.mkdir_p('layouts/foo')
@@ -98,7 +98,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_create_item_at_root
     # Create item
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
     data_source.create_item('content here', { :foo => 'bar' }, '/')
 
     # Check file existance
@@ -113,7 +113,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_create_item_not_at_root
     # Create item
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
     data_source.create_item('content here', { :foo => 'bar' }, '/moo/')
 
     # Check file existance
@@ -128,7 +128,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_create_layout
     # Create layout
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
     data_source.create_layout('content here', { :foo => 'bar' }, '/moo/')
 
     # Check file existance
@@ -149,7 +149,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_with_one_content_file
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/bar/baz')
@@ -166,7 +166,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_with_two_content_files
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/bar/baz')
@@ -186,7 +186,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_with_one_content_and_one_meta_file
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/bar/baz')
@@ -204,7 +204,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_with_one_content_and_many_meta_files
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/bar/baz')
@@ -224,7 +224,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_with_one_content_file_and_rejected_files
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/bar/baz')
@@ -245,7 +245,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_with_one_index_content_file
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/bar/baz')
@@ -272,7 +272,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_content_filename_for_dir_index_error
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo/index')
@@ -287,7 +287,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_compile_huge_site
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     # Create a lot of items
     count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5

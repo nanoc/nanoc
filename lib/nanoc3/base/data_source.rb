@@ -16,9 +16,24 @@ module Nanoc3
   # first time. This method should be overridden in subclasses.
   class DataSource < Plugin
 
+    # TODO document
+    attr_reader :root
+
+    # TODO document
+    attr_reader :config
+
     # Creates a new data source for the given site.
-    def initialize(site)
-      @site       = site
+    #
+    # +site+:: The site this data source belongs to.
+    # +root+:: The prefix that should be given to all items returned by the
+    #          #items method (comparable to mount points for filesystems in
+    #          Unix-ish OSes).
+    # +config+:: The configuration for this data source.
+    def initialize(site, root, config)
+      @site   = site
+      @root   = root
+      @config = config
+
       @references = 0
     end
 
@@ -44,13 +59,32 @@ module Nanoc3
     # the data source does not get unloaded while it is still being used
     # elsewhere.
     def loading
-      # Load if necessary
-      up if @references == 0
-      @references += 1
-
+      use
       yield
     ensure
-      # Unload if necessary
+      unuse
+    end
+
+    # Marks the data source as used by the caller.
+    #
+    # Calling this method increases the internal reference count. When the
+    # data source is used for the first time (first #use call), the data
+    # source will be loaded (#up will be called). Similarly, when the
+    # reference count reaches zero, the data source will be unloaded (#down
+    # will be called).
+    def use
+      up if @references == 0
+      @references += 1
+    end
+
+    # Marks the data source as unused by the caller.
+    #
+    # Calling this method increases the internal reference count. When the
+    # data source is used for the first time (first #use call), the data
+    # source will be loaded (#up will be called). Similarly, when the
+    # reference count reaches zero, the data source will be unloaded (#down
+    # will be called).
+    def unuse
       @references -= 1
       down if @references == 0
     end
@@ -98,37 +132,38 @@ module Nanoc3
     ########## Loading data
 
     # Returns the list of items (represented by Nanoc3::Item) in this site.
-    # This is an abstract method implemented by the subclass.
+    # The default implementation simply returns an empty array.
     #
-    # Subclasses must implement this method.
+    # Subclasses may implement this method.
     def items
-      not_implemented('items')
+      []
     end
 
-    # Returns the list of layouts (represented by Nanoc3::Layout) in this site.
-    # This is an abstract method implemented by the subclass.
+    # Returns the list of layouts (represented by Nanoc3::Layout) in this
+    # site. The default implementation simply returns an empty array.
     #
-    # Subclasses must implement this method.
+    # Subclasses may implement this method.
     def layouts
-      not_implemented('layouts')
+      []
     end
 
     # Returns the custom code snippets (represented by Nanoc3::CodeSnippet)
-    # for this site. This is an abstract method implemented by the subclass.
+    # for this site. The default implementation simply returns an empty array.
     # This can be code for custom filters and more, but pretty much any code
     # can be put in there (global helper functions are very useful).
     #
-    # Subclasses must implement this method.
+    # Subclasses may implement this method.
     def code_snippets
-      not_implemented('code_snippets')
+      []
     end
 
     # Returns an array containing two elements: the rules for compiling the
-    # site, and the mtime of the rules.
+    # site, and the mtime of the rules. The default implementation simply
+    # returns nil, indicating that this data sources does not provide rules.
     #
-    # Subclasses must implement this method.
+    # Subclasses may implement this method.
     def rules
-      not_implemented('rules')
+      nil
     end
 
     ########## Creating data
@@ -147,8 +182,7 @@ module Nanoc3
 
     def not_implemented(name)
       raise NotImplementedError.new(
-        "#{self.class} does not override ##{name}, which is required for " +
-        "this data source to be used."
+        "#{self.class} does not implement ##{name}"
       )
     end
 

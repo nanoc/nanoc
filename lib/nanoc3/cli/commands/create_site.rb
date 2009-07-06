@@ -230,9 +230,12 @@ EOS
 
       # Create config
       File.open('config.yaml', 'w') do |io|
-        io.write "---\n"
-        io.write "output_dir:  \"output\"\n"
-        io.write "data_source: \"#{data_source}\"\n"
+        io.write(YAML.dump(
+          'output_dir' => 'output',
+          'data_sources' => [
+            { 'type' => 'filesystem', 'root' => '/' }
+          ]
+        ))
       end
       Nanoc3::NotificationCenter.post(:file_created, 'config.yaml')
 
@@ -266,9 +269,9 @@ EOS
       # Get site
       site = Nanoc3::Site.new('.')
 
-      # Set up data source
-      site.data_source.loading do
-        site.data_source.setup
+      # Set up data sources
+      site.data_sources.each do |data_source|
+        data_source.loading { data_source.setup }
       end
     end
 
@@ -279,14 +282,18 @@ EOS
       site = Nanoc3::Site.new('.')
 
       # Create item
-      site.data_source.create_item(
+      # FIXME get the right data source
+      data_source = site.data_sources[0]
+      data_source.create_item(
         DEFAULT_ITEM,
         { :title => "Home" },
         '/'
       )
 
       # Create layout
-      site.data_source.create_layout(
+      # FIXME get the right data source
+      data_source = site.data_sources[0]
+      data_source.create_layout(
         DEFAULT_LAYOUT,
         { :filter => 'erb' },
         '/default/'

@@ -17,14 +17,28 @@ module Nanoc3
   #                path is relative to the current working directory, but can
   #                also be an absolute path.
   #
-  # +data_source+:: The identifier of the data source that will be used for
-  #                 loading site data.
+  # +data_sources+:: A list of data sources for this site. See below for
+  #                  documentation on the structure of this list. By default,
+  #                  there is only one data source of the filesystem  type
+  #                  mounted at /.
   #
   # +index_filenames+:: A list of filenames that will be stripped off full
   #                     item paths to create cleaner URLs (for example,
   #                     '/about/' will be used instead of
   #                     '/about/index.html'). The default value should be okay
   #                     in most cases.
+  #
+  # The list of data sources consists of hashes with the following keys:
+  #
+  # +type+:: The type of data source, i.e. its identifier. 
+  #
+  # +root+:: The root where items returned by this data source will be placed.
+  #          Comparable to mount points in UNIX.
+  #
+  # +config+:: A hash containing the configuration for this data source. This
+  #            is especially useful for online data sources; for example, a
+  #            Twitter data source would need the username of the account from
+  #            which to fetch tweets.
   #
   # A site also has several helper classes:
   #
@@ -43,9 +57,14 @@ module Nanoc3
     # lacks some options, the default value will be taken from
     # +DEFAULT_CONFIG+.
     DEFAULT_CONFIG = {
-      :output_dir       => 'output',
-      :data_source      => 'filesystem',
-      :index_filenames  => [ 'index.html' ]
+      :output_dir => 'output',
+      :data_sources => [
+        :type   => 'filesystem',
+        # FIXME root only applies to items, so do we need an items_root and a layouts_root?
+        :root   => '/',
+        :config => {}
+      ],
+      :index_filenames => [ 'index.html' ]
     }
 
     # The site configuration.
@@ -64,16 +83,7 @@ module Nanoc3
     #                        directory; if a hash, contains the site
     #                        configuration.
     def initialize(dir_or_config_hash)
-      if dir_or_config_hash.is_a? String
-        # Read config from config.yaml in given dir
-        config_path = File.join(dir_or_config_hash, 'config.yaml')
-        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
-        @config_mtime = File.stat(config_path).mtime
-      else
-        # Use passed config hash
-        @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
-        @config_mtime = nil
-      end
+      build_config(dir_or_config_hash)
     end
 
     # Returns the compiler for this site. Will create a new compiler if none
@@ -82,14 +92,16 @@ module Nanoc3
       @compiler ||= Compiler.new(self)
     end
 
-    # Returns the data source for this site. Will create a new data source if
-    # none exists yet. Raises Nanoc3::Errors::UnknownDataSource if the
-    # site configuration specifies an unknown data source.
-    def data_source
-      @data_source ||= begin
-        data_source_class = Nanoc3::DataSource.named(@config[:data_source])
-        raise Nanoc3::Errors::UnknownDataSource.new(@config[:data_source]) if data_source_class.nil?
-        data_source_class.new(self)
+    # Returns the data sources for this site. Will create a new data source if
+    # none exists yet. Raises Nanoc3::Errors::UnknownDataSource if the site
+    # configuration specifies an unknown data source.
+    def data_sources
+      @data_sources ||= begin
+        @config[:data_sources].map do |data_source_hash|
+          data_source_class = Nanoc3::DataSource.named(data_source_hash[:type])
+          raise Nanoc3::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
+          data_source_class.new(self, data_source_hash[:root], data_source_hash[:config] || {})
+        end
       end
     end
 
@@ -105,12 +117,12 @@ module Nanoc3
       return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
 
       # Load all data
-      data_source.loading do
-        load_code_snippets(force)
-        load_rules
-        load_items
-        load_layouts
-      end
+      data_sources.each { |ds| ds.use }
+      load_code_snippets(force)
+      load_rules
+      load_items
+      load_layouts
+      data_sources.each { |ds| ds.unuse }
 
       # Done
       @data_loaded = true
@@ -136,14 +148,19 @@ module Nanoc3
 
   private
 
-    # Loads this site's code snippets and executes it.
+    # Returns the Nanoc3::CompilerDSL that should be used for this site.
+    def dsl
+      @dsl ||= Nanoc3::CompilerDSL.new(compiler)
+    end
+
+    # Loads this site's code and executes it.
     def load_code_snippets(force=false)
       # Don't load code snippets twice
       @code_snippets_loaded ||= false
       return if @code_snippets_loaded and !force
 
       # Get code snippets
-      @code_snippets = data_source.code_snippets
+      @code_snippets = data_sources.map { |ds| ds.code_snippets }.flatten
       @code_snippets.each { |cs| cs.site = self }
 
       # Execute code snippets
@@ -152,15 +169,19 @@ module Nanoc3
       @code_snippets_loaded = true
     end
 
-    # Returns the Nanoc3::CompilerDSL that should be used for this site.
-    def dsl
-      @dsl ||= Nanoc3::CompilerDSL.new(compiler)
-    end
-
     # Loads this site's rules.
     def load_rules
+      # FIXME perhaps not the best approach
+
       # Get rules
-      @rules, @rules_mtime = data_source.rules
+      # FIXME raise proper custom errors
+      rule_sets = data_sources.map { |ds| ds.rules }.compact
+      if rule_sets.size > 1
+        raise Nanoc3::Errors::Generic, "multiple data source providing rules found"
+      elsif rule_sets.size == 0
+        raise Nanoc3::Errors::Generic, "no data source providing rules found"
+      end
+      @rules, @rules_mtime = *rule_sets[0]
 
       # Load DSL
       dsl.instance_eval(@rules)
@@ -169,12 +190,18 @@ module Nanoc3
     # Loads this site's items, sets up item child-parent relationships and
     # builds each item's list of item representations.
     def load_items
-      @items = data_source.items
+      @items = data_sources.map { |ds| ds.items }.flatten
       @items.each { |p| p.site = self }
 
       setup_child_parent_links
       build_reps
       route_reps
+    end
+
+    # Loads this site's layouts.
+    def load_layouts
+      @layouts = data_sources.map { |ds| ds.layouts }.flatten
+      @layouts.each { |l| l.site = self }
     end
 
     # Fills each item's parent reference and children array with the
@@ -235,10 +262,20 @@ module Nanoc3
       end
     end
 
-    # Loads this site's layouts.
-    def load_layouts
-      @layouts = data_source.layouts
-      @layouts.each { |l| l.site = self }
+    # Builds the configuration hash based on the given argument. Also see
+    # #initialize for details.
+    def build_config(dir_or_config_hash)
+      if dir_or_config_hash.is_a? String
+        # Read config from config.yaml in given dir
+        config_path = File.join(dir_or_config_hash, 'config.yaml')
+        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
+        @config[:data_sources].map! { |ds| ds.symbolize_keys }
+        @config_mtime = File.stat(config_path).mtime
+      else
+        # Use passed config hash
+        @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
+        @config_mtime = nil
+      end
     end
 
   end

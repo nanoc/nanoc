@@ -74,8 +74,7 @@ module Nanoc3::CLI
     # implement #vcs=).
     def set_vcs(vcs_name)
       # Skip if not possible
-      return if vcs_name.nil?
-      return if site.nil? or !site.data_source.respond_to?(:vcs=)
+      return if vcs_name.nil? || site.nil?
 
       # Find VCS
       vcs_class = Nanoc3::Extra::VCS.named(vcs_name.to_sym)
@@ -84,8 +83,13 @@ module Nanoc3::CLI
         exit 1
       end
 
-      # Set VCS
-      site.data_source.vcs = vcs_class.new
+      site.data_sources.each do |data_source|
+        # Skip if not possible
+        next if !data_source.respond_to?(:vcs=)
+
+        # Set VCS
+        data_source.vcs = vcs_class.new
+      end
     end
 
     # Returns the list of global option definitionss.

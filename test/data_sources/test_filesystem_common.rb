@@ -47,7 +47,7 @@ class Nanoc3::DataSources::FilesystemCommonTest < MiniTest::Unit::TestCase
 
   def test_rules_with_invalid_rules_file_names
     # Create data source
-    data_source = Nanoc3::DataSources::Filesystem.new(nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil)
 
     begin
       # Create a sample rules file
