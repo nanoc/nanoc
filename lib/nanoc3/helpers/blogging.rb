@@ -75,11 +75,13 @@ module Nanoc3::Helpers
     # used data source (the filesystem data source checks the file mtimes, for
     # instance).
     #
-    # The feed item will need to have the following attributes:
+    # The site configuration will need to have the following attributes:
     #
     # * 'base_url', containing the URL to the site, without trailing slash.
     #   For example, if the site is at "http://example.com/", the base_url
     #   would be "http://example.com".
+    #
+    # The feed item will need to have the following attributes:
     #
     # * 'title', containing the title of the feed, which is usually also the
     #   title of the blog.
@@ -112,10 +114,12 @@ module Nanoc3::Helpers
       content_proc      = params[:content_proc] || lambda { |a| a.content   }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
 
-      # Check feed item attributes
-      if @item[:base_url].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no base_url')
+      # Check config attributes
+      if @site.config[:base_url].nil?
+        raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
+
+      # Check feed item attributes
       if @item[:title].nil?
         raise RuntimeError.new('Cannot build Atom feed: feed item has no title')
       end
@@ -148,14 +152,14 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
         # Add primary attributes
-        xml.id      @item[:base_url] + '/'
+        xml.id      @site.config[:base_url] + '/'
         xml.title   @item[:title]
 
         # Add date
         xml.updated Time.parse(last_article[:created_at]).to_iso8601_time
 
         # Add links
-        xml.link(:rel => 'alternate', :href => @item[:base_url])
+        xml.link(:rel => 'alternate', :href => @site.config[:base_url])
         xml.link(:rel => 'self',      :href => feed_url)
 
         # Add author information
@@ -192,13 +196,13 @@ module Nanoc3::Helpers
     # Returns the URL for the given item. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
     def url_for(item)
-      @item[:base_url] + (item[:custom_path_in_feed] || item.reps[0].path)
+      @site.config[:base_url] + (item[:custom_path_in_feed] || item.reps[0].path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
-      @item[:feed_url] || @item[:base_url] + @item.reps[0].path
+      @item[:feed_url] || @site.config[:base_url] + @item.reps[0].path
     end
 
     # Returns an URI containing an unique ID for the given item. This will be
@@ -206,7 +210,7 @@ module Nanoc3::Helpers
     # created using a procedure suggested by Mark Pilgrim in this blog post:
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
     def atom_tag_for(item)
-      hostname        = @item[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
+      hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
       formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + (item.reps[0].path || item.identifier)
