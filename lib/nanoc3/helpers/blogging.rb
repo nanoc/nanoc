@@ -31,7 +31,7 @@ module Nanoc3::Helpers
     # Returns a list of articles, sorted by descending creation date (so newer
     # articles appear first).
     def sorted_articles
-      articles.sort_by { |a| a[:created_at] }.reverse
+      articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,

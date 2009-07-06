@@ -45,11 +45,11 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
     # Create item 1
     @items[1].expects(:[]).with(:kind).returns('article')
-    @items[1].expects(:[]).with(:created_at).returns((Time.now - 1000).to_s)
+    @items[1].expects(:[]).with(:created_at).returns('20-05-2008')
 
     # Create item 2
     @items[2].expects(:[]).with(:kind).returns('article')
-    @items[2].expects(:[]).with(:created_at).returns((Time.now - 500).to_s)
+    @items[2].expects(:[]).with(:created_at).returns('19-04-2009')
 
     # Get articles
     articles = sorted_articles
