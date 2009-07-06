@@ -1,0 +1,42 @@
+# encoding: utf-8
+
+module Nanoc3::DataSources
+
+  # Nanoc3::DataSources::Twitter provides tweets from a single user as items
+  # (Nanoc3::Item instances).
+  #
+  # The configuration must have a "username" attribute containing the username
+  # of the account from which to fetch the tweets.
+  class Twitter < Nanoc3::DataSource
+
+    def items
+      @item ||= begin
+        # Get data
+        @http_client ||= Nanoc3::Extra::CachingHTTPClient.new
+        data = @http_client.get("http://twitter.com/statuses/user_timeline/#{self.config[:username]}.json")
+
+        # Parse as JSON
+        require 'json'
+        raw_items = JSON.parse(data)
+
+        # Convert to items
+        raw_items.enum_with_index.map do |raw_item, i|
+          # Get data
+          content = raw_item['text']
+          attributes = {
+            :created_at  => raw_item['created_at'],
+            :source      => raw_item['source']
+            # TODO add more
+          }
+          identifier = File.join(self.root, raw_item['id'].to_s)
+          mtime = Time.parse(raw_item['created_at'])
+
+          # Build item
+          Nanoc3::Item.new(content, attributes, identifier, mtime)
+        end
+      end
+    end
+
+  end
+
+end

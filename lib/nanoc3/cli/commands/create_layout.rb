@@ -71,7 +71,9 @@ module Nanoc3::CLI::Commands
       end
 
       # Create layout
-      @base.site.data_source.create_layout(
+      # FIXME get the right data source
+      data_source = @base.site.data_sources[0]
+      data_source.create_layout(
         "<html>\n" +
         "  <head>\n" +
         "    <title><%= @item.title %></title>\n" +

@@ -8,7 +8,7 @@ class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
 
   def test_loading
     # Create data source
-    data_source = Nanoc3::DataSource.new(nil)
+    data_source = Nanoc3::DataSource.new(nil, nil, nil)
     data_source.expects(:up).times(1)
     data_source.expects(:down).times(1)
 
@@ -26,7 +26,7 @@ class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
 
   def test_not_implemented
     # Create data source
-    data_source = Nanoc3::DataSource.new(nil)
+    data_source = Nanoc3::DataSource.new(nil, nil, nil)
 
     # Test optional methods
     data_source.up
@@ -36,10 +36,11 @@ class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
     # Test required methods - general
     assert_raises(NotImplementedError) { data_source.setup }
 
-    # Test required methods - loading data
-    assert_raises(NotImplementedError) { data_source.items }
-    assert_raises(NotImplementedError) { data_source.layouts }
-    assert_raises(NotImplementedError) { data_source.code_snippets }
+    # Test methods - loading data
+    assert_equal [],  data_source.items
+    assert_equal [],  data_source.layouts
+    assert_equal [],  data_source.code_snippets
+    assert_equal nil, data_source.rules
 
     # Test required method - creating data
     assert_raises(NotImplementedError) { data_source.create_item(nil, nil, nil) }

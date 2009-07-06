@@ -105,10 +105,11 @@ describe 'Nanoc::Site#load_data' do
   it 'should load the data source' do
     site = Nanoc3::Site.new({})
 
-    # Mock data source
-    data_source = mock
-    data_source.expects(:loading).yields
-    site.expects(:data_source).returns(data_source)
+    # Mock data sources
+    data_sources = [ mock, mock, mock ]
+    data_sources.each { |ds| ds.expects(:use)   }
+    data_sources.each { |ds| ds.expects(:unuse) }
+    site.stubs(:data_sources).returns(data_sources)
 
     # Mock load_* methods
     site.stubs(:load_code_snippets).with(false)
@@ -123,10 +124,11 @@ describe 'Nanoc::Site#load_data' do
   it 'should call load_* methods' do
     site = Nanoc3::Site.new({})
 
-    # Mock data source
-    data_source = mock
-    data_source.expects(:loading).yields
-    site.stubs(:data_source).returns(data_source)
+    # Mock data sources
+    data_sources = [ mock, mock, mock ]
+    data_sources.each { |ds| ds.expects(:use)   }
+    data_sources.each { |ds| ds.expects(:unuse) }
+    site.stubs(:data_sources).returns(data_sources)
 
     # Mock load_* methods
     site.expects(:load_code_snippets).with(false)
@@ -141,10 +143,11 @@ describe 'Nanoc::Site#load_data' do
   it 'should not load data twice if not forced' do
     site = Nanoc3::Site.new({})
 
-    # Mock data source
-    data_source = mock
-    data_source.expects(:loading).once.yields
-    site.expects(:data_source).returns(data_source)
+    # Mock data sources
+    data_sources = [ mock, mock, mock ]
+    data_sources.each { |ds| ds.expects(:use)   }
+    data_sources.each { |ds| ds.expects(:unuse) }
+    site.stubs(:data_sources).returns(data_sources)
 
     # Mock load_* methods
     site.expects(:load_code_snippets).with(false).once
@@ -160,10 +163,11 @@ describe 'Nanoc::Site#load_data' do
   it 'should load data twice if forced' do
     site = Nanoc3::Site.new({})
 
-    # Mock data source
-    data_source = mock
-    data_source.expects(:loading).times(2).yields
-    site.expects(:data_source).times(2).returns(data_source)
+    # Mock data sources
+    data_sources = [ mock, mock, mock ]
+    data_sources.each { |ds| ds.expects(:use).times(2)   }
+    data_sources.each { |ds| ds.expects(:unuse).times(2) }
+    site.stubs(:data_sources).returns(data_sources)
 
     # Mock load_* methods
     site.expects(:load_code_snippets).with(true).times(2)
@@ -228,19 +232,23 @@ describe 'Nanoc::Site#compiler' do
 
 end
 
-describe 'Nanoc::Site#data_source' do
+describe 'Nanoc::Site#data_sources' do
 
   include Nanoc3::TestHelpers
 
   it 'should not raise for known data sources' do
     site = Nanoc3::Site.new({})
-    site.data_source
+    site.data_sources
   end
 
   it 'should raise for unknown data sources' do
     proc do
-      site = Nanoc3::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
-      site.data_source
+      site = Nanoc3::Site.new(
+        :data_sources => [
+          { :type => 'fklsdhailfdjalghlkasdflhagjskajdf', :root => '/' }
+        ]
+      )
+      site.data_sources
     end.must_raise Nanoc3::Errors::UnknownDataSource
   end
 

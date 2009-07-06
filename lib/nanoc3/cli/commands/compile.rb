@@ -47,6 +47,7 @@ module Nanoc3::CLI::Commands
 
     def run(options, arguments)
       # Make sure we are in a nanoc site directory
+      puts "Loading site data..."
       @base.require_site
       @base.site.load_data
 

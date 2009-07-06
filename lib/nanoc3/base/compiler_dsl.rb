@@ -2,8 +2,11 @@
 
 module Nanoc3
 
+  # Nanoc3::CompilerDSL contains methods that will be executed by the site's
+  # rules file.
   class CompilerDSL
 
+    # Creates a new compiler DSL for the given compiler.
     def initialize(compiler)
       @compiler = compiler
     end
