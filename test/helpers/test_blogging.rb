@@ -95,9 +95,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep.stubs(:path).returns("/item2/")
       @items[2].stubs(:reps).returns([ item_rep ])
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Cool Blog')
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
@@ -119,9 +122,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].stubs(:[]).with(:kind).returns('item')
       @items[2].stubs(:[]).with(:kind).returns('item')
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -144,9 +150,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
       @items[1].stubs(:[]).with(:kind).returns('article')
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({:base_url => nil})
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns(nil)
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -156,7 +165,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no base_url',
+        'Cannot build Atom feed: site configuration has no base_url',
         error.message
       )
     end
@@ -169,9 +178,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
       @items[1].stubs(:[]).with(:kind).returns('article')
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns(nil)
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -194,9 +206,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
       @items[1].stubs(:[]).with(:kind).returns('article')
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns(nil)
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -219,9 +234,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
       @items[1].stubs(:[]).with(:kind).returns('article')
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns(nil)
@@ -251,9 +269,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[4].stubs(:[]).with(:kind).returns('article')
       @items[4].stubs(:[]).with(:created_at).returns(nil)
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -292,9 +313,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep.stubs(:raw_path).returns('output/asdf/fdsa/index.html')
       @items[4].stubs(:reps).returns([ item_rep ])
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -324,9 +348,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         article.stubs(:reps).returns([ item_rep ])
       end
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -356,9 +383,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep.stubs(:raw_path).returns('output/item1/index.html')
       @items[0].stubs(:reps).returns([ item_rep ])
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -385,9 +415,12 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep.stubs(:raw_path).returns('output/item1/index.html')
       @items[0].stubs(:reps).returns([ item_rep ])
 
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
       # Create feed item
       @item = mock
-      @item.stubs(:[]).with(:base_url).returns('http://example.com')
       @item.stubs(:[]).with(:title).returns('My Blog Or Something')
       @item.stubs(:[]).with(:author_name).returns('J. Doe')
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
@@ -400,9 +433,9 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_url_for_without_custom_path_in_feed
-    # Create feed item
-    @item = mock
-    @item.expects(:[]).with(:base_url).returns('http://example.com')
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
     # Create article
     item = mock
@@ -419,9 +452,9 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_url_for_with_custom_path_in_feed
-    # Create feed item
-    @item = mock
-    @item.expects(:[]).with(:base_url).returns('http://example.com')
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
     # Create article
     item = mock
@@ -435,10 +468,13 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_feed_url_without_custom_feed_url
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
     # Create feed item
     @item = mock
     @item.expects(:[]).with(:feed_url).returns(nil)
-    @item.expects(:[]).with(:base_url).returns('http://example.com')
     item_rep = mock
     item_rep.expects(:path).returns('/foo/bar/')
     @item.expects(:reps).returns([ item_rep ])
@@ -451,6 +487,10 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_feed_url_with_custom_feed_url
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
     # Create feed item
     @item = mock
     @item.expects(:[]).with(:feed_url).returns('http://example.com/feed/')
@@ -463,9 +503,9 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_atom_tag_for_with_path
-    # Create feed item
-    @item = mock
-    @item.expects(:[]).with(:base_url).returns('http://example.com')
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
     # Create article reps
     item_rep = mock
@@ -481,9 +521,9 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_atom_tag_for_without_path
-    # Create feed item
-    @item = mock
-    @item.expects(:[]).with(:base_url).returns('http://example.com')
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
     # Create article reps
     item_rep = mock
