@@ -73,7 +73,6 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
       # Create item 1
       @items[1].stubs(:mtime).returns(Time.now - 500)
-      @items[1].stubs(:content).returns('item 1 content')
       @items[1].stubs(:[]).with(:kind).returns('article')
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
@@ -81,11 +80,11 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
       item_rep = mock
       item_rep.stubs(:path).returns("/item1/")
+      item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 1 content')
       @items[1].stubs(:reps).returns([ item_rep ])
 
       # Create item 2
       @items[2].stubs(:mtime).returns(Time.now - 250)
-      @items[2].stubs(:content).returns('item 2 content')
       @items[2].stubs(:[]).with(:kind).returns('article')
       @items[2].stubs(:[]).with(:created_at).returns((Time.now - 750).to_s)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
@@ -93,6 +92,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[2].stubs(:[]).with(:excerpt).returns('item 2 excerpt')
       item_rep = mock
       item_rep.stubs(:path).returns("/item2/")
+      item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 2 content')
       @items[2].stubs(:reps).returns([ item_rep ])
 
       # Mock site
@@ -311,6 +311,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep = mock
       item_rep.stubs(:path).returns('/asdf/fdsa/')
       item_rep.stubs(:raw_path).returns('output/asdf/fdsa/index.html')
+      item_rep.expects(:content_at_snapshot).with(:pre).returns('asdf')
       @items[4].stubs(:reps).returns([ item_rep ])
 
       # Mock site
@@ -335,7 +336,6 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items = [ mock, mock, mock, mock, mock ]
       @items.each_with_index do |article, i|
         article.stubs(:mtime).returns(Time.now - 500)
-        article.stubs(:content).returns("item #{i} content")
         article.stubs(:[]).with(:kind).returns('article')
         article.stubs(:[]).with(:created_at).returns((Time.now - 1000*i).to_s)
         article.stubs(:[]).with(:title).returns("Article #{i}")
@@ -345,6 +345,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         item_rep = mock
         item_rep.stubs(:path).returns("/articles/#{i}/")
         item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
+        item_rep.stubs(:content_at_snapshot).with(:pre).returns("item #{i} content")
         article.stubs(:reps).returns([ item_rep ])
       end
 
@@ -413,6 +414,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep = mock
       item_rep.stubs(:path).returns('/item1/')
       item_rep.stubs(:raw_path).returns('output/item1/index.html')
+      item_rep.expects(:content_at_snapshot).with(:pre).returns('foo')
       @items[0].stubs(:reps).returns([ item_rep ])
 
       # Mock site
