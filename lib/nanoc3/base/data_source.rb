@@ -157,15 +157,6 @@ module Nanoc3
       []
     end
 
-    # Returns an array containing two elements: the rules for compiling the
-    # site, and the mtime of the rules. The default implementation simply
-    # returns nil, indicating that this data sources does not provide rules.
-    #
-    # Subclasses may implement this method.
-    def rules
-      nil
-    end
-
     ########## Creating data
 
     # Creates a new item with the given content, attributes and identifier.

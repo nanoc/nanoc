@@ -51,11 +51,6 @@ module Nanoc3::DataSources
   #
   # Code snippets are stored in '.rb' files in the 'lib' directory. Code
   # snippets can reside in sub-directories.
-  #
-  # = Rules
-  #
-  # Rules are stored in a file named 'Rules', 'rules', 'Rules.rb' or
-  # 'rules.rb' at the top level of the site directory.
   class FilesystemCombined < Nanoc3::DataSource
 
     include Nanoc3::DataSources::FilesystemCommon
