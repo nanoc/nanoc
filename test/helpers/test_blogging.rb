@@ -369,6 +369,48 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_atom_feed_sorting
+    if_have 'builder' do
+      # Mock articles
+      @items = [ mock, mock, mock, mock ]
+      @items.each_with_index do |article, i|
+        article.stubs(:mtime).returns(Time.now - 500)
+        article.stubs(:[]).with(:kind).returns('article')
+        article.stubs(:[]).with(:title).returns("Article #{i}")
+        article.stubs(:[]).with(:custom_path_in_feed).returns(nil)
+        article.stubs(:[]).with(:path).returns("/articles/#{i}/")
+        article.stubs(:[]).with(:excerpt).returns(nil)
+        item_rep = mock
+        item_rep.stubs(:path).returns("/articles/#{i}/")
+        item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
+        item_rep.stubs(:content_at_snapshot).with(:pre).returns("Article #{i} content")
+        article.stubs(:reps).returns([ item_rep ])
+      end
+      @items[0].stubs(:[]).with(:created_at).returns('23-02-2009')
+      @items[1].stubs(:[]).with(:created_at).returns('22-03-2009')
+      @items[2].stubs(:[]).with(:created_at).returns('21-04-2009')
+      @items[3].stubs(:[]).with(:created_at).returns('20-05-2009')
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
+      @item.stubs(:[]).with(:author_name).returns('J. Doe')
+      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      result = atom_feed
+      assert_match(
+        Regexp.new('Article 3.*Article 2.*Article 1.*Article 0', Regexp::MULTILINE),
+        result
+      )
+    end
+  end
+
   def test_atom_feed_with_content_proc_param
     if_have 'builder' do
       # Mock article

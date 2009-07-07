@@ -139,7 +139,7 @@ module Nanoc3::Helpers
       end
 
       # Get sorted relevant articles
-      sorted_relevant_articles = relevant_articles.sort_by { |a| a[:created_at] }.reverse.first(limit)
+      sorted_relevant_articles = relevant_articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse.first(limit)
 
       # Get most recent article
       last_article = sorted_relevant_articles.first
