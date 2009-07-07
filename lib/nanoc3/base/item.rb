@@ -23,7 +23,7 @@ module Nanoc3
     attr_reader   :reps
 
     # This item's raw, uncompiled content.
-    attr_reader   :content
+    attr_reader   :raw_content
 
     # The parent item of this item. This can be nil even for non-root items.
     attr_accessor :parent
@@ -36,23 +36,23 @@ module Nanoc3
 
     # Creates a new item.
     #
-    # +content+:: The uncompiled item content.
+    # +raw_content+:: The uncompiled item content.
     #
     # +attributes+:: A hash containing this item's attributes.
     #
     # +identifier+:: This item's identifier.
     #
     # +mtime+:: The time when this item was last modified.
-    def initialize(content, attributes, identifier, mtime=nil)
-      @content    = content
-      @attributes = attributes.symbolize_keys
-      @identifier = identifier.cleaned_identifier
-      @mtime      = mtime
+    def initialize(raw_content, attributes, identifier, mtime=nil)
+      @raw_content  = raw_content
+      @attributes   = attributes.symbolize_keys
+      @identifier   = identifier.cleaned_identifier
+      @mtime        = mtime
 
-      @parent     = nil
-      @children   = []
+      @parent       = nil
+      @children     = []
 
-      @reps       = []
+      @reps         = []
     end
 
     # Requests the attribute with the given key.

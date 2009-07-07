@@ -12,7 +12,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     # Mock layouts
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
-    layout.expect(:content,      'This is the <%= @layout.identifier %> layout.')
+    layout.expect(:raw_content,  'This is the <%= @layout.identifier %> layout.')
 
     # Mock site, compiler and stack
     stack    = []
@@ -41,7 +41,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     # Mock layouts
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
-    layout.expect(:content,      'This is the <%= "foo" %> layout.')
+    layout.expect(:raw_content,  'This is the <%= "foo" %> layout.')
 
     # Mock compiler
     compiler = mock
@@ -62,7 +62,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     # Mock layouts
     layout = MiniTest::Mock.new
     layout.expect(:identifier,   '/foo/')
-    layout.expect(:content,      'This is the <%= "foo" %> layout.')
+    layout.expect(:raw_content,  'This is the <%= "foo" %> layout.')
 
     # Mock compiler
     compiler = mock

@@ -54,7 +54,7 @@ module Nanoc3::Helpers
 
       # Layout
       @site.compiler.stack.push(layout)
-      result = filter.run(layout.content)
+      result = filter.run(layout.raw_content)
       @site.compiler.stack.pop
       result
     end

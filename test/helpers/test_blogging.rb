@@ -302,7 +302,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
       # Mock one article
       @items[4].stubs(:mtime).returns(Time.now - 500)
-      @items[4].stubs(:content).returns('item 1 content')
+      @items[4].stubs(:raw_content).returns('item 1 content')
       @items[4].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[4].stubs(:[]).with(:title).returns('Item One')
       @items[4].stubs(:[]).with(:custom_path_in_feed).returns(nil)
@@ -452,7 +452,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
-      @items[0].stubs(:content).returns('some content')
+      @items[0].stubs(:raw_content).returns('some content')
       item_rep = mock
       item_rep.stubs(:path).returns('/item1/')
       item_rep.stubs(:raw_path).returns('output/item1/index.html')
