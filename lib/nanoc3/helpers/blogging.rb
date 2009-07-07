@@ -111,7 +111,7 @@ module Nanoc3::Helpers
       # Extract parameters
       limit             = params[:limit] || 5
       relevant_articles = params[:articles] || articles || []
-      content_proc      = params[:content_proc] || lambda { |a| a.content   }
+      content_proc      = params[:content_proc] || lambda { |a| a.reps[0].content_at_snapshot(:pre) }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
 
       # Check config attributes
