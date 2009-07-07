@@ -7,6 +7,25 @@ module Nanoc3::DataSources
   #
   # The configuration must have a "username" attribute containing the username
   # of the account from which to fetch the bookmarks.
+  #
+  # The items returned by this data source will be mounted at {root}/{id},
+  # where +id+ is a sequence number that is not necessarily unique for this
+  # bookmark (because delicious.com unfortunately does not provide unique IDs
+  # for each bookmark).
+  #
+  # The items returned by this data source will have the following attributes:
+  #
+  # +:url+:: The URL the bookmark leads to.
+  #
+  # +:description+:: The description (title, usually) of the bookmark.
+  #
+  # +:tags+:: An array of tags (strings) for this bookmark.
+  #
+  # +:date+:: The timestamp when this bookmark was created (a Time object).
+  #
+  # +:note+:: The personal note for this bookmark (can be nil).
+  #
+  # +:author+:: The username of the person storing the bookmark.
   class Delicious < Nanoc3::DataSource
 
     def items
