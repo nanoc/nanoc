@@ -50,7 +50,7 @@ module Nanoc3::DataSources
             :note        => raw_item['n'],
             :author      => raw_item['a']
           }
-          identifier = File.join(self.root, i.to_s)
+          identifier = File.join(self.items_root, i.to_s)
           mtime = nil
 
           # Build item

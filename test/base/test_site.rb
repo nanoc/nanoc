@@ -245,7 +245,7 @@ describe 'Nanoc::Site#data_sources' do
     proc do
       site = Nanoc3::Site.new(
         :data_sources => [
-          { :type => 'fklsdhailfdjalghlkasdflhagjskajdf', :root => '/' }
+          { :type => 'fklsdhailfdjalghlkasdflhagjskajdf' }
         ]
       )
       site.data_sources

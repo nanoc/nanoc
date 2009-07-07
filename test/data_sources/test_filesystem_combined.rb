@@ -10,7 +10,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_setup
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Remove files to make sure they are recreated
     FileUtils.rm_rf('content')
@@ -40,7 +40,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_items
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Create foo item
     FileUtils.mkdir_p('content/foo')
@@ -71,7 +71,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_layouts
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Create layout
     FileUtils.mkdir_p('layouts')
@@ -94,7 +94,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_create_item_at_root
     # Create item
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
     data_source.create_item('content here', { :foo => 'bar' }, '/')
 
     # Check file existance
@@ -109,7 +109,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_create_item_not_at_root
     # Create item
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
     data_source.create_item('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
     # Check file existance
@@ -125,7 +125,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_create_layout
     # Create layout
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
     data_source.create_layout('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
 
     # Check file existance
@@ -143,7 +143,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_files_without_recursion
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo')
@@ -167,7 +167,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   def test_files_with_recursion
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Build directory
     FileUtils.mkdir_p('foo')
@@ -196,7 +196,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
 
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Parse it
     assert_raises(RuntimeError) do
@@ -214,7 +214,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
 
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse_file('test.html', 'foobar') }
@@ -231,7 +231,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
 
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse_file('test.html', 'foobar') }
