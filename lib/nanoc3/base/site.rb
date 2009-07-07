@@ -59,11 +59,10 @@ module Nanoc3
     DEFAULT_CONFIG = {
       :output_dir => 'output',
       :data_sources => [
-        :type   => 'filesystem',
-        # FIXME root only applies to items, so do we need an items_root and a layouts_root?
+        :type         => 'filesystem',
         :items_root   => '/',
         :layouts_root => '/',
-        :config => {}
+        :config       => {}
       ],
       :index_filenames => [ 'index.html' ]
     }
