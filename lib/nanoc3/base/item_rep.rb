@@ -60,12 +60,6 @@ module Nanoc3
     # filename, even if it is an index filename.
     attr_accessor :raw_path
 
-    # A hash containing this rep's content for each snapshot. Snapshot names
-    # can be anything; some predefines ones are +:raw+, +:pre+, +:post+ and
-    # +:last+.
-    # FIXME do not allow direct access to this hash (messes up dependencies)
-    attr_accessor :content
-
     # Creates a new item representation for the given item.
     #
     # +item+:: The item (Nanoc3::Item) to which the new representation will
