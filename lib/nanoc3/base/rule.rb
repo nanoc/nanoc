@@ -2,8 +2,8 @@
 
 module Nanoc3
 
-  # Nanoc3::ItemRule contains the processing information for a item.
-  class ItemRule
+  # Nanoc3::Rule contains the processing information for a item.
+  class Rule
 
     # The regex that determines which items this rule can be applied to. This
     # rule can be applied to items with a identifier matching this regex.

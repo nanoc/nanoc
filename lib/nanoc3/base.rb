@@ -14,10 +14,10 @@ module Nanoc3
   autoload 'Filter',             'nanoc3/base/filter'
   autoload 'Item',               'nanoc3/base/item'
   autoload 'ItemRep',            'nanoc3/base/item_rep'
-  autoload 'ItemRule',           'nanoc3/base/item_rule'
   autoload 'Layout',             'nanoc3/base/layout'
   autoload 'NotificationCenter', 'nanoc3/base/notification_center'
   autoload 'Plugin',             'nanoc3/base/plugin'
+  autoload 'Rule',               'nanoc3/base/rule'
   autoload 'Site',               'nanoc3/base/site'
 
 end
