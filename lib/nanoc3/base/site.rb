@@ -171,17 +171,13 @@ module Nanoc3
 
     # Loads this site's rules.
     def load_rules
-      # FIXME perhaps not the best approach
+      # Find rules file
+      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
+      raise Nanoc3::Errors::NoRulesFileFound.new if rules_filename.nil?
 
-      # Get rules
-      # FIXME raise proper custom errors
-      rule_sets = data_sources.map { |ds| ds.rules }.compact
-      if rule_sets.size > 1
-        raise Nanoc3::Errors::Generic, "multiple data source providing rules found"
-      elsif rule_sets.size == 0
-        raise Nanoc3::Errors::Generic, "no data source providing rules found"
-      end
-      @rules, @rules_mtime = *rule_sets[0]
+      # Get rule data
+      @rules       = File.read(rules_filename)
+      @rules_mtime = File.stat(rules_filename).mtime
 
       # Load DSL
       dsl.instance_eval(@rules)

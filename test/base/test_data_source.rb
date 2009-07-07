@@ -40,7 +40,6 @@ class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
     assert_equal [],  data_source.items
     assert_equal [],  data_source.layouts
     assert_equal [],  data_source.code_snippets
-    assert_equal nil, data_source.rules
 
     # Test required method - creating data
     assert_raises(NotImplementedError) { data_source.create_item(nil, nil, nil) }
