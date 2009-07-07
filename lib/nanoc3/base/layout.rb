@@ -12,7 +12,7 @@ module Nanoc3
     attr_accessor :site
 
     # The raw content of this layout.
-    attr_reader :content
+    attr_reader :raw_content
 
     # A hash containing this layout's attributes.
     attr_reader :attributes
@@ -32,11 +32,11 @@ module Nanoc3
     # +identifier+:: This layout's identifier.
     #
     # +mtime+:: The time when this layout was last modified.
-    def initialize(content, attributes, identifier, mtime=nil)
-      @content    = content
-      @attributes = attributes.symbolize_keys
-      @identifier = identifier.cleaned_identifier
-      @mtime      = mtime
+    def initialize(raw_content, attributes, identifier, mtime=nil)
+      @raw_content  = raw_content
+      @attributes   = attributes.symbolize_keys
+      @identifier   = identifier.cleaned_identifier
+      @mtime        = mtime
     end
 
     # Requests the attribute with the given key.

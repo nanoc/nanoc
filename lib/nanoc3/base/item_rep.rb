@@ -79,9 +79,9 @@ module Nanoc3
 
       # Initialize content
       @content = {
-        :raw  => @item.content,
-        :last => @item.content,
-        :pre  => @item.content
+        :raw  => @item.raw_content,
+        :last => @item.raw_content,
+        :pre  => @item.raw_content
       }
 
       # Reset flags
@@ -197,7 +197,7 @@ module Nanoc3
       # Layout
       @item.site.compiler.stack.push(layout)
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      @content[:last] = filter.run(layout.content)
+      @content[:last] = filter.run(layout.raw_content)
       Nanoc3::NotificationCenter.post(:filtering_ended,   self, filter_name)
       @item.site.compiler.stack.pop
 

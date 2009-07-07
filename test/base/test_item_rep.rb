@@ -14,7 +14,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -50,7 +50,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, nil)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -84,7 +84,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -119,7 +119,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -149,7 +149,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-100)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -183,7 +183,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -217,7 +217,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -251,7 +251,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -286,7 +286,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -321,7 +321,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = MiniTest::Mock.new
     item.expect(:mtime, Time.now-500)
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Mock layouts
     layouts = [ mock ]
@@ -370,14 +370,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Mock item
     item = MiniTest::Mock.new
-    item.expect(:content, %[<%= '<%= "blah" %' + '>' %>])
+    item.expect(:raw_content, %[<%= '<%= "blah" %' + '>' %>])
     item.expect(:site, site)
     item.expect(:identifier, '/foobar/')
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
-      @content[:raw]  = item.content
+      @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
     end
 
@@ -394,7 +394,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock layout
     layout = mock
     layout.stubs(:identifier).returns('/somelayout/')
-    layout.stubs(:content).returns(%[<%= "blah" %>])
+    layout.stubs(:raw_content).returns(%[<%= "blah" %>])
 
     # Mock compiler
     stack = mock
@@ -413,13 +413,13 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Mock item
     item = mock
-    item.stubs(:content).returns(%[Hello.])
+    item.stubs(:raw_content).returns(%[Hello.])
     item.stubs(:site).returns(site)
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
-      @content[:raw]  = item.content
+      @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
     end
 
@@ -437,14 +437,14 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Mock item
     item = MiniTest::Mock.new
-    item.expect(:content, %[<%= '<%= "blah" %' + '>' %>])
+    item.expect(:raw_content, %[<%= '<%= "blah" %' + '>' %>])
     item.expect(:site, site)
     item.expect(:identifier, '/foobar/')
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
     item_rep.instance_eval do
-      @content[:raw]  = item.content
+      @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
     end
 
@@ -464,7 +464,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_write
     # Mock item
     item = MiniTest::Mock.new
-    item.expect(:content, "blah blah blah")
+    item.expect(:raw_content, "blah blah blah")
 
     # Create rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
