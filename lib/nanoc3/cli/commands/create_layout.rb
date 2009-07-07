@@ -17,7 +17,7 @@ module Nanoc3::CLI::Commands
     end
 
     def long_desc
-      'Create a new layout in the current site.'
+      'Create a new layout in the current site. The first data source in the site configuration will be used.'
     end
 
     def usage
@@ -71,7 +71,6 @@ module Nanoc3::CLI::Commands
       end
 
       # Create layout
-      # FIXME get the right data source
       data_source = @base.site.data_sources[0]
       data_source.create_layout(
         "<html>\n" +

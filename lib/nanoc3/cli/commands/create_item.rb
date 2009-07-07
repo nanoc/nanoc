@@ -17,7 +17,7 @@ module Nanoc3::CLI::Commands
     end
 
     def long_desc
-      'Create a new item in the current site.'
+      'Create a new item in the current site. The first data source in the site configuration will be used.'
     end
 
     def usage
@@ -64,7 +64,6 @@ module Nanoc3::CLI::Commands
       end
 
       # Create item
-      # FIXME get the right data source
       data_source = site.data_sources[0]
       data_source.create_item(
         "Hi, I'm a new item!\n",
