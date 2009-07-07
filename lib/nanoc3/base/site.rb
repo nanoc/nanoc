@@ -61,7 +61,8 @@ module Nanoc3
       :data_sources => [
         :type   => 'filesystem',
         # FIXME root only applies to items, so do we need an items_root and a layouts_root?
-        :root   => '/',
+        :items_root   => '/',
+        :layouts_root => '/',
         :config => {}
       ],
       :index_filenames => [ 'index.html' ]
@@ -98,9 +99,17 @@ module Nanoc3
     def data_sources
       @data_sources ||= begin
         @config[:data_sources].map do |data_source_hash|
+          # Get data source class
           data_source_class = Nanoc3::DataSource.named(data_source_hash[:type])
           raise Nanoc3::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
-          data_source_class.new(self, data_source_hash[:root], data_source_hash[:config] || {})
+
+          # Create data source
+          data_source_class.new(
+            self,
+            data_source_hash[:items_root],
+            data_source_hash[:layouts_root],
+            data_source_hash[:config] || {}
+          )
         end
       end
     end

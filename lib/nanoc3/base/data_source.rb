@@ -16,10 +16,16 @@ module Nanoc3
   # first time. This method should be overridden in subclasses.
   class DataSource < Plugin
 
-    # TODO document
-    attr_reader :root
+    # A string containing the root where items returned by this data source
+    # should be mounted.
+    attr_reader :items_root
 
-    # TODO document
+    # A string containing the root where layouts returned by this data source
+    # should be mounted.
+    attr_reader :layouts_root
+
+    # A hash containing the configuration for this data source. For example,
+    # online data sources could contain authentication details.
     attr_reader :config
 
     # Creates a new data source for the given site.
@@ -29,10 +35,11 @@ module Nanoc3
     #          #items method (comparable to mount points for filesystems in
     #          Unix-ish OSes).
     # +config+:: The configuration for this data source.
-    def initialize(site, root, config)
-      @site   = site
-      @root   = root
-      @config = config
+    def initialize(site, items_root, layouts_root, config)
+      @site         = site
+      @items_root   = items_root
+      @layouts_root = layouts_root
+      @config       = config
 
       @references = 0
     end
@@ -134,6 +141,9 @@ module Nanoc3
     # Returns the list of items (represented by Nanoc3::Item) in this site.
     # The default implementation simply returns an empty array.
     #
+    # Subclasses should prepend item_root to the item's identifiers, since
+    # this is not done automatically.
+    #
     # Subclasses may implement this method.
     def items
       []
@@ -141,6 +151,9 @@ module Nanoc3
 
     # Returns the list of layouts (represented by Nanoc3::Layout) in this
     # site. The default implementation simply returns an empty array.
+    #
+    # Subclasses should prepend layout_root to the layout's identifiers, since
+    # this is not done automatically.
     #
     # Subclasses may implement this method.
     def layouts
