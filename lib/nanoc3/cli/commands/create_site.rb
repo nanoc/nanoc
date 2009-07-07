@@ -282,7 +282,6 @@ EOS
       site = Nanoc3::Site.new('.')
 
       # Create item
-      # FIXME get the right data source
       data_source = site.data_sources[0]
       data_source.create_item(
         DEFAULT_ITEM,
@@ -291,7 +290,6 @@ EOS
       )
 
       # Create layout
-      # FIXME get the right data source
       data_source = site.data_sources[0]
       data_source.create_layout(
         DEFAULT_LAYOUT,
