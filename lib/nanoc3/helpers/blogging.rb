@@ -45,8 +45,9 @@ module Nanoc3::Helpers
     #
     # +content_proc+:: A proc that returns the content of the given article,
     #                  passed as a parameter. By default, given the argument
-    #                  +article+, this proc will return +article.content+.
-    #                  This function may not return nil.
+    #                  +article+, this proc will return
+    #                  +article.reps[0].content+. This function may not return
+    #                  nil.
     #
     # +excerpt_proc+:: A proc that returns the excerpt of the given article,
     #                  passed as a parameter. By default, given the argument
