@@ -27,7 +27,7 @@ module Nanoc3::DataSources
             :url         => raw_item['u'],
             :description => raw_item['d'],
             :tags        => raw_item['t'],
-            :date        => raw_item['dt'],
+            :date        => Time.parse(raw_item['dt']),
             :note        => raw_item['n'],
             :author      => raw_item['a']
           }
