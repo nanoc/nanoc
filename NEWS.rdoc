@@ -4,6 +4,7 @@
 
 New:
 
+* Multiple data sources
 * Dependency tracking between items
 * Filters can now optionally take arguments
 * create_page and create_layout methods in data sources
