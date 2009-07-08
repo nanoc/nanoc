@@ -194,7 +194,12 @@ module Nanoc3
     # Loads this site's items, sets up item child-parent relationships and
     # builds each item's list of item representations.
     def load_items
-      @items = data_sources.map { |ds| ds.items }.flatten
+      @items = []
+      data_sources.each do |ds|
+        items_in_ds = ds.items
+        items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
+        @items += items_in_ds
+      end
       @items.each { |p| p.site = self }
 
       setup_child_parent_links

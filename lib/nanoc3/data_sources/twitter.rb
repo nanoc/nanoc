@@ -37,7 +37,7 @@ module Nanoc3::DataSources
             :source      => raw_item['source']
             # TODO add more
           }
-          identifier = File.join(self.items_root, raw_item['id'].to_s)
+          identifier = "/#{raw_item['id']}/"
           mtime = Time.parse(raw_item['created_at'])
 
           # Build item

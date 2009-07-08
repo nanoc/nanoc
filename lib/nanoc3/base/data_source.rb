@@ -141,8 +141,8 @@ module Nanoc3
     # Returns the list of items (represented by Nanoc3::Item) in this site.
     # The default implementation simply returns an empty array.
     #
-    # Subclasses should prepend item_root to the item's identifiers, since
-    # this is not done automatically.
+    # Subclasses should not prepend items_root to the item's identifiers, as
+    # this will be done automatically.
     #
     # Subclasses may implement this method.
     def items
