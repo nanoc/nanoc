@@ -14,7 +14,7 @@ module Nanoc3
     attr_accessor :attributes
 
     # This item's identifier.
-    attr_reader   :identifier
+    attr_accessor :identifier
 
     # The time when this item was last modified.
     attr_reader   :mtime
