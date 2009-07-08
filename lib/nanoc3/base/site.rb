@@ -205,7 +205,7 @@ module Nanoc3
         items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
         @items += items_in_ds
       end
-      @items.each { |p| p.site = self }
+      @items.each { |i| i.site = self }
 
       setup_child_parent_links
       build_reps
@@ -214,7 +214,12 @@ module Nanoc3
 
     # Loads this site's layouts.
     def load_layouts
-      @layouts = data_sources.map { |ds| ds.layouts }.flatten
+      @layouts = []
+      data_sources.each do |ds|
+        layouts_in_ds = ds.layouts
+        layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
+        @layouts += layouts_in_ds
+      end
       @layouts.each { |l| l.site = self }
     end
 
