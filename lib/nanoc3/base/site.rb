@@ -30,12 +30,17 @@ module Nanoc3
   #
   # The list of data sources consists of hashes with the following keys:
   #
-  # +type+:: The type of data source, i.e. its identifier. 
+  # +:type+:: The type of data source, i.e. its identifier. 
   #
-  # +root+:: The root where items returned by this data source will be placed.
-  #          Comparable to mount points in UNIX.
+  # +:items_root+:: The prefix that should be given to all items returned by
+  #                 the #items method (comparable to mount points for
+  #                 filesystems in Unix-ish OSes).
   #
-  # +config+:: A hash containing the configuration for this data source. This
+  # +:layouts_root+:: The prefix that should be given to all layouts returned
+  #                   by the #layouts method (comparable to mount points for
+  #                   filesystems in Unix-ish OSes).
+  #
+  # +:config+:: A hash containing the configuration for this data source. This
   #            is especially useful for online data sources; for example, a
   #            Twitter data source would need the username of the account from
   #            which to fetch tweets.
