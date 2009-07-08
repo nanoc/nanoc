@@ -233,7 +233,11 @@ EOS
         io.write(YAML.dump(
           'output_dir' => 'output',
           'data_sources' => [
-            { 'type' => 'filesystem', 'root' => '/' }
+            {
+              'type'         => 'filesystem',
+              'items_root'   => '/',
+              'layouts_root' => '/'
+            }
           ]
         ))
       end
