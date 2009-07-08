@@ -31,9 +31,12 @@ module Nanoc3
     # Creates a new data source for the given site.
     #
     # +site+:: The site this data source belongs to.
-    # +root+:: The prefix that should be given to all items returned by the
-    #          #items method (comparable to mount points for filesystems in
-    #          Unix-ish OSes).
+    # +items_root+:: The prefix that should be given to all items returned by
+    #                the #items method (comparable to mount points for
+    #                filesystems in Unix-ish OSes).
+    # +layouts_root+:: The prefix that should be given to all layouts returned
+    #                  by the #layouts method (comparable to mount points for
+    #                  filesystems in Unix-ish OSes).
     # +config+:: The configuration for this data source.
     def initialize(site, items_root, layouts_root, config)
       @site         = site
