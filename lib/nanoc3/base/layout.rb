@@ -18,7 +18,7 @@ module Nanoc3
     attr_reader :attributes
 
     # This layout's identifier, starting and ending with a slash.
-    attr_reader :identifier
+    attr_accessor :identifier
 
     # The time when this layout was last modified.
     attr_reader :mtime
