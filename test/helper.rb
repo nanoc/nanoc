@@ -22,11 +22,16 @@ require 'stringio'
 
 module Nanoc3::TestHelpers
 
-  def if_have(x)
-    require x
-    yield
-  rescue LoadError
-    skip "requiring #{x} failed"
+  def if_have(*libs)
+    libs.each do |lib|
+      begin
+        require lib
+        yield
+      rescue LoadError
+        skip "requiring #{lib} failed"
+        return
+      end
+    end
   end
 
   def setup
