@@ -64,7 +64,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Create item
-      data_source = site.data_sources[0]
+      data_source = @base.site.data_sources[0]
       data_source.create_item(
         "Hi, I'm a new item!\n",
         { :title => "A New Item" },
