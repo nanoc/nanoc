@@ -24,11 +24,11 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
       # Check with compact
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
-      assert_equal(".foo #bar { color: #f00; }\n", result)
+      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*#f00;?[\s\n]*\}/m, result)
 
       # Check with compressed
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compressed')
-      assert_match(".foo #bar{color:#f00}\n", result)
+      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*#f00;?[\s\n]*\}/m, result)
     end
   end
 
