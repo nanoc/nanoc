@@ -7,9 +7,7 @@ module Nanoc3::Filters
       require 'haml'
 
       # Get options
-      symbolized_params = params.inject({}) { |m,(k,v)| m.merge(k => v.to_sym) }
-      options = symbolized_params
-      options[:filename] = filename
+      options = params.merge(:filename => filename)
 
       # Create context
       context = ::Nanoc3::Extra::Context.new(assigns)
