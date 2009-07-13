@@ -7,9 +7,7 @@ module Nanoc3::Filters
       require 'sass'
 
       # Get options
-      symbolized_params = params.inject({}) { |m,(k,v)| m.merge(k => v.to_sym) }
-      options = symbolized_params
-      options[:filename] = filename
+      options = params.merge(:filename => filename)
 
       # Get result
       ::Sass::Engine.new(content, options).render

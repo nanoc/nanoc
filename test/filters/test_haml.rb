@@ -31,11 +31,11 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
       filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
 
       # Check with HTML5
-      result = filter.run('%img', :format => 'html5')
+      result = filter.run('%img', :format => :html5)
       assert_match(/<img>/, result)
 
       # Check with XHTML
-      result = filter.run('%img', :format => 'xhtml')
+      result = filter.run('%img', :format => :xhtml)
       assert_match(/<img\s*\/>/, result)
     end
   end
