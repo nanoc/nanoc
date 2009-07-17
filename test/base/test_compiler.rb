@@ -70,7 +70,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
-    compiler.run([ item ])
+    compiler.run(item)
 
     # Make sure output dir is created
     assert(File.directory?('foo/bar/baz'))

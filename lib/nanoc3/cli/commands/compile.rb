@@ -58,26 +58,21 @@ module Nanoc3::CLI::Commands
 
       # Find item(s) to compile
       if arguments.size == 0
-        items = nil
-      else
-        # Find item(s) with given identifier(s)
-        items = arguments.map do |identifier|
-          # Find item
-          identifier = identifier.cleaned_identifier
-          item = @base.site.items.find { |item| item.identifier == identifier }
+        item = nil
+      elsif arguments.size == 1
+        # Find item
+        identifier = arguments[0].cleaned_identifier
+        item = @base.site.items.find { |item| item.identifier == identifier }
 
-          # Ensure item
-          if item.nil?
-            $stderr.puts "Unknown item: #{identifier}"
-            exit 1
-          end
-
-          item
+        # Ensure item
+        if item.nil?
+          $stderr.puts "Unknown item: #{identifier}"
+          exit 1
         end
       end
 
       # Give feedback
-      puts "Compiling #{items.nil? ? 'site' : 'items'}..."
+      puts "Compiling #{item.nil? ? 'site' : 'item'}..."
 
       # Initialize profiling stuff
       time_before = Time.now
@@ -87,7 +82,7 @@ module Nanoc3::CLI::Commands
 
       # Compile
       @base.site.compiler.run(
-        items,
+        item,
         :force => options.has_key?(:all) || options.has_key?(:force)
       )
 
@@ -104,7 +99,7 @@ module Nanoc3::CLI::Commands
       # Give general feedback
       puts
       puts "No items were modified." unless reps.any? { |r| r.modified? }
-      puts "#{items.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
+      puts "#{item.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
       if options.has_key?(:verbose)
         print_state_feedback(reps)
