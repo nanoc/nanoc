@@ -35,7 +35,7 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
     # Create rules file
     File.open('Rules', 'w') do |io|
       io.write <<-EOF
-compile '*' do |rep|
+compile '*' do
   # ... do nothing ...
 end
 EOF
