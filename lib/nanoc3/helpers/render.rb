@@ -42,7 +42,7 @@ module Nanoc3::Helpers
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name  = @site.compiler.filter_name_for_layout(layout)
+      filter_name, filter_args = @site.compiler.filter_for_layout(layout)
       raise Nanoc3::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
@@ -54,7 +54,7 @@ module Nanoc3::Helpers
 
       # Layout
       @site.compiler.stack.push(layout)
-      result = filter.run(layout.raw_content)
+      result = filter.run(layout.raw_content, filter_args)
       @site.compiler.stack.pop
       result
     end

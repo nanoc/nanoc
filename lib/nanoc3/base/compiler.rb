@@ -88,13 +88,13 @@ module Nanoc3
       end
     end
 
-    # Returns the filter name for the given layout
-    def filter_name_for_layout(layout)
-      filter_name = nil
-      @layout_filter_mapping.each_pair do |lr, fn|
-        filter_name = fn if layout.identifier =~ lr
+    # Returns a tuple containing the filter name and the filter arguments for
+    # the given layout.
+    def filter_for_layout(layout)
+      @layout_filter_mapping.each_pair do |layout_identifier, filter_name_and_args|
+        return filter_name_and_args if layout.identifier =~ layout_identifier
       end
-      filter_name
+      nil
     end
 
   private

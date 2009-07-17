@@ -402,7 +402,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     stack.expects(:pop)
     compiler = mock
     compiler.stubs(:stack).returns(stack)
-    compiler.expects(:filter_name_for_layout).with(layout).returns(:erb)
+    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
 
     # Mock site
     site = mock

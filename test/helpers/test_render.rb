@@ -18,7 +18,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     stack    = []
     compiler = MiniTest::Mock.new
     compiler.expect(:stack, stack)
-    compiler.expects(:filter_name_for_layout).with(layout).returns(:erb)
+    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
     @site    = MiniTest::Mock.new
     @site.expect(:compiler, compiler)
     @site.expect(:layouts, [ layout ])
@@ -45,7 +45,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
 
     # Mock compiler
     compiler = mock
-    compiler.stubs(:filter_name_for_layout).with(layout).returns(nil)
+    compiler.stubs(:filter_for_layout).with(layout).returns(nil)
 
     # Mock site
     @site = MiniTest::Mock.new
@@ -66,7 +66,7 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
 
     # Mock compiler
     compiler = mock
-    compiler.stubs(:filter_name_for_layout).with(layout).returns(:kjsdalfjwagihlawfji)
+    compiler.stubs(:filter_for_layout).with(layout).returns([ :kjsdalfjwagihlawfji, {} ])
 
     # Mock site
     @site = MiniTest::Mock.new
