@@ -176,8 +176,8 @@ module Nanoc3
       layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
       raise Nanoc3::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
 
-      # Get filter name
-      filter_name  = @item.site.compiler.filter_name_for_layout(layout)
+      # Get filter
+      filter_name, filter_args  = @item.site.compiler.filter_for_layout(layout)
       raise Nanoc3::Errors::CannotDetermineFilter.new(layout_identifier) if filter_name.nil?
 
       # Get filter class
@@ -193,7 +193,7 @@ module Nanoc3
       # Layout
       @item.site.compiler.stack.push(layout)
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      @content[:last] = filter.run(layout.raw_content)
+      @content[:last] = filter.run(layout.raw_content, filter_args)
       Nanoc3::NotificationCenter.post(:filtering_ended,   self, filter_name)
       @item.site.compiler.stack.pop
 

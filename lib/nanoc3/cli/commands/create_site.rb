@@ -262,7 +262,7 @@ EOS
         io.write "  rep.item.identifier + 'index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*' => :erb\n"
+        io.write "layout '*', :erb\n"
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rules')
     end

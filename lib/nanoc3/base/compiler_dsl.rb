@@ -73,22 +73,18 @@ module Nanoc3
       @compiler.item_routing_rules << rule
     end
 
-    # Creates a layout rule for all layouts whose identifier match the first
-    # key in the given hash (which should only contain one key-value pair).
-    # The value of the first pair is the filter to use when compiling this
-    # layout.
+    # Creates a layout rule for all layouts whose identifier match the given
+    # identifier, which may either be a string containing the * wildcard, or a
+    # regular expression. The layouts matching the identifier will be filtered
+    # using the filter specified in the second argument. The params hash
+    # contains filter arguments that will be passed to the filter.
     #
     # Example:
     #
-    #   layout '/default/' => :erb
-    #   layout '/custom/'  => :haml
-    def layout(params={})
-      # Get layout identifier and filter name
-      identifier  = params.keys[0]
-      filter_name = params.values[0]
-
-      # Create rule
-      @compiler.layout_filter_mapping[identifier_to_regex(identifier)] = filter_name
+    #   layout '/default/', :erb
+    #   layout '/custom/',  :haml, :format => :html5
+    def layout(identifier, filter_name, params={})
+      @compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
     end
 
   private
