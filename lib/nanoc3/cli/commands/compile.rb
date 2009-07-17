@@ -99,7 +99,7 @@ module Nanoc3::CLI::Commands
       # Give general feedback
       puts
       puts "No items were modified." unless reps.any? { |r| r.modified? }
-      puts "#{item.nil? ? 'Site' : 'Object'} compiled in #{format('%.2f', Time.now - time_before)}s."
+      puts "#{item.nil? ? 'Site' : 'Item'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
       if options.has_key?(:verbose)
         print_state_feedback(reps)
