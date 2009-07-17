@@ -20,6 +20,10 @@ module Nanoc3
 
     attr_accessor :filename
 
+    # FIXME The way the graph is stored is not exactly great. An adjacency
+    # matrix (wrapped in a Graph class, perhaps) would be a lot easier to work
+    # with, and it would not require an inverse graph to be maintained.
+
     # Creates a new dependency tracker for the given items.
     def initialize(items)
       @items = items
@@ -27,6 +31,7 @@ module Nanoc3
       @filename = 'tmp/dependencies'
 
       @graph = {}
+      @inverse_graph = {}
     end
 
     # Starts listening for dependency messages (+:visit_started+ and
@@ -71,24 +76,60 @@ module Nanoc3
     # Returns all dependencies (direct and indirect) for +item+, i.e. the
     # items that, when outdated, will cause +item+ to be marked as outdated.
     def all_dependencies_for(item)
+      # FIXME can result in an infinite loop
+
       direct_dependencies   = direct_dependencies_for(item)
       indirect_dependencies = direct_dependencies.map { |i| all_dependencies_for(i) }
 
       (direct_dependencies + indirect_dependencies).flatten
     end
 
+    # Returns the direct inverse dependencies for +item+, i.e. the items that
+    # will be marked as outdated when +item+ is outdated. Indirect
+    # dependencies will not be returned (e.g. if A depends on B which depends
+    # on C, then the direct inverse dependencies of C do not include A).
+    def direct_inverse_dependencies_for(item)
+      inverted_graph[item] || []
+    end
+
+    # Returns all inverse dependencies (direct and indirect) for +item+, i.e.
+    # the items that will be marked as outdated when +item+ is outdated.
+    def all_inverse_dependencies_for(item)
+      # Init list of all found dependencies
+      all_dependencies = []
+
+      # Init lists with already checked and not yet checked dependencies
+      checked_direct_dependencies = []
+      pending_direct_dependencies = direct_inverse_dependencies_for(item)
+
+      while !pending_direct_dependencies.empty?
+        # Get next unchecked dependency
+        dependency = pending_direct_dependencies.shift
+        next if checked_direct_dependencies.include?(dependency)
+
+        # Add dependencies of this unchecked dependency
+        pending_direct_dependencies += direct_inverse_dependencies_for(dependency)
+
+        # Mark this dependency as handled
+        all_dependencies << dependency
+        checked_direct_dependencies << dependency
+      end
+
+      all_dependencies
+    end
+
     # Records a dependency from +src+ to +dst+ in the dependency graph. When
     # +dst+ is oudated, +src+ will also become outdated.
     def record_dependency(src, dst)
+      # Initialize graph if necessary
       @graph[src] ||= []
 
-      # Don't include self in dependencies
+      # Don't include self or doubles in dependencies
       return if src == dst
-
-      # Don't include doubles in dependencies
       return if @graph[src].include?(dst)
 
       # Record dependency
+      invalidate_inverted_graph
       @graph[src] << dst
     end
 
@@ -146,9 +187,6 @@ module Nanoc3
     # Traverses the dependency graph and marks all items that (directly or
     # indirectly) depend on an outdated item as outdated.
     def mark_outdated_items
-      # Invert dependency graph
-      inverted_graph = invert_graph(@graph)
-
       # Unmark everything
       @items.each { |i| i.dependencies_outdated = false }
 
@@ -193,6 +231,19 @@ module Nanoc3
     # Returns the item with the given identifier, or nil if no item is found.
     def item_with_identifier(identifier)
       @items.find { |i| i.identifier == identifier }
+    end
+
+    # Returns the inverted dependency graph, creating it first if it does not
+    # exist yet or is outdated. In this graph, the keys will be outdated when
+    # any of the values are outdated.
+    def inverted_graph
+      @inverted_graph ||= invert_graph(@graph)
+    end
+
+    # Marks the inverted graph as outdated so that it will be regenerated the
+    # next time it is used.
+    def invalidate_inverted_graph
+      @inverted_graph = nil
     end
 
     # Inverts the given graph (keys become values and values become keys).
