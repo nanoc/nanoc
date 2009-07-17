@@ -115,9 +115,13 @@ module Nanoc3
           @stack.clear
           begin
             rep = active_reps.shift
+            puts "*** Attempting to compile #{rep.inspect}" if $DEBUG
+
             @stack.push(rep)
             compile_rep(rep)
           rescue Nanoc3::Errors::UnmetDependency => e
+            puts "*** Attempt failed due to unmet dependency on #{e.rep.inspect}" if $DEBUG
+
             # Save rep to compile it later
             inactive_reps << rep
 
@@ -125,12 +129,17 @@ module Nanoc3
             inactive_reps.delete(e.rep)
             inactive_reps.unshift(e.rep) unless active_reps.include?(e.rep)
           else
+            puts "*** Attempt succeeded" if $DEBUG
+
             changed = true
             compiled_reps << rep
           end
+          puts if $DEBUG
         end
 
         # Retry
+        puts "*** No active reps left; activating all (#{inactive_reps.size}) inactive reps" if $DEBUG
+        puts if $DEBUG
         active_reps   = inactive_reps
         inactive_reps = []
       end
