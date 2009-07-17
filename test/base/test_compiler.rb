@@ -44,12 +44,14 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_run_with_item
-    # Mock item
+    # Mock items
     item = mock
+    other_items = [ mock, mock ]
 
     # Mock reps
     item.stubs(:reps).returns([ mock, mock, mock ])
-    reps = item.reps
+    other_items.each { |i| i.stubs(:reps).returns([ mock ]) }
+    reps = item.reps + other_items[0].reps
 
     # Mock site
     site = mock
@@ -59,7 +61,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:compile_reps).with(reps)
     compiler.expects(:mark_outdated_items).with(reps, false)
-    compiler.expects(:forget_dependencies_if_outdated).with([ item ])
+    compiler.expects(:forget_dependencies_if_outdated).with([ item, other_items[0] ])
 
     # Mock dependency tracker
     dependency_tracker = mock
@@ -67,6 +69,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     dependency_tracker.expects(:store_graph)
     dependency_tracker.expects(:start)
     dependency_tracker.expects(:stop)
+    dependency_tracker.expects(:all_inverse_dependencies_for).with(item).returns([ other_items[0] ])
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
@@ -207,26 +210,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_equal(nil, compiler.filter_name_for_layout(layout))
   end
 
-  def test_compile_rep_with_not_outdated_rep
+  def test_compile_rep
     # Mock rep
     item = mock
     rep = mock
-    rep.expects(:outdated?).returns(false)
-    rep.stubs(:item).returns(item)
-    item.expects(:dependencies_outdated?).returns(false)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-
-    # Compile
-    compiler.send :compile_rep, rep
-  end
-
-  def test_compile_rep_with_outdated_rep
-    # Mock rep
-    item = mock
-    rep = mock
-    rep.expects(:outdated?).returns(true)
     rep.expects(:compiled=).with(true)
     rep.expects(:raw_path).returns('output/foo.html')
     rep.expects(:write)
@@ -254,6 +241,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   def test_compile_reps_with_one_rep
     # Mock rep
     rep = mock
+    rep.expects(:outdated?).returns(true)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -266,6 +254,8 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   def test_compile_reps_with_two_independent_reps
     # Mock reps
     reps = [ mock, mock ]
+    reps[0].expects(:outdated?).returns(true)
+    reps[1].expects(:outdated?).returns(true)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -285,8 +275,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Mock reps
     reps  = [ mock, mock ]
+    reps[0].expects(:outdated?).returns(true)
     reps[1].expects(:item).returns(items[1])
     reps[1].expects(:name).returns('somerepname')
+    reps[1].expects(:outdated?).returns(true)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -328,8 +320,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     reps  = [ mock, mock ]
     reps[0].expects(:item).returns(items[0])
     reps[0].expects(:name).returns('firstrep')
+    reps[0].expects(:outdated?).returns(true)
     reps[1].expects(:item).returns(items[1])
     reps[1].expects(:name).returns('secondrep')
+    reps[1].expects(:outdated?).returns(true)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)

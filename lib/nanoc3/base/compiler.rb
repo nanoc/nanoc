@@ -48,19 +48,22 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Get items and reps to compile
-      items = item ? [ item ] : @site.items
-      reps = items.map { |i| i.reps }.flatten
-
       # Load dependencies
       dependency_tracker.load_graph
+      print_dependency_graph if $DEBUG
+
+      # Get items and reps to compile
+      if item
+        items = [ item ] + dependency_tracker.all_inverse_dependencies_for(item)
+        items.uniq!
+      else
+        items = @site.items
+      end
+      reps = items.map { |i| i.reps }.flatten
 
       # Prepare dependencies
       mark_outdated_items(reps, params.has_key?(:force) && params[:force])
       forget_dependencies_if_outdated(items)
-
-      # Debug
-      print_dependency_graph if $DEBUG
 
       # Compile reps
       dependency_tracker.start
@@ -98,9 +101,9 @@ module Nanoc3
 
     # Compiles all item representations in the site.
     def compile_reps(reps)
-      active_reps     = reps.dup
-      inactive_reps   = []
-      compiled_reps   = []
+      active_reps, skipped_reps = reps.partition { |rep| rep.outdated? || rep.item.dependencies_outdated? }
+      inactive_reps = []
+      compiled_reps = []
 
       # Repeat as long as something is successfully compiled...
       changed = true
@@ -115,7 +118,12 @@ module Nanoc3
             @stack.push(rep)
             compile_rep(rep)
           rescue Nanoc3::Errors::UnmetDependency => e
+            # Save rep to compile it later
             inactive_reps << rep
+
+            # Add dependency to list of items to compile
+            inactive_reps.delete(e.rep)
+            inactive_reps.unshift(e.rep) unless active_reps.include?(e.rep)
           else
             changed = true
             compiled_reps << rep
@@ -127,9 +135,14 @@ module Nanoc3
         inactive_reps = []
       end
 
+      # Notify skipped reps
+      skipped_reps.each do |rep|
+        Nanoc3::NotificationCenter.post(:compilation_started, rep)
+        Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
+      end
+
       # Raise error if some active but non-compileable reps are left
       if !active_reps.empty?
-        # FIXME as a workaround, check whether the reps param is complete
         raise Nanoc3::Errors::RecursiveCompilation.new(active_reps)
       end
     end
@@ -142,15 +155,6 @@ module Nanoc3
     #
     # +rep+:: The rep that is to be compiled.
     def compile_rep(rep)
-      # Skip unless outdated
-      if !rep.outdated? && !rep.item.dependencies_outdated?
-        Nanoc3::NotificationCenter.post(:compilation_started, rep)
-        Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
-        Nanoc3::NotificationCenter.post(:visit_ended,         rep.item)
-        Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
-        return
-      end
-
       # Start
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
