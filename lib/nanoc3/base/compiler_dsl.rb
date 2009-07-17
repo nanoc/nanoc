@@ -23,11 +23,11 @@ module Nanoc3
     #
     # Example:
     #
-    #   compile '/foo/*' do |rep|
+    #   compile '/foo/*' do
     #     rep.filter :erb
     #   end
     #   
-    #   compile '/bar/*', :rep => 'raw' do |rep|
+    #   compile '/bar/*', :rep => 'raw' do
     #     # do nothing
     #   end
     def compile(identifier, params={}, &block)
@@ -54,11 +54,11 @@ module Nanoc3
     #
     # Example:
     #
-    #   route '/foo/*' do |rep|
+    #   route '/foo/*' do
     #     '/blahblah' + rep.item.identifier + 'index.html'
     #   end
     #   
-    #   route '/bar/*', :rep => 'raw' do |rep|
+    #   route '/bar/*', :rep => 'raw' do
     #     '/blahblah' + rep.item.identifier + 'index.txt'
     #   end
     def route(identifier, params={}, &block)
