@@ -226,7 +226,7 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class} name=#{self.name} item.identifier=#{self.item.identifier}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier}>"
     end
 
   end
