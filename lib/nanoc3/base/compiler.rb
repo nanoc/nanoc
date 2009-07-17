@@ -44,13 +44,12 @@ module Nanoc3
     #
     # +:force+:: true if the rep should be compiled even if it is not
     #            outdated, false if not. Defaults to false.
-    def run(items=nil, params={})
+    def run(item=nil, params={})
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
       # Get items and reps to compile
-      # FIXME also add items that are depended upon
-      items ||= @site.items
+      items = item ? [ item ] : @site.items
       reps = items.map { |i| i.reps }.flatten
 
       # Load dependencies
