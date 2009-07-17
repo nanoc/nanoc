@@ -29,7 +29,7 @@ module Nanoc3
 
     # Applies this rule to the given item rep.
     def apply_to(rep)
-      rule_context = Nanoc3::RuleContext.new(rep).instance_eval &@block
+      Nanoc3::RuleContext.new(rep).instance_eval &@block
     end
 
   end
