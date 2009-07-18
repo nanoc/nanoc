@@ -126,8 +126,11 @@ module Nanoc3
             inactive_reps << rep
 
             # Add dependency to list of items to compile
-            inactive_reps.delete(e.rep)
-            inactive_reps.unshift(e.rep) unless active_reps.include?(e.rep)
+            unless active_reps.include?(e.rep) || inactive_reps.include?(e.rep)
+              changed = true
+              skipped_reps.delete(e.rep)
+              inactive_reps.unshift(e.rep)
+            end
           else
             puts "*** Attempt succeeded" if $DEBUG
 
