@@ -7,8 +7,14 @@ module Nanoc3
   class CompilerDSL
 
     # Creates a new compiler DSL for the given compiler.
-    def initialize(compiler)
-      @compiler = compiler
+    def initialize(site)
+      @site = site
+    end
+
+    # Creates a preprocessor block that will be executed after all data is
+    # loaded, but before the site is compiled.
+    def preprocess(&block)
+      @site.preprocessor = block
     end
 
     # Creates a compilation rule for all items whose identifier match the
@@ -39,7 +45,7 @@ module Nanoc3
 
       # Create rule
       rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
-      @compiler.item_compilation_rules << rule
+      @site.compiler.item_compilation_rules << rule
     end
 
     # Creates a routing rule for all items whose identifier match the
@@ -70,7 +76,7 @@ module Nanoc3
 
       # Create rule
       rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
-      @compiler.item_routing_rules << rule
+      @site.compiler.item_routing_rules << rule
     end
 
     # Creates a layout rule for all layouts whose identifier match the given
@@ -84,7 +90,7 @@ module Nanoc3
     #   layout '/default/', :erb
     #   layout '/custom/',  :haml, :format => :html5
     def layout(identifier, filter_name, params={})
-      @compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
+      @site.compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
     end
 
   private

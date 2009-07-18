@@ -81,6 +81,10 @@ module Nanoc3
     # The timestamp when the rules were last modified.
     attr_reader :rules_mtime
 
+    # The code block that will be executed after all data is loaded but before
+    # the site is compiled.
+    attr_accessor :preprocessor
+
     # Creates a Nanoc3::Site object for the site specified by the given
     # +dir_or_config_hash+ argument.
     #
@@ -89,6 +93,10 @@ module Nanoc3
     #                        configuration.
     def initialize(dir_or_config_hash)
       build_config(dir_or_config_hash)
+
+      @code_snippets_loaded = false
+      @items_loaded         = false
+      @layouts_loaded       = false
     end
 
     # Returns the compiler for this site. Will create a new compiler if none
@@ -137,25 +145,32 @@ module Nanoc3
       load_layouts
       data_sources.each { |ds| ds.unuse }
 
+      # Preprocess
+      Nanoc3::PreprocessorContext.new(self).instance_eval(&preprocessor) unless preprocessor.nil?
+      link_everything_to_site
+      setup_child_parent_links
+      build_reps
+      route_reps
+
       # Done
       @data_loaded = true
     end
 
     # Returns this site's code snippets. Raises an exception if data hasn't been loaded yet.
     def code_snippets
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @data_loaded
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @code_snippets_loaded
       @code_snippets
     end
 
     # Returns this site's items. Raises an exception if data hasn't been loaded yet.
     def items
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @data_loaded
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @items_loaded
       @items
     end
 
     # Returns this site's layouts. Raises an exception if data hasn't been loaded yet.
     def layouts
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @data_loaded
+      raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @layouts_loaded
       @layouts
     end
 
@@ -163,18 +178,16 @@ module Nanoc3
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
     def dsl
-      @dsl ||= Nanoc3::CompilerDSL.new(compiler)
+      @dsl ||= Nanoc3::CompilerDSL.new(self)
     end
 
     # Loads this site's code and executes it.
     def load_code_snippets(force=false)
       # Don't load code snippets twice
-      @code_snippets_loaded ||= false
       return if @code_snippets_loaded and !force
 
       # Get code snippets
       @code_snippets = data_sources.map { |ds| ds.code_snippets }.flatten
-      @code_snippets.each { |cs| cs.site = self }
 
       # Execute code snippets
       @code_snippets.each { |cs| cs.load }
@@ -205,11 +218,8 @@ module Nanoc3
         items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
         @items += items_in_ds
       end
-      @items.each { |i| i.site = self }
 
-      setup_child_parent_links
-      build_reps
-      route_reps
+      @items_loaded = true
     end
 
     # Loads this site's layouts.
@@ -220,7 +230,15 @@ module Nanoc3
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts += layouts_in_ds
       end
-      @layouts.each { |l| l.site = self }
+
+      @layouts_loaded = true
+    end
+
+    # Links items, layouts and code snippets to the site.
+    def link_everything_to_site
+      @items.each         { |i|  i.site  = self }
+      @layouts.each       { |l|  l.site  = self }
+      @code_snippets.each { |cs| cs.site = self }
     end
 
     # Fills each item's parent reference and children array with the
