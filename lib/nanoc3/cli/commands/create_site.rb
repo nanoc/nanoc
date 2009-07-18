@@ -234,7 +234,7 @@ EOS
           'output_dir' => 'output',
           'data_sources' => [
             {
-              'type'         => 'filesystem',
+              'type'         => data_source,
               'items_root'   => '/',
               'layouts_root' => '/'
             }
