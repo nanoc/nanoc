@@ -116,6 +116,37 @@ describe 'Nanoc::Site#load_data' do
     site.stubs(:load_rules)
     site.stubs(:load_items)
     site.stubs(:load_layouts)
+    site.expects(:link_everything_to_site)
+    site.expects(:setup_child_parent_links)
+    site.expects(:build_reps)
+    site.expects(:route_reps)
+
+    # Load data
+    site.load_data
+  end
+
+  it 'should call the preprocessor' do
+    site = Nanoc3::Site.new({})
+
+    # Mock data sources
+    data_sources = [ mock, mock, mock ]
+    data_sources.each { |ds| ds.expects(:use)   }
+    data_sources.each { |ds| ds.expects(:unuse) }
+    site.stubs(:data_sources).returns(data_sources)
+
+    # Mock load_* methods
+    site.expects(:load_code_snippets).with(false)
+    site.expects(:load_rules)
+    site.expects(:load_items)
+    site.expects(:load_layouts)
+    site.expects(:link_everything_to_site)
+    site.expects(:setup_child_parent_links)
+    site.expects(:build_reps)
+    site.expects(:route_reps)
+
+    # Mock preprocessor
+    preprocessor = lambda { }
+    site.expects(:preprocessor).times(2).returns(preprocessor)
 
     # Load data
     site.load_data
@@ -135,6 +166,10 @@ describe 'Nanoc::Site#load_data' do
     site.expects(:load_rules)
     site.expects(:load_items)
     site.expects(:load_layouts)
+    site.expects(:link_everything_to_site)
+    site.expects(:setup_child_parent_links)
+    site.expects(:build_reps)
+    site.expects(:route_reps)
 
     # Load data
     site.load_data
@@ -154,6 +189,10 @@ describe 'Nanoc::Site#load_data' do
     site.expects(:load_rules)
     site.expects(:load_items).once
     site.expects(:load_layouts).once
+    site.expects(:link_everything_to_site)
+    site.expects(:setup_child_parent_links).once
+    site.expects(:build_reps).once
+    site.expects(:route_reps).once
 
     # Load data twice
     site.load_data
@@ -174,6 +213,10 @@ describe 'Nanoc::Site#load_data' do
     site.expects(:load_rules).times(2)
     site.expects(:load_items).times(2)
     site.expects(:load_layouts).times(2)
+    site.expects(:link_everything_to_site).times(2)
+    site.expects(:setup_child_parent_links).times(2)
+    site.expects(:build_reps).times(2)
+    site.expects(:route_reps).times(2)
 
     # Load data twice
     site.load_data(true)
