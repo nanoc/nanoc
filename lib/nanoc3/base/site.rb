@@ -64,7 +64,7 @@ module Nanoc3
     DEFAULT_CONFIG = {
       :output_dir => 'output',
       :data_sources => [
-        :type         => 'filesystem',
+        :type         => 'filesystem_compact',
         :items_root   => '/',
         :layouts_root => '/',
         :config       => {}

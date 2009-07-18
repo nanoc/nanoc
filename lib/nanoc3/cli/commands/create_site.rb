@@ -190,7 +190,7 @@ EOS
 
       # Extract arguments and options
       path        = arguments[0]
-      data_source = options[:datasource] || 'filesystem'
+      data_source = options[:datasource] || 'filesystem_compact'
 
       # Check whether site exists
       if File.exist?(path)
