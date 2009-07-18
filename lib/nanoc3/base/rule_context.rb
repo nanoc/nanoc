@@ -10,14 +10,39 @@ module Nanoc3
       @rep = rep
     end
 
-    # Returns the item representation that is currently being processed in
-    # this context.
-    attr_reader :rep
+    # The representation that is currently being processed in this context.
+    def rep
+      @rep
+    end
 
-    # Returns the item of the representation that is currently being processed
-    # in this context.
+    # The item of the representation that is currently being processed in this
+    # context.
     def item
       rep.item
+    end
+
+    # The site of the item representation that is currently being processed in
+    # this context.
+    def site
+      item.site
+    end
+
+    # The configuration of the site of the item representation that is
+    # currently being processed in this context.
+    def config
+      site.config
+    end
+
+    # The items in the site of the item representation that is currently being
+    # processed in this context.
+    def items
+      site.items
+    end
+
+    # The layouts in the site of the item representation that is currently
+    # being processed in this context.
+    def layouts
+      site.layouts
     end
 
     # Filters the current representation (calls #filter with the given
