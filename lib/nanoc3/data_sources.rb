@@ -7,12 +7,14 @@ module Nanoc3::DataSources
   autoload 'FilesystemCombined', 'nanoc3/data_sources/filesystem_combined'
   autoload 'FilesystemCommon',   'nanoc3/data_sources/filesystem_common'
   autoload 'FilesystemCompact',  'nanoc3/data_sources/filesystem_compact'
+  autoload 'LastFM',             'nanoc3/data_sources/last_fm'
   autoload 'Twitter',            'nanoc3/data_sources/twitter'
 
   Nanoc3::DataSource.register '::Nanoc3::DataSources::Delicious',          :delicious
   Nanoc3::DataSource.register '::Nanoc3::DataSources::Filesystem',         :filesystem
   Nanoc3::DataSource.register '::Nanoc3::DataSources::FilesystemCombined', :filesystem_combined
   Nanoc3::DataSource.register '::Nanoc3::DataSources::FilesystemCompact',  :filesystem_compact
+  Nanoc3::DataSource.register '::Nanoc3::DataSources::LastFM',             :last_fm
   Nanoc3::DataSource.register '::Nanoc3::DataSources::Twitter',            :twitter
 
 end
