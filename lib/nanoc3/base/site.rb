@@ -57,18 +57,21 @@ module Nanoc3
   # The way site data is stored depends on the data source.
   class Site
 
+    # 
+    DEFAULT_DATA_SOURCE_CONFIG = {
+      :type         => 'filesystem_compact',
+      :items_root   => '/',
+      :layouts_root => '/',
+      :config       => {}
+    }
+
     # The default configuration for a site. A site's configuration overrides
     # these options: when a Nanoc3::Site is created with a configuration that
     # lacks some options, the default value will be taken from
     # +DEFAULT_CONFIG+.
     DEFAULT_CONFIG = {
-      :output_dir => 'output',
-      :data_sources => [
-        :type         => 'filesystem_compact',
-        :items_root   => '/',
-        :layouts_root => '/',
-        :config       => {}
-      ],
+      :output_dir      => 'output',
+      :data_sources    => [ {} ],
       :index_filenames => [ 'index.html' ]
     }
 
@@ -313,6 +316,9 @@ module Nanoc3
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
         @config_mtime = nil
       end
+
+      # Merge data sources with default data source config
+      @config[:data_sources].map! { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
     end
 
   end
