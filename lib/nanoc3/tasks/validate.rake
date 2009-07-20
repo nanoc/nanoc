@@ -13,7 +13,7 @@ namespace :validate do
     end
 
     # Validate
-    validator = ::Nanoc3::Tasks::Validate::W3C.new(site, :html)
+    validator = ::Nanoc3::Extra::Validators::W3C.new(site, :html)
     validator.run
   end
 
@@ -28,7 +28,7 @@ namespace :validate do
     end
 
     # Validate
-    validator = ::Nanoc3::Tasks::Validate::W3C.new(site, :css)
+    validator = ::Nanoc3::Extra::Validators::W3C.new(site, :css)
     validator.run
   end
 

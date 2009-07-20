@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Tasks::Validate::HTMLTest < MiniTest::Unit::TestCase
+class Nanoc3::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
@@ -14,7 +14,7 @@ class Nanoc3::Tasks::Validate::HTMLTest < MiniTest::Unit::TestCase
       site.expects(:config).returns({ :output_dir => '.' })
 
       # Create validator
-      w3c = Nanoc3::Tasks::Validate::W3C.new(site, nil)
+      w3c = Nanoc3::Extra::Validators::W3C.new(site, nil)
 
       # Create some sample files
       %w{ foo bar baz qux }.each do |filename|

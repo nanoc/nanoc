@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-module Nanoc3::Tasks::Deploy
+module Nanoc3::Extra::Deployers
 
-  # Nanoc3::Tasks::Deploy::Rsync is a task that deploys a site using rsync.
+  # Nanoc3::Extra::Deployers::Rsync is a deployer that deploys a site using rsync.
   class Rsync
 
     # Creates a new deployment task that uses rsync. The deployment
