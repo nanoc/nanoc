@@ -1,7 +1,9 @@
 # encoding: utf-8
 
-module Nanoc3::Tasks::Validate
+module Nanoc3::Extra::Validators
 
+  # Nanoc3::Extra::Validators::W3C is a validator that uses the W3C web
+  # service to validate HTML and CSS files.
   class W3C
 
     def initialize(site, type)

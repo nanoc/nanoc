@@ -2,14 +2,14 @@
 
 require 'test/helper'
 
-class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
+class Nanoc3::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
   def test_new_without_site
     # Try creating site
     error = assert_raises(RuntimeError) do
-      Nanoc3::Tasks::Deploy::Rsync.new
+      Nanoc3::Extra::Deployers::Rsync.new
     end
 
     # Check error message
@@ -24,7 +24,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Try running
     error = assert_raises(RuntimeError) do
@@ -45,7 +45,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Try running
     error = assert_raises(RuntimeError) do
@@ -66,7 +66,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Try running
     error = assert_raises(RuntimeError) do
@@ -87,7 +87,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Try running
     error = assert_raises(RuntimeError) do
@@ -108,7 +108,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Try running
     error = assert_raises(RuntimeError) do
@@ -129,7 +129,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
@@ -156,7 +156,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
@@ -183,7 +183,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
@@ -210,7 +210,7 @@ class Nanoc3::Tasks::Deploy::RsyncTest < MiniTest::Unit::TestCase
     end
 
     # Create site
-    rsync = Nanoc3::Tasks::Deploy::Rsync.new
+    rsync = Nanoc3::Extra::Deployers::Rsync.new
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
