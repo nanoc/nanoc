@@ -31,8 +31,8 @@ module Nanoc3::DataSources
     def items
       @items ||= begin
         # Get data
-        @http_client ||= Nanoc3::Extra::CachingHTTPClient.new
-        data = @http_client.get("http://feeds.delicious.com/v2/json/#{self.config[:username]}")
+        @http_client ||= Nanoc3::Extra::CHiCk::Client.new
+        status, headers, data = *@http_client.get("http://feeds.delicious.com/v2/json/#{self.config[:username]}")
 
         # Parse as JSON
         require 'json'

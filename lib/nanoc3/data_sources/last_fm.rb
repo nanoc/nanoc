@@ -19,10 +19,10 @@ module Nanoc3::DataSources
         end
 
         # Get data
-        @http_client ||= Nanoc3::Extra::CachingHTTPClient.new
-        data = @http_client.get(
+        @http_client ||= Nanoc3::Extra::CHiCk::Client.new
+        status, headers, data = *@http_client.get(
           'http://ws.audioscrobbler.com/2.0/' +
-            '?method=user.getrecenttracks' +
+            '?method=user.getRecentTracks' +
             '&format=json' +
             '&user=' + URI.escape(self.config[:username]) +
             '&api_key=' + URI.escape(self.config[:api_key])
@@ -35,7 +35,7 @@ module Nanoc3::DataSources
         # Convert to items
         raw_items.enum_with_index.map do |raw_item, i|
           # Get artist data
-          artist_data = @http_client.get(
+          artist_status, artist_headers, artist_data = *@http_client.get(
             'http://ws.audioscrobbler.com/2.0/' +
               '?method=artist.getInfo' +
               '&format=json' +

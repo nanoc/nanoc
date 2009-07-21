@@ -21,8 +21,8 @@ module Nanoc3::DataSources
     def items
       @item ||= begin
         # Get data
-        @http_client ||= Nanoc3::Extra::CachingHTTPClient.new
-        data = @http_client.get("http://twitter.com/statuses/user_timeline/#{self.config[:username]}.json")
+        @http_client ||= Nanoc3::Extra::CHiCk::Client.new
+        status, headers, data = *@http_client.get("http://twitter.com/statuses/user_timeline/#{self.config[:username]}.json")
 
         # Parse as JSON
         require 'json'
