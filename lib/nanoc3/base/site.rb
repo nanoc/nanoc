@@ -149,6 +149,7 @@ module Nanoc3
       data_sources.each { |ds| ds.unuse }
 
       # Preprocess
+      setup_child_parent_links
       Nanoc3::PreprocessorContext.new(self).instance_eval(&preprocessor) unless preprocessor.nil?
       link_everything_to_site
       setup_child_parent_links
@@ -247,6 +248,12 @@ module Nanoc3
     # Fills each item's parent reference and children array with the
     # appropriate items.
     def setup_child_parent_links
+      # Clear all links
+      @items.each do |item|
+        item.parent = nil
+        item.children = []
+      end
+
       @items.each do |item|
         # Get parent
         parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
