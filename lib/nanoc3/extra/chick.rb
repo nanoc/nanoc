@@ -24,13 +24,14 @@ module Nanoc3::Extra
         # Get options
         @options = DEFAULT_OPTIONS.merge(options)
         @options[:cache] = DEFAULT_OPTIONS[:cache].merge(@options[:cache])
+        @options[:cache_controller] = DEFAULT_OPTIONS[:cache_controller].merge(@options[:cache_controller])
       end
 
       def get(url, additional_headers={})
         # Build app
         options = @options
         @app ||= Rack::Builder.new {
-          use Rack::Cache,            options[:cache]
+          use Rack::Cache, options[:cache]
           use Nanoc3::Extra::CHiCk::CacheController, options[:cache_controller]
           run Nanoc3::Extra::CHiCk::RackClient
         }
@@ -51,13 +52,9 @@ module Nanoc3::Extra
     # specifically, max-age) to limit the number of necessary requests.
     class CacheController
 
-      DEFAULT_OPTIONS = {
-        :max_age => 10 # maximum age in seconds
-      }
-
       def initialize(app, options={})
         @app = app
-        @options = DEFAULT_OPTIONS.merge(options)
+        @options = options
       end
 
       def call(env)
