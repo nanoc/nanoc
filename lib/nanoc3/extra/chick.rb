@@ -39,6 +39,9 @@ module Nanoc3::Extra
         # Build environment for request
         env = Rack::MockRequest.env_for(url, :method => 'GET')
 
+        # Debug
+        puts "[CHiCk] Fetching #{url} from cache" if $DEBUG
+
         # Fetch
         status, headers, body_parts = @app.call(env)
         body = ''
@@ -87,6 +90,9 @@ module Nanoc3::Extra
         request_headers = env.inject({}) do |m,(k,v)|
           k =~ /^HTTP_(.*)$/ && v ? m.merge($1.gsub(/_/, '-') => v) : m
         end
+
+        # Debug
+        puts "[CHiCk] Fetching #{request.url} from the internets (not cached)" if $DEBUG
 
         # Build Net::HTTP request
         http = Net::HTTP.new(request.host, request.port)
