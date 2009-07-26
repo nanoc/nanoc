@@ -85,7 +85,7 @@ module Nanoc3::Extra
 
         # Build headers and strip HTTP_
         request_headers = env.inject({}) do |m,(k,v)|
-          k =~ /^HTTP_(.*)$/ ? m.merge($1.gsub(/_/, '-') => v) : m
+          k =~ /^HTTP_(.*)$/ && v ? m.merge($1.gsub(/_/, '-') => v) : m
         end
 
         # Build Net::HTTP request
