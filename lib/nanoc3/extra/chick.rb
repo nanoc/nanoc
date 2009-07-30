@@ -27,7 +27,7 @@ module Nanoc3::Extra
         @options[:cache_controller] = DEFAULT_OPTIONS[:cache_controller].merge(@options[:cache_controller])
       end
 
-      def get(url, additional_headers={})
+      def get(url)
         # Build app
         options = @options
         @app ||= Rack::Builder.new {
