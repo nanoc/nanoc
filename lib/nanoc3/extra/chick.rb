@@ -31,7 +31,7 @@ module Nanoc3::Extra
         # Build app
         options = @options
         @app ||= Rack::Builder.new {
-          use Rack::Cache, options[:cache]
+          use Rack::Cache, options[:cache].merge(:verbose => true)
           use Nanoc3::Extra::CHiCk::CacheController, options[:cache_controller]
           run Nanoc3::Extra::CHiCk::RackClient
         }
@@ -39,13 +39,16 @@ module Nanoc3::Extra
         # Build environment for request
         env = Rack::MockRequest.env_for(url, :method => 'GET')
 
-        # Debug
-        puts "[CHiCk] Fetching #{url} from cache" if $DEBUG
-
         # Fetch
+        puts "[CHiCk] Fetching #{url}..." if $DEBUG
         status, headers, body_parts = @app.call(env)
+        puts "[CHiCk] #{url}: #{headers['X-Rack-Cache']}" if $DEBUG
+
+        # Join body
         body = ''
         body_parts.each { |part| body << part }
+
+        # Done
         [ status, headers, body ]
       end
 
@@ -90,9 +93,6 @@ module Nanoc3::Extra
         request_headers = env.inject({}) do |m,(k,v)|
           k =~ /^HTTP_(.*)$/ && v ? m.merge($1.gsub(/_/, '-') => v) : m
         end
-
-        # Debug
-        puts "[CHiCk] Fetching #{request.url} from the internets (not cached)" if $DEBUG
 
         # Build Net::HTTP request
         http = Net::HTTP.new(request.host, request.port)
