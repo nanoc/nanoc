@@ -75,7 +75,7 @@ module Nanoc3::Extra
 
     def serve(rep)
       # Recompile rep
-      @site.compiler.run([ rep.item ], :force => true)
+      @site.compiler.run(rep.item, :force => true)
 
       # Build response
       [

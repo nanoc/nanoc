@@ -300,8 +300,12 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create compiler
       compiler = Object.new
-      def compiler.run(items, params={})
+      def compiler.run(item, params={})
+        @called = true
         File.open('somefile.html', 'w') { |io| io.write("... compiled item content ...") }
+      end
+      def compiler.called?
+        @called || false
       end
 
       # Create site
@@ -319,6 +323,9 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         assert_equal(200,                     response[0])
         assert_equal('text/html',             response[1]['Content-Type'])
         assert_match(/compiled item content/, response[2][0])
+
+        # Check call
+        assert compiler.called?
       ensure
         # Clean up
         FileUtils.rm_rf(item_rep.raw_path)
