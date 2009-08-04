@@ -57,7 +57,8 @@ module Nanoc3
   # The way site data is stored depends on the data source.
   class Site
 
-    # 
+    # The default configuration for a data source. A data source's
+    # configuration overrides these options.
     DEFAULT_DATA_SOURCE_CONFIG = {
       :type         => 'filesystem_compact',
       :items_root   => '/',
