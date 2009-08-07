@@ -8,6 +8,8 @@ module Nanoc3::Helpers
   # This helper is activated automatically.
   module Render
 
+    include Nanoc3::Helpers::Capturing
+
     # Returns a string containing the rendered given layout.
     #
     # +identifier+:: the identifier of the layout that should be rendered.
@@ -25,13 +27,17 @@ module Nanoc3::Helpers
     #
     #   <%= render 'head', :title => 'Foo' %>
     #   # => "<h1>Foo</h1>"
-    def render(identifier, other_assigns={})
+    def render(identifier, other_assigns={}, &block)
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
       raise Nanoc3::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?
 
+      # Capture content, if any
+      captured_content = block_given? ? capture(&block) : nil
+
       # Get assigns
       assigns = {
+        :content    => captured_content,
         :item       => @item,
         :item_rep   => @item_rep,
         :items      => @items,
@@ -56,6 +62,14 @@ module Nanoc3::Helpers
       @site.compiler.stack.push(layout)
       result = filter.run(layout.raw_content, filter_args)
       @site.compiler.stack.pop
+
+      # Append to erbout if we have a block
+      if block_given?
+        erbout = eval('_erbout', block.binding)
+        erbout << result
+      end
+
+      # Done
       result
     end
 

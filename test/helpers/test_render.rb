@@ -79,4 +79,31 @@ class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_render_with_block
+    # Mock layouts
+    layout = MiniTest::Mock.new
+    layout.expect(:identifier,   '/foo/')
+    layout.expect(:raw_content,  '[partial-before]<%= yield %>[partial-after]')
+
+    # Mock compiler
+    stack    = []
+    compiler = mock
+    compiler.stubs(:stack).returns(stack)
+    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
+
+    # Mock site
+    @site    = MiniTest::Mock.new
+    @site.expect(:compiler, compiler)
+    @site.expect(:layouts, [ layout ])
+
+    # Mock erbout
+    _erbout = '[erbout-before]'
+
+    # Render
+    render '/foo/' do
+      _erbout << "This is some extra content"
+    end
+    assert_equal('[erbout-before][partial-before]This is some extra content[partial-after]', _erbout)
+  end
+
 end
