@@ -28,7 +28,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc update [options]"
+      "nanoc3 update [options]"
     end
 
     def option_definitions
@@ -80,7 +80,7 @@ module Nanoc3::CLI::Commands
                      'using the specified VCS. To get a list of VCSes ' +
                      'supported by nanoc, issue the "info" command.'
         $stderr.puts
-        $stderr.puts 'To continue, use the -y/--yes option, like "nanoc ' +
+        $stderr.puts 'To continue, use the -y/--yes option, like "nanoc3 ' +
                      'update -y".'
         exit 1
       end

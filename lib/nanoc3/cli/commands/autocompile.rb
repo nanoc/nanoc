@@ -23,7 +23,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc autocompile [options]"
+      "nanoc3 autocompile [options]"
     end
 
     def option_definitions
