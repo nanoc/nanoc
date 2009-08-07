@@ -168,7 +168,7 @@ EOS
     end
 
     def usage
-      "nanoc create_site [path]"
+      "nanoc3 create_site [path]"
     end
 
     def option_definitions

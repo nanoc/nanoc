@@ -27,7 +27,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc compile [options] [identifier]"
+      "nanoc3 compile [options] [identifier]"
     end
 
     def option_definitions

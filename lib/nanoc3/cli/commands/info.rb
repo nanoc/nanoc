@@ -23,7 +23,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc info"
+      "nanoc3 info"
     end
 
     def option_definitions
