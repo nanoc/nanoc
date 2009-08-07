@@ -163,8 +163,8 @@ EOS
 
     def long_desc
       'Create a new site at the given path. The site will use the ' +
-      'filesystem data source by default, but this ccan be changed by ' +
-      'using the --datasource commandline option.'
+      'filesystem_compact data source by default, but this can be ' +
+      'changed using the --datasource commandline option.'
     end
 
     def usage
