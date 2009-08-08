@@ -2,11 +2,11 @@
 
 require 'test/helper'
 
-class Nanoc3::Helpers::RenderTest < MiniTest::Unit::TestCase
+class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  include Nanoc3::Helpers::Render
+  include Nanoc3::Helpers::Rendering
 
   def test_render
     # Mock layouts
