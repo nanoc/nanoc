@@ -21,6 +21,10 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::Update.new)
     end
 
+    def self.shared_base
+      @shared_base ||= Nanoc3::CLI::Base.new
+    end
+
     # Helper function which can be called when a command is executed that
     # requires a site, such as the compile command.
     def require_site
