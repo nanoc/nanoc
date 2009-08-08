@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'time'
-
 module Nanoc3::HashExtensions
 
   # Returns a new hash where all keys are recursively converted into symbols.

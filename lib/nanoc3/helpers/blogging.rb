@@ -31,6 +31,7 @@ module Nanoc3::Helpers
     # Returns a list of articles, sorted by descending creation date (so newer
     # articles appear first).
     def sorted_articles
+      require 'time'
       articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse
     end
 
@@ -108,6 +109,7 @@ module Nanoc3::Helpers
     #   <%= atom_feed %>
     def atom_feed(params={})
       require 'builder'
+      require 'time'
 
       # Extract parameters
       limit             = params[:limit] || 5
@@ -211,6 +213,8 @@ module Nanoc3::Helpers
     # created using a procedure suggested by Mark Pilgrim in this blog post:
     # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
     def atom_tag_for(item)
+      require 'time'
+
       hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
       formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
 
