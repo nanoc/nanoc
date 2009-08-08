@@ -30,12 +30,14 @@ module Nanoc3::DataSources
 
     def items
       @items ||= begin
+        require 'json'
+        require 'time'
+
         # Get data
         @http_client ||= Nanoc3::Extra::CHiCk::Client.new
         status, headers, data = *@http_client.get("http://feeds.delicious.com/v2/json/#{self.config[:username]}")
 
         # Parse as JSON
-        require 'json'
         raw_items = JSON.parse(data)
 
         # Convert to items

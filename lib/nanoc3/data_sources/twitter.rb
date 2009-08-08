@@ -20,12 +20,14 @@ module Nanoc3::DataSources
 
     def items
       @item ||= begin
+        require 'json'
+        require 'time'
+
         # Get data
         @http_client ||= Nanoc3::Extra::CHiCk::Client.new
         status, headers, data = *@http_client.get("http://twitter.com/statuses/user_timeline/#{self.config[:username]}.json")
 
         # Parse as JSON
-        require 'json'
         raw_items = JSON.parse(data)
 
         # Convert to items
