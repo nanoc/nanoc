@@ -32,9 +32,4 @@ namespace :validate do
     validator.run
   end
 
-  desc 'Validate all links in the output files'
-  task :links do
-    # TODO implement
-  end
-
 end
