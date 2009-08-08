@@ -4,8 +4,6 @@ module Nanoc3::Helpers
 
   # Nanoc3::Helpers::Rendering provides functionality for rendering layouts as
   # partials.
-  #
-  # This helper is activated automatically.
   module Rendering
 
     include Nanoc3::Helpers::Capturing
