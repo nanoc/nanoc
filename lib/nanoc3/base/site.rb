@@ -41,9 +41,9 @@ module Nanoc3
   #                   filesystems in Unix-ish OSes).
   #
   # +:config+:: A hash containing the configuration for this data source. This
-  #            is especially useful for online data sources; for example, a
-  #            Twitter data source would need the username of the account from
-  #            which to fetch tweets.
+  #             is especially useful for online data sources; for example, a
+  #             Twitter data source would need the username of the account
+  #             from which to fetch tweets.
   #
   # A site also has several helper classes:
   #
