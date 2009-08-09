@@ -28,7 +28,7 @@ module Nanoc3::Helpers
     #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   item_rep = @items.find { |i| i.item_id == 'special' }.reps(:default)
+    #   item_rep = @items.find { |i| i.item_id == 'special' }.reps[0]
     #   link_to('Special Item', item_rep)
     #   # => '<a href="/special_item/">Special Item</a>'
     #
