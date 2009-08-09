@@ -297,7 +297,7 @@ EOS
       data_source = site.data_sources[0]
       data_source.create_layout(
         DEFAULT_LAYOUT,
-        { :filter => 'erb' },
+        {},
         '/default/'
       )
 
