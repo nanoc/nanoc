@@ -9,12 +9,11 @@ module Nanoc3::DataSources
   # directory.
   #
   # The metadata for a item is embedded into the file itself. It is stored at
-  # the top of the file, between '-----' (five dashes) separators. For
-  # example:
+  # the top of the file, between '---' (three dashes) separators. For example:
   #
-  #   -----
+  #   ---
   #   title: "Moo!"
-  #   -----
+  #   ---
   #   h1. Hello!
   #
   # The identifier of a item is determined as follows. A file with an
@@ -45,7 +44,7 @@ module Nanoc3::DataSources
   #
   # Layouts are stored as files in the 'layouts' directory. Similar to items,
   # each layout consists of a metadata part and a content part, separated by
-  # '-----'.
+  # '---' (three dashes).
   #
   # = Code Snippets
   #
@@ -142,9 +141,8 @@ module Nanoc3::DataSources
       # Write item
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        io.write("-----\n")
         io.write(YAML.dump(attributes.stringify_keys) + "\n")
-        io.write("-----\n")
+        io.write("---\n")
         io.write(content)
       end
     end
@@ -161,9 +159,8 @@ module Nanoc3::DataSources
       # Write layout
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        io.write("-----\n")
         io.write(YAML.dump(attributes.stringify_keys) + "\n")
-        io.write("-----\n")
+        io.write("---\n")
         io.write(content)
       end
     end
@@ -186,7 +183,7 @@ module Nanoc3::DataSources
     # file content itself.
     def parse_file(filename, kind)
       # Split file
-      pieces = File.read(filename).split(/^-----/)
+      pieces = File.read(filename).split(/^(-{5}|-{3})/).compact
       if pieces.size < 3
         raise RuntimeError.new(
           "The file '#{filename}' does not seem to be a nanoc #{kind}"
@@ -194,8 +191,8 @@ module Nanoc3::DataSources
       end
 
       # Parse
-      meta    = YAML.load(pieces[1]) || {}
-      content = pieces[2..-1].join.strip
+      meta    = YAML.load(pieces[2]) || {}
+      content = pieces[4..-1].join.strip
 
       [ meta, content ]
     end
