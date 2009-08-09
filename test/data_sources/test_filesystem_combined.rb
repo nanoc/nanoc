@@ -103,7 +103,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert File.file?('content/index.html')
 
     # Check file content
-    expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+    expected = "--- \nfoo: bar\n\n---\ncontent here"
     assert_equal expected, File.read('content/index.html')
   end
 
@@ -119,7 +119,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert !File.file?('content/xxx/yyy/zzz.yaml')
 
     # Check file content
-    expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+    expected = "--- \nfoo: bar\n\n---\ncontent here"
     assert_equal expected, File.read('content/xxx/yyy/zzz.html')
   end
 
@@ -135,7 +135,7 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert !File.file?('layouts/xxx/yyy/zzz.yaml')
 
     # Check file content
-    expected = "-----\n--- \nfoo: bar\n\n-----\ncontent here"
+    expected = "--- \nfoo: bar\n\n---\ncontent here"
     assert_equal expected, File.read('layouts/xxx/yyy/zzz.html')
   end
 
