@@ -14,7 +14,7 @@ module Nanoc3::Tasks
 
       # Delete all compiled item reps
       filenames.each do |filename|
-        FileUtils.rm_f filename
+        FileUtils.rm_f filename unless filename.nil?
       end
     end
 
