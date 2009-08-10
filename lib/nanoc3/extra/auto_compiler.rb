@@ -23,8 +23,6 @@ module Nanoc3::Extra
 
     def call(env)
       @mutex.synchronize do
-        puts env.inspect
-
         # Start with a new site
         build_site
 
