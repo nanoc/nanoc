@@ -45,4 +45,27 @@ class Nanoc3::Tasks::CleanTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_with_nil_raw_path
+    if_have 'w3c_validators' do
+      # Stub items
+      item = mock
+      rep = mock
+      item.expects(:reps).returns([ rep ])
+
+      # Create sample file
+      rep.expects(:raw_path).returns(nil)
+
+      # Stub site
+      site = mock
+      site.expects(:load_data)
+      site.expects(:items).returns([ item ])
+
+      # Create clean task
+      clean = ::Nanoc3::Tasks::Clean.new(site)
+
+      # Run
+      clean.run
+    end
+  end
+
 end
