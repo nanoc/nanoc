@@ -7,13 +7,15 @@ module Nanoc3::Extra
   # stylesheets and images.
   class AutoCompiler
 
+    attr_reader :site
+
     # Creates a new autocompiler for the given site.
-    def initialize(site)
+    def initialize(site_path)
       require 'rack'
       require 'mime/types'
 
       # Set site
-      @site = site
+      @site_path = site_path
 
       # Create mutex to prevent parallel requests
       @mutex = Mutex.new
@@ -21,12 +23,14 @@ module Nanoc3::Extra
 
     def call(env)
       @mutex.synchronize do
-        # Reload site data
-        @site.load_data(true)
+        puts env.inspect
+
+        # Start with a new site
+        build_site
 
         # Find rep
         path = env['PATH_INFO']
-        reps = @site.items.map { |i| i.reps }.flatten
+        reps = site.items.map { |i| i.reps }.flatten
         rep = reps.find { |r| r.path == path }
 
         if rep
@@ -34,13 +38,13 @@ module Nanoc3::Extra
         else
           # Get paths by appending index filenames
           if path =~ /\/$/
-            possible_paths = @site.config[:index_filenames].map { |f| path + f }
+            possible_paths = site.config[:index_filenames].map { |f| path + f }
           else
             possible_paths = [ path ]
           end
 
           # Find matching file
-          modified_path = possible_paths.find { |f| File.file?(@site.config[:output_dir] + f) }
+          modified_path = possible_paths.find { |f| File.file?(site.config[:output_dir] + f) }
           modified_path ||= path
 
           # Serve using Rack::File
@@ -50,7 +54,7 @@ module Nanoc3::Extra
     rescue StandardError, ScriptError => e
       # Add compilation stack to env
       env['nanoc.stack'] = []
-      @site.compiler.stack.reverse.each do |obj|
+      site.compiler.stack.reverse.each do |obj|
         if obj.is_a?(Nanoc3::ItemRep) # item rep
           env['nanoc.stack'] << "[item] #{obj.item.identifier} (rep #{obj.name})"
         else # layout
@@ -64,18 +68,23 @@ module Nanoc3::Extra
 
   private
 
+    def build_site
+      @site = Nanoc3::Site.new(@site_path)
+      @site.load_data
+    end
+
     def mime_type_of(path, fallback)
       mime_type = MIME::Types.of(path).first
       mime_type = mime_type.nil? ? fallback : mime_type.simplified
     end
 
     def file_server
-      @file_server ||= ::Rack::File.new(@site.config[:output_dir])
+      @file_server ||= ::Rack::File.new(site.config[:output_dir])
     end
 
     def serve(rep)
       # Recompile rep
-      @site.compiler.run(rep.item, :force => true)
+      site.compiler.run(rep.item, :force => true)
 
       # Build response
       [

@@ -19,12 +19,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.stubs(:load_data).with(true)
       site.stubs(:items).returns(items)
       site.stubs(:config).returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:serve).with(item_reps[1])
       autocompiler.stubs(:build_reps)
 
@@ -46,7 +47,6 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns(items)
       site.expects(:config).returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
@@ -60,7 +60,9 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       def file_server.actual_path_info   ; @actual_path_info   ; end
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -88,12 +90,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns([])
       site.expects(:config).returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -121,12 +124,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns([])
       site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -154,12 +158,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns([])
       site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -187,12 +192,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns([])
       site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -220,12 +226,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns([])
       site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -249,12 +256,13 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create site
       site = mock
-      site.expects(:load_data).with(true)
       site.expects(:items).returns([])
       site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
@@ -313,7 +321,9 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:compiler).returns(compiler)
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
 
       begin
         # Serve
@@ -348,12 +358,47 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:compiler).at_least_once.returns(compiler)
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(site)
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
 
       # Serve
       assert_raises(RuntimeError) do
         autocompiler.instance_eval { serve(item_rep) }
       end
+    end
+  end
+
+  def test_reload_config_file_before_each_request
+    # Create site
+    Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
+
+    FileUtils.cd('foo') do
+      # Create item that outputs config elements
+      File.open('content/index.html', 'w') do |io|
+        io.write "The Grand Value of Configuration is <%= @config[:value] %>!"
+      end
+
+      # Create autocompiler
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+
+      # Set config to 1st value
+      File.open('config.yaml', 'w') do |io|
+        io.write "value: Foo"
+      end
+
+      # Check
+      status, headers, body = autocompiler.call('PATH_INFO' => '/')
+      assert_match /The Grand Value of Configuration is Foo!/, body.join
+
+      # Set config to 2nd value
+      File.open('config.yaml', 'w') do |io|
+        io.write "value: Bar"
+      end
+
+      # Check
+      status, headers, body = autocompiler.call('PATH_INFO' => '/')
+      assert_match /The Grand Value of Configuration is Bar!/, body.join
     end
   end
 
