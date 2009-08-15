@@ -41,7 +41,7 @@ The source code is structured in a few directories:
 
 The namespaces (modules) are organised like this:
 
-* *Nanoc* is the namespace for everything nanoc-related (obviously). The
+* *Nanoc3* is the namespace for everything nanoc-related (obviously). The
   classes in 'lib/nanoc3/base' are part of this module (not Nanoc3::Base which
   does not exist)
   * *CLI* containing everything related to the commandline tool.
