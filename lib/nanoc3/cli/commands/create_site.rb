@@ -135,8 +135,8 @@ EOS
     <div id="sidebar">
       <h2>Documentation</h2>
       <ul>
-        <li><a href="http://nanoc.stoneship.org/help/tutorial/">Tutorial</a></li>
-        <li><a href="http://nanoc.stoneship.org/help/manual/">Manual</a></li>
+        <li><a href="http://nanoc.stoneship.org/tutorial/">Tutorial</a></li>
+        <li><a href="http://nanoc.stoneship.org/manual/">Manual</a></li>
       </ul>
       <h2>Community</h2>
       <ul>
