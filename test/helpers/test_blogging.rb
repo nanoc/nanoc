@@ -511,6 +511,17 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @item = nil
   end
 
+  def test_url_for_without_base_url
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({})
+
+    # Check
+    assert_raises(RuntimeError) do
+      url_for(nil)
+    end
+  end
+
   def test_feed_url_without_custom_feed_url
     # Mock site
     @site = mock
@@ -544,6 +555,17 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   ensure
     # Cleanup
     @item = nil
+  end
+
+  def test_feed_url_without_base_url
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({})
+
+    # Check
+    assert_raises(RuntimeError) do
+      feed_url
+    end
   end
 
   def test_atom_tag_for_with_path
