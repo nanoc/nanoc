@@ -59,7 +59,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
       io.write("---\n")
       io.write("title: Bar\n")
     end
-    File.open('content/bar/bar.html', 'w') do |io|
+    File.open('content/bar/bar.xml', 'w') do |io|
       io.write("Lorem ipsum dolor sit amet...")
     end
 
@@ -68,8 +68,8 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
     # Check items
     assert_equal(2, items.size)
-    assert(items.any? { |a| a[:title] == 'Foo' })
-    assert(items.any? { |a| a[:title] == 'Bar' })
+    assert(items.any? { |a| a[:title] == 'Foo' && a[:extension] == 'html' })
+    assert(items.any? { |a| a[:title] == 'Bar' && a[:extension] == 'xml'  })
   end
 
   def test_layouts
@@ -90,8 +90,9 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     layouts = data_source.layouts
 
     # Check layouts
-    assert_equal(1,     layouts.size)
-    assert_equal('erb', layouts[0][:filter])
+    assert_equal(1,       layouts.size)
+    assert_equal('erb',   layouts[0][:filter])
+    assert_equal('rhtml', layouts[0][:extension])
   end
 
   # Test creating data

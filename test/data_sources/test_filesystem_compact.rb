@@ -57,7 +57,8 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     # Check
     assert_equal 1, items.size
     assert_equal '/foo/', items[0].identifier
-    assert_equal 'Foo', items[0][:title]
+    assert_equal 'Foo',   items[0][:title]
+    assert_equal 'html',  items[0][:extension]
   end
 
   def test_items_with_non_index_names
@@ -78,7 +79,8 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     # Check
     assert_equal 1, items.size
     assert_equal '/foo/bar/', items[0].identifier
-    assert_equal 'Foo', items[0][:title]
+    assert_equal 'Foo',       items[0][:title]
+    assert_equal 'html',      items[0][:extension]
   end
 
   def test_items_with_both_index_and_non_index_names
@@ -92,7 +94,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     File.open('content/foo/index.yaml', 'w') do |io|
       io.write(YAML.dump({ 'title' => 'Foo' }))
     end
-    File.open('content/foo/index.html', 'w') do |io|
+    File.open('content/foo/index.xml', 'w') do |io|
       io.write('Lorem ipsum dolor sit amet...')
     end
 
@@ -100,7 +102,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     File.open('content/foo/bar.yaml', 'w') do |io|
       io.write(YAML.dump({ 'title' => 'Bar' }))
     end
-    File.open('content/foo/bar.html', 'w') do |io|
+    File.open('content/foo/bar.rhtml', 'w') do |io|
       io.write("Lorem ipsum dolor sit amet...")
     end
 
@@ -110,10 +112,12 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Check items
     assert_equal 2, items.size
-    assert_equal 'Bar', items[0][:title]
-    assert_equal 'Foo', items[1][:title]
     assert_equal '/foo/bar/', items[0].identifier
-    assert_equal '/foo/', items[1].identifier
+    assert_equal 'Bar',       items[0][:title]
+    assert_equal 'rhtml',     items[0][:extension]
+    assert_equal '/foo/',     items[1].identifier
+    assert_equal 'Foo',       items[1][:title]
+    assert_equal 'xml',       items[1][:extension]
   end
 
   def test_layouts
@@ -135,6 +139,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     # Check layouts
     assert_equal 1,       layouts.size
     assert_equal 'miaow', layouts[0][:cat]
+    assert_equal 'rhtml', layouts[0][:extension]
     assert_equal '/foo/', layouts[0].identifier
   end
 
