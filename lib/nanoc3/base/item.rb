@@ -55,6 +55,11 @@ module Nanoc3
       @reps         = []
     end
 
+    # Returns the rep with the given name.
+    def rep(rep_name)
+      @reps.find { |r| r.name == rep_name }
+    end
+
     # Requests the attribute with the given key.
     def [](key)
       Nanoc3::NotificationCenter.post(:visit_started, self)

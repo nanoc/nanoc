@@ -81,7 +81,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep = mock
       item_rep.stubs(:path).returns("/item1/")
       item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 1 content')
-      @items[1].stubs(:reps).returns([ item_rep ])
+      @items[1].stubs(:rep).with(:default).returns(item_rep)
 
       # Create item 2
       @items[2].stubs(:mtime).returns(Time.now - 250)
@@ -93,7 +93,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep = mock
       item_rep.stubs(:path).returns("/item2/")
       item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 2 content')
-      @items[2].stubs(:reps).returns([ item_rep ])
+      @items[2].stubs(:rep).with(:default).returns(item_rep)
 
       # Mock site
       @site = mock
@@ -107,7 +107,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:feed_url).returns(nil)
       item_rep = mock
       item_rep.stubs(:path).returns("/journal/feed/")
-      @item.stubs(:reps).returns([ item_rep ])
+      @item.stubs(:rep).with(:default).returns(item_rep)
 
       # Check
       atom_feed
@@ -312,7 +312,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep.stubs(:path).returns('/asdf/fdsa/')
       item_rep.stubs(:raw_path).returns('output/asdf/fdsa/index.html')
       item_rep.expects(:content_at_snapshot).with(:pre).returns('asdf')
-      @items[4].stubs(:reps).returns([ item_rep ])
+      @items[4].stubs(:rep).with(:default).returns(item_rep)
 
       # Mock site
       @site = mock
@@ -346,7 +346,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         item_rep.stubs(:path).returns("/articles/#{i}/")
         item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
         item_rep.stubs(:content_at_snapshot).with(:pre).returns("item #{i} content")
-        article.stubs(:reps).returns([ item_rep ])
+        article.stubs(:rep).with(:default).returns(item_rep)
       end
 
       # Mock site
@@ -384,7 +384,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         item_rep.stubs(:path).returns("/articles/#{i}/")
         item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
         item_rep.stubs(:content_at_snapshot).with(:pre).returns("Article #{i} content")
-        article.stubs(:reps).returns([ item_rep ])
+        article.stubs(:rep).with(:default).returns(item_rep)
       end
       @items[0].stubs(:[]).with(:created_at).returns('23-02-2009')
       @items[1].stubs(:[]).with(:created_at).returns('22-03-2009')
@@ -424,7 +424,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep = mock
       item_rep.stubs(:path).returns('/item1/')
       item_rep.stubs(:raw_path).returns('output/item1/index.html')
-      @items[0].stubs(:reps).returns([ item_rep ])
+      @items[0].stubs(:rep).with(:default).returns(item_rep)
 
       # Mock site
       @site = mock
@@ -457,7 +457,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       item_rep.stubs(:path).returns('/item1/')
       item_rep.stubs(:raw_path).returns('output/item1/index.html')
       item_rep.expects(:content_at_snapshot).with(:pre).returns('foo')
-      @items[0].stubs(:reps).returns([ item_rep ])
+      @items[0].stubs(:rep).with(:default).returns(item_rep)
 
       # Mock site
       @site = mock
@@ -486,7 +486,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     item.expects(:[]).with(:custom_path_in_feed).returns(nil)
     item_rep = mock
     item_rep.expects(:path).returns('/foo/bar/')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:rep).with(:default).returns(item_rep)
 
     # Check
     assert_equal('http://example.com/foo/bar/', url_for(item))
@@ -521,7 +521,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @item.expects(:[]).with(:feed_url).returns(nil)
     item_rep = mock
     item_rep.expects(:path).returns('/foo/bar/')
-    @item.expects(:reps).returns([ item_rep ])
+    @item.expects(:rep).with(:default).returns(item_rep)
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
@@ -558,7 +558,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create article
     item = mock
     item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:rep).with(:default).returns(item_rep)
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
@@ -576,7 +576,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create article
     item = mock
     item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:rep).with(:default).returns(item_rep)
     item.expects(:identifier).returns('/baz/qux/')
 
     # Check
