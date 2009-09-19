@@ -86,7 +86,10 @@ module Nanoc3::DataSources
         content = File.read(content_filename)
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(content_filename))
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(content_filename),
+          :extension => File.extname(content_filename)[1..-1]
+        }.merge(meta)
 
         # Get identifier
         identifier = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
@@ -103,12 +106,18 @@ module Nanoc3::DataSources
 
     def layouts
       meta_filenames('layouts').map do |meta_filename|
+        # Read metadata
+        meta = YAML.load_file(meta_filename) || {}
+
         # Get content
         content_filename  = content_filename_for_dir(File.dirname(meta_filename))
         content           = File.read(content_filename)
 
         # Get attributes
-        attributes = YAML.load_file(meta_filename) || {}
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(content_filename),
+          :extension => File.extname(content_filename)[1..-1]
+        }.merge(meta)
 
         # Get identifier
         identifier = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')

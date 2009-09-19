@@ -197,7 +197,10 @@ module Nanoc3::DataSources
         content = File.read(content_filename)
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(content_filename))
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(content_filename),
+          :extension => File.extname(content_filename)[1..-1]
+        }.merge(meta)
 
         # Get identifier
         identifier = identifier_for_meta_filename(meta_filename[(base.length+1)..-1])
