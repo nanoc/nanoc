@@ -1,5 +1,11 @@
 = nanoc News
 
+== 3.1
+
+New:
+
+* A Item#rep(name) function for quickly getting a certain rep
+
 == 3.0
 
 New:
