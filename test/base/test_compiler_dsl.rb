@@ -74,4 +74,20 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     assert_equal(expected.options,   actual.options)
   end
 
+  def test_identifier_to_regex_with_plus_wildcard
+    # Create compiler DSL
+    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+
+    actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/+') }
+    expected = %r{^/foo/(.+?)/?$}
+
+    assert_equal(expected.to_s,      actual.to_s)
+    assert_equal(expected.source,    actual.source)
+    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
+    assert_equal(expected.casefold?, actual.casefold?)
+    assert_equal(expected.options,   actual.options)
+    assert('/foo/bar/' =~ actual)
+    refute('/foo/'     =~ actual)
+  end
+
 end

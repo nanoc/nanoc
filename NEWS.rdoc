@@ -5,6 +5,7 @@
 New:
 
 * A Item#rep(name) function for quickly getting a certain rep
+* The new "+" wildcard in rule patterns now matches one or more characters
 
 == 3.0
 
