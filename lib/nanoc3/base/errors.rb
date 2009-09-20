@@ -68,8 +68,8 @@ module Nanoc3
     # Error that is raised when no compilation rule that can be applied to the
     # current item can be found.
     class NoMatchingCompilationRuleFound < Generic
-      def initialize(rep)
-        super("No compilation rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
+      def initialize(item)
+        super("No compilation rules were found for the '#{item.identifier}' item.")
       end
     end
 
