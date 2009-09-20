@@ -273,7 +273,7 @@ module Nanoc3
       @items.each do |item|
         # Find matching rules
         matching_rules = self.compiler.item_compilation_rules.select { |r| r.applicable_to?(item) }
-        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new(rep) if matching_rules.empty?
+        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
 
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq

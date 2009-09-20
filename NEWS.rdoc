@@ -1,5 +1,10 @@
 = nanoc News
 
+== 3.0.1
+
+* The proper exception is now raised when no matching compilation rules can
+  be found
+
 == 3.0
 
 New:
