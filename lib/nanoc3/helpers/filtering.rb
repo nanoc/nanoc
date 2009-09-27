@@ -13,7 +13,7 @@ module Nanoc3::Helpers
   #     <p>Consectetur adipisicing elit...</p>
   #   <% end %>
   #
-  # This helper likely only works with ERB (and perhaps Erubis).
+  # This helper has been tested with ERB and Haml.
   #
   # To activate this helper, +include+ it, like this:
   #
