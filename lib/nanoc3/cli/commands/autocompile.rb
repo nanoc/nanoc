@@ -28,11 +28,6 @@ module Nanoc3::CLI::Commands
 
     def option_definitions
       [
-        # --port
-        {
-          :long => 'port', :short => 'p', :argument => :required,
-          :desc => 'specify a port number for the autocompiler'
-        },
         # --server
         {
           :long => 'server', :short => 's', :argument => :required,
