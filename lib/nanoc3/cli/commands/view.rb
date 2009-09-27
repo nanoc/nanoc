@@ -28,7 +28,7 @@ module Nanoc3::CLI::Commands
       [
         # --handler
         {
-          :long => 'handler', :short => 'h', :argument => :required,
+          :long => 'handler', :short => 'H', :argument => :required,
           :desc => 'specify the handler to use (webrick/mongrel/...)'
         },
         # --host
