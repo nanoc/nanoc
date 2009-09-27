@@ -2,7 +2,7 @@
 
 module Nanoc3::DataSources
 
-  # The filesystem data source is the default data source for a new nanoc
+  # The filesystem_verbose data source is the old data source for a new nanoc
   # site. It stores all data as files on the hard disk.
   #
   # None of the methods are documented in this file. See Nanoc3::DataSource
@@ -10,9 +10,9 @@ module Nanoc3::DataSources
   #
   # = Items
   #
-  # The filesystem data source stores its items in nested directories. Each
-  # directory represents a single item. The root directory is the 'content'
-  # directory.
+  # The filesystem_verbose data source stores its items in nested directories.
+  # Each directory represents a single item. The root directory is the
+  # 'content' directory.
   #
   # Every directory has a content file and a meta file. The content file
   # contains the actual item content, while the meta file contains the item's
@@ -46,7 +46,7 @@ module Nanoc3::DataSources
   #
   # Code snippets are stored in '.rb' files in the 'lib' directory. Code
   # snippets can reside in sub-directories.
-  class Filesystem < Nanoc3::DataSource
+  class FilesystemVerbose < Nanoc3::DataSource
 
     include Nanoc3::DataSources::FilesystemCommon
 
@@ -86,7 +86,10 @@ module Nanoc3::DataSources
         content = File.read(content_filename)
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(content_filename))
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(content_filename),
+          :extension => File.extname(content_filename)[1..-1]
+        }.merge(meta)
 
         # Get identifier
         identifier = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
@@ -103,12 +106,18 @@ module Nanoc3::DataSources
 
     def layouts
       meta_filenames('layouts').map do |meta_filename|
+        # Read metadata
+        meta = YAML.load_file(meta_filename) || {}
+
         # Get content
         content_filename  = content_filename_for_dir(File.dirname(meta_filename))
         content           = File.read(content_filename)
 
         # Get attributes
-        attributes = YAML.load_file(meta_filename) || {}
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(content_filename),
+          :extension => File.extname(content_filename)[1..-1]
+        }.merge(meta)
 
         # Get identifier
         identifier = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')

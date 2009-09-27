@@ -57,7 +57,8 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     # Check
     assert_equal 1, items.size
     assert_equal '/foo/', items[0].identifier
-    assert_equal 'Foo', items[0][:title]
+    assert_equal 'Foo',   items[0][:title]
+    assert_equal 'html',  items[0][:extension]
   end
 
   def test_items_with_non_index_names
@@ -78,7 +79,8 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     # Check
     assert_equal 1, items.size
     assert_equal '/foo/bar/', items[0].identifier
-    assert_equal 'Foo', items[0][:title]
+    assert_equal 'Foo',       items[0][:title]
+    assert_equal 'html',      items[0][:extension]
   end
 
   def test_items_with_both_index_and_non_index_names
@@ -92,7 +94,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     File.open('content/foo/index.yaml', 'w') do |io|
       io.write(YAML.dump({ 'title' => 'Foo' }))
     end
-    File.open('content/foo/index.html', 'w') do |io|
+    File.open('content/foo/index.xml', 'w') do |io|
       io.write('Lorem ipsum dolor sit amet...')
     end
 
@@ -100,20 +102,22 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     File.open('content/foo/bar.yaml', 'w') do |io|
       io.write(YAML.dump({ 'title' => 'Bar' }))
     end
-    File.open('content/foo/bar.html', 'w') do |io|
+    File.open('content/foo/bar.rhtml', 'w') do |io|
       io.write("Lorem ipsum dolor sit amet...")
     end
 
     # Load items
     items = data_source.items
-    items.sort_by { |i| i[:title] }
+    items = items.sort_by { |i| i[:title] }
 
     # Check items
     assert_equal 2, items.size
-    assert_equal 'Bar', items[0][:title]
-    assert_equal 'Foo', items[1][:title]
     assert_equal '/foo/bar/', items[0].identifier
-    assert_equal '/foo/', items[1].identifier
+    assert_equal 'Bar',       items[0][:title]
+    assert_equal 'rhtml',     items[0][:extension]
+    assert_equal '/foo/',     items[1].identifier
+    assert_equal 'Foo',       items[1][:title]
+    assert_equal 'xml',       items[1][:extension]
   end
 
   def test_layouts
@@ -135,6 +139,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     # Check layouts
     assert_equal 1,       layouts.size
     assert_equal 'miaow', layouts[0][:cat]
+    assert_equal 'rhtml', layouts[0][:extension]
     assert_equal '/foo/', layouts[0].identifier
   end
 
@@ -202,105 +207,61 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
   # Test private methods
 
-  def test_meta_filenames
-    # TODO implement
-  end
-
-  def test_content_filename_for_meta_filename_with_one_content_file
+  def test_all_files_in
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/index.html', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.yaml', 'w') { |io| io.write('test') }
+    # Write sample files
+    %w( foo.html foo.yaml bar.html qux.yaml ).each do |filename|
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
 
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/index.html',
-      data_source.instance_eval do
-        content_filename_for_meta_filename('foo/bar/baz/index.yaml')
-      end
-    )
+    # Get all files
+    output_expected = {
+      './foo' => [ 'yaml', 'html' ],
+      './bar' => [ nil,    'html' ],
+      './qux' => [ 'yaml', nil    ]
+    }
+    output_actual = data_source.send :all_files_in, '.'
+
+    # Check
+    assert_equal output_expected, output_actual
   end
 
-  def test_content_filename_for_meta_filename_with_one_content_file_and_no_meta_file
+  def test_all_files_in_with_multiple_content_files
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/index.html', 'w') { |io| io.write('test') }
+    # Write sample files
+    %w( foo.html foo.xhtml foo.txt foo.yaml bar.html qux.yaml ).each do |filename|
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
 
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/index.html',
-      data_source.instance_eval do
-        content_filename_for_meta_filename('foo/bar/baz/index.yaml')
-      end
-    )
-  end
-
-  def test_content_filename_for_meta_filename_with_two_content_files
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/index.html',  'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.xhtml', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.yaml',  'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_raises(RuntimeError) do
-      assert_equal(
-        'foo/bar/baz/index.html',
-        data_source.instance_eval do
-          content_filename_for_meta_filename('foo/bar/baz/index.yaml')
-        end
-      )
+    # Check
+    assert_raises RuntimeError do
+      data_source.send :all_files_in, '.'
     end
   end
 
-  def test_content_filename_for_meta_filename_with_one_content_and_many_meta_files
+  def test_all_files_in_with_backup_files
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/index.html', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.yaml', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/foo.yaml',   'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/zzz.yaml',   'w') { |io| io.write('test') }
+    # Write sample files
+    %w( foo.html foo.html~ foo.yaml foo.yaml~ foo.html.bak foo.yaml.bak bar.html qux.yaml ).each do |filename|
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
 
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/index.html',
-      data_source.instance_eval do
-        content_filename_for_meta_filename('foo/bar/baz/index.yaml')
-      end
-    )
-  end
+    # Get all files
+    output_expected = {
+      './foo' => [ 'yaml', 'html' ],
+      './bar' => [ nil,    'html' ],
+      './qux' => [ 'yaml', nil    ]
+    }
+    output_actual = data_source.send :all_files_in, '.'
 
-  def test_content_filename_for_meta_filename_with_one_content_file_and_rejected_files
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/index.html',      'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.html~',     'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.html.orig', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.html.rej',  'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/index.html.bak',  'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/index.html',
-      data_source.instance_eval do
-        content_filename_for_meta_filename('foo/bar/baz/index.yaml')
-      end
-    )
+    # Check
+    assert_equal output_expected, output_actual
   end
 
   def test_identifier_for_meta_filename_with_same_name

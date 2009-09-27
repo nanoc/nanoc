@@ -86,7 +86,10 @@ module Nanoc3::DataSources
         meta, content = *parse_file(filename, 'item')
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(filename))
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(filename),
+          :extension => File.extname(filename)[1..-1]
+        }.merge(meta)
 
         # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
@@ -108,6 +111,12 @@ module Nanoc3::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'layout')
 
+        # Get attributes
+        attributes = {
+          :file      => Nanoc3::Extra::FileProxy.new(filename),
+          :extension => File.extname(filename)[1..-1]
+        }.merge(meta)
+
         # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
           identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
@@ -119,7 +128,7 @@ module Nanoc3::DataSources
         mtime = File.stat(filename).mtime
 
         # Build layout
-        Nanoc3::Layout.new(content, meta, identifier, mtime)
+        Nanoc3::Layout.new(content, attributes, identifier, mtime)
       end.compact
     end
 

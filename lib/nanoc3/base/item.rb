@@ -34,15 +34,13 @@ module Nanoc3
     # A boolean indicating whether or not this item is outdated because of its dependencies are outdated.
     attr_accessor :dependencies_outdated
 
-    # Creates a new item.
+    # @param [String] raw_content The uncompiled item content.
     #
-    # +raw_content+:: The uncompiled item content.
+    # @param [Hash] attributes A hash containing this item's attributes.
     #
-    # +attributes+:: A hash containing this item's attributes.
+    # @param [String] identifier This item's identifier.
     #
-    # +identifier+:: This item's identifier.
-    #
-    # +mtime+:: The time when this item was last modified.
+    # @param [String, nil] mtime The time when this item was last modified.
     def initialize(raw_content, attributes, identifier, mtime=nil)
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys
@@ -55,7 +53,20 @@ module Nanoc3
       @reps         = []
     end
 
+    # Returns the rep with the given name.
+    #
+    # @param [Symbol] rep_name The name of the representation to return.
+    #
+    # @return [Nanoc3::ItemRep] The representation with the given name.
+    def rep(rep_name)
+      @reps.find { |r| r.name == rep_name }
+    end
+
     # Requests the attribute with the given key.
+    #
+    # @param [Symbol] key The name of the attribute to fetch.
+    #
+    # @return [Object] The value of the requested attribute.
     def [](key)
       Nanoc3::NotificationCenter.post(:visit_started, self)
       Nanoc3::NotificationCenter.post(:visit_ended,   self)
@@ -64,11 +75,15 @@ module Nanoc3
     end
 
     # Sets the attribute with the given key to the given value.
+    #
+    # @param [Symbol] key The name of the attribute to set.
+    #
+    # @param [Object] value The value of the attribute to set.
     def []=(key, value)
       @attributes[key] = value
     end
 
-    # True if any reps are outdated; false otherwise.
+    # @return [Boolean] true if any reps are outdated; false otherwise.
     def outdated?
       @reps.any? { |r| r.outdated? }
     end

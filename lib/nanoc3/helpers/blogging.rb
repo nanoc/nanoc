@@ -32,7 +32,7 @@ module Nanoc3::Helpers
     # articles appear first).
     def sorted_articles
       require 'time'
-      articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse
+      articles.sort_by { |a| t = a[:created_at] ; t.is_a?(String) ? Time.parse(t) : t }.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,
@@ -47,8 +47,8 @@ module Nanoc3::Helpers
     # +content_proc+:: A proc that returns the content of the given article,
     #                  passed as a parameter. By default, given the argument
     #                  +article+, this proc will return
-    #                  +article.reps[0].content+. This function may not return
-    #                  nil.
+    #                  +article.rep(:default).content+. This function may
+    #                  not return nil.
     #
     # +excerpt_proc+:: A proc that returns the excerpt of the given article,
     #                  passed as a parameter. By default, given the argument
@@ -114,7 +114,7 @@ module Nanoc3::Helpers
       # Extract parameters
       limit             = params[:limit] || 5
       relevant_articles = params[:articles] || articles || []
-      content_proc      = params[:content_proc] || lambda { |a| a.reps[0].content_at_snapshot(:pre) }
+      content_proc      = params[:content_proc] || lambda { |a| a.rep(:default).content_at_snapshot(:pre) }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
 
       # Check config attributes
@@ -204,7 +204,7 @@ module Nanoc3::Helpers
         raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @site.config[:base_url] + (item[:custom_path_in_feed] || item.reps[0].path)
+      @site.config[:base_url] + (item[:custom_path_in_feed] || item.rep(:default).path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
@@ -215,7 +215,7 @@ module Nanoc3::Helpers
         raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @item[:feed_url] || @site.config[:base_url] + @item.reps[0].path
+      @item[:feed_url] || @site.config[:base_url] + @item.rep(:default).path
     end
 
     # Returns an URI containing an unique ID for the given item. This will be
@@ -228,7 +228,7 @@ module Nanoc3::Helpers
       hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
       formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + (item.reps[0].path || item.identifier)
+      'tag:' + hostname + ',' + formatted_date + ':' + (item.rep(:default).path || item.identifier)
     end
 
   end

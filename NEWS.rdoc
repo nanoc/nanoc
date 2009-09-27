@@ -1,5 +1,16 @@
 = nanoc News
 
+== 3.1
+
+New:
+
+* A Item#rep(name) function for quickly getting a certain rep
+* The new "+" wildcard in rule patterns now matches one or more characters
+
+Changed:
+
+* The "filesystem" data source is now known as "filesystem_verbose"
+
 == 3.0.1
 
 * The proper exception is now raised when no matching compilation rules can

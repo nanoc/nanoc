@@ -19,6 +19,7 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::CreateSite.new)
       add_command(Nanoc3::CLI::Commands::Info.new)
       add_command(Nanoc3::CLI::Commands::Update.new)
+      add_command(Nanoc3::CLI::Commands::View.new)
     end
 
     def self.shared_base
