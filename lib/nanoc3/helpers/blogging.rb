@@ -32,7 +32,7 @@ module Nanoc3::Helpers
     # articles appear first).
     def sorted_articles
       require 'time'
-      articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse
+      articles.sort_by { |a| t = a[:created_at] ; t.is_a?(String) ? Time.parse(t) : t }.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,
