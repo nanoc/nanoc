@@ -2,7 +2,7 @@
 
 module Nanoc3::HashExtensions
 
-  # Returns a new hash where all keys are recursively converted into symbols.
+  # Returns a new hash where all keys are recursively converted to symbols.
   def symbolize_keys
     inject({}) do |hash, (key, value)|
       hash.merge(key.to_sym => value.respond_to?(:symbolize_keys) ? value.symbolize_keys : value)

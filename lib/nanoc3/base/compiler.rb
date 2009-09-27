@@ -22,7 +22,7 @@ module Nanoc3
     # The hash containing layout-to-filter mapping rules.
     attr_reader :layout_filter_mapping
 
-    # Creates a new compiler for the given site.
+    # @param [Nanoc3::Site] site The site this compiler belongs to.
     def initialize(site)
       @site = site
 
@@ -36,14 +36,11 @@ module Nanoc3
     # Compiles (part of) the site and writes out the compiled item
     # representations.
     #
-    # +items+:: The items that should be compiled, along with their
-    #           dependencies. Pass +nil+ if the entire site should be
-    #           compiled.
+    # @param [Nanoc3::Item] item The item that should be compiled, along with
+    #   its dependencies. Pass +nil+ if the entire site should be compiled.
     #
-    # This method also accepts a few optional parameters:
-    #
-    # +:force+:: true if the rep should be compiled even if it is not
-    #            outdated, false if not. Defaults to false.
+    # @option params [Boolean] :force (false) true if the rep should be
+    #   compiled even if it is not outdated, false if not.
     def run(item=nil, params={})
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
@@ -74,22 +71,30 @@ module Nanoc3
       dependency_tracker.store_graph
     end
 
-    # Returns the first matching compilation rule for the given rep.
+    # @param [Nanoc3::ItemRep] rep The item representation for which to fetch
+    #   the first matching compilation rule.
+    #
+    # @return [Nanoc3::Rule] The first matching compilation rule for the given rep.
     def compilation_rule_for(rep)
       @item_compilation_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end
 
-    # Returns the first matching routing rule for the given rep.
+    # @param [Nanoc3::ItemRep] rep The item representation for which to fetch
+    #   the first matching routing rule.
+    #
+    # @return [Nanoc3::Rule] The first matching routing rule for the given rep.
     def routing_rule_for(rep)
       @item_routing_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end
 
-    # Returns a tuple containing the filter name and the filter arguments for
-    # the given layout.
+    # @param [Nanoc3::Layout] layout The layout for which to fetch the filter.
+    #
+    # @return [Array, nil] A tuple containing the filter name and the filter 
+    #   arguments for the given layout.
     def filter_for_layout(layout)
       @layout_filter_mapping.each_pair do |layout_identifier, filter_name_and_args|
         return filter_name_and_args if layout.identifier =~ layout_identifier
@@ -99,7 +104,9 @@ module Nanoc3
 
   private
 
-    # Compiles all item representations in the site.
+    # Compiles the given representations.
+    #
+    # @param [Array] reps The item representations to compile.
     def compile_reps(reps)
       active_reps, skipped_reps = reps.partition { |rep| rep.outdated? || rep.item.dependencies_outdated? }
       inactive_reps = []
@@ -162,10 +169,10 @@ module Nanoc3
     # Compiles the given item representation.
     #
     # This method should not be called directly; please use
-    # Nanoc3::Compiler#run instead, and pass this item representation's item as
-    # its first argument.
+    # Nanoc3::Compiler#run instead, and pass this item representation's item
+    # as its first argument.
     #
-    # +rep+:: The rep that is to be compiled.
+    # @param [Nanoc3::ItemRep] rep The rep that is to be compiled.
     def compile_rep(rep)
       # Start
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
@@ -183,12 +190,14 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
     end
 
-    # Returns the dependency tracker for this site.
+    # @return [Nanoc3::DependencyTracker] the dependency tracker for this site.
     def dependency_tracker
       @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
     end
 
     # Marks the necessary items as outdated.
+    #
+    # FIXME this method needs a different signature, fast
     def mark_outdated_items(reps, force)
       if force
         reps.each { |r| r.force_outdated = true }

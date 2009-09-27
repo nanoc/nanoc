@@ -92,9 +92,8 @@ module Nanoc3
     # Creates a Nanoc3::Site object for the site specified by the given
     # +dir_or_config_hash+ argument.
     #
-    # +dir_or_config_hash+:: If a string, contains the path to the site
-    #                        directory; if a hash, contains the site
-    #                        configuration.
+    # @param [Hash, String] dir_or_config_hash If a string, contains the path
+    #   to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
       build_config(dir_or_config_hash)
 
@@ -135,8 +134,8 @@ module Nanoc3
     # calling this method will not have any effect the second time, unless
     # +force+ is true.
     #
-    # +force+:: If true, will force load the site data even if it has been
-    #           loaded before, to circumvent caching issues.
+    # @param [Boolean] force If true, will force load the site data even if it
+    #   has been loaded before, to circumvent caching issues.
     def load_data(force=false)
       # Don't load data twice
       return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
