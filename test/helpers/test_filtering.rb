@@ -101,7 +101,7 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
 
       # Evaluate content
       result = ::Haml::Engine.new(content).render(binding)
-      assert_match(%r{<p>Foo.</p>\s*abcxyz\s*<p>Bar.</p>}, result)
+      assert_match(%r{^<p>Foo.</p>\s*abcxyz\s*<p>Bar.</p>$}, result)
     end
   end
 
