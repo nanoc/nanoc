@@ -111,6 +111,7 @@ module Nanoc3::CLI
     def resolution_for(error)
       # FIXME this should probably go somewhere else so that 3rd-party code can add other gem names too
       gem_names = {
+        'adsf'           => 'adsf',
         'bluecloth'      => 'bluecloth',
         'builder'        => 'builder',
         'coderay'        => 'coderay',
