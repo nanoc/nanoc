@@ -11,10 +11,8 @@ module Nanoc3
     # filtering.
     attr_reader :assigns
 
-    # Creates a new filter with the given assigns.
-    #
-    # +a_assigns+:: A hash containing variables that should be made available
-    #               during filtering.
+    # @param [Hash] a_assigns A hash containing variables that should be made
+    #   available during filtering.
     def initialize(a_assigns={})
       @assigns = a_assigns
     end
@@ -36,15 +34,19 @@ module Nanoc3
 
     # Runs the filter. This method returns the filtered content.
     #
-    # +content+:: The unprocessed content that should be filtered.
-    #
     # Subclasses must implement this method.
+    #
+    # @param [String] content The unprocessed content that should be filtered.
+    #
+    # @param [Hash] params A hash containing parameters. Filter subclasses can
+    #   use these parameters to allow modifying the filter's behaviour.
+    #
     def run(content, params={})
       raise NotImplementedError.new("Nanoc3::Filter subclasses must implement #run")
     end
 
-    # Returns the filename associated with the item that is being filtered.
-    # The returned filename is in the format "item <identifier> (rep <name>)".
+    # @return [String] The filename associated with the item that is being
+    # filtered. It is in the format "item <identifier> (rep <name>)".
     def filename
       if assigns[:layout]
         "layout #{assigns[:layout].identifier}"

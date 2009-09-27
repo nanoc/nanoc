@@ -248,14 +248,12 @@ module Nanoc3
 
     # Inverts the given graph (keys become values and values become keys).
     #
-    # For example, this graph
+    # @example The first graph is turned into the second graph
     #
     #   {
     #     :a => [ :b, :c ],
     #     :b => [ :x, :c ]
     #   }
-    #
-    # is turned into
     #
     #   {
     #     :b => [ :a ],
