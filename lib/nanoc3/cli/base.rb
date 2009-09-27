@@ -45,33 +45,104 @@ module Nanoc3::CLI
         rescue Nanoc3::Errors::UnknownDataSource => e
           $stderr.puts "Unknown data source: #{e}"
           exit 1
-        rescue StandardError, ScriptError => error
-          # Header
-          $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
-          $stderr.puts '| An exception occured while loading the site. If you think   |'
-          $stderr.puts '| this is a bug in nanoc, please do report it at              |'
-          $stderr.puts '| <http://projects.stoneship.org/trac/nanoc/newticket> --     |'
-          $stderr.puts '| thanks in advance!                                          |'
-          $stderr.puts '+-------------------------------------------------------------+'
-
-          # Exception
-          $stderr.puts
-          $stderr.puts '=== MESSAGE:'
-          $stderr.puts
-          $stderr.puts "#{error.class}: #{error.message}"
-
-          # Backtrace
-          require 'enumerator'
-          $stderr.puts
-          $stderr.puts '=== BACKTRACE:'
-          $stderr.puts
-          $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
-
-          exit 1
         end
       end
 
       @site
+    end
+
+    # Inherited from ::Cri::Base
+    def run(args)
+      super(args)
+    rescue Interrupt => e
+      exit(1)
+    rescue StandardError, ScriptError => e
+      print_error(e)
+      exit(1)
+    end
+
+    # Prints the given error to stderr. Includes message, possible resolution,
+    # compilation stack, backtrace, etc.
+    def print_error(error)
+      $stderr.puts
+
+      # Header
+      $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
+      $stderr.puts '| An exception occured while running nanoc. If you think this |'
+      $stderr.puts '| is a bug in nanoc, please do report it at                   |'
+      $stderr.puts '| <http://projects.stoneship.org/trac/nanoc/newticket> --     |'
+      $stderr.puts '| thanks in advance!                                          |'
+      $stderr.puts '+-------------------------------------------------------------+'
+
+      # Exception and resolution (if any)
+      $stderr.puts
+      $stderr.puts '=== MESSAGE:'
+      $stderr.puts
+      $stderr.puts "#{error.class}: #{error.message}"
+      resolution = self.resolution_for(error)
+      $stderr.puts "#{resolution}" if resolution
+
+      # Compilation stack
+      $stderr.puts
+      $stderr.puts '=== COMPILATION STACK:'
+      $stderr.puts
+      if ((self.site && self.site.compiler.stack) || []).empty?
+        $stderr.puts "  (empty)"
+      else
+        self.site.compiler.stack.reverse.each do |obj|
+          if obj.is_a?(Nanoc3::ItemRep)
+            $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
+          else # layout
+            $stderr.puts "  - [layout] #{obj.identifier}"
+          end
+        end
+      end
+
+      # Backtrace
+      require 'enumerator'
+      $stderr.puts
+      $stderr.puts '=== BACKTRACE:'
+      $stderr.puts
+      $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
+    end
+
+    # Returns a string containing hints for resolving the given error, or nil
+    # if no resolution can be automatically obtained.
+    def resolution_for(error)
+      # FIXME this should probably go somewhere else so that 3rd-party code can add other gem names too
+      gem_names = {
+        'bluecloth'      => 'bluecloth',
+        'builder'        => 'builder',
+        'coderay'        => 'coderay',
+        'cri'            => 'cri',
+        'erubis'         => 'erubis',
+        'haml'           => 'haml',
+        'json'           => 'json',
+        'less'           => 'less',
+        'markaby'        => 'markaby',
+        'maruku'         => 'maruku',
+        'mime/types'     => 'mime-types',
+        'rack'           => 'rack',
+        'rack/cache'     => 'rack-cache',
+        'rainpress'      => 'rainpress',
+        'rdiscount'      => 'rdiscount',
+        'redcloth'       => 'redcloth',
+        'rubypants'      => 'rubypants',
+        'sass'           => 'sass',
+        'w3c_validators' => 'w3c_validators'
+      }
+
+      case error
+      when LoadError
+        # Get gem name
+        lib_name = error.message.match(/no such file to load -- ([^\s]+)/)[1]
+        gem_name = gem_names[$1]
+
+        # Build message
+        if gem_name
+          "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) and then re-running the command."
+        end
+      end
     end
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing

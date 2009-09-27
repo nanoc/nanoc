@@ -73,8 +73,8 @@ module Nanoc3
 ------------------------------------------------------------------------------
 Thanks for installing nanoc 3.0! Here are some resources to help you get started:
 
-* The tutorial at <http://nanoc.stoneship.org/help/tutorial/>
-* The manual at <http://nanoc.stoneship.org/help/manual/>
+* The tutorial at <http://nanoc.stoneship.org/tutorial/>
+* The manual at <http://nanoc.stoneship.org/manual/>
 * The discussion group at <http://groups.google.com/group/nanoc>
 
 Because nanoc 3.0 has a lot of new features, be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for details about this release.

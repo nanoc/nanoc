@@ -105,11 +105,6 @@ module Nanoc3::CLI::Commands
         print_state_feedback(reps)
         print_profiling_feedback(reps)
       end
-    rescue Interrupt => e
-      exit(1)
-    rescue StandardError, ScriptError => e
-      print_error(e)
-      exit(1)
     end
 
   private
@@ -186,47 +181,6 @@ module Nanoc3::CLI::Commands
         filter_name = format("%#{max_filter_name_length}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
-    end
-
-    def print_error(error)
-      $stderr.puts
-
-      # Header
-      $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
-      $stderr.puts '| An exception occured while compiling the site. If you think |'
-      $stderr.puts '| this is a bug in nanoc, please do report it at              |'
-      $stderr.puts '| <http://projects.stoneship.org/trac/nanoc/newticket> --     |'
-      $stderr.puts '| thanks in advance!                                          |'
-      $stderr.puts '+-------------------------------------------------------------+'
-
-      # Exception
-      $stderr.puts
-      $stderr.puts '=== MESSAGE:'
-      $stderr.puts
-      $stderr.puts "#{error.class}: #{error.message}"
-
-      # Compilation stack
-      $stderr.puts
-      $stderr.puts '=== COMPILATION STACK:'
-      $stderr.puts
-      if ((@base.site && @base.site.compiler.stack) || []).empty?
-        $stderr.puts "  (empty)"
-      else
-        @base.site.compiler.stack.reverse.each do |obj|
-          if obj.is_a?(Nanoc3::ItemRep)
-            $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
-          else # layout
-            $stderr.puts "  - [layout] #{obj.identifier}"
-          end
-        end
-      end
-
-      # Backtrace
-      require 'enumerator'
-      $stderr.puts
-      $stderr.puts '=== BACKTRACE:'
-      $stderr.puts
-      $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
     end
 
     def rep_compilation_started(rep)

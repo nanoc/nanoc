@@ -199,12 +199,22 @@ module Nanoc3::Helpers
     # Returns the URL for the given item. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
     def url_for(item)
+      # Check attributes
+      if @site.config[:base_url].nil?
+        raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
+      end
+
       @site.config[:base_url] + (item[:custom_path_in_feed] || item.rep(:default).path)
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
     def feed_url
+      # Check attributes
+      if @site.config[:base_url].nil?
+        raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
+      end
+
       @item[:feed_url] || @site.config[:base_url] + @item.rep(:default).path
     end
 

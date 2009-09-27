@@ -75,7 +75,7 @@ module Nanoc3::CLI::Commands
       data_source.create_layout(
         "<html>\n" +
         "  <head>\n" +
-        "    <title><%= @item.title %></title>\n" +
+        "    <title><%= @item[:title] %></title>\n" +
         "  </head>\n" +
         "  <body>\n" +
         "    <p>Hi, I'm a new layout. Please customize me!</p>\n" +
