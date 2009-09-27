@@ -10,6 +10,7 @@ New:
 Changed:
 
 * The "filesystem" data source is now known as "filesystem_verbose"
+* The --server autocompile option is now known as --handler
 
 == 3.0.1
 
