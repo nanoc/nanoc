@@ -25,7 +25,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:mark_outdated_items).with(reps, false)
     compiler.expects(:forget_dependencies_if_outdated).with(items)
 
     # Mock dependency tracker
@@ -34,6 +33,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     dependency_tracker.expects(:store_graph)
     dependency_tracker.expects(:start)
     dependency_tracker.expects(:stop)
+    dependency_tracker.expects(:mark_outdated_items)
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
@@ -60,7 +60,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:mark_outdated_items).with(reps, false)
     compiler.expects(:forget_dependencies_if_outdated).with([ item, other_items[0] ])
 
     # Mock dependency tracker
@@ -69,6 +68,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     dependency_tracker.expects(:store_graph)
     dependency_tracker.expects(:start)
     dependency_tracker.expects(:stop)
+    dependency_tracker.expects(:mark_outdated_items)
     dependency_tracker.expects(:all_inverse_dependencies_for).with(item).returns([ other_items[0] ])
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
@@ -89,6 +89,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     items[0].stubs(:reps).returns([ mock ])
     items[1].stubs(:reps).returns([ mock, mock ])
     reps = items[0].reps + items[1].reps
+    reps.each { |r| r.expects(:force_outdated=).with(true) }
 
     # Mock site
     site = mock
@@ -98,7 +99,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:mark_outdated_items).with(reps, true)
     compiler.expects(:forget_dependencies_if_outdated).with(items)
 
     # Mock dependency tracker
@@ -342,30 +342,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_raises Nanoc3::Errors::RecursiveCompilation do
       compiler.send :compile_reps, reps
     end
-  end
-
-  def test_mark_outdated_items_without_force
-    # Mock reps
-    reps = [ mock, mock ]
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:mark_outdated_items)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.expects(:dependency_tracker).returns(dependency_tracker)
-    compiler.send :mark_outdated_items, reps, false
-  end
-
-  def test_mark_outdated_items_with_force
-    # Mock reps
-    reps = [ mock, mock ]
-    reps.each { |r| r.expects(:force_outdated=).with(true) }
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.send :mark_outdated_items, reps, true
   end
 
   def test_forget_dependencies_if_outdated
