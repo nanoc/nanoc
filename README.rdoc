@@ -72,6 +72,7 @@ You may need to manually install the rdoc gem and update the rubygems installati
 * Dmitry Bilunov
 * Šime Ramov
 * "Soryu"
+* Starr Horne
 * Dennis Sutch
 
 Special thanks to Ale Muñoz.
