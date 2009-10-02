@@ -42,4 +42,57 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     assert_equal 'More human than human', item[:motto]
   end
 
+  def test_compiled_content_with_default_rep_and_default_snapshot
+    # Mock reps
+    rep = mock
+    rep.expects(:name).returns(:default)
+    rep.expects(:content_at_snapshot).with(:last).returns('compiled stuff')
+
+    # Mock item
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item.expects(:reps).returns([ rep ])
+
+    # Check
+    assert_equal 'compiled stuff', item.compiled_content
+  end
+
+  def test_compiled_content_with_custom_rep_and_default_snapshot
+    # Mock reps
+    rep = mock
+    rep.expects(:name).returns(:foo)
+    rep.expects(:content_at_snapshot).with(:last).returns('compiled stuff')
+
+    # Mock item
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item.expects(:reps).returns([ rep ])
+
+    # Check
+    assert_equal 'compiled stuff', item.compiled_content(:rep => :foo)
+  end
+
+  def test_compiled_content_with_default_rep_and_custom_snapshot
+    # Mock reps
+    rep = mock
+    rep.expects(:name).returns(:default)
+    rep.expects(:content_at_snapshot).with(:blah).returns('compiled stuff')
+
+    # Mock item
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item.expects(:reps).returns([ rep ])
+
+    # Check
+    assert_equal 'compiled stuff', item.compiled_content(:snapshot => :blah)
+  end
+
+  def test_compiled_content_with_custom_nonexistant_rep
+    # Mock item
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item.expects(:reps).returns([])
+
+    # Check
+    assert_raises(Nanoc3::Errors::Generic) do
+      item.compiled_content(:rep => :lkasdhflahgwfe)
+    end
+  end
+
 end
