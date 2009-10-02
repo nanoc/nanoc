@@ -87,4 +87,22 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_with_haml
+    if_have 'haml' do
+      # Build content to be evaluated
+      content = "%p Foo.\n" +
+                "- filter(:erb) do\n" +
+                "  <%= 'abc' + 'xyz' %>\n" +
+                "%p Bar.\n"
+
+      # Mock item and rep
+      @item_rep = mock
+      @item_rep.expects(:assigns).returns({})
+
+      # Evaluate content
+      result = ::Haml::Engine.new(content).render(binding)
+      assert_match(%r{^<p>Foo.</p>\s*abcxyz\s*<p>Bar.</p>$}, result)
+    end
+  end
+
 end
