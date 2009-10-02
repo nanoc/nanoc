@@ -33,7 +33,7 @@ module Nanoc3::Helpers
   # this item, the purpose of nanoc is described, blah blah blah,” as
   # expected.
   #
-  # This helper likely only works with ERB (and perhaps Erubis).
+  # This helper has been tested with ERB and Haml.
   #
   # To activate this helper, +include+ it, like this:
   #
