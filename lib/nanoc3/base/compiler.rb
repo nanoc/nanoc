@@ -59,7 +59,11 @@ module Nanoc3
       reps = items.map { |i| i.reps }.flatten
 
       # Prepare dependencies
-      mark_outdated_items(reps, params.has_key?(:force) && params[:force])
+      if params.has_key?(:force) && params[:force]
+        reps.each { |r| r.force_outdated = true }
+      else
+        dependency_tracker.mark_outdated_items
+      end
       forget_dependencies_if_outdated(items)
 
       # Compile reps
@@ -193,17 +197,6 @@ module Nanoc3
     # @return [Nanoc3::DependencyTracker] the dependency tracker for this site.
     def dependency_tracker
       @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
-    end
-
-    # Marks the necessary items as outdated.
-    #
-    # FIXME this method needs a different signature, fast
-    def mark_outdated_items(reps, force)
-      if force
-        reps.each { |r| r.force_outdated = true }
-      else
-        dependency_tracker.mark_outdated_items
-      end
     end
 
     # Clears the list of dependencies for items that will be recompiled.
