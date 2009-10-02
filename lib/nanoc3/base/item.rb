@@ -62,6 +62,33 @@ module Nanoc3
       @reps.find { |r| r.name == rep_name }
     end
 
+    # Returns the compiled content from a given representation and a given
+    # snapshot. This is a convenience method that makes fetching compiled
+    # content easier.
+    #
+    # @option params [String] :rep (:default) The name of the representation
+    #   from which the compiled content should be fetched. By default, the
+    #   compiled content will be fetched from the default representation.
+    #
+    # @option params [String] :snapshot (:last) The name of the snapshot from
+    #   which to fetch the compiled content. By default, the fully compiled
+    #   content will be fetched, with all filters and layouts applied--not the
+    #   pre-layout content.
+    def compiled_content(params={})
+      rep_name      = params[:rep]      || :default
+      snapshot_name = params[:snapshot] || :last
+
+      # Get rep
+      rep = reps.find { |r| r.name == rep_name }
+      if rep.nil?
+        raise Nanoc3::Errors::Generic,
+          "No rep named #{rep_name.inspect} was found."
+      end
+
+      # Get rep's content
+      rep.content_at_snapshot(snapshot_name)
+    end
+
     # Requests the attribute with the given key.
     #
     # @param [Symbol] key The name of the attribute to fetch.
