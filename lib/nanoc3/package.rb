@@ -64,7 +64,7 @@ module Nanoc3
                                   '... documents into static web pages'
         s.description           = s.summary
         s.homepage              = 'http://nanoc.stoneship.org/'
-        s.rubyforge_project     = 'nanoc3'
+        s.rubyforge_project     = 'nanoc'
 
         s.author                = 'Denis Defreyne'
         s.email                 = 'denis.defreyne@stoneship.org'
