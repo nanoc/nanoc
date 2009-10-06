@@ -60,6 +60,7 @@ nanoc itself can be used without installing any dependencies. Some components, h
 autocompiler::             +mime-types+, +rack+
 documentation generation:: +rdoc+ (2.4 or newer), +yardoc+
 packaging::                +rubygems+ (1.3 or newer)
+testing::                  +mocha+
 
 You may need to manually install the rdoc gem and update the rubygems installation.
 
