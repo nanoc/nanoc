@@ -2,9 +2,9 @@
 
 module Nanoc3
 
-  # Nanoc3::Item is represents all compileable items in a site. It has content
-  # and attributes, as well as an identifier. It can also store the
-  # modification time to speed up compilation.
+  # Nanoc3::Item represents a compileable item in a site. It has content and
+  # attributes, as well as an identifier. It can also store the modification
+  # time to speed up compilation.
   class Item
 
     # The Nanoc3::Site this item belongs to.
