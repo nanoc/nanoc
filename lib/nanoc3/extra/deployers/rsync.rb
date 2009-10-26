@@ -5,6 +5,13 @@ module Nanoc3::Extra::Deployers
   # Nanoc3::Extra::Deployers::Rsync is a deployer that deploys a site using rsync.
   class Rsync
 
+    DEFAULT_OPTIONS = [
+      '-glpPrtvz',
+      '--exclude=".hg"',
+      '--exclude=".svn"',
+      '--exclude=".git"'
+    ]
+
     # Creates a new deployment task that uses rsync. The deployment
     # configuration will be taken from the site's configuration file.
     def initialize
@@ -32,7 +39,7 @@ module Nanoc3::Extra::Deployers
       # Set arguments
       src = File.expand_path(@site.config[:output_dir]) + '/'
       dst = @site.config[:deploy][config_name][:dst]
-      options = @site.config[:deploy][config_name][:options] || []
+      options = @site.config[:deploy][config_name][:options] || DEFAULT_OPTIONS
 
       # Validate arguments
       error 'No dst found in deployment configuration' if dst.nil?
