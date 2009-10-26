@@ -44,6 +44,15 @@ module Nanoc3::Extra::Deployers
     #         dst: "ectype:sites/stoneship/public"
     #       staging:
     #         dst: "ectype:sites/stoneship-staging/public"
+    #         options: [ "-glpPrtvz" ]
+    #
+    # When running the deployer with the "default" resp. "staging"
+    # configurations, the following rsync commands will be executed:
+    #
+    #     rsync -glpPrtvz --exclude=".hg" --exclude=".svn"
+    #       --exclude=".git" output ectype:sites/stoneship/public
+    #
+    #     rsync -glpPrtvz output ectype:sites/stoneship-staging/public
     def initialize
       # Get site
       error 'No site configuration found' unless File.file?('config.yaml')
