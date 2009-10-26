@@ -12,8 +12,38 @@ module Nanoc3::Extra::Deployers
       '--exclude=".git"'
     ]
 
-    # Creates a new deployment task that uses rsync. The deployment
-    # configuration will be taken from the site's configuration file.
+    # Creates a new deployer that uses rsync. The deployment configurations
+    # will be read from the configuration file of the site (which is assumed
+    # to be the current working directory).
+    #
+    # The deployment configurations are stored like this in the site's
+    # configuration file:
+    #
+    #     deploy:
+    #       <name>:
+    #         options: [ <options> ]
+    #         dst:     "<dst>"
+    #
+    # +<name>+ is a unique name for the deployment configuration. By default,
+    # the deployer will use the deployment configuration named "default".
+    #
+    # +<options>+ is an array containing options to pass to the rsync
+    # executable. This is optiona; by default, +-glpPrtvz+ and +--exclude+s
+    # for +.svn+, +.hg+ and +.git+ are used.
+    #
+    # +<dst>+ is a string containing the destination to where rsync should
+    # upload its data. It will likely be in +<host>:<path>+ format. For
+    # example, "example.com:/var/www/sites/mysite/html". It should not end
+    # with a trailing slash.
+    #
+    # Example: This deployment configuration defines a "default" and a
+    # "staging" deployment configuration. The default options are used.
+    #
+    # deploy:
+    #   default:
+    #     dst: "ectype:sites/stoneship/public"
+    #   staging:
+    #     dst: "ectype:sites/stoneship-staging/public"
     def initialize
       # Get site
       error 'No site configuration found' unless File.file?('config.yaml')
