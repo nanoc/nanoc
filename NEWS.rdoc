@@ -7,11 +7,13 @@ New:
 * An Item#rep(name) function for quickly getting a certain rep
 * The new "+" wildcard in rule patterns now matches one or more characters
 * An Item#compiled_content function for quickly getting compiled content
+* The deploy:rsync task now accepts a config environment variable
 
 Changed:
 
 * The "filesystem" data source is now known as "filesystem_verbose"
 * The --server autocompile option is now known as --handler
+* The deploy:rsync task now uses a lowercase dry_run environment variable
 
 == 3.0.1
 
