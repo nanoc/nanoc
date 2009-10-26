@@ -20,30 +20,30 @@ module Nanoc3::Extra::Deployers
     # configuration file:
     #
     #     deploy:
-    #       <name>:
-    #         options: [ <options> ]
-    #         dst:     "<dst>"
+    #       NAME:
+    #         options: [ OPTIONS ]
+    #         dst:     "DST"
     #
-    # +<name>+ is a unique name for the deployment configuration. By default,
+    # +NAME+ is a unique name for the deployment configuration. By default,
     # the deployer will use the deployment configuration named "default".
     #
-    # +<options>+ is an array containing options to pass to the rsync
-    # executable. This is optiona; by default, +-glpPrtvz+ and +--exclude+s
-    # for +.svn+, +.hg+ and +.git+ are used.
+    # +OPTIONS+ is an array containing options to pass to the rsync
+    # executable. This is not required; by default, +-glpPrtvz+ and
+    # +--exclude+s for +.svn+, +.hg+ and +.git+ are used.
     #
-    # +<dst>+ is a string containing the destination to where rsync should
-    # upload its data. It will likely be in +<host>:<path>+ format. For
-    # example, "example.com:/var/www/sites/mysite/html". It should not end
-    # with a trailing slash.
+    # +DST+ is a string containing the destination to where rsync should
+    # upload its data. It will likely be in +host:path+ format. For example,
+    # "example.com:/var/www/sites/mysite/html". It should not end with a
+    # trailing slash.
     #
     # Example: This deployment configuration defines a "default" and a
     # "staging" deployment configuration. The default options are used.
     #
-    # deploy:
-    #   default:
-    #     dst: "ectype:sites/stoneship/public"
-    #   staging:
-    #     dst: "ectype:sites/stoneship-staging/public"
+    #     deploy:
+    #       default:
+    #         dst: "ectype:sites/stoneship/public"
+    #       staging:
+    #         dst: "ectype:sites/stoneship-staging/public"
     def initialize
       # Get site
       error 'No site configuration found' unless File.file?('config.yaml')
