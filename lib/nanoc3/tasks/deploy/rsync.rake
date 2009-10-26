@@ -4,7 +4,7 @@ namespace :deploy do
 
   desc 'Upload the compiled site using rsync'
   task :rsync do
-    dry_run     = !!ENV['DRY_RUN']
+    dry_run     = !!ENV['dry_run']
     config_name = ENV['config'] || :default
 
     deployer = Nanoc3::Extra::Deployers::Rsync.new
