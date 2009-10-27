@@ -212,15 +212,15 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Write sample files
-    %w( foo.html foo.yaml bar.html qux.yaml ).each do |filename|
+    %w( foo.html foo.yaml bar.erb.html qux.yaml ).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
     # Get all files
     output_expected = {
-      './foo' => [ 'yaml', 'html' ],
-      './bar' => [ nil,    'html' ],
-      './qux' => [ 'yaml', nil    ]
+      './foo' => [ 'yaml', 'html'     ],
+      './bar' => [ nil,    'erb.html' ],
+      './qux' => [ 'yaml', nil        ]
     }
     output_actual = data_source.send :all_files_in, '.'
 
@@ -264,28 +264,100 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     assert_equal output_expected, output_actual
   end
 
-  def test_identifier_for_meta_filename_with_same_name
+  def test_identifier_for_filename_with_same_name
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal '/foo/foo/', data_source.send(:identifier_for_meta_filename, '/foo/foo.yaml')
+    assert_equal '/foo/foo/', data_source.send(:identifier_for_filename, '/foo/foo.yaml')
   end
 
-  def test_identifier_for_meta_filename_with_other_name
+  def test_identifier_for_filename_with_other_name
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal '/foo/bar/', data_source.send(:identifier_for_meta_filename, '/foo/bar.yaml')
+    assert_equal '/foo/bar/', data_source.send(:identifier_for_filename, '/foo/bar.yaml')
   end
 
-  def test_identifier_for_meta_filename_with_index_name
+  def test_identifier_for_filename_with_index_name
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal '/foo/', data_source.send(:identifier_for_meta_filename, '/foo/index.yaml')
+    assert_equal '/foo/', data_source.send(:identifier_for_filename, '/foo/index.yaml')
+  end
+
+  def test_identifier_for_filename_with_content_name
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '/foo/bar/', data_source.send(:identifier_for_filename, '/foo/bar.html')
+  end
+
+  def test_identifier_for_filename_with_multiple_extensions
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '/foo/bar/', data_source.send(:identifier_for_filename, '/foo/bar.html.erb')
+  end
+
+  def test_basename_of_without_extensions
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '/foo/bar', data_source.send(:basename_of, '/foo/bar')
+  end
+
+  def test_basename_of_with_one_extension
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '/foo/bar', data_source.send(:basename_of, '/foo/bar.html')
+  end
+
+  def test_basename_of_with_absolute_path
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '/foo/bar', data_source.send(:basename_of, '/foo/bar.html.erb')
+  end
+
+  def test_basename_of_with_relative_path
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal 'foo/bar', data_source.send(:basename_of, 'foo/bar.html.erb')
+  end
+
+  def test_ext_of_without_extension
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '', data_source.send(:ext_of, '/foo/bar')
+  end
+
+  def test_ext_of_with_one_extension
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '.html', data_source.send(:ext_of, '/foo/bar.html')
+  end
+
+  def test_ext_of_with_multiple_extensions
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Check
+    assert_equal '.html.erb', data_source.send(:ext_of, '/foo/bar.html.erb')
   end
 
   # Miscellaneous
