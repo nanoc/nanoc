@@ -154,15 +154,13 @@ module Nanoc3::DataSources
       filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
 
       # Group by dirname+basename
-      grouped_filenames = filenames.group_by do |fn|
-        File.dirname(fn) + '/' + File.basename(fn, File.extname(fn))
-      end
+      grouped_filenames = filenames.group_by { |fn| basename_of(fn) }
 
       # Convert values into metafile/content file extension tuple
       grouped_filenames.each_pair do |key, filenames|
         # Divide
-        meta_filenames    = filenames.select { |fn| File.extname(fn) == '.yaml' }
-        content_filenames = filenames.select { |fn| File.extname(fn) != '.yaml' }
+        meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
+        content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
 
         # Check number of files per type
         if ![ 0, 1 ].include?(meta_filenames.size)
@@ -173,8 +171,8 @@ module Nanoc3::DataSources
         end
 
         # Reorder elements and convert to extnames
-        filenames[0] = meta_filenames[0]    ? File.extname(meta_filenames[0])[1..-1]    : nil
-        filenames[1] = content_filenames[0] ? File.extname(content_filenames[0])[1..-1] : nil
+        filenames[0] = meta_filenames[0]    ? ext_of(meta_filenames[0])[1..-1]    : nil
+        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] : nil
       end
 
       # Done
@@ -189,51 +187,78 @@ module Nanoc3::DataSources
     def create_from_files_in(base, klass)
       all_files_in(base).map do |base_filename, (meta_ext, content_ext)|
         # Get filenames
-        meta_filename    = base_filename + '.' + meta_ext
-        content_filename = base_filename + '.' + content_ext
+        meta_filename    = meta_ext    ? base_filename + '.' + meta_ext    : nil
+        content_filename = content_ext ? base_filename + '.' + content_ext : nil
 
         # Get meta and content
-        meta    = YAML.load_file(meta_filename) || {}
-        content = File.read(content_filename)
+        meta    = (meta_filename    ? YAML.load_file(meta_filename) : nil) || {}
+        content = (content_filename ? File.read(content_filename)   : nil) || ''
 
         # Get attributes
-        attributes = {
-          :file      => Nanoc3::Extra::FileProxy.new(content_filename),
-          :extension => File.extname(content_filename)[1..-1]
-        }.merge(meta)
+        attributes = {}
+        attributes[:file]      = Nanoc3::Extra::FileProxy.new(content_filename) if content_filename
+        attributes[:extension] = File.extname(content_filename)[1..-1]          if content_filename
+        attributes.merge!(meta)
 
         # Get identifier
-        identifier = identifier_for_meta_filename(meta_filename[(base.length+1)..-1])
+        if meta_filename
+          identifier = identifier_for_filename(meta_filename[(base.length+1)..-1])
+        elsif content_filename
+          identifier = identifier_for_filename(content_filename[(base.length+1)..-1])
+        else
+          raise RuntimeError, "meta_filename and content_filename are both nil"
+        end
 
         # Get modification times
-        meta_mtime    = File.stat(meta_filename).mtime
-        content_mtime = File.stat(content_filename).mtime
-        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
+        meta_mtime    = meta_filename    ? File.stat(meta_filename).mtime    : nil
+        content_mtime = content_filename ? File.stat(content_filename).mtime : nil
+        if meta_mtime && content_mtime
+          mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
+        elsif meta_mtime
+          mtime = meta_mtime
+        elsif content_mtime
+          mtime = content_mtime
+        else
+          raise RuntimeError, "meta_mtime and content_mtime are both nil"
+        end
 
         # Create layout object
         klass.new(content, attributes, identifier, mtime)
       end
     end
 
-    # Returns the identifier for the given meta filename. This method assumes
-    # that the base is already stripped.
+    # Returns the identifier for the given filename. This method assumes that
+    # the base is already stripped.
     #
     # For example:
     #
     #   /foo.yaml       -> /foo/
     #   /foo/index.yaml -> /foo/
+    #   /foo/index.erb  -> /foo/
     #   /foo/foo.yaml   -> /foo/foo/
-    #   /foo/bar.yaml   -> /foo/bar/
-    def identifier_for_meta_filename(meta_filename)
+    #   /foo/bar.html   -> /foo/bar/
+    def identifier_for_filename(meta_filename)
       # Split into components
       components = meta_filename.gsub(%r{(^/|/$)}, '').split('/')
-      components[-1].sub!(/\.yaml$/, '')
+      components[-1].sub!(/(\.[a-z]+)+$/, '')
 
       if components[-1] == 'index'
         components[0..-2].join('/').cleaned_identifier
       else
         components.join('/').cleaned_identifier
       end
+    end
+
+    # Returns the base name of filename, i.e. filename with all extensions
+    # stripped off. Supports multiple extensions.
+    def basename_of(filename)
+      filename.sub(/(\.[a-z]+)*$/, '')
+    end
+
+    # Returns the extension(s) of filename. Supports multiple extensions.
+    # Includes the leading period.
+    def ext_of(filename)
+      filename =~ /((\.[a-z]+)*)$/ ? $1 : ''
     end
 
   end
