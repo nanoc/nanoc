@@ -21,7 +21,7 @@ module Nanoc3
     def files
       @files ||= (%w( ChangeLog LICENSE NEWS.rdoc Rakefile README.rdoc ) +
         Dir['bin/**/*'] +
-        Dir['lib/**/*']
+        Dir['lib/**/*'])
     end
 
     # The files that are included in the documentation by default.
