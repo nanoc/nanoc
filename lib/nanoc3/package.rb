@@ -21,8 +21,7 @@ module Nanoc3
     def files
       @files ||= (%w( ChangeLog LICENSE NEWS.rdoc Rakefile README.rdoc ) +
         Dir['bin/**/*'] +
-        Dir['lib/**/*'] +
-        Dir['vendor/**/*']).reject { |f| File.directory?(f) }
+        Dir['lib/**/*']
     end
 
     # The files that are included in the documentation by default.
@@ -32,8 +31,7 @@ module Nanoc3
 
     # The files that should not be included in the documentation.
     def files_not_in_documentation
-      Dir['lib/**/*.rake'] +
-      Dir['vendor/**/*'].reject { |f| File.directory?(f) }
+      Dir['lib/**/*.rake']
     end
 
     # The files that should be included in the documentation.
@@ -84,6 +82,7 @@ Enjoy!
 EOS
 
         s.required_ruby_version = '>= 1.8.5'
+        s.add_dependency('cri', '>= 1.0.0')
 
         s.has_rdoc              = true
         s.extra_rdoc_files      = self.extra_rdoc_files
