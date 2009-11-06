@@ -99,7 +99,12 @@ module Nanoc3
     # For example, 'foo/*/bar' is transformed into /^foo\/(.*?)\/bar$/.
     def identifier_to_regex(identifier)
       if identifier.is_a? String
-        /^#{identifier.cleaned_identifier.gsub('*', '(.*?)')}?$/
+        # Add leading/trailing slashes if necessary
+        new_identifier = identifier.dup
+        new_identifier[/^/] = '/' if identifier[0,1] != '/'
+        new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1,1])
+
+        /^#{new_identifier.gsub('*', '(.*?)')}$/
       else
         identifier
       end
