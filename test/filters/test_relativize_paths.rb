@@ -82,6 +82,25 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     assert_equal(expected_content, actual_content)
   end
 
+  def test_filter_html_outside_tag
+    # Create filter with mock item
+    filter = Nanoc3::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/foo/bar/baz/')
+    end
+
+    # Set content
+    raw_content      = %[stuff href="/foo" more stuff]
+    expected_content = %[stuff href="/foo" more stuff]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
+
   def test_filter_implicit
     # Create filter with mock item
     filter = Nanoc3::Filters::RelativizePaths.new
