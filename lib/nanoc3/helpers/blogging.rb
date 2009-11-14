@@ -173,6 +173,10 @@ module Nanoc3::Helpers
 
         # Add articles
         sorted_relevant_articles.each do |a|
+          # Get URL
+          url = url_for(a)
+          next if url.nil?
+
           xml.entry do
             # Add primary attributes
             xml.id        atom_tag_for(a)
@@ -183,7 +187,7 @@ module Nanoc3::Helpers
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
-            xml.link(:rel => 'alternate', :href => url_for(a))
+            xml.link(:rel => 'alternate', :href => url)
 
             # Add content
             summary = excerpt_proc.call(a)
@@ -204,7 +208,12 @@ module Nanoc3::Helpers
         raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @site.config[:base_url] + (item[:custom_path_in_feed] || item.reps[0].path)
+      # Get path
+      path = item[:custom_path_in_feed] || item.reps[0].path
+      return nil if path.nil?
+
+      # Build URL
+      @site.config[:base_url] + path
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
