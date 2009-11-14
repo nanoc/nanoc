@@ -1,5 +1,10 @@
 = nanoc News
 
+== 3.0.3
+
+* The Blogging helper now properly handles item reps without paths
+* The relativize_paths filter now only operates inside tags
+
 == 3.0.2
 
 * Children-only identifier patterns no longer erroneously also match parent
