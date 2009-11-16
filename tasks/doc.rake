@@ -15,9 +15,9 @@ namespace :doc do
   end
 
   YARD::Rake::YardocTask.new do |yard|
-    yard.files   = Nanoc3::Package.instance.files_in_documentation
+    yard.files   = Dir['lib/**/*.rb']
     yard.options = [
-      '--readme',     Nanoc3::Package.instance.main_documentation_file,
+      '--readme',     'README.rdoc',
       '--output-dir', 'doc/yardoc'
     ]
   end
