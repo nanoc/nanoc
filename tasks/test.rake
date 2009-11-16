@@ -7,7 +7,7 @@ test = namespace :test do
   # test:rcov
   desc 'Generate code coverage stats'
   task :rcov do
-    sh %{rcov test/**/test_*.rb -I test -x /Library}
+    sh *[ 'rcov', Dir['test/**/test_*.rb'], '-I', 'test', '-I', 'lib', '-x', ENV['GEM_HOME'] ].flatten
   end
 
   # test:all
