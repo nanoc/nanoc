@@ -4,7 +4,6 @@ module Nanoc3::DataSources
 
   autoload 'Delicious',          'nanoc3/data_sources/delicious'
   autoload 'FilesystemCombined', 'nanoc3/data_sources/filesystem_combined'
-  autoload 'FilesystemCommon',   'nanoc3/data_sources/filesystem_common'
   autoload 'FilesystemCompact',  'nanoc3/data_sources/filesystem_compact'
   autoload 'FilesystemVerbose',  'nanoc3/data_sources/filesystem_verbose'
   autoload 'LastFM',             'nanoc3/data_sources/last_fm'

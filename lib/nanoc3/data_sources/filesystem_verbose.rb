@@ -48,8 +48,6 @@ module Nanoc3::DataSources
   # snippets can reside in sub-directories.
   class FilesystemVerbose < Nanoc3::DataSource
 
-    include Nanoc3::DataSources::FilesystemCommon
-
     ########## VCSes ##########
 
     attr_accessor :vcs

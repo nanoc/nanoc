@@ -191,7 +191,13 @@ module Nanoc3
       return if @code_snippets_loaded and !force
 
       # Get code snippets
-      @code_snippets = data_sources.map { |ds| ds.code_snippets }.flatten
+      @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
+        Nanoc3::CodeSnippet.new(
+          File.read(filename),
+          filename.sub(/^lib\//, ''),
+          File.stat(filename).mtime
+        )
+      end
 
       # Execute code snippets
       @code_snippets.each { |cs| cs.load }
