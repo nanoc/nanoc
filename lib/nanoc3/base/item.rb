@@ -32,7 +32,7 @@ module Nanoc3
     attr_accessor :children
 
     # A boolean indicating whether or not this item is outdated because of its dependencies are outdated.
-    attr_accessor :dependencies_outdated
+    attr_accessor :outdated_due_to_dependencies
 
     # @param [String] raw_content The uncompiled item content.
     #
@@ -115,9 +115,9 @@ module Nanoc3
       @reps.any? { |r| r.outdated? }
     end
 
-    # Alias for #dependencies_outdated.
-    def dependencies_outdated?
-      self.dependencies_outdated
+    # Alias for #outdated_due_to_dependencies.
+    def outdated_due_to_dependencies?
+      self.outdated_due_to_dependencies
     end
 
     def inspect

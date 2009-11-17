@@ -69,7 +69,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     dependency_tracker.expects(:start)
     dependency_tracker.expects(:stop)
     dependency_tracker.expects(:mark_outdated_items)
-    dependency_tracker.expects(:all_inverse_dependencies_for).with(item).returns([ other_items[0] ])
+    dependency_tracker.expects(:all_successors_of).with(item).returns([ other_items[0] ])
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
@@ -348,13 +348,13 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock items
     items = [ mock, mock, mock, mock ]
     items[0].stubs(:outdated?).returns(false)
-    items[0].stubs(:dependencies_outdated?).returns(false)
+    items[0].stubs(:outdated_due_to_dependencies?).returns(false)
     items[1].stubs(:outdated?).returns(true)
-    items[1].stubs(:dependencies_outdated?).returns(false)
+    items[1].stubs(:outdated_due_to_dependencies?).returns(false)
     items[2].stubs(:outdated?).returns(false)
-    items[2].stubs(:dependencies_outdated?).returns(true)
+    items[2].stubs(:outdated_due_to_dependencies?).returns(true)
     items[3].stubs(:outdated?).returns(true)
-    items[3].stubs(:dependencies_outdated?).returns(true)
+    items[3].stubs(:outdated_due_to_dependencies?).returns(true)
 
     # Mock dependency tracker
     dependency_tracker = mock
