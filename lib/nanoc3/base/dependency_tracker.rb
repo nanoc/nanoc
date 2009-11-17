@@ -63,28 +63,28 @@ module Nanoc3
     # outdated, will cause +item+ to be marked as outdated. Indirect
     # dependencies will not be returned (e.g. if A depends on B which depends
     # on C, then the direct dependencies of A do not include C).
-    def predecessors_of(item)
-      @graph.predecessors_of(item).compact
+    def direct_predecessors_of(item)
+      @graph.direct_predecessors_of(item).compact
     end
 
     # Returns all dependencies (direct and indirect) for +item+, i.e. the
     # items that, when outdated, will cause +item+ to be marked as outdated.
-    def all_predecessors_of(item)
-      @graph.all_predecessors_of(item).compact
+    def predecessors_of(item)
+      @graph.predecessors_of(item).compact
     end
 
     # Returns the direct inverse dependencies for +item+, i.e. the items that
     # will be marked as outdated when +item+ is outdated. Indirect
     # dependencies will not be returned (e.g. if A depends on B which depends
     # on C, then the direct inverse dependencies of C do not include A).
-    def successors_of(item)
-      @graph.successors_of(item).compact
+    def direct_successors_of(item)
+      @graph.direct_successors_of(item).compact
     end
 
     # Returns all inverse dependencies (direct and indirect) for +item+, i.e.
     # the items that will be marked as outdated when +item+ is outdated.
-    def all_successors_of(item)
-      @graph.all_successors_of(item).compact
+    def successors_of(item)
+      @graph.successors_of(item).compact
     end
 
     # Records a dependency from +src+ to +dst+ in the dependency graph. When
@@ -142,14 +142,14 @@ module Nanoc3
       added_items.each { |i| i.outdated_due_to_dependencies = true }
 
       # Mark successors of nil as outdated
-      self.all_successors_of(nil).each do |i|
+      self.successors_of(nil).each do |i|
         i.outdated_due_to_dependencies = true
       end
 
       # For each outdated item...
       @items.select { |i| i.outdated? }.each do |outdated_item|
         # ... mark all its successors as outdated
-        self.all_successors_of(outdated_item).each do |i|
+        self.successors_of(outdated_item).each do |i|
           i.outdated_due_to_dependencies = true
         end
       end

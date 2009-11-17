@@ -72,26 +72,26 @@ module Nanoc3
       @matrix[from_index, to_index] = false
     end
 
-    def predecessors_of(to)
+    def direct_predecessors_of(to)
       @vertices.select do |from|
         from_index, to_index = indices_of(from, to)
         @matrix[from_index, to_index] == true
       end
     end
 
-    def successors_of(from)
+    def direct_successors_of(from)
       @vertices.select do |to|
         from_index, to_index = indices_of(from, to)
         @matrix[from_index, to_index] == true
       end
     end
 
-    def all_predecessors_of(vertex)
-      recursively_find_vertices(vertex, :predecessors_of)
+    def predecessors_of(vertex)
+      recursively_find_vertices(vertex, :direct_predecessors_of)
     end
 
-    def all_successors_of(vertex)
-      recursively_find_vertices(vertex, :successors_of)
+    def successors_of(vertex)
+      recursively_find_vertices(vertex, :direct_successors_of)
     end
 
     def edges

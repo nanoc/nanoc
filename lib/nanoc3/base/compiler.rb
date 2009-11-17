@@ -51,7 +51,7 @@ module Nanoc3
 
       # Get items and reps to compile
       if item
-        items = [ item ] + dependency_tracker.all_successors_of(item)
+        items = [ item ] + dependency_tracker.successors_of(item)
         items.uniq!
       else
         items = @site.items

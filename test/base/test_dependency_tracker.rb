@@ -14,8 +14,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker = Nanoc3::DependencyTracker.new(items)
 
     # Verify no dependencies yet
-    assert_equal [], tracker.predecessors_of(items[0])
-    assert_equal [], tracker.predecessors_of(items[1])
+    assert_equal [], tracker.direct_predecessors_of(items[0])
+    assert_equal [], tracker.direct_predecessors_of(items[1])
   end
 
   def test_record_dependency
@@ -29,7 +29,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
   end
 
   def test_record_dependency_no_self
@@ -44,7 +44,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
   end
 
   def test_record_dependency_no_doubles
@@ -60,7 +60,22 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
+  end
+
+  def test_direct_predecessors_of
+    # Mock items
+    items = [ mock, mock, mock ]
+
+    # Create
+    tracker = Nanoc3::DependencyTracker.new(items)
+
+    # Record some dependencies
+    tracker.record_dependency(items[0], items[1])
+    tracker.record_dependency(items[1], items[2])
+
+    # Verify dependencies
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
   end
 
   def test_predecessors_of
@@ -75,10 +90,13 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    all_dependencies = tracker.predecessors_of(items[0])
+    assert_equal 2, all_dependencies.size
+    assert all_dependencies.include?(items[1])
+    assert all_dependencies.include?(items[2])
   end
 
-  def test_all_predecessors_of
+  def test_direct_successors_of
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -90,10 +108,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    all_dependencies = tracker.all_predecessors_of(items[0])
-    assert_equal 2, all_dependencies.size
-    assert all_dependencies.include?(items[1])
-    assert all_dependencies.include?(items[2])
+    assert_equal [ items[0] ], tracker.direct_successors_of(items[1])
   end
 
   def test_successors_of
@@ -108,22 +123,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    assert_equal [ items[0] ], tracker.successors_of(items[1])
-  end
-
-  def test_all_successors_of
-    # Mock items
-    items = [ mock, mock, mock ]
-
-    # Create
-    tracker = Nanoc3::DependencyTracker.new(items)
-
-    # Record some dependencies
-    tracker.record_dependency(items[0], items[1])
-    tracker.record_dependency(items[1], items[2])
-
-    # Verify dependencies
-    all_dependencies = tracker.all_successors_of(items[2])
+    all_dependencies = tracker.successors_of(items[2])
     assert_equal 2, all_dependencies.size
     assert all_dependencies.include?(items[0])
     assert all_dependencies.include?(items[1])
@@ -145,8 +145,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.stop
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
-    assert_equal [],           tracker.predecessors_of(items[1])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_equal [],           tracker.direct_predecessors_of(items[1])
   end
 
   def test_store_graph_and_load_graph_simple
@@ -176,10 +176,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ],           tracker.predecessors_of(items[0])
-    assert_equal [ items[2], items[3] ], tracker.predecessors_of(items[1])
-    assert_equal [],                     tracker.predecessors_of(items[2])
-    assert_equal [],                     tracker.predecessors_of(items[3])
+    assert_equal [ items[1] ],           tracker.direct_predecessors_of(items[0])
+    assert_equal [ items[2], items[3] ], tracker.direct_predecessors_of(items[1])
+    assert_equal [],                     tracker.direct_predecessors_of(items[2])
+    assert_equal [],                     tracker.direct_predecessors_of(items[3])
   end
 
   def test_store_graph_with_custom_filename
@@ -236,9 +236,9 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
-    assert_equal [ items[2] ], tracker.predecessors_of(items[1])
-    assert_equal [],           tracker.predecessors_of(items[2])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_equal [ items[2] ], tracker.direct_predecessors_of(items[1])
+    assert_equal [],           tracker.direct_predecessors_of(items[2])
   end
 
   def test_store_graph_with_nils_in_dst
@@ -266,8 +266,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
-    assert_equal [ ],          tracker.predecessors_of(items[1])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_equal [ ],          tracker.direct_predecessors_of(items[1])
   end
 
   def test_store_graph_with_nils_in_src
@@ -295,8 +295,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
-    assert_equal [ ],          tracker.predecessors_of(items[1])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_equal [ ],          tracker.direct_predecessors_of(items[1])
   end
 
   def test_load_graph_without_file
@@ -322,8 +322,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     refute tracker.nil?
     refute graph.nil?
     assert_equal [ nil ] + items, graph.vertices
-    assert_equal [], tracker.predecessors_of(items[0])
-    assert_equal [], tracker.predecessors_of(items[1])
+    assert_equal [], tracker.direct_predecessors_of(items[0])
+    assert_equal [], tracker.direct_predecessors_of(items[1])
 
     # Mark as outdated
     tracker.mark_outdated_items
@@ -500,11 +500,11 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # Record some dependencies
     tracker.record_dependency(items[0], items[1])
     tracker.record_dependency(items[1], items[2])
-    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
 
     # Forget dependencies
     tracker.forget_dependencies_for(items[0])
-    assert_equal [], tracker.predecessors_of(items[0])
+    assert_equal [], tracker.direct_predecessors_of(items[0])
   end
 
 end
