@@ -51,7 +51,7 @@ module Nanoc3
 
       # Get items and reps to compile
       if item
-        items = [ item ] + dependency_tracker.all_inverse_dependencies_for(item)
+        items = [ item ] + dependency_tracker.all_successors_of(item)
         items.uniq!
       else
         items = @site.items
@@ -112,7 +112,7 @@ module Nanoc3
     #
     # @param [Array] reps The item representations to compile.
     def compile_reps(reps)
-      active_reps, skipped_reps = reps.partition { |rep| rep.outdated? || rep.item.dependencies_outdated? }
+      active_reps, skipped_reps = reps.partition { |rep| rep.outdated? || rep.item.outdated_due_to_dependencies? }
       inactive_reps = []
       compiled_reps = []
 
@@ -202,7 +202,7 @@ module Nanoc3
     # Clears the list of dependencies for items that will be recompiled.
     def forget_dependencies_if_outdated(items)
       items.each do |i|
-        if i.outdated? || i.dependencies_outdated?
+        if i.outdated? || i.outdated_due_to_dependencies?
           dependency_tracker.forget_dependencies_for(i)
         end
       end

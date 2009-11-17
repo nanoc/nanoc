@@ -20,18 +20,12 @@ module Nanoc3
 
     attr_accessor :filename
 
-    # FIXME The way the graph is stored is not exactly great. An adjacency
-    # matrix (wrapped in a Graph class, perhaps) would be a lot easier to work
-    # with, and it would not require an inverse graph to be maintained.
-
     # Creates a new dependency tracker for the given items.
     def initialize(items)
-      @items = items
-
-      @filename = 'tmp/dependencies'
-
-      @graph = {}
-      @inverse_graph = {}
+      @items          = items
+      @filename       = 'tmp/dependencies'
+      @graph          = Nanoc3::DirectedGraph.new([ nil ] + @items)
+      @previous_items = []
     end
 
     # Starts listening for dependency messages (+:visit_started+ and
@@ -69,95 +63,45 @@ module Nanoc3
     # outdated, will cause +item+ to be marked as outdated. Indirect
     # dependencies will not be returned (e.g. if A depends on B which depends
     # on C, then the direct dependencies of A do not include C).
-    def direct_dependencies_for(item)
-      @graph[item] || []
+    def predecessors_of(item)
+      @graph.predecessors_of(item).compact
     end
 
     # Returns all dependencies (direct and indirect) for +item+, i.e. the
     # items that, when outdated, will cause +item+ to be marked as outdated.
-    def all_dependencies_for(item)
-      # FIXME can result in an infinite loop
-
-      direct_dependencies   = direct_dependencies_for(item)
-      indirect_dependencies = direct_dependencies.map { |i| all_dependencies_for(i) }
-
-      (direct_dependencies + indirect_dependencies).flatten
+    def all_predecessors_of(item)
+      @graph.all_predecessors_of(item).compact
     end
 
     # Returns the direct inverse dependencies for +item+, i.e. the items that
     # will be marked as outdated when +item+ is outdated. Indirect
     # dependencies will not be returned (e.g. if A depends on B which depends
     # on C, then the direct inverse dependencies of C do not include A).
-    def direct_inverse_dependencies_for(item)
-      inverted_graph[item] || []
+    def successors_of(item)
+      @graph.successors_of(item).compact
     end
 
     # Returns all inverse dependencies (direct and indirect) for +item+, i.e.
     # the items that will be marked as outdated when +item+ is outdated.
-    def all_inverse_dependencies_for(item)
-      # Init list of all found dependencies
-      all_dependencies = []
-
-      # Init lists with already checked and not yet checked dependencies
-      checked_direct_dependencies = []
-      pending_direct_dependencies = direct_inverse_dependencies_for(item)
-
-      while !pending_direct_dependencies.empty?
-        # Get next unchecked dependency
-        dependency = pending_direct_dependencies.shift
-        next if checked_direct_dependencies.include?(dependency)
-
-        # Add dependencies of this unchecked dependency
-        pending_direct_dependencies += direct_inverse_dependencies_for(dependency)
-
-        # Mark this dependency as handled
-        all_dependencies << dependency
-        checked_direct_dependencies << dependency
-      end
-
-      all_dependencies
+    def all_successors_of(item)
+      @graph.all_successors_of(item).compact
     end
 
     # Records a dependency from +src+ to +dst+ in the dependency graph. When
     # +dst+ is oudated, +src+ will also become outdated.
     def record_dependency(src, dst)
-      # Initialize graph if necessary
-      @graph[src] ||= []
-
-      # Don't include self or doubles in dependencies
-      return if src == dst
-      return if @graph[src].include?(dst)
-
-      # Record dependency
-      invalidate_inverted_graph
-      @graph[src] << dst
+      # Warning! dst and src are *reversed* here!
+      @graph.add_edge(dst, src) unless src == dst
     end
 
     # Stores the dependency graph into the file specified by the +filename+
     # attribute.
     def store_graph
-      # Create dir
       FileUtils.mkdir_p(File.dirname(self.filename))
-
-      # Complete the graph
-      complete_graph
-
-      # Convert graph of items into graph of item identifiers
-      new_graph = {}
-      @graph.each_pair do |second_item, first_items|
-        # Don't store nil because that would be pointless (if first_item is
-        # outdated, something that does not exist is also outdated… makes no
-        # sense).
-        # FIXME can second_item really be nil?
-        next if second_item.nil?
-
-        new_graph[second_item.identifier] = first_items.map { |f| f && f.identifier }.compact
-      end
-
-      # Store dependencies
       store = PStore.new(self.filename)
       store.transaction do
-        store[:dependencies] = new_graph
+        store[:vertices] = @graph.vertices.map { |i| i && i.identifier }
+        store[:edges]    = @graph.edges
       end
     end
 
@@ -165,7 +109,7 @@ module Nanoc3
     # attribute. This method will overwrite an existing dependency graph.
     def load_graph
       # Create new graph
-      @graph = {}
+      @graph = Nanoc3::DirectedGraph.new([ nil ] + @items)
 
       # Don't do anything if dependencies haven't been stored yet
       return if !File.file?(self.filename)
@@ -173,13 +117,16 @@ module Nanoc3
       # Load dependencies
       store = PStore.new(self.filename)
       store.transaction do
-        # Convert graph of identifiers into graph of items
-        store[:dependencies].each_pair do |second_item_identifier, first_item_identifiers|
-          # Convert second and first item identifiers into items
-          second_item = item_with_identifier(second_item_identifier)
-          first_items = first_item_identifiers.map { |p| item_with_identifier(p) }
+        # Load vertices
+        @previous_items = store[:vertices].map do |v|
+          @items.find { |i| i.identifier == v }
+        end
 
-          @graph[second_item] = first_items
+        # Load edges
+        store[:edges].each do |edge|
+          from_index, to_index = *edge
+          from, to = @previous_items[from_index], @previous_items[to_index]
+          @graph.add_edge(from, to)
         end
       end
     end
@@ -188,42 +135,34 @@ module Nanoc3
     # indirectly) depend on an outdated item as outdated.
     def mark_outdated_items
       # Unmark everything
-      @items.each { |i| i.dependencies_outdated = false }
+      @items.each { |i| i.outdated_due_to_dependencies = false }
 
-      # Mark items that appear in @items but not in the dependency graph
-      added_items = @items - @graph.keys
-      added_items.each { |i| i.dependencies_outdated = true }
+      # Mark new items as outdated
+      added_items = @items - @previous_items
+      added_items.each { |i| i.outdated_due_to_dependencies = true }
 
-      # Walk graph and mark items as outdated if necessary
-      # (#keys and #sort is used instead of #each_pair to add determinism)
-      first_items = inverted_graph.keys.sort_by { |i| i.nil? ? '/' : i.identifier }
-      something_changed = true
-      while something_changed
-        something_changed = false
+      # Mark successors of nil as outdated
+      self.all_successors_of(nil).each do |i|
+        i.outdated_due_to_dependencies = true
+      end
 
-        first_items.each do |first_item|
-          second_items = inverted_graph[first_item]
-
-          if first_item.nil? ||                # item was removed
-             first_item.outdated? ||           # item itself is outdated
-             first_item.dependencies_outdated? # item is outdated because of its dependencies
-            second_items.each do |item|
-              # Ignore this item
-              next if item.nil?
-
-              something_changed = true if !item.dependencies_outdated?
-              item.dependencies_outdated = true
-            end
-          end
+      # For each outdated item...
+      @items.select { |i| i.outdated? }.each do |outdated_item|
+        # ... mark all its successors as outdated
+        self.all_successors_of(outdated_item).each do |i|
+          i.outdated_due_to_dependencies = true
         end
       end
     end
 
     # Empties the list of dependencies for the given item. This is necessary
     # before recompiling the given item, because otherwise old dependencies
-    # will stick around and new dependencies will appear twice.
+    # will stick around and new dependencies will appear twice. This function
+    # removes all incoming edges for the given vertex.
     def forget_dependencies_for(item)
-      @graph[item] = []
+      @graph.vertices.each do |v|
+        @graph.remove_edge(v, item)
+      end
     end
 
   private
@@ -231,57 +170,6 @@ module Nanoc3
     # Returns the item with the given identifier, or nil if no item is found.
     def item_with_identifier(identifier)
       @items.find { |i| i.identifier == identifier }
-    end
-
-    # Returns the inverted dependency graph, creating it first if it does not
-    # exist yet or is outdated. In this graph, the keys will be outdated when
-    # any of the values are outdated.
-    def inverted_graph
-      @inverted_graph ||= invert_graph(@graph)
-    end
-
-    # Marks the inverted graph as outdated so that it will be regenerated the
-    # next time it is used.
-    def invalidate_inverted_graph
-      @inverted_graph = nil
-    end
-
-    # Inverts the given graph (keys become values and values become keys).
-    #
-    # @example The first graph is turned into the second graph
-    #
-    #   {
-    #     :a => [ :b, :c ],
-    #     :b => [ :x, :c ]
-    #   }
-    #
-    #   {
-    #     :b => [ :a ],
-    #     :c => [ :a, :b ],
-    #     :x => [ :b ]
-    #   }
-    def invert_graph(graph)
-      inverted_graph = {}
-
-      graph.each_pair do |key, values|
-        values.each do |v|
-          inverted_graph[v] ||= []
-          inverted_graph[v] << key
-        end
-      end
-
-      inverted_graph
-    end
-
-    # Ensures that all items in the dependency graph have a list of
-    # dependecies, even if it is empty. Items without a list of dependencies
-    # will be treated as "added" and will depend on all other pages, which is
-    # not necessary for non-added items.
-    def complete_graph
-      @items.each do |item|
-        @graph[item] ||= []
-      end
-
     end
 
   end

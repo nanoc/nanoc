@@ -14,8 +14,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker = Nanoc3::DependencyTracker.new(items)
 
     # Verify no dependencies yet
-    assert_equal [], tracker.direct_dependencies_for(items[0])
-    assert_equal [], tracker.direct_dependencies_for(items[1])
+    assert_equal [], tracker.predecessors_of(items[0])
+    assert_equal [], tracker.predecessors_of(items[1])
   end
 
   def test_record_dependency
@@ -29,7 +29,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
   end
 
   def test_record_dependency_no_self
@@ -44,7 +44,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
   end
 
   def test_record_dependency_no_doubles
@@ -60,10 +60,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
   end
 
-  def test_direct_dependencies_for
+  def test_predecessors_of
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -75,10 +75,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
   end
 
-  def test_all_dependencies_for
+  def test_all_predecessors_of
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -90,13 +90,13 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    all_dependencies = tracker.all_dependencies_for(items[0])
+    all_dependencies = tracker.all_predecessors_of(items[0])
     assert_equal 2, all_dependencies.size
     assert all_dependencies.include?(items[1])
     assert all_dependencies.include?(items[2])
   end
 
-  def test_direct_inverse_dependencies_for
+  def test_successors_of
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -108,10 +108,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    assert_equal [ items[0] ], tracker.direct_inverse_dependencies_for(items[1])
+    assert_equal [ items[0] ], tracker.successors_of(items[1])
   end
 
-  def test_all_inverse_dependencies_for
+  def test_all_successors_of
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -123,7 +123,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    all_dependencies = tracker.all_inverse_dependencies_for(items[2])
+    all_dependencies = tracker.all_successors_of(items[2])
     assert_equal 2, all_dependencies.size
     assert all_dependencies.include?(items[0])
     assert all_dependencies.include?(items[1])
@@ -145,8 +145,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.stop
 
     # Verify dependencies
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
-    assert_equal [],           tracker.direct_dependencies_for(items[1])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [],           tracker.predecessors_of(items[1])
   end
 
   def test_store_graph_and_load_graph_simple
@@ -176,10 +176,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ],           tracker.direct_dependencies_for(items[0])
-    assert_equal [ items[2], items[3] ], tracker.direct_dependencies_for(items[1])
-    assert_equal [],                     tracker.direct_dependencies_for(items[2])
-    assert_equal [],                     tracker.direct_dependencies_for(items[3])
+    assert_equal [ items[1] ],           tracker.predecessors_of(items[0])
+    assert_equal [ items[2], items[3] ], tracker.predecessors_of(items[1])
+    assert_equal [],                     tracker.predecessors_of(items[2])
+    assert_equal [],                     tracker.predecessors_of(items[3])
   end
 
   def test_store_graph_with_custom_filename
@@ -236,10 +236,9 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ],      tracker.direct_dependencies_for(items[0])
-    assert_equal [ items[2], nil ], tracker.direct_dependencies_for(items[1])
-    assert_equal [],                tracker.direct_dependencies_for(items[2])
-    assert_equal [],                tracker.direct_dependencies_for(items[3])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ items[2] ], tracker.predecessors_of(items[1])
+    assert_equal [],           tracker.predecessors_of(items[2])
   end
 
   def test_store_graph_with_nils_in_dst
@@ -267,8 +266,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
-    assert_equal [ ],          tracker.direct_dependencies_for(items[1])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ ],          tracker.predecessors_of(items[1])
   end
 
   def test_store_graph_with_nils_in_src
@@ -296,20 +295,20 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
-    assert_equal [ ],          tracker.direct_dependencies_for(items[1])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
+    assert_equal [ ],          tracker.predecessors_of(items[1])
   end
 
   def test_load_graph_without_file
     # Mock items
     item_0 = Object.new
-    def item_0.outdated?                 ; false                      ; end
-    def item_0.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_0.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
+    def item_0.outdated?                        ; false                             ; end
+    def item_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     item_1 = Object.new
-    def item_1.outdated?                 ; true                       ; end
-    def item_1.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_1.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
+    def item_1.outdated?                        ; true                              ; end
+    def item_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     items = [ item_0, item_1 ]
 
     # Create
@@ -317,14 +316,21 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Load
     tracker.load_graph
-    assert_equal({}, tracker.instance_eval { @graph })
+    graph = tracker.instance_eval { @graph }
+
+    # Check
+    refute tracker.nil?
+    refute graph.nil?
+    assert_equal [ nil ] + items, graph.vertices
+    assert_equal [], tracker.predecessors_of(items[0])
+    assert_equal [], tracker.predecessors_of(items[1])
 
     # Mark as outdated
     tracker.mark_outdated_items
 
     # Check outdatedness
-    assert item_0.dependencies_outdated?
-    assert item_1.dependencies_outdated?
+    assert item_0.outdated_due_to_dependencies?
+    assert item_1.outdated_due_to_dependencies?
   end
 
   def test_item_with_identifier
@@ -349,71 +355,66 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
   def test_mark_outdated_items_simple
     # Mock items
     item_0 = Object.new
-    def item_0.outdated?                 ; false                      ; end
-    def item_0.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_0.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
-    def item_0.identifier                ; '/a/'                      ; end
+    def item_0.outdated?                        ; false                             ; end
+    def item_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     item_1 = Object.new
-    def item_1.outdated?                 ; true                       ; end
-    def item_1.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_1.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
-    def item_1.identifier                ; '/b/'                      ; end
+    def item_1.outdated?                        ; true                              ; end
+    def item_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     items = [ item_0, item_1 ]
 
     # Create
     tracker = Nanoc3::DependencyTracker.new(items)
+    tracker.instance_eval { @previous_items = items }
 
     # Record some dependencies
     tracker.record_dependency(items[0], items[1])
-    tracker.send :complete_graph
 
     # Mark as outdated
     tracker.mark_outdated_items
 
     # Check outdatedness
     assert !items[0].outdated?
-    assert items[0].dependencies_outdated?
+    assert items[0].outdated_due_to_dependencies?
     assert items[1].outdated?
-    assert !items[1].dependencies_outdated?
+    assert !items[1].outdated_due_to_dependencies?
   end
 
   def test_mark_outdated_items_chained
     # Mock items
     item_0 = Object.new
-    def item_0.outdated?                 ; false                      ; end
-    def item_0.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_0.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
-    def item_0.identifier                ; '/a/'                      ; end
+    def item_0.outdated?                        ; false                             ; end
+    def item_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     item_1 = Object.new
-    def item_1.outdated?                 ; false                      ; end
-    def item_1.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_1.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
-    def item_1.identifier                ; '/b/'                      ; end
+    def item_1.outdated?                        ; false                             ; end
+    def item_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     item_2 = Object.new
-    def item_2.outdated?                 ; true                       ; end
-    def item_2.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item_2.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
-    def item_2.identifier                ; '/c/'                      ; end
+    def item_2.outdated?                        ; true                              ; end
+    def item_2.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_2.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
     items = [ item_0, item_1, item_2 ]
 
     # Create
     tracker = Nanoc3::DependencyTracker.new(items)
+    tracker.instance_eval { @previous_items = items }
 
     # Record some dependencies
     tracker.record_dependency(items[0], items[1])
     tracker.record_dependency(items[1], items[2])
-    tracker.send :complete_graph
 
     # Mark as outdated
     tracker.mark_outdated_items
 
     # Check outdatedness
     assert !items[0].outdated?
-    assert items[0].dependencies_outdated?
+    assert items[0].outdated_due_to_dependencies?
     assert !items[1].outdated?
-    assert items[1].dependencies_outdated?
+    assert items[1].outdated_due_to_dependencies?
     assert items[2].outdated?
-    assert !items[2].dependencies_outdated?
+    assert !items[2].outdated_due_to_dependencies?
   end
 
   def test_mark_outdated_items_with_removed_items_forward
@@ -421,23 +422,23 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Mock items
     item = Object.new
-    def item.outdated?                 ; false                      ; end
-    def item.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
+    def item.outdated?                        ; false                             ; end
+    def item.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
 
     # Create
     tracker = Nanoc3::DependencyTracker.new([ item ])
+    tracker.instance_eval { @previous_items = [ item ] }
 
     # Record some dependencies
     tracker.record_dependency(item, nil)
-    tracker.send :complete_graph
 
     # Mark as outdated
     tracker.mark_outdated_items
 
     # Check outdatedness
     assert !item.outdated?
-    assert item.dependencies_outdated?
+    assert item.outdated_due_to_dependencies?
   end
 
   def test_mark_outdated_items_with_removed_items_backward
@@ -445,43 +446,48 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Mock items
     item = Object.new
-    def item.outdated?                 ; true                       ; end
-    def item.identifier                ; '/bob/'                    ; end
-    def item.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
+    def item.outdated?                        ; true                              ; end
+    def item.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
 
     # Create
     tracker = Nanoc3::DependencyTracker.new([ item ])
+    tracker.instance_eval { @previous_items = [ item ] }
 
     # Record some dependencies
     tracker.record_dependency(nil, item)
-    tracker.send :complete_graph
 
     # Mark as outdated
     tracker.mark_outdated_items
 
     # Check outdatedness
     assert item.outdated?
-    assert !item.dependencies_outdated?
+    assert !item.outdated_due_to_dependencies?
   end
 
   def test_mark_outdated_items_with_added_items
     # An added item (with no entry in the dependency graph) depends on all other items.
 
     # Mock items
-    item = Object.new
-    def item.outdated?                 ; false                      ; end
-    def item.dependencies_outdated?    ; @dependencies_outdated     ; end
-    def item.dependencies_outdated=(b) ; @dependencies_outdated = b ; end
+    item_0 = Object.new
+    def item_0.outdated?                        ; false                             ; end
+    def item_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    item_1 = Object.new
+    def item_1.outdated?                        ; false                             ; end
+    def item_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
+    def item_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
 
     # Create
-    tracker = Nanoc3::DependencyTracker.new([ item ])
+    tracker = Nanoc3::DependencyTracker.new([ item_0, item_1 ])
+    tracker.instance_eval { @previous_items = [ item_0 ] }
 
     # Mark as outdated
     tracker.mark_outdated_items
 
     # Check outdatedness
-    assert item.dependencies_outdated?, 'items without entry in the dependency graph (i.e. added items) should be outdated'
+    assert !item_0.outdated_due_to_dependencies?
+    assert item_1.outdated_due_to_dependencies?
   end
 
   def test_forget_dependencies_for
@@ -494,31 +500,11 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # Record some dependencies
     tracker.record_dependency(items[0], items[1])
     tracker.record_dependency(items[1], items[2])
-    assert_equal [ items[1] ], tracker.direct_dependencies_for(items[0])
+    assert_equal [ items[1] ], tracker.predecessors_of(items[0])
 
     # Forget dependencies
     tracker.forget_dependencies_for(items[0])
-    assert_equal [], tracker.direct_dependencies_for(items[0])
-  end
-
-  def test_invert_graph
-    # Create
-    tracker = Nanoc3::DependencyTracker.new([])
-
-    # Invert
-    original = {
-      :a => [ :b, :c ],
-      :b => [ :x, :c ]
-    }
-    actual = tracker.send(:invert_graph, original)
-
-    # Check
-    expected = {
-      :b => [ :a ],
-      :c => [ :a, :b ],
-      :x => [ :b ]
-    }
-    assert_equal expected, actual
+    assert_equal [], tracker.predecessors_of(items[0])
   end
 
 end
