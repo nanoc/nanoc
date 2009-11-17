@@ -69,7 +69,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     dependency_tracker.expects(:start)
     dependency_tracker.expects(:stop)
     dependency_tracker.expects(:mark_outdated_items)
-    dependency_tracker.expects(:all_successors_of).with(item).returns([ other_items[0] ])
+    dependency_tracker.expects(:successors_of).with(item).returns([ other_items[0] ])
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
