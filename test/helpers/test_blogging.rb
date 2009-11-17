@@ -476,6 +476,41 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_atom_feed_with_item_without_path
+    if_have 'builder' do
+      # Create items
+      @items = [ mock ]
+      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:identifier).returns('/item/')
+      @items[0].stubs(:[]).with(:kind).returns('article')
+      @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
+      @items[0].stubs(:[]).with(:title).returns('Item One')
+      @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[0].stubs(:[]).with(:excerpt).returns(nil)
+      item_rep = mock
+      item_rep.stubs(:path).returns(nil)
+      @items[0].stubs(:rep).with(:default).returns(item_rep)
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:identifier).returns('/feed/')
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      item_rep = mock
+      item_rep.stubs(:path).returns("/journal/feed/")
+      @item.stubs(:rep).with(:default).returns(item_rep)
+
+      # Check
+      atom_feed
+    end
+  end
+
   def test_url_for_without_custom_path_in_feed
     # Mock site
     @site = mock
@@ -520,6 +555,22 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     assert_raises(RuntimeError) do
       url_for(nil)
     end
+  end
+
+  def test_url_for_without_path
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+    # Create article
+    item = mock
+    item.expects(:[]).with(:custom_path_in_feed).returns(nil)
+    item_rep = mock
+    item_rep.expects(:path).returns(nil)
+    item.expects(:rep).with(:default).returns(item_rep)
+
+    # Check
+    assert_equal(nil, url_for(item))
   end
 
   def test_feed_url_without_custom_feed_url

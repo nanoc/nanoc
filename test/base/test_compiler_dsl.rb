@@ -23,7 +23,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     compiler_dsl = Nanoc3::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo') }
-    expected = %r{^/foo/?$}
+    expected = %r{^/foo/$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -37,7 +37,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     compiler_dsl = Nanoc3::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar') }
-    expected = %r{^/foo/(.*?)/bar/?$}
+    expected = %r{^/foo/(.*?)/bar/$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -51,7 +51,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     compiler_dsl = Nanoc3::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
-    expected = %r{^/foo/(.*?)/bar/(.*?)/qux/?$}
+    expected = %r{^/foo/(.*?)/bar/(.*?)/qux/$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -65,7 +65,35 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     compiler_dsl = Nanoc3::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('*') }
-    expected = %r{^/(.*?)/?$}
+    expected = %r{^/(.*?)$}
+
+    assert_equal(expected.to_s,      actual.to_s)
+    assert_equal(expected.source,    actual.source)
+    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
+    assert_equal(expected.casefold?, actual.casefold?)
+    assert_equal(expected.options,   actual.options)
+  end
+
+  def test_identifier_to_regex_with_root
+    # Create compiler DSL
+    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+
+    actual   = compiler_dsl.instance_eval { identifier_to_regex('/') }
+    expected = %r{^/$}
+
+    assert_equal(expected.to_s,      actual.to_s)
+    assert_equal(expected.source,    actual.source)
+    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
+    assert_equal(expected.casefold?, actual.casefold?)
+    assert_equal(expected.options,   actual.options)
+  end
+
+  def test_identifier_to_regex_with_only_children
+    # Create compiler DSL
+    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+
+    actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/*/') }
+    expected = %r{^/foo/(.*?)/$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -79,7 +107,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     compiler_dsl = Nanoc3::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/+') }
-    expected = %r{^/foo/(.+?)/?$}
+    expected = %r{^/foo/(.+?)/$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)

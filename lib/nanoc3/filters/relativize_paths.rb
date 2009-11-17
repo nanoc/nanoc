@@ -13,8 +13,8 @@ module Nanoc3::Filters
       # Filter
       case params[:type]
       when :html
-        content.gsub(/(src|href)=(['"]?)(\/.+?)\2([ >])/) do
-          $1 + '=' + $2 + relative_path_to($3) + $2 + $4
+        content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/.+?)\3([ >])/) do
+          $1 + '=' + $3 + relative_path_to($4) + $3 + $5
         end
       when :css
         content.gsub(/url\((['"]?)(\/.+?)\1\)/) do
