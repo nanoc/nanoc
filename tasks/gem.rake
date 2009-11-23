@@ -36,6 +36,9 @@ EOS
 
       s.required_ruby_version = '>= 1.8.6'
       s.add_dependency('cri', '>= 1.0.0')
+
+      s.has_rdoc = 'yard'
+      s.rdoc_options = [ '--readme', 'README.rdoc' ]
     end
   rescue LoadError
     warn "Jeweler (or a dependency) is not available. Install it with `gem install jeweler`"
