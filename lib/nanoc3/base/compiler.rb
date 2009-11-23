@@ -188,7 +188,7 @@ module Nanoc3
 
       # Write if rep is routed
       rep.write unless rep.raw_path.nil?
-
+    ensure
       # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
