@@ -20,6 +20,11 @@ module Nanoc3
 
     attr_accessor :filename
 
+    # The version of the file format used by the dependency tracker to store
+    # dependencies. When a dependencies file with an incompatible version is
+    # found, it is ignored.
+    STORE_VERSION = 2
+
     # Creates a new dependency tracker for the given items.
     def initialize(items)
       @items          = items
@@ -100,6 +105,7 @@ module Nanoc3
       FileUtils.mkdir_p(File.dirname(self.filename))
       store = PStore.new(self.filename)
       store.transaction do
+        store[:version]  = STORE_VERSION
         store[:vertices] = @graph.vertices.map { |i| i && i.identifier }
         store[:edges]    = @graph.edges
       end
@@ -111,12 +117,15 @@ module Nanoc3
       # Create new graph
       @graph = Nanoc3::DirectedGraph.new([ nil ] + @items)
 
-      # Don't do anything if dependencies haven't been stored yet
+      # Get store
       return if !File.file?(self.filename)
+      store = PStore.new(self.filename)
 
       # Load dependencies
-      store = PStore.new(self.filename)
       store.transaction do
+        # Verify version
+        return if store[:version] != STORE_VERSION
+
         # Load vertices
         @previous_items = store[:vertices].map do |v|
           @items.find { |i| i.identifier == v }
