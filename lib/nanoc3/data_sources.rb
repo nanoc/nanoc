@@ -16,4 +16,8 @@ module Nanoc3::DataSources
   Nanoc3::DataSource.register '::Nanoc3::DataSources::LastFM',             :last_fm
   Nanoc3::DataSource.register '::Nanoc3::DataSources::Twitter',            :twitter
 
+  # Deprecated; use filesystem_verbose instead
+  # TODO [in nanoc 3.2] remove me
+  Nanoc3::DataSource.register '::Nanoc3::DataSources::FilesystemVerbose',  :filesystem
+
 end
