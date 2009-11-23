@@ -20,13 +20,15 @@ namespace :pkg do
 
       s.post_install_message  = <<EOS
 ------------------------------------------------------------------------------
-Thanks for installing nanoc 3.0! Here are some resources to help you get started:
+Thanks for installing nanoc 3.1! Here are some resources to help you get
+started:
 
 * The tutorial at <http://nanoc.stoneship.org/tutorial/>
 * The manual at <http://nanoc.stoneship.org/manual/>
 * The discussion group at <http://groups.google.com/group/nanoc>
 
-Because nanoc 3.0 has a lot of new features, be sure to check out the nanoc blog at <http://nanoc.stoneship.org/blog/> for details about this release.
+Because nanoc 3.1 has quite a few new features, be sure to check out the nanoc
+blog at <http://nanoc.stoneship.org/blog/> for details about this release.
 
 Enjoy!
 ------------------------------------------------------------------------------
