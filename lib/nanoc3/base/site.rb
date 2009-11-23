@@ -118,6 +118,12 @@ module Nanoc3
           data_source_class = Nanoc3::DataSource.named(data_source_hash[:type])
           raise Nanoc3::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
 
+          # Warn about deprecated data sources
+          # TODO [in nanoc 3.2] remove me
+          if data_source_hash[:type] == 'filesystem'
+            warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
+          end
+
           # Create data source
           data_source_class.new(
             self,
