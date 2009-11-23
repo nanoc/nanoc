@@ -174,6 +174,20 @@ module Nanoc3
       end
     end
 
+    # Prints the dependency graph in human-readable form.
+    def print_graph
+      @items.each do |item|
+        puts "#{item.inspect} depends on:"
+
+        predecessors = direct_predecessors_of(item)
+        predecessors.each do |pred|
+          puts "    #{pred.inspect}"
+        end
+        puts "    (nothing!)" if predecessors.empty?
+        puts
+      end
+    end
+
   private
 
     # Returns the item with the given identifier, or nil if no item is found.

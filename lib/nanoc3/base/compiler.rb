@@ -47,7 +47,7 @@ module Nanoc3
 
       # Load dependencies
       dependency_tracker.load_graph
-      print_dependency_graph if $DEBUG
+      dependency_tracker.print_graph if $DEBUG
 
       # Get items and reps to compile
       if item
@@ -205,20 +205,6 @@ module Nanoc3
         if i.outdated? || i.outdated_due_to_dependencies?
           dependency_tracker.forget_dependencies_for(i)
         end
-      end
-    end
-
-    # Prints the dependency graph.
-    def print_dependency_graph
-      graph = dependency_tracker.instance_eval { @graph }
-      puts "DEPENDENCY GRAPH:"
-      graph.each_pair do |key, values|
-        puts "#{key.inspect} depends on:"
-        values.each do |value|
-          puts "    #{value.inspect}"
-        end
-        puts "    (nothing!)" if values.empty?
-        puts
       end
     end
 
