@@ -4,12 +4,6 @@ require 'minitest/unit'
 
 test = namespace :test do
 
-  # test:rcov
-  desc 'Generate code coverage stats'
-  task :rcov do
-    sh %{rcov test/**/test_*.rb -I test -x /Library}
-  end
-
   # test:all
   desc 'Run all tests'
   task :all do

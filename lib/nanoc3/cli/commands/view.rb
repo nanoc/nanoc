@@ -2,28 +2,26 @@
 
 module Nanoc3::CLI::Commands
 
-  class Autocompile < Cri::Command
+  class View < Cri::Command
 
     def name
-      'autocompile'
+      'view'
     end
 
     def aliases
-      [ 'aco' ]
+      []
     end
 
     def short_desc
-      'start the autocompiler'
+      'start the web server that serves static files'
     end
 
     def long_desc
-      'Start the autocompiler web server. Unless specified, the web ' +
-      'server will run on port 3000 and listen on all IP addresses. ' +
-      'Running the autocompiler requires \'mime/types\' and \'rack\'.'
+      'Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running the autocompiler requires \'adsf\' and \'rack\'.'
     end
 
     def usage
-      "nanoc3 autocompile [options]"
+      "nanoc3 view [options]"
     end
 
     def option_definitions
@@ -48,6 +46,7 @@ module Nanoc3::CLI::Commands
 
     def run(options, arguments)
       require 'rack'
+      require 'adsf'
 
       # Make sure we are in a nanoc site directory
       @base.require_site
@@ -68,11 +67,13 @@ module Nanoc3::CLI::Commands
       end
 
       # Build app
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      site = @base.site
       app = Rack::Builder.new do
-        use Rack::CommonLogger, $stderr
+        use Rack::CommonLogger
         use Rack::ShowExceptions
-        run autocompiler
+        use Rack::Lint
+        use Adsf::Rack::IndexFileFinder, :root => site.config[:output_dir]
+        run Rack::File.new(site.config[:output_dir])
       end.to_app
 
       # Run autocompiler

@@ -67,8 +67,6 @@ module Nanoc3::DataSources
   # snippets can reside in sub-directories.
   class FilesystemCompact < Nanoc3::DataSource
 
-    include Nanoc3::DataSources::FilesystemCommon
-
     ########## VCSes ##########
 
     attr_accessor :vcs
@@ -90,50 +88,11 @@ module Nanoc3::DataSources
     ########## Loading data ##########
 
     def items
-      meta_filenames('content').map do |meta_filename|
-        # Read metadata
-        meta = YAML.load_file(meta_filename) || {}
-
-        # Get content
-        content_filename = content_filename_for_meta_filename(meta_filename)
-        content = File.read(content_filename)
-
-        # Get attributes
-        attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(content_filename))
-
-        # Get identifier
-        identifier = identifier_for_meta_filename(meta_filename.sub(/^content/, ''))
-
-        # Get modification times
-        meta_mtime    = File.stat(meta_filename).mtime
-        content_mtime = File.stat(content_filename).mtime
-        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
-
-        # Create item object
-        Nanoc3::Item.new(content, attributes, identifier, mtime)
-      end
+      create_from_files_in('content', Nanoc3::Item)
     end
 
     def layouts
-      meta_filenames('layouts').map do |meta_filename|
-        # Get content
-        content_filename  = content_filename_for_meta_filename(meta_filename)
-        content           = File.read(content_filename)
-
-        # Get attributes
-        attributes = YAML.load_file(meta_filename) || {}
-
-        # Get identifier
-        identifier = identifier_for_meta_filename(meta_filename.sub(/^layouts\//, ''))
-
-        # Get modification times
-        meta_mtime    = File.stat(meta_filename).mtime
-        content_mtime = File.stat(content_filename).mtime
-        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
-
-        # Create layout object
-        Nanoc3::Layout.new(content, attributes, identifier, mtime)
-      end
+      create_from_files_in('layouts', Nanoc3::Layout)
     end
 
     ########## Creating data ##########
@@ -176,19 +135,110 @@ module Nanoc3::DataSources
 
     ########## Custom functions ##########
 
-    # Returns the identifier for the given meta filename. This method assumes
-    # that the base is already stripped.
+    # Finds all items/layouts/... in the given base directory. Returns a hash
+    # in which the keys are the file's dirname + basenames, and the values a
+    # pair consisting of the metafile extension and the content file
+    # extension. The meta file extension or the content file extension can be
+    # nil, but not both. Backup files are ignored. For example:
+    #
+    #   {
+    #     'content/foo' => [ 'yaml', 'html' ],
+    #     'content/bar' => [ 'yaml', nil    ],
+    #     'content/qux' => [ nil,    'html' ]
+    #   }
+    def all_files_in(base)
+      # Get all good file names
+      filenames = Dir[base + '/**/*'].select { |i| File.file?(i) }
+      filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
+
+      # Group by dirname+basename
+      grouped_filenames = filenames.group_by { |fn| basename_of(fn) }
+
+      # Convert values into metafile/content file extension tuple
+      grouped_filenames.each_pair do |key, filenames|
+        # Divide
+        meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
+        content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
+
+        # Check number of files per type
+        if ![ 0, 1 ].include?(meta_filenames.size)
+          raise RuntimeError, "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
+        end
+        if ![ 0, 1 ].include?(content_filenames.size)
+          raise RuntimeError, "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
+        end
+
+        # Reorder elements and convert to extnames
+        filenames[0] = meta_filenames[0]    ? ext_of(meta_filenames[0])[1..-1]    : nil
+        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] : nil
+      end
+
+      # Done
+      grouped_filenames
+    end
+
+    # Creates Item or Layout objects based on all files in the given directory.
+    #
+    # +base+:: The base directory where to search for files.
+    #
+    # +klass+:: The class (Nanoc3::Item or Nanoc3::Layout) of the objects to generate.
+    def create_from_files_in(base, klass)
+      all_files_in(base).map do |base_filename, (meta_ext, content_ext)|
+        # Get filenames
+        meta_filename    = meta_ext    ? base_filename + '.' + meta_ext    : nil
+        content_filename = content_ext ? base_filename + '.' + content_ext : nil
+
+        # Get meta and content
+        meta    = (meta_filename    ? YAML.load_file(meta_filename) : nil) || {}
+        content = (content_filename ? File.read(content_filename)   : nil) || ''
+
+        # Get attributes
+        attributes = {}
+        attributes[:file]      = Nanoc3::Extra::FileProxy.new(content_filename) if content_filename
+        attributes[:extension] = File.extname(content_filename)[1..-1]          if content_filename
+        attributes.merge!(meta)
+
+        # Get identifier
+        if meta_filename
+          identifier = identifier_for_filename(meta_filename[(base.length+1)..-1])
+        elsif content_filename
+          identifier = identifier_for_filename(content_filename[(base.length+1)..-1])
+        else
+          raise RuntimeError, "meta_filename and content_filename are both nil"
+        end
+
+        # Get modification times
+        meta_mtime    = meta_filename    ? File.stat(meta_filename).mtime    : nil
+        content_mtime = content_filename ? File.stat(content_filename).mtime : nil
+        if meta_mtime && content_mtime
+          mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
+        elsif meta_mtime
+          mtime = meta_mtime
+        elsif content_mtime
+          mtime = content_mtime
+        else
+          raise RuntimeError, "meta_mtime and content_mtime are both nil"
+        end
+
+        # Create layout object
+        klass.new(content, attributes, identifier, mtime)
+      end
+    end
+
+    # Returns the identifier for the given filename. This method assumes that
+    # the base is already stripped.
     #
     # For example:
     #
     #   /foo.yaml       -> /foo/
     #   /foo/index.yaml -> /foo/
+    #   /foo/index.erb  -> /foo/
     #   /foo/foo.yaml   -> /foo/foo/
-    #   /foo/bar.yaml   -> /foo/bar/
-    def identifier_for_meta_filename(meta_filename)
+    #   /foo/bar.html   -> /foo/bar/
+    def identifier_for_filename(meta_filename)
       # Split into components
       components = meta_filename.gsub(%r{(^/|/$)}, '').split('/')
-      components[-1].sub!(/\.yaml$/, '')
+      components[-1].sub!(/(\.[a-z]+)+$/, '')
 
       if components[-1] == 'index'
         components[0..-2].join('/').cleaned_identifier
@@ -197,34 +247,16 @@ module Nanoc3::DataSources
       end
     end
 
-    # Returns the list of all meta files in the given base directory as well
-    # as its subdirectories.
-    def meta_filenames(base)
-      Dir[base + '/**/*.yaml']
+    # Returns the base name of filename, i.e. filename with all extensions
+    # stripped off. Supports multiple extensions.
+    def basename_of(filename)
+      filename.sub(/(\.[a-z]+)*$/, '')
     end
 
-    # Returns the filename of the content file corresponding to the given meta
-    # file, ignoring any unwanted files (files that end with '~', '.orig',
-    # '.rej' or '.bak')
-    def content_filename_for_meta_filename(meta_filename)
-      # Find all files
-      filenames = Dir[meta_filename.sub(/\.yaml$/, '.*')]
-
-      # Reject meta files
-      filenames.reject! { |f| f =~ /\.yaml$/ }
-
-      # Reject backups
-      filenames.reject! { |f| f =~ /(~|\.orig|\.rej|\.bak)$/ }
-
-      # Make sure there is only one content file
-      if filenames.size != 1
-        raise RuntimeError.new(
-          "Expected 1 content file for the metafile #{meta_filename} but found #{filenames.size}"
-        )
-      end
-
-      # Return content filename
-      filenames.first
+    # Returns the extension(s) of filename. Supports multiple extensions.
+    # Includes the leading period.
+    def ext_of(filename)
+      filename =~ /((\.[a-z]+)*)$/ ? $1 : ''
     end
 
   end

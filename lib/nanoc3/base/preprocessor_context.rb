@@ -5,29 +5,33 @@ module Nanoc3
   # items and layouts.
   class PreprocessorContext
 
-    # Creates a new preprocessor context for the given site.
+    # @param [Nanoc3::Site] site The site to create a preprocessor context
+    #   for. Items, layouts, … will be fetched from this site.
     def initialize(site)
       @site = site
     end
 
-    # The site for which the preprocessor code is being executed.
+    # @return [Nanoc3::Site] The site for which the preprocessor code is being
+    #   executed.
     def site
       @site
     end
 
-    # The configuration of the site for which the preprocessor code is being
+    # @return [Hash] The configuration of the site for which the preprocessor
+    #   code is being
     # executed.
     def config
       site.config
     end
 
-    # The items in the site for which the preprocessor code is being executed.
+    # @return [Array<Nanoc3::Item>] The items in the site for which the
+    #   preprocessor code is being executed.
     def items
       site.items
     end
 
-    # The layouts in the site for which the preprocessor code is being
-    # executed.
+    # @return [Array<Nanoc3::Layout>] The layouts in the site for which the
+    #   preprocessor code is being executed.
     def layouts
       site.layouts
     end

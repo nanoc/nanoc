@@ -88,8 +88,8 @@ module Nanoc3::Helpers
       # Find path
       if target.is_a?(String)
         path = target
-      elsif target.respond_to?(:reps)
-        path = target.reps.find { |r| r.name == :default }.path
+      elsif target.respond_to?(:rep)
+        path = target.rep(:default).path
       else
         path = target.path
       end

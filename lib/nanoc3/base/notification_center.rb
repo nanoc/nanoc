@@ -17,11 +17,13 @@ module Nanoc3
       # Adds the given block to the list of blocks that should be called when
       # the notification with the given name is received.
       #
-      # +name+:: The name of the notification that will be posted.
+      # @param [String, Symbol] name The name of the notification that will
+      #   cause the given block to be called.
       #
-      # +id+:: An identifier for the block. This is only used to be able to
-      #        remove the block (using the remove method) later. Defaults to
-      #        nil.
+      # @param [String, Symbol, nil] id An identifier for the block. This is
+      #   only used to be able to remove the block (using the remove method)
+      #   later. Can be nil, but this is not recommended because it prevents
+      #   the given notification block from being unregistered.
       def on(name, id=nil, &block)
         initialize_if_necessary(name)
 
@@ -29,8 +31,13 @@ module Nanoc3
         @notifications[name] << { :id => id, :block => block }
       end
 
-      # Posts a notification with the given name. All arguments wil be passed
-      # to the blocks handling the notification.
+      # Posts a notification with the given name and the given arguments.
+      #
+      # @param [String, Symbol] name The name of the notification that should
+      #   be posted.
+      #
+      # @param args Arguments that wil be passed to the blocks handling the
+      #   notification.
       def post(name, *args)
         initialize_if_necessary(name)
 
@@ -44,9 +51,11 @@ module Nanoc3
       # that should be called when the notification with the given name is
       # posted.
       #
-      # +name+:: The name of the notification that will be posted.
+      # @param [String, Symbol] name The name of the notification that should
+      #   no longer be registered.
       #
-      # +id+:: The identifier of the block that should be removed.
+      # @param [String, Symbol] id The identifier of the block that should be
+      #   removed.
       def remove(name, id)
         initialize_if_necessary(name)
 

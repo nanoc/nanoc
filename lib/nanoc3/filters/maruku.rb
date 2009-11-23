@@ -7,7 +7,7 @@ module Nanoc3::Filters
       require 'maruku'
 
       # Get result
-      ::Maruku.new(content).to_html
+      ::Maruku.new(content, params).to_html
     end
 
   end
