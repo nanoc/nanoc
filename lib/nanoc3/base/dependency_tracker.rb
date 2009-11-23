@@ -43,8 +43,11 @@ module Nanoc3
 
       # Register start of visits
       Nanoc3::NotificationCenter.on(:visit_started, self) do |item|
+        $stderr.puts "*** IN stack.size=#{@stack.size} item=#{item.inspect}" if $DEBUG
+
         # Record possible dependency
         unless @stack.empty?
+          $stderr.puts "*** Recording dependency #{@stack[-1].inspect} -> #{item.inspect}" if $DEBUG
           self.record_dependency(@stack[-1], item)
         end
 
@@ -53,6 +56,8 @@ module Nanoc3
 
       # Register end of visits
       Nanoc3::NotificationCenter.on(:visit_ended, self) do |item|
+        $stderr.puts "*** OUT stack.size=#{@stack.size} item=#{item.inspect}" if $DEBUG
+
         @stack.pop
       end
     end
