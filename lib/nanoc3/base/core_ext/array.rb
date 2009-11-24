@@ -10,7 +10,7 @@ module Nanoc3::ArrayExtensions
 
   def stringify_keys
     inject([]) do |array, element|
-      array + [ element.respond_to?(:stringify_keys) ? element.symbolize_keys : element ]
+      array + [ element.respond_to?(:stringify_keys) ? element.stringify_keys : element ]
     end
   end
 

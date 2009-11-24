@@ -5,19 +5,19 @@ require 'test/helper'
 describe 'Array#symbolize_keys' do
 
   it 'should convert keys to symbols' do
-    array_old = [ 'xyz', { 'foo' => 'bar' } ]
-    array_new = [ 'xyz', { :foo  => 'bar' } ]
+    array_old = [ :abc, 'xyz', { 'foo' => 'bar', :baz => :qux } ]
+    array_new = [ :abc, 'xyz', { :foo  => 'bar', :baz => :qux } ]
     array_old.symbolize_keys.must_equal array_new
   end
 
 end
 
-describe 'Hash#stringify_keys' do
+describe 'Array#stringify_keys' do
 
   it 'should convert keys to strings' do
-    array_old = [ 'xyz', { :foo  => 'bar' } ]
-    array_new = [ 'xyz', { 'foo' => 'bar' } ]
-    array_old.symbolize_keys.must_equal array_new
+    array_old = [ :abc, 'xyz', { :foo  => 'bar', 'baz' => :qux } ]
+    array_new = [ :abc, 'xyz', { 'foo' => 'bar', 'baz' => :qux } ]
+    array_old.stringify_keys.must_equal array_new
   end
 
 end
