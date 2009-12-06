@@ -77,6 +77,7 @@ module Nanoc3
         :last => @item.raw_content,
         :pre  => @item.raw_content
       }
+      @old_content = nil
 
       # Reset flags
       @compiled       = false
@@ -230,7 +231,7 @@ module Nanoc3
 
       # Remember old content
       if File.file?(self.raw_path)
-        old_content = File.read(self.raw_path)
+        @old_content = File.read(self.raw_path)
       end
 
       # Write
@@ -238,11 +239,44 @@ module Nanoc3
       @written = true
 
       # Check if file was modified
-      @modified = File.read(self.raw_path) != old_content
+      @modified = File.read(self.raw_path) != @old_content
+    end
+
+    def diff
+      # Check if old content exists
+      if @old_content.nil? or self.raw_path.nil?
+        nil
+      else
+        diff_strings(@old_content, @content[:last])
+      end
     end
 
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier}>"
+    end
+
+  private
+
+    def diff_strings(a, b)
+      # TODO Rewrite this string-diffing method in pure Ruby. It should not
+      # use the "diff" executable, because this will most likely not work on
+      # operating systems without it, such as Windows.
+
+      require 'tempfile'
+      require 'open3'
+
+      # Create files
+      old_file = Tempfile.new('old')
+      new_file = Tempfile.new('new')
+
+      # Write files
+      old_file.write(a)
+      new_file.write(b)
+
+      # Diff
+      stdin, stdout, stderr = Open3.popen3('diff', '-u', old_file.path, new_file.path)
+      result = stdout.read
+      result == '' ? nil : result
     end
 
   end
