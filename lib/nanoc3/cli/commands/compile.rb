@@ -96,6 +96,9 @@ module Nanoc3::CLI::Commands
         Nanoc3::CLI::Logger.instance.file(:high, :skip, rep.raw_path, duration)
       end
 
+      # Show diff
+      write_diff_for(reps)
+
       # Give general feedback
       puts
       puts "No items were modified." unless reps.any? { |r| r.modified? }
@@ -122,6 +125,24 @@ module Nanoc3::CLI::Commands
       Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
         rep_filtering_ended(rep, filter_name)
       end
+    end
+
+    def write_diff_for(reps)
+      full_diff = ''
+      reps.each do |rep|
+        diff = rep.diff
+        next if diff.nil?
+
+        # Fix header
+        diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
+        diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
+
+        # Add
+        full_diff << diff
+      end
+
+      # Write
+      File.open('output.diff', 'w') { |io| io.write(full_diff) }
     end
 
     def print_state_feedback(reps)
