@@ -93,7 +93,7 @@ module Nanoc3::CLI::Commands
       reps.select { |r| !r.compiled? }.each do |rep|
         next if rep.raw_path.nil?
         duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
+        Nanoc3::CLI::Logger.instance.file(:high, :skip, rep.raw_path, duration)
       end
 
       # Give general feedback
@@ -198,20 +198,20 @@ module Nanoc3::CLI::Commands
       return unless rep.written?
 
       # Get action and level
-      action, level = *if rep.created?
-        [ :create, :high ]
+      action = if rep.created?
+        :create
       elsif rep.modified?
-        [ :update, :high ]
+        :update
       elsif !rep.compiled?
-        [ nil, nil ]
+        nil
       else
-        [ :identical, :low ]
+        :identical
       end
 
       # Log
       unless action.nil?
         duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(level, action, rep.raw_path, duration)
+        Nanoc3::CLI::Logger.instance.file(:high, action, rep.raw_path, duration)
       end
     end
 
