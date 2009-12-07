@@ -201,7 +201,7 @@ module Nanoc3
       filter = filter_class.new(assigns.merge({ :layout => layout }))
 
       # Create "pre" snapshot
-      snapshot(:pre)
+      snapshot(:pre) unless @content[:pre]
 
       # Layout
       @item.site.compiler.stack.push(layout)
