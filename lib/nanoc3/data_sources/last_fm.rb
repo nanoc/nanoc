@@ -36,6 +36,7 @@ module Nanoc3::DataSources
         require 'json'
         require 'time'
         require 'uri'
+        require 'enumerator'
 
         # Check configuration
         if self.config[:username].nil?
