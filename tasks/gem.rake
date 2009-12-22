@@ -2,11 +2,17 @@
 
 require 'nanoc3/package'
 
-require 'rubygems/package_task'
+begin
+  require 'rubygems/package_task'
+  GemPackageTask = ::Gem::PackageTask
+rescue LoadError
+  warn 'could not load “rubygems/package_task”; consider upgrading rubygems'
+  GemPackageTask = ::Rake::GemPackageTask
+end
 
 namespace :gem do
 
-  package_task = Gem::PackageTask.new(Nanoc3::Package.instance.gem_spec) { |pkg| }
+  package_task = GemPackageTask.new(Nanoc3::Package.instance.gem_spec) { |pkg| }
 
   desc 'Install the gem'
   task :install => [ :package ] do
