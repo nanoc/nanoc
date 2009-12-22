@@ -81,6 +81,38 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     assert_equal 'Foo', items[0][:title]
   end
 
+  def test_items_with_period_in_name
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    FileUtils.mkdir_p('content/foo')
+
+    # Create bar.css
+    File.open('content/foo/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo' }))
+    end
+    File.open('content/foo/bar.css', 'w') do |io|
+      io.write('body{}')
+    end
+
+    # Create bar.baz.css
+    File.open('content/foo/bar.baz.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo2' }))
+    end
+    File.open('content/foo/bar.baz.css', 'w') do |io|
+      io.write('body{}')
+    end
+
+    # Load
+    items = data_source.items.sort_by { |i| i[:title] }
+
+    # Check
+    assert_equal 2, items.size
+    assert_equal '/foo/bar/',     items[0].identifier
+    assert_equal 'Foo',           items[0][:title]
+    assert_equal '/foo/bar.baz/', items[1].identifier
+    assert_equal 'Foo2',          items[1][:title]
+  end
+
   def test_items_with_both_index_and_non_index_names
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)

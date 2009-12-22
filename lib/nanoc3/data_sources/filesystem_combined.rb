@@ -90,9 +90,9 @@ module Nanoc3::DataSources
 
         # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^content/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^content/, '').sub(/index\.[^\/\.]+$/, '') + '/'
         else
-          identifier = filename.sub(/^content/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^content/, '').sub(/\.[^\/\.]+$/, '') + '/'
         end
 
         # Get mtime
@@ -110,9 +110,9 @@ module Nanoc3::DataSources
 
         # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/\.]+$/, '') + '/'
         else
-          identifier = filename.sub(/^layouts/, '').sub(/\.[^\/]+$/, '') + '/'
+          identifier = filename.sub(/^layouts/, '').sub(/\.[^\/\.]+$/, '') + '/'
         end
 
         # Get mtime

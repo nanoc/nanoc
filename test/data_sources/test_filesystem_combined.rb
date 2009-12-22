@@ -69,6 +69,32 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert(items.any? { |a| a[:title] == 'Bar' })
   end
 
+  def test_items_with_period_in_name
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    FileUtils.mkdir_p('content/foo')
+
+    # Create bar.css
+    File.open('content/foo/bar.css', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo' }) + "---\n" + 'body.foo {}')
+    end
+
+    # Create bar.baz.css
+    File.open('content/foo/bar.baz.css', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo Bar' }) + "---\n" + 'body.foobar {}')
+    end
+
+    # Load
+    items = data_source.items.sort_by { |i| i[:title] }
+
+    # Check
+    assert_equal 2, items.size
+    assert_equal '/foo/bar/',     items[0].identifier
+    assert_equal 'Foo',           items[0][:title]
+    assert_equal '/foo/bar.baz/', items[1].identifier
+    assert_equal 'Foo Bar',       items[1][:title]
+  end
+
   def test_layouts
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)

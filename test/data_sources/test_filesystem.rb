@@ -72,6 +72,38 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert(items.any? { |a| a[:title] == 'Bar' })
   end
 
+  def test_items_with_period_in_name
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Create foo.css
+    FileUtils.mkdir_p('content/foo')
+    File.open('content/foo/foo.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo' }))
+    end
+    File.open('content/foo/foo.css', 'w') do |io|
+      io.write('body.foo {}')
+    end
+    
+    # Create foo.bar.css
+    FileUtils.mkdir_p('content/foo.bar')
+    File.open('content/foo.bar/foo.bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo Bar' }))
+    end
+    File.open('content/foo.bar/foo.bar.css', 'w') do |io|
+      io.write('body.foobar {}')
+    end
+    
+    # Load
+    items = data_source.items
+    
+    # Check
+    assert_equal 2, items.size
+    assert_equal '/foo/',     items[0].identifier
+    assert_equal 'Foo',       items[0][:title]
+    assert_equal '/foo.bar/', items[1].identifier
+    assert_equal 'Foo Bar',   items[1][:title]
+  end
+
   def test_layouts
     # Create data source
     data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
@@ -143,8 +175,32 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   # Test private methods
 
-  def test_meta_filenames
-    # TODO implement
+  def test_meta_filenames_good
+    # Create data sources
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Create files
+    FileUtils.mkdir_p('foo')
+    File.open('foo/foo.yaml', 'w') { |io| io.write('foo') }
+    FileUtils.mkdir_p('foo.bar')
+    File.open('foo.bar/foo.bar.yaml', 'w') { |io| io.write('foo') }
+
+    # Check
+    assert_equal %w( ./foo/foo.yaml ./foo.bar/foo.bar.yaml ), data_source.send(:meta_filenames, '.')
+  end
+
+  def test_meta_filenames_bad
+    # Create data sources
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Create files
+    FileUtils.mkdir_p('foo')
+    File.open('foo/dsafsdf.yaml', 'w') { |io| io.write('dagasfwegfwa') }
+
+    # Check
+    assert_raises(RuntimeError) do
+      data_source.send(:meta_filenames, '.')
+    end
   end
 
   def test_content_filename_for_dir_with_one_content_file

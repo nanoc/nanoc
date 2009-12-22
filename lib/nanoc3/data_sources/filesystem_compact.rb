@@ -208,7 +208,9 @@ module Nanoc3::DataSources
     # '.rej' or '.bak')
     def content_filename_for_meta_filename(meta_filename)
       # Find all files
-      filenames = Dir[meta_filename.sub(/\.yaml$/, '.*')]
+    	base_filename = File.basename(meta_filename, '.yaml')
+    	dirname       = File.dirname(meta_filename)
+    	filenames     = Dir.entries(dirname).select { |f| f =~ /#{base_filename}\.[^.]+$/ }.map { |f| "#{dirname}/#{f}" }
 
       # Reject meta files
       filenames.reject! { |f| f =~ /\.yaml$/ }
