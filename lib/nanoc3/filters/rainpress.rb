@@ -6,7 +6,7 @@ module Nanoc3::Filters
     def run(content, params={})
       require 'rainpress'
 
-      ::Rainpress.compress(content)
+      ::Rainpress.compress(content, params)
     end
 
   end

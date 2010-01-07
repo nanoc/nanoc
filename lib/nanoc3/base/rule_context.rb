@@ -5,42 +5,44 @@ module Nanoc3
   # is being compiled or routed.
   class RuleContext
 
-    # Creates a new rule context for the given item representation.
+    # @param [Nanoc3::ItemRep] rep The item representation for which to create
+    #   a new rule context.
     def initialize(rep)
       @rep = rep
     end
 
-    # The representation that is currently being processed in this context.
+    # @return [Nanoc3::ItemRep] The representation that is currently being
+    #   processed in this context.
     def rep
       @rep
     end
 
-    # The item of the representation that is currently being processed in this
-    # context.
+    # @return [Nanoc3::Item] The item of the representation that is currently
+    #   being processed in this context.
     def item
       rep.item
     end
 
-    # The site of the item representation that is currently being processed in
-    # this context.
+    # @return [Nanoc3::Site] The site of the item representation that is
+    #   currently being processed in this context.
     def site
       item.site
     end
 
-    # The configuration of the site of the item representation that is
-    # currently being processed in this context.
+    # @return [Hash] The configuration of the site of the item representation
+    #   that is currently being processed in this context.
     def config
       site.config
     end
 
-    # The items in the site of the item representation that is currently being
-    # processed in this context.
+    # @return [Array<Nanoc::Item>] The items in the site of the item
+    #   representation that is currently being processed in this context.
     def items
       site.items
     end
 
-    # The layouts in the site of the item representation that is currently
-    # being processed in this context.
+    # @return [Array<Nanoc3::Layout>] The layouts in the site of the item
+    #   representation that is currently being processed in this context.
     def layouts
       site.layouts
     end

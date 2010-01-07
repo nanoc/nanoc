@@ -127,6 +127,7 @@ EOS
   <head>
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
     <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
+    <meta name="generator" content="nanoc #{Nanoc3::VERSION}">
   </head>
   <body>
     <div id="main">
