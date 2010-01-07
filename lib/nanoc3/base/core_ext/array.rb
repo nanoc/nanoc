@@ -9,10 +9,10 @@ module Nanoc3::ArrayExtensions
     end
   end
 
-  # Returns a new array where all keys are recursively converted to strings by calling #symbolize_keys.
+  # Returns a new array where all items' keys are recursively converted to strings by calling #stringify_keys.
   def stringify_keys
     inject([]) do |array, element|
-      array + [ element.respond_to?(:stringify_keys) ? element.symbolize_keys : element ]
+      array + [ element.respond_to?(:stringify_keys) ? element.stringify_keys : element ]
     end
   end
 

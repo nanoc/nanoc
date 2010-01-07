@@ -83,6 +83,38 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     assert_equal 'html',      items[0][:extension]
   end
 
+  def test_items_with_period_in_name
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    FileUtils.mkdir_p('content/foo')
+
+    # Create bar.css
+    File.open('content/foo/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo' }))
+    end
+    File.open('content/foo/bar.css', 'w') do |io|
+      io.write('body{}')
+    end
+
+    # Create bar.baz.css
+    File.open('content/foo/bar.baz.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo2' }))
+    end
+    File.open('content/foo/bar.baz.css', 'w') do |io|
+      io.write('body{}')
+    end
+
+    # Load
+    items = data_source.items.sort_by { |i| i[:title] }
+
+    # Check
+    assert_equal 2, items.size
+    assert_equal '/foo/bar/',     items[0].identifier
+    assert_equal 'Foo',           items[0][:title]
+    assert_equal '/foo/bar.baz/', items[1].identifier
+    assert_equal 'Foo2',          items[1][:title]
+  end
+
   def test_items_with_both_index_and_non_index_names
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
@@ -212,15 +244,15 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Write sample files
-    %w( foo.html foo.yaml bar.erb.html qux.yaml ).each do |filename|
+    %w( foo.html foo.yaml bar.entry.html qux.yaml ).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
     # Get all files
     output_expected = {
-      './foo' => [ 'yaml', 'html'     ],
-      './bar' => [ nil,    'erb.html' ],
-      './qux' => [ 'yaml', nil        ]
+      './foo'       => [ 'yaml', 'html' ],
+      './bar.entry' => [ nil,    'html' ],
+      './qux'       => [ 'yaml', nil    ]
     }
     output_actual = data_source.send :all_files_in, '.'
 
@@ -301,7 +333,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal '/foo/bar/', data_source.send(:identifier_for_filename, '/foo/bar.html.erb')
+    assert_equal '/foo/bar.html/', data_source.send(:identifier_for_filename, '/foo/bar.html.erb')
   end
 
   def test_basename_of_without_extensions
@@ -325,7 +357,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal '/foo/bar', data_source.send(:basename_of, '/foo/bar.html.erb')
+    assert_equal '/foo/bar.html', data_source.send(:basename_of, '/foo/bar.html.erb')
   end
 
   def test_basename_of_with_relative_path
@@ -333,7 +365,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal 'foo/bar', data_source.send(:basename_of, 'foo/bar.html.erb')
+    assert_equal 'foo/bar.html', data_source.send(:basename_of, 'foo/bar.html.erb')
   end
 
   def test_ext_of_without_extension
@@ -357,7 +389,7 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
     # Check
-    assert_equal '.html.erb', data_source.send(:ext_of, '/foo/bar.html.erb')
+    assert_equal '.erb', data_source.send(:ext_of, '/foo/bar.html.erb')
   end
 
   # Miscellaneous

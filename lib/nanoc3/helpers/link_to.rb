@@ -44,7 +44,7 @@ module Nanoc3::Helpers
       end
 
       # Create link
-      "<a #{attributes}href=\"#{path}\">#{text}</a>"
+      "<a #{attributes}href=\"#{h path}\">#{text}</a>"
     end
 
     # Creates a HTML link using link_to, except when the linked item is the

@@ -238,7 +238,7 @@ module Nanoc3::DataSources
     def identifier_for_filename(meta_filename)
       # Split into components
       components = meta_filename.gsub(%r{(^/|/$)}, '').split('/')
-      components[-1].sub!(/(\.[a-z]+)+$/, '')
+      components[-1].sub!(/\.[a-z0-9]+$/, '')
 
       if components[-1] == 'index'
         components[0..-2].join('/').cleaned_identifier
@@ -250,13 +250,13 @@ module Nanoc3::DataSources
     # Returns the base name of filename, i.e. filename with all extensions
     # stripped off. Supports multiple extensions.
     def basename_of(filename)
-      filename.sub(/(\.[a-z]+)*$/, '')
+      filename.sub(/\.[a-z0-9]+$/, '')
     end
 
     # Returns the extension(s) of filename. Supports multiple extensions.
     # Includes the leading period.
     def ext_of(filename)
-      filename =~ /((\.[a-z]+)*)$/ ? $1 : ''
+      filename =~ /(\.[a-z0-9]+)$/ ? $1 : ''
     end
 
   end

@@ -22,6 +22,7 @@ module Nanoc3::DataSources
       @item ||= begin
         require 'json'
         require 'time'
+        require 'enumerator'
 
         # Get data
         @http_client ||= Nanoc3::Extra::CHiCk::Client.new

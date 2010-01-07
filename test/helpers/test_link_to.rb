@@ -39,8 +39,8 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_link_to_escape
     # Check
     assert_equal(
-      '<a title="Foo &amp; Bar" href="/foo/">Foo &amp; Bar</a>',
-      link_to('Foo &amp; Bar', '/foo/', :title => 'Foo & Bar')
+      '<a title="Foo &amp; Bar" href="/foo&amp;bar/">Foo &amp; Bar</a>',
+      link_to('Foo &amp; Bar', '/foo&bar/', :title => 'Foo & Bar')
     )
   end
 

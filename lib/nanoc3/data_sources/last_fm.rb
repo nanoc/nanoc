@@ -36,6 +36,7 @@ module Nanoc3::DataSources
         require 'json'
         require 'time'
         require 'uri'
+        require 'enumerator'
 
         # Check configuration
         if self.config[:username].nil?
@@ -80,6 +81,16 @@ module Nanoc3::DataSources
 
           # Build data
           content = ''
+
+          # Handle track dates
+          if raw_item['@attr'] && raw_item['@attr']['nowplaying'] == 'true'
+            track_played_at = Time.now
+            now_playing = true
+          else
+            played_at = Time.parse(raw_item['date']['#text'])
+            now_playing = false
+          end
+          
           attributes = {
             :name      => raw_item['name'],
             :artist    => {
@@ -87,7 +98,8 @@ module Nanoc3::DataSources
               :url       => raw_artist_info['url']
             },
             :url       => raw_item['url'],
-            :played_at => Time.parse(raw_item['date']['#text'])
+            :played_at => track_played_at,
+            :now_playing => now_playing
           }
           identifier = "/#{i}/"
           mtime = nil

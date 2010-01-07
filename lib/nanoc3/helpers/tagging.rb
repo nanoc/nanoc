@@ -13,6 +13,9 @@ module Nanoc3::Helpers
   #   include Nanoc3::Helpers::Tagging
   module Tagging
 
+    require 'nanoc3/helpers/html_escape'
+    include Nanoc3::Helpers::HTMLEscape
+
     # Returns a formatted list of tags for the given item as a string. Several
     # parameters allow customization:
     #
@@ -50,7 +53,7 @@ module Nanoc3::Helpers
     # +base_url+:: The URL to which the tag will be appended to construct the
     #              link URL. This URL must have a trailing slash.
     def link_for_tag(tag, base_url)
-      %[<a href="#{base_url}#{tag}" rel="tag">#{tag}</a>]
+      %[<a href="#{h base_url}#{h tag}" rel="tag">#{h tag}</a>]
     end
 
   end
