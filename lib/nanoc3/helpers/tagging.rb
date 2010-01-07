@@ -16,8 +16,10 @@ module Nanoc3::Helpers
     require 'nanoc3/helpers/html_escape'
     include Nanoc3::Helpers::HTMLEscape
 
-    # Returns a formatted list of tags for the given item as a string. Several
-    # parameters allow customization:
+    # Returns a formatted list of tags for the given item as a string. The
+    # tags will be linked using the `link_for_tag` function; the HTML-escaping
+    # rules for this function apply here as well. Several parameters allow
+    # customization:
     #
     # :base_url:: The URL to which the tag will be appended to construct the
     #             link URL. This URL must have a trailing slash. Defaults to
@@ -45,7 +47,8 @@ module Nanoc3::Helpers
     end
 
     # Returns a link to to the specified tag. The link is marked up using the
-    # rel-tag microformat.
+    # rel-tag microformat. The `href` attribute of the link will be HTML-
+    # escaped, as will the content of the `a` element.
     #
     # +tag+:: The name of the tag, which should consist of letters and numbers
     #         (no spaces, slashes, or other special characters).
