@@ -185,23 +185,12 @@ module Nanoc3
     # @param [String] layout_identifier The identifier of the layout the ite
     #   should be laid out with.
     def layout(layout_identifier)
-      # Get layout
-      layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
-      raise Nanoc3::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
-
-      # Get filter
-      filter_name, filter_args  = @item.site.compiler.filter_for_layout(layout)
-      raise Nanoc3::Errors::CannotDetermineFilter.new(layout_identifier) if filter_name.nil?
-
-      # Get filter class
-      filter_class = Nanoc3::Filter.named(filter_name)
-      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
-
-      # Create filter
-      filter = filter_class.new(assigns.merge({ :layout => layout }))
-
       # Create "pre" snapshot
       snapshot(:pre) unless @content[:pre]
+
+      # Create filter
+      layout = layout_with_identifier(layout_identifier)
+      filter, filter_name, filter_args = filter_for_layout(layout)
 
       # Layout
       @item.site.compiler.stack.push(layout)
@@ -256,6 +245,28 @@ module Nanoc3
     end
 
   private
+
+    def layout_with_identifier(layout_identifier)
+      layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
+      raise Nanoc3::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
+      layout
+    end
+
+    def filter_for_layout(layout)
+      # Get filter name and args
+      filter_name, filter_args  = @item.site.compiler.filter_for_layout(layout)
+      raise Nanoc3::Errors::CannotDetermineFilter.new(layout_identifier) if filter_name.nil?
+
+      # Get filter class
+      filter_class = Nanoc3::Filter.named(filter_name)
+      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
+
+      # Create filter
+      filter = filter_class.new(assigns.merge({ :layout => layout }))
+
+      # Done
+      [ filter, filter_name, filter_args ]
+    end
 
     def diff_strings(a, b)
       # TODO Rewrite this string-diffing method in pure Ruby. It should not
