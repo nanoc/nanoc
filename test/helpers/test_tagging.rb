@@ -79,4 +79,11 @@ class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_link_for_tag_escape
+    assert_equal(
+      %[<a href="http://stoneship.org/tags&amp;stuff/foo&amp;bar" rel="tag">foo&amp;bar</a>],
+      link_for_tag('foo&bar', 'http://stoneship.org/tags&stuff/')
+    )
+  end
+
 end
