@@ -140,8 +140,9 @@ class Nanoc3::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
     rsync.run(:config_name => 'foobar')
 
     # Check args
+    default_options = Nanoc3::Extra::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
-      [ 'rsync', File.expand_path('output') + '/', 'asdf' ],
+      [ 'rsync', default_options, File.expand_path('output') + '/', 'asdf' ].flatten,
       rsync.instance_eval { @shell_cms_args }
     )
   end
@@ -167,8 +168,9 @@ class Nanoc3::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
     rsync.run(:config_name => :foobar)
 
     # Check args
+    default_options = Nanoc3::Extra::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
-      [ 'rsync', File.expand_path('output') + '/', 'asdf' ],
+      [ 'rsync', default_options, File.expand_path('output') + '/', 'asdf' ].flatten,
       rsync.instance_eval { @shell_cms_args }
     )
   end
@@ -194,8 +196,9 @@ class Nanoc3::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
     rsync.run
 
     # Check args
+    default_options = Nanoc3::Extra::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
-      [ 'rsync', File.expand_path('output') + '/', 'asdf' ],
+      [ 'rsync', default_options, File.expand_path('output') + '/', 'asdf' ].flatten,
       rsync.instance_eval { @shell_cms_args }
     )
   end
@@ -221,8 +224,9 @@ class Nanoc3::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
     rsync.run(:dry_run => true)
 
     # Check args
+    default_options = Nanoc3::Extra::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
-      [ 'echo', 'rsync', File.expand_path('output') + '/', 'asdf' ],
+      [ 'echo', 'rsync', default_options, File.expand_path('output') + '/', 'asdf' ].flatten,
       rsync.instance_eval { @shell_cms_args }
     )
   end

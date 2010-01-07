@@ -32,17 +32,15 @@ module Nanoc3
     attr_accessor :children
 
     # A boolean indicating whether or not this item is outdated because of its dependencies are outdated.
-    attr_accessor :dependencies_outdated
+    attr_accessor :outdated_due_to_dependencies
 
-    # Creates a new item.
+    # @param [String] raw_content The uncompiled item content.
     #
-    # +raw_content+:: The uncompiled item content.
+    # @param [Hash] attributes A hash containing this item's attributes.
     #
-    # +attributes+:: A hash containing this item's attributes.
+    # @param [String] identifier This item's identifier.
     #
-    # +identifier+:: This item's identifier.
-    #
-    # +mtime+:: The time when this item was last modified.
+    # @param [String, nil] mtime The time when this item was last modified.
     def initialize(raw_content, attributes, identifier, mtime=nil)
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys
@@ -55,7 +53,47 @@ module Nanoc3
       @reps         = []
     end
 
+    # Returns the rep with the given name.
+    #
+    # @param [Symbol] rep_name The name of the representation to return.
+    #
+    # @return [Nanoc3::ItemRep] The representation with the given name.
+    def rep(rep_name)
+      @reps.find { |r| r.name == rep_name }
+    end
+
+    # Returns the compiled content from a given representation and a given
+    # snapshot. This is a convenience method that makes fetching compiled
+    # content easier.
+    #
+    # @option params [String] :rep (:default) The name of the representation
+    #   from which the compiled content should be fetched. By default, the
+    #   compiled content will be fetched from the default representation.
+    #
+    # @option params [String] :snapshot (:last) The name of the snapshot from
+    #   which to fetch the compiled content. By default, the fully compiled
+    #   content will be fetched, with all filters and layouts applied--not the
+    #   pre-layout content.
+    def compiled_content(params={})
+      rep_name      = params[:rep]      || :default
+      snapshot_name = params[:snapshot] || :last
+
+      # Get rep
+      rep = reps.find { |r| r.name == rep_name }
+      if rep.nil?
+        raise Nanoc3::Errors::Generic,
+          "No rep named #{rep_name.inspect} was found."
+      end
+
+      # Get rep's content
+      rep.content_at_snapshot(snapshot_name)
+    end
+
     # Requests the attribute with the given key.
+    #
+    # @param [Symbol] key The name of the attribute to fetch.
+    #
+    # @return [Object] The value of the requested attribute.
     def [](key)
       Nanoc3::NotificationCenter.post(:visit_started, self)
       Nanoc3::NotificationCenter.post(:visit_ended,   self)
@@ -64,18 +102,22 @@ module Nanoc3
     end
 
     # Sets the attribute with the given key to the given value.
+    #
+    # @param [Symbol] key The name of the attribute to set.
+    #
+    # @param [Object] value The value of the attribute to set.
     def []=(key, value)
       @attributes[key] = value
     end
 
-    # True if any reps are outdated; false otherwise.
+    # @return [Boolean] true if any reps are outdated; false otherwise.
     def outdated?
       @reps.any? { |r| r.outdated? }
     end
 
-    # Alias for #dependencies_outdated.
-    def dependencies_outdated?
-      self.dependencies_outdated
+    # Alias for #outdated_due_to_dependencies.
+    def outdated_due_to_dependencies?
+      self.outdated_due_to_dependencies
     end
 
     def inspect
