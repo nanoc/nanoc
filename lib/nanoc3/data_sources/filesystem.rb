@@ -31,6 +31,10 @@ module Nanoc3::DataSources
   # can have an 'index.txt' content file and a 'meta.yaml' meta file. This is
   # to preserve backward compatibility.
   #
+  # The identifier is calculated by stripping the extension; if there is more
+  # than one extension, only the last extension is stripped and the previous
+  # extensions will be part of the identifier.
+  #
   # = Layouts
   #
   # Layouts are stored as directories in the 'layouts' directory. Each layout
@@ -41,6 +45,9 @@ module Nanoc3::DataSources
   # For backward compatibility, a layout can also be a single file in the
   # 'layouts' directory. Such a layout cannot have any metadata; the filter
   # used for this layout is determined from the file extension.
+  #
+  # The identifier for layouts is generated the same way as identifiers for
+  # items (see above for details).
   #
   # = Code Snippets
   #
