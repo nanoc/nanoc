@@ -13,7 +13,9 @@ module Nanoc3::Helpers
     include Nanoc3::Helpers::HTMLEscape
 
     # Creates a HTML link to the given path or item representation, and with
-    # the given text.
+    # the given text. All attributes of the `a` element, including the `href`
+    # attribute, will be HTML-escaped; the contents of the `a` element, which
+    # can contain markup, will not be HTML-escaped.
     #
     # +path_or_rep+:: the URL or path (a String) that should be linked to, or
     #                 the item representation that should be linked to.
@@ -49,7 +51,8 @@ module Nanoc3::Helpers
 
     # Creates a HTML link using link_to, except when the linked item is the
     # current one. In this case, a span element with class "active" and with
-    # the given text will be returned.
+    # the given text will be returned. The HTML-escaping rules for `link_to`
+    # apply here as well.
     #
     # Examples:
     #
@@ -71,7 +74,7 @@ module Nanoc3::Helpers
     end
 
     # Returns the relative path from the current item to the given path or
-    # item representation.
+    # item representation. The returned path will not be HTML-escaped.
     #
     # +path_or_rep+:: the URL or path (a String) to where the relative should
     #                 point, or the item representation to which the relative
