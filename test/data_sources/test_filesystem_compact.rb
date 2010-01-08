@@ -335,6 +335,32 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_content_filename_for_meta_filename_with_subfilename
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Build directory
+    FileUtils.mkdir_p('foo')
+    File.open('foo/bar.yaml',        'w') { |io| io.write('test') }
+    File.open('foo/bar.html',        'w') { |io| io.write('test') }
+    File.open('foo/quxbar.yaml',     'w') { |io| io.write('test') }
+    File.open('foo/quxbar.html',     'w') { |io| io.write('test') }
+
+    # Check content filename
+    assert_equal(
+      'foo/bar.html',
+      data_source.instance_eval do
+        content_filename_for_meta_filename('foo/bar.yaml')
+      end
+    )
+    assert_equal(
+      'foo/quxbar.html',
+      data_source.instance_eval do
+        content_filename_for_meta_filename('foo/quxbar.yaml')
+      end
+    )
+  end
+
   def test_identifier_for_meta_filename_with_same_name
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
