@@ -177,14 +177,18 @@ module Nanoc3::DataSources
     ########## Custom functions ##########
 
     # Returns the identifier for the given meta filename. This method assumes
-    # that the base is already stripped.
+    # that the base is already stripped. The identifier is calculated by
+    # stripping the extension; if there is more than one extension, only the
+    # last extension is stripped and the previous extensions will be part of
+    # the identifier.
     #
     # For example:
     #
-    #   /foo.yaml       -> /foo/
-    #   /foo/index.yaml -> /foo/
-    #   /foo/foo.yaml   -> /foo/foo/
-    #   /foo/bar.yaml   -> /foo/bar/
+    #   /foo.yaml           -> /foo/
+    #   /foo/index.yaml     -> /foo/
+    #   /foo/foo.yaml       -> /foo/foo/
+    #   /foo/bar.yaml       -> /foo/bar/
+    #   /foo/bar.entry.yaml -> /foo/bar.entry/
     def identifier_for_meta_filename(meta_filename)
       # Split into components
       components = meta_filename.gsub(%r{(^/|/$)}, '').split('/')
