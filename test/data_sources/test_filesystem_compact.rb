@@ -341,24 +341,36 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Build directory
     FileUtils.mkdir_p('foo')
-    File.open('foo/bar.yaml',        'w') { |io| io.write('test') }
-    File.open('foo/bar.html',        'w') { |io| io.write('test') }
-    File.open('foo/quxbar.yaml',     'w') { |io| io.write('test') }
-    File.open('foo/quxbar.html',     'w') { |io| io.write('test') }
+    File.open('foo/bar.yaml',         'w') { |io| io.write('test') }
+    File.open('foo/bar.html',         'w') { |io| io.write('test') }
+    File.open('foo/quxbar.yaml',      'w') { |io| io.write('test') }
+    File.open('foo/quxbar.html',      'w') { |io| io.write('test') }
+    File.open('foo/barqux.yaml',      'w') { |io| io.write('test') }
+    File.open('foo/barqux.html',      'w') { |io| io.write('test') }
+    File.open('foo/quxbarqux.yaml',   'w') { |io| io.write('test') }
+    File.open('foo/quxbarqux.html',   'w') { |io| io.write('test') }
+    File.open('foo/qux.bar.yaml',     'w') { |io| io.write('test') }
+    File.open('foo/qux.bar.html',     'w') { |io| io.write('test') }
+    File.open('foo/bar.qux.yaml',     'w') { |io| io.write('test') }
+    File.open('foo/bar.qux.html',     'w') { |io| io.write('test') }
+    File.open('foo/qux.bar.qux.yaml', 'w') { |io| io.write('test') }
+    File.open('foo/qux.bar.qux.html', 'w') { |io| io.write('test') }
 
     # Check content filename
-    assert_equal(
-      'foo/bar.html',
-      data_source.instance_eval do
-        content_filename_for_meta_filename('foo/bar.yaml')
-      end
-    )
-    assert_equal(
-      'foo/quxbar.html',
-      data_source.instance_eval do
-        content_filename_for_meta_filename('foo/quxbar.yaml')
-      end
-    )
+    {
+      'foo/bar.yaml'         => 'foo/bar.html',
+      'foo/quxbar.yaml'      => 'foo/quxbar.html',
+      'foo/barqux.yaml'      => 'foo/barqux.html',
+      'foo/quxbarqux.yaml'   => 'foo/quxbarqux.html',
+      'foo/qux.bar.yaml'     => 'foo/qux.bar.html',
+      'foo/bar.qux.yaml'     => 'foo/bar.qux.html',
+      'foo/qux.bar.qux.yaml' => 'foo/qux.bar.qux.html'
+    }.each_pair do |meta_filename, expected_content_filename|
+      assert_equal(
+        expected_content_filename,
+        data_source.instance_eval { content_filename_for_meta_filename(meta_filename) }
+      )
+    end
   end
 
   def test_identifier_for_meta_filename_with_same_name
