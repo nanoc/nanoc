@@ -67,9 +67,9 @@ You may need to manually install the rdoc gem and update the rubygems installati
 
 (In alphabetical order)
 
-* Christian Plessl
 * Colin Barrett
 * Dmitry Bilunov
+* Christian Plessl
 * Šime Ramov
 * "Soryu"
 * Dennis Sutch
