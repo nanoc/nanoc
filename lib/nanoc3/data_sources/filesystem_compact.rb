@@ -25,6 +25,10 @@ module Nanoc3::DataSources
   # nested in directories and named "index" such as the home page item, or
   # they can simply be given a non-"index" name.
   #
+  # The identifier is calculated by stripping the extension; if there is more
+  # than one extension, only the last extension is stripped and the previous
+  # extensions will be part of the identifier.
+  #
   # For example, this directory structure:
   #
   #   content/
@@ -42,6 +46,8 @@ module Nanoc3::DataSources
   #         a-very-old-post.yaml
   #         another-very-old-post.html
   #         another-very-old-post.yaml
+  #         foo.entry.html
+  #         foo.entry.yaml
   #     myst/
   #       index.html
   #       index.yaml
@@ -54,12 +60,16 @@ module Nanoc3::DataSources
   #   /journal/2005/
   #   /journal/2005/a-very-old-post/
   #   /journal/2005/another-very-old-post/
+  #   /journal/2005/foo.entry/
   #   /myst/
   #
   # = Layouts
   #
   # Layouts are stored the same way as items, except that they are stored in
   # the "layouts" directory instead of the "content" directory.
+  #
+  # The identifier for layouts is generated the same way as identifiers for
+  # items (see above for details).
   #
   # = Code Snippets
   #
@@ -230,11 +240,12 @@ module Nanoc3::DataSources
     #
     # For example:
     #
-    #   /foo.yaml       -> /foo/
-    #   /foo/index.yaml -> /foo/
-    #   /foo/index.erb  -> /foo/
-    #   /foo/foo.yaml   -> /foo/foo/
-    #   /foo/bar.html   -> /foo/bar/
+    #   /foo.yaml           -> /foo/
+    #   /foo/index.yaml     -> /foo/
+    #   /foo/index.erb      -> /foo/
+    #   /foo/foo.yaml       -> /foo/foo/
+    #   /foo/bar.html       -> /foo/bar/
+    #   /foo/bar.entry.yaml -> /foo/bar.entry/
     def identifier_for_filename(meta_filename)
       # Split into components
       components = meta_filename.gsub(%r{(^/|/$)}, '').split('/')

@@ -19,7 +19,10 @@ module Nanoc3::DataSources
   # The identifier of a item is determined as follows. A file with an
   # 'index.*' filename, such as 'index.txt', will have the filesystem path
   # with the 'index.*' part stripped as a identifier. For example,
-  # 'foo/bar/index.html' will have '/foo/bar/' as identifier.
+  # 'foo/bar/index.html' will have '/foo/bar/' as identifier. In other cases,
+  # the identifier is calculated by stripping the extension; if there is more
+  # than one extension, only the last extension is stripped and the previous
+  # extensions will be part of the identifier.
   #
   # A file with a filename not starting with 'index.', such as 'foo.html',
   # will have an identifier ending in 'foo/'. For example, 'foo/bar.html' will
@@ -45,6 +48,9 @@ module Nanoc3::DataSources
   # Layouts are stored as files in the 'layouts' directory. Similar to items,
   # each layout consists of a metadata part and a content part, separated by
   # '---' (three dashes).
+  #
+  # The identifier for layouts is generated the same way as identifiers for
+  # items (see above for details).
   #
   # = Code Snippets
   #
