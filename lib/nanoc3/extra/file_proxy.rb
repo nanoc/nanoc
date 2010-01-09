@@ -19,11 +19,17 @@ module Nanoc3::Extra
       @path = path
     end
 
+    # Returns true if File instances respond to the given method; false if
+    # they do not.
+    def respond_to?(meth)
+      File.instance_methods.any? { |m| m == meth.to_s || m == meth.to_sym }
+    end
+
     # Makes sure all method calls are relayed to a File object, which will
     # be created right before the method call takes place and destroyed
     # right after.
     def method_missing(sym, *args, &block)
-      File.new(@path).__send__(sym, *args, &block)
+      File.open(@path, 'r') { |io| io.__send__(sym, *args, &block) }
     end
 
   end
