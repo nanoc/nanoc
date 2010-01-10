@@ -65,8 +65,16 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
     # Check items
     assert_equal(2, items.size)
-    assert(items.any? { |a| a[:title] == 'Foo' && a[:extension] == 'html' })
-    assert(items.any? { |a| a[:title] == 'Bar' && a[:extension] == 'xml'  })
+    assert(items.any? { |a|
+      a[:title]     == 'Foo' &&
+      a[:extension] == 'html' &&
+      a[:filename]  == 'content/foo.html'
+    })
+    assert(items.any? { |a|
+      a[:title]     == 'Bar' &&
+      a[:extension] == 'xml' &&
+      a[:filename]  == 'content/bar.xml'
+    })
   end
 
   def test_items_with_period_in_name
@@ -89,10 +97,12 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal 2, items.size
-    assert_equal '/foo/bar/',     items[0].identifier
-    assert_equal 'Foo',           items[0][:title]
-    assert_equal '/foo/bar.baz/', items[1].identifier
-    assert_equal 'Foo Bar',       items[1][:title]
+    assert_equal '/foo/bar/',               items[0].identifier
+    assert_equal 'Foo',                     items[0][:title]
+    assert_equal 'content/foo/bar.css',     items[0][:filename]
+    assert_equal '/foo/bar.baz/',           items[1].identifier
+    assert_equal 'Foo Bar',                 items[1][:title]
+    assert_equal 'content/foo/bar.baz.css', items[1][:filename]
   end
 
   def test_layouts
@@ -112,9 +122,10 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     layouts = data_source.layouts
 
     # Check layouts
-    assert_equal(1,      layouts.size)
-    assert_equal('erb',  layouts[0][:filter])
-    assert_equal('html', layouts[0][:extension])
+    assert_equal(1,                  layouts.size)
+    assert_equal('erb',              layouts[0][:filter])
+    assert_equal('html',             layouts[0][:extension])
+    assert_equal('layouts/foo.html', layouts[0][:filename])
   end
 
   # Test creating data

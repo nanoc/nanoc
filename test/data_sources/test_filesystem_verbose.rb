@@ -68,8 +68,18 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
     # Check items
     assert_equal(2, items.size)
-    assert(items.any? { |a| a[:title] == 'Foo' && a[:extension] == 'html' })
-    assert(items.any? { |a| a[:title] == 'Bar' && a[:extension] == 'xml'  })
+    assert(items.any? { |a|
+      a[:title]            == 'Foo' &&
+      a[:extension]        == 'html' &&
+      a[:content_filename] == 'content/foo/foo.html' &&
+      a[:meta_filename]    == 'content/foo/foo.yaml'
+    })
+    assert(items.any? { |a|
+      a[:title]            == 'Bar' &&
+      a[:extension]        == 'xml' &&
+      a[:content_filename] == 'content/bar/bar.xml' &&
+      a[:meta_filename]    == 'content/bar/bar.yaml'
+    })
   end
 
   def test_items_with_period_in_name
@@ -98,10 +108,14 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     
     # Check
     assert_equal 2, items.size
-    assert_equal '/foo/',     items[0].identifier
-    assert_equal 'Foo',       items[0][:title]
-    assert_equal '/foo.bar/', items[1].identifier
-    assert_equal 'Foo Bar',   items[1][:title]
+    assert_equal '/foo/',                        items[0].identifier
+    assert_equal 'Foo',                          items[0][:title]
+    assert_equal 'content/foo/foo.css',          items[0][:content_filename]
+    assert_equal 'content/foo/foo.yaml',         items[0][:meta_filename]
+    assert_equal '/foo.bar/',                    items[1].identifier
+    assert_equal 'Foo Bar',                      items[1][:title]
+    assert_equal 'content/foo.bar/foo.bar.css',  items[1][:content_filename]
+    assert_equal 'content/foo.bar/foo.bar.yaml', items[1][:meta_filename]
   end
 
   def test_layouts
@@ -122,9 +136,11 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     layouts = data_source.layouts
 
     # Check layouts
-    assert_equal(1,       layouts.size)
-    assert_equal('erb',   layouts[0][:filter])
-    assert_equal('rhtml', layouts[0][:extension])
+    assert_equal(1,                       layouts.size)
+    assert_equal('erb',                   layouts[0][:filter])
+    assert_equal('rhtml',                 layouts[0][:extension])
+    assert_equal('layouts/foo/foo.rhtml', layouts[0][:content_filename])
+    assert_equal('layouts/foo/foo.yaml',  layouts[0][:meta_filename])
   end
 
   # Test creating data
