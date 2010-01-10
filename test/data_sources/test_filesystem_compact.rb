@@ -56,9 +56,11 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal 1, items.size
-    assert_equal '/foo/', items[0].identifier
-    assert_equal 'Foo',   items[0][:title]
-    assert_equal 'html',  items[0][:extension]
+    assert_equal '/foo/',                  items[0].identifier
+    assert_equal 'Foo',                    items[0][:title]
+    assert_equal 'html',                   items[0][:extension]
+    assert_equal 'content/foo/index.html', items[0][:content_filename]
+    assert_equal 'content/foo/index.yaml', items[0][:meta_filename]
   end
 
   def test_items_with_non_index_names
@@ -78,9 +80,11 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal 1, items.size
-    assert_equal '/foo/bar/', items[0].identifier
-    assert_equal 'Foo',       items[0][:title]
-    assert_equal 'html',      items[0][:extension]
+    assert_equal '/foo/bar/',            items[0].identifier
+    assert_equal 'Foo',                  items[0][:title]
+    assert_equal 'html',                 items[0][:extension]
+    assert_equal 'content/foo/bar.html', items[0][:content_filename]
+    assert_equal 'content/foo/bar.yaml', items[0][:meta_filename]
   end
 
   def test_items_with_period_in_name
@@ -109,10 +113,14 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal 2, items.size
-    assert_equal '/foo/bar/',     items[0].identifier
-    assert_equal 'Foo',           items[0][:title]
-    assert_equal '/foo/bar.baz/', items[1].identifier
-    assert_equal 'Foo2',          items[1][:title]
+    assert_equal '/foo/bar/',                items[0].identifier
+    assert_equal 'Foo',                      items[0][:title]
+    assert_equal 'content/foo/bar.css',      items[0][:content_filename]
+    assert_equal 'content/foo/bar.yaml',     items[0][:meta_filename]
+    assert_equal '/foo/bar.baz/',            items[1].identifier
+    assert_equal 'Foo2',                     items[1][:title]
+    assert_equal 'content/foo/bar.baz.css',  items[1][:content_filename]
+    assert_equal 'content/foo/bar.baz.yaml', items[1][:meta_filename]
   end
 
   def test_items_with_both_index_and_non_index_names
@@ -144,12 +152,16 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Check items
     assert_equal 2, items.size
-    assert_equal '/foo/bar/', items[0].identifier
-    assert_equal 'Bar',       items[0][:title]
-    assert_equal 'rhtml',     items[0][:extension]
-    assert_equal '/foo/',     items[1].identifier
-    assert_equal 'Foo',       items[1][:title]
-    assert_equal 'xml',       items[1][:extension]
+    assert_equal '/foo/bar/',              items[0].identifier
+    assert_equal 'Bar',                    items[0][:title]
+    assert_equal 'rhtml',                  items[0][:extension]
+    assert_equal 'content/foo/bar.rhtml',  items[0][:content_filename]
+    assert_equal 'content/foo/bar.yaml',   items[0][:meta_filename]
+    assert_equal '/foo/',                  items[1].identifier
+    assert_equal 'Foo',                    items[1][:title]
+    assert_equal 'xml',                    items[1][:extension]
+    assert_equal 'content/foo/index.xml',  items[1][:content_filename]
+    assert_equal 'content/foo/index.yaml', items[1][:meta_filename]
   end
 
   def test_layouts
@@ -169,10 +181,12 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     layouts = data_source.layouts
 
     # Check layouts
-    assert_equal 1,       layouts.size
-    assert_equal 'miaow', layouts[0][:cat]
-    assert_equal 'rhtml', layouts[0][:extension]
-    assert_equal '/foo/', layouts[0].identifier
+    assert_equal 1,                   layouts.size
+    assert_equal 'miaow',             layouts[0][:cat]
+    assert_equal 'rhtml',             layouts[0][:extension]
+    assert_equal 'layouts/foo.rhtml', layouts[0][:content_filename]
+    assert_equal 'layouts/foo.yaml',  layouts[0][:meta_filename]
+    assert_equal '/foo/',             layouts[0].identifier
   end
 
   # Test creating data

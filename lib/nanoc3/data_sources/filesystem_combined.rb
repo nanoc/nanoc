@@ -91,8 +91,11 @@ module Nanoc3::DataSources
 
         # Get attributes
         attributes = {
-          :file      => Nanoc3::Extra::FileProxy.new(filename),
-          :extension => File.extname(filename)[1..-1]
+          :filename  => filename,
+          :extension => File.extname(filename)[1..-1],
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :filename attribute.
+          :file      => Nanoc3::Extra::FileProxy.new(filename)
         }.merge(meta)
 
         # Get actual identifier
@@ -117,8 +120,11 @@ module Nanoc3::DataSources
 
         # Get attributes
         attributes = {
-          :file      => Nanoc3::Extra::FileProxy.new(filename),
-          :extension => File.extname(filename)[1..-1]
+          :filename  => filename,
+          :extension => File.extname(filename)[1..-1],
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :filename attribute.
+          :file      => Nanoc3::Extra::FileProxy.new(filename)
         }.merge(meta)
 
         # Get actual identifier

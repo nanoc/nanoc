@@ -203,10 +203,14 @@ module Nanoc3::DataSources
         content = (content_filename ? File.read(content_filename)   : nil) || ''
 
         # Get attributes
-        attributes = {}
-        attributes[:file]      = Nanoc3::Extra::FileProxy.new(content_filename) if content_filename
-        attributes[:extension] = File.extname(content_filename)[1..-1]          if content_filename
-        attributes.merge!(meta)
+        attributes = {
+          :content_filename => content_filename,
+          :meta_filename    => meta_filename,
+          :extension        => content_filename ? File.extname(content_filename)[1..-1] : nil,
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :content_filename or :meta_filename attributes.
+          :file             => content_filename ? Nanoc3::Extra::FileProxy.new(content_filename) : nil
+        }.merge(meta)
 
         # Get identifier
         if meta_filename
