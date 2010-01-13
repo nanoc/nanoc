@@ -95,11 +95,15 @@ module Nanoc3::DataSources
         attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(filename))
 
         # Get actual identifier
+        identifier = filename.sub(/^content/, '')
         if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^content/, '').sub(/index\.[^\/\.]+$/, '') + '/'
+          regex = ((@config && @config[:allow_periods_in_identifiers]) ? /index\.[^\/\.]+$/ : /index\.[^\/]+$/)
+          identifier.sub!(regex, '')
         else
-          identifier = filename.sub(/^content/, '').sub(/\.[^\/\.]+$/, '') + '/'
+          regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/      : /\.[^\/]+$/)
+          identifier.sub!(regex, '')
         end
+        identifier << '/'
 
         # Get mtime
         mtime = File.stat(filename).mtime

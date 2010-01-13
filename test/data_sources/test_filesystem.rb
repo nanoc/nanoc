@@ -72,8 +72,40 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert(items.any? { |a| a[:title] == 'Bar' })
   end
 
-  def test_items_with_period_in_name
+  def test_items_with_period_in_name_disallowing_periods_in_identifiers
     data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Create foo.css
+    FileUtils.mkdir_p('content/foo')
+    File.open('content/foo/foo.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Foo' }))
+    end
+    File.open('content/foo/foo.css', 'w') do |io|
+      io.write('body.foo {}')
+    end
+    
+    # Create bar.css.erb
+    FileUtils.mkdir_p('content/bar')
+    File.open('content/bar/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Bar' }))
+    end
+    File.open('content/bar/bar.css.erb', 'w') do |io|
+      io.write('body.foobar {}')
+    end
+    
+    # Load
+    items = data_source.items.sort_by { |i| i[:title] }
+    
+    # Check
+    assert_equal 2, items.size
+    assert_equal '/bar/', items[0].identifier
+    assert_equal 'Bar',   items[0][:title]
+    assert_equal '/foo/', items[1].identifier
+    assert_equal 'Foo',   items[1][:title]
+  end
+
+  def test_items_with_period_in_name_allowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Create foo.css
     FileUtils.mkdir_p('content/foo')
@@ -175,9 +207,9 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   # Test private methods
 
-  def test_meta_filenames_good
+  def test_meta_filenames_good_allowing_periods_in_identifiers
     # Create data sources
-    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Create files
     FileUtils.mkdir_p('foo')
@@ -187,6 +219,20 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal %w( ./foo/foo.yaml ./foo.bar/foo.bar.yaml ), data_source.send(:meta_filenames, '.')
+  end
+
+  def test_meta_filenames_good_disallowing_periods_in_identifiers
+    # Create data sources
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Create files
+    FileUtils.mkdir_p('foo')
+    File.open('foo/foo.yaml', 'w') { |io| io.write('foo') }
+    FileUtils.mkdir_p('bar')
+    File.open('bar/bar.yaml', 'w') { |io| io.write('bar') }
+
+    # Check
+    assert_equal %w( ./foo/foo.yaml ./bar/bar.yaml ).sort, data_source.send(:meta_filenames, '.').sort
   end
 
   def test_meta_filenames_bad
