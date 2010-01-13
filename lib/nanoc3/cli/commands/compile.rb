@@ -93,8 +93,11 @@ module Nanoc3::CLI::Commands
       reps.select { |r| !r.compiled? }.each do |rep|
         next if rep.raw_path.nil?
         duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:low, :skip, rep.raw_path, duration)
+        Nanoc3::CLI::Logger.instance.file(:high, :skip, rep.raw_path, duration)
       end
+
+      # Show diff
+      write_diff_for(reps)
 
       # Give general feedback
       puts
@@ -122,6 +125,24 @@ module Nanoc3::CLI::Commands
       Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
         rep_filtering_ended(rep, filter_name)
       end
+    end
+
+    def write_diff_for(reps)
+      full_diff = ''
+      reps.each do |rep|
+        diff = rep.diff
+        next if diff.nil?
+
+        # Fix header
+        diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
+        diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
+
+        # Add
+        full_diff << diff
+      end
+
+      # Write
+      File.open('output.diff', 'w') { |io| io.write(full_diff) }
     end
 
     def print_state_feedback(reps)
@@ -198,20 +219,20 @@ module Nanoc3::CLI::Commands
       return unless rep.written?
 
       # Get action and level
-      action, level = *if rep.created?
-        [ :create, :high ]
+      action = if rep.created?
+        :create
       elsif rep.modified?
-        [ :update, :high ]
+        :update
       elsif !rep.compiled?
-        [ nil, nil ]
+        nil
       else
-        [ :identical, :low ]
+        :identical
       end
 
       # Log
       unless action.nil?
         duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(level, action, rep.raw_path, duration)
+        Nanoc3::CLI::Logger.instance.file(:high, action, rep.raw_path, duration)
       end
     end
 

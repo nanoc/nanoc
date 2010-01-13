@@ -95,8 +95,10 @@ module Nanoc3
 
   private
 
-    # Converts the given identifier, which can contain the '*' wildcard, to a regex.
-    # For example, 'foo/*/bar' is transformed into /^foo\/(.*?)\/bar$/.
+    # Converts the given identifier, which can contain the '*' or '+'
+    # wildcard characters, matching zero or more resp. one or more
+    # characters, to a regex. For example, 'foo/*/bar' is transformed
+    # into /^foo\/(.*?)\/bar$/ and 'foo+' is transformed into /^foo(.+?)/.
     def identifier_to_regex(identifier)
       if identifier.is_a? String
         # Add leading/trailing slashes if necessary
@@ -104,7 +106,7 @@ module Nanoc3
         new_identifier[/^/] = '/' if identifier[0,1] != '/'
         new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1,1])
 
-        /^#{new_identifier.gsub('*', '(.*?)')}$/
+        /^#{new_identifier.gsub('*', '(.*?)').gsub('+', '(.+?)')}$/
       else
         identifier
       end

@@ -4,8 +4,8 @@ module Nanoc3
 
   # Nanoc3::DataSource is responsible for loading data. It is the (abstract)
   # superclass for all data sources. Subclasses must at least implement the
-  # data reading methods (+items+, +layouts+, and +code_snippets+); all other
-  # methods involving data manipulation are optional.
+  # data reading methods (+items+ and +layouts+); all other methods involving
+  # data manipulation are optional.
   #
   # Apart from the methods for loading and storing data, there are the +up+
   # and +down+ methods for bringing up and tearing down the connection to the
@@ -30,14 +30,17 @@ module Nanoc3
 
     # Creates a new data source for the given site.
     #
-    # +site+:: The site this data source belongs to.
-    # +items_root+:: The prefix that should be given to all items returned by
-    #                the #items method (comparable to mount points for
-    #                filesystems in Unix-ish OSes).
-    # +layouts_root+:: The prefix that should be given to all layouts returned
-    #                  by the #layouts method (comparable to mount points for
-    #                  filesystems in Unix-ish OSes).
-    # +config+:: The configuration for this data source.
+    # @param [Nanoc3::Site] site The site this data source belongs to.
+    #
+    # @param [String] items_root The prefix that should be given to all items
+    #   returned by the #items method (comparable to mount points for
+    #   filesystems in Unix-ish OSes).
+    #
+    # @param [String] layouts_root The prefix that should be given to all
+    #   layouts returned by the #layouts method (comparable to mount points
+    #   for filesystems in Unix-ish OSes).
+    #
+    # @param [Hash] config The configuration for this data source.
     def initialize(site, items_root, layouts_root, config)
       @site         = site
       @items_root   = items_root
@@ -160,16 +163,6 @@ module Nanoc3
     #
     # Subclasses may implement this method.
     def layouts
-      []
-    end
-
-    # Returns the custom code snippets (represented by Nanoc3::CodeSnippet)
-    # for this site. The default implementation simply returns an empty array.
-    # This can be code for custom filters and more, but pretty much any code
-    # can be put in there (global helper functions are very useful).
-    #
-    # Subclasses may implement this method.
-    def code_snippets
       []
     end
 

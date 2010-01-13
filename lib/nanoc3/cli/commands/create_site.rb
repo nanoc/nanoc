@@ -4,6 +4,39 @@ module Nanoc3::CLI::Commands
 
   class CreateSite < Cri::Command
 
+    DEFAULT_RULES = <<EOS
+#!/usr/bin/env ruby
+
+# A few helpful tips about the Rules file:
+#
+# * The order of rules is important: for each item, only the first matching
+#   rule is applied.
+#
+# * Item identifiers start and end with a slash (e.g. “/about/” for the file
+#   “content/about.html”). To select all children, grandchildren, … of an
+#   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
+#   because “*” matches zero or more characters.
+
+compile '/stylesheet/' do
+  # don’t filter or layout
+end
+
+compile '*' do
+  filter :erb
+  layout 'default'
+end
+
+route '/stylesheet/' do
+  '/style.css'
+end
+
+route '*' do
+  item.identifier + 'index.html'
+end
+
+layout '*', :erb
+EOS
+
     DEFAULT_ITEM = <<EOS
 <h1>A Brand New nanoc Site</h1>
 
@@ -127,6 +160,7 @@ EOS
   <head>
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
     <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
+    <meta name="generator" content="nanoc #{Nanoc3::VERSION}">
   </head>
   <body>
     <div id="main">
@@ -251,18 +285,7 @@ EOS
 
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write "#!/usr/bin/env ruby\n"
-        io.write "\n"
-        io.write "compile '*' do\n"
-        io.write "  filter :erb\n"
-        io.write "  layout 'default'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '*' do\n"
-        io.write "  item.identifier + 'index.html'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write DEFAULT_RULES
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rules')
     end
@@ -284,28 +307,28 @@ EOS
     def site_populate
       # Get site
       site = Nanoc3::Site.new('.')
-
-      # Create item
       data_source = site.data_sources[0]
+
+      # Create home page
       data_source.create_item(
         DEFAULT_ITEM,
         { :title => "Home" },
         '/'
       )
 
+      # Create stylesheet
+      data_source.create_item(
+        DEFAULT_STYLESHEET,
+        {},
+        '/stylesheet/'
+      )
+
       # Create layout
-      data_source = site.data_sources[0]
       data_source.create_layout(
         DEFAULT_LAYOUT,
         {},
         '/default/'
       )
-
-      # Create stylesheet
-      FileUtils.mkdir_p('output')
-      File.open('output/style.css', 'w') do |io|
-        io.write DEFAULT_STYLESHEET
-      end
 
       # Create code
       FileUtils.mkdir_p('lib')

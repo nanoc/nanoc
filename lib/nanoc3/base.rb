@@ -10,6 +10,7 @@ module Nanoc3
   autoload 'Config',              'nanoc3/base/config'
   autoload 'DataSource',          'nanoc3/base/data_source'
   autoload 'DependencyTracker',   'nanoc3/base/dependency_tracker'
+  autoload 'DirectedGraph',       'nanoc3/base/directed_graph'
   autoload 'Errors',              'nanoc3/base/errors'
   autoload 'Filter',              'nanoc3/base/filter'
   autoload 'Item',                'nanoc3/base/item'

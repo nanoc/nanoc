@@ -7,5 +7,5 @@ require 'nanoc3'
 # Load tasks
 Dir.glob('tasks/**/*.rake').each { |r| Rake.application.add_import r }
 
-# Set default talk
-task :default => [ :fetch_dependencies, :test ]
+# Set default task
+task :default => :test

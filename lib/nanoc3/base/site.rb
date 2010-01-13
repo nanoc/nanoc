@@ -92,9 +92,8 @@ module Nanoc3
     # Creates a Nanoc3::Site object for the site specified by the given
     # +dir_or_config_hash+ argument.
     #
-    # +dir_or_config_hash+:: If a string, contains the path to the site
-    #                        directory; if a hash, contains the site
-    #                        configuration.
+    # @param [Hash, String] dir_or_config_hash If a string, contains the path
+    #   to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
       build_config(dir_or_config_hash)
 
@@ -119,6 +118,12 @@ module Nanoc3
           data_source_class = Nanoc3::DataSource.named(data_source_hash[:type])
           raise Nanoc3::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
 
+          # Warn about deprecated data sources
+          # TODO [in nanoc 3.2] remove me
+          if data_source_hash[:type] == 'filesystem'
+            warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
+          end
+
           # Create data source
           data_source_class.new(
             self,
@@ -135,8 +140,8 @@ module Nanoc3
     # calling this method will not have any effect the second time, unless
     # +force+ is true.
     #
-    # +force+:: If true, will force load the site data even if it has been
-    #           loaded before, to circumvent caching issues.
+    # @param [Boolean] force If true, will force load the site data even if it
+    #   has been loaded before, to circumvent caching issues.
     def load_data(force=false)
       # Don't load data twice
       return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
@@ -192,7 +197,13 @@ module Nanoc3
       return if @code_snippets_loaded and !force
 
       # Get code snippets
-      @code_snippets = data_sources.map { |ds| ds.code_snippets }.flatten
+      @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
+        Nanoc3::CodeSnippet.new(
+          File.read(filename),
+          filename.sub(/^lib\//, ''),
+          File.stat(filename).mtime
+        )
+      end
 
       # Execute code snippets
       @code_snippets.each { |cs| cs.load }

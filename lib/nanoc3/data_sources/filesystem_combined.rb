@@ -58,8 +58,6 @@ module Nanoc3::DataSources
   # snippets can reside in sub-directories.
   class FilesystemCombined < Nanoc3::DataSource
 
-    include Nanoc3::DataSources::FilesystemCommon
-
     ########## VCSes ##########
 
     attr_accessor :vcs
@@ -92,18 +90,20 @@ module Nanoc3::DataSources
         meta, content = *parse_file(filename, 'item')
 
         # Get attributes
-        attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(filename))
+        attributes = {
+          :filename  => filename,
+          :extension => File.extname(filename)[1..-1],
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :filename attribute.
+          :file      => Nanoc3::Extra::FileProxy.new(filename)
+        }.merge(meta)
 
         # Get actual identifier
-        identifier = filename.sub(/^content/, '')
         if filename =~ /\/index\.[^\/]+$/
-          regex = ((@config && @config[:allow_periods_in_identifiers]) ? /index\.[^\/\.]+$/ : /index\.[^\/]+$/)
-          identifier.sub!(regex, '')
+          identifier = filename.sub(/^content/, '').sub(/index\.[^\/\.]+$/, '') + '/'
         else
-          regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/      : /\.[^\/]+$/)
-          identifier.sub!(regex, '')
+          identifier = filename.sub(/^content/, '').sub(/\.[^\/\.]+$/, '') + '/'
         end
-        identifier << '/'
 
         # Get mtime
         mtime = File.stat(filename).mtime
@@ -118,6 +118,15 @@ module Nanoc3::DataSources
         # Read and parse data
         meta, content = *parse_file(filename, 'layout')
 
+        # Get attributes
+        attributes = {
+          :filename  => filename,
+          :extension => File.extname(filename)[1..-1],
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :filename attribute.
+          :file      => Nanoc3::Extra::FileProxy.new(filename)
+        }.merge(meta)
+
         # Get actual identifier
         if filename =~ /\/index\.[^\/]+$/
           identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/\.]+$/, '') + '/'
@@ -129,7 +138,7 @@ module Nanoc3::DataSources
         mtime = File.stat(filename).mtime
 
         # Build layout
-        Nanoc3::Layout.new(content, meta, identifier, mtime)
+        Nanoc3::Layout.new(content, attributes, identifier, mtime)
       end.compact
     end
 
