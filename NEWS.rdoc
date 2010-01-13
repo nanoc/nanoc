@@ -15,6 +15,20 @@ Changed:
 * The --server autocompile option is now known as --handler
 * The deploy:rsync task now uses a lowercase dry_run environment variable
 
+== 3.0.5
+
+* Restored pre-3.0.3 behaviour of periods in identifiers. By default, a file
+  can have multiple extensions (e.g. content/foo.html.erb will have the
+  identifier /foo/), but if `allow_periods_in_identifiers` in the site
+  configuration is true, a file can have only one extension (e.g.
+  content/blog/stuff.entry.html will have the identifier /blog/stuff.entry/).
+
+== 3.0.4
+
+* Fixed a bug which would cause the filesystem_compact data source to
+  incorrectly determine the content filename, leading to weird “Expected 1
+  content file but found 3” errors [Eric Sunshine]
+
 == 3.0.3
 
 * The Blogging helper now properly handles item reps without paths
