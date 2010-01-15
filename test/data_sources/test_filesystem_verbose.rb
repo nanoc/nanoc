@@ -144,7 +144,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
   end
 
   def test_layouts_with_period_in_name_disallowing_periods_in_identifiers
-    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
 
     # Create foo.html
     FileUtils.mkdir_p('layouts/foo')
@@ -176,7 +176,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
   end
 
   def test_layouts_with_period_in_name_allowing_periods_in_identifiers
-    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Create foo.html
     FileUtils.mkdir_p('layouts/foo')
