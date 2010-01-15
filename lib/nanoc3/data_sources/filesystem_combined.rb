@@ -92,9 +92,7 @@ module Nanoc3::DataSources
       [ meta, content ]
     end
 
-    # Creates a new file in dir_name according to the given identifier. The
-    # file will have its attributes taken from the attributes hash argument
-    # and its content from the content argument.
+    # See superclass for documentation.
     def create_object(dir_name, content, attributes, identifier)
       # Determine path
       path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + '.html')
@@ -112,9 +110,7 @@ module Nanoc3::DataSources
       end
     end
 
-    # Creates instances of klass corresponding to the files in dir_name. The
-    # kind attribute indicates the kind of object that is being loaded and is
-    # used solely for debugging purposes.
+    # See superclass for documentation.
     def load_objects(dir_name, kind, klass)
       files(dir_name).map do |filename|
         # Read and parse data
