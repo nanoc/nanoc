@@ -6,39 +6,6 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  # Test preparation
-
-  def test_setup
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Remove files to make sure they are recreated
-    FileUtils.rm_rf('content')
-    FileUtils.rm_rf('layouts/default')
-    FileUtils.rm_rf('lib/default.rb')
-
-    # Mock VCS
-    vcs = mock
-    vcs.expects(:add).times(3) # One time for each directory
-    data_source.vcs = vcs
-
-    # Recreate files
-    data_source.setup
-
-    # Ensure essential files have been recreated
-    assert(File.directory?('content/'))
-    assert(File.directory?('layouts/'))
-    assert(File.directory?('lib/'))
-
-    # Ensure no non-essential files have been recreated
-    assert(!File.file?('content/content.html'))
-    assert(!File.file?('content/content.yaml'))
-    assert(!File.directory?('layouts/default/'))
-    assert(!File.file?('lib/default.rb'))
-  end
-
-  # Test loading data
-
   def test_items
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
@@ -207,8 +174,6 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     assert_equal 'woof',      layouts[1][:dog]
   end
 
-  # Test creating data
-
   def test_create_item_at_root
     # Create item
     data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
@@ -253,8 +218,6 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     assert_equal 'content here', File.read('layouts/moo/moo.html')
     assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
   end
-
-  # Test private methods
 
   def test_meta_filenames_good
     # Create data sources
@@ -395,16 +358,6 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
         content_filename_for_dir('foo/bar/baz')
       end
     )
-  end
-
-  # Miscellaneous
-
-  def test_meta_filenames_error
-    # TODO implement
-  end
-
-  def test_content_filename_for_dir_error
-    # TODO implement
   end
 
   def test_content_filename_for_dir_index_error

@@ -48,41 +48,13 @@ module Nanoc3::DataSources
   #
   # The identifier for layouts is generated the same way as identifiers for
   # items (see above for details).
-  #
-  # = Code Snippets
-  #
-  # Code snippets are stored in '.rb' files in the 'lib' directory. Code
-  # snippets can reside in sub-directories.
-  class FilesystemVerbose < Nanoc3::DataSource
+  class FilesystemVerbose < Nanoc3::DataSources::Filesystem
 
-    ########## VCSes ##########
+  private
 
-    attr_accessor :vcs
-
-    def vcs
-      @vcs ||= Nanoc3::Extra::VCSes::Dummy.new
-    end
-
-    ########## Preparation ##########
-
-    def up
-    end
-
-    def down
-    end
-
-    def setup
-      # Create directories
-      %w( content layouts lib ).each do |dir|
-        FileUtils.mkdir_p(dir)
-        vcs.add(dir)
-      end
-    end
-
-    ########## Loading data ##########
-
-    def items
-      meta_filenames('content').map do |meta_filename|
+    # See superclass for documentation.
+    def load_objects(dir_name, kind, klass)
+      meta_filenames(dir_name).map do |meta_filename|
         # Read metadata
         meta = YAML.load_file(meta_filename) || {}
 
@@ -101,7 +73,7 @@ module Nanoc3::DataSources
         }.merge(meta)
 
         # Get identifier
-        identifier = meta_filename_to_identifier(meta_filename, /^content/)
+        identifier = meta_filename_to_identifier(meta_filename, Regexp.compile("^#{dir_name}"))
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -113,50 +85,16 @@ module Nanoc3::DataSources
       end
     end
 
-    def layouts
-      meta_filenames('layouts').map do |meta_filename|
-        # Read metadata
-        meta = YAML.load_file(meta_filename) || {}
-
-        # Get content
-        content_filename  = content_filename_for_dir(File.dirname(meta_filename))
-        content           = File.read(content_filename)
-
-        # Get attributes
-        attributes = {
-          :content_filename => content_filename,
-          :meta_filename    => meta_filename,
-          :extension        => File.extname(content_filename)[1..-1],
-          # WARNING :file is deprecated; please create a File object manually
-          # using the :content_filename or :meta_filename attributes.
-          :file             => Nanoc3::Extra::FileProxy.new(content_filename)
-        }.merge(meta)
-
-        # Get identifier
-        identifier = meta_filename_to_identifier(meta_filename, /^layouts/)
-
-        # Get modification times
-        meta_mtime    = File.stat(meta_filename).mtime
-        content_mtime = File.stat(content_filename).mtime
-        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
-
-        # Create layout object
-        Nanoc3::Layout.new(content, attributes, identifier, mtime)
-      end
-    end
-
-    ########## Creating data ##########
-
-    # Creates a new item with the given content, attributes and identifier.
-    def create_item(content, attributes, identifier)
+    # See superclass for documentation.
+    def create_object(dir_name, content, attributes, identifier)
       # Determine base path
-      last_component = identifier.split('/')[-1] || 'content'
-      base_path = 'content' + identifier + last_component
+      last_component = identifier.split('/')[-1] || dir_name
+      base_path = dir_name + identifier + last_component
 
       # Get filenames
-      dir_path         = 'content' + identifier
-      meta_filename    = 'content' + identifier + last_component + '.yaml'
-      content_filename = 'content' + identifier + last_component + '.html'
+      dir_path         = dir_name + identifier
+      meta_filename    = dir_name + identifier + last_component + '.yaml'
+      content_filename = dir_name + identifier + last_component + '.html'
                                      
       # Notify
       Nanoc3::NotificationCenter.post(:file_created, meta_filename)
@@ -167,31 +105,6 @@ module Nanoc3::DataSources
       File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.stringify_keys)) }
       File.open(content_filename, 'w') { |io| io.write(content) }
     end
-
-    # Creates a new layout with the given content, attributes and identifier.
-    def create_layout(content, attributes, identifier)
-      # Determine base path
-      last_component = identifier.split('/')[-1]
-      base_path = 'layouts' + identifier + last_component
-
-      # Get filenames
-      dir_path         = 'layouts' + identifier
-      meta_filename    = 'layouts' + identifier + last_component + '.yaml'
-      content_filename = 'layouts' + identifier + last_component + '.html'
-
-      # Notify
-      Nanoc3::NotificationCenter.post(:file_created, meta_filename)
-      Nanoc3::NotificationCenter.post(:file_created, content_filename)
-
-      # Create files
-      FileUtils.mkdir_p(dir_path)
-      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.stringify_keys)) }
-      File.open(content_filename, 'w') { |io| io.write(content) }
-    end
-
-  private
-
-    ########## Custom functions ##########
 
     # Returns the list of all meta files in the given base directory as well
     # as its subdirectories.
