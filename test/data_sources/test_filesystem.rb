@@ -8,7 +8,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_setup
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Remove files to make sure they are recreated
     FileUtils.rm_rf('content')
@@ -36,7 +36,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_items
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Check
     data_source.expects(:load_objects).with('content', 'item', Nanoc3::Item)
@@ -45,7 +45,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_layouts
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Check
     data_source.expects(:load_objects).with('layouts', 'layout', Nanoc3::Layout)
@@ -54,7 +54,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_create_item
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Check
     data_source.expects(:create_object).with('content', 'the content', 'the attributes', 'the identifier')
@@ -63,7 +63,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
   def test_create_layout
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Check
     data_source.expects(:create_object).with('layouts', 'the content', 'the attributes', 'the identifier')
