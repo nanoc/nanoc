@@ -6,8 +6,6 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  # Test preparation
-
   def test_setup
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
@@ -36,206 +34,79 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert(!File.file?('lib/default.rb'))
   end
 
-  # Test loading data
-
   def test_items
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
-    # Create foo item
-    FileUtils.mkdir_p('content/foo')
-    File.open('content/foo.html', 'w') do |io|
-      io.write("-----\n")
-      io.write("title: Foo\n")
-      io.write("-----\n")
-      io.write("Lorem ipsum dolor sit amet...\n")
-    end
-
-    # Create bar item
-    FileUtils.mkdir_p('content/bar')
-    File.open('content/bar.xml', 'w') do |io|
-      io.write("-----\n")
-      io.write("title: Bar\n")
-      io.write("-----\n")
-      io.write("Lorem ipsum dolor sit amet...\n")
-    end
-
-    # Load items
-    items = data_source.items
-
-    # Check items
-    assert_equal(2, items.size)
-    assert(items.any? { |a|
-      a[:title]     == 'Foo' &&
-      a[:extension] == 'html' &&
-      a[:filename]  == 'content/foo.html'
-    })
-    assert(items.any? { |a|
-      a[:title]     == 'Bar' &&
-      a[:extension] == 'xml' &&
-      a[:filename]  == 'content/bar.xml'
-    })
-  end
-
-  def test_items_with_period_in_name
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-
-    FileUtils.mkdir_p('content/foo')
-
-    # Create bar.css
-    File.open('content/foo/bar.css', 'w') do |io|
-      io.write(YAML.dump({ 'title' => 'Foo' }) + "---\n" + 'body.foo {}')
-    end
-
-    # Create bar.baz.css
-    File.open('content/foo/bar.baz.css', 'w') do |io|
-      io.write(YAML.dump({ 'title' => 'Foo Bar' }) + "---\n" + 'body.foobar {}')
-    end
-
-    # Load
-    items = data_source.items.sort_by { |i| i[:title] }
-
     # Check
-    assert_equal 2, items.size
-    assert_equal '/foo/bar/',               items[0].identifier
-    assert_equal 'Foo',                     items[0][:title]
-    assert_equal 'content/foo/bar.css',     items[0][:filename]
-    assert_equal '/foo/bar.baz/',           items[1].identifier
-    assert_equal 'Foo Bar',                 items[1][:title]
-    assert_equal 'content/foo/bar.baz.css', items[1][:filename]
+    data_source.expects(:load_objects).with('content', 'item', Nanoc3::Item)
+    data_source.items
   end
 
   def test_layouts
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
-    # Create layout
-    FileUtils.mkdir_p('layouts')
-    File.open('layouts/foo.html', 'w') do |io|
-      io.write("-----\n")
-      io.write("filter: erb\n")
-      io.write("-----\n")
-      io.write("Lorem ipsum dolor sit amet...\n")
-    end
-
-    # Load layouts
-    layouts = data_source.layouts
-
-    # Check layouts
-    assert_equal(1,                  layouts.size)
-    assert_equal('erb',              layouts[0][:filter])
-    assert_equal('html',             layouts[0][:extension])
-    assert_equal('layouts/foo.html', layouts[0][:filename])
+    # Check
+    data_source.expects(:load_objects).with('layouts', 'layout', Nanoc3::Layout)
+    data_source.layouts
   end
 
-  def test_layouts_with_period_in_name_disallowing_periods_in_identifiers
+  def test_create_item
+    # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-
-    FileUtils.mkdir_p('layouts')
-
-    # Create foo.html
-    File.open('layouts/foo.html', 'w') do |io|
-      io.write(YAML.dump({ 'cow' => 'moo' }) + "---\n" + '... foo content ...')
-    end
-
-    # Create bar.html.erb
-    File.open('layouts/bar.html.erb', 'w') do |io|
-      io.write(YAML.dump({ 'horse' => 'whinny' }) + "---\n" + '... bar content ...')
-    end
-
-    # Load
-    layouts = data_source.layouts.sort_by { |i| i.identifier }
 
     # Check
-    assert_equal 2, layouts.size
-    assert_equal '/bar/',  layouts[0].identifier
-    assert_equal 'whinny', layouts[0][:horse]
-    assert_equal '/foo/',  layouts[1].identifier
-    assert_equal 'moo',    layouts[1][:cow]
-  end
-
-  def test_layouts_with_period_in_name_allowing_periods_in_identifiers
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
-
-    FileUtils.mkdir_p('layouts')
-
-    # Create foo.html
-    File.open('layouts/foo.html', 'w') do |io|
-      io.write(YAML.dump({ 'cow' => 'moo' }) + "---\n" + '... foo content ...')
-    end
-
-    # Create bar.qux.html
-    File.open('layouts/bar.qux.html', 'w') do |io|
-      io.write(YAML.dump({ 'horse' => 'whinny' }) + "---\n" + '... bar content ...')
-    end
-
-    # Load
-    layouts = data_source.layouts.sort_by { |i| i.identifier }
-
-    # Check
-    assert_equal 2, layouts.size
-    assert_equal '/bar.qux/', layouts[0].identifier
-    assert_equal 'whinny',    layouts[0][:horse]
-    assert_equal '/foo/',     layouts[1].identifier
-    assert_equal 'moo',       layouts[1][:cow]
-  end
-
-  # Test creating data
-
-  def test_create_item_at_root
-    # Create item
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-    data_source.create_item('content here', { :foo => 'bar' }, '/')
-
-    # Check file existance
-    assert File.directory?('content')
-    assert !File.directory?('content/content')
-    assert File.file?('content/index.html')
-
-    # Check file content
-    expected = "--- \nfoo: bar\n\n---\ncontent here"
-    assert_equal expected, File.read('content/index.html')
-  end
-
-  def test_create_item_not_at_root
-    # Create item
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-    data_source.create_item('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
-
-    # Check file existance
-    assert File.directory?('content/xxx/yyy')
-    assert !File.directory?('content/xxx/yyy/zzz')
-    assert File.file?('content/xxx/yyy/zzz.html')
-    assert !File.file?('content/xxx/yyy/zzz.yaml')
-
-    # Check file content
-    expected = "--- \nfoo: bar\n\n---\ncontent here"
-    assert_equal expected, File.read('content/xxx/yyy/zzz.html')
+    data_source.expects(:create_object).with('content', 'the content', 'the attributes', 'the identifier')
+    data_source.create_item('the content', 'the attributes', 'the identifier')
   end
 
   def test_create_layout
-    # Create layout
+    # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-    data_source.create_layout('content here', { :foo => 'bar' }, '/xxx/yyy/zzz/')
+
+    # Check
+    data_source.expects(:create_object).with('layouts', 'the content', 'the attributes', 'the identifier')
+    data_source.create_layout('the content', 'the attributes', 'the identifier')
+  end
+
+  def test_create_object_not_at_root
+    # Create item
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source.send(:create_object, 'foobar', 'content here', { :foo => 'bar' }, '/asdf/')
 
     # Check file existance
-    assert File.directory?('layouts/xxx/yyy')
-    assert !File.directory?('layouts/xxx/yyy/zzz')
-    assert File.file?('layouts/xxx/yyy/zzz.html')
-    assert !File.file?('layouts/xxx/yyy/zzz.yaml')
+    assert File.directory?('foobar')
+    assert !File.directory?('foobar/content')
+    assert !File.directory?('foobar/asdf')
+    assert File.file?('foobar/asdf.html')
 
     # Check file content
     expected = "--- \nfoo: bar\n\n---\ncontent here"
-    assert_equal expected, File.read('layouts/xxx/yyy/zzz.html')
+    assert_equal expected, File.read('foobar/asdf.html')
   end
 
-  # Test private methods
+  def test_create_object_at_root
+    # Create item
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source.send(:create_object, 'foobar', 'content here', { :foo => 'bar' }, '/')
 
-  def test_files_without_recursion
+    # Check file existance
+    assert File.directory?('foobar')
+    assert !File.directory?('foobar/index')
+    assert !File.directory?('foobar/foobar')
+    assert File.file?('foobar/index.html')
+
+    # Check file content
+    expected = "--- \nfoo: bar\n\n---\ncontent here"
+    assert_equal expected, File.read('foobar/index.html')
+  end
+
+  def test_files
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
-    # Build directory
+    # Create test files
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo/a/b')
     File.open('foo/bar.html',       'w') { |io| io.write('test') }
@@ -246,37 +117,12 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     File.open('foo/ugly.html.rej',  'w') { |io| io.write('test') }
     File.open('foo/ugly.html.bak',  'w') { |io| io.write('test') }
 
-    # Check content filename
-    assert_equal(
-      [ 'foo/bar.html', 'foo/baz.html' ],
-      data_source.instance_eval do
-        files('foo', false).sort
-      end
-    )
-  end
+    # Get expected and actual output
+    expected_out = [ 'foo/a/b/c.html', 'foo/bar.html', 'foo/baz.html' ]
+    actual_out   = data_source.instance_eval { files('foo') }.sort
 
-  def test_files_with_recursion
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo')
-    FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/bar.html',       'w') { |io| io.write('test') }
-    File.open('foo/baz.html',       'w') { |io| io.write('test') }
-    File.open('foo/a/b/c.html',     'w') { |io| io.write('test') }
-    File.open('foo/ugly.html~',     'w') { |io| io.write('test') }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write('test') }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write('test') }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      [ 'foo/a/b/c.html', 'foo/bar.html', 'foo/baz.html' ],
-      data_source.instance_eval do
-        files('foo', true).sort
-      end
-    )
+    # Check
+    assert_equal(expected_out, actual_out)
   end
 
   def test_parse_file_invalid
@@ -327,6 +173,111 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     result = data_source.instance_eval { parse_file('test.html', 'foobar') }
     assert_equal({}, result[0])
     assert_equal('blah blah', result[1])
+  end
+
+  def test_load_objects
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Create a fake class
+    klass = Class.new do
+      attr_reader :stuff
+      def initialize(*stuff)
+        @stuff = stuff
+      end
+      def ==(other)
+        @stuff == other.stuff
+      end
+    end
+
+    # Create sample files
+    FileUtils.mkdir_p('foo')
+    FileUtils.mkdir_p('foo/a/b')
+    File.open('foo/bar.html',       'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
+    File.open('foo/b.c.html',       'w') { |io| io.write("---\nnum: 2\n---\ntest 2") }
+    File.open('foo/a/b/c.html',     'w') { |io| io.write("---\nnum: 3\n---\ntest 3") }
+    File.open('foo/ugly.html~',     'w') { |io| io.write("---\nnum: 4\n---\ntest 4") }
+    File.open('foo/ugly.html.orig', 'w') { |io| io.write("---\nnum: 5\n---\ntest 5") }
+    File.open('foo/ugly.html.rej',  'w') { |io| io.write("---\nnum: 6\n---\ntest 6") }
+    File.open('foo/ugly.html.bak',  'w') { |io| io.write("---\nnum: 7\n---\ntest 7") }
+
+    # Get expected and actual output
+    expected_out = [
+      klass.new(
+        'test 1',
+        { 'num' => 1, :filename => 'foo/bar.html',   :extension => 'html', :file => File.open('foo/bar.html') },
+        '/bar/',
+        File.mtime('foo/bar.html')
+      ),
+      klass.new(
+        'test 2',
+        { 'num' => 2, :filename => 'foo/b.c.html',   :extension => 'html', :file => File.open('foo/b.c.html') },
+        '/b/',
+        File.mtime('foo/b.c.html')
+      ),
+      klass.new(
+        'test 3',
+        { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html', :file => File.open('foo/a/b/c.html') },
+        '/a/b/c/',
+        File.mtime('foo/a/b/c.html')
+      )
+    ]
+    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0] }
+
+    # Check
+    (0..expected_out.size-1).each do |i|
+      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
+      assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
+      assert_equal expected_out[i].stuff[3], actual_out[i].stuff[3], 'mtime must match'
+      assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
+      [ 'num', :filename, :extension ].each do |key|
+        assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
+      end
+    end
+  end
+
+  def test_filename_to_identifier_disallowing_periods_in_identifiers
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Get expected and actual output
+    expected_out = [
+      '/x/',
+      '/x/',
+      '/x/'
+    ]
+    actual_out = [
+      data_source.send(:filename_to_identifier, 'foo/x',            'foo'),
+      data_source.send(:filename_to_identifier, 'foo/x.html',       'foo'),
+      data_source.send(:filename_to_identifier, 'foo/x.entry.html', 'foo')
+    ]
+
+    # Check
+    (0..expected_out.size-1).each do |i|
+      assert_equal expected_out[i], actual_out[i]
+    end
+  end
+
+  def test_filename_to_identifier_allowing_periods_in_identifiers
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+
+    # Get expected and actual output
+    expected_out = [
+      '/x/',
+      '/x/',
+      '/x.entry/'
+    ]
+    actual_out = [
+      data_source.send(:filename_to_identifier, 'foo/x',            'foo'),
+      data_source.send(:filename_to_identifier, 'foo/x.html',       'foo'),
+      data_source.send(:filename_to_identifier, 'foo/x.entry.html', 'foo')
+    ]
+
+    # Check
+    (0..expected_out.size-1).each do |i|
+      assert_equal expected_out[i], actual_out[i]
+    end
   end
 
 end
