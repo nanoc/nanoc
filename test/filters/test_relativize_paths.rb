@@ -101,6 +101,25 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     assert_equal(expected_content, actual_content)
   end
 
+  def test_filter_html_root
+    # Create filter with mock item
+    filter = Nanoc3::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/woof/meow/')
+    end
+
+    # Set content
+    raw_content      = %[<a href="/">foo</a>]
+    expected_content = %[<a href="../../">foo</a>]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
+
   def test_filter_implicit
     # Create filter with mock item
     filter = Nanoc3::Filters::RelativizePaths.new
@@ -181,6 +200,28 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     # Set content
     raw_content      = %[background: url(/foo/bar/a.png) url(/foo/bar/b.png);]
     expected_content = %[background: url(../a.png) url(../b.png);]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :css)
+    assert_equal(expected_content, actual_content)
+  end
+
+  def test_filter_css_root
+    # It is probably a bit weird to have “url(/)” in CSS, but I’ve made a
+    # test case for this situation anyway. Can’t hurt…
+
+    # Create filter with mock item
+    filter = Nanoc3::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = MiniTest::Mock.new
+      @item_rep.expect(:path, '/woof/meow/')
+    end
+
+    # Set content
+    raw_content      = %[background: url(/);]
+    expected_content = %[background: url(../../);]
 
     # Test
     actual_content = filter.run(raw_content, :type => :css)
