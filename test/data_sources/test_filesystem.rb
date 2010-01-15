@@ -158,6 +158,70 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert_equal('erb', layouts[0][:filter])
   end
 
+  def test_layouts_with_period_in_name_disallowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Create foo.html
+    FileUtils.mkdir_p('layouts/foo')
+    File.open('layouts/foo/foo.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'dog' => 'woof' }))
+    end
+    File.open('layouts/foo/foo.html', 'w') do |io|
+      io.write('body.foo {}')
+    end
+    
+    # Create bar.html.erb
+    FileUtils.mkdir_p('layouts/bar')
+    File.open('layouts/bar/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'cat' => 'meow' }))
+    end
+    File.open('layouts/bar/bar.html.erb', 'w') do |io|
+      io.write('body.foobar {}')
+    end
+    
+    # Load
+    layouts = data_source.layouts.sort_by { |i| i.identifier }
+    
+    # Check
+    assert_equal 2, layouts.size
+    assert_equal '/bar/', layouts[0].identifier
+    assert_equal 'meow',  layouts[0][:cat]
+    assert_equal '/foo/', layouts[1].identifier
+    assert_equal 'woof',  layouts[1][:dog]
+  end
+
+  def test_layouts_with_period_in_name_allowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+
+    # Create foo.html
+    FileUtils.mkdir_p('layouts/foo')
+    File.open('layouts/foo/foo.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'dog' => 'woof' }))
+    end
+    File.open('layouts/foo/foo.html', 'w') do |io|
+      io.write('body.foo {}')
+    end
+    
+    # Create bar.html.erb
+    FileUtils.mkdir_p('layouts/bar.xyz')
+    File.open('layouts/bar.xyz/bar.xyz.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'cat' => 'meow' }))
+    end
+    File.open('layouts/bar.xyz/bar.xyz.html', 'w') do |io|
+      io.write('body.foobar {}')
+    end
+    
+    # Load
+    layouts = data_source.layouts.sort_by { |i| i.identifier }
+    
+    # Check
+    assert_equal 2, layouts.size
+    assert_equal '/bar.xyz/', layouts[0].identifier
+    assert_equal 'meow',      layouts[0][:cat]
+    assert_equal '/foo/',     layouts[1].identifier
+    assert_equal 'woof',      layouts[1][:dog]
+  end
+
   # Test creating data
 
   def test_create_item_at_root

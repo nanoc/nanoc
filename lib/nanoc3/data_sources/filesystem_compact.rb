@@ -134,7 +134,7 @@ module Nanoc3::DataSources
         attributes = YAML.load_file(meta_filename) || {}
 
         # Get identifier
-        identifier = identifier_for_meta_filename(meta_filename.sub(/^layouts\//, ''))
+        identifier = identifier_for_meta_filename(meta_filename.sub(/^layouts/, ''))
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -202,7 +202,11 @@ module Nanoc3::DataSources
     def identifier_for_meta_filename(meta_filename)
       # Split into components
       components = meta_filename.gsub(%r{(^/|/$)}, '').split('/')
-      components[-1].sub!(/\.yaml$/, '')
+      if @config && @config[:allow_periods_in_identifiers]
+        components[-1].sub!(/\.yaml$/, '')
+      else
+        components[-1].sub!(/\.[^\/\.]+$/, '')
+      end
 
       if components[-1] == 'index'
         components[0..-2].join('/').cleaned_identifier

@@ -95,15 +95,7 @@ module Nanoc3::DataSources
         attributes = meta.merge(:file => Nanoc3::Extra::FileProxy.new(filename))
 
         # Get actual identifier
-        identifier = filename.sub(/^content/, '')
-        if filename =~ /\/index\.[^\/]+$/
-          regex = ((@config && @config[:allow_periods_in_identifiers]) ? /index\.[^\/\.]+$/ : /index\.[^\/]+$/)
-          identifier.sub!(regex, '')
-        else
-          regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/      : /\.[^\/]+$/)
-          identifier.sub!(regex, '')
-        end
-        identifier << '/'
+        identifier = filename_to_identifier(filename, /^content/)
 
         # Get mtime
         mtime = File.stat(filename).mtime
@@ -119,11 +111,7 @@ module Nanoc3::DataSources
         meta, content = *parse_file(filename, 'layout')
 
         # Get actual identifier
-        if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/\.]+$/, '') + '/'
-        else
-          identifier = filename.sub(/^layouts/, '').sub(/\.[^\/\.]+$/, '') + '/'
-        end
+        identifier = filename_to_identifier(filename, /^layouts/)
 
         # Get mtime
         mtime = File.stat(filename).mtime
@@ -205,6 +193,20 @@ module Nanoc3::DataSources
       content = pieces[4..-1].join.strip
 
       [ meta, content ]
+    end
+
+    def filename_to_identifier(filename, regex)
+      identifier = filename.sub(regex, '')
+      if filename =~ /\/index\.[^\/]+$/
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /index\.[^\/\.]+$/ : /index\.[^\/]+$/)
+        identifier.sub!(regex, '')
+      else
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/      : /\.[^\/]+$/)
+        identifier.sub!(regex, '')
+      end
+      identifier << '/'
+
+      identifier
     end
 
   end
