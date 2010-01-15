@@ -84,21 +84,21 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
   def test_items_with_period_in_name_disallowing_periods_in_identifiers
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
 
-    FileUtils.mkdir_p('content/foo')
-
     # Create bar.css
-    File.open('content/foo/bar.yaml', 'w') do |io|
-      io.write(YAML.dump({ 'title' => 'Foo' }))
+    FileUtils.mkdir_p('content/aaa')
+    File.open('content/aaa/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Aaa' }))
     end
-    File.open('content/foo/bar.css', 'w') do |io|
+    File.open('content/aaa/bar.css', 'w') do |io|
       io.write('body{}')
     end
 
     # Create bar.baz.css
-    File.open('content/foo/bar.yaml', 'w') do |io|
-      io.write(YAML.dump({ 'title' => 'Foo2' }))
+    FileUtils.mkdir_p('content/bbb')
+    File.open('content/bbb/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Bbb' }))
     end
-    File.open('content/foo/bar.baz.css', 'w') do |io|
+    File.open('content/bbb/bar.css.sass', 'w') do |io|
       io.write('body{}')
     end
 
@@ -107,13 +107,13 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal 2, items.size
-    assert_equal '/foo/bar/', items[0].identifier
-    assert_equal 'Foo',       items[0][:title]
-    assert_equal '/foo/bar/', items[1].identifier
-    assert_equal 'Foo2',      items[1][:title]
+    assert_equal '/aaa/bar/', items[0].identifier
+    assert_equal 'Aaa',       items[0][:title]
+    assert_equal '/bbb/bar/', items[1].identifier
+    assert_equal 'Bbb',       items[1][:title]
   end
 
-  def test_items_with_period_in_name_disallowing_periods_in_identifiers
+  def test_items_with_period_in_name_allowing_periods_in_identifiers
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     FileUtils.mkdir_p('content/foo')
@@ -200,6 +200,70 @@ class Nanoc3::DataSources::FilesystemCompactTest < MiniTest::Unit::TestCase
     assert_equal 1,       layouts.size
     assert_equal 'miaow', layouts[0][:cat]
     assert_equal '/foo/', layouts[0].identifier
+  end
+
+  def test_layouts_with_period_in_name_disallowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    FileUtils.mkdir_p('layouts/foo')
+
+    # Create bar.css
+    File.open('layouts/foo/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Bar' }))
+    end
+    File.open('layouts/foo/bar.erb', 'w') do |io|
+      io.write('... body ...')
+    end
+
+    # Create bar.baz.css
+    File.open('layouts/foo/qux.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Qux' }))
+    end
+    File.open('layouts/foo/qux.html.erb', 'w') do |io|
+      io.write('... body ...')
+    end
+
+    # Load
+    layouts = data_source.layouts.sort_by { |i| i.identifier }
+
+    # Check
+    assert_equal 2, layouts.size
+    assert_equal '/foo/bar/', layouts[0].identifier
+    assert_equal 'Bar',       layouts[0][:title]
+    assert_equal '/foo/qux/', layouts[1].identifier
+    assert_equal 'Qux',       layouts[1][:title]
+  end
+
+  def test_layouts_with_period_in_name_allowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+
+    FileUtils.mkdir_p('layouts/foo')
+
+    # Create bar.css
+    File.open('layouts/foo/bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'Bar' }))
+    end
+    File.open('layouts/foo/bar.erb', 'w') do |io|
+      io.write('... body ...')
+    end
+
+    # Create bar.baz.css
+    File.open('layouts/foo/qux.bar.yaml', 'w') do |io|
+      io.write(YAML.dump({ 'title' => 'QuxBar' }))
+    end
+    File.open('layouts/foo/qux.bar.erb', 'w') do |io|
+      io.write('... body ...')
+    end
+
+    # Load
+    layouts = data_source.layouts.sort_by { |i| i.identifier }
+
+    # Check
+    assert_equal 2, layouts.size
+    assert_equal '/foo/bar/',     layouts[0].identifier
+    assert_equal 'Bar',           layouts[0][:title]
+    assert_equal '/foo/qux.bar/', layouts[1].identifier
+    assert_equal 'QuxBar',        layouts[1][:title]
   end
 
   # Test creating data

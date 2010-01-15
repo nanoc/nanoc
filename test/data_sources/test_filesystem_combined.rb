@@ -142,6 +142,58 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert_equal('erb', layouts[0][:filter])
   end
 
+  def test_layouts_with_period_in_name_disallowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    FileUtils.mkdir_p('layouts')
+
+    # Create foo.html
+    File.open('layouts/foo.html', 'w') do |io|
+      io.write(YAML.dump({ 'cow' => 'moo' }) + "---\n" + '... foo content ...')
+    end
+
+    # Create bar.html.erb
+    File.open('layouts/bar.html.erb', 'w') do |io|
+      io.write(YAML.dump({ 'horse' => 'whinny' }) + "---\n" + '... bar content ...')
+    end
+
+    # Load
+    layouts = data_source.layouts.sort_by { |i| i.identifier }
+
+    # Check
+    assert_equal 2, layouts.size
+    assert_equal '/bar/',  layouts[0].identifier
+    assert_equal 'whinny', layouts[0][:horse]
+    assert_equal '/foo/',  layouts[1].identifier
+    assert_equal 'moo',    layouts[1][:cow]
+  end
+
+  def test_layouts_with_period_in_name_allowing_periods_in_identifiers
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+
+    FileUtils.mkdir_p('layouts')
+
+    # Create foo.html
+    File.open('layouts/foo.html', 'w') do |io|
+      io.write(YAML.dump({ 'cow' => 'moo' }) + "---\n" + '... foo content ...')
+    end
+
+    # Create bar.qux.html
+    File.open('layouts/bar.qux.html', 'w') do |io|
+      io.write(YAML.dump({ 'horse' => 'whinny' }) + "---\n" + '... bar content ...')
+    end
+
+    # Load
+    layouts = data_source.layouts.sort_by { |i| i.identifier }
+
+    # Check
+    assert_equal 2, layouts.size
+    assert_equal '/bar.qux/', layouts[0].identifier
+    assert_equal 'whinny',    layouts[0][:horse]
+    assert_equal '/foo/',     layouts[1].identifier
+    assert_equal 'moo',       layouts[1][:cow]
+  end
+
   # Test creating data
 
   def test_create_item_at_root
