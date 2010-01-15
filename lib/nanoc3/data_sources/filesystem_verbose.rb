@@ -101,7 +101,7 @@ module Nanoc3::DataSources
         }.merge(meta)
 
         # Get identifier
-        identifier = meta_filename.sub(/^content/, '').sub(/[^\/]+\.yaml$/, '')
+        identifier = meta_filename_to_identifier(meta_filename, /^content/)
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -133,7 +133,7 @@ module Nanoc3::DataSources
         }.merge(meta)
 
         # Get identifier
-        identifier = meta_filename.sub(/^layouts\//, '').sub(/\/[^\/]+\.yaml$/, '')
+        identifier = meta_filename_to_identifier(meta_filename, /^layouts/)
 
         # Get modification times
         meta_mtime    = File.stat(meta_filename).mtime
@@ -246,6 +246,10 @@ module Nanoc3::DataSources
 
       # Return content filename
       filenames.first
+    end
+
+    def meta_filename_to_identifier(meta_filename, regex)
+      meta_filename.sub(regex, '').sub(/[^\/]+\.yaml$/, '')
     end
 
   end
