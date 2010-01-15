@@ -6,24 +6,6 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_create_item
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-
-    # Check
-    data_source.expects(:create_object).with('content', 'the content', 'the attributes', 'the identifier')
-    data_source.create_item('the content', 'the attributes', 'the identifier')
-  end
-
-  def test_create_layout
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-
-    # Check
-    data_source.expects(:create_object).with('layouts', 'the content', 'the attributes', 'the identifier')
-    data_source.create_layout('the content', 'the attributes', 'the identifier')
-  end
-
   def test_create_object_not_at_root
     # Create item
     data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
