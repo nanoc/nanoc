@@ -3,6 +3,7 @@
 module Nanoc3::DataSources
 
   autoload 'Delicious',          'nanoc3/data_sources/delicious'
+  autoload 'Filesystem',         'nanoc3/data_sources/filesystem'
   autoload 'FilesystemCombined', 'nanoc3/data_sources/filesystem_combined'
   autoload 'FilesystemCompact',  'nanoc3/data_sources/filesystem_compact'
   autoload 'FilesystemVerbose',  'nanoc3/data_sources/filesystem_verbose'
@@ -17,7 +18,7 @@ module Nanoc3::DataSources
   Nanoc3::DataSource.register '::Nanoc3::DataSources::Twitter',            :twitter
 
   # Deprecated; use filesystem_verbose instead
-  # TODO [in nanoc 3.2] remove me
+  # TODO [in nanoc 4.0] remove me
   Nanoc3::DataSource.register '::Nanoc3::DataSources::FilesystemVerbose',  :filesystem
 
 end
