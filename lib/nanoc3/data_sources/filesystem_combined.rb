@@ -18,30 +18,37 @@ module Nanoc3::DataSources
   #
   # The identifier of a item is determined as follows. A file with an
   # 'index.*' filename, such as 'index.txt', will have the filesystem path
-  # with the 'index.*' part stripped as a identifier. For example,
-  # 'foo/bar/index.html' will have '/foo/bar/' as identifier. In other cases,
-  # the identifier is calculated by stripping the extension; if there is more
-  # than one extension, only the last extension is stripped and the previous
-  # extensions will be part of the identifier.
+  # with the 'index.*' part stripped as a identifier. For example:
   #
-  # A file with a filename not starting with 'index.', such as 'foo.html',
-  # will have an identifier ending in 'foo/'. For example, 'foo/bar.html' will
-  # have '/foo/bar/' as identifier.
+  #    foo/bar/index.html → /foo/bar/
+  #
+  # In other cases, the identifier is calculated by stripping the extension.
+  # If the `allow_periods_in_identifiers` attribute in the configuration is
+  # true, only the last extension will be stripped if the file has multiple
+  # extensions; if it is false or unset, all extensions will be stripped.
+  # For example:
+  #
+  #   (allow_periods_in_identifiers set to true)
+  #   foo.entry.html → /foo.entry/
+  #   
+  #   (allow_periods_in_identifiers set to false)
+  #   foo.html.erb → /foo/
   #
   # Note that it is possible for two different, separate files to have the
-  # same identifier. It is therefore recommended to avoid such situations.
+  # same identifier. It is recommended to avoid such situations.
   #
   # Some more examples:
   #
-  #   content/index.html          --> /
-  #   content/foo.html            --> /foo/
-  #   content/foo/index.html      --> /foo/
-  #   content/foo/bar.html        --> /foo/bar/
-  #   content/foo/bar/index.html  --> /foo/bar/
+  #   content/index.html          → /
+  #   content/foo.html            → /foo/
+  #   content/foo/index.html      → /foo/
+  #   content/foo/bar.html        → /foo/bar/
+  #   content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
+  #   content/foo/bar/index.html  → /foo/bar/
+  #   content/foo.bar/index.html  → /foo.bar/
   #
-  # File extensions are ignored by nanoc. The file extension does not
-  # determine the filters to run on it; the metadata in the file defines the
-  # list of filters.
+  # The file extension does not determine the filters to run on the item; the
+  # Rules file is used to specify processing instructors for each item.
   #
   # = Layouts
   #
@@ -51,11 +58,6 @@ module Nanoc3::DataSources
   #
   # The identifier for layouts is generated the same way as identifiers for
   # items (see above for details).
-  #
-  # = Code Snippets
-  #
-  # Code snippets are stored in '.rb' files in the 'lib' directory. Code
-  # snippets can reside in sub-directories.
   class FilesystemCombined < Nanoc3::DataSource
 
     ########## VCSes ##########
@@ -68,12 +70,15 @@ module Nanoc3::DataSources
 
     ########## Preparation ##########
 
+    # See superclass for documentation.
     def up
     end
 
+    # See superclass for documentation.
     def down
     end
 
+    # See superclass for documentation.
     def setup
       # Create directories
       %w( content layouts lib ).each do |dir|
@@ -84,117 +89,38 @@ module Nanoc3::DataSources
 
     ########## Loading data ##########
 
+    # See superclass for documentation.
     def items
-      files('content', true).map do |filename|
-        # Read and parse data
-        meta, content = *parse_file(filename, 'item')
-
-        # Get attributes
-        attributes = {
-          :filename  => filename,
-          :extension => File.extname(filename)[1..-1],
-          # WARNING :file is deprecated; please create a File object manually
-          # using the :filename attribute.
-          :file      => Nanoc3::Extra::FileProxy.new(filename)
-        }.merge(meta)
-
-        # Get actual identifier
-        if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^content/, '').sub(/index\.[^\/\.]+$/, '') + '/'
-        else
-          identifier = filename.sub(/^content/, '').sub(/\.[^\/\.]+$/, '') + '/'
-        end
-
-        # Get mtime
-        mtime = File.stat(filename).mtime
-
-        # Build item
-        Nanoc3::Item.new(content, attributes, identifier, mtime)
-      end
+      load_objects('content', 'item', Nanoc3::Item)
     end
 
+    # See superclass for documentation.
     def layouts
-      files('layouts', true).map do |filename|
-        # Read and parse data
-        meta, content = *parse_file(filename, 'layout')
-
-        # Get attributes
-        attributes = {
-          :filename  => filename,
-          :extension => File.extname(filename)[1..-1],
-          # WARNING :file is deprecated; please create a File object manually
-          # using the :filename attribute.
-          :file      => Nanoc3::Extra::FileProxy.new(filename)
-        }.merge(meta)
-
-        # Get actual identifier
-        if filename =~ /\/index\.[^\/]+$/
-          identifier = filename.sub(/^layouts/, '').sub(/index\.[^\/\.]+$/, '') + '/'
-        else
-          identifier = filename.sub(/^layouts/, '').sub(/\.[^\/\.]+$/, '') + '/'
-        end
-
-        # Get mtime
-        mtime = File.stat(filename).mtime
-
-        # Build layout
-        Nanoc3::Layout.new(content, attributes, identifier, mtime)
-      end.compact
+      load_objects('layouts', 'layout', Nanoc3::Layout)
     end
 
     ########## Creating data ##########
 
-    # Creates a new item with the given content, attributes and identifier.
+    # See superclass for documentation.
     def create_item(content, attributes, identifier)
-      # Determine path
-      if identifier == '/'
-        path = 'content/index.html'
-      else
-        path = 'content' + identifier[0..-2] + '.html'
-      end
-      parent_path = File.dirname(path)
-
-      # Notify
-      Nanoc3::NotificationCenter.post(:file_created, path)
-
-      # Write item
-      FileUtils.mkdir_p(parent_path)
-      File.open(path, 'w') do |io|
-        io.write(YAML.dump(attributes.stringify_keys) + "\n")
-        io.write("---\n")
-        io.write(content)
-      end
+      create_object('content', content, attributes, identifier)
     end
 
-    # Creates a new layout with the given content, attributes and identifier.
+    # See superclass for documentation.
     def create_layout(content, attributes, identifier)
-      # Determine path
-      path = 'layouts' + identifier[0..-2] + '.html'
-      parent_path = File.dirname(path)
-
-      # Notify
-      Nanoc3::NotificationCenter.post(:file_created, path)
-
-      # Write layout
-      FileUtils.mkdir_p(parent_path)
-      File.open(path, 'w') do |io|
-        io.write(YAML.dump(attributes.stringify_keys) + "\n")
-        io.write("---\n")
-        io.write(content)
-      end
+      create_object('layouts', content, attributes, identifier)
     end
 
   private
 
-    # Returns a list of all files in +dir+, ignoring any unwanted files (files
-    # that end with '~', '.orig', '.rej' or '.bak').
-    #
-    # +recursively+:: When +true+, finds files in +dir+ as well as its
-    #                 subdirectories; when +false+, only searches +dir+
-    #                 itself.
-    def files(dir, recursively)
-      glob = File.join([dir] + (recursively ? [ '**', '*' ] : [ '*' ]))
-      Dir[glob].reject { |f| File.directory?(f) or f =~ /(~|\.orig|\.rej|\.bak)$/ }
+    # Returns a list of all files in +dir+, ignoring any unwanted files
+    # (files that end with '~', '.orig', '.rej' or '.bak'). Always
+    # recurses in subdirectories.
+    def files(dir)
+      Dir[dir + '/**/*'].reject do |filename|
+        File.directory?(filename) ||
+          filename =~ /(~|\.orig|\.rej|\.bak)$/
+      end
     end
 
     # Parses the file named +filename+ and returns an array with its first
@@ -213,7 +139,65 @@ module Nanoc3::DataSources
       meta    = YAML.load(pieces[2]) || {}
       content = pieces[4..-1].join.strip
 
+      # Done
       [ meta, content ]
+    end
+
+    # Creates a new file in dir_name according to the given identifier. The
+    # file will have its attributes taken from the attributes hash argument
+    # and its content from the content argument.
+    def create_object(dir_name, content, attributes, identifier)
+      # Determine path
+      path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + '.html')
+      parent_path = File.dirname(path)
+
+      # Notify
+      Nanoc3::NotificationCenter.post(:file_created, path)
+
+      # Write item
+      FileUtils.mkdir_p(parent_path)
+      File.open(path, 'w') do |io|
+        io.write(YAML.dump(attributes.stringify_keys) + "\n")
+        io.write("---\n")
+        io.write(content)
+      end
+    end
+
+    # Creates instances of klass corresponding to the files in dir_name. The
+    # kind attribute indicates the kind of object that is being loaded and is
+    # used solely for debugging purposes.
+    def load_objects(dir_name, kind, klass)
+      files(dir_name).map do |filename|
+        # Read and parse data
+        meta, content = *parse_file(filename, kind)
+
+        # Get attributes
+        attributes = {
+          :filename  => filename,
+          :extension => File.extname(filename)[1..-1],
+          :file      => Nanoc3::Extra::FileProxy.new(filename)
+        }.merge(meta)
+
+        # Get actual identifier
+        identifier = filename_to_identifier(filename, dir_name)
+
+        # Get mtime
+        mtime = File.stat(filename).mtime
+
+        # Build item
+        klass.new(content, attributes, identifier, mtime)
+      end
+    end
+
+    def filename_to_identifier(filename, dir_name)
+      # Get actual identifier
+      identifier = filename.sub(Regexp.new("^#{dir_name}"), '')
+      if filename =~ /\/index\.[^\/]+$/
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /index\.[^\/\.]+$/ : /index\.[^\/]+$/)
+      else
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/      : /\.[^\/]+$/)
+      end
+      identifier.sub(regex, '') + '/'
     end
 
   end
