@@ -76,6 +76,7 @@ module Nanoc3::CLI::Commands
       end.to_app
 
       # Run autocompiler
+      puts "Running on http://#{options_for_rack[:Host]}:#{options_for_rack[:Port]}/"
       handler.run(app, options_for_rack)
     end
 
