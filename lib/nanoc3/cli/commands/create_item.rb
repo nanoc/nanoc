@@ -21,7 +21,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc3 create_item [options] [identifier]"
+      "nanoc3 create_item [options] identifier"
     end
 
     def option_definitions
