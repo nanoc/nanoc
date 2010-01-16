@@ -308,6 +308,22 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_parse_file_invalid_2
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    assert_raises(RuntimeError) do
+      data_source.instance_eval { parse_file('test.html', 'foobar') }
+    end
+  end
+
   def test_parse_file_full_meta
     # Create a file
     File.open('test.html', 'w') do |io|
