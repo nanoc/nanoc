@@ -353,12 +353,54 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     FileUtils.rm_f('output.html')
   end
 
-  def test_content_at_snapshot_with_valid_snapshot
-    # TODO implement
+  def test_compiled_content
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal 'last content', rep.compiled_content
   end
 
-  def test_content_at_snapshot_with_invalid_snapshot
-    # TODO implement
+  def test_compiled_content_with_custom_snapshot
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal 'last content', rep.compiled_content(:snapshot => :last)
+  end
+
+  def test_compiled_content_with_invalid_snapshot
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal nil, rep.compiled_content(:snapshot => :klsjflkasdfl)
+  end
+
+  def test_compiled_content_with_uncompiled_content
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    item.stubs(:identifier).returns('my identifier')
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.expects(:compiled?).returns(false)
+
+    # Check
+    assert_raises(Nanoc3::Errors::UnmetDependency) do
+      rep.compiled_content
+    end
   end
 
   def test_filter

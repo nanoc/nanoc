@@ -141,13 +141,17 @@ module Nanoc3
       }
     end
 
-    # Returns the item representation content at the given snapshot.
+    # Returns the compiled content from a given snapshot.
     #
-    # @param [Symbol] snapshot The name of the snapshot from which the content
-    #   should be fetched. To get the raw, uncompiled content, use +:raw+.
+    # @option params [String] :snapshot (:last) The name of the snapshot from
+    #   which to fetch the compiled content. By default, the fully compiled
+    #   content will be fetched, with all filters and layouts applied--not the
+    #   pre-layout content.
     #
-    # @return [String] The item representation content at the given snapshot.
-    def content_at_snapshot(snapshot=:pre)
+    # FIXME should the default snapshot be :last, or should be it be :pre?
+    def compiled_content(params={})
+      snapshot_name = params[:snapshot] || :last
+
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
 
@@ -155,7 +159,12 @@ module Nanoc3
 
       raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
 
-      @content[snapshot]
+      @content[snapshot_name]
+    end
+
+    # @deprecated Use Nanoc3::ItemRep#compiled_content instead.
+    def content_at_snapshot(snapshot=:pre)
+      compiled_content(:snapshot => snapshot)
     end
 
     # Runs the item content through the given filter with the given arguments.
