@@ -21,7 +21,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc3 create_layout identifier"
+      "nanoc3 create_layout [options] identifier"
     end
 
     def option_definitions
