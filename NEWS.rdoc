@@ -5,16 +5,27 @@
 New:
 
 * An Item#rep(name) function for quickly getting a certain rep
-* The new "+" wildcard in rule patterns now matches one or more characters
 * An Item#compiled_content function for quickly getting compiled content
-* The deploy:rsync task now accepts a config environment variable
+* An Item#path function for quickly getting the path of an item rep
+* The new "+" wildcard in rule patterns now matches one or more characters
+* A "view" command that starts a web server in the output directory
+* A kramdown filter
 * A plugin-loading system
 
 Changed:
 
+* New sites now come with a stylesheet item instead of a style.css file in
+  the output dir
+* The deploy:rsync task now use sensible default options
+* The deploy:rsync task now accepts a config environment variable
+* The maruku filter now accepts parameters
+* The rainpress filter now accepts parameters
 * The "filesystem" data source is now known as "filesystem_verbose"
+* Both meta files and content files are now optional
 * The --server autocompile option is now known as --handler
 * The deploy:rsync task now uses a lowercase dry_run environment variable
+* Deprecated Nanoc3::FileProxy; use one of the filename attributes instead
+* Deprecated #content_at_snapshot; use #compiled_content instead
 
 == 3.0.5
 
