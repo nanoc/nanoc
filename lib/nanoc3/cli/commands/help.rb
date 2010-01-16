@@ -25,7 +25,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc3 help [command]"
+      "nanoc3 help [options] [command]"
     end
 
     def run(options, arguments)
