@@ -2,6 +2,7 @@
 
 module Nanoc3
 
+  # Module that contains all nanoc-specific errors.
   module Errors
 
     # Generic error. Superclass for all nanoc-specific errors.
