@@ -8,6 +8,7 @@ New:
 * The new "+" wildcard in rule patterns now matches one or more characters
 * An Item#compiled_content function for quickly getting compiled content
 * The deploy:rsync task now accepts a config environment variable
+* A plugin-loading system
 
 Changed:
 
