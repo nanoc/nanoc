@@ -95,4 +95,32 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_path_with_default_rep
+    # Mock reps
+    rep = mock
+    rep.expects(:name).returns(:default)
+    rep.expects(:path).returns('the correct path')
+
+    # Mock item
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item.expects(:reps).returns([ rep ])
+
+    # Check
+    assert_equal 'the correct path', item.path
+  end
+
+  def test_path_with_custom_rep
+    # Mock reps
+    rep = mock
+    rep.expects(:name).returns(:moo)
+    rep.expects(:path).returns('the correct path')
+
+    # Mock item
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item.expects(:reps).returns([ rep ])
+
+    # Check
+    assert_equal 'the correct path', item.path(:rep => :moo)
+  end
+
 end
