@@ -89,6 +89,26 @@ module Nanoc3
       rep.content_at_snapshot(snapshot_name)
     end
 
+    # Returns the path from a given representation. This is a convenience
+    # method that makes fetching the path of a rep easier.
+    #
+    # @option params [String] :rep (:default) The name of the representation
+    #   from which the path should be fetched. By default, the path will be
+    #   fetched from the default representation.
+    def path(params={})
+      rep_name = params[:rep] || :default
+
+      # Get rep
+      rep = reps.find { |r| r.name == rep_name }
+      if rep.nil?
+        raise Nanoc3::Errors::Generic,
+          "No rep named #{rep_name.inspect} was found."
+      end
+
+      # Get rep's path
+      rep.path
+    end
+
     # Requests the attribute with the given key.
     #
     # @param [Symbol] key The name of the attribute to fetch.
