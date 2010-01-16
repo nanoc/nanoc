@@ -4,19 +4,29 @@ module Nanoc3
 
   # Nanoc3::DirectedGraph represents a directed graph. It is used by the
   # dependency tracker for storing and querying dependencies between items.
+  # Internally, the graph will be stored as an adjacency matrix. For this,
+  # the {Nanoc3::DirectedGraph::SquareBooleanMatrix} class is used.
   class DirectedGraph
 
     # Nanoc3::DirectedGraph::SquareBooleanMatrix is, as the name says, a
     # square matrix that contains boolean values. It is used as an adjacency
-    # matrix by the DirectedGraph class.
+    # matrix by the {Nanoc3::DirectedGraph} class.
     class SquareBooleanMatrix
 
       # Creates a new matrix with the given number of rows/columns.
+      #
+      # @param [Number] size The number of elements along both sides of the
+      #   matrix (in other words, the square root of the number of elements)
       def initialize(size)
         @size = size
       end
 
       # Gets the value at the given x/y coordinates.
+      #
+      # @param [Number] x The X coordinate
+      # @param [Number] y The Y coordinate
+      #
+      # @return The value at the given coordinates
       def [](x, y)
         @data ||= {}
         @data[x] ||= {}
@@ -24,12 +34,21 @@ module Nanoc3
       end
 
       # Sets the value at the given x/y coordinates.
+      #
+      # @param [Number] x The X coordinate
+      # @param [Number] y The Y coordinate
+      # @param value The value to set at the given coordinates
+      #
+      # @return [nil]
       def []=(x, y, value)
         @data ||= {}
         @data[x] ||= {}
         @data[x][y] = value
       end
 
+      # Returns a string representing this matrix in ASCII art.
+      #
+      # @return [String] The string representation of this matrix
       def to_s
         s = ''
 
@@ -62,6 +81,9 @@ module Nanoc3
 
     end
 
+    # The list of vertices in this graph.
+    #
+    # @return [Array]
     attr_reader :vertices
 
     # Creates a new directed graph with the given vertices.
@@ -72,12 +94,23 @@ module Nanoc3
     end
 
     # Adds an edge from the first vertex to the second vertex.
+    #
+    # @param from Vertex where the edge should start
+    # @param to   Vertex where the edge should end
+    #
+    # @return [nil]
     def add_edge(from, to)
       from_index, to_index = indices_of(from, to)
       @matrix[from_index, to_index] = true
     end
 
-    # Removes the edge from the first vertex to the second vertex.
+    # Removes the edge from the first vertex to the second vertex. If the
+    # edge does not exist, nothing is done.
+    #
+    # @param from Start vertex of the edge
+    # @param to   End vertex of the edge
+    #
+    # @return [nil]
     def remove_edge(from, to)
       from_index, to_index = indices_of(from, to)
       @matrix[from_index, to_index] = false
@@ -85,6 +118,10 @@ module Nanoc3
 
     # Returns the direct predecessors of the given vertex, i.e. the vertices
     # x where there is an edge from x to the given vertex y.
+    #
+    # @param to The vertex of which the predecessors should be calculated
+    #
+    # @return [Array] Direct predecessors of the given vertex
     def direct_predecessors_of(to)
       @vertices.select do |from|
         from_index, to_index = indices_of(from, to)
@@ -94,6 +131,10 @@ module Nanoc3
 
     # Returns the direct successors of the given vertex, i.e. the vertices y
     # where there is an edge from the given vertex x to y.
+    #
+    # @param from The vertex of which the successors should be calculated
+    #
+    # @return [Array] Direct successors of the given vertex
     def direct_successors_of(from)
       @vertices.select do |to|
         from_index, to_index = indices_of(from, to)
@@ -103,18 +144,28 @@ module Nanoc3
 
     # Returns the predecessors of the given vertex, i.e. the vertices x for
     # which there is a path from x to the given vertex y.
-    def predecessors_of(vertex)
-      recursively_find_vertices(vertex, :direct_predecessors_of)
+    #
+    # @param to The vertex of which the predecessors should be calculated
+    #
+    # @return [Array] Predecessors of the given vertex
+    def predecessors_of(to)
+      recursively_find_vertices(to, :direct_predecessors_of)
     end
 
     # Returns the successors of the given vertex, i.e. the vertices y for
     # which there is a path from the given vertex x to y.
-    def successors_of(vertex)
-      recursively_find_vertices(vertex, :direct_successors_of)
+    #
+    # @param from The vertex of which the successors should be calculated
+    #
+    # @return [Array] Successors of the given vertex
+    def successors_of(from)
+      recursively_find_vertices(from, :direct_successors_of)
     end
 
     # Returns an array of tuples representing the edges. The result of this
     # method may take a while to compute and should be cached if possible.
+    #
+    # @return [Array] The list of all edges in this graph.
     def edges
       result = []
 
@@ -130,6 +181,10 @@ module Nanoc3
       result
     end
 
+    # Returns a string representing this graph in ASCII art (or, to be more
+    # precise, the string representation of the matrix backing this graph).
+    #
+    # @return [String] The string representation of this graph
     def to_s
       @matrix.to_s
     end
