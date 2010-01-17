@@ -41,7 +41,7 @@ module Nanoc3::Helpers
     #
     # @example Linking with custom attributes
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
-    #   # => '<a href="/blog/" title="My super cool blog">Blog</a>
+    #   # => '<a title="My super cool blog" href="/blog/">Blog</a>'
     def link_to(text, target, attributes={})
       # Find path
       path = target.is_a?(String) ? target : target.path
@@ -76,7 +76,7 @@ module Nanoc3::Helpers
     #
     # @example Linking to the same page
     #   link_to_unless_current('This Item', @item)
-    #   # => '<span class="active" title="You're here.">This Item</span>'
+    #   # => '<span class="active" title="You\'re here.">This Item</span>'
     def link_to_unless_current(text, target, attributes={})
       # Find path
       path = target.is_a?(String) ? target : target.path
@@ -100,7 +100,7 @@ module Nanoc3::Helpers
     #
     # @example
     #   # if the current item's path is /foo/bar/
-    #   relative_path('/foo/qux/')
+    #   relative_path_to('/foo/qux/')
     #   # => '../qux/'
     def relative_path_to(target)
       require 'pathname'
