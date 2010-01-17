@@ -4,9 +4,7 @@ module Nanoc3::Helpers
 
   # Nanoc3::Helpers::LinkTo contains functions for linking to items.
   #
-  # To activate this helper, +include+ it, like this:
-  #
-  #   include Nanoc3::Helpers::LinkTo
+  # To activate this helper, `include Nanoc3::Helpers::LinkTo`.
   module LinkTo
 
     require 'nanoc3/helpers/html_escape'
@@ -17,10 +15,10 @@ module Nanoc3::Helpers
     # attribute, will be HTML-escaped; the contents of the `a` element, which
     # can contain markup, will not be HTML-escaped.
     #
-    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] obj The path/URL, item
-    #   or item representation that should be linked to
-    #
     # @param [String] text The visible link text
+    #
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
+    #   item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
     #   `rel`, `title`, …) that will be added to the link.
@@ -44,9 +42,9 @@ module Nanoc3::Helpers
     # @example Linking with custom attributes
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a href="/blog/" title="My super cool blog">Blog</a>
-    def link_to(text, obj, attributes={})
+    def link_to(text, target, attributes={})
       # Find path
-      path = obj.is_a?(String) ? obj : obj.path
+      path = target.is_a?(String) ? target : target.path
 
       # Join attributes
       attributes = attributes.inject('') do |memo, (key, value)|
@@ -58,38 +56,49 @@ module Nanoc3::Helpers
     end
 
     # Creates a HTML link using link_to, except when the linked item is the
-    # current one. In this case, a span element with class "active" and with
-    # the given text will be returned. The HTML-escaping rules for `link_to`
-    # apply here as well.
+    # current one. In this case, a span element with class “active” and with
+    # the given text will be returned. The HTML-escaping rules for
+    # {#link_to} apply here as well.
     #
-    # Examples:
+    # @param [String] text The visible link text
     #
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
+    #   item or item representation that should be linked to
+    #
+    # @param [Hash] attributes A hash containing HTML attributes (e.g.
+    #   `rel`, `title`, …) that will be added to the link.
+    #
+    # @return [String] The link text
+    #
+    # @example Linking to a different page
     #   link_to_unless_current('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   link_to_unless_current('This Item', @item_rep)
-    #   # => '<span class="active">This Item</span>'
-    def link_to_unless_current(text, path_or_rep, attributes={})
+    # @example Linking to the same page
+    #   link_to_unless_current('This Item', @item)
+    #   # => '<span class="active" title="You're here.">This Item</span>'
+    def link_to_unless_current(text, target, attributes={})
       # Find path
-      path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
+      path = target.is_a?(String) ? target : target.path
 
-      if @item_rep and @item_rep.path == path
+      if @item_rep && @item_rep.path == path
         # Create message
         "<span class=\"active\" title=\"You're here.\">#{text}</span>"
       else
-        link_to(text, path_or_rep, attributes)
+        link_to(text, target, attributes)
       end
     end
 
     # Returns the relative path from the current item to the given path or
     # item representation. The returned path will not be HTML-escaped.
     #
-    # +path_or_rep+:: the URL or path (a String) to where the relative should
-    #                 point, or the item representation to which the relative
-    #                 should point.
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
+    #   item or item representation to which the relative path should be
+    #   generated
     #
-    # Example:
+    # @return [String] The relative path to the target
     #
+    # @example
     #   # if the current item's path is /foo/bar/
     #   relative_path('/foo/qux/')
     #   # => '../qux/'
