@@ -28,6 +28,18 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_link_to_with_item
+    # Create rep
+    item = mock
+    item.expects(:path).returns('/bar/')
+
+    # Check
+    assert_equal(
+      '<a href="/bar/">Bar</a>',
+      link_to('Bar', item)
+    )
+  end
+
   def test_link_to_with_attributes
     # Check
     assert_equal(
