@@ -2,29 +2,36 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::Rendering provides functionality for rendering layouts as
-  # partials.
+  # Provides functionality for rendering layouts as partials.
   module Rendering
 
     include Nanoc3::Helpers::Capturing
 
     # Returns a string containing the rendered given layout.
     #
-    # +identifier+:: the identifier of the layout that should be rendered.
+    # @param [String] identifier The identifier of the layout that should be
+    #   rendered
     #
-    # +other_assigns+:: a hash containing assigns that will be made available
-    #                   as instance variables.
+    # @param [Hash] other_assigns A hash containing assigns that will be made
+    #   available as instance variables in the partial
     #
-    # Example 1: a layout 'head' with content "HEAD" and a layout 'foot' with
-    # content "FOOT":
+    # @example Rendering a head and a foot partial around some text
     #
     #   <%= render 'head' %> - MIDDLE - <%= render 'foot' %>
     #   # => "HEAD - MIDDLE - FOOT" 
     #
-    # Example 2: a layout named 'head' with content "<h1><%= @title %></h1>":
+    # @example Rendering a head partial with a custom title
     #
+    #   # The 'head' layout
+    #   <h1><%= @title %></h1>
+    #
+    #   # The item/layout where the partial is rendered
     #   <%= render 'head', :title => 'Foo' %>
     #   # => "<h1>Foo</h1>"
+    #
+    # @raise [Nanoc3::Errors::UnknownLayout] if the given layout does not exist
+    #
+    # @return [String] The rendered partial
     def render(identifier, other_assigns={}, &block)
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
