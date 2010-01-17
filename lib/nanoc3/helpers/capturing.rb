@@ -48,13 +48,13 @@ module Nanoc3::Helpers
     end
 
     # Evaluates the given block and returns the result. The block is not outputted.
-    def capture(*args, &block)
+    def capture(&block)
       # Get erbout so far
       erbout = eval('_erbout', block.binding)
       erbout_length = erbout.length
 
       # Execute block
-      block.call(*args)
+      block.call
 
       # Get new piece of erbout
       erbout_addition = erbout[erbout_length..-1]
