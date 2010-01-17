@@ -4,69 +4,70 @@
 
 New:
 
-* An Item#rep(name) function for quickly getting a certain rep
-* An Item#compiled_content function for quickly getting compiled content
-* An Item#path function for quickly getting the path of an item rep
-* The new "+" wildcard in rule patterns now matches one or more characters
-* A "view" command that starts a web server in the output directory
-* A kramdown filter
+* An `Item#rep(name)` function for quickly getting a certain rep
+* An `Item#compiled_content` function for quickly getting compiled content
+* An `Item#path` function for quickly getting the path of an item rep
+* A new “+” wildcard in rule patterns that matches one or more characters
+* A `view` command that starts a web server in the output directory
+* A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
 * A plugin-loading system
 
 Changed:
 
-* New sites now come with a stylesheet item instead of a style.css file in
-  the output dir
-* The deploy:rsync task now use sensible default options
-* The deploy:rsync task now accepts a config environment variable
-* The maruku filter now accepts parameters
-* The rainpress filter now accepts parameters
-* The "filesystem" data source is now known as "filesystem_verbose"
-* Both meta files and content files are now optional
-* The --server autocompile option is now known as --handler
-* The deploy:rsync task now uses a lowercase dry_run environment variable
-* Deprecated Nanoc3::FileProxy; use one of the filename attributes instead
-* Deprecated #content_at_snapshot; use #compiled_content instead
+* New sites now come with a stylesheet item instead of a `style.css` file in
+  the output directory
+* The `deploy:rsync` task now use sensible default options
+* The `deploy:rsync` task now accepts a config environment variable
+* The `deploy:rsync` task now uses a lowercase `dry_run` environment variable
+* The `maruku` filter now accepts parameters
+* The `rainpress` filter now accepts parameters
+* The `filesystem` data source is now known as `filesystem_verbose`
+* Meta files and content files are now optional
+* The `--server` autocompile option is now known as `--handler`
+* Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
+* Deprecated `#content_at_snapshot`; use `#compiled_content` instead
 
 ## 3.0.5
 
 * Restored pre-3.0.3 behaviour of periods in identifiers. By default, a file
-  can have multiple extensions (e.g. content/foo.html.erb will have the
-  identifier /foo/), but if `allow_periods_in_identifiers` in the site
+  can have multiple extensions (e.g. `content/foo.html.erb` will have the
+  identifier `/foo/`), but if `allow_periods_in_identifiers` in the site
   configuration is true, a file can have only one extension (e.g.
-  content/blog/stuff.entry.html will have the identifier /blog/stuff.entry/).
+  `content/blog/stuff.entry.html` will have the identifier
+  `/blog/stuff.entry/`).
 
 ## 3.0.4
 
-* Fixed a bug which would cause the filesystem_compact data source to
+* Fixed a bug which would cause the `filesystem_compact` data source to
   incorrectly determine the content filename, leading to weird “Expected 1
   content file but found 3” errors [Eric Sunshine]
 
 ## 3.0.3
 
-* The Blogging helper now properly handles item reps without paths
-* The relativize_paths filter now only operates inside tags
+* The `Blogging` helper now properly handles item reps without paths
+* The `relativize_paths` filter now only operates inside tags
 * The autocompiler now handles escaped paths
-* The link_to and tagging helpers now output escaped HTML
-* Fixed played_at attribute assignment in Last.fm data source for tracks
-  playing now and added a now_playing attribute [Nicky Peeters]
-* The filesystem_* data sources can now handle dots in identifiers
-* Required enumerator to make sure #enum_with_index always works
-* Array#stringify_keys now properly recurses
+* The `LinkTo` and `Tagging` helpers now output escaped HTML
+* Fixed `played_at` attribute assignment in the `LastFM` data source for
+  tracks playing now, and added a `now_playing` attribute [Nicky Peeters]
+* The `filesystem_*` data sources can now handle dots in identifiers
+* Required enumerator to make sure `#enum_with_index` always works
+* `Array#stringify_keys` now properly recurses
 
 ## 3.0.2
 
 * Children-only identifier patterns no longer erroneously also match parent
-  (e.g. /foo/*/ no longer matches /foo/)
-* The create_site command no longer uses those ugly HTML entities
+  (e.g.` /foo/*/` no longer matches `/foo/`)
+* The `create_site` command no longer uses those ugly HTML entities
 * Install message now mentions the IRC channel
 
 ## 3.0.1
 
 * The proper exception is now raised when no matching compilation rules can
   be found
-* The autocompile command no longer has a duplicate --port option
-* The #url_for and #feed_url methods now check the presence of the base_url
-  site configuration attribute
+* The autocompile command no longer has a duplicate `--port` option
+* The `#url_for` and `#feed_url` methods now check the presence of the
+  `base_url` site configuration attribute
 * Several outdated URLs are now up-to-date
 * Error handling has been improved in general
 
@@ -77,14 +78,14 @@ New:
 * Multiple data sources
 * Dependency tracking between items
 * Filters can now optionally take arguments
-* create_page and create_layout methods in data sources
+* `#create_page` and `#create_layout` methods in data sources
 * A new way to specify compilation/routing rules using a Rules file
-* Coderay filter
-* A filesystem_compact data source which uses less directories
+* A `coderay` filter ([CodeRay site](http://coderay.rubychan.de/))
+* A `filesystem_compact` data source which uses less directories
 
 Changed:
 
-* Pages and textual assets are now known as "items"
+* Pages and textual assets are now known as “items”
 
 Removed:
 
@@ -92,13 +93,13 @@ Removed:
 * Support for binary assets
 * Support for templates
 * Everything that was deprecated in nanoc 2.x
-* save_*, move_* and delete_* methods in data sources
+* `save_*`, `move_*` and `delete_*` methods in data sources
 * Processing instructions in metadata
 
 ## 2.2.2
 
-* Removed relativize_paths filter; use relativize_paths_in_html or
-  relativize_paths_in_css instead
+* Removed `relativize_paths` filter; use `relativize_paths_in_html` or
+  `relativize_paths_in_css` instead
 * Fixed bug which could cause nanoc to eat massive amounts of memory when an
   exception occurs
 * Fixed bug which would cause nanoc to complain about the open file limit
@@ -106,32 +107,32 @@ Removed:
 
 ## 2.2.1
 
-* Fixed bug which prevented relative_path_to from working
-* Split relativize_paths filter into two filter: relativize_paths_in_html
-  and relativize_paths_in_css
+* Fixed bug which prevented `relative_path_to` from working
+* Split `relativize_paths` filter into two filter: `relativize_paths_in_html`
+  and `relativize_paths_in_css`
 * Removed bundled mime-types library
 
 ## 2.2
 
 New:
 
-* --pages and --assets compiler options
-* --no-color commandline option
-* Filtering helper
-* relative_path_to function in LinkTo helper
-* Rainpress filter
-* RelativizePaths filter
-* The current layout is now accessible through the @layout variable
+* `--pages` and `--assets` compiler options
+* `--no-color` commandline option
+* `Filtering` helper
+* `#relative_path_to` function in `LinkTo` helper
+* `rainpress` filter ([Rainpress site](http://code.google.com/p/rainpress/))
+* `relativize_paths` filter
+* The current layout is now accessible through the `@layout` variable
 * Much more informative stack traces when something goes wrong
 
 Changed:
 
 * The commandline option parser is now a lot more reliable
-* atom_feed now takes optional :content_proc, :excerpt_proc and :articles
-  parameters
-* The compile command show non-written items (those with skip_output: true)
+* `#atom_feed` now takes optional `:content_proc`, `:excerpt_proc` and
+  `:articles` parameters
+* The compile command show non-written items (those with `skip_output: true`)
 * The compile command compiles everything by default
-* Added --only-outdated option to compile only outdated pages
+* Added `--only-outdated` option to compile only outdated pages
 
 Removed:
 
@@ -139,8 +140,8 @@ Removed:
 
 ## 2.1.6
 
-* The FilesystemCombined data source now supports empty metadata sections
-* The RDoc filter now works for both RDoc 1.x and 2.x
+* The `filesystem_combined` data source now supports empty metadata sections
+* The `rdoc` filter now works for both RDoc 1.x and 2.x
 * The autocompiler now serves a 500 when an exception occurs outside
   compilation
 * The autocompiler no longer serves index files when the request path does not
@@ -150,7 +151,7 @@ Removed:
 ## 2.1.5
 
 * Added Ruby 1.9 compatibility
-* The Filesystem and FilesystemCombined data sources now preserve custom
+* The `filesystem` and `filesystem_combined` data sources now preserve custom
   extensions
 
 ## 2.1.4
@@ -159,15 +160,15 @@ Removed:
 
 ## 2.1.3
 
-* The Haml and Sass filters now correctly take their options from assets
-* Autocompiler now serves index files instead of 404s
-* Layouts named "index" are now handled correctly
-* filesystem_combined now properly handles assets
+* The `haml` and `sass` filters now correctly take their options from assets
+* The autocompiler now serves index files instead of 404s
+* Layouts named “index” are now handled correctly
+* The `filesystem_combined` data source now properly handles assets
 
 ## 2.1.2
 
-* Autocompiler now compiles assets as well
-* Sass filter now takes options (just like the Haml filter)
+* The utocompiler now compiles assets as well
+* The `sass` filter now takes options (just like the `haml` filter)
 * Haml/Sass options are now taken from the page *rep* instead of the page
 
 ## 2.1.1
@@ -176,17 +177,19 @@ Removed:
 
 ## 2.1
 
-This is only a short summary of all changes in 2.1. For details, see the nanoc
-web site at <http://nanoc.stoneship.org/> -- especially the blog and the
+This is only a short summary of all changes in 2.1. For details, see the
+[nanoc web site](http://nanoc.stoneship.org/). Especially the blog and the
 updated manual will be useful.
 
 New:
 
-* New filters: RDiscount, Maruku, Erubis
+* New `rdiscount` filter ([RDiscount site](http://github.com/rtomayko/rdiscount))
+* New `maruku` filter ([Maruku site](http://maruku.rubyforge.org/))
+* New `erubis` filter ([Erubis site](http://www.kuwata-lab.com/erubis/))
 * A better commandline frontend
-* A new filesystem data source named "filesystem_combined"
+* A new filesystem data source named `filesystem_combined`
 * Routers, which decide where compiled pages should be written to
-* Page/layout mtimes can now be retrieved through page.mtime/layout.mtime
+* Page/layout mtimes can now be retrieved through `page.mtime`/`layout.mtime`
 
 Changed:
 
@@ -205,7 +208,7 @@ Removed:
 
 ## 2.0.4
 
-* Fixed default.rb's `html_escape`
+* Fixed `default.rb`’s `#html_escape`
 * Updated Haml filter and layout processor so that @page, @pages and @config
   are now available as instance variables instead of local variables
 
@@ -213,7 +216,7 @@ Removed:
 
 * The autocompiler now honors custom paths
 * The autocompiler now attempts to serve pages with the most appropriate MIME
-  type, instead of always serving everything as "text/html"
+  type, instead of always serving everything as `text/html`
 
 ## 2.0.2
 
@@ -221,7 +224,7 @@ Removed:
 
 ## 2.0.1
 
-* Fixed a "too many open files" error that could appear during (auto)compiling
+* Fixed a “too many open files” error that could appear during (auto)compiling
 
 ## 2.0
 
@@ -230,14 +233,14 @@ New:
 * Support for custom layout processors
 * Support for custom data sources
 * Database data source
-* Auto-compiler
+* An auto-compiler
 * Pages have `parent` and `children`
 
 Changed:
 
 * The source has been restructured and cleaned up a great deal
 * Filters are defined in a different way now
-* The 'eruby' filter now uses ERB instead of Erubis
+* The `eruby` filter now uses ERB instead of Erubis
 
 Removed:
 
@@ -265,43 +268,43 @@ Removed:
 * Added support for custom filters
 * Improved Liquid support -- Liquid is now a first-class nanoc citizen
 * Deprecated assets -- use something like rsync instead
-* Added eruby_engine option, which can be 'erb' or 'erubis'
+* Added `eruby_engine` option, which can be `erb` or `erubis`
 
 ## 1.4
 
 * nanoc now supports ERB (as well as Erubis); Erubis no longer is a dependency
-* meta.yaml can now have haml_options property, which is passed to Haml
-* Pages can now have a 'filename' property, which defaults to 'index' [Dennis
+* `meta.yaml` can now have `haml_options` property, which is passed to Haml
+* Pages can now have a `filename` property, which defaults to `index` [Dennis
   Sutch]
 * Pages now know in what order they should be compiled, eliminating the need
   for custom page ordering [Dennis Sutch]
 
 ## 1.3.1
 
-* The contents of the 'assets' directory are now copied into the output
-  directory specified in 'config.yaml'
+* The contents of the `assets` directory are now copied into the output
+  directory specified in `config.yaml`
 
 ## 1.3
 
-* The @pages array now also contains uncompiled pages
-* Pages with 'skip_output' set to true will not be outputted
+* The `@pages` array now also contains uncompiled pages
+* Pages with `skip_output` set to true will not be outputted
 * Added new filters
 	* Textile/RedCloth
 	* Sass
-* nanoc now warns before overwriting in create_site, create_page and
-  create_template (but not in compile)
+* nanoc now warns before overwriting in `create_site`, `create_page` and
+  `create_template` (but not in compile)
 
 ## 1.2
 
-* Sites now have an 'assets' directory, whose contents are copied to the
-  'output' directory when compiling [Soryu]
+* Sites now have an `assets` directory, whose contents are copied to the
+  `output` directory when compiling [Soryu]
 * Added support for non-eRuby layouts (Markaby, Haml, Liquid, ...)
 * Added more filters (Markaby, Haml, Liquid, RDoc [Dmitry Bilunov])
 * Improved error reporting
-* Accessing page attributes using instance variables, and not through @page,
+* Accessing page attributes using instance variables, and not through `@page`,
   is no longer possible
-* Page attributes can now be accessed using dot notation, i.e. @page.title as
-  well as @page[:title]
+* Page attributes can now be accessed using dot notation, i.e. `@page.title`
+  as well as `@page[:title]`
 
 ## 1.1.3
 
@@ -316,10 +319,10 @@ Removed:
 
 * Added support for nested layouts
 * Added coloured logging
-* @page now hold the page that is currently being processed
+* `@page` now hold the page that is currently being processed
 * Index files are now called “content” files and are now named after the
   directory they are in [Colin Barrett]
-* It is now possible to access @page in the page’s content file
+* It is now possible to access `@page` in the page’s content file
 
 ## 1.0.1
 
