@@ -1,6 +1,6 @@
-= nanoc News
+# nanoc News
 
-== 3.1
+## 3.1
 
 New:
 
@@ -27,7 +27,7 @@ Changed:
 * Deprecated Nanoc3::FileProxy; use one of the filename attributes instead
 * Deprecated #content_at_snapshot; use #compiled_content instead
 
-== 3.0.5
+## 3.0.5
 
 * Restored pre-3.0.3 behaviour of periods in identifiers. By default, a file
   can have multiple extensions (e.g. content/foo.html.erb will have the
@@ -35,13 +35,13 @@ Changed:
   configuration is true, a file can have only one extension (e.g.
   content/blog/stuff.entry.html will have the identifier /blog/stuff.entry/).
 
-== 3.0.4
+## 3.0.4
 
 * Fixed a bug which would cause the filesystem_compact data source to
   incorrectly determine the content filename, leading to weird “Expected 1
   content file but found 3” errors [Eric Sunshine]
 
-== 3.0.3
+## 3.0.3
 
 * The Blogging helper now properly handles item reps without paths
 * The relativize_paths filter now only operates inside tags
@@ -53,14 +53,14 @@ Changed:
 * Required enumerator to make sure #enum_with_index always works
 * Array#stringify_keys now properly recurses
 
-== 3.0.2
+## 3.0.2
 
 * Children-only identifier patterns no longer erroneously also match parent
   (e.g. /foo/*/ no longer matches /foo/)
 * The create_site command no longer uses those ugly HTML entities
 * Install message now mentions the IRC channel
 
-== 3.0.1
+## 3.0.1
 
 * The proper exception is now raised when no matching compilation rules can
   be found
@@ -70,7 +70,7 @@ Changed:
 * Several outdated URLs are now up-to-date
 * Error handling has been improved in general
 
-== 3.0
+## 3.0
 
 New:
 
@@ -95,7 +95,7 @@ Removed:
 * save_*, move_* and delete_* methods in data sources
 * Processing instructions in metadata
 
-== 2.2.2
+## 2.2.2
 
 * Removed relativize_paths filter; use relativize_paths_in_html or
   relativize_paths_in_css instead
@@ -104,14 +104,14 @@ Removed:
 * Fixed bug which would cause nanoc to complain about the open file limit
   being reached when using a large amount of assets
 
-== 2.2.1
+## 2.2.1
 
 * Fixed bug which prevented relative_path_to from working
 * Split relativize_paths filter into two filter: relativize_paths_in_html
   and relativize_paths_in_css
 * Removed bundled mime-types library
 
-== 2.2
+## 2.2
 
 New:
 
@@ -137,7 +137,7 @@ Removed:
 
 * deprecated extension-based code
 
-== 2.1.6
+## 2.1.6
 
 * The FilesystemCombined data source now supports empty metadata sections
 * The RDoc filter now works for both RDoc 1.x and 2.x
@@ -147,34 +147,34 @@ Removed:
   end with a slash
 * The autocompiler now always serves asset content correctly
 
-== 2.1.5
+## 2.1.5
 
 * Added Ruby 1.9 compatibility
 * The Filesystem and FilesystemCombined data sources now preserve custom
   extensions
 
-== 2.1.4
+## 2.1.4
 
 * Fixed an issue where the autocompiler in Windows would serve broken assets
 
-== 2.1.3
+## 2.1.3
 
 * The Haml and Sass filters now correctly take their options from assets
 * Autocompiler now serves index files instead of 404s
 * Layouts named "index" are now handled correctly
 * filesystem_combined now properly handles assets
 
-== 2.1.2
+## 2.1.2
 
 * Autocompiler now compiles assets as well
 * Sass filter now takes options (just like the Haml filter)
 * Haml/Sass options are now taken from the page *rep* instead of the page
 
-== 2.1.1
+## 2.1.1
 
 * Fixed issue which would cause files not to be required in the right order
 
-== 2.1
+## 2.1
 
 This is only a short summary of all changes in 2.1. For details, see the nanoc
 web site at <http://nanoc.stoneship.org/> -- especially the blog and the
@@ -203,27 +203,27 @@ Removed:
 	* `markdown`: use `bluecloth`, `rdiscount` or `maruku` instead
 	* `textile`: use `redcloth` instead
 
-== 2.0.4
+## 2.0.4
 
 * Fixed default.rb's `html_escape`
 * Updated Haml filter and layout processor so that @page, @pages and @config
   are now available as instance variables instead of local variables
 
-== 2.0.3
+## 2.0.3
 
 * The autocompiler now honors custom paths
 * The autocompiler now attempts to serve pages with the most appropriate MIME
   type, instead of always serving everything as "text/html"
 
-== 2.0.2
+## 2.0.2
 
 * nanoc now requires Ruby 1.8.5 instead of 1.8.6
 
-== 2.0.1
+## 2.0.1
 
 * Fixed a "too many open files" error that could appear during (auto)compiling
 
-== 2.0
+## 2.0
 
 New:
 
@@ -244,15 +244,15 @@ Removed:
 * The `filters` property; use `filters_pre` instead
 * Support for Liquid
 
-== 1.6.2
+## 1.6.2
 
 * Fixed an issue which prevented the content capturing plugin from working
 
-== 1.6.1
+## 1.6.1
 
 * Removed a stray debug message
 
-== 1.6
+## 1.6
 
 * Added support for post-layout filters
 * Added support for getting a File object for the page, so you can now e.g.
@@ -260,14 +260,14 @@ Removed:
 * Cleaned up the source code a lot
 * Removed deprecated asset-copying functionality
 
-== 1.5
+## 1.5
 
 * Added support for custom filters
 * Improved Liquid support -- Liquid is now a first-class nanoc citizen
 * Deprecated assets -- use something like rsync instead
 * Added eruby_engine option, which can be 'erb' or 'erubis'
 
-== 1.4
+## 1.4
 
 * nanoc now supports ERB (as well as Erubis); Erubis no longer is a dependency
 * meta.yaml can now have haml_options property, which is passed to Haml
@@ -276,12 +276,12 @@ Removed:
 * Pages now know in what order they should be compiled, eliminating the need
   for custom page ordering [Dennis Sutch]
 
-== 1.3.1
+## 1.3.1
 
 * The contents of the 'assets' directory are now copied into the output
   directory specified in 'config.yaml'
 
-== 1.3
+## 1.3
 
 * The @pages array now also contains uncompiled pages
 * Pages with 'skip_output' set to true will not be outputted
@@ -291,7 +291,7 @@ Removed:
 * nanoc now warns before overwriting in create_site, create_page and
   create_template (but not in compile)
 
-== 1.2
+## 1.2
 
 * Sites now have an 'assets' directory, whose contents are copied to the
   'output' directory when compiling [Soryu]
@@ -303,16 +303,16 @@ Removed:
 * Page attributes can now be accessed using dot notation, i.e. @page.title as
   well as @page[:title]
 
-== 1.1.3
+## 1.1.3
 
 * Fixed bug which would cause layoutless pages to be outputted incorrectly
 
-== 1.1.2
+## 1.1.2
 
 * Backup files (files ending with a “~”) are now ignored
 * Fixed bug which would cause subpages not to be generated correctly
 
-== 1.1
+## 1.1
 
 * Added support for nested layouts
 * Added coloured logging
@@ -321,12 +321,12 @@ Removed:
   directory they are in [Colin Barrett]
 * It is now possible to access @page in the page’s content file
 
-== 1.0.1
+## 1.0.1
 
 * Fixed a bug which would cause a “no such template” error to be displayed
   when the template existed but compiling it would raise an exception
 * Fixed bug which would cause pages not to be sorted by order before compiling
 
-== 1.0
+## 1.0
 
 * Initial release
