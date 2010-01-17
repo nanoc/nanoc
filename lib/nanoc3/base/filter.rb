@@ -27,7 +27,7 @@ module Nanoc3
     # @param [Array<Symbol>] identifier A list of identifiers to assign to
     #   this filter.
     #
-    # @return [nil]
+    # @return [void]
     def self.identifiers(*identifiers)
       Nanoc3::Filter.register(self, *identifiers)
     end
@@ -36,7 +36,7 @@ module Nanoc3
     #
     # @param [Symbol] identifier An identifier to assign to this filter.
     #
-    # @return [nil]
+    # @return [void]
     def self.identifier(identifier)
       Nanoc3::Filter.register(self, identifier)
     end
@@ -49,7 +49,7 @@ module Nanoc3
     # @param [Array<Symbol>] identifiers A list of identifiers to assign to
     #   this filter.
     #
-    # @return [nil]
+    # @return [void]
     def self.register(class_or_name, *identifiers)
       Nanoc3::Plugin.register(Nanoc3::Filter, class_or_name, *identifiers)
     end
