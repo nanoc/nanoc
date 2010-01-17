@@ -2,12 +2,15 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::HTMLEscape contains functionality for HTML-escaping
-  # strings.
+  # Contains functionality for HTML-escaping strings.
   module HTMLEscape
 
-    # Returns the HTML-escaped representation of the given string. Only &, <,
-    # > and " are escaped.
+    # Returns the HTML-escaped representation of the given string. Only `&`,
+    # `<`, `>` and `"` are escaped.
+    #
+    # @param [String] string The string to escape
+    #
+    # @return [String] The escaped string
     def html_escape(string)
       string.gsub('&', '&amp;').
              gsub('<', '&lt;').

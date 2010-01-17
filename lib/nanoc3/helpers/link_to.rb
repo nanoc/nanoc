@@ -2,9 +2,7 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::LinkTo contains functions for linking to items.
-  #
-  # To activate this helper, `include Nanoc3::Helpers::LinkTo`.
+  # Contains functions for linking to items and item representations.
   module LinkTo
 
     require 'nanoc3/helpers/html_escape'
@@ -13,7 +11,8 @@ module Nanoc3::Helpers
     # Creates a HTML link to the given path or item representation, and with
     # the given text. All attributes of the `a` element, including the `href`
     # attribute, will be HTML-escaped; the contents of the `a` element, which
-    # can contain markup, will not be HTML-escaped.
+    # can contain markup, will not be HTML-escaped. The HTML-escaping is done
+    # using {Nanoc3::Helpers::HTMLEscape#html_escape}.
     #
     # @param [String] text The visible link text
     #
