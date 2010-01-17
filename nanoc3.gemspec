@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.require_paths      = [ 'lib' ]
 
   s.has_rdoc         = 'yard'
-  s.rdoc_options     = [ '--readme', 'README.rdoc' ]
-  s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.rdoc', 'NEWS.rdoc' ]
+  s.rdoc_options     = [ '--readme', 'README.md' ]
+  s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
 
   s.add_runtime_dependency('cri', [ '>= 1.0.0' ])
 
