@@ -61,4 +61,26 @@ module Nanoc3::TestHelpers
     end
   end
 
+  # Adapted from http://github.com/lsegal/yard-examples/tree/master/doctest
+  def assert_examples_correct(object)
+    P(object).tags(:example).each do |example|
+      begin
+        # Get input and output
+        parts = example.text.split(/# ?=>/).map { |s| s.strip }
+        code             = parts[0].strip
+        expected_out_raw = parts[1].strip
+
+        # Evaluate
+        expected_out     = eval(parts[1])
+        actual_out       = instance_eval("#{code}")
+      rescue Exception => e
+        e.message << " (code: #{code}; expected output: #{expected_out_raw})"
+        raise e
+      end
+
+      assert_equal expected_out, actual_out,
+        "Incorrect example: #{code}"
+    end
+  end
+
 end
