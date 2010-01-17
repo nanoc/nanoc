@@ -152,10 +152,8 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Mock other
-    other_item_rep = mock
-    other_item_rep.expects(:path).returns('/foo/quux/')
     other_item = mock
-    other_item.expects(:rep).with(:default).returns(other_item_rep)
+    other_item.expects(:path).returns('/foo/quux/')
 
     # Test
     assert_equal(

@@ -97,13 +97,7 @@ module Nanoc3::Helpers
       require 'pathname'
 
       # Find path
-      if target.is_a?(String)
-        path = target
-      elsif target.respond_to?(:rep)
-        path = target.rep(:default).path
-      else
-        path = target.path
-      end
+      path = target.is_a?(String) ? target : target.path
 
       # Get source and destination paths
       dst_path   = Pathname.new(path)
