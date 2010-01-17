@@ -7,6 +7,7 @@ YARD::Rake::YardocTask.new(:doc) do |yard|
   yard.options = [
     '--markup',     'markdown',
     '--readme',     'README.md',
+    '--files',      'NEWS.md,LICENSE',
     '--output-dir', 'doc/yardoc'
   ]
 end
