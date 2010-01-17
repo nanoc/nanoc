@@ -17,28 +17,36 @@ module Nanoc3::Helpers
     # attribute, will be HTML-escaped; the contents of the `a` element, which
     # can contain markup, will not be HTML-escaped.
     #
-    # +path_or_rep+:: the URL or path (a String) that should be linked to, or
-    #                 the item representation that should be linked to.
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] obj The path/URL, item
+    #   or item representation that should be linked to
     #
-    # +text+:: the visible link text.
+    # @param [String] text The visible link text
     #
-    # +attributes+:: a hash containing HTML attributes that will be added to
-    #                the link.
+    # @param [Hash] attributes A hash containing HTML attributes (e.g.
+    #   `rel`, `title`, …) that will be added to the link.
     #
-    # Examples:
+    # @return [String] The link text
     #
+    # @example Linking to a path
     #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   item_rep = @items.find { |i| i.item_id == 'special' }.reps[0]
-    #   link_to('Special Item', item_rep)
-    #   # => '<a href="/special_item/">Special Item</a>'
+    # @example Linking to an item
+    #   about = @items.find { |i| i.identifier == '/about/' }
+    #   link_to('About Me', about)
+    #   # => '<a href="/about.html">About Me</a>'
     #
+    # @example Linking to an item representation
+    #   about = @items.find { |i| i.identifier == '/about/' }
+    #   link_to('My vCard', about.rep(:vcard))
+    #   # => '<a href="/about.vcf">My vCard</a>'
+    #
+    # @example Linking with custom attributes
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a href="/blog/" title="My super cool blog">Blog</a>
-    def link_to(text, path_or_rep, attributes={})
+    def link_to(text, obj, attributes={})
       # Find path
-      path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
+      path = obj.is_a?(String) ? obj : obj.path
 
       # Join attributes
       attributes = attributes.inject('') do |memo, (key, value)|
