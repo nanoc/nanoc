@@ -39,7 +39,7 @@ module Nanoc3
       # @param [Number] y The Y coordinate
       # @param value The value to set at the given coordinates
       #
-      # @return [nil]
+      # @return [void]
       def []=(x, y, value)
         @data ||= {}
         @data[x] ||= {}
@@ -98,7 +98,7 @@ module Nanoc3
     # @param from Vertex where the edge should start
     # @param to   Vertex where the edge should end
     #
-    # @return [nil]
+    # @return [void]
     def add_edge(from, to)
       from_index, to_index = indices_of(from, to)
       @matrix[from_index, to_index] = true
@@ -110,7 +110,7 @@ module Nanoc3
     # @param from Start vertex of the edge
     # @param to   End vertex of the edge
     #
-    # @return [nil]
+    # @return [void]
     def remove_edge(from, to)
       from_index, to_index = indices_of(from, to)
       @matrix[from_index, to_index] = false
