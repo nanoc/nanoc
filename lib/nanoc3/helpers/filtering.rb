@@ -2,28 +2,31 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::Filtering provides a filter method, which allows parts of
-  # an item to be filtered.
-  #
-  # For example, the following piece of code only runs the "rubypants" filter
-  # on the second paragraph:
-  #
-  #   <p>Lorem ipsum dolor sit amet...</p>
-  #   <% filter :rubypants do %>
-  #     <p>Consectetur adipisicing elit...</p>
-  #   <% end %>
-  #
-  # This helper has been tested with ERB and Haml.
-  #
-  # To activate this helper, +include+ it, like this:
-  #
-  #   include Nanoc3::Helpers::Filtering
+  # Provides functionality for filtering parts of an item or a layout.
   module Filtering
 
     require 'nanoc3/helpers/capturing'
     include Nanoc3::Helpers::Capturing
 
-    # Filters the content in the given block and outputs it.
+    # Filters the content in the given block and outputs it. This function
+    # does not return anything; instead, the filtered contents is directly
+    # appended to the output buffer (`_erbout`).
+    #
+    # This function has been tested with ERB and Haml. Other filters may not
+    # work correctly.
+    #
+    # @example Running a filter on a part of an item or layout
+    #   <p>Lorem ipsum dolor sit amet...</p>
+    #   <% filter :rubypants do %>
+    #     <p>Consectetur adipisicing elit...</p>
+    #   <% end %>
+    #
+    # @param [Symbol] filter_name The name of the filter to run on the
+    #   contents of the block
+    #
+    # @param [Hash] argument Arguments to pass to the filter
+    #
+    # @return [void]
     def filter(filter_name, arguments={}, &block)
       # Capture block
       data = capture(&block)

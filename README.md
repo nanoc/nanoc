@@ -7,18 +7,18 @@ Markdown, etc.
 
 ## Documentation
 
-nanoc3's web site, which can be found at http://nanoc.stoneship.org/, contains
-a few useful resources to help you get started with nanoc:
+The [nanoc3 web site](http://nanoc.stoneship.org) contains a few useful
+resources to help you get started with nanoc:
 
-* The tutorial at http://nanoc.stoneship.org/tutorial
-* The manual at http://nanoc.stoneship.org/manual
-* The migration guide at http://nanoc.stoneship.org/migrating
+* The [tutorial](http://nanoc.stoneship.org/tutorial)
+* The [manual](http://nanoc.stoneship.org/manual)
+* The [migration guide](http://nanoc.stoneship.org/migrating)
 
 It is probably also worth checking out and perhaps subscribing to the
 discussion groups:
 
-* The discussion group in English at http://groups.google.com/group/nanoc
-* The discussion group in Spanish at http://groups.google.com/group/nanoc-es
+* The [discussion group in English](http://groups.google.com/group/nanoc)
+* The [discussion group in Spanish](http://groups.google.com/group/nanoc-es)
 
 ### Source Code Documentation
 
@@ -57,12 +57,10 @@ you want to explore nanoc from a technical perspective.
 nanoc itself can be used without installing any dependencies. Some
 components, however, do have dependencies:
 
-autocompiler::             `mime-types`, `rack`
-documentation generation:: `rdoc` (2.4 or newer), `yardoc`
-packaging::                `rubygems` (1.3 or newer)
-testing::                  `mocha`
-
-You may need to update the rubygems installation.
+* The **autocompiler** depends on `mime-types` and `rack`.
+* For **documentation generation** you’ll need `yard`.
+* For **packaging** you’ll need `rubygems` (1.3 or newer).
+* For **testing** you’ll need `mocha`.
 
 ## Contributors
 
