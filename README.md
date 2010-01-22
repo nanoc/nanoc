@@ -24,9 +24,9 @@ discussion groups:
 
 The source code is structured in a few directories:
 
-* `bin` contains the commandline tool aptly named `nanoc`
+* `bin` contains the commandline tool aptly named `nanoc3`
 * `lib`
-  * `nanoc`
+  * `nanoc3`
     * `base` contains the bare essentials necessary for nanoc to function
     * `cli` contains the commandline interface
     * *data_sources* contains the standard data sources (Nanoc3::DataSource
