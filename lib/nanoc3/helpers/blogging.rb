@@ -32,7 +32,7 @@ module Nanoc3::Helpers
     # attribute is set to `"article"`. Articles are sorted by descending
     # creation date, so newer articles appear before older articles.
     #
-    # @return [Array] An sorted array containing all articles
+    # @return [Array] A sorted array containing all articles
     def sorted_articles
       require 'time'
       articles.sort_by { |a| t = a[:created_at] ; t.is_a?(String) ? Time.parse(t) : t }.reverse
