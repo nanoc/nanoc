@@ -61,21 +61,6 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     assert_equal(expected_out, actual_out)
   end
 
-  def test_parse_file_invalid
-    # Create a file
-    File.open('test.html', 'w') do |io|
-      io.write "blah blah\n"
-    end
-
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
-
-    # Parse it
-    assert_raises(RuntimeError) do
-      data_source.instance_eval { parse_file('test.html', 'foobar') }
-    end
-  end
-
   def test_parse_file_full_meta
     # Create a file
     File.open('test.html', 'w') do |io|
@@ -109,6 +94,22 @@ class Nanoc3::DataSources::FilesystemCombinedTest < MiniTest::Unit::TestCase
     result = data_source.instance_eval { parse_file('test.html', 'foobar') }
     assert_equal({}, result[0])
     assert_equal('blah blah', result[1])
+  end
+
+  def test_parse_file_no_meta
+    content = "blah\n" \
+      "blah blah blah\n" \
+      "blah blah\n"
+    # Create a file
+    File.open('test.html', 'w') { |io| io.write(content) }
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse_file('test.html', 'foobar') }
+    assert_equal({}, result[0])
+    assert_equal(content, result[1])
   end
 
   def test_load_objects
