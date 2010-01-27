@@ -23,6 +23,8 @@ Changed:
 * The `rainpress` filter now accepts parameters
 * The `filesystem` data source is now known as `filesystem_verbose`
 * Meta files and content files are now optional
+* The metadata section in `filesystem_combined` is now optional [Christopher
+  Eppstein]
 * The `--server` autocompile option is now known as `--handler`
 * Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
 * Deprecated `#content_at_snapshot`; use `#compiled_content` instead

@@ -16,6 +16,10 @@ module Nanoc3::DataSources
   #   ---
   #   h1. Hello!
   #
+  # The metadata section can be omitted. If the file does not start with
+  # three or five dashes, the entire file will be considered as content; the
+  # returned metadata will be empty.
+  #
   # The identifier of a item is determined as follows. A file with an
   # 'index.*' filename, such as 'index.txt', will have the filesystem path
   # with the 'index.*' part stripped as a identifier. For example:
@@ -76,8 +80,16 @@ module Nanoc3::DataSources
     # element a hash with the file's metadata, and with its second element the
     # file content itself.
     def parse_file(filename, kind)
+      # Read
+      content = File.read(filename)
+
+      # Return metadataless content if there is no metadata section
+      if content !~ /^(-{5}|-{3})/
+        return [ {}, content ]
+      end
+
       # Split file
-      pieces = File.read(filename).split(/^(-{5}|-{3})/).compact
+      pieces = content.split(/^(-{5}|-{3})/).compact
       if pieces.size < 3
         raise RuntimeError.new(
           "The file '#{filename}' does not seem to be a nanoc #{kind}"
