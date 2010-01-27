@@ -217,6 +217,8 @@ module Nanoc3
     # in the data source so that it can be loaded and turned into a
     # {Nanoc3::Item} instance by the {#items} method.
     #
+    # @abstract
+    #
     # @param [String] content
     #
     # @param [Hash] attributes
@@ -232,6 +234,8 @@ module Nanoc3
     # No instance of {Nanoc3::Layout} will be created; this method creates the
     # layout in the data source so that it can be loaded and turned into a
     # {Nanoc3::Layout} instance by the {#layouts} method.
+    #
+    # @abstract
     #
     # @param [String] content
     #
