@@ -20,7 +20,10 @@ module Nanoc3
   # The {#setup} method is used for setting up a site's data source for the
   # first time.
   #
-  # @abstract
+  # @abstract Subclasses should at least implement {#items} and {#layouts}. If
+  # the data source should support creating items and layouts using the
+  # `create_item` and `create_layout` CLI commands, the {#setup},
+  # {#create_item} and {#create_layout} methods should be implemented as well.
   class DataSource < Plugin
 
     # @return [String] The root path where items returned by this data source
