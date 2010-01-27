@@ -142,8 +142,8 @@ module Nanoc3
     # stored, this may not be necessary. This is the ideal place to connect to
     # the database, for example.
     #
-    # @abstract Subclasses may override this method, but are not required to
-    #   do so; the default implementation simply does nothing.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
     #
     # @return [void]
     def up
@@ -153,8 +153,8 @@ module Nanoc3
     # effects of the {#up} method. For example, a database connection
     # established in {#up} should be closed in this method.
     #
-    # @abstract Subclasses may override this method, but are not required to
-    #   do so; the default implementation simply does nothing.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
     #
     # @return [void]
     def down
@@ -177,8 +177,8 @@ module Nanoc3
     # version of a data source may store content in a different format, and
     # this method will update the stored content to this newer format.
     #
-    # @abstract Subclasses may override this method, but are not required to
-    #   do so; the default implementation simply does nothing.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
     #
     # @return [void]
     def update
@@ -190,8 +190,8 @@ module Nanoc3
     # Subclasses should not prepend `items_root` to the item's identifiers, as
     # this will be done automatically.
     #
-    # @abstract Subclasses may override this method, but are not required to
-    #   do so; the default implementation simply returns an empty array.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
     #
     # @return [Array<Nanoc3::Item>] A list of items
     def items
@@ -204,8 +204,8 @@ module Nanoc3
     # Subclasses should prepend `layout_root` to the layout's identifiers,
     # since this is not done automatically.
     #
-    # @abstract Subclasses may override this method, but are not required to
-    #   do so; the default implementation simply returns an empty array.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
     #
     # @return [Array<Nanoc3::Layout>] A list of layouts
     def layouts
