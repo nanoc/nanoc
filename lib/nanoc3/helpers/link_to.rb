@@ -121,7 +121,7 @@ module Nanoc3::Helpers
 
       # Add trailing slash if necessary
       if dst_path.to_s[-1,1] == '/'
-        relative_path += '/'
+        relative_path << '/'
       end
 
       # Done
