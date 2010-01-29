@@ -232,7 +232,7 @@ module Nanoc3
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
-        @items += items_in_ds
+        @items.concat(items_in_ds)
       end
 
       @items_loaded = true
@@ -244,7 +244,7 @@ module Nanoc3
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
-        @layouts += layouts_in_ds
+        @layouts.concat(layouts_in_ds)
       end
 
       @layouts_loaded = true
