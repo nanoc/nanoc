@@ -22,4 +22,12 @@ class Nanoc3::Extra::ContextTest < MiniTest::Unit::TestCase
     assert_equal('bar', eval("foo", context.get_binding))
   end
 
+  def test_example
+    # Parse
+    YARD.parse('../lib/nanoc3/extra/context.rb')
+
+    # Run
+    assert_examples_correct 'Nanoc3::Extra::Context#initialize'
+  end
+
 end
