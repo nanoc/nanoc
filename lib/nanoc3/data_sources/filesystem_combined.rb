@@ -2,29 +2,29 @@
 
 module Nanoc3::DataSources
 
-  # = Items
+  # The filesystem data source stores its items and layouts in nested
+  # directories. Items and layouts are represented by single files. The root
+  # directory for items is the `content` directory; for layouts, this is the
+  # `layouts` directory.
   #
-  # The filesystem data source stores its items in nested directories. A item
-  # is represented by a single file. The root directory is the 'content'
-  # directory.
+  # The metadata for items and layouts is embedded into the file itself. It is
+  # stored at the top of the file, between `---` (three dashes) separators.
+  # For example:
   #
-  # The metadata for a item is embedded into the file itself. It is stored at
-  # the top of the file, between '---' (three dashes) separators. For example:
-  #
-  #   ---
-  #   title: "Moo!"
-  #   ---
-  #   h1. Hello!
+  #     ---
+  #     title: "Moo!"
+  #     ---
+  #     h1. Hello!
   #
   # The metadata section can be omitted. If the file does not start with
   # three or five dashes, the entire file will be considered as content; the
   # returned metadata will be empty.
   #
-  # The identifier of a item is determined as follows. A file with an
-  # 'index.*' filename, such as 'index.txt', will have the filesystem path
-  # with the 'index.*' part stripped as a identifier. For example:
+  # The identifier of items and layouts is determined as follows. A file with
+  # an `index.*` filename, such as `index.txt`, will have the filesystem path
+  # with the `index.*` part stripped as a identifier. For example:
   #
-  #    foo/bar/index.html → /foo/bar/
+  #     foo/bar/index.html → /foo/bar/
   #
   # In other cases, the identifier is calculated by stripping the extension.
   # If the `allow_periods_in_identifiers` attribute in the configuration is
@@ -32,43 +32,34 @@ module Nanoc3::DataSources
   # extensions; if it is false or unset, all extensions will be stripped.
   # For example:
   #
-  #   (allow_periods_in_identifiers set to true)
-  #   foo.entry.html → /foo.entry/
-  #   
-  #   (allow_periods_in_identifiers set to false)
-  #   foo.html.erb → /foo/
+  #     (`allow_periods_in_identifiers` set to true)
+  #     foo.entry.html → /foo.entry/
+  #
+  #     (`allow_periods_in_identifiers` set to false)
+  #     foo.html.erb → /foo/
   #
   # Note that it is possible for two different, separate files to have the
   # same identifier. It is recommended to avoid such situations.
   #
   # Some more examples:
   #
-  #   content/index.html          → /
-  #   content/foo.html            → /foo/
-  #   content/foo/index.html      → /foo/
-  #   content/foo/bar.html        → /foo/bar/
-  #   content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
-  #   content/foo/bar/index.html  → /foo/bar/
-  #   content/foo.bar/index.html  → /foo.bar/
+  #     content/index.html          → /
+  #     content/foo.html            → /foo/
+  #     content/foo/index.html      → /foo/
+  #     content/foo/bar.html        → /foo/bar/
+  #     content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
+  #     content/foo/bar/index.html  → /foo/bar/
+  #     content/foo.bar/index.html  → /foo.bar/
   #
-  # The file extension does not determine the filters to run on the item; the
+  # The file extension does not determine the filters to run on items; the
   # Rules file is used to specify processing instructors for each item.
-  #
-  # = Layouts
-  #
-  # Layouts are stored as files in the 'layouts' directory. Similar to items,
-  # each layout consists of a metadata part and a content part, separated by
-  # '---' (three dashes).
-  #
-  # The identifier for layouts is generated the same way as identifiers for
-  # items (see above for details).
   class FilesystemCombined < Nanoc3::DataSources::Filesystem
 
   private
 
-    # Returns a list of all files in +dir+, ignoring any unwanted files
-    # (files that end with '~', '.orig', '.rej' or '.bak'). Always
-    # recurses in subdirectories.
+    # Finds all files in the given directory, ignoring any unwanted files.
+    # Unwanted files are files that end with `~`, `.orig`, `.rej` or `.bak`.
+    # This method will recurse into subdirectories.
     def files(dir)
       Dir[dir + '/**/*'].reject do |filename|
         File.directory?(filename) ||
@@ -76,7 +67,7 @@ module Nanoc3::DataSources
       end
     end
 
-    # Parses the file named +filename+ and returns an array with its first
+    # Parses the file named `filename` and returns an array with its first
     # element a hash with the file's metadata, and with its second element the
     # file content itself.
     def parse_file(filename, kind)
@@ -104,7 +95,7 @@ module Nanoc3::DataSources
       [ meta, content ]
     end
 
-    # See superclass for documentation.
+    # See {Nanoc3::DataSources::Filesystem#create_object}.
     def create_object(dir_name, content, attributes, identifier)
       # Determine path
       path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + '.html')
@@ -122,7 +113,7 @@ module Nanoc3::DataSources
       end
     end
 
-    # See superclass for documentation.
+    # See {Nanoc3::DataSources::Filesystem#load_objects}.
     def load_objects(dir_name, kind, klass)
       files(dir_name).map do |filename|
         # Read and parse data
@@ -146,6 +137,8 @@ module Nanoc3::DataSources
       end
     end
 
+    # Returns the identifier derived from the given filename, first stripping
+    # the given directory name off the filename.
     def filename_to_identifier(filename, dir_name)
       # Get actual identifier
       identifier = filename.sub(Regexp.new("^#{dir_name}"), '')
