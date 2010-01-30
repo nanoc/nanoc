@@ -30,7 +30,7 @@ module Nanoc3
 
       @item_compilation_rules  = []
       @item_routing_rules      = []
-      @layout_filter_mapping   = {}
+      @layout_filter_mapping   = OrderedHash.new
     end
 
     # Compiles (part of) the site and writes out the compiled item

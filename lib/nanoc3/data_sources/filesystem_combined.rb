@@ -81,7 +81,7 @@ module Nanoc3::DataSources
 
       # Split file
       pieces = content.split(/^(-{5}|-{3})/).compact
-      if pieces.size < 3
+      if pieces.size < 4
         raise RuntimeError.new(
           "The file '#{filename}' does not seem to be a nanoc #{kind}"
         )

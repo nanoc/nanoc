@@ -29,6 +29,17 @@ Changed:
 * Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
 * Deprecated `#content_at_snapshot`; use `#compiled_content` instead
 
+## 3.0.7
+
+* Fixed a bug which could cause layout rules not be matched in order
+
+## 3.0.6
+
+* Error checking in `filesystem_combined` has been improved [Brian Candler]
+* Generated HTML files now have a default encoding of UTF-8
+* Periods in identifiers for layouts now behave correctly
+* The `relativize_paths` filter now correctly handles “/” [Eric Sunshine]
+
 ## 3.0.5
 
 * Restored pre-3.0.3 behaviour of periods in identifiers. By default, a file

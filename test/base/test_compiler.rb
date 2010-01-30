@@ -210,6 +210,40 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_equal(nil, compiler.filter_for_layout(layout))
   end
 
+  def test_filter_for_layout_with_many_layouts
+    # Mock site
+    site = mock
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [ :erb, { :char => 'd' } ]
+    compiler.layout_filter_mapping[%r{^/a/.*/$}]     = [ :erb, { :char => 'b' } ]
+    compiler.layout_filter_mapping[%r{^/a/b/.*/$}]   = [ :erb, { :char => 'c' } ] # never used!
+    compiler.layout_filter_mapping[%r{^/.*/$}]       = [ :erb, { :char => 'a' } ]
+
+    # Mock layout
+    layouts = [ mock, mock, mock, mock ]
+    layouts[0].stubs(:identifier).returns('/a/b/c/d/')
+    layouts[1].stubs(:identifier).returns('/a/b/c/')
+    layouts[2].stubs(:identifier).returns('/a/b/')
+    layouts[3].stubs(:identifier).returns('/a/')
+
+    # Get expectations
+    expectations = {
+      0 => 'd',
+      1 => 'b', # never used! not c, because b takes priority
+      2 => 'b',
+      3 => 'a'
+    }
+
+    # Check
+    expectations.each_pair do |num, char|
+      filter_and_args = compiler.filter_for_layout(layouts[num])
+      refute_nil(filter_and_args)
+      assert_equal(char, filter_and_args[1][:char])
+    end
+  end
+
   def test_compile_rep
     # Mock rep
     item = mock
