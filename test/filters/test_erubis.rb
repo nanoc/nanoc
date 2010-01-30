@@ -6,13 +6,24 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_filter
+  def test_filter_with_instance_variable
     if_have 'erubis' do
       # Create filter
       filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
       result = filter.run('<%= "I was hiding in #{@location}." %>')
+      assert_equal('I was hiding in a cheap motel.', result)
+    end
+  end
+
+  def test_filter_with_instance_method
+    if_have 'erubis' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
+
+      # Run filter
+      result = filter.run('<%= "I was hiding in #{location}." %>')
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
