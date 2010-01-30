@@ -2,62 +2,65 @@
 
 module Nanoc3
 
-  # A Nanoc3::ItemRep is a single representation (rep) of an item
-  # (Nanoc3::Item). An item can have multiple representations. A
-  # representation has its own output file. A single item can therefore have
-  # multiple output files, each run through a different set of filters with a
-  # different layout.
+  # A single representation (rep) of an item ({Nanoc3::Item}). An item can
+  # have multiple representations. A representation has its own output file.
+  # A single item can therefore have multiple output files, each run through
+  # a different set of filters with a different layout.
   #
   # An item representation is observable. The following events will be
   # notified:
   #
-  # * :compilation_started
-  # * :compilation_ended
-  # * :filtering_started
-  # * :filtering_ended
+  # * `:compilation_started`
+  # * `:compilation_ended`
+  # * `:filtering_started`
+  # * `:filtering_ended`
   #
   # The compilation-related events have one parameters (the item
   # representation); the filtering-related events have two (the item
   # representation, and a symbol containing the filter class name).
   class ItemRep
 
-    # The item (Nanoc3::Item) to which this representation belongs.
+    # @return [Nanoc3::Item] The item to which this rep belongs
     attr_reader   :item
 
-    # This item representation's unique name.
+    # @return [Symbol] The representation's unique name
     attr_reader   :name
 
-    # Indicates whether this rep is forced to be dirty by the user.
+    # @return [Boolean] true if this rep is forced to be dirty (e.g. because
+    #   of the `--force` commandline option); false otherwise
     attr_accessor :force_outdated
 
-    # Indicates whether this rep's output file has changed the last time it
-    # was compiled.
+    # @return [Boolean] true if this rep’s output file has changed since the
+    #   last time it was compiled; false otherwise
     attr_accessor :modified
     alias_method :modified?, :modified
 
-    # Indicates whether this rep's output file was created the last time it
-    # was compiled.
+    # @return [Boolean] true if this rep’s output file was created during the
+    #   current or last compilation session; false otherwise
     attr_accessor :created
     alias_method :created?, :created
 
-    # Indicates whether this rep has already been compiled.
+    # @return [Boolean] true if this representation has already been
+    #   compiled during the current or last compilation session; false
+    #   otherwise
     attr_accessor :compiled
     alias_method :compiled?, :compiled
 
-    # Indicates whether this rep's compiled content has been written during
-    # the current or last compilation session.
+    # @return [Boolean] true if this representation’s compiled content has
+    #   been written during the current or last compilation session; false
+    #   otherwise
     attr_reader :written
     alias_method :written?, :written
 
-    # The item rep's path, as used when being linked to. It starts with a
-    # slash and it is relative to the output directory. It does not include
-    # the path to the output directory. It will not include the filename if
-    # the filename is an index filename.
+    # @return [String] The item rep's path, as used when being linked to. It
+    #   starts with a slash and it is relative to the output directory. It
+    #   does not include the path to the output directory. It will not include
+    #   the filename if the filename is an index filename.
     attr_accessor :path
 
-    # The item rep's raw path. It is relative to the current working directory
-    # and includes the path to the output directory. It also includes the
-    # filename, even if it is an index filename.
+    # @return [String] The item rep's raw path. It is relative to the current
+    #   working directory and includes the path to the output directory. It
+    #   also includes the filename, even if it is an index filename.
     attr_accessor :raw_path
 
     # Creates a new item representation for the given item.
@@ -88,7 +91,7 @@ module Nanoc3
     end
 
     # @return [Boolean] true if this item rep's output file is outdated and
-    # must be regenerated, false otherwise.
+    #   must be regenerated, false otherwise
     def outdated?
       # Outdated if we don't know
       return true if @item.mtime.nil?
@@ -162,18 +165,25 @@ module Nanoc3
       @content[snapshot_name]
     end
 
-    # @deprecated Use Nanoc3::ItemRep#compiled_content instead.
+    # @deprecated Use {Nanoc3::ItemRep#compiled_content} instead.
     def content_at_snapshot(snapshot=:pre)
       compiled_content(:snapshot => snapshot)
     end
 
     # Runs the item content through the given filter with the given arguments.
+    # This method will replace the content of the `:last` snapshot with the
+    # filtered content of the last snapshot.
+    #
+    # This method is supposed to be called only in a compilation rule block
+    # (see {Nanoc3::CompilerDSL#compile}).
     #
     # @param [Symbol] filter_name The name of the filter to run the item
-    #   representations' content through.
+    #   representations' content through
     #
     # @param [Hash] filter_args The filter arguments that should be passed to
-    #   the filter's #run method.
+    #   the filter's #run method
+    #
+    # @return [void]
     def filter(filter_name, filter_args={})
       # Create filter
       klass = Nanoc3::Filter.named(filter_name)
@@ -189,10 +199,17 @@ module Nanoc3
       snapshot(@content[:post] ? :post : :pre)
     end
 
-    # Lays out the item using the given layout.
+    # Lays out the item using the given layout. This method will replace the
+    # content of the `:last` snapshot with the laid out content of the last
+    # snapshot.
+    #
+    # This method is supposed to be called only in a compilation rule block
+    # (see {Nanoc3::CompilerDSL#compile}).
     #
     # @param [String] layout_identifier The identifier of the layout the ite
-    #   should be laid out with.
+    #   should be laid out with
+    #
+    # @return [void]
     def layout(layout_identifier)
       # Create "pre" snapshot
       snapshot(:pre) unless @content[:pre]
@@ -214,12 +231,19 @@ module Nanoc3
 
     # Creates a snapshot of the current compiled item content.
     #
-    # @param [Symbol] snapshot_name The name of the snapshot to create.
+    # @param [Symbol] snapshot_name The name of the snapshot to create
+    #
+    # @return [void]
     def snapshot(snapshot_name)
       @content[snapshot_name] = @content[:last]
     end
 
     # Writes the item rep's compiled content to the rep's output file.
+    #
+    # This method should not be called directly, even in a compilation block;
+    # the compiler is responsible for calling this method.
+    #
+    # @return [void]
     def write
       # Create parent directory
       FileUtils.mkdir_p(File.dirname(self.raw_path))
@@ -240,6 +264,13 @@ module Nanoc3
       @modified = File.read(self.raw_path) != @old_content
     end
 
+    # Creates and returns a diff between the compiled content before the
+    # current compilation session and the content compiled in the current
+    # compilation session.
+    #
+    # @return [String, nil] The difference between the old and new compiled
+    #   content in `diff(1)` format, or nil if there is no previous compiled
+    #   content
     def diff
       # Check if old content exists
       if @old_content.nil? or self.raw_path.nil?
