@@ -3,6 +3,7 @@
 module Nanoc3
 
   require 'nanoc3/base/core_ext'
+  require 'nanoc3/base/ordered_hash'
 
   autoload 'CodeSnippet',         'nanoc3/base/code_snippet'
   autoload 'Compiler',            'nanoc3/base/compiler'

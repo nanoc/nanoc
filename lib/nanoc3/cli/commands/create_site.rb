@@ -159,6 +159,7 @@ EOS
 <html>
   <head>
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
     <meta name="generator" content="nanoc #{Nanoc3::VERSION}">
   </head>
