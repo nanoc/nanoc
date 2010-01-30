@@ -1,5 +1,9 @@
 = nanoc News
 
+== 3.0.7
+
+* Fixed bug which could cause layout rules not be matched in order
+
 == 3.0.6
 
 * Error checking in `filesystem_combined` has been improved [Brian Candler]
