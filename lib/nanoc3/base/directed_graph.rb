@@ -6,6 +6,31 @@ module Nanoc3
   # dependency tracker for storing and querying dependencies between items.
   # Internally, the graph will be stored as an adjacency matrix. For this,
   # the {Nanoc3::DirectedGraph::SquareBooleanMatrix} class is used.
+  #
+  # @example Creating and using a directed graph
+  #
+  #   # Create a graph with three vertices
+  #   graph = DirectedGraph.new(%w( a b c d ))
+  #   
+  #   # Add edges
+  #   graph.add_edge('a', 'b')
+  #   graph.add_edge('b', 'c')
+  #   graph.add_edge('c', 'd')
+  #   
+  #   # Get (direct) predecessors
+  #   graph.direct_predecessors_of('d').sort
+  #     # => %w( c )
+  #   graph.predecessors_of('d').sort
+  #     # => %w( a b c )
+  #   
+  #   # Modify edges
+  #   graph.remove_edge('a', 'b')
+  #   
+  #   # Get (direct) predecessors again
+  #   graph.direct_predecessors_of('d').sort
+  #     # => %w( c )
+  #   graph.predecessors_of('d').sort
+  #     # => %w( b c )
   class DirectedGraph
 
     # Nanoc3::DirectedGraph::SquareBooleanMatrix is, as the name says, a
