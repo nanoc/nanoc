@@ -68,11 +68,11 @@ components, however, do have dependencies:
 
 * Colin Barrett
 * Dmitry Bilunov
+* Starr Horne
 * Nicky Peeters
 * Christian Plessl
 * Šime Ramov
 * "Soryu"
-* Starr Horne
 * Dennis Sutch
 
 Special thanks to Ale Muñoz.
