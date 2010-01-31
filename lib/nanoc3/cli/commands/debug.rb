@@ -49,11 +49,16 @@ module Nanoc3::CLI::Commands
       # Print items
       puts '=== Items'
       puts
+      row = 0
       items.sort_by { |i| i.identifier }.each do |item|
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
+          # Determine filler
+          filler = (row % 3 == 0 ? '· ' : ' ')
+          row += 1
+
           # Print rep
           puts "* %s %s -> %s" % [
-            fill(item.identifier, identifier_length, '· '),
+            fill(item.identifier, identifier_length, filler),
             fill(rep.name.to_s,   rep_name_length,   ' '),
             rep.raw_path || '-'
           ]
