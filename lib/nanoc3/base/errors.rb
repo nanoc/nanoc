@@ -43,10 +43,10 @@ module Nanoc3
     end
 
     # Error that is raised when data is requested when the data is not yet
-    # available (possibly due to a missing Nanoc::Site#load_data).
+    # available (possibly due to a missing Nanoc3::Site#load_data).
     class DataNotYetAvailable < Generic
       def initialize(type, plural)
-        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.")
+        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc3::Site#load_data call.")
       end
     end
 

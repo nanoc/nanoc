@@ -16,12 +16,12 @@ module Nanoc3
       # Registers the given class as a plugin.
       #
       # @param [Class] superclass The superclass of the plugin. For example:
-      #   {Nanoc::Filter}, {Nanoc::VCS}.
+      #   {Nanoc3::Filter}, {Nanoc3::VCS}.
       #
       # @param [Class, String] class_or_name The class to register. This can
       #   be a string, in which case it will be automatically converted to a
-      #   proper class at lookup. For example: `Nanoc::Filters::ERB`,
-      #   `"Nanoc::Filters::Haml"`.
+      #   proper class at lookup. For example: `Nanoc3::Filters::ERB`,
+      #   `"Nanoc3::Filters::Haml"`.
       #
       # @param [Symbol] identifiers One or more symbols identifying the class.
       #   For example: `:haml`, :`erb`.
