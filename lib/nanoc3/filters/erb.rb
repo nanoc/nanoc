@@ -7,7 +7,7 @@ module Nanoc3::Filters
       require 'erb'
 
       # Create context
-      context = ::Nanoc3::Extra::Context.new(assigns)
+      context = ::Nanoc3::Context.new(assigns)
 
       # Get result
       erb = ::ERB.new(content)

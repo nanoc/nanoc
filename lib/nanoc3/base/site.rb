@@ -342,7 +342,7 @@ module Nanoc3
 
     # Returns a preprocessor context, creating one if none exists yet.
     def preprocessor_context
-      @preprocessor_context ||= Nanoc3::Extra::Context.new({
+      @preprocessor_context ||= Nanoc3::Context.new({
         :site    => self,
         :config  => self.config,
         :items   => self.items,
