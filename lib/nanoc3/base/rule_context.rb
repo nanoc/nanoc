@@ -1,50 +1,38 @@
 module Nanoc3
 
-  # Nanoc3::RuleContext provides a context in which compilation and routing
-  # rules can be executed. It provides access to the item representation that
-  # is being compiled or routed.
-  class RuleContext
+  # Provides a context in which compilation and routing rules can be executed.
+  # It provides access to the item representation that is being compiled or
+  # routed.
+  #
+  # The following variables will be available in this rules context:
+  #
+  # * `rep`     ({Nanoc3::ItemRep})         - The current item rep
+  # * `item`    ({Nanoc3::Item})            - The current item
+  # * `site`    ({Nanoc3::Site})            - The site
+  # * `config`  ({Hash})                    - The site configuration
+  # * `items`   ({Array}<{Nanoc3::Item}>)   - A list of all items
+  # * `layouts` ({Array}<{Nanoc3::Layout}>) - A list of all layouts
+  class RuleContext < Context
 
+    # Creates a new rule context for the given iterm representation.
+    #
     # @param [Nanoc3::ItemRep] rep The item representation for which to create
     #   a new rule context.
     def initialize(rep)
-      @rep = rep
-    end
+      item    = rep.item
+      site    = item.site
+      config  = site.config
+      items   = site.items
+      layouts = site.layouts
 
-    # @return [Nanoc3::ItemRep] The representation that is currently being
-    #   processed in this context.
-    def rep
-      @rep
-    end
-
-    # @return [Nanoc3::Item] The item of the representation that is currently
-    #   being processed in this context.
-    def item
-      rep.item
-    end
-
-    # @return [Nanoc3::Site] The site of the item representation that is
-    #   currently being processed in this context.
-    def site
-      item.site
-    end
-
-    # @return [Hash] The configuration of the site of the item representation
-    #   that is currently being processed in this context.
-    def config
-      site.config
-    end
-
-    # @return [Array<Nanoc3::Item>] The items in the site of the item
-    #   representation that is currently being processed in this context.
-    def items
-      site.items
-    end
-
-    # @return [Array<Nanoc3::Layout>] The layouts in the site of the item
-    #   representation that is currently being processed in this context.
-    def layouts
-      site.layouts
+      super({
+        :rep     => rep,
+        :item    => item,
+        :site    => site,
+        :config  => config,
+        :items   => items,
+        :layouts => layouts
+      })
     end
 
     # Filters the current representation (calls {Nanoc3::ItemRep#filter} with
