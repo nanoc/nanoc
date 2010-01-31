@@ -135,6 +135,10 @@ describe 'Nanoc3::Site#load_data' do
 
   it 'should call the preprocessor' do
     site = Nanoc3::Site.new({})
+    site.instance_eval do
+      @items_loaded   = true
+      @layouts_loaded = true
+    end
 
     # Mock data sources
     data_sources = [ mock, mock, mock ]

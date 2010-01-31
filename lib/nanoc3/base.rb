@@ -19,7 +19,6 @@ module Nanoc3
   autoload 'Layout',              'nanoc3/base/layout'
   autoload 'NotificationCenter',  'nanoc3/base/notification_center'
   autoload 'Plugin',              'nanoc3/base/plugin'
-  autoload 'PreprocessorContext', 'nanoc3/base/preprocessor_context'
   autoload 'Rule',                'nanoc3/base/rule'
   autoload 'RuleContext',         'nanoc3/base/rule_context'
   autoload 'Site',                'nanoc3/base/site'
