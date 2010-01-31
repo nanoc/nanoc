@@ -17,6 +17,7 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::CreateLayout.new)
       add_command(Nanoc3::CLI::Commands::CreateItem.new)
       add_command(Nanoc3::CLI::Commands::CreateSite.new)
+      add_command(Nanoc3::CLI::Commands::Debug.new)
       add_command(Nanoc3::CLI::Commands::Info.new)
       add_command(Nanoc3::CLI::Commands::Update.new)
       add_command(Nanoc3::CLI::Commands::View.new)
