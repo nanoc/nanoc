@@ -2,27 +2,37 @@
 
 module Nanoc3
 
-  # Nanoc3::Compiler is responsible for compiling a site's item
-  # representations.
+  # Responsible for compiling a site’s item representations.
   class Compiler
 
     # The compilation stack. When the compiler begins compiling a rep or a
     # layout, it will be placed on the stack; when it is done compiling the
     # rep or layout, it will be removed from the stack.
+    #
+    # @return [Array] The compilation stack
     attr_reader :stack
 
     # The list of compilation rules that will be used to compile items. This
-    # array will be filled by Nanoc3::Site#load_data.
+    # array will be filled by {Nanoc3::Site#load_data}.
+    #
+    # @return [Array<Nanoc3::Rule>] The list of item compilation rules
     attr_reader :item_compilation_rules
 
     # The list of routing rules that will be used to give all items a path.
-    # This array will be filled by Nanoc3::Site#load_data.
+    # This array will be filled by {Nanoc3::Site#load_data}.
+    #
+    # @return [Array<Nanoc3::Rule>] The list of item routing rules
     attr_reader :item_routing_rules
 
-    # The hash containing layout-to-filter mapping rules.
+    # The hash containing layout-to-filter mapping rules. This hash is
+    # ordered: iterating over the hash will happen in insertion order.
+    #
+    # @return [Hash] The layout-to-filter mapping rules
     attr_reader :layout_filter_mapping
 
-    # @param [Nanoc3::Site] site The site this compiler belongs to.
+    # Creates a new compiler fo the given site
+    #
+    # @param [Nanoc3::Site] site The site this compiler belongs to
     def initialize(site)
       @site = site
 
@@ -37,10 +47,12 @@ module Nanoc3
     # representations.
     #
     # @param [Nanoc3::Item] item The item that should be compiled, along with
-    #   its dependencies. Pass +nil+ if the entire site should be compiled.
+    #   its dependencies. Pass `nil` if the entire site should be compiled.
     #
     # @option params [Boolean] :force (false) true if the rep should be
-    #   compiled even if it is not outdated, false if not.
+    #   compiled even if it is not outdated, false if not
+    #
+    # @return [void]
     def run(item=nil, params={})
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
@@ -75,26 +87,33 @@ module Nanoc3
       dependency_tracker.store_graph
     end
 
-    # @param [Nanoc3::ItemRep] rep The item representation for which to fetch
-    #   the first matching compilation rule.
+    # Finds the first matching compilation rule for the given item
+    # representation.
     #
-    # @return [Nanoc3::Rule] The first matching compilation rule for the given rep.
+    # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
+    #
+    # @return [Nanoc3::Rule, nil] The compilation rule for the given item rep,
+    #   or nil if no rules have been found
     def compilation_rule_for(rep)
       @item_compilation_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end
 
-    # @param [Nanoc3::ItemRep] rep The item representation for which to fetch
-    #   the first matching routing rule.
+    # Finds the first matching routing rule for the given item representation.
     #
-    # @return [Nanoc3::Rule] The first matching routing rule for the given rep.
+    # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
+    #
+    # @return [Nanoc3::Rule, nil] The routing rule for the given item rep, or
+    #   nil if no rules have been found
     def routing_rule_for(rep)
       @item_routing_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
     end
 
+    # Finds the filter name and arguments to use for the given layout.
+    #
     # @param [Nanoc3::Layout] layout The layout for which to fetch the filter.
     #
     # @return [Array, nil] A tuple containing the filter name and the filter 
@@ -111,6 +130,8 @@ module Nanoc3
     # Compiles the given representations.
     #
     # @param [Array] reps The item representations to compile.
+    #
+    # @return [void]
     def compile_reps(reps)
       active_reps, skipped_reps = reps.partition { |rep| rep.outdated? || rep.item.outdated_due_to_dependencies? }
       inactive_reps = []
@@ -173,10 +194,12 @@ module Nanoc3
     # Compiles the given item representation.
     #
     # This method should not be called directly; please use
-    # Nanoc3::Compiler#run instead, and pass this item representation's item
+    # {Nanoc3::Compiler#run} instead, and pass this item representation's item
     # as its first argument.
     #
-    # @param [Nanoc3::ItemRep] rep The rep that is to be compiled.
+    # @param [Nanoc3::ItemRep] rep The rep that is to be compiled
+    #
+    # @return [void]
     def compile_rep(rep)
       # Start
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
@@ -194,12 +217,20 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
     end
 
-    # @return [Nanoc3::DependencyTracker] the dependency tracker for this site.
+    # Returns the dependency tracker for this site, creating it first if it
+    # does not yet exist.
+    # 
+    # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
       @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
     end
 
     # Clears the list of dependencies for items that will be recompiled.
+    #
+    # @param [Array<Nanoc3::Item>] items The list of items for which to forget
+    #   the dependencies
+    #
+    # @return [void]
     def forget_dependencies_if_outdated(items)
       items.each do |i|
         if i.outdated? || i.outdated_due_to_dependencies?
