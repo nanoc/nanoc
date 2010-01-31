@@ -9,6 +9,7 @@ module Nanoc3
   autoload 'Compiler',            'nanoc3/base/compiler'
   autoload 'CompilerDSL',         'nanoc3/base/compiler_dsl'
   autoload 'Config',              'nanoc3/base/config'
+  autoload 'Context',             'nanoc3/base/context'
   autoload 'DataSource',          'nanoc3/base/data_source'
   autoload 'DependencyTracker',   'nanoc3/base/dependency_tracker'
   autoload 'DirectedGraph',       'nanoc3/base/directed_graph'

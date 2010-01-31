@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc3::Extra
+module Nanoc3
 
   # Provides a context and a binding for use in filters such as the ERB and
   # Haml ones.
@@ -17,7 +17,7 @@ module Nanoc3::Extra
     #
     # @example Defining a context and accessing values
     #
-    #     context = Nanoc3::Extra::Context.new(
+    #     context = Nanoc3::Context.new(
     #       :name     => 'Max Payne',
     #       :location => 'in a cheap motel'
     #     )

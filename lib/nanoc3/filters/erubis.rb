@@ -7,7 +7,7 @@ module Nanoc3::Filters
       require 'erubis'
 
       # Create context
-      context = ::Nanoc3::Extra::Context.new(assigns)
+      context = ::Nanoc3::Context.new(assigns)
 
       # Get result
       ::Erubis::Eruby.new(content, :filename => filename).result(context.get_binding { assigns[:content] })
