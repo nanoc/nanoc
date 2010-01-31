@@ -33,8 +33,20 @@ class Nanoc3::RuleContextTest < MiniTest::Unit::TestCase
   end
 
   def test_actions
+    # Mock everything
+    config = mock
+    items = mock
+    layouts = mock
+    site = mock
+    site.stubs(:config).returns(config)
+    site.stubs(:items).returns(items)
+    site.stubs(:layouts).returns(layouts)
+    item = mock
+    item.stubs(:site).returns(site)
+
     # Mock rep
     rep = mock
+    rep.stubs(:item).returns(item)
     rep.expects(:filter).with(:foo, { :bar => 'baz' })
     rep.expects(:layout).with('foo')
     rep.expects(:snapshot).with('awesome')
