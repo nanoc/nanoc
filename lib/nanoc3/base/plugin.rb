@@ -2,9 +2,9 @@
 
 module Nanoc3
 
-  # Nanoc3::Plugin is the superclass for all plugins, such as filters
-  # (Nanoc3::Filter), data sources (Nanoc3::DataSource) and VCSes
-  # (Nanoc3::Extra::VCS). Each plugin has one or more unique identifiers,
+  # The abstract superclass for all plugins, such as filters
+  # ({Nanoc3::Filter}), data sources ({Nanoc3::DataSource}) and VCSes
+  # ({Nanoc3::Extra::VCS}). Each plugin has one or more unique identifiers,
   # and several methods in this class provides functionality for finding
   # plugins with given identifiers.
   class Plugin
@@ -16,15 +16,17 @@ module Nanoc3
       # Registers the given class as a plugin.
       #
       # @param [Class] superclass The superclass of the plugin. For example:
-      #   Nanoc::Filter, Nanoc::VCS.
+      #   {Nanoc::Filter}, {Nanoc::VCS}.
       #
       # @param [Class, String] class_or_name The class to register. This can
       #   be a string, in which case it will be automatically converted to a
-      #   proper class at lookup. For example: 'Nanoc::Filters::ERB',
-      #   Nanoc::Filters::Haml.
+      #   proper class at lookup. For example: `Nanoc::Filters::ERB`,
+      #   `"Nanoc::Filters::Haml"`.
       #
       # @param [Symbol] identifiers One or more symbols identifying the class.
-      #   For example: :haml, :erb.
+      #   For example: `:haml`, :`erb`.
+      #
+      # @return [void]
       def register(superclass, class_or_name, *identifiers)
         MAP[superclass] ||= {}
 
@@ -34,12 +36,12 @@ module Nanoc3
       end
 
       # Returns the plugin with the given name. Only subclasses of this class
-      # will be searched. For example, calling this method on Nanoc3::Filter
-      # will cause only Nanoc3::Filter subclasses to be searched.
+      # will be searched. For example, calling this method on {Nanoc3::Filter}
+      # will cause only {Nanoc3::Filter} subclasses to be searched.
       #
-      # @param [Symbol] name The name of the plugin to return.
+      # @param [Symbol] name The name of the plugin to return
       #
-      # @return [Class, nil] The plugin with the given name.
+      # @return [Class, nil] The plugin with the given name
       def named(name)
         # Initialize
         MAP[self] ||= {}
@@ -57,9 +59,9 @@ module Nanoc3
 
       # Returns a list of all plugins in the following format:
       #
-      #   { :class => ..., :superclass => ..., :identifiers => ... }
+      #     { :class => ..., :superclass => ..., :identifiers => ... }
       #
-      # @return A list of all plugins in the format described.
+      # @return [Array<Hash>] A list of all plugins in the format described.
       def all
         plugins = []
         MAP.each_pair do |superclass, submap|
