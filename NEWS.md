@@ -9,6 +9,7 @@ New:
 * An `Item#path` function for quickly getting the path of an item rep
 * A new “+” wildcard in rule patterns that matches one or more characters
 * A `view` command that starts a web server in the output directory
+* A `debug` command that shows information about the items, reps and layouts
 * A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
 * A plugin-loading system
 
