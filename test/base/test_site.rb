@@ -106,7 +106,7 @@ describe 'Nanoc3::Site#initialize' do
 
 end
 
-describe 'Nanoc::Site#load_data' do
+describe 'Nanoc3::Site#load_data' do
 
   include Nanoc3::TestHelpers
 
@@ -233,7 +233,7 @@ describe 'Nanoc::Site#load_data' do
 
 end
 
-describe 'Nanoc::Site#code_snippets' do
+describe 'Nanoc3::Site#code_snippets' do
 
   include Nanoc3::TestHelpers
 
@@ -246,7 +246,7 @@ describe 'Nanoc::Site#code_snippets' do
 
 end
 
-describe 'Nanoc::Site#items' do
+describe 'Nanoc3::Site#items' do
 
   include Nanoc3::TestHelpers
 
@@ -259,7 +259,7 @@ describe 'Nanoc::Site#items' do
 
 end
 
-describe 'Nanoc::Site#layouts' do
+describe 'Nanoc3::Site#layouts' do
 
   include Nanoc3::TestHelpers
 
@@ -272,7 +272,7 @@ describe 'Nanoc::Site#layouts' do
 
 end
 
-describe 'Nanoc::Site#compiler' do
+describe 'Nanoc3::Site#compiler' do
 
   include Nanoc3::TestHelpers
 
@@ -283,7 +283,7 @@ describe 'Nanoc::Site#compiler' do
 
 end
 
-describe 'Nanoc::Site#data_sources' do
+describe 'Nanoc3::Site#data_sources' do
 
   include Nanoc3::TestHelpers
 
