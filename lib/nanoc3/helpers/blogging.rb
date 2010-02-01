@@ -169,15 +169,17 @@ module Nanoc3::Helpers
       # Build feed
       xml.instruct!
       xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
+        root_url = @site.config[:base_url] + '/'
+
         # Add primary attributes
-        xml.id      @site.config[:base_url] + '/'
+        xml.id      root_url
         xml.title   @item[:title]
 
         # Add date
         xml.updated Time.parse(last_article[:created_at]).to_iso8601_time
 
         # Add links
-        xml.link(:rel => 'alternate', :href => @site.config[:base_url])
+        xml.link(:rel => 'alternate', :href => root_url)
         xml.link(:rel => 'self',      :href => feed_url)
 
         # Add author information
@@ -260,10 +262,10 @@ module Nanoc3::Helpers
     def atom_tag_for(item)
       require 'time'
 
-      hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
-      formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
+      hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
+      formatted_date     = Time.parse(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + (item.rep(:default).path || item.identifier)
+      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.rep(:default).path || item.identifier)
     end
 
   end

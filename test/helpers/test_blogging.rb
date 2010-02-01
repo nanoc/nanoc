@@ -656,4 +656,22 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     assert_equal('tag:example.com,2008-05-19:/baz/qux/', atom_tag_for(item))
   end
 
+  def test_atom_tag_for_with_base_url_in_dir
+    # Mock site
+    @site = mock
+    @site.stubs(:config).returns({ :base_url => 'http://example.com/somedir' })
+
+    # Create article reps
+    item_rep = mock
+    item_rep.expects(:path).returns('/foo/bar/')
+
+    # Create article
+    item = mock
+    item.expects(:[]).with(:created_at).returns('2008-05-19')
+    item.expects(:rep).with(:default).returns(item_rep)
+
+    # Check
+    assert_equal('tag:example.com,2008-05-19:/somedir/foo/bar/', atom_tag_for(item))
+  end
+
 end
