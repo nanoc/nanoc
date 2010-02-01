@@ -2,8 +2,8 @@
 
 module Nanoc3::DataSources
 
-  # The abstract superclass for all filesystem-based data sources.
-  class Filesystem < Nanoc3::DataSource
+  # Provides functionality common across all filesystem data sources.
+  module Filesystem
 
     # The VCS that will be called when adding, deleting and moving files. If
     # no VCS has been set, or if the VCS has been set to `nil`, a dummy VCS
