@@ -40,39 +40,6 @@ module Nanoc3::DataSources
 
   private
 
-    # See {Nanoc3::DataSources::Filesystem#load_objects}.
-    def load_objects(dir_name, kind, klass)
-      meta_filenames(dir_name).map do |meta_filename|
-        # Read metadata
-        meta = YAML.load_file(meta_filename) || {}
-
-        # Get content
-        content_filename = content_filename_for_dir(File.dirname(meta_filename))
-        content = File.read(content_filename)
-
-        # Get attributes
-        attributes = {
-          :content_filename => content_filename,
-          :meta_filename    => meta_filename,
-          :extension        => File.extname(content_filename)[1..-1],
-          # WARNING :file is deprecated; please create a File object manually
-          # using the :content_filename or :meta_filename attributes.
-          :file             => Nanoc3::Extra::FileProxy.new(content_filename)
-        }.merge(meta)
-
-        # Get identifier
-        identifier = meta_filename_to_identifier(meta_filename, Regexp.compile("^#{dir_name}"))
-
-        # Get modification times
-        meta_mtime    = File.stat(meta_filename).mtime
-        content_mtime = File.stat(content_filename).mtime
-        mtime         = meta_mtime > content_mtime ? meta_mtime : content_mtime
-
-        # Create item object
-        Nanoc3::Item.new(content, attributes, identifier, mtime)
-      end
-    end
-
     # See {Nanoc3::DataSources::Filesystem#create_object}.
     def create_object(dir_name, content, attributes, identifier)
       # Determine base path
@@ -94,63 +61,58 @@ module Nanoc3::DataSources
       File.open(content_filename, 'w') { |io| io.write(content) }
     end
 
-    # Returns the list of all meta files in the given base directory as well
-    # as its subdirectories.
-    def meta_filenames(base)
-      # Find all possible meta file names
-      filenames = Dir[base + '/**/*.yaml']
+    # See {Nanoc3::DataSources::Filesystem#load_objects}.
+    def load_objects(dir_name, kind, klass)
+      all_split_files_in(dir_name).map do |base_filename, (meta_ext, content_ext)|
+        # Get filenames
+        last_part = base_filename.split('/')[-1]
+        base_glob = base_filename.split('/')[0..-2].join('/') + "/{index,#{last_part}}."
+        meta_filename    = meta_ext    ? Dir[base_glob + meta_ext   ][0] : nil
+        content_filename = content_ext ? Dir[base_glob + content_ext][0] : nil
 
-      # Filter out invalid meta files
-      good_filenames = []
-      bad_filenames  = []
-      filenames.each do |filename|
-        if filename =~ /meta\.yaml$/ or filename =~ /([^\/]+)\/\1\.yaml$/
-          good_filenames << filename
+        # Get meta and content
+        meta    = (meta_filename    ? YAML.load_file(meta_filename) : nil) || {}
+        content = (content_filename ? File.read(content_filename)   : nil) || ''
+
+        # Get attributes
+        attributes = {
+          :content_filename => content_filename,
+          :meta_filename    => meta_filename,
+          :extension        => content_filename ? ext_of(content_filename)[1..-1] : nil,
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :content_filename or :meta_filename attributes.
+          :file             => content_filename ? Nanoc3::Extra::FileProxy.new(content_filename) : nil
+        }.merge(meta)
+
+        # Get identifier
+        if meta_filename
+          identifier = identifier_for_filename(meta_filename[(dir_name.length+1)..-1])
+        elsif content_filename
+          identifier = identifier_for_filename(content_filename[(dir_name.length+1)..-1])
         else
-          bad_filenames << filename
+          raise RuntimeError, "meta_filename and content_filename are both nil"
         end
-      end
 
-      # Warn about bad filenames
-      unless bad_filenames.empty?
-        raise RuntimeError.new(
-          "The following files appear to be meta files, " +
-          "but have an invalid name:\n  - " +
-          bad_filenames.join("\n  - ")
-        )
-      end
+        # Get modification times
+        meta_mtime    = meta_filename    ? File.stat(meta_filename).mtime    : nil
+        content_mtime = content_filename ? File.stat(content_filename).mtime : nil
+        if meta_mtime && content_mtime
+          mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
+        elsif meta_mtime
+          mtime = meta_mtime
+        elsif content_mtime
+          mtime = content_mtime
+        else
+          raise RuntimeError, "meta_mtime and content_mtime are both nil"
+        end
 
-      good_filenames
+        # Create layout object
+        klass.new(content, attributes, identifier, mtime)
+      end
     end
 
-    # Returns the filename of the content file in the given directory,
-    # ignoring any unwanted files (files that end with '~', '.orig', '.rej' or
-    # '.bak')
-    def content_filename_for_dir(dir)
-      # Find all files
-      filename_glob_1 = dir.sub(/([^\/]+)$/, '\1/\1.*')
-      filename_glob_2 = dir.sub(/([^\/]+)$/, '\1/index.*')
-      filenames = (Dir[filename_glob_1] + Dir[filename_glob_2]).uniq
-
-      # Reject meta files
-      filenames.reject! { |f| f =~ /\.yaml$/ }
-
-      # Reject backups
-      filenames.reject! { |f| f =~ /(~|\.orig|\.rej|\.bak)$/ }
-
-      # Make sure there is only one content file
-      if filenames.size != 1
-        raise RuntimeError.new(
-          "Expected 1 content file in #{dir} but found #{filenames.size}"
-        )
-      end
-
-      # Return content filename
-      filenames.first
-    end
-
-    def meta_filename_to_identifier(meta_filename, regex)
-      meta_filename.sub(regex, '').sub(/[^\/]+\.yaml$/, '')
+    def identifier_for_filename(filename)
+      filename.sub(/[^\/]+\.yaml$/, '')
     end
 
   end

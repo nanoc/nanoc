@@ -50,7 +50,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
   end
 
   def test_items_with_period_in_name
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Create foo.css
     FileUtils.mkdir_p('content/foo')
@@ -83,6 +83,42 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     assert_equal 'Foo Bar',                      items[1][:title]
     assert_equal 'content/foo.bar/foo.bar.css',  items[1][:content_filename]
     assert_equal 'content/foo.bar/foo.bar.yaml', items[1][:meta_filename]
+  end
+
+  def test_items_with_optional_meta_file
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+
+    # Create foo item
+    FileUtils.mkdir_p('content/foo')
+    File.open('content/foo/foo.html', 'w') do |io|
+      io.write('Lorem ipsum dolor sit amet...')
+    end
+
+    # Create bar item
+    FileUtils.mkdir_p('content/bar')
+    File.open('content/bar/bar.yaml', 'w') do |io|
+      io.write("---\n")
+      io.write("title: Bar\n")
+    end
+
+    # Load items
+    items = data_source.items
+
+    # Check items
+    assert_equal(2, items.size)
+    assert(items.any? { |a|
+      a[:title]            == nil &&
+      a[:extension]        == 'html' &&
+      a[:content_filename] == 'content/foo/foo.html' &&
+      a[:meta_filename]    == nil
+    })
+    assert(items.any? { |a|
+      a[:title]            == 'Bar' &&
+      a[:extension]        == nil &&
+      a[:content_filename] == nil &&
+      a[:meta_filename]    == 'content/bar/bar.yaml'
+    })
   end
 
   def test_layouts
@@ -217,162 +253,6 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     # Check file content
     assert_equal 'content here', File.read('layouts/moo/moo.html')
     assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
-  end
-
-  def test_meta_filenames_good
-    # Create data sources
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Create files
-    FileUtils.mkdir_p('foo')
-    File.open('foo/foo.yaml', 'w') { |io| io.write('foo') }
-    FileUtils.mkdir_p('foo.bar')
-    File.open('foo.bar/foo.bar.yaml', 'w') { |io| io.write('foo') }
-
-    # Check
-    assert_equal %w( ./foo/foo.yaml ./foo.bar/foo.bar.yaml ), data_source.send(:meta_filenames, '.')
-  end
-
-  def test_meta_filenames_bad
-    # Create data sources
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Create files
-    FileUtils.mkdir_p('foo')
-    File.open('foo/dsafsdf.yaml', 'w') { |io| io.write('dagasfwegfwa') }
-
-    # Check
-    assert_raises(RuntimeError) do
-      data_source.send(:meta_filenames, '.')
-    end
-  end
-
-  def test_content_filename_for_dir_with_one_content_file
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/baz.html',
-      data_source.instance_eval do
-        content_filename_for_dir('foo/bar/baz')
-      end
-    )
-  end
-
-  def test_content_filename_for_dir_with_two_content_files
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.xhtml', 'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_raises(RuntimeError) do
-      assert_equal(
-        'foo/bar/baz/baz.html',
-        data_source.instance_eval do
-          content_filename_for_dir('foo/bar/baz')
-        end
-      )
-    end
-  end
-
-  def test_content_filename_for_dir_with_one_content_and_one_meta_file
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/baz.html',
-      data_source.instance_eval do
-        content_filename_for_dir('foo/bar/baz')
-      end
-    )
-  end
-
-  def test_content_filename_for_dir_with_one_content_and_many_meta_files
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.yaml', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/foo.yaml', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/zzz.yaml', 'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/baz.html',
-      data_source.instance_eval do
-        content_filename_for_dir('foo/bar/baz')
-      end
-    )
-  end
-
-  def test_content_filename_for_dir_with_one_content_file_and_rejected_files
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/baz.html', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.html~', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.html.orig', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.html.rej', 'w') { |io| io.write('test') }
-    File.open('foo/bar/baz/baz.html.bak', 'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/baz.html',
-      data_source.instance_eval do
-        content_filename_for_dir('foo/bar/baz')
-      end
-    )
-  end
-
-  def test_content_filename_for_dir_with_one_index_content_file
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/bar/baz')
-    File.open('foo/bar/baz/index.html', 'w') { |io| io.write('test') }
-
-    # Check content filename
-    assert_equal(
-      'foo/bar/baz/index.html',
-      data_source.instance_eval do
-        content_filename_for_dir('foo/bar/baz')
-      end
-    )
-  end
-
-  def test_content_filename_for_dir_index_error
-    # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
-
-    # Build directory
-    FileUtils.mkdir_p('foo/index')
-    File.open('foo/index/index.html', 'w') { |io| io.write('test') }
-
-    # Check
-    assert_equal(
-      'foo/index/index.html',
-      data_source.instance_eval { content_filename_for_dir('foo/index') }
-    )
   end
 
   def test_compile_huge_site
