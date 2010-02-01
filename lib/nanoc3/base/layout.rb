@@ -2,25 +2,24 @@
 
 module Nanoc3
 
-  # A Nanoc3::Layout represents a layout in a nanoc site. It has content,
-  # attributes (for determining which filter to use for laying out an item),
-  # an identifier (because layouts are organised hierarchically), and a
-  # modification time (to speed up compilation).
+  # Represents a layout in a nanoc site. It has content, attributes, an
+  # identifier and a modification time (to speed up compilation).
   class Layout
 
-    # The Nanoc3::Site this layout belongs to.
+    # @return [Nanoc3::Site] The site this layout belongs to
     attr_accessor :site
 
-    # The raw content of this layout.
+    # @return [String] The raw content of this layout
     attr_reader :raw_content
 
-    # A hash containing this layout's attributes.
+    # @return [Hash] This layout's attributes
     attr_reader :attributes
 
-    # This layout's identifier, starting and ending with a slash.
+    # @return [String] This layout's identifier, starting and ending with a
+    #  slash
     attr_accessor :identifier
 
-    # The time when this layout was last modified.
+    # @return [Time] The time when this layout was last modified
     attr_reader :mtime
 
     # Creates a new layout.
