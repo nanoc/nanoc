@@ -5,6 +5,23 @@ module Nanoc3
   # Nanoc3::Filter is responsible for filtering items. It is the superclass
   # for all textual filters.
   #
+  # When creating a filter with a hash containing assigned variables, those
+  # variables will be made available in the `@assigns` instance variable and
+  # the {#assigns} method. The assigns itself will also be available as
+  # instance variables and instance methods.
+  #
+  # @example Accessing assigns in different ways
+  #
+  #     filter = SomeFilter.new({ :foo => 'bar' })
+  #     filter.instance_eval { @assigns[:foo] }
+  #       # => 'bar'
+  #     filter.instance_eval { assigns[:foo] }
+  #       # => 'bar'
+  #     filter.instance_eval { @foo }
+  #       # => 'bar'
+  #     filter.instance_eval { foo }
+  #       # => 'bar'
+  #
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Plugin
 
@@ -18,8 +35,16 @@ module Nanoc3
     #
     # @param [Hash] a_assigns A hash containing variables that should be made
     #   available during filtering.
-    def initialize(a_assigns={})
-      @assigns = a_assigns
+    def initialize(hash={})
+      @assigns = hash
+      hash.each_pair do |key, value|
+        # Build instance variable
+        instance_variable_set('@' + key.to_s, value)
+
+        # Define method
+        metaclass = (class << self ; self ; end)
+        metaclass.send(:define_method, key) { value }
+      end
     end
 
     # Sets the identifiers for this filter.
