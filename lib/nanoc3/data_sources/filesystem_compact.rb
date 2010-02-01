@@ -67,11 +67,13 @@ module Nanoc3::DataSources
   #     /journal/2005/another-very-old-post/
   #     /journal/2005/foo.entry/ OR /journal/2005/foo/
   #     /myst/
-  class FilesystemCompact < Nanoc3::DataSources::Filesystem
+  class FilesystemCompact < Nanoc3::DataSource
+
+    include Nanoc3::DataSources::Filesystem
 
   private
 
-  # See {Nanoc3::DataSources::Filesystem#create_object}.
+    # See {Nanoc3::DataSources::Filesystem#create_object}.
     def create_object(dir_name, content, attributes, identifier)
       # Check for periods
       if (@config.nil? || !@config[:allow_periods_in_identifiers]) && identifier.include?('.')

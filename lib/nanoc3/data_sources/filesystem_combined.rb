@@ -53,7 +53,9 @@ module Nanoc3::DataSources
   #
   # The file extension does not determine the filters to run on items; the
   # Rules file is used to specify processing instructors for each item.
-  class FilesystemCombined < Nanoc3::DataSources::Filesystem
+  class FilesystemCombined < Nanoc3::DataSource
+
+    include Nanoc3::DataSources::Filesystem
 
   private
 

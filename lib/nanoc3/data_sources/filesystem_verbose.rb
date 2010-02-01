@@ -34,11 +34,13 @@ module Nanoc3::DataSources
   # The identifier is calculated by stripping the extension; if there is more
   # than one extension, only the last extension is stripped and the previous
   # extensions will be part of the identifier.
-  class FilesystemVerbose < Nanoc3::DataSources::Filesystem
+  class FilesystemVerbose < Nanoc3::DataSource
+
+    include Nanoc3::DataSources::Filesystem
 
   private
 
-  # See {Nanoc3::DataSources::Filesystem#load_objects}.
+    # See {Nanoc3::DataSources::Filesystem#load_objects}.
     def load_objects(dir_name, kind, klass)
       meta_filenames(dir_name).map do |meta_filename|
         # Read metadata
