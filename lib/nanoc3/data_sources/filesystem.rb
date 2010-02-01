@@ -72,6 +72,59 @@ module Nanoc3::DataSources
       )
     end
 
+    # Loads objects (like {Nanoc3::DataSources::Filesystem#load_objects]) from
+    # a filesystem-based data source where content and attributes are spread
+    # over two separate files (e.g. {Nanoc3::DataSources::FilesystemVerbose}
+    # and {Nanoc3::DataSources::FilesystemCompact}).
+    #
+    # @see Nanoc3::DataSources::Filesystem#load_objects
+    def load_split_objects(dir_name, kind, klass)
+      all_split_files_in(dir_name).map do |base_filename, (meta_ext, content_ext)|
+        # Get filenames
+        meta_filename    = filename_for(base_filename, meta_ext)
+        content_filename = filename_for(base_filename, content_ext)
+
+        # Get meta and content
+        meta    = (meta_filename    ? YAML.load_file(meta_filename) : nil) || {}
+        content = (content_filename ? File.read(content_filename)   : nil) || ''
+
+        # Get attributes
+        attributes = {
+          :content_filename => content_filename,
+          :meta_filename    => meta_filename,
+          :extension        => content_filename ? ext_of(content_filename)[1..-1] : nil,
+          # WARNING :file is deprecated; please create a File object manually
+          # using the :content_filename or :meta_filename attributes.
+          :file             => content_filename ? Nanoc3::Extra::FileProxy.new(content_filename) : nil
+        }.merge(meta)
+
+        # Get identifier
+        if meta_filename
+          identifier = identifier_for_filename(meta_filename[(dir_name.length+1)..-1])
+        elsif content_filename
+          identifier = identifier_for_filename(content_filename[(dir_name.length+1)..-1])
+        else
+          raise RuntimeError, "meta_filename and content_filename are both nil"
+        end
+
+        # Get modification times
+        meta_mtime    = meta_filename    ? File.stat(meta_filename).mtime    : nil
+        content_mtime = content_filename ? File.stat(content_filename).mtime : nil
+        if meta_mtime && content_mtime
+          mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
+        elsif meta_mtime
+          mtime = meta_mtime
+        elsif content_mtime
+          mtime = content_mtime
+        else
+          raise RuntimeError, "meta_mtime and content_mtime are both nil"
+        end
+
+        # Create layout object
+        klass.new(content, attributes, identifier, mtime)
+      end
+    end
+
     # Finds all items/layouts/... in the given base directory. Returns a hash
     # in which the keys are the file's dirname + basenames, and the values a
     # pair consisting of the metafile extension and the content file
@@ -112,6 +165,30 @@ module Nanoc3::DataSources
 
       # Done
       grouped_filenames
+    end
+
+    # Returns the filename for the given base filename and the extension.
+    #
+    # If the extension is nil, this function should return nil as well.
+    #
+    # A simple implementation would simply concatenate the base filename, a
+    # period and an extension (which is what the
+    # {Nanoc3::DataSources::FilesystemCompact} data source does), but other
+    # data sources may prefer to implement this differently (for example,
+    # {Nanoc3::DataSources::FilesystemVerbose} doubles the last part of the
+    # basename before concatenating it with a period and the extension).
+    def filename_for(base_filename, ext)
+      raise NotImplementedError.new(
+        "#{self.class} does not implement #filename_for"
+      )
+    end
+
+    # Returns the identifier that corresponds with the given filename, which
+    # can be the content filename or the meta filename.
+    def identifier_for_filename(filename)
+      raise NotImplementedError.new(
+        "#{self.class} does not implement #identifier_for_filename"
+      )
     end
 
     # Returns the base name of filename, i.e. filename with the first or all
