@@ -12,83 +12,130 @@ module Nanoc3
     # Error that is raised when a site is loaded that uses a data source with
     # an unknown identifier.
     class UnknownDataSource < Generic
+
+      # @param [String] data_source_name The data source name for which no
+      #   data source could be found
       def initialize(data_source_name)
         super("The data source specified in the site's configuration file, #{data_source_name}, does not exist.")
       end
+
     end
 
     # Error that is raised during site compilation when an item uses a layout
     # that is not present in the site.
     class UnknownLayout < Generic
+
+      # @param [String] layout_identifier The layout identifier for which no
+      #   layout could be found
       def initialize(layout_identifier)
         super("The site does not have a layout with identifier '#{layout_identifier}'.")
       end
+
     end
 
     # Error that is raised during site compilation when an item uses a filter
     # that is not known.
     class UnknownFilter < Generic
+
+      # @param [Symbol] filter_name The filter name for which no filter could
+      #   be found
       def initialize(filter_name)
         super("The requested filter, #{filter_name}, does not exist.")
       end
+
     end
 
     # Error that is raised during site compilation when a layout is compiled
     # for which the filter cannot be determined. This is similar to the
-    # UnknownFilterError, but specific for filters for layouts.
+    # {UnknownFilterError}, but specific for filters for layouts.
     class CannotDetermineFilter < Generic
+
+      # @param [String] layout_identifier The identifier of the layout for
+      #   which the filter could not be determined
       def initialize(layout_identifier)
         super("The filter to be used for the '#{layout_identifier}' could not be determined. Make sure the layout does have a filter.")
       end
+
     end
 
     # Error that is raised when data is requested when the data is not yet
-    # available (possibly due to a missing Nanoc3::Site#load_data).
+    # available (possibly due to a missing {Nanoc3::Site#load_data}).
     class DataNotYetAvailable < Generic
+
+      # @param [String] type The name of the data type that is not yet
+      #   available. For example: `"site"`, `"items"`.
+      #
+      # @param [Boolean] plural True if the given type is plural, false
+      #   otherwise. This only has an effect on the exception message. For
+      #   example, if the given type is `"site"`, plural would be `false`; if
+      #   the given type is `"items"`, plural would be `true`.
       def initialize(type, plural)
         super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc3::Site#load_data call.")
       end
+
     end
 
     # Error that is raised during site compilation when an item (directly or
     # indirectly) includes its own item content, leading to endless recursion.
     class RecursiveCompilation < Generic
+
+      # @param [Array<Nanoc3::ItemRep>] reps A list of item representations
+      #   that mutually depend on each other
       def initialize(reps)
         super("The site cannot be compiled because the following items mutually depend on each other: #{reps.inspect}.")
       end
+
     end
 
     # Error that is raised when no rules file can be found in the current
     # working directory.
     class NoRulesFileFound < Generic
+
       def initialize
         super("This site does not have a rules file, which is required for nanoc sites.")
       end
+
     end
 
     # Error that is raised when no compilation rule that can be applied to the
     # current item can be found.
     class NoMatchingCompilationRuleFound < Generic
+
+      # @param [Nanoc3::Item] item The item for which no compilation rule
+      #   could be found
       def initialize(item)
         super("No compilation rules were found for the '#{item.identifier}' item.")
       end
+
     end
 
     # Error that is raised when no routing rule that can be applied to the
     # current item can be found.
     class NoMatchingRoutingRuleFound < Generic
+
+      # @param [Nanoc3::Item] item The item for which no routing rule could be
+      #   found
       def initialize(rep)
         super("No routing rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
       end
+
     end
 
-    # Error that is raised when an rep cannot be compiled because it depends on other representations.
+    # Error that is raised when an rep cannot be compiled because it depends
+    # on other representations.
     class UnmetDependency < Generic
+
+      # @return [Nanoc3::ItemRep] The item representation that cannot yet be
+      #   compiled
       attr_reader :rep
+
+      # @param [Nanoc3::ItemRep] The item representation that cannot yet be
+      #   compiled
       def initialize(rep)
         @rep = rep
         super("The '#{rep.item.identifier}' item (rep '#{rep.name}') cannot currently be compiled yet due to an unmet dependency.")
       end
+
     end
 
   end
