@@ -69,6 +69,7 @@ components, however, do have dependencies:
 * Colin Barrett
 * Dmitry Bilunov
 * Brian Candler
+* Chris Eppstein
 * Starr Horne
 * Nicky Peeters
 * Christian Plessl
