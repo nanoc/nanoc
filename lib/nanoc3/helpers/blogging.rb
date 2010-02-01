@@ -234,10 +234,10 @@ module Nanoc3::Helpers
     def atom_tag_for(item)
       require 'time'
 
-      hostname        = @site.config[:base_url].sub(/.*:\/\/(.+?)\/?$/, '\1')
-      formatted_date  = Time.parse(item[:created_at]).to_iso8601_date
+      hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
+      formatted_date     = Time.parse(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + (item.reps[0].path || item.identifier)
+      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.reps[0].path || item.identifier)
     end
 
   end
