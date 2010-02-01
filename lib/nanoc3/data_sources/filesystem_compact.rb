@@ -98,7 +98,7 @@ module Nanoc3::DataSources
 
     # See {Nanoc3::DataSources::Filesystem#load_objects}.
     def load_objects(dir_name, kind, klass)
-      all_files_in(dir_name).map do |base_filename, (meta_ext, content_ext)|
+      all_split_files_in(dir_name).map do |base_filename, (meta_ext, content_ext)|
         # Get filenames
         meta_filename    = meta_ext    ? base_filename + '.' + meta_ext    : nil
         content_filename = content_ext ? base_filename + '.' + content_ext : nil
@@ -139,51 +139,9 @@ module Nanoc3::DataSources
           raise RuntimeError, "meta_mtime and content_mtime are both nil"
         end
 
-        # Create layout object
+        # Create item/layout object
         klass.new(content, attributes, identifier, mtime)
       end
-    end
-
-    # Finds all items/layouts/... in the given base directory. Returns a hash
-    # in which the keys are the file's dirname + basenames, and the values a
-    # pair consisting of the metafile extension and the content file
-    # extension. The meta file extension or the content file extension can be
-    # nil, but not both. Backup files are ignored. For example:
-    #
-    #   {
-    #     'content/foo' => [ 'yaml', 'html' ],
-    #     'content/bar' => [ 'yaml', nil    ],
-    #     'content/qux' => [ nil,    'html' ]
-    #   }
-    def all_files_in(dir_name)
-      # Get all good file names
-      filenames = Dir[dir_name + '/**/*'].select { |i| File.file?(i) }
-      filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
-
-      # Group by identifier
-      grouped_filenames = filenames.group_by { |fn| basename_of(fn) }
-
-      # Convert values into metafile/content file extension tuple
-      grouped_filenames.each_pair do |key, filenames|
-        # Divide
-        meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
-        content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
-
-        # Check number of files per type
-        if ![ 0, 1 ].include?(meta_filenames.size)
-          raise RuntimeError, "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
-        end
-        if ![ 0, 1 ].include?(content_filenames.size)
-          raise RuntimeError, "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
-        end
-
-        # Reorder elements and convert to extnames
-        filenames[0] = meta_filenames[0]    ? ext_of(meta_filenames[0])[1..-1]    : nil
-        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] : nil
-      end
-
-      # Done
-      grouped_filenames
     end
 
     # Returns the identifier for the given filename. This method assumes that
@@ -208,31 +166,6 @@ module Nanoc3::DataSources
         components[0..-2].join('/').cleaned_identifier
       else
         components.join('/').cleaned_identifier
-      end
-    end
-
-    # Returns the base name of filename, i.e. filename with the first or all
-    # extensions stripped off. By default, all extensions are stripped off,
-    # but when allow_periods_in_identifiers is set to true in the site
-    # configuration, only the last extension will be stripped .
-    def basename_of(filename)
-      filename.sub(extension_regex, '')
-    end
-
-    # Returns the extension(s) of filename. Supports multiple extensions.
-    # Includes the leading period.
-    def ext_of(filename)
-      filename =~ extension_regex ? $1 : ''
-    end
-
-    # Returns a regex that is used for determining the extension of a file
-    # name. The first match group will be the entire extension, including the
-    # leading period.
-    def extension_regex
-      if @config && @config[:allow_periods_in_identifiers]
-        /(\.[^\/\.]+$)/
-      else
-        /(\.[^\/]+$)/
       end
     end
 
