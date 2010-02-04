@@ -27,6 +27,7 @@ Changed:
 * The metadata section in `filesystem_combined` is now optional [Christopher
   Eppstein]
 * The `--server` autocompile option is now known as `--handler`
+* Assigns in filters are now available as instance variables and methods
 * Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
 * Deprecated `#content_at_snapshot`; use `#compiled_content` instead
 
