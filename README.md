@@ -29,7 +29,7 @@ The source code is structured in a few directories:
   * `nanoc3`
     * `base` contains the bare essentials necessary for nanoc to function
     * `cli` contains the commandline interface
-    * *data_sources* contains the standard data sources (Nanoc3::DataSource
+    * `data_sources` contains the standard data sources (Nanoc3::DataSource
       subclasses), such as the filesystem data source
     * `helpers` contains helpers, which provide functionality some sites
       may find useful, such as the blogging and tagging helpers
