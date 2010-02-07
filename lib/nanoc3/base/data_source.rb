@@ -228,8 +228,13 @@ module Nanoc3
     #
     # @param [String] identifier
     #
+    # @param [Hash] params Extra parameters to give to the data source. This
+    #   can be used to influence the way items are stored. For example,
+    #   filesystem data sources could use this to pass the extension of the
+    #   files that should be generated.
+    #
     # @return [void]
-    def create_item(content, attributes, identifier)
+    def create_item(content, attributes, identifier, params={})
       not_implemented('create_item')
     end
 
@@ -246,8 +251,13 @@ module Nanoc3
     #
     # @param [String] identifier
     #
+    # @param [Hash] params Extra parameters to give to the data source. This
+    #   can be used to influence the way items are stored. For example,
+    #   filesystem data sources could use this to pass the extension of the
+    #   files that should be generated.
+    #
     # @return [void]
-    def create_layout(content, attributes, identifier)
+    def create_layout(content, attributes, identifier, params={})
       not_implemented('create_layout')
     end
 
