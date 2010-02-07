@@ -30,6 +30,7 @@ Changed:
 * Assigns in filters are now available as instance variables and methods
 * Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
 * Deprecated `#content_at_snapshot`; use `#compiled_content` instead
+* The `#breadcrumbs_trail` function now allows missing parents
 
 Removed:
 
