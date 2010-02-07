@@ -6,18 +6,6 @@ class Nanoc3::CLI::Commands::CreateLayoutTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_creates_layout
-    Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
-
-    FileUtils.cd('foo') do
-      # Create new layout
-      Nanoc3::CLI::Base.new.run([ 'create_layout', 'moo' ])
-
-      # Check presence
-      assert_equal 2, Dir['layouts/moo.*'].size
-    end
-  end
-
   def test_can_compile_new_layout
     Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
 
