@@ -62,11 +62,6 @@ module Nanoc3::DataSources
       File.open(content_filename, 'w') { |io| io.write(content) }
     end
 
-    # See {Nanoc3::DataSources::Filesystem#load_objects}.
-    def load_objects(dir_name, kind, klass)
-      load_split_objects(dir_name, kind, klass)
-    end
-
     # See {Nanoc3::DataSources::Filesystem#filename_for}.
     def filename_for(base_filename, ext)
       last_part = base_filename.split('/')[-1]

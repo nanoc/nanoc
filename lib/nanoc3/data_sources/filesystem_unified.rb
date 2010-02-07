@@ -34,11 +34,6 @@ module Nanoc3::DataSources
       end
     end
 
-    # See {Nanoc3::DataSources::Filesystem#load_objects}.
-    def load_objects(dir_name, kind, klass)
-      load_split_objects(dir_name, kind, klass)
-    end
-
     # See {Nanoc3::DataSources::Filesystem#filename_for}.
     def filename_for(base_filename, ext)
       ext ? base_filename + '.' + ext : nil
