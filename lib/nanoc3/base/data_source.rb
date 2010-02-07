@@ -38,6 +38,8 @@ module Nanoc3
     #   online data sources could contain authentication details.
     attr_reader :config
 
+    extend Nanoc3::Plugin::PluginMethods
+
     # Creates a new data source for the given site.
     #
     # @param [Nanoc3::Site] site The site this data source belongs to.
@@ -58,57 +60,6 @@ module Nanoc3
       @config       = config
 
       @references = 0
-    end
-
-    # Sets the identifiers for this data source. For simplicity, is
-    # recommended to give only a single identifier to a data source.
-    #
-    # @example Defining identifiers to a data source
-    #
-    #   class UltraSpecialDataSource < Nanoc3::DataSource
-    #     identifiers :ultra_special, :awesome
-    #     # ...
-    #   end
-    #
-    # @param [Array<Symbol>] identifiers A list of identifiers to assign to
-    #   this data source class
-    #
-    # @return [void]
-    def self.identifiers(*identifiers)
-      Nanoc3::DataSource.register(self, *identifiers)
-    end
-
-    # Sets the identifier for this data source.
-    #
-    # @example Defining an identifier to a data source
-    #
-    #   class UltraSpecialDataSource < Nanoc3::DataSource
-    #     identifier :ultra_special
-    #     # ...
-    #   end
-    #
-    # @param [Symbol] identifier An identifier to assign to this data source
-    #   class
-    #
-    # @return [void]
-    def self.identifier(identifier)
-      Nanoc3::DataSource.register(self, identifier)
-    end
-
-    # Registers the given class as a data source with the given identifier.
-    #
-    # @return [void]
-    def self.register(class_or_name, *identifiers)
-      Nanoc3::Plugin.register(Nanoc3::DataSource, class_or_name, *identifiers)
-    end
-
-    # Returns the data source with the given name
-    #
-    # @param [String] name The name of the data source class to find
-    #
-    # @return [Class] The data source class with the given name
-    def self.named(name)
-      Nanoc3::Plugin.find(self, name)
     end
 
     # Loads the data source when necessary (calling {#up}), yields, and

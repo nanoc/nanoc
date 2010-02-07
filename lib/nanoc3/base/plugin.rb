@@ -11,6 +11,50 @@ module Nanoc3
 
     MAP = {}
 
+    module PluginMethods
+      # Sets the identifiers for this plugin.
+      #
+      # @param [Array<Symbol>] identifier A list of identifiers to assign to
+      #   this plugin.
+      #
+      # @return [void]
+      def identifiers(*identifiers)
+        register(self, *identifiers)
+      end
+
+      # Sets the identifier for this plugin.
+      #
+      # @param [Symbol] identifier An identifier to assign to this plugin.
+      #
+      # @return [void]
+      def identifier(identifier)
+        register(self, identifier)
+      end
+
+      # Registers the given class as a plugin with the given identifier.
+      #
+      # @param [Class, String] class_or_name The class to register, or a
+      #   string containing the class name to register.
+      #
+      # @param [Array<Symbol>] identifiers A list of identifiers to assign to
+      #   this plugin.
+      #
+      # @return [void]
+      def register(class_or_name, *identifiers)
+        Nanoc3::Plugin.register(self, class_or_name, *identifiers)
+      end
+
+      # Returns the plugin with the given name (identifier)
+      #
+      # @param [String] name The name of the plugin class to find
+      #
+      # @return [Class] The plugin class with the given name
+      def named(name)
+        Nanoc3::Plugin.find(self, name)
+      end
+
+    end
+
     class << self
 
       # Registers the given class as a plugin.
