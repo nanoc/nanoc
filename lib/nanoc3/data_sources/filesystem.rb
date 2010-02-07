@@ -84,12 +84,12 @@ module Nanoc3::DataSources
         meta_filename    = filename_for(base_filename, meta_ext)
         content_filename = filename_for(base_filename, content_ext)
 
-        # Get meta and content
-        meta    = (meta_filename    ? YAML.load_file(meta_filename) : nil) || {}
-        content = (content_filename ? File.read(content_filename)   : nil) || ''
+        # Read content and metadata
+        meta, content = parse(content_filename, meta_filename, kind)
 
         # Get attributes
         attributes = {
+          :filename         => content_filename,
           :content_filename => content_filename,
           :meta_filename    => meta_filename,
           :extension        => content_filename ? ext_of(content_filename)[1..-1] : nil,
@@ -214,6 +214,42 @@ module Nanoc3::DataSources
       else
         /(\.[^\/]+$)/
       end
+    end
+
+    # Parses the file named `filename` and returns an array with its first
+    # element a hash with the file's metadata, and with its second element the
+    # file content itself.
+    def parse(content_filename, meta_filename, kind)
+      # Read content and metadata from separate files
+      if meta_filename
+        content = content_filename ? File.read(content_filename) : ''
+        meta    = YAML.load_file(meta_filename) || {}
+
+        return [ meta, content ]
+      end
+
+      # Read data
+      data = File.read(content_filename)
+
+      # Check presence of metadata section
+      if data !~ /^(-{5}|-{3})/
+        return [ {}, data ]
+      end
+
+      # Split data
+      pieces = data.split(/^(-{5}|-{3})/)
+      if pieces.size < 4
+        raise RuntimeError.new(
+          "The file '#{content_filename}' does not seem to be a nanoc #{kind}"
+        )
+      end
+
+      # Parse
+      meta    = YAML.load(pieces[2]) || {}
+      content = pieces[4..-1].join.strip
+
+      # Done
+      [ meta, content ]
     end
 
   end

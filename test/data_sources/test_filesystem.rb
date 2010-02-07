@@ -263,4 +263,86 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_parse_embedded_invalid_2
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    assert_raises(RuntimeError) do
+      data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    end
+  end
+
+  def test_parse_embedded_full_meta
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "foo: bar\n"
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({ 'foo' => 'bar' }, result[0])
+    assert_equal('blah blah', result[1])
+  end
+
+  def test_parse_embedded_empty_meta
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({}, result[0])
+    assert_equal('blah blah', result[1])
+  end
+
+  def test_parse_embedded_no_meta
+    content = "blah\n" \
+      "blah blah blah\n" \
+      "blah blah\n"
+
+    # Create a file
+    File.open('test.html', 'w') { |io| io.write(content) }
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({}, result[0])
+    assert_equal(content, result[1])
+  end
+
+  def test_parse_external
+    # Create a file
+    File.open('test.html', 'w') { |io| io.write("blah blah") }
+    File.open('test.yaml', 'w') { |io| io.write("foo: bar") }
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
+    assert_equal({ "foo" => "bar"}, result[0])
+    assert_equal("blah blah",       result[1])
+  end
+
 end
