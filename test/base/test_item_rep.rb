@@ -353,7 +353,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     FileUtils.rm_f('output.html')
   end
 
-  def test_compiled_content
+  def test_compiled_content_with_only_last_available
     # Create rep
     item = mock
     item.stubs(:raw_content).returns(nil)
@@ -363,6 +363,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal 'last content', rep.compiled_content
+  end
+
+  def test_compiled_content_with_pre_and_last_available
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal 'pre content', rep.compiled_content
   end
 
   def test_compiled_content_with_custom_snapshot
