@@ -2,37 +2,40 @@
 
 module Nanoc3
 
-  # Nanoc3::Item represents a compileable item in a site. It has content and
-  # attributes, as well as an identifier. It can also store the modification
-  # time to speed up compilation.
+  # Represents a compileable item in a site. It has content and attributes, as
+  # well as an identifier (which starts and ends with a slash). It can also
+  # store the modification time to speed up compilation.
   class Item
 
-    # The Nanoc3::Site this item belongs to.
+    # @return [Nanoc3::Site] The site this item belongs to
     attr_accessor :site
 
-    # A hash containing this item's attributes.
+    # @return [Hash] This item's attributes
     attr_accessor :attributes
 
-    # This item's identifier.
+    # @return [String] This item's identifier
     attr_accessor :identifier
 
-    # The time when this item was last modified.
+    # @return [Time] The time when this item was last modified
     attr_reader   :mtime
 
-    # This item's list of item representations.
+    # @return [Array<Nanoc3::ItemRep>] This item’s list of item reps
     attr_reader   :reps
 
-    # This item's raw, uncompiled content.
+    # @return [String] This item's raw, uncompiled content
     attr_reader   :raw_content
 
-    # The parent item of this item. This can be nil even for non-root items.
+    # @return [Nanoc3::Item, nil] The parent item of this item. This can be
+    #   nil even for non-root items.
     attr_accessor :parent
 
-    # The child items of this item.
+    # @return [Array<Nanoc3::Item>] The child items of this item
     attr_accessor :children
 
-    # A boolean indicating whether or not this item is outdated because of its dependencies are outdated.
+    # @return [Boolean] Whether or not this item is outdated because of its
+    #   dependencies are outdated
     attr_accessor :outdated_due_to_dependencies
+    alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
 
     # @param [String] raw_content The uncompiled item content.
     #
@@ -55,9 +58,9 @@ module Nanoc3
 
     # Returns the rep with the given name.
     #
-    # @param [Symbol] rep_name The name of the representation to return.
+    # @param [Symbol] rep_name The name of the representation to return
     #
-    # @return [Nanoc3::ItemRep] The representation with the given name.
+    # @return [Nanoc3::ItemRep] The representation with the given name
     def rep(rep_name)
       @reps.find { |r| r.name == rep_name }
     end
@@ -74,6 +77,10 @@ module Nanoc3
     #   which to fetch the compiled content. By default, the fully compiled
     #   content will be fetched, with all filters and layouts applied--not the
     #   pre-layout content.
+    #
+    # @return [String] The compiled content of the given rep (or the default
+    #   rep if no rep is specified) at the given snapshot (or the default
+    #   snapshot if no snapshot is specified)
     def compiled_content(params={})
       rep_name      = params[:rep]      || :default
       snapshot_name = params[:snapshot] || :last
@@ -95,6 +102,9 @@ module Nanoc3
     # @option params [String] :rep (:default) The name of the representation
     #   from which the path should be fetched. By default, the path will be
     #   fetched from the default representation.
+    #
+    # @return [String] The path of the given rep ( or the default rep if no
+    #   rep is specified)
     def path(params={})
       rep_name = params[:rep] || :default
 
@@ -111,9 +121,9 @@ module Nanoc3
 
     # Requests the attribute with the given key.
     #
-    # @param [Symbol] key The name of the attribute to fetch.
+    # @param [Symbol] key The name of the attribute to fetch
     #
-    # @return [Object] The value of the requested attribute.
+    # @return [Object] The value of the requested attribute
     def [](key)
       Nanoc3::NotificationCenter.post(:visit_started, self)
       Nanoc3::NotificationCenter.post(:visit_ended,   self)
@@ -123,21 +133,19 @@ module Nanoc3
 
     # Sets the attribute with the given key to the given value.
     #
-    # @param [Symbol] key The name of the attribute to set.
+    # @param [Symbol] key The name of the attribute to set
     #
-    # @param [Object] value The value of the attribute to set.
+    # @param [Object] value The value of the attribute to set
     def []=(key, value)
       @attributes[key] = value
     end
 
+    # Determines whether this item (or rather, its reps) is outdated and
+    # should be recompiled (or rather, its reps should be recompiled).
+    #
     # @return [Boolean] true if any reps are outdated; false otherwise.
     def outdated?
       @reps.any? { |r| r.outdated? }
-    end
-
-    # Alias for #outdated_due_to_dependencies.
-    def outdated_due_to_dependencies?
-      self.outdated_due_to_dependencies
     end
 
     def inspect
