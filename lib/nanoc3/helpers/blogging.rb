@@ -113,9 +113,9 @@ module Nanoc3::Helpers
     #   include in the feed
     #
     # @option params [Proc] :content_proc (->{ |article|
-    #   article.compiled_content }) A proc that returns the content of
-    #   the given article, which is passed as a parameter. This function may
-    #   not return nil.
+    #   article.compiled_content(:snapshot => :pre) }) A proc that returns the
+    #   content of the given article, which is passed as a parameter. This
+    #   function may not return nil.
     #
     # @option params [proc] :excerpt_proc (->{ |article| article[:excerpt] })
     #   A proc that returns the excerpt of the given article, passed as a
@@ -129,7 +129,7 @@ module Nanoc3::Helpers
       # Extract parameters
       limit             = params[:limit] || 5
       relevant_articles = params[:articles] || articles || []
-      content_proc      = params[:content_proc] || lambda { |a| a.rep(:default).content_at_snapshot(:pre) }
+      content_proc      = params[:content_proc] || lambda { |a| a.compiled_content(:snapshot => :pre) }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
 
       # Check config attributes
@@ -230,7 +230,7 @@ module Nanoc3::Helpers
       end
 
       # Get path
-      path = item[:custom_path_in_feed] || item.rep(:default).path
+      path = item[:custom_path_in_feed] || item.path
       return nil if path.nil?
 
       # Build URL
@@ -247,7 +247,7 @@ module Nanoc3::Helpers
         raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @item[:feed_url] || @site.config[:base_url] + @item.rep(:default).path
+      @item[:feed_url] || @site.config[:base_url] + @item.path
     end
 
     # Returns an URI containing an unique ID for the given item. This will be
@@ -265,7 +265,7 @@ module Nanoc3::Helpers
       hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
       formatted_date     = Time.parse(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.rep(:default).path || item.identifier)
+      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier)
     end
 
   end
