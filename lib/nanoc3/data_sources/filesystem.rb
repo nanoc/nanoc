@@ -66,19 +66,15 @@ module Nanoc3::DataSources
     # Creates instances of klass corresponding to the files in dir_name. The
     # kind attribute indicates the kind of object that is being loaded and is
     # used solely for debugging purposes.
-    def load_objects(dir_name, kind, klass)
-      raise NotImplementedError.new(
-        "#{self.class} does not implement ##{name}"
-      )
-    end
-
-    # Loads objects (like {Nanoc3::DataSources::Filesystem#load_objects]) from
-    # a filesystem-based data source where content and attributes are spread
-    # over two separate files (e.g. {Nanoc3::DataSources::FilesystemVerbose}
-    # and {Nanoc3::DataSources::FilesystemCompact}).
+    #
+    # This particular implementation loads objects from a filesystem-based
+    # data source where content and attributes can be spread over two separate
+    # files. The content and meta-file are optional (but at least one of them
+    # needs to be present, obviously) and the content file can start with a
+    # metadata section.
     #
     # @see Nanoc3::DataSources::Filesystem#load_objects
-    def load_split_objects(dir_name, kind, klass)
+    def load_objects(dir_name, kind, klass)
       all_split_files_in(dir_name).map do |base_filename, (meta_ext, content_ext)|
         # Get filenames
         meta_filename    = filename_for(base_filename, meta_ext)
