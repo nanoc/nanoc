@@ -35,26 +35,30 @@ module Nanoc3
         end
       end
 
-      # Returns the plugin with the given name. Only subclasses of this class
-      # will be searched. For example, calling this method on {Nanoc3::Filter}
-      # will cause only {Nanoc3::Filter} subclasses to be searched.
+      # Finds the plugin that is a subclass of the given class and has the
+      # given name.
       #
       # @param [Symbol] name The name of the plugin to return
       #
       # @return [Class, nil] The plugin with the given name
-      def named(name)
+      def find(klass, name)
         # Initialize
-        MAP[self] ||= {}
+        MAP[klass] ||= {}
 
         # Lookup
-        class_or_name = MAP[self][name.to_sym]
+        class_or_name = MAP[klass][name.to_sym]
 
         # Get class
         if class_or_name.is_a?(String)
-          class_or_name.scan(/\w+/).inject(self) { |memo, part| memo.const_get(part) }
+          class_or_name.scan(/\w+/).inject(klass) { |memo, part| memo.const_get(part) }
         else
           class_or_name
         end
+      end
+
+      # @deprecated Use {Nanoc3::Plugin#find} instead.
+      def named(name)
+        find(self, name)
       end
 
       # Returns a list of all plugins in the following format:
