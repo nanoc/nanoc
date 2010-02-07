@@ -8,10 +8,11 @@ class Nanoc3::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
 
   include Nanoc3::Helpers::Breadcrumbs
 
-  def test_breadcrumbs_trail_with_0_parents
+  def test_breadcrumbs_trail_at_root
     # Mock item
     @item = mock
-    @item.expects(:parent).returns(nil)
+    @item.stubs(:identifier).returns('/')
+    @items = [ @item ]
 
     # Build trail
     trail = breadcrumbs_trail
@@ -26,9 +27,10 @@ class Nanoc3::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
   def test_breadcrumbs_trail_with_1_parent
     # Mock item
     parent = mock
-    parent.expects(:parent).returns(nil)
+    parent.stubs(:identifier).returns('/')
     @item = mock
-    @item.expects(:parent).returns(parent)
+    @item.stubs(:identifier).returns('/foo/')
+    @items = [ parent, @item ]
 
     # Build trail
     trail = breadcrumbs_trail
@@ -43,11 +45,12 @@ class Nanoc3::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
   def test_breadcrumbs_trail_with_many_parents
     # Mock item
     grandparent = mock
-    grandparent.expects(:parent).returns(nil)
+    grandparent.stubs(:identifier).returns('/')
     parent = mock
-    parent.expects(:parent).returns(grandparent)
+    parent.stubs(:identifier).returns('/foo/')
     @item = mock
-    @item.expects(:parent).returns(parent)
+    @item.stubs(:identifier).returns('/foo/bar/')
+    @items = [ grandparent, parent, @item ]
 
     # Build trail
     trail = breadcrumbs_trail
@@ -55,6 +58,24 @@ class Nanoc3::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
     # Check
     assert_equal(
       [ grandparent, parent, @item ],
+      trail
+    )
+  end
+
+  def test_breadcrumbs_trail_with_nils
+    # Mock item
+    grandparent = mock
+    grandparent.stubs(:identifier).returns('/')
+    @item = mock
+    @item.stubs(:identifier).returns('/foo/bar/')
+    @items = [ grandparent, @item ]
+
+    # Build trail
+    trail = breadcrumbs_trail
+
+    # Check
+    assert_equal(
+      [ grandparent, nil, @item ],
       trail
     )
   end

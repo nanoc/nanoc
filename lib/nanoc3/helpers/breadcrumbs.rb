@@ -8,20 +8,22 @@ module Nanoc3::Helpers
 
     # Creates a breadcrumb trail leading from the current item to its parent,
     # to its parent’s parent, etc, until the root item is reached. This
-    # function expects that each intermediate item exist; for example, if
-    # there is no `/foo/` item, breadcrumbs for a `/foo/bar/` item cannot not
-    # be calculated.
+    # function does not require that each intermediate item exist; for
+    # example, if there is no `/foo/` item, breadcrumbs for a `/foo/bar/` item
+    # will contain a `nil` element.
     #
     # @return [Array] The breadcrumbs, starting with the root item and ending
     #   with the item itself
     def breadcrumbs_trail
-      trail = [] 
-      item = @item 
+      trail = []
+      current_identifier = @item.identifier
 
-      begin
-        trail.unshift(item) 
-        item = item.parent 
-      end until item.nil?
+      loop do
+        item = @items.find { |i| i.identifier == current_identifier }
+        trail.unshift(item)
+        break if current_identifier == '/'
+        current_identifier = current_identifier.sub(/[^\/]+\/$/, '')
+      end
 
       trail
     end
