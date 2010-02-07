@@ -41,15 +41,16 @@ module Nanoc3::DataSources
   private
 
     # See {Nanoc3::DataSources::Filesystem#create_object}.
-    def create_object(dir_name, content, attributes, identifier)
+    def create_object(dir_name, content, attributes, identifier, params={})
       # Determine base path
       last_component = identifier.split('/')[-1] || dir_name
       base_path = dir_name + identifier + last_component
 
       # Get filenames
+      ext = params[:extension] || '.html'
       dir_path         = dir_name + identifier
       meta_filename    = dir_name + identifier + last_component + '.yaml'
-      content_filename = dir_name + identifier + last_component + '.html'
+      content_filename = dir_name + identifier + last_component + ext
                                      
       # Notify
       Nanoc3::NotificationCenter.post(:file_created, meta_filename)

@@ -61,7 +61,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
 
     # Check
-    data_source.expects(:create_object).with('content', 'the content', 'the attributes', 'the identifier')
+    data_source.expects(:create_object).with('content', 'the content', 'the attributes', 'the identifier', {})
     data_source.create_item('the content', 'the attributes', 'the identifier')
   end
 
@@ -70,7 +70,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
 
     # Check
-    data_source.expects(:create_object).with('layouts', 'the content', 'the attributes', 'the identifier')
+    data_source.expects(:create_object).with('layouts', 'the content', 'the attributes', 'the identifier', {})
     data_source.create_layout('the content', 'the attributes', 'the identifier')
   end
 

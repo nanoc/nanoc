@@ -10,7 +10,7 @@ module Nanoc3::DataSources
   private
 
     # See {Nanoc3::DataSources::Filesystem#create_object}.
-    def create_object(dir_name, content, attributes, identifier)
+    def create_object(dir_name, content, attributes, identifier, params={})
       # Check for periods
       if (@config.nil? || !@config[:allow_periods_in_identifiers]) && identifier.include?('.')
         raise RuntimeError,
@@ -18,7 +18,8 @@ module Nanoc3::DataSources
       end
 
       # Determine path
-      path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + '.html')
+      ext = params[:extension] || '.html'
+      path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + ext)
       parent_path = File.dirname(path)
 
       # Notify
