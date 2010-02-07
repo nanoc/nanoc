@@ -31,6 +31,8 @@ module Nanoc3
     # @return [Hash]
     attr_reader :assigns
 
+    extend Nanoc3::Plugin::PluginMethods
+
     # Creates a new filter that has access to the given assigns.
     #
     # @param [Hash] a_assigns A hash containing variables that should be made
@@ -45,47 +47,6 @@ module Nanoc3
         metaclass = (class << self ; self ; end)
         metaclass.send(:define_method, key) { value }
       end
-    end
-
-    # Sets the identifiers for this filter.
-    #
-    # @param [Array<Symbol>] identifier A list of identifiers to assign to
-    #   this filter.
-    #
-    # @return [void]
-    def self.identifiers(*identifiers)
-      Nanoc3::Filter.register(self, *identifiers)
-    end
-
-    # Sets the identifier for this filter.
-    #
-    # @param [Symbol] identifier An identifier to assign to this filter.
-    #
-    # @return [void]
-    def self.identifier(identifier)
-      Nanoc3::Filter.register(self, identifier)
-    end
-
-    # Registers the given class as a filter with the given identifier.
-    #
-    # @param [Class, String] class_or_name The class to register, or a string
-    #   containing the class name to register.
-    #
-    # @param [Array<Symbol>] identifiers A list of identifiers to assign to
-    #   this filter.
-    #
-    # @return [void]
-    def self.register(class_or_name, *identifiers)
-      Nanoc3::Plugin.register(Nanoc3::Filter, class_or_name, *identifiers)
-    end
-
-    # Returns the filter with the given name (identifier)
-    #
-    # @param [String] name The name of the filter class to find
-    #
-    # @return [Class] The filter class with the given name
-    def self.named(name)
-      Nanoc3::Plugin.find(self, name)
     end
 
     # Runs the filter on the given content.
