@@ -82,10 +82,8 @@ module Nanoc3
     #   rep if no rep is specified) at the given snapshot (or the default
     #   snapshot if no snapshot is specified)
     def compiled_content(params={})
-      rep_name      = params[:rep]      || :default
-      snapshot_name = params[:snapshot] || :last
-
       # Get rep
+      rep_name = params[:rep] || :default
       rep = reps.find { |r| r.name == rep_name }
       if rep.nil?
         raise Nanoc3::Errors::Generic,
@@ -93,7 +91,7 @@ module Nanoc3
       end
 
       # Get rep's content
-      rep.content_at_snapshot(snapshot_name)
+      rep.compiled_content(params)
     end
 
     # Returns the path from a given representation. This is a convenience
