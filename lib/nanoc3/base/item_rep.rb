@@ -146,22 +146,30 @@ module Nanoc3
 
     # Returns the compiled content from a given snapshot.
     #
-    # @option params [String] :snapshot (:last) The name of the snapshot from
-    #   which to fetch the compiled content. By default, the fully compiled
-    #   content will be fetched, with all filters and layouts applied--not the
-    #   pre-layout content.
-    #
-    # FIXME should the default snapshot be :last, or should be it be :pre?
+    # @option params [String] :snapshot The name of the snapshot from
+    #   which to fetch the compiled content. By default, the returned compiled
+    #   content will be the content compiled right before the first layout
+    #   call (if any).
     def compiled_content(params={})
-      snapshot_name = params[:snapshot] || :last
-
+      # Notify
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
 
+      # Debug
       puts "*** Attempting to fetch content for #{self.inspect}" if $DEBUG
 
+      # Require compilation
       raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
 
+      # Get name of last pre-layout snapshot
+      snapshot_name = params[:snapshot]
+      if @content[:pre]
+        snapshot_name ||= :pre
+      else
+        snapshot_name ||= :last
+      end
+
+      # Get content
       @content[snapshot_name]
     end
 
