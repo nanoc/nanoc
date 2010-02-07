@@ -118,17 +118,7 @@ module Nanoc3::DataSources
     #     /foo/bar.html       -> /foo/bar/
     #     /foo/bar.entry.yaml -> /foo/bar.entry/
     def identifier_for_filename(filename)
-      return basename_of(filename).sub(/index$/, '').cleaned_identifier
-
-      # Split into components
-      components = filename.gsub(%r{(^/|/$)}, '').split('/')
-      components[-1].sub!(/\.[a-z0-9]+$/, '')
-
-      if components[-1] == 'index'
-        components[0..-2].join('/').cleaned_identifier
-      else
-        components.join('/').cleaned_identifier
-      end
+      basename_of(filename).sub(/index$/, '').cleaned_identifier
     end
 
   end
