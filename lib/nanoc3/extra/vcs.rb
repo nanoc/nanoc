@@ -9,22 +9,9 @@ module Nanoc3::Extra
   #
   # This is the abstract superclass for all VCSes. Subclasses should implement
   # the indicated methods. 
-  class VCS < Nanoc3::Plugin
+  class VCS
 
-    # Sets the identifiers for this VCS.
-    def self.identifiers(*identifiers)
-      Nanoc3::Extra::VCS.register(self, *identifiers)
-    end
-
-    # Sets the identifier for this VCS.
-    def self.identifier(identifier)
-      Nanoc3::Extra::VCS.register(self, identifier)
-    end
-
-    # Registers the given class as a VCS with the given identifier.
-    def self.register(class_or_name, *identifiers)
-      Nanoc3::Plugin.register(Nanoc3::Extra::VCS, class_or_name, *identifiers)
-    end
+    extend Nanoc3::Plugin::PluginMethods
 
     # Adds the file with the given filename to the working copy.
     #
