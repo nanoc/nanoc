@@ -23,7 +23,7 @@ module Nanoc3
   #       # => 'bar'
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
-  class Filter < Plugin
+  class Filter
 
     # A hash containing variables that will be made available during
     # filtering.
@@ -77,6 +77,15 @@ module Nanoc3
     # @return [void]
     def self.register(class_or_name, *identifiers)
       Nanoc3::Plugin.register(Nanoc3::Filter, class_or_name, *identifiers)
+    end
+
+    # Returns the filter with the given name (identifier)
+    #
+    # @param [String] name The name of the filter class to find
+    #
+    # @return [Class] The filter class with the given name
+    def self.named(name)
+      Nanoc3::Plugin.find(self, name)
     end
 
     # Runs the filter on the given content.

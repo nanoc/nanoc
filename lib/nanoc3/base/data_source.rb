@@ -24,7 +24,7 @@ module Nanoc3
   # the data source should support creating items and layouts using the
   # `create_item` and `create_layout` CLI commands, the {#setup},
   # {#create_item} and {#create_layout} methods should be implemented as well.
-  class DataSource < Plugin
+  class DataSource
 
     # @return [String] The root path where items returned by this data source
     #   should be mounted.
@@ -100,6 +100,15 @@ module Nanoc3
     # @return [void]
     def self.register(class_or_name, *identifiers)
       Nanoc3::Plugin.register(Nanoc3::DataSource, class_or_name, *identifiers)
+    end
+
+    # Returns the data source with the given name
+    #
+    # @param [String] name The name of the data source class to find
+    #
+    # @return [Class] The data source class with the given name
+    def self.named(name)
+      Nanoc3::Plugin.find(self, name)
     end
 
     # Loads the data source when necessary (calling {#up}), yields, and
