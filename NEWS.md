@@ -31,6 +31,11 @@ Changed:
 * Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
 * Deprecated `#content_at_snapshot`; use `#compiled_content` instead
 
+Removed:
+
+* The Last.fm, Delicious and Twitter data sources, which were meant mostly as
+  an example anyway. You can still find them on the wiki if you need them.
+
 ## 3.0.7
 
 * Fixed a bug which could cause layout rules not be matched in order
