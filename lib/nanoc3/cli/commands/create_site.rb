@@ -318,11 +318,11 @@ EOS
       )
 
       # Create stylesheet
-      # FIXME give it a .css extension
       data_source.create_item(
         DEFAULT_STYLESHEET,
         {},
-        '/stylesheet/'
+        '/stylesheet/',
+        :extension => '.css'
       )
 
       # Create layout
