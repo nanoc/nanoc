@@ -38,7 +38,7 @@ module Nanoc3
     #   online data sources could contain authentication details.
     attr_reader :config
 
-    extend Nanoc3::Plugin::PluginMethods
+    extend Nanoc3::PluginRegistry::PluginMethods
 
     # Creates a new data source for the given site.
     #

@@ -19,9 +19,12 @@ module Nanoc3
   autoload 'ItemRep',             'nanoc3/base/item_rep'
   autoload 'Layout',              'nanoc3/base/layout'
   autoload 'NotificationCenter',  'nanoc3/base/notification_center'
-  autoload 'Plugin',              'nanoc3/base/plugin'
+  autoload 'PluginRegistry',      'nanoc3/base/plugin_registry'
   autoload 'Rule',                'nanoc3/base/rule'
   autoload 'RuleContext',         'nanoc3/base/rule_context'
   autoload 'Site',                'nanoc3/base/site'
+
+  # Deprecated; use PluginRepository instead
+  autoload 'Plugin',              'nanoc3/base/plugin_registry'
 
 end
