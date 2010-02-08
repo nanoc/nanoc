@@ -11,7 +11,7 @@ module Nanoc3::Extra
   # the indicated methods. 
   class VCS
 
-    extend Nanoc3::Plugin::PluginMethods
+    extend Nanoc3::PluginRegistry::PluginMethods
 
     # Adds the file with the given filename to the working copy.
     #

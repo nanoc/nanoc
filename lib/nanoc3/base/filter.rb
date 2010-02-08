@@ -31,7 +31,7 @@ module Nanoc3
     # @return [Hash]
     attr_reader :assigns
 
-    extend Nanoc3::Plugin::PluginMethods
+    extend Nanoc3::PluginRegistry::PluginMethods
 
     # Creates a new filter that has access to the given assigns.
     #
