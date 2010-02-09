@@ -23,7 +23,7 @@ module Nanoc3
   #       # => 'bar'
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
-  class Filter
+  class Filter < Context
 
     # A hash containing variables that will be made available during
     # filtering.
@@ -39,14 +39,7 @@ module Nanoc3
     #   available during filtering.
     def initialize(hash={})
       @assigns = hash
-      hash.each_pair do |key, value|
-        # Build instance variable
-        instance_variable_set('@' + key.to_s, value)
-
-        # Define method
-        metaclass = (class << self ; self ; end)
-        metaclass.send(:define_method, key) { value }
-      end
+      super
     end
 
     # Runs the filter on the given content.
