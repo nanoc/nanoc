@@ -24,7 +24,7 @@ module Nanoc3
       #   later. Can be nil, but this is not recommended because it prevents
       #   the given notification block from being unregistered.
       #
-      # @yield [*args] Will be executed with the arguments passed to {#post}
+      # @yield [*args] Will be executed with the arguments passed to {.post}
       #
       # @return [void]
       def on(name, id=nil, &block)
