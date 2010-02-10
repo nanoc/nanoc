@@ -8,6 +8,8 @@ module Nanoc3::Extra
   autoload 'FileProxy',         'nanoc3/extra/file_proxy'
   autoload 'Validators',        'nanoc3/extra/validators'
 
+  # Deprecated; use {Nanoc3::Context} instead
+  # TODO [in nanoc 4.0] remove me
   Context = ::Nanoc3::Context
 
 end
