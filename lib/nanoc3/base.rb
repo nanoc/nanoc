@@ -25,6 +25,7 @@ module Nanoc3
   autoload 'Site',                'nanoc3/base/site'
 
   # Deprecated; use PluginRepository instead
+  # TODO [in nanoc 4.0] remove me
   autoload 'Plugin',              'nanoc3/base/plugin_registry'
 
 end

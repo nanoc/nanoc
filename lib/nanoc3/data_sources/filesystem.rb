@@ -91,6 +91,7 @@ module Nanoc3::DataSources
           :extension        => content_filename ? ext_of(content_filename)[1..-1] : nil,
           # WARNING :file is deprecated; please create a File object manually
           # using the :content_filename or :meta_filename attributes.
+          # TODO [in nanoc 4.0] remove me
           :file             => content_filename ? Nanoc3::Extra::FileProxy.new(content_filename) : nil
         }.merge(meta)
 
