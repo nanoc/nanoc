@@ -11,8 +11,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create items and reps
       item_reps = [ mock, mock, mock ]
       item_reps[0].stubs(:path).returns('/foo/1/')
+      item_reps[0].stubs(:raw_path).returns('out/foo/1/index.html')
       item_reps[1].stubs(:path).returns('/foo/2/')
+      item_reps[1].stubs(:raw_path).returns('out/foo/2/index.html')
       item_reps[2].stubs(:path).returns('/bar/')
+      item_reps[2].stubs(:raw_path).returns('out/bar/index.html')
       items = [ mock, mock ]
       items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
       items[1].stubs(:reps).returns([ item_reps[2] ])
@@ -20,7 +23,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.stubs(:items).returns(items)
-      site.stubs(:config).returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -34,13 +37,47 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_handle_request_with_item_rep_with_index_filename
+    if_have 'rack' do
+      # Create items and reps
+      item_reps = [ mock, mock, mock ]
+      item_reps[0].stubs(:path).returns('/foo/1/')
+      item_reps[0].stubs(:raw_path).returns('out/foo/1/index.html')
+      item_reps[1].stubs(:path).returns('/foo/2/')
+      item_reps[1].stubs(:raw_path).returns('out/foo/2/index.html')
+      item_reps[2].stubs(:path).returns('/bar/')
+      item_reps[2].stubs(:raw_path).returns('out/bar/index.html')
+      items = [ mock, mock ]
+      items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
+      items[1].stubs(:reps).returns([ item_reps[2] ])
+
+      # Create site
+      site = mock
+      site.stubs(:items).returns(items)
+      site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
+
+      # Create autocompiler
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
+      autocompiler.expects(:serve).with(item_reps[1])
+      autocompiler.stubs(:build_reps)
+
+      # Run
+      autocompiler.instance_eval { call('PATH_INFO' => '/foo/2/index.html') }
+    end
+  end
+
   def test_handle_request_with_broken_url
     if_have 'rack' do
       # Create items and reps
       item_reps = [ mock, mock, mock ]
-      item_reps[0].expects(:path).at_most_once.returns('/foo/1/')
-      item_reps[1].expects(:path).returns('/foo/2/')
-      item_reps[2].expects(:path).at_most_once.returns('/bar/')
+      item_reps[0].stubs(:path).returns('/foo/1/')
+      item_reps[0].stubs(:raw_path).returns('/foo/1/index.html')
+      item_reps[1].stubs(:path).returns('/foo/2/')
+      item_reps[1].stubs(:raw_path).returns('/foo/2/index.html')
+      item_reps[2].stubs(:path).returns('/bar/')
+      item_reps[2].stubs(:raw_path).returns('/bar/index.html')
       items = [ mock, mock ]
       items[0].expects(:reps).returns([ item_reps[0], item_reps[1] ])
       items[1].expects(:reps).returns([ item_reps[2] ])
@@ -48,7 +85,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns(items)
-      site.expects(:config).returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create file server
       file_server = mock
@@ -91,7 +128,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.expects(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -116,7 +153,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create file server
       file_server = mock
       def file_server.call(env)
-        @expected_path_info = 'foo/bar/index.html'
+        @expected_path_info = '/foo/bar/index.html'
         @actual_path_info   = env['PATH_INFO']
       end
       def file_server.expected_path_info ; @expected_path_info ; end
@@ -125,7 +162,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -134,7 +171,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar/') }
+      autocompiler.instance_eval { call('PATH_INFO' => '/foo/bar/') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -159,7 +196,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -193,7 +230,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -227,7 +264,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -257,7 +294,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out/', :index_filenames => [ 'index.html' ] })
+      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
