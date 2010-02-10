@@ -2,20 +2,24 @@
 
 module Nanoc3::Extra
 
-  # Nanoc3::Extra::VCS is a very simple representation of a version control
-  # system that abstracts the add, remove and move operations. It does not
-  # commit. This class is primarily used by data sources that store data as
-  # flat files on the disk.
+  # A very simple representation of a version control system (VCS) that
+  # abstracts the add, remove and move operations. It does not commit. This
+  # class is primarily used by data sources that store data as flat files on
+  # the disk.
   #
-  # This is the abstract superclass for all VCSes. Subclasses should implement
-  # the indicated methods. 
+  # @abstract Subclass and override {#add}, {#remove} and {#move} to implement
+  #   a custom VCS.
   class VCS
 
     extend Nanoc3::PluginRegistry::PluginMethods
 
     # Adds the file with the given filename to the working copy.
     #
-    # Subclasses must implement this method.
+    # @param [String] filename The name of the file to add
+    #
+    # @return [void]
+    #
+    # @abstract
     def add(filename)
       not_implemented('add')
     end
@@ -24,7 +28,11 @@ module Nanoc3::Extra
     # this method is executed, the file should no longer be present on the
     # disk.
     #
-    # Subclasses must implement this method.
+    # @param [String] filename The name of the file to remove
+    #
+    # @return [void]
+    #
+    # @abstract
     def remove(filename)
       not_implemented('remove')
     end
@@ -33,7 +41,13 @@ module Nanoc3::Extra
     # method is executed, the original file should no longer be present on the
     # disk.
     #
-    # Subclasses must implement this method.
+    # @param [String] src The old filename
+    #
+    # @param [String] dst The new filename
+    #
+    # @return [void]
+    #
+    # @abstract
     def move(src, dst)
       not_implemented('move')
     end
