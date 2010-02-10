@@ -47,7 +47,7 @@ module Nanoc3
 
     # Error that is raised during site compilation when a layout is compiled
     # for which the filter cannot be determined. This is similar to the
-    # {UnknownFilterError}, but specific for filters for layouts.
+    # {UnknownFilter} error, but specific for filters for layouts.
     class CannotDetermineFilter < Generic
 
       # @param [String] layout_identifier The identifier of the layout for
