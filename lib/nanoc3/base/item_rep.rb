@@ -336,6 +336,10 @@ module Nanoc3
       stdin, stdout, stderr = Open3.popen3('diff', '-u', old_file.path, new_file.path)
       result = stdout.read
       result == '' ? nil : result
+    rescue Errno::ENOENT
+      warn 'Failed to run `diff`, so no diff with the previously compiled ' \
+           'content will be available.'
+      nil
     end
 
   end
