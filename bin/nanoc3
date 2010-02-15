@@ -8,9 +8,5 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'nanoc3'
 require 'nanoc3/cli'
 
-# Load custom code that can't be load later
-Dir['lib/commands/*.rb'].sort.each     { |f| require f }
-Dir['lib/data_sources/*.rb'].sort.each { |f| require f }
-
 # Run base
 Nanoc3::CLI::Base.shared_base.run(ARGV)
