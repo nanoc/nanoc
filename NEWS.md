@@ -12,6 +12,8 @@ New:
 * A `debug` command that shows information about the items, reps and layouts
 * A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
 * A plugin-loading system
+* A diff between the previously compiled content and the last compiled content
+  is now written to `output.diff`
 
 Changed:
 
@@ -24,18 +26,20 @@ Changed:
 * The `rainpress` filter now accepts parameters
 * The `filesystem` data source is now known as `filesystem_verbose`
 * Meta files and content files are now optional
-* The metadata section in `filesystem_combined` is now optional [Christopher
+* The `filesystem_compact` and `filesystem_combined` data sources have been
+  merged into a new `filesystem_unified` data source
+* The metadata section in `filesystem_unified` is now optional [Christopher
   Eppstein]
 * The `--server` autocompile option is now known as `--handler`
 * Assigns in filters are now available as instance variables and methods
-* Deprecated `Nanoc3::FileProxy`; use one of the filename attributes instead
-* Deprecated `#content_at_snapshot`; use `#compiled_content` instead
 * The `#breadcrumbs_trail` function now allows missing parents
 
-Removed:
+Deprecated:
 
-* The Last.fm, Delicious and Twitter data sources, which were meant mostly as
-  an example anyway. You can still find them on the wiki if you need them.
+* `Nanoc3::FileProxy`; use one of the filename attributes instead
+* `ItemRep#content_at_snapshot`; use `#compiled_content` instead
+* The `last_fm`, `delicious` and `twitter` data sources; fetch online content
+  into a cache by a rake task and load data from this cache instead
 
 ## 3.0.7
 
