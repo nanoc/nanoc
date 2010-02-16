@@ -8,7 +8,7 @@ class Nanoc3::ExtraCoreExtEnumerableTest < MiniTest::Unit::TestCase
 
   class MyCollection
 
-    include Nanoc3::Extra::EnumerableExtensions::GroupBy
+    include Enumerable
 
     def initialize(array)
       @array = array
