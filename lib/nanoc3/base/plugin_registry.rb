@@ -11,6 +11,7 @@ module Nanoc3
     # for setting identifiers, registering plugins and finding plugins. Plugin
     # classes should extend this module.
     module PluginMethods
+
       # Sets the identifiers for this plugin.
       #
       # @param [Array<Symbol>] identifier A list of identifiers to assign to
@@ -40,7 +41,13 @@ module Nanoc3
       #
       # @return [void]
       def register(class_or_name, *identifiers)
-        Nanoc3::Plugin.register(self, class_or_name, *identifiers)
+        # Find plugin class
+        klass = self
+        klass = klass.superclass while klass.superclass.respond_to?(:register)
+
+        # Register
+        registry = Nanoc3::PluginRegistry.instance
+        registry.register(klass, class_or_name, *identifiers)
       end
 
       # Returns the plugin with the given name (identifier)
