@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-module Nanoc3::Extra::EnumerableExtensions
+module Enumerable
 
-  module GroupBy
+  if !Enumerable.instance_methods.include?('group_by')
 
     # Returns a hash, which keys are evaluated result from the block, and
     # values are arrays of elements in enum corresponding to the key. This
@@ -30,10 +30,4 @@ module Nanoc3::Extra::EnumerableExtensions
 
   end
 
-end
-
-module Enumerable
-  if !Enumerable.instance_methods.include?('group_by')
-    include Nanoc3::Extra::EnumerableExtensions::GroupBy
-  end
 end
