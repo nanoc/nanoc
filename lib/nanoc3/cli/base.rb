@@ -200,7 +200,7 @@ module Nanoc3::CLI
     def handle_option(option)
       case option
       when :version
-        puts "nanoc #{Nanoc3::VERSION} (c) 2007-2009 Denis Defreyne."
+        puts "nanoc #{Nanoc3::VERSION} (c) 2007-2010 Denis Defreyne."
         puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
         exit 0
       when :verbose
