@@ -2,7 +2,9 @@
 
 module Nanoc3::HashExtensions
 
-  # Returns a new hash where all keys are recursively converted to symbols.
+  # Returns a new hash where all keys are recursively converted to symbols by
+  # calling {Nanoc3::ArrayExtensions#symbolize_keys} or
+  # {Nanoc3::HashExtensions#symbolize_keys}.
   #
   # @return [Hash] The converted hash
   def symbolize_keys
@@ -11,7 +13,9 @@ module Nanoc3::HashExtensions
     end
   end
 
-  # Returns a new hash where all keys are recursively converted to strings.
+  # Returns a new hash where all keys are recursively converted to strings by
+  # calling {Nanoc3::ArrayExtensions#stringify_keys} or
+  # {Nanoc3::HashExtensions#stringify_keys}.
   #
   # @return [Hash] The converted hash
   def stringify_keys
