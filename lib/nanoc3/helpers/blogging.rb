@@ -32,7 +32,10 @@ module Nanoc3::Helpers
     # articles appear first).
     def sorted_articles
       require 'time'
-      articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse
+      articles.sort_by do |a|
+        time = a[:created_at]
+        time.is_a?(String) ? Time.parse(time) : time
+      end.reverse
     end
 
     # Returns a string representing the atom feed containing recent articles,
@@ -142,7 +145,10 @@ module Nanoc3::Helpers
       end
 
       # Get sorted relevant articles
-      sorted_relevant_articles = relevant_articles.sort_by { |a| Time.parse(a[:created_at]) }.reverse.first(limit)
+      sorted_relevant_articles = relevant_articles.sort_by do |a|
+        time = a[:created_at]
+        time.is_a?(String) ? Time.parse(time) : time
+      end.reverse.first(limit)
 
       # Get most recent article
       last_article = sorted_relevant_articles.first
@@ -161,7 +167,8 @@ module Nanoc3::Helpers
         xml.title   @item[:title]
 
         # Add date
-        xml.updated Time.parse(last_article[:created_at]).to_iso8601_time
+        time = last_article[:created_at]
+        xml.updated (time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time
 
         # Add links
         xml.link(:rel => 'alternate', :href => root_url)
@@ -185,7 +192,8 @@ module Nanoc3::Helpers
             xml.title     a[:title], :type => 'html'
 
             # Add dates
-            xml.published Time.parse(a[:created_at]).to_iso8601_time
+            time = a[:created_at]
+            xml.published (time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time
             xml.updated   a.mtime.to_iso8601_time
 
             # Add link
@@ -237,7 +245,9 @@ module Nanoc3::Helpers
       require 'time'
 
       hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
-      formatted_date     = Time.parse(item[:created_at]).to_iso8601_date
+
+      time = item[:created_at]
+      formatted_date = (time.is_a?(String) ? Time.parse(time) : time).to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.reps[0].path || item.identifier)
     end
