@@ -186,7 +186,9 @@ module Nanoc3::Extra::Validators
 
             # Validate
             if !is_valid_external_href?(href)
-              broken_hrefs[href] = filenames
+              @mutex.synchronize do
+                broken_hrefs[href] = filenames
+              end
             end
           end
         end
