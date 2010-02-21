@@ -51,29 +51,27 @@ module Nanoc3::Extra::Validators
     def all_broken_hrefs
       broken_hrefs = {}
 
-      # Validate internal hrefs
+      internal_hrefs = {}
       external_hrefs = {}
+
+      # Split into internal and external hrefs
       all_hrefs_per_filename.each_pair do |filename, hrefs|
         hrefs.each do |href|
           if is_external_href?(href)
             external_hrefs[href] ||= []
             external_hrefs[href] << filename
-          elsif @include_internal && !is_valid_internal_href?(href, filename)
-            broken_hrefs[href] ||= []
-            broken_hrefs[href] << filename
+          else
+            internal_hrefs[href] ||= []
+            internal_hrefs[href] << filename
           end
         end
       end
 
-      # Validate external hrefs
-      if @include_external
-        external_hrefs.each_pair do |href, filenames|
-          if !is_valid_external_href?(href)
-            broken_hrefs[href] = filenames
-          end
-        end
-      end
+      # Validate hrefs
+      validate_internal_hrefs(internal_hrefs, broken_hrefs) if @include_internal
+      validate_external_hrefs(external_hrefs, broken_hrefs) if @include_external
 
+      # Done
       broken_hrefs
     end
 
@@ -134,18 +132,66 @@ module Nanoc3::Extra::Validators
       # Skip non-HTTP URLs
       return true if uri.scheme != 'http'
 
-      # Notify
-      @delegate.send(:started_validating_external_href, href)
-
       # Get status
       status = fetch_http_status_for(uri)
       is_valid = (status && status >= 200 && status <= 299)
 
       # Notify
-      @delegate.send(:ended_validating_external_href, href, is_valid)
+      @delegate.send(:external_href_validated, href, is_valid)
 
       # Done
       is_valid
+    end
+
+    def validate_internal_hrefs(hrefs, broken_hrefs)
+      hrefs.each_pair do |href, filenames|
+        filenames.each do |filename|
+          if !is_valid_internal_href?(href, filename)
+            broken_hrefs[href] = filenames
+          end
+        end
+      end
+    end
+
+    class EachPairEnumerator
+
+      def initialize(hash)
+        @hash             = hash
+        @unprocessed_keys = @hash.keys.dup
+        @mutex            = Mutex.new
+      end
+
+      def next_pair
+        @mutex.synchronize do
+          key = @unprocessed_keys.shift
+          return (key ? [ key, @hash[key] ] : nil)
+        end
+      end
+
+    end
+
+    def validate_external_hrefs(hrefs, broken_hrefs)
+      @mutex = Mutex.new
+
+      enum = EachPairEnumerator.new(hrefs)
+
+      threads = []
+      5.times do
+        threads << Thread.new do
+          loop do
+            # Get next pair
+            pair = enum.next_pair
+            break if pair.nil?
+            href, filenames = pair[0], pair[1]
+
+            # Validate
+            if !is_valid_external_href?(href)
+              broken_hrefs[href] = filenames
+            end
+          end
+        end
+      end
+      threads.each { |t| t.join }
     end
 
     def fetch_http_status_for(url, params={})
@@ -172,11 +218,7 @@ module Nanoc3::Extra::Validators
       res
     end
 
-    def started_validating_external_href(href)
-      print "Checking #{href}… "
-    end
-
-    def ended_validating_external_href(href, is_valid)
+    def external_href_validated(href, is_valid)
       texts = {
         true  => 'ok',
         false => ' ERROR '
@@ -188,7 +230,9 @@ module Nanoc3::Extra::Validators
         :off     => "\033[0m"
       }
 
-      puts colors[is_valid] + texts[is_valid] + colors[:off]
+      @mutex.synchronize do
+        puts href + ': ' + colors[is_valid] + texts[is_valid] + colors[:off]
+      end
     end
 
   end
