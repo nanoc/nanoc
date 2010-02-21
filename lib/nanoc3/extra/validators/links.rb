@@ -176,7 +176,7 @@ module Nanoc3::Extra::Validators
       enum = EachPairEnumerator.new(hrefs)
 
       threads = []
-      5.times do
+      10.times do
         threads << Thread.new do
           loop do
             # Get next pair
