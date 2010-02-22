@@ -3,7 +3,6 @@
 # Load Cri
 require 'cri'
 
-# Module for CLI
 module Nanoc3::CLI
 end
 

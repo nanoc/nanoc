@@ -13,11 +13,11 @@ module Nanoc3::Extra::Validators
     #   will be appended to URLs by web servers if a directory is requested
     #   instead of a file
     #
-    # @option params [Boolean] :internal True if internal links should be
-    #   checked; false if they should not
+    # @option params [Boolean] :internal (false) True if internal links should
+    #   be checked; false if they should not
     #
-    # @option params [Boolean] :external True if external links should be
-    #   checked; false if they should not
+    # @option params [Boolean] :external (false) True if external links should
+    #   be checked; false if they should not
     def initialize(dir, index_filenames, params={})
       @dir              = dir
       @index_filenames  = index_filenames
