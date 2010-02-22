@@ -2,15 +2,17 @@
 
 module Nanoc3::Extra::Validators
 
-  # Nanoc3::Extra::Validators::W3C is a validator that uses the W3C web
-  # service to validate HTML and CSS files.
+  # A validator that uses the W3C web service to validate HTML and CSS files.
   class W3C
 
+    # TODO document
+    # FIXME change site argument to dir
     def initialize(site, type)
       @site = site
       @type = type
     end
 
+    # TODO document
     def run
       # Load validator
       require 'w3c_validators'
