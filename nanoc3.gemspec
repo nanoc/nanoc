@@ -16,10 +16,6 @@ Gem::Specification.new do |s|
   s.executables        = [ 'nanoc3' ]
   s.require_paths      = [ 'lib' ]
 
-  s.has_rdoc         = 'yard'
-  s.rdoc_options     = [ '--readme', 'README.md' ]
-  s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
-
   s.add_runtime_dependency('cri', '>= 1.0.0')
 
   s.post_install_message = %q{------------------------------------------------------------------------------
