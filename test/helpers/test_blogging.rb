@@ -187,7 +187,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no title',
+        'Cannot build Atom feed: no title in params, item or site config',
         error.message
       )
     end
@@ -215,7 +215,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no author_name',
+        'Cannot build Atom feed: no author_name in params, item or site config',
         error.message
       )
     end
@@ -243,7 +243,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no author_uri',
+        'Cannot build Atom feed: no author_uri in params, item or site config',
         error.message
       )
     end
