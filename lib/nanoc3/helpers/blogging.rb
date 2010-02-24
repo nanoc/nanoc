@@ -153,15 +153,15 @@ module Nanoc3::Helpers
       end
 
       # Check feed item attributes
-      title = params[:title] || @item[:title] || @site.config[:feed_title]
+      title = params[:title] || @item[:title] || @site.config[:title]
       if title.nil?
         raise RuntimeError.new('Cannot build Atom feed: no title in params, item or site config')
       end
-      author_name = params[:author_name] || @item[:author_name] || @site.config[:feed_author_name]
+      author_name = params[:author_name] || @item[:author_name] || @site.config[:author_name]
       if author_name.nil?
         raise RuntimeError.new('Cannot build Atom feed: no author_name in params, item or site config')
       end
-      author_uri = params[:author_uri] || @item[:author_uri] || @site.config[:feed_author_uri]
+      author_uri = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
       if author_uri.nil?
         raise RuntimeError.new('Cannot build Atom feed: no author_uri in params, item or site config')
       end
