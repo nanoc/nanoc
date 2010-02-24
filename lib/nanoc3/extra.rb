@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-# Contains all functionality that is not present in nanoc base and is not
-# categorisable in other modules such as {Nanoc3::Filters} and
-# {Nanoc3::Helpers}.
 module Nanoc3::Extra
 
   autoload 'AutoCompiler',      'nanoc3/extra/auto_compiler'
