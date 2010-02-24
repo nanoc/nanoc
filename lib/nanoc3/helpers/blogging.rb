@@ -69,7 +69,10 @@ module Nanoc3::Helpers
     #   example, if the site is at “http://example.com/”, the `base_url`
     #   would be “http://example.com”.
     #
-    # The feed item will need to have the following attributes:
+    # The feed item will need to know about the feed title, the feed author
+    # name, and the URI corresponding to the author. These can be specified
+    # using parameters, as attributes in the feed item, or in the site
+    # configuration.   
     #
     # * `title` — The title of the feed, which is usually also the title of
     #   the blog.
@@ -121,6 +124,15 @@ module Nanoc3::Helpers
     # A proc that returns the excerpt of the given article, passed as a
     # parameter. This function should return nil if there is no excerpt.
     #
+    # @option params [String] :title The feed’s title, if it is not given in
+    # the item attributes.
+    #
+    # @option params [String] :author_name The name of the feed’s author, if
+    # it is not given in the item attributes.
+    #
+    # @option params [String] :title The URI of the feed’s author, if it is
+    # not given in the item attributes.
+    #
     # @return [String] The generated feed content
     def atom_feed(params={})
       require 'builder'
@@ -138,14 +150,17 @@ module Nanoc3::Helpers
       end
 
       # Check feed item attributes
-      if @item[:title].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no title')
+      title = params[:title] || @item[:title] || @site.config[:title]
+      if title.nil?
+        raise RuntimeError.new('Cannot build Atom feed: no title in params, item or site config')
       end
-      if @item[:author_name].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no author_name')
+      author_name = params[:author_name] || @item[:author_name] || @site.config[:author_name]
+      if author_name.nil?
+        raise RuntimeError.new('Cannot build Atom feed: no author_name in params, item or site config')
       end
-      if @item[:author_uri].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no author_uri')
+      author_uri = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
+      if author_uri.nil?
+        raise RuntimeError.new('Cannot build Atom feed: no author_uri in params, item or site config')
       end
 
       # Check article attributes
@@ -173,7 +188,7 @@ module Nanoc3::Helpers
 
         # Add primary attributes
         xml.id      root_url
-        xml.title   @item[:title]
+        xml.title   title
 
         # Add date
         xml.updated Time.parse(last_article[:created_at]).to_iso8601_time
@@ -184,8 +199,8 @@ module Nanoc3::Helpers
 
         # Add author information
         xml.author do
-          xml.name  @item[:author_name]
-          xml.uri   @item[:author_uri]
+          xml.name  author_name
+          xml.uri   author_uri
         end
 
         # Add articles
