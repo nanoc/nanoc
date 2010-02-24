@@ -5,6 +5,8 @@ It operates on local files, and therefore does not run on the server. nanoc
 “compiles” the local source files into HTML (usually), by evaluating eRuby,
 Markdown, etc.
 
+Note: This documentation looks best with Yardoc, not RDoc.
+
 ## Resources
 
 The [nanoc web site](http://nanoc.stoneship.org) contains a few useful
