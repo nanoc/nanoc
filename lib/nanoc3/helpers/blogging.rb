@@ -69,8 +69,10 @@ module Nanoc3::Helpers
     #   example, if the site is at “http://example.com/”, the `base_url`
     #   would be “http://example.com”.
     #
-    # The feed item will need to have the following attributes if they are not
-    # passed in the parameters:
+    # The feed item will need to know about the feed title, the feed author
+    # name, and the URI corresponding to the author. These can be specified
+    # using parameters, as attributes in the feed item, or in the site
+    # configuration.   
     #
     # * `title` — The title of the feed, which is usually also the title of
     #   the blog.
@@ -79,9 +81,6 @@ module Nanoc3::Helpers
     #
     # * `author_uri` — The URI for the item’s author, such as the author’s
     #   web site URL.
-    #
-    # These attributes can also be set in the site's configuration as
-    # `feed_title`, `feed_author_name`, and `feed_author_uri`.
     #
     # The feed item can have the following optional attributes:
     #
@@ -125,16 +124,14 @@ module Nanoc3::Helpers
     #   A proc that returns the excerpt of the given article, passed as a
     #   parameter. This function should return nil if there is no excerpt.
     #
-    # @option params [String] :title
-    #   The feed's title, if it is not given in the item attributes.
+    # @option params [String] :title The feed’s title, if it is not given in
+    # the item attributes.
     #
-    # @option params [String] :author_name
-    #   The name of the feed's author, if it is not given in the item
-    #   attributes.
+    # @option params [String] :author_name The name of the feed’s author, if
+    # it is not given in the item attributes.
     #
-    # @option params [String] :title
-    #   The URI of the feed's author, if it is not given in the item
-    #    attributes.
+    # @option params [String] :title The URI of the feed’s author, if it is
+    # not given in the item attributes.
     #
     # @return [String] The generated feed content
     def atom_feed(params={})
