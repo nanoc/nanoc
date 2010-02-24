@@ -2,7 +2,7 @@
 
 ## 3.1
 
-New:
+* Fixed bug which could cause layout rules not be matched in order
 
 * An `Item#rep(name)` function for quickly getting a certain rep
 * An `Item#compiled_content` function for quickly getting compiled content
@@ -41,6 +41,13 @@ Deprecated:
 * `ItemRep#content_at_snapshot`; use `#compiled_content` instead
 * The `last_fm`, `delicious` and `twitter` data sources; fetch online content
   into a cache by a rake task and load data from this cache instead
+
+## 3.0.8
+
+* `#atom_tag_for` now works with base_urls that contain a path [Eric Sunshine]
+* Generated root URLs in `#atom_feed` now end with a slash [Eric Sunshine]
+* Autocompiler now recognises requests to index files
+* `Blogging` helper now allows created_at to be a Time instance
 
 ## 3.0.7
 
