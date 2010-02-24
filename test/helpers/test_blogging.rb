@@ -284,6 +284,82 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_atom_feed_with_title_author_name_and_uri_as_params
+    if_have 'builder' do
+      # Create items
+      @items = [ mock, mock ]
+      @items[0].stubs(:[]).with(:kind).returns('item')
+      @items[1].stubs(:[]).with(:kind).returns('article')
+      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:raw_content).returns('item 1 content')
+      @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
+      @items[1].stubs(:[]).with(:title).returns('Item One')
+      @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:path).returns('/item1/')
+      @items[1].stubs(:[]).with(:excerpt).returns(nil)
+      @items[1].stubs(:path).returns('/asdf/fdsa/')
+      @items[1].stubs(:raw_path).returns('output/asdf/fdsa/index.html')
+      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns(nil)
+      @item.stubs(:[]).with(:author_name).returns(nil)
+      @item.stubs(:[]).with(:author_uri).returns(nil)
+      @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      atom_feed(
+        :author_name => 'Bob',
+        :author_uri  => 'http://example.com/~bob/',
+        :title       => 'My Blog Or Something'
+      )
+    end
+  end
+
+  def test_atom_feed_with_title_author_name_and_uri_from_config
+    if_have 'builder' do
+      # Create items
+      @items = [ mock, mock ]
+      @items[0].stubs(:[]).with(:kind).returns('item')
+      @items[1].stubs(:[]).with(:kind).returns('article')
+      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:raw_content).returns('item 1 content')
+      @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
+      @items[1].stubs(:[]).with(:title).returns('Item One')
+      @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:path).returns('/item1/')
+      @items[1].stubs(:[]).with(:excerpt).returns(nil)
+      @items[1].stubs(:path).returns('/asdf/fdsa/')
+      @items[1].stubs(:raw_path).returns('output/asdf/fdsa/index.html')
+      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
+
+      # Mock site
+      @config = {
+        :author_name => 'Bob',
+        :author_uri  => 'http://example.com/~bob/',
+        :title       => 'My Blog Or Something',
+        :base_url    => 'http://example.com'
+      }
+      @site = mock
+      @site.stubs(:config).returns(@config)
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns(nil)
+      @item.stubs(:[]).with(:author_name).returns(nil)
+      @item.stubs(:[]).with(:author_uri).returns(nil)
+      @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      atom_feed
+    end
+  end
+
   def test_atom_feed_with_articles_param
     if_have 'builder' do
       # Mock items
