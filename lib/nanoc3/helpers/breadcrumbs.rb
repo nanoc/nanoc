@@ -13,7 +13,7 @@ module Nanoc3::Helpers
     # will contain a `nil` element.
     #
     # @return [Array] The breadcrumbs, starting with the root item and ending
-    #   with the item itself
+    # with the item itself
     def breadcrumbs_trail
       trail = []
       current_identifier = @item.identifier

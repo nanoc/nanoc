@@ -17,28 +17,32 @@ module Nanoc3::Helpers
     # @param [String] text The visible link text
     #
     # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
-    #   item or item representation that should be linked to
+    # item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
-    #   `rel`, `title`, …) that will be added to the link.
+    # `rel`, `title`, …) that will be added to the link.
     #
     # @return [String] The link text
     #
     # @example Linking to a path
+    #
     #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
     # @example Linking to an item
+    #
     #   about = @items.find { |i| i.identifier == '/about/' }
     #   link_to('About Me', about)
     #   # => '<a href="/about.html">About Me</a>'
     #
     # @example Linking to an item representation
+    #
     #   about = @items.find { |i| i.identifier == '/about/' }
     #   link_to('My vCard', about.rep(:vcard))
     #   # => '<a href="/about.vcf">My vCard</a>'
     #
     # @example Linking with custom attributes
+    #
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a title="My super cool blog" href="/blog/">Blog</a>'
     def link_to(text, target, attributes={})
@@ -62,18 +66,20 @@ module Nanoc3::Helpers
     # @param [String] text The visible link text
     #
     # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
-    #   item or item representation that should be linked to
+    # item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
-    #   `rel`, `title`, …) that will be added to the link.
+    # `rel`, `title`, …) that will be added to the link.
     #
     # @return [String] The link text
     #
     # @example Linking to a different page
+    #
     #   link_to_unless_current('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
     # @example Linking to the same page
+    #
     #   link_to_unless_current('This Item', @item)
     #   # => '<span class="active" title="You\'re here.">This Item</span>'
     def link_to_unless_current(text, target, attributes={})
@@ -92,12 +98,13 @@ module Nanoc3::Helpers
     # item representation. The returned path will not be HTML-escaped.
     #
     # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
-    #   item or item representation to which the relative path should be
-    #   generated
+    # item or item representation to which the relative path should be
+    # generated
     #
     # @return [String] The relative path to the target
     #
     # @example
+    #
     #   # if the current item's path is /foo/bar/
     #   relative_path_to('/foo/qux/')
     #   # => '../qux/'

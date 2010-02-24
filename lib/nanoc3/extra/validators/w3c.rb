@@ -7,6 +7,7 @@ module Nanoc3::Extra::Validators
 
     # TODO document
     # FIXME change site argument to dir
+    # FIXME allow multiple types
     def initialize(site, type)
       @site = site
       @type = type

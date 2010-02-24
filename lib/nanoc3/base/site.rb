@@ -15,9 +15,10 @@ module Nanoc3
   # A site also has several helper classes:
   #
   # * {#data_sources} (array of {Nanoc3::DataSource}) - A list of data sources
-  #     that are used for loading site data
+  #   that are used for loading site data
+  #
   # * {#compiler} ({Nanoc3::Compiler}) - The compiler that is used for
-  #     compiling items and their representations
+  #   compiling items and their representations
   #
   # The physical representation of a {Nanoc3::Site} is usually a directory
   # that contains a configuration file, site data, a rakefile, a rules file,
@@ -46,55 +47,54 @@ module Nanoc3
     # The site configuration. The configuration has the following keys:
     #
     # * `output_dir` ({String}) - The directory to which compiled items will
-    #     be written. This path is relative to the current working directory,
-    #     but can also be an absolute path.
+    #   be written. This path is relative to the current working directory,
+    #   but can also be an absolute path.
     #
     # * `data_sources` ({Array<Hash>}) - A list of data sources for this site.
-    #     See below for documentation on the structure of this list. By
-    #     default, there is only one data source of the filesystem  type
-    #     mounted at `/`.
+    #   See below for documentation on the structure of this list. By default,
+    #   there is only one data source of the filesystem  type mounted at `/`.
     #
     # * `index_filenames` ({Array<String>}) - A list of filenames that will be
-    #     stripped off full item paths to create cleaner URLs. For example,
-    #     `/about/` will be used instead of `/about/index.html`). The default
-    #     value should be okay in most cases.
+    #   stripped off full item paths to create cleaner URLs. For example,
+    #   `/about/` will be used instead of `/about/index.html`). The default
+    #   value should be okay in most cases.
     #
     # The list of data sources consists of hashes with the following keys:
     #
     # * `:type` ({String}) - The type of data source, i.e. its identifier.
     #
     # * `:items_root` ({String}) - The prefix that should be given to all
-    #     items returned by the {#items} method (comparable to mount points
-    #     for filesystems in Unix-ish OSes).
+    #   items returned by the {#items} method (comparable to mount points
+    #   for filesystems in Unix-ish OSes).
     #
     # * `:layouts_root` ({String}) - The prefix that should be given to all
-    #     layouts returned by the {#layouts} method (comparable to mount
-    #     points for filesystems in Unix-ish OSes).
+    #   layouts returned by the {#layouts} method (comparable to mount
+    #   points for filesystems in Unix-ish OSes).
     #
     # * `:config` ({Hash}) - A hash containing the configuration for this data
-    #     source. nanoc itself does not use this hash. This is especially
-    #     useful for online data sources; for example, a Twitter data source
-    #     would need the username of the account from which to fetch tweets.
+    #   source. nanoc itself does not use this hash. This is especially
+    #   useful for online data sources; for example, a Twitter data source
+    #   would need the username of the account from which to fetch tweets.
     #
     # @return [Hash] The site configuration
     attr_reader :config
 
     # @return [Time] The timestamp when the site configuration was last
-    #   modified
+    # modified
     attr_reader :config_mtime
 
     # @return [Time] The timestamp when the rules were last modified
     attr_reader :rules_mtime
 
     # @return [Proc] The code block that will be executed after all data is
-    #   loaded but before the site is compiled
+    # loaded but before the site is compiled
     attr_accessor :preprocessor
 
     # Creates a site object for the site specified by the given
     # `dir_or_config_hash` argument.
     #
     # @param [Hash, String] dir_or_config_hash If a string, contains the path
-    #   to the site directory; if a hash, contains the site configuration.
+    # to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
       build_config(dir_or_config_hash)
 
@@ -115,10 +115,10 @@ module Nanoc3
     # none exists yet.
     #
     # @return [Array<Nanoc3::DataSource>] The list of data sources for this
-    #   site
+    # site
     #
     # @raise [Nanoc3::Errors::UnknownDataSource] if the site configuration
-    #   specifies an unknown data source
+    # specifies an unknown data source
     def data_sources
       @data_sources ||= begin
         @config[:data_sources].map do |data_source_hash|
@@ -149,7 +149,7 @@ module Nanoc3
     # the `force` parameter is true.
     #
     # @param [Boolean] force If true, will force load the site data even if it
-    #   has been loaded before, to circumvent caching issues
+    # has been loaded before, to circumvent caching issues
     #
     # @return [void]
     def load_data(force=false)
@@ -179,10 +179,10 @@ module Nanoc3
     # Returns this site’s code snippets.
     #
     # @return [Array<Nanoc3::CodeSnippet>] The list of code snippets in this
-    #   site
+    # site
     #
     # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    #   been loaded yet (call {#load_data} to load the site data)
+    # been loaded yet (call {#load_data} to load the site data)
     def code_snippets
       raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @code_snippets_loaded
       @code_snippets
@@ -193,7 +193,7 @@ module Nanoc3
     # @return [Array<Nanoc3::Item>] The list of items in this site
     #
     # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    #   been loaded yet (call {#load_data} to load the site data)
+    # been loaded yet (call {#load_data} to load the site data)
     def items
       raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @items_loaded
       @items
@@ -204,7 +204,7 @@ module Nanoc3
     # @return [Array<Nanoc3::Layouts>] The list of layout in this site
     #
     # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    #   been loaded yet (call {#load_data} to load the site data)
+    # been loaded yet (call {#load_data} to load the site data)
     def layouts
       raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @layouts_loaded
       @layouts

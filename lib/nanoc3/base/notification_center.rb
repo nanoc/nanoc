@@ -17,12 +17,12 @@ module Nanoc3
       # the notification with the given name is received.
       #
       # @param [String, Symbol] name The name of the notification that will
-      #   cause the given block to be called.
+      # cause the given block to be called.
       #
       # @param [String, Symbol, nil] id An identifier for the block. This is
-      #   only used to be able to remove the block (using the remove method)
-      #   later. Can be nil, but this is not recommended because it prevents
-      #   the given notification block from being unregistered.
+      # only used to be able to remove the block (using the remove method)
+      # later. Can be nil, but this is not recommended because it prevents
+      # the given notification block from being unregistered.
       #
       # @yield [*args] Will be executed with the arguments passed to {.post}
       #
@@ -37,10 +37,10 @@ module Nanoc3
       # Posts a notification with the given name and the given arguments.
       #
       # @param [String, Symbol] name The name of the notification that should
-      #   be posted.
+      # be posted.
       #
       # @param args Arguments that wil be passed to the blocks handling the
-      #   notification.
+      # notification.
       #
       # @return [void]
       def post(name, *args)
@@ -57,10 +57,10 @@ module Nanoc3
       # posted.
       #
       # @param [String, Symbol] name The name of the notification that should
-      #   no longer be registered.
+      # no longer be registered.
       #
       # @param [String, Symbol] id The identifier of the block that should be
-      #   removed.
+      # removed.
       #
       # @return [void]
       def remove(name, id)

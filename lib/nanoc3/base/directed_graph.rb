@@ -2,10 +2,10 @@
 
 module Nanoc3
 
-  # Nanoc3::DirectedGraph represents a directed graph. It is used by the
-  # dependency tracker for storing and querying dependencies between items.
-  # Internally, the graph will be stored as an adjacency matrix. For this,
-  # the {Nanoc3::DirectedGraph::SquareBooleanMatrix} class is used.
+  # Represents a directed graph. It is used by the dependency tracker for
+  # storing and querying dependencies between items. Internally, the graph
+  # will be stored as an adjacency matrix. For this, the
+  # {Nanoc3::DirectedGraph::SquareBooleanMatrix} class is used.
   #
   # @example Creating and using a directed graph
   #
@@ -33,15 +33,14 @@ module Nanoc3
   #     # => %w( b c )
   class DirectedGraph
 
-    # Nanoc3::DirectedGraph::SquareBooleanMatrix is, as the name says, a
-    # square matrix that contains boolean values. It is used as an adjacency
+    # A square matrix that contains boolean values. It is used as an adjacency
     # matrix by the {Nanoc3::DirectedGraph} class.
     class SquareBooleanMatrix
 
       # Creates a new matrix with the given number of rows/columns.
       #
       # @param [Number] size The number of elements along both sides of the
-      #   matrix (in other words, the square root of the number of elements)
+      # matrix (in other words, the square root of the number of elements)
       def initialize(size)
         @size = size
       end

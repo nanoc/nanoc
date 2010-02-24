@@ -13,11 +13,13 @@ module Nanoc3::Helpers
   # the sidebar layout.
   #
   # @example Capturing content into a `content_for_summary` attribute
+  #
   #   <% content_for :summary do %>
   #     <p>On this item, nanoc is introduced, blah blah.</p>
   #   <% end %>
   #
   # @example Showing captured content in a sidebar
+  #
   #   <div id="sidebar">
   #     <h3>Summary</h3>
   #     <%= @item[:content_for_summary] || '(no summary)' %>
@@ -28,8 +30,8 @@ module Nanoc3::Helpers
     # attribute named `content_for_` followed by the given name. The
     # content of the block itself will not be outputted.
     #
-    # @param [Symbol, String] The base name of the attribute into which
-    #   the content should be stored
+    # @param [Symbol, String] The base name of the attribute into which the
+    # content should be stored
     #
     # @return [void]
     def content_for(name, &block)

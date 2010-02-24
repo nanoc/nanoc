@@ -20,10 +20,10 @@ module Nanoc3::Extra::Deployers
     # The deployment configurations are stored like this in the site's
     # configuration file:
     #
-    #     deploy:
-    #       NAME:
-    #         options: [ OPTIONS ]
-    #         dst:     "DST"
+    #   deploy:
+    #     NAME:
+    #       options: [ OPTIONS ]
+    #       dst:     "DST"
     #
     # `NAME` is a unique name for the deployment configuration. By default,
     # the deployer will use the deployment configuration named `"default"`.
@@ -40,20 +40,20 @@ module Nanoc3::Extra::Deployers
     # Example: This deployment configuration defines a "default" and a
     # "staging" deployment configuration. The default options are used.
     #
-    #     deploy:
-    #       default:
-    #         dst: "ectype:sites/stoneship/public"
-    #       staging:
-    #         dst: "ectype:sites/stoneship-staging/public"
-    #         options: [ "-glpPrtvz" ]
+    #   deploy:
+    #     default:
+    #       dst: "ectype:sites/stoneship/public"
+    #     staging:
+    #       dst: "ectype:sites/stoneship-staging/public"
+    #       options: [ "-glpPrtvz" ]
     #
     # When running the deployer with the `default` resp. `staging`
     # configurations, the following rsync commands will be executed:
     #
-    #     rsync -glpPrtvz --exclude=".hg" --exclude=".svn"
-    #       --exclude=".git" output ectype:sites/stoneship/public
+    #   rsync -glpPrtvz --exclude=".hg" --exclude=".svn"
+    #     --exclude=".git" output ectype:sites/stoneship/public
     #
-    #     rsync -glpPrtvz output ectype:sites/stoneship-staging/public
+    #   rsync -glpPrtvz output ectype:sites/stoneship-staging/public
     def initialize
       # Get site
       error 'No site configuration found' unless File.file?('config.yaml')
@@ -63,10 +63,10 @@ module Nanoc3::Extra::Deployers
     # Runs the task. Possible params:
     #
     # @option params [Boolean] :dry_run (false) True if the action itself
-    #   should not be executed, but still printed; false otherwise.
+    # should not be executed, but still printed; false otherwise.
     #
     # @option params [String] :config_name (:default) The name of the
-    #   deployment configuration to use.
+    # deployment configuration to use.
     #
     # @return [void]
     def run(params={})
