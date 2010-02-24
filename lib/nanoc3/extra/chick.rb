@@ -4,10 +4,14 @@ require 'rack/cache'
 
 module Nanoc3::Extra
 
-  # CHiCk is a caching HTTP client that uses Rack::Cache.
+  # @deprecated Use a HTTP library such as
+  # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+  # [Curb](http://curb.rubyforge.org/) instead.
   module CHiCk
 
-    # CHiCk::Client provides a simple API for issuing HTTP requests.
+    # @deprecated Use a HTTP library such as
+    # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+    # [Curb](http://curb.rubyforge.org/) instead.
     class Client
 
       DEFAULT_OPTIONS = {
@@ -54,8 +58,9 @@ module Nanoc3::Extra
 
     end
 
-    # CHiCk::CacheController sets the Cache-Control header (and more
-    # specifically, max-age) to limit the number of necessary requests.
+    # @deprecated Use a HTTP library such as
+    # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+    # [Curb](http://curb.rubyforge.org/) instead.
     class CacheController
 
       def initialize(app, options={})
@@ -73,8 +78,9 @@ module Nanoc3::Extra
 
     end
 
-    # CHiCk::RackClient performs the actual HTTP requests. It does not perform
-    # any caching.
+    # @deprecated Use a HTTP library such as
+    # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+    # [Curb](http://curb.rubyforge.org/) instead.
     class RackClient
 
       METHOD_TO_CLASS_MAPPING = {

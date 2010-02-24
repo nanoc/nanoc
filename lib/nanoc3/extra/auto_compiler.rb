@@ -2,14 +2,16 @@
 
 module Nanoc3::Extra
 
-  # Nanoc3::Extra::AutoCompiler is a web server that will automatically compile
-  # items as they are requested. It also serves static files such as
-  # stylesheets and images.
+  # A web server that will automatically compile items as they are requested.
+  # It also serves static files such as stylesheets and images.
   class AutoCompiler
 
+    # @return [Nanoc3::Site] The site this autocompiler belongs to
     attr_reader :site
 
     # Creates a new autocompiler for the given site.
+    #
+    # @param [String] site_path The path to the site to autocompile
     def initialize(site_path)
       require 'rack'
       require 'mime/types'
@@ -21,6 +23,13 @@ module Nanoc3::Extra
       @mutex = Mutex.new
     end
 
+    # Calls the autocompiler. The behaviour of this method is defined by the
+    # [Rack specification](http://rack.rubyforge.org/doc/files/SPEC.html).
+    #
+    # @param [Hash] env The environment, as defined by the Rack specification
+    #
+    # @return [Array] An array containing the status, the headers, and the
+    # body, as defined by the Rack specification
     def call(env)
       @mutex.synchronize do
         # Start with a new site

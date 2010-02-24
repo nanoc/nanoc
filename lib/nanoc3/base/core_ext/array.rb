@@ -2,7 +2,9 @@
 
 module Nanoc3::ArrayExtensions
 
-  # Returns a new array where all items' keys are recursively converted to symbols by calling #symbolize_keys.
+  # Returns a new array where all items' keys are recursively converted to
+  # symbols by calling {Nanoc3::ArrayExtensions#symbolize_keys} or
+  # {Nanoc3::HashExtensions#symbolize_keys}.
   #
   # @return [Array] The converted array
   def symbolize_keys
@@ -11,7 +13,9 @@ module Nanoc3::ArrayExtensions
     end
   end
 
-  # Returns a new array where all items' keys are recursively converted to strings by calling #stringify_keys.
+  # Returns a new array where all items' keys are recursively converted to
+  # strings by calling {Nanoc3::ArrayExtensions#stringify_keys} or
+  # {Nanoc3::HashExtensions#stringify_keys}.
   #
   # @return [Array] The converted array
   def stringify_keys

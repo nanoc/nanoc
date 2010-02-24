@@ -3,13 +3,13 @@
 module Nanoc3
 
   # The current nanoc version.
-  VERSION = '3.1.0a1'
+  VERSION = '3.1.0a2'
 
   # Loads all nanoc3 plugins, i.e. requires all ruby gems whose name start
   # with `nanoc3-`.
   #
   # @return [Boolean] true if all plugins were loaded successfully, false if
-  #   rubygems isn’t loaded.
+  # rubygems isn’t loaded.
   def self.load_plugins
     # Don’t load if there’s no rubygems
     return false if !defined?(Gem)

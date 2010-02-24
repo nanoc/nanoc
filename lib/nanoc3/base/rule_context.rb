@@ -17,7 +17,7 @@ module Nanoc3
     # Creates a new rule context for the given iterm representation.
     #
     # @param [Nanoc3::ItemRep] rep The item representation for which to create
-    #   a new rule context.
+    # a new rule context.
     def initialize(rep)
       item    = rep.item
       site    = item.site
@@ -41,10 +41,10 @@ module Nanoc3
     # @see Nanoc3::ItemRep#filter
     #
     # @param [Symbol] filter_name The name of the filter to run the item
-    #   representations' content through
+    # representations' content through
     #
     # @param [Hash] filter_args The filter arguments that should be passed to
-    #   the filter's #run method
+    # the filter's #run method
     #
     # @return [void]
     def filter(filter_name, filter_args={})
@@ -56,8 +56,8 @@ module Nanoc3
     #
     # @see Nanoc3::ItemRep#layout
     #
-    # @param [String] layout_identifier The identifier of the layout the ite
-    #   should be laid out with
+    # @param [String] layout_identifier The identifier of the layout the item
+    # should be laid out with
     #
     # @return [void]
     def layout(layout_identifier)

@@ -8,7 +8,7 @@ module Nanoc3::Extra
   # the disk.
   #
   # @abstract Subclass and override {#add}, {#remove} and {#move} to implement
-  #   a custom VCS.
+  # a custom VCS.
   class VCS
 
     extend Nanoc3::PluginRegistry::PluginMethods
