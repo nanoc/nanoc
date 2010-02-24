@@ -16,13 +16,14 @@ module Nanoc3::Helpers
     # work correctly.
     #
     # @example Running a filter on a part of an item or layout
+    #
     #   <p>Lorem ipsum dolor sit amet...</p>
     #   <% filter :rubypants do %>
     #     <p>Consectetur adipisicing elit...</p>
     #   <% end %>
     #
     # @param [Symbol] filter_name The name of the filter to run on the
-    #   contents of the block
+    # contents of the block
     #
     # @param [Hash] argument Arguments to pass to the filter
     #

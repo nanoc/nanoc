@@ -29,7 +29,7 @@ module Nanoc3::Extra
     # @param [Hash] env The environment, as defined by the Rack specification
     #
     # @return [Array] An array containing the status, the headers, and the
-    #   body, as defined by the Rack specification
+    # body, as defined by the Rack specification
     def call(env)
       @mutex.synchronize do
         # Start with a new site

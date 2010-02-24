@@ -9,7 +9,7 @@ module Nanoc3
   # with `nanoc3-`.
   #
   # @return [Boolean] true if all plugins were loaded successfully, false if
-  #   rubygems isn’t loaded.
+  # rubygems isn’t loaded.
   def self.load_plugins
     # Don’t load if there’s no rubygems
     return false if !defined?(Gem)

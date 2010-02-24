@@ -12,15 +12,15 @@ module Nanoc3
   #
   # @example Accessing assigns in different ways
   #
-  #     filter = SomeFilter.new({ :foo => 'bar' })
-  #     filter.instance_eval { @assigns[:foo] }
-  #       # => 'bar'
-  #     filter.instance_eval { assigns[:foo] }
-  #       # => 'bar'
-  #     filter.instance_eval { @foo }
-  #       # => 'bar'
-  #     filter.instance_eval { foo }
-  #       # => 'bar'
+  #   filter = SomeFilter.new({ :foo => 'bar' })
+  #   filter.instance_eval { @assigns[:foo] }
+  #     # => 'bar'
+  #   filter.instance_eval { assigns[:foo] }
+  #     # => 'bar'
+  #   filter.instance_eval { @foo }
+  #     # => 'bar'
+  #   filter.instance_eval { foo }
+  #     # => 'bar'
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Context
@@ -36,7 +36,7 @@ module Nanoc3
     # Creates a new filter that has access to the given assigns.
     #
     # @param [Hash] a_assigns A hash containing variables that should be made
-    #   available during filtering.
+    # available during filtering.
     def initialize(hash={})
       @assigns = hash
       super
@@ -49,7 +49,7 @@ module Nanoc3
     # @param [String] content The unprocessed content that should be filtered.
     #
     # @param [Hash] params A hash containing parameters. Filter subclasses can
-    #   use these parameters to allow modifying the filter's behaviour.
+    # use these parameters to allow modifying the filter's behaviour.
     #
     # @return [String] The filtered content
     def run(content, params={})

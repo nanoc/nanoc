@@ -47,10 +47,10 @@ module Nanoc3
     # representations.
     #
     # @param [Nanoc3::Item] item The item that should be compiled, along with
-    #   its dependencies. Pass `nil` if the entire site should be compiled.
+    # its dependencies. Pass `nil` if the entire site should be compiled.
     #
     # @option params [Boolean] :force (false) true if the rep should be
-    #   compiled even if it is not outdated, false if not
+    # compiled even if it is not outdated, false if not
     #
     # @return [void]
     def run(item=nil, params={})
@@ -93,7 +93,7 @@ module Nanoc3
     # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
     #
     # @return [Nanoc3::Rule, nil] The compilation rule for the given item rep,
-    #   or nil if no rules have been found
+    # or nil if no rules have been found
     def compilation_rule_for(rep)
       @item_compilation_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
@@ -105,7 +105,7 @@ module Nanoc3
     # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
     #
     # @return [Nanoc3::Rule, nil] The routing rule for the given item rep, or
-    #   nil if no rules have been found
+    # nil if no rules have been found
     def routing_rule_for(rep)
       @item_routing_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
@@ -117,7 +117,7 @@ module Nanoc3
     # @param [Nanoc3::Layout] layout The layout for which to fetch the filter.
     #
     # @return [Array, nil] A tuple containing the filter name and the filter 
-    #   arguments for the given layout.
+    # arguments for the given layout.
     def filter_for_layout(layout)
       @layout_filter_mapping.each_pair do |layout_identifier, filter_name_and_args|
         return filter_name_and_args if layout.identifier =~ layout_identifier
@@ -228,7 +228,7 @@ module Nanoc3
     # Clears the list of dependencies for items that will be recompiled.
     #
     # @param [Array<Nanoc3::Item>] items The list of items for which to forget
-    #   the dependencies
+    # the dependencies
     #
     # @return [void]
     def forget_dependencies_if_outdated(items)

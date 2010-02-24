@@ -5,13 +5,13 @@ require 'rack/cache'
 module Nanoc3::Extra
 
   # @deprecated Use a HTTP library such as
-  #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-  #   [Curb](http://curb.rubyforge.org/) instead.
+  # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+  # [Curb](http://curb.rubyforge.org/) instead.
   module CHiCk
 
     # @deprecated Use a HTTP library such as
-    #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-    #   [Curb](http://curb.rubyforge.org/) instead.
+    # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+    # [Curb](http://curb.rubyforge.org/) instead.
     class Client
 
       DEFAULT_OPTIONS = {
@@ -59,8 +59,8 @@ module Nanoc3::Extra
     end
 
     # @deprecated Use a HTTP library such as
-    #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-    #   [Curb](http://curb.rubyforge.org/) instead.
+    # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+    # [Curb](http://curb.rubyforge.org/) instead.
     class CacheController
 
       def initialize(app, options={})
@@ -79,8 +79,8 @@ module Nanoc3::Extra
     end
 
     # @deprecated Use a HTTP library such as
-    #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-    #   [Curb](http://curb.rubyforge.org/) instead.
+    # [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
+    # [Curb](http://curb.rubyforge.org/) instead.
     class RackClient
 
       METHOD_TO_CLASS_MAPPING = {

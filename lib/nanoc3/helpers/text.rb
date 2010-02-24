@@ -12,10 +12,10 @@ module Nanoc3::Helpers
     # @param [String] string The string for which to build an excerpt
     #
     # @option params [Number] length (25) The maximum number of characters
-    #   this excerpt can contain, including the omission.
+    # this excerpt can contain, including the omission.
     #
     # @option params [String] omission ("...") The string to append to the
-    #   excerpt when the excerpt is shorter than the original string
+    # excerpt when the excerpt is shorter than the original string
     #
     # @return [String] The excerpt of the given string
     def excerptize(string, params={})

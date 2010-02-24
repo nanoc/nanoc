@@ -26,14 +26,14 @@ module Nanoc3
     attr_reader   :raw_content
 
     # @return [Nanoc3::Item, nil] The parent item of this item. This can be
-    #   nil even for non-root items.
+    # nil even for non-root items.
     attr_accessor :parent
 
     # @return [Array<Nanoc3::Item>] The child items of this item
     attr_accessor :children
 
     # @return [Boolean] Whether or not this item is outdated because of its
-    #   dependencies are outdated
+    # dependencies are outdated
     attr_accessor :outdated_due_to_dependencies
     alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
 
@@ -70,17 +70,17 @@ module Nanoc3
     # content easier.
     #
     # @option params [String] :rep (:default) The name of the representation
-    #   from which the compiled content should be fetched. By default, the
-    #   compiled content will be fetched from the default representation.
+    # from which the compiled content should be fetched. By default, the
+    # compiled content will be fetched from the default representation.
     #
     # @option params [String] :snapshot (:last) The name of the snapshot from
-    #   which to fetch the compiled content. By default, the fully compiled
-    #   content will be fetched, with all filters and layouts applied--not the
-    #   pre-layout content.
+    # which to fetch the compiled content. By default, the fully compiled
+    # content will be fetched, with all filters and layouts applied--not the
+    # pre-layout content.
     #
     # @return [String] The compiled content of the given rep (or the default
-    #   rep if no rep is specified) at the given snapshot (or the default
-    #   snapshot if no snapshot is specified)
+    # rep if no rep is specified) at the given snapshot (or the default
+    # snapshot if no snapshot is specified)
     def compiled_content(params={})
       # Get rep
       rep_name = params[:rep] || :default
@@ -98,11 +98,11 @@ module Nanoc3
     # method that makes fetching the path of a rep easier.
     #
     # @option params [String] :rep (:default) The name of the representation
-    #   from which the path should be fetched. By default, the path will be
-    #   fetched from the default representation.
+    # from which the path should be fetched. By default, the path will be
+    # fetched from the default representation.
     #
     # @return [String] The path of the given rep ( or the default rep if no
-    #   rep is specified)
+    # rep is specified)
     def path(params={})
       rep_name = params[:rep] || :default
 

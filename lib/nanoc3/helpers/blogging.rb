@@ -107,19 +107,19 @@ module Nanoc3::Helpers
     #   <%= atom_feed :limit => 5 %>
     #
     # @option params [Number] :limit (5) The maximum number of articles to
-    #   show
+    # show
     #
     # @option params [Array] :articles (sorted_articles) A list of articles to
-    #   include in the feed
+    # include in the feed
     #
     # @option params [Proc] :content_proc (->{ |article|
-    #   article.compiled_content(:snapshot => :pre) }) A proc that returns the
-    #   content of the given article, which is passed as a parameter. This
-    #   function may not return nil.
+    # article.compiled_content(:snapshot => :pre) }) A proc that returns the
+    # content of the given article, which is passed as a parameter. This
+    # function may not return nil.
     #
     # @option params [proc] :excerpt_proc (->{ |article| article[:excerpt] })
-    #   A proc that returns the excerpt of the given article, passed as a
-    #   parameter. This function should return nil if there is no excerpt.
+    # A proc that returns the excerpt of the given article, passed as a
+    # parameter. This function should return nil if there is no excerpt.
     #
     # @return [String] The generated feed content
     def atom_feed(params={})
