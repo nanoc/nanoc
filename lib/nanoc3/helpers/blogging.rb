@@ -133,8 +133,8 @@ module Nanoc3::Helpers
     # @option params [String] :author_name The name of the feed’s author, if
     # it is not given in the item attributes.
     #
-    # @option params [String] :title The URI of the feed’s author, if it is
-    # not given in the item attributes.
+    # @option params [String] :author_uri The URI of the feed’s author, if it
+    # is not given in the item attributes.
     #
     # @return [String] The generated feed content
     def atom_feed(params={})
