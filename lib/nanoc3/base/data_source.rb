@@ -93,7 +93,7 @@ module Nanoc3
     #
     # Calling this method decreases the internal reference count. When the
     # reference count reaches zero, i.e. when the data source is not used any
-    # more, the data soruce will be unloaded ({#down} will be called).
+    # more, the data source will be unloaded ({#down} will be called).
     #
     # @return [void]
     def unuse
