@@ -11,7 +11,8 @@ module Nanoc3::Helpers
   # * `kind` — Set to `"article"`
   #
   # * `created_at` — The article’s publication timestamp. This timestamp can
-  #   be in any format parseable by `Time.parse`.
+  #   be an actual `Time` instance or a string in any format parseable by
+  #   `Time.parse`.
   #
   # Some functions in this blogging helper, such as the {#atom_feed} function,
   # require additional attributes to be set; these attributes are described in
@@ -62,9 +63,10 @@ module Nanoc3::Helpers
     #   path set to the blog path instead, for example.
     #
     # The feed will also include dates on which the articles were updated.
-    # These are generated automatically; the way this happens depends on the
-    # used data source (the filesystem data source checks the file mtimes, for
-    # instance).
+    # These are indicated by the `updated_at` attribute on the item, to
+    # prevent mistakes in automatically detecting updates. `updated_at` can be
+    # a `Time` instance or a string in any format parseable by `Time.parse`.
+    # If it is not given, `created_at` will be used instead.
     #
     # The site configuration will need to have the following attributes:
     #
@@ -198,7 +200,7 @@ module Nanoc3::Helpers
 
         # Add date
         time = last_article[:created_at]
-        xml.updated (time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time
+        xml.updated ((time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time)
 
         # Add links
         xml.link(:rel => 'alternate', :href => root_url)
@@ -222,9 +224,10 @@ module Nanoc3::Helpers
             xml.title     a[:title], :type => 'html'
 
             # Add dates
-            time = a[:created_at]
-            xml.published (time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time
-            xml.updated   a.mtime.to_iso8601_time
+            create_time = a[:created_at]
+            update_time = a[:updated_at] || a[:created_at]
+            xml.published ((create_time.is_a?(String) ? Time.parse(create_time) : create_time).to_iso8601_time)
+            xml.updated   ((update_time.is_a?(String) ? Time.parse(update_time) : update_time).to_iso8601_time)
 
             # Add link
             xml.link(:rel => 'alternate', :href => url)
