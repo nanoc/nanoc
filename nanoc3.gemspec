@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.executables        = [ 'nanoc3' ]
   s.require_paths      = [ 'lib' ]
 
+  s.has_rdoc         = 'yard'
   s.rdoc_options     = [ '--main', 'README.md' ]
   s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
 
