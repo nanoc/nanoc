@@ -72,7 +72,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
 
       # Create item 1
-      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[1].stubs(:[]).with(:kind).returns('article')
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
@@ -82,7 +82,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('item 1 content')
 
       # Create item 2
-      @items[2].stubs(:mtime).returns(Time.now - 250)
+      @items[2].stubs(:[]).with(:updated_at).returns(Time.now - 250)
       @items[2].stubs(:[]).with(:kind).returns('article')
       @items[2].stubs(:[]).with(:created_at).returns((Time.now - 750).to_s)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
@@ -117,7 +117,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
 
       # Create item 1
-      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[1].stubs(:[]).with(:kind).returns('article')
       @items[1].stubs(:[]).with(:created_at).returns(Time.now - 1000)
       @items[1].stubs(:[]).with(:title).returns('Item One')
@@ -127,7 +127,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].expects(:compiled_content).returns('item 1 content')
 
       # Create item 2
-      @items[2].stubs(:mtime).returns(Time.now - 250)
+      @items[2].stubs(:[]).with(:updated_at).returns(Time.now - 250)
       @items[2].stubs(:[]).with(:kind).returns('article')
       @items[2].stubs(:[]).with(:created_at).returns(Time.now - 1200)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
@@ -335,7 +335,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items = [ mock, mock ]
       @items[0].stubs(:[]).with(:kind).returns('item')
       @items[1].stubs(:[]).with(:kind).returns('article')
-      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[1].stubs(:raw_content).returns('item 1 content')
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
@@ -372,7 +372,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items = [ mock, mock ]
       @items[0].stubs(:[]).with(:kind).returns('item')
       @items[1].stubs(:[]).with(:kind).returns('article')
-      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[1].stubs(:raw_content).returns('item 1 content')
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
@@ -416,7 +416,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[4].stubs(:[]).with(:kind).returns('article')
 
       # Mock one article
-      @items[4].stubs(:mtime).returns(Time.now - 500)
+      @items[4].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[4].stubs(:raw_content).returns('item 1 content')
       @items[4].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[4].stubs(:[]).with(:title).returns('Item One')
@@ -448,7 +448,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       # Mock articles
       @items = [ mock, mock, mock, mock, mock ]
       @items.each_with_index do |article, i|
-        article.stubs(:mtime).returns(Time.now - 500)
+        article.stubs(:[]).with(:updated_at).returns(Time.now - 500)
         article.stubs(:[]).with(:kind).returns('article')
         article.stubs(:[]).with(:created_at).returns((Time.now - 1000*i).to_s)
         article.stubs(:[]).with(:title).returns("Article #{i}")
@@ -485,7 +485,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       # Mock articles
       @items = [ mock, mock, mock, mock ]
       @items.each_with_index do |article, i|
-        article.stubs(:mtime).returns(Time.now - 500)
+        article.stubs(:[]).with(:updated_at).returns(Time.now - 500)
         article.stubs(:[]).with(:kind).returns('article')
         article.stubs(:[]).with(:title).returns("Article #{i}")
         article.stubs(:[]).with(:custom_path_in_feed).returns(nil)
@@ -524,7 +524,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     if_have 'builder' do
       # Mock article
       @items = [ mock ]
-      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[0].stubs(:[]).with(:kind).returns('article')
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
@@ -554,7 +554,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     if_have 'builder' do
       # Mock article
       @items = [ mock ]
-      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[0].stubs(:[]).with(:kind).returns('article')
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
@@ -585,7 +585,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     if_have 'builder' do
       # Create items
       @items = [ mock ]
-      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[0].stubs(:identifier).returns('/item/')
       @items[0].stubs(:[]).with(:kind).returns('article')
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
