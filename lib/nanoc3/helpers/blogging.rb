@@ -64,7 +64,7 @@ module Nanoc3::Helpers
     #   non-outputted items in a feed; such items could have their custom feed
     #   path set to the blog path instead, for example.
     #
-    # * `updated_at` - The time when the article was last modified. If this
+    # * `updated_at` — The time when the article was last modified. If this
     #   attribute is not present, the `created_at` attribute will be used as
     #   the time when the article was last modified.
     #
