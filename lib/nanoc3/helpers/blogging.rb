@@ -10,13 +10,15 @@ module Nanoc3::Helpers
   #
   # * `kind` — Set to `"article"`
   #
-  # * `created_at` — The article’s publication timestamp. This timestamp can
-  #   be an actual `Time` instance or a string in any format parseable by
-  #   `Time.parse`.
+  # * `created_at` — The article’s publication timestamp
   #
   # Some functions in this blogging helper, such as the {#atom_feed} function,
   # require additional attributes to be set; these attributes are described in
   # the documentation for these functions.
+  #
+  # All “time” item attributes, site configuration attributes or method
+  # parameters can either be a `Time` instance or a string in any format
+  # parseable by `Time.parse`.
   #
   # The two main functions are {#sorted_articles} and {#atom_feed}.
   module Blogging
@@ -62,11 +64,9 @@ module Nanoc3::Helpers
     #   non-outputted items in a feed; such items could have their custom feed
     #   path set to the blog path instead, for example.
     #
-    # The feed will also include dates on which the articles were updated.
-    # These are indicated by the `updated_at` attribute on the item, to
-    # prevent mistakes in automatically detecting updates. `updated_at` can be
-    # a `Time` instance or a string in any format parseable by `Time.parse`.
-    # If it is not given, `created_at` will be used instead.
+    # * `updated_at` - The time when the article was last modified. If this
+    #   attribute is not present, the `created_at` attribute will be used as
+    #   the time when the article was last modified.
     #
     # The site configuration will need to have the following attributes:
     #
