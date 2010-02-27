@@ -149,6 +149,9 @@ module Nanoc3
     # fetch the compiled content. By default, the returned compiled content
     # will be the content compiled right before the first layout call (if
     # any).
+    #
+    # @return [String] The compiled content o at the given snapshot (or the
+    # default snapshot if no snapshot is specified)
     def compiled_content(params={})
       # Notify
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
