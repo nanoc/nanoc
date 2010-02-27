@@ -61,7 +61,7 @@ module Nanoc3
     # @param [Symbol] rep_name The name of the representation to return
     #
     # @return [Nanoc3::ItemRep] The representation with the given name
-    def rep(rep_name)
+    def rep_named(rep_name)
       @reps.find { |r| r.name == rep_name }
     end
 
