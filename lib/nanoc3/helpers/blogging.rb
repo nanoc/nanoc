@@ -200,7 +200,7 @@ module Nanoc3::Helpers
 
         # Add date
         time = last_article[:created_at]
-        xml.updated ((time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time)
+        xml.updated((time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time)
 
         # Add links
         xml.link(:rel => 'alternate', :href => root_url)

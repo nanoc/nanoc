@@ -42,6 +42,11 @@ Deprecated:
 * The `last_fm`, `delicious` and `twitter` data sources; fetch online content
   into a cache by a rake task and load data from this cache instead
 
+## 3.0.9
+
+* Fixed 1.8.x parsing bug due to lack of parens which could cause “undefined
+  method `to_iso8601_time` for #<String:0x…>” errors
+
 ## 3.0.8
 
 * `#atom_tag_for` now works with base_urls that contain a path [Eric Sunshine]
