@@ -6,9 +6,20 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
+  def new_data_source(params=nil)
+    # Mock site
+    site = Nanoc3::Site.new({})
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemVerbose.new(site, nil, nil, params)
+
+    # Done
+    data_source
+  end
+
   def test_items
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create foo item
     FileUtils.mkdir_p('content/foo')
@@ -50,7 +61,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
   end
 
   def test_items_with_period_in_name
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
 
     # Create foo.css
     FileUtils.mkdir_p('content/foo')
@@ -87,7 +98,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   def test_items_with_optional_meta_file
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create foo item
     FileUtils.mkdir_p('content/foo')
@@ -123,7 +134,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   def test_layouts
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create layout
     FileUtils.mkdir_p('layouts/foo')
@@ -147,7 +158,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
   end
 
   def test_layouts_with_period_in_name_disallowing_periods_in_identifiers
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create foo.html
     FileUtils.mkdir_p('layouts/foo')
@@ -179,7 +190,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
   end
 
   def test_layouts_with_period_in_name_allowing_periods_in_identifiers
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
 
     # Create foo.html
     FileUtils.mkdir_p('layouts/foo')
@@ -212,7 +223,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   def test_create_item_at_root
     # Create item
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
     data_source.create_item('content here', { :foo => 'bar' }, '/')
 
     # Check file existance
@@ -227,7 +238,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   def test_create_item_not_at_root
     # Create item
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
     data_source.create_item('content here', { :foo => 'bar' }, '/moo/')
 
     # Check file existance
@@ -242,7 +253,7 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
 
   def test_create_layout
     # Create layout
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
     data_source.create_layout('content here', { :foo => 'bar' }, '/moo/')
 
     # Check file existance
@@ -255,9 +266,27 @@ class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
     assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
   end
 
+  def test_load_binary_objects
+    # Create data source
+    data_source = new_data_source
+
+    # Create sample files
+    FileUtils.mkdir_p('foo')
+    File.open('foo/stuff.dat', 'w') { |io| io.write("random binary data") }
+
+    # Load
+    items = data_source.send(:load_objects, 'foo', 'item', Nanoc3::Item)
+
+    # Check
+    assert_equal 1,               items.size
+    assert_equal :binary,         items[0].type
+    assert_equal 'foo/stuff.dat', items[0].filename
+    assert_nil   items[0].raw_content
+  end
+
   def test_compile_huge_site
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemVerbose.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create a lot of items
     count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5

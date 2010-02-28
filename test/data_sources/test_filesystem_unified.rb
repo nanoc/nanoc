@@ -6,9 +6,20 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
+  def new_data_source(params=nil)
+    # Mock site
+    site = Nanoc3::Site.new({})
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemUnified.new(site, nil, nil, params)
+
+    # Done
+    data_source
+  end
+
   def test_create_object_not_at_root
     # Create item
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
     data_source.send(:create_object, 'foobar', 'content here', { :foo => 'bar' }, '/asdf/')
 
     # Check file existance
@@ -24,7 +35,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_create_object_at_root
     # Create item
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
     data_source.send(:create_object, 'foobar', 'content here', { :foo => 'bar' }, '/')
 
     # Check file existance
@@ -40,7 +51,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_load_objects
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create a fake class
     klass = Class.new do
@@ -99,9 +110,27 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_load_binary_objects
+    # Create data source
+    data_source = new_data_source
+
+    # Create sample files
+    FileUtils.mkdir_p('foo')
+    File.open('foo/stuff.dat', 'w') { |io| io.write("random binary data") }
+
+    # Load
+    items = data_source.send(:load_objects, 'foo', 'item', Nanoc3::Item)
+
+    # Check
+    assert_equal 1,               items.size
+    assert_equal :binary,         items[0].type
+    assert_equal 'foo/stuff.dat', items[0].filename
+    assert_nil   items[0].raw_content
+  end
+
   def test_identifier_for_filename_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
 
     # Get input and expected output
     expected = {
@@ -123,7 +152,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_identifier_for_filename_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Get input and expected output
     expected = {
@@ -145,7 +174,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_identifier_for_filename_with_subfilename_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
 
     # Build directory
     FileUtils.mkdir_p('foo')
@@ -183,7 +212,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_identifier_for_filename_with_subfilename_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Build directory
     FileUtils.mkdir_p('foo')
@@ -221,7 +250,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_load_objects_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
 
     # Create a fake class
     klass = Class.new do
@@ -307,7 +336,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_load_objects_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create a fake class
     klass = Class.new do
@@ -393,7 +422,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_create_object_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
 
     # Create object without period
     data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/asdf/')
@@ -412,7 +441,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_create_object_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create object without period
     data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/asdf/')
@@ -429,7 +458,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
 
   def test_compile_huge_site
     # Create data source
-    data_source = Nanoc3::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+    data_source = new_data_source
 
     # Create a lot of items
     count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
