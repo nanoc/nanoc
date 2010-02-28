@@ -599,4 +599,25 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
   end
 
+  def test_hash
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :type => :text
+    )
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, '/foo/')
+
+    # Create files
+    File.open('one', 'w') { |io| io.write('abc') }
+    File.open('two', 'w') { |io| io.write('abcdefghijklmnopqrstuvwxyz') }
+
+    # Test
+    assert_equal 'a9993e364706816aba3e25717850c26c9cd0d89d',
+      rep.send(:hash, 'one')
+    assert_equal '32d10c7b8cf96570ca04ce37f2a19d84240d3a89',
+      rep.send(:hash, 'two')
+  end
+
 end

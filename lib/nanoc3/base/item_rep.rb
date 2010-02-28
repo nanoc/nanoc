@@ -290,14 +290,17 @@ module Nanoc3
 
       if @item.type == :binary
         # Calculate hash of old content
-        # TODO implement
+        hash_old = hash(self.raw_path) if File.file?(self.raw_path)
+        size_old = File.size(self.raw_path)
 
         # Copy
         FileUtils.cp(@filenames[:last], self.raw_path)
         @written = true
 
         # Check if file was modified
-        # TODO implement
+        size_new = File.size(self.raw_path)
+        hash_new = hash(self.raw_path) if size_old == size_new
+        @modified = (size_old != size_new || hash_old != hash_new)
       else
         # Remember old content
         if File.file?(self.raw_path)
@@ -385,6 +388,18 @@ module Nanoc3
       warn 'Failed to run `diff`, so no diff with the previously compiled ' \
            'content will be available.'
       nil
+    end
+
+    # Returns a hash of the given filename
+    def hash(filename)
+      digest = Digest::SHA1.new
+      File.open(filename, 'r') do |io|
+        until io.eof
+          data = io.readpartial(2**10)
+          digest.update(data)
+        end
+      end
+      digest.hexdigest
     end
 
   end
