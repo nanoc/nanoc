@@ -73,12 +73,20 @@ module Nanoc3
       @item = item
       @name = name
 
-      # Initialize content
-      @content = {
-        :raw  => @item.raw_content,
-        :last => @item.raw_content,
-        :pre  => @item.raw_content
-      }
+      # Initialize content and filenames
+      if @item.type == :binary
+        @filenames = {
+          # TODO change to raw_filename
+          :raw  => @item.filename,
+          :last => @item.filename
+        }
+      else
+        @content = {
+          :raw  => @item.raw_content,
+          :last => @item.raw_content,
+          :pre  => @item.raw_content
+        }
+      end
       @old_content = nil
 
       # Reset flags
@@ -150,9 +158,15 @@ module Nanoc3
     # will be the content compiled right before the first layout call (if
     # any).
     #
-    # @return [String] The compiled content o at the given snapshot (or the
+    # @return [String] The compiled content at the given snapshot (or the
     # default snapshot if no snapshot is specified)
     def compiled_content(params={})
+      # Check whether content can be fetched
+      # TODO get proper exception
+      if @item.type == :binary
+        raise RuntimeError, "attempted to fetch compiled content from a binary item"
+      end
+
       # Notify
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
@@ -200,6 +214,12 @@ module Nanoc3
       raise Nanoc3::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(assigns)
 
+      # Check whether filter can be applied
+      # TODO allow binary filters
+      if @item.type == :binary
+        raise RuntimeError, "cannot apply textual filter to binary content"
+      end
+
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
       @content[:last] = filter.run(@content[:last], filter_args)
@@ -228,6 +248,12 @@ module Nanoc3
       layout = layout_with_identifier(layout_identifier)
       filter, filter_name, filter_args = filter_for_layout(layout)
 
+      # Check whether item can be laid out
+      # TODO get proper exception
+      if @item.type == :binary
+        raise RuntimeError, "cannot lay out binary item"
+      end
+
       # Layout
       @item.site.compiler.stack.push(layout)
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
@@ -245,7 +271,8 @@ module Nanoc3
     #
     # @return [void]
     def snapshot(snapshot_name)
-      @content[snapshot_name] = @content[:last]
+      target = @item.type == :binary ? @filenames : @content
+      target[snapshot_name] = target[:last]
     end
 
     # Writes the item rep's compiled content to the rep's output file.
@@ -261,17 +288,29 @@ module Nanoc3
       # Check if file will be created
       @created = !File.file?(self.raw_path)
 
-      # Remember old content
-      if File.file?(self.raw_path)
-        @old_content = File.read(self.raw_path)
+      if @item.type == :binary
+        # Calculate hash of old content
+        # TODO implement
+
+        # Copy
+        FileUtils.cp(@filenames[:last], self.raw_path)
+        @written = true
+
+        # Check if file was modified
+        # TODO implement
+      else
+        # Remember old content
+        if File.file?(self.raw_path)
+          @old_content = File.read(self.raw_path)
+        end
+
+        # Write
+        File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
+        @written = true
+
+        # Check if file was modified
+        @modified = File.read(self.raw_path) != @old_content
       end
-
-      # Write
-      File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
-      @written = true
-
-      # Check if file was modified
-      @modified = File.read(self.raw_path) != @old_content
     end
 
     # Creates and returns a diff between the compiled content before the
@@ -282,6 +321,10 @@ module Nanoc3
     # content in `diff(1)` format, or nil if there is no previous compiled
     # content
     def diff
+      # Check if content can be diffed
+      # TODO allow binary diffs
+      return nil if @item.type == :binary
+
       # Check if old content exists
       if @old_content.nil? or self.raw_path.nil?
         nil
@@ -291,7 +334,7 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier} item.binary?=#{@item.type == :binary}>"
     end
 
   private

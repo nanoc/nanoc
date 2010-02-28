@@ -193,7 +193,7 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.type == :binary}>"
     end
 
   end
