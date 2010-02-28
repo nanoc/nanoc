@@ -83,6 +83,9 @@ module Nanoc3
       compile_reps(reps)
       dependency_tracker.stop
 
+      # Cleanup
+      FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
+
       # Store dependencies
       dependency_tracker.store_graph
     end
