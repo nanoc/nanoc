@@ -80,8 +80,11 @@ module Nanoc3::DataSources
       # Write item
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        io.write(YAML.dump(attributes.stringify_keys) + "\n")
-        io.write("---\n")
+        meta = attributes.stringify_keys
+        unless meta == {}
+          io.write(YAML.dump(meta).strip + "\n")
+          io.write("---\n\n")
+        end
         io.write(content)
       end
     end
