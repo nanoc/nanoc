@@ -138,6 +138,41 @@ module Nanoc3
 
     end
 
+    # Error that is raised when a binary item is attempted to be laid out.
+    class CannotLayoutBinaryItem < Generic
+
+      # @param [Nanoc3::ItemRep] The item representation that was attempted to
+      # be laid out
+      def initialize(rep)
+        super("The '#{rep.item.identifier}' item (rep '#{rep.name}') cannot be laid out because it is a binary item.")
+      end
+
+    end
+
+    class CannotUseTextualFilter < Generic
+
+      # @param [Nanoc3::ItemRep] rep The item representation that was
+      # attempted to be filtered
+      #
+      # @param [Class] filter_class The filter class that was used
+      def initialize(rep, filter_class)
+        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because textual filters cannot be used on binary items.")
+      end
+
+    end
+
+    class CannotUseBinaryFilter < Generic
+
+      # @param [Nanoc3::ItemRep] rep The item representation that was
+      # attempted to be filtered
+      #
+      # @param [Class] filter_class The filter class that was used
+      def initialize(rep, filter_class)
+        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items.")
+      end
+
+    end
+
   end
 
 end

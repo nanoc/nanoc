@@ -81,7 +81,14 @@ module Nanoc3::DataSources
         content_filename = filename_for(base_filename, content_ext)
 
         # Read content and metadata
-        meta, content = parse(content_filename, meta_filename, kind)
+        is_binary = !!(content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1]))
+        if is_binary
+          meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
+          content_or_filename = content_filename
+        else
+          meta, content_or_filename = parse(
+            content_filename, meta_filename, kind)
+        end
 
         # Get attributes
         attributes = {
@@ -118,7 +125,10 @@ module Nanoc3::DataSources
         end
 
         # Create layout object
-        klass.new(content, attributes, identifier, mtime)
+        klass.new(
+          content_or_filename, attributes, identifier,
+          :binary => is_binary, :mtime => mtime
+        )
       end
     end
 

@@ -12,9 +12,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_not_outdated
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -48,9 +49,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_mtime_nil
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, nil)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/'
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -82,9 +83,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_force_outdated
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :mtime => Time.now-500, :binary => false
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -117,9 +119,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_compiled_file_doesnt_exist
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -147,9 +150,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_source_file_too_old
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-100)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-100
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -181,9 +185,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_layouts_outdated
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -215,9 +220,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_code_snippets_outdated
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -249,9 +255,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_config_outdated
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -284,9 +291,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_config_mtime_missing
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -319,9 +327,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_outdated_if_rules_outdated
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:mtime, Time.now-500)
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
 
     # Mock layouts
     layouts = [ mock ]
@@ -355,8 +364,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_compiled_content_with_only_last_available
     # Create rep
-    item = mock
-    item.stubs(:raw_content).returns(nil)
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :last => 'last content' } }
     rep.expects(:compiled?).returns(true)
@@ -367,8 +378,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_compiled_content_with_pre_and_last_available
     # Create rep
-    item = mock
-    item.stubs(:raw_content).returns(nil)
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
     rep.expects(:compiled?).returns(true)
@@ -379,8 +392,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_compiled_content_with_custom_snapshot
     # Create rep
-    item = mock
-    item.stubs(:raw_content).returns(nil)
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
     rep.expects(:compiled?).returns(true)
@@ -391,8 +406,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_compiled_content_with_invalid_snapshot
     # Create rep
-    item = mock
-    item.stubs(:raw_content).returns(nil)
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :binary => false, :mtime => Time.now-500
+    )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
     rep.expects(:compiled?).returns(true)
@@ -403,9 +420,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_compiled_content_with_uncompiled_content
     # Create rep
-    item = mock
-    item.stubs(:raw_content).returns(nil)
-    item.stubs(:identifier).returns('my identifier')
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
 
@@ -423,10 +441,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.expect(:layouts, [])
 
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:raw_content, %[<%= '<%= "blah" %' + '>' %>])
-    item.expect(:site, site)
-    item.expect(:identifier, '/foobar/')
+    item = Nanoc3::Item.new(
+      %[<%= '<%= "blah" %' + '>' %>], {}, '/',
+      :binary => false
+    )
+    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -466,9 +485,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:compiler).returns(compiler)
 
     # Mock item
-    item = mock
-    item.stubs(:raw_content).returns(%[Hello.])
-    item.stubs(:site).returns(site)
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -506,9 +527,8 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:compiler).returns(compiler)
 
     # Mock item
-    item = mock
-    item.stubs(:raw_content).returns('blah')
-    item.stubs(:site).returns(site)
+    item = Nanoc3::Item.new('blah', {}, '/', :binary => false)
+    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -533,10 +553,11 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.expect(:layouts, [])
 
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:raw_content, %[<%= '<%= "blah" %' + '>' %>])
-    item.expect(:site, site)
-    item.expect(:identifier, '/foobar/')
+    item = Nanoc3::Item.new(
+      %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
+      :binary => false
+    )
+    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -560,8 +581,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_write
     # Mock item
-    item = MiniTest::Mock.new
-    item.expect(:raw_content, "blah blah blah")
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
 
     # Create rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -574,6 +597,27 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Check
     assert(File.file?('foo/bar/baz/quux.txt'))
     assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
+  end
+
+  def test_hash
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, '/foo/')
+
+    # Create files
+    File.open('one', 'w') { |io| io.write('abc') }
+    File.open('two', 'w') { |io| io.write('abcdefghijklmnopqrstuvwxyz') }
+
+    # Test
+    assert_equal 'a9993e364706816aba3e25717850c26c9cd0d89d',
+      rep.send(:hash, 'one')
+    assert_equal '32d10c7b8cf96570ca04ce37f2a19d84240d3a89',
+      rep.send(:hash, 'two')
   end
 
 end
