@@ -118,7 +118,10 @@ module Nanoc3::DataSources
         end
 
         # Create layout object
-        klass.new(content, attributes, identifier, mtime)
+        klass.new(
+          content, attributes, identifier,
+          :type => :text, :mtime => mtime
+        )
       end
     end
 
