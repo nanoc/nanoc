@@ -66,7 +66,7 @@ module Nanoc3
     # @option params_or_mtime [Time, nil] :mtime (nil) The time when this item
     # was last modified
     #
-    # @option params_or_mtime [Symbol, nil] :type (:text) The type of the
+    # @option params_or_mtime [Symbol, nil] :type (:binary) The type of the
     # item: either `:text` or `:binary`
     def initialize(raw_content_or_filename, attributes, identifier, params_or_mtime=nil)
       # Get params and mtime
@@ -80,8 +80,7 @@ module Nanoc3
       end
 
       # Get type and raw content or filename
-      # FIXME change to :binary by default
-      @type = params[:type] || :text
+      @type = params[:type] || :binary
       case @type
         when :binary
           @filename = raw_content_or_filename
