@@ -35,24 +35,28 @@ module Nanoc3
 
     # Creates a new filter that has access to the given assigns.
     #
-    # @param [Hash] a_assigns A hash containing variables that should be made
+    # @param [Hash] hash A hash containing variables that should be made
     # available during filtering.
     def initialize(hash={})
       @assigns = hash
       super
     end
 
-    # Runs the filter on the given content.
+    # Runs the filter on the given content or filename.
     #
     # @abstract
     #
-    # @param [String] content The unprocessed content that should be filtered.
+    # @param [String] content_or_filename The unprocessed content that should
+    # be filtered (if the item is a textual item) or the path to the file that
+    # should be fitlered (if the item is a binar item)
     #
     # @param [Hash] params A hash containing parameters. Filter subclasses can
     # use these parameters to allow modifying the filter's behaviour.
     #
-    # @return [String] The filtered content
-    def run(content, params={})
+    # @return [String] The filtered content (if the item is a textual item) or
+    # a path to a newly generated file containing the filtered content (if the
+    # item is a binary item)
+    def run(content_or_filename, params={})
       raise NotImplementedError.new("Nanoc3::Filter subclasses must implement #run")
     end
 
