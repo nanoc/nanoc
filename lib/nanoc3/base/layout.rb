@@ -24,18 +24,31 @@ module Nanoc3
 
     # Creates a new layout.
     #
-    # @param [String] content The raw content of this layout.
+    # @param [String] raw_content The raw content of this layout.
     #
     # @param [Hash] attributes A hash containing this layout's attributes.
     #
     # @param [String] identifier This layout's identifier.
     #
-    # @param [Time, nil] mtime The time when this layout was last modified.
-    def initialize(raw_content, attributes, identifier, mtime=nil)
+    # @param [Time, Hash, nil] params_or_mtime Extra parameters for the
+    # layout, or the time when this layout was last modified (deprecated).
+    #
+    # @option params_or_mtime [Time, nil] :mtime (nil) The time when this
+    # layout was last modified
+    def initialize(raw_content, attributes, identifier, params_or_mtime=nil)
+      # Get params and mtime
+      # TODO [in nanoc 4.0] clean this up
+      if params_or_mtime.nil? || params_or_mtime.is_a?(Time)
+        params = {}
+        @mtime = params_or_mtime
+      elsif params_or_mtime.is_a?(Hash)
+        params = params_or_mtime
+        @mtime = params[:mtime]
+      end
+
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys
       @identifier   = identifier.cleaned_identifier
-      @mtime        = mtime
     end
 
     # Requests the attribute with the given key.
