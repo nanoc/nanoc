@@ -243,18 +243,15 @@ module Nanoc3
     #
     # @return [void]
     def layout(layout_identifier)
+      # Check whether item can be laid out
+      raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if item.binary?
+
       # Create "pre" snapshot
       snapshot(:pre) unless @content[:pre]
 
       # Create filter
       layout = layout_with_identifier(layout_identifier)
       filter, filter_name, filter_args = filter_for_layout(layout)
-
-      # Check whether item can be laid out
-      # TODO get proper exception
-      if @item.binary?
-        raise RuntimeError, "cannot lay out binary item"
-      end
 
       # Layout
       @item.site.compiler.stack.push(layout)

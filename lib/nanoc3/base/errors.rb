@@ -138,6 +138,22 @@ module Nanoc3
 
     end
 
+    # Error that is raised when a binary item is attempted to be laid out.
+    class CannotLayoutBinaryItem < Generic
+
+      # @return [Nanoc3::ItemRep] The item representation that was attempted
+      # to be laid out
+      attr_reader :rep
+
+      # @param [Nanoc3::ItemRep] The item representation that was attempted to
+      # be laid out
+      def initialize(rep)
+        @rep = rep
+        super("The '#{rep.item.identifier}' item (rep '#{rep.name}') cannot be laid out because it is a binary item.")
+      end
+
+    end
+
   end
 
 end
