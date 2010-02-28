@@ -16,9 +16,6 @@ module Nanoc3
     # @return [String] This item's identifier
     attr_accessor :identifier
 
-    # @return [Symbol] The type of this item: either `:text` or `:binary`
-    attr_reader   :type
-
     # @return [Time] The time when this item was last modified
     attr_reader   :mtime
 
@@ -183,6 +180,11 @@ module Nanoc3
       @attributes[key] = value
     end
 
+    # @return [Boolean] True if the item is binary; false if it is not
+    def binary?
+      @type == :binary
+    end
+
     # Determines whether this item (or rather, its reps) is outdated and
     # should be recompiled (or rather, its reps should be recompiled).
     #
@@ -192,7 +194,7 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.type == :binary}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.binary?}>"
     end
 
   end

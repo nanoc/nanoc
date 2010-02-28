@@ -74,7 +74,7 @@ module Nanoc3
       @name = name
 
       # Initialize content and filenames
-      if @item.type == :binary
+      if @item.binary?
         @filenames = {
           :raw  => @item.raw_filename,
           :last => @item.raw_filename
@@ -162,7 +162,7 @@ module Nanoc3
     def compiled_content(params={})
       # Check whether content can be fetched
       # TODO get proper exception
-      if @item.type == :binary
+      if @item.binary?
         raise RuntimeError, "attempted to fetch compiled content from a binary item"
       end
 
@@ -215,7 +215,7 @@ module Nanoc3
 
       # Check whether filter can be applied
       # TODO allow binary filters
-      if @item.type == :binary
+      if @item.binary?
         raise RuntimeError, "cannot apply textual filter to binary content"
       end
 
@@ -249,7 +249,7 @@ module Nanoc3
 
       # Check whether item can be laid out
       # TODO get proper exception
-      if @item.type == :binary
+      if @item.binary?
         raise RuntimeError, "cannot lay out binary item"
       end
 
@@ -270,7 +270,7 @@ module Nanoc3
     #
     # @return [void]
     def snapshot(snapshot_name)
-      target = @item.type == :binary ? @filenames : @content
+      target = @item.binary? ? @filenames : @content
       target[snapshot_name] = target[:last]
     end
 
@@ -287,7 +287,7 @@ module Nanoc3
       # Check if file will be created
       @created = !File.file?(self.raw_path)
 
-      if @item.type == :binary
+      if @item.binary?
         # Calculate hash of old content
         hash_old = hash(self.raw_path) if File.file?(self.raw_path)
         size_old = File.size(self.raw_path)
@@ -325,7 +325,7 @@ module Nanoc3
     def diff
       # Check if content can be diffed
       # TODO allow binary diffs
-      return nil if @item.type == :binary
+      return nil if @item.binary?
 
       # Check if old content exists
       if @old_content.nil? or self.raw_path.nil?
@@ -336,7 +336,7 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier} item.binary?=#{@item.type == :binary}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier} item.binary?=#{@item.binary?}>"
     end
 
   private
