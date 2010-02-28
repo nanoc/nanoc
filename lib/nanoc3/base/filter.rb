@@ -33,6 +33,24 @@ module Nanoc3
 
     extend Nanoc3::PluginRegistry::PluginMethods
 
+    class << self
+
+      # Sets the new type for the filter (`:binary` or `:text`).
+      #
+      # @param [Symbol] arg The new type of this filter
+      #
+      # @return [void]
+      def type(arg)
+        @type = arg
+      end
+
+      # @return [Boolean] True if this is a binary filter, false otherwise
+      def binary?
+        (@type || :text) == :binary
+      end
+
+    end
+
     # Creates a new filter that has access to the given assigns.
     #
     # @param [Hash] hash A hash containing variables that should be made

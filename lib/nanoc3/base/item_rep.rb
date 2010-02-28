@@ -219,7 +219,11 @@ module Nanoc3
       filter = klass.new(assigns)
 
       # Check whether filter can be applied
-      # TODO implement
+      if klass.binary? && !item.binary?
+        raise Nanoc3::Errors::CannotUseBinaryFilter.new(self, klass)
+      elsif !klass.binary? && item.binary?
+        raise Nanoc3::Errors::CannotUseTextualFilter.new(self, klass)
+      end
 
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
