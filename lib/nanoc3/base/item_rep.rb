@@ -76,9 +76,8 @@ module Nanoc3
       # Initialize content and filenames
       if @item.type == :binary
         @filenames = {
-          # TODO change to raw_filename
-          :raw  => @item.filename,
-          :last => @item.filename
+          :raw  => @item.raw_filename,
+          :last => @item.raw_filename
         }
       else
         @content = {
