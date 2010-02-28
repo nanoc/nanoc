@@ -37,18 +37,56 @@ module Nanoc3
     attr_accessor :outdated_due_to_dependencies
     alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
 
-    # @param [String] raw_content The uncompiled item content.
+    # Creates a new item with the given content or filename, attributes and
+    # identifier.
+    #
+    # Note that the API in 3.1 has changed a bit since 3.0; the API remains
+    # backwards compatible, however. Passing the modification time as the 4th
+    # parameter is deprecated; pass it as the `:mtime` method option instead.
+    #
+    # @param [String] raw_content_or_filename The uncompiled item content (if
+    # it is a textual item) or the path to the filename containing the content
+    # (if it is a binary item).
     #
     # @param [Hash] attributes A hash containing this item's attributes.
     #
     # @param [String] identifier This item's identifier.
     #
-    # @param [String, nil] mtime The time when this item was last modified.
-    def initialize(raw_content, attributes, identifier, mtime=nil)
-      @raw_content  = raw_content
+    # @param [Time, Hash, nil] params_or_mtime Extra parameters for the item,
+    # or the time when this item was last modified (deprecated).
+    #
+    # @option params_or_mtime [Time, nil] :mtime (nil) The time when this item
+    # was last modified
+    #
+    # @option params_or_mtime [Symbol, nil] :type (:text) The type of the
+    # item: either `:text` or `:binary`
+    def initialize(raw_content_or_filename, attributes, identifier, params_or_mtime=nil)
+      # Get params and mtime
+      # TODO [in nanoc 4.0] clean this up
+      if params_or_mtime.nil? || params_or_mtime.is_a?(Time)
+        params = {}
+        @mtime  = params_or_mtime
+      elsif params_or_mtime.is_a?(Hash)
+        params = params_or_mtime
+        @mtime  = params[:mtime]
+      end
+
+      # Get type and raw content or filename
+      # FIXME change to :binary by default
+      @type = params[:type] || :text
+      case @type
+        when :binary
+          @filename = raw_content_or_filename
+        when :text
+          @raw_content = raw_content_or_filename
+        else
+          raise RuntimeError,
+            "unknown item type: #{@type.inspect} (should be :text or :binary)"
+      end
+
+      # Get rest of params
       @attributes   = attributes.symbolize_keys
       @identifier   = identifier.cleaned_identifier
-      @mtime        = mtime
 
       @parent       = nil
       @children     = []
