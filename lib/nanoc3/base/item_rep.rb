@@ -289,8 +289,10 @@ module Nanoc3
 
       if @item.binary?
         # Calculate hash of old content
-        hash_old = hash(self.raw_path) if File.file?(self.raw_path)
-        size_old = File.size(self.raw_path)
+        if File.file?(self.raw_path)
+          hash_old = hash(self.raw_path)
+          size_old = File.size(self.raw_path)
+        end
 
         # Copy
         FileUtils.cp(@filenames[:last], self.raw_path)
