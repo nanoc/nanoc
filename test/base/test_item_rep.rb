@@ -554,7 +554,8 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Mock item
     item = Nanoc3::Item.new(
-      %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/'
+      %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
+      :type => :text
     )
     item.site = site
 
