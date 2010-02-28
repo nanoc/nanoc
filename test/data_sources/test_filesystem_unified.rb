@@ -70,19 +70,19 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
         'test 1',
         { 'num' => 1, :filename => 'foo/bar.html',   :extension => 'html', :file => File.open('foo/bar.html') },
         '/bar/',
-        File.mtime('foo/bar.html')
+        :type => :text, :mtime => File.mtime('foo/bar.html')
       ),
       klass.new(
         'test 2',
         { 'num' => 2, :filename => 'foo/b.c.html',   :extension => 'c.html', :file => File.open('foo/b.c.html') },
         '/b/',
-        File.mtime('foo/b.c.html')
+        :type => :text, :mtime => File.mtime('foo/b.c.html')
       ),
       klass.new(
         'test 3',
         { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html', :file => File.open('foo/a/b/c.html') },
         '/a/b/c/',
-        File.mtime('foo/a/b/c.html')
+        :type => :text, :mtime => File.mtime('foo/a/b/c.html')
       )
     ]
     actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0] }
@@ -259,7 +259,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
           :file             => nil
         },
         '/a/b/c/',
-        File.mtime('foo/a/b/c.yaml')
+        :type => :text, :mtime => File.mtime('foo/a/b/c.yaml')
       ),
       klass.new(
         'test 2',
@@ -271,7 +271,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
           :file             => File.open('foo/b.c.html')
         },
         '/b.c/',
-        File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
+        :type => :text, :mtime => File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
       ),
       klass.new(
         'test 3',
@@ -282,7 +282,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
           :file             => File.open('foo/car.html')
         },
         '/car/',
-        File.mtime('foo/car.html')
+        :type => :text, :mtime => File.mtime('foo/car.html')
       )
     ]
 
@@ -345,7 +345,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
           :file             => nil
         },
         '/a/b/c/',
-        File.mtime('foo/a/b/c.yaml')
+        :type => :text, :mtime => File.mtime('foo/a/b/c.yaml')
       ),
       klass.new(
         'test 2',
@@ -357,7 +357,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
           :file             => File.open('foo/b.html.erb')
         },
         '/b/',
-        File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
+        :type => :text, :mtime => File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
       ),
       klass.new(
         'test 3',
@@ -368,7 +368,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
           :file             => File.open('foo/car.html')
         },
         '/car/',
-        File.mtime('foo/car.html')
+        :type => :text, :mtime => File.mtime('foo/car.html')
       )
     ]
 
