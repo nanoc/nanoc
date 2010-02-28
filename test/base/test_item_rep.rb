@@ -85,7 +85,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :mtime => Time.now-500, :type => :text
+      :mtime => Time.now-500, :binary => false
     )
 
     # Mock layouts
@@ -121,7 +121,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
 
     # Mock layouts
@@ -152,7 +152,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-100
+      :binary => false, :mtime => Time.now-100
     )
 
     # Mock layouts
@@ -187,7 +187,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
 
     # Mock layouts
@@ -222,7 +222,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
 
     # Mock layouts
@@ -257,7 +257,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
 
     # Mock layouts
@@ -293,7 +293,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
 
     # Mock layouts
@@ -329,7 +329,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
 
     # Mock layouts
@@ -366,7 +366,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Create rep
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :last => 'last content' } }
@@ -380,7 +380,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Create rep
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
@@ -394,7 +394,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Create rep
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
@@ -408,7 +408,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Create rep
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :type => :text, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now-500
     )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
@@ -422,7 +422,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Create rep
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
-      :type => :text
+      :binary => false
     )
     rep = Nanoc3::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -443,7 +443,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       %[<%= '<%= "blah" %' + '>' %>], {}, '/',
-      :type => :text
+      :binary => false
     )
     item.site = site
 
@@ -487,7 +487,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
-      :type => :text
+      :binary => false
     )
     item.site = site
 
@@ -527,7 +527,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:compiler).returns(compiler)
 
     # Mock item
-    item = Nanoc3::Item.new('blah', {}, '/', :type => :text)
+    item = Nanoc3::Item.new('blah', {}, '/', :binary => false)
     item.site = site
 
     # Create item rep
@@ -555,7 +555,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
-      :type => :text
+      :binary => false
     )
     item.site = site
 
@@ -583,7 +583,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
-      :type => :text
+      :binary => false
     )
 
     # Create rep
@@ -603,7 +603,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
-      :type => :text
+      :binary => false
     )
 
     # Create rep

@@ -63,8 +63,8 @@ module Nanoc3
     # @option params_or_mtime [Time, nil] :mtime (nil) The time when this item
     # was last modified
     #
-    # @option params_or_mtime [Symbol, nil] :type (:binary) The type of the
-    # item: either `:text` or `:binary`
+    # @option params_or_mtime [Symbol, nil] :binary (true) Whether or not this
+    # item is binary
     def initialize(raw_content_or_raw_filename, attributes, identifier, params_or_mtime=nil)
       # Get params and mtime
       # TODO [in nanoc 4.0] clean this up
@@ -77,15 +77,11 @@ module Nanoc3
       end
 
       # Get type and raw content or raw filename
-      @type = params[:type] || :binary
-      case @type
-        when :binary
-          @raw_filename = raw_content_or_raw_filename
-        when :text
-          @raw_content  = raw_content_or_raw_filename
-        else
-          raise RuntimeError,
-            "unknown item type: #{@type.inspect} (should be :text or :binary)"
+      @is_binary = params.has_key?(:binary) ? params[:binary] : true
+      if @is_binary
+        @raw_filename = raw_content_or_raw_filename
+      else
+        @raw_content  = raw_content_or_raw_filename
       end
 
       # Get rest of params
@@ -182,7 +178,7 @@ module Nanoc3
 
     # @return [Boolean] True if the item is binary; false if it is not
     def binary?
-      @type == :binary
+      !!@is_binary
     end
 
     # Determines whether this item (or rather, its reps) is outdated and
