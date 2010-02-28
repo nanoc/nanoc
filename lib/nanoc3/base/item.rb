@@ -31,7 +31,7 @@ module Nanoc3
 
     # @return [String] The filename pointing to the file containing this
     # item’s content (only available for binary items)
-    attr_reader   :filename
+    attr_reader   :raw_filename
 
     # @return [Nanoc3::Item, nil] The parent item of this item. This can be
     # nil even for non-root items.
@@ -52,9 +52,9 @@ module Nanoc3
     # backwards compatible, however. Passing the modification time as the 4th
     # parameter is deprecated; pass it as the `:mtime` method option instead.
     #
-    # @param [String] raw_content_or_filename The uncompiled item content (if
-    # it is a textual item) or the path to the filename containing the content
-    # (if it is a binary item).
+    # @param [String] raw_content_or_raw_filename The uncompiled item content
+    # (if it is a textual item) or the path to the filename containing the
+    # content (if it is a binary item).
     #
     # @param [Hash] attributes A hash containing this item's attributes.
     #
@@ -68,7 +68,7 @@ module Nanoc3
     #
     # @option params_or_mtime [Symbol, nil] :type (:binary) The type of the
     # item: either `:text` or `:binary`
-    def initialize(raw_content_or_filename, attributes, identifier, params_or_mtime=nil)
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params_or_mtime=nil)
       # Get params and mtime
       # TODO [in nanoc 4.0] clean this up
       if params_or_mtime.nil? || params_or_mtime.is_a?(Time)
@@ -79,13 +79,13 @@ module Nanoc3
         @mtime = params[:mtime]
       end
 
-      # Get type and raw content or filename
+      # Get type and raw content or raw filename
       @type = params[:type] || :binary
       case @type
         when :binary
-          @filename = raw_content_or_filename
+          @raw_filename = raw_content_or_raw_filename
         when :text
-          @raw_content = raw_content_or_filename
+          @raw_content  = raw_content_or_raw_filename
         else
           raise RuntimeError,
             "unknown item type: #{@type.inspect} (should be :text or :binary)"

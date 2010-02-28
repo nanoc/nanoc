@@ -124,7 +124,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     # Check
     assert_equal 1,               items.size
     assert_equal :binary,         items[0].type
-    assert_equal 'foo/stuff.dat', items[0].filename
+    assert_equal 'foo/stuff.dat', items[0].raw_filename
     assert_nil   items[0].raw_content
   end
 
