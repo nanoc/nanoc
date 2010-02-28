@@ -150,7 +150,7 @@ module Nanoc3
     # will be the content compiled right before the first layout call (if
     # any).
     #
-    # @return [String] The compiled content o at the given snapshot (or the
+    # @return [String] The compiled content at the given snapshot (or the
     # default snapshot if no snapshot is specified)
     def compiled_content(params={})
       # Notify
