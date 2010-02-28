@@ -4,9 +4,11 @@ module Nanoc3::Filters
 
   autoload 'BlueCloth',       'nanoc3/filters/bluecloth'
   autoload 'CodeRay',         'nanoc3/filters/coderay'
+  autoload 'ColorizeSyntax',  'nanoc3/filters/colorize_syntax'
   autoload 'ERB',             'nanoc3/filters/erb'
   autoload 'Erubis',          'nanoc3/filters/erubis'
   autoload 'Haml',            'nanoc3/filters/haml'
+  autoload 'Kramdown',        'nanoc3/filters/kramdown'
   autoload 'Less',            'nanoc3/filters/less'
   autoload 'Markaby',         'nanoc3/filters/markaby'
   autoload 'Maruku',          'nanoc3/filters/maruku'
@@ -20,9 +22,11 @@ module Nanoc3::Filters
 
   Nanoc3::Filter.register '::Nanoc3::Filters::BlueCloth',       :bluecloth
   Nanoc3::Filter.register '::Nanoc3::Filters::CodeRay',         :coderay
+  Nanoc3::Filter.register '::Nanoc3::Filters::ColorizeSyntax',  :colorize_syntax
   Nanoc3::Filter.register '::Nanoc3::Filters::ERB',             :erb
   Nanoc3::Filter.register '::Nanoc3::Filters::Erubis',          :erubis
   Nanoc3::Filter.register '::Nanoc3::Filters::Haml',            :haml
+  Nanoc3::Filter.register '::Nanoc3::Filters::Kramdown',        :kramdown
   Nanoc3::Filter.register '::Nanoc3::Filters::Less',            :less
   Nanoc3::Filter.register '::Nanoc3::Filters::Markaby',         :markaby
   Nanoc3::Filter.register '::Nanoc3::Filters::Maruku',          :maruku

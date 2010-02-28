@@ -22,6 +22,22 @@ class Nanoc3::FilterTest < MiniTest::Unit::TestCase
     assert_equal('bar', filter.assigns[:foo])
   end
 
+  def test_assigns_with_instance_variables
+    # Create filter
+    filter = Nanoc3::Filter.new({ :foo => 'bar' })
+
+    # Check assigns
+    assert_equal('bar', filter.instance_eval { @foo })
+  end
+
+  def test_assigns_with_instance_methods
+    # Create filter
+    filter = Nanoc3::Filter.new({ :foo => 'bar' })
+
+    # Check assigns
+    assert_equal('bar', filter.instance_eval { foo })
+  end
+
   def test_run
     # Create filter
     filter = Nanoc3::Filter.new

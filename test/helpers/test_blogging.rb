@@ -72,28 +72,24 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
 
       # Create item 1
-      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[1].stubs(:[]).with(:kind).returns('article')
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns("/item1/")
-      item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 1 content')
-      @items[1].stubs(:reps).returns([ item_rep ])
+      @items[1].stubs(:path).returns("/item1/")
+      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('item 1 content')
 
       # Create item 2
-      @items[2].stubs(:mtime).returns(Time.now - 250)
+      @items[2].stubs(:[]).with(:updated_at).returns(Time.now - 250)
       @items[2].stubs(:[]).with(:kind).returns('article')
       @items[2].stubs(:[]).with(:created_at).returns((Time.now - 750).to_s)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
       @items[2].stubs(:[]).with(:custom_path_in_feed).returns('/item2custom/')
       @items[2].stubs(:[]).with(:excerpt).returns('item 2 excerpt')
-      item_rep = mock
-      item_rep.stubs(:path).returns("/item2/")
-      item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 2 content')
-      @items[2].stubs(:reps).returns([ item_rep ])
+      @items[2].stubs(:path).returns("/item2/")
+      @items[2].expects(:compiled_content).with(:snapshot => :pre).returns('item 2 content')
 
       # Mock site
       @site = mock
@@ -105,9 +101,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns("/journal/feed/")
-      @item.stubs(:reps).returns([ item_rep ])
+      @item.stubs(:path).returns("/journal/feed/")
 
       # Check
       atom_feed
@@ -123,28 +117,24 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
 
       # Create item 1
-      @items[1].stubs(:mtime).returns(Time.now - 500)
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[1].stubs(:[]).with(:kind).returns('article')
       @items[1].stubs(:[]).with(:created_at).returns(Time.now - 1000)
       @items[1].stubs(:[]).with(:title).returns('Item One')
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns("/item1/")
-      item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 1 content')
-      @items[1].stubs(:reps).returns([ item_rep ])
+      @items[1].stubs(:path).returns("/item1/")
+      @items[1].expects(:compiled_content).returns('item 1 content')
 
       # Create item 2
-      @items[2].stubs(:mtime).returns(Time.now - 250)
+      @items[2].stubs(:[]).with(:updated_at).returns(Time.now - 250)
       @items[2].stubs(:[]).with(:kind).returns('article')
       @items[2].stubs(:[]).with(:created_at).returns(Time.now - 1200)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
       @items[2].stubs(:[]).with(:custom_path_in_feed).returns('/item2custom/')
       @items[2].stubs(:[]).with(:excerpt).returns('item 2 excerpt')
-      item_rep = mock
-      item_rep.stubs(:path).returns("/item2/")
-      item_rep.expects(:content_at_snapshot).with(:pre).returns('item rep 2 content')
-      @items[2].stubs(:reps).returns([ item_rep ])
+      @items[2].stubs(:path).returns("/item2/")
+      @items[2].expects(:compiled_content).returns('item 2 content')
 
       # Mock site
       @site = mock
@@ -156,9 +146,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns("/journal/feed/")
-      @item.stubs(:reps).returns([ item_rep ])
+      @item.stubs(:path).returns("/journal/feed/")
 
       # Check
       atom_feed
@@ -244,7 +232,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no title',
+        'Cannot build Atom feed: no title in params, item or site config',
         error.message
       )
     end
@@ -272,7 +260,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no author_name',
+        'Cannot build Atom feed: no author_name in params, item or site config',
         error.message
       )
     end
@@ -300,7 +288,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         atom_feed
       end
       assert_equal(
-        'Cannot build Atom feed: feed item has no author_uri',
+        'Cannot build Atom feed: no author_uri in params, item or site config',
         error.message
       )
     end
@@ -341,6 +329,82 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_atom_feed_with_title_author_name_and_uri_as_params
+    if_have 'builder' do
+      # Create items
+      @items = [ mock, mock ]
+      @items[0].stubs(:[]).with(:kind).returns('item')
+      @items[1].stubs(:[]).with(:kind).returns('article')
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
+      @items[1].stubs(:raw_content).returns('item 1 content')
+      @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
+      @items[1].stubs(:[]).with(:title).returns('Item One')
+      @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:path).returns('/item1/')
+      @items[1].stubs(:[]).with(:excerpt).returns(nil)
+      @items[1].stubs(:path).returns('/asdf/fdsa/')
+      @items[1].stubs(:raw_path).returns('output/asdf/fdsa/index.html')
+      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns(nil)
+      @item.stubs(:[]).with(:author_name).returns(nil)
+      @item.stubs(:[]).with(:author_uri).returns(nil)
+      @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      atom_feed(
+        :author_name => 'Bob',
+        :author_uri  => 'http://example.com/~bob/',
+        :title       => 'My Blog Or Something'
+      )
+    end
+  end
+
+  def test_atom_feed_with_title_author_name_and_uri_from_config
+    if_have 'builder' do
+      # Create items
+      @items = [ mock, mock ]
+      @items[0].stubs(:[]).with(:kind).returns('item')
+      @items[1].stubs(:[]).with(:kind).returns('article')
+      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
+      @items[1].stubs(:raw_content).returns('item 1 content')
+      @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
+      @items[1].stubs(:[]).with(:title).returns('Item One')
+      @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:path).returns('/item1/')
+      @items[1].stubs(:[]).with(:excerpt).returns(nil)
+      @items[1].stubs(:path).returns('/asdf/fdsa/')
+      @items[1].stubs(:raw_path).returns('output/asdf/fdsa/index.html')
+      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
+
+      # Mock site
+      @config = {
+        :author_name => 'Bob',
+        :author_uri  => 'http://example.com/~bob/',
+        :title       => 'My Blog Or Something',
+        :base_url    => 'http://example.com'
+      }
+      @site = mock
+      @site.stubs(:config).returns(@config)
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns(nil)
+      @item.stubs(:[]).with(:author_name).returns(nil)
+      @item.stubs(:[]).with(:author_uri).returns(nil)
+      @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      atom_feed
+    end
+  end
+
   def test_atom_feed_with_articles_param
     if_have 'builder' do
       # Mock items
@@ -352,18 +416,16 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[4].stubs(:[]).with(:kind).returns('article')
 
       # Mock one article
-      @items[4].stubs(:mtime).returns(Time.now - 500)
+      @items[4].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[4].stubs(:raw_content).returns('item 1 content')
       @items[4].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[4].stubs(:[]).with(:title).returns('Item One')
       @items[4].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[4].stubs(:[]).with(:path).returns('/item1/')
       @items[4].stubs(:[]).with(:excerpt).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns('/asdf/fdsa/')
-      item_rep.stubs(:raw_path).returns('output/asdf/fdsa/index.html')
-      item_rep.expects(:content_at_snapshot).with(:pre).returns('asdf')
-      @items[4].stubs(:reps).returns([ item_rep ])
+      @items[4].stubs(:path).returns('/asdf/fdsa/')
+      @items[4].stubs(:raw_path).returns('output/asdf/fdsa/index.html')
+      @items[4].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
       @site = mock
@@ -386,18 +448,16 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       # Mock articles
       @items = [ mock, mock, mock, mock, mock ]
       @items.each_with_index do |article, i|
-        article.stubs(:mtime).returns(Time.now - 500)
+        article.stubs(:[]).with(:updated_at).returns(Time.now - 500)
         article.stubs(:[]).with(:kind).returns('article')
         article.stubs(:[]).with(:created_at).returns((Time.now - 1000*i).to_s)
         article.stubs(:[]).with(:title).returns("Article #{i}")
         article.stubs(:[]).with(:custom_path_in_feed).returns(nil)
         article.stubs(:[]).with(:path).returns("/articles/#{i}/")
         article.stubs(:[]).with(:excerpt).returns(nil)
-        item_rep = mock
-        item_rep.stubs(:path).returns("/articles/#{i}/")
-        item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
-        item_rep.stubs(:content_at_snapshot).with(:pre).returns("item #{i} content")
-        article.stubs(:reps).returns([ item_rep ])
+        article.stubs(:path).returns("/articles/#{i}/")
+        article.stubs(:raw_path).returns("output/articles/#{i}/index.html")
+        article.stubs(:compiled_content).with(:snapshot => :pre).returns("item #{i} content")
       end
 
       # Mock site
@@ -425,17 +485,15 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       # Mock articles
       @items = [ mock, mock, mock, mock ]
       @items.each_with_index do |article, i|
-        article.stubs(:mtime).returns(Time.now - 500)
+        article.stubs(:[]).with(:updated_at).returns(Time.now - 500)
         article.stubs(:[]).with(:kind).returns('article')
         article.stubs(:[]).with(:title).returns("Article #{i}")
         article.stubs(:[]).with(:custom_path_in_feed).returns(nil)
         article.stubs(:[]).with(:path).returns("/articles/#{i}/")
         article.stubs(:[]).with(:excerpt).returns(nil)
-        item_rep = mock
-        item_rep.stubs(:path).returns("/articles/#{i}/")
-        item_rep.stubs(:raw_path).returns("output/articles/#{i}/index.html")
-        item_rep.stubs(:content_at_snapshot).with(:pre).returns("Article #{i} content")
-        article.stubs(:reps).returns([ item_rep ])
+        article.stubs(:path).returns("/articles/#{i}/")
+        article.stubs(:raw_path).returns("output/articles/#{i}/index.html")
+        article.stubs(:compiled_content).with(:snapshot => :pre).returns("Article #{i} content")
       end
       @items[0].stubs(:[]).with(:created_at).returns('23-02-2009')
       @items[1].stubs(:[]).with(:created_at).returns('22-03-2009')
@@ -466,16 +524,14 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     if_have 'builder' do
       # Mock article
       @items = [ mock ]
-      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[0].stubs(:[]).with(:kind).returns('article')
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[0].stubs(:[]).with(:excerpt).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns('/item1/')
-      item_rep.stubs(:raw_path).returns('output/item1/index.html')
-      @items[0].stubs(:reps).returns([ item_rep ])
+      @items[0].stubs(:path).returns('/item1/')
+      @items[0].stubs(:raw_path).returns('output/item1/index.html')
 
       # Mock site
       @site = mock
@@ -498,17 +554,15 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     if_have 'builder' do
       # Mock article
       @items = [ mock ]
-      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[0].stubs(:[]).with(:kind).returns('article')
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[0].stubs(:raw_content).returns('some content')
-      item_rep = mock
-      item_rep.stubs(:path).returns('/item1/')
-      item_rep.stubs(:raw_path).returns('output/item1/index.html')
-      item_rep.expects(:content_at_snapshot).with(:pre).returns('foo')
-      @items[0].stubs(:reps).returns([ item_rep ])
+      @items[0].stubs(:path).returns('/item1/')
+      @items[0].stubs(:raw_path).returns('output/item1/index.html')
+      @items[0].expects(:compiled_content).with(:snapshot => :pre).returns('foo')
 
       # Mock site
       @site = mock
@@ -531,16 +585,14 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     if_have 'builder' do
       # Create items
       @items = [ mock ]
-      @items[0].stubs(:mtime).returns(Time.now - 500)
+      @items[0].stubs(:[]).with(:updated_at).returns(Time.now - 500)
       @items[0].stubs(:identifier).returns('/item/')
       @items[0].stubs(:[]).with(:kind).returns('article')
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[0].stubs(:[]).with(:excerpt).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns(nil)
-      @items[0].stubs(:reps).returns([ item_rep ])
+      @items[0].stubs(:path).returns(nil)
 
       # Mock site
       @site = mock
@@ -553,9 +605,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      item_rep = mock
-      item_rep.stubs(:path).returns("/journal/feed/")
-      @item.stubs(:reps).returns([ item_rep ])
+      @item.stubs(:path).returns("/journal/feed/")
 
       # Check
       atom_feed
@@ -570,9 +620,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create article
     item = mock
     item.expects(:[]).with(:custom_path_in_feed).returns(nil)
-    item_rep = mock
-    item_rep.expects(:path).returns('/foo/bar/')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:path).returns('/foo/bar/')
 
     # Check
     assert_equal('http://example.com/foo/bar/', url_for(item))
@@ -616,9 +664,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create article
     item = mock
     item.expects(:[]).with(:custom_path_in_feed).returns(nil)
-    item_rep = mock
-    item_rep.expects(:path).returns(nil)
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:path).returns(nil)
 
     # Check
     assert_equal(nil, url_for(item))
@@ -632,9 +678,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     # Create feed item
     @item = mock
     @item.expects(:[]).with(:feed_url).returns(nil)
-    item_rep = mock
-    item_rep.expects(:path).returns('/foo/bar/')
-    @item.expects(:reps).returns([ item_rep ])
+    @item.expects(:path).returns('/foo/bar/')
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
@@ -675,14 +719,10 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = mock
     @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
-    # Create article reps
-    item_rep = mock
-    item_rep.expects(:path).returns('/foo/bar/')
-
     # Create article
     item = mock
     item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:path).returns('/foo/bar/')
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
@@ -693,14 +733,10 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = mock
     @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
-    # Create article reps
-    item_rep = mock
-    item_rep.expects(:path).returns(nil)
-
     # Create article
     item = mock
     item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:path).returns(nil)
     item.expects(:identifier).returns('/baz/qux/')
 
     # Check
@@ -712,14 +748,10 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = mock
     @site.stubs(:config).returns({ :base_url => 'http://example.com/somedir' })
 
-    # Create article reps
-    item_rep = mock
-    item_rep.expects(:path).returns('/foo/bar/')
-
     # Create article
     item = mock
     item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:reps).returns([ item_rep ])
+    item.expects(:path).returns('/foo/bar/')
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/somedir/foo/bar/', atom_tag_for(item))

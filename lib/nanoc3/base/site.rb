@@ -2,59 +2,27 @@
 
 module Nanoc3
 
-  # A Nanoc3::Site is the in-memory representation of a nanoc site. It holds
-  # references to the following site data:
+  # The in-memory representation of a nanoc site. It holds references to the
+  # following site data:
   #
-  # * +items+ is a list of Nanoc3::Item instances representing items
-  # * +layouts+ is a list of Nanoc3::Layout instances representing layouts
-  # * +code_snippets+ is list of Nanoc3::CodeSnippet instance representing
-  #   custom site code
+  # * {#items}         - the list of items         ({Nanoc3::Item})
+  # * {#layouts}       - the list of layouts       ({Nanoc3::Layout})
+  # * {#code_snippets} - the list of code snippets ({Nanoc3::CodeSnippet})
   #
-  # In addition, each site has a +config+ hash which stores the site
-  # configuration. This configuration hash can have the following keys:
-  #
-  # +output_dir+:: The directory to which compiled items will be written. This
-  #                path is relative to the current working directory, but can
-  #                also be an absolute path.
-  #
-  # +data_sources+:: A list of data sources for this site. See below for
-  #                  documentation on the structure of this list. By default,
-  #                  there is only one data source of the filesystem  type
-  #                  mounted at /.
-  #
-  # +index_filenames+:: A list of filenames that will be stripped off full
-  #                     item paths to create cleaner URLs (for example,
-  #                     '/about/' will be used instead of
-  #                     '/about/index.html'). The default value should be okay
-  #                     in most cases.
-  #
-  # The list of data sources consists of hashes with the following keys:
-  #
-  # +:type+:: The type of data source, i.e. its identifier. 
-  #
-  # +:items_root+:: The prefix that should be given to all items returned by
-  #                 the #items method (comparable to mount points for
-  #                 filesystems in Unix-ish OSes).
-  #
-  # +:layouts_root+:: The prefix that should be given to all layouts returned
-  #                   by the #layouts method (comparable to mount points for
-  #                   filesystems in Unix-ish OSes).
-  #
-  # +:config+:: A hash containing the configuration for this data source. This
-  #             is especially useful for online data sources; for example, a
-  #             Twitter data source would need the username of the account
-  #             from which to fetch tweets.
+  # In addition, each site has a {#config} hash which stores the site
+  # configuration.
   #
   # A site also has several helper classes:
   #
-  # * +data_source+ is a Nanoc3::DataSource subclass instance used for loading
-  #   site data.
-  # * +compiler+ is a Nanoc3::Compiler instance that compiles item
-  #   representations.
+  # * {#data_sources} (array of {Nanoc3::DataSource}) - A list of data sources
+  #   that are used for loading site data
   #
-  # The physical representation of a Nanoc3::Site is usually a directory that
-  # contains a configuration file, site data, a rakefile, a rules file, etc.
-  # The way site data is stored depends on the data source.
+  # * {#compiler} ({Nanoc3::Compiler}) - The compiler that is used for
+  #   compiling items and their representations
+  #
+  # The physical representation of a {Nanoc3::Site} is usually a directory
+  # that contains a configuration file, site data, a rakefile, a rules file,
+  # etc. The way site data is stored depends on the data source.
   class Site
 
     # The default configuration for a data source. A data source's
@@ -67,34 +35,66 @@ module Nanoc3
     }
 
     # The default configuration for a site. A site's configuration overrides
-    # these options: when a Nanoc3::Site is created with a configuration that
-    # lacks some options, the default value will be taken from
-    # +DEFAULT_CONFIG+.
+    # these options: when a {Nanoc3::Site} is created with a configuration
+    # that lacks some options, the default value will be taken from
+    # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
       :output_dir      => 'output',
       :data_sources    => [ {} ],
       :index_filenames => [ 'index.html' ]
     }
 
-    # The site configuration.
+    # The site configuration. The configuration has the following keys:
+    #
+    # * `output_dir` ({String}) - The directory to which compiled items will
+    #   be written. This path is relative to the current working directory,
+    #   but can also be an absolute path.
+    #
+    # * `data_sources` ({Array<Hash>}) - A list of data sources for this site.
+    #   See below for documentation on the structure of this list. By default,
+    #   there is only one data source of the filesystem  type mounted at `/`.
+    #
+    # * `index_filenames` ({Array<String>}) - A list of filenames that will be
+    #   stripped off full item paths to create cleaner URLs. For example,
+    #   `/about/` will be used instead of `/about/index.html`). The default
+    #   value should be okay in most cases.
+    #
+    # The list of data sources consists of hashes with the following keys:
+    #
+    # * `:type` ({String}) - The type of data source, i.e. its identifier.
+    #
+    # * `:items_root` ({String}) - The prefix that should be given to all
+    #   items returned by the {#items} method (comparable to mount points
+    #   for filesystems in Unix-ish OSes).
+    #
+    # * `:layouts_root` ({String}) - The prefix that should be given to all
+    #   layouts returned by the {#layouts} method (comparable to mount
+    #   points for filesystems in Unix-ish OSes).
+    #
+    # * `:config` ({Hash}) - A hash containing the configuration for this data
+    #   source. nanoc itself does not use this hash. This is especially
+    #   useful for online data sources; for example, a Twitter data source
+    #   would need the username of the account from which to fetch tweets.
+    #
+    # @return [Hash] The site configuration
     attr_reader :config
 
-    # The timestamp when the site configuration was last modified.
+    # @return [Time] The timestamp when the site configuration was last
+    # modified
     attr_reader :config_mtime
 
-    # The timestamp when the rules were last modified.
+    # @return [Time] The timestamp when the rules were last modified
     attr_reader :rules_mtime
 
-    # The code block that will be executed after all data is loaded but before
-    # the site is compiled.
+    # @return [Proc] The code block that will be executed after all data is
+    # loaded but before the site is compiled
     attr_accessor :preprocessor
 
-    # Creates a Nanoc3::Site object for the site specified by the given
-    # +dir_or_config_hash+ argument.
+    # Creates a site object for the site specified by the given
+    # `dir_or_config_hash` argument.
     #
-    # +dir_or_config_hash+:: If a string, contains the path to the site
-    #                        directory; if a hash, contains the site
-    #                        configuration.
+    # @param [Hash, String] dir_or_config_hash If a string, contains the path
+    # to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
       build_config(dir_or_config_hash)
 
@@ -105,19 +105,32 @@ module Nanoc3
 
     # Returns the compiler for this site. Will create a new compiler if none
     # exists yet.
+    #
+    # @return [Nanoc3::Compiler] The compiler for this site
     def compiler
       @compiler ||= Compiler.new(self)
     end
 
     # Returns the data sources for this site. Will create a new data source if
-    # none exists yet. Raises Nanoc3::Errors::UnknownDataSource if the site
-    # configuration specifies an unknown data source.
+    # none exists yet.
+    #
+    # @return [Array<Nanoc3::DataSource>] The list of data sources for this
+    # site
+    #
+    # @raise [Nanoc3::Errors::UnknownDataSource] if the site configuration
+    # specifies an unknown data source
     def data_sources
       @data_sources ||= begin
         @config[:data_sources].map do |data_source_hash|
           # Get data source class
           data_source_class = Nanoc3::DataSource.named(data_source_hash[:type])
           raise Nanoc3::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
+
+          # Warn about deprecated data sources
+          # TODO [in nanoc 4.0] remove me
+          if data_source_hash[:type] == 'filesystem'
+            warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
+          end
 
           # Create data source
           data_source_class.new(
@@ -130,13 +143,15 @@ module Nanoc3
       end
     end
 
-    # Loads the site data. This will query the Nanoc3::DataSource associated
+    # Loads the site data. This will query the {Nanoc3::DataSource} associated
     # with the site and fetch all site data. The site data is cached, so
     # calling this method will not have any effect the second time, unless
-    # +force+ is true.
+    # the `force` parameter is true.
     #
-    # +force+:: If true, will force load the site data even if it has been
-    #           loaded before, to circumvent caching issues.
+    # @param [Boolean] force If true, will force load the site data even if it
+    # has been loaded before, to circumvent caching issues
+    #
+    # @return [void]
     def load_data(force=false)
       # Don't load data twice
       return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
@@ -151,7 +166,7 @@ module Nanoc3
 
       # Preprocess
       setup_child_parent_links
-      Nanoc3::PreprocessorContext.new(self).instance_eval(&preprocessor) unless preprocessor.nil?
+      preprocessor_context.instance_eval(&preprocessor) unless preprocessor.nil?
       link_everything_to_site
       setup_child_parent_links
       build_reps
@@ -161,19 +176,35 @@ module Nanoc3
       @data_loaded = true
     end
 
-    # Returns this site's code snippets. Raises an exception if data hasn't been loaded yet.
+    # Returns this site’s code snippets.
+    #
+    # @return [Array<Nanoc3::CodeSnippet>] The list of code snippets in this
+    # site
+    #
+    # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
+    # been loaded yet (call {#load_data} to load the site data)
     def code_snippets
       raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @code_snippets_loaded
       @code_snippets
     end
 
-    # Returns this site's items. Raises an exception if data hasn't been loaded yet.
+    # Returns this site’s items.
+    #
+    # @return [Array<Nanoc3::Item>] The list of items in this site
+    #
+    # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
+    # been loaded yet (call {#load_data} to load the site data)
     def items
       raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @items_loaded
       @items
     end
 
-    # Returns this site's layouts. Raises an exception if data hasn't been loaded yet.
+    # Returns this site’s layouts.
+    #
+    # @return [Array<Nanoc3::Layouts>] The list of layout in this site
+    #
+    # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
+    # been loaded yet (call {#load_data} to load the site data)
     def layouts
       raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @layouts_loaded
       @layouts
@@ -186,13 +217,19 @@ module Nanoc3
       @dsl ||= Nanoc3::CompilerDSL.new(self)
     end
 
-    # Loads this site's code and executes it.
+    # Loads this site’s code and executes it.
     def load_code_snippets(force=false)
       # Don't load code snippets twice
       return if @code_snippets_loaded and !force
 
       # Get code snippets
-      @code_snippets = data_sources.map { |ds| ds.code_snippets }.flatten
+      @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
+        Nanoc3::CodeSnippet.new(
+          File.read(filename),
+          filename.sub(/^lib\//, ''),
+          File.stat(filename).mtime
+        )
+      end
 
       # Execute code snippets
       @code_snippets.each { |cs| cs.load }
@@ -200,7 +237,7 @@ module Nanoc3
       @code_snippets_loaded = true
     end
 
-    # Loads this site's rules.
+    # Loads this site’s rules.
     def load_rules
       # Find rules file
       rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
@@ -214,26 +251,26 @@ module Nanoc3
       dsl.instance_eval(@rules)
     end
 
-    # Loads this site's items, sets up item child-parent relationships and
+    # Loads this site’s items, sets up item child-parent relationships and
     # builds each item's list of item representations.
     def load_items
       @items = []
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
-        @items += items_in_ds
+        @items.concat(items_in_ds)
       end
 
       @items_loaded = true
     end
 
-    # Loads this site's layouts.
+    # Loads this site’s layouts.
     def load_layouts
       @layouts = []
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
-        @layouts += layouts_in_ds
+        @layouts.concat(layouts_in_ds)
       end
 
       @layouts_loaded = true
@@ -327,6 +364,16 @@ module Nanoc3
 
       # Merge data sources with default data source config
       @config[:data_sources].map! { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
+    end
+
+    # Returns a preprocessor context, creating one if none exists yet.
+    def preprocessor_context
+      @preprocessor_context ||= Nanoc3::Context.new({
+        :site    => self,
+        :config  => self.config,
+        :items   => self.items,
+        :layouts => self.layouts
+      })
     end
 
   end

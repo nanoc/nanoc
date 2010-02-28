@@ -2,11 +2,7 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::LinkTo contains functions for linking to items.
-  #
-  # To activate this helper, +include+ it, like this:
-  #
-  #   include Nanoc3::Helpers::LinkTo
+  # Contains functions for linking to items and item representations.
   module LinkTo
 
     require 'nanoc3/helpers/html_escape'
@@ -15,30 +11,43 @@ module Nanoc3::Helpers
     # Creates a HTML link to the given path or item representation, and with
     # the given text. All attributes of the `a` element, including the `href`
     # attribute, will be HTML-escaped; the contents of the `a` element, which
-    # can contain markup, will not be HTML-escaped.
+    # can contain markup, will not be HTML-escaped. The HTML-escaping is done
+    # using {Nanoc3::Helpers::HTMLEscape#html_escape}.
     #
-    # +path_or_rep+:: the URL or path (a String) that should be linked to, or
-    #                 the item representation that should be linked to.
+    # @param [String] text The visible link text
     #
-    # +text+:: the visible link text.
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
+    # item or item representation that should be linked to
     #
-    # +attributes+:: a hash containing HTML attributes that will be added to
-    #                the link.
+    # @param [Hash] attributes A hash containing HTML attributes (e.g.
+    # `rel`, `title`, …) that will be added to the link.
     #
-    # Examples:
+    # @return [String] The link text
+    #
+    # @example Linking to a path
     #
     #   link_to('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   item_rep = @items.find { |i| i.item_id == 'special' }.reps[0]
-    #   link_to('Special Item', item_rep)
-    #   # => '<a href="/special_item/">Special Item</a>'
+    # @example Linking to an item
+    #
+    #   about = @items.find { |i| i.identifier == '/about/' }
+    #   link_to('About Me', about)
+    #   # => '<a href="/about.html">About Me</a>'
+    #
+    # @example Linking to an item representation
+    #
+    #   about = @items.find { |i| i.identifier == '/about/' }
+    #   link_to('My vCard', about.rep(:vcard))
+    #   # => '<a href="/about.vcf">My vCard</a>'
+    #
+    # @example Linking with custom attributes
     #
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
-    #   # => '<a href="/blog/" title="My super cool blog">Blog</a>
-    def link_to(text, path_or_rep, attributes={})
+    #   # => '<a title="My super cool blog" href="/blog/">Blog</a>'
+    def link_to(text, target, attributes={})
       # Find path
-      path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
+      path = target.is_a?(String) ? target : target.path
 
       # Join attributes
       attributes = attributes.inject('') do |memo, (key, value)|
@@ -50,52 +59,60 @@ module Nanoc3::Helpers
     end
 
     # Creates a HTML link using link_to, except when the linked item is the
-    # current one. In this case, a span element with class "active" and with
-    # the given text will be returned. The HTML-escaping rules for `link_to`
-    # apply here as well.
+    # current one. In this case, a span element with class “active” and with
+    # the given text will be returned. The HTML-escaping rules for
+    # {#link_to} apply here as well.
     #
-    # Examples:
+    # @param [String] text The visible link text
+    #
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
+    # item or item representation that should be linked to
+    #
+    # @param [Hash] attributes A hash containing HTML attributes (e.g.
+    # `rel`, `title`, …) that will be added to the link.
+    #
+    # @return [String] The link text
+    #
+    # @example Linking to a different page
     #
     #   link_to_unless_current('Blog', '/blog/')
     #   # => '<a href="/blog/">Blog</a>'
     #
-    #   link_to_unless_current('This Item', @item_rep)
-    #   # => '<span class="active">This Item</span>'
-    def link_to_unless_current(text, path_or_rep, attributes={})
+    # @example Linking to the same page
+    #
+    #   link_to_unless_current('This Item', @item)
+    #   # => '<span class="active" title="You\'re here.">This Item</span>'
+    def link_to_unless_current(text, target, attributes={})
       # Find path
-      path = path_or_rep.is_a?(String) ? path_or_rep : path_or_rep.path
+      path = target.is_a?(String) ? target : target.path
 
-      if @item_rep and @item_rep.path == path
+      if @item_rep && @item_rep.path == path
         # Create message
         "<span class=\"active\" title=\"You're here.\">#{text}</span>"
       else
-        link_to(text, path_or_rep, attributes)
+        link_to(text, target, attributes)
       end
     end
 
     # Returns the relative path from the current item to the given path or
     # item representation. The returned path will not be HTML-escaped.
     #
-    # +path_or_rep+:: the URL or path (a String) to where the relative should
-    #                 point, or the item representation to which the relative
-    #                 should point.
+    # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
+    # item or item representation to which the relative path should be
+    # generated
     #
-    # Example:
+    # @return [String] The relative path to the target
+    #
+    # @example
     #
     #   # if the current item's path is /foo/bar/
-    #   relative_path('/foo/qux/')
+    #   relative_path_to('/foo/qux/')
     #   # => '../qux/'
     def relative_path_to(target)
       require 'pathname'
 
       # Find path
-      if target.is_a?(String)
-        path = target
-      elsif target.respond_to?(:reps)
-        path = target.reps.find { |r| r.name == :default }.path
-      else
-        path = target.path
-      end
+      path = target.is_a?(String) ? target : target.path
 
       # Get source and destination paths
       dst_path   = Pathname.new(path)
@@ -111,7 +128,7 @@ module Nanoc3::Helpers
 
       # Add trailing slash if necessary
       if dst_path.to_s[-1,1] == '/'
-        relative_path += '/'
+        relative_path << '/'
       end
 
       # Done

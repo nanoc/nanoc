@@ -4,38 +4,47 @@ require 'pstore'
 
 module Nanoc3
 
-  # Nanoc3::DependencyTracker is responsible for remembering dependencies
-  # between items. It is used to speed up compilation by only letting an item
-  # be recompiled when it is outdated or any of its dependencies (or
-  # dependencies' dependencies, etc) is outdated.
+  # Responsible for remembering dependencies between items. It is used to
+  # speed up compilation by only letting an item be recompiled when it is
+  # outdated or any of its dependencies (or dependencies’ dependencies, etc)
+  # is outdated.
   #
   # The dependencies tracked by the dependency tracker are not dependencies
-  # based on an item's content. When one item uses an attribute of another
+  # based on an item’s content. When one item uses an attribute of another
   # item, then this is also treated as a dependency. While dependencies based
-  # on an item's content (handled in Nanoc3::Compiler) cannot be mutually
+  # on an item’s content (handled in {Nanoc3::Compiler}) cannot be mutually
   # recursive, the more general dependencies in Nanoc3::DependencyTracker can
   # (e.g. item A can use an attribute of item B and vice versa without
   # problems).
+  #
+  # The dependency tracker remembers the dependency information between runs.
+  # Dependency information is stored in the `tmp/dependencies` file. This file
+  # also contains a version number; when a dependencies file with an
+  # incompatible version is found, it is ignored.
   class DependencyTracker
 
+    # @return [String] The name of the file in which dependency information is
+    # stored
     attr_accessor :filename
 
-    # FIXME The way the graph is stored is not exactly great. An adjacency
-    # matrix (wrapped in a Graph class, perhaps) would be a lot easier to work
-    # with, and it would not require an inverse graph to be maintained.
+    # The version of the file format used to store dependencies.
+    STORE_VERSION = 2
 
     # Creates a new dependency tracker for the given items.
+    #
+    # @param [Array<Nanoc3::Item>] item The list of items whose dependencies
+    # should be managed
     def initialize(items)
-      @items = items
-
-      @filename = 'tmp/dependencies'
-
-      @graph = {}
-      @inverse_graph = {}
+      @items          = items
+      @filename       = 'tmp/dependencies'
+      @graph          = Nanoc3::DirectedGraph.new([ nil ] + @items)
+      @previous_items = []
     end
 
-    # Starts listening for dependency messages (+:visit_started+ and
-    # +:visit_ended+) and start recording dependencies.
+    # Starts listening for dependency messages (`:visit_started` and
+    # `:visit_ended`) and start recording dependencies.
+    #
+    # @return [void]
     def start
       # Initialize dependency stack. An item will be pushed onto this stack
       # when it is visited. Therefore, an item on the stack always depends on
@@ -44,8 +53,11 @@ module Nanoc3
 
       # Register start of visits
       Nanoc3::NotificationCenter.on(:visit_started, self) do |item|
+        $stderr.puts "*** IN stack.size=#{@stack.size} item=#{item.inspect}" if $DEBUG
+
         # Record possible dependency
         unless @stack.empty?
+          $stderr.puts "*** Recording dependency #{@stack[-1].inspect} -> #{item.inspect}" if $DEBUG
           self.record_dependency(@stack[-1], item)
         end
 
@@ -54,176 +66,192 @@ module Nanoc3
 
       # Register end of visits
       Nanoc3::NotificationCenter.on(:visit_ended, self) do |item|
+        $stderr.puts "*** OUT stack.size=#{@stack.size} item=#{item.inspect}" if $DEBUG
+
         @stack.pop
       end
     end
 
     # Stop listening for dependency messages and stop recording dependencies.
+    #
+    # @return [void]
     def stop
       # Unregister
       Nanoc3::NotificationCenter.remove(:visit_started, self)
       Nanoc3::NotificationCenter.remove(:visit_ended,   self)
     end
 
-    # Returns the direct dependencies for +item+, i.e. the items that, when
-    # outdated, will cause +item+ to be marked as outdated. Indirect
-    # dependencies will not be returned (e.g. if A depends on B which depends
-    # on C, then the direct dependencies of A do not include C).
-    def direct_dependencies_for(item)
-      @graph[item] || []
+    # Returns the direct dependencies for `item`.
+    #
+    # The direct dependencies of `item` include the items that, when outdated
+    # will cause `item` to be marked as outdated. Indirect dependencies will
+    # not be returned (e.g. if A depends on B which depends on C, then the
+    # direct dependencies of A do not include C).
+    #
+    # @param [Nanoc3::Item] item The item for which to fetch the direct
+    # predecessors
+    #
+    # @return [Array<Nanoc3::Item>] The direct predecessors of the given item
+    def direct_predecessors_of(item)
+      @graph.direct_predecessors_of(item).compact
     end
 
-    # Returns all dependencies (direct and indirect) for +item+, i.e. the
-    # items that, when outdated, will cause +item+ to be marked as outdated.
-    def all_dependencies_for(item)
-      # FIXME can result in an infinite loop
-
-      direct_dependencies   = direct_dependencies_for(item)
-      indirect_dependencies = direct_dependencies.map { |i| all_dependencies_for(i) }
-
-      (direct_dependencies + indirect_dependencies).flatten
+    # Returns all dependencies (direct and indirect) for `item`.
+    #
+    # The dependencies of `item` include the items that, when outdated, will
+    # cause `item` to be marked as outdated.
+    #
+    # @param [Nanoc3::Item] item The item for which to fetch all direct and
+    # indirect predecessors
+    #
+    # @return [Array<Nanoc3::Item>] The predecessors of the given item
+    def predecessors_of(item)
+      @graph.predecessors_of(item).compact
     end
 
-    # Returns the direct inverse dependencies for +item+, i.e. the items that
-    # will be marked as outdated when +item+ is outdated. Indirect
-    # dependencies will not be returned (e.g. if A depends on B which depends
-    # on C, then the direct inverse dependencies of C do not include A).
-    def direct_inverse_dependencies_for(item)
-      inverted_graph[item] || []
+    # Returns the direct inverse dependencies for `item`.
+    #
+    # The direct inverse dependencies of `item` include the items that will be
+    # marked as outdated when`+item` is outdated. Indirect dependencies will
+    # not be returned (e.g. if A depends on B which depends on C, then the
+    # direct inverse dependencies of C do not include A).
+    #
+    # @param [Nanoc3::Item] item The item for which to fetch the direct
+    # successors
+    #
+    # @return [Array<Nanoc3::Item>] The direct successors of the given item
+    def direct_successors_of(item)
+      @graph.direct_successors_of(item).compact
     end
 
-    # Returns all inverse dependencies (direct and indirect) for +item+, i.e.
-    # the items that will be marked as outdated when +item+ is outdated.
-    def all_inverse_dependencies_for(item)
-      # Init list of all found dependencies
-      all_dependencies = []
-
-      # Init lists with already checked and not yet checked dependencies
-      checked_direct_dependencies = []
-      pending_direct_dependencies = direct_inverse_dependencies_for(item)
-
-      while !pending_direct_dependencies.empty?
-        # Get next unchecked dependency
-        dependency = pending_direct_dependencies.shift
-        next if checked_direct_dependencies.include?(dependency)
-
-        # Add dependencies of this unchecked dependency
-        pending_direct_dependencies += direct_inverse_dependencies_for(dependency)
-
-        # Mark this dependency as handled
-        all_dependencies << dependency
-        checked_direct_dependencies << dependency
-      end
-
-      all_dependencies
+    # Returns all inverse dependencies (direct and indirect) for `item`.
+    #
+    # The inverse dependencies of `item` include the items that will be marked
+    # as outdated when `item` is outdated.
+    #
+    # @param [Nanoc3::Item] item The item for which to fetch all direct and
+    # indirect successors
+    #
+    # @return [Array<Nanoc3::Item>] The successors of the given item
+    def successors_of(item)
+      @graph.successors_of(item).compact
     end
 
-    # Records a dependency from +src+ to +dst+ in the dependency graph. When
-    # +dst+ is oudated, +src+ will also become outdated.
+    # Records a dependency from `src` to `dst` in the dependency graph. When
+    # `dst` is oudated, `src` will also become outdated.
+    #
+    # @param [Nanoc3::Item] src The source of the dependency, i.e. the item
+    # that will become outdated if dst is outdated
+    #
+    # @param [Nanoc3::Item] dst The destination of the dependency, i.e. the
+    # item that will cause the source to become outdated if the destination
+    # is outdated
+    #
+    # @return [void]
     def record_dependency(src, dst)
-      # Initialize graph if necessary
-      @graph[src] ||= []
-
-      # Don't include self or doubles in dependencies
-      return if src == dst
-      return if @graph[src].include?(dst)
-
-      # Record dependency
-      invalidate_inverted_graph
-      @graph[src] << dst
+      # Warning! dst and src are *reversed* here!
+      @graph.add_edge(dst, src) unless src == dst
     end
 
-    # Stores the dependency graph into the file specified by the +filename+
+    # Stores the dependency graph into the file specified by the {#filename}
     # attribute.
+    #
+    # @return [void]
     def store_graph
-      # Create dir
       FileUtils.mkdir_p(File.dirname(self.filename))
-
-      # Complete the graph
-      complete_graph
-
-      # Convert graph of items into graph of item identifiers
-      new_graph = {}
-      @graph.each_pair do |second_item, first_items|
-        # Don't store nil because that would be pointless (if first_item is
-        # outdated, something that does not exist is also outdated… makes no
-        # sense).
-        # FIXME can second_item really be nil?
-        next if second_item.nil?
-
-        new_graph[second_item.identifier] = first_items.map { |f| f && f.identifier }.compact
-      end
-
-      # Store dependencies
       store = PStore.new(self.filename)
       store.transaction do
-        store[:dependencies] = new_graph
+        store[:version]  = STORE_VERSION
+        store[:vertices] = @graph.vertices.map { |i| i && i.identifier }
+        store[:edges]    = @graph.edges
       end
     end
 
-    # Loads the dependency graph from the file specified by the +filename+
+    # Loads the dependency graph from the file specified by the {#filename}
     # attribute. This method will overwrite an existing dependency graph.
+    #
+    # @return [void]
     def load_graph
       # Create new graph
-      @graph = {}
+      @graph = Nanoc3::DirectedGraph.new([ nil ] + @items)
 
-      # Don't do anything if dependencies haven't been stored yet
+      # Get store
       return if !File.file?(self.filename)
+      store = PStore.new(self.filename)
 
       # Load dependencies
-      store = PStore.new(self.filename)
       store.transaction do
-        # Convert graph of identifiers into graph of items
-        store[:dependencies].each_pair do |second_item_identifier, first_item_identifiers|
-          # Convert second and first item identifiers into items
-          second_item = item_with_identifier(second_item_identifier)
-          first_items = first_item_identifiers.map { |p| item_with_identifier(p) }
+        # Verify version
+        return if store[:version] != STORE_VERSION
 
-          @graph[second_item] = first_items
+        # Load vertices
+        @previous_items = store[:vertices].map do |v|
+          @items.find { |i| i.identifier == v }
+        end
+
+        # Load edges
+        store[:edges].each do |edge|
+          from_index, to_index = *edge
+          from, to = @previous_items[from_index], @previous_items[to_index]
+          @graph.add_edge(from, to)
         end
       end
     end
 
     # Traverses the dependency graph and marks all items that (directly or
     # indirectly) depend on an outdated item as outdated.
+    #
+    # @return [void]
     def mark_outdated_items
       # Unmark everything
-      @items.each { |i| i.dependencies_outdated = false }
+      @items.each { |i| i.outdated_due_to_dependencies = false }
 
-      # Mark items that appear in @items but not in the dependency graph
-      added_items = @items - @graph.keys
-      added_items.each { |i| i.dependencies_outdated = true }
+      # Mark new items as outdated
+      added_items = @items - @previous_items
+      added_items.each { |i| i.outdated_due_to_dependencies = true }
 
-      # Walk graph and mark items as outdated if necessary
-      # (#keys and #sort is used instead of #each_pair to add determinism)
-      first_items = inverted_graph.keys.sort_by { |i| i.nil? ? '/' : i.identifier }
-      something_changed = true
-      while something_changed
-        something_changed = false
+      # Mark successors of nil as outdated
+      self.successors_of(nil).each do |i|
+        i.outdated_due_to_dependencies = true
+      end
 
-        first_items.each do |first_item|
-          second_items = inverted_graph[first_item]
-
-          if first_item.nil? ||                # item was removed
-             first_item.outdated? ||           # item itself is outdated
-             first_item.dependencies_outdated? # item is outdated because of its dependencies
-            second_items.each do |item|
-              # Ignore this item
-              next if item.nil?
-
-              something_changed = true if !item.dependencies_outdated?
-              item.dependencies_outdated = true
-            end
-          end
+      # For each outdated item...
+      @items.select { |i| i.outdated? }.each do |outdated_item|
+        # ... mark all its successors as outdated
+        self.successors_of(outdated_item).each do |i|
+          i.outdated_due_to_dependencies = true
         end
       end
     end
 
     # Empties the list of dependencies for the given item. This is necessary
     # before recompiling the given item, because otherwise old dependencies
-    # will stick around and new dependencies will appear twice.
+    # will stick around and new dependencies will appear twice. This function
+    # removes all incoming edges for the given vertex.
+    #
+    # @param [Nanoc3::Item] item The item for which to forget all dependencies
+    #
+    # @return [void]
     def forget_dependencies_for(item)
-      @graph[item] = []
+      @graph.vertices.each do |v|
+        @graph.remove_edge(v, item)
+      end
+    end
+
+    # Prints the dependency graph in human-readable form.
+    #
+    # @return [void]
+    def print_graph
+      @items.each do |item|
+        puts "#{item.inspect} depends on:"
+
+        predecessors = direct_predecessors_of(item)
+        predecessors.each do |pred|
+          puts "    #{pred.inspect}"
+        end
+        puts "    (nothing!)" if predecessors.empty?
+        puts
+      end
     end
 
   private
@@ -231,59 +259,6 @@ module Nanoc3
     # Returns the item with the given identifier, or nil if no item is found.
     def item_with_identifier(identifier)
       @items.find { |i| i.identifier == identifier }
-    end
-
-    # Returns the inverted dependency graph, creating it first if it does not
-    # exist yet or is outdated. In this graph, the keys will be outdated when
-    # any of the values are outdated.
-    def inverted_graph
-      @inverted_graph ||= invert_graph(@graph)
-    end
-
-    # Marks the inverted graph as outdated so that it will be regenerated the
-    # next time it is used.
-    def invalidate_inverted_graph
-      @inverted_graph = nil
-    end
-
-    # Inverts the given graph (keys become values and values become keys).
-    #
-    # For example, this graph
-    #
-    #   {
-    #     :a => [ :b, :c ],
-    #     :b => [ :x, :c ]
-    #   }
-    #
-    # is turned into
-    #
-    #   {
-    #     :b => [ :a ],
-    #     :c => [ :a, :b ],
-    #     :x => [ :b ]
-    #   }
-    def invert_graph(graph)
-      inverted_graph = {}
-
-      graph.each_pair do |key, values|
-        values.each do |v|
-          inverted_graph[v] ||= []
-          inverted_graph[v] << key
-        end
-      end
-
-      inverted_graph
-    end
-
-    # Ensures that all items in the dependency graph have a list of
-    # dependecies, even if it is empty. Items without a list of dependencies
-    # will be treated as "added" and will depend on all other pages, which is
-    # not necessary for non-added items.
-    def complete_graph
-      @items.each do |item|
-        @graph[item] ||= []
-      end
-
     end
 
   end

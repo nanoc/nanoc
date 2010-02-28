@@ -6,7 +6,9 @@ module Nanoc3::Filters
     def run(content, params={})
       require 'rdiscount'
 
-      ::RDiscount.new(content).to_html
+      extensions = params[:extensions] || []
+
+      ::RDiscount.new(content, *extensions).to_html
     end
 
   end

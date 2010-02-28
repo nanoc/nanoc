@@ -2,25 +2,21 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::XMLSitemap contains functionality for building XML
-  # sitemaps that will be crawled by search engines. See the Sitemaps protocol
-  # web site, http://www.sitemaps.org, for details.
-  #
-  # To activate this helper, +include+ it, like this:
-  #
-  #   include Nanoc3::Helpers::XMLSitemap
+  # Contains functionality for building XML sitemaps that will be crawled by
+  # search engines. See the [Sitemaps protocol site](http://www.sitemaps.org)
+  # for details.
   module XMLSitemap
 
-    # Returns the XML sitemap as a string.
+    # Builds an XML sitemap and returns it.
     #
     # The following attributes can optionally be set on items to change the
     # behaviour of the sitemap:
     #
-    # * 'changefreq', containing the estimated change frequency as defined by
-    #   the Sitemaps protocol.
+    # * `changefreq` — The estimated change frequency as defined by the
+    #   Sitemaps protocol
     #
-    # * 'priority', containing the item's priority, ranging from 0.0 to 1.0,
-    #   as defined by the Sitemaps protocol.
+    # * `priority` — The item's priority, ranging from 0.0 to 1.0, as defined
+    #   by the Sitemaps protocol
     #
     # The sitemap will also include dates on which the items were updated.
     # These are generated automatically; the way this happens depends on the
@@ -29,9 +25,11 @@ module Nanoc3::Helpers
     #
     # The site configuration will need to have the following attributes:
     #
-    # * 'base_url', containing the URL to the site, without trailing slash.
-    #   For example, if the site is at "http://example.com/", the base_url
-    #   would be "http://example.com".
+    # * `base_url` — The URL to the site, without trailing slash. For example,
+    #   if the site is at "http://example.com/", the `base_url` would be
+    #   "http://example.com".
+    #
+    # @return [String] The XML sitemap
     def xml_sitemap
       require 'builder'
 

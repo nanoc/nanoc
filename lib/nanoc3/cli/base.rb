@@ -17,8 +17,10 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::CreateLayout.new)
       add_command(Nanoc3::CLI::Commands::CreateItem.new)
       add_command(Nanoc3::CLI::Commands::CreateSite.new)
+      add_command(Nanoc3::CLI::Commands::Debug.new)
       add_command(Nanoc3::CLI::Commands::Info.new)
       add_command(Nanoc3::CLI::Commands::Update.new)
+      add_command(Nanoc3::CLI::Commands::View.new)
     end
 
     def self.shared_base
@@ -110,6 +112,7 @@ module Nanoc3::CLI
     def resolution_for(error)
       # FIXME this should probably go somewhere else so that 3rd-party code can add other gem names too
       gem_names = {
+        'adsf'           => 'adsf',
         'bluecloth'      => 'bluecloth',
         'builder'        => 'builder',
         'coderay'        => 'coderay',

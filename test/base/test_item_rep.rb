@@ -353,12 +353,66 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     FileUtils.rm_f('output.html')
   end
 
-  def test_content_at_snapshot_with_valid_snapshot
-    # TODO implement
+  def test_compiled_content_with_only_last_available
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal 'last content', rep.compiled_content
   end
 
-  def test_content_at_snapshot_with_invalid_snapshot
-    # TODO implement
+  def test_compiled_content_with_pre_and_last_available
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal 'pre content', rep.compiled_content
+  end
+
+  def test_compiled_content_with_custom_snapshot
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal 'last content', rep.compiled_content(:snapshot => :last)
+  end
+
+  def test_compiled_content_with_invalid_snapshot
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.expects(:compiled?).returns(true)
+
+    # Check
+    assert_equal nil, rep.compiled_content(:snapshot => :klsjflkasdfl)
+  end
+
+  def test_compiled_content_with_uncompiled_content
+    # Create rep
+    item = mock
+    item.stubs(:raw_content).returns(nil)
+    item.stubs(:identifier).returns('my identifier')
+    rep = Nanoc3::ItemRep.new(item, nil)
+    rep.expects(:compiled?).returns(false)
+
+    # Check
+    assert_raises(Nanoc3::Errors::UnmetDependency) do
+      rep.compiled_content
+    end
   end
 
   def test_filter
@@ -426,6 +480,49 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Layout
     item_rep.layout('/somelayout/')
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
+  end
+
+  def test_layout_multiple
+    # Mock layout 1
+    layouts = [ mock, mock ]
+    layouts[0].stubs(:identifier).returns('/one/')
+    layouts[0].stubs(:raw_content).returns('{one}<%= yield %>{/one}')
+    layouts[1].stubs(:identifier).returns('/two/')
+    layouts[1].stubs(:raw_content).returns('{two}<%= yield %>{/two}')
+
+    # Mock compiler
+    stack = mock
+    stack.stubs(:push)
+    stack.stubs(:pop)
+    compiler = mock
+    compiler.stubs(:stack).returns(stack)
+    compiler.stubs(:filter_for_layout).returns([ :erb, {} ])
+
+    # Mock site
+    site = mock
+    site.stubs(:items).returns([])
+    site.stubs(:config).returns([])
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:compiler).returns(compiler)
+
+    # Mock item
+    item = mock
+    item.stubs(:raw_content).returns('blah')
+    item.stubs(:site).returns(site)
+
+    # Create item rep
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep.instance_eval do
+      @content[:raw]  = item.raw_content
+      @content[:last] = @content[:raw]
+    end
+
+    # Layout
+    item_rep.layout('/one/')
+    item_rep.layout('/two/')
+    assert_equal('blah',                       item_rep.instance_eval { @content[:pre]  })
+    assert_equal('{two}{one}blah{/one}{/two}', item_rep.instance_eval { @content[:post] })
+    assert_equal('{two}{one}blah{/one}{/two}', item_rep.instance_eval { @content[:last] })
   end
 
   def test_snapshot

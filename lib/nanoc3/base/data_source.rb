@@ -2,42 +2,57 @@
 
 module Nanoc3
 
-  # Nanoc3::DataSource is responsible for loading data. It is the (abstract)
-  # superclass for all data sources. Subclasses must at least implement the
-  # data reading methods (+items+, +layouts+, and +code_snippets+); all other
-  # methods involving data manipulation are optional.
+  # Responsible for loading site data. It is the (abstract) superclass for all
+  # data sources. Subclasses must at least implement the data reading methods
+  # ({#items} and {#layouts}); all other methods involving data manipulation
+  # are optional.
   #
-  # Apart from the methods for loading and storing data, there are the +up+
-  # and +down+ methods for bringing up and tearing down the connection to the
-  # data source. These should be overridden in subclasses. The +loading+
-  # method wraps +up+ and +down+.
+  # Apart from the methods for loading and storing data, there are the {#up}
+  # and {#down} methods for bringing up and tearing down the connection to the
+  # data source. These should be overridden in subclasses. The {#loading}
+  # method wraps {#up} and {#down}. {#loading} is a convenience method for the
+  # more low-level methods {#use} and {#unuse}, which respectively increment
+  # and decrement the reference count; when the reference count goes from 0 to
+  # 1, the data source will be loaded ({#up} will be called) and when the
+  # reference count goes from 1 to 0, the data source will be unloaded
+  # ({#down} will be called).
   #
-  # The +setup+ method is used for setting up a site's data source for the
-  # first time. This method should be overridden in subclasses.
-  class DataSource < Plugin
+  # The {#setup} method is used for setting up a site's data source for the
+  # first time.
+  #
+  # @abstract Subclasses should at least implement {#items} and {#layouts}. If
+  # the data source should support creating items and layouts using the
+  # `create_item` and `create_layout` CLI commands, the {#setup},
+  # {#create_item} and {#create_layout} methods should be implemented as well.
+  class DataSource
 
-    # A string containing the root where items returned by this data source
+    # @return [String] The root path where items returned by this data source
     # should be mounted.
     attr_reader :items_root
 
-    # A string containing the root where layouts returned by this data source
-    # should be mounted.
+    # @return [String] The root path where layouts returned by this data
+    # source should be mounted.
     attr_reader :layouts_root
 
-    # A hash containing the configuration for this data source. For example,
+    # @return [Hash] The configuration for this data source. For example,
     # online data sources could contain authentication details.
     attr_reader :config
 
+    extend Nanoc3::PluginRegistry::PluginMethods
+
     # Creates a new data source for the given site.
     #
-    # +site+:: The site this data source belongs to.
-    # +items_root+:: The prefix that should be given to all items returned by
-    #                the #items method (comparable to mount points for
-    #                filesystems in Unix-ish OSes).
-    # +layouts_root+:: The prefix that should be given to all layouts returned
-    #                  by the #layouts method (comparable to mount points for
-    #                  filesystems in Unix-ish OSes).
-    # +config+:: The configuration for this data source.
+    # @param [Nanoc3::Site] site The site this data source belongs to.
+    #
+    # @param [String] items_root The prefix that should be given to all items
+    # returned by the #items method (comparable to mount points for
+    # filesystems in Unix-ish OSes).
+    #
+    # @param [String] layouts_root The prefix that should be given to all
+    # layouts returned by the #layouts method (comparable to mount points
+    # for filesystems in Unix-ish OSes).
+    #
+    # @param [Hash] config The configuration for this data source.
     def initialize(site, items_root, layouts_root, config)
       @site         = site
       @items_root   = items_root
@@ -47,27 +62,14 @@ module Nanoc3
       @references = 0
     end
 
-    # Sets the identifiers for this data source.
-    def self.identifiers(*identifiers)
-      Nanoc3::DataSource.register(self, *identifiers)
-    end
-
-    # Sets the identifier for this data source.
-    def self.identifier(identifier)
-      Nanoc3::DataSource.register(self, identifier)
-    end
-
-    # Registers the given class as a data source with the given identifier.
-    def self.register(class_or_name, *identifiers)
-      Nanoc3::Plugin.register(Nanoc3::DataSource, class_or_name, *identifiers)
-    end
-
-    # Loads the data source when necessary (calling +up+), yields, and unloads
-    # the data source when it is not being used elsewhere. All data source
-    # queries and data manipulations should be wrapped in a +loading+ block;
-    # it ensures that the data source is loaded when necessary and makes sure
-    # the data source does not get unloaded while it is still being used
-    # elsewhere.
+    # Loads the data source when necessary (calling {#up}), yields, and
+    # unloads (using {#down}) the data source when it is not being used
+    # elsewhere. All data source queries and data manipulations should be
+    # wrapped in a {#loading} block; it ensures that the data source is loaded
+    # when necessary and makes sure the data source does not get unloaded
+    # while it is still being used elsewhere.
+    #
+    # @return [void]
     def loading
       use
       yield
@@ -78,10 +80,10 @@ module Nanoc3
     # Marks the data source as used by the caller.
     #
     # Calling this method increases the internal reference count. When the
-    # data source is used for the first time (first #use call), the data
-    # source will be loaded (#up will be called). Similarly, when the
-    # reference count reaches zero, the data source will be unloaded (#down
-    # will be called).
+    # data source is used for the first time (first {#use} call), the data
+    # source will be loaded ({#up} will be called).
+    #
+    # @return [void]
     def use
       up if @references == 0
       @references += 1
@@ -89,44 +91,47 @@ module Nanoc3
 
     # Marks the data source as unused by the caller.
     #
-    # Calling this method increases the internal reference count. When the
-    # data source is used for the first time (first #use call), the data
-    # source will be loaded (#up will be called). Similarly, when the
-    # reference count reaches zero, the data source will be unloaded (#down
-    # will be called).
+    # Calling this method decreases the internal reference count. When the
+    # reference count reaches zero, i.e. when the data source is not used any
+    # more, the data source will be unloaded ({#down} will be called).
+    #
+    # @return [void]
     def unuse
       @references -= 1
       down if @references == 0
     end
 
-    ########## Loading and unloading
-
-    # Brings up the connection to the data. This is an abstract method
-    # implemented by the subclass. Depending on the way data is stored, this
-    # may not be necessary. This is the ideal place to connect to the
-    # database, for example.
+    # Brings up the connection to the data. Depending on the way data is
+    # stored, this may not be necessary. This is the ideal place to connect to
+    # the database, for example.
     #
-    # Subclasses may implement this method.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
+    #
+    # @return [void]
     def up
     end
 
-    # Brings down the connection to the data. This is an abstract method
-    # implemented by the subclass. This method should undo the effects of
-    # +up+.
+    # Brings down the connection to the data. This method should undo the
+    # effects of the {#up} method. For example, a database connection
+    # established in {#up} should be closed in this method.
     #
-    # Subclasses may implement this method.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
+    #
+    # @return [void]
     def down
     end
 
-    ########## Creating/updating
-
     # Creates the bare minimum essentials for this data source to work. This
     # action will likely be destructive. This method should not create sample
-    # data such as a default home page, a default layout, etc. For example, if
-    # you're using a database, this is where you should create the necessary
+    # data such as a default home page, a default layout, etc. For example,
+    # when using a database, this is where you should create the necessary
     # tables for the data source to function properly.
     #
-    # Subclasses must implement this method.
+    # @abstract
+    #
+    # @return [void]
     def setup
       not_implemented('setup')
     end
@@ -135,53 +140,84 @@ module Nanoc3
     # version of a data source may store content in a different format, and
     # this method will update the stored content to this newer format.
     #
-    # Subclasses may implement this method.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
+    #
+    # @return [void]
     def update
     end
 
-    ########## Loading data
-
-    # Returns the list of items (represented by Nanoc3::Item) in this site.
+    # Returns the list of items (represented by {Nanoc3::Item}) in this site.
     # The default implementation simply returns an empty array.
     #
-    # Subclasses should not prepend items_root to the item's identifiers, as
+    # Subclasses should not prepend `items_root` to the item's identifiers, as
     # this will be done automatically.
     #
-    # Subclasses may implement this method.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
+    #
+    # @return [Array<Nanoc3::Item>] A list of items
     def items
       []
     end
 
-    # Returns the list of layouts (represented by Nanoc3::Layout) in this
+    # Returns the list of layouts (represented by {Nanoc3::Layout}) in this
     # site. The default implementation simply returns an empty array.
     #
-    # Subclasses should prepend layout_root to the layout's identifiers, since
-    # this is not done automatically.
+    # Subclasses should prepend `layout_root` to the layout's identifiers,
+    # since this is not done automatically.
     #
-    # Subclasses may implement this method.
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
+    #
+    # @return [Array<Nanoc3::Layout>] A list of layouts
     def layouts
       []
     end
 
-    # Returns the custom code snippets (represented by Nanoc3::CodeSnippet)
-    # for this site. The default implementation simply returns an empty array.
-    # This can be code for custom filters and more, but pretty much any code
-    # can be put in there (global helper functions are very useful).
+    # Creates a new item with the given content, attributes and identifier. No
+    # instance of {Nanoc3::Item} will be created; this method creates the item
+    # in the data source so that it can be loaded and turned into a
+    # {Nanoc3::Item} instance by the {#items} method.
     #
-    # Subclasses may implement this method.
-    def code_snippets
-      []
-    end
-
-    ########## Creating data
-
-    # Creates a new item with the given content, attributes and identifier.
-    def create_item(content, attributes, identifier)
+    # @abstract
+    #
+    # @param [String] content
+    #
+    # @param [Hash] attributes
+    #
+    # @param [String] identifier
+    #
+    # @param [Hash] params Extra parameters to give to the data source. This
+    # can be used to influence the way items are stored. For example,
+    # filesystem data sources could use this to pass the extension of the
+    # files that should be generated.
+    #
+    # @return [void]
+    def create_item(content, attributes, identifier, params={})
       not_implemented('create_item')
     end
 
     # Creates a new layout with the given content, attributes and identifier.
-    def create_layout(content, attributes, identifier)
+    # No instance of {Nanoc3::Layout} will be created; this method creates the
+    # layout in the data source so that it can be loaded and turned into a
+    # {Nanoc3::Layout} instance by the {#layouts} method.
+    #
+    # @abstract
+    #
+    # @param [String] content
+    #
+    # @param [Hash] attributes
+    #
+    # @param [String] identifier
+    #
+    # @param [Hash] params Extra parameters to give to the data source. This
+    # can be used to influence the way items are stored. For example,
+    # filesystem data sources could use this to pass the extension of the
+    # files that should be generated.
+    #
+    # @return [void]
+    def create_layout(content, attributes, identifier, params={})
       not_implemented('create_layout')
     end
 

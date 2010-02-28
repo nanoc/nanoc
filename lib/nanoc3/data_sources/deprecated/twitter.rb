@@ -2,20 +2,7 @@
 
 module Nanoc3::DataSources
 
-  # Nanoc3::DataSources::Twitter provides tweets from a single user as items
-  # (Nanoc3::Item instances).
-  #
-  # The configuration must have a "username" attribute containing the username
-  # of the account from which to fetch the tweets.
-  #
-  # The items returned by this data source will be mounted at {root}/{id},
-  # where +id+ is the unique identifier of the tweet.
-  #
-  # The items returned by this data source will have the following attributes:
-  #
-  # +:created_at+:: The timestamp when this tweet was posted (a string).
-  #
-  # +source+:: The client used to tweet this message (HTML-encoded).
+  # @deprecated Fetch data from online data sources manually instead
   class Twitter < Nanoc3::DataSource
 
     def items

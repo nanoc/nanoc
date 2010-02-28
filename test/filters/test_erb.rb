@@ -6,12 +6,21 @@ class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_filter
+  def test_filter_with_instance_variable
     # Create filter
     filter = ::Nanoc3::Filters::ERB.new({ :location => 'a cheap motel' })
 
     # Run filter
     result = filter.run('<%= "I was hiding in #{@location}." %>')
+    assert_equal('I was hiding in a cheap motel.', result)
+  end
+
+  def test_filter_with_instance_method
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({ :location => 'a cheap motel' })
+
+    # Run filter
+    result = filter.run('<%= "I was hiding in #{location}." %>')
     assert_equal('I was hiding in a cheap motel.', result)
   end
 

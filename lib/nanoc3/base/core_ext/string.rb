@@ -3,6 +3,8 @@
 module Nanoc3::StringExtensions
 
   # Transforms string into an actual identifier
+  #
+  # @return [String] The identifier generated from the receiver
   def cleaned_identifier
     "/#{self}/".gsub(/^\/+|\/+$/, '/')
   end

@@ -2,34 +2,40 @@
 
 module Nanoc3::Helpers
 
-  # Nanoc3::Helpers::Blogging provides some functionality for building blogs,
-  # such as finding articles and constructing feeds.
+  # Provides functionality for building blogs, such as finding articles and
+  # constructing feeds.
   #
   # This helper has a few requirements. First, all blog articles should have
   # the following attributes:
   #
-  # * 'kind', set to 'article'.
+  # * `kind` — Set to `"article"`
   #
-  # * 'created_at', set to the creation timestamp.
+  # * `created_at` — The article’s publication timestamp
   #
-  # Some functions in this blogging helper, such as the +atom_feed+ function,
+  # Some functions in this blogging helper, such as the {#atom_feed} function,
   # require additional attributes to be set; these attributes are described in
   # the documentation for these functions.
   #
-  # The two main functions are sorted_articles and atom_feed.
+  # All “time” item attributes, site configuration attributes or method
+  # parameters can either be a `Time` instance or a string in any format
+  # parseable by `Time.parse`.
   #
-  # To activate this helper, +include+ it, like this:
-  #
-  #   include Nanoc3::Helpers::Blogging
+  # The two main functions are {#sorted_articles} and {#atom_feed}.
   module Blogging
 
-    # Returns an unsorted list of articles.
+    # Returns an unsorted list of articles, i.e. items where the `kind`
+    # attribute is set to `"article"`.
+    #
+    # @return [Array] An array containing all articles
     def articles
       @items.select { |item| item[:kind] == 'article' }
     end
 
-    # Returns a list of articles, sorted by descending creation date (so newer
-    # articles appear first).
+    # Returns a sorted list of articles, i.e. items where the `kind`
+    # attribute is set to `"article"`. Articles are sorted by descending
+    # creation date, so newer articles appear before older articles.
+    #
+    # @return [Array] A sorted array containing all articles
     def sorted_articles
       require 'time'
       articles.sort_by do |a|
@@ -39,77 +45,100 @@ module Nanoc3::Helpers
     end
 
     # Returns a string representing the atom feed containing recent articles,
-    # sorted by descending creation date. +params+ is a hash where the
-    # following keys can be set:
-    #
-    # +limit+:: The maximum number of articles to show. Defaults to 5.
-    #
-    # +articles+:: A list of articles to include in the feed. Defaults to the
-    #              list of articles returned by the articles function.
-    #
-    # +content_proc+:: A proc that returns the content of the given article,
-    #                  passed as a parameter. By default, given the argument
-    #                  +article+, this proc will return
-    #                  +article.reps[0].content+. This function may not return
-    #                  nil.
-    #
-    # +excerpt_proc+:: A proc that returns the excerpt of the given article,
-    #                  passed as a parameter. By default, given the argument
-    #                  +article+, this proc will return +article.excerpt+.
-    #                  This function may return nil.
+    # sorted by descending creation date.
     #
     # The following attributes must be set on blog articles:
     #
-    # * 'title', containing the title of the blog post.
+    # * `title` — The title of the blog post
     #
-    # * all other attributes mentioned above.
+    # * `kind` and `created_at` (described above)
     #
     # The following attributes can optionally be set on blog articles to
     # change the behaviour of the Atom feed:
     #
-    # * 'excerpt', containing an excerpt of the article, usually only a few
+    # * `excerpt` — An excerpt of the article, which is usually only a few
     #   lines long.
     #
-    # * 'custom_path_in_feed', containing the path that will be used instead
-    #   of the normal path in the feed. This can be useful when including
+    # * `custom_path_in_feed` — The path that will be used instead of the
+    #   normal path in the feed. This can be useful when including
     #   non-outputted items in a feed; such items could have their custom feed
     #   path set to the blog path instead, for example.
     #
-    # The feed will also include dates on which the articles were updated.
-    # These are generated automatically; the way this happens depends on the
-    # used data source (the filesystem data source checks the file mtimes, for
-    # instance).
+    # * `updated_at` — The time when the article was last modified. If this
+    #   attribute is not present, the `created_at` attribute will be used as
+    #   the time when the article was last modified.
     #
     # The site configuration will need to have the following attributes:
     #
-    # * 'base_url', containing the URL to the site, without trailing slash.
-    #   For example, if the site is at "http://example.com/", the base_url
-    #   would be "http://example.com".
+    # * `base_url` — The URL to the site, without trailing slash. For
+    #   example, if the site is at “http://example.com/”, the `base_url`
+    #   would be “http://example.com”.
     #
-    # The feed item will need to have the following attributes:
+    # The feed item will need to know about the feed title, the feed author
+    # name, and the URI corresponding to the author. These can be specified
+    # using parameters, as attributes in the feed item, or in the site
+    # configuration.   
     #
-    # * 'title', containing the title of the feed, which is usually also the
-    #   title of the blog.
+    # * `title` — The title of the feed, which is usually also the title of
+    #   the blog.
     #
-    # * 'author_name', containing the name of the item's author. This will
-    #   likely be a global attribute, unless the site is managed by several
-    #   people/
+    # * `author_name` — The name of the item’s author.
     #
-    # * 'author_uri', containing the URI for the item's author, such as the
-    #   author's web site URL. This will also likely be a global attribute.
+    # * `author_uri` — The URI for the item’s author, such as the author’s
+    #   web site URL.
     #
     # The feed item can have the following optional attributes:
     #
-    # * 'feed_url', containing the custom URL of the feed. This can be useful
-    #   when the private feed URL shouldn't be exposed; for example, when
-    #   using FeedBurner this would be set to the public FeedBurner URL.
+    # * `feed_url` — The custom URL of the feed. This can be useful when the
+    #   private feed URL shouldn’t be exposed; for example, when using
+    #   FeedBurner this would be set to the public FeedBurner URL.
     #
-    # To construct a feed, create a blank item with no layout, only the 'erb'
-    # (or 'erubis') filter, and an 'xml' extension. It may also be useful to
-    # set 'is_hidden' to true, so that helpers such as the sitemap helper will
-    # ignore the item. The content of the feed item should be:
+    # To construct a feed, create a new item and make sure that it is
+    # filtered with `:erb` or `:erubis`; it should not be laid out. Ensure
+    # that it is routed to the proper path, e.g. `/blog.xml`. It may also be
+    # useful to set the `is_hidden` attribute to true, so that helpers such
+    # as the sitemap helper will ignore the item. The content of the feed
+    # item should be `<%= atom_feed %>`.
     #
-    #   <%= atom_feed %>
+    # @example Defining compilation and routing rules for a feed item
+    #
+    #   compile '/blog/feed/' do
+    #     filter :erb
+    #   end
+    #
+    #   route '/blog/feed/' do
+    #     '/blog.xml'
+    #   end
+    #
+    # @example Limiting the number of items in a feed
+    #
+    #   <%= atom_feed :limit => 5 %>
+    #
+    # @option params [Number] :limit (5) The maximum number of articles to
+    # show
+    #
+    # @option params [Array] :articles (sorted_articles) A list of articles to
+    # include in the feed
+    #
+    # @option params [Proc] :content_proc (->{ |article|
+    # article.compiled_content(:snapshot => :pre) }) A proc that returns the
+    # content of the given article, which is passed as a parameter. This
+    # function may not return nil.
+    #
+    # @option params [proc] :excerpt_proc (->{ |article| article[:excerpt] })
+    # A proc that returns the excerpt of the given article, passed as a
+    # parameter. This function should return nil if there is no excerpt.
+    #
+    # @option params [String] :title The feed’s title, if it is not given in
+    # the item attributes.
+    #
+    # @option params [String] :author_name The name of the feed’s author, if
+    # it is not given in the item attributes.
+    #
+    # @option params [String] :author_uri The URI of the feed’s author, if it
+    # is not given in the item attributes.
+    #
+    # @return [String] The generated feed content
     def atom_feed(params={})
       require 'builder'
       require 'time'
@@ -117,7 +146,7 @@ module Nanoc3::Helpers
       # Extract parameters
       limit             = params[:limit] || 5
       relevant_articles = params[:articles] || articles || []
-      content_proc      = params[:content_proc] || lambda { |a| a.reps[0].content_at_snapshot(:pre) }
+      content_proc      = params[:content_proc] || lambda { |a| a.compiled_content(:snapshot => :pre) }
       excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
 
       # Check config attributes
@@ -126,14 +155,17 @@ module Nanoc3::Helpers
       end
 
       # Check feed item attributes
-      if @item[:title].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no title')
+      title = params[:title] || @item[:title] || @site.config[:title]
+      if title.nil?
+        raise RuntimeError.new('Cannot build Atom feed: no title in params, item or site config')
       end
-      if @item[:author_name].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no author_name')
+      author_name = params[:author_name] || @item[:author_name] || @site.config[:author_name]
+      if author_name.nil?
+        raise RuntimeError.new('Cannot build Atom feed: no author_name in params, item or site config')
       end
-      if @item[:author_uri].nil?
-        raise RuntimeError.new('Cannot build Atom feed: feed item has no author_uri')
+      author_uri = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
+      if author_uri.nil?
+        raise RuntimeError.new('Cannot build Atom feed: no author_uri in params, item or site config')
       end
 
       # Check article attributes
@@ -164,7 +196,7 @@ module Nanoc3::Helpers
 
         # Add primary attributes
         xml.id      root_url
-        xml.title   @item[:title]
+        xml.title   title
 
         # Add date
         time = last_article[:created_at]
@@ -176,8 +208,8 @@ module Nanoc3::Helpers
 
         # Add author information
         xml.author do
-          xml.name  @item[:author_name]
-          xml.uri   @item[:author_uri]
+          xml.name  author_name
+          xml.uri   author_uri
         end
 
         # Add articles
@@ -192,9 +224,10 @@ module Nanoc3::Helpers
             xml.title     a[:title], :type => 'html'
 
             # Add dates
-            time = a[:created_at]
-            xml.published((time.is_a?(String) ? Time.parse(time) : time).to_iso8601_time)
-            xml.updated   a.mtime.to_iso8601_time
+            create_time = a[:created_at]
+            update_time = a[:updated_at] || a[:created_at]
+            xml.published ((create_time.is_a?(String) ? Time.parse(create_time) : create_time).to_iso8601_time)
+            xml.updated   ((update_time.is_a?(String) ? Time.parse(update_time) : update_time).to_iso8601_time)
 
             # Add link
             xml.link(:rel => 'alternate', :href => url)
@@ -212,6 +245,10 @@ module Nanoc3::Helpers
 
     # Returns the URL for the given item. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
+    #
+    # @param [Nanoc3::Item] item The item for which to fetch the URL.
+    #
+    # @return [String] The URL of the given item
     def url_for(item)
       # Check attributes
       if @site.config[:base_url].nil?
@@ -219,7 +256,7 @@ module Nanoc3::Helpers
       end
 
       # Get path
-      path = item[:custom_path_in_feed] || item.reps[0].path
+      path = item[:custom_path_in_feed] || item.path
       return nil if path.nil?
 
       # Build URL
@@ -228,19 +265,26 @@ module Nanoc3::Helpers
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
     # or otherwise the normal feed URL.
+    #
+    # @return [String] The URL of the feed
     def feed_url
       # Check attributes
       if @site.config[:base_url].nil?
         raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @item[:feed_url] || @site.config[:base_url] + @item.reps[0].path
+      @item[:feed_url] || @site.config[:base_url] + @item.path
     end
 
     # Returns an URI containing an unique ID for the given item. This will be
     # used in the Atom feed to uniquely identify articles. These IDs are
-    # created using a procedure suggested by Mark Pilgrim in this blog post:
-    # http://diveintomark.org/archives/2004/05/28/howto-atom-id.
+    # created using a procedure suggested by Mark Pilgrim and described in his
+    # [“How to make a good ID in Atom” blog post]
+    # (http://diveintomark.org/archives/2004/05/28/howto-atom-id).
+    #
+    # @param [Nanoc3::Item] item The item for which to create an atom tag
+    #
+    # @return [String] The atom tag for the given item
     def atom_tag_for(item)
       require 'time'
 
@@ -249,7 +293,7 @@ module Nanoc3::Helpers
       time = item[:created_at]
       formatted_date = (time.is_a?(String) ? Time.parse(time) : time).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.reps[0].path || item.identifier)
+      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier)
     end
 
   end

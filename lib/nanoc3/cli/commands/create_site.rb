@@ -4,16 +4,47 @@ module Nanoc3::CLI::Commands
 
   class CreateSite < Cri::Command
 
+    DEFAULT_RULES = <<EOS
+#!/usr/bin/env ruby
+
+# A few helpful tips about the Rules file:
+#
+# * The order of rules is important: for each item, only the first matching
+#   rule is applied.
+#
+# * Item identifiers start and end with a slash (e.g. “/about/” for the file
+#   “content/about.html”). To select all children, grandchildren, … of an
+#   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
+#   because “*” matches zero or more characters.
+
+compile '/stylesheet/' do
+  # don’t filter or layout
+end
+
+compile '*' do
+  filter :erb
+  layout 'default'
+end
+
+route '/stylesheet/' do
+  '/style.css'
+end
+
+route '*' do
+  item.identifier + 'index.html'
+end
+
+layout '*', :erb
+EOS
+
     DEFAULT_ITEM = <<EOS
 <h1>A Brand New nanoc Site</h1>
 
-<p>You’ve just created a new nanoc site. The page you are looking at right now is the home page for your site (and it’s probably the only page).</p>
-
-<p>To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
+<p>You’ve just created a new nanoc site. The page you are looking at right now is the home page for your site. To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
 
 <ul>
-  <li><p><strong>Change this page’s content</strong> by editing “content.html” file in the “content” directory. This is the actual page content, and therefore doesn’t include the header, sidebar or style information (those are part of the layout).</p></li>
-  <li><p><strong>Change the layout</strong>, which is the “default.txt” file in the “layouts/default” directory, and create something unique (and hopefully less bland).</p></li>
+  <li><p><strong>Change this page’s content</strong> by editing the “index.html” file in the “content” directory. This is the actual page content, and therefore doesn’t include the header, sidebar or style information (those are part of the layout).</p></li>
+  <li><p><strong>Change the layout</strong>, which is the “default.html” file in the “layouts” directory, and create something unique (and hopefully less bland).</p></li>
 </ul>
 
 <p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
@@ -122,27 +153,28 @@ a:hover {
 EOS
 
     DEFAULT_LAYOUT = <<EOS
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE HTML>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
+    <meta name="generator" content="nanoc #{Nanoc3::VERSION}">
   </head>
   <body>
     <div id="main">
-<%= yield %>
+      <%= yield %>
     </div>
     <div id="sidebar">
       <h2>Documentation</h2>
       <ul>
-        <li><a href="http://nanoc.stoneship.org/tutorial/">Tutorial</a></li>
-        <li><a href="http://nanoc.stoneship.org/manual/">Manual</a></li>
+        <li><a href="http://nanoc.stoneship.org/docs/">Documentation</a></li>
+        <li><a href="http://nanoc.stoneship.org/docs/3-getting-started/">Getting Started</a></li>
       </ul>
       <h2>Community</h2>
       <ul>
         <li><a href="http://groups.google.com/group/nanoc/">Discussion Group</a></li>
-        <li><a href="http://groups.google.com/group/nanoc-es/">Spanish Discussion Group</a></li>
+        <li><a href="irc://chat.freenode.net/#nanoc">IRC Channel</a></li>
         <li><a href="http://projects.stoneship.org/trac/nanoc/">Wiki</a></li>
       </ul>
     </div>
@@ -169,7 +201,7 @@ EOS
     end
 
     def usage
-      "nanoc3 create_site [path]"
+      "nanoc3 create_site [options] path"
     end
 
     def option_definitions
@@ -252,18 +284,7 @@ EOS
 
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write "#!/usr/bin/env ruby\n"
-        io.write "\n"
-        io.write "compile '*' do\n"
-        io.write "  filter :erb\n"
-        io.write "  layout 'default'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '*' do\n"
-        io.write "  item.identifier + 'index.html'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write DEFAULT_RULES
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rules')
     end
@@ -285,28 +306,29 @@ EOS
     def site_populate
       # Get site
       site = Nanoc3::Site.new('.')
-
-      # Create item
       data_source = site.data_sources[0]
+
+      # Create home page
       data_source.create_item(
         DEFAULT_ITEM,
         { :title => "Home" },
         '/'
       )
 
+      # Create stylesheet
+      data_source.create_item(
+        DEFAULT_STYLESHEET,
+        {},
+        '/stylesheet/',
+        :extension => '.css'
+      )
+
       # Create layout
-      data_source = site.data_sources[0]
       data_source.create_layout(
         DEFAULT_LAYOUT,
         {},
         '/default/'
       )
-
-      # Create stylesheet
-      FileUtils.mkdir_p('output')
-      File.open('output/style.css', 'w') do |io|
-        io.write DEFAULT_STYLESHEET
-      end
 
       # Create code
       FileUtils.mkdir_p('lib')

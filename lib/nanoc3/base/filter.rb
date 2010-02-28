@@ -2,49 +2,64 @@
 
 module Nanoc3
 
-  # Nanoc3::Filter is responsible for filtering items. It is
-  # the (abstract) superclass for all textual filters. Subclasses should
-  # override the +run+ method.
-  class Filter < Plugin
+  # Nanoc3::Filter is responsible for filtering items. It is the superclass
+  # for all textual filters.
+  #
+  # When creating a filter with a hash containing assigned variables, those
+  # variables will be made available in the `@assigns` instance variable and
+  # the {#assigns} method. The assigns itself will also be available as
+  # instance variables and instance methods.
+  #
+  # @example Accessing assigns in different ways
+  #
+  #   filter = SomeFilter.new({ :foo => 'bar' })
+  #   filter.instance_eval { @assigns[:foo] }
+  #     # => 'bar'
+  #   filter.instance_eval { assigns[:foo] }
+  #     # => 'bar'
+  #   filter.instance_eval { @foo }
+  #     # => 'bar'
+  #   filter.instance_eval { foo }
+  #     # => 'bar'
+  #
+  # @abstract Subclass and override {#run} to implement a custom filter.
+  class Filter < Context
 
     # A hash containing variables that will be made available during
     # filtering.
+    #
+    # @return [Hash]
     attr_reader :assigns
 
-    # Creates a new filter with the given assigns.
+    extend Nanoc3::PluginRegistry::PluginMethods
+
+    # Creates a new filter that has access to the given assigns.
     #
-    # +a_assigns+:: A hash containing variables that should be made available
-    #               during filtering.
-    def initialize(a_assigns={})
-      @assigns = a_assigns
+    # @param [Hash] a_assigns A hash containing variables that should be made
+    # available during filtering.
+    def initialize(hash={})
+      @assigns = hash
+      super
     end
 
-    # Sets the identifiers for this filter.
-    def self.identifiers(*identifiers)
-      Nanoc3::Filter.register(self, *identifiers)
-    end
-
-    # Sets the identifier for this filter.
-    def self.identifier(identifier)
-      Nanoc3::Filter.register(self, identifier)
-    end
-
-    # Registers the given class as a filter with the given identifier.
-    def self.register(class_or_name, *identifiers)
-      Nanoc3::Plugin.register(Nanoc3::Filter, class_or_name, *identifiers)
-    end
-
-    # Runs the filter. This method returns the filtered content.
+    # Runs the filter on the given content.
     #
-    # +content+:: The unprocessed content that should be filtered.
+    # @abstract
     #
-    # Subclasses must implement this method.
+    # @param [String] content The unprocessed content that should be filtered.
+    #
+    # @param [Hash] params A hash containing parameters. Filter subclasses can
+    # use these parameters to allow modifying the filter's behaviour.
+    #
+    # @return [String] The filtered content
     def run(content, params={})
       raise NotImplementedError.new("Nanoc3::Filter subclasses must implement #run")
     end
 
     # Returns the filename associated with the item that is being filtered.
-    # The returned filename is in the format "item <identifier> (rep <name>)".
+    # It is in the format `item <identifier> (rep <name>)`.
+    #
+    # @return [String] The filename
     def filename
       if assigns[:layout]
         "layout #{assigns[:layout].identifier}"

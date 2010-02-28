@@ -28,6 +28,18 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_link_to_with_item
+    # Create rep
+    item = mock
+    item.expects(:path).returns('/bar/')
+
+    # Check
+    assert_equal(
+      '<a href="/bar/">Bar</a>',
+      link_to('Bar', item)
+    )
+  end
+
   def test_link_to_with_attributes
     # Check
     assert_equal(
@@ -140,17 +152,60 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     @item_rep.expects(:path).returns('/foo/bar/baz/')
 
     # Mock other
-    other_item_rep = mock
-    other_item_rep.expects(:name).returns(:default)
-    other_item_rep.expects(:path).returns('/foo/quux/')
     other_item = mock
-    other_item.expects(:reps).returns([ other_item_rep ])
+    other_item.expects(:path).returns('/foo/quux/')
 
     # Test
     assert_equal(
       '../../quux/',
       relative_path_to(other_item)
     )
+  end
+
+  def test_examples_link_to
+    # Parse
+    YARD.parse('../lib/nanoc3/helpers/link_to.rb')
+
+    # Mock
+    @items = [ mock, mock, mock ]
+    @items[0].stubs(:identifier).returns('/about/')
+    @items[0].stubs(:path).returns('/about.html')
+    @items[1].stubs(:identifier).returns('/software/')
+    @items[1].stubs(:path).returns('/software.html')
+    @items[2].stubs(:identifier).returns('/software/nanoc/')
+    @items[2].stubs(:path).returns('/software/nanoc.html')
+    about_rep_vcard = mock
+    about_rep_vcard.stubs(:path).returns('/about.vcf')
+    @items[0].stubs(:rep).with(:vcard).returns(about_rep_vcard)
+
+    # Run
+    assert_examples_correct 'Nanoc3::Helpers::LinkTo#link_to'
+  end
+
+  def test_examples_link_to_unless_current
+    # Parse
+    YARD.parse('../lib/nanoc3/helpers/link_to.rb')
+
+    # Mock
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/about/')
+    @item = mock
+    @item.stubs(:path).returns(@item_rep.path)
+
+    # Run
+    assert_examples_correct 'Nanoc3::Helpers::LinkTo#link_to_unless_current'
+  end
+
+  def test_examples_relative_path_to
+    # Parse
+    YARD.parse('../lib/nanoc3/helpers/link_to.rb')
+
+    # Mock
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/foo/bar/')
+
+    # Run
+    assert_examples_correct 'Nanoc3::Helpers::LinkTo#relative_path_to'
   end
 
 end
