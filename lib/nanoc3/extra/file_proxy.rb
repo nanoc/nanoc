@@ -19,7 +19,7 @@ module Nanoc3::Extra
 
     def method_missing(sym, *args, &block)
       if !@@deprecation_warning_shown
-        $stderr.puts 'WARNING: The :file attribute is deprecated and will be removed in a future version of nanoc. Instead of using this :file attribute, consider manually creating a File object when it’s needed, using the :content_filename or :meta_filename attributes (for filesystem_verbose and filesystem_compact) or :filename (for filesystem_combined).'
+        $stderr.puts 'WARNING: The :file attribute is deprecated and will be removed in a future version of nanoc. Instead of using this :file attribute, consider manually creating a File object when it’s needed, using the :content_filename, :meta_filename or :filename attributes.'
         @@deprecation_warning_shown = true
       end
 
