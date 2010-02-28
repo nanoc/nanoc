@@ -5,6 +5,9 @@ module Nanoc3
   # Nanoc3::Filter is responsible for filtering items. It is the superclass
   # for all textual filters.
   #
+  # A filter instance should only be used once. Filters should not be reused
+  # since they store state.
+  #
   # When creating a filter with a hash containing assigned variables, those
   # variables will be made available in the `@assigns` instance variable and
   # the {#assigns} method. The assigns itself will also be available as
@@ -76,6 +79,23 @@ module Nanoc3
     # item is a binary item)
     def run(content_or_filename, params={})
       raise NotImplementedError.new("Nanoc3::Filter subclasses must implement #run")
+    end
+
+    # Returns a filename that is used to write data to. This method is only
+    # used on binary items. When running a binary filter on a file, the
+    # resulting file must end up in the location returned by this method.
+    #
+    # @return [String] The output filename
+    def output_filename
+      @output_filename ||= begin
+        require 'tempfile'
+
+        tempfile = Tempfile.new(filename.gsub(/[^a-z]/, '-'), 'tmp')
+        new_filename = tempfile.path
+        tempfile.close!
+
+        new_filename
+      end
     end
 
     # Returns the filename associated with the item that is being filtered.

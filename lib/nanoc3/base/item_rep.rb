@@ -227,8 +227,12 @@ module Nanoc3
 
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      target = item.binary? ? @filenames : @content
-      target[:last] = filter.run(target[:last], filter_args)
+      if item.binary?
+        filter.run(@filenames[:last], filter_args)
+        @filenames[:last] = filter.output_filename
+      else
+        @content[:last] = filter.run(@content[:last], filter_args)
+      end
       Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
       # Create snapshot
