@@ -73,10 +73,10 @@ module Nanoc3
       # TODO [in nanoc 4.0] clean this up
       if params_or_mtime.nil? || params_or_mtime.is_a?(Time)
         params = {}
-        @mtime  = params_or_mtime
+        @mtime = params_or_mtime
       elsif params_or_mtime.is_a?(Hash)
         params = params_or_mtime
-        @mtime  = params[:mtime]
+        @mtime = params[:mtime]
       end
 
       # Get type and raw content or filename
