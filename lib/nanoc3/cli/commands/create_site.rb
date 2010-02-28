@@ -196,7 +196,7 @@ EOS
 
     def long_desc
       'Create a new site at the given path. The site will use the ' +
-      'filesystem_compact data source by default, but this can be ' +
+      'filesystem_unified data source by default, but this can be ' +
       'changed using the --datasource commandline option.'
     end
 
@@ -223,7 +223,7 @@ EOS
 
       # Extract arguments and options
       path        = arguments[0]
-      data_source = options[:datasource] || 'filesystem_compact'
+      data_source = options[:datasource] || 'filesystem_unified'
 
       # Check whether site exists
       if File.exist?(path)
