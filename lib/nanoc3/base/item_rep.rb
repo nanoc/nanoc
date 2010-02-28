@@ -139,15 +139,20 @@ module Nanoc3
     # @return [Hash] The assignments that should be available when compiling
     # the content.
     def assigns
-      {
-        :content    => @content[:last],
+      if item.binary?
+        content_or_filename_assigns = { :filename => @filenames[:last] }
+      else
+        content_or_filename_assigns = { :content => @content[:last] }
+      end
+
+      content_or_filename_assigns.merge({
         :item       => self.item,
         :item_rep   => self,
         :items      => self.item.site.items,
         :layouts    => self.item.site.layouts,
         :config     => self.item.site.config,
         :site       => self.item.site
-      }
+      })
     end
 
     # Returns the compiled content from a given snapshot.
@@ -214,18 +219,16 @@ module Nanoc3
       filter = klass.new(assigns)
 
       # Check whether filter can be applied
-      # TODO allow binary filters
-      if @item.binary?
-        raise RuntimeError, "cannot apply textual filter to binary content"
-      end
+      # TODO implement
 
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      @content[:last] = filter.run(@content[:last], filter_args)
+      target = item.binary? ? @filenames : @content
+      target[:last] = filter.run(target[:last], filter_args)
       Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
       # Create snapshot
-      snapshot(@content[:post] ? :post : :pre)
+      snapshot(@content[:post] ? :post : :pre) unless item.binary?
     end
 
     # Lays out the item using the given layout. This method will replace the
