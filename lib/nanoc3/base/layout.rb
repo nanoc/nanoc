@@ -16,7 +16,7 @@ module Nanoc3
     attr_reader :attributes
 
     # @return [String] This layout's identifier, starting and ending with a
-    #  slash
+    # slash
     attr_accessor :identifier
 
     # @return [Time] The time when this layout was last modified
