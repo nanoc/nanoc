@@ -122,10 +122,10 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     items = data_source.send(:load_objects, 'foo', 'item', Nanoc3::Item)
 
     # Check
-    assert_equal 1,               items.size
-    assert_equal :binary,         items[0].type
+    assert_equal 1, items.size
+    assert items[0].binary?
     assert_equal 'foo/stuff.dat', items[0].raw_filename
-    assert_nil   items[0].raw_content
+    assert_nil items[0].raw_content
   end
 
   def test_identifier_for_filename_allowing_periods_in_identifiers
