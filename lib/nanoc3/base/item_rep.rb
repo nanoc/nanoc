@@ -73,12 +73,19 @@ module Nanoc3
       @item = item
       @name = name
 
-      # Initialize content
-      @content = {
-        :raw  => @item.raw_content,
-        :last => @item.raw_content,
-        :pre  => @item.raw_content
-      }
+      # Initialize content and filenames
+      if @item.binary?
+        @filenames = {
+          :raw  => @item.raw_filename,
+          :last => @item.raw_filename
+        }
+      else
+        @content = {
+          :raw  => @item.raw_content,
+          :last => @item.raw_content,
+          :pre  => @item.raw_content
+        }
+      end
       @old_content = nil
 
       # Reset flags
@@ -132,15 +139,20 @@ module Nanoc3
     # @return [Hash] The assignments that should be available when compiling
     # the content.
     def assigns
-      {
-        :content    => @content[:last],
+      if item.binary?
+        content_or_filename_assigns = { :filename => @filenames[:last] }
+      else
+        content_or_filename_assigns = { :content => @content[:last] }
+      end
+
+      content_or_filename_assigns.merge({
         :item       => self.item,
         :item_rep   => self,
         :items      => self.item.site.items,
         :layouts    => self.item.site.layouts,
         :config     => self.item.site.config,
         :site       => self.item.site
-      }
+      })
     end
 
     # Returns the compiled content from a given snapshot.
@@ -153,6 +165,12 @@ module Nanoc3
     # @return [String] The compiled content at the given snapshot (or the
     # default snapshot if no snapshot is specified)
     def compiled_content(params={})
+      # Check whether content can be fetched
+      # TODO get proper exception
+      if @item.binary?
+        raise RuntimeError, "attempted to fetch compiled content from a binary item"
+      end
+
       # Notify
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
@@ -200,13 +218,25 @@ module Nanoc3
       raise Nanoc3::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(assigns)
 
+      # Check whether filter can be applied
+      if klass.binary? && !item.binary?
+        raise Nanoc3::Errors::CannotUseBinaryFilter.new(self, klass)
+      elsif !klass.binary? && item.binary?
+        raise Nanoc3::Errors::CannotUseTextualFilter.new(self, klass)
+      end
+
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      @content[:last] = filter.run(@content[:last], filter_args)
+      if item.binary?
+        filter.run(@filenames[:last], filter_args)
+        @filenames[:last] = filter.output_filename
+      else
+        @content[:last] = filter.run(@content[:last], filter_args)
+      end
       Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
       # Create snapshot
-      snapshot(@content[:post] ? :post : :pre)
+      snapshot(@content[:post] ? :post : :pre) unless item.binary?
     end
 
     # Lays out the item using the given layout. This method will replace the
@@ -221,6 +251,9 @@ module Nanoc3
     #
     # @return [void]
     def layout(layout_identifier)
+      # Check whether item can be laid out
+      raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if item.binary?
+
       # Create "pre" snapshot
       snapshot(:pre) unless @content[:pre]
 
@@ -245,7 +278,8 @@ module Nanoc3
     #
     # @return [void]
     def snapshot(snapshot_name)
-      @content[snapshot_name] = @content[:last]
+      target = @item.binary? ? @filenames : @content
+      target[snapshot_name] = target[:last]
     end
 
     # Writes the item rep's compiled content to the rep's output file.
@@ -261,17 +295,34 @@ module Nanoc3
       # Check if file will be created
       @created = !File.file?(self.raw_path)
 
-      # Remember old content
-      if File.file?(self.raw_path)
-        @old_content = File.read(self.raw_path)
+      if @item.binary?
+        # Calculate hash of old content
+        if File.file?(self.raw_path)
+          hash_old = hash(self.raw_path)
+          size_old = File.size(self.raw_path)
+        end
+
+        # Copy
+        FileUtils.cp(@filenames[:last], self.raw_path)
+        @written = true
+
+        # Check if file was modified
+        size_new = File.size(self.raw_path)
+        hash_new = hash(self.raw_path) if size_old == size_new
+        @modified = (size_old != size_new || hash_old != hash_new)
+      else
+        # Remember old content
+        if File.file?(self.raw_path)
+          @old_content = File.read(self.raw_path)
+        end
+
+        # Write
+        File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
+        @written = true
+
+        # Check if file was modified
+        @modified = File.read(self.raw_path) != @old_content
       end
-
-      # Write
-      File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
-      @written = true
-
-      # Check if file was modified
-      @modified = File.read(self.raw_path) != @old_content
     end
 
     # Creates and returns a diff between the compiled content before the
@@ -282,6 +333,10 @@ module Nanoc3
     # content in `diff(1)` format, or nil if there is no previous compiled
     # content
     def diff
+      # Check if content can be diffed
+      # TODO allow binary diffs
+      return nil if @item.binary?
+
       # Check if old content exists
       if @old_content.nil? or self.raw_path.nil?
         nil
@@ -291,7 +346,7 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier} item.binary?=#{@item.binary?}>"
     end
 
   private
@@ -342,6 +397,18 @@ module Nanoc3
       warn 'Failed to run `diff`, so no diff with the previously compiled ' \
            'content will be available.'
       nil
+    end
+
+    # Returns a hash of the given filename
+    def hash(filename)
+      digest = Digest::SHA1.new
+      File.open(filename, 'r') do |io|
+        until io.eof
+          data = io.readpartial(2**10)
+          digest.update(data)
+        end
+      end
+      digest.hexdigest
     end
 
   end
