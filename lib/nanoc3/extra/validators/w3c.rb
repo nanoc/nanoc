@@ -5,55 +5,76 @@ module Nanoc3::Extra::Validators
   # A validator that uses the W3C web service to validate HTML and CSS files.
   class W3C
 
-    # TODO document
-    # FIXME change site argument to dir
-    # FIXME allow multiple types
-    def initialize(site, type)
-      @site = site
-      @type = type
+    # @param [String] dir The directory that will be searched for HTML and/or
+    # CSS files to validate
+    #
+    # @param [Array<Symbol>] types A list of types to check. Allowed types are
+    # `:html` and `:css`.
+    def initialize(dir, types)
+      @dir   = dir
+      @types = types
     end
 
-    # TODO document
+    # Starts the validator. The results will be printed to stdout.
+    #
+    # @return [void]
     def run
       # Load validator
       require 'w3c_validators'
 
-      # Make sure config is loaded
-      @site.load_data
-
       # Find all files
-      files = extensions.map { |extension| Dir["#{@site.config[:output_dir]}/**/*.#{extension}"] }.flatten
+      filenames = []
+      extensions = types_to_extensions(@types)
+      extensions.each { |extension| filenames.concat(Dir[@dir + '/**/*.' + extension]) }
 
       # Validate each file
-      files.each do |file|
-        validation_started(file)
-        results = validator.validate_file(file)
-        validation_ended(file, results.errors)
+      filenames.each do |filename|
+        validation_started(filename)
+
+        extension = File.extname(filename)[1..-1]
+        results = validator_for(extension).validate_file(filename)
+
+        validation_ended(filename, results.errors)
       end
     end
 
   private
 
-    def extensions
-      case @type
-      when :html
-        [ 'html', 'htm' ]
-      when :css
-        [ 'css' ]
+    # Returns all extensions for the given types
+    def types_to_extensions(types)
+      extensions = []
+      types.each { |type| extensions.concat(type_to_extensions(type)) }
+      extensions
+    end
+
+    # Returns all extensions for the given type
+    def type_to_extensions(type)
+      case type
+        when :html
+          [ 'html', 'htm' ]
+        when :css
+          [ 'css' ]
+        else
+          raise RuntimeError, "unknown type: #{type}"
       end
     end
 
-    def validator_class
-      case @type
-      when :html
+    # Returns the validator class for the given extension
+    def validator_class_for(extension)
+      case extension
+      when 'html', 'htm'
         ::W3CValidators::MarkupValidator
-      when :css
+      when 'css'
         ::W3CValidators::CSSValidator
+      else
+        raise RuntimeError, "unknown extension: #{extension}"
       end
     end
 
-    def validator
-      @validator ||= validator_class.new
+    # Returns the validator for the given extension
+    def validator_for(extension)
+      @validators ||= {}
+      @validators[extension] ||= validator_class_for(extension).new
     end
 
     def validation_started(file)
