@@ -16,14 +16,22 @@ module Nanoc3
     # @return [String] This item's identifier
     attr_accessor :identifier
 
+    # @return [Symbol] The type of this item: either `:text` or `:binary`
+    attr_reader   :type
+
     # @return [Time] The time when this item was last modified
     attr_reader   :mtime
 
     # @return [Array<Nanoc3::ItemRep>] This item’s list of item reps
     attr_reader   :reps
 
-    # @return [String] This item's raw, uncompiled content
+    # @return [String] This item's raw, uncompiled content of this item (only
+    # available for textual items)
     attr_reader   :raw_content
+
+    # @return [String] The filename pointing to the file containing this
+    # item’s content (only available for binary items)
+    attr_reader   :filename
 
     # @return [Nanoc3::Item, nil] The parent item of this item. This can be
     # nil even for non-root items.
