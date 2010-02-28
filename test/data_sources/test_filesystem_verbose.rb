@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::DataSources::FilesystemVeboseTest < MiniTest::Unit::TestCase
+class Nanoc3::DataSources::FilesystemVerboseTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
