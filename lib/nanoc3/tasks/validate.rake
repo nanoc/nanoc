@@ -40,6 +40,11 @@ namespace :validate do
     task :internal do
       # Get output directory
       site = Nanoc3::Site.new('.')
+      if site.nil?
+        $stderr.puts 'The current working directory does not seem to be a ' +
+                     'valid/complete nanoc site directory; aborting.'
+        exit 1
+      end
       dir             = site.config[:output_dir]
       index_filenames = site.config[:index_filenames]
 
@@ -52,6 +57,11 @@ namespace :validate do
     task :external do
       # Get output directory
       site = Nanoc3::Site.new('.')
+      if site.nil?
+        $stderr.puts 'The current working directory does not seem to be a ' +
+                     'valid/complete nanoc site directory; aborting.'
+        exit 1
+      end
       dir             = site.config[:output_dir]
       index_filenames = site.config[:index_filenames]
 
@@ -66,6 +76,11 @@ namespace :validate do
   task :links do
     # Get output directory
     site = Nanoc3::Site.new('.')
+    if site.nil?
+      $stderr.puts 'The current working directory does not seem to be a ' +
+                   'valid/complete nanoc site directory; aborting.'
+      exit 1
+    end
     dir             = site.config[:output_dir]
     index_filenames = site.config[:index_filenames]
 
