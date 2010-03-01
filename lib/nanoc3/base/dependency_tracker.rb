@@ -202,7 +202,7 @@ module Nanoc3
     # indirectly) depend on an outdated item as outdated.
     #
     # @return [void]
-    def mark_outdated_items
+    def propagate_outdatedness
       # Unmark everything
       @items.each { |i| i.outdated_due_to_dependencies = false }
 
@@ -252,6 +252,11 @@ module Nanoc3
         puts "    (nothing!)" if predecessors.empty?
         puts
       end
+    end
+
+    # @deprecated Use {#propagate_outdatedness} instead.
+    def mark_outdated_items
+      propagate_outdatedness
     end
 
   private

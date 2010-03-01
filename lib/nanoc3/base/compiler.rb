@@ -74,7 +74,7 @@ module Nanoc3
       if params.has_key?(:force) && params[:force]
         reps.each { |r| r.force_outdated = true }
       else
-        dependency_tracker.mark_outdated_items
+        dependency_tracker.propagate_outdatedness
       end
       forget_dependencies_if_outdated(items)
 
