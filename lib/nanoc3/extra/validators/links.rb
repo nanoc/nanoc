@@ -153,6 +153,9 @@ module Nanoc3::Extra::Validators
       end
     end
 
+    # This class is a helper class, which means that it is not used directly
+    # by nanoc. Future versions of nanoc may no longer contain this class. Do
+    # not depend on this class to be available.
     class EachPairEnumerator
 
       def initialize(hash)
