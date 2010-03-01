@@ -382,17 +382,18 @@ module Nanoc3
       require 'open3'
 
       # Create files
-      old_file = Tempfile.new('old')
-      new_file = Tempfile.new('new')
+      Tempfile.open('old') do |old_file|
+        Tempfile.open('new') do |new_file|
+          # Write files
+          old_file.write(a)
+          new_file.write(b)
 
-      # Write files
-      old_file.write(a)
-      new_file.write(b)
-
-      # Diff
-      stdin, stdout, stderr = Open3.popen3('diff', '-u', old_file.path, new_file.path)
-      result = stdout.read
-      result == '' ? nil : result
+          # Diff
+          stdin, stdout, stderr = Open3.popen3('diff', '-u', old_file.path, new_file.path)
+          result = stdout.read
+          result == '' ? nil : result
+        end
+      end
     rescue Errno::ENOENT
       warn 'Failed to run `diff`, so no diff with the previously compiled ' \
            'content will be available.'
