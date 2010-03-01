@@ -35,6 +35,10 @@ module Nanoc3
 
     # A square matrix that contains boolean values. It is used as an adjacency
     # matrix by the {Nanoc3::DirectedGraph} class.
+    #
+    # This class is a helper class, which means that it is not used directly
+    # by nanoc. Future versions of nanoc may no longer contain this class. Do
+    # not depend on this class to be available.
     class SquareBooleanMatrix
 
       # Creates a new matrix with the given number of rows/columns.
