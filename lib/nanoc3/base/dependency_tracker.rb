@@ -215,11 +215,15 @@ module Nanoc3
         i.outdated_due_to_dependencies = true
       end
 
-      # For each outdated item...
-      @items.select { |i| i.outdated? }.each do |outdated_item|
-        # ... mark all its successors as outdated
-        self.successors_of(outdated_item).each do |i|
-          i.outdated_due_to_dependencies = true
+      # Mark successors of outdated items as outdated
+      unprocessed = @items.select { |i| i.outdated? }
+      until unprocessed.empty?
+        item = unprocessed.shift
+        self.direct_successors_of(item).each do |successor|
+          next if successor.outdated?
+
+          successor.outdated_due_to_dependencies = true
+          unprocessed << successor
         end
       end
     end
