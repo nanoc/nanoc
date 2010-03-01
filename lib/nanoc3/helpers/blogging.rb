@@ -226,8 +226,8 @@ module Nanoc3::Helpers
             # Add dates
             create_time = a[:created_at]
             update_time = a[:updated_at] || a[:created_at]
-            xml.published ((create_time.is_a?(String) ? Time.parse(create_time) : create_time).to_iso8601_time)
-            xml.updated   ((update_time.is_a?(String) ? Time.parse(update_time) : update_time).to_iso8601_time)
+            xml.published((create_time.is_a?(String) ? Time.parse(create_time) : create_time).to_iso8601_time)
+            xml.updated(  (update_time.is_a?(String) ? Time.parse(update_time) : update_time).to_iso8601_time)
 
             # Add link
             xml.link(:rel => 'alternate', :href => url)
