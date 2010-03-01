@@ -326,7 +326,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert_equal [], tracker.direct_predecessors_of(items[1])
 
     # Mark as outdated
-    tracker.mark_outdated_items
+    tracker.propagate_outdatedness
 
     # Check outdatedness
     assert item_0.outdated_due_to_dependencies?
@@ -352,7 +352,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert_equal nil,      tracker.send(:item_with_identifier, '/123/')
   end
 
-  def test_mark_outdated_items_simple
+  def test_propagate_outdatedness_simple
     # Mock items
     item_0 = Object.new
     def item_0.outdated?                        ; false                             ; end
@@ -372,7 +372,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Mark as outdated
-    tracker.mark_outdated_items
+    tracker.propagate_outdatedness
 
     # Check outdatedness
     assert !items[0].outdated?
@@ -381,7 +381,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert !items[1].outdated_due_to_dependencies?
   end
 
-  def test_mark_outdated_items_chained
+  def test_propagate_outdatedness_chained
     # Mock items
     item_0 = Object.new
     def item_0.outdated?                        ; false                             ; end
@@ -406,7 +406,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Mark as outdated
-    tracker.mark_outdated_items
+    tracker.propagate_outdatedness
 
     # Check outdatedness
     assert !items[0].outdated?
@@ -417,7 +417,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert !items[2].outdated_due_to_dependencies?
   end
 
-  def test_mark_outdated_items_with_removed_items_forward
+  def test_propagate_outdatedness_with_removed_items_forward
     # A removed item (nil) that appears as a value marks all dependent items as outdated.
 
     # Mock items
@@ -434,14 +434,14 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(item, nil)
 
     # Mark as outdated
-    tracker.mark_outdated_items
+    tracker.propagate_outdatedness
 
     # Check outdatedness
     assert !item.outdated?
     assert item.outdated_due_to_dependencies?
   end
 
-  def test_mark_outdated_items_with_removed_items_backward
+  def test_propagate_outdatedness_with_removed_items_backward
     # A removed item (nil) that appears as a key can be ignored safely.
 
     # Mock items
@@ -458,14 +458,14 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(nil, item)
 
     # Mark as outdated
-    tracker.mark_outdated_items
+    tracker.propagate_outdatedness
 
     # Check outdatedness
     assert item.outdated?
     assert !item.outdated_due_to_dependencies?
   end
 
-  def test_mark_outdated_items_with_added_items
+  def test_propagate_outdatedness_with_added_items
     # An added item (with no entry in the dependency graph) depends on all other items.
 
     # Mock items
@@ -483,7 +483,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.instance_eval { @previous_items = [ item_0 ] }
 
     # Mark as outdated
-    tracker.mark_outdated_items
+    tracker.propagate_outdatedness
 
     # Check outdatedness
     assert !item_0.outdated_due_to_dependencies?
