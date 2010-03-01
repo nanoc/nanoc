@@ -216,11 +216,15 @@ module Nanoc3
       end
 
       # Mark successors of outdated items as outdated
+      require 'set'
+      processed   = Set.new
       unprocessed = @items.select { |i| i.outdated? }
       until unprocessed.empty?
         item = unprocessed.shift
+        processed << item
+
         self.direct_successors_of(item).each do |successor|
-          next if successor.outdated?
+          next if successor.outdated? || processed.include?(successor)
 
           successor.outdated_due_to_dependencies = true
           unprocessed << successor

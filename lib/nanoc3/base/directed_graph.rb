@@ -117,6 +117,8 @@ module Nanoc3
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = vertices
+      generate_indices
+      invalidate_successor_predecessor_cache
 
       @matrix = SquareBooleanMatrix.new(@vertices.size)
     end
@@ -130,6 +132,7 @@ module Nanoc3
     def add_edge(from, to)
       from_index, to_index = indices_of(from, to)
       @matrix[from_index, to_index] = true
+      invalidate_successor_predecessor_cache
     end
 
     # Removes the edge from the first vertex to the second vertex. If the
@@ -142,6 +145,7 @@ module Nanoc3
     def remove_edge(from, to)
       from_index, to_index = indices_of(from, to)
       @matrix[from_index, to_index] = false
+      invalidate_successor_predecessor_cache
     end
 
     # Returns the direct predecessors of the given vertex, i.e. the vertices
@@ -151,9 +155,11 @@ module Nanoc3
     #
     # @return [Array] Direct predecessors of the given vertex
     def direct_predecessors_of(to)
-      @vertices.select do |from|
-        from_index, to_index = indices_of(from, to)
-        @matrix[from_index, to_index] == true
+      @direct_predecessors[to] ||= begin
+        @vertices.select do |from|
+          from_index, to_index = indices_of(from, to)
+          @matrix[from_index, to_index] == true
+        end
       end
     end
 
@@ -164,9 +170,11 @@ module Nanoc3
     #
     # @return [Array] Direct successors of the given vertex
     def direct_successors_of(from)
-      @vertices.select do |to|
-        from_index, to_index = indices_of(from, to)
-        @matrix[from_index, to_index] == true
+      @direct_successors[from] ||= begin
+        @vertices.select do |to|
+          from_index, to_index = indices_of(from, to)
+          @matrix[from_index, to_index] == true
+        end
       end
     end
 
@@ -177,7 +185,7 @@ module Nanoc3
     #
     # @return [Array] Predecessors of the given vertex
     def predecessors_of(to)
-      recursively_find_vertices(to, :direct_predecessors_of)
+      @predecessors[to] ||= recursively_find_vertices(to, :direct_predecessors_of)
     end
 
     # Returns the successors of the given vertex, i.e. the vertices y for
@@ -187,7 +195,7 @@ module Nanoc3
     #
     # @return [Array] Successors of the given vertex
     def successors_of(from)
-      recursively_find_vertices(from, :direct_successors_of)
+      @successors[from] ||= recursively_find_vertices(from, :direct_successors_of)
     end
 
     # Returns an array of tuples representing the edges. The result of this
@@ -219,10 +227,27 @@ module Nanoc3
 
   private
 
+    # Generates vertex-to-index mapping
+    def generate_indices
+      @indices = {}
+      @vertices.each_with_index do |v, i|
+        @indices[v] = i
+      end
+    end
+
+    # Invalidates the cache that contains successors and predecessors (both
+    # direct and indirect).
+    def invalidate_successor_predecessor_cache
+      @successors          = {}
+      @direct_successors   = {}
+      @predecessors        = {}
+      @direct_predecessors = {}
+    end
+
     # Returns an array of indices for the given vertices. Raises an error if
     # one or more given objects are not vertices.
     def indices_of(*vertices)
-      vertices.map { |v| @vertices.index(v) or raise RuntimeError, "#{v.inspect} not a vertex" }
+      vertices.map { |v| @indices[v] or raise RuntimeError, "#{v.inspect} not a vertex" }
     end
 
     # Recursively finds vertices, starting at the vertex start, using the
