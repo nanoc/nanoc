@@ -46,7 +46,7 @@ module Nanoc3::Filters
     def coderay(code, language, params={})
       require 'coderay'
 
-      CodeRay.scan(code, language).div(params)
+      ::CodeRay.scan(code, language).html(params)
     end
 
     def dummy(code, language, params={})
