@@ -77,7 +77,7 @@ module Nanoc3
       end
 
       # Get type and raw content or raw filename
-      @is_binary = params.has_key?(:binary) ? params[:binary] : true
+      @is_binary = params.has_key?(:binary) ? params[:binary] : false
       if @is_binary
         @raw_filename = raw_content_or_raw_filename
       else
