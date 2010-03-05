@@ -23,9 +23,8 @@ module Nanoc3::Filters
         language = match[2]
 
         # Highlight
-        element.parent.replace(
-          Nokogiri.make(highlight(element.inner_text, language, params))
-        )
+        highlighted_code = highlight(element.inner_text, language, params)
+        element.inner_html = highlighted_code
       end
 
       doc.to_s
