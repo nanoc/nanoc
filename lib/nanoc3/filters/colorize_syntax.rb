@@ -16,9 +16,9 @@ module Nanoc3::Filters
 
       # Colorize
       doc = Nokogiri::HTML.fragment(content)
-      doc.css('pre > code[class*="lang-"]').each do |element|
+      doc.css('pre > code[class*="language-"]').each do |element|
         # Get language
-        match = element['class'].match(/(^| )lang-([^ ]+)/)
+        match = element['class'].match(/(^| )language-([^ ]+)/)
         next if match.nil?
         language = match[2]
 
