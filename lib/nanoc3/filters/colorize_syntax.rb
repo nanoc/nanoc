@@ -37,7 +37,7 @@ module Nanoc3::Filters
     def highlight(code, language, params={})
       colorizer = @colorizers[language]
       if KNOWN_COLORIZERS.include?(colorizer)
-        send(colorizer, code, language, params[colorizer])
+        send(colorizer, code, language, params[colorizer] || {})
       else
         raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end
