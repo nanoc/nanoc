@@ -2,7 +2,7 @@
 
 ## 3.1
 
-* An `Item#rep(name)` function for quickly getting a certain rep
+* An `Item#rep_named(name)` function for quickly getting a certain rep
 * An `Item#compiled_content` function for quickly getting compiled content
 * An `Item#path` function for quickly getting the path of an item rep
 * A new “+” wildcard in rule patterns that matches one or more characters
