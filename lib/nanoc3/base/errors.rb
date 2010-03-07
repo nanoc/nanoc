@@ -149,6 +149,8 @@ module Nanoc3
 
     end
 
+    # Error that is raised when a textual filter is attempted to be applied to
+    # a binary item representation.
     class CannotUseTextualFilter < Generic
 
       # @param [Nanoc3::ItemRep] rep The item representation that was
@@ -161,6 +163,8 @@ module Nanoc3
 
     end
 
+    # Error that is raised when a binary filter is attempted to be applied to
+    # a textual item representation.
     class CannotUseBinaryFilter < Generic
 
       # @param [Nanoc3::ItemRep] rep The item representation that was
