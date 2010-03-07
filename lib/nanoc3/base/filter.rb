@@ -41,18 +41,40 @@ module Nanoc3
 
     class << self
 
-      # Sets the new type for the filter (`:binary` or `:text`).
+      # Sets the new type for the filter. The type can be `:binary` (default)
+      # or `:text`. The given argument can either be a symbol indicating both
+      # “from” and “to” types, or a hash where the only key is the “from” type
+      # and the only value is the “to” type.
       #
-      # @param [Symbol] arg The new type of this filter
+      # @example Specifying a text-to-text filter
+      #
+      #     type :text
+      #
+      # @example Specifying a text-to-binary filter
+      #
+      #     type :text => :binary
+      #
+      # @param [Symbol, Hash] arg The new type of this filter
       #
       # @return [void]
       def type(arg)
-        @type = arg
+        if arg.is_a?(Hash)
+          @from, @to = arg.keys[0], arg.values[0]
+        else
+          @from, @to = arg, arg
+        end
       end
 
-      # @return [Boolean] True if this is a binary filter, false otherwise
-      def binary?
-        (@type || :text) == :binary
+      # @return [Boolean] True if this filter can be applied to binary item
+      # representations, false otherwise
+      def from_binary?
+        (@from || :text) == :binary
+      end
+
+      # @return [Boolean] True if this filter results in a binary item
+      # representation, false otherwise
+      def to_binary?
+        (@to || :text) == :binary
       end
 
     end

@@ -30,6 +30,10 @@ module Nanoc3
     # of the `--force` commandline option); false otherwise
     attr_accessor :force_outdated
 
+    # @return [Boolean] true if this rep is currently binary; false otherwise
+    attr_reader :binary
+    alias_method :binary?, :binary
+
     # @return [Boolean] true if this rep’s output file has changed since the
     # last time it was compiled; false otherwise
     attr_accessor :modified
@@ -70,21 +74,26 @@ module Nanoc3
     # @param [Symbol] name The unique name for the new item representation.
     def initialize(item, name)
       # Set primary attributes
-      @item = item
-      @name = name
+      @item   = item
+      @name   = name
+
+      # Set binary
+      @binary = @item.binary?
 
       # Initialize content and filenames
-      if @item.binary?
+      if self.binary?
         @filenames = {
           :raw  => @item.raw_filename,
           :last => @item.raw_filename
         }
+        @content = {}
       else
         @content = {
           :raw  => @item.raw_content,
           :last => @item.raw_content,
           :pre  => @item.raw_content
         }
+        @filenames = {}
       end
       @old_content = nil
 
@@ -139,7 +148,7 @@ module Nanoc3
     # @return [Hash] The assignments that should be available when compiling
     # the content.
     def assigns
-      if item.binary?
+      if self.binary?
         content_or_filename_assigns = { :filename => @filenames[:last] }
       else
         content_or_filename_assigns = { :content => @content[:last] }
@@ -167,7 +176,7 @@ module Nanoc3
     def compiled_content(params={})
       # Check whether content can be fetched
       # TODO get proper exception
-      if @item.binary?
+      if self.binary?
         raise RuntimeError, "attempted to fetch compiled content from a binary item"
       end
 
@@ -213,30 +222,40 @@ module Nanoc3
     #
     # @return [void]
     def filter(filter_name, filter_args={})
-      # Create filter
-      klass = Nanoc3::Filter.named(filter_name)
+      # Get filter class
+      klass = filter_named(filter_name)
       raise Nanoc3::Errors::UnknownFilter.new(filter_name) if klass.nil?
-      filter = klass.new(assigns)
 
       # Check whether filter can be applied
-      if klass.binary? && !item.binary?
+      if klass.from_binary? && !self.binary?
         raise Nanoc3::Errors::CannotUseBinaryFilter.new(self, klass)
-      elsif !klass.binary? && item.binary?
+      elsif !klass.from_binary? && self.binary?
         raise Nanoc3::Errors::CannotUseTextualFilter.new(self, klass)
       end
 
+      # Create filter
+      filter = klass.new(assigns)
+
       # Run filter
       Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
-      if item.binary?
-        filter.run(@filenames[:last], filter_args)
+      source = self.binary? ? @filenames[:last] : @content[:last]
+      result = filter.run(source, filter_args)
+      if klass.to_binary?
         @filenames[:last] = filter.output_filename
       else
-        @content[:last] = filter.run(@content[:last], filter_args)
+        @content[:last] = result
       end
+      @binary = klass.to_binary?
       Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
+      # Check whether file was written
+      if self.binary? && !File.file?(filter.output_filename)
+        raise RuntimeError,
+          "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
+      end
+
       # Create snapshot
-      snapshot(@content[:post] ? :post : :pre) unless item.binary?
+      snapshot(@content[:post] ? :post : :pre) unless self.binary?
     end
 
     # Lays out the item using the given layout. This method will replace the
@@ -252,7 +271,7 @@ module Nanoc3
     # @return [void]
     def layout(layout_identifier)
       # Check whether item can be laid out
-      raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if item.binary?
+      raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
 
       # Create "pre" snapshot
       snapshot(:pre) unless @content[:pre]
@@ -278,7 +297,7 @@ module Nanoc3
     #
     # @return [void]
     def snapshot(snapshot_name)
-      target = @item.binary? ? @filenames : @content
+      target = self.binary? ? @filenames : @content
       target[snapshot_name] = target[:last]
     end
 
@@ -295,7 +314,7 @@ module Nanoc3
       # Check if file will be created
       @created = !File.file?(self.raw_path)
 
-      if @item.binary?
+      if self.binary?
         # Calculate hash of old content
         if File.file?(self.raw_path)
           hash_old = hash(self.raw_path)
@@ -335,7 +354,7 @@ module Nanoc3
     def diff
       # Check if content can be diffed
       # TODO allow binary diffs
-      return nil if @item.binary?
+      return nil if self.binary?
 
       # Check if old content exists
       if @old_content.nil? or self.raw_path.nil?
@@ -346,10 +365,14 @@ module Nanoc3
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} item.identifier=#{self.item.identifier} item.binary?=#{@item.binary?}>"
+      "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} binary=#{self.binary?} item.identifier=#{self.item.identifier}>"
     end
 
   private
+
+    def filter_named(name)
+      Nanoc3::Filter.named(name)
+    end
 
     def layout_with_identifier(layout_identifier)
       layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
