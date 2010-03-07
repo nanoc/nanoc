@@ -675,4 +675,19 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_get_compiled_content_from_binary_item
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => true
+    )
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    def rep.compiled? ; true ; end
+
+    # Check
+    assert_nil rep.compiled_content
+  end
+
 end
