@@ -9,10 +9,10 @@
 * A `view` command that starts a web server in the output directory
 * A `debug` command that shows information about the items, reps and layouts
 * A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
-* A plugin-loading system
 * A diff between the previously compiled content and the last compiled content
   is now written to `output.diff`
 * Assigns, such as `@items`, `@layouts`, `@item`, … are accessible without `@`
+* Support for binary items
 
 Changed:
 
