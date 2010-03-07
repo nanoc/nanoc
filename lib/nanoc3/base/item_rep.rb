@@ -174,12 +174,6 @@ module Nanoc3
     # @return [String] The compiled content at the given snapshot (or the
     # default snapshot if no snapshot is specified)
     def compiled_content(params={})
-      # Check whether content can be fetched
-      # TODO get proper exception
-      if self.binary?
-        raise RuntimeError, "attempted to fetch compiled content from a binary item"
-      end
-
       # Notify
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
