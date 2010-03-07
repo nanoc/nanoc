@@ -620,4 +620,59 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       rep.send(:hash, 'two')
   end
 
+  def test_filter_text_to_binary
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    def rep.assigns ; {} ; end
+
+    # Create fake filter
+    def rep.filter_named(name)
+      @filter ||= Class.new(::Nanoc3::Filter) do
+        type :text => :binary
+        def run(content, params={})
+          File.open(output_filename, 'w') { |io| io.write(content) }
+        end
+      end
+    end
+
+    # Run
+    rep.filter(:foo)
+
+    # Check
+    assert rep.binary?
+  end
+
+  def test_filter_with_textual_rep_and_binary_filter
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    def rep.assigns ; {} ; end
+
+    # Create fake filter
+    def rep.filter_named(name)
+      @filter ||= Class.new(::Nanoc3::Filter) do
+        type :binary
+        def run(content, params={})
+          File.open(output_filename, 'w') { |io| io.write(content) }
+        end
+      end
+    end
+
+    # Run
+    assert_raises ::Nanoc3::Errors::CannotUseBinaryFilter do
+      rep.filter(:foo)
+    end
+  end
+
 end
