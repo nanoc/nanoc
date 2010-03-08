@@ -28,7 +28,7 @@ module Nanoc3
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
     DEFAULT_DATA_SOURCE_CONFIG = {
-      :type         => 'filesystem_compact',
+      :type         => 'filesystem_unified',
       :items_root   => '/',
       :layouts_root => '/',
       :config       => {}
