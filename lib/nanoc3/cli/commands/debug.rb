@@ -57,7 +57,8 @@ module Nanoc3::CLI::Commands
           row += 1
 
           # Print rep
-          puts "* %s %s -> %s" % [
+          puts "* [%s] %s %s -> %s" % [
+            item.binary? ? 'binary ' : 'textual',
             fill(item.identifier, identifier_length, filler),
             fill(rep.name.to_s,   rep_name_length,   ' '),
             rep.raw_path || '-'
