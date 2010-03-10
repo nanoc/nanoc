@@ -43,23 +43,27 @@ module Nanoc3::Extra
             r.raw_path == site.config[:output_dir] + path
         end
 
+        # Recompile rep
         if rep
-          serve(rep)
-        else
-          # Get paths by appending index filenames
-          if path =~ /\/$/
-            possible_paths = site.config[:index_filenames].map { |f| path + f }
-          else
-            possible_paths = [ path ]
-          end
-
-          # Find matching file
-          modified_path = possible_paths.find { |f| File.file?(site.config[:output_dir] + f) }
-          modified_path ||= path
-
-          # Serve using Rack::File
-          file_server.call(env.merge('PATH_INFO' => modified_path))
+          site.compiler.run(rep.item, :force => true)
         end
+
+        # Get paths by appending index filenames
+        if path =~ /\/$/
+          possible_paths = site.config[:index_filenames].map { |f| path + f }
+        else
+          possible_paths = [ path ]
+        end
+
+        # Find matching file
+        modified_path = possible_paths.find { |f| File.file?(site.config[:output_dir] + f) }
+        modified_path ||= path
+
+        # Serve using Rack::File
+        puts "*** serving file #{modified_path}"
+        res = file_server.call(env.merge('PATH_INFO' => modified_path))
+        puts "*** done serving file #{modified_path}"
+        res
       end
     rescue StandardError, ScriptError => e
       # Add compilation stack to env
@@ -90,18 +94,6 @@ module Nanoc3::Extra
 
     def file_server
       @file_server ||= ::Rack::File.new(site.config[:output_dir])
-    end
-
-    def serve(rep)
-      # Recompile rep
-      site.compiler.run(rep.item, :force => true)
-
-      # Build response
-      [
-        200,
-        { 'Content-Type' => mime_type_of(rep.raw_path, 'text/html') },
-        [ rep.content_at_snapshot(:last) ]
-      ]
     end
 
   end
