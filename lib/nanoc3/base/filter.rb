@@ -94,7 +94,7 @@ module Nanoc3
     #
     # @param [String] content_or_filename The unprocessed content that should
     # be filtered (if the item is a textual item) or the path to the file that
-    # should be fitlered (if the item is a binar item)
+    # should be fitlered (if the item is a binary item)
     #
     # @param [Hash] params A hash containing parameters. Filter subclasses can
     # use these parameters to allow modifying the filter's behaviour.
