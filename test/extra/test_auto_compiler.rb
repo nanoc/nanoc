@@ -23,7 +23,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create compiler
       compiler = mock
-      compiler.expects(:run).with(item_reps[1].item, :force => true)
+      compiler.expects(:run).with(item_reps[1].item)
 
       # Create site
       site = mock
@@ -59,7 +59,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Create compiler
       compiler = mock
-      compiler.expects(:run).with(items[0], :force => true)
+      compiler.expects(:run).with(items[0])
 
       # Create site
       site = mock
@@ -360,7 +360,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         # Create site
         site = Nanoc3::Site.new('.')
         site.load_data
-        site.compiler.expects(:run).with(site.items[0], :force => true)
+        site.compiler.expects(:run).with(site.items[0])
 
         # Create autocompiler
         autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -426,6 +426,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       File.open('config.yaml', 'w') do |io|
         io.write "value: Foo"
       end
+      File.utime(Time.now+5, Time.now+5, 'config.yaml')
 
       # Check
       status, headers, body = autocompiler.call('PATH_INFO' => '/')
@@ -437,6 +438,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       File.open('config.yaml', 'w') do |io|
         io.write "value: Bar"
       end
+      File.utime(Time.now+5, Time.now+5, 'config.yaml')
 
       # Check
       status, headers, body = autocompiler.call('PATH_INFO' => '/')
