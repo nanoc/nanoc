@@ -78,6 +78,35 @@ EOF
     site.send :load_rules
   end
 
+  def test_load_data_sources_first
+    # Create site
+    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+
+    FileUtils.cd('bar') do
+      # Create data source code
+      File.open('lib/some_data_source.rb', 'w') do |io|
+        io.write "class FooDataSource < Nanoc3::DataSource\n"
+        io.write "  identifier :site_test_foo\n"
+        io.write "  def items ; [ Nanoc3::Item.new('content', {}, '/foo/') ] ; end\n"
+        io.write "end\n"
+      end
+
+      # Update configuration
+      File.open('config.yaml', 'w') do |io|
+        io.write "data_sources:\n"
+        io.write "  - type: site_test_foo"
+      end
+
+      # Create site
+      site = Nanoc3::Site.new('.')
+      site.load_data
+
+      # Check
+      assert_equal 1,       site.data_sources.size
+      assert_equal '/foo/', site.items[0].identifier
+    end
+  end
+
 end
 
 describe 'Nanoc3::Site#initialize' do
