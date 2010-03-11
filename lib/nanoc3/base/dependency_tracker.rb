@@ -27,6 +27,10 @@ module Nanoc3
     # stored
     attr_accessor :filename
 
+    # @return [Array<Nanoc3::Item>] The list of items that is being tracked
+    # by the dependency tracker
+    attr_reader :items
+
     # The version of the file format used to store dependencies.
     STORE_VERSION = 2
 
