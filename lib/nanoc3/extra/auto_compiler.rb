@@ -44,9 +44,7 @@ module Nanoc3::Extra
         end
 
         # Recompile rep
-        if rep
-          site.compiler.run(rep.item, :force => true)
-        end
+        site.compiler.run(rep.item) if rep
 
         # Get paths by appending index filenames
         if path =~ /\/$/
