@@ -42,28 +42,34 @@ module Nanoc3::CLI::Commands
       reps    = items.map { |i| i.reps }.flatten
       layouts = @base.site.layouts
 
-      # Calculate prettification data
-      identifier_length = items.map { |i| i.identifier.size }.max
-      rep_name_length   = reps.map  { |r| r.name.size }.max
+      # Get dependency tracker
+      # FIXME clean this up
+      dependency_tracker = @base.site.compiler.send(:dependency_tracker)
+      dependency_tracker.load_graph
 
       # Print items
       puts '=== Items'
       puts
       row = 0
       items.sort_by { |i| i.identifier }.each do |item|
-        item.reps.sort_by { |r| r.name.to_s }.each do |rep|
-          # Determine filler
-          filler = (row % 3 == 0 ? '· ' : ' ')
-          row += 1
+        puts "item #{item.identifier}:"
 
-          # Print rep
-          puts "* [%s] %s %s -> %s" % [
-            item.binary? ? 'binary ' : 'textual',
-            fill(item.identifier, identifier_length, filler),
-            fill(rep.name.to_s,   rep_name_length,   ' '),
-            rep.raw_path || '-'
-          ]
+        # Print item dependencies
+        puts "  dependencies:"
+        predecessors = dependency_tracker.direct_predecessors_of(item).sort_by { |i| i.identifier }
+        predecessors.each do |pred|
+          puts "    #{pred.identifier}"
         end
+        puts "    (nothing)" if predecessors.empty?
+
+        # Print item representations
+        puts "  representations:"
+        item.reps.sort_by { |r| r.name.to_s }.each do |rep|
+          puts "    #{rep.name} -> #{rep.raw_path || '(not written)'}"
+        end
+
+        # Done
+        puts
       end
       puts
 
@@ -71,29 +77,8 @@ module Nanoc3::CLI::Commands
       puts '=== Layouts'
       puts
       layouts.each do |layout|
-        puts "* #{layout.identifier}"
+        puts "layout #{layout.identifier}"
       end
-    end
-
-  private
-
-    # Returns a string that is exactly `length` long, starting with `text` and
-    # filling up any unused space by repeating the string `filler`.
-    def fill(text, length, filler)
-      res = text.dup
-
-      filler_length = (length - 1 - text.length)
-      if filler_length >= 0
-        # Append spacer to ensure alignment
-        spacer_length = text.size % filler.length
-        filler_length -= spacer_length
-        res << ' ' * (spacer_length + 1)
-
-        # Append leader
-        res << filler*(filler_length/filler.length)
-      end
-
-      res
     end
 
   end
