@@ -19,17 +19,22 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       items = [ mock, mock ]
       items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
       items[1].stubs(:reps).returns([ item_reps[2] ])
+      item_reps[1].stubs(:item).returns(items[0])
+
+      # Create compiler
+      compiler = mock
+      compiler.expects(:run).with(item_reps[1].item, :force => true)
 
       # Create site
       site = mock
       site.stubs(:items).returns(items)
       site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
+      site.stubs(:compiler).returns(compiler)
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
-      autocompiler.expects(:serve).with(item_reps[1])
       autocompiler.stubs(:build_reps)
 
       # Run
@@ -50,17 +55,22 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       items = [ mock, mock ]
       items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
       items[1].stubs(:reps).returns([ item_reps[2] ])
+      item_reps[1].stubs(:item).returns(items[0])
+
+      # Create compiler
+      compiler = mock
+      compiler.expects(:run).with(items[0], :force => true)
 
       # Create site
       site = mock
       site.stubs(:items).returns(items)
       site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
+      site.stubs(:compiler).returns(compiler)
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
-      autocompiler.expects(:serve).with(item_reps[1])
       autocompiler.stubs(:build_reps)
 
       # Run
@@ -332,76 +342,69 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_serve_with_working_item
-    if_have 'mime/types', 'rack'  do
-      # Create item and item rep
-      item = mock
-      item_rep = mock
-      item_rep.expects(:raw_path).at_least_once.returns('somefile.html')
-      item_rep.expects(:item).returns(item)
-      item_rep.expects(:content_at_snapshot).with(:last).returns('compiled item content')
-
-      # Create file
-      File.open(item_rep.raw_path, 'w') { |io| io.write('hello') }
-
-      # Create compiler
-      compiler = Object.new
-      def compiler.run(item, params={})
-        @called = true
-        File.open('somefile.html', 'w') { |io| io.write("... compiled item content ...") }
-      end
-      def compiler.called?
-        @called || false
-      end
-
+    if_have 'mime/types', 'rack' do
       # Create site
-      site = mock
-      site.expects(:compiler).returns(compiler)
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
 
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
-      autocompiler.stubs(:build_site)
-      autocompiler.stubs(:site).returns(site)
+      FileUtils.cd('bar') do
+        # Create item
+        File.open('content/index.html', 'w') do |io|
+          io.write "Moo!"
+        end
 
-      begin
+        # Create output file
+        File.open('output/index.html', 'w') do |io|
+          io.write "Compiled moo!"
+        end
+
+        # Create site
+        site = Nanoc3::Site.new('.')
+        site.load_data
+        site.compiler.expects(:run).with(site.items[0], :force => true)
+
+        # Create autocompiler
+        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler.stubs(:build_site)
+        autocompiler.stubs(:site).returns(site)
+
         # Serve
-        response = autocompiler.instance_eval { serve(item_rep) }
+        status, headers, body = autocompiler.instance_eval { call('PATH_INFO' => '/') }
 
         # Check response
-        assert_equal(200,                     response[0])
-        assert_equal('text/html',             response[1]['Content-Type'])
-        assert_match(/compiled item content/, response[2][0])
-
-        # Check call
-        assert compiler.called?
-      ensure
-        # Clean up
-        FileUtils.rm_rf(item_rep.raw_path)
+        assert_equal(200, status)
+        assert_equal('text/html', headers['Content-Type'])
+        body.each do |b|
+          assert_equal "Compiled moo!", b
+        end
       end
     end
   end
 
   def test_serve_with_broken_item
     if_have 'mime/types', 'rack' do
-      # Create item and item rep
-      item = mock
-      item_rep = mock
-      item_rep.expects(:item).returns(item)
-
       # Create site
-      stack = []
-      compiler = mock
-      compiler.expects(:run).raises(RuntimeError, 'aah! fail!')
-      site = mock
-      site.expects(:compiler).at_least_once.returns(compiler)
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
 
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
-      autocompiler.stubs(:build_site)
-      autocompiler.stubs(:site).returns(site)
+      FileUtils.cd('bar') do
+        # Create item
+        File.open('content/whatever.html', 'w') do |io|
+          io.write "Whatever!"
+        end
 
-      # Serve
-      assert_raises(RuntimeError) do
-        autocompiler.instance_eval { serve(item_rep) }
+        # Create site
+        site = Nanoc3::Site.new('.')
+        site.load_data
+        site.compiler.expects(:run).raises(RuntimeError, 'aah! fail!')
+
+        # Create autocompiler
+        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler.stubs(:build_site)
+        autocompiler.stubs(:site).returns(site)
+
+        # Serve
+        assert_raises(RuntimeError) do
+          autocompiler.instance_eval { call('PATH_INFO' => '/whatever/') }
+        end
       end
     end
   end
@@ -426,7 +429,9 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Check
       status, headers, body = autocompiler.call('PATH_INFO' => '/')
-      assert_match /The Grand Value of Configuration is Foo!/, body.join
+      body.each do |b|
+        assert_match /The Grand Value of Configuration is Foo!/, b
+      end
 
       # Set config to 2nd value
       File.open('config.yaml', 'w') do |io|
@@ -435,7 +440,9 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
       # Check
       status, headers, body = autocompiler.call('PATH_INFO' => '/')
-      assert_match /The Grand Value of Configuration is Bar!/, body.join
+      body.each do |b|
+        assert_match /The Grand Value of Configuration is Bar!/, b
+      end
     end
   end
 
