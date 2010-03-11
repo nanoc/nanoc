@@ -26,12 +26,13 @@ module Nanoc3::TestHelpers
     libs.each do |lib|
       begin
         require lib
-        yield
       rescue LoadError
         skip "requiring #{lib} failed"
         return
       end
     end
+
+    yield
   end
 
   def setup
