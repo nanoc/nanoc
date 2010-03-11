@@ -161,8 +161,8 @@ module Nanoc3
       return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
 
       # Load all data
-      data_sources.each { |ds| ds.use }
       load_code_snippets(force)
+      data_sources.each { |ds| ds.use }
       load_rules
       load_items
       load_layouts
