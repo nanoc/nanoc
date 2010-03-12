@@ -230,7 +230,7 @@ module Nanoc3
       @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
         Nanoc3::CodeSnippet.new(
           File.read(filename),
-          filename.sub(/^lib\//, ''),
+          filename,
           File.stat(filename).mtime
         )
       end
