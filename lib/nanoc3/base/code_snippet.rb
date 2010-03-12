@@ -46,7 +46,7 @@ module Nanoc3
     #
     # @return [void]
     def load
-      eval(@data, TOPLEVEL_BINDING, @filename)
+      eval(@data, TOPLEVEL_BINDING, "./lib/#{@filename}")
     end
 
   end

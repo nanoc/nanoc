@@ -252,7 +252,7 @@ module Nanoc3
       @rules_mtime = File.stat(rules_filename).mtime
 
       # Load DSL
-      dsl.instance_eval(@rules)
+      dsl.instance_eval(@rules, "./#{rules_filename}")
     end
 
     # Loads this site’s items, sets up item child-parent relationships and
