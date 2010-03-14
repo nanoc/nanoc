@@ -158,6 +158,7 @@ module Nanoc3
       @direct_predecessors[to] ||= begin
         @vertices.select do |from|
           from_index, to_index = indices_of(from, to)
+          return [] if from_index.nil? || to_index.nil?
           @matrix[from_index, to_index] == true
         end
       end
@@ -173,6 +174,7 @@ module Nanoc3
       @direct_successors[from] ||= begin
         @vertices.select do |to|
           from_index, to_index = indices_of(from, to)
+          return [] if from_index.nil? || to_index.nil?
           @matrix[from_index, to_index] == true
         end
       end
@@ -247,7 +249,7 @@ module Nanoc3
     # Returns an array of indices for the given vertices. Raises an error if
     # one or more given objects are not vertices.
     def indices_of(*vertices)
-      vertices.map { |v| @indices[v] or raise RuntimeError, "#{v.inspect} not a vertex" }
+      vertices.map { |v| @indices[v] }
     end
 
     # Recursively finds vertices, starting at the vertex start, using the
