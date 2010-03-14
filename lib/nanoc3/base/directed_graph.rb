@@ -155,7 +155,7 @@ module Nanoc3
     # given method, which should be a symbol to a method that takes a vertex
     # and returns related vertices (e.g. predecessors, successors).
     def recursively_find_vertices(start, method)
-      all_vertices = []
+      all_vertices = Set.new
 
       processed_vertices   = Set.new
       unprocessed_vertices = [ start ]
@@ -173,7 +173,7 @@ module Nanoc3
         end
       end
 
-      all_vertices
+      all_vertices.to_a
     end
 
   end
