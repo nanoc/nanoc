@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'set'
+
 module Nanoc3
 
   # Represents a directed graph. It is used by the dependency tracker for
@@ -33,82 +35,6 @@ module Nanoc3
   #     # => %w( b c )
   class DirectedGraph
 
-    # A square matrix that contains boolean values. It is used as an adjacency
-    # matrix by the {Nanoc3::DirectedGraph} class.
-    #
-    # This class is a helper class, which means that it is not used directly
-    # by nanoc. Future versions of nanoc may no longer contain this class. Do
-    # not depend on this class to be available.
-    class SquareBooleanMatrix
-
-      # Creates a new matrix with the given number of rows/columns.
-      #
-      # @param [Number] size The number of elements along both sides of the
-      # matrix (in other words, the square root of the number of elements)
-      def initialize(size)
-        @size = size
-      end
-
-      # Gets the value at the given x/y coordinates.
-      #
-      # @param [Number] x The X coordinate
-      # @param [Number] y The Y coordinate
-      #
-      # @return The value at the given coordinates
-      def [](x, y)
-        @data ||= {}
-        @data[x] ||= {}
-        @data[x].has_key?(y) ? @data[x][y] : false
-      end
-
-      # Sets the value at the given x/y coordinates.
-      #
-      # @param [Number] x The X coordinate
-      # @param [Number] y The Y coordinate
-      # @param value The value to set at the given coordinates
-      #
-      # @return [void]
-      def []=(x, y, value)
-        @data ||= {}
-        @data[x] ||= {}
-        @data[x][y] = value
-      end
-
-      # Returns a string representing this matrix in ASCII art.
-      #
-      # @return [String] The string representation of this matrix
-      def to_s
-        s = ''
-
-        # Calculate column width
-        width = (@size-1).to_s.size
-
-        # Add header
-        s << ' ' + ' '*width + ' '
-        @size.times { |i| s << '| ' + format("%#{width}i", i) + ' ' }
-        s << "\n"
-
-        # Add rows
-        @size.times do |x|
-          # Add line
-          s << '-' + '-'*width + '-'
-          @size.times { |i| s << '+-' + '-'*width + '-' }
-          s << "\n"
-
-          # Add actual row
-          s << ' ' + format("%#{width}i", x)+ ' '
-          @size.times do |y|
-            s << '| ' + format("%#{width}s", self[x, y] ? '*' : ' ') + ' '
-          end
-          s << "\n"
-        end
-
-        # Done
-        s
-      end
-
-    end
-
     # The list of vertices in this graph.
     #
     # @return [Array]
@@ -117,10 +43,16 @@ module Nanoc3
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = vertices
-      generate_indices
-      invalidate_successor_predecessor_cache
 
-      @matrix = SquareBooleanMatrix.new(@vertices.size)
+      @from_graph = {}
+      @to_graph   = {}
+
+      @vertice_indexes = {}
+      vertices.each_with_index do |v, i|
+        @vertice_indexes[v] = i
+      end
+
+      invalidate_caches
     end
 
     # Adds an edge from the first vertex to the second vertex.
@@ -130,9 +62,13 @@ module Nanoc3
     #
     # @return [void]
     def add_edge(from, to)
-      from_index, to_index = indices_of(from, to)
-      @matrix[from_index, to_index] = true
-      invalidate_successor_predecessor_cache
+      @from_graph[from] ||= Set.new
+      @from_graph[from] << to
+
+      @to_graph[to] ||= Set.new
+      @to_graph[to]  << from
+
+      invalidate_caches
     end
 
     # Removes the edge from the first vertex to the second vertex. If the
@@ -143,9 +79,13 @@ module Nanoc3
     #
     # @return [void]
     def remove_edge(from, to)
-      from_index, to_index = indices_of(from, to)
-      @matrix[from_index, to_index] = false
-      invalidate_successor_predecessor_cache
+      @from_graph[from] ||= Set.new
+      @from_graph[from].delete(to)
+
+      @to_graph[to] ||= Set.new
+      @to_graph[to].delete(from)
+
+      invalidate_caches
     end
 
     # Returns the direct predecessors of the given vertex, i.e. the vertices
@@ -155,13 +95,7 @@ module Nanoc3
     #
     # @return [Array] Direct predecessors of the given vertex
     def direct_predecessors_of(to)
-      @direct_predecessors[to] ||= begin
-        @vertices.select do |from|
-          from_index, to_index = indices_of(from, to)
-          return [] if from_index.nil? || to_index.nil?
-          @matrix[from_index, to_index] == true
-        end
-      end
+      @to_graph[to].to_a
     end
 
     # Returns the direct successors of the given vertex, i.e. the vertices y
@@ -171,13 +105,7 @@ module Nanoc3
     #
     # @return [Array] Direct successors of the given vertex
     def direct_successors_of(from)
-      @direct_successors[from] ||= begin
-        @vertices.select do |to|
-          from_index, to_index = indices_of(from, to)
-          return [] if from_index.nil? || to_index.nil?
-          @matrix[from_index, to_index] == true
-        end
-      end
+      @from_graph[from].to_a
     end
 
     # Returns the predecessors of the given vertex, i.e. the vertices x for
@@ -206,50 +134,21 @@ module Nanoc3
     # @return [Array] The list of all edges in this graph.
     def edges
       result = []
-
-      @vertices.each do |from|
-        @vertices.each do |to|
-          from_index, to_index = indices_of(from, to)
-          next if @matrix[from_index, to_index] == false
-
-          result << [ from_index, to_index ]
+      @vertices.each_with_index do |v, i|
+        direct_successors_of(v).map { |v2| @vertice_indexes[v2] }.each do |i2|
+          result << [ i, i2 ]
         end
       end
-
       result
-    end
-
-    # Returns a string representing this graph in ASCII art (or, to be more
-    # precise, the string representation of the matrix backing this graph).
-    #
-    # @return [String] The string representation of this graph
-    def to_s
-      @matrix.to_s
     end
 
   private
 
-    # Generates vertex-to-index mapping
-    def generate_indices
-      @indices = {}
-      @vertices.each_with_index do |v, i|
-        @indices[v] = i
-      end
-    end
-
-    # Invalidates the cache that contains successors and predecessors (both
-    # direct and indirect).
-    def invalidate_successor_predecessor_cache
-      @successors          = {}
-      @direct_successors   = {}
-      @predecessors        = {}
-      @direct_predecessors = {}
-    end
-
-    # Returns an array of indices for the given vertices. Raises an error if
-    # one or more given objects are not vertices.
-    def indices_of(*vertices)
-      vertices.map { |v| @indices[v] }
+    # Invalidates cached data. This method should be called when the internal
+    # graph representation is changed.
+    def invalidate_caches
+      @predecessors = {}
+      @successors   = {}
     end
 
     # Recursively finds vertices, starting at the vertex start, using the
