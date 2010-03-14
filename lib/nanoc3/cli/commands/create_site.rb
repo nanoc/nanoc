@@ -4,6 +4,56 @@ module Nanoc3::CLI::Commands
 
   class CreateSite < Cri::Command
 
+    class << self
+
+    protected
+
+      # Converts the given array to YAML format
+      def array_to_yaml(array)
+        '[ ' + array.map { |s| "'" + s + "'" }.join(', ') + ' ]'
+      end
+
+    end
+
+    DEFAULT_CONFIG = <<EOS
+# A list of file extensions that nanoc will consider to be textual rather than
+# binary. If an item with an extension not in this list is found,  the file
+# will be considered as binary.
+text_extensions: #{array_to_yaml(Nanoc3::Site::DEFAULT_CONFIG[:text_extensions])}
+
+# The path to the directory where all generated files will be written to. This
+# can be an absolute path starting with a slash, but it can also be path
+# relative to the site directory.
+output_dir: #{Nanoc3::Site::DEFAULT_CONFIG[:output_dir]}
+
+# A list of index filenames, i.e. names of files that will be served by a web
+# server when a directory is requested. Usually, index files are named
+# “index.hml”, but depending on the web server, this may be something else,
+# such as “default.htm”. This list is used by nanoc to generate pretty URLs.
+index_filenames: #{array_to_yaml(Nanoc3::Site::DEFAULT_CONFIG[:index_filenames])}
+
+# The data sources where nanoc loads its data from. This is an array of
+# hashes; each array element represents a single data source. By default,
+# there is only a single data source that reads data from the “content/” and
+# “layout/” directories in the site directory.
+data_sources:
+  -
+    # The type is the identifier of the data source. By default, this will be
+    # `filesystem_unified`.
+    type: #{Nanoc3::Site::DEFAULT_DATA_SOURCE_CONFIG[:type]}
+
+    # The path where items should be mounted (comparable to mount points in
+    # Unix-like systems). This is “/” by default, meaning that items will have
+    # “/” prefixed to their identifiers. If the items root were “/en/”
+    # instead, an item at content/about.html would have an identifier of
+    # “/en/about/” instead of just “/about/”.
+    items_root: #{Nanoc3::Site::DEFAULT_DATA_SOURCE_CONFIG[:items_root]}
+
+    # The path where layouts should be mounted. The layouts root behaves the
+    # same as the items root, but applies to layouts rather than items.
+    layouts_root: #{Nanoc3::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
+EOS
+
     DEFAULT_RULES = <<EOS
 #!/usr/bin/env ruby
 
@@ -262,18 +312,7 @@ EOS
       FileUtils.mkdir_p('output')
 
       # Create config
-      File.open('config.yaml', 'w') do |io|
-        io.write(YAML.dump(
-          'output_dir' => 'output',
-          'data_sources' => [
-            {
-              'type'         => data_source,
-              'items_root'   => '/',
-              'layouts_root' => '/'
-            }
-          ]
-        ))
-      end
+      File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
       Nanoc3::NotificationCenter.post(:file_created, 'config.yaml')
 
       # Create rakefile
