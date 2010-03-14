@@ -690,4 +690,185 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_nil rep.compiled_content
   end
 
+  def test_using_textual_filters_on_binary_reps_raises
+    item = create_binary_item
+    site = mock_and_stub(:items => [item],
+      :layouts => [],
+      :config  => []
+    )
+    item.stubs(:site).returns(site)
+    rep = create_rep_for(item, '/foo/')
+    create_textual_filter
+
+    assert rep.binary?
+    assert_raises(Nanoc3::Errors::CannotUseTextualFilter) { rep.filter(:text_filter) }
+  end
+
+  def test_writing_binary_reps_uses_content_in_last_filename
+    require 'tempfile'
+
+    in_filename  = 'nanoc-in'
+    out_filename = 'nanoc-out'
+    file_content = 'Some content for this test'
+    File.open(in_filename, 'w') { |io| io.write(file_content) }
+
+    item = create_binary_item
+    rep = create_rep_for(item, /foo/)
+    rep.instance_eval { @filenames[:last] = in_filename }
+    rep.raw_path = out_filename
+
+    rep.write
+
+    assert(File.exist?(out_filename))
+    assert_equal(file_content, File.read(out_filename))
+  end
+
+  def test_converted_binary_rep_can_be_layed_out
+    layout = mock_and_stub(
+      :identifier => '/somelayout/',
+      :raw_content => %[<%= "blah" %> <%= yield %>]
+    )
+
+    # Mock compiler
+    stack = mock_and_stub(:pop => layout)
+    stack.stubs(:push).returns(stack)
+    compiler = mock_and_stub(
+      :stack => stack,
+      :filter_for_layout => [ :erb, {} ]
+    )
+
+    # Mock site
+    site = mock_and_stub(
+      :items    => [],
+      :config   => [],
+      :layouts  => [ layout ],
+      :compiler => compiler
+    )
+
+    item = create_binary_item
+    item.site = site
+
+    rep = create_rep_for(item, '/foo/')
+    def rep.filter_named(name)
+      @filter ||= Class.new(::Nanoc3::Filter) do
+        type :binary => :text
+        def run(content, params={})
+          "Some textual content"
+        end
+      end
+    end
+
+    rep.filter(:binary_to_text)
+    rep.layout('/somelayout/')
+    assert_equal('blah Some textual content', rep.instance_eval { @content[:last] })
+  end
+
+  def test_converted_binary_rep_can_be_filterd_with_textual_filters
+    item = create_binary_item
+    site = mock_and_stub(:items => [item],
+      :layouts => [],
+      :config  => []
+    )
+    item.stubs(:site).returns(site)
+    rep = create_rep_for(item, /foo/)
+    create_textual_filter
+
+    assert rep.binary?
+
+    def rep.filter_named(name)
+      Class.new(::Nanoc3::Filter) do
+        type :binary => :text
+        def run(content, params={})
+          "Some textual content"
+        end
+      end
+    end
+    rep.filter(:binary_to_text)
+    assert !rep.binary?
+
+    def rep.filter_named(name)
+      Class.new(::Nanoc3::Filter) do
+        type :text
+        def run(content, params={})
+          "Some textual content"
+        end
+      end
+    end
+    rep.filter(:text_filter)
+    assert !rep.binary?
+  end
+
+  def test_converted_binary_rep_cannot_be_filterd_with_binary_filters
+    item = create_binary_item
+    site = mock_and_stub(
+      :items   => [item],
+      :layouts => [],
+      :config  => []
+    )
+    item.stubs(:site).returns(site)
+    rep = create_rep_for(item, '/foo/')
+    create_binary_filter
+
+    assert rep.binary?
+    def rep.filter_named(name)
+      @filter ||= Class.new(::Nanoc3::Filter) do
+        type :binary => :text
+        def run(content, params={})
+          "Some textual content"
+        end
+      end
+    end
+    rep.filter(:binary_to_text)
+    assert ! rep.binary?
+    assert_raises(Nanoc3::Errors::CannotUseBinaryFilter) { rep.filter(:binary_filter) }
+  end
+
+private
+
+  def create_binary_item
+    Nanoc3::Item.new(
+      "/a/file/name.dat", {}, '/',
+      :binary => true
+    )
+  end
+
+  def mock_and_stub(params)
+    m = mock
+    params.each do |method, return_value|
+      m.stubs(method.to_sym).returns( return_value )
+    end
+    m
+  end
+
+  def create_rep_for(item, name)
+    Nanoc3::ItemRep.new(item, name)
+  end
+
+  def create_textual_filter
+    f = create_filter(:text)
+    f.class_eval do
+      def run(content, params={})
+        ""
+      end
+    end
+    f
+  end
+
+  def create_binary_filter
+    f = create_filter(:binary)
+    f.class_eval do
+      def run(content, params={})
+        File.open(output_filename, 'w') { |io| io.write(content) }
+      end
+    end
+    f
+  end
+
+  def create_filter(type)
+    filter_klass = Class.new(Nanoc3::Filter)
+    filter_klass.type(type)
+    Nanoc3::Filter.register filter_klass, "#{type}_filter".to_sym
+    filter_klass
+  end
+
 end
