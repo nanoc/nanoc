@@ -157,7 +157,7 @@ module Nanoc3
     def recursively_find_vertices(start, method)
       all_vertices = []
 
-      processed_vertices   = []
+      processed_vertices   = Set.new
       unprocessed_vertices = [ start ]
 
       until unprocessed_vertices.empty?
