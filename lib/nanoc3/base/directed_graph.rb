@@ -86,6 +86,19 @@ module Nanoc3
       invalidate_caches
     end
 
+    # Deletes all edges going to the given vertex.
+    #
+    # @param to Vertex to which all edges should be removed
+    #
+    # @return [void]
+    def delete_edges_to(to)
+      @to_graph[to] ||= Set.new
+      @to_graph[to].each do |from|
+        @from_graph[from].delete(to)
+      end
+      @to_graph.delete(to)
+    end
+
     # Returns the direct predecessors of the given vertex, i.e. the vertices
     # x where there is an edge from x to the given vertex y.
     #

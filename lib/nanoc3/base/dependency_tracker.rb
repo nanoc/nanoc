@@ -245,9 +245,7 @@ module Nanoc3
     #
     # @return [void]
     def forget_dependencies_for(item)
-      @graph.vertices.each do |v|
-        @graph.remove_edge(v, item)
-      end
+      @graph.delete_edges_to(item)
     end
 
     # Prints the dependency graph in human-readable form.
