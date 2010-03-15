@@ -406,9 +406,11 @@ module Nanoc3
           new_file.write(b)
 
           # Diff
-          stdin, stdout, stderr = Open3.popen3('diff', '-u', old_file.path, new_file.path)
-          result = stdout.read
-          result == '' ? nil : result
+          cmd = [ 'diff', '-u', old_file.path, new_file.path ]
+          Open3.popen3(*cmd) do |stdin, stdout, stderr|
+            result = stdout.read
+            return (result == '' ? nil : result)
+          end
         end
       end
     rescue Errno::ENOENT
