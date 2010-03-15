@@ -5,9 +5,7 @@ require 'set'
 module Nanoc3
 
   # Represents a directed graph. It is used by the dependency tracker for
-  # storing and querying dependencies between items. Internally, the graph
-  # will be stored as an adjacency matrix. For this, the
-  # {Nanoc3::DirectedGraph::SquareBooleanMatrix} class is used.
+  # storing and querying dependencies between items.
   #
   # @example Creating and using a directed graph
   #
