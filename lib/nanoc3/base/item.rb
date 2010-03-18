@@ -111,14 +111,16 @@ module Nanoc3
     # from which the compiled content should be fetched. By default, the
     # compiled content will be fetched from the default representation.
     #
-    # @option params [String] :snapshot (:last) The name of the snapshot from
-    # which to fetch the compiled content. By default, the fully compiled
-    # content will be fetched, with all filters and layouts applied--not the
-    # pre-layout content.
+    # @option params [String] :snapshot The name of the snapshot from which to
+    # fetch the compiled content. By default, the returned compiled content
+    # will be the content compiled right before the first layout call (if
+    # any).
     #
     # @return [String] The compiled content of the given rep (or the default
     # rep if no rep is specified) at the given snapshot (or the default
     # snapshot if no snapshot is specified)
+    #
+    # @see ItemRep#compiled_content
     def compiled_content(params={})
       # Get rep
       rep_name = params[:rep] || :default
