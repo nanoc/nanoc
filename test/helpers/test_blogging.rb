@@ -11,21 +11,23 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
   def test_articles
     # Create items
-    @items = [ mock, mock, mock ]
-
-    # Create item 0
-    @items[0].expects(:[]).with(:kind).returns('item')
-
-    # Create item 1
-    @items[1].expects(:[]).with(:kind).returns('article')
-    @items[1].expects(:[]).with(:created_at).returns((Time.now - 1000).to_s)
-
-    # Create item 2
-    @items[2].expects(:[]).with(:kind).returns('article')
-    @items[2].expects(:[]).with(:created_at).returns((Time.now - 500).to_s)
-
-    # Get articles
-    articles = sorted_articles
+    @items = [
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'item' },
+        '/0/'
+      ),
+      Nanoc3::Item.new(
+        'blah blah',
+        { :kind => 'article' }, 
+        '/1/'
+      ),
+      Nanoc3::Item.new(
+        'blah blah blah',
+        { :kind => 'article' }, 
+        '/2/'
+      )
+    ]
 
     # Check
     assert_equal(2, articles.size)
@@ -38,26 +40,28 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
   def test_sorted_articles
     # Create items
-    @items = [ mock, mock, mock ]
-
-    # Create item 0
-    @items[0].expects(:[]).with(:kind).returns('item')
-
-    # Create item 1
-    @items[1].expects(:[]).with(:kind).returns('article')
-    @items[1].expects(:[]).with(:created_at).returns('20-05-2008')
-
-    # Create item 2
-    @items[2].expects(:[]).with(:kind).returns('article')
-    @items[2].expects(:[]).with(:created_at).returns(Time.parse('19-04-2009'))
-
-    # Get articles
-    articles = sorted_articles
+    @items = [
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'item' },
+        '/0/'
+      ),
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'article', :created_at => (Time.now - 1000).to_s }, 
+        '/1/'
+      ),
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'article', :created_at => (Time.now - 500).to_s }, 
+        '/2/'
+      )
+    ]
 
     # Check
-    assert_equal(2,         articles.size)
-    assert_equal(@items[2], articles[0])
-    assert_equal(@items[1], articles[1])
+    assert_equal(2,         sorted_articles.size)
+    assert_equal(@items[2], sorted_articles[0])
+    assert_equal(@items[1], sorted_articles[1])
   ensure
     # Cleanup
     @items = nil
@@ -613,14 +617,13 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_url_for_without_custom_path_in_feed
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = mock
-    item.expects(:[]).with(:custom_path_in_feed).returns(nil)
-    item.expects(:path).returns('/foo/bar/')
+    item = Nanoc3::Item.new('content', {}, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+    item.reps[0].path = '/foo/bar/'
 
     # Check
     assert_equal('http://example.com/foo/bar/', url_for(item))
@@ -630,13 +633,13 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_url_for_with_custom_path_in_feed
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = mock
-    item.expects(:[]).with(:custom_path_in_feed).returns('/meow/woof/')
+    item = Nanoc3::Item.new(
+      'content', { :custom_path_in_feed => '/meow/woof/' }, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
 
     # Check
     assert_equal('http://example.com/meow/woof/', url_for(item))
@@ -646,9 +649,8 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_url_for_without_base_url
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({})
+    # Create site
+    @site = Nanoc3::Site.new({})
 
     # Check
     assert_raises(RuntimeError) do
@@ -657,28 +659,26 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_url_for_without_path
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = mock
-    item.expects(:[]).with(:custom_path_in_feed).returns(nil)
-    item.expects(:path).returns(nil)
+    item = Nanoc3::Item.new('content', {}, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+    item.reps[0].path = nil
 
     # Check
     assert_equal(nil, url_for(item))
   end
 
   def test_feed_url_without_custom_feed_url
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
-    # Create feed item
-    @item = mock
-    @item.expects(:[]).with(:feed_url).returns(nil)
-    @item.expects(:path).returns('/foo/bar/')
+    # Create article
+    @item = Nanoc3::Item.new('content', {}, '/foo/')
+    @item.reps << Nanoc3::ItemRep.new(@item, :default)
+    @item.reps[0].path = '/foo/bar/'
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
@@ -688,13 +688,13 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_feed_url_with_custom_feed_url
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
     # Create feed item
-    @item = mock
-    @item.expects(:[]).with(:feed_url).returns('http://example.com/feed/')
+    @item = Nanoc3::Item.new('content', { :feed_url => 'http://example.com/feed/' }, '/foo/')
+    @item.reps << Nanoc3::ItemRep.new(@item, :default)
+    @item.reps[0].path = '/foo/bar/'
 
     # Check
     assert_equal('http://example.com/feed/', feed_url)
@@ -704,9 +704,8 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_feed_url_without_base_url
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({})
+    # Create site
+    @site = Nanoc3::Site.new({})
 
     # Check
     assert_raises(RuntimeError) do
@@ -715,43 +714,38 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   end
 
   def test_atom_tag_for_with_path
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = mock
-    item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:path).returns('/foo/bar/')
+    item = Nanoc3::Item.new('content', { :created_at => '2008-05-19' }, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+    item.reps[0].path = '/foo/bar/'
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
   end
 
   def test_atom_tag_for_without_path
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = mock
-    item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:path).returns(nil)
-    item.expects(:identifier).returns('/baz/qux/')
+    item = Nanoc3::Item.new('content', { :created_at => '2008-05-19' }, '/baz/qux/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/baz/qux/', atom_tag_for(item))
   end
 
   def test_atom_tag_for_with_base_url_in_dir
-    # Mock site
-    @site = mock
-    @site.stubs(:config).returns({ :base_url => 'http://example.com/somedir' })
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com/somedir' })
 
     # Create article
-    item = mock
-    item.expects(:[]).with(:created_at).returns('2008-05-19')
-    item.expects(:path).returns('/foo/bar/')
+    item = Nanoc3::Item.new('content', { :created_at => '2008-05-19' }, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+    item.reps[0].path = '/foo/bar/'
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/somedir/foo/bar/', atom_tag_for(item))
