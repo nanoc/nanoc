@@ -203,8 +203,10 @@ module Nanoc3::CLI
     def handle_option(option)
       case option
       when :version
+        gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
+
         puts "nanoc #{Nanoc3::VERSION} (c) 2007-2010 Denis Defreyne."
-        puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM}"
+        puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM} #{gem_info}"
         exit 0
       when :verbose
         Nanoc3::CLI::Logger.instance.level = :low
