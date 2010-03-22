@@ -192,6 +192,11 @@ module Nanoc3
         snapshot_name ||= :last
       end
 
+      # Check presence of snapshot
+      if @content[snapshot_name].nil?
+        warn "The #{self.inspect} item representation does not have the requested snapshot named #{snapshot_name.inspect}. Are you requesting the correct snapshot? It is not possible to request the compiled content of a binary item representation; if this item is marked as binary even though you believe it should be textual, you may need to add the extension of this item to the site configuration's `text_extensions` array."
+      end
+
       # Get content
       @content[snapshot_name]
     end
