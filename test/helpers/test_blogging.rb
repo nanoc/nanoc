@@ -81,6 +81,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
       @items[1].stubs(:path).returns("/item1/")
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('item 1 content')
@@ -91,6 +92,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[2].stubs(:[]).with(:created_at).returns((Time.now - 750).to_s)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
       @items[2].stubs(:[]).with(:custom_path_in_feed).returns('/item2custom/')
+      @items[2].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[2].stubs(:[]).with(:excerpt).returns('item 2 excerpt')
       @items[2].stubs(:path).returns("/item2/")
       @items[2].expects(:compiled_content).with(:snapshot => :pre).returns('item 2 content')
@@ -126,6 +128,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].stubs(:[]).with(:created_at).returns(Time.now - 1000)
       @items[1].stubs(:[]).with(:title).returns('Item One')
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
       @items[1].stubs(:path).returns("/item1/")
       @items[1].expects(:compiled_content).returns('item 1 content')
@@ -136,6 +139,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[2].stubs(:[]).with(:created_at).returns(Time.now - 1200)
       @items[2].stubs(:[]).with(:title).returns('Item Two')
       @items[2].stubs(:[]).with(:custom_path_in_feed).returns('/item2custom/')
+      @items[2].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[2].stubs(:[]).with(:excerpt).returns('item 2 excerpt')
       @items[2].stubs(:path).returns("/item2/")
       @items[2].expects(:compiled_content).returns('item 2 content')
@@ -344,6 +348,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:path).returns('/item1/')
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
       @items[1].stubs(:path).returns('/asdf/fdsa/')
@@ -381,6 +386,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[1].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[1].stubs(:[]).with(:title).returns('Item One')
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:path).returns('/item1/')
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
       @items[1].stubs(:path).returns('/asdf/fdsa/')
@@ -425,6 +431,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[4].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[4].stubs(:[]).with(:title).returns('Item One')
       @items[4].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[4].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[4].stubs(:[]).with(:path).returns('/item1/')
       @items[4].stubs(:[]).with(:excerpt).returns(nil)
       @items[4].stubs(:path).returns('/asdf/fdsa/')
@@ -457,6 +464,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         article.stubs(:[]).with(:created_at).returns((Time.now - 1000*i).to_s)
         article.stubs(:[]).with(:title).returns("Article #{i}")
         article.stubs(:[]).with(:custom_path_in_feed).returns(nil)
+        article.stubs(:[]).with(:custom_url_in_feed).returns(nil)
         article.stubs(:[]).with(:path).returns("/articles/#{i}/")
         article.stubs(:[]).with(:excerpt).returns(nil)
         article.stubs(:path).returns("/articles/#{i}/")
@@ -493,6 +501,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
         article.stubs(:[]).with(:kind).returns('article')
         article.stubs(:[]).with(:title).returns("Article #{i}")
         article.stubs(:[]).with(:custom_path_in_feed).returns(nil)
+        article.stubs(:[]).with(:custom_url_in_feed).returns(nil)
         article.stubs(:[]).with(:path).returns("/articles/#{i}/")
         article.stubs(:[]).with(:excerpt).returns(nil)
         article.stubs(:path).returns("/articles/#{i}/")
@@ -533,6 +542,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[0].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[0].stubs(:[]).with(:excerpt).returns(nil)
       @items[0].stubs(:path).returns('/item1/')
       @items[0].stubs(:raw_path).returns('output/item1/index.html')
@@ -563,6 +573,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[0].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[0].stubs(:raw_content).returns('some content')
       @items[0].stubs(:path).returns('/item1/')
       @items[0].stubs(:raw_path).returns('output/item1/index.html')
@@ -595,6 +606,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:created_at).returns((Time.now - 1000).to_s)
       @items[0].stubs(:[]).with(:title).returns('Item One')
       @items[0].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[0].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[0].stubs(:[]).with(:excerpt).returns(nil)
       @items[0].stubs(:path).returns(nil)
 
@@ -643,6 +655,22 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal('http://example.com/meow/woof/', url_for(item))
+  ensure
+    # Cleanup
+    @item = nil
+  end
+
+  def test_url_for_with_custom_url_in_feed
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
+
+    # Create article
+    item = Nanoc3::Item.new(
+      'content', { :custom_url_in_feed => 'http://example.org/x' }, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+
+    # Check
+    assert_equal('http://example.org/x', url_for(item))
   ensure
     # Cleanup
     @item = nil
