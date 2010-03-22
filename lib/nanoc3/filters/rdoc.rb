@@ -3,6 +3,12 @@
 module Nanoc3::Filters
   class RDoc < Nanoc3::Filter
 
+    # Runs the content through [RDoc::Markup](http://rdoc.rubyforge.org/RDoc/Markup.html).
+    # This method takes no options.
+    #
+    # @param [String] content The content to filter
+    #
+    # @return [String] The filtered content
     def run(content, params={})
       begin
         # new RDoc

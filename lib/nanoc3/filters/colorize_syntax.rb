@@ -3,8 +3,44 @@
 module Nanoc3::Filters
   class ColorizeSyntax < Nanoc3::Filter
 
+    # The default colorizer to use for a language if the colorizer for that
+    # language is not overridden.
     DEFAULT_COLORIZER = :coderay
 
+    # Syntax-highlights code blocks in the given content. Code blocks should
+    # be enclosed in `pre` elements that contain a `code` element. The code
+    # element should have a class starting with `language-` and followed by
+    # the programming language, as specified by HTML5.
+    #
+    # Options for individual colorizers will be taken from the {#run}
+    # options’ value for the given colorizer. For example, if the filter is
+    # invoked with a `:coderay => coderay_options_hash` option, the
+    # `coderay_options_hash` hash will be passed to the CodeRay colorizer.
+    #
+    # Currently, only the `:coderay` and `:pygmentize` colorizers are
+    # implemented. Additional colorizer implementations are welcome!
+    #
+    # @example Content that will be highlighted
+    #
+    #     <pre><code class="language-ruby">
+    #     def foo
+    #       "asdf"
+    #     end
+    #     </code></pre>
+    #
+    # @example Invoking the filter with custom parameters
+    #
+    #     filter :colorize_syntax,
+    #            :colorizers => { :ruby => :coderay },
+    #            :coderay    => { :line_numbers => :list }
+    #
+    # @param [String] content The content to filter
+    #
+    # @option params [Hash] :colorizers (DEFAULT_COLORIZER) A hash containing
+    #   a mapping of programming languages (symbols, not strings) onto
+    #   colorizers (symbols).
+    #
+    # @return [String] The filtered content
     def run(content, params={})
       require 'nokogiri'
 

@@ -3,6 +3,12 @@
 module Nanoc3::Filters
   class Sass < Nanoc3::Filter
 
+    # Runs the content through [Sass](http://sass-lang.com/).
+    # Parameters passed to this filter will be passed on to Sass.
+    #
+    # @param [String] content The content to filter
+    #
+    # @return [String] The filtered content
     def run(content, params={})
       require 'sass'
 
