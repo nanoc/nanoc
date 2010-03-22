@@ -333,6 +333,9 @@ module Nanoc3
         File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
         @written = true
 
+        # Generate diff
+        generate_diff
+
         # Check if file was modified
         @modified = File.read(self.raw_path) != @old_content
       end
@@ -346,15 +349,13 @@ module Nanoc3
     # content in `diff(1)` format, or nil if there is no previous compiled
     # content
     def diff
-      # Check if content can be diffed
       # TODO allow binary diffs
-      return nil if self.binary?
 
-      # Check if old content exists
-      if @old_content.nil? or self.raw_path.nil?
+      if self.binary?
         nil
       else
-        diff_strings(@old_content, @content[:last])
+         @diff_thread.join if @diff_thread
+        @diff
       end
     end
 
@@ -388,6 +389,18 @@ module Nanoc3
 
       # Done
       [ filter, filter_name, filter_args ]
+    end
+
+    def generate_diff
+      if @old_content.nil? or self.raw_path.nil?
+        @diff = nil
+      else
+        @diff_thread = Thread.new do
+          @diff = diff_strings(@old_content, @content[:last])
+          sleep 2
+          @diff_thread = nil
+        end
+      end
     end
 
     def diff_strings(a, b)
