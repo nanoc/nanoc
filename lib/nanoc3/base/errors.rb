@@ -16,7 +16,7 @@ module Nanoc3
       # @param [String] data_source_name The data source name for which no
       # data source could be found
       def initialize(data_source_name)
-        super("The data source specified in the site's configuration file, #{data_source_name}, does not exist.")
+        super("The data source specified in the site’s configuration file, “#{data_source_name}”, does not exist.")
       end
 
     end
@@ -28,7 +28,7 @@ module Nanoc3
       # @param [String] layout_identifier The layout identifier for which no
       # layout could be found
       def initialize(layout_identifier)
-        super("The site does not have a layout with identifier '#{layout_identifier}'.")
+        super("The site does not have a layout with identifier “#{layout_identifier}”.")
       end
 
     end
@@ -40,7 +40,7 @@ module Nanoc3
       # @param [Symbol] filter_name The filter name for which no filter could
       # be found
       def initialize(filter_name)
-        super("The requested filter, #{filter_name}, does not exist.")
+        super("The requested filter, “#{filter_name}”, does not exist.")
       end
 
     end
@@ -53,7 +53,7 @@ module Nanoc3
       # @param [String] layout_identifier The identifier of the layout for
       # which the filter could not be determined
       def initialize(layout_identifier)
-        super("The filter to be used for the '#{layout_identifier}' could not be determined. Make sure the layout does have a filter.")
+        super("The filter to be used for the “#{layout_identifier}” layout could not be determined. Make sure the layout does have a filter.")
       end
 
     end
@@ -104,7 +104,7 @@ module Nanoc3
       # @param [Nanoc3::Item] item The item for which no compilation rule
       # could be found
       def initialize(item)
-        super("No compilation rules were found for the '#{item.identifier}' item.")
+        super("No compilation rules were found for the “#{item.identifier}” item.")
       end
 
     end
@@ -116,7 +116,7 @@ module Nanoc3
       # @param [Nanoc3::Item] item The item for which no routing rule could be
       # found
       def initialize(rep)
-        super("No routing rules were found for the '#{rep.item.identifier}' item (rep '#{rep.name}').")
+        super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
       end
 
     end
@@ -133,7 +133,7 @@ module Nanoc3
       # compiled
       def initialize(rep)
         @rep = rep
-        super("The '#{rep.item.identifier}' item (rep '#{rep.name}') cannot currently be compiled yet due to an unmet dependency.")
+        super("The “#{rep.item.identifier}” item (rep “#{rep.name}”) cannot currently be compiled yet due to an unmet dependency.")
       end
 
     end
@@ -144,7 +144,7 @@ module Nanoc3
       # @param [Nanoc3::ItemRep] The item representation that was attempted to
       # be laid out
       def initialize(rep)
-        super("The '#{rep.item.identifier}' item (rep '#{rep.name}') cannot be laid out because it is a binary item.")
+        super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item.")
       end
 
     end
