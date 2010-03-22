@@ -64,6 +64,11 @@ module Nanoc3::Helpers
     #   non-outputted items in a feed; such items could have their custom feed
     #   path set to the blog path instead, for example.
     #
+    # * `custom_url_in_feed` — The url that will be used instead of the
+    #   normal url in the feed (generated from the site’s base url + the item
+    #   rep’s path). This can be useful when building a link-blog where the
+    #   URL of article is a remote location.
+    #
     # * `updated_at` — The time when the article was last modified. If this
     #   attribute is not present, the `created_at` attribute will be used as
     #   the time when the article was last modified.
@@ -255,12 +260,14 @@ module Nanoc3::Helpers
         raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      # Get path
-      path = item[:custom_path_in_feed] || item.path
-      return nil if path.nil?
-
       # Build URL
-      @site.config[:base_url] + path
+      if item[:custom_url_in_feed]
+        item[:custom_url_in_feed]
+      elsif item[:custom_path_in_feed]
+        @site.config[:base_url] + item[:custom_path_in_feed]
+      elsif item.path
+        @site.config[:base_url] + item.path
+      end
     end
 
     # Returns the URL of the feed. It will return the custom feed URL if set,
