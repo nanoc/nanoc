@@ -312,7 +312,7 @@ EOS
       FileUtils.mkdir_p('output')
 
       # Create config
-      File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
+      File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG.make_compatible_with_env) }
       Nanoc3::NotificationCenter.post(:file_created, 'config.yaml')
 
       # Create rakefile
@@ -323,7 +323,7 @@ EOS
 
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write DEFAULT_RULES
+        io.write DEFAULT_RULES.make_compatible_with_env
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rules')
     end
@@ -349,14 +349,14 @@ EOS
 
       # Create home page
       data_source.create_item(
-        DEFAULT_ITEM,
+        DEFAULT_ITEM.make_compatible_with_env,
         { :title => "Home" },
         '/'
       )
 
       # Create stylesheet
       data_source.create_item(
-        DEFAULT_STYLESHEET,
+        DEFAULT_STYLESHEET.make_compatible_with_env,
         {},
         '/stylesheet/',
         :extension => '.css'
@@ -364,7 +364,7 @@ EOS
 
       # Create layout
       data_source.create_layout(
-        DEFAULT_LAYOUT,
+        DEFAULT_LAYOUT.make_compatible_with_env,
         {},
         '/default/'
       )
