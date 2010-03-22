@@ -6,11 +6,23 @@ module Nanoc3::Filters
     require 'nanoc3/helpers/link_to'
     include Nanoc3::Helpers::LinkTo
 
+    # Relativizes all paths in the given content, which can be either HTML or
+    # CSS. This filter is quite useful if a site needs to be hosted in a
+    # subdirectory instead of a subdomain. In HTML, all `href` and `src`
+    # attributes will be relativized. In CSS, all `url()` references will be
+    # relativized.
+    #
+    # @param [String] content The content to filter
+    #
+    # @option params [Symbol] :type The type of content to filter; can be either `:html` or `:css`.
+    #
+    # @return [String] The filtered content
     def run(content, params={})
       # Set assigns so helper function can be used
       @item_rep = assigns[:item_rep] if @item_rep.nil?
 
       # Filter
+      # TODO use nokogiri or csspool instead of regular expressions
       case params[:type]
       when :html
         content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/.*?)\3([ >])/) do
