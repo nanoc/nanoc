@@ -66,6 +66,11 @@ module Nanoc3::CLI::Commands
         puts "  representations:"
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           puts "    #{rep.name} -> #{rep.raw_path || '(not written)'}"
+
+          outdatedness_reason = rep.outdatedness_reason
+          if outdatedness_reason
+            puts "      outdated: #{outdatedness_reason[:type]} (#{outdatedness_reason[:description]})"
+          end
         end
 
         # Done
