@@ -3,7 +3,7 @@
 module Nanoc3
 
   # The current nanoc version.
-  VERSION = '3.1.0b2'
+  VERSION = '3.2.0a1'
 
 end
 
