@@ -20,6 +20,29 @@ module Nanoc3
   # representation, and a symbol containing the filter class name).
   class ItemRep
 
+    # The descriptive strings for each outdatedness reason. This hash is used
+    # by the {#outdatedness_reason} method.
+    OUTDATEDNESS_REASON_DESCRIPTIONS = {
+      :no_mtime => 'No file modification time is available.',
+      :forced => 'All pages are recompiled because of a `--force` flag given
+      to the compilation command.',
+      :no_raw_path => 'The routing rules do not specify a path where this
+      item should be written to, i.e. the item representation will never be
+      written to the output directory.',
+      :not_written => 'This item representation has not yet been written to
+      the output directory (but it does have a path).',
+      :source_modified => 'The source file of this item has been modified
+      since the last time this item representation was compiled.',
+      :layouts_outdated => 'The source of one or more layouts has been
+      modified since the last time this item representation was compiled.',
+      :code_outdated => 'The code snippets in the `lib/` directory have been
+      modified since the last time this item representation was compiled.',
+      :config_outdated => 'The site configuration has been modified since the
+      last time this item representation was compiled.',
+      :rules_outdated => 'The rules file has been modified since the last
+      time this item representation was compiled.',
+    }
+
     # @return [Nanoc3::Item] The item to which this rep belongs
     attr_reader   :item
 
@@ -105,44 +128,72 @@ module Nanoc3
       @force_outdated = false
     end
 
+    # Calculates the reason why this item representation is outdated. The
+    # output will be a hash with a `:type` key, containing the reason why the
+    # item is outdated in the form of a symbol, and a `:description` key,
+    # containing a descriptive string that can be printed if necessary.
+    #
+    # For documentation on the types that this method can return, check the
+    # {OUTDATEDNESS_REASON_DESCRIPTIONS} hash in this class.
+    #
+    # @return [Hash, nil] A hash containing the reason why this item rep is
+    #   outdated, both in the form of a symbol and as a descriptive string, or
+    #   nil if the item representation is not outdated.
+    def outdatedness_reason
+      # Get reason symbol
+      reason = lambda do
+        # Outdated if we don't know
+        return :no_mtime if @item.mtime.nil?
+
+        # Outdated if the dependency tracker says so
+        return :forced if @force_outdated
+
+        # Outdated if compiled file doesn't exist (yet)
+        return :no_raw_path if self.raw_path.nil?
+        return :not_written if !File.file?(self.raw_path)
+
+        # Get compiled mtime
+        compiled_mtime = File.stat(self.raw_path).mtime
+
+        # Outdated if file too old
+        return :source_modified if @item.mtime > compiled_mtime
+
+        # Outdated if layouts outdated
+        return :layouts_outdated if @item.site.layouts.any? do |l|
+          l.mtime.nil? || l.mtime > compiled_mtime
+        end
+
+        # Outdated if code outdated
+        return :code_outdated if @item.site.code_snippets.any? do |cs|
+          cs.mtime.nil? || cs.mtime > compiled_mtime
+        end
+
+        # Outdated if config outdated
+        return :config_outdated if @item.site.config_mtime.nil?
+        return :config_outdated if @item.site.config_mtime > compiled_mtime
+
+        # Outdated if rules outdated
+        return :rules_outdated if @item.site.rules_mtime.nil?
+        return :rules_outdated if @item.site.rules_mtime > compiled_mtime
+
+        return nil
+      end[]
+
+      # Build reason symbol and description
+      if reason.nil?
+        nil
+      else
+        {
+          :type        => reason,
+          :description => OUTDATEDNESS_REASON_DESCRIPTIONS[reason]
+        }
+      end
+    end
+
     # @return [Boolean] true if this item rep's output file is outdated and
     # must be regenerated, false otherwise
     def outdated?
-      # Outdated if we don't know
-      return true if @item.mtime.nil?
-
-      # Outdated if the dependency tracker says so
-      return true if @force_outdated
-
-      # Outdated if compiled file doesn't exist
-      return true if self.raw_path.nil?
-      return true if !File.file?(self.raw_path)
-
-      # Get compiled mtime
-      compiled_mtime = File.stat(self.raw_path).mtime
-
-      # Outdated if file too old
-      return true if @item.mtime > compiled_mtime
-
-      # Outdated if layouts outdated
-      return true if @item.site.layouts.any? do |l|
-        l.mtime.nil? || l.mtime > compiled_mtime
-      end
-
-      # Outdated if code outdated
-      return true if @item.site.code_snippets.any? do |cs|
-        cs.mtime.nil? || cs.mtime > compiled_mtime
-      end
-
-      # Outdated if config outdated
-      return true if @item.site.config_mtime.nil?
-      return true if @item.site.config_mtime > compiled_mtime
-
-      # Outdated if rules outdated
-      return true if @item.site.rules_mtime.nil?
-      return true if @item.site.rules_mtime > compiled_mtime
-
-      return false
+      !outdatedness_reason.nil?
     end
 
     # @return [Hash] The assignments that should be available when compiling
