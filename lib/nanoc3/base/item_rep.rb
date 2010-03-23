@@ -24,23 +24,14 @@ module Nanoc3
     # by the {#outdatedness_reason} method.
     OUTDATEDNESS_REASON_DESCRIPTIONS = {
       :no_mtime => 'No file modification time is available.',
-      :forced => 'All pages are recompiled because of a `--force` flag given
-      to the compilation command.',
-      :no_raw_path => 'The routing rules do not specify a path where this
-      item should be written to, i.e. the item representation will never be
-      written to the output directory.',
-      :not_written => 'This item representation has not yet been written to
-      the output directory (but it does have a path).',
-      :source_modified => 'The source file of this item has been modified
-      since the last time this item representation was compiled.',
-      :layouts_outdated => 'The source of one or more layouts has been
-      modified since the last time this item representation was compiled.',
-      :code_outdated => 'The code snippets in the `lib/` directory have been
-      modified since the last time this item representation was compiled.',
-      :config_outdated => 'The site configuration has been modified since the
-      last time this item representation was compiled.',
-      :rules_outdated => 'The rules file has been modified since the last
-      time this item representation was compiled.',
+      :forced => 'All pages are recompiled because of a `--force` flag given to the compilation command.',
+      :no_raw_path => 'The routing rules do not specify a path where this item should be written to, i.e. the item representation will never be written to the output directory.',
+      :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
+      :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
+      :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
+      :code_outdated => 'The code snippets in the `lib/` directory have been modified since the last time this item representation was compiled.',
+      :config_outdated => 'The site configuration has been modified since the last time this item representation was compiled.',
+      :rules_outdated => 'The rules file has been modified since the last time this item representation was compiled.',
     }
 
     # @return [Nanoc3::Item] The item to which this rep belongs
