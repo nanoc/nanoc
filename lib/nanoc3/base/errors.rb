@@ -144,7 +144,7 @@ module Nanoc3
       # @param [Nanoc3::ItemRep] The item representation that was attempted to
       # be laid out
       def initialize(rep)
-        super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item.".make_compatible_with_env)
+        super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.".make_compatible_with_env)
       end
 
     end
@@ -172,7 +172,7 @@ module Nanoc3
       #
       # @param [Class] filter_class The filter class that was used
       def initialize(rep, filter_class)
-        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items.".make_compatible_with_env)
+        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.".make_compatible_with_env)
       end
 
     end
