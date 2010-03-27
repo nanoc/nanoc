@@ -39,10 +39,11 @@ module Nanoc3
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
-      :text_extensions => %w( css erb haml htm html js less markdown md php rb sass txt ),
-      :output_dir      => 'output',
-      :data_sources    => [ {} ],
-      :index_filenames => [ 'index.html' ]
+      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass txt ),
+      :output_dir         => 'output',
+      :data_sources       => [ {} ],
+      :index_filenames    => [ 'index.html' ],
+      :enable_output_diff => false
     }
 
     # The site configuration. The configuration has the following keys:
@@ -64,6 +65,9 @@ module Nanoc3
     #   stripped off full item paths to create cleaner URLs. For example,
     #   `/about/` will be used instead of `/about/index.html`). The default
     #   value should be okay in most cases.
+    #
+    # * `enable_output_diff` ({Boolean}) - True when diffs should be generated
+    #   for the compiled content of this site; false otherwise.
     #
     # The list of data sources consists of hashes with the following keys:
     #
