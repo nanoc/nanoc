@@ -57,10 +57,8 @@ module Nanoc3::Filters
       end
 
       # Require compilation of each item
-      puts "imported items: #{imported_items}"
       imported_items.each do |item|
         any_uncompiled_rep = item.reps.find { |r| !r.compiled? }
-        p any_uncompiled_rep
         raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
       end
 
