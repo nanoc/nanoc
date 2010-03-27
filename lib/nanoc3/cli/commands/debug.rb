@@ -47,31 +47,45 @@ module Nanoc3::CLI::Commands
       dependency_tracker = @base.site.compiler.send(:dependency_tracker)
       dependency_tracker.load_graph
 
-      # Print items
-      puts '=== Items'
+      # Print item dependencies
+      puts '=== Item dependencies ======================================================='
       puts
-      row = 0
       items.sort_by { |i| i.identifier }.each do |item|
-        puts "item #{item.identifier}:"
-
-        # Print item dependencies
-        puts "  dependencies:"
+        puts "item #{item.identifier} depends on:"
         predecessors = dependency_tracker.direct_predecessors_of(item).sort_by { |i| i.identifier }
         predecessors.each do |pred|
-          puts "    #{pred.identifier}"
+          puts "  #{pred.identifier}"
         end
-        puts "    (nothing)" if predecessors.empty?
-
-        # Print item representations
-        puts "  representations:"
-        item.reps.sort_by { |r| r.name.to_s }.each do |rep|
-          puts "    #{rep.name} -> #{rep.raw_path || '(not written)'}"
-        end
-
-        # Done
+        puts "  (nothing)" if predecessors.empty?
         puts
       end
+
+      # Print representation paths
+      puts '=== Representation paths ===================================================='
       puts
+      items.sort_by { |i| i.identifier }.each do |item|
+        item.reps.sort_by { |r| r.name.to_s }.each do |rep|
+          puts "item #{item.identifier}, rep #{rep.name}:"
+          puts "  #{rep.raw_path || '(not written)'}"
+        end
+        puts
+      end
+
+      # Print representation outdatedness
+      puts '=== Representation outdatedness ============================================='
+      puts
+      items.sort_by { |i| i.identifier }.each do |item|
+        item.reps.sort_by { |r| r.name.to_s }.each do |rep|
+          puts "item #{item.identifier}, rep #{rep.name}:"
+          outdatedness_reason = rep.outdatedness_reason
+          if outdatedness_reason
+            puts "  is outdated: #{outdatedness_reason[:type]} (#{outdatedness_reason[:description]})"
+          else
+            puts "  is not outdated"
+          end
+        end
+        puts
+      end
 
       # Print layouts
       puts '=== Layouts'
