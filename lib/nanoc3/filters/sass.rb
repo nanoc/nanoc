@@ -12,11 +12,60 @@ module Nanoc3::Filters
     def run(content, params={})
       require 'sass'
 
+      # Add imported_filename read accessor to ImportNode
+      # … but… but… nex3 said I could monkey patch it! :(
+      methods = ::Sass::Tree::ImportNode.instance_methods
+      if !methods.include?(:import_filename) && !methods.include?('import_filename')
+        ::Sass::Tree::ImportNode.send(:attr_reader, :imported_filename)
+      end
+
       # Get options
       options = params.merge(:filename => filename)
 
-      # Get result
-      ::Sass::Engine.new(content, options).render
+      # Build engine
+      engine = ::Sass::Engine.new(content, options)
+
+      # Get import nodes
+      require 'set'
+      imported_nodes = []
+      unprocessed_nodes = Set.new([ engine.to_tree ])
+      until unprocessed_nodes.empty?
+        # Get an unprocessed node
+        node = unprocessed_nodes.each { |n| break n }
+        unprocessed_nodes.delete(node)
+
+        # Add to list of import nodes if necessary
+        imported_nodes << node if node.is_a?(::Sass::Tree::ImportNode)
+
+        # Mark children of this node for processing
+        node.children.each { |c| unprocessed_nodes << c }
+      end
+
+      # Get import paths
+      import_paths = (options[:load_paths] || []).dup
+      import_paths.unshift(File.dirname(options[:filename])) if options[:filename]
+
+      # Get imported filenames
+      imported_filenames = imported_nodes.map do |node|
+        ::Sass::Files.find_file_to_import(node.imported_filename, import_paths)
+      end
+
+      # Convert to items
+      imported_items = imported_filenames.map do |filename|
+        normalized_filename = Pathname.new(filename).realpath
+        @items.find { |i| Pathname.new(i[:filename]).realpath == normalized_filename }
+      end
+
+      # Require compilation of each item
+      puts "imported items: #{imported_items}"
+      imported_items.each do |item|
+        any_uncompiled_rep = item.reps.find { |r| !r.compiled? }
+        p any_uncompiled_rep
+        raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
+      end
+
+      # Done
+      engine.render
     end
 
   end
