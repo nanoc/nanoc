@@ -47,6 +47,11 @@ module Nanoc3
 
     # The site configuration. The configuration has the following keys:
     #
+    # * `text_extensions` ({Array<String>}) - A list of file extensions that
+    #   will cause nanoc to threat the file as textual instead of binary. When
+    #   the data source finds a content file with an extension that is
+    #   included in this list, it will be marked as textual.
+    #
     # * `output_dir` ({String}) - The directory to which compiled items will
     #   be written. This path is relative to the current working directory,
     #   but can also be an absolute path.
