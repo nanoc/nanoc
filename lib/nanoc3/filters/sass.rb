@@ -58,6 +58,11 @@ module Nanoc3::Filters
 
       # Require compilation of each item
       imported_items.each do |item|
+        # Notify
+        Nanoc3::NotificationCenter.post(:visit_started, item)
+        Nanoc3::NotificationCenter.post(:visit_ended,   item)
+
+        # Raise unmet dependency error if item is not yet compiled
         any_uncompiled_rep = item.reps.find { |r| !r.compiled? }
         raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
       end
