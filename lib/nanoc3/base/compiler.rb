@@ -59,7 +59,6 @@ module Nanoc3
 
       # Load dependencies
       dependency_tracker.load_graph
-      dependency_tracker.print_graph if $DEBUG
 
       # Get items and reps to compile
       if item
