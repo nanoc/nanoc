@@ -128,6 +128,13 @@ module Nanoc3::CLI::Commands
     end
 
     def write_diff_for(reps)
+      # Delete diff
+      FileUtils.rm('output.diff') if File.file?('output.diff')
+
+      # Don’t generate diffs when diffs are disabled
+      return if !@base.site.config[:enable_output_diff]
+
+      # Generate diff
       full_diff = ''
       reps.each do |rep|
         diff = rep.diff

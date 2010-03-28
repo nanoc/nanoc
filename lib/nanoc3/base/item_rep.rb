@@ -396,8 +396,6 @@ module Nanoc3
     # content in `diff(1)` format, or nil if there is no previous compiled
     # content
     def diff
-      # TODO allow binary diffs
-
       if self.binary?
         nil
       else
@@ -439,7 +437,7 @@ module Nanoc3
     end
 
     def generate_diff
-      if @old_content.nil? or self.raw_path.nil?
+      if @old_content.nil? || self.raw_path.nil? || !@item.site.config[:enable_output_diff]
         @diff = nil
       else
         @diff_thread = Thread.new do
@@ -451,10 +449,6 @@ module Nanoc3
     end
 
     def diff_strings(a, b)
-      # TODO Rewrite this string-diffing method in pure Ruby. It should not
-      # use the "diff" executable, because this will most likely not work on
-      # operating systems without it, such as Windows.
-
       require 'tempfile'
       require 'open3'
 

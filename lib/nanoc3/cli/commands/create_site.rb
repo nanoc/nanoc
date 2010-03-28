@@ -32,6 +32,11 @@ output_dir: #{Nanoc3::Site::DEFAULT_CONFIG[:output_dir]}
 # such as “default.htm”. This list is used by nanoc to generate pretty URLs.
 index_filenames: #{array_to_yaml(Nanoc3::Site::DEFAULT_CONFIG[:index_filenames])}
 
+# Whether or not to generate a diff of the compiled content when compiling a
+# site. The diff will contain the differences between the compiled content
+# before and after the last site compilation.
+enable_output_diff: false
+
 # The data sources where nanoc loads its data from. This is an array of
 # hashes; each array element represents a single data source. By default,
 # there is only a single data source that reads data from the “content/” and
