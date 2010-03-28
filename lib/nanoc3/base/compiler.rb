@@ -176,7 +176,7 @@ module Nanoc3
 
         # Retry
         if inactive_reps.empty?
-          puts "*** Nothing left to compile!"
+          puts "*** Nothing left to compile!" if $DEBUG
           break
         else
           puts "*** No active reps left; activating all (#{inactive_reps.size}) inactive reps" if $DEBUG
