@@ -396,8 +396,6 @@ module Nanoc3
     # content in `diff(1)` format, or nil if there is no previous compiled
     # content
     def diff
-      return nil if !@item.site.config[:enable_output_diff]
-
       if self.binary?
         nil
       else
@@ -439,7 +437,7 @@ module Nanoc3
     end
 
     def generate_diff
-      if @old_content.nil? or self.raw_path.nil?
+      if @old_content.nil? || self.raw_path.nil? || !@item.site.config[:enable_output_diff]
         @diff = nil
       else
         @diff_thread = Thread.new do
