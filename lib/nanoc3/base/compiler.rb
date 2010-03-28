@@ -215,8 +215,9 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      if !rep.outdated? && get_cached_compiled_content_for(rep)
+      if !rep.outdated? && !rep.item.outdated_due_to_dependencies && get_cached_compiled_content_for(rep)
         # Load content from cache if possible
+        puts "Using cached compiled content for #{rep.inspect} instead of recompiling" if $DEBUG
         cached_compiled_content = get_cached_compiled_content_for(rep)
         # FIXME don’t use instance_eval
         rep.instance_eval { @content = cached_compiled_content }
