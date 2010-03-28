@@ -124,10 +124,13 @@ module Nanoc3::DataSources
           raise RuntimeError, "meta_mtime and content_mtime are both nil"
         end
 
+        # Get checksum
+        checksum = checksum_for([ meta_filename, content_filename ].compact)
+
         # Create layout object
         klass.new(
           content_or_filename, attributes, identifier,
-          :binary => is_binary, :mtime => mtime
+          :binary => is_binary, :mtime => mtime, :checksum => checksum
         )
       end
     end
@@ -257,6 +260,20 @@ module Nanoc3::DataSources
 
       # Done
       [ meta, content ]
+    end
+
+    # Returns a checksum of the given filenames
+    def checksum_for(*filenames)
+      filenames.flatten.map do |filename|
+        digest = Digest::SHA1.new
+        File.open(filename, 'r') do |io|
+          until io.eof
+            data = io.readpartial(2**10)
+            digest.update(data)
+          end
+        end
+        digest.hexdigest
+      end.join('-')
     end
 
   end

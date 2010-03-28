@@ -46,6 +46,9 @@ module Nanoc3
       :enable_output_diff => false
     }
 
+    # The name of the file where checksums will be stored.
+    CHECKSUMS_FILE_NAME = 'tmp/checksums'
+
     # The site configuration. The configuration has the following keys:
     #
     # * `text_extensions` ({Array<String>}) - A list of file extensions that
@@ -89,12 +92,20 @@ module Nanoc3
     # @return [Hash] The site configuration
     attr_reader :config
 
-    # @return [Time] The timestamp when the site configuration was last
-    # modified
-    attr_reader :config_mtime
+    # @return [String] The checksum of the site configuration that was in
+    #   effect during the previous site compilation
+    attr_accessor :old_config_checksum
 
-    # @return [Time] The timestamp when the rules were last modified
-    attr_reader :rules_mtime
+    # @return [String] The current, up-to-date checksum of the site
+    #   configuration
+    attr_reader   :new_config_checksum
+
+    # @return [String] The checksum of the rules file that was in effect
+    #   during the previous site compilation
+    attr_accessor :old_rules_checksum
+
+    # @return [String] The current, up-to-date checksum of the rules file
+    attr_reader   :new_rules_checksum
 
     # @return [Proc] The code block that will be executed after all data is
     # loaded but before the site is compiled
@@ -106,6 +117,8 @@ module Nanoc3
     # @param [Hash, String] dir_or_config_hash If a string, contains the path
     # to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
+      @new_checksums = {}
+
       build_config(dir_or_config_hash)
 
       @code_snippets_loaded = false
@@ -223,6 +236,18 @@ module Nanoc3
       @layouts
     end
 
+    # Stores the checksums into the checksums file.
+    #
+    # @return [void]
+    def store_checksums
+      # Store
+      FileUtils.mkdir_p(File.dirname(CHECKSUMS_FILE_NAME))
+      store = PStore.new(CHECKSUMS_FILE_NAME)
+      store.transaction do
+        store[:checksums] = @new_checksums || {}
+      end
+    end
+
   private
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
@@ -240,8 +265,14 @@ module Nanoc3
         Nanoc3::CodeSnippet.new(
           File.read(filename),
           filename,
-          File.stat(filename).mtime
+          :checksum => checksum_for(filename)
         )
+      end
+
+      # Set checksums
+      @code_snippets.each do |cs|
+        cs.old_checksum = old_checksum_for(:code_snippet, cs.filename)
+        @new_checksums[ [ :code_snippet, cs.filename ] ] = cs.new_checksum
       end
 
       # Execute code snippets
@@ -257,8 +288,10 @@ module Nanoc3
       raise Nanoc3::Errors::NoRulesFileFound.new if rules_filename.nil?
 
       # Get rule data
-      @rules       = File.read(rules_filename)
-      @rules_mtime = File.stat(rules_filename).mtime
+      @rules = File.read(rules_filename)
+      @new_rules_checksum = checksum_for(rules_filename)
+      @old_rules_checksum = old_checksum_for(:misc, 'Rules')
+      @new_checksums[ [ :misc, 'Rules' ] ] = @new_rules_checksum
 
       # Load DSL
       dsl.instance_eval(@rules, "./#{rules_filename}")
@@ -274,6 +307,12 @@ module Nanoc3
         @items.concat(items_in_ds)
       end
 
+      # Set checksums
+      @items.each do |i|
+        i.old_checksum = old_checksum_for(:item, i.identifier)
+        @new_checksums[ [ :item, i.identifier ] ] = i.new_checksum
+      end
+
       @items_loaded = true
     end
 
@@ -284,6 +323,12 @@ module Nanoc3
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts.concat(layouts_in_ds)
+      end
+
+      # Set checksums
+      @layouts.each do |l|
+        l.old_checksum = old_checksum_for(:layout, l.identifier)
+        @new_checksums[ [ :layout, l.identifier ] ] = l.new_checksum
       end
 
       @layouts_loaded = true
@@ -361,19 +406,24 @@ module Nanoc3
     end
 
     # Builds the configuration hash based on the given argument. Also see
-    # #initialize for details.
+    # {#initialize} for details.
     def build_config(dir_or_config_hash)
       if dir_or_config_hash.is_a? String
         # Read config from config.yaml in given dir
         config_path = File.join(dir_or_config_hash, 'config.yaml')
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
         @config[:data_sources].map! { |ds| ds.symbolize_keys }
-        @config_mtime = File.stat(config_path).mtime
+
+        @new_config_checksum = checksum_for('config.yaml')
+        @new_checksums[ [ :misc, 'config.yaml' ] ] = @new_config_checksum
       else
         # Use passed config hash
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
-        @config_mtime = nil
+        @new_config_checksum = nil
       end
+
+      # Build checksum
+      @old_config_checksum = old_checksum_for(:misc, 'config.yaml')
 
       # Merge data sources with default data source config
       @config[:data_sources].map! { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
@@ -387,6 +437,54 @@ module Nanoc3
         :items   => self.items,
         :layouts => self.layouts
       })
+    end
+
+    # Returns the checksums, loads the checksums from the cached checksums
+    # file first if necessary. The checksums returned is a hash in th following
+    # format:
+    #
+    #     {
+    #       [ :layout,       '/identifier/'    ] => checksum,
+    #       [ :item,         '/identifier/'    ] => checksum,
+    #       [ :code_snippet, 'lib/filename.rb' ] => checksum,
+    #     }
+    def checksums
+      return @checksums if @checksums_loaded
+
+      if !File.file?(CHECKSUMS_FILE_NAME)
+        @checksums = {}
+      else
+        require 'pstore'
+        store = PStore.new(CHECKSUMS_FILE_NAME)
+        store.transaction do
+          @checksums = store[:checksums] || {}
+        end
+      end
+
+      @checksums_loaded = true
+      @checksums
+    end
+
+    # Returns the old checksum for the given object.
+    def old_checksum_for(type, identifier)
+      key = [ type, identifier ]
+      checksums[key]
+    end
+
+    # Returns a checksum of the given filenames
+    # FIXME duplicated
+    def checksum_for(*filenames)
+      require 'digest'
+      filenames.flatten.map do |filename|
+        digest = Digest::SHA1.new
+        File.open(filename, 'r') do |io|
+          until io.eof
+            data = io.readpartial(2**10)
+            digest.update(data)
+          end
+        end
+        digest.hexdigest
+      end.join('-')
     end
 
   end

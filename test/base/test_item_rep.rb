@@ -11,355 +11,353 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_not_outdated
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
+
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+
+    # Mock site
+    site = mock
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code_snippets).returns(code_snippets)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
+
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :mtime => Time.now-500
+      :checksum => 'i:aaa'
     )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(Time.now-1100)
-    site.stubs(:rules_mtime).returns(Time.now-1200)
+    item.old_checksum = 'i:aaa'
     item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-100, Time.now-200, 'output.html')
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    refute(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_nil rep.outdatedness_reason
   end
 
-  def test_outdated_if_mtime_nil
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/'
-    )
-
+  def test_outdated_if_item_checksum_nil
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-100, Time.now-200, 'output.html')
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:aaa'
+    )
+    item.old_checksum = nil
+    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :not_enough_data, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_force_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :mtime => Time.now-500, :binary => false
-    )
-
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-100, Time.now-200, 'output.html')
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:aaa'
+    )
+    item.old_checksum = 'i:aaa'
+    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-    rep.instance_eval { @force_outdated = true }
+    rep.raw_path = 'moo.html'
+    rep.force_outdated = true
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :forced, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_compiled_file_doesnt_exist
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
+
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:aaa'
+    )
+    item.old_checksum = 'i:aaa'
     item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Check
+    assert !File.file?('moo.html')
+    assert_equal :not_written, (rep.outdatedness_reason || {})[:type]
   end
 
-  def test_outdated_if_source_file_too_old
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-100
-    )
-
+  def test_outdated_if_item_checksum_is_different
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-500, Time.now-600, 'output.html')
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:bbb'
+    )
+    item.old_checksum = 'i:aaa'
+    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :source_modified, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_layouts_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-100)
+    layouts[0].stubs(:new_checksum).returns('l:bbb')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:aaa'
+    )
+    item.old_checksum = 'i:aaa'
+    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :layouts_outdated, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_code_snippets_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-100)
+    code_snippets[0].stubs(:new_checksum).returns('cs:bbb')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:aaa'
+    )
+    item.old_checksum = 'i:aaa'
+    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :code_outdated, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_config_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(Time.now-100)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:bbb')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:aaa')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_config_mtime_missing
     # Mock item
     item = Nanoc3::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :checksum => 'i:aaa'
     )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(nil)
+    item.old_checksum = 'i:aaa'
     item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :config_outdated, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_rules_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
+    layouts[0].stubs(:new_checksum).returns('l:aaa')
+    layouts[0].stubs(:old_checksum).returns('l:aaa')
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
+    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(Time.now-1100)
-    site.stubs(:rules_mtime).returns(Time.now-100)
-    item.stubs(:site).returns(site)
+    site.stubs(:new_config_checksum).returns('co:aaa')
+    site.stubs(:old_config_checksum).returns('co:aaa')
+    site.stubs(:new_rules_checksum).returns('r:bbb')
+    site.stubs(:old_rules_checksum).returns('r:aaa')
 
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
+    # Mock item
+    item = Nanoc3::Item.new(
+      'blah blah blah', {}, '/',
+      :checksum => 'i:aaa'
+    )
+    item.old_checksum = 'i:aaa'
+    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
+    rep.raw_path = 'moo.html'
 
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    assert_equal :rules_outdated, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_compiled_content_with_only_last_available
