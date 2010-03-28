@@ -175,10 +175,15 @@ module Nanoc3
         end
 
         # Retry
-        puts "*** No active reps left; activating all (#{inactive_reps.size}) inactive reps" if $DEBUG
-        puts if $DEBUG
-        active_reps   = inactive_reps
-        inactive_reps = []
+        if inactive_reps.empty?
+          puts "*** Nothing left to compile!"
+          break
+        else
+          puts "*** No active reps left; activating all (#{inactive_reps.size}) inactive reps" if $DEBUG
+          puts if $DEBUG
+          active_reps   = inactive_reps
+          inactive_reps = []
+        end
       end
 
       # Notify skipped reps
