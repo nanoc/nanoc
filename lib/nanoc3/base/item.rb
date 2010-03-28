@@ -16,8 +16,15 @@ module Nanoc3
     # @return [String] This item's identifier
     attr_accessor :identifier
 
-    # @return [Time] The time when this item was last modified
+    # @return [Time] The time where this item was last modified
     attr_reader   :mtime
+
+    # @return [String] The checksum of this item that was in effect during the
+    #   previous site compilation
+    attr_accessor :old_checksum
+
+    # @return [String] The current, up-to-date checksum of this item
+    attr_reader   :new_checksum
 
     # @return [Array<Nanoc3::ItemRep>] This item’s list of item reps
     attr_reader   :reps
@@ -45,10 +52,6 @@ module Nanoc3
     # Creates a new item with the given content or filename, attributes and
     # identifier.
     #
-    # Note that the API in 3.1 has changed a bit since 3.0; the API remains
-    # backwards compatible, however. Passing the modification time as the 4th
-    # parameter is deprecated; pass it as the `:mtime` method option instead.
-    #
     # @param [String] raw_content_or_raw_filename The uncompiled item content
     # (if it is a textual item) or the path to the filename containing the
     # content (if it is a binary item).
@@ -57,24 +60,24 @@ module Nanoc3
     #
     # @param [String] identifier This item's identifier.
     #
-    # @param [Time, Hash, nil] params_or_mtime Extra parameters for the item,
-    # or the time when this item was last modified (deprecated).
+    # @param [Time, Hash] params Extra parameters. For backwards
+    #   compatibility, this can be a Time instance indicating the time when
+    #   this item was last modified (mtime).
     #
-    # @option params_or_mtime [Time, nil] :mtime (nil) The time when this item
-    # was last modified
+    # @option params [Time, nil] :mtime (nil) The time when this item was last
+    #   modified
     #
-    # @option params_or_mtime [Symbol, nil] :binary (true) Whether or not this
-    # item is binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params_or_mtime=nil)
-      # Get params and mtime
-      # TODO [in nanoc 4.0] clean this up
-      if params_or_mtime.nil? || params_or_mtime.is_a?(Time)
-        params = {}
-        @mtime = params_or_mtime
-      elsif params_or_mtime.is_a?(Hash)
-        params = params_or_mtime
-        @mtime = params[:mtime]
-      end
+    # @option params [Symbol, nil] :binary (true) Whether or not this item is
+    #   binary
+    #
+    # @option params [String, nil] :checksum (nil) The current, up-to-date
+    #   checksum of this item
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
+      # Get mtime and checksum
+      params ||= {}
+      params = { :mtime => params } if params.is_a?(Time)
+      @new_checksum = params[:checksum]
+      @mtime        = params[:mtime]
 
       # Get type and raw content or raw filename
       @is_binary = params.has_key?(:binary) ? params[:binary] : false

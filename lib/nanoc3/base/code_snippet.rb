@@ -2,9 +2,7 @@
 
 module Nanoc3
 
-  # Nanoc3::CodeSnippet represent a piece of custom code of a nanoc site. It
-  # contains the textual source code as well as a mtime, which is used to
-  # speed up site compilation.
+  # Nanoc3::CodeSnippet represent a piece of custom code of a nanoc site.
   class CodeSnippet
 
     # The {Nanoc3::Site} this code snippet belongs to.
@@ -22,24 +20,38 @@ module Nanoc3
     # @return [String]
     attr_reader :filename
 
-    # The time where this code snippet was last modified.
-    #
-    # @return [Time]
-    attr_reader :mtime
+    # @return [String] The checksum of this code snippet that was in effect
+    #   during the previous site compilation
+    attr_accessor :old_checksum
+
+    # @return [String] The current, up-to-date checksum of this code snippet
+    attr_reader   :new_checksum
 
     # Creates a new code snippet.
     #
     # @param [String] data The raw source code which will be executed before
-    # compilation
+    #   compilation
     #
     # @param [String] filename The filename corresponding to this code snippet
     #
-    # @param [Time] mtime The time when the code was last modified (can be
-    # nil)
-    def initialize(data, filename, mtime=nil)
+    # @param [Time, Hash] params Extra parameters. For backwards
+    #   compatibility, this can be a Time instance indicating the time when
+    #   this code snippet was last modified (mtime).
+    #
+    # @option params [Time, nil] :mtime (nil) The time when this code snippet
+    #   was last modified
+    #
+    # @option params [String, nil] :checksum (nil) The current, up-to-date
+    #   checksum of this code snippet
+    def initialize(data, filename, params=nil)
+      # Get mtime and checksum
+      params ||= {}
+      params = { :mtime => params } if params.is_a?(Time)
+      @new_checksum = params[:checksum]
+      @mtime        = params[:mtime]
+
       @data     = data
       @filename = filename
-      @mtime    = mtime
     end
 
     # Loads the code by executing it.

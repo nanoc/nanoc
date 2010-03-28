@@ -88,6 +88,10 @@ module Nanoc3
       # Cleanup
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
 
+      # Store checksums
+      # FIXME not the right place
+      @site.store_checksums
+
       # Store dependencies
       dependency_tracker.store_graph
     end
@@ -181,7 +185,7 @@ module Nanoc3
 
         # Retry
         if inactive_reps.empty?
-          puts "*** Nothing left to compile!"
+          puts "*** Nothing left to compile!" if $DEBUG
           break
         else
           puts "*** No active reps left; activating all (#{inactive_reps.size}) inactive reps" if $DEBUG
@@ -228,8 +232,8 @@ module Nanoc3
       else
         # Apply matching rule
         compilation_rule_for(rep).apply_to(rep)
-        rep.compiled = true
       end
+      rep.compiled = true
 
       # Write if rep is routed
       # FIXME don’t use instance_eval

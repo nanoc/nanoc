@@ -21,6 +21,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.stubs(:items).returns(items)
+    site.expects(:store_checksums)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
@@ -56,6 +57,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock site
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
+    site.expects(:store_checksums)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
@@ -95,6 +97,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.stubs(:items).returns(items)
+    site.expects(:store_checksums)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
