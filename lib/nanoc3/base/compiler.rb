@@ -5,6 +5,9 @@ module Nanoc3
   # Responsible for compiling a site’s item representations.
   class Compiler
 
+    # The name of the file where cached compiled content will be stored
+    COMPILED_CONTENT_CACHE_FILENAME = 'tmp/compiled_content'
+
     # The compilation stack. When the compiler begins compiling a rep or a
     # layout, it will be placed on the stack; when it is done compiling the
     # rep or layout, it will be removed from the stack.
@@ -140,6 +143,8 @@ module Nanoc3
       inactive_reps = []
       compiled_reps = []
 
+      load_cached_compiled_content
+
       # Repeat as long as something is successfully compiled...
       changed = true
       until !changed
@@ -182,6 +187,8 @@ module Nanoc3
         inactive_reps = []
       end
 
+      store_cached_compiled_content
+
       # Notify skipped reps
       skipped_reps.each do |rep|
         Nanoc3::NotificationCenter.post(:compilation_started, rep)
@@ -208,16 +215,65 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      # Apply matching rule
-      compilation_rule_for(rep).apply_to(rep)
-      rep.compiled = true
+      if !rep.outdated? && !rep.item.outdated_due_to_dependencies && get_cached_compiled_content_for(rep)
+        # Load content from cache if possible
+        puts "Using cached compiled content for #{rep.inspect} instead of recompiling" if $DEBUG
+        cached_compiled_content = get_cached_compiled_content_for(rep)
+        # FIXME don’t use instance_eval
+        rep.instance_eval { @content = cached_compiled_content }
+      else
+        # Apply matching rule
+        compilation_rule_for(rep).apply_to(rep)
+        rep.compiled = true
+      end
 
       # Write if rep is routed
+      # FIXME don’t use instance_eval
+      set_cached_compiled_content_for(rep, rep.instance_eval { @content })
       rep.write unless rep.raw_path.nil?
     ensure
       # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
+    end
+
+    # Loads cached compiled content into memory.
+    def load_cached_compiled_content
+      require 'pstore'
+
+      if !File.file?(COMPILED_CONTENT_CACHE_FILENAME)
+        @cached_compiled_content = {}
+      else
+        store = PStore.new(COMPILED_CONTENT_CACHE_FILENAME)
+        store.transaction do
+          @cached_compiled_content = store[:compiled_content]
+        end
+      end
+    end
+
+    # Stores cached compiled content back to disk.
+    def store_cached_compiled_content
+      require 'pstore'
+
+      FileUtils.mkdir_p(File.dirname(COMPILED_CONTENT_CACHE_FILENAME))
+      store = PStore.new(COMPILED_CONTENT_CACHE_FILENAME)
+      store.transaction do
+        store[:compiled_content] = @cached_compiled_content
+      end
+    end
+
+    # Gets the compiled content for the given item representation
+    def get_cached_compiled_content_for(rep)
+      @cached_compiled_content ||= {}
+      @cached_compiled_content[rep.item.identifier] ||= {}
+      @cached_compiled_content[rep.item.identifier][rep.name] || {}
+    end
+
+    # Sets the compiled content for the given item representation
+    def set_cached_compiled_content_for(rep, content)
+      @cached_compiled_content ||= {}
+      @cached_compiled_content[rep.item.identifier] ||= {}
+      @cached_compiled_content[rep.item.identifier][rep.name] = content
     end
 
     # Returns the dependency tracker for this site, creating it first if it
