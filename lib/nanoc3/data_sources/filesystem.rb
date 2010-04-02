@@ -82,7 +82,7 @@ module Nanoc3::DataSources
 
         # Read content and metadata
         is_binary = !!(content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1]))
-        if is_binary
+        if is_binary && klass == Nanoc3::Item
           meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
           content_or_filename = content_filename
         else

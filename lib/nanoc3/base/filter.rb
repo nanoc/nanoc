@@ -99,9 +99,9 @@ module Nanoc3
     # @param [Hash] params A hash containing parameters. Filter subclasses can
     # use these parameters to allow modifying the filter's behaviour.
     #
-    # @return [String] The filtered content (if the item is a textual item) or
-    # a path to a newly generated file containing the filtered content (if the
-    # item is a binary item)
+    # @return [String, void] If the filter output binary content, the return
+    #   value is undefined; if the filter outputs textual content, the return
+    #   value will be the filtered content.
     def run(content_or_filename, params={})
       raise NotImplementedError.new("Nanoc3::Filter subclasses must implement #run")
     end
