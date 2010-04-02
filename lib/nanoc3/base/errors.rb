@@ -133,7 +133,7 @@ module Nanoc3
       # compiled
       def initialize(rep)
         @rep = rep
-        super("The “#{rep.item.identifier}” item (rep “#{rep.name}”) cannot currently be compiled yet due to an unmet dependency.".make_compatible_with_env)
+        super("The current item cannot be compiled yet because of an unmet dependency on the “#{rep.item.identifier}” item (rep “#{rep.name}”).".make_compatible_with_env)
       end
 
     end
