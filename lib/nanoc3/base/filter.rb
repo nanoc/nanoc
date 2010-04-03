@@ -66,13 +66,13 @@ module Nanoc3
       end
 
       # @return [Boolean] True if this filter can be applied to binary item
-      # representations, false otherwise
+      #   representations, false otherwise
       def from_binary?
         (@from || :text) == :binary
       end
 
       # @return [Boolean] True if this filter results in a binary item
-      # representation, false otherwise
+      #   representation, false otherwise
       def to_binary?
         (@to || :text) == :binary
       end
@@ -82,7 +82,7 @@ module Nanoc3
     # Creates a new filter that has access to the given assigns.
     #
     # @param [Hash] hash A hash containing variables that should be made
-    # available during filtering.
+    #   available during filtering.
     def initialize(hash={})
       @assigns = hash
       super
@@ -93,11 +93,11 @@ module Nanoc3
     # @abstract
     #
     # @param [String] content_or_filename The unprocessed content that should
-    # be filtered (if the item is a textual item) or the path to the file that
-    # should be fitlered (if the item is a binary item)
+    #   be filtered (if the item is a textual item) or the path to the file
+    #   that should be filtered (if the item is a binary item)
     #
     # @param [Hash] params A hash containing parameters. Filter subclasses can
-    # use these parameters to allow modifying the filter's behaviour.
+    #   use these parameters to allow modifying the filter's behaviour.
     #
     # @return [String, void] If the filter output binary content, the return
     #   value is undefined; if the filter outputs textual content, the return
@@ -107,8 +107,8 @@ module Nanoc3
     end
 
     # Returns a filename that is used to write data to. This method is only
-    # used on binary items. When running a binary filter on a file, the
-    # resulting file must end up in the location returned by this method.
+    #   used on binary items. When running a binary filter on a file, the
+    #   resulting file must end up in the location returned by this method.
     #
     # @return [String] The output filename
     def output_filename
@@ -125,7 +125,7 @@ module Nanoc3
     end
 
     # Returns the filename associated with the item that is being filtered.
-    # It is in the format `item <identifier> (rep <name>)`.
+    #   It is in the format `item <identifier> (rep <name>)`.
     #
     # @return [String] The filename
     def filename
