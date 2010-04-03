@@ -21,6 +21,7 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::Info.new)
       add_command(Nanoc3::CLI::Commands::Update.new)
       add_command(Nanoc3::CLI::Commands::View.new)
+      add_command(Nanoc3::CLI::Commands::Watch.new)
     end
 
     def self.shared_base
@@ -118,6 +119,7 @@ module Nanoc3::CLI
         'coderay'        => 'coderay',
         'cri'            => 'cri',
         'erubis'         => 'erubis',
+        'fssm'           => 'fssm',
         'haml'           => 'haml',
         'json'           => 'json',
         'less'           => 'less',
