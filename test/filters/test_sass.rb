@@ -62,4 +62,17 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_will_skip_items_without_filename
+    if_have 'sass' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Sass.new(:items => [ Nanoc3::Item.new('blah', {}, '/blah/') ])
+
+      # Create sample file
+      File.open('moo.sass', 'w') { |io| io.write "body\n  color: red" }
+
+      # Run filter
+      filter.run('@import moo')
+    end
+  end
+
 end
