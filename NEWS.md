@@ -2,6 +2,8 @@
 
 ## 3.1
 
+New:
+
 * An `Item#rep_named(name)` function for quickly getting a certain rep
 * An `Item#compiled_content` function for quickly getting compiled content
 * An `Item#path` function for quickly getting the path of an item rep
@@ -10,7 +12,8 @@
 * A `debug` command that shows information about the items, reps and layouts
 * A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
 * A diff between the previously compiled content and the last compiled content
-  is now written to `output.diff`
+  is now written to `output.diff` if the `enable_output_diff` site
+  configuration attribute is true
 * Assigns, such as `@items`, `@layouts`, `@item`, … are accessible without `@`
 * Support for binary items
 
@@ -32,6 +35,7 @@ Changed:
 * The `--server` autocompile option is now known as `--handler`
 * Assigns in filters are now available as instance variables and methods
 * The `#breadcrumbs_trail` function now allows missing parents
+* The `sass` filter now properly handles `@import` dependencies
 
 Deprecated:
 
