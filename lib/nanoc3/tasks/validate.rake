@@ -2,7 +2,7 @@
 
 namespace :validate do
 
-  desc 'Validate the site\'s HTML files'
+  desc 'Validate the site’s HTML files'.make_compatible_with_env
   task :html do
     # Get output directory
     site = Nanoc3::Site.new('.')
@@ -18,7 +18,7 @@ namespace :validate do
     validator.run
   end
 
-  desc 'Validate the site\'s CSS files'
+  desc 'Validate the site’s CSS files'.make_compatible_with_env
   task :css do
     # Get output directory
     site = Nanoc3::Site.new('.')
@@ -36,7 +36,7 @@ namespace :validate do
 
   namespace :links do
 
-    desc 'Validate the site’s internal links'
+    desc 'Validate the site’s internal links'.make_compatible_with_env
     task :internal do
       # Get output directory
       site = Nanoc3::Site.new('.')
@@ -53,7 +53,7 @@ namespace :validate do
       validator.run
     end
 
-    desc 'Validate the site’s internal links'
+    desc 'Validate the site’s internal links'.make_compatible_with_env
     task :external do
       # Get output directory
       site = Nanoc3::Site.new('.')
@@ -72,7 +72,7 @@ namespace :validate do
 
   end
 
-  desc 'Validate the site’s internal and external links'
+  desc 'Validate the site’s internal and external links'.make_compatible_with_env
   task :links do
     # Get output directory
     site = Nanoc3::Site.new('.')
