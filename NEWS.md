@@ -1,5 +1,10 @@
 # nanoc news
 
+## 3.1.1 (2010-04-05)
+
+* Sass `@import`s now work for files not managed by nanoc
+* Rake tasks now have their Unicode description decomposed if necessary
+
 ## 3.1 (2010-04-03)
 
 New:
