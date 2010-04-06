@@ -37,9 +37,15 @@ module Nanoc3::CLI::Commands
       # system('growlnotify', '-m', 'Compilation completed')
       # # --image misc/error-icon.png
       # system('growlnotify', '-m', 'Compilation failed')
-
       # Define rebuilder
-      rebuilder = lambda do |base, filename|
+      rebuilder = lambda do |base, relative|
+        # Determine filename
+        if base.nil? || relative.nil?
+          filename = nil
+        else
+          filename = ::Pathname.new(File.join([ base, relative ])).relative_path_from(::Pathname.new(Dir.getwd)).to_s
+        end
+
         # Notify
         if filename
           print "Change detected to #{filename}; recompiling… ".make_compatible_with_env
@@ -63,7 +69,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Rebuild once
-      rebuilder.call(nil,nil)
+      rebuilder.call(nil, nil)
 
       # Get directories to watch
       # FIXME needs something more intelligent and customizable
