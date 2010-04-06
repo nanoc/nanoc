@@ -74,7 +74,8 @@ module Nanoc3::CLI::Commands
 
       # Get directories to watch
       # FIXME needs something more intelligent and customizable
-      dirs_to_watch = %w( content layouts lib )
+      dirs_to_watch  = %w( content layouts lib )
+      files_to_watch = %w( config.yaml Rules )
 
       # Watch
       puts "Watching for changes…".make_compatible_with_env
@@ -84,9 +85,8 @@ module Nanoc3::CLI::Commands
         create(&rebuilder)
       end
       monitor = FSSM::Monitor.new
-      dirs_to_watch.each do |dir|
-        monitor.path(dir, '**/*', &watcher)
-      end
+      dirs_to_watch.each  { |dir|      monitor.path(dir, '**/*', &watcher) }
+      files_to_watch.each { |filename| monitor.file(filename, &watcher)    }
       monitor.run
     end
 
