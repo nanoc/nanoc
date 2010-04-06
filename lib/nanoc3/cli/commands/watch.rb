@@ -32,11 +32,6 @@ module Nanoc3::CLI::Commands
     def run(options, arguments)
       require 'fssm'
 
-      # TODO send growl notifications
-      # # --image misc/success-icon.png
-      # system('growlnotify', '-m', 'Compilation completed')
-      # # --image misc/error-icon.png
-      # system('growlnotify', '-m', 'Compilation failed')
       # Define rebuilder
       rebuilder = lambda do |base, relative|
         # Determine filename
@@ -60,8 +55,14 @@ module Nanoc3::CLI::Commands
         begin
           site.compiler.run
 
+          # TODO include icon (--image misc/success-icon.png)
+          system('growlnotify', '-m', 'Compilation completed')
+
           puts "done in #{((Time.now - start)*10000).round.to_f / 10}ms"
         rescue Exception => e
+          # TODO include icon (--image misc/error-icon.png)
+          system('growlnotify', '-m', 'Compilation failed')
+
           puts
           @base.print_error(e)
           puts
