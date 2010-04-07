@@ -310,6 +310,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock reps
     reps  = [ mock, mock ]
     reps[0].expects(:outdated?).returns(true)
+    reps[0].expects(:forget_progress)
     reps[1].expects(:item).returns(items[1])
     reps[1].expects(:name).returns('somerepname')
     reps[1].expects(:outdated?).returns(true)
@@ -355,9 +356,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     reps[0].expects(:item).returns(items[0])
     reps[0].expects(:name).returns('firstrep')
     reps[0].expects(:outdated?).returns(true)
+    reps[0].expects(:forget_progress)
     reps[1].expects(:item).returns(items[1])
     reps[1].expects(:name).returns('secondrep')
     reps[1].expects(:outdated?).returns(true)
+    reps[1].expects(:forget_progress)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)

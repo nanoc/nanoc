@@ -156,6 +156,9 @@ module Nanoc3
           rescue Nanoc3::Errors::UnmetDependency => e
             puts "*** Attempt failed due to unmet dependency on #{e.rep.inspect}" if $DEBUG
 
+            # Reinitialize rep
+            rep.forget_progress
+
             # Save rep to compile it later
             inactive_reps << rep
 
