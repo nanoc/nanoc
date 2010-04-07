@@ -1,5 +1,10 @@
 # nanoc news
 
+## 3.1.2 (2010-04-07)
+
+* Fixed bug which could cause incorrect output when compilation of an item is
+  delayed due to an unmet dependency
+
 ## 3.1.1 (2010-04-05)
 
 * Sass `@import`s now work for files not managed by nanoc
