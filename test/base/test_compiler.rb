@@ -21,6 +21,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.stubs(:items).returns(items)
+    site.expects(:store_checksums)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
@@ -56,6 +57,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock site
     site = mock
     site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
+    site.expects(:store_checksums)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
@@ -95,6 +97,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
     site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
     site.stubs(:items).returns(items)
+    site.expects(:store_checksums)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
@@ -248,16 +251,19 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock rep
     item = mock
     rep = mock
+    rep.expects(:outdated?).returns(true)
     rep.expects(:compiled=).with(true)
     rep.expects(:raw_path).returns('output/foo.html')
     rep.expects(:write)
     rep.stubs(:item).returns(item)
+    rep.instance_eval { @content = { :foo => 'bar' }}
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compilation_rule = mock
     compilation_rule.expects(:apply_to).with(rep)
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
+    compiler.expects(:set_cached_compiled_content_for).with(rep, { :foo => 'bar' })
 
     # Compile
     compiler.send :compile_rep, rep

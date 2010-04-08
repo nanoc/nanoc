@@ -19,8 +19,15 @@ module Nanoc3
     # slash
     attr_accessor :identifier
 
-    # @return [Time] The time when this layout was last modified
-    attr_reader :mtime
+    # @return [Time] The time where this layout was last modified
+    attr_reader   :mtime
+
+    # @return [String] The checksum of this layout that was in effect during
+    #   the previous site compilation
+    attr_accessor :old_checksum
+
+    # @return [String] The current, up-to-date checksum of this layout
+    attr_reader   :new_checksum
 
     # Creates a new layout.
     #
@@ -30,21 +37,21 @@ module Nanoc3
     #
     # @param [String] identifier This layout's identifier.
     #
-    # @param [Time, Hash, nil] params_or_mtime Extra parameters for the
-    # layout, or the time when this layout was last modified (deprecated).
+    # @param [Time, Hash] params Extra parameters. For backwards
+    #   compatibility, this can be a Time instance indicating the time when
+    #   this layout was last modified (mtime).
     #
-    # @option params_or_mtime [Time, nil] :mtime (nil) The time when this
-    # layout was last modified
-    def initialize(raw_content, attributes, identifier, params_or_mtime=nil)
-      # Get params and mtime
-      # TODO [in nanoc 4.0] clean this up
-      if params_or_mtime.nil? || params_or_mtime.is_a?(Time)
-        params = {}
-        @mtime = params_or_mtime
-      elsif params_or_mtime.is_a?(Hash)
-        params = params_or_mtime
-        @mtime = params[:mtime]
-      end
+    # @option params [Time, nil] :mtime (nil) The time when this layout was
+    #   last modified
+    #
+    # @option params [String, nil] :checksum (nil) The current, up-to-date
+    #   checksum of this layout
+    def initialize(raw_content, attributes, identifier, params=nil)
+      # Get mtime and checksum
+      params ||= {}
+      params = { :mtime => params } if params.is_a?(Time)
+      @new_checksum = params[:checksum]
+      @mtime        = params[:mtime]
 
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys

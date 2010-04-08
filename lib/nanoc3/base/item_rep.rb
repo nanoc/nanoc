@@ -23,9 +23,8 @@ module Nanoc3
     # The descriptive strings for each outdatedness reason. This hash is used
     # by the {#outdatedness_reason} method.
     OUTDATEDNESS_REASON_DESCRIPTIONS = {
-      :no_mtime => 'No file modification time is available.',
-      :forced => 'All pages are recompiled because of a `--force` flag given to the compilation command.',
-      :no_raw_path => 'The routing rules do not specify a path where this item should be written to, i.e. the item representation will never be written to the output directory.',
+      :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
+      :forced => 'All items are recompiled because of a `--force` flag given to the compilation command.',
       :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
       :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
       :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
@@ -120,39 +119,41 @@ module Nanoc3
     def outdatedness_reason
       # Get reason symbol
       reason = lambda do
-        # Outdated if we don't know
-        return :no_mtime if @item.mtime.nil?
-
-        # Outdated if the dependency tracker says so
+        # Outdated if we’re compiling with --force
         return :forced if @force_outdated
 
-        # Outdated if compiled file doesn't exist (yet)
-        return :no_raw_path if self.raw_path.nil?
-        return :not_written if !File.file?(self.raw_path)
+        # Outdated if checksums are missing
+        if !@item.old_checksum || !@item.new_checksum
+          return :not_enough_data
+        end
 
-        # Get compiled mtime
-        compiled_mtime = File.stat(self.raw_path).mtime
+        # Outdated if compiled file doesn't exist (yet)
+        return :not_written if self.raw_path && !File.file?(self.raw_path)
 
         # Outdated if file too old
-        return :source_modified if @item.mtime > compiled_mtime
+        if @item.old_checksum != @item.new_checksum
+          return :source_modified
+        end
 
         # Outdated if layouts outdated
         return :layouts_outdated if @item.site.layouts.any? do |l|
-          l.mtime.nil? || l.mtime > compiled_mtime
+          !l.old_checksum || !l.new_checksum || l.new_checksum != l.old_checksum
         end
 
         # Outdated if code outdated
         return :code_outdated if @item.site.code_snippets.any? do |cs|
-          cs.mtime.nil? || cs.mtime > compiled_mtime
+          !cs.old_checksum || !cs.new_checksum || cs.new_checksum != cs.old_checksum
         end
 
         # Outdated if config outdated
-        return :config_outdated if @item.site.config_mtime.nil?
-        return :config_outdated if @item.site.config_mtime > compiled_mtime
+        if !@item.site.old_config_checksum || !@item.site.new_config_checksum || @item.site.old_config_checksum != @item.site.new_config_checksum
+          return :config_outdated
+        end
 
-        # Outdated if rules outdated
-        return :rules_outdated if @item.site.rules_mtime.nil?
-        return :rules_outdated if @item.site.rules_mtime > compiled_mtime
+        # Outdated if rules modified
+        if !@item.site.old_rules_checksum || !@item.site.new_rules_checksum || @item.site.old_rules_checksum != @item.site.new_rules_checksum
+          return :rules_outdated
+        end
 
         return nil
       end[]
