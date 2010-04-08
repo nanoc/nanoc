@@ -94,20 +94,7 @@ module Nanoc3
       @binary = @item.binary?
 
       # Initialize content and filenames
-      if self.binary?
-        @filenames = {
-          :raw  => @item.raw_filename,
-          :last => @item.raw_filename
-        }
-        @content = {}
-      else
-        @content = {
-          :raw  => @item.raw_content,
-          :last => @item.raw_content,
-          :pre  => @item.raw_content
-        }
-        @filenames = {}
-      end
+      initialize_content
       @old_content = nil
 
       # Reset flags
@@ -247,6 +234,15 @@ module Nanoc3
     # @deprecated Use {Nanoc3::ItemRep#compiled_content} instead.
     def content_at_snapshot(snapshot=:pre)
       compiled_content(:snapshot => snapshot)
+    end
+
+    # Resets the compilation progress for this item representation. This is
+    # necessary when an unmet dependency is detected during compilation.
+    # This method should probably not be called directly.
+    #
+    # @return [void]
+    def forget_progress
+      initialize_content
     end
 
     # Runs the item content through the given filter with the given arguments.
@@ -410,6 +406,24 @@ module Nanoc3
     end
 
   private
+
+    def initialize_content
+      # Initialize content and filenames
+      if self.binary?
+        @filenames = {
+          :raw  => @item.raw_filename,
+          :last => @item.raw_filename
+        }
+        @content = {}
+      else
+        @content = {
+          :raw  => @item.raw_content,
+          :last => @item.raw_content,
+          :pre  => @item.raw_content
+        }
+        @filenames = {}
+      end
+    end
 
     def filter_named(name)
       Nanoc3::Filter.named(name)
