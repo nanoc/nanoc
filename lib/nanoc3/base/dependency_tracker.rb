@@ -243,22 +243,6 @@ module Nanoc3
       @graph.delete_edges_to(item)
     end
 
-    # Prints the dependency graph in human-readable form.
-    #
-    # @return [void]
-    def print_graph
-      @items.each do |item|
-        puts "#{item.inspect} depends on:"
-
-        predecessors = direct_predecessors_of(item)
-        predecessors.each do |pred|
-          puts "    #{pred.inspect}"
-        end
-        puts "    (nothing!)" if predecessors.empty?
-        puts
-      end
-    end
-
     # @deprecated Use {#propagate_outdatedness} instead.
     def mark_outdated_items
       propagate_outdatedness
