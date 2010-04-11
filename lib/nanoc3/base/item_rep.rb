@@ -79,6 +79,11 @@ module Nanoc3
     # includes the filename, even if it is an index filename.
     attr_accessor :raw_path
 
+    # @return [Hash<Symbol,String>] A hash containing the content at all
+    #   snapshots. The keys correspond with the snapshot names, and the
+    #   values with the content.
+    attr_accessor :content
+
     # Creates a new item representation for the given item.
     #
     # @param [Nanoc3::Item] item The item to which the new representation will
