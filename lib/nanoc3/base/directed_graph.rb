@@ -86,6 +86,20 @@ module Nanoc3
       invalidate_caches
     end
 
+    # Deletes all edges coming from the given vertex.
+    #
+    # @param from Vertex from which all edges should be removed
+    #
+    # @return [void]
+    def delete_edges_from(from)
+      return if @from_graph[from].nil?
+
+      @from_graph[from].each do |to|
+        @to_graph[to].delete(from)
+      end
+      @from_graph.delete(from)
+    end
+
     # Deletes all edges going to the given vertex.
     #
     # @param to Vertex to which all edges should be removed
