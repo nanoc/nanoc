@@ -114,10 +114,18 @@ module Nanoc3::CLI::Commands
 
     def setup_notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
+        puts "*** Started compilation of #{rep.inspect}" if @base.debug?
         rep_compilation_started(rep)
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
+        puts "*** Ended compilation of #{rep.inspect}" if @base.debug?
         rep_compilation_ended(rep)
+      end
+      Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
+        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if @base.debug?
+      end
+      Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
+        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if @base.debug?
       end
       Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
         rep_filtering_started(rep, filter_name)
