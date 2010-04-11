@@ -142,60 +142,60 @@ module Nanoc3
     #
     # @return [void]
     def compile_reps(reps)
-      active_reps, skipped_reps = reps.partition { |rep| rep.outdated? || rep.item.outdated_due_to_dependencies? }
-      inactive_reps = []
-      compiled_reps = []
+      require 'set'
+
+      # Partition in outdated and non-outdated
+      outdated_reps = Set.new
+      skipped_reps  = Set.new
+      reps.each do |rep|
+        if rep.outdated? || rep.item.outdated_due_to_dependencies?
+          outdated_reps.add(rep)
+        else
+          skipped_reps.add(rep)
+        end
+      end
+
+      # Build graph for outdated reps
+      content_dependency_graph = Nanoc3::DirectedGraph.new(outdated_reps)
 
       load_cached_compiled_content
 
-      # Repeat as long as something is successfully compiled...
-      changed = true
-      until !changed
-        changed = false
+      # Attempt to compile all active reps
+      loop do
+        # Start fresh
+        @stack.clear
 
-        # Attempt to compile all active reps
-        until active_reps.empty?
-          @stack.clear
-          begin
-            rep = active_reps.shift
-            puts "*** Attempting to compile #{rep.inspect}" if $DEBUG
+        # Find rep to compile
+        break if content_dependency_graph.roots.empty?
+        rep = content_dependency_graph.roots.each { |e| break e }
+        puts "*** Attempting to compile #{rep.inspect}" if $DEBUG
+        @stack.push(rep)
 
-            @stack.push(rep)
-            compile_rep(rep)
-          rescue Nanoc3::Errors::UnmetDependency => e
-            puts "*** Attempt failed due to unmet dependency on #{e.rep.inspect}" if $DEBUG
+        begin
+          compile_rep(rep)
+        rescue Nanoc3::Errors::UnmetDependency => e
+          puts "*** Attempt failed due to unmet dependency on #{e.rep.inspect}" if $DEBUG
 
-            # Reinitialize rep
-            rep.forget_progress
+          # Reinitialize rep
+          rep.forget_progress
 
-            # Save rep to compile it later
-            inactive_reps << rep
-
-            # Add dependency to list of items to compile
-            unless active_reps.include?(e.rep) || inactive_reps.include?(e.rep)
-              changed = true
-              skipped_reps.delete(e.rep)
-              inactive_reps.unshift(e.rep)
-            end
-          else
-            puts "*** Attempt succeeded" if $DEBUG
-
-            changed = true
-            compiled_reps << rep
+          # Record dependency
+          content_dependency_graph.add_edge(e.rep, rep)
+          unless content_dependency_graph.vertices.include?(e.rep)
+            skipped_reps.delete(e.rep)
+            content_dependency_graph.add_vertex(e.rep)
           end
-          puts if $DEBUG
-        end
-
-        # Retry
-        if inactive_reps.empty?
-          puts "*** Nothing left to compile!" if $DEBUG
-          break
         else
-          puts "*** No active reps left; activating all (#{inactive_reps.size}) inactive reps" if $DEBUG
-          puts if $DEBUG
-          active_reps   = inactive_reps
-          inactive_reps = []
+          puts "*** Attempt succeeded" if $DEBUG
+
+          content_dependency_graph.delete_vertex(rep)
         end
+        puts if $DEBUG
+      end
+
+      # Check whether everything was compiled
+      if !content_dependency_graph.vertices.empty?
+        raise Nanoc3::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
 
       store_cached_compiled_content
@@ -204,11 +204,6 @@ module Nanoc3
       skipped_reps.each do |rep|
         Nanoc3::NotificationCenter.post(:compilation_started, rep)
         Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
-      end
-
-      # Raise error if some active but non-compileable reps are left
-      if !active_reps.empty?
-        raise Nanoc3::Errors::RecursiveCompilation.new(active_reps)
       end
     end
 
