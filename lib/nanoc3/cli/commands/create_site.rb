@@ -57,6 +57,20 @@ data_sources:
     # The path where layouts should be mounted. The layouts root behaves the
     # same as the items root, but applies to layouts rather than items.
     layouts_root: #{Nanoc3::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
+
+# Configuration for the “watch” command, which watches a site for changes and
+# recompiles if necessary.
+watcher:
+  # A list of directories to watch for changes. When editing this, make sure
+  # that the “output/” and “tmp/” directories are _not_ included in this list,
+  # because recompiling the site will cause these directories to change, which
+  # will cause the site to be recompiled, which will cause these directories
+  # to change, which will cause the site to be recompiled again, and so on.
+  dirs_to_watch: [ 'content', 'layouts', 'lib' ]
+
+  # A list of single files to watch for changes. As mentioned above, don’t put
+  # any files from the “output/” or “tmp/” directories in here.
+  files_to_watch: [ 'config.yaml', 'Rules' ]
 EOS
 
     DEFAULT_RULES = <<EOS
