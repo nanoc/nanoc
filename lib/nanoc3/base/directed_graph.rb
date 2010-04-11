@@ -80,7 +80,7 @@ module Nanoc3
     # @param to   End vertex of the edge
     #
     # @return [void]
-    def remove_edge(from, to)
+    def delete_edge(from, to)
       @from_graph[from] ||= Set.new
       @from_graph[from].delete(to)
 
@@ -206,6 +206,11 @@ module Nanoc3
     # @return [Set] The set of all root vertices in this graph.
     def roots
       @roots
+    end
+
+    # @deprecated Use {#delete_edge} instead
+    def remove_edge(from, to)
+      delete_edge(from, to)
     end
 
   private
