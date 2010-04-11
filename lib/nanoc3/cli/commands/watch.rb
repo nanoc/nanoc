@@ -32,6 +32,8 @@ module Nanoc3::CLI::Commands
     def run(options, arguments)
       require 'fssm'
 
+      @notifier = Notifier.new
+
       # Define rebuilder
       rebuilder = lambda do |base, relative|
         # Determine filename
@@ -56,12 +58,12 @@ module Nanoc3::CLI::Commands
           site.compiler.run
 
           # TODO include icon (--image misc/success-icon.png)
-          system('growlnotify', '-m', 'Compilation completed')
+          @notifier.notify('Compilation complete')
 
           puts "done in #{((Time.now - start)*10000).round.to_f / 10}ms"
         rescue Exception => e
           # TODO include icon (--image misc/error-icon.png)
-          system('growlnotify', '-m', 'Compilation failed')
+          @notifier.notify('Compilation failed')
 
           puts
           @base.print_error(e)
@@ -88,6 +90,57 @@ module Nanoc3::CLI::Commands
       dirs_to_watch.each  { |dir|      monitor.path(dir, '**/*', &watcher) }
       files_to_watch.each { |filename| monitor.file(filename, &watcher)    }
       monitor.run
+    end
+
+    # Allows sending user notifications in a cross-platform way.
+    class Notifier
+
+      # A list of commandline tool names that can be used to send notifications
+      TOOLS = %w( growlnotify notify_send )
+
+      # Error that is raised when no notifier can be found.
+      class NoNotifierFound < ::StandardError
+
+        def initialize
+          super("Could not find a notifier that works on this system. I tried to find #{CrossPlatformNotifier::TOOLS.join(', ')} but found nothing.")
+        end
+
+      end
+
+      # Send a notification.
+      #
+      # @param [String] message The message to include in the notification
+      #
+      # @option params [Boolean] :raise (true) true if this method should
+      #   raise an exception if no notifier can be found, false otherwise
+      def notify(message, params={})
+        params[:raise] = true if !params.has_key?(:raise)
+
+        if tool.nil?
+          if params[:raise]
+            raise NoNotifierFound
+          else
+            return
+          end
+        end
+
+        send(tool, message, params)
+      end
+
+    private
+
+      def tool
+        @tool ||= TOOLS.find { |t| !`which #{t}`.empty? }
+      end
+
+      def growlnotify(message, params={})
+        system('growlnotify', '-m', message)
+      end
+
+      def notify_send(message, params={})
+        system('notify_send', messsage)
+      end
+
     end
 
   end
