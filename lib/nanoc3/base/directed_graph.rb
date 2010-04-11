@@ -92,7 +92,8 @@ module Nanoc3
     #
     # @return [void]
     def delete_edges_to(to)
-      @to_graph[to] ||= Set.new
+      return if @to_graph[to].nil?
+
       @to_graph[to].each do |from|
         @from_graph[from].delete(to)
       end
