@@ -7,6 +7,8 @@ module Nanoc3::CLI
     def initialize
       super('nanoc3')
 
+      @debug = true
+
       # Add help command
       self.help_command = Nanoc3::CLI::Commands::Help.new
       add_command(self.help_command)
@@ -26,6 +28,11 @@ module Nanoc3::CLI
 
     def self.shared_base
       @shared_base ||= Nanoc3::CLI::Base.new
+    end
+
+    # @return [Boolean] true if debug output is enabled, false if not
+    def debug?
+      @debug
     end
 
     # Helper function which can be called when a command is executed that
@@ -193,7 +200,7 @@ module Nanoc3::CLI
         },
         {
           :long => 'debug', :short => 'd', :argument => :forbidden,
-          :desc => 'enable debugging (set $DEBUG to true)'
+          :desc => 'enable debugging'
         },
         {
           :long => 'warn', :short => 'w', :argument => :forbidden,
@@ -213,7 +220,7 @@ module Nanoc3::CLI
       when :verbose
         Nanoc3::CLI::Logger.instance.level = :low
       when :debug
-        $DEBUG = true
+        @debug = true
       when :warn
         $-w = true
       when :'no-color'

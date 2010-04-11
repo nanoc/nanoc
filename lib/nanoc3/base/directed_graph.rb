@@ -46,7 +46,7 @@ module Nanoc3
       @to_graph   = {}
 
       @vertice_indexes = {}
-      vertices.each_with_index do |v, i|
+      @vertices.each_with_index do |v, i|
         @vertice_indexes[v] = i
       end
 

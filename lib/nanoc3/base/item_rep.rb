@@ -208,9 +208,6 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
 
-      # Debug
-      puts "*** Attempting to fetch content for #{self.inspect}" if $DEBUG
-
       # Require compilation
       raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
 

@@ -168,14 +168,11 @@ module Nanoc3
         # Find rep to compile
         break if content_dependency_graph.roots.empty?
         rep = content_dependency_graph.roots.each { |e| break e }
-        puts "*** Attempting to compile #{rep.inspect}" if $DEBUG
         @stack.push(rep)
 
         begin
           compile_rep(rep)
         rescue Nanoc3::Errors::UnmetDependency => e
-          puts "*** Attempt failed due to unmet dependency on #{e.rep.inspect}" if $DEBUG
-
           # Reinitialize rep
           rep.forget_progress
 
@@ -186,11 +183,8 @@ module Nanoc3
             content_dependency_graph.add_vertex(e.rep)
           end
         else
-          puts "*** Attempt succeeded" if $DEBUG
-
           content_dependency_graph.delete_vertex(rep)
         end
-        puts if $DEBUG
       end
 
       # Check whether everything was compiled
@@ -223,7 +217,7 @@ module Nanoc3
 
       if !rep.outdated? && !rep.item.outdated_due_to_dependencies && get_cached_compiled_content_for(rep)
         # Load content from cache if possible
-        puts "Using cached compiled content for #{rep.inspect} instead of recompiling" if $DEBUG
+        Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         cached_compiled_content = get_cached_compiled_content_for(rep)
         # FIXME don’t use instance_eval
         rep.instance_eval { @content = cached_compiled_content }
@@ -237,6 +231,9 @@ module Nanoc3
       # FIXME don’t use instance_eval
       set_cached_compiled_content_for(rep, rep.instance_eval { @content })
       rep.write unless rep.raw_path.nil?
+    rescue => e
+      Nanoc3::NotificationCenter.post(:compilation_failed, rep)
+      raise e
     ensure
       # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
