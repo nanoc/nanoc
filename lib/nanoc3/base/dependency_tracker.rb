@@ -59,7 +59,6 @@ module Nanoc3
       Nanoc3::NotificationCenter.on(:visit_started, self) do |item|
         # Record possible dependency
         unless @stack.empty?
-          $stderr.puts "*** Recording dependency on #{item.inspect}" if $DEBUG
           self.record_dependency(@stack[-1], item)
         end
 
