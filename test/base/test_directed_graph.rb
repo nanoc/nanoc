@@ -95,6 +95,7 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
     assert_equal [ 1, 3 ], graph.direct_successors_of(2).sort
     assert_equal [ 1, 2 ], graph.direct_predecessors_of(3).sort
     assert_equal [ 1, 2 ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([]), graph.roots
 
     graph.delete_edges_from(1)
 
@@ -104,6 +105,17 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
     assert_equal [ 1, 3 ], graph.direct_successors_of(2).sort
     assert_equal [ 2    ], graph.direct_predecessors_of(3).sort
     assert_equal [ 1, 2 ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([]), graph.roots
+
+    graph.delete_edges_from(2)
+
+    assert_equal [ 3    ], graph.direct_predecessors_of(1).sort
+    assert_equal [      ], graph.direct_successors_of(1).sort
+    assert_equal [ 3    ], graph.direct_predecessors_of(2).sort
+    assert_equal [      ], graph.direct_successors_of(2).sort
+    assert_equal [      ], graph.direct_predecessors_of(3).sort
+    assert_equal [ 1, 2 ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([ 3 ]), graph.roots
   end
 
   def test_delete_edges_to
@@ -122,6 +134,7 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
     assert_equal [ 1, 3 ], graph.direct_successors_of(2).sort
     assert_equal [ 1, 2 ], graph.direct_predecessors_of(3).sort
     assert_equal [ 1, 2 ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([]), graph.roots
 
     graph.delete_edges_to(1)
 
@@ -131,6 +144,48 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
     assert_equal [ 3    ], graph.direct_successors_of(2).sort
     assert_equal [ 1, 2 ], graph.direct_predecessors_of(3).sort
     assert_equal [ 2    ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([ 1 ]), graph.roots
+
+    graph.delete_edges_to(2)
+
+    assert_equal [      ], graph.direct_predecessors_of(1).sort
+    assert_equal [ 3    ], graph.direct_successors_of(1).sort
+    assert_equal [      ], graph.direct_predecessors_of(2).sort
+    assert_equal [ 3    ], graph.direct_successors_of(2).sort
+    assert_equal [ 1, 2 ], graph.direct_predecessors_of(3).sort
+    assert_equal [      ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([ 1, 2 ]), graph.roots
+  end
+
+  def test_delete_vertex
+    graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
+
+    graph.add_edge(1, 2)
+    graph.add_edge(2, 1)
+    graph.add_edge(2, 3)
+    graph.add_edge(3, 2)
+    graph.add_edge(1, 3)
+    graph.add_edge(3, 1)
+
+    graph.delete_vertex(2)
+
+    assert_equal [ 3 ], graph.direct_predecessors_of(1).sort
+    assert_equal [ 3 ], graph.direct_successors_of(1).sort
+    assert_equal [ 1 ], graph.direct_predecessors_of(3).sort
+    assert_equal [ 1 ], graph.direct_successors_of(3).sort
+    assert_equal Set.new([]), graph.roots
+  end
+
+  def test_delete_vertex_resulting_roots
+    graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
+    assert_equal Set.new([ 1, 2, 3 ]), graph.roots
+
+    graph.add_edge(1, 2)
+    graph.add_edge(2, 3)
+    assert_equal Set.new([ 1 ]), graph.roots
+
+    graph.delete_vertex(2)
+    assert_equal Set.new([ 1, 3 ]), graph.roots
   end
 
   def test_should_return_empty_array_for_nonexistant_vertices
