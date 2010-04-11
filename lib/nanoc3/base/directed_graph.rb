@@ -92,6 +92,18 @@ module Nanoc3
       invalidate_caches
     end
 
+    # Adds the given vertex to the graph.
+    #
+    # @param [Vertex] v The vertex to add to the graph
+    #
+    # @return [void]
+    def add_vertex(v)
+      return if @vertices.include?(v)
+
+      @vertices << v
+      @roots    << v
+    end
+
     # Deletes all edges coming from the given vertex.
     #
     # @param from Vertex from which all edges should be removed
@@ -118,6 +130,19 @@ module Nanoc3
         @from_graph[from].delete(to)
       end
       @to_graph.delete(to)
+    end
+
+    # Removes the given vertex from the graph.
+    #
+    # @param v Vertex to remove from the graph
+    #
+    # @return [void]
+    def delete_vertex(v)
+      delete_edges_to(v)
+      delete_edges_from(v)
+
+      @vertices.delete(v)
+      @roots.delete(v)
     end
 
     # Returns the direct predecessors of the given vertex, i.e. the vertices
