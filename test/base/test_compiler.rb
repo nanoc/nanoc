@@ -253,10 +253,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     rep = mock
     rep.expects(:outdated?).returns(true)
     rep.expects(:compiled=).with(true)
+    rep.expects(:content).returns({ :foo => 'bar' })
     rep.expects(:raw_path).returns('output/foo.html')
     rep.expects(:write)
     rep.stubs(:item).returns(item)
-    rep.instance_eval { @content = { :foo => 'bar' }}
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)

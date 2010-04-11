@@ -89,7 +89,6 @@ module Nanoc3
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
 
       # Store checksums
-      # FIXME not the right place
       @site.store_checksums
 
       # Store dependencies
@@ -218,9 +217,7 @@ module Nanoc3
       if !rep.outdated? && !rep.item.outdated_due_to_dependencies && get_cached_compiled_content_for(rep)
         # Load content from cache if possible
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
-        cached_compiled_content = get_cached_compiled_content_for(rep)
-        # FIXME don’t use instance_eval
-        rep.instance_eval { @content = cached_compiled_content }
+        rep.content = get_cached_compiled_content_for(rep)
       else
         # Apply matching rule
         compilation_rule_for(rep).apply_to(rep)
@@ -229,7 +226,7 @@ module Nanoc3
 
       # Write if rep is routed
       # FIXME don’t use instance_eval
-      set_cached_compiled_content_for(rep, rep.instance_eval { @content })
+      set_cached_compiled_content_for(rep, rep.content)
       rep.write unless rep.raw_path.nil?
     rescue => e
       Nanoc3::NotificationCenter.post(:compilation_failed, rep)
