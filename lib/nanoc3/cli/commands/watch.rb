@@ -75,9 +75,9 @@ module Nanoc3::CLI::Commands
       rebuilder.call(nil, nil)
 
       # Get directories to watch
-      # FIXME needs something more intelligent and customizable
-      dirs_to_watch  = %w( content layouts lib )
-      files_to_watch = %w( config.yaml Rules )
+      watcher_config = @base.site.config[:watcher] || {}
+      dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
+      files_to_watch = watcher_config[:files_to_watch] || %w( config.yaml Rules )
 
       # Watch
       puts "Watching for changes…".make_compatible_with_env
