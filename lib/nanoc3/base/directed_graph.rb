@@ -50,6 +50,8 @@ module Nanoc3
         @vertice_indexes[v] = i
       end
 
+      @roots = Set.new(@vertices)
+
       invalidate_caches
     end
 
@@ -65,6 +67,8 @@ module Nanoc3
 
       @to_graph[to] ||= Set.new
       @to_graph[to]  << from
+
+      @roots.delete(to)
 
       invalidate_caches
     end
@@ -82,6 +86,8 @@ module Nanoc3
 
       @to_graph[to] ||= Set.new
       @to_graph[to].delete(from)
+
+      @roots.add(to) if @to_graph[to].empty?
 
       invalidate_caches
     end
@@ -166,6 +172,13 @@ module Nanoc3
         end
       end
       result
+    end
+
+    # Returns all root vertices, i.e. vertices where no edge points to.
+    #
+    # @return [Set] The set of all root vertices in this graph.
+    def roots
+      @roots
     end
 
   private
