@@ -114,6 +114,7 @@ module Nanoc3
 
       @from_graph[from].each do |to|
         @to_graph[to].delete(from)
+        @roots.add(to) if @to_graph[to].empty?
       end
       @from_graph.delete(from)
     end
@@ -130,6 +131,7 @@ module Nanoc3
         @from_graph[from].delete(to)
       end
       @to_graph.delete(to)
+      @roots.add(to)
     end
 
     # Removes the given vertex from the graph.
