@@ -60,7 +60,9 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Load dependencies
+      # Load necessary data
+      compiled_content_cache = CompiledContentCache.new(COMPILED_CONTENT_CACHE_FILENAME)
+      compiled_content_cache.load
       dependency_tracker.load_graph
 
       # Get items and reps to compile
@@ -88,10 +90,9 @@ module Nanoc3
       # Cleanup
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
 
-      # Store checksums
+      # Store necessary data
+      compiled_content_cache.store
       @site.store_checksums
-
-      # Store dependencies
       dependency_tracker.store_graph
     end
 
@@ -157,8 +158,6 @@ module Nanoc3
       # Build graph for outdated reps
       content_dependency_graph = Nanoc3::DirectedGraph.new(outdated_reps)
 
-      load_cached_compiled_content
-
       # Attempt to compile all active reps
       loop do
         # Start fresh
@@ -191,8 +190,6 @@ module Nanoc3
         raise Nanoc3::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
 
-      store_cached_compiled_content
-
       # Notify skipped reps
       skipped_reps.each do |rep|
         Nanoc3::NotificationCenter.post(:compilation_started, rep)
@@ -214,10 +211,10 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      if !rep.outdated? && !rep.item.outdated_due_to_dependencies && get_cached_compiled_content_for(rep)
+      if !rep.outdated? && !rep.item.outdated_due_to_dependencies && compiled_content_cache[rep]
         # Load content from cache if possible
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
-        rep.content = get_cached_compiled_content_for(rep)
+        rep.content = compiled_content_cache[rep]
       else
         # Apply matching rule
         compilation_rule_for(rep).apply_to(rep)
@@ -225,8 +222,7 @@ module Nanoc3
       rep.compiled = true
 
       # Write if rep is routed
-      # FIXME don’t use instance_eval
-      set_cached_compiled_content_for(rep, rep.content)
+      compiled_content_cache[rep] = rep.content
       rep.write unless rep.raw_path.nil?
     rescue => e
       Nanoc3::NotificationCenter.post(:compilation_failed, rep)
@@ -235,45 +231,6 @@ module Nanoc3
       # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
-    end
-
-    # Loads cached compiled content into memory.
-    def load_cached_compiled_content
-      require 'pstore'
-
-      if !File.file?(COMPILED_CONTENT_CACHE_FILENAME)
-        @cached_compiled_content = {}
-      else
-        store = PStore.new(COMPILED_CONTENT_CACHE_FILENAME)
-        store.transaction do
-          @cached_compiled_content = store[:compiled_content]
-        end
-      end
-    end
-
-    # Stores cached compiled content back to disk.
-    def store_cached_compiled_content
-      require 'pstore'
-
-      FileUtils.mkdir_p(File.dirname(COMPILED_CONTENT_CACHE_FILENAME))
-      store = PStore.new(COMPILED_CONTENT_CACHE_FILENAME)
-      store.transaction do
-        store[:compiled_content] = @cached_compiled_content
-      end
-    end
-
-    # Gets the compiled content for the given item representation
-    def get_cached_compiled_content_for(rep)
-      @cached_compiled_content ||= {}
-      @cached_compiled_content[rep.item.identifier] ||= {}
-      @cached_compiled_content[rep.item.identifier][rep.name] || {}
-    end
-
-    # Sets the compiled content for the given item representation
-    def set_cached_compiled_content_for(rep, content)
-      @cached_compiled_content ||= {}
-      @cached_compiled_content[rep.item.identifier] ||= {}
-      @cached_compiled_content[rep.item.identifier][rep.name] = content
     end
 
     # Returns the dependency tracker for this site, creating it first if it
@@ -296,6 +253,98 @@ module Nanoc3
           dependency_tracker.forget_dependencies_for(i)
         end
       end
+    end
+
+    # Returns the cache used for storing compiled content.
+    #
+    # @return [CompiledContentCache] The compiled content cache
+    def compiled_content_cache
+      @compiled_content_cache ||= begin
+        cache = CompiledContentCache.new(COMPILED_CONTENT_CACHE_FILENAME)
+        cache.load
+        cache
+      end
+    end
+
+    # Represents a cache than can be used to store already compiled content,
+    # to prevent it from being needlessly recompiled.
+    #
+    # This class is intended for internal use only. Do not rely on its
+    # presence; future versions of nanoc, even in the 3.x branch, may no
+    # longer contain this class.
+    class CompiledContentCache
+
+      # @return [String] The filename where the cache will be loaded from
+      #   and stored to
+      attr_reader :filename
+
+      # Creates a new cache for the given filename.
+      #
+      # @param [String] filename The filename where the cache will be loaded
+      #   from and stored to
+      def initialize(filename)
+        require 'pstore'
+
+        @filename = filename
+      end
+
+      # Loads the cache from the filesystem into memory.
+      #
+      # @return [void]
+      def load
+        cache = nil
+        return if !File.file?(filename)
+        pstore.transaction { cache = pstore[:compiled_content] }
+      end
+
+      # Stores the content of the (probably modified) in-memory cache to the
+      #   filesystem.
+      #
+      # @return [void]
+      def store
+        FileUtils.mkdir_p(File.dirname(filename))
+        pstore.transaction { pstore[:compiled_content] = cache }
+      end
+
+      # Returns the cached compiled content for the given item
+      # representation. This cached compiled content is a hash where the keys
+      # are the snapshot names and the values the compiled content at the
+      # given snapshot.
+      #
+      # @param [Nanoc3::ItemRep] rep The item rep to fetch the content for
+      #
+      # @return [Hash<Symbol,String>] A hash containing the cached compiled
+      #   content for the given item representation
+      def [](rep)
+        item_cache = cache[rep.item.identifier] || {}
+        item_cache[rep.name]
+      end
+
+      # Sets the compiled content for the given representation.
+      #
+      # @param [Nanoc3::ItemRep] rep The item representation for which to set
+      #   the compiled content
+      #
+      # @param [Hash<Symbol,String>] content A hash containing the compiled
+      #   content of the given representation
+      #
+      # @return [void]
+      def []=(rep, content)
+        cache[rep.item.identifier] ||= {}
+        cache[rep.item.identifier][rep.name] = content
+      end
+
+    private
+
+      def cache
+        @cache ||= {}
+      end
+
+      def pstore
+        require 'pstore'
+        @store ||= PStore.new(@filename)
+      end
+
     end
 
   end
