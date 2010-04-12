@@ -246,9 +246,8 @@ module Nanoc3::DataSources
       # Split data
       pieces = data.split(/^(-{5}|-{3})/)
       if pieces.size < 4
-        # TODO improve error message
         raise RuntimeError.new(
-          "The file '#{content_filename}' does not seem to be a nanoc #{kind}"
+          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format."
         )
       end
 
