@@ -57,6 +57,9 @@ module Nanoc3
     #
     # @return [void]
     def run(item=nil, params={})
+      # Parse params
+      params[:force] = false if !params.has_key?(:force)
+
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
@@ -66,20 +69,12 @@ module Nanoc3
       dependency_tracker.load_graph
 
       # Get items and reps to compile
-      if item
-        items = [ item ] + dependency_tracker.successors_of(item)
-        items.uniq!
-      else
-        items = @site.items
-      end
+      items = item ? ([ item ] + dependency_tracker.successors_of(item)).uniq : @site.items
       reps = items.map { |i| i.reps }.flatten
 
-      # Prepare dependencies
-      if params.has_key?(:force) && params[:force]
-        reps.each { |r| r.force_outdated = true }
-      else
-        dependency_tracker.propagate_outdatedness
-      end
+      # Determine which reps need to be recompiled
+      reps.each { |r| r.force_outdated = true } if params[:force]
+      dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)
 
       # Compile reps
@@ -87,13 +82,13 @@ module Nanoc3
       compile_reps(reps)
       dependency_tracker.stop
 
-      # Cleanup
-      FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
-
       # Store necessary data
       compiled_content_cache.store
       @site.store_checksums
       dependency_tracker.store_graph
+    ensure
+      # Cleanup
+      FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
     end
 
     # Finds the first matching compilation rule for the given item
@@ -148,11 +143,8 @@ module Nanoc3
       outdated_reps = Set.new
       skipped_reps  = Set.new
       reps.each do |rep|
-        if rep.outdated? || rep.item.outdated_due_to_dependencies?
-          outdated_reps.add(rep)
-        else
-          skipped_reps.add(rep)
-        end
+        target = (rep.outdated? || rep.item.outdated_due_to_dependencies?) ? outdated_reps : skipped_reps
+        target.add(rep)
       end
 
       # Build graph for outdated reps
@@ -160,28 +152,20 @@ module Nanoc3
 
       # Attempt to compile all active reps
       loop do
-        # Start fresh
-        @stack.clear
-
         # Find rep to compile
         break if content_dependency_graph.roots.empty?
         rep = content_dependency_graph.roots.each { |e| break e }
-        @stack.push(rep)
+        @stack = [ rep ]
 
         begin
           compile_rep(rep)
+          content_dependency_graph.delete_vertex(rep)
         rescue Nanoc3::Errors::UnmetDependency => e
-          # Reinitialize rep
-          rep.forget_progress
-
-          # Record dependency
           content_dependency_graph.add_edge(e.rep, rep)
           unless content_dependency_graph.vertices.include?(e.rep)
             skipped_reps.delete(e.rep)
             content_dependency_graph.add_vertex(e.rep)
           end
-        else
-          content_dependency_graph.delete_vertex(rep)
         end
       end
 
@@ -207,28 +191,25 @@ module Nanoc3
     #
     # @return [void]
     def compile_rep(rep)
-      # Start
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
       if !rep.outdated? && !rep.item.outdated_due_to_dependencies && compiled_content_cache[rep]
-        # Load content from cache if possible
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
-        # Apply matching rule
         compilation_rule_for(rep).apply_to(rep)
       end
-      rep.compiled = true
 
-      # Write if rep is routed
+      rep.compiled = true
       compiled_content_cache[rep] = rep.content
+
       rep.write unless rep.raw_path.nil?
     rescue => e
+      rep.forget_progress
       Nanoc3::NotificationCenter.post(:compilation_failed, rep)
       raise e
     ensure
-      # Stop
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
     end

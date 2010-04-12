@@ -110,6 +110,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     dependency_tracker.expects(:store_graph)
     dependency_tracker.expects(:start)
     dependency_tracker.expects(:stop)
+    dependency_tracker.expects(:propagate_outdatedness)
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
 
     # Run
@@ -263,6 +264,24 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert rep.compiled?
   end
 
+  def test_compile_rep_with_unmet_dependency
+    # Mock rep
+    item = Nanoc3::Item.new('content', {}, '/moo/')
+    rep = Nanoc3::ItemRep.new(item, :blah)
+    rep.expects(:forget_progress)
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compilation_rule = mock
+    compilation_rule.expects(:apply_to).with(rep).raises(Nanoc3::Errors::UnmetDependency, rep)
+    compiler.expects(:compilation_rule_for).returns(compilation_rule)
+
+    # Compile
+    assert_raises Nanoc3::Errors::UnmetDependency do
+      compiler.send :compile_rep, rep
+    end
+  end
+
   def test_compile_reps_with_no_reps
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -310,7 +329,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Mock reps
     reps  = [ mock, mock ]
     reps[0].expects(:outdated?).returns(true)
-    reps[0].expects(:forget_progress)
     reps[1].expects(:item).returns(items[1])
     reps[1].expects(:name).returns('somerepname')
     reps[1].expects(:outdated?).returns(true)
@@ -356,11 +374,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     reps[0].expects(:item).returns(items[0])
     reps[0].expects(:name).returns('firstrep')
     reps[0].expects(:outdated?).returns(true)
-    reps[0].expects(:forget_progress)
     reps[1].expects(:item).returns(items[1])
     reps[1].expects(:name).returns('secondrep')
     reps[1].expects(:outdated?).returns(true)
-    reps[1].expects(:forget_progress)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
