@@ -128,6 +128,25 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert_equal output_expected, output_actual
   end
 
+  def test_all_split_files_in_with_multiple_dirs
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Write sample files
+    %w( aaa/foo.html bbb/foo.html ccc/foo.html ).each do |filename|
+      FileUtils.mkdir_p(File.dirname(filename))
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
+
+    # Check
+    expected = {
+      './aaa/foo' => [ nil, 'html' ],
+      './bbb/foo' => [ nil, 'html' ],
+      './ccc/foo' => [ nil, 'html' ]
+    }
+    assert_equal expected, data_source.send(:all_split_files_in, '.')
+  end
+
   def test_all_split_files_in_with_multiple_content_files
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
@@ -139,7 +158,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
     # Check
     assert_raises RuntimeError do
-      data_source.send :all_split_files_in, '.'
+      data_source.send(:all_split_files_in, '.')
     end
   end
 

@@ -284,6 +284,60 @@ class Nanoc3::DataSources::FilesystemVerboseTest < MiniTest::Unit::TestCase
     assert_nil items[0].raw_content
   end
 
+  def test_filename_for_with_single
+    data_source = new_data_source
+
+    FileUtils.mkdir_p('foo/bar')
+    File.open('foo/bar.ext', 'w') { |io| io.write('o hai') }
+    assert_equal 'foo/bar.ext', data_source.send(:filename_for, 'foo/bar', 'ext')
+  end
+
+  def test_filename_for_with_double
+    data_source = new_data_source
+
+    FileUtils.mkdir_p('foo/bar')
+    File.open('foo/bar/bar.ext', 'w') { |io| io.write('o hai') }
+    assert_equal 'foo/bar/bar.ext', data_source.send(:filename_for, 'foo/bar', 'ext')
+  end
+
+  def test_filename_for_with_index
+    data_source = new_data_source
+
+    FileUtils.mkdir_p('foo/bar')
+    File.open('foo/bar/index.ext', 'w') { |io| io.write('o hai') }
+    assert_equal 'foo/bar/index.ext', data_source.send(:filename_for, 'foo/bar', 'ext')
+  end
+
+  def test_filename_for_with_nil
+    data_source = new_data_source
+
+    assert_equal nil, data_source.send(:filename_for, 'foo/bar', nil)
+  end
+
+  def test_filename_for_with_single_and_empty_ext
+    data_source = new_data_source
+
+    FileUtils.mkdir_p('foo')
+    File.open('foo/bar', 'w') { |io| io.write('o hai') }
+    assert_equal 'foo/bar', data_source.send(:filename_for, 'foo/bar', '')
+  end
+
+  def test_filename_for_with_double_and_empty_ext
+    data_source = new_data_source
+
+    FileUtils.mkdir_p('foo/bar')
+    File.open('foo/bar/bar', 'w') { |io| io.write('o hai') }
+    assert_equal 'foo/bar/bar', data_source.send(:filename_for, 'foo/bar', '')
+  end
+
+  def test_filename_for_with_index_and_empty_ext
+    data_source = new_data_source
+
+    FileUtils.mkdir_p('foo/bar')
+    File.open('foo/bar/index', 'w') { |io| io.write('o hai') }
+    assert_equal 'foo/bar/index', data_source.send(:filename_for, 'foo/bar', '')
+  end
+
   def test_compile_huge_site
     # Create data source
     data_source = new_data_source
