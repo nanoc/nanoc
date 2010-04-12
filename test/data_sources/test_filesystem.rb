@@ -333,6 +333,24 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert_equal('blah blah', result[1])
   end
 
+  def test_parse_embedded_with_extra_spaces
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----             \n"
+      io.write "foo: bar\n"
+      io.write "-----\t\t\t\t\t\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({ 'foo' => 'bar' }, result[0])
+    assert_equal('blah blah', result[1])
+  end
+
   def test_parse_embedded_empty_meta
     # Create a file
     File.open('test.html', 'w') do |io|
