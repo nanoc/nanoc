@@ -244,7 +244,7 @@ module Nanoc3::DataSources
       end
 
       # Split data
-      pieces = data.split(/^(-{5}|-{3})/)
+      pieces = data.split(/^(-{5}|-{3})\s*$/)
       if pieces.size < 4
         raise RuntimeError.new(
           "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format."
