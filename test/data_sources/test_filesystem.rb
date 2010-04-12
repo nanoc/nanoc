@@ -298,6 +298,23 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_parse_embedded_separators_but_not_metadata
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "blah blah\n"
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal(File.read('test.html'), result[1])
+    assert_equal({},                     result[0])
+  end
+
   def test_parse_embedded_full_meta
     # Create a file
     File.open('test.html', 'w') do |io|
