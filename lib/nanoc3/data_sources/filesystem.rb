@@ -166,8 +166,8 @@ module Nanoc3::DataSources
         end
 
         # Reorder elements and convert to extnames
-        filenames[0] = meta_filenames[0]    ? ext_of(meta_filenames[0])[1..-1]    : nil
-        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] : nil
+        filenames[0] = meta_filenames[0]    ? 'yaml'                                   : nil
+        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '': nil
       end
 
       # Done
@@ -246,6 +246,7 @@ module Nanoc3::DataSources
       # Split data
       pieces = data.split(/^(-{5}|-{3})/)
       if pieces.size < 4
+        # TODO improve error message
         raise RuntimeError.new(
           "The file '#{content_filename}' does not seem to be a nanoc #{kind}"
         )
