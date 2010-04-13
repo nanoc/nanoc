@@ -91,7 +91,13 @@ module Nanoc3::DataSources
 
     # See {Nanoc3::DataSources::Filesystem#filename_for}.
     def filename_for(base_filename, ext)
-      ext ? base_filename + '.' + ext : nil
+      if ext.nil?
+        nil
+      elsif ext.empty?
+        base_filename
+      else
+        base_filename + '.' + ext
+      end
     end
 
     # Returns the identifier derived from the given filename, first stripping

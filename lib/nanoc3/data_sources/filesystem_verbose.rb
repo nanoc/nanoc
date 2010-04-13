@@ -64,10 +64,16 @@ module Nanoc3::DataSources
 
     # See {Nanoc3::DataSources::Filesystem#filename_for}.
     def filename_for(base_filename, ext)
-      last_part = base_filename.split('/')[-1]
-      base_glob = base_filename.split('/')[0..-2].join('/') + "/{index,#{last_part}}."
+      return nil if ext.nil?
 
-      ext ? Dir[base_glob + ext][0] : nil
+      last_component = base_filename[%r{[^/]+$}]
+      possibilities = [
+        base_filename + (ext.empty? ? '' : '.' + ext),                        # foo/bar.html
+        base_filename + '/' + last_component + (ext.empty? ? '' : '.' + ext), # foo/bar/bar.html
+        base_filename + '/' + 'index' + (ext.empty? ? '' : '.' + ext)         # foo/bar/index.html
+      ]
+
+      possibilities.find { |p| File.file?(p) }
     end
 
     # See {Nanoc3::DataSources::Filesystem#identifier_for_filename}.
