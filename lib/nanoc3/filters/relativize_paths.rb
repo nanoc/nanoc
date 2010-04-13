@@ -22,7 +22,7 @@ module Nanoc3::Filters
       @item_rep = assigns[:item_rep] if @item_rep.nil?
 
       # Filter
-      # TODO use nokogiri or csspool instead of regular expressions
+      # FIXME use nokogiri or csspool instead of regular expressions
       case params[:type]
       when :html
         content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/.*?)\3([ >])/) do
