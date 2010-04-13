@@ -128,6 +128,25 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert_equal output_expected, output_actual
   end
 
+  def test_all_split_files_in_with_multiple_dirs
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Write sample files
+    %w( aaa/foo.html bbb/foo.html ccc/foo.html ).each do |filename|
+      FileUtils.mkdir_p(File.dirname(filename))
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
+
+    # Check
+    expected = {
+      './aaa/foo' => [ nil, 'html' ],
+      './bbb/foo' => [ nil, 'html' ],
+      './ccc/foo' => [ nil, 'html' ]
+    }
+    assert_equal expected, data_source.send(:all_split_files_in, '.')
+  end
+
   def test_all_split_files_in_with_multiple_content_files
     # Create data source
     data_source = Nanoc3::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
@@ -139,7 +158,7 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
 
     # Check
     assert_raises RuntimeError do
-      data_source.send :all_split_files_in, '.'
+      data_source.send(:all_split_files_in, '.')
     end
   end
 
@@ -279,12 +298,47 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_parse_embedded_separators_but_not_metadata
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "blah blah\n"
+      io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal(File.read('test.html'), result[1])
+    assert_equal({},                     result[0])
+  end
+
   def test_parse_embedded_full_meta
     # Create a file
     File.open('test.html', 'w') do |io|
       io.write "-----\n"
       io.write "foo: bar\n"
       io.write "-----\n"
+      io.write "blah blah\n"
+    end
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({ 'foo' => 'bar' }, result[0])
+    assert_equal('blah blah', result[1])
+  end
+
+  def test_parse_embedded_with_extra_spaces
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----             \n"
+      io.write "foo: bar\n"
+      io.write "-----\t\t\t\t\t\n"
       io.write "blah blah\n"
     end
 
