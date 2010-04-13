@@ -4,6 +4,32 @@ module Nanoc3::CLI
 
   class Base < Cri::Base
 
+    # A hash that contains the name of the gem for a given required file. If a
+    # {#require} fails, the gem name is looked up in this hash.
+    GEM_NAMES = {
+      'adsf'           => 'adsf',
+      'bluecloth'      => 'bluecloth',
+      'builder'        => 'builder',
+      'coderay'        => 'coderay',
+      'cri'            => 'cri',
+      'erubis'         => 'erubis',
+      'fssm'           => 'fssm',
+      'haml'           => 'haml',
+      'json'           => 'json',
+      'less'           => 'less',
+      'markaby'        => 'markaby',
+      'maruku'         => 'maruku',
+      'mime/types'     => 'mime-types',
+      'rack'           => 'rack',
+      'rack/cache'     => 'rack-cache',
+      'rainpress'      => 'rainpress',
+      'rdiscount'      => 'rdiscount',
+      'redcloth'       => 'redcloth',
+      'rubypants'      => 'rubypants',
+      'sass'           => 'sass',
+      'w3c_validators' => 'w3c_validators'
+    }
+
     def initialize
       super('nanoc3')
 
@@ -118,36 +144,11 @@ module Nanoc3::CLI
     # Returns a string containing hints for resolving the given error, or nil
     # if no resolution can be automatically obtained.
     def resolution_for(error)
-      # FIXME this should probably go somewhere else so that 3rd-party code can add other gem names too
-      gem_names = {
-        'adsf'           => 'adsf',
-        'bluecloth'      => 'bluecloth',
-        'builder'        => 'builder',
-        'coderay'        => 'coderay',
-        'cri'            => 'cri',
-        'erubis'         => 'erubis',
-        'fssm'           => 'fssm',
-        'haml'           => 'haml',
-        'json'           => 'json',
-        'less'           => 'less',
-        'markaby'        => 'markaby',
-        'maruku'         => 'maruku',
-        'mime/types'     => 'mime-types',
-        'rack'           => 'rack',
-        'rack/cache'     => 'rack-cache',
-        'rainpress'      => 'rainpress',
-        'rdiscount'      => 'rdiscount',
-        'redcloth'       => 'redcloth',
-        'rubypants'      => 'rubypants',
-        'sass'           => 'sass',
-        'w3c_validators' => 'w3c_validators'
-      }
-
       case error
       when LoadError
         # Get gem name
         lib_name = error.message.match(/no such file to load -- ([^\s]+)/)[1]
-        gem_name = gem_names[$1]
+        gem_name = GEM_NAMES[$1]
 
         # Build message
         if gem_name
