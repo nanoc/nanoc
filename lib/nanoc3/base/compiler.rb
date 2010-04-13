@@ -124,6 +124,24 @@ module Nanoc3
       end
     end
 
+    # Returns the list of routing rules that can be applied to the given item
+    # representation. For each snapshot, the first matching rule will be
+    # returned. The result is a hash containing the corresponding rule for
+    # each snapshot.
+    #
+    # @return [Hash<Symbol, Nanoc3::Rule>] The routing rules for the given rep
+    def routing_rules_for(rep)
+      rules = {}
+      @item_routing_rules.each do |rule|
+        next if !rule.applicable_to?(rep.item)
+        next if rule.rep_name != rep.name
+        next if rules.has_key?(rule.snapshot_name)
+
+        rules[rule.snapshot_name] = rule
+      end
+      rules
+    end
+
     # Finds the filter name and arguments to use for the given layout.
     #
     # @param [Nanoc3::Layout] layout The layout for which to fetch the filter.
@@ -206,13 +224,15 @@ module Nanoc3
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
+        rep.snapshot(:raw)
+        rep.snapshot(:pre)
         compilation_rule_for(rep).apply_to(rep)
       end
 
       rep.compiled = true
       compiled_content_cache[rep] = rep.content
 
-      rep.write unless rep.raw_path.nil?
+      rep.write(:last)
     rescue => e
       rep.forget_progress
       Nanoc3::NotificationCenter.post(:compilation_failed, rep)

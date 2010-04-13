@@ -65,7 +65,13 @@ module Nanoc3::CLI::Commands
       items.sort_by { |i| i.identifier }.each do |item|
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           puts "item #{item.identifier}, rep #{rep.name}:"
-          puts "  #{rep.raw_path || '(not written)'}"
+          if rep.raw_paths.empty?
+            puts "  (not written)"
+          end
+          length = rep.raw_paths.keys.map { |s| s.to_s.length }.max
+          rep.raw_paths.each do |snapshot_name, raw_path|
+            puts "  [ %-#{length}s ] %s" % [ snapshot_name, raw_path ]
+          end
         end
         puts
       end

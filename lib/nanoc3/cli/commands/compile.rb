@@ -91,9 +91,11 @@ module Nanoc3::CLI::Commands
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
-        next if rep.raw_path.nil?
-        duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:high, :skip, rep.raw_path, duration)
+        rep.raw_paths.each do |snapshot_name, filename|
+          next if filename.nil?
+          duration = @rep_times[filename]
+          Nanoc3::CLI::Logger.instance.file(:high, :skip, filename, duration)
+        end
       end
 
       # Show diff
@@ -113,19 +115,33 @@ module Nanoc3::CLI::Commands
   private
 
     def setup_notifications
+      # File notifications
+      Nanoc3::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_updated|
+        action = (is_created ? :create : (is_updated ? :update : :identical))
+        duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
+        Nanoc3::CLI::Logger.instance.file(:high, action, path, duration)
+      end
+
+      # Debug notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
         puts "*** Started compilation of #{rep.inspect}" if @base.debug?
-        rep_compilation_started(rep)
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
         puts "*** Ended compilation of #{rep.inspect}" if @base.debug?
-        rep_compilation_ended(rep)
       end
       Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
         puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if @base.debug?
       end
       Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
         puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if @base.debug?
+      end
+
+      # Timing notifications
+      Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
+        rep_compilation_started(rep)
+      end
+      Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
+        rep_compilation_ended(rep)
       end
       Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
         rep_filtering_started(rep, filter_name)
@@ -166,7 +182,7 @@ module Nanoc3::CLI::Commands
       created, rest     = *rest.partition { |r| r.created? }
       modified, rest    = *rest.partition { |r| r.modified? }
       skipped, rest     = *rest.partition { |r| !r.compiled? }
-      not_written, rest = *rest.partition { |r| r.compiled? && !r.written? }
+      not_written, rest = *rest.partition { |r| r.compiled? && r.raw_path.nil? }
       identical         = rest
 
       # Print
@@ -229,26 +245,6 @@ module Nanoc3::CLI::Commands
       # Profile compilation
       @rep_times ||= {}
       @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
-
-      # Skip if not outputted
-      return unless rep.written?
-
-      # Get action and level
-      action = if rep.created?
-        :create
-      elsif rep.modified?
-        :update
-      elsif !rep.compiled?
-        nil
-      else
-        :identical
-      end
-
-      # Log
-      unless action.nil?
-        duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:high, action, rep.raw_path, duration)
-      end
     end
 
     def rep_filtering_started(rep, filter_name)

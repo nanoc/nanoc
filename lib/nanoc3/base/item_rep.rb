@@ -62,22 +62,16 @@ module Nanoc3
     attr_accessor :compiled
     alias_method :compiled?, :compiled
 
-    # @return [Boolean] true if this representation’s compiled content has
-    #   been written during the current or last compilation session; false
-    #   otherwise
-    attr_reader :written
-    alias_method :written?, :written
+    # @return [Hash<Symbol,String>] A hash containing the raw paths (paths
+    #   including the path to the output directory and the filename) for all
+    #   snapshots. The keys correspond with the snapshot names, and the values
+    #   with the path.
+    attr_accessor :raw_paths
 
-    # @return [String] The item rep's path, as used when being linked to. It
-    #   starts with a slash and it is relative to the output directory. It
-    #   does not include the path to the output directory. It will not include
-    #   the filename if the filename is an index filename.
-    attr_accessor :path
-
-    # @return [String] The item rep's raw path. It is relative to the current
-    #   working directory and includes the path to the output directory. It
-    #   also includes the filename, even if it is an index filename.
-    attr_accessor :raw_path
+    # @return [Hash<Symbol,String>] A hash containing the paths for all
+    #   snapshots. The keys correspond with the snapshot names, and the values
+    #   with the path.
+    attr_accessor :paths
 
     # @return [Hash<Symbol,String>] A hash containing the content at all
     #   snapshots. The keys correspond with the snapshot names, and the
@@ -98,15 +92,16 @@ module Nanoc3
       # Set binary
       @binary = @item.binary?
 
-      # Initialize content and filenames
-      initialize_content
+      # Initialize content and filenames and paths
+      @raw_paths   = {}
+      @paths       = {}
       @old_content = nil
+      initialize_content
 
       # Reset flags
       @compiled       = false
       @modified       = false
       @created        = false
-      @written        = false
       @force_outdated = false
     end
 
@@ -233,6 +228,42 @@ module Nanoc3
       @content[snapshot_name]
     end
 
+    # Returns the item rep’s raw path. It includes the path to the output
+    # directory and the full filename.
+    #
+    # @option params [Symbol] :snapshot (:last) The snapshot for which the
+    #   path should be returned
+    #
+    # @return [String] The item rep’s path
+    def raw_path(params={})
+      snapshot_name = params[:snapshot] || :last
+      @raw_paths[snapshot_name]
+    end
+
+    # Returns the item rep’s path, as used when being linked to. It starts
+    # with a slash and it is relative to the output directory. It does not
+    # include the path to the output directory. It will not include the
+    # filename if the filename is an index filename.
+    #
+    # @option params [Symbol] :snapshot (:last) The snapshot for which the
+    #   path should be returned
+    #
+    # @return [String] The item rep’s path
+    def path(params={})
+      snapshot_name = params[:snapshot] || :last
+      @paths[snapshot_name]
+    end
+
+    # @deprecated Modify the {#raw_paths} attribute instead
+    def raw_path=(raw_path)
+      raw_paths[:last] = raw_path
+    end
+
+    # @deprecated Modify the {#paths} attribute instead
+    def path=(path)
+      paths[:last] = path
+    end
+
     # @deprecated Use {Nanoc3::ItemRep#compiled_content} instead.
     def content_at_snapshot(snapshot=:pre)
       compiled_content(:snapshot => snapshot)
@@ -337,8 +368,11 @@ module Nanoc3
     #
     # @return [void]
     def snapshot(snapshot_name)
-      target = self.binary? ? @filenames : @content
-      target[snapshot_name] = target[:last]
+      # Create snapshot
+       @content[snapshot_name] = @content[:last] unless self.binary?
+
+      # Write
+      write(snapshot_name)
     end
 
     # Writes the item rep's compiled content to the rep's output file.
@@ -346,45 +380,53 @@ module Nanoc3
     # This method should not be called directly, even in a compilation block;
     # the compiler is responsible for calling this method.
     #
+    # @param [String, nil] raw_path The raw path to write the compiled rep to.
+    #   If nil, the default raw path will be used.
+    #
     # @return [void]
-    def write
+    def write(snapshot=:last)
+      # Get raw path
+      raw_path = self.raw_path(:snapshot => snapshot)
+      return if raw_path.nil?
+
       # Create parent directory
-      FileUtils.mkdir_p(File.dirname(self.raw_path))
+      FileUtils.mkdir_p(File.dirname(raw_path))
 
       # Check if file will be created
-      @created = !File.file?(self.raw_path)
+      @created = !File.file?(raw_path)
 
       if self.binary?
         # Calculate hash of old content
-        if File.file?(self.raw_path)
-          hash_old = Nanoc3::Checksummer.checksum_for(self.raw_path)
-          size_old = File.size(self.raw_path)
+        if File.file?(raw_path)
+          hash_old = Nanoc3::Checksummer.checksum_for(raw_path)
+          size_old = File.size(raw_path)
         end
 
         # Copy
-        FileUtils.cp(@filenames[:last], self.raw_path)
-        @written = true
+        FileUtils.cp(@filenames[:last], raw_path)
 
         # Check if file was modified
-        size_new = File.size(self.raw_path)
-        hash_new = Nanoc3::Checksummer.checksum_for(self.raw_path) if size_old == size_new
+        size_new = File.size(raw_path)
+        hash_new = Nanoc3::Checksummer.checksum_for(raw_path) if size_old == size_new
         @modified = (size_old != size_new || hash_old != hash_new)
       else
         # Remember old content
-        if File.file?(self.raw_path)
-          @old_content = File.read(self.raw_path)
+        if File.file?(raw_path)
+          @old_content = File.read(raw_path)
         end
 
         # Write
-        File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
-        @written = true
+        File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
 
         # Generate diff
         generate_diff
 
         # Check if file was modified
-        @modified = File.read(self.raw_path) != @old_content
+        @modified = File.read(raw_path) != @old_content
       end
+
+      # Notify
+      Nanoc3::NotificationCenter.post(:rep_written, self, raw_path, @created, @updated)
     end
 
     # Creates and returns a diff between the compiled content before the
@@ -403,6 +445,16 @@ module Nanoc3
       end
     end
 
+    # @deprecated
+    def written
+      raise NotImplementedError, "Nanoc3::ItemRep#written is no longer implemented"
+    end
+
+    # @deprecated
+    def written?
+      raise NotImplementedError, "Nanoc3::ItemRep#written is no longer implemented"
+    end
+
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} binary=#{self.binary?} raw_path=#{self.raw_path} item.identifier=#{self.item.identifier}>"
     end
@@ -412,17 +464,10 @@ module Nanoc3
     def initialize_content
       # Initialize content and filenames
       if self.binary?
-        @filenames = {
-          :raw  => @item.raw_filename,
-          :last => @item.raw_filename
-        }
-        @content = {}
+        @filenames = { :last => @item.raw_filename }
+        @content   = {}
       else
-        @content = {
-          :raw  => @item.raw_content,
-          :last => @item.raw_content,
-          :pre  => @item.raw_content
-        }
+        @content   = { :last => @item.raw_content }
         @filenames = {}
       end
     end
