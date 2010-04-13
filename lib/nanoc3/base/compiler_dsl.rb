@@ -33,13 +33,13 @@ module Nanoc3
     # rep as a block argument.
     #
     # @param [String] identifier A pattern matching identifiers of items that
-    # should be compiled using this rule
+    #   should be compiled using this rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
-    # that should be compiled using this rule
+    #   that should be compiled using this rule
     #
     # @yield The block that will be executed when an item matching this
-    # compilation rule needs to be compiled
+    #   compilation rule needs to be compiled
     #
     # @return [void]
     #
@@ -77,13 +77,13 @@ module Nanoc3
     # and passing the rep as a block argument.
     #
     # @param [String] identifier A pattern matching identifiers of items that
-    # should be routed using this rule
+    #   should be routed using this rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
-    # that should be routed using this rule
+    #   that should be routed using this rule
     #
     # @yield The block that will be executed when an item matching this
-    # compilation rule needs to be routed
+    #   compilation rule needs to be routed
     #
     # @return [void]
     #
@@ -117,13 +117,13 @@ module Nanoc3
     # contains filter arguments that will be passed to the filter.
     #
     # @param [String] identifier A pattern matching identifiers of layouts
-    # that should be filtered using this rule
+    #   that should be filtered using this rule
     #
     # @param [Symbol] filter_name The name of the filter that should be run
-    # when processing the layout
+    #   when processing the layout
     #
     # @param [Hash] params Extra filter arguments that should be passed to the
-    # filter when processing the layout (see {Nanoc3::Filter#run})
+    #   filter when processing the layout (see {Nanoc3::Filter#run})
     #
     # @return [void]
     #

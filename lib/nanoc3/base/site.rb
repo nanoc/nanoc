@@ -108,14 +108,14 @@ module Nanoc3
     attr_reader   :new_rules_checksum
 
     # @return [Proc] The code block that will be executed after all data is
-    # loaded but before the site is compiled
+    #   loaded but before the site is compiled
     attr_accessor :preprocessor
 
     # Creates a site object for the site specified by the given
     # `dir_or_config_hash` argument.
     #
     # @param [Hash, String] dir_or_config_hash If a string, contains the path
-    # to the site directory; if a hash, contains the site configuration.
+    #   to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
       @new_checksums = {}
 
@@ -138,10 +138,10 @@ module Nanoc3
     # none exists yet.
     #
     # @return [Array<Nanoc3::DataSource>] The list of data sources for this
-    # site
+    #   site
     #
     # @raise [Nanoc3::Errors::UnknownDataSource] if the site configuration
-    # specifies an unknown data source
+    #   specifies an unknown data source
     def data_sources
       @data_sources ||= begin
         @config[:data_sources].map do |data_source_hash|
@@ -175,7 +175,7 @@ module Nanoc3
     # the `force` parameter is true.
     #
     # @param [Boolean] force If true, will force load the site data even if it
-    # has been loaded before, to circumvent caching issues
+    #   has been loaded before, to circumvent caching issues
     #
     # @return [void]
     def load_data(force=false)
@@ -205,10 +205,10 @@ module Nanoc3
     # Returns this site’s code snippets.
     #
     # @return [Array<Nanoc3::CodeSnippet>] The list of code snippets in this
-    # site
+    #   site
     #
     # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    # been loaded yet (call {#load_data} to load the site data)
+    #   been loaded yet (call {#load_data} to load the site data)
     def code_snippets
       raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @code_snippets_loaded
       @code_snippets
@@ -219,7 +219,7 @@ module Nanoc3
     # @return [Array<Nanoc3::Item>] The list of items in this site
     #
     # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    # been loaded yet (call {#load_data} to load the site data)
+    #   been loaded yet (call {#load_data} to load the site data)
     def items
       raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @items_loaded
       @items
@@ -230,7 +230,7 @@ module Nanoc3
     # @return [Array<Nanoc3::Layouts>] The list of layout in this site
     #
     # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    # been loaded yet (call {#load_data} to load the site data)
+    #   been loaded yet (call {#load_data} to load the site data)
     def layouts
       raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @layouts_loaded
       @layouts

@@ -58,6 +58,7 @@ module Nanoc3
     # Adds an edge from the first vertex to the second vertex.
     #
     # @param from Vertex where the edge should start
+    #
     # @param to   Vertex where the edge should end
     #
     # @return [void]
@@ -77,6 +78,7 @@ module Nanoc3
     # edge does not exist, nothing is done.
     #
     # @param from Start vertex of the edge
+    #
     # @param to   End vertex of the edge
     #
     # @return [void]

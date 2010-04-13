@@ -10,10 +10,10 @@ module Nanoc3::Helpers
     # Returns a string containing the rendered given layout.
     #
     # @param [String] identifier The identifier of the layout that should be
-    # rendered
+    #   rendered
     #
     # @param [Hash] other_assigns A hash containing assigns that will be made
-    # available as instance variables in the partial
+    #   available as instance variables in the partial
     #
     # @example Rendering a head and a foot partial around some text
     #
@@ -30,7 +30,7 @@ module Nanoc3::Helpers
     #   # => "<h1>Foo</h1>"
     #
     # @raise [Nanoc3::Errors::UnknownLayout] if the given layout does not
-    # exist
+    #   exist
     #
     # @return [String] The rendered partial
     def render(identifier, other_assigns={}, &block)

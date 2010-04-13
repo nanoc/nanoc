@@ -30,22 +30,22 @@ module Nanoc3
     attr_reader   :reps
 
     # @return [String] This item's raw, uncompiled content of this item (only
-    # available for textual items)
+    #   available for textual items)
     attr_reader   :raw_content
 
     # @return [String] The filename pointing to the file containing this
-    # item’s content (only available for binary items)
+    #   item’s content (only available for binary items)
     attr_reader   :raw_filename
 
     # @return [Nanoc3::Item, nil] The parent item of this item. This can be
-    # nil even for non-root items.
+    #   nil even for non-root items.
     attr_accessor :parent
 
     # @return [Array<Nanoc3::Item>] The child items of this item
     attr_accessor :children
 
     # @return [Boolean] Whether or not this item is outdated because of its
-    # dependencies are outdated
+    #   dependencies are outdated
     attr_accessor :outdated_due_to_dependencies
     alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
 
@@ -53,8 +53,8 @@ module Nanoc3
     # identifier.
     #
     # @param [String] raw_content_or_raw_filename The uncompiled item content
-    # (if it is a textual item) or the path to the filename containing the
-    # content (if it is a binary item).
+    #   (if it is a textual item) or the path to the filename containing the
+    #   content (if it is a binary item).
     #
     # @param [Hash] attributes A hash containing this item's attributes.
     #
@@ -111,17 +111,17 @@ module Nanoc3
     # content easier.
     #
     # @option params [String] :rep (:default) The name of the representation
-    # from which the compiled content should be fetched. By default, the
-    # compiled content will be fetched from the default representation.
+    #   from which the compiled content should be fetched. By default, the
+    #   compiled content will be fetched from the default representation.
     #
     # @option params [String] :snapshot The name of the snapshot from which to
-    # fetch the compiled content. By default, the returned compiled content
-    # will be the content compiled right before the first layout call (if
-    # any).
+    #   fetch the compiled content. By default, the returned compiled content
+    #   will be the content compiled right before the first layout call (if
+    #   any).
     #
     # @return [String] The compiled content of the given rep (or the default
-    # rep if no rep is specified) at the given snapshot (or the default
-    # snapshot if no snapshot is specified)
+    #   rep if no rep is specified) at the given snapshot (or the default
+    #   snapshot if no snapshot is specified)
     #
     # @see ItemRep#compiled_content
     def compiled_content(params={})
@@ -141,11 +141,11 @@ module Nanoc3
     # method that makes fetching the path of a rep easier.
     #
     # @option params [String] :rep (:default) The name of the representation
-    # from which the path should be fetched. By default, the path will be
-    # fetched from the default representation.
+    #   from which the path should be fetched. By default, the path will be
+    #   fetched from the default representation.
     #
     # @return [String] The path of the given rep ( or the default rep if no
-    # rep is specified)
+    #   rep is specified)
     def path(params={})
       rep_name = params[:rep] || :default
 
