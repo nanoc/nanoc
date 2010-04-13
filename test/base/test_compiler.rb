@@ -282,6 +282,60 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_compile_rep_should_write_proper_snapshots
+    # Mock rep
+    item = Nanoc3::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
+    rep  = Nanoc3::ItemRep.new(item, :blah)
+
+    # Set snapshot filenames
+    rep.raw_paths = {
+      :raw  => 'raw.txt',
+      :pre  => 'pre.txt',
+      :post => 'post.txt',
+      :last => 'last.txt'
+    }
+
+    # Create rule
+    rule_block = lambda do
+      filter :erb
+      filter :erb
+      layout '/blah/'
+      filter :erb
+    end
+    rule = Nanoc3::Rule.new(/blah/, :meh, rule_block)
+
+    # Create layout
+    layout = Nanoc3::Layout.new('head <%= yield %> foot', {}, '/')
+    rep.expects(:layout_with_identifier).returns(layout)
+    filter = Nanoc3::PluginRegistry.instance.find(Nanoc3::Filter, :erb)
+    rep.expects(:filter_for_layout).with(layout).returns(filter.new({ :content => 'middle' }))
+
+    # Create site
+    site = mock
+    site.stubs(:config).returns({})
+    site.stubs(:items).returns([])
+    site.stubs(:layouts).returns([])
+    item.site = site
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.expects(:compilation_rule_for).with(rep).returns(rule)
+    site.stubs(:compiler).returns(compiler)
+
+    # Compile
+    compiler.send(:compile_rep, rep)
+
+    # Test
+    assert File.file?('raw.txt')
+    assert File.file?('pre.txt')
+    assert File.file?('post.txt')
+    assert File.file?('last.txt')
+    assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('raw.txt')
+    assert_equal '1 2 <%= 3 %>',                  File.read('pre.txt')
+    assert_equal 'head middle foot',              File.read('post.txt')
+    assert_equal 'head middle foot',              File.read('last.txt')
+  end
+
   def test_compile_reps_with_no_reps
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)

@@ -197,7 +197,7 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
 
       # Require compilation
-      raise Nanoc3::Errors::UnmetDependency.new(self) unless compiled?
+      raise Nanoc3::Errors::UnmetDependency.new(self) if !compiled? && !params[:force]
 
       # Get name of last pre-layout snapshot
       snapshot_name = params[:snapshot]
@@ -314,7 +314,7 @@ module Nanoc3
       end
 
       # Create snapshot
-      snapshot(@content[:post] ? :post : :pre) unless self.binary?
+      snapshot(@content[:post] ? :post : :pre, :final => false) unless self.binary?
     end
 
     # Lays out the item using the given layout. This method will replace the
@@ -333,7 +333,9 @@ module Nanoc3
       raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
 
       # Create "pre" snapshot
-      snapshot(:pre) unless @content[:pre]
+      if @content[:post].nil?
+        snapshot(:pre, :final => true)
+      end
 
       # Create filter
       layout = layout_with_identifier(layout_identifier)
@@ -347,20 +349,27 @@ module Nanoc3
       @item.site.compiler.stack.pop
 
       # Create "post" snapshot
-      snapshot(:post)
+      snapshot(:post, :final => false)
     end
 
     # Creates a snapshot of the current compiled item content.
     #
     # @param [Symbol] snapshot_name The name of the snapshot to create
     #
+    # @option params [Boolean] :final (true) True if this is the final time
+    #   the snapshot will be updated; false if it is a non-final moving
+    #   snapshot (such as `:pre`, `:post` or `:last`)
+    #
     # @return [void]
-    def snapshot(snapshot_name)
+    def snapshot(snapshot_name, params={})
+      # Parse params
+      params[:final] = true if !params.has_key?(:final)
+
       # Create snapshot
        @content[snapshot_name] = @content[:last] unless self.binary?
 
       # Write
-      write(snapshot_name)
+      write(snapshot_name) if params[:final]
     end
 
     # Writes the item rep's compiled content to the rep's output file.

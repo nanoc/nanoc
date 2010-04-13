@@ -577,6 +577,35 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal(%[blah],                        item_rep.instance_eval { @content[:qux] })
   end
 
+  def test_snapshot_should_be_written
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+
+    # Create rep
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    item_rep.raw_paths = { :moo => 'foo-moo.txt' }
+
+    # Test non-final
+    refute File.file?(item_rep.raw_path(:snapshot => :moo))
+    item_rep.snapshot(:moo, :final => false)
+    refute File.file?(item_rep.raw_path(:snapshot => :moo))
+
+    # Test final 1
+    item_rep.snapshot(:moo, :final => true)
+    assert File.file?(item_rep.raw_path(:snapshot => :moo))
+    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
+    FileUtils.rm_f(item_rep.raw_path(:snapshot => :moo))
+
+    # Test final 2
+    item_rep.snapshot(:moo)
+    assert File.file?(item_rep.raw_path(:snapshot => :moo))
+    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
+  end
+
   def test_write
     # Mock item
     item = Nanoc3::Item.new(
