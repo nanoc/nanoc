@@ -382,24 +382,26 @@ module Nanoc3
     def route_reps
       reps = @items.map { |i| i.reps }.flatten
       reps.each do |rep|
-        # Find matching rule
-        rule = self.compiler.routing_rule_for(rep)
-        raise Nanoc3::Errors::NoMatchingRoutingRuleFound.new(rep) if rule.nil?
+        # Find matching rules
+        rules = self.compiler.routing_rules_for(rep)
+        raise Nanoc3::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
 
-        # Get basic path by applying matching rule
-        basic_path = rule.apply_to(rep)
-        next if basic_path.nil?
+        rules.each_pair do |snapshot, rule|
+          # Get basic path by applying matching rule
+          basic_path = rule.apply_to(rep)
+          next if basic_path.nil?
 
-        # Get raw path by prepending output directory
-        rep.raw_path = self.config[:output_dir] + basic_path
+          # Get raw path by prepending output directory
+          rep.raw_paths[snapshot] = self.config[:output_dir] + basic_path
 
-        # Get normal path by stripping index filename
-        rep.path = basic_path
-        self.config[:index_filenames].each do |index_filename|
-          if rep.path[-index_filename.length..-1] == index_filename
-            # Strip and stop
-            rep.path = rep.path[0..-index_filename.length-1]
-            break
+          # Get normal path by stripping index filename
+          rep.paths[snapshot] = basic_path
+          self.config[:index_filenames].each do |index_filename|
+            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
+              # Strip and stop
+              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
+              break
+            end
           end
         end
       end

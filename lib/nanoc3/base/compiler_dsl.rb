@@ -103,10 +103,11 @@ module Nanoc3
       raise ArgumentError.new("#route requires a block") unless block_given?
 
       # Get rep name
-      rep_name = params[:rep] || :default
+      rep_name      = params[:rep] || :default
+      snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
+      rule = Rule.new(identifier_to_regex(identifier), rep_name, block, :snapshot_name => snapshot_name)
       @site.compiler.item_routing_rules << rule
     end
 

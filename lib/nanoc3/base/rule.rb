@@ -14,6 +14,10 @@ module Nanoc3
     #   using this rule
     attr_reader :rep_name
 
+    # @return [Symbol] The name of the snapshot this rule will apply to.
+    #   Ignored for compilation rules, but used for routing rules.
+    attr_reader :snapshot_name
+
     # Creates a new item compilation rule with the given identifier regex,
     # compiler and block. The block will be called during compilation with the
     # item rep as its argument.
@@ -26,9 +30,14 @@ module Nanoc3
     #
     # @param [Proc] block A block that will be called when matching items are
     #   compiled
-    def initialize(identifier_regex, rep_name, block)
+    #
+    # @option params [Symbol, nil] :snapshot (nil) The name of the snapshot
+    #   this rule will apply to. Ignored for compilation rules, but used for
+    #   routing rules.
+    def initialize(identifier_regex, rep_name, block, params={})
       @identifier_regex = identifier_regex
       @rep_name         = rep_name.to_sym
+      @snapshot_name    = params[:snapshot_name]
 
       @block = block
     end

@@ -692,7 +692,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item = create_binary_item
     rep = create_rep_for(item, /foo/)
     rep.instance_eval { @filenames[:last] = in_filename }
-    rep.raw_path = out_filename
+    rep.raw_paths[:last] = out_filename
 
     rep.write
 
