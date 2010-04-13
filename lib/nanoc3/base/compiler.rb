@@ -91,6 +91,14 @@ module Nanoc3
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
     end
 
+    # Returns the dependency tracker for this site, creating it first if it
+    # does not yet exist.
+    # 
+    # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
+    def dependency_tracker
+      @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
+    end
+
     # Finds the first matching compilation rule for the given item
     # representation.
     #
@@ -212,14 +220,6 @@ module Nanoc3
     ensure
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
-    end
-
-    # Returns the dependency tracker for this site, creating it first if it
-    # does not yet exist.
-    # 
-    # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
-    def dependency_tracker
-      @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
     end
 
     # Clears the list of dependencies for items that will be recompiled.
