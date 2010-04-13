@@ -13,7 +13,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.run(".foo #bar\n  color: #f00")
-      assert_match(/.foo\s+#bar\s*\{\s*color:\s+#f00;?\s*\}/, result)
+      assert_match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}/, result)
     end
   end
 
@@ -24,11 +24,11 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
       # Check with compact
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
-      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*#f00;?[\s\n]*\}/m, result)
+      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*(red|#f00);?[\s\n]*\}/m, result)
 
       # Check with compressed
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compressed')
-      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*#f00;?[\s\n]*\}/m, result)
+      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*(red|#f00);?[\s\n]*\}/m, result)
     end
   end
 
