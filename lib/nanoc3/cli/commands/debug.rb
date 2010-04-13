@@ -43,8 +43,7 @@ module Nanoc3::CLI::Commands
       layouts = @base.site.layouts
 
       # Get dependency tracker
-      # FIXME clean this up
-      dependency_tracker = @base.site.compiler.send(:dependency_tracker)
+      dependency_tracker = @base.site.compiler.dependency_tracker
       dependency_tracker.load_graph
 
       # Print item dependencies
