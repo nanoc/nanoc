@@ -14,7 +14,8 @@ module Nanoc3::Filters
     #
     # @param [String] content The content to filter
     #
-    # @option params [Symbol] :type The type of content to filter; can be either `:html` or `:css`.
+    # @option params [Symbol] :type The type of content to filter; can be
+    #   either `:html` or `:css`.
     #
     # @return [String] The filtered content
     def run(content, params={})

@@ -24,11 +24,11 @@ module Nanoc3
   class DependencyTracker
 
     # @return [String] The name of the file in which dependency information is
-    # stored
+    #   stored
     attr_accessor :filename
 
     # @return [Array<Nanoc3::Item>] The list of items that is being tracked
-    # by the dependency tracker
+    #   by the dependency tracker
     attr_reader :items
 
     # The version of the file format used to store dependencies.
@@ -37,7 +37,7 @@ module Nanoc3
     # Creates a new dependency tracker for the given items.
     #
     # @param [Array<Nanoc3::Item>] item The list of items whose dependencies
-    # should be managed
+    #   should be managed
     def initialize(items)
       @items          = items
       @filename       = 'tmp/dependencies'
@@ -88,7 +88,7 @@ module Nanoc3
     # direct dependencies of A do not include C).
     #
     # @param [Nanoc3::Item] item The item for which to fetch the direct
-    # predecessors
+    #   predecessors
     #
     # @return [Array<Nanoc3::Item>] The direct predecessors of the given item
     def direct_predecessors_of(item)
@@ -101,7 +101,7 @@ module Nanoc3
     # cause `item` to be marked as outdated.
     #
     # @param [Nanoc3::Item] item The item for which to fetch all direct and
-    # indirect predecessors
+    #   indirect predecessors
     #
     # @return [Array<Nanoc3::Item>] The predecessors of the given item
     def predecessors_of(item)
@@ -116,7 +116,7 @@ module Nanoc3
     # direct inverse dependencies of C do not include A).
     #
     # @param [Nanoc3::Item] item The item for which to fetch the direct
-    # successors
+    #   successors
     #
     # @return [Array<Nanoc3::Item>] The direct successors of the given item
     def direct_successors_of(item)
@@ -129,7 +129,7 @@ module Nanoc3
     # as outdated when `item` is outdated.
     #
     # @param [Nanoc3::Item] item The item for which to fetch all direct and
-    # indirect successors
+    #   indirect successors
     #
     # @return [Array<Nanoc3::Item>] The successors of the given item
     def successors_of(item)
@@ -140,11 +140,11 @@ module Nanoc3
     # `dst` is oudated, `src` will also become outdated.
     #
     # @param [Nanoc3::Item] src The source of the dependency, i.e. the item
-    # that will become outdated if dst is outdated
+    #   that will become outdated if dst is outdated
     #
     # @param [Nanoc3::Item] dst The destination of the dependency, i.e. the
-    # item that will cause the source to become outdated if the destination
-    # is outdated
+    #   item that will cause the source to become outdated if the destination
+    #   is outdated
     #
     # @return [void]
     def record_dependency(src, dst)

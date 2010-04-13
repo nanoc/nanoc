@@ -31,7 +31,7 @@ module Nanoc3::Helpers
     # content of the block itself will not be outputted.
     #
     # @param [Symbol, String] The base name of the attribute into which the
-    # content should be stored
+    #   content should be stored
     #
     # @return [void]
     def content_for(name, &block)

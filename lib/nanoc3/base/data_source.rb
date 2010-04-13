@@ -21,21 +21,22 @@ module Nanoc3
   # first time.
   #
   # @abstract Subclasses should at least implement {#items} and {#layouts}. If
-  # the data source should support creating items and layouts using the
-  # `create_item` and `create_layout` CLI commands, the {#setup},
-  # {#create_item} and {#create_layout} methods should be implemented as well.
+  #   the data source should support creating items and layouts using the
+  #   `create_item` and `create_layout` CLI commands, the {#setup},
+  #   {#create_item} and {#create_layout} methods should be implemented as
+  #   well.
   class DataSource
 
     # @return [String] The root path where items returned by this data source
-    # should be mounted.
+    #   should be mounted.
     attr_reader :items_root
 
     # @return [String] The root path where layouts returned by this data
-    # source should be mounted.
+    #   source should be mounted.
     attr_reader :layouts_root
 
     # @return [Hash] The configuration for this data source. For example,
-    # online data sources could contain authentication details.
+    #   online data sources could contain authentication details.
     attr_reader :config
 
     extend Nanoc3::PluginRegistry::PluginMethods
@@ -45,12 +46,12 @@ module Nanoc3
     # @param [Nanoc3::Site] site The site this data source belongs to.
     #
     # @param [String] items_root The prefix that should be given to all items
-    # returned by the #items method (comparable to mount points for
-    # filesystems in Unix-ish OSes).
+    #   returned by the #items method (comparable to mount points for
+    #   filesystems in Unix-ish OSes).
     #
     # @param [String] layouts_root The prefix that should be given to all
-    # layouts returned by the #layouts method (comparable to mount points
-    # for filesystems in Unix-ish OSes).
+    #   layouts returned by the #layouts method (comparable to mount points
+    #   for filesystems in Unix-ish OSes).
     #
     # @param [Hash] config The configuration for this data source.
     def initialize(site, items_root, layouts_root, config)
@@ -189,9 +190,9 @@ module Nanoc3
     # @param [String] identifier
     #
     # @param [Hash] params Extra parameters to give to the data source. This
-    # can be used to influence the way items are stored. For example,
-    # filesystem data sources could use this to pass the extension of the
-    # files that should be generated.
+    #   can be used to influence the way items are stored. For example,
+    #   filesystem data sources could use this to pass the extension of the
+    #   files that should be generated.
     #
     # @return [void]
     def create_item(content, attributes, identifier, params={})
@@ -212,9 +213,9 @@ module Nanoc3
     # @param [String] identifier
     #
     # @param [Hash] params Extra parameters to give to the data source. This
-    # can be used to influence the way items are stored. For example,
-    # filesystem data sources could use this to pass the extension of the
-    # files that should be generated.
+    #   can be used to influence the way items are stored. For example,
+    #   filesystem data sources could use this to pass the extension of the
+    #   files that should be generated.
     #
     # @return [void]
     def create_layout(content, attributes, identifier, params={})

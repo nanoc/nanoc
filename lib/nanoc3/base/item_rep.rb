@@ -40,7 +40,7 @@ module Nanoc3
     attr_reader   :name
 
     # @return [Boolean] true if this rep is forced to be dirty (e.g. because
-    # of the `--force` commandline option); false otherwise
+    #   of the `--force` commandline option); false otherwise
     attr_accessor :force_outdated
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
@@ -48,35 +48,35 @@ module Nanoc3
     alias_method :binary?, :binary
 
     # @return [Boolean] true if this rep’s output file has changed since the
-    # last time it was compiled; false otherwise
+    #   last time it was compiled; false otherwise
     attr_accessor :modified
     alias_method :modified?, :modified
 
     # @return [Boolean] true if this rep’s output file was created during the
-    # current or last compilation session; false otherwise
+    #   current or last compilation session; false otherwise
     attr_accessor :created
     alias_method :created?, :created
 
     # @return [Boolean] true if this representation has already been compiled
-    # during the current or last compilation session; false otherwise
+    #   during the current or last compilation session; false otherwise
     attr_accessor :compiled
     alias_method :compiled?, :compiled
 
     # @return [Boolean] true if this representation’s compiled content has
-    # been written during the current or last compilation session; false
-    # otherwise
+    #   been written during the current or last compilation session; false
+    #   otherwise
     attr_reader :written
     alias_method :written?, :written
 
     # @return [String] The item rep's path, as used when being linked to. It
-    # starts with a slash and it is relative to the output directory. It does
-    # not include the path to the output directory. It will not include the
-    # filename if the filename is an index filename.
+    #   starts with a slash and it is relative to the output directory. It
+    #   does not include the path to the output directory. It will not include
+    #   the filename if the filename is an index filename.
     attr_accessor :path
 
     # @return [String] The item rep's raw path. It is relative to the current
-    # working directory and includes the path to the output directory. It also
-    # includes the filename, even if it is an index filename.
+    #   working directory and includes the path to the output directory. It
+    #   also includes the filename, even if it is an index filename.
     attr_accessor :raw_path
 
     # @return [Hash<Symbol,String>] A hash containing the content at all
@@ -87,7 +87,7 @@ module Nanoc3
     # Creates a new item representation for the given item.
     #
     # @param [Nanoc3::Item] item The item to which the new representation will
-    # belong.
+    #   belong.
     #
     # @param [Symbol] name The unique name for the new item representation.
     def initialize(item, name)
@@ -175,13 +175,13 @@ module Nanoc3
     end
 
     # @return [Boolean] true if this item rep's output file is outdated and
-    # must be regenerated, false otherwise
+    #   must be regenerated, false otherwise
     def outdated?
       !outdatedness_reason.nil?
     end
 
     # @return [Hash] The assignments that should be available when compiling
-    # the content.
+    #   the content.
     def assigns
       if self.binary?
         content_or_filename_assigns = { :filename => @filenames[:last] }
@@ -202,12 +202,12 @@ module Nanoc3
     # Returns the compiled content from a given snapshot.
     #
     # @option params [String] :snapshot The name of the snapshot from which to
-    # fetch the compiled content. By default, the returned compiled content
-    # will be the content compiled right before the first layout call (if
-    # any).
+    #   fetch the compiled content. By default, the returned compiled content
+    #   will be the content compiled right before the first layout call (if
+    #   any).
     #
     # @return [String] The compiled content at the given snapshot (or the
-    # default snapshot if no snapshot is specified)
+    #   default snapshot if no snapshot is specified)
     def compiled_content(params={})
       # Notify
       Nanoc3::NotificationCenter.post(:visit_started, self.item)
@@ -255,10 +255,10 @@ module Nanoc3
     # (see {Nanoc3::CompilerDSL#compile}).
     #
     # @param [Symbol] filter_name The name of the filter to run the item
-    # representations' content through
+    #   representations' content through
     #
     # @param [Hash] filter_args The filter arguments that should be passed to
-    # the filter's #run method
+    #   the filter's #run method
     #
     # @return [void]
     def filter(filter_name, filter_args={})
@@ -306,7 +306,7 @@ module Nanoc3
     # (see {Nanoc3::CompilerDSL#compile}).
     #
     # @param [String] layout_identifier The identifier of the layout the item
-    # should be laid out with
+    #   should be laid out with
     #
     # @return [void]
     def layout(layout_identifier)
@@ -392,8 +392,8 @@ module Nanoc3
     # compilation session.
     #
     # @return [String, nil] The difference between the old and new compiled
-    # content in `diff(1)` format, or nil if there is no previous compiled
-    # content
+    #   content in `diff(1)` format, or nil if there is no previous compiled
+    #   content
     def diff
       if self.binary?
         nil
