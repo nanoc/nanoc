@@ -265,7 +265,7 @@ module Nanoc3
         Nanoc3::CodeSnippet.new(
           File.read(filename),
           filename,
-          :checksum => checksum_for(filename)
+          :checksum => Nanoc3::Checksummer.checksum_for(filename)
         )
       end
 
@@ -289,7 +289,7 @@ module Nanoc3
 
       # Get rule data
       @rules = File.read(rules_filename)
-      @new_rules_checksum = checksum_for(rules_filename)
+      @new_rules_checksum = Nanoc3::Checksummer.checksum_for(rules_filename)
       @old_rules_checksum = old_checksum_for(:misc, 'Rules')
       @new_checksums[ [ :misc, 'Rules' ] ] = @new_rules_checksum
 
@@ -414,7 +414,7 @@ module Nanoc3
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
         @config[:data_sources].map! { |ds| ds.symbolize_keys }
 
-        @new_config_checksum = checksum_for('config.yaml')
+        @new_config_checksum = Nanoc3::Checksummer.checksum_for('config.yaml')
         @new_checksums[ [ :misc, 'config.yaml' ] ] = @new_config_checksum
       else
         # Use passed config hash
@@ -469,22 +469,6 @@ module Nanoc3
     def old_checksum_for(type, identifier)
       key = [ type, identifier ]
       checksums[key]
-    end
-
-    # Returns a checksum of the given filenames
-    # FIXME duplicated
-    def checksum_for(*filenames)
-      require 'digest'
-      filenames.flatten.map do |filename|
-        digest = Digest::SHA1.new
-        File.open(filename, 'r') do |io|
-          until io.eof
-            data = io.readpartial(2**10)
-            digest.update(data)
-          end
-        end
-        digest.hexdigest
-      end.join('-')
     end
 
   end
