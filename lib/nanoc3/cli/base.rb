@@ -35,7 +35,7 @@ module Nanoc3::CLI
     def initialize
       super('nanoc3')
 
-      @debug = true
+      @debug = false
 
       # Add help command
       self.help_command = Nanoc3::CLI::Commands::Help.new
