@@ -47,16 +47,6 @@ module Nanoc3
     attr_reader :binary
     alias_method :binary?, :binary
 
-    # @return [Boolean] true if this rep’s output file has changed since the
-    #   last time it was compiled; false otherwise
-    attr_accessor :modified
-    alias_method :modified?, :modified
-
-    # @return [Boolean] true if this rep’s output file was created during the
-    #   current or last compilation session; false otherwise
-    attr_accessor :created
-    alias_method :created?, :created
-
     # @return [Boolean] true if this representation has already been compiled
     #   during the current or last compilation session; false otherwise
     attr_accessor :compiled
@@ -100,8 +90,6 @@ module Nanoc3
 
       # Reset flags
       @compiled       = false
-      @modified       = false
-      @created        = false
       @force_outdated = false
     end
 
@@ -441,13 +429,33 @@ module Nanoc3
     end
 
     # @deprecated
+    def created
+      raise NotImplementedError, "Nanoc3::ItemRep#created is no longer implemented"
+    end
+
+    # @deprecated
+    def created?
+      raise NotImplementedError, "Nanoc3::ItemRep#created? is no longer implemented"
+    end
+
+    # @deprecated
+    def modified
+      raise NotImplementedError, "Nanoc3::ItemRep#modified is no longer implemented"
+    end
+
+    # @deprecated
+    def modified?
+      raise NotImplementedError, "Nanoc3::ItemRep#modified? is no longer implemented"
+    end
+
+    # @deprecated
     def written
       raise NotImplementedError, "Nanoc3::ItemRep#written is no longer implemented"
     end
 
     # @deprecated
     def written?
-      raise NotImplementedError, "Nanoc3::ItemRep#written is no longer implemented"
+      raise NotImplementedError, "Nanoc3::ItemRep#written? is no longer implemented"
     end
 
     def inspect
