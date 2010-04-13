@@ -36,4 +36,31 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_colorize_syntax_with_unknown_syntax
+    if_have 'coderay' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Run filter
+      assert_raises RuntimeError do
+        filter.run('<p>whatever</p>', :syntax => :kasflwafhaweoineurl)
+      end
+    end
+  end
+
+  def test_colorize_syntax_with_xml
+    if_have 'coderay' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = '<p>foo<br/>bar</p>'
+      expected_output = '<p>foo<br/>bar</p>'
+
+      # Run filter
+      actual_output = filter.run(input, :syntax => :xml)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
 end

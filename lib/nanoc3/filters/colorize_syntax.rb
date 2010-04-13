@@ -50,8 +50,19 @@ module Nanoc3::Filters
         @colorizers[language] = colorizer
       end
 
+      # Determine syntax (HTML or XML)
+      syntax = params[:syntax] || :html
+      case syntax
+      when :html
+        klass = Nokogiri::HTML
+      when :xml
+        klass = Nokogiri::XML
+      else
+        raise RuntimeError, "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
+      end
+
       # Colorize
-      doc = Nokogiri::HTML.fragment(content)
+      doc = klass.fragment(content)
       doc.css('pre > code[class*="language-"]').each do |element|
         # Get language
         match = element['class'].match(/(^| )language-([^ ]+)/)
