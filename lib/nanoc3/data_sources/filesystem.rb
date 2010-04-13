@@ -124,7 +124,9 @@ module Nanoc3::DataSources
         end
 
         # Get checksum
-        checksum = checksum_for([ meta_filename, content_filename ].compact)
+        meta_checksum    = meta_filename    ? Nanoc3::Checksummer.checksum_for(meta_filename)    : nil
+        content_checksum = content_filename ? Nanoc3::Checksummer.checksum_for(content_filename) : nil
+        checksum = [ meta_checksum, content_checksum ].compact.join('-')
 
         # Create layout object
         klass.new(
@@ -259,20 +261,6 @@ module Nanoc3::DataSources
 
       # Done
       [ meta, content ]
-    end
-
-    # Returns a checksum of the given filenames
-    def checksum_for(*filenames)
-      filenames.flatten.map do |filename|
-        digest = Digest::SHA1.new
-        File.open(filename, 'r') do |io|
-          until io.eof
-            data = io.readpartial(2**10)
-            digest.update(data)
-          end
-        end
-        digest.hexdigest
-      end.join('-')
     end
 
   end

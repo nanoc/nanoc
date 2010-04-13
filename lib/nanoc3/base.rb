@@ -5,6 +5,7 @@ module Nanoc3
   require 'nanoc3/base/core_ext'
   require 'nanoc3/base/ordered_hash'
 
+  autoload 'Checksummer',         'nanoc3/base/checksummer'
   autoload 'CodeSnippet',         'nanoc3/base/code_snippet'
   autoload 'Compiler',            'nanoc3/base/compiler'
   autoload 'CompilerDSL',         'nanoc3/base/compiler_dsl'

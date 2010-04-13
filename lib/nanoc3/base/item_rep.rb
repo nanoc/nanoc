@@ -357,7 +357,7 @@ module Nanoc3
       if self.binary?
         # Calculate hash of old content
         if File.file?(self.raw_path)
-          hash_old = checksum_for(self.raw_path)
+          hash_old = Nanoc3::Checksummer.checksum_for(self.raw_path)
           size_old = File.size(self.raw_path)
         end
 
@@ -367,7 +367,7 @@ module Nanoc3
 
         # Check if file was modified
         size_new = File.size(self.raw_path)
-        hash_new = checksum_for(self.raw_path) if size_old == size_new
+        hash_new = Nanoc3::Checksummer.checksum_for(self.raw_path) if size_old == size_new
         @modified = (size_old != size_new || hash_old != hash_new)
       else
         # Remember old content
@@ -488,22 +488,6 @@ module Nanoc3
       warn 'Failed to run `diff`, so no diff with the previously compiled ' \
            'content will be available.'
       nil
-    end
-
-    # Returns a checksum of the given filenames
-    # FIXME duplicated
-    def checksum_for(*filenames)
-      require 'digest'
-      filenames.flatten.map do |filename|
-        digest = Digest::SHA1.new
-        File.open(filename, 'r') do |io|
-          until io.eof
-            data = io.readpartial(2**10)
-            digest.update(data)
-          end
-        end
-        digest.hexdigest
-      end.join('-')
     end
 
   end
