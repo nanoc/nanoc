@@ -225,14 +225,14 @@ module Nanoc3
         rep.content = compiled_content_cache[rep]
       else
         rep.snapshot(:raw)
-        rep.snapshot(:pre)
+        rep.snapshot(:pre, :final => false)
         compilation_rule_for(rep).apply_to(rep)
+        rep.snapshot(:post) if rep.compiled_content(:snapshot => :post, :force => true)
+        rep.snapshot(:last)
       end
 
       rep.compiled = true
       compiled_content_cache[rep] = rep.content
-
-      rep.write(:last)
     rescue => e
       rep.forget_progress
       Nanoc3::NotificationCenter.post(:compilation_failed, rep)
