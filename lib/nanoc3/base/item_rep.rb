@@ -393,40 +393,35 @@ module Nanoc3
       FileUtils.mkdir_p(File.dirname(raw_path))
 
       # Check if file will be created
-      @created = !File.file?(raw_path)
+      is_created = !File.file?(raw_path)
+
+      # Calculate characteristics of old content
+      if File.file?(raw_path)
+        hash_old = Nanoc3::Checksummer.checksum_for(raw_path)
+        size_old = File.size(raw_path)
+      end
 
       if self.binary?
-        # Calculate hash of old content
-        if File.file?(raw_path)
-          hash_old = Nanoc3::Checksummer.checksum_for(raw_path)
-          size_old = File.size(raw_path)
-        end
-
         # Copy
         FileUtils.cp(@filenames[:last], raw_path)
-
-        # Check if file was modified
-        size_new = File.size(raw_path)
-        hash_new = Nanoc3::Checksummer.checksum_for(raw_path) if size_old == size_new
-        @modified = (size_old != size_new || hash_old != hash_new)
       else
-        # Remember old content
-        if File.file?(raw_path)
-          @old_content = File.read(raw_path)
-        end
-
         # Write
         File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
 
         # Generate diff
         generate_diff
-
-        # Check if file was modified
-        @modified = File.read(raw_path) != @old_content
       end
 
+      # Check if file was modified
+      size_new = File.size(raw_path)
+      hash_new = Nanoc3::Checksummer.checksum_for(raw_path) if size_old == size_new
+      is_modified = (size_old != size_new || hash_old != hash_new)
+
       # Notify
-      Nanoc3::NotificationCenter.post(:rep_written, self, raw_path, @created, @updated)
+      Nanoc3::NotificationCenter.post(
+        :rep_written,
+        self, raw_path, is_created, is_modified
+      )
     end
 
     # Creates and returns a diff between the compiled content before the
