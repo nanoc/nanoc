@@ -199,12 +199,6 @@ module Nanoc3
       if !content_dependency_graph.vertices.empty?
         raise Nanoc3::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
-
-      # Notify skipped reps
-      skipped_reps.each do |rep|
-        Nanoc3::NotificationCenter.post(:compilation_started, rep)
-        Nanoc3::NotificationCenter.post(:compilation_ended,   rep)
-      end
     end
 
     # Compiles the given item representation.
