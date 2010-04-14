@@ -216,6 +216,14 @@ module Nanoc3
       @content[snapshot_name]
     end
 
+    # Checks whether content exists at a given snapshot.
+    #
+    # @return [Boolean] True if content exists for the snapshot with the
+    #   given name, false otherwise
+    def has_snapshot?(snapshot_name)
+      !@content[snapshot_name].nil?
+    end
+
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
     #

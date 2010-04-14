@@ -227,7 +227,7 @@ module Nanoc3
         rep.snapshot(:raw)
         rep.snapshot(:pre, :final => false)
         compilation_rule_for(rep).apply_to(rep)
-        rep.snapshot(:post) if rep.compiled_content(:snapshot => :post, :force => true)
+        rep.snapshot(:post) if rep.has_snapshot?(:post)
         rep.snapshot(:last)
       end
 
