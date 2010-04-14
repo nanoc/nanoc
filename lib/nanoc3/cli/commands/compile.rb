@@ -76,8 +76,8 @@ module Nanoc3::CLI::Commands
 
       # Initialize profiling stuff
       time_before = Time.now
-      @filter_times ||= {}
-      @times_stack  ||= []
+      @rep_times     = {}
+      @filter_times  = {}
       setup_notifications
 
       # Compile
@@ -103,11 +103,10 @@ module Nanoc3::CLI::Commands
 
       # Give general feedback
       puts
-      puts "No items were modified." unless reps.any? { |r| r.modified? }
       puts "#{item.nil? ? 'Site' : 'Item'} compiled in #{format('%.2f', Time.now - time_before)}s."
 
+      # Give detailed feedback
       if options.has_key?(:verbose)
-        print_state_feedback(reps)
         print_profiling_feedback(reps)
       end
     end
@@ -116,8 +115,8 @@ module Nanoc3::CLI::Commands
 
     def setup_notifications
       # File notifications
-      Nanoc3::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_updated|
-        action = (is_created ? :create : (is_updated ? :update : :identical))
+      Nanoc3::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        action = (is_created ? :create : (is_modified ? :update : :identical))
         duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
         Nanoc3::CLI::Logger.instance.file(:high, action, path, duration)
       end
@@ -138,16 +137,16 @@ module Nanoc3::CLI::Commands
 
       # Timing notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
-        rep_compilation_started(rep)
+        @rep_times[rep.raw_path] = Time.now
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
-        rep_compilation_ended(rep)
+        @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
       end
       Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-        rep_filtering_started(rep, filter_name)
+        @filter_times[filter_name] = Time.now
       end
       Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-        rep_filtering_ended(rep, filter_name)
+        @filter_times[filter_name] = Time.now - @filter_times[filter_name]
       end
     end
 
@@ -165,6 +164,7 @@ module Nanoc3::CLI::Commands
         next if diff.nil?
 
         # Fix header
+        # FIXME this may break for other lines starting with --- or +++
         diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
         diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
 
@@ -174,24 +174,6 @@ module Nanoc3::CLI::Commands
 
       # Write
       File.open('output.diff', 'w') { |io| io.write(full_diff) }
-    end
-
-    def print_state_feedback(reps)
-      # Categorise reps
-      rest              = reps
-      created, rest     = *rest.partition { |r| r.created? }
-      modified, rest    = *rest.partition { |r| r.modified? }
-      skipped, rest     = *rest.partition { |r| !r.compiled? }
-      not_written, rest = *rest.partition { |r| r.compiled? && r.raw_path.nil? }
-      identical         = rest
-
-      # Print
-      puts
-      puts format('  %4d  created',     created.size)
-      puts format('  %4d  modified',    modified.size)
-      puts format('  %4d  skipped',     skipped.size)
-      puts format('  %4d  not written', not_written.size)
-      puts format('  %4d  identical',   identical.size)
     end
 
     def print_profiling_feedback(reps)
@@ -233,31 +215,6 @@ module Nanoc3::CLI::Commands
         filter_name = format("%#{max_filter_name_length}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
-    end
-
-    def rep_compilation_started(rep)
-      # Profile compilation
-      @rep_times ||= {}
-      @rep_times[rep.raw_path] = Time.now
-    end
-
-    def rep_compilation_ended(rep)
-      # Profile compilation
-      @rep_times ||= {}
-      @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
-    end
-
-    def rep_filtering_started(rep, filter_name)
-      @times_stack.push(Time.now)
-    end
-
-    def rep_filtering_ended(rep, filter_name)
-      # Get last time
-      time_start = @times_stack.pop
-
-      # Update times
-      @filter_times[filter_name.to_sym] ||= []
-      @filter_times[filter_name.to_sym] << Time.now - time_start
     end
 
   end
