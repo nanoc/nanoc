@@ -12,6 +12,7 @@ module Nanoc3::Filters
   autoload 'Less',            'nanoc3/filters/less'
   autoload 'Markaby',         'nanoc3/filters/markaby'
   autoload 'Maruku',          'nanoc3/filters/maruku'
+  autoload 'Mustache',        'nanoc3/filters/mustache'
   autoload 'Rainpress',       'nanoc3/filters/rainpress'
   autoload 'RDiscount',       'nanoc3/filters/rdiscount'
   autoload 'RDoc',            'nanoc3/filters/rdoc'
@@ -30,6 +31,7 @@ module Nanoc3::Filters
   Nanoc3::Filter.register '::Nanoc3::Filters::Less',            :less
   Nanoc3::Filter.register '::Nanoc3::Filters::Markaby',         :markaby
   Nanoc3::Filter.register '::Nanoc3::Filters::Maruku',          :maruku
+  Nanoc3::Filter.register '::Nanoc3::Filters::Mustache',        :mustache
   Nanoc3::Filter.register '::Nanoc3::Filters::Rainpress',       :rainpress
   Nanoc3::Filter.register '::Nanoc3::Filters::RDiscount',       :rdiscount
   Nanoc3::Filter.register '::Nanoc3::Filters::RDoc',            :rdoc
