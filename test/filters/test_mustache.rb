@@ -6,7 +6,7 @@ class Nanoc3::Filters::MustacheTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_filte
+  def test_filter
     if_have 'mustache' do
       # Create item
       item = Nanoc3::Item.new(
