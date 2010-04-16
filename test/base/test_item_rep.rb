@@ -11,17 +11,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_not_outdated
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(false)
@@ -46,17 +41,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_item_checksum_nil
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(false)
@@ -81,17 +71,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_force_outdated
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(false)
@@ -117,17 +102,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_compiled_file_doesnt_exist
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(false)
@@ -150,17 +130,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_item_checksum_is_different
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(false)
@@ -184,7 +159,10 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal :source_modified, (rep.outdatedness_reason || {})[:type]
   end
 
-  def test_outdated_if_layouts_outdated
+  def test_not_outdated_if_layouts_outdated
+    # Item-layout dependencies, as well as item-item dependencies, are
+    # handled elsewhere
+
     # Mock layouts
     layouts = [ mock ]
     layouts[0].stubs(:outdated?).returns(true)
@@ -216,21 +194,16 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
     # Check
-    assert_equal :layouts_outdated, (rep.outdatedness_reason || {})[:type]
+    assert_equal nil, (rep.outdatedness_reason || {})[:type]
   end
 
   def test_outdated_if_code_snippets_outdated
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(true)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(false)
@@ -255,17 +228,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_config_outdated
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(true)
     site.stubs(:rules_outdated?).returns(false)
@@ -290,17 +258,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_rules_outdated
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:outdated?).returns(false)
-
     # Mock code snippets
     code_snippets = [ mock ]
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
-    site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
     site.stubs(:config_outdated?).returns(false)
     site.stubs(:rules_outdated?).returns(true)

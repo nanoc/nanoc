@@ -4,18 +4,18 @@ require 'pstore'
 
 module Nanoc3
 
-  # Responsible for remembering dependencies between items. It is used to
-  # speed up compilation by only letting an item be recompiled when it is
-  # outdated or any of its dependencies (or dependencies’ dependencies, etc)
-  # is outdated.
+  # Responsible for remembering dependencies between items and layouts. It is
+  # used to speed up compilation by only letting an item be recompiled when it
+  # is outdated or any of its dependencies (or dependencies’ dependencies,
+  # etc) is outdated.
   #
   # The dependencies tracked by the dependency tracker are not dependencies
-  # based on an item’s content. When one item uses an attribute of another
-  # item, then this is also treated as a dependency. While dependencies based
-  # on an item’s content (handled in {Nanoc3::Compiler}) cannot be mutually
-  # recursive, the more general dependencies in Nanoc3::DependencyTracker can
-  # (e.g. item A can use an attribute of item B and vice versa without
-  # problems).
+  # based on an item’s or a layout’s content. When one object uses an
+  # attribute of another object, then this is also treated as a dependency.
+  # While dependencies based on an item’s or layout’s content (handled in
+  # {Nanoc3::Compiler}) cannot be mutually recursive, the more general
+  # dependencies in Nanoc3::DependencyTracker can (e.g. item A can use an
+  # attribute of item B and vice versa without problems).
   #
   # The dependency tracker remembers the dependency information between runs.
   # Dependency information is stored in the `tmp/dependencies` file. This file
@@ -27,22 +27,23 @@ module Nanoc3
     #   stored
     attr_accessor :filename
 
-    # @return [Array<Nanoc3::Item>] The list of items that is being tracked
-    #   by the dependency tracker
-    attr_reader :items
+    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The list of items and
+    #   layouts that are being tracked by the dependency tracker
+    attr_reader :objects
 
     # The version of the file format used to store dependencies.
-    STORE_VERSION = 2
+    STORE_VERSION = 3
 
-    # Creates a new dependency tracker for the given items.
+    # Creates a new dependency tracker for the given items and layouts.
     #
-    # @param [Array<Nanoc3::Item>] item The list of items whose dependencies
-    #   should be managed
-    def initialize(items)
-      @items          = items
-      @filename       = 'tmp/dependencies'
-      @graph          = Nanoc3::DirectedGraph.new([ nil ] + @items)
-      @previous_items = []
+    # @param [Array<Nanoc3::Item, Nanoc3::Layout>] objects The list of items
+    #   and layouts whose dependencies should be managed
+    def initialize(objects)
+      @objects = objects
+
+      @filename         = 'tmp/dependencies'
+      @graph            = Nanoc3::DirectedGraph.new([ nil ] + @objects)
+      @previous_objects = []
     end
 
     # Starts listening for dependency messages (`:visit_started` and
@@ -50,23 +51,19 @@ module Nanoc3
     #
     # @return [void]
     def start
-      # Initialize dependency stack. An item will be pushed onto this stack
-      # when it is visited. Therefore, an item on the stack always depends on
-      # all items pushed above it.
+      # Initialize dependency stack. An object will be pushed onto this stack
+      # when it is visited. Therefore, an object on the stack always depends
+      # on all objects pushed above it.
       @stack = []
 
       # Register start of visits
-      Nanoc3::NotificationCenter.on(:visit_started, self) do |item|
-        # Record possible dependency
-        unless @stack.empty?
-          self.record_dependency(@stack[-1], item)
-        end
-
-        @stack.push(item)
+      Nanoc3::NotificationCenter.on(:visit_started, self) do |obj|
+        self.record_dependency(@stack[-1], obj) unless @stack.empty?
+        @stack.push(obj)
       end
 
       # Register end of visits
-      Nanoc3::NotificationCenter.on(:visit_ended, self) do |item|
+      Nanoc3::NotificationCenter.on(:visit_ended, self) do |obj|
         @stack.pop
       end
     end
@@ -80,71 +77,78 @@ module Nanoc3
       Nanoc3::NotificationCenter.remove(:visit_ended,   self)
     end
 
-    # Returns the direct dependencies for `item`.
+    # Returns the direct dependencies for the given object.
     #
-    # The direct dependencies of `item` include the items that, when outdated
-    # will cause `item` to be marked as outdated. Indirect dependencies will
-    # not be returned (e.g. if A depends on B which depends on C, then the
-    # direct dependencies of A do not include C).
+    # The direct dependencies of the given object include the items
+    # and layouts that, when outdated will cause the given object to be marked
+    # as outdated. Indirect dependencies will not be returned (e.g. if A
+    # depends on B which depends on C, then the direct dependencies of A do
+    # not include C).
     #
-    # @param [Nanoc3::Item] item The item for which to fetch the direct
-    #   predecessors
+    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for
+    #   which to fetch the direct predecessors
     #
-    # @return [Array<Nanoc3::Item>] The direct predecessors of the given item
-    def direct_predecessors_of(item)
-      @graph.direct_predecessors_of(item).compact
+    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The direct predecessors of
+    #   the given object
+    def direct_predecessors_of(object)
+      @graph.direct_predecessors_of(object).compact
     end
 
-    # Returns all dependencies (direct and indirect) for `item`.
+    # Returns all dependencies (direct and indirect) for the given object.
     #
-    # The dependencies of `item` include the items that, when outdated, will
-    # cause `item` to be marked as outdated.
+    # The dependencies of given object include the objects that, when
+    # outdated, will cause the given object to be marked as outdated.
     #
-    # @param [Nanoc3::Item] item The item for which to fetch all direct and
-    #   indirect predecessors
+    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
+    #   fetch all direct and indirect predecessors
     #
-    # @return [Array<Nanoc3::Item>] The predecessors of the given item
-    def predecessors_of(item)
-      @graph.predecessors_of(item).compact
+    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The predecessors of the
+    #   given object
+    def predecessors_of(object)
+      @graph.predecessors_of(object).compact
     end
 
-    # Returns the direct inverse dependencies for `item`.
+    # Returns the direct inverse dependencies for the given object.
     #
-    # The direct inverse dependencies of `item` include the items that will be
-    # marked as outdated when`+item` is outdated. Indirect dependencies will
-    # not be returned (e.g. if A depends on B which depends on C, then the
-    # direct inverse dependencies of C do not include A).
+    # The direct inverse dependencies of the given object include the objects
+    # that will be marked as outdated when the given object is outdated.
+    # Indirect dependencies will not be returned (e.g. if A depends on B which
+    # depends on C, then the direct inverse dependencies of C do not include
+    # A).
     #
-    # @param [Nanoc3::Item] item The item for which to fetch the direct
-    #   successors
+    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
+    #   fetch the direct successors
     #
-    # @return [Array<Nanoc3::Item>] The direct successors of the given item
-    def direct_successors_of(item)
-      @graph.direct_successors_of(item).compact
+    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The direct successors of
+    #   the given object
+    def direct_successors_of(object)
+      @graph.direct_successors_of(object).compact
     end
 
-    # Returns all inverse dependencies (direct and indirect) for `item`.
+    # Returns all inverse dependencies (direct and indirect) for the given
+    # object.
     #
-    # The inverse dependencies of `item` include the items that will be marked
-    # as outdated when `item` is outdated.
+    # The inverse dependencies of the given object include the objects that
+    # will be marked as outdated when the given object is outdated.
     #
-    # @param [Nanoc3::Item] item The item for which to fetch all direct and
-    #   indirect successors
+    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
+    #   fetch all direct and indirect successors
     #
-    # @return [Array<Nanoc3::Item>] The successors of the given item
-    def successors_of(item)
-      @graph.successors_of(item).compact
+    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The successors of the
+    #   given object
+    def successors_of(object)
+      @graph.successors_of(object).compact
     end
 
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #
-    # @param [Nanoc3::Item] src The source of the dependency, i.e. the item
-    #   that will become outdated if dst is outdated
+    # @param [Nanoc3::Item, Nanoc3::Layout] src The source of the dependency,
+    #   i.e. the object that will become outdated if dst is outdated
     #
-    # @param [Nanoc3::Item] dst The destination of the dependency, i.e. the
-    #   item that will cause the source to become outdated if the destination
-    #   is outdated
+    # @param [Nanoc3::Item, Nanoc3::Layout] dst The destination of the
+    #   dependency, i.e. the object that will cause the source to become
+    #   outdated if the destination is outdated
     #
     # @return [void]
     def record_dependency(src, dst)
@@ -161,7 +165,7 @@ module Nanoc3
       store = PStore.new(self.filename)
       store.transaction do
         store[:version]  = STORE_VERSION
-        store[:vertices] = @graph.vertices.map { |i| i && i.identifier }
+        store[:vertices] = @graph.vertices.map { |obj| obj && obj.reference }
         store[:edges]    = @graph.edges
       end
     end
@@ -172,7 +176,7 @@ module Nanoc3
     # @return [void]
     def load_graph
       # Create new graph
-      @graph = Nanoc3::DirectedGraph.new([ nil ] + @items)
+      @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
 
       # Get store
       return if !File.file?(self.filename)
@@ -184,44 +188,44 @@ module Nanoc3
         return if store[:version] != STORE_VERSION
 
         # Load vertices
-        @previous_items = store[:vertices].map do |v|
-          @items.find { |i| i.identifier == v }
+        @previous_objects = store[:vertices].map do |reference|
+          @objects.find { |obj| reference == obj.reference }
         end
 
         # Load edges
         store[:edges].each do |edge|
           from_index, to_index = *edge
-          from, to = @previous_items[from_index], @previous_items[to_index]
+          from, to = @previous_objects[from_index], @previous_objects[to_index]
           @graph.add_edge(from, to)
         end
       end
     end
 
-    # Traverses the dependency graph and marks all items that (directly or
-    # indirectly) depend on an outdated item as outdated.
+    # Traverses the dependency graph and marks all objects that (directly or
+    # indirectly) depend on an outdated object as outdated.
     #
     # @return [void]
     def propagate_outdatedness
       # Unmark everything
-      @items.each { |i| i.outdated_due_to_dependencies = false }
+      @objects.each { |o| o.outdated_due_to_dependencies = false }
 
-      # Mark new items as outdated
-      added_items = @items - @previous_items
-      added_items.each { |i| i.outdated_due_to_dependencies = true }
+      # Mark new objects as outdated
+      added_objects = @objects - @previous_objects
+      added_objects.each { |o| o.outdated_due_to_dependencies = true }
 
       # Mark successors of nil as outdated
-      self.successors_of(nil).each do |i|
-        i.outdated_due_to_dependencies = true
+      self.successors_of(nil).each do |o|
+        o.outdated_due_to_dependencies = true
       end
 
-      # Mark successors of outdated items as outdated
+      # Mark successors of outdated objects as outdated
       require 'set'
-      unprocessed = @items.select { |i| i.outdated? }
+      unprocessed = @objects.select { |i| i.outdated? }
       seen        = Set.new(unprocessed)
       until unprocessed.empty?
-        item = unprocessed.shift
+        obj = unprocessed.shift
 
-        self.direct_successors_of(item).each do |successor|
+        self.direct_successors_of(obj).each do |successor|
           next if seen.include?(successor)
           seen << successor
 
@@ -231,28 +235,24 @@ module Nanoc3
       end
     end
 
-    # Empties the list of dependencies for the given item. This is necessary
-    # before recompiling the given item, because otherwise old dependencies
+    # TODO update documentation
+    #
+    # Empties the list of dependencies for the given object. This is necessary
+    # before recompiling the given object, because otherwise old dependencies
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
     #
-    # @param [Nanoc3::Item] item The item for which to forget all dependencies
+    # @param [Nanoc3::Item, Nanoc3::Layout] item The item for which to forget
+    #   all dependencies
     #
     # @return [void]
-    def forget_dependencies_for(item)
-      @graph.delete_edges_to(item)
+    def forget_dependencies_for(object)
+      @graph.delete_edges_to(object)
     end
 
     # @deprecated Use {#propagate_outdatedness} instead.
     def mark_outdated_items
       propagate_outdatedness
-    end
-
-  private
-
-    # Returns the item with the given identifier, or nil if no item is found.
-    def item_with_identifier(identifier)
-      @items.find { |i| i.identifier == identifier }
     end
 
   end

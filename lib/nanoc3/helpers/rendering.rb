@@ -38,6 +38,10 @@ module Nanoc3::Helpers
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
       raise Nanoc3::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?
 
+      # Visit
+      Nanoc3::NotificationCenter.post(:visit_started, layout)
+      Nanoc3::NotificationCenter.post(:visit_ended,   layout)
+
       # Capture content, if any
       captured_content = block_given? ? capture(&block) : nil
 

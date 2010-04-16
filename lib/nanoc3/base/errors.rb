@@ -177,6 +177,10 @@ module Nanoc3
 
     end
 
+    # Error that is raised when an internal consistency error is detected.
+    class InternalConsistency < Generic
+    end
+
   end
 
 end

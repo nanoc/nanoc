@@ -194,6 +194,16 @@ module Nanoc3
       @reps.any? { |r| r.outdated? }
     end
 
+    # TODO document
+    def type
+      :item
+    end
+
+    # TODO document
+    def reference
+      [ :item, self.identifier ]
+    end
+
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.binary?}>"
     end
