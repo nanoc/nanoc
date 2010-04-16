@@ -123,7 +123,7 @@ module Nanoc3
     # 
     # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
-      @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items)
+      @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items + @site.layouts)
     end
 
     # Finds the first matching compilation rule for the given item

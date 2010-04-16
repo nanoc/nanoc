@@ -220,7 +220,7 @@ module Nanoc3
 
       # Mark successors of outdated objects as outdated
       require 'set'
-      unprocessed = @objects.select { |i| i.outdated? }
+      unprocessed = @objects.select { |o| o.outdated? }
       seen        = Set.new(unprocessed)
       until unprocessed.empty?
         obj = unprocessed.shift
