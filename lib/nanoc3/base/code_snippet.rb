@@ -61,6 +61,12 @@ module Nanoc3
       eval(@data, TOPLEVEL_BINDING, @filename)
     end
 
+    # @return [Boolean] true if the code snippet was modified since it was
+    #   last compiled, false otherwise
+    def outdated?
+      !self.old_checksum || !self.new_checksum || self.new_checksum != self.old_checksum
+    end
+
   end
 
 end

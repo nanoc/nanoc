@@ -13,22 +13,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_not_outdated
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -52,22 +48,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_item_checksum_nil
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -91,22 +83,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_force_outdated
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -131,22 +119,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_compiled_file_doesnt_exist
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -168,22 +152,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_item_checksum_is_different
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -207,22 +187,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_layouts_outdated
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:bbb')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(true)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -246,22 +222,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_code_snippets_outdated
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:bbb')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(true)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -285,22 +257,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_config_outdated
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:bbb')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:aaa')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(true)
+    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new(
@@ -324,22 +292,18 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   def test_outdated_if_rules_outdated
     # Mock layouts
     layouts = [ mock ]
-    layouts[0].stubs(:new_checksum).returns('l:aaa')
-    layouts[0].stubs(:old_checksum).returns('l:aaa')
+    layouts[0].stubs(:outdated?).returns(false)
 
     # Mock code snippets
     code_snippets = [ mock ]
-    code_snippets[0].stubs(:new_checksum).returns('cs:aaa')
-    code_snippets[0].stubs(:old_checksum).returns('cs:aaa')
+    code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
     site = mock
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:new_config_checksum).returns('co:aaa')
-    site.stubs(:old_config_checksum).returns('co:aaa')
-    site.stubs(:new_rules_checksum).returns('r:bbb')
-    site.stubs(:old_rules_checksum).returns('r:aaa')
+    site.stubs(:config_outdated?).returns(false)
+    site.stubs(:rules_outdated?).returns(true)
 
     # Mock item
     item = Nanoc3::Item.new(
