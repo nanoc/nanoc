@@ -29,6 +29,11 @@ module Nanoc3
     # @return [String] The current, up-to-date checksum of this layout
     attr_reader   :new_checksum
 
+    # @return [Boolean] Whether or not this layout is outdated because of its
+    #   dependencies are outdated
+    attr_accessor :outdated_due_to_dependencies
+    alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
+
     # Creates a new layout.
     #
     # @param [String] raw_content The raw content of this layout.
@@ -71,6 +76,16 @@ module Nanoc3
     #   last compiled, false otherwise
     def outdated?
       !self.old_checksum || !self.new_checksum || self.new_checksum != self.old_checksum
+    end
+
+    # TODO document
+    def type
+      :layout
+    end
+
+    # TODO document
+    def reference
+      [ :layout, self.identifier ]
     end
 
     def inspect

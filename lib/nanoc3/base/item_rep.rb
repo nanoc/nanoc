@@ -112,7 +112,6 @@ module Nanoc3
         end
 
         # Outdated if other site parts outdated
-        return :layouts_outdated if @item.site.layouts.any?       { |l|  l.outdated?  }
         return :code_outdated    if @item.site.code_snippets.any? { |cs| cs.outdated? }
         return :config_outdated  if @item.site.config_outdated?
         return :rules_outdated   if @item.site.rules_outdated?
@@ -322,6 +321,10 @@ module Nanoc3
       # Create filter
       layout = layout_with_identifier(layout_identifier)
       filter, filter_name, filter_args = filter_for_layout(layout)
+
+      # Visit
+      Nanoc3::NotificationCenter.post(:visit_started, layout)
+      Nanoc3::NotificationCenter.post(:visit_ended,   layout)
 
       # Layout
       @item.site.compiler.stack.push(layout)
