@@ -248,6 +248,18 @@ module Nanoc3
       end
     end
 
+    # @return [Boolean] true if the site configuration was modified since the
+    #   site was last compiled, false otherwise
+    def config_outdated?
+      !self.old_config_checksum || !self.new_config_checksum || self.old_config_checksum != self.new_config_checksum
+    end
+
+    # @return [Boolean] true if the rules were modified since the site was
+    #   last compiled, false otherwise
+    def rules_outdated?
+      !self.old_rules_checksum || !self.new_rules_checksum || self.old_rules_checksum != self.new_rules_checksum
+    end
+
   private
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.

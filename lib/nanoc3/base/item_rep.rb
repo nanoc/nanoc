@@ -111,25 +111,11 @@ module Nanoc3
           return :source_modified
         end
 
-        # Outdated if layouts outdated
-        return :layouts_outdated if @item.site.layouts.any? do |l|
-          !l.old_checksum || !l.new_checksum || l.new_checksum != l.old_checksum
-        end
-
-        # Outdated if code outdated
-        return :code_outdated if @item.site.code_snippets.any? do |cs|
-          !cs.old_checksum || !cs.new_checksum || cs.new_checksum != cs.old_checksum
-        end
-
-        # Outdated if config outdated
-        if !@item.site.old_config_checksum || !@item.site.new_config_checksum || @item.site.old_config_checksum != @item.site.new_config_checksum
-          return :config_outdated
-        end
-
-        # Outdated if rules modified
-        if !@item.site.old_rules_checksum || !@item.site.new_rules_checksum || @item.site.old_rules_checksum != @item.site.new_rules_checksum
-          return :rules_outdated
-        end
+        # Outdated if other site parts outdated
+        return :layouts_outdated if @item.site.layouts.any?       { |l|  l.outdated?  }
+        return :code_outdated    if @item.site.code_snippets.any? { |cs| cs.outdated? }
+        return :config_outdated  if @item.site.config_outdated?
+        return :rules_outdated   if @item.site.rules_outdated?
 
         return nil
       end[]

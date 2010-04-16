@@ -67,6 +67,12 @@ module Nanoc3
       @attributes[key]
     end
 
+    # @return [Boolean] true if the layout was modified since the site was
+    #   last compiled, false otherwise
+    def outdated?
+      !self.old_checksum || !self.new_checksum || self.new_checksum != self.old_checksum
+    end
+
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier}>"
     end
