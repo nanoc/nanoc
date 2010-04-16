@@ -78,14 +78,19 @@ module Nanoc3
       !self.old_checksum || !self.new_checksum || self.new_checksum != self.old_checksum
     end
 
-    # TODO document
+    # Returns the type of this object. Will always return `:layout`, because
+    # this is a layout. For items, this method returns `:item`.
+    #
+    # @return [Symbol] :layout
     def type
       :layout
     end
 
-    # TODO document
+    # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @return [Object] An unique reference to this object
     def reference
-      [ :layout, self.identifier ]
+      [ type, self.identifier ]
     end
 
     def inspect
