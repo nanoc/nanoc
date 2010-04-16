@@ -6,18 +6,6 @@ module Nanoc3
   # have multiple representations. A representation has its own output file.
   # A single item can therefore have multiple output files, each run through
   # a different set of filters with a different layout.
-  #
-  # An item representation is observable. The following events will be
-  # notified:
-  #
-  # * `:compilation_started`
-  # * `:compilation_ended`
-  # * `:filtering_started`
-  # * `:filtering_ended`
-  #
-  # The compilation-related events have one parameters (the item
-  # representation); the filtering-related events have two (the item
-  # representation, and a symbol containing the filter class name).
   class ItemRep
 
     # The descriptive strings for each outdatedness reason. This hash is used
