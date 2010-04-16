@@ -3,6 +3,33 @@
 module Nanoc3
 
   # Responsible for compiling a site’s item representations.
+  #
+  # The compilation process makes use of notifications (see
+  # {Nanoc3::NotificationCenter}) to track dependencies between items,
+  # layouts, etc. The following notifications are used:
+  #
+  # * `compilation_started` — indicates that the compiler has started
+  #   compiling this item representation. Has one argument: the item
+  #   representation itself. Only one item can be compiled at a given moment;
+  #   therefore, it is not possible to get two consecutive
+  #   `compilation_started` notifications without also getting a
+  #   `compilation_ended` notification in between them.
+  #
+  # * `compilation_ended` — indicates that the compiler has finished compiling
+  #   this item representation (either successfully or with failure). Has one
+  #   argument: the item representation itself.
+  #
+  # * `visit_started` — indicates that the compiler requires content or
+  #   attributes from the item representation that will be visited. Has one
+  #   argument: the visited item identifier. This notification is used to
+  #   track dependencies of items on other items; a `visit_started` event
+  #   followed by another `visit_started` event indicates that the item
+  #   corresponding to the former event will depend on the item from the
+  #   latter event.
+  #
+  # * `visit_ended` — indicates that the compiler has finished visiting the
+  #   item representation and that the requested attributes or content have
+  #   been fetched (either successfully or with failure)
   class Compiler
 
     # The name of the file where cached compiled content will be stored
