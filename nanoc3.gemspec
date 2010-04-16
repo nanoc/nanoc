@@ -24,15 +24,16 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('cri', '>= 1.0.0')
 
   s.post_install_message = %q{------------------------------------------------------------------------------
-Thanks for installing nanoc 3.1! Here are some resources to help you get
+Thanks for installing nanoc 3.2! Here are some resources to help you get
 started:
 
-* The tutorial at <http://nanoc.stoneship.org/tutorial/>
-* The manual at <http://nanoc.stoneship.org/manual/>
-* The discussion group at <http://groups.google.com/group/nanoc>
+* The web site at <http://nanoc.stoneship.org/>
+* The tutorial at <http://nanoc.stoneship.org/docs/3-getting-started/>
+* The manual at <http://nanoc.stoneship.org/docs/4-basic-concepts/>
 
-Because nanoc 3.1 has quite a few new features, be sure to check out the nanoc
-blog at <http://nanoc.stoneship.org/blog/> for details about this release.
+If you have questions, issues or simply want to share ideas, join the
+discussion at <http://groups.google.com/group/nanoc> or stop by in the IRC
+channel on irc.freenode.net, channel #nanoc. See you there!
 
 Enjoy!
 ------------------------------------------------------------------------------
