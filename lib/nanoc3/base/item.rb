@@ -194,14 +194,19 @@ module Nanoc3
       @reps.any? { |r| r.outdated? }
     end
 
-    # TODO document
+    # Returns the type of this object. Will always return `:item`, because
+    # this is an item. For layouts, this method returns `:layout`.
+    #
+    # @return [Symbol] :item
     def type
       :item
     end
 
-    # TODO document
+    # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @return [Object] An unique reference to this object
     def reference
-      [ :item, self.identifier ]
+      [ type, self.identifier ]
     end
 
     def inspect

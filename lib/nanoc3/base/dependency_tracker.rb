@@ -235,15 +235,13 @@ module Nanoc3
       end
     end
 
-    # TODO update documentation
-    #
     # Empties the list of dependencies for the given object. This is necessary
     # before recompiling the given object, because otherwise old dependencies
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
     #
-    # @param [Nanoc3::Item, Nanoc3::Layout] item The item for which to forget
-    #   all dependencies
+    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
+    #   forget all dependencies
     #
     # @return [void]
     def forget_dependencies_for(object)
