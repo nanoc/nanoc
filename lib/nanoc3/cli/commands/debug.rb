@@ -96,7 +96,9 @@ module Nanoc3::CLI::Commands
       puts '=== Layouts'
       puts
       layouts.each do |layout|
-        puts "layout #{layout.identifier}"
+        puts "layout #{layout.identifier}:"
+        puts "  is #{layout.outdated? ? '' : 'not '}outdated"
+        puts
       end
     end
 
