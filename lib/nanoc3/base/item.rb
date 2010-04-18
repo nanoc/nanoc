@@ -23,9 +23,6 @@ module Nanoc3
     #   previous site compilation
     attr_accessor :old_checksum
 
-    # @return [String] The current, up-to-date checksum of this item
-    attr_reader   :new_checksum
-
     # @return [Array<Nanoc3::ItemRep>] This item’s list of item reps
     attr_reader   :reps
 
@@ -69,18 +66,17 @@ module Nanoc3
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    #
-    # @option params [String, nil] :checksum (nil) The current, up-to-date
-    #   checksum of this item
     def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
-      # Get mtime and checksum
+      # Parse params
       params ||= {}
       params = { :mtime => params } if params.is_a?(Time)
-      @new_checksum = params[:checksum]
-      @mtime        = params[:mtime]
+      params[:binary] = false unless params.has_key?(:binary)
+
+      # Get mtime
+      @mtime = params[:mtime]
 
       # Get type and raw content or raw filename
-      @is_binary = params.has_key?(:binary) ? params[:binary] : false
+      @is_binary = params[:binary]
       if @is_binary
         @raw_filename = raw_content_or_raw_filename
       else
@@ -184,6 +180,24 @@ module Nanoc3
     # @return [Boolean] True if the item is binary; false if it is not
     def binary?
       !!@is_binary
+    end
+
+    # @return [String] The current, up-to-date checksum of this item
+    def new_checksum
+      @new_checksum ||= begin
+        content_checksum = if binary?
+          Nanoc3::Checksummer.checksum_for_file(raw_filename)
+        else
+          Nanoc3::Checksummer.checksum_for_string(raw_content)
+        end
+
+        attributes_checksum = Nanoc3::Checksummer.checksum_for_hash(
+          # :file => nil because :file is deprecated and causes a warning
+          attributes.merge(:file => nil)
+        )
+
+        content_checksum + '-' + attributes_checksum
+      end
     end
 
     # Determines whether this item (or rather, its reps) is outdated and
