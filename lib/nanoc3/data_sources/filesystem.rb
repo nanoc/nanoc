@@ -123,15 +123,10 @@ module Nanoc3::DataSources
           raise RuntimeError, "meta_mtime and content_mtime are both nil"
         end
 
-        # Get checksum
-        meta_checksum    = meta_filename    ? Nanoc3::Checksummer.checksum_for(meta_filename)    : nil
-        content_checksum = content_filename ? Nanoc3::Checksummer.checksum_for(content_filename) : nil
-        checksum = [ meta_checksum, content_checksum ].compact.join('-')
-
         # Create layout object
         klass.new(
           content_or_filename, attributes, identifier,
-          :binary => is_binary, :mtime => mtime, :checksum => checksum
+          :binary => is_binary, :mtime => mtime
         )
       end
     end

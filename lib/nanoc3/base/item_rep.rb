@@ -379,7 +379,7 @@ module Nanoc3
 
       # Calculate characteristics of old content
       if File.file?(raw_path)
-        hash_old = Nanoc3::Checksummer.checksum_for(raw_path)
+        hash_old = Nanoc3::Checksummer.checksum_for_file(raw_path)
         size_old = File.size(raw_path)
       end
 
@@ -396,7 +396,7 @@ module Nanoc3
 
       # Check if file was modified
       size_new = File.size(raw_path)
-      hash_new = Nanoc3::Checksummer.checksum_for(raw_path) if size_old == size_new
+      hash_new = Nanoc3::Checksummer.checksum_for_file(raw_path) if size_old == size_new
       is_modified = (size_old != size_new || hash_old != hash_new)
 
       # Notify

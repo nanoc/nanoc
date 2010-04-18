@@ -26,9 +26,6 @@ module Nanoc3
     #   the previous site compilation
     attr_accessor :old_checksum
 
-    # @return [String] The current, up-to-date checksum of this layout
-    attr_reader   :new_checksum
-
     # @return [Boolean] Whether or not this layout is outdated because of its
     #   dependencies are outdated
     attr_accessor :outdated_due_to_dependencies
@@ -70,6 +67,20 @@ module Nanoc3
     # @return [Object] The value of the requested attribute.
     def [](key)
       @attributes[key]
+    end
+
+    # @return [String] The current, up-to-date checksum of this layout
+    def new_checksum
+      @new_checksum ||= begin
+        content_checksum = Nanoc3::Checksummer.checksum_for_string(raw_content)
+
+        attributes_checksum = Nanoc3::Checksummer.checksum_for_hash(
+          # :file => nil because :file is deprecated and causes a warning
+          attributes.merge(:file => nil)
+        )
+
+        content_checksum + '-' + attributes_checksum
+      end
     end
 
     # @return [Boolean] true if the layout was modified since the site was

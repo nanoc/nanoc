@@ -22,11 +22,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -52,11 +50,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
-    item.old_checksum = nil
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+    item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns(nil)
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -82,11 +78,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -113,11 +107,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -141,11 +133,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:bbb'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:bbb')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -179,11 +169,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -209,11 +197,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -239,11 +225,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -269,11 +253,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     site.stubs(:rules_outdated?).returns(true)
 
     # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :checksum => 'i:aaa'
-    )
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
     item.old_checksum = 'i:aaa'
+    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep

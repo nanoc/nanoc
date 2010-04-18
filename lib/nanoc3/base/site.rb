@@ -276,8 +276,7 @@ module Nanoc3
       @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
         Nanoc3::CodeSnippet.new(
           File.read(filename),
-          filename,
-          :checksum => Nanoc3::Checksummer.checksum_for(filename)
+          filename
         )
       end
 
@@ -301,7 +300,7 @@ module Nanoc3
 
       # Get rule data
       @rules = File.read(rules_filename)
-      @new_rules_checksum = Nanoc3::Checksummer.checksum_for(rules_filename)
+      @new_rules_checksum = Nanoc3::Checksummer.checksum_for_file(rules_filename)
       @old_rules_checksum = old_checksum_for(:misc, 'Rules')
       @new_checksums[ [ :misc, 'Rules' ] ] = @new_rules_checksum
 
@@ -428,7 +427,7 @@ module Nanoc3
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
         @config[:data_sources].map! { |ds| ds.symbolize_keys }
 
-        @new_config_checksum = Nanoc3::Checksummer.checksum_for('config.yaml')
+        @new_config_checksum = Nanoc3::Checksummer.checksum_for_file('config.yaml')
         @new_checksums[ [ :misc, 'config.yaml' ] ] = @new_config_checksum
       else
         # Use passed config hash
