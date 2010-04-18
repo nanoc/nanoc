@@ -49,10 +49,11 @@ module Nanoc3
     # @option params [String, nil] :checksum (nil) The current, up-to-date
     #   checksum of this layout
     def initialize(raw_content, attributes, identifier, params=nil)
-      # Get mtime and checksum
+      # Parse params
       params ||= {}
       params = { :mtime => params } if params.is_a?(Time)
-      @new_checksum = params[:checksum]
+
+      # Get mtime
       @mtime        = params[:mtime]
 
       @raw_content  = raw_content
