@@ -51,6 +51,18 @@ module Nanoc3::CLI::Commands
       @base.require_site
       @base.site.load_data
 
+      # Check presence of checksums
+      objects_without_checksum = (@base.site.items + @base.site.layouts).select { |o| o.new_checksum.nil? }
+      if !objects_without_checksum.empty?
+        $stderr.puts '-' * 80
+        $stderr.puts 'WARNING: Some items and/or layouts do not have a checksum. These items will need to be recompiled every time, because it will not be possible to determine whether they have changed. Consider passing the :checksum option to the Nanoc3::Item or Nanoc3::Layout constructor to give them a checksum. You can use Nanoc3::Checksummer.checksum_for(filename) to create a checksum for a given filename. The affected items and/or layouts are:'
+        $stderr.puts
+        objects_without_checksum.each do |obj|
+          $stderr.puts "* #{obj.inspect}"
+        end
+        $stderr.puts '-' * 80
+      end
+
       # Check presence of --all option
       if options.has_key?(:all)
         $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
