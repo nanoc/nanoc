@@ -30,6 +30,14 @@ module Nanoc3
   # * `visit_ended` — indicates that the compiler has finished visiting the
   #   item representation and that the requested attributes or content have
   #   been fetched (either successfully or with failure)
+  #
+  # * `processing_started` — indicates that the compiler has started
+  #   processing the specified object, which can be an item representation
+  #   (when it is compiled) or a layout (when it is used to lay out an item
+  #   representation or when it is used as a partial)
+  #
+  # * `processing_ended` — indicates that the compiler has finished processing
+  #   the specified object.
   class Compiler
 
     # The name of the file where cached compiled content will be stored
@@ -264,12 +272,16 @@ module Nanoc3
       # Build graph for outdated reps
       content_dependency_graph = Nanoc3::DirectedGraph.new(outdated_reps)
 
+      # Listen to processing start/stop
+      Nanoc3::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
+      Nanoc3::NotificationCenter.on(:processing_ended,   self) { |obj| @stack.pop       }
+
       # Attempt to compile all active reps
       loop do
         # Find rep to compile
         break if content_dependency_graph.roots.empty?
         rep = content_dependency_graph.roots.each { |e| break e }
-        @stack = [ rep ]
+        @stack = []
 
         begin
           compile_rep(rep)
@@ -287,6 +299,9 @@ module Nanoc3
       if !content_dependency_graph.vertices.empty?
         raise Nanoc3::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
+    ensure
+      Nanoc3::NotificationCenter.remove(:processing_started, self)
+      Nanoc3::NotificationCenter.remove(:processing_ended,   self)
     end
 
     # Compiles the given item representation.
@@ -300,6 +315,7 @@ module Nanoc3
     # @return [void]
     def compile_rep(rep)
       Nanoc3::NotificationCenter.post(:compilation_started, rep)
+      Nanoc3::NotificationCenter.post(:processing_started,  rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
       if !rep.outdated? && !rep.item.outdated_due_to_dependencies && compiled_content_cache[rep]
@@ -321,6 +337,7 @@ module Nanoc3
       raise e
     ensure
       Nanoc3::NotificationCenter.post(:visit_ended,       rep.item)
+      Nanoc3::NotificationCenter.post(:processing_ended,  rep)
       Nanoc3::NotificationCenter.post(:compilation_ended, rep)
     end
 

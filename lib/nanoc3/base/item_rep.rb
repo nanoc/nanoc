@@ -270,11 +270,11 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:visit_ended,   layout)
 
       # Layout
-      @item.site.compiler.stack.push(layout)
-      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
+      Nanoc3::NotificationCenter.post(:processing_started, layout)
+      Nanoc3::NotificationCenter.post(:filtering_started,  self, filter_name)
       @content[:last] = filter.run(layout.raw_content, filter_args)
-      Nanoc3::NotificationCenter.post(:filtering_ended,   self, filter_name)
-      @item.site.compiler.stack.pop
+      Nanoc3::NotificationCenter.post(:filtering_ended,    self, filter_name)
+      Nanoc3::NotificationCenter.post(:processing_ended,   layout)
 
       # Create "post" snapshot
       snapshot(:post, :final => false)

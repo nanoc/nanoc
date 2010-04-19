@@ -69,9 +69,9 @@ module Nanoc3::Helpers
       filter = filter_class.new(assigns)
 
       # Layout
-      @site.compiler.stack.push(layout)
+      Nanoc3::NotificationCenter.post(:processing_started, layout)
       result = filter.run(layout.raw_content, filter_args)
-      @site.compiler.stack.pop
+      Nanoc3::NotificationCenter.post(:processing_ended, layout)
 
       # Append to erbout if we have a block
       if block_given?
