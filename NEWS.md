@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.1.3 (???)
+
+* Removed annoying win32console warning [Eric Sunshine]
+* Removed color codes when not writing to a terminal, or when writing to
+  Windows’ console when win32console is not installed [Eric Sunshine]
+
 ## 3.1.2 (2010-04-07)
 
 * Fixed bug which could cause incorrect output when compilation of an item is
