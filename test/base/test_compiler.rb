@@ -44,43 +44,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert(File.directory?('foo/bar/baz'))
   end
 
-  def test_run_with_item
-    # Mock items
-    item = mock
-    other_items = [ mock, mock ]
-
-    # Mock reps
-    item.stubs(:reps).returns([ mock, mock, mock ])
-    other_items.each { |i| i.stubs(:reps).returns([ mock ]) }
-    reps = item.reps + other_items[0].reps
-
-    # Mock site
-    site = mock
-    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.expects(:store_checksums)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:forget_dependencies_if_outdated).with([ item, other_items[0] ])
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:load_graph)
-    dependency_tracker.expects(:store_graph)
-    dependency_tracker.expects(:start)
-    dependency_tracker.expects(:stop)
-    dependency_tracker.expects(:propagate_outdatedness)
-    dependency_tracker.expects(:successors_of).with(item).returns([ other_items[0] ])
-    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
-
-    # Run
-    compiler.run(item)
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-  end
-
   def test_run_with_force
     # Mock items
     items = [ mock, mock ]
