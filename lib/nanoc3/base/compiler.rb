@@ -76,8 +76,7 @@ module Nanoc3
     # Compiles (part of) the site and writes out the compiled item
     # representations.
     #
-    # @param [Nanoc3::Item] item The item that should be compiled, along with
-    #   its dependencies. Pass `nil` if the entire site should be compiled.
+    # @param [Nanoc3::Item] item Deprecated and ignored.
     #
     # @option params [Boolean] :force (false) true if the rep should be
     #   compiled even if it is not outdated, false if not
@@ -96,8 +95,8 @@ module Nanoc3
       dependency_tracker.load_graph
 
       # Get items and reps to compile
-      items = item ? ([ item ] + dependency_tracker.successors_of(item)).uniq : @site.items
-      reps = items.map { |i| i.reps }.flatten
+      items = @site.items
+      reps  = items.map { |i| i.reps }.flatten
 
       # Determine which reps need to be recompiled
       reps.each { |r| r.force_outdated = true } if params[:force]

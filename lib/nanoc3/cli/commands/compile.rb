@@ -17,8 +17,7 @@ module Nanoc3::CLI::Commands
     end
 
     def long_desc
-      'Compile all items of the current site. If an identifier is given, ' +
-      'only the item with the given identifier will be compiled. ' +
+      'Compile all items of the current site.' +
       "\n\n" +
       'By default, only item that are outdated will be compiled. This can ' +
       'speed up the compilation process quite a bit, but items that include ' +
@@ -27,7 +26,7 @@ module Nanoc3::CLI::Commands
     end
 
     def usage
-      "nanoc3 compile [options] [identifier]"
+      "nanoc3 compile [options]"
     end
 
     def option_definitions
@@ -56,23 +55,15 @@ module Nanoc3::CLI::Commands
         $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
       end
 
-      # Find item(s) to compile
-      if arguments.size == 0
-        item = nil
-      elsif arguments.size == 1
-        # Find item
-        identifier = arguments[0].cleaned_identifier
-        item = @base.site.items.find { |item| item.identifier == identifier }
-
-        # Ensure item
-        if item.nil?
-          $stderr.puts "Unknown item: #{identifier}"
-          exit 1
-        end
+      # Warn if trying to compile a single item
+      if arguments.size == 1
+        $stderr.puts '-' * 80
+        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'.make_compatible_with_env
+        $stderr.puts '-' * 80
       end
 
       # Give feedback
-      puts "Compiling #{item.nil? ? 'site' : 'item'}..."
+      puts "Compiling site..."
 
       # Initialize profiling stuff
       time_before = Time.now
@@ -82,12 +73,11 @@ module Nanoc3::CLI::Commands
 
       # Compile
       @base.site.compiler.run(
-        item,
-        :force => options.has_key?(:all) || options.has_key?(:force)
+        :force => (options.has_key?(:all) || options.has_key?(:force))
       )
 
       # Find reps
-      reps = @base.site.items.map  { |i| i.reps }.flatten
+      reps = @base.site.items.map { |i| i.reps }.flatten
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
@@ -103,7 +93,7 @@ module Nanoc3::CLI::Commands
 
       # Give general feedback
       puts
-      puts "#{item.nil? ? 'Site' : 'Item'} compiled in #{format('%.2f', Time.now - time_before)}s."
+      puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
 
       # Give detailed feedback
       if options.has_key?(:verbose)
