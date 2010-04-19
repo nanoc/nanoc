@@ -78,24 +78,6 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert_equal [ items[1] ], tracker.direct_predecessors_of(items[0])
   end
 
-  def test_predecessors_of
-    # Mock items
-    items = [ mock, mock, mock ]
-
-    # Create
-    tracker = Nanoc3::DependencyTracker.new(items)
-
-    # Record some dependencies
-    tracker.record_dependency(items[0], items[1])
-    tracker.record_dependency(items[1], items[2])
-
-    # Verify dependencies
-    all_dependencies = tracker.predecessors_of(items[0])
-    assert_equal 2, all_dependencies.size
-    assert all_dependencies.include?(items[1])
-    assert all_dependencies.include?(items[2])
-  end
-
   def test_direct_successors_of
     # Mock items
     items = [ mock, mock, mock ]
@@ -109,24 +91,6 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Verify dependencies
     assert_equal [ items[0] ], tracker.direct_successors_of(items[1])
-  end
-
-  def test_successors_of
-    # Mock items
-    items = [ mock, mock, mock ]
-
-    # Create
-    tracker = Nanoc3::DependencyTracker.new(items)
-
-    # Record some dependencies
-    tracker.record_dependency(items[0], items[1])
-    tracker.record_dependency(items[1], items[2])
-
-    # Verify dependencies
-    all_dependencies = tracker.successors_of(items[2])
-    assert_equal 2, all_dependencies.size
-    assert all_dependencies.include?(items[0])
-    assert all_dependencies.include?(items[1])
   end
 
   def test_start_and_stop
