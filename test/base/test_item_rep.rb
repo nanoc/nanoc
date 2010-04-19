@@ -118,11 +118,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     layout.stubs(:raw_content).returns(%[<%= "blah" %>])
 
     # Mock compiler
-    stack = mock
-    stack.expects(:push).with(layout)
-    stack.expects(:pop)
     compiler = mock
-    compiler.stubs(:stack).returns(stack)
     compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
 
     # Mock site
