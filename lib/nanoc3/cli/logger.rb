@@ -35,6 +35,7 @@ module Nanoc3::CLI
         require 'Win32/Console/ANSI' if RUBY_PLATFORM =~/mswin|mingw/
       rescue LoadError
         warn 'The win32console gem is not available. Install it to enable color support on Windows.'
+        @color = false
       end
     end
 
