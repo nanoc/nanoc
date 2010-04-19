@@ -8,19 +8,6 @@ module Nanoc3
   # a different set of filters with a different layout.
   class ItemRep
 
-    # The descriptive strings for each outdatedness reason. This hash is used
-    # by the {#outdatedness_reason} method.
-    OUTDATEDNESS_REASON_DESCRIPTIONS = {
-      :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
-      :forced => 'All items are recompiled because of a `--force` flag given to the compilation command.',
-      :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
-      :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
-      :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
-      :code_outdated => 'The code snippets in the `lib/` directory have been modified since the last time this item representation was compiled.',
-      :config_outdated => 'The site configuration has been modified since the last time this item representation was compiled.',
-      :rules_outdated => 'The rules file has been modified since the last time this item representation was compiled.',
-    }
-
     # @return [Nanoc3::Item] The item to which this rep belongs
     attr_reader   :item
 
@@ -30,6 +17,11 @@ module Nanoc3
     # @return [Boolean] true if this rep is forced to be dirty (e.g. because
     #   of the `--force` commandline option); false otherwise
     attr_accessor :force_outdated
+
+    # @return [Hash, nil] A hash containing the reason why this item rep is
+    #   outdated, both in the form of a symbol and as a descriptive string, or
+    #   nil if the item representation is not outdated.
+    attr_accessor :outdatedness_reason
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
     attr_reader :binary
@@ -79,55 +71,6 @@ module Nanoc3
       # Reset flags
       @compiled       = false
       @force_outdated = false
-    end
-
-    # Calculates the reason why this item representation is outdated. The
-    # output will be a hash with a `:type` key, containing the reason why the
-    # item is outdated in the form of a symbol, and a `:description` key,
-    # containing a descriptive string that can be printed if necessary.
-    #
-    # For documentation on the types that this method can return, check the
-    # {OUTDATEDNESS_REASON_DESCRIPTIONS} hash in this class.
-    #
-    # @return [Hash, nil] A hash containing the reason why this item rep is
-    #   outdated, both in the form of a symbol and as a descriptive string, or
-    #   nil if the item representation is not outdated.
-    def outdatedness_reason
-      # Get reason symbol
-      reason = lambda do
-        # Outdated if we’re compiling with --force
-        return :forced if @force_outdated
-
-        # Outdated if checksums are missing
-        if !@item.old_checksum || !@item.new_checksum
-          return :not_enough_data
-        end
-
-        # Outdated if compiled file doesn't exist (yet)
-        return :not_written if self.raw_path && !File.file?(self.raw_path)
-
-        # Outdated if file too old
-        if @item.old_checksum != @item.new_checksum
-          return :source_modified
-        end
-
-        # Outdated if other site parts outdated
-        return :code_outdated    if @item.site.code_snippets.any? { |cs| cs.outdated? }
-        return :config_outdated  if @item.site.config_outdated?
-        return :rules_outdated   if @item.site.rules_outdated?
-
-        return nil
-      end[]
-
-      # Build reason symbol and description
-      if reason.nil?
-        nil
-      else
-        {
-          :type        => reason,
-          :description => OUTDATEDNESS_REASON_DESCRIPTIONS[reason]
-        }
-      end
     end
 
     # @return [Boolean] true if this item rep's output file is outdated and
