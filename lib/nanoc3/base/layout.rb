@@ -6,9 +6,6 @@ module Nanoc3
   # identifier and a modification time (to speed up compilation).
   class Layout
 
-    # @return [Nanoc3::Site] The site this layout belongs to
-    attr_accessor :site
-
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
