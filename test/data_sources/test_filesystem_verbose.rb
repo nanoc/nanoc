@@ -339,19 +339,21 @@ class Nanoc3::DataSources::FilesystemVerboseTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_huge_site
-    # Create data source
-    data_source = new_data_source
+    if_implemented do
+      # Create data source
+      data_source = new_data_source
 
-    # Create a lot of items
-    count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
-    count.times do |i|
-      FileUtils.mkdir_p("content/#{i}")
-      File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is item #{i}." }
-      File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Item #{i}"   }
+      # Create a lot of items
+      count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
+      count.times do |i|
+        FileUtils.mkdir_p("content/#{i}")
+        File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is item #{i}." }
+        File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Item #{i}"   }
+      end
+
+      # Read all items
+      data_source.items
     end
-
-    # Read all items
-    data_source.items
   end
 
 end
