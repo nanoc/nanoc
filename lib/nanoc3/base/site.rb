@@ -117,8 +117,6 @@ module Nanoc3
     # @param [Hash, String] dir_or_config_hash If a string, contains the path
     #   to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
-      @new_checksums = {}
-
       build_config(dir_or_config_hash)
 
       @code_snippets_loaded = false
@@ -193,6 +191,8 @@ module Nanoc3
       # Preprocess
       setup_child_parent_links
       preprocessor_context.instance_eval(&preprocessor) unless preprocessor.nil?
+
+      restore_old_checksums
       link_everything_to_site
       setup_child_parent_links
       build_reps
@@ -240,11 +240,24 @@ module Nanoc3
     #
     # @return [void]
     def store_checksums
+      # Glean
+      checksums = {}
+      checksums[ [ :misc, 'Rules' ] ] = @new_rules_checksum
+      checksums[ [ :misc, 'config.yaml' ] ] = @new_config_checksum
+      @code_snippets.each do |cs|
+        checksums[ [ :code_snippet, cs.filename ] ] = cs.new_checksum
+      end
+      @items.each do |i|
+        checksums[ [ :item, i.identifier ] ] = i.new_checksum
+      end
+      @layouts.each do |l|
+        checksums[ [ :layout, l.identifier ] ] = l.new_checksum
+      end
       # Store
       FileUtils.mkdir_p(File.dirname(CHECKSUMS_FILE_NAME))
       store = PStore.new(CHECKSUMS_FILE_NAME)
       store.transaction do
-        store[:checksums] = @new_checksums || {}
+        store[:checksums] = checksums
       end
     end
 
@@ -280,12 +293,6 @@ module Nanoc3
         )
       end
 
-      # Set checksums
-      @code_snippets.each do |cs|
-        cs.old_checksum = old_checksum_for(:code_snippet, cs.filename)
-        @new_checksums[ [ :code_snippet, cs.filename ] ] = cs.new_checksum
-      end
-
       # Execute code snippets
       @code_snippets.each { |cs| cs.load }
 
@@ -302,7 +309,6 @@ module Nanoc3
       @rules = File.read(rules_filename)
       @new_rules_checksum = Nanoc3::Checksummer.checksum_for_file(rules_filename)
       @old_rules_checksum = old_checksum_for(:misc, 'Rules')
-      @new_checksums[ [ :misc, 'Rules' ] ] = @new_rules_checksum
 
       # Load DSL
       dsl.instance_eval(@rules, "./#{rules_filename}")
@@ -318,12 +324,6 @@ module Nanoc3
         @items.concat(items_in_ds)
       end
 
-      # Set checksums
-      @items.each do |i|
-        i.old_checksum = old_checksum_for(:item, i.identifier)
-        @new_checksums[ [ :item, i.identifier ] ] = i.new_checksum
-      end
-
       @items_loaded = true
     end
 
@@ -334,12 +334,6 @@ module Nanoc3
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts.concat(layouts_in_ds)
-      end
-
-      # Set checksums
-      @layouts.each do |l|
-        l.old_checksum = old_checksum_for(:layout, l.identifier)
-        @new_checksums[ [ :layout, l.identifier ] ] = l.new_checksum
       end
 
       @layouts_loaded = true
@@ -428,7 +422,6 @@ module Nanoc3
         @config[:data_sources].map! { |ds| ds.symbolize_keys }
 
         @new_config_checksum = Nanoc3::Checksummer.checksum_for_file('config.yaml')
-        @new_checksums[ [ :misc, 'config.yaml' ] ] = @new_config_checksum
       else
         # Use passed config hash
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
@@ -476,6 +469,19 @@ module Nanoc3
 
       @checksums_loaded = true
       @checksums
+    end
+
+    # Restore cached item, layout, and code snippet checksums.
+    def restore_old_checksums()
+      @code_snippets.each do |cs|
+        cs.old_checksum = old_checksum_for(:code_snippet, cs.filename)
+      end
+      @items.each do |i|
+        i.old_checksum = old_checksum_for(:item, i.identifier)
+      end
+      @layouts.each do |l|
+        l.old_checksum = old_checksum_for(:layout, l.identifier)
+      end
     end
 
     # Returns the old checksum for the given object.
