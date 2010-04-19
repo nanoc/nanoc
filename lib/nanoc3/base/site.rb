@@ -190,8 +190,7 @@ module Nanoc3
 
       # Preprocess
       setup_child_parent_links
-      preprocessor_context.instance_eval(&preprocessor) unless preprocessor.nil?
-
+      preprocessor_context.instance_eval(&preprocessor) if preprocessor
       restore_old_checksums
       link_everything_to_site
       setup_child_parent_links
@@ -253,6 +252,7 @@ module Nanoc3
       @layouts.each do |l|
         checksums[ [ :layout, l.identifier ] ] = l.new_checksum
       end
+
       # Store
       FileUtils.mkdir_p(File.dirname(CHECKSUMS_FILE_NAME))
       store = PStore.new(CHECKSUMS_FILE_NAME)
@@ -446,8 +446,8 @@ module Nanoc3
     end
 
     # Returns the checksums, loads the checksums from the cached checksums
-    # file first if necessary. The checksums returned is a hash in th following
-    # format:
+    # file first if necessary. The checksums returned is a hash in the
+    # following format:
     #
     #     {
     #       [ :layout,       '/identifier/'    ] => checksum,
@@ -471,7 +471,7 @@ module Nanoc3
       @checksums
     end
 
-    # Restore cached item, layout, and code snippet checksums.
+    # Restores cached item, layout, and code snippet checksums.
     def restore_old_checksums()
       @code_snippets.each do |cs|
         cs.old_checksum = old_checksum_for(:code_snippet, cs.filename)
