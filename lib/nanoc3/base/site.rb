@@ -341,9 +341,7 @@ module Nanoc3
 
     # Links items, layouts and code snippets to the site.
     def link_everything_to_site
-      @items.each         { |i|  i.site  = self }
-      @layouts.each       { |l|  l.site  = self }
-      @code_snippets.each { |cs| cs.site = self }
+      @items.each { |i|  i.site  = self }
     end
 
     # Fills each item's parent reference and children array with the

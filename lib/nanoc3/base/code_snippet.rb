@@ -5,11 +5,6 @@ module Nanoc3
   # Nanoc3::CodeSnippet represent a piece of custom code of a nanoc site.
   class CodeSnippet
 
-    # The {Nanoc3::Site} this code snippet belongs to.
-    #
-    # @return [Nanoc3::Site]
-    attr_accessor :site
-
     # A string containing the actual code in this code snippet.
     #
     # @return [String]
