@@ -34,8 +34,6 @@ module Nanoc3::CLI
       begin
         require 'Win32/Console/ANSI' if RUBY_PLATFORM =~/mswin|mingw/
       rescue LoadError
-        $stderr.puts 'The win32console gem is not installed. Consider installing it using "gem install win32console" to enable colored terminal output on Windows.'
-        $stderr.puts
         @color = false
       end
     end
