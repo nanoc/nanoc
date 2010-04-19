@@ -94,20 +94,6 @@ module Nanoc3
       @graph.direct_predecessors_of(object).compact
     end
 
-    # Returns all dependencies (direct and indirect) for the given object.
-    #
-    # The dependencies of given object include the objects that, when
-    # outdated, will cause the given object to be marked as outdated.
-    #
-    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
-    #   fetch all direct and indirect predecessors
-    #
-    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The predecessors of the
-    #   given object
-    def predecessors_of(object)
-      @graph.predecessors_of(object).compact
-    end
-
     # Returns the direct inverse dependencies for the given object.
     #
     # The direct inverse dependencies of the given object include the objects
@@ -123,21 +109,6 @@ module Nanoc3
     #   the given object
     def direct_successors_of(object)
       @graph.direct_successors_of(object).compact
-    end
-
-    # Returns all inverse dependencies (direct and indirect) for the given
-    # object.
-    #
-    # The inverse dependencies of the given object include the objects that
-    # will be marked as outdated when the given object is outdated.
-    #
-    # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
-    #   fetch all direct and indirect successors
-    #
-    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The successors of the
-    #   given object
-    def successors_of(object)
-      @graph.successors_of(object).compact
     end
 
     # Records a dependency from `src` to `dst` in the dependency graph. When
@@ -213,14 +184,9 @@ module Nanoc3
       added_objects = @objects - @previous_objects
       added_objects.each { |o| o.outdated_due_to_dependencies = true }
 
-      # Mark successors of nil as outdated
-      self.successors_of(nil).each do |o|
-        o.outdated_due_to_dependencies = true
-      end
-
       # Mark successors of outdated objects as outdated
       require 'set'
-      unprocessed = @objects.select { |o| o.outdated? }
+      unprocessed = [ nil ] + @objects.select { |o| o.outdated? }
       seen        = Set.new(unprocessed)
       until unprocessed.empty?
         obj = unprocessed.shift
