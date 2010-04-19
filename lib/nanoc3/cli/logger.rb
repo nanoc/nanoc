@@ -28,7 +28,7 @@ module Nanoc3::CLI
 
     def initialize
       @level = :high
-      @color = true
+      @color = $stdout.tty?
 
       # Try enabling color support on Windows
       begin
