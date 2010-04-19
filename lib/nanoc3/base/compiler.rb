@@ -183,6 +183,67 @@ module Nanoc3
 
   private
 
+    # The descriptive strings for each outdatedness reason.
+    OUTDATEDNESS_REASON_DESCRIPTIONS = {
+      :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
+      :forced => 'All items are recompiled because of a `--force` flag given to the compilation command.',
+      :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
+      :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
+      :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
+      :code_outdated => 'The code snippets in the `lib/` directory have been modified since the last time this item representation was compiled.',
+      :config_outdated => 'The site configuration has been modified since the last time this item representation was compiled.',
+      :rules_outdated => 'The rules file has been modified since the last time this item representation was compiled.',
+    }
+
+    # Determines whether the given representations are outdated or not. For
+    # outdated representations, the outdatedness reason will be set.
+    #
+    # The outdatedness reason is a hash with a `:type` key, containing the
+    # reason why the item is outdated in the form of a symbol, and a
+    # `:description` key, containing a descriptive string that can be printed
+    # if necessary.
+    #
+    # @return [void]
+    def determine_outdatedness(reps)
+      # TODO outdatedness reasons should be objects with descriptions
+      # TODO should item reps know their outdatedness?
+
+      reps.each do |rep|
+        # Get reason symbol
+        reason = lambda do
+          # Outdated if we’re compiling with --force
+          return :forced if rep.force_outdated
+
+          # Outdated if checksums are missing
+          if !rep.item.old_checksum || !rep.item.new_checksum
+            return :not_enough_data
+          end
+
+          # Outdated if file too old
+          if rep.item.old_checksum != rep.item.new_checksum
+            return :source_modified
+          end
+
+          # Outdated if compiled file doesn't exist (yet)
+          return :not_written if rep.raw_path && !File.file?(rep.raw_path)
+
+          # Outdated if other site parts outdated
+          return :code_outdated   if @site.code_snippets.any? { |cs| cs.outdated? }
+          return :config_outdated if @site.config_outdated?
+          return :rules_outdated  if @site.rules_outdated?
+
+          return nil
+        end[]
+
+        # Build reason symbol and description
+        next if reason.nil?
+        rep.outdatedness_reason = {
+          :type        => reason,
+          :description => OUTDATEDNESS_REASON_DESCRIPTIONS[reason]
+        }
+      end
+    end
+
     # Compiles the given representations.
     #
     # @param [Array] reps The item representations to compile.
@@ -192,6 +253,7 @@ module Nanoc3
       require 'set'
 
       # Partition in outdated and non-outdated
+      determine_outdatedness(reps)
       outdated_reps = Set.new
       skipped_reps  = Set.new
       reps.each do |rep|
