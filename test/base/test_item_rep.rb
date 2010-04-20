@@ -615,9 +615,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Test
     assert_equal 'a9993e364706816aba3e25717850c26c9cd0d89d',
-      rep.send(:hash, 'one')
+      rep.send(:hash_for_file, 'one')
     assert_equal '32d10c7b8cf96570ca04ce37f2a19d84240d3a89',
-      rep.send(:hash, 'two')
+      rep.send(:hash_for_file, 'two')
   end
 
   def test_filter_text_to_binary
