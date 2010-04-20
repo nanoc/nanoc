@@ -104,6 +104,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
       assert_equal expected_out[i].stuff[3], actual_out[i].stuff[3], 'mtime must match'
       assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
+      expected_out[i].stuff[1][:file].close;
+      actual_out[i].stuff[1][:file].close
       [ 'num', :filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
@@ -343,6 +345,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
       actual_file   = actual_out[i].stuff[1][:file]
       expected_file = expected_out[i].stuff[1][:file]
       assert(actual_file == expected_file || actual_file.path == expected_file.path, 'file paths must match')
+      actual_file.close unless actual_file.nil?
+      expected_file.close unless expected_file.nil?
 
       [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
@@ -429,6 +433,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
       actual_file   = actual_out[i].stuff[1][:file]
       expected_file = expected_out[i].stuff[1][:file]
       assert(actual_file == expected_file || actual_file.path == expected_file.path, 'file paths must match')
+      actual_file.close unless actual_file.nil?
+      expected_file.close unless expected_file.nil?
 
       [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
