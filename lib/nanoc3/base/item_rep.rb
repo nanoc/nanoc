@@ -354,7 +354,7 @@ module Nanoc3
       if self.binary?
         # Calculate hash of old content
         if File.file?(self.raw_path)
-          hash_old = hash(self.raw_path)
+          hash_old = hash_for_file(self.raw_path)
           size_old = File.size(self.raw_path)
         end
 
@@ -364,7 +364,7 @@ module Nanoc3
 
         # Check if file was modified
         size_new = File.size(self.raw_path)
-        hash_new = hash(self.raw_path) if size_old == size_new
+        hash_new = hash_for_file(self.raw_path) if size_old == size_new
         @modified = (size_old != size_new || hash_old != hash_new)
       else
         # Remember old content
@@ -488,7 +488,7 @@ module Nanoc3
     end
 
     # Returns a hash of the given filename
-    def hash(filename)
+    def hash_for_file(filename)
       digest = Digest::SHA1.new
       File.open(filename, 'r') do |io|
         until io.eof
