@@ -20,7 +20,9 @@ module Nanoc3::Filters
       end
 
       # Get options
-      options = params.merge(:filename => filename)
+      options = params.dup
+      sass_filename = options[:filename] || (@item && @item[:content_filename])
+      options[:filename] ||= sass_filename
 
       # Build engine
       engine = ::Sass::Engine.new(content, options)
@@ -43,8 +45,7 @@ module Nanoc3::Filters
 
       # Get import paths
       import_paths = (options[:load_paths] || []).dup
-      import_paths.unshift(File.dirname(options[:filename])) if options[:filename]
-
+      import_paths.unshift(File.dirname(sass_filename)) if sass_filename
       # Get imported filenames
       imported_filenames = imported_nodes.map do |node|
         ::Sass::Files.find_file_to_import(node.imported_filename, import_paths)
@@ -52,8 +53,10 @@ module Nanoc3::Filters
 
       # Convert to items
       imported_items = imported_filenames.map do |filename|
-        normalized_filename = Pathname.new(filename).realpath
-        @items.find { |i| i[:filename] && Pathname.new(i[:filename]).realpath == normalized_filename }
+        pathname = Pathname.new(filename)
+        next unless pathname.file?
+        normalized_filename = pathname.realpath
+        @items.find { |i| i[:content_filename] && Pathname.new(i[:content_filename]).realpath == normalized_filename }
       end.compact
 
       # Require compilation of each item

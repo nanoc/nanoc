@@ -64,6 +64,7 @@ components, however, do have dependencies:
 
 (In alphabetical order)
 
+* Ben Armston
 * Colin Barrett
 * Dmitry Bilunov
 * Brian Candler
