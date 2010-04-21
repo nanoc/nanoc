@@ -42,7 +42,8 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
       begin
         filter.run('$*#&!@($')
       rescue Sass::SyntaxError => e
-        assert_match '?', e.backtrace[0]
+        open("/tmp/asdf", "w") {|f| f.puts e.backtrace[0]}
+        assert_match ':1', e.backtrace[0]
         raised = true
       end
       assert raised
