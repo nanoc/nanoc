@@ -89,5 +89,15 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
       filter.run('@import moo')
     end
   end
+  
+  def test_css_imports_work
+    if_have 'sass' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Sass.new(:items => [ Nanoc3::Item.new('blah', {}, '/blah/') ])
+
+      # Run filter
+      filter.run('@import moo.css')
+    end
+  end
 
 end

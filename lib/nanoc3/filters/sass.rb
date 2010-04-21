@@ -53,8 +53,10 @@ module Nanoc3::Filters
 
       # Convert to items
       imported_items = imported_filenames.map do |filename|
-        normalized_filename = Pathname.new(filename).realpath
-        @items.find { |i| i[:filename] && Pathname.new(i[:filename]).realpath == normalized_filename }
+        pathname = Pathname.new(filename)
+        next unless pathname.file?
+        normalized_filename = pathname.realpath
+        @items.find { |i| i[:content_filename] && Pathname.new(i[:content_filename]).realpath == normalized_filename }
       end.compact
 
       # Require compilation of each item
