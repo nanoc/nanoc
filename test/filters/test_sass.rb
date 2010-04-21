@@ -62,6 +62,21 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_can_import_relative_files
+    if_have 'sass' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Sass.new(:items => [])
+
+      # Create sample file
+      File.open('moo.sass', 'w') { |io| io.write %Q{@import subdir/relative} }
+      FileUtils.mkdir_p("subdir")
+      File.open('subdir/relative.sass', 'w') { |io| io.write "body\n  color: red" }
+
+      # Run filter
+      filter.run('@import moo')
+    end
+  end
+
   def test_filter_will_skip_items_without_filename
     if_have 'sass' do
       # Create filter
