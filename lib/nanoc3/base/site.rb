@@ -39,7 +39,7 @@ module Nanoc3
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
-      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass txt ),
+      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass txt xhtml xml ),
       :output_dir         => 'output',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],
