@@ -96,7 +96,7 @@ module Nanoc3::CLI::Commands
     class Notifier
 
       # A list of commandline tool names that can be used to send notifications
-      TOOLS = %w( growlnotify notify_send )
+      TOOLS = %w( growlnotify notify-send )
 
       # Error that is raised when no notifier can be found.
       class NoNotifierFound < ::StandardError
@@ -124,7 +124,7 @@ module Nanoc3::CLI::Commands
           end
         end
 
-        send(tool, message, params)
+        send(tool.tr('-', '_'), message, params)
       end
 
     private
