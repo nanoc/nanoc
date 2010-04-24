@@ -138,7 +138,7 @@ module Nanoc3::CLI::Commands
       end
 
       def notify_send(message, params={})
-        system('notify_send', messsage)
+        system('notify-send', message)
       end
 
     end
