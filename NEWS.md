@@ -5,6 +5,8 @@
 * Removed annoying win32console warning [Eric Sunshine]
 * Removed color codes when not writing to a terminal, or when writing to
   Windows’ console when win32console is not installed [Eric Sunshine]
+* Added .xhtml and .xml to list of text extensions
+* Improved support for relative Sass @imports [Chris Eppstein]
 
 ## 3.1.2 (2010-04-07)
 
