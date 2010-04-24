@@ -58,7 +58,7 @@ components, however, do have dependencies:
 * The **autocompiler** depends on `mime-types` and `rack`.
 * For **documentation generation** you’ll need `yard`.
 * For **packaging** you’ll need `rubygems` (1.3 or newer).
-* For **testing** you’ll need `mocha`.
+* For **testing** you’ll need `mocha` and `minitest`.
 
 ## Contributors
 
