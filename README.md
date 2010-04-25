@@ -69,10 +69,12 @@ components, however, do have dependencies:
 * Dmitry Bilunov
 * Brian Candler
 * Chris Eppstein
+* Felix Hanley
 * Starr Horne
 * Nicky Peeters
 * Christian Plessl
 * Šime Ramov
+* Xavier Shay
 * “Soryu”
 * Eric Sunshine
 * Dennis Sutch
