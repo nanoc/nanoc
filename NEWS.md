@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.1.3 (???)
+## 3.1.3 (2010-04-25)
 
 * Removed annoying win32console warning [Eric Sunshine]
 * Removed color codes when not writing to a terminal, or when writing to
