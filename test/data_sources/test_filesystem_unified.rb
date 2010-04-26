@@ -104,6 +104,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
       assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
       assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
+      expected_out[i].stuff[1][:file].close;
+      actual_out[i].stuff[1][:file].close
       [ 'num', :filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
@@ -343,6 +345,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
       actual_file   = actual_out[i].stuff[1][:file]
       expected_file = expected_out[i].stuff[1][:file]
       assert(actual_file == expected_file || actual_file.path == expected_file.path, 'file paths must match')
+      actual_file.close unless actual_file.nil?
+      expected_file.close unless expected_file.nil?
 
       [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
@@ -429,6 +433,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
       actual_file   = actual_out[i].stuff[1][:file]
       expected_file = expected_out[i].stuff[1][:file]
       assert(actual_file == expected_file || actual_file.path == expected_file.path, 'file paths must match')
+      actual_file.close unless actual_file.nil?
+      expected_file.close unless expected_file.nil?
 
       [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
@@ -482,19 +488,21 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_huge_site
-    # Create data source
-    data_source = new_data_source
+    if_implemented do
+      # Create data source
+      data_source = new_data_source
 
-    # Create a lot of items
-    count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
-    count.times do |i|
-      FileUtils.mkdir_p("content/#{i}")
-      File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is item #{i}." }
-      File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Item #{i}"   }
+      # Create a lot of items
+      count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
+      count.times do |i|
+        FileUtils.mkdir_p("content/#{i}")
+        File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is item #{i}." }
+        File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Item #{i}"   }
+      end
+
+      # Read all items
+      data_source.items
     end
-
-    # Read all items
-    data_source.items
   end
 
 end

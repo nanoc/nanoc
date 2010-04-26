@@ -35,6 +35,15 @@ module Nanoc3::TestHelpers
     yield
   end
 
+  def if_implemented
+    begin
+      yield
+    rescue NotImplementedError, NameError
+      skip $!
+      return
+    end
+  end
+
   def setup
     # Clean up
     GC.start

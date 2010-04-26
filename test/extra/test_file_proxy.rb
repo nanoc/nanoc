@@ -7,13 +7,15 @@ class Nanoc3::Extra::FileProxyTest < MiniTest::Unit::TestCase
   include Nanoc3::TestHelpers
 
   def test_create_many
-    # Create test file
-    File.open('test.txt', 'w') { |io| }
+    if_implemented do
+      # Create test file
+      File.open('test.txt', 'w') { |io| }
 
-    # Create lots of file proxies
-    count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
-    file_proxies = []
-    count.times { file_proxies << Nanoc3::Extra::FileProxy.new('test.txt') }
+      # Create lots of file proxies
+      count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
+      file_proxies = []
+      count.times { file_proxies << Nanoc3::Extra::FileProxy.new('test.txt') }
+    end
   end
 
 end
