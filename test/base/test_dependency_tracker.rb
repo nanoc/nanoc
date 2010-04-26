@@ -141,10 +141,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_equal [ items[1] ],           tracker.direct_predecessors_of(items[0])
-    assert_equal [ items[2], items[3] ], tracker.direct_predecessors_of(items[1])
-    assert_equal [],                     tracker.direct_predecessors_of(items[2])
-    assert_equal [],                     tracker.direct_predecessors_of(items[3])
+    assert_equal Set.new([ items[1] ]),           Set.new(tracker.direct_predecessors_of(items[0]))
+    assert_equal Set.new([ items[2], items[3] ]), Set.new(tracker.direct_predecessors_of(items[1]))
+    assert_equal Set.new([]),                     Set.new(tracker.direct_predecessors_of(items[2]))
+    assert_equal Set.new([]),                     Set.new(tracker.direct_predecessors_of(items[3]))
   end
 
   def test_store_graph_with_custom_filename
