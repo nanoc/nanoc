@@ -227,7 +227,7 @@ module Nanoc3::Extra::Validators
             return res.code.to_i
           end
         rescue
-          nil
+          return nil
         end
       end
     end
