@@ -218,7 +218,10 @@ module Nanoc3::Extra::Validators
     def fetch_http_status_for(url, params={})
       5.times do |i|
         begin
-          res = request_url_once(url)
+          res = nil
+          Timeout::timeout(10) do
+            res = request_url_once(url)
+          end
 
           if res.code =~ /^3..$/
             url = URI.parse(res['location'])
