@@ -170,7 +170,7 @@ module Nanoc3::Extra::Validators
 
       # Get status
       status = fetch_http_status_for(uri)
-      is_valid = (status && status >= 200 && status <= 299)
+      is_valid = !!(status && status >= 200 && status <= 299)
 
       # Notify
       @delegate && @delegate.send(:external_href_validated, href, is_valid)
