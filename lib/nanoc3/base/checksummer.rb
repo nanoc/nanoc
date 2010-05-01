@@ -17,6 +17,8 @@ module Nanoc3
   # The format of the resulting checksum should not be relied upon. In future
   # versions of nanoc, this function may use a different method for generating
   # checksums.
+  #
+  # @private
   class Checksummer
 
     # Returns a checksum for the specified file.

@@ -21,6 +21,8 @@ module Nanoc3
 
     # @return [Boolean] Whether or not this layout is outdated because of its
     #   dependencies are outdated
+    #
+    # @private
     attr_accessor :outdated_due_to_dependencies
     alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
 
@@ -65,12 +67,16 @@ module Nanoc3
     # Returns the type of this object. Will always return `:layout`, because
     # this is a layout. For items, this method returns `:item`.
     #
+    # @private
+    #
     # @return [Symbol] :layout
     def type
       :layout
     end
 
     # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @private
     #
     # @return [Object] An unique reference to this object
     def reference

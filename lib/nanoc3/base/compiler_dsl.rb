@@ -7,6 +7,8 @@ module Nanoc3
 
     # Creates a new compiler DSL for the given compiler.
     #
+    # @private
+    #
     # @param [Nanoc3::Site] site The site this DSL belongs to
     def initialize(site)
       @site = site
