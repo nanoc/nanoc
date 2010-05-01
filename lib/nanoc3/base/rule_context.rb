@@ -14,7 +14,7 @@ module Nanoc3
   # * `layouts` ({Array}<{Nanoc3::Layout}>) - A list of all layouts
   class RuleContext < Context
 
-    # Creates a new rule context for the given iterm representation.
+    # Creates a new rule context for the given item representation.
     #
     # @param [Nanoc3::ItemRep] rep The item representation for which to create
     #   a new rule context.

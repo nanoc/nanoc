@@ -48,6 +48,36 @@ module Nanoc3::Extra::Validators
 
   private
 
+    # Enumerates all key-value pairs of a given hash in a thread-safe way.
+    #
+    # This class is a helper class, which means that it is not used directly
+    # by nanoc. Future versions of nanoc may no longer contain this class. Do
+    # not depend on this class to be available.
+    class ThreadsafeHashEnumerator
+
+      # Creates a new enumerator for the given hash.
+      #
+      # @param [Hash] hash The hash for which the enumerator should return
+      #   key-value pairs
+      def initialize(hash)
+        @hash             = hash
+        @unprocessed_keys = @hash.keys.dup
+        @mutex            = Mutex.new
+      end
+
+      # Returns the next key-value pair in the hash.
+      #
+      # @return [Array] An array containing the key and the corresponding
+      #   value of teh next key-value pair
+      def next_pair
+        @mutex.synchronize do
+          key = @unprocessed_keys.shift
+          return (key ? [ key, @hash[key] ] : nil)
+        end
+      end
+
+    end
+
     def all_broken_hrefs
       broken_hrefs = {}
 
@@ -127,17 +157,23 @@ module Nanoc3::Extra::Validators
       require 'uri'
 
       # Parse
-      uri = URI.parse(href)
+      uri = nil
+      begin
+        uri = URI.parse(href)
+      rescue URI::InvalidURIError
+        @delegate && @delegate.send(:external_href_validated, href, false)
+        return false
+      end
 
       # Skip non-HTTP URLs
       return true if uri.scheme != 'http'
 
       # Get status
       status = fetch_http_status_for(uri)
-      is_valid = (status && status >= 200 && status <= 299)
+      is_valid = !!(status && status >= 200 && status <= 299)
 
       # Notify
-      @delegate.send(:external_href_validated, href, is_valid)
+      @delegate && @delegate.send(:external_href_validated, href, is_valid)
 
       # Done
       is_valid
@@ -153,30 +189,10 @@ module Nanoc3::Extra::Validators
       end
     end
 
-    # This class is a helper class, which means that it is not used directly
-    # by nanoc. Future versions of nanoc may no longer contain this class. Do
-    # not depend on this class to be available.
-    class EachPairEnumerator
-
-      def initialize(hash)
-        @hash             = hash
-        @unprocessed_keys = @hash.keys.dup
-        @mutex            = Mutex.new
-      end
-
-      def next_pair
-        @mutex.synchronize do
-          key = @unprocessed_keys.shift
-          return (key ? [ key, @hash[key] ] : nil)
-        end
-      end
-
-    end
-
     def validate_external_hrefs(hrefs, broken_hrefs)
       @mutex = Mutex.new
 
-      enum = EachPairEnumerator.new(hrefs)
+      enum = ThreadsafeHashEnumerator.new(hrefs)
 
       threads = []
       10.times do
@@ -202,7 +218,10 @@ module Nanoc3::Extra::Validators
     def fetch_http_status_for(url, params={})
       5.times do |i|
         begin
-          res = request_url_once(url)
+          res = nil
+          Timeout::timeout(10) do
+            res = request_url_once(url)
+          end
 
           if res.code =~ /^3..$/
             url = URI.parse(res['location'])
@@ -211,7 +230,7 @@ module Nanoc3::Extra::Validators
             return res.code.to_i
           end
         rescue
-          nil
+          return nil
         end
       end
     end
