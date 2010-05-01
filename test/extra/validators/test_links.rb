@@ -37,4 +37,15 @@ class Nanoc3::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
     assert validator.send(:is_valid_internal_href?, '/stuff/blah', 'output/origin')
   end
 
+  def test_is_valid_external_href?
+    # Create validator
+    validator = Nanoc3::Extra::Validators::Links.new('output', [ 'index.html' ])
+    validator.stubs(:fetch_http_status_for).returns(200)
+
+    # Test
+    assert validator.send(:is_valid_external_href?, 'http://example.com/')
+    assert validator.send(:is_valid_external_href?, 'foo://example.com/')
+    refute validator.send(:is_valid_external_href?, 'http://example.com/">')
+  end
+
 end
