@@ -127,7 +127,13 @@ module Nanoc3::Extra::Validators
       require 'uri'
 
       # Parse
-      uri = URI.parse(href)
+      uri = nil
+      begin
+        uri = URI.parse(href)
+      rescue URI::InvalidURIError
+        @delegate && @delegate.send(:external_href_validated, href, false)
+        return false
+      end
 
       # Skip non-HTTP URLs
       return true if uri.scheme != 'http'
