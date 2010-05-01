@@ -29,10 +29,6 @@ module Nanoc3
     # @return [Time] The time where this item was last modified
     attr_reader   :mtime
 
-    # @return [String] The checksum of this item that was in effect during the
-    #   previous site compilation
-    attr_accessor :old_checksum
-
     # @return [Array<Nanoc3::ItemRep>] This item’s list of item reps
     attr_reader   :reps
 
@@ -190,32 +186,6 @@ module Nanoc3
     # @return [Boolean] True if the item is binary; false if it is not
     def binary?
       !!@is_binary
-    end
-
-    # @return [String] The current, up-to-date checksum of this item
-    def new_checksum
-      @new_checksum ||= begin
-        content_checksum = if binary?
-          Nanoc3::Checksummer.checksum_for_file(raw_filename)
-        else
-          Nanoc3::Checksummer.checksum_for_string(raw_content)
-        end
-
-        attributes_checksum = Nanoc3::Checksummer.checksum_for_hash(
-          # :file => nil because :file is deprecated and causes a warning
-          attributes.merge(:file => nil)
-        )
-
-        content_checksum + '-' + attributes_checksum
-      end
-    end
-
-    # Determines whether this item (or rather, its reps) is outdated and
-    # should be recompiled (or rather, its reps should be recompiled).
-    #
-    # @return [Boolean] true if any reps are outdated; false otherwise.
-    def outdated?
-      @reps.any? { |r| r.outdated? }
     end
 
     # Returns the type of this object. Will always return `:item`, because

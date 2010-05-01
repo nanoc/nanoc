@@ -6,6 +6,7 @@ module Nanoc3
   require 'nanoc3/base/ordered_hash'
 
   autoload 'Checksummer',          'nanoc3/base/checksummer'
+  autoload 'ChecksumStore',        'nanoc3/base/checksum_store'
   autoload 'CodeSnippet',          'nanoc3/base/code_snippet'
   autoload 'CompiledContentCache', 'nanoc3/base/compiled_content_cache'
   autoload 'Compiler',             'nanoc3/base/compiler'

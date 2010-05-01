@@ -43,7 +43,8 @@ module Nanoc3::CLI::Commands
       layouts = @base.site.layouts
 
       # Get dependency tracker
-      dependency_tracker = @base.site.compiler.dependency_tracker
+      compiler = @base.site.compiler
+      dependency_tracker = compiler.dependency_tracker
       dependency_tracker.load_graph
 
       # Print item dependencies
@@ -82,7 +83,7 @@ module Nanoc3::CLI::Commands
       items.sort_by { |i| i.identifier }.each do |item|
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           puts "item #{item.identifier}, rep #{rep.name}:"
-          outdatedness_reason = rep.outdatedness_reason
+          outdatedness_reason = compiler.outdatedness_reason_for(rep)
           if outdatedness_reason
             puts "  is outdated: #{outdatedness_reason[:type]} (#{outdatedness_reason[:description]})"
           else
@@ -97,7 +98,7 @@ module Nanoc3::CLI::Commands
       puts
       layouts.each do |layout|
         puts "layout #{layout.identifier}:"
-        puts "  is #{layout.outdated? ? '' : 'not '}outdated"
+        puts "  is #{compiler.outdated?(layout) ? '' : 'not '}outdated"
         puts
       end
     end

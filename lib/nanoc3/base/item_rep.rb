@@ -18,11 +18,6 @@ module Nanoc3
     #   of the `--force` commandline option); false otherwise
     attr_accessor :force_outdated
 
-    # @return [Hash, nil] A hash containing the reason why this item rep is
-    #   outdated, both in the form of a symbol and as a descriptive string, or
-    #   nil if the item representation is not outdated.
-    attr_accessor :outdatedness_reason
-
     # @return [Boolean] true if this rep is currently binary; false otherwise
     attr_reader :binary
     alias_method :binary?, :binary
@@ -73,12 +68,8 @@ module Nanoc3
       @force_outdated = false
     end
 
-    # @return [Boolean] true if this item rep's output file is outdated and
-    #   must be regenerated, false otherwise
-    def outdated?
-      !outdatedness_reason.nil?
-    end
-
+    # @private
+    #
     # @return [Hash] The assignments that should be available when compiling
     #   the content.
     def assigns
@@ -184,6 +175,8 @@ module Nanoc3
     # Resets the compilation progress for this item representation. This is
     # necessary when an unmet dependency is detected during compilation.
     # This method should probably not be called directly.
+    #
+    # @private
     #
     # @return [void]
     def forget_progress
@@ -353,6 +346,8 @@ module Nanoc3
     # current compilation session and the content compiled in the current
     # compilation session.
     #
+    # @private
+    #
     # @return [String, nil] The difference between the old and new compiled
     #   content in `diff(1)` format, or nil if there is no previous compiled
     #   content
@@ -363,6 +358,11 @@ module Nanoc3
          @diff_thread.join if @diff_thread
         @diff
       end
+    end
+
+    # TODO document
+    def type
+      :item_rep
     end
 
     # @deprecated

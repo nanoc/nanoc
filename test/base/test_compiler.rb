@@ -6,83 +6,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_run_without_item
-    # Mock items
-    items = [ mock, mock ]
-    items[0]
-    items[1]
-
-    # Mock reps
-    items[0].stubs(:reps).returns([ mock ])
-    items[1].stubs(:reps).returns([ mock, mock ])
-    reps = items[0].reps + items[1].reps
-
-    # Mock site
-    site = mock
-    site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.stubs(:items).returns(items)
-    site.expects(:store_checksums)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:forget_dependencies_if_outdated).with(items)
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:load_graph)
-    dependency_tracker.expects(:store_graph)
-    dependency_tracker.expects(:start)
-    dependency_tracker.expects(:stop)
-    dependency_tracker.expects(:propagate_outdatedness)
-    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
-
-    # Run
-    compiler.run
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-  end
-
-  def test_run_with_force
-    # Mock items
-    items = [ mock, mock ]
-    items[0]
-    items[1]
-
-    # Mock reps
-    items[0].stubs(:reps).returns([ mock ])
-    items[1].stubs(:reps).returns([ mock, mock ])
-    reps = items[0].reps + items[1].reps
-    reps.each { |r| r.expects(:force_outdated=).with(true) }
-
-    # Mock site
-    site = mock
-    site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.stubs(:items).returns(items)
-    site.expects(:store_checksums)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:forget_dependencies_if_outdated).with(items)
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:load_graph)
-    dependency_tracker.expects(:store_graph)
-    dependency_tracker.expects(:start)
-    dependency_tracker.expects(:stop)
-    dependency_tracker.expects(:propagate_outdatedness)
-    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
-
-    # Run
-    compiler.run(nil, :force => true)
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-  end
-
   def test_compilation_rule_for
     # Mock rules
     rules = [ mock, mock, mock ]
@@ -223,6 +146,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
 
     # Compile
+    compiler.send(:determine_outdatedness, [ rep ])
     compiler.send :compile_rep, rep
     assert rep.compiled?
   end
@@ -235,6 +159,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
+    compiler.send(:determine_outdatedness, [ rep ])
     compilation_rule = mock
     compilation_rule.expects(:apply_to).with(rep).raises(Nanoc3::Errors::UnmetDependency, rep)
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
@@ -286,6 +211,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site.stubs(:compiler).returns(compiler)
 
     # Compile
+    compiler.send(:determine_outdatedness, [ rep ])
     compiler.send(:compile_rep, rep)
 
     # Test
@@ -303,38 +229,37 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.expects(:compile_rep).never
-    compiler.expects(:determine_outdatedness)
 
     # Compile
+    compiler.send :determine_outdatedness, []
     compiler.send :compile_reps, []
   end
 
   def test_compile_reps_with_one_rep
-    # Mock rep
-    rep = mock
-    rep.expects(:outdated?).returns(true)
+    # Mock reps
+    item = Nanoc3::Item.new("content1", {}, '/one/')
+    rep  = Nanoc3::ItemRep.new(item, :moo)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.expects(:compile_rep).with(rep)
-    compiler.expects(:determine_outdatedness)
 
     # Compile
+    compiler.send :determine_outdatedness, [ rep ]
     compiler.send :compile_reps, [ rep ]
   end
 
   def test_compile_reps_with_two_independent_reps
     # Mock reps
-    reps = [ mock, mock ]
-    reps[0].expects(:outdated?).returns(true)
-    reps[1].expects(:outdated?).returns(true)
+    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
+    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.expects(:compile_rep).times(2)
-    compiler.expects(:determine_outdatedness)
 
     # Compile
+    compiler.send :determine_outdatedness, reps
     compiler.send :compile_reps, reps
 
     # Check size of reps array
@@ -342,20 +267,12 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_reps_with_two_dependent_reps
-    # Mock items
-    items = [ mock, mock ]
-    items[1].expects(:identifier).returns('/foo/bar/')
-
     # Mock reps
-    reps  = [ mock, mock ]
-    reps[0].expects(:outdated?).returns(true)
-    reps[1].expects(:item).returns(items[1])
-    reps[1].expects(:name).returns('somerepname')
-    reps[1].expects(:outdated?).returns(true)
+    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
+    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
-    compiler.expects(:determine_outdatedness)
     compiler.instance_eval { @_reps = reps }
     def compiler.compile_rep(rep)
       @_invocation_id ||= 0
@@ -376,6 +293,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     end
 
     # Compile
+    compiler.send :determine_outdatedness, reps
     compiler.send :compile_reps, reps
 
     # Check
@@ -385,23 +303,12 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_reps_with_two_mutually_dependent_reps
-    # Mock items
-    items = [ mock, mock ]
-    items[0].expects(:identifier).returns('/first/')
-    items[1].expects(:identifier).returns('/second/')
-
     # Mock reps
-    reps  = [ mock, mock ]
-    reps[0].expects(:item).returns(items[0])
-    reps[0].expects(:name).returns('firstrep')
-    reps[0].expects(:outdated?).returns(true)
-    reps[1].expects(:item).returns(items[1])
-    reps[1].expects(:name).returns('secondrep')
-    reps[1].expects(:outdated?).returns(true)
+    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
+    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
-    compiler.expects(:determine_outdatedness)
     compiler.instance_eval { @_reps = reps }
     def compiler.compile_rep(rep)
       if rep == @_reps[0]
@@ -409,11 +316,12 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       elsif rep == @_reps[1]
         raise Nanoc3::Errors::UnmetDependency.new(@_reps[0])
       else
-        raise RuntimeError.new("this shouldn't have happened")
+        raise RuntimeError, 'this shouldn not have happened'
       end
     end
 
     # Compile
+    compiler.send :determine_outdatedness, reps
     assert_raises Nanoc3::Errors::RecursiveCompilation do
       compiler.send :compile_reps, reps
     end
@@ -421,20 +329,14 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_not_outdated
     # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:outdated?).returns(false)
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
@@ -443,9 +345,23 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Write output file
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_nil rep.outdatedness_reason
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_nil compiler.outdatedness_reason_for(rep)
   end
 
   def test_outdated_if_item_checksum_nil
@@ -454,16 +370,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns(nil)
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
@@ -473,8 +384,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal :not_enough_data, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal :not_enough_data, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_outdated_if_force_outdated
@@ -483,16 +395,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
@@ -503,8 +410,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal :forced, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal :forced, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_outdated_if_compiled_file_doesnt_exist
@@ -513,25 +421,31 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
     rep.raw_path = 'moo.html'
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference => Nanoc3::ChecksumStore.new.new_checksum_for(item)
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
     assert !File.file?('moo.html')
-    assert_equal :not_written, (rep.outdatedness_reason || {})[:type]
+    assert_equal :not_written, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_outdated_if_item_checksum_is_different
@@ -540,16 +454,11 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     code_snippets[0].stubs(:outdated?).returns(false)
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:bbb')
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
@@ -558,9 +467,22 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Write output file
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference             => 'OMG! DIFFERENT!',
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal :source_modified, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal :source_modified, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_not_outdated_if_layouts_outdated
@@ -572,20 +494,15 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     layouts[0].stubs(:outdated?).returns(true)
 
     # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:outdated?).returns(false)
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:layouts).returns(layouts)
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -595,26 +512,35 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Write output file
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal nil, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal nil, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_outdated_if_code_snippets_outdated
     # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:outdated?).returns(true)
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
     item.stubs(:site).returns(site)
 
     # Create rep
@@ -624,27 +550,35 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Write output file
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => 'OMG! DIFFERENT!',
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal :code_outdated, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal :code_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_outdated_if_config_outdated
     # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:outdated?).returns(false)
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(true)
-    site.stubs(:rules_outdated?).returns(false)
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
@@ -653,27 +587,35 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Write output file
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => 'OMG! DIFFERENT'
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal :config_outdated, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal :config_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_outdated_if_rules_outdated
     # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:outdated?).returns(false)
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
 
     # Mock site
-    site = mock
+    site = Nanoc3::Site.new({})
     site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_outdated?).returns(false)
-    site.stubs(:rules_outdated?).returns(true)
+    site.stubs(:config).returns({ :foo => 'bar' })
 
     # Mock item
     item = Nanoc3::Item.new('blah blah blah', {}, '/')
-    item.old_checksum = 'i:aaa'
-    item.stubs(:new_checksum).returns('i:aaa')
-    item.stubs(:site).returns(site)
 
     # Create rep
     rep = Nanoc3::ItemRep.new(item, 'blah')
@@ -682,22 +624,41 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Write output file
     File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
 
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:checksums] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
+        :rules                     => 'OMG! DIFFERENT'
+      }
+    end
+
     # Check
-    Nanoc3::Compiler.new(site).send(:determine_outdatedness, [ rep ])
-    assert_equal :rules_outdated, (rep.outdatedness_reason || {})[:type]
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:determine_outdatedness, [ rep ])
+    assert_equal :rules_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
   def test_forget_dependencies_if_outdated
     # Mock items
     items = [ mock, mock, mock, mock ]
-    items[0].stubs(:outdated?).returns(false)
+    reps  = [ mock, mock, mock, mock ]
+    reps[0].stubs(:outdated?).returns(false)
     items[0].stubs(:outdated_due_to_dependencies?).returns(false)
-    items[1].stubs(:outdated?).returns(true)
+    reps[1].stubs(:outdated?).returns(true)
     items[1].stubs(:outdated_due_to_dependencies?).returns(false)
-    items[2].stubs(:outdated?).returns(false)
+    reps[2].stubs(:outdated?).returns(false)
     items[2].stubs(:outdated_due_to_dependencies?).returns(true)
-    items[3].stubs(:outdated?).returns(true)
+    reps[3].stubs(:outdated?).returns(true)
     items[3].stubs(:outdated_due_to_dependencies?).returns(true)
+    (0..4).each { |i| items[i].stubs(:reps).returns([ reps[i] ]) }
+    (0..4).each { |i| reps[i].stubs(:force_outdated).returns(false) }
+    items.each { |i| i.stubs(:type).returns(:item) }
+    reps.each  { |i| i.stubs(:type).returns(:item_rep) }
 
     # Mock dependency tracker
     dependency_tracker = mock
@@ -705,6 +666,13 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval do
+      @outdatedness_reasons = {}
+      @outdatedness_reasons[reps[0]] = false
+      @outdatedness_reasons[reps[1]] = true
+      @outdatedness_reasons[reps[2]] = false
+      @outdatedness_reasons[reps[3]] = true
+    end
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
     compiler.send :forget_dependencies_if_outdated, items
   end

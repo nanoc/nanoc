@@ -19,10 +19,6 @@ module Nanoc3
     # @return [Time] The time where this layout was last modified
     attr_reader   :mtime
 
-    # @return [String] The checksum of this layout that was in effect during
-    #   the previous site compilation
-    attr_accessor :old_checksum
-
     # @return [Boolean] Whether or not this layout is outdated because of its
     #   dependencies are outdated
     attr_accessor :outdated_due_to_dependencies
@@ -43,8 +39,7 @@ module Nanoc3
     # @option params [Time, nil] :mtime (nil) The time when this layout was
     #   last modified
     #
-    # @option params [String, nil] :checksum (nil) The current, up-to-date
-    #   checksum of this layout
+    # FIXME maybe change the arguments back to what they were?
     def initialize(raw_content, attributes, identifier, params=nil)
       # Parse params
       params ||= {}
@@ -65,26 +60,6 @@ module Nanoc3
     # @return [Object] The value of the requested attribute.
     def [](key)
       @attributes[key]
-    end
-
-    # @return [String] The current, up-to-date checksum of this layout
-    def new_checksum
-      @new_checksum ||= begin
-        content_checksum = Nanoc3::Checksummer.checksum_for_string(raw_content)
-
-        attributes_checksum = Nanoc3::Checksummer.checksum_for_hash(
-          # :file => nil because :file is deprecated and causes a warning
-          attributes.merge(:file => nil)
-        )
-
-        content_checksum + '-' + attributes_checksum
-      end
-    end
-
-    # @return [Boolean] true if the layout was modified since the site was
-    #   last compiled, false otherwise
-    def outdated?
-      !self.old_checksum || !self.new_checksum || self.new_checksum != self.old_checksum
     end
 
     # Returns the type of this object. Will always return `:layout`, because

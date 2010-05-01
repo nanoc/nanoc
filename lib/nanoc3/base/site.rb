@@ -46,9 +46,6 @@ module Nanoc3
       :enable_output_diff => false
     }
 
-    # The name of the file where checksums will be stored.
-    CHECKSUMS_FILE_NAME = 'tmp/checksums'
-
     # The site configuration. The configuration has the following keys:
     #
     # * `text_extensions` ({Array<String>}) - A list of file extensions that
@@ -91,21 +88,6 @@ module Nanoc3
     #
     # @return [Hash] The site configuration
     attr_reader :config
-
-    # @return [String] The checksum of the site configuration that was in
-    #   effect during the previous site compilation
-    attr_accessor :old_config_checksum
-
-    # @return [String] The current, up-to-date checksum of the site
-    #   configuration
-    attr_reader   :new_config_checksum
-
-    # @return [String] The checksum of the rules file that was in effect
-    #   during the previous site compilation
-    attr_accessor :old_rules_checksum
-
-    # @return [String] The current, up-to-date checksum of the rules file
-    attr_reader   :new_rules_checksum
 
     # @return [Proc] The code block that will be executed after all data is
     #   loaded but before the site is compiled
@@ -191,7 +173,6 @@ module Nanoc3
       # Preprocess
       setup_child_parent_links
       preprocessor_context.instance_eval(&preprocessor) if preprocessor
-      restore_old_checksums
       link_everything_to_site
       setup_child_parent_links
       build_reps
@@ -235,42 +216,24 @@ module Nanoc3
       @layouts
     end
 
-    # Stores the checksums into the checksums file.
-    #
-    # @return [void]
-    def store_checksums
-      # Glean
-      checksums = {}
-      checksums[ [ :misc, 'Rules' ] ] = @new_rules_checksum
-      checksums[ [ :misc, 'config.yaml' ] ] = @new_config_checksum
-      @code_snippets.each do |cs|
-        checksums[ [ :code_snippet, cs.filename ] ] = cs.new_checksum
-      end
-      @items.each do |i|
-        checksums[ [ :item, i.identifier ] ] = i.new_checksum
-      end
-      @layouts.each do |l|
-        checksums[ [ :layout, l.identifier ] ] = l.new_checksum
-      end
-
-      # Store
-      FileUtils.mkdir_p(File.dirname(CHECKSUMS_FILE_NAME))
-      store = PStore.new(CHECKSUMS_FILE_NAME)
-      store.transaction do
-        store[:checksums] = checksums
+    # FIXME get rid of this
+    def config_with_reference
+      @config_pseudo ||= begin
+        pseudo = Object.new
+        def pseudo.reference ; :config ; end
+        def pseudo.data ; @config.inspect ; end
+        pseudo
       end
     end
 
-    # @return [Boolean] true if the site configuration was modified since the
-    #   site was last compiled, false otherwise
-    def config_outdated?
-      !self.old_config_checksum || !self.new_config_checksum || self.old_config_checksum != self.new_config_checksum
-    end
-
-    # @return [Boolean] true if the rules were modified since the site was
-    #   last compiled, false otherwise
-    def rules_outdated?
-      !self.old_rules_checksum || !self.new_rules_checksum || self.old_rules_checksum != self.new_rules_checksum
+    # FIXME get rid of this
+    def rules_with_reference
+      @rules_pseudo ||= begin
+        pseudo = Object.new
+        def pseudo.reference ; :rules ; end
+        def pseudo.data ; @rules.inspect ; end
+        pseudo
+      end
     end
 
   private
@@ -307,8 +270,6 @@ module Nanoc3
 
       # Get rule data
       @rules = File.read(rules_filename)
-      @new_rules_checksum = Nanoc3::Checksummer.checksum_for_file(rules_filename)
-      @old_rules_checksum = old_checksum_for(:misc, 'Rules')
 
       # Load DSL
       dsl.instance_eval(@rules, "./#{rules_filename}")
@@ -418,16 +379,10 @@ module Nanoc3
         config_path = File.join(dir_or_config_hash, 'config.yaml')
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
         @config[:data_sources].map! { |ds| ds.symbolize_keys }
-
-        @new_config_checksum = Nanoc3::Checksummer.checksum_for_file('config.yaml')
       else
         # Use passed config hash
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
-        @new_config_checksum = nil
       end
-
-      # Build checksum
-      @old_config_checksum = old_checksum_for(:misc, 'config.yaml')
 
       # Merge data sources with default data source config
       @config[:data_sources].map! { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
@@ -441,51 +396,6 @@ module Nanoc3
         :items   => self.items,
         :layouts => self.layouts
       })
-    end
-
-    # Returns the checksums, loads the checksums from the cached checksums
-    # file first if necessary. The checksums returned is a hash in the
-    # following format:
-    #
-    #     {
-    #       [ :layout,       '/identifier/'    ] => checksum,
-    #       [ :item,         '/identifier/'    ] => checksum,
-    #       [ :code_snippet, 'lib/filename.rb' ] => checksum,
-    #     }
-    def checksums
-      return @checksums if @checksums_loaded
-
-      if !File.file?(CHECKSUMS_FILE_NAME)
-        @checksums = {}
-      else
-        require 'pstore'
-        store = PStore.new(CHECKSUMS_FILE_NAME)
-        store.transaction do
-          @checksums = store[:checksums] || {}
-        end
-      end
-
-      @checksums_loaded = true
-      @checksums
-    end
-
-    # Restores cached item, layout, and code snippet checksums.
-    def restore_old_checksums()
-      @code_snippets.each do |cs|
-        cs.old_checksum = old_checksum_for(:code_snippet, cs.filename)
-      end
-      @items.each do |i|
-        i.old_checksum = old_checksum_for(:item, i.identifier)
-      end
-      @layouts.each do |l|
-        l.old_checksum = old_checksum_for(:layout, l.identifier)
-      end
-    end
-
-    # Returns the old checksum for the given object.
-    def old_checksum_for(type, identifier)
-      key = [ type, identifier ]
-      checksums[key]
     end
 
   end
