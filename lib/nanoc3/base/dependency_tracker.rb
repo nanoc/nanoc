@@ -31,6 +31,10 @@ module Nanoc3
     #   layouts that are being tracked by the dependency tracker
     attr_reader :objects
 
+    # @return [Nanoc3::Compiler] The compiler that corresponds to this
+    #   dependency tracker
+    attr_accessor :compiler
+
     # The version of the file format used to store dependencies.
     STORE_VERSION = 3
 
@@ -186,7 +190,7 @@ module Nanoc3
 
       # Mark successors of outdated objects as outdated
       require 'set'
-      unprocessed = [ nil ] + @objects.select { |o| o.outdated? }
+      unprocessed = [ nil ] + @objects.select { |o| compiler.outdated?(o) }
       seen        = Set.new(unprocessed)
       until unprocessed.empty?
         obj = unprocessed.shift

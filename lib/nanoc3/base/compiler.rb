@@ -108,6 +108,7 @@ module Nanoc3
 
       # Determine which reps need to be recompiled
       reps.each { |r| r.force_outdated = true } if params[:force]
+      determine_outdatedness(reps)
       dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)
 
@@ -118,7 +119,7 @@ module Nanoc3
 
       # Store necessary data
       compiled_content_cache.store
-      @site.store_checksums
+      checksum_store.store
       dependency_tracker.store_graph
     ensure
       # Cleanup
@@ -130,7 +131,11 @@ module Nanoc3
     # 
     # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
-      @dependency_tracker ||= Nanoc3::DependencyTracker.new(@site.items + @site.layouts)
+      @dependency_tracker ||= begin
+        dt = Nanoc3::DependencyTracker.new(@site.items + @site.layouts)
+        dt.compiler = self
+        dt
+      end
     end
 
     # Finds the first matching compilation rule for the given item
@@ -189,6 +194,25 @@ module Nanoc3
       nil
     end
 
+    # @return [Boolean] true if the object is outdated, false otherwise
+    def outdated?(obj)
+      case obj.type
+        when :item_rep
+          !!@outdatedness_reasons[obj] || obj.force_outdated
+        when :item
+          obj.reps.any? { |rep| outdated?(rep) }
+        when :layout
+          checksum_store.object_modified?(obj)
+        else
+          raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
+      end
+    end
+
+    # TODO document
+    def outdatedness_reason_for(rep)
+      @outdatedness_reasons[rep]
+    end
+
   private
 
     # The descriptive strings for each outdatedness reason.
@@ -216,36 +240,35 @@ module Nanoc3
       # TODO outdatedness reasons should be objects with descriptions
       # TODO should item reps know their outdatedness?
 
+      @outdatedness_reasons ||= {}
       reps.each do |rep|
         # Get reason symbol
         reason = lambda do
           # Outdated if we’re compiling with --force
           return :forced if rep.force_outdated
 
-          # Outdated if checksums are missing
-          if !rep.item.old_checksum || !rep.item.new_checksum
-            return :not_enough_data
-          end
-
-          # Outdated if file too old
-          if rep.item.old_checksum != rep.item.new_checksum
-            return :source_modified
-          end
+          # Outdated if checksums are missing or different
+          return :not_enough_data if !checksum_store.checksums_available?(rep.item)
+          return :source_modified if !checksum_store.checksums_identical?(rep.item)
 
           # Outdated if compiled file doesn't exist (yet)
           return :not_written if rep.raw_path && !File.file?(rep.raw_path)
 
-          # Outdated if other site parts outdated
-          return :code_outdated   if @site.code_snippets.any? { |cs| cs.outdated? }
-          return :config_outdated if @site.config_outdated?
-          return :rules_outdated  if @site.rules_outdated?
+          # Outdated if code snippets outdated
+          return :code_outdated if @site.code_snippets.any? { |cs| checksum_store.object_modified?(cs) }
+
+          # Outdated if configuration outdated
+          return :config_outdated if checksum_store.object_modified?(@site.config_with_reference)
+
+          # Outdated if rules outdated
+          return :rules_outdated  if checksum_store.object_modified?(@site.rules_with_reference)
 
           return nil
         end[]
 
         # Build reason symbol and description
         next if reason.nil?
-        rep.outdatedness_reason = {
+        @outdatedness_reasons[rep] = {
           :type        => reason,
           :description => OUTDATEDNESS_REASON_DESCRIPTIONS[reason]
         }
@@ -261,11 +284,10 @@ module Nanoc3
       require 'set'
 
       # Partition in outdated and non-outdated
-      determine_outdatedness(reps)
       outdated_reps = Set.new
       skipped_reps  = Set.new
       reps.each do |rep|
-        target = (rep.outdated? || rep.item.outdated_due_to_dependencies?) ? outdated_reps : skipped_reps
+        target = (outdated?(rep) || rep.item.outdated_due_to_dependencies?) ? outdated_reps : skipped_reps
         target.add(rep)
       end
 
@@ -318,7 +340,7 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:processing_started,  rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      if !rep.outdated? && !rep.item.outdated_due_to_dependencies && compiled_content_cache[rep]
+      if !outdated?(rep) && !rep.item.outdated_due_to_dependencies && compiled_content_cache[rep]
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
@@ -349,7 +371,7 @@ module Nanoc3
     # @return [void]
     def forget_dependencies_if_outdated(items)
       items.each do |i|
-        if i.outdated? || i.outdated_due_to_dependencies?
+        if i.reps.any? { |r| outdated?(r) } || i.outdated_due_to_dependencies?
           dependency_tracker.forget_dependencies_for(i)
         end
       end
@@ -364,6 +386,13 @@ module Nanoc3
         cache.load
         cache
       end
+    end
+
+    # Returns the checksum store for this site
+    #
+    # @return [ChecksumStore] The checksum store
+    def checksum_store
+      @checksum_store ||= Nanoc3::ChecksumStore.new
     end
 
   end

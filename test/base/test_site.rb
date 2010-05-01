@@ -154,7 +154,6 @@ describe 'Nanoc3::Site#load_data' do
     site.stubs(:load_items)
     site.stubs(:load_layouts)
     site.expects(:link_everything_to_site)
-    site.expects(:restore_old_checksums)
     site.expects(:setup_child_parent_links).times(2)
     site.expects(:build_reps)
     site.expects(:route_reps)
@@ -182,7 +181,6 @@ describe 'Nanoc3::Site#load_data' do
     site.expects(:load_items)
     site.expects(:load_layouts)
     site.expects(:link_everything_to_site)
-    site.expects(:restore_old_checksums)
     site.expects(:setup_child_parent_links).times(2)
     site.expects(:build_reps)
     site.expects(:route_reps)
@@ -210,7 +208,6 @@ describe 'Nanoc3::Site#load_data' do
     site.expects(:load_items)
     site.expects(:load_layouts)
     site.expects(:link_everything_to_site)
-    site.expects(:restore_old_checksums)
     site.expects(:setup_child_parent_links).times(2)
     site.expects(:build_reps)
     site.expects(:route_reps)
@@ -234,7 +231,6 @@ describe 'Nanoc3::Site#load_data' do
     site.expects(:load_items).once
     site.expects(:load_layouts).once
     site.expects(:link_everything_to_site)
-    site.expects(:restore_old_checksums)
     site.expects(:setup_child_parent_links).times(2)
     site.expects(:build_reps).once
     site.expects(:route_reps).once
@@ -259,7 +255,6 @@ describe 'Nanoc3::Site#load_data' do
     site.expects(:load_items).times(2)
     site.expects(:load_layouts).times(2)
     site.expects(:link_everything_to_site).times(2)
-    site.expects(:restore_old_checksums).times(2)
     site.expects(:setup_child_parent_links).times(2*2)
     site.expects(:build_reps).times(2)
     site.expects(:route_reps).times(2)

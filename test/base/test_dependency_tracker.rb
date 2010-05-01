@@ -270,18 +270,25 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
   def test_load_graph_without_file
     # Mock items
-    item_0 = Object.new
-    def item_0.outdated?                        ; false                             ; end
-    def item_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def item_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
-    item_1 = Object.new
-    def item_1.outdated?                        ; true                              ; end
-    def item_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def item_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    item_0 = Nanoc3::Item.new('content0', {}, '/blah0/')
+    item_1 = Nanoc3::Item.new('content1', {}, '/blah1/')
     items = [ item_0, item_1 ]
+    items.each do |item|
+      item.reps << Nanoc3::ItemRep.new(item, :blah)
+    end
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval do
+       @outdatedness_reasons = {
+         item_0.reps[0] => false,
+         item_1.reps[0] => true
+       }
+    end
 
     # Create
     tracker = Nanoc3::DependencyTracker.new([ item_0, item_1 ])
+    tracker.compiler = compiler
 
     # Load
     tracker.load_graph
@@ -304,19 +311,26 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
   def test_propagate_outdatedness_simple
     # Mock objects
-    object_0 = Object.new
-    def object_0.outdated?                        ; false                             ; end
-    def object_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
-    object_1 = Object.new
-    def object_1.outdated?                        ; true                              ; end
-    def object_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    object_0 = Nanoc3::Item.new('content0', {}, '/blah0/')
+    object_1 = Nanoc3::Item.new('content1', {}, '/blah1/')
     objects = [ object_0, object_1 ]
+    objects.each do |obj|
+      obj.reps << Nanoc3::ItemRep.new(obj, :blah)
+    end
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval do
+       @outdatedness_reasons = {
+         object_0.reps[0] => false,
+         object_1.reps[0] => true
+       }
+    end
 
     # Create
     tracker = Nanoc3::DependencyTracker.new(objects)
     tracker.instance_eval { @previous_objects = objects }
+    tracker.compiler = compiler
 
     # Record some dependencies
     tracker.record_dependency(objects[0], objects[1])
@@ -325,31 +339,36 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !objects[0].outdated?
+    assert !compiler.outdated?(objects[0])
     assert objects[0].outdated_due_to_dependencies?
-    assert objects[1].outdated?
+    assert compiler.outdated?(objects[1])
     assert !objects[1].outdated_due_to_dependencies?
   end
 
   def test_propagate_outdatedness_chained
     # Mock objects
-    object_0 = Object.new
-    def object_0.outdated?                        ; false                             ; end
-    def object_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
-    object_1 = Object.new
-    def object_1.outdated?                        ; false                             ; end
-    def object_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
-    object_2 = Object.new
-    def object_2.outdated?                        ; true                              ; end
-    def object_2.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_2.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    object_0 = Nanoc3::Item.new('content0', {}, '/blah0/')
+    object_1 = Nanoc3::Item.new('content1', {}, '/blah1/')
+    object_2 = Nanoc3::Item.new('content2', {}, '/blah2/')
     objects = [ object_0, object_1, object_2 ]
+    objects.each do |obj|
+      obj.reps << Nanoc3::ItemRep.new(obj, :blah)
+    end
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval do
+       @outdatedness_reasons = {
+         object_0.reps[0] => false,
+         object_1.reps[0] => false,
+         object_2.reps[0] => true
+       }
+    end
 
     # Create
     tracker = Nanoc3::DependencyTracker.new(objects)
     tracker.instance_eval { @previous_objects = objects }
+    tracker.compiler = compiler
 
     # Record some dependencies
     tracker.record_dependency(objects[0], objects[1])
@@ -359,11 +378,11 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !objects[0].outdated?
+    assert !compiler.outdated?(objects[0])
     assert objects[0].outdated_due_to_dependencies?
-    assert !objects[1].outdated?
+    assert !compiler.outdated?(objects[1])
     assert objects[1].outdated_due_to_dependencies?
-    assert objects[2].outdated?
+    assert compiler.outdated?(objects[2])
     assert !objects[2].outdated_due_to_dependencies?
   end
 
@@ -371,14 +390,16 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # A removed object (nil) that appears as a value marks all dependent objects as outdated.
 
     # Mock objects
-    object = Object.new
-    def object.outdated?                        ; false                             ; end
-    def object.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    object = Nanoc3::Item.new('content', {}, '/blah/')
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.stubs(:outdated?).returns(false)
 
     # Create
     tracker = Nanoc3::DependencyTracker.new([ object ])
     tracker.instance_eval { @previous_objects = [ object ] }
+    tracker.compiler = compiler
 
     # Record some dependencies
     tracker.record_dependency(object, nil)
@@ -387,7 +408,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !object.outdated?
+    assert !compiler.outdated?(object)
     assert object.outdated_due_to_dependencies?
   end
 
@@ -395,14 +416,16 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # A removed object (nil) that appears as a key can be ignored safely.
 
     # Mock objects
-    object = Object.new
-    def object.outdated?                        ; true                              ; end
-    def object.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    object = Nanoc3::Item.new('content', {}, '/blah/')
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.stubs(:outdated?).returns(false)
 
     # Create
     tracker = Nanoc3::DependencyTracker.new([ object ])
     tracker.instance_eval { @previous_objects = [ object ] }
+    tracker.compiler = compiler
 
     # Record some dependencies
     tracker.record_dependency(nil, object)
@@ -411,7 +434,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert object.outdated?
+    assert !compiler.outdated?(object)
     assert !object.outdated_due_to_dependencies?
   end
 
@@ -419,18 +442,17 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # An added object (with no entry in the dependency graph) depends on all other objects.
 
     # Mock objects
-    object_0 = Object.new
-    def object_0.outdated?                        ; false                             ; end
-    def object_0.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_0.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
-    object_1 = Object.new
-    def object_1.outdated?                        ; false                             ; end
-    def object_1.outdated_due_to_dependencies?    ; @outdated_due_to_dependencies     ; end
-    def object_1.outdated_due_to_dependencies=(b) ; @outdated_due_to_dependencies = b ; end
+    object_0 = Nanoc3::Item.new('content', {}, '/blah/')
+    object_1 = Nanoc3::Item.new('content', {}, '/blah/')
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compiler.stubs(:outdated?).returns(false)
 
     # Create
     tracker = Nanoc3::DependencyTracker.new([ object_0, object_1 ])
     tracker.instance_eval { @previous_objects = [ object_0 ] }
+    tracker.compiler = compiler
 
     # Mark as outdated
     tracker.propagate_outdatedness

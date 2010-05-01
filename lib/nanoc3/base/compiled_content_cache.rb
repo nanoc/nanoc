@@ -5,9 +5,7 @@ module Nanoc3
   # Represents a cache than can be used to store already compiled content,
   # to prevent it from being needlessly recompiled.
   #
-  # This class is intended for internal use only. Do not rely on its
-  # presence; future versions of nanoc, even in the 3.x branch, may no
-  # longer contain this class.
+  # @private
   class CompiledContentCache
 
     # @return [String] The filename where the cache will be loaded from
