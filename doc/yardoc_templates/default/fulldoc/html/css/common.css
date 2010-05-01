@@ -1,0 +1,4 @@
+/* Override this file with custom rules */
+
+.note.nonpublic { background: #ffe5e5; border-color: #e9dada; }
+.note.title.nonpublic { background: #ffe5e5; border-color: #e9dada; }
