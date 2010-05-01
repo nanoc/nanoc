@@ -48,6 +48,36 @@ module Nanoc3::Extra::Validators
 
   private
 
+    # Enumerates all key-value pairs of a given hash in a thread-safe way.
+    #
+    # This class is a helper class, which means that it is not used directly
+    # by nanoc. Future versions of nanoc may no longer contain this class. Do
+    # not depend on this class to be available.
+    class ThreadsafeHashEnumerator
+
+      # Creates a new enumerator for the given hash.
+      #
+      # @param [Hash] hash The hash for which the enumerator should return
+      #   key-value pairs
+      def initialize(hash)
+        @hash             = hash
+        @unprocessed_keys = @hash.keys.dup
+        @mutex            = Mutex.new
+      end
+
+      # Returns the next key-value pair in the hash.
+      #
+      # @return [Array] An array containing the key and the corresponding
+      #   value of teh next key-value pair
+      def next_pair
+        @mutex.synchronize do
+          key = @unprocessed_keys.shift
+          return (key ? [ key, @hash[key] ] : nil)
+        end
+      end
+
+    end
+
     def all_broken_hrefs
       broken_hrefs = {}
 
@@ -159,30 +189,10 @@ module Nanoc3::Extra::Validators
       end
     end
 
-    # This class is a helper class, which means that it is not used directly
-    # by nanoc. Future versions of nanoc may no longer contain this class. Do
-    # not depend on this class to be available.
-    class EachPairEnumerator
-
-      def initialize(hash)
-        @hash             = hash
-        @unprocessed_keys = @hash.keys.dup
-        @mutex            = Mutex.new
-      end
-
-      def next_pair
-        @mutex.synchronize do
-          key = @unprocessed_keys.shift
-          return (key ? [ key, @hash[key] ] : nil)
-        end
-      end
-
-    end
-
     def validate_external_hrefs(hrefs, broken_hrefs)
       @mutex = Mutex.new
 
-      enum = EachPairEnumerator.new(hrefs)
+      enum = ThreadsafeHashEnumerator.new(hrefs)
 
       threads = []
       10.times do
