@@ -78,17 +78,20 @@ module Nanoc3
       @layout_filter_mapping   = OrderedHash.new
     end
 
-    # Compiles (part of) the site and writes out the compiled item
-    # representations.
+    # Compiles the site and writes out the compiled item representations.
     #
-    # @param [Nanoc3::Item] item Deprecated and ignored.
-    #
-    # @option params [Boolean] :force (false) true if the rep should be
-    #   compiled even if it is not outdated, false if not
-    #
-    # @return [void]
-    def run(item=nil, params={})
-      # Parse params
+    # @overload run(params={})
+    #   @option params [Boolean] :force (false) true if all representations
+    #     should be compiled even if they are not outdated, false if not
+    #   @return [void]
+    def run(*args)
+      # Parse arguments
+      params = {}
+      if args.size >= 1 && args[0].is_a?(Hash)
+        params = args[0]
+      elsif args.size >= 2 && args[1].is_a?(Hash)
+        params = args[1]
+      end
       params[:force] = false if !params.has_key?(:force)
 
       # Create output directory if necessary
