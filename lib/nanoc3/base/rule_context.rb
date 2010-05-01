@@ -12,6 +12,8 @@ module Nanoc3
   # * `config`  ({Hash})                    - The site configuration
   # * `items`   ({Array}<{Nanoc3::Item}>)   - A list of all items
   # * `layouts` ({Array}<{Nanoc3::Layout}>) - A list of all layouts
+  #
+  # @private
   class RuleContext < Context
 
     # Creates a new rule context for the given item representation.

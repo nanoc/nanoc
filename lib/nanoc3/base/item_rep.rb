@@ -16,6 +16,8 @@ module Nanoc3
 
     # @return [Boolean] true if this rep is forced to be dirty (e.g. because
     #   of the `--force` commandline option); false otherwise
+    #
+    # @private
     attr_accessor :force_outdated
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
@@ -24,6 +26,8 @@ module Nanoc3
 
     # @return [Boolean] true if this representation has already been compiled
     #   during the current or last compilation session; false otherwise
+    #
+    # @private
     attr_accessor :compiled
     alias_method :compiled?, :compiled
 
@@ -31,16 +35,22 @@ module Nanoc3
     #   including the path to the output directory and the filename) for all
     #   snapshots. The keys correspond with the snapshot names, and the values
     #   with the path.
+    #
+    # @private
     attr_accessor :raw_paths
 
     # @return [Hash<Symbol,String>] A hash containing the paths for all
     #   snapshots. The keys correspond with the snapshot names, and the values
     #   with the path.
+    #
+    # @private
     attr_accessor :paths
 
     # @return [Hash<Symbol,String>] A hash containing the content at all
     #   snapshots. The keys correspond with the snapshot names, and the
     #   values with the content.
+    #
+    # @private
     attr_accessor :content
 
     # Creates a new item representation for the given item.
@@ -360,7 +370,12 @@ module Nanoc3
       end
     end
 
-    # TODO document
+    # Returns the type of this object. Will always return `:item_rep`, because
+    # this is an item rep. For layouts, this method returns `:layout`.
+    #
+    # @private
+    #
+    # @return [Symbol] :item_rep
     def type
       :item_rep
     end

@@ -127,7 +127,9 @@ module Nanoc3
 
     # Returns the dependency tracker for this site, creating it first if it
     # does not yet exist.
-    # 
+    #
+    # @private
+    #
     # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
       @dependency_tracker ||= begin
@@ -140,6 +142,8 @@ module Nanoc3
     # Finds the first matching compilation rule for the given item
     # representation.
     #
+    # @private
+    #
     # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
     #
     # @return [Nanoc3::Rule, nil] The compilation rule for the given item rep,
@@ -151,6 +155,8 @@ module Nanoc3
     end
 
     # Finds the first matching routing rule for the given item representation.
+    #
+    # @private
     #
     # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
     #
@@ -167,6 +173,8 @@ module Nanoc3
     # returned. The result is a hash containing the corresponding rule for
     # each snapshot.
     #
+    # @private
+    #
     # @return [Hash<Symbol, Nanoc3::Rule>] The routing rules for the given rep
     def routing_rules_for(rep)
       rules = {}
@@ -182,6 +190,8 @@ module Nanoc3
 
     # Finds the filter name and arguments to use for the given layout.
     #
+    # @private
+    #
     # @param [Nanoc3::Layout] layout The layout for which to fetch the filter.
     #
     # @return [Array, nil] A tuple containing the filter name and the filter 
@@ -193,6 +203,8 @@ module Nanoc3
       nil
     end
 
+    # @private
+    #
     # @return [Boolean] true if the object is outdated, false otherwise
     def outdated?(obj)
       case obj.type
@@ -208,6 +220,8 @@ module Nanoc3
     end
 
     # TODO document
+    #
+    # @private
     def outdatedness_reason_for(rep)
       @outdatedness_reasons[rep]
     end
