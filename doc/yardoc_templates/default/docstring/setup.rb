@@ -1,7 +1,8 @@
 def init
   super
-  # FIXME sections[1] << :nonpublic
-  sections.unshift(:nonpublic)
+  return if sections.empty?
+
+  sections[1].unshift(:nonpublic)
 end
 
 def nonpublic
