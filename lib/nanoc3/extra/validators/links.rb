@@ -137,7 +137,7 @@ module Nanoc3::Extra::Validators
       is_valid = (status && status >= 200 && status <= 299)
 
       # Notify
-      @delegate.send(:external_href_validated, href, is_valid)
+      @delegate && @delegate.send(:external_href_validated, href, is_valid)
 
       # Done
       is_valid
