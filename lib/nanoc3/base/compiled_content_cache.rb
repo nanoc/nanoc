@@ -8,18 +8,11 @@ module Nanoc3
   # @private
   class CompiledContentCache
 
-    # @return [String] The filename where the cache will be loaded from
-    #   and stored to
-    attr_reader :filename
-
-    # Creates a new cache for the given filename.
-    #
-    # @param [String] filename The filename where the cache will be loaded
-    #   from and stored to
-    def initialize(filename)
+    def initialize
       require 'pstore'
 
-      @filename = filename
+      @filename = 'tmp/compiled_content'
+      @loaded   = false
     end
 
     # Loads the cache from the filesystem into memory.
@@ -27,8 +20,14 @@ module Nanoc3
     # @return [void]
     def load
       cache = nil
-      return if !File.file?(filename)
+
+      if !File.file?(@filename)
+        @loaded = true
+        return
+      end
+
       pstore.transaction { cache = pstore[:compiled_content] }
+      @loaded = true
     end
 
     # Stores the content of the (probably modified) in-memory cache to the
@@ -36,7 +35,7 @@ module Nanoc3
     #
     # @return [void]
     def store
-      FileUtils.mkdir_p(File.dirname(filename))
+      FileUtils.mkdir_p(File.dirname(@filename))
       pstore.transaction { pstore[:compiled_content] = cache }
     end
 
@@ -50,6 +49,7 @@ module Nanoc3
     # @return [Hash<Symbol,String>] A hash containing the cached compiled
     #   content for the given item representation
     def [](rep)
+      load unless @loaded
       item_cache = cache[rep.item.identifier] || {}
       item_cache[rep.name]
     end
