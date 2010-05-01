@@ -40,9 +40,6 @@ module Nanoc3
   #   the specified object.
   class Compiler
 
-    # The name of the file where cached compiled content will be stored
-    COMPILED_CONTENT_CACHE_FILENAME = 'tmp/compiled_content'
-
     # The compilation stack. When the compiler begins compiling a rep or a
     # layout, it will be placed on the stack; when it is done compiling the
     # rep or layout, it will be removed from the stack.
@@ -98,7 +95,6 @@ module Nanoc3
       FileUtils.mkdir_p(@site.config[:output_dir])
 
       # Load necessary data
-      compiled_content_cache = CompiledContentCache.new(COMPILED_CONTENT_CACHE_FILENAME)
       compiled_content_cache.load
       dependency_tracker.load_graph
 
@@ -377,19 +373,11 @@ module Nanoc3
       end
     end
 
-    # Returns the cache used for storing compiled content.
-    #
     # @return [CompiledContentCache] The compiled content cache
     def compiled_content_cache
-      @compiled_content_cache ||= begin
-        cache = Nanoc3::CompiledContentCache.new(COMPILED_CONTENT_CACHE_FILENAME)
-        cache.load
-        cache
-      end
+      @compiled_content_cache ||= Nanoc3::CompiledContentCache.new
     end
 
-    # Returns the checksum store for this site
-    #
     # @return [ChecksumStore] The checksum store
     def checksum_store
       @checksum_store ||= Nanoc3::ChecksumStore.new
