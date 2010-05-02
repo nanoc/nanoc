@@ -15,8 +15,9 @@ module Nanoc3
     #
     # @param [String] filename The name of the file where data will be loaded
     #   from and stored to.
-    def initialize(filename)
+    def initialize(filename, version)
       @filename = filename
+      @version  = version
     end
 
     # @return The data that should be written to the disk
@@ -36,13 +37,30 @@ module Nanoc3
     #
     # @return [void]
     def load
-      if self.loaded? || !File.file?(self.filename)
+      # Don’t load twice
+      if self.loaded?
+        return
+      end
+
+      # Check file existance
+      if !File.file?(self.filename)
+        no_data_found
         self.loaded = true
         return
       end
 
-      self.pstore.transaction { self.data = self.pstore[:data] }
-      self.loaded = true
+      self.pstore.transaction do
+        # Check version
+        if self.pstore[:version] != self.version
+          version_mismatch_detected
+          self.loaded = true
+          return
+        end
+
+        # Load
+        self.data = self.pstore[:data]
+        self.loaded = true
+      end
     end
 
     # Stores the data contained in memory to the filesystem. This method will
@@ -51,12 +69,34 @@ module Nanoc3
     # @return [void]
     def store
       FileUtils.mkdir_p(File.dirname(self.filename))
-      self.pstore.transaction { self.pstore[:data] = self.data }
+
+      self.pstore.transaction do
+        self.pstore[:data]    = self.data
+        self.pstore[:version] = self.version
+      end
+    end
+
+    # Callback method that is called when no data file was found. By default,
+    # this implementation does nothing, but it should probably be overridden
+    # by the subclass.
+    #
+    # @return [void]
+    def no_data_found
+    end
+
+    # Callback method that is called when a version mismatch is detected. By
+    # default, this implementation does nothing, but it should probably be
+    # overridden by the subclass.
+    #
+    # @return [void]
+    def version_mismatch_detected
     end
 
   protected
 
     attr_reader :filename
+
+    attr_reader :version
 
     attr_accessor :loaded
     def loaded? ; !!@loaded ; end

@@ -350,6 +350,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
@@ -439,6 +440,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference => Nanoc3::ChecksumStore.new.new_checksum_for(item)
       }
@@ -476,6 +478,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference             => 'OMG! DIFFERENT!',
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
@@ -522,6 +525,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
@@ -561,6 +565,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => 'OMG! DIFFERENT!',
@@ -599,6 +604,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
@@ -637,6 +643,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
+      store[:version] = 1
       store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),

@@ -14,6 +14,7 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
     pstore = PStore.new('tmp/checksums')
     pstore.transaction do
       pstore[:data] = { [ :item, '/moo/' ] => 'zomg' }
+      pstore[:version] = 1
     end
 
     # Check
