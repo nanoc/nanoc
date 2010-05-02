@@ -6,37 +6,12 @@ module Nanoc3
   # to prevent it from being needlessly recompiled.
   #
   # @api private
-  class CompiledContentCache
+  class CompiledContentCache < ::Nanoc3::Store
 
     def initialize
-      require 'pstore'
+      super('tmp/compiled_content')
 
-      @filename = 'tmp/compiled_content'
-      @loaded   = false
-    end
-
-    # Loads the cache from the filesystem into memory.
-    #
-    # @return [void]
-    def load
-      cache = nil
-
-      if !File.file?(@filename)
-        @loaded = true
-        return
-      end
-
-      pstore.transaction { cache = pstore[:compiled_content] }
-      @loaded = true
-    end
-
-    # Stores the content of the (probably modified) in-memory cache to the
-    #   filesystem.
-    #
-    # @return [void]
-    def store
-      FileUtils.mkdir_p(File.dirname(@filename))
-      pstore.transaction { pstore[:compiled_content] = cache }
+      @cache = {}
     end
 
     # Returns the cached compiled content for the given item
@@ -49,8 +24,7 @@ module Nanoc3
     # @return [Hash<Symbol,String>] A hash containing the cached compiled
     #   content for the given item representation
     def [](rep)
-      load unless @loaded
-      item_cache = cache[rep.item.identifier] || {}
+      item_cache = self.cache[rep.item.identifier] || {}
       item_cache[rep.name]
     end
 
@@ -64,19 +38,20 @@ module Nanoc3
     #
     # @return [void]
     def []=(rep, content)
-      cache[rep.item.identifier] ||= {}
-      cache[rep.item.identifier][rep.name] = content
+      self.cache[rep.item.identifier] ||= {}
+      self.cache[rep.item.identifier][rep.name] = content
     end
 
-  private
+  protected
 
-    def cache
-      @cache ||= {}
+    attr_accessor :cache
+
+    def data
+      self.cache
     end
 
-    def pstore
-      require 'pstore'
-      @store ||= PStore.new(@filename)
+    def data=(new_data)
+      self.cache = new_data
     end
 
   end

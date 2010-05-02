@@ -99,6 +99,7 @@ module Nanoc3
 
       # Load necessary data
       compiled_content_cache.load
+      checksum_store.load
       dependency_tracker.load_graph
 
       # Get items and reps to compile

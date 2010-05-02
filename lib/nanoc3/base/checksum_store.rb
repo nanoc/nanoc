@@ -12,14 +12,13 @@ module Nanoc3
   # depend on that object).
   #
   # @api private
-  class ChecksumStore
-
-    # @return [String] The name of the file where new calculated checksums
-    #   will be written to.
-    attr_reader :filename
+  class ChecksumStore < ::Nanoc3::Store
 
     def initialize
-      @filename = 'tmp/checksums'
+      super('tmp/checksums')
+
+      @new_checksums = {}
+      @old_checksums = {}
     end
 
     # Returns the old checksum for the given object. The object must respond
@@ -30,7 +29,7 @@ module Nanoc3
     #
     # @return [String] The old checksum for the given object
     def old_checksum_for(obj)
-      old_checksums[obj.reference]
+      self.old_checksums[obj.reference]
     end
 
     # Returns the new checksum for the given object. The object must respond
@@ -41,7 +40,7 @@ module Nanoc3
     #
     # @return [String] The new checksum for the given object
     def new_checksum_for(obj)
-      new_checksums[obj.reference] ||= begin
+      self.new_checksums[obj.reference] ||= begin
         checksum_parts = []
 
         # Calculate content checksum
@@ -107,46 +106,17 @@ module Nanoc3
       !checksums_available?(obj) || !checksums_identical?(obj)
     end
 
-    # Saves the calculated new checksums to disk. It may be necessary to call
-    # {#calculate_checksums_for} to ensure that the checksums for all
-    # necessary objects are calculated.
-    #
-    # @return [void]
-    def store
-      require 'pstore'
+  protected
 
-      FileUtils.mkdir_p('tmp')
-      store = PStore.new(@filename)
-      store.transaction do
-        store[:checksums] = new_checksums
-      end
+    attr_accessor :new_checksums
+    attr_accessor :old_checksums
+
+    def data
+      self.new_checksums
     end
 
-  private
-
-    # Returns a hash that maps object references to new checksums.
-    def new_checksums
-      @new_checksums ||= {}
-    end
-
-    # Returns a hash that maps object references to old checksums, loading the
-    # checksums from the filesystem first if necessary.
-    def old_checksums
-      return @old_checksums if @old_checksums
-
-      if !File.file?(@filename)
-        @old_checksums = {}
-      else
-        require 'pstore'
-
-        store = PStore.new(@filename)
-        store.transaction do
-          @old_checksums = store[:checksums] || {}
-        end
-      end
-
-      @old_checksums_loaded = true
-      @old_checksums
+    def data=(new_data)
+      self.old_checksums = new_data
     end
 
   end

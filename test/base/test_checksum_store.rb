@@ -13,17 +13,19 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     pstore = PStore.new('tmp/checksums')
     pstore.transaction do
-      pstore[:checksums] = { [ :item, '/moo/' ] => 'zomg' }
+      pstore[:data] = { [ :item, '/moo/' ] => 'zomg' }
     end
 
     # Check
     store = Nanoc3::ChecksumStore.new
+    store.load
     obj = Nanoc3::Item.new('Moo?', {}, '/moo/')
     assert_equal 'zomg', store.old_checksum_for(obj)
   end
 
   def test_get_with_nonexistant_object
     store = Nanoc3::ChecksumStore.new
+    store.load
 
     # Check
     obj = Nanoc3::Item.new('Moo?', {}, '/animals/cow/')
@@ -35,6 +37,7 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
 
   def test_store
     store = Nanoc3::ChecksumStore.new
+    store.load
 
     obj = Nanoc3::Item.new('Moo?', {}, '/animals/cow/')
     new_checksum = Nanoc3::Checksummer.checksum_for_string('Moo?') + '-' +
@@ -42,6 +45,7 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
 
     store.store
     store = Nanoc3::ChecksumStore.new
+    store.load
 
     assert_equal nil,          store.old_checksum_for(obj)
     assert_equal new_checksum, store.new_checksum_for(obj)
@@ -49,6 +53,7 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
     store.calculate_checksums_for([ obj ])
     store.store
     store = Nanoc3::ChecksumStore.new
+    store.load
 
     assert_equal new_checksum, store.old_checksum_for(obj)
     assert_equal new_checksum, store.new_checksum_for(obj)

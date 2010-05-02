@@ -26,6 +26,7 @@ module Nanoc3
   autoload 'Rule',                 'nanoc3/base/rule'
   autoload 'RuleContext',          'nanoc3/base/rule_context'
   autoload 'Site',                 'nanoc3/base/site'
+  autoload 'Store',                'nanoc3/base/store'
 
   # Deprecated; use PluginRepository instead
   # TODO [in nanoc 4.0] remove me
