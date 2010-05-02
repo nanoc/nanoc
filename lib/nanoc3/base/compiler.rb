@@ -100,7 +100,7 @@ module Nanoc3
       # Load necessary data
       compiled_content_cache.load
       checksum_store.load
-      dependency_tracker.load_graph
+      dependency_tracker.load
 
       # Get items and reps to compile
       items = @site.items
@@ -120,7 +120,7 @@ module Nanoc3
       # Store necessary data
       compiled_content_cache.store
       checksum_store.store
-      dependency_tracker.store_graph
+      dependency_tracker.store
     ensure
       # Cleanup
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)

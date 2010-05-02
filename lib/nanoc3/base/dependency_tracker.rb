@@ -125,16 +125,6 @@ module Nanoc3
       @graph.add_edge(dst, src) unless src == dst
     end
 
-    # @deprecated Use {#store} instead
-    def store_graph
-      self.store
-    end
-
-    # @deprecated Use {#load} instead
-    def load_graph
-      self.load
-    end
-
     # Traverses the dependency graph and marks all objects that (directly or
     # indirectly) depend on an outdated object as outdated.
     #
@@ -182,6 +172,16 @@ module Nanoc3
     # @deprecated Use {#propagate_outdatedness} instead.
     def mark_outdated_items
       propagate_outdatedness
+    end
+
+    # @deprecated Use {#store} instead
+    def store_graph
+      self.store
+    end
+
+    # @deprecated Use {#load} instead
+    def load_graph
+      self.load
     end
 
   protected
