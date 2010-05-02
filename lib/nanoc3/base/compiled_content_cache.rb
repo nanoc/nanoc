@@ -9,7 +9,7 @@ module Nanoc3
   class CompiledContentCache < ::Nanoc3::Store
 
     def initialize
-      super('tmp/compiled_content')
+      super('tmp/compiled_content', 1)
 
       @cache = {}
     end

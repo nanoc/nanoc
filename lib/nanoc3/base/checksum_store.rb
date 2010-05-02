@@ -15,7 +15,7 @@ module Nanoc3
   class ChecksumStore < ::Nanoc3::Store
 
     def initialize
-      super('tmp/checksums')
+      super('tmp/checksums', 1)
 
       @new_checksums = {}
       @old_checksums = {}
