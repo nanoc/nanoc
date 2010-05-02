@@ -21,11 +21,7 @@ module Nanoc3
   # Dependency information is stored in the `tmp/dependencies` file. This file
   # also contains a version number; when a dependencies file with an
   # incompatible version is found, it is ignored.
-  class DependencyTracker
-
-    # @return [String] The name of the file in which dependency information is
-    #   stored
-    attr_accessor :filename
+  class DependencyTracker < ::Nanoc3::Store
 
     # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The list of items and
     #   layouts that are being tracked by the dependency tracker
@@ -35,17 +31,15 @@ module Nanoc3
     #   dependency tracker
     attr_accessor :compiler
 
-    # The version of the file format used to store dependencies.
-    STORE_VERSION = 3
-
     # Creates a new dependency tracker for the given items and layouts.
     #
     # @param [Array<Nanoc3::Item, Nanoc3::Layout>] objects The list of items
     #   and layouts whose dependencies should be managed
     def initialize(objects)
+      super('tmp/dependencies', 4)
+
       @objects = objects
 
-      @filename         = 'tmp/dependencies'
       @graph            = Nanoc3::DirectedGraph.new([ nil ] + @objects)
       @previous_objects = []
     end
@@ -131,49 +125,14 @@ module Nanoc3
       @graph.add_edge(dst, src) unless src == dst
     end
 
-    # Stores the dependency graph into the file specified by the {#filename}
-    # attribute.
-    #
-    # @return [void]
+    # @deprecated Use {#store} instead
     def store_graph
-      FileUtils.mkdir_p(File.dirname(self.filename))
-      store = PStore.new(self.filename)
-      store.transaction do
-        store[:version]  = STORE_VERSION
-        store[:vertices] = @graph.vertices.map { |obj| obj && obj.reference }
-        store[:edges]    = @graph.edges
-      end
+      self.store
     end
 
-    # Loads the dependency graph from the file specified by the {#filename}
-    # attribute. This method will overwrite an existing dependency graph.
-    #
-    # @return [void]
+    # @deprecated Use {#load} instead
     def load_graph
-      # Create new graph
-      @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
-
-      # Get store
-      return if !File.file?(self.filename)
-      store = PStore.new(self.filename)
-
-      # Load dependencies
-      store.transaction do
-        # Verify version
-        return if store[:version] != STORE_VERSION
-
-        # Load vertices
-        @previous_objects = store[:vertices].map do |reference|
-          @objects.find { |obj| reference == obj.reference }
-        end
-
-        # Load edges
-        store[:edges].each do |edge|
-          from_index, to_index = *edge
-          from, to = @previous_objects[from_index], @previous_objects[to_index]
-          @graph.add_edge(from, to)
-        end
-      end
+      self.load
     end
 
     # Traverses the dependency graph and marks all objects that (directly or
@@ -223,6 +182,32 @@ module Nanoc3
     # @deprecated Use {#propagate_outdatedness} instead.
     def mark_outdated_items
       propagate_outdatedness
+    end
+
+  protected
+
+    def data
+      {
+        :edges    => @graph.edges,
+        :vertices => @graph.vertices.map { |obj| obj && obj.reference }
+      }
+    end
+
+    def data=(new_data)
+      # Create new graph
+      @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
+
+      # Load vertices
+      @previous_objects = new_data[:vertices].map do |reference|
+        @objects.find { |obj| reference == obj.reference }
+      end
+
+      # Load edges
+      new_data[:edges].each do |edge|
+        from_index, to_index = *edge
+        from, to = @previous_objects[from_index], @previous_objects[to_index]
+        @graph.add_edge(from, to)
+      end
     end
 
   end

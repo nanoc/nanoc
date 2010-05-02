@@ -132,7 +132,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.filename)
+    assert File.file?(tracker.send(:filename))
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(items)
@@ -145,30 +145,6 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     assert_equal Set.new([ items[2], items[3] ]), Set.new(tracker.direct_predecessors_of(items[1]))
     assert_equal Set.new([]),                     Set.new(tracker.direct_predecessors_of(items[2]))
     assert_equal Set.new([]),                     Set.new(tracker.direct_predecessors_of(items[3]))
-  end
-
-  def test_store_graph_with_custom_filename
-    # Mock items
-    items = [ mock('0'), mock('1'), mock('2'), mock('3') ]
-    items.each { |i| i.stubs(:type).returns(:item) }
-    items[0].stubs(:reference).returns([ :item, '/aaa/' ])
-    items[1].stubs(:reference).returns([ :item, '/bbb/' ])
-    items[2].stubs(:reference).returns([ :item, '/ccc/' ])
-    items[3].stubs(:reference).returns([ :item, '/ddd/' ])
-
-    # Create
-    tracker = Nanoc3::DependencyTracker.new(items)
-    tracker.filename = 'tmp/bob/iguana/bits'
-
-    # Record some dependencies
-    tracker.record_dependency(items[0], items[1])
-    tracker.record_dependency(items[1], items[2])
-    tracker.record_dependency(items[1], items[3])
-
-    # Store
-    tracker.store_graph
-    assert File.file?(tracker.filename)
-    assert File.file?('tmp/bob/iguana/bits')
   end
 
   def test_store_graph_and_load_graph_with_removed_items
@@ -194,7 +170,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.filename)
+    assert File.file?(tracker.send(:filename))
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(new_items)
@@ -225,7 +201,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.filename)
+    assert File.file?(tracker.send(:filename))
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(items)
@@ -255,7 +231,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.filename)
+    assert File.file?(tracker.send(:filename))
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(items)
