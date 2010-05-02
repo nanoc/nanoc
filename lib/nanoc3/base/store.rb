@@ -6,7 +6,8 @@ module Nanoc3
   # filesystem, such as checksums, cached compiled content and dependency
   # graphs.
   #
-  # @abstract Subclasses should implement {#data} and {#data=}
+  # @abstract Subclasses should implement {#data} and {#data=}, and may
+  #   implement {#no_data_found} and {#version_mismatch_detected}.
   #
   # @api private
   class Store
@@ -15,6 +16,10 @@ module Nanoc3
     #
     # @param [String] filename The name of the file where data will be loaded
     #   from and stored to.
+    #
+    # @param [Numeric] version The version number corresponding to the file
+    #   format the data is in. When the file format changes, the version
+    #   number should be incremented.
     def initialize(filename, version)
       @filename = filename
       @version  = version
