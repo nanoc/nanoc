@@ -46,49 +46,6 @@ module Nanoc3
       :enable_output_diff => false
     }
 
-    # The site configuration. The configuration has the following keys:
-    #
-    # * `text_extensions` ({Array<String>}) - A list of file extensions that
-    #   will cause nanoc to threat the file as textual instead of binary. When
-    #   the data source finds a content file with an extension that is
-    #   included in this list, it will be marked as textual.
-    #
-    # * `output_dir` ({String}) - The directory to which compiled items will
-    #   be written. This path is relative to the current working directory,
-    #   but can also be an absolute path.
-    #
-    # * `data_sources` ({Array<Hash>}) - A list of data sources for this site.
-    #   See below for documentation on the structure of this list. By default,
-    #   there is only one data source of the filesystem  type mounted at `/`.
-    #
-    # * `index_filenames` ({Array<String>}) - A list of filenames that will be
-    #   stripped off full item paths to create cleaner URLs. For example,
-    #   `/about/` will be used instead of `/about/index.html`). The default
-    #   value should be okay in most cases.
-    #
-    # * `enable_output_diff` ({Boolean}) - True when diffs should be generated
-    #   for the compiled content of this site; false otherwise.
-    #
-    # The list of data sources consists of hashes with the following keys:
-    #
-    # * `:type` ({String}) - The type of data source, i.e. its identifier.
-    #
-    # * `:items_root` ({String}) - The prefix that should be given to all
-    #   items returned by the {#items} method (comparable to mount points
-    #   for filesystems in Unix-ish OSes).
-    #
-    # * `:layouts_root` ({String}) - The prefix that should be given to all
-    #   layouts returned by the {#layouts} method (comparable to mount
-    #   points for filesystems in Unix-ish OSes).
-    #
-    # * `:config` ({Hash}) - A hash containing the configuration for this data
-    #   source. nanoc itself does not use this hash. This is especially
-    #   useful for online data sources; for example, a Twitter data source
-    #   would need the username of the account from which to fetch tweets.
-    #
-    # @return [Hash] The site configuration
-    attr_reader :config
-
     # @return [Proc] The code block that will be executed after all data is
     #   loaded but before the site is compiled
     attr_accessor :preprocessor
@@ -216,16 +173,63 @@ module Nanoc3
       @layouts
     end
 
-    # FIXME get rid of this
+    # Returns the site configuration. It has the following keys:
     #
-    # @api private
-    def config_with_reference
-      @config_pseudo ||= begin
-        pseudo = Object.new
-        def pseudo.reference ; :config ; end
-        def pseudo.data ; @config.inspect ; end
-        pseudo
+    # * `text_extensions` ({Array<String>}) - A list of file extensions that
+    #   will cause nanoc to threat the file as textual instead of binary. When
+    #   the data source finds a content file with an extension that is
+    #   included in this list, it will be marked as textual.
+    #
+    # * `output_dir` ({String}) - The directory to which compiled items will
+    #   be written. This path is relative to the current working directory,
+    #   but can also be an absolute path.
+    #
+    # * `data_sources` ({Array<Hash>}) - A list of data sources for this site.
+    #   See below for documentation on the structure of this list. By default,
+    #   there is only one data source of the filesystem  type mounted at `/`.
+    #
+    # * `index_filenames` ({Array<String>}) - A list of filenames that will be
+    #   stripped off full item paths to create cleaner URLs. For example,
+    #   `/about/` will be used instead of `/about/index.html`). The default
+    #   value should be okay in most cases.
+    #
+    # * `enable_output_diff` ({Boolean}) - True when diffs should be generated
+    #   for the compiled content of this site; false otherwise.
+    #
+    # The list of data sources consists of hashes with the following keys:
+    #
+    # * `:type` ({String}) - The type of data source, i.e. its identifier.
+    #
+    # * `:items_root` ({String}) - The prefix that should be given to all
+    #   items returned by the {#items} method (comparable to mount points
+    #   for filesystems in Unix-ish OSes).
+    #
+    # * `:layouts_root` ({String}) - The prefix that should be given to all
+    #   layouts returned by the {#layouts} method (comparable to mount
+    #   points for filesystems in Unix-ish OSes).
+    #
+    # * `:config` ({Hash}) - A hash containing the configuration for this data
+    #   source. nanoc itself does not use this hash. This is especially
+    #   useful for online data sources; for example, a Twitter data source
+    #   would need the username of the account from which to fetch tweets.
+    #
+    # @return [Hash] The site configuration
+    def config
+      # Add reference to config if necessary
+      if !@config.respond_to?(:reference)
+        def @config.reference
+          :config
+        end
       end
+
+      # Add data to config if necessary
+      if !@config.respond_to?(:data)
+        def @config.data
+          @config.inspect
+        end
+      end
+
+      @config
     end
 
     # FIXME get rid of this
