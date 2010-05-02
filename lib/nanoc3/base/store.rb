@@ -12,6 +12,15 @@ module Nanoc3
   # @api private
   class Store
 
+    # @return [String] The name of the file where data will be loaded from and
+    #   stored to.
+    attr_reader :filename
+
+    # @return [Numeric] The version number corresponding to the file format
+    #   the data is in. When the file format changes, the version number
+    #   should be incremented.
+    attr_reader :version
+
     # Creates a new store for the given filename.
     #
     # @param [String] filename The name of the file where data will be loaded
@@ -43,28 +52,28 @@ module Nanoc3
     # @return [void]
     def load
       # Don’t load twice
-      if self.loaded?
+      if @loaded
         return
       end
 
       # Check file existance
       if !File.file?(self.filename)
         no_data_found
-        self.loaded = true
+        @loaded = true
         return
       end
 
-      self.pstore.transaction do
+      pstore.transaction do
         # Check version
-        if self.pstore[:version] != self.version
+        if pstore[:version] != self.version
           version_mismatch_detected
-          self.loaded = true
+          @loaded = true
           return
         end
 
         # Load
-        self.data = self.pstore[:data]
-        self.loaded = true
+        self.data = pstore[:data]
+        @loaded = true
       end
     end
 
@@ -75,9 +84,9 @@ module Nanoc3
     def store
       FileUtils.mkdir_p(File.dirname(self.filename))
 
-      self.pstore.transaction do
-        self.pstore[:data]    = self.data
-        self.pstore[:version] = self.version
+      pstore.transaction do
+        pstore[:data]    = self.data
+        pstore[:version] = self.version
       end
     end
 
@@ -97,14 +106,7 @@ module Nanoc3
     def version_mismatch_detected
     end
 
-  protected
-
-    attr_reader :filename
-
-    attr_reader :version
-
-    attr_accessor :loaded
-    def loaded? ; !!@loaded ; end
+  private
 
     def pstore
       require 'pstore'
