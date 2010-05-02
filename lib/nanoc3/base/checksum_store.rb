@@ -29,7 +29,7 @@ module Nanoc3
     #
     # @return [String] The old checksum for the given object
     def old_checksum_for(obj)
-      self.old_checksums[obj.reference]
+      @old_checksums[obj.reference]
     end
 
     # Returns the new checksum for the given object. The object must respond
@@ -40,7 +40,7 @@ module Nanoc3
     #
     # @return [String] The new checksum for the given object
     def new_checksum_for(obj)
-      self.new_checksums[obj.reference] ||= begin
+      @new_checksums[obj.reference] ||= begin
         checksum_parts = []
 
         # Calculate content checksum
@@ -108,15 +108,12 @@ module Nanoc3
 
   protected
 
-    attr_accessor :new_checksums
-    attr_accessor :old_checksums
-
     def data
-      self.new_checksums
+      @new_checksums
     end
 
     def data=(new_data)
-      self.old_checksums = new_data
+      @old_checksums = new_data
     end
 
   end
