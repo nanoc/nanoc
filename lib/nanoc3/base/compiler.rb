@@ -80,20 +80,14 @@ module Nanoc3
 
     # Compiles the site and writes out the compiled item representations.
     #
-    # @overload run(params={})
-    #   @option params [Boolean] :force (false) true if all representations
-    #     should be compiled even if they are not outdated, false if not
+    # Previous versions of nanoc (< 3.2) allowed passing items to compile, and
+    # had a “force” option to make the compiler recompile all pages, even
+    # when not outdated. These arguments and options are, as of nanoc 3.2, no
+    # longer used, and will simply be ignored when passed to {#run}.
+    #
+    # @overload run
     #   @return [void]
     def run(*args)
-      # Parse arguments
-      params = {}
-      if args.size >= 1 && args[0].is_a?(Hash)
-        params = args[0]
-      elsif args.size >= 2 && args[1].is_a?(Hash)
-        params = args[1]
-      end
-      params[:force] = false if !params.has_key?(:force)
-
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
@@ -107,7 +101,6 @@ module Nanoc3
       reps  = items.map { |i| i.reps }.flatten
 
       # Determine which reps need to be recompiled
-      reps.each { |r| r.force_outdated = true } if params[:force]
       determine_outdatedness(reps)
       dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)
@@ -210,7 +203,7 @@ module Nanoc3
     def outdated?(obj)
       case obj.type
         when :item_rep
-          !!@outdatedness_reasons[obj] || obj.force_outdated
+          !!@outdatedness_reasons[obj]
         when :item
           obj.reps.any? { |rep| outdated?(rep) }
         when :layout
@@ -232,7 +225,6 @@ module Nanoc3
     # The descriptive strings for each outdatedness reason.
     OUTDATEDNESS_REASON_DESCRIPTIONS = {
       :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
-      :forced => 'All items are recompiled because of a `--force` flag given to the compilation command.',
       :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
       :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
       :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
@@ -258,9 +250,6 @@ module Nanoc3
       reps.each do |rep|
         # Get reason symbol
         reason = lambda do
-          # Outdated if we’re compiling with --force
-          return :forced if rep.force_outdated
-
           # Outdated if checksums are missing or different
           return :not_enough_data if !checksum_store.checksums_available?(rep.item)
           return :source_modified if !checksum_store.checksums_identical?(rep.item)

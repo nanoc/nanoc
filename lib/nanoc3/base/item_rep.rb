@@ -14,12 +14,6 @@ module Nanoc3
     # @return [Symbol] The representation's unique name
     attr_reader   :name
 
-    # @return [Boolean] true if this rep is forced to be dirty (e.g. because
-    #   of the `--force` commandline option); false otherwise
-    #
-    # @api private
-    attr_accessor :force_outdated
-
     # @return [Boolean] true if this rep is currently binary; false otherwise
     attr_reader :binary
     alias_method :binary?, :binary
@@ -74,8 +68,7 @@ module Nanoc3
       initialize_content
 
       # Reset flags
-      @compiled       = false
-      @force_outdated = false
+      @compiled = false
     end
 
     # @api private
