@@ -132,7 +132,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.send(:filename))
+    assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(items)
@@ -170,7 +170,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.send(:filename))
+    assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(new_items)
@@ -201,7 +201,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.send(:filename))
+    assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(items)
@@ -231,7 +231,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Store
     tracker.store_graph
-    assert File.file?(tracker.send(:filename))
+    assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc3::DependencyTracker.new(items)
