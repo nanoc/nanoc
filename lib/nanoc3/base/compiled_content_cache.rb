@@ -5,7 +5,7 @@ module Nanoc3
   # Represents a cache than can be used to store already compiled content,
   # to prevent it from being needlessly recompiled.
   #
-  # @private
+  # @api private
   class CompiledContentCache
 
     def initialize

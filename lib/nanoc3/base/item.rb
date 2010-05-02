@@ -50,7 +50,7 @@ module Nanoc3
     # @return [Boolean] Whether or not this item is outdated because of its
     #   dependencies are outdated
     #
-    # @private
+    # @api private
     attr_accessor :outdated_due_to_dependencies
     alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
 
@@ -193,7 +193,7 @@ module Nanoc3
     # Returns the type of this object. Will always return `:item`, because
     # this is an item. For layouts, this method returns `:layout`.
     #
-    # @private
+    # @api private
     #
     # @return [Symbol] :item
     def type
@@ -202,7 +202,7 @@ module Nanoc3
 
     # Returns an object that can be used for uniquely identifying objects.
     #
-    # @private
+    # @api private
     #
     # @return [Object] An unique reference to this object
     def reference

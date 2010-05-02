@@ -17,7 +17,7 @@ module Nanoc3
     # @return [Boolean] true if this rep is forced to be dirty (e.g. because
     #   of the `--force` commandline option); false otherwise
     #
-    # @private
+    # @api private
     attr_accessor :force_outdated
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
@@ -27,7 +27,7 @@ module Nanoc3
     # @return [Boolean] true if this representation has already been compiled
     #   during the current or last compilation session; false otherwise
     #
-    # @private
+    # @api private
     attr_accessor :compiled
     alias_method :compiled?, :compiled
 
@@ -36,21 +36,21 @@ module Nanoc3
     #   snapshots. The keys correspond with the snapshot names, and the values
     #   with the path.
     #
-    # @private
+    # @api private
     attr_accessor :raw_paths
 
     # @return [Hash<Symbol,String>] A hash containing the paths for all
     #   snapshots. The keys correspond with the snapshot names, and the values
     #   with the path.
     #
-    # @private
+    # @api private
     attr_accessor :paths
 
     # @return [Hash<Symbol,String>] A hash containing the content at all
     #   snapshots. The keys correspond with the snapshot names, and the
     #   values with the content.
     #
-    # @private
+    # @api private
     attr_accessor :content
 
     # Creates a new item representation for the given item.
@@ -78,7 +78,7 @@ module Nanoc3
       @force_outdated = false
     end
 
-    # @private
+    # @api private
     #
     # @return [Hash] The assignments that should be available when compiling
     #   the content.
@@ -186,7 +186,7 @@ module Nanoc3
     # necessary when an unmet dependency is detected during compilation.
     # This method should probably not be called directly.
     #
-    # @private
+    # @api private
     #
     # @return [void]
     def forget_progress
@@ -356,7 +356,7 @@ module Nanoc3
     # current compilation session and the content compiled in the current
     # compilation session.
     #
-    # @private
+    # @api private
     #
     # @return [String, nil] The difference between the old and new compiled
     #   content in `diff(1)` format, or nil if there is no previous compiled
@@ -373,7 +373,7 @@ module Nanoc3
     # Returns the type of this object. Will always return `:item_rep`, because
     # this is an item rep. For layouts, this method returns `:layout`.
     #
-    # @private
+    # @api private
     #
     # @return [Symbol] :item_rep
     def type
