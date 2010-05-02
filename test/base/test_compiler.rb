@@ -392,33 +392,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_equal :not_enough_data, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
-  def test_outdated_if_force_outdated
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:outdated?).returns(false)
-
-    # Mock site
-    site = Nanoc3::Site.new({})
-    site.stubs(:code_snippets).returns(code_snippets)
-
-    # Mock item
-    item = Nanoc3::Item.new('blah blah blah', {}, '/')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.raw_path = 'moo.html'
-    rep.force_outdated = true
-
-    # Write output file
-    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
-
-    # Check
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
-    assert_equal :forced, (compiler.outdatedness_reason_for(rep) || {})[:type]
-  end
-
   def test_outdated_if_compiled_file_doesnt_exist
     # Mock code snippets
     code_snippets = [ mock ]
@@ -672,7 +645,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     reps[3].stubs(:outdated?).returns(true)
     items[3].stubs(:outdated_due_to_dependencies?).returns(true)
     (0..4).each { |i| items[i].stubs(:reps).returns([ reps[i] ]) }
-    (0..4).each { |i| reps[i].stubs(:force_outdated).returns(false) }
     items.each { |i| i.stubs(:type).returns(:item) }
     reps.each  { |i| i.stubs(:type).returns(:item_rep) }
 

@@ -21,8 +21,7 @@ module Nanoc3::CLI::Commands
       "\n\n" +
       'By default, only item that are outdated will be compiled. This can ' +
       'speed up the compilation process quite a bit, but items that include ' +
-      'content from other items may have to be recompiled manually. In ' +
-      'order to compile items even when they are outdated, use the --force option.'
+      'content from other items may have to be recompiled manually.'
     end
 
     def usage
@@ -34,12 +33,12 @@ module Nanoc3::CLI::Commands
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'alias for --force (DEPRECATED)'
+          :desc => '(ignored)'
         },
         # --force
         {
           :long => 'force', :short => 'f', :argument => :forbidden,
-          :desc => 'compile items even when they are not outdated'
+          :desc => '(ignored)'
         }
       ]
     end
@@ -51,8 +50,8 @@ module Nanoc3::CLI::Commands
       @base.site.load_data
 
       # Check presence of --all option
-      if options.has_key?(:all)
-        $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
+      if options.has_key?(:all) || options.has_key?(:force)
+        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
       end
 
       # Warn if trying to compile a single item
@@ -72,9 +71,7 @@ module Nanoc3::CLI::Commands
       setup_notifications
 
       # Compile
-      @base.site.compiler.run(
-        :force => (options.has_key?(:all) || options.has_key?(:force))
-      )
+      @base.site.compiler.run
 
       # Find reps
       reps = @base.site.items.map { |i| i.reps }.flatten
