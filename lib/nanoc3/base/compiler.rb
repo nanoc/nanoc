@@ -261,7 +261,7 @@ module Nanoc3
           return :code_outdated if @site.code_snippets.any? { |cs| checksum_store.object_modified?(cs) }
 
           # Outdated if configuration outdated
-          return :config_outdated if checksum_store.object_modified?(@site.config_with_reference)
+          return :config_outdated if checksum_store.object_modified?(@site.config)
 
           # Outdated if rules outdated
           return :rules_outdated  if checksum_store.object_modified?(@site.rules_with_reference)
