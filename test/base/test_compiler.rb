@@ -350,7 +350,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
@@ -360,6 +360,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_nil compiler.outdatedness_reason_for(rep)
   end
@@ -385,6 +386,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :not_enough_data, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -411,6 +413,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :forced, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -436,13 +439,14 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference => Nanoc3::ChecksumStore.new.new_checksum_for(item)
       }
     end
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert !File.file?('moo.html')
     assert_equal :not_written, (compiler.outdatedness_reason_for(rep) || {})[:type]
@@ -472,7 +476,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference             => 'OMG! DIFFERENT!',
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
         :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
@@ -481,6 +485,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :source_modified, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -517,7 +522,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
@@ -527,6 +532,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal nil, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -555,7 +561,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => 'OMG! DIFFERENT!',
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
@@ -565,6 +571,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :code_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -592,7 +599,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
         :config                    => 'OMG! DIFFERENT'
@@ -601,6 +608,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :config_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -629,7 +637,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     FileUtils.mkdir_p('tmp')
     store = PStore.new('tmp/checksums')
     store.transaction do
-      store[:checksums] = {
+      store[:data] = {
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config_with_reference),
@@ -639,6 +647,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Check
     compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
     compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :rules_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
