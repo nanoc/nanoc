@@ -11,7 +11,7 @@ module Nanoc3
   # modified and will need to be recompiled (along with the objects that
   # depend on that object).
   #
-  # @private
+  # @api private
   class ChecksumStore
 
     # @return [String] The name of the file where new calculated checksums

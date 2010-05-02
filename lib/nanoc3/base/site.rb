@@ -218,7 +218,7 @@ module Nanoc3
 
     # FIXME get rid of this
     #
-    # @private
+    # @api private
     def config_with_reference
       @config_pseudo ||= begin
         pseudo = Object.new
@@ -230,7 +230,7 @@ module Nanoc3
 
     # FIXME get rid of this
     #
-    # @private
+    # @api private
     def rules_with_reference
       @rules_pseudo ||= begin
         pseudo = Object.new

@@ -210,7 +210,7 @@ module Nanoc3
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
     #
-    # @private
+    # @api private
     #
     # @param [Nanoc3::Item, Nanoc3::Layout] object The object for which to
     #   forget all dependencies
