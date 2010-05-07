@@ -36,6 +36,23 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_simon_highlight
+    if `which highlight`.strip.empty?
+      skip "could not find `highlight`"
+    end
+
+    # Create filter
+    filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+    # Get input and expected output
+    input = %Q[<pre title="moo"><code class="language-ruby">\n# comment\n</code></pre>]
+    expected_output = '<pre title="moo"><code class="language-ruby"><span class="slc"># comment</span></code></pre>'
+
+    # Run filter
+    actual_output = filter.run(input, :default_colorizer => :simon_highlight)
+    assert_equal(expected_output, actual_output)
+  end
+
   def test_colorize_syntax_with_unknown_syntax
     if_have 'coderay' do
       # Create filter
