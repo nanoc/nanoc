@@ -71,7 +71,7 @@ module Nanoc3::Filters
     KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize ]
 
     def highlight(code, language, params={})
-      colorizer = @colorizers[language]
+      colorizer = @colorizers[language.to_sym]
       if KNOWN_COLORIZERS.include?(colorizer)
         send(colorizer, code, language, params[colorizer] || {})
       else
