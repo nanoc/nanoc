@@ -49,7 +49,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment</span></code></pre>'
 
     # Run filter
-    actual_output = filter.run(input, :colorizers => { 'ruby' => :pygmentize })
+    actual_output = filter.run(input, :colorizers => { :ruby => :pygmentize })
     assert_equal(expected_output, actual_output)
   end
 
