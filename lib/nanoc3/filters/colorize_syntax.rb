@@ -93,7 +93,10 @@ module Nanoc3::Filters
       IO.popen("pygmentize -l #{language} -f html", "r+") do |io|
         io.write(code)
         io.close_write
-        return io.read
+        highlighted_code = io.read
+
+        doc = Nokogiri::HTML.fragment(highlighted_code)
+        return doc.xpath('./div[@class="highlight"]/pre').inner_html
       end
     end
 
