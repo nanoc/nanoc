@@ -91,14 +91,12 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Load necessary data
-      compiled_content_cache.load
-      checksum_store.load
-      dependency_tracker.load
-
       # Get items and reps to compile
       items = @site.items
       reps  = items.map { |i| i.reps }.flatten
+
+      # Load helper data
+      load
 
       # Determine which reps need to be recompiled
       determine_outdatedness(reps)
@@ -110,13 +108,29 @@ module Nanoc3
       compile_reps(reps)
       dependency_tracker.stop
 
-      # Store necessary data
-      compiled_content_cache.store
-      checksum_store.store
-      dependency_tracker.store
+      # Store modified helper data
+      store
     ensure
       # Cleanup
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
+    end
+
+    # Load the helper data that is used for compiling the site.
+    #
+    # @api private
+    #
+    # @return [void]
+    def load
+      stores.each { |s| s.load }
+    end
+
+    # Store the modified helper data used for compiling the site.
+    #
+    # @api private
+    #
+    # @return [void]
+    def store
+      stores.each { |s| s.store }
     end
 
     # Returns the dependency tracker for this site, creating it first if it
@@ -388,6 +402,12 @@ module Nanoc3
     # @return [ChecksumStore] The checksum store
     def checksum_store
       @checksum_store ||= Nanoc3::ChecksumStore.new
+    end
+
+    # Returns all stores that can load/store data that can be used for
+    # compilation.
+    def stores
+      [ compiled_content_cache, checksum_store, dependency_tracker ]
     end
 
   end
