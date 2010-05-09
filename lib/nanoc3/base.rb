@@ -31,6 +31,7 @@ module Nanoc3
   autoload 'CompilerDSL',          'nanoc3/base/compilation/compiler_dsl'
   autoload 'DependencyTracker',    'nanoc3/base/compilation/dependency_tracker'
   autoload 'Filter',               'nanoc3/base/compilation/filter'
+  autoload 'OutdatednessChecker',  'nanoc3/base/compilation/outdatedness_checker'
   autoload 'Rule',                 'nanoc3/base/compilation/rule'
   autoload 'RuleContext',          'nanoc3/base/compilation/rule_context'
 

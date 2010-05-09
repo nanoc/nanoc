@@ -45,7 +45,6 @@ module Nanoc3::CLI::Commands
       # Get dependency tracker
       compiler = @base.site.compiler
       compiler.load
-      compiler.send(:determine_outdatedness, reps)
       dependency_tracker = compiler.dependency_tracker
 
       # Print item dependencies

@@ -111,7 +111,6 @@ module Nanoc3
       stores.each { |s| s.load }
 
       # Determine which reps need to be recompiled
-      determine_outdatedness(reps)
       dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)
     end
@@ -210,23 +209,17 @@ module Nanoc3
     #
     # @return [Boolean] true if the object is outdated, false otherwise
     def outdated?(obj)
-      case obj.type
-        when :item_rep
-          !!@outdatedness_reasons[obj]
-        when :item
-          obj.reps.any? { |rep| outdated?(rep) }
-        when :layout
-          checksum_store.object_modified?(obj)
-        else
-          raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
-      end
+      outdatedness_checker.outdated?(obj)
     end
 
     # TODO document
     #
     # @api private
     def outdatedness_reason_for(rep)
-      @outdatedness_reasons[rep]
+      type        = outdatedness_checker.outdatedness_reason_for_item_rep(rep)
+      description = outdatedness_checker.outdatedness_message_for_reason(type)
+
+      type ? { :type => type, :decription => description } : nil
     end
 
   private
@@ -237,62 +230,6 @@ module Nanoc3
 
     def reps
       @reps ||= items.map { |i| i.reps }.flatten
-    end
-
-    # The descriptive strings for each outdatedness reason.
-    OUTDATEDNESS_REASON_DESCRIPTIONS = {
-      :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
-      :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
-      :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
-      :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
-      :code_outdated => 'The code snippets in the `lib/` directory have been modified since the last time this item representation was compiled.',
-      :config_outdated => 'The site configuration has been modified since the last time this item representation was compiled.',
-      :rules_outdated => 'The rules file has been modified since the last time this item representation was compiled.',
-    }
-
-    # Determines whether the given representations are outdated or not. For
-    # outdated representations, the outdatedness reason will be set.
-    #
-    # The outdatedness reason is a hash with a `:type` key, containing the
-    # reason why the item is outdated in the form of a symbol, and a
-    # `:description` key, containing a descriptive string that can be printed
-    # if necessary.
-    #
-    # @return [void]
-    def determine_outdatedness(reps)
-      # TODO outdatedness reasons should be objects with descriptions
-      # TODO should item reps know their outdatedness?
-
-      @outdatedness_reasons ||= {}
-      reps.each do |rep|
-        # Get reason symbol
-        reason = lambda do
-          # Outdated if checksums are missing or different
-          return :not_enough_data if !checksum_store.checksums_available?(rep.item)
-          return :source_modified if !checksum_store.checksums_identical?(rep.item)
-
-          # Outdated if compiled file doesn't exist (yet)
-          return :not_written if rep.raw_path && !File.file?(rep.raw_path)
-
-          # Outdated if code snippets outdated
-          return :code_outdated if @site.code_snippets.any? { |cs| checksum_store.object_modified?(cs) }
-
-          # Outdated if configuration outdated
-          return :config_outdated if checksum_store.object_modified?(@site.config)
-
-          # Outdated if rules outdated
-          return :rules_outdated  if checksum_store.object_modified?(@site.rules_with_reference)
-
-          return nil
-        end[]
-
-        # Build reason symbol and description
-        next if reason.nil?
-        @outdatedness_reasons[rep] = {
-          :type        => reason,
-          :description => OUTDATEDNESS_REASON_DESCRIPTIONS[reason]
-        }
-      end
     end
 
     # Compiles the given representations.
@@ -405,6 +342,11 @@ module Nanoc3
     # @return [ChecksumStore] The checksum store
     def checksum_store
       @checksum_store ||= Nanoc3::ChecksumStore.new(:site => @site)
+    end
+
+    # @return [Nanoc3::OutdatednessChecker] The outdatedness checker
+    def outdatedness_checker
+      @outdatedness_checker ||= Nanoc3::OutdatednessChecker.new(:site => @site, :checksum_store => checksum_store)
     end
 
     # Returns all stores that can load/store data that can be used for
