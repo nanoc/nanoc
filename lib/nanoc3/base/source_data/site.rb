@@ -225,7 +225,7 @@ module Nanoc3
       # Add data to config if necessary
       if !@config.respond_to?(:data)
         def @config.data
-          @config.inspect
+          self.inspect
         end
       end
 
@@ -236,10 +236,12 @@ module Nanoc3
     #
     # @api private
     def rules_with_reference
+      rules = @rules
       @rules_pseudo ||= begin
         pseudo = Object.new
+        pseudo.instance_eval { @data = rules }
         def pseudo.reference ; :rules ; end
-        def pseudo.data ; @rules.inspect ; end
+        def pseudo.data ; @data.inspect ; end
         pseudo
       end
     end
