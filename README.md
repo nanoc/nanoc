@@ -71,6 +71,7 @@ components, however, do have dependencies:
 * Chris Eppstein
 * Felix Hanley
 * Starr Horne
+* Ale Muñoz
 * Nicky Peeters
 * Christian Plessl
 * Šime Ramov
@@ -78,8 +79,6 @@ components, however, do have dependencies:
 * “Soryu”
 * Eric Sunshine
 * Dennis Sutch
-
-Special thanks to Ale Muñoz.
 
 ## Contact
 
