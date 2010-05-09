@@ -109,6 +109,9 @@ module Nanoc3
       dependency_tracker.stop
 
       # Store modified helper data
+      checksum_store.calculate_checksums_for(
+        @site.items + @site.layouts + @site.code_snippets + [ @site.config, @site.rules_with_reference ]
+      )
       store
     ensure
       # Cleanup
