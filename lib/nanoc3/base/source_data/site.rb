@@ -246,6 +246,13 @@ module Nanoc3
       end
     end
 
+    # TODO document
+    #
+    # @api private
+    def objects
+      items + layouts + code_snippets + [ config, rules_with_reference ]
+    end
+
   private
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
