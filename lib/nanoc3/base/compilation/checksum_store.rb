@@ -14,8 +14,10 @@ module Nanoc3
   # @api private
   class ChecksumStore < ::Nanoc3::Store
 
-    def initialize
+    def initialize(params={})
       super('tmp/checksums', 1)
+
+      @site = params[:site] if params.has_key?(:site)
 
       @new_checksums = {}
       @old_checksums = {}
@@ -68,18 +70,16 @@ module Nanoc3
       end
     end
 
-    # Calculates the checksums for all given objects. This method should be
-    # used to make the checksum store remember the new checksums for all given
-    # objects; it is probably necessary to call this method before calling
-    # {#store}, to make sure that all new checksums are calculated. It is not
-    # necessary to call this method in order to use {#new_checksum_for}.
-    #
-    # @param [#each] objs The objects for which the new checksum should be
-    #   calculated
+    # Calculates the checksums for all objects in the site. This method should
+    # be used to make the checksum store remember the new checksums for all
+    # given objects; it is probably necessary to call this method before
+    # calling {#store}, to make sure that all new checksums are calculated. It
+    # is not necessary to call this method in order to use
+    # {#new_checksum_for}.
     #
     # @return [void]
-    def calculate_checksums_for(objs)
-      objs.each { |obj| new_checksum_for(obj) }
+    def calculate_all_checksums
+      @site.objects.each { |obj| new_checksum_for(obj) }
     end
 
     # @param [#reference] obj
@@ -104,6 +104,12 @@ module Nanoc3
     #   are available and identical, false otherwise
     def object_modified?(obj)
       !checksums_available?(obj) || !checksums_identical?(obj)
+    end
+
+    # @see Nanoc3::Store#store
+    def store
+      calculate_all_checksums
+      super
     end
 
   protected

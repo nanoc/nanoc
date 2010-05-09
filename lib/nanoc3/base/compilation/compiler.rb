@@ -91,27 +91,11 @@ module Nanoc3
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
-      # Get items and reps to compile
-      items = @site.items
-      reps  = items.map { |i| i.reps }.flatten
-
-      # Load helper data
-      load
-
-      # Determine which reps need to be recompiled
-      determine_outdatedness(reps)
-      dependency_tracker.propagate_outdatedness
-      forget_dependencies_if_outdated(items)
-
       # Compile reps
+      load
       dependency_tracker.start
       compile_reps(reps)
       dependency_tracker.stop
-
-      # Store modified helper data
-      checksum_store.calculate_checksums_for(
-        @site.items + @site.layouts + @site.code_snippets + [ @site.config, @site.rules_with_reference ]
-      )
       store
     ensure
       # Cleanup
@@ -125,6 +109,11 @@ module Nanoc3
     # @return [void]
     def load
       stores.each { |s| s.load }
+
+      # Determine which reps need to be recompiled
+      determine_outdatedness(reps)
+      dependency_tracker.propagate_outdatedness
+      forget_dependencies_if_outdated(items)
     end
 
     # Store the modified helper data used for compiling the site.
@@ -133,6 +122,9 @@ module Nanoc3
     #
     # @return [void]
     def store
+      # checksum_store.calculate_checksums_for(
+      #   @site.items + @site.layouts + @site.code_snippets + [ @site.config, @site.rules_with_reference ]
+      # )
       stores.each { |s| s.store }
     end
 
@@ -238,6 +230,14 @@ module Nanoc3
     end
 
   private
+
+    def items
+      @items ||= @site.items
+    end
+
+    def reps
+      @reps ||= items.map { |i| i.reps }.flatten
+    end
 
     # The descriptive strings for each outdatedness reason.
     OUTDATEDNESS_REASON_DESCRIPTIONS = {
@@ -404,7 +404,7 @@ module Nanoc3
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      @checksum_store ||= Nanoc3::ChecksumStore.new
+      @checksum_store ||= Nanoc3::ChecksumStore.new(:site => @site)
     end
 
     # Returns all stores that can load/store data that can be used for

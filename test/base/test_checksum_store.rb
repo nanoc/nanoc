@@ -37,23 +37,18 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
   end
 
   def test_store
-    store = Nanoc3::ChecksumStore.new
-    store.load
-
     obj = Nanoc3::Item.new('Moo?', {}, '/animals/cow/')
     new_checksum = Nanoc3::Checksummer.checksum_for_string('Moo?') + '-' +
       Nanoc3::Checksummer.checksum_for_hash({})
 
-    store.store
-    store = Nanoc3::ChecksumStore.new
+    site = mock
+    site.stubs(:objects).returns([ obj ])
+
+    store = Nanoc3::ChecksumStore.new(:site => site)
     store.load
 
-    assert_equal nil,          store.old_checksum_for(obj)
-    assert_equal new_checksum, store.new_checksum_for(obj)
-
-    store.calculate_checksums_for([ obj ])
     store.store
-    store = Nanoc3::ChecksumStore.new
+    store = Nanoc3::ChecksumStore.new(:site => site)
     store.load
 
     assert_equal new_checksum, store.old_checksum_for(obj)
