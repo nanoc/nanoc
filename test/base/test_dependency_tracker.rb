@@ -297,10 +297,20 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.instance_eval do
-       @outdatedness_reasons = {
-         object_0.reps[0] => false,
-         object_1.reps[0] => true
-       }
+      @objs = [
+        object_0,
+        object_1
+      ]
+    end
+    def compiler.outdated?(obj)
+      case obj
+      when @objs[0]
+        false
+      when @objs[1]
+        true
+      else
+        raise RuntimeError, "I did not expect #{obj.inspect}"
+      end
     end
 
     # Create
@@ -315,10 +325,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !compiler.outdated?(objects[0])
+    refute compiler.outdated?(objects[0])
     assert objects[0].outdated_due_to_dependencies?
     assert compiler.outdated?(objects[1])
-    assert !objects[1].outdated_due_to_dependencies?
+    refute objects[1].outdated_due_to_dependencies?
   end
 
   def test_propagate_outdatedness_chained
@@ -334,11 +344,21 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.instance_eval do
-       @outdatedness_reasons = {
-         object_0.reps[0] => false,
-         object_1.reps[0] => false,
-         object_2.reps[0] => true
-       }
+      @objs = [
+        object_0,
+        object_1,
+        object_2
+      ]
+    end
+    def compiler.outdated?(obj)
+      case obj
+      when @objs[0], @objs[1]
+        false
+      when @objs[2]
+        true
+      else
+        raise RuntimeError, "I did not expect #{obj.inspect}"
+      end
     end
 
     # Create

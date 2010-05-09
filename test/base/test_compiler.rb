@@ -146,7 +146,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
 
     # Compile
-    compiler.send(:determine_outdatedness, [ rep ])
     compiler.send :compile_rep, rep
     assert rep.compiled?
   end
@@ -159,7 +158,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
-    compiler.send(:determine_outdatedness, [ rep ])
     compilation_rule = mock
     compilation_rule.expects(:apply_to).with(rep).raises(Nanoc3::Errors::UnmetDependency, rep)
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
@@ -211,7 +209,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site.stubs(:compiler).returns(compiler)
 
     # Compile
-    compiler.send(:determine_outdatedness, [ rep ])
     compiler.send(:compile_rep, rep)
 
     # Test
@@ -231,7 +228,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).never
 
     # Compile
-    compiler.send :determine_outdatedness, []
     compiler.send :compile_reps, []
   end
 
@@ -245,7 +241,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).with(rep)
 
     # Compile
-    compiler.send :determine_outdatedness, [ rep ]
     compiler.send :compile_reps, [ rep ]
   end
 
@@ -259,7 +254,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:compile_rep).times(2)
 
     # Compile
-    compiler.send :determine_outdatedness, reps
     compiler.send :compile_reps, reps
 
     # Check size of reps array
@@ -293,7 +287,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     end
 
     # Compile
-    compiler.send :determine_outdatedness, reps
     compiler.send :compile_reps, reps
 
     # Check
@@ -321,7 +314,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     end
 
     # Compile
-    compiler.send :determine_outdatedness, reps
     assert_raises Nanoc3::Errors::RecursiveCompilation do
       compiler.send :compile_reps, reps
     end
@@ -362,7 +354,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_nil compiler.outdatedness_reason_for(rep)
   end
 
@@ -388,7 +379,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :not_enough_data, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
@@ -422,7 +412,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert !File.file?('moo.html')
     assert_equal :not_written, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
@@ -462,7 +451,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :source_modified, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
@@ -510,7 +498,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_equal nil, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
@@ -550,7 +537,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :code_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
@@ -588,7 +574,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :config_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
@@ -627,7 +612,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Check
     compiler = Nanoc3::Compiler.new(site)
     compiler.send(:checksum_store).load
-    compiler.send(:determine_outdatedness, [ rep ])
     assert_equal :rules_outdated, (compiler.outdatedness_reason_for(rep) || {})[:type]
   end
 
@@ -654,11 +638,22 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.instance_eval do
-      @outdatedness_reasons = {}
-      @outdatedness_reasons[reps[0]] = false
-      @outdatedness_reasons[reps[1]] = true
-      @outdatedness_reasons[reps[2]] = false
-      @outdatedness_reasons[reps[3]] = true
+      @objs = [
+        reps[0],
+        reps[1],
+        reps[2],
+        reps[3]
+      ]
+    end
+    def compiler.outdated?(obj)
+      case obj
+      when @objs[0], @objs[2]
+        false
+      when @objs[1], @objs[3]
+        true
+      else
+        raise RuntimeError, "I did not expect #{obj.inspect}"
+      end
     end
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
     compiler.send :forget_dependencies_if_outdated, items
