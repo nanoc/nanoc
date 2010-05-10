@@ -24,7 +24,7 @@ module Nanoc3
     # @return [Hash<Symbol,String>] A hash containing the cached compiled
     #   content for the given item representation
     def [](rep)
-      item_cache = self.cache[rep.item.identifier] || {}
+      item_cache = @cache[rep.item.identifier] || {}
       item_cache[rep.name]
     end
 
@@ -38,20 +38,18 @@ module Nanoc3
     #
     # @return [void]
     def []=(rep, content)
-      self.cache[rep.item.identifier] ||= {}
-      self.cache[rep.item.identifier][rep.name] = content
+      @cache[rep.item.identifier] ||= {}
+      @cache[rep.item.identifier][rep.name] = content
     end
 
   protected
 
-    attr_accessor :cache
-
     def data
-      self.cache
+      @cache
     end
 
     def data=(new_data)
-      self.cache = new_data
+      @cache = new_data
     end
 
   end
