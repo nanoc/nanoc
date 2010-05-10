@@ -10,7 +10,7 @@ module Nanoc3
     # @option params [Nanoc3::Site] :site (nil) The site this outdatedness
     #   checker belongs to.
     #
-    # @options params [Nanoc3::ChecksumStore] :checksum_store (nil) The
+    # @option params [Nanoc3::ChecksumStore] :checksum_store (nil) The
     #   checksum store where checksums of items, layouts, … are stored.
     def initialize(params={})
       @site           = params[:site]           if params.has_key?(:site)
@@ -35,7 +35,7 @@ module Nanoc3
     # @param [Nanoc3::Item, Nanoc3::ItemRep, Nanoc3::Layout] obj The object
     #   whose outdatedness reason should be calculated.
     #
-    # @return [Nanoc3::OutdatednessReason::Generic, nil] The reason why the
+    # @return [Nanoc3::OutdatednessReasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def outdatedness_reason_for(obj)
       case obj.type
