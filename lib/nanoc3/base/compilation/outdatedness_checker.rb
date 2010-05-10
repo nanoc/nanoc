@@ -9,7 +9,11 @@ module Nanoc3
 
     # TODO outdatedness reasons should be objects with descriptions
 
-    # TODO document
+    # @option params [Nanoc3::Site] :site (nil) The site this outdatedness
+    #   checker belongs to.
+    #
+    # @options params [Nanoc3::ChecksumStore] :checksum_store (nil) The
+    #   checksum store where checksums of items, layouts, … are stored.
     def initialize(params={})
       @site           = params[:site]           if params.has_key?(:site)
       @checksum_store = params[:checksum_store] if params.has_key?(:checksum_store)
@@ -17,6 +21,12 @@ module Nanoc3
       @outdatedness_reasons = {}
     end
 
+    # Checks whether the given object is outdated and therefore needs to be
+    # recompiled.
+    #
+    # @param [Nanoc3::Item, Nanoc3::ItemRep, Nanoc3::Layout] obj The object
+    #   those outdatedness should be checked.
+    #
     # @return [Boolean] true if the object is outdated, false otherwise
     def outdated?(obj)
       case obj.type
@@ -31,7 +41,7 @@ module Nanoc3
       end
     end
 
-    # TODO document
+    # TODO remove me (should not be necessary with reason objects)
     def outdatedness_message_for_reason(reason)
       @reason_to_message_mapping ||= {
         :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
@@ -46,7 +56,7 @@ module Nanoc3
       @reason_to_message_mapping[reason]
     end
 
-    # TODO document
+    # TODO remove me (should not be necessary with reason objects)
     def outdatedness_reason_for_item_rep(rep)
       # Outdated if checksums are missing or different
       return :not_enough_data if !checksum_store.checksums_available?(rep.item)
