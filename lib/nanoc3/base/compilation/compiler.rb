@@ -216,10 +216,7 @@ module Nanoc3
     #
     # @api private
     def outdatedness_reason_for(rep)
-      type        = outdatedness_checker.outdatedness_reason_for_item_rep(rep)
-      description = outdatedness_checker.outdatedness_message_for_reason(type)
-
-      type ? { :type => type, :decription => description } : nil
+      outdatedness_checker.outdatedness_reason_for_item_rep(rep)
     end
 
   private
