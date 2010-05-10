@@ -208,7 +208,7 @@ module Nanoc3
     #   layouts returned by the {#layouts} method (comparable to mount
     #   points for filesystems in Unix-ish OSes).
     #
-    # * `:config` (`Hash `) - A hash containing the configuration for this data
+    # * `:config` (`Hash`) - A hash containing the configuration for this data
     #   source. nanoc itself does not use this hash. This is especially
     #   useful for online data sources; for example, a Twitter data source
     #   would need the username of the account from which to fetch tweets.

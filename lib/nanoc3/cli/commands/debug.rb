@@ -98,7 +98,12 @@ module Nanoc3::CLI::Commands
       puts
       layouts.each do |layout|
         puts "layout #{layout.identifier}:"
-        puts "  is #{compiler.outdated?(layout) ? '' : 'not '}outdated"
+        outdatedness_reason = compiler.outdatedness_reason_for(layout)
+        if outdatedness_reason
+          puts "  is outdated: #{outdatedness_reason.message}"
+        else
+          puts "  is not outdated"
+        end
         puts
       end
     end
