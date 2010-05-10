@@ -159,7 +159,7 @@ module Nanoc3
 
   end
 
-  # @deprecated Use {Nanoc3::PluginRegistry.instace} instead
+  # @deprecated Use {Nanoc3::PluginRegistry.instance} instead
   Plugin = PluginRegistry.instance
 
 end

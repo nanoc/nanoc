@@ -24,7 +24,7 @@ module Nanoc3
     end
 
     # Returns the old checksum for the given object. The object must respond
-    # to {#reference} (for example, {Nanoc3::Item#reference},
+    # to `#reference` (for example, {Nanoc3::Item#reference},
     # {Nanoc3::Layout#reference}, {Nanoc3::CodeSnippet#reference}, …).
     #
     # @param [#reference] obj The object for which to fetch the old checksum
@@ -35,7 +35,7 @@ module Nanoc3
     end
 
     # Returns the new checksum for the given object. The object must respond
-    # to {#reference} (for example, {Nanoc3::Item#reference},
+    # to `#reference` (for example, {Nanoc3::Item#reference},
     # {Nanoc3::Layout#reference}, {Nanoc3::CodeSnippet#reference}, …).
     #
     # @param [#reference] obj The object for which to calculate the new checksum
