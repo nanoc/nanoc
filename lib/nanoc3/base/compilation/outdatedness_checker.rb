@@ -17,16 +17,6 @@ module Nanoc3
       @outdatedness_reasons = {}
     end
 
-    # TODO document
-    def load
-      checksum_store.load
-    end
-
-    # TODO document
-    def store
-      checksum_store.store
-    end
-
     # @return [Boolean] true if the object is outdated, false otherwise
     def outdated?(obj)
       case obj.type
