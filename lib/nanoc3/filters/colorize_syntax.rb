@@ -89,7 +89,7 @@ module Nanoc3::Filters
     KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :simon_highlight ]
 
     def highlight(code, language, params={})
-      colorizer = @colorizers[language]
+      colorizer = @colorizers[language.to_sym]
       if KNOWN_COLORIZERS.include?(colorizer)
         send(colorizer, code, language, params[colorizer] || {})
       else
@@ -111,7 +111,10 @@ module Nanoc3::Filters
       IO.popen("pygmentize -l #{language} -f html", "r+") do |io|
         io.write(code)
         io.close_write
-        return io.read
+        highlighted_code = io.read
+
+        doc = Nokogiri::HTML.fragment(highlighted_code)
+        return doc.xpath('./div[@class="highlight"]/pre').inner_html
       end
     end
 
