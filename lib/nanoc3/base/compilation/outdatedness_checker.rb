@@ -41,38 +41,24 @@ module Nanoc3
       end
     end
 
-    # TODO remove me (should not be necessary with reason objects)
-    def outdatedness_message_for_reason(reason)
-      @reason_to_message_mapping ||= {
-        :not_enough_data => 'Not enough data is present to correctly determine whether the item is outdated.',
-        :not_written => 'This item representation has not yet been written to the output directory (but it does have a path).',
-        :source_modified => 'The source file of this item has been modified since the last time this item representation was compiled.',
-        :layouts_outdated => 'The source of one or more layouts has been modified since the last time this item representation was compiled.',
-        :code_outdated => 'The code snippets in the `lib/` directory have been modified since the last time this item representation was compiled.',
-        :config_outdated => 'The site configuration has been modified since the last time this item representation was compiled.',
-        :rules_outdated => 'The rules file has been modified since the last time this item representation was compiled.',
-      }
-
-      @reason_to_message_mapping[reason]
-    end
-
-    # TODO remove me (should not be necessary with reason objects)
+    # TODO document
+    # TODO generalize for items, layouts, …
     def outdatedness_reason_for_item_rep(rep)
       # Outdated if checksums are missing or different
-      return :not_enough_data if !checksum_store.checksums_available?(rep.item)
-      return :source_modified if !checksum_store.checksums_identical?(rep.item)
+      return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(rep.item)
+      return Nanoc3::OutdatednessReasons::SourceModified if !checksum_store.checksums_identical?(rep.item)
 
       # Outdated if compiled file doesn't exist (yet)
-      return :not_written if rep.raw_path && !File.file?(rep.raw_path)
+      return Nanoc3::OutdatednessReasons::NotWritten if rep.raw_path && !File.file?(rep.raw_path)
 
       # Outdated if code snippets outdated
-      return :code_outdated if @site.code_snippets.any? { |cs| checksum_store.object_modified?(cs) }
+      return Nanoc3::OutdatednessReasons::CodeSnippetsModified if @site.code_snippets.any? { |cs| checksum_store.object_modified?(cs) }
 
       # Outdated if configuration outdated
-      return :config_outdated if checksum_store.object_modified?(@site.config)
+      return Nanoc3::OutdatednessReasons::ConfigurationModified if checksum_store.object_modified?(@site.config)
 
       # Outdated if rules outdated
-      return :rules_outdated  if checksum_store.object_modified?(@site.rules_with_reference)
+      return Nanoc3::OutdatednessReasons::RulesModified if checksum_store.object_modified?(@site.rules_with_reference)
 
       # Not outdated
       return nil

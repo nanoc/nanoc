@@ -85,7 +85,7 @@ module Nanoc3::CLI::Commands
           puts "item #{item.identifier}, rep #{rep.name}:"
           outdatedness_reason = compiler.outdatedness_reason_for(rep)
           if outdatedness_reason
-            puts "  is outdated: #{outdatedness_reason[:type]} (#{outdatedness_reason[:description]})"
+            puts "  is outdated: #{outdatedness_reason.message}"
           else
             puts "  is not outdated"
           end
