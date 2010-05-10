@@ -2,16 +2,18 @@
 
 module Nanoc3
 
-  # TODO document
+  # Module that contains all outdatedness reasons.
   module OutdatednessReasons
 
-    # TODO document
+    # A generic outdatedness reason. An outdatedness reason is basically a
+    # descriptive message that explains why a given object is outdated.
     class Generic
 
-      # TODO document
+      # @return [String] A descriptive message for this outdatedness reason
       attr_reader :message
 
-      # TODO document
+      # @param [String] message The descriptive message for this outdatedness
+      #   reason
       def initialize(message)
         @message = message
       end
