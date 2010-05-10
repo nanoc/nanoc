@@ -215,8 +215,8 @@ module Nanoc3
     # TODO document
     #
     # @api private
-    def outdatedness_reason_for(rep)
-      outdatedness_checker.outdatedness_reason_for_item_rep(rep)
+    def outdatedness_reason_for(obj)
+      outdatedness_checker.outdatedness_reason_for(obj)
     end
 
   private
