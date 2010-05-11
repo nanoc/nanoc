@@ -100,7 +100,13 @@ route '/stylesheet/' do
 end
 
 route '*' do
-  item.identifier + 'index.html'
+  if item.binary?
+    # /foo/ -> /foo.ext
+    item.identifier.chop + '.' + item[:extension]
+  else
+    # /foo/ -> /foo/index.html
+    item.identifier + 'index.html'
+  end
 end
 
 layout '*', :erb
