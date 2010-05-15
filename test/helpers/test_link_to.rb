@@ -19,7 +19,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_link_to_with_rep
     # Create rep
     rep = mock
-    rep.expects(:path).returns('/bar/')
+    rep.stubs(:path).returns('/bar/')
 
     # Check
     assert_equal(
@@ -31,7 +31,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_link_to_with_item
     # Create rep
     item = mock
-    item.expects(:path).returns('/bar/')
+    item.stubs(:path).returns('/bar/')
 
     # Check
     assert_equal(
@@ -56,10 +56,19 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     )
   end
 
+  def test_link_to_to_nil_item_or_item_rep
+    obj = Object.new
+    def obj.path ; nil ; end
+
+    assert_raises RuntimeError do
+      link_to("Some Text", obj)
+    end
+  end
+
   def test_link_to_unless_current_current
     # Create item
     @item_rep = mock
-    @item_rep.expects(:path).at_least_once.returns('/foo/')
+    @item_rep.stubs(:path).returns('/foo/')
 
     # Check
     assert_equal(
@@ -73,7 +82,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_link_to_unless_current_not_current
     # Create item
     @item_rep = mock
-    @item_rep.expects(:path).at_least_once.returns('/foo/')
+    @item_rep.stubs(:path).returns('/foo/')
 
     # Check
     assert_equal(
@@ -85,7 +94,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_relative_path_to_with_self
     # Mock item
     @item_rep = mock
-    @item_rep.expects(:path).returns('/foo/bar/baz/')
+    @item_rep.stubs(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -97,7 +106,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_relative_path_to_with_root
     # Mock item
     @item_rep = mock
-    @item_rep.expects(:path).returns('/foo/bar/baz/')
+    @item_rep.stubs(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -109,7 +118,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_relative_path_to_file
     # Mock item
     @item_rep = mock
-    @item_rep.expects(:path).returns('/foo/bar/baz/')
+    @item_rep.stubs(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -121,7 +130,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_relative_path_to_dir
     # Mock item
     @item_rep = mock
-    @item_rep.expects(:path).returns('/foo/bar/baz/')
+    @item_rep.stubs(:path).returns('/foo/bar/baz/')
 
     # Test
     assert_equal(
@@ -133,11 +142,11 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
   def test_relative_path_to_rep
     # Mock self
     @item_rep = mock
-    @item_rep.expects(:path).returns('/foo/bar/baz/')
+    @item_rep.stubs(:path).returns('/foo/bar/baz/')
 
     # Mock other
     other_item_rep = mock
-    other_item_rep.expects(:path).returns('/foo/quux/')
+    other_item_rep.stubs(:path).returns('/foo/quux/')
 
     # Test
     assert_equal(
@@ -146,20 +155,51 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     )
   end
 
+
   def test_relative_path_to_item
     # Mock self
     @item_rep = mock
-    @item_rep.expects(:path).returns('/foo/bar/baz/')
+    @item_rep.stubs(:path).returns('/foo/bar/baz/')
 
     # Mock other
     other_item = mock
-    other_item.expects(:path).returns('/foo/quux/')
+    other_item.stubs(:path).returns('/foo/quux/')
 
     # Test
     assert_equal(
       '../../quux/',
       relative_path_to(other_item)
     )
+  end
+
+  def test_relative_path_to_to_nil
+    # Mock self
+    @item_rep = mock
+    @item_rep.stubs(:path).returns(nil)
+
+    # Mock other
+    other_item_rep = mock
+    other_item_rep.stubs(:path).returns('/foo/quux/')
+
+    # Test
+    assert_raises RuntimeError do
+      relative_path_to(other_item_rep)
+    end
+  end
+
+  def test_relative_path_to_from_nil
+    # Mock self
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/foo/quux/')
+
+    # Mock other
+    other_item_rep = mock
+    other_item_rep.stubs(:path).returns(nil)
+
+    # Test
+    assert_raises RuntimeError do
+      relative_path_to(other_item_rep)
+    end
   end
 
   def test_examples_link_to
