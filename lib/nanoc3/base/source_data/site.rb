@@ -120,7 +120,7 @@ module Nanoc3
 
       # Preprocess
       setup_child_parent_links
-      preprocessor_context.instance_eval(&compiler.preprocessor) if compiler.preprocessor
+      compiler.preprocess
       link_everything_to_site
       setup_child_parent_links
       build_reps
@@ -397,18 +397,6 @@ module Nanoc3
 
       # Merge data sources with default data source config
       @config[:data_sources].map! { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
-    end
-
-    # Returns a preprocessor context, creating one if none exists yet.
-    #
-    # TODO move to Nanoc3::Compiler
-    def preprocessor_context
-      @preprocessor_context ||= Nanoc3::Context.new({
-        :site    => self,
-        :config  => self.config,
-        :items   => self.items,
-        :layouts => self.layouts
-      })
     end
 
   end

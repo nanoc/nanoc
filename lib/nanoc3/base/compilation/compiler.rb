@@ -230,6 +230,13 @@ module Nanoc3
       @dsl ||= Nanoc3::CompilerDSL.new(self)
     end
 
+    # Runs the preprocessor.
+    #
+    # @api private
+    def preprocess
+      preprocessor_context.instance_eval(&preprocessor) if preprocessor
+    end
+
   private
 
     def items
@@ -340,6 +347,16 @@ module Nanoc3
           dependency_tracker.forget_dependencies_for(i)
         end
       end
+    end
+
+    # Returns a preprocessor context, creating one if none exists yet.
+    def preprocessor_context
+      @preprocessor_context ||= Nanoc3::Context.new({
+        :site    => @site,
+        :config  => @site.config,
+        :items   => @site.items,
+        :layouts => @site.layouts
+      })
     end
 
     # @return [CompiledContentCache] The compiled content cache
