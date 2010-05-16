@@ -40,8 +40,9 @@ module Nanoc3
 
       @objects = objects
 
-      @graph            = Nanoc3::DirectedGraph.new([ nil ] + @objects)
+      @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
       @previous_objects = []
+      @objects_outdated_due_to_dependencies = Set.new
     end
 
     # Starts listening for dependency messages (`:visit_started` and
@@ -73,6 +74,18 @@ module Nanoc3
       # Unregister
       Nanoc3::NotificationCenter.remove(:visit_started, self)
       Nanoc3::NotificationCenter.remove(:visit_ended,   self)
+    end
+
+    # Checks whether the given object is outdated due to dependencies, i.e.
+    # check whether there are other objects that are outdated that cause this
+    # object to be outdated.
+    #
+    # @param [Nanoc3::Item, Nanoc3::Layout] obj The object to check
+    #
+    # @return [Boolean] true if the given object is outdated due to
+    #   dependencies, false if not.
+    def outdated_due_to_dependencies?(obj)
+      @objects_outdated_due_to_dependencies.include?(obj)
     end
 
     # Returns the direct dependencies for the given object.
@@ -131,11 +144,11 @@ module Nanoc3
     # @return [void]
     def propagate_outdatedness
       # Unmark everything
-      @objects.each { |o| o.outdated_due_to_dependencies = false }
+      @objects_outdated_due_to_dependencies.clear
 
       # Mark new objects as outdated
       added_objects = @objects - @previous_objects
-      added_objects.each { |o| o.outdated_due_to_dependencies = true }
+      @objects_outdated_due_to_dependencies.merge(added_objects)
 
       # Mark successors of outdated objects as outdated
       require 'set'
@@ -148,7 +161,7 @@ module Nanoc3
           next if seen.include?(successor)
           seen << successor
 
-          successor.outdated_due_to_dependencies = true
+          @objects_outdated_due_to_dependencies << successor
           unprocessed << successor
         end
       end

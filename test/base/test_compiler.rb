@@ -617,33 +617,33 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_forget_dependencies_if_outdated
     # Mock items
-    items = [ mock, mock, mock, mock ]
-    reps  = [ mock, mock, mock, mock ]
-    reps[0].stubs(:outdated?).returns(false)
-    items[0].stubs(:outdated_due_to_dependencies?).returns(false)
-    reps[1].stubs(:outdated?).returns(true)
-    items[1].stubs(:outdated_due_to_dependencies?).returns(false)
-    reps[2].stubs(:outdated?).returns(false)
-    items[2].stubs(:outdated_due_to_dependencies?).returns(true)
-    reps[3].stubs(:outdated?).returns(true)
-    items[3].stubs(:outdated_due_to_dependencies?).returns(true)
+    items = (0..3).map { |i| mock("item #{i}") }
+    reps  = (0..3).map { |i| mock("rep #{i}") }
     (0..4).each { |i| items[i].stubs(:reps).returns([ reps[i] ]) }
     items.each { |i| i.stubs(:type).returns(:item) }
     reps.each  { |i| i.stubs(:type).returns(:item_rep) }
 
     # Mock dependency tracker
-    dependency_tracker = mock
+    dependency_tracker = Object.new
     dependency_tracker.expects(:forget_dependencies_for).times(3)
+    dependency_tracker.instance_eval do
+      @objs = [ items[0], items[1], items[2], items[3] ]
+    end
+    def dependency_tracker.outdated_due_to_dependencies?(obj)
+      case obj
+      when @objs[0], @objs[1]
+        false
+      when @objs[2], @objs[3]
+        true
+      else
+        raise RuntimeError, "The dependency tracker did not expect #{obj.inspect}"
+      end
+    end
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.instance_eval do
-      @objs = [
-        reps[0],
-        reps[1],
-        reps[2],
-        reps[3]
-      ]
+      @objs = [ reps[0], reps[1], reps[2], reps[3] ]
     end
     def compiler.outdated?(obj)
       case obj
@@ -652,7 +652,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       when @objs[1], @objs[3]
         true
       else
-        raise RuntimeError, "I did not expect #{obj.inspect}"
+        raise RuntimeError, "The compiler did not expect #{obj.inspect}"
       end
     end
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)

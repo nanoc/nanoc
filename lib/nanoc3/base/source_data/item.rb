@@ -47,13 +47,6 @@ module Nanoc3
     # @return [Array<Nanoc3::Item>] The child items of this item
     attr_accessor :children
 
-    # @return [Boolean] Whether or not this item is outdated because of its
-    #   dependencies are outdated
-    #
-    # @api private
-    attr_accessor :outdated_due_to_dependencies
-    alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
-
     # Creates a new item with the given content or filename, attributes and
     # identifier.
     #

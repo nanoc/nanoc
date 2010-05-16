@@ -281,8 +281,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert item_0.outdated_due_to_dependencies?
-    assert item_1.outdated_due_to_dependencies?
+    assert tracker.outdated_due_to_dependencies?(item_0)
+    assert tracker.outdated_due_to_dependencies?(item_1)
   end
 
   def test_propagate_outdatedness_simple
@@ -326,9 +326,9 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Check outdatedness
     refute compiler.outdated?(objects[0])
-    assert objects[0].outdated_due_to_dependencies?
+    assert tracker.outdated_due_to_dependencies?(objects[0])
     assert compiler.outdated?(objects[1])
-    refute objects[1].outdated_due_to_dependencies?
+    refute tracker.outdated_due_to_dependencies?(objects[1])
   end
 
   def test_propagate_outdatedness_chained
@@ -374,12 +374,12 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !compiler.outdated?(objects[0])
-    assert objects[0].outdated_due_to_dependencies?
-    assert !compiler.outdated?(objects[1])
-    assert objects[1].outdated_due_to_dependencies?
+    refute compiler.outdated?(objects[0])
+    assert tracker.outdated_due_to_dependencies?(objects[0])
+    refute compiler.outdated?(objects[1])
+    assert tracker.outdated_due_to_dependencies?(objects[1])
     assert compiler.outdated?(objects[2])
-    assert !objects[2].outdated_due_to_dependencies?
+    refute tracker.outdated_due_to_dependencies?(objects[2])
   end
 
   def test_propagate_outdatedness_with_removed_objects_forward
@@ -404,8 +404,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !compiler.outdated?(object)
-    assert object.outdated_due_to_dependencies?
+    refute compiler.outdated?(object)
+    assert tracker.outdated_due_to_dependencies?(object)
   end
 
   def test_propagate_outdatedness_with_removed_objects_backward
@@ -430,8 +430,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !compiler.outdated?(object)
-    assert !object.outdated_due_to_dependencies?
+    refute compiler.outdated?(object)
+    refute tracker.outdated_due_to_dependencies?(object)
   end
 
   def test_propagate_outdatedness_with_added_objects
@@ -454,8 +454,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.propagate_outdatedness
 
     # Check outdatedness
-    assert !object_0.outdated_due_to_dependencies?
-    assert object_1.outdated_due_to_dependencies?
+    refute tracker.outdated_due_to_dependencies?(object_0)
+    assert tracker.outdated_due_to_dependencies?(object_1)
   end
 
   def test_forget_dependencies_for
