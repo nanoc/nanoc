@@ -353,11 +353,10 @@ module Nanoc3
     # This method is supposed to be called only in a compilation rule block
     # (see {Nanoc3::CompilerDSL#compile}).
     #
-    # @param [String] layout_identifier The identifier of the layout the item
-    #   should be laid out with
-    #
     # @return [void]
-    def layout(layout_identifier)
+    #
+    # TODO update documentation
+    def layout(layout, filter_name, filter_args)
       # Check whether item can be laid out
       raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
 
@@ -367,8 +366,9 @@ module Nanoc3
       end
 
       # Create filter
-      layout = layout_with_identifier(layout_identifier)
-      filter, filter_name, filter_args = filter_for_layout(layout)
+      klass = filter_named(filter_name)
+      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if klass.nil?
+      filter = klass.new(assigns.merge({ :layout => layout }))
 
       # Visit
       Nanoc3::NotificationCenter.post(:visit_started, layout)
@@ -424,28 +424,6 @@ module Nanoc3
 
     def filter_named(name)
       Nanoc3::Filter.named(name)
-    end
-
-    def layout_with_identifier(layout_identifier)
-      layout ||= @item.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
-      raise Nanoc3::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
-      layout
-    end
-
-    def filter_for_layout(layout)
-      # Get filter name and args
-      filter_name, filter_args  = @item.site.compiler.filter_for_layout(layout)
-      raise Nanoc3::Errors::CannotDetermineFilter.new(layout_identifier) if filter_name.nil?
-
-      # Get filter class
-      filter_class = Nanoc3::Filter.named(filter_name)
-      raise Nanoc3::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
-
-      # Create filter
-      filter = filter_class.new(assigns.merge({ :layout => layout }))
-
-      # Done
-      [ filter, filter_name, filter_args ]
     end
 
     def generate_diff

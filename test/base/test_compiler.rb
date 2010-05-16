@@ -191,21 +191,19 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     rule = Nanoc3::Rule.new(/blah/, :meh, rule_block)
 
     # Create layout
-    layout = Nanoc3::Layout.new('head <%= yield %> foot', {}, '/')
-    rep.expects(:layout_with_identifier).returns(layout)
-    filter = Nanoc3::PluginRegistry.instance.find(Nanoc3::Filter, :erb)
-    rep.expects(:filter_for_layout).with(layout).returns(filter.new({ :content => 'middle' }))
+    layout = Nanoc3::Layout.new('head <%= yield %> foot', {}, '/blah/')
 
     # Create site
     site = mock
     site.stubs(:config).returns({})
     site.stubs(:items).returns([])
-    site.stubs(:layouts).returns([])
+    site.stubs(:layouts).returns([ layout ])
     item.site = site
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
     compiler.expects(:compilation_rule_for).with(rep).returns(rule)
+    compiler.layout_filter_mapping[%r{^/blah/$}] = [ :erb, {} ]
     site.stubs(:compiler).returns(compiler)
 
     # Compile
@@ -218,8 +216,8 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert File.file?('last.txt')
     assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('raw.txt')
     assert_equal '1 2 <%= 3 %>',                  File.read('pre.txt')
-    assert_equal 'head middle foot',              File.read('post.txt')
-    assert_equal 'head middle foot',              File.read('last.txt')
+    assert_equal 'head 1 2 3 foot',               File.read('post.txt')
+    assert_equal 'head 1 2 3 foot',               File.read('last.txt')
   end
 
   def test_compile_reps_with_no_reps

@@ -115,27 +115,13 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_layout
     # Mock layout
-    layout = mock
-    layout.stubs(:identifier).returns('/somelayout/')
-    layout.stubs(:raw_content).returns(%[<%= "blah" %>])
-
-    # Mock compiler
-    compiler = mock
-    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
-
-    # Mock site
-    site = mock
-    site.stubs(:items).returns([])
-    site.stubs(:config).returns([])
-    site.stubs(:layouts).returns([ layout ])
-    site.stubs(:compiler).returns(compiler)
+    layout = Nanoc3::Layout.new(%[<%= "blah" %>], {}, '/somelayout/')
 
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
       :binary => false
     )
-    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -146,7 +132,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Layout
     item_rep.assigns = {}
-    item_rep.layout('/somelayout/')
+    item_rep.layout(layout, :erb, [])
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
 
@@ -341,38 +327,23 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # Mock layout
     layout = Nanoc3::Layout.new(%[<%= "blah" %> <%= yield %>], {}, '/somelayout/')
 
-    # Mock compiler
-    stack = mock_and_stub(:pop => layout)
-    stack.stubs(:push).returns(stack)
-    compiler = mock_and_stub(
-      :stack => stack,
-      :filter_for_layout => [ :erb, {} ]
-    )
-
-    # Mock site
-    site = mock_and_stub(
-      :items    => [],
-      :config   => [],
-      :layouts  => [ layout ],
-      :compiler => compiler
-    )
-
+    # Create item and item rep
     item = create_binary_item
-    item.site = site
-
     rep = create_rep_for(item, '/foo/')
     rep.assigns = { :content => 'meh' }
-    def rep.filter_named(name)
-      @filter ||= Class.new(::Nanoc3::Filter) do
-        type :binary => :text
-        def run(content, params={})
-          content + ' textified'
-        end
+
+    # Create filter
+    Class.new(::Nanoc3::Filter) do
+      type       :binary => :text
+      identifier :binary_to_text
+      def run(content, params={})
+        content + ' textified'
       end
     end
 
+    # Run and check
     rep.filter(:binary_to_text)
-    rep.layout('/somelayout/')
+    rep.layout(layout, :erb, {})
     assert_equal('blah meh', rep.instance_eval { @content[:last] })
   end
 
