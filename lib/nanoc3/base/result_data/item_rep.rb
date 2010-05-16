@@ -8,6 +8,204 @@ module Nanoc3
   # a different set of filters with a different layout.
   class ItemRep
 
+    # Contains all deprecated methods. Mixed into {Nanoc3::ItemRep}.
+    module Deprecated
+
+      # @deprecated Modify the {#raw_paths} attribute instead
+      def raw_path=(raw_path)
+        raw_paths[:last] = raw_path
+      end
+
+      # @deprecated Modify the {#paths} attribute instead
+      def path=(path)
+        paths[:last] = path
+      end
+
+      # @deprecated Use {Nanoc3::ItemRep#compiled_content} instead.
+      def content_at_snapshot(snapshot=:pre)
+        compiled_content(:snapshot => snapshot)
+      end
+
+      # @deprecated
+      def created
+        raise NotImplementedError, "Nanoc3::ItemRep#created is no longer implemented"
+      end
+
+      # @deprecated
+      def created?
+        raise NotImplementedError, "Nanoc3::ItemRep#created? is no longer implemented"
+      end
+
+      # @deprecated
+      def modified
+        raise NotImplementedError, "Nanoc3::ItemRep#modified is no longer implemented"
+      end
+
+      # @deprecated
+      def modified?
+        raise NotImplementedError, "Nanoc3::ItemRep#modified? is no longer implemented"
+      end
+
+      # @deprecated
+      def written
+        raise NotImplementedError, "Nanoc3::ItemRep#written is no longer implemented"
+      end
+
+      # @deprecated
+      def written?
+        raise NotImplementedError, "Nanoc3::ItemRep#written? is no longer implemented"
+      end
+
+    end
+
+    # Contains all private methods. Mixed into {Nanoc3::ItemRep}.
+    module Private
+
+      # @return [Boolean] true if this representation has already been compiled
+      #   during the current or last compilation session; false otherwise
+      #
+      # @api private
+      attr_accessor :compiled
+      alias_method :compiled?, :compiled
+
+      # @return [Hash<Symbol,String>] A hash containing the raw paths (paths
+      #   including the path to the output directory and the filename) for all
+      #   snapshots. The keys correspond with the snapshot names, and the values
+      #   with the path.
+      #
+      # @api private
+      attr_accessor :raw_paths
+
+      # @return [Hash<Symbol,String>] A hash containing the paths for all
+      #   snapshots. The keys correspond with the snapshot names, and the values
+      #   with the path.
+      #
+      # @api private
+      attr_accessor :paths
+
+      # @return [Hash<Symbol,String>] A hash containing the content at all
+      #   snapshots. The keys correspond with the snapshot names, and the
+      #   values with the content.
+      #
+      # @api private
+      attr_accessor :content
+
+      # @api private
+      #
+      # @return [Hash] The assignments that should be available when compiling
+      #   the content.
+      def assigns
+        if self.binary?
+          content_or_filename_assigns = { :filename => @filenames[:last] }
+        else
+          content_or_filename_assigns = { :content => @content[:last] }
+        end
+
+        content_or_filename_assigns.merge({
+          :item       => self.item,
+          :item_rep   => self,
+          :items      => self.item.site.items,
+          :layouts    => self.item.site.layouts,
+          :config     => self.item.site.config,
+          :site       => self.item.site
+        })
+      end
+
+      # Writes the item rep's compiled content to the rep's output file.
+      #
+      # This method should not be called directly, even in a compilation block;
+      # the compiler is responsible for calling this method.
+      #
+      # @api private
+      #
+      # @param [String, nil] raw_path The raw path to write the compiled rep to.
+      #   If nil, the default raw path will be used.
+      #
+      # @return [void]
+      def write(snapshot=:last)
+        # Get raw path
+        raw_path = self.raw_path(:snapshot => snapshot)
+        return if raw_path.nil?
+
+        # Create parent directory
+        FileUtils.mkdir_p(File.dirname(raw_path))
+
+        # Check if file will be created
+        is_created = !File.file?(raw_path)
+
+        # Calculate characteristics of old content
+        if File.file?(raw_path)
+          hash_old = Nanoc3::Checksummer.checksum_for_file(raw_path)
+          size_old = File.size(raw_path)
+        end
+
+        if self.binary?
+          # Copy
+          FileUtils.cp(@filenames[:last], raw_path)
+        else
+          # Write
+          File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
+
+          # Generate diff
+          generate_diff
+        end
+
+        # Check if file was modified
+        size_new = File.size(raw_path)
+        hash_new = Nanoc3::Checksummer.checksum_for_file(raw_path) if size_old == size_new
+        is_modified = (size_old != size_new || hash_old != hash_new)
+
+        # Notify
+        Nanoc3::NotificationCenter.post(
+          :rep_written,
+          self, raw_path, is_created, is_modified
+        )
+      end
+
+      # Resets the compilation progress for this item representation. This is
+      # necessary when an unmet dependency is detected during compilation.
+      # This method should probably not be called directly.
+      #
+      # @api private
+      #
+      # @return [void]
+      def forget_progress
+        initialize_content
+      end
+
+      # Creates and returns a diff between the compiled content before the
+      # current compilation session and the content compiled in the current
+      # compilation session.
+      #
+      # @api private
+      #
+      # @return [String, nil] The difference between the old and new compiled
+      #   content in `diff(1)` format, or nil if there is no previous compiled
+      #   content
+      def diff
+        if self.binary?
+          nil
+        else
+           @diff_thread.join if @diff_thread
+          @diff
+        end
+      end
+
+      # Returns the type of this object. Will always return `:item_rep`, because
+      # this is an item rep. For layouts, this method returns `:layout`.
+      #
+      # @api private
+      #
+      # @return [Symbol] :item_rep
+      def type
+        :item_rep
+      end
+
+    end
+
+    include Deprecated
+    include Private
+
     # @return [Nanoc3::Item] The item to which this rep belongs
     attr_reader   :item
 
@@ -17,35 +215,6 @@ module Nanoc3
     # @return [Boolean] true if this rep is currently binary; false otherwise
     attr_reader :binary
     alias_method :binary?, :binary
-
-    # @return [Boolean] true if this representation has already been compiled
-    #   during the current or last compilation session; false otherwise
-    #
-    # @api private
-    attr_accessor :compiled
-    alias_method :compiled?, :compiled
-
-    # @return [Hash<Symbol,String>] A hash containing the raw paths (paths
-    #   including the path to the output directory and the filename) for all
-    #   snapshots. The keys correspond with the snapshot names, and the values
-    #   with the path.
-    #
-    # @api private
-    attr_accessor :raw_paths
-
-    # @return [Hash<Symbol,String>] A hash containing the paths for all
-    #   snapshots. The keys correspond with the snapshot names, and the values
-    #   with the path.
-    #
-    # @api private
-    attr_accessor :paths
-
-    # @return [Hash<Symbol,String>] A hash containing the content at all
-    #   snapshots. The keys correspond with the snapshot names, and the
-    #   values with the content.
-    #
-    # @api private
-    attr_accessor :content
 
     # Creates a new item representation for the given item.
     #
@@ -69,27 +238,6 @@ module Nanoc3
 
       # Reset flags
       @compiled = false
-    end
-
-    # @api private
-    #
-    # @return [Hash] The assignments that should be available when compiling
-    #   the content.
-    def assigns
-      if self.binary?
-        content_or_filename_assigns = { :filename => @filenames[:last] }
-      else
-        content_or_filename_assigns = { :content => @content[:last] }
-      end
-
-      content_or_filename_assigns.merge({
-        :item       => self.item,
-        :item_rep   => self,
-        :items      => self.item.site.items,
-        :layouts    => self.item.site.layouts,
-        :config     => self.item.site.config,
-        :site       => self.item.site
-      })
     end
 
     # Returns the compiled content from a given snapshot.
@@ -158,32 +306,6 @@ module Nanoc3
     def path(params={})
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]
-    end
-
-    # @deprecated Modify the {#raw_paths} attribute instead
-    def raw_path=(raw_path)
-      raw_paths[:last] = raw_path
-    end
-
-    # @deprecated Modify the {#paths} attribute instead
-    def path=(path)
-      paths[:last] = path
-    end
-
-    # @deprecated Use {Nanoc3::ItemRep#compiled_content} instead.
-    def content_at_snapshot(snapshot=:pre)
-      compiled_content(:snapshot => snapshot)
-    end
-
-    # Resets the compilation progress for this item representation. This is
-    # necessary when an unmet dependency is detected during compilation.
-    # This method should probably not be called directly.
-    #
-    # @api private
-    #
-    # @return [void]
-    def forget_progress
-      initialize_content
     end
 
     # Runs the item content through the given filter with the given arguments.
@@ -294,113 +416,6 @@ module Nanoc3
 
       # Write
       write(snapshot_name) if params[:final]
-    end
-
-    # Writes the item rep's compiled content to the rep's output file.
-    #
-    # This method should not be called directly, even in a compilation block;
-    # the compiler is responsible for calling this method.
-    #
-    # @param [String, nil] raw_path The raw path to write the compiled rep to.
-    #   If nil, the default raw path will be used.
-    #
-    # @return [void]
-    def write(snapshot=:last)
-      # Get raw path
-      raw_path = self.raw_path(:snapshot => snapshot)
-      return if raw_path.nil?
-
-      # Create parent directory
-      FileUtils.mkdir_p(File.dirname(raw_path))
-
-      # Check if file will be created
-      is_created = !File.file?(raw_path)
-
-      # Calculate characteristics of old content
-      if File.file?(raw_path)
-        hash_old = Nanoc3::Checksummer.checksum_for_file(raw_path)
-        size_old = File.size(raw_path)
-      end
-
-      if self.binary?
-        # Copy
-        FileUtils.cp(@filenames[:last], raw_path)
-      else
-        # Write
-        File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
-
-        # Generate diff
-        generate_diff
-      end
-
-      # Check if file was modified
-      size_new = File.size(raw_path)
-      hash_new = Nanoc3::Checksummer.checksum_for_file(raw_path) if size_old == size_new
-      is_modified = (size_old != size_new || hash_old != hash_new)
-
-      # Notify
-      Nanoc3::NotificationCenter.post(
-        :rep_written,
-        self, raw_path, is_created, is_modified
-      )
-    end
-
-    # Creates and returns a diff between the compiled content before the
-    # current compilation session and the content compiled in the current
-    # compilation session.
-    #
-    # @api private
-    #
-    # @return [String, nil] The difference between the old and new compiled
-    #   content in `diff(1)` format, or nil if there is no previous compiled
-    #   content
-    def diff
-      if self.binary?
-        nil
-      else
-         @diff_thread.join if @diff_thread
-        @diff
-      end
-    end
-
-    # Returns the type of this object. Will always return `:item_rep`, because
-    # this is an item rep. For layouts, this method returns `:layout`.
-    #
-    # @api private
-    #
-    # @return [Symbol] :item_rep
-    def type
-      :item_rep
-    end
-
-    # @deprecated
-    def created
-      raise NotImplementedError, "Nanoc3::ItemRep#created is no longer implemented"
-    end
-
-    # @deprecated
-    def created?
-      raise NotImplementedError, "Nanoc3::ItemRep#created? is no longer implemented"
-    end
-
-    # @deprecated
-    def modified
-      raise NotImplementedError, "Nanoc3::ItemRep#modified is no longer implemented"
-    end
-
-    # @deprecated
-    def modified?
-      raise NotImplementedError, "Nanoc3::ItemRep#modified? is no longer implemented"
-    end
-
-    # @deprecated
-    def written
-      raise NotImplementedError, "Nanoc3::ItemRep#written is no longer implemented"
-    end
-
-    # @deprecated
-    def written?
-      raise NotImplementedError, "Nanoc3::ItemRep#written? is no longer implemented"
     end
 
     def inspect
