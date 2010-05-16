@@ -241,7 +241,7 @@ module Nanoc3
       outdated_reps = Set.new
       skipped_reps  = Set.new
       reps.each do |rep|
-        target = (outdated?(rep) || rep.item.outdated_due_to_dependencies?) ? outdated_reps : skipped_reps
+        target = (outdated?(rep) || dependency_tracker.outdated_due_to_dependencies?(rep.item)) ? outdated_reps : skipped_reps
         target.add(rep)
       end
 
@@ -294,7 +294,7 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:processing_started,  rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      if !outdated?(rep) && !rep.item.outdated_due_to_dependencies && compiled_content_cache[rep]
+      if !outdated?(rep) && !dependency_tracker.outdated_due_to_dependencies?(rep.item) && compiled_content_cache[rep]
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
@@ -325,7 +325,7 @@ module Nanoc3
     # @return [void]
     def forget_dependencies_if_outdated(items)
       items.each do |i|
-        if i.reps.any? { |r| outdated?(r) } || i.outdated_due_to_dependencies?
+        if i.reps.any? { |r| outdated?(r) } || dependency_tracker.outdated_due_to_dependencies?(i)
           dependency_tracker.forget_dependencies_for(i)
         end
       end

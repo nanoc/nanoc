@@ -19,13 +19,6 @@ module Nanoc3
     # @return [Time] The time where this layout was last modified
     attr_reader   :mtime
 
-    # @return [Boolean] Whether or not this layout is outdated because of its
-    #   dependencies are outdated
-    #
-    # @api private
-    attr_accessor :outdated_due_to_dependencies
-    alias_method :outdated_due_to_dependencies?, :outdated_due_to_dependencies
-
     # Creates a new layout.
     #
     # @param [String] raw_content The raw content of this layout.
