@@ -106,6 +106,7 @@ module Nanoc3::Extra::Deployers
     # Runs the given shell command. This is a simple wrapper around Kernel#system.
     def run_shell_cmd(args)
       system(*args)
+      raise "command exited with a nonzero status code #{$?.exitstatus} (command: #{args.join(' ')})" if !$?.success?
     end
 
   end
