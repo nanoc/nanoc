@@ -16,24 +16,25 @@ module Nanoc3
   # @api private
   class RuleContext < Context
 
-    # Creates a new rule context for the given item representation.
+    # @option params [Nanoc3::ItemRep] :rep The item representation that will
+    #   be processed in this rule context
     #
-    # @param [Nanoc3::ItemRep] rep The item representation for which to create
-    #   a new rule context.
-    def initialize(rep)
-      item    = rep.item
-      site    = item.site
-      config  = site.config
-      items   = site.items
-      layouts = site.layouts
+    # @option params [Nanoc3::Compiler] :compiler The compiler that is being
+    #   used to compile the site
+    #
+    # @raise [ArgumentError] if the `:rep` or the `:compiler` option is
+    #   missing
+    def initialize(params={})
+      rep      = params[:rep]      or raise ArgumentError, "Required :rep option is missing"
+      compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
 
       super({
         :rep     => rep,
-        :item    => item,
-        :site    => site,
-        :config  => config,
-        :items   => items,
-        :layouts => layouts
+        :item    => rep.item,
+        :site    => compiler.site,
+        :config  => compiler.site.config,
+        :items   => compiler.site.items,
+        :layouts => compiler.site.layouts
       })
     end
 

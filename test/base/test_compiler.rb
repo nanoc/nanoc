@@ -142,7 +142,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compilation_rule = mock
-    compilation_rule.expects(:apply_to).with(rep)
+    compilation_rule.expects(:apply_to).with(rep, :compiler => compiler)
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
 
     # Compile
@@ -159,7 +159,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compilation_rule = mock
-    compilation_rule.expects(:apply_to).with(rep).raises(Nanoc3::Errors::UnmetDependency, rep)
+    compilation_rule.expects(:apply_to).with(rep, :compiler => compiler).raises(Nanoc3::Errors::UnmetDependency, rep)
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
 
     # Compile

@@ -19,9 +19,10 @@ class Nanoc3::RuleContextTest < MiniTest::Unit::TestCase
     item.stubs(:site).returns(site)
     rep = mock
     rep.stubs(:item).returns(item)
+    compiler = Nanoc3::Compiler.new(site)
 
     # Create context
-    @rule_context = Nanoc3::RuleContext.new(rep)
+    @rule_context = Nanoc3::RuleContext.new(:rep => rep, :compiler => compiler)
 
     # Check
     assert_equal rep,     @rule_context.rep
@@ -51,8 +52,11 @@ class Nanoc3::RuleContextTest < MiniTest::Unit::TestCase
     rep.expects(:layout).with('foo')
     rep.expects(:snapshot).with('awesome')
 
+    # Mock compiler
+    compiler = Nanoc3::Compiler.new(site)
+
     # Create context
-    @rule_context = Nanoc3::RuleContext.new(rep)
+    @rule_context = Nanoc3::RuleContext.new(:rep => rep, :compiler => compiler)
 
     # Check
     rep.filter   :foo, :bar => 'baz'

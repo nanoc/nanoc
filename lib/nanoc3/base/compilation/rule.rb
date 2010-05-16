@@ -55,9 +55,15 @@ module Nanoc3
     # @param [Nanoc3::ItemRep] rep The item representation where this rule
     #   should be applied to
     #
+    # @option params [Nanoc3::Compiler] :compiler The compiler
+    #
+    # @raise [ArgumentError] if no compiler is passed
+    #
     # @return [void]
-    def apply_to(rep)
-      Nanoc3::RuleContext.new(rep).instance_eval &@block
+    def apply_to(rep, params={})
+      compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
+      rep = Nanoc3::ItemRepProxy.new(rep, compiler)
+      Nanoc3::RuleContext.new(:rep => rep, :compiler => compiler).instance_eval &@block
     end
 
   end
