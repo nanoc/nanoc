@@ -28,8 +28,6 @@ module Nanoc3
     #
     # @option params [Time, nil] :mtime (nil) The time when this code snippet
     #   was last modified
-    #
-    # FIXME maybe change the arguments back to what they were?
     def initialize(data, filename, params=nil)
       # Parse params
       params ||= {}
