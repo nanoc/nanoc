@@ -237,6 +237,55 @@ module Nanoc3
       preprocessor_context.instance_eval(&preprocessor) if preprocessor
     end
 
+    # Creates the representations of all items as defined by the compilation
+    # rules.
+    #
+    # @api private
+    def build_reps
+      @site.items.each do |item|
+        # Find matching rules
+        matching_rules = item_compilation_rules.select { |r| r.applicable_to?(item) }
+        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
+
+        # Create reps
+        rep_names = matching_rules.map { |r| r.rep_name }.uniq
+        rep_names.each do |rep_name|
+          item.reps << ItemRep.new(item, rep_name)
+        end
+      end
+    end
+
+    # Determines the paths of all item representations.
+    #
+    # @api private
+    def route_reps
+      reps = @site.items.map { |i| i.reps }.flatten
+      reps.each do |rep|
+        # Find matching rules
+        rules = routing_rules_for(rep)
+        raise Nanoc3::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
+
+        rules.each_pair do |snapshot, rule|
+          # Get basic path by applying matching rule
+          basic_path = rule.apply_to(rep)
+          next if basic_path.nil?
+
+          # Get raw path by prepending output directory
+          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path
+
+          # Get normal path by stripping index filename
+          rep.paths[snapshot] = basic_path
+          @site.config[:index_filenames].each do |index_filename|
+            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
+              # Strip and stop
+              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
+              break
+            end
+          end
+        end
+      end
+    end
+
   private
 
     def items
