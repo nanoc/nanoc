@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors = 'Denis Defreyne'
   s.email   = 'denis.defreyne@stoneship.org'
 
-  s.files              = Dir['[A-Z]*'] + Dir['lib/**/*']
+  s.files              = Dir['[A-Z]*'] + Dir['lib/**/*'] + Dir['doc/yardoc_templates/**/*'] + [ 'nanoc3.gemspec' ]
   s.default_executable = 'nanoc3'
   s.executables        = [ 'nanoc3' ]
   s.require_paths      = [ 'lib' ]
