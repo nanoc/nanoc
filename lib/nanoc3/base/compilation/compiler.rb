@@ -223,6 +223,13 @@ module Nanoc3
       outdatedness_checker.outdatedness_reason_for(obj)
     end
 
+    # Returns the Nanoc3::CompilerDSL that should be used for this site.
+    #
+    # @api private
+    def dsl
+      @dsl ||= Nanoc3::CompilerDSL.new(self)
+    end
+
   private
 
     def items

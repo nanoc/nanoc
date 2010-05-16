@@ -246,13 +246,6 @@ module Nanoc3
 
   private
 
-    # Returns the Nanoc3::CompilerDSL that should be used for this site.
-    #
-    # TODO move to Nanoc3::Compiler
-    def dsl
-      @dsl ||= Nanoc3::CompilerDSL.new(compiler)
-    end
-
     # Loads this site’s code and executes it.
     def load_code_snippets(force=false)
       # Don't load code snippets twice
@@ -284,7 +277,7 @@ module Nanoc3
       @rules = File.read(rules_filename)
 
       # Load DSL
-      dsl.instance_eval(@rules, "./#{rules_filename}")
+      compiler.dsl.instance_eval(@rules, "./#{rules_filename}")
     end
 
     # Loads this site’s items, sets up item child-parent relationships and

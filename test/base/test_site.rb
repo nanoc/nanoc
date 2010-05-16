@@ -38,7 +38,7 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
     # Create site
     site = Nanoc3::Site.new({})
-    site.expects(:dsl).returns(dsl)
+    site.compiler.expects(:dsl).returns(dsl)
 
     # Create rules file
     File.open('Rules', 'w') do |io|
@@ -46,31 +46,6 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 compile '*' do
   # ... do nothing ...
 end
-EOF
-    end
-
-    # Load rules
-    site.send :load_rules
-  end
-
-  def test_load_rules_with_broken_rules_file
-    # Mock DSL
-    dsl = mock
-    dsl.expects(:some_function_that_doesn_really_exist)
-    dsl.expects(:weird_param_number_one)
-    dsl.expects(:mysterious_param_number_two)
-
-    # Create site
-    site = Nanoc3::Site.new({})
-    site.expects(:dsl).returns(dsl)
-
-    # Create rules file
-    File.open('Rules', 'w') do |io|
-      io.write <<-EOF
-some_function_that_doesn_really_exist(
-weird_param_number_one,
-mysterious_param_number_two
-)
 EOF
     end
 
