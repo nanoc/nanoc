@@ -123,8 +123,8 @@ module Nanoc3
       compiler.preprocess
       link_everything_to_site
       setup_child_parent_links
-      build_reps
-      route_reps
+      compiler.build_reps
+      compiler.route_reps
 
       # Done
       @data_loaded = true
@@ -330,55 +330,6 @@ module Nanoc3
         # Link
         item.parent = parent
         parent.children << item
-      end
-    end
-
-    # Creates the representations of all items as defined by the compilation
-    # rules.
-    #
-    # TODO move to Nanoc3::Compiler
-    def build_reps
-      @items.each do |item|
-        # Find matching rules
-        matching_rules = self.compiler.item_compilation_rules.select { |r| r.applicable_to?(item) }
-        raise Nanoc3::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
-
-        # Create reps
-        rep_names = matching_rules.map { |r| r.rep_name }.uniq
-        rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name)
-        end
-      end
-    end
-
-    # Determines the paths of all item representations.
-    #
-    # TODO move to Nanoc3::Compiler
-    def route_reps
-      reps = @items.map { |i| i.reps }.flatten
-      reps.each do |rep|
-        # Find matching rules
-        rules = self.compiler.routing_rules_for(rep)
-        raise Nanoc3::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
-
-        rules.each_pair do |snapshot, rule|
-          # Get basic path by applying matching rule
-          basic_path = rule.apply_to(rep)
-          next if basic_path.nil?
-
-          # Get raw path by prepending output directory
-          rep.raw_paths[snapshot] = self.config[:output_dir] + basic_path
-
-          # Get normal path by stripping index filename
-          rep.paths[snapshot] = basic_path
-          self.config[:index_filenames].each do |index_filename|
-            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
-              # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
-              break
-            end
-          end
-        end
       end
     end
 
