@@ -250,7 +250,7 @@ module Nanoc3
     #
     # TODO move to Nanoc3::Compiler
     def dsl
-      @dsl ||= Nanoc3::CompilerDSL.new(self)
+      @dsl ||= Nanoc3::CompilerDSL.new(compiler)
     end
 
     # Loads this site’s code and executes it.
