@@ -8,6 +8,8 @@ module Nanoc3
   class Item
 
     # @return [Nanoc3::Site] The site this item belongs to
+    #
+    # TODO remove me
     attr_accessor :site
 
     # @return [Hash] This item's attributes

@@ -41,6 +41,8 @@ module Nanoc3
 
     # @return [Proc] The code block that will be executed after all data is
     #   loaded but before the site is compiled
+    #
+    # TODO move to Nanoc3::Compiler
     attr_accessor :preprocessor
 
     # Creates a site object for the site specified by the given
@@ -60,6 +62,8 @@ module Nanoc3
     # exists yet.
     #
     # @return [Nanoc3::Compiler] The compiler for this site
+    #
+    # TODO remove/deprecate? maybe create a #compile method?
     def compiler
       @compiler ||= Compiler.new(self)
     end
@@ -249,6 +253,8 @@ module Nanoc3
   private
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
+    #
+    # TODO move to Nanoc3::Compiler
     def dsl
       @dsl ||= Nanoc3::CompilerDSL.new(self)
     end
@@ -273,6 +279,8 @@ module Nanoc3
     end
 
     # Loads this site’s rules.
+    #
+    # TODO move to Nanoc3::Compiler
     def load_rules
       # Find rules file
       rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
@@ -311,8 +319,10 @@ module Nanoc3
     end
 
     # Links items, layouts and code snippets to the site.
+    #
+    # TODO remove me (not necessary once compiler knows how to build assigns)
     def link_everything_to_site
-      @items.each { |i|  i.site  = self }
+      @items.each { |i| i.site  = self }
     end
 
     # Fills each item's parent reference and children array with the
@@ -338,6 +348,8 @@ module Nanoc3
 
     # Creates the representations of all items as defined by the compilation
     # rules.
+    #
+    # TODO move to Nanoc3::Compiler
     def build_reps
       @items.each do |item|
         # Find matching rules
@@ -353,6 +365,8 @@ module Nanoc3
     end
 
     # Determines the paths of all item representations.
+    #
+    # TODO move to Nanoc3::Compiler
     def route_reps
       reps = @items.map { |i| i.reps }.flatten
       reps.each do |rep|
@@ -399,6 +413,8 @@ module Nanoc3
     end
 
     # Returns a preprocessor context, creating one if none exists yet.
+    #
+    # TODO move to Nanoc3::Compiler
     def preprocessor_context
       @preprocessor_context ||= Nanoc3::Context.new({
         :site    => self,
