@@ -1,8 +1,9 @@
 syntax: glob
 .DS_Store
-*.gemspec
-*.tmproj
-*.gem
 .yardoc
 doc/yardoc
+*.gem
+*.gemspec
+*.rbc
+*.tmproj
 *~
