@@ -39,12 +39,6 @@ module Nanoc3
       :enable_output_diff => false
     }
 
-    # @return [Proc] The code block that will be executed after all data is
-    #   loaded but before the site is compiled
-    #
-    # TODO move to Nanoc3::Compiler
-    attr_accessor :preprocessor
-
     # Creates a site object for the site specified by the given
     # `dir_or_config_hash` argument.
     #
@@ -126,7 +120,7 @@ module Nanoc3
 
       # Preprocess
       setup_child_parent_links
-      preprocessor_context.instance_eval(&preprocessor) if preprocessor
+      preprocessor_context.instance_eval(&compiler.preprocessor) if compiler.preprocessor
       link_everything_to_site
       setup_child_parent_links
       build_reps

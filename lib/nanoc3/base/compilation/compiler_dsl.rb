@@ -21,7 +21,7 @@ module Nanoc3
     #
     # @return [void]
     def preprocess(&block)
-      @site.preprocessor = block
+      @site.compiler.preprocessor = block
     end
 
     # Creates a compilation rule for all items whose identifier match the
