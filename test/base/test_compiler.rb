@@ -347,7 +347,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
-        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
       }
     end
 
@@ -444,7 +444,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       store[:data] = {
         item.reference             => 'OMG! DIFFERENT!',
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
-        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
       }
     end
 
@@ -491,7 +491,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
-        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
       }
     end
 
@@ -530,7 +530,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
         item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
         code_snippets[0].reference => 'OMG! DIFFERENT!',
         :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
-        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.rules_with_reference)
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
       }
     end
 

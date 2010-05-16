@@ -113,13 +113,14 @@ module Nanoc3
       # Load all data
       load_code_snippets(force)
       data_sources.each { |ds| ds.use }
-      load_rules
       load_items
       load_layouts
       data_sources.each { |ds| ds.unuse }
+      setup_child_parent_links
 
       # Preprocess
-      setup_child_parent_links
+      # TODO move this to Compiler
+      compiler.load_rules
       compiler.preprocess
       link_everything_to_site
       setup_child_parent_links
@@ -223,25 +224,11 @@ module Nanoc3
       @config
     end
 
-    # FIXME get rid of this
-    #
-    # @api private
-    def rules_with_reference
-      rules = @rules
-      @rules_pseudo ||= begin
-        pseudo = Object.new
-        pseudo.instance_eval { @data = rules }
-        def pseudo.reference ; :rules ; end
-        def pseudo.data ; @data.inspect ; end
-        pseudo
-      end
-    end
-
     # TODO document
     #
     # @api private
     def objects
-      items + layouts + code_snippets + [ config, rules_with_reference ]
+      items + layouts + code_snippets + [ config, compiler.rules_with_reference ]
     end
 
   private
@@ -263,21 +250,6 @@ module Nanoc3
       @code_snippets.each { |cs| cs.load }
 
       @code_snippets_loaded = true
-    end
-
-    # Loads this site’s rules.
-    #
-    # TODO move to Nanoc3::Compiler
-    def load_rules
-      # Find rules file
-      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
-      raise Nanoc3::Errors::NoRulesFileFound.new if rules_filename.nil?
-
-      # Get rule data
-      @rules = File.read(rules_filename)
-
-      # Load DSL
-      compiler.dsl.instance_eval(@rules, "./#{rules_filename}")
     end
 
     # Loads this site’s items, sets up item child-parent relationships and
