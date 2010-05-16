@@ -65,6 +65,7 @@ components, however, do have dependencies:
 * Ben Armston
 * Colin Barrett
 * Dmitry Bilunov
+* Devon Luke Buchanan
 * Brian Candler
 * Chris Eppstein
 * Felix Hanley
