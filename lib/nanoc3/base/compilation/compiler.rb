@@ -125,9 +125,6 @@ module Nanoc3
     #
     # @return [void]
     def store
-      # checksum_store.calculate_checksums_for(
-      #   @site.items + @site.layouts + @site.code_snippets + [ @site.config, @site.rules_with_reference ]
-      # )
       stores.each { |s| s.store }
     end
 
@@ -230,11 +227,40 @@ module Nanoc3
       @dsl ||= Nanoc3::CompilerDSL.new(self)
     end
 
+    # Loads this site’s rules.
+    #
+    # @api private
+    def load_rules
+      # Find rules file
+      rules_filename = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ].find { |f| File.file?(f) }
+      raise Nanoc3::Errors::NoRulesFileFound.new if rules_filename.nil?
+
+      # Get rule data
+      @rules = File.read(rules_filename)
+
+      # Load DSL
+      dsl.instance_eval(@rules, "./#{rules_filename}")
+    end
+
     # Runs the preprocessor.
     #
     # @api private
     def preprocess
       preprocessor_context.instance_eval(&preprocessor) if preprocessor
+    end
+
+    # FIXME get rid of this
+    #
+    # @api private
+    def rules_with_reference
+      rules = @rules
+      @rules_pseudo ||= begin
+        pseudo = Object.new
+        pseudo.instance_eval { @data = rules }
+        def pseudo.reference ; :rules ; end
+        def pseudo.data ; @data.inspect ; end
+        pseudo
+      end
     end
 
     # Creates the representations of all items as defined by the compilation

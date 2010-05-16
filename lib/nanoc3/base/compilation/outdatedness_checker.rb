@@ -56,7 +56,7 @@ module Nanoc3
           return Nanoc3::OutdatednessReasons::ConfigurationModified if checksum_store.object_modified?(@site.config)
 
           # Outdated if rules outdated
-          return Nanoc3::OutdatednessReasons::RulesModified if checksum_store.object_modified?(@site.rules_with_reference)
+          return Nanoc3::OutdatednessReasons::RulesModified if checksum_store.object_modified?(@site.compiler.rules_with_reference)
 
           # Not outdated
           return nil

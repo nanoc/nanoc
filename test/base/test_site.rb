@@ -50,7 +50,7 @@ EOF
     end
 
     # Load rules
-    site.send :load_rules
+    site.compiler.send :load_rules
   end
 
   def test_load_data_sources_first
