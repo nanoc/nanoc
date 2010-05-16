@@ -5,20 +5,13 @@ module Nanoc3
   # The in-memory representation of a nanoc site. It holds references to the
   # following site data:
   #
-  # * {#items}         - the list of items         ({Nanoc3::Item})
-  # * {#layouts}       - the list of layouts       ({Nanoc3::Layout})
-  # * {#code_snippets} - the list of code snippets ({Nanoc3::CodeSnippet})
+  # * {#items}         — the list of items         ({Nanoc3::Item})
+  # * {#layouts}       — the list of layouts       ({Nanoc3::Layout})
+  # * {#code_snippets} — the list of code snippets ({Nanoc3::CodeSnippet})
+  # * {#data_sources}  — the list of data sources  ({Nanoc3::DataSource})
   #
   # In addition, each site has a {#config} hash which stores the site
   # configuration.
-  #
-  # A site also has several helper classes:
-  #
-  # * {#data_sources} (array of {Nanoc3::DataSource}) - A list of data sources
-  #   that are used for loading site data
-  #
-  # * {#compiler} ({Nanoc3::Compiler}) - The compiler that is used for
-  #   compiling items and their representations
   #
   # The physical representation of a {Nanoc3::Site} is usually a directory
   # that contains a configuration file, site data, a rakefile, a rules file,
