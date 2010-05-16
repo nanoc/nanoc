@@ -40,6 +40,9 @@ module Nanoc3
   #   the specified object.
   class Compiler
 
+    # @return [Nanoc3::Site] The site this compiler belongs to
+    attr_reader :site
+
     # The compilation stack. When the compiler begins compiling a rep or a
     # layout, it will be placed on the stack; when it is done compiling the
     # rep or layout, it will be removed from the stack.
@@ -293,7 +296,7 @@ module Nanoc3
 
         rules.each_pair do |snapshot, rule|
           # Get basic path by applying matching rule
-          basic_path = rule.apply_to(rep)
+          basic_path = rule.apply_to(rep, :compiler => self)
           next if basic_path.nil?
 
           # Get raw path by prepending output directory
@@ -310,6 +313,24 @@ module Nanoc3
           end
         end
       end
+    end
+
+    # TODO document
+    def assigns_for(rep)
+      if rep.binary?
+        content_or_filename_assigns = { :filename => rep.filenames[:last] }
+      else
+        content_or_filename_assigns = { :content => rep.content[:last] }
+      end
+
+      content_or_filename_assigns.merge({
+        :item       => rep.item,
+        :item_rep   => rep,
+        :items      => site.items,
+        :layouts    => site.layouts,
+        :config     => site.config,
+        :site       => site
+      })
     end
 
   private
@@ -393,7 +414,7 @@ module Nanoc3
       else
         rep.snapshot(:raw)
         rep.snapshot(:pre, :final => false)
-        compilation_rule_for(rep).apply_to(rep)
+        compilation_rule_for(rep).apply_to(rep, :compiler => self)
         rep.snapshot(:post) if rep.has_snapshot?(:post)
         rep.snapshot(:last)
       end

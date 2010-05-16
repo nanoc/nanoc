@@ -61,6 +61,9 @@ module Nanoc3
     # Contains all private methods. Mixed into {Nanoc3::ItemRep}.
     module Private
 
+      # TODO document
+      attr_accessor :assigns
+
       # @return [Boolean] true if this representation has already been compiled
       #   during the current or last compilation session; false otherwise
       #
@@ -83,33 +86,16 @@ module Nanoc3
       # @api private
       attr_accessor :paths
 
+      # TODO document
+      # TODO remove me (probably not necessary)
+      attr_reader :filenames
+
       # @return [Hash<Symbol,String>] A hash containing the content at all
       #   snapshots. The keys correspond with the snapshot names, and the
       #   values with the content.
       #
       # @api private
       attr_accessor :content
-
-      # @api private
-      #
-      # @return [Hash] The assignments that should be available when compiling
-      #   the content.
-      def assigns
-        if self.binary?
-          content_or_filename_assigns = { :filename => @filenames[:last] }
-        else
-          content_or_filename_assigns = { :content => @content[:last] }
-        end
-
-        content_or_filename_assigns.merge({
-          :item       => self.item,
-          :item_rep   => self,
-          :items      => self.item.site.items,
-          :layouts    => self.item.site.layouts,
-          :config     => self.item.site.config,
-          :site       => self.item.site
-        })
-      end
 
       # Writes the item rep's compiled content to the rep's output file.
       #
@@ -230,10 +216,11 @@ module Nanoc3
       # Set binary
       @binary = @item.binary?
 
-      # Initialize content and filenames and paths
+      # Set default attributes
       @raw_paths   = {}
       @paths       = {}
       @old_content = nil
+      @assigns     = {}
       initialize_content
 
       # Reset flags

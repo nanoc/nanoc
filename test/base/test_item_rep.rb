@@ -103,10 +103,12 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     # Filter once
+    item_rep.assigns = {}
     item_rep.filter(:erb)
     assert_equal(%[<%= "blah" %>], item_rep.instance_eval { @content[:last] })
 
     # Filter twice
+    item_rep.assigns = {}
     item_rep.filter(:erb)
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
@@ -143,50 +145,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     # Layout
+    item_rep.assigns = {}
     item_rep.layout('/somelayout/')
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
-  end
-
-  def test_layout_multiple
-    # Mock layout 1
-    layouts = [ mock, mock ]
-    layouts[0].stubs(:identifier).returns('/one/')
-    layouts[0].stubs(:raw_content).returns('{one}<%= yield %>{/one}')
-    layouts[1].stubs(:identifier).returns('/two/')
-    layouts[1].stubs(:raw_content).returns('{two}<%= yield %>{/two}')
-
-    # Mock compiler
-    stack = mock
-    stack.stubs(:push)
-    stack.stubs(:pop)
-    compiler = mock
-    compiler.stubs(:stack).returns(stack)
-    compiler.stubs(:filter_for_layout).returns([ :erb, {} ])
-
-    # Mock site
-    site = mock
-    site.stubs(:items).returns([])
-    site.stubs(:config).returns([])
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:compiler).returns(compiler)
-
-    # Mock item
-    item = Nanoc3::Item.new('blah', {}, '/', :binary => false)
-    item.site = site
-
-    # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
-    item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
-      @content[:last] = @content[:raw]
-    end
-
-    # Layout
-    item_rep.layout('/one/')
-    item_rep.layout('/two/')
-    assert_equal('blah',                       item_rep.instance_eval { @content[:pre]  })
-    assert_equal('{two}{one}blah{/one}{/two}', item_rep.instance_eval { @content[:post] })
-    assert_equal('{two}{one}blah{/one}{/two}', item_rep.instance_eval { @content[:last] })
   end
 
   def test_snapshot
@@ -211,6 +172,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     # Filter while taking snapshots
+    item_rep.assigns = {}
     item_rep.snapshot(:foo)
     item_rep.filter(:erb)
     item_rep.snapshot(:bar)
@@ -376,10 +338,8 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_converted_binary_rep_can_be_layed_out
-    layout = mock_and_stub(
-      :identifier => '/somelayout/',
-      :raw_content => %[<%= "blah" %> <%= yield %>]
-    )
+    # Mock layout
+    layout = Nanoc3::Layout.new(%[<%= "blah" %> <%= yield %>], {}, '/somelayout/')
 
     # Mock compiler
     stack = mock_and_stub(:pop => layout)
@@ -401,21 +361,22 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     item.site = site
 
     rep = create_rep_for(item, '/foo/')
+    rep.assigns = { :content => 'meh' }
     def rep.filter_named(name)
       @filter ||= Class.new(::Nanoc3::Filter) do
         type :binary => :text
         def run(content, params={})
-          "Some textual content"
+          content + ' textified'
         end
       end
     end
 
     rep.filter(:binary_to_text)
     rep.layout('/somelayout/')
-    assert_equal('blah Some textual content', rep.instance_eval { @content[:last] })
+    assert_equal('blah meh', rep.instance_eval { @content[:last] })
   end
 
-  def test_converted_binary_rep_can_be_filterd_with_textual_filters
+  def test_converted_binary_rep_can_be_filtered_with_textual_filters
     item = create_binary_item
     site = mock_and_stub(:items => [item],
       :layouts => [],
@@ -423,6 +384,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, /foo/)
+    rep.assigns = {}
     create_textual_filter
 
     assert rep.binary?
@@ -450,7 +412,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert !rep.binary?
   end
 
-  def test_converted_binary_rep_cannot_be_filterd_with_binary_filters
+  def test_converted_binary_rep_cannot_be_filtered_with_binary_filters
     item = create_binary_item
     site = mock_and_stub(
       :items   => [item],
@@ -459,6 +421,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, '/foo/')
+    rep.assigns = {}
     create_binary_filter
 
     assert rep.binary?
@@ -471,7 +434,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       end
     end
     rep.filter(:binary_to_text)
-    assert ! rep.binary?
+    refute rep.binary?
     assert_raises(Nanoc3::Errors::CannotUseBinaryFilter) { rep.filter(:binary_filter) }
   end
 
