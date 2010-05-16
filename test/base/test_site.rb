@@ -162,37 +162,6 @@ describe 'Nanoc3::Site#load_data' do
     site.load_data
   end
 
-  it 'should call the preprocessor' do
-    site = Nanoc3::Site.new({})
-    site.instance_eval do
-      @items_loaded   = true
-      @layouts_loaded = true
-    end
-
-    # Mock data sources
-    data_sources = [ mock, mock, mock ]
-    data_sources.each { |ds| ds.expects(:use)   }
-    data_sources.each { |ds| ds.expects(:unuse) }
-    site.stubs(:data_sources).returns(data_sources)
-
-    # Mock load_* methods
-    site.expects(:load_code_snippets).with(false)
-    site.expects(:load_rules)
-    site.expects(:load_items)
-    site.expects(:load_layouts)
-    site.expects(:link_everything_to_site)
-    site.expects(:setup_child_parent_links).times(2)
-    site.expects(:build_reps)
-    site.expects(:route_reps)
-
-    # Mock preprocessor
-    preprocessor = lambda { }
-    site.expects(:preprocessor).times(2).returns(preprocessor)
-
-    # Load data
-    site.load_data
-  end
-
   it 'should call load_* methods' do
     site = Nanoc3::Site.new({})
 

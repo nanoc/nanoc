@@ -65,6 +65,12 @@ module Nanoc3
     # @return [Hash] The layout-to-filter mapping rules
     attr_reader :layout_filter_mapping
 
+    # @return [Proc] The code block that will be executed after all data is
+    #   loaded but before the site is compiled
+    #
+    # TODO move to Nanoc3::Compiler
+    attr_accessor :preprocessor
+
     # Creates a new compiler fo the given site
     #
     # @param [Nanoc3::Site] site The site this compiler belongs to
