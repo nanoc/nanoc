@@ -14,6 +14,8 @@ module Nanoc3
   # @api private
   class ChecksumStore < ::Nanoc3::Store
 
+    # @option params [Nanoc3::Site] site The site where this checksum store
+    #   belongs to
     def initialize(params={})
       super('tmp/checksums', 1)
 
@@ -38,7 +40,8 @@ module Nanoc3
     # to `#reference` (for example, {Nanoc3::Item#reference},
     # {Nanoc3::Layout#reference}, {Nanoc3::CodeSnippet#reference}, …).
     #
-    # @param [#reference] obj The object for which to calculate the new checksum
+    # @param [#reference] obj The object for which to calculate the new
+    #   checksum
     #
     # @return [String] The new checksum for the given object
     def new_checksum_for(obj)

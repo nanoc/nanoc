@@ -216,7 +216,9 @@ module Nanoc3
       outdatedness_checker.outdated?(obj)
     end
 
-    # TODO document
+    # Returns the reason why the given object is outdated.
+    #
+    # @see Nanoc3::OutdatednessChecker#outdatedness_reason_for
     #
     # @api private
     def outdatedness_reason_for(obj)
@@ -315,7 +317,11 @@ module Nanoc3
       end
     end
 
-    # TODO document
+    # @param [Nanoc3::ItemRep] rep The item representation for which the
+    #   assigns should be fetched
+    #
+    # @return [Hash] The assigns that should be used in the next filter/layout
+    #   operation
     def assigns_for(rep)
       if rep.binary?
         content_or_filename_assigns = { :filename => rep.filenames[:last] }
