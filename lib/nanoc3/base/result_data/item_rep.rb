@@ -61,11 +61,14 @@ module Nanoc3
     # Contains all private methods. Mixed into {Nanoc3::ItemRep}.
     module Private
 
-      # TODO document
+      # @return [Hash] A hash containing the assigns that will be used in the
+      #   next filter or layout operation. The keys ({Symbol} instances) will
+      #   be made available during the next operation.
       attr_accessor :assigns
 
-      # @return [Boolean] true if this representation has already been compiled
-      #   during the current or last compilation session; false otherwise
+      # @return [Boolean] true if this representation has already been
+      #   compiled during the current or last compilation session; false
+      #   otherwise
       #
       # @api private
       attr_accessor :compiled
@@ -73,20 +76,26 @@ module Nanoc3
 
       # @return [Hash<Symbol,String>] A hash containing the raw paths (paths
       #   including the path to the output directory and the filename) for all
-      #   snapshots. The keys correspond with the snapshot names, and the values
-      #   with the path.
+      #   snapshots. The keys correspond with the snapshot names, and the
+      #   values with the path.
       #
       # @api private
       attr_accessor :raw_paths
 
       # @return [Hash<Symbol,String>] A hash containing the paths for all
-      #   snapshots. The keys correspond with the snapshot names, and the values
-      #   with the path.
+      #   snapshots. The keys correspond with the snapshot names, and the
+      #   values with the path.
       #
       # @api private
       attr_accessor :paths
 
-      # TODO document
+      # @return [Hash<Symbol,String>] A hash containing the filenames for all
+      #   snapshots. This is only used when the item representation is binary.
+      #   The keys correspond with the snapshot names, and the values with the
+      #   filename.
+      #
+      # @api private
+      #
       # TODO remove me (probably not necessary)
       attr_reader :filenames
 
@@ -99,13 +108,10 @@ module Nanoc3
 
       # Writes the item rep's compiled content to the rep's output file.
       #
-      # This method should not be called directly, even in a compilation block;
-      # the compiler is responsible for calling this method.
-      #
       # @api private
       #
-      # @param [String, nil] raw_path The raw path to write the compiled rep to.
-      #   If nil, the default raw path will be used.
+      # @param [String, nil] raw_path The raw path to write the compiled rep
+      #   to. If nil, the default raw path will be used.
       #
       # @return [void]
       def write(snapshot=:last)
@@ -150,7 +156,6 @@ module Nanoc3
 
       # Resets the compilation progress for this item representation. This is
       # necessary when an unmet dependency is detected during compilation.
-      # This method should probably not be called directly.
       #
       # @api private
       #
@@ -177,8 +182,9 @@ module Nanoc3
         end
       end
 
-      # Returns the type of this object. Will always return `:item_rep`, because
-      # this is an item rep. For layouts, this method returns `:layout`.
+      # Returns the type of this object. Will always return `:item_rep`,
+      # because this is an item rep. For layouts, this method returns
+      # `:layout`.
       #
       # @api private
       #
@@ -302,6 +308,8 @@ module Nanoc3
     # This method is supposed to be called only in a compilation rule block
     # (see {Nanoc3::CompilerDSL#compile}).
     #
+    # @see Nanoc3::ItemRepProxy#filter
+    #
     # @param [Symbol] filter_name The name of the filter to run the item
     #   representations' content through
     #
@@ -353,9 +361,17 @@ module Nanoc3
     # This method is supposed to be called only in a compilation rule block
     # (see {Nanoc3::CompilerDSL#compile}).
     #
-    # @return [void]
+    # @see Nanoc3::ItemRepProxy#layout
     #
-    # TODO update documentation
+    # @param [Nanoc3::Layout] layout The layout to use
+    #
+    # @param [Symbol] filter_name The name of the filter to layout the item
+    #   representations' content with
+    #
+    # @param [Hash] filter_args The filter arguments that should be passed to
+    #   the filter's #run method
+    #
+    # @return [void]
     def layout(layout, filter_name, filter_args)
       # Check whether item can be laid out
       raise Nanoc3::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
@@ -426,6 +442,7 @@ module Nanoc3
       Nanoc3::Filter.named(name)
     end
 
+    # TODO move this elsewhere
     def generate_diff
       if @old_content.nil? || self.raw_path.nil? || !@item.site.config[:enable_output_diff]
         @diff = nil
@@ -438,6 +455,7 @@ module Nanoc3
       end
     end
 
+    # TODO move this elsewhere
     def diff_strings(a, b)
       require 'tempfile'
       require 'open3'
