@@ -102,7 +102,7 @@ module Nanoc3::CLI::Commands
       class NoNotifierFound < ::StandardError
 
         def initialize
-          super("Could not find a notifier that works on this system. I tried to find #{CrossPlatformNotifier::TOOLS.join(', ')} but found nothing.")
+          super("Could not find a notifier that works on this system. I tried to find #{Notifier::TOOLS.join(', ')} but found nothing.")
         end
 
       end
