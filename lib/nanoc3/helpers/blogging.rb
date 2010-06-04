@@ -233,6 +233,14 @@ module Nanoc3::Helpers
             update_time = a[:updated_at] || a[:created_at]
             xml.published((create_time.is_a?(String) ? Time.parse(create_time) : create_time).to_iso8601_time)
             xml.updated(  (update_time.is_a?(String) ? Time.parse(update_time) : update_time).to_iso8601_time)
+        
+            # Add specific author information
+            if a[:author_name] || a[:author_uri]
+              xml.author do
+                xml.name  a[:author_name] || author_name
+                xml.uri   a[:author_uri]  || author_uri
+              end
+            end
 
             # Add link
             xml.link(:rel => 'alternate', :href => url)
