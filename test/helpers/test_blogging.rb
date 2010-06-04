@@ -19,8 +19,8 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     item.stubs(:[]).with(:custom_url_in_feed).returns(nil)
     item.stubs(:[]).with(:excerpt).returns(nil)
     item.stubs(:path).returns("/item/")
-    item.stubs(:author_name).returns(nil)
-    item.stubs(:author_uri).returns(nil)
+    item.stubs(:[]).with(:author_name).returns(nil)
+    item.stubs(:[]).with(:author_uri).returns(nil)
     item.stubs(:compiled_content).returns('item content')
     item
   end
@@ -252,6 +252,54 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       assert_equal(
         'Cannot build Atom feed: no author_name in params, item or site config',
         error.message
+      )
+    end
+  end
+
+  def test_atom_feed_with_author_name_and_uri_from_content_item
+    if_have 'builder' do
+      # Create items
+      @items = [ mock_article ]
+
+      # Create item 1
+      @items[0].stubs(:[]).with(:author_name).returns("Don Alias")
+      @items[0].stubs(:[]).with(:author_uri).returns("http://don.example.com/")
+      @items[0].expects(:compiled_content).returns('item 1 content')
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com/' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:kind).returns(nil)
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      @item.stubs(:path).returns("/journal/feed/")
+
+      # Check
+      # TODO: Use xpath matchers for more specific test
+      result = atom_feed
+      # Still should keep feed level author
+      assert_match(
+        /#{Regexp.escape('<name>Denis Defreyne</name>')}/, #'
+        result
+      )
+      assert_match(
+        /#{Regexp.escape('<uri>http://stoneship.org/</uri>')}/, #'
+        result
+      )
+
+      # Overrides on specific items
+      assert_match(
+        /#{Regexp.escape('<name>Don Alias</name>')}/, #'
+        result
+      )
+      assert_match(
+        /#{Regexp.escape('<uri>http://don.example.com/</uri>')}/, #'
+        result
       )
     end
   end
