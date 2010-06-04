@@ -599,6 +599,56 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
   end
 
+  def test_write_should_not_touch_identical_textual_files
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+
+    # Create rep
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    def item_rep.generate_diff ; end
+    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    item_rep.raw_path = 'foo/bar/baz/quux.txt'
+
+    # Write once
+    item_rep.write
+    a_long_time_ago = Time.now-1_000_000
+    File.utime(a_long_time_ago, a_long_time_ago, item_rep.raw_path)
+
+    # Write again
+    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
+    item_rep.write
+    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
+  end
+
+  def test_write_should_not_touch_identical_binary_files
+    # Create temporary source file
+    File.open('blahblah', 'w') { |io| io.write("Blah blah…") }
+    full_file_path = File.expand_path('blahblah')
+
+    # Mock item
+    item = Nanoc3::Item.new(
+      full_file_path, {}, '/',
+      :binary => true
+    )
+
+    # Create rep
+    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep.raw_path = 'foo/bar/baz/quux'
+
+    # Write once
+    item_rep.write
+    a_long_time_ago = Time.now-1_000_000
+    File.utime(a_long_time_ago, a_long_time_ago, item_rep.raw_path)
+
+    # Write again
+    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
+    item_rep.write
+    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
+  end
+
   def test_hash
     # Mock item
     item = Nanoc3::Item.new(

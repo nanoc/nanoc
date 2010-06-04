@@ -357,15 +357,17 @@ module Nanoc3
           hash_old = hash_for_file(self.raw_path)
           size_old = File.size(self.raw_path)
         end
-
-        # Copy
-        FileUtils.cp(@filenames[:last], self.raw_path)
-        @written = true
+        size_new = File.size(@filenames[:last])
+        hash_new = hash_for_file(@filenames[:last]) if size_old == size_new
 
         # Check if file was modified
-        size_new = File.size(self.raw_path)
-        hash_new = hash_for_file(self.raw_path) if size_old == size_new
         @modified = (size_old != size_new || hash_old != hash_new)
+
+        # Copy
+        if @modified
+          FileUtils.cp(@filenames[:last], self.raw_path)
+        end
+        @written = true
       else
         # Remember old content
         if File.file?(self.raw_path)
@@ -373,7 +375,10 @@ module Nanoc3
         end
 
         # Write
-        File.open(self.raw_path, 'w') { |io| io.write(@content[:last]) }
+        new_content = @content[:last]
+        if @old_content != new_content
+          File.open(self.raw_path, 'w') { |io| io.write(new_content) }
+        end
         @written = true
 
         # Generate diff
