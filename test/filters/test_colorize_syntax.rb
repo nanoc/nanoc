@@ -63,7 +63,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
     # Get input and expected output
     input = %Q[<pre title="moo"><code class="language-ruby">\n# comment\n</code></pre>]
-    expected_output = '<pre title="moo"><code class="language-ruby"><span class="slc"># comment</span></code></pre>'
+    expected_output = '<pre title="moo"><code class="language-ruby"><span class="hl slc"># comment</span></code></pre>'
 
     # Run filter
     actual_output = filter.run(input, :default_colorizer => :simon_highlight)
