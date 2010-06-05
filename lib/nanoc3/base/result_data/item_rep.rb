@@ -132,20 +132,29 @@ module Nanoc3
         end
 
         if self.binary?
+          # Calculate characteristics of new content
+          size_new = File.size(@filenames[:last])
+          hash_new = Nanoc3::Checksummer.checksum_for_file(@filenames[:last]) if size_old == size_new
+
+          # Check whether content was modified
+          is_modified = (size_old != size_new || hash_old != hash_new)
+
           # Copy
-          FileUtils.cp(@filenames[:last], raw_path)
+          if is_modified
+            FileUtils.cp(@filenames[:last], raw_path)
+          end
         else
+          # Check whether content was modified
+          is_modified = (!File.file?(raw_path) || File.read(raw_path) != @content[:last])
+
           # Write
-          File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
+          if is_modified
+            File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
+          end
 
           # Generate diff
           generate_diff
         end
-
-        # Check if file was modified
-        size_new = File.size(raw_path)
-        hash_new = Nanoc3::Checksummer.checksum_for_file(raw_path) if size_old == size_new
-        is_modified = (size_old != size_new || hash_old != hash_new)
 
         # Notify
         Nanoc3::NotificationCenter.post(
