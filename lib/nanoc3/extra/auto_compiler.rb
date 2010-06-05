@@ -82,7 +82,6 @@ module Nanoc3::Extra
 
     def build_site
       @site = Nanoc3::Site.new(@site_path)
-      @site.load_data
     end
 
     def mime_type_of(path, fallback)

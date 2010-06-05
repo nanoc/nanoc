@@ -33,7 +33,6 @@ module Nanoc3::CLI::Commands
       # Make sure we are in a nanoc site directory
       print "Loading site data... "
       @base.require_site
-      @base.site.load_data
       puts "done"
       puts
 

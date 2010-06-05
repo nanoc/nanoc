@@ -50,16 +50,12 @@ module Nanoc3
     # @return [Array] The compilation stack
     attr_reader :stack
 
-    # The list of compilation rules that will be used to compile items. This
-    # array will be filled by {Nanoc3::Site#load_data}.
-    #
-    # @return [Array<Nanoc3::Rule>] The list of item compilation rules
+    # @return [Array<Nanoc3::Rule>] The list of item compilation rules that
+    #   will be used to compile items.
     attr_reader :item_compilation_rules
 
-    # The list of routing rules that will be used to give all items a path.
-    # This array will be filled by {Nanoc3::Site#load_data}.
-    #
-    # @return [Array<Nanoc3::Rule>] The list of item routing rules
+    # @return [Array<Nanoc3::Rule>] The list of routing rules that will be
+    #   used to give all items a path.
     attr_reader :item_routing_rules
 
     # The hash containing layout-to-filter mapping rules. This hash is

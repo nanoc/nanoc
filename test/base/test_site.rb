@@ -110,45 +110,6 @@ describe 'Nanoc3::Site#initialize' do
 
 end
 
-describe 'Nanoc3::Site#code_snippets' do
-
-  include Nanoc3::TestHelpers
-
-  it 'should raise when data is not loaded yet' do
-    site = Nanoc3::Site.new({})
-    proc do
-      site.code_snippets
-    end.must_raise Nanoc3::Errors::DataNotYetAvailable
-  end
-
-end
-
-describe 'Nanoc3::Site#items' do
-
-  include Nanoc3::TestHelpers
-
-  it 'should raise when data is not loaded yet' do
-    site = Nanoc3::Site.new({})
-    proc do
-      site.items
-    end.must_raise Nanoc3::Errors::DataNotYetAvailable
-  end
-
-end
-
-describe 'Nanoc3::Site#layouts' do
-
-  include Nanoc3::TestHelpers
-
-  it 'should raise when data is not loaded yet' do
-    site = Nanoc3::Site.new({})
-    proc do
-      site.layouts
-    end.must_raise Nanoc3::Errors::DataNotYetAvailable
-  end
-
-end
-
 describe 'Nanoc3::Site#compiler' do
 
   include Nanoc3::TestHelpers

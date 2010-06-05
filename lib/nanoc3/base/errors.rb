@@ -58,23 +58,6 @@ module Nanoc3
 
     end
 
-    # Error that is raised when data is requested when the data is not yet
-    # available (possibly due to a missing {Nanoc3::Site#load_data}).
-    class DataNotYetAvailable < Generic
-
-      # @param [String] type The name of the data type that is not yet
-      #   available. For example: `"site"`, `"items"`.
-      #
-      # @param [Boolean] plural True if the given type is plural, false
-      #   otherwise. This only has an effect on the exception message. For
-      #   example, if the given type is `"site"`, plural would be `false`; if
-      #   the given type is `"items"`, plural would be `true`.
-      def initialize(type, plural)
-        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc3::Site#load_data call.".make_compatible_with_env)
-      end
-
-    end
-
     # Error that is raised during site compilation when an item (directly or
     # indirectly) includes its own item content, leading to endless recursion.
     class RecursiveCompilation < Generic
@@ -179,6 +162,15 @@ module Nanoc3
 
     # Error that is raised when an internal consistency error is detected.
     class InternalConsistency < Generic
+    end
+
+    # @deprecated No longer necessary, but kept for backwards compatibility.
+    class DataNotYetAvailable < Generic
+
+      def initialize(type, plural)
+        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc3::Site#load_data call.".make_compatible_with_env)
+      end
+
     end
 
   end

@@ -26,7 +26,6 @@ class Nanoc3::Tasks::CleanTest < MiniTest::Unit::TestCase
 
       # Stub site
       site = mock
-      site.expects(:load_data)
       site.expects(:items).returns(items)
 
       # Create clean task
@@ -57,7 +56,6 @@ class Nanoc3::Tasks::CleanTest < MiniTest::Unit::TestCase
 
       # Stub site
       site = mock
-      site.expects(:load_data)
       site.expects(:items).returns([ item ])
 
       # Create clean task

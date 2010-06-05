@@ -46,10 +46,6 @@ module Nanoc3
     #   to the site directory; if a hash, contains the site configuration.
     def initialize(dir_or_config_hash)
       build_config(dir_or_config_hash)
-
-      @code_snippets_loaded = false
-      @items_loaded         = false
-      @layouts_loaded       = false
     end
 
     # Returns the compiler for this site. Will create a new compiler if none
@@ -71,6 +67,8 @@ module Nanoc3
     # @raise [Nanoc3::Errors::UnknownDataSource] if the site configuration
     #   specifies an unknown data source
     def data_sources
+      load_code_snippets
+
       @data_sources ||= begin
         @config[:data_sources].map do |data_source_hash|
           # Get data source class
@@ -97,71 +95,28 @@ module Nanoc3
       end
     end
 
-    # Loads the site data. This will query the {Nanoc3::DataSource} associated
-    # with the site and fetch all site data. The site data is cached, so
-    # calling this method will not have any effect the second time, unless
-    # the `force` parameter is true.
-    #
-    # @param [Boolean] force If true, will force load the site data even if it
-    #   has been loaded before, to circumvent caching issues
-    #
-    # @return [void]
-    def load_data(force=false)
-      # Don't load data twice
-      return if instance_variable_defined?(:@data_loaded) && @data_loaded && !force
-
-      # Load all data
-      load_code_snippets(force)
-      data_sources.each { |ds| ds.use }
-      load_items
-      load_layouts
-      data_sources.each { |ds| ds.unuse }
-      setup_child_parent_links
-
-      # Preprocess
-      # TODO move this to Compiler
-      compiler.load_rules
-      compiler.preprocess
-      link_everything_to_site
-      setup_child_parent_links
-      compiler.build_reps
-      compiler.route_reps
-
-      # Done
-      @data_loaded = true
-    end
-
     # Returns this site’s code snippets.
     #
     # @return [Array<Nanoc3::CodeSnippet>] The list of code snippets in this
     #   site
-    #
-    # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    #   been loaded yet (call {#load_data} to load the site data)
     def code_snippets
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Code snippets', false) unless @code_snippets_loaded
+      load
       @code_snippets
     end
 
     # Returns this site’s items.
     #
     # @return [Array<Nanoc3::Item>] The list of items in this site
-    #
-    # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    #   been loaded yet (call {#load_data} to load the site data)
     def items
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Items', true) unless @items_loaded
+      load
       @items
     end
 
     # Returns this site’s layouts.
     #
     # @return [Array<Nanoc3::Layouts>] The list of layout in this site
-    #
-    # @raise [Nanoc3::Errors::DataNotYetAvailable] if the site data hasn’t
-    #   been loaded yet (call {#load_data} to load the site data)
     def layouts
-      raise Nanoc3::Errors::DataNotYetAvailable.new('Layouts', true) unless @layouts_loaded
+      load
       @layouts
     end
 
@@ -231,12 +186,41 @@ module Nanoc3
       items + layouts + code_snippets + [ config, compiler.rules_with_reference ]
     end
 
+    # @deprecated It is no longer necessary to explicitly load site data. It is safe to remove all {#load_data} calls.
+    def load_data(force=false)
+      warn 'It is no longer necessary to call Nanoc3::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
+    end
+
   private
 
+    # Loads the site data. It is not necessary to call this method explicitly; it will be called when it is necessary.
+    def load
+      return if @data_loaded
+      @data_loaded = true
+
+      # Load all data
+      load_code_snippets
+      data_sources.each { |ds| ds.use }
+      load_items
+      load_layouts
+      data_sources.each { |ds| ds.unuse }
+      setup_child_parent_links
+
+      # Preprocess
+      # TODO move this to Compiler
+      compiler.load_rules
+      compiler.preprocess
+      link_everything_to_site
+      setup_child_parent_links
+      compiler.build_reps
+      compiler.route_reps
+    end
+
     # Loads this site’s code and executes it.
-    def load_code_snippets(force=false)
-      # Don't load code snippets twice
-      return if @code_snippets_loaded and !force
+    def load_code_snippets
+      @code_snippets_loaded ||= false
+      return if @code_snippets_loaded
+      @code_snippets_loaded = true
 
       # Get code snippets
       @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
@@ -248,33 +232,37 @@ module Nanoc3
 
       # Execute code snippets
       @code_snippets.each { |cs| cs.load }
-
-      @code_snippets_loaded = true
     end
 
     # Loads this site’s items, sets up item child-parent relationships and
     # builds each item's list of item representations.
     def load_items
+      @items_loaded ||= false
+      return if @items_loaded
+      @items_loaded = true
+
+      # Get items
       @items = []
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
         @items.concat(items_in_ds)
       end
-
-      @items_loaded = true
     end
 
     # Loads this site’s layouts.
     def load_layouts
+      @layouts_loaded ||= false
+      return if @layouts_loaded
+      @layouts_loaded = true
+
+      # Get layouts
       @layouts = []
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts.concat(layouts_in_ds)
       end
-
-      @layouts_loaded = true
     end
 
     # Links items, layouts and code snippets to the site.
