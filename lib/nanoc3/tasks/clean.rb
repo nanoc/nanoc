@@ -9,10 +9,6 @@ module Nanoc3::Tasks
     end
 
     def run
-      # Load site data
-      @site.load_data
-
-      # Delete all compiled item reps
       filenames.each do |filename|
         FileUtils.rm_f filename unless filename.nil?
       end

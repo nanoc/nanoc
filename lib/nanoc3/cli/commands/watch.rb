@@ -53,7 +53,6 @@ module Nanoc3::CLI::Commands
         # Recompile
         start = Time.now
         site = Nanoc3::Site.new('.')
-        site.load_data
         begin
           site.compiler.run
 

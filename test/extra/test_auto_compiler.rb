@@ -359,7 +359,6 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
         # Create site
         site = Nanoc3::Site.new('.')
-        site.load_data
         site.compiler.expects(:run).with(site.items[0])
 
         # Create autocompiler
@@ -393,7 +392,6 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
         # Create site
         site = Nanoc3::Site.new('.')
-        site.load_data
         site.compiler.expects(:run).raises(RuntimeError, 'aah! fail!')
 
         # Create autocompiler
