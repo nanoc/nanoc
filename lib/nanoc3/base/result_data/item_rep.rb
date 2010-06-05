@@ -131,6 +131,9 @@ module Nanoc3
           size_old = File.size(raw_path)
         end
 
+        # Generate diff
+        generate_diff
+
         if self.binary?
           # Calculate characteristics of new content
           size_new = File.size(@filenames[:last])
@@ -151,9 +154,6 @@ module Nanoc3
           if is_modified
             File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
           end
-
-          # Generate diff
-          generate_diff
         end
 
         # Notify
@@ -232,10 +232,9 @@ module Nanoc3
       @binary = @item.binary?
 
       # Set default attributes
-      @raw_paths   = {}
-      @paths       = {}
-      @old_content = nil
-      @assigns     = {}
+      @raw_paths  = {}
+      @paths      = {}
+      @assigns    = {}
       initialize_content
 
       # Reset flags
@@ -453,11 +452,11 @@ module Nanoc3
 
     # TODO move this elsewhere
     def generate_diff
-      if @old_content.nil? || self.raw_path.nil? || !@item.site.config[:enable_output_diff]
+      if self.binary? || self.raw_path.nil? || !File.file?(self.raw_path) || !@item.site.config[:enable_output_diff]
         @diff = nil
       else
         @diff_thread = Thread.new do
-          @diff = diff_strings(@old_content, @content[:last])
+          @diff = diff_strings(File.read(self.raw_path), @content[:last])
           sleep 2
           @diff_thread = nil
         end
