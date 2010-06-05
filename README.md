@@ -50,10 +50,17 @@ you want to explore nanoc from a technical perspective.
 
 ## Dependencies
 
-nanoc itself can be used without installing any dependencies. Some
-components, however, do have dependencies:
+nanoc has few dependencies. It is possible to use nanoc programmatically
+without any dependencies at all, but if you want to use nanoc in a proper way,
+you’ll likely need some dependencies:
 
+* The **commandline frontend** depends on `cli`.
 * The **autocompiler** depends on `mime-types` and `rack`.
+* Filters and helpers likely have dependencies on their own too.
+
+If you’re developing for nanoc, such as writing custom filters or helpers, you
+may be interested in the development dependencies:
+
 * For **documentation generation** you’ll need `yard`.
 * For **packaging** you’ll need `rubygems` (1.3 or newer).
 * For **testing** you’ll need `mocha` and `minitest`.
