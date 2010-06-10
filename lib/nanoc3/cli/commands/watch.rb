@@ -97,32 +97,12 @@ module Nanoc3::CLI::Commands
       # A list of commandline tool names that can be used to send notifications
       TOOLS = %w( growlnotify notify-send )
 
-      # Error that is raised when no notifier can be found.
-      class NoNotifierFound < ::StandardError
-
-        def initialize
-          super("Could not find a notifier that works on this system. I tried to find #{Notifier::TOOLS.join(', ')} but found nothing.")
-        end
-
-      end
-
-      # Send a notification.
+      # Send a notification. If no notifier is found, no notification will be
+      # created.
       #
       # @param [String] message The message to include in the notification
-      #
-      # @option params [Boolean] :raise (true) true if this method should
-      #   raise an exception if no notifier can be found, false otherwise
-      def notify(message, params={})
-        params[:raise] = true if !params.has_key?(:raise)
-
-        if tool.nil?
-          if params[:raise]
-            raise NoNotifierFound
-          else
-            return
-          end
-        end
-
+      def notify(message)
+        return if tool.nil?
         send(tool.tr('-', '_'), message, params)
       end
 
