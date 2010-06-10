@@ -32,6 +32,11 @@ module Nanoc3::CLI::Commands
     def run(options, arguments)
       require 'fssm'
 
+      Signal.trap("INT") do
+        puts
+        exit
+      end
+
       @notifier = Notifier.new
 
       # Define rebuilder
