@@ -62,13 +62,23 @@ module Nanoc3::CLI::Commands
           site.compiler.run
 
           # TODO include icon (--image misc/success-icon.png)
-          @notifier.notify('Compilation complete')
+          notify_on_compilation_success = site.config.has_key?(:notify_on_compilation_success) ?
+            site.config[:notify_on_compilation_success] :
+            true
+          if notify_on_compilation_success
+            @notifier.notify('Compilation complete')
+          end
 
           time_spent = ((Time.now - start)*1000.0).round
           puts "done in #{format '%is %ims', *(time_spent.divmod(1000))}"
         rescue Exception => e
           # TODO include icon (--image misc/error-icon.png)
-          @notifier.notify('Compilation failed')
+          notify_on_compilation_failure = site.config.has_key?(:notify_on_compilation_failure) ?
+            site.config[:notify_on_compilation_failure] :
+            true
+          if notify_on_compilation_failure
+            @notifier.notify('Compilation failed')
+          end
 
           puts
           @base.print_error(e)
