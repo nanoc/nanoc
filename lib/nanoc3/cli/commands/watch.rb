@@ -64,7 +64,8 @@ module Nanoc3::CLI::Commands
           # TODO include icon (--image misc/success-icon.png)
           @notifier.notify('Compilation complete')
 
-          puts "done in #{((Time.now - start)*10000).round.to_f / 10}ms"
+          time_spent = ((Time.now - start)*1000.0).round
+          puts "done in #{format '%is %ims', *(time_spent.divmod(1000))}"
         rescue Exception => e
           # TODO include icon (--image misc/error-icon.png)
           @notifier.notify('Compilation failed')
