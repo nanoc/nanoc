@@ -93,7 +93,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       %[<%= '<%= "blah" %' + '>' %>], {}, '/',
       :binary => false
     )
-    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
@@ -148,7 +147,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
       :binary => false
     )
-    item.site = site
 
     # Create item rep
     item_rep = Nanoc3::ItemRep.new(item, '/foo/')
