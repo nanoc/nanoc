@@ -198,7 +198,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site.stubs(:config).returns({})
     site.stubs(:items).returns([])
     site.stubs(:layouts).returns([ layout ])
-    item.site = site
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)

@@ -210,7 +210,6 @@ module Nanoc3
       # TODO move this to Compiler
       compiler.load_rules
       compiler.preprocess
-      link_everything_to_site
       setup_child_parent_links
       compiler.build_reps
       compiler.route_reps
@@ -263,13 +262,6 @@ module Nanoc3
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts.concat(layouts_in_ds)
       end
-    end
-
-    # Links items, layouts and code snippets to the site.
-    #
-    # TODO remove me (not necessary once compiler knows how to build assigns)
-    def link_everything_to_site
-      @items.each { |i| i.site  = self }
     end
 
     # Fills each item's parent reference and children array with the
