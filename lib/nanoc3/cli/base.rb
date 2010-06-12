@@ -13,6 +13,7 @@ module Nanoc3::CLI
       'coderay'        => 'coderay',
       'cri'            => 'cri',
       'erubis'         => 'erubis',
+      'escape'         => 'escape',
       'fssm'           => 'fssm',
       'haml'           => 'haml',
       'json'           => 'json',
