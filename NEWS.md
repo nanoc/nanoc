@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.2 (???)
+
+* Sped up nanoc quite a bit
+* Added AsciiDoc filter
+* Added progress indicator for long-running filters
+
 ## 3.1.3 (2010-04-25)
 
 * Removed annoying win32console warning [Eric Sunshine]
