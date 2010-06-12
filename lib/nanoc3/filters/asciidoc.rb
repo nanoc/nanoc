@@ -16,27 +16,6 @@ module Nanoc3::Filters
       require 'escape'
       require 'tempfile'
 
-      # Create update thread
-      # TODO move this into Filter
-      running = true
-      update_thread = Thread.new do
-        delay = 1.0
-        step = 0
-        while running
-          sleep 0.1
-
-          delay -= 0.1
-          next if !$stdout.tty? || delay > 0.05
-
-          $stdout.print 'Running AsciiDoc… ' + %w( | / - \\ )[step] + "\r"
-          step = (step + 1) % 4
-        end
-
-        if $stdout.tty? && delay < 0.05
-          $stdout.print ' ' * 19 + "\r"
-        end
-      end
-
       # Run filter
       output = ''
       errors = ''
@@ -67,23 +46,12 @@ module Nanoc3::Filters
         errors = File.read(cmd_err.path)
       end
 
-      # Stop progress bar
-      running = false
-      update_thread.join
-
       # Show errors
       puts errors
       raise RuntimeError, errors if !success
 
       # Done
       output
-    rescue Errno::ENOENT => e
-      # Stop progress bar
-      running = false
-      update_thread.join
-
-      # Re-raise
-      raise e
     end
 
   end
