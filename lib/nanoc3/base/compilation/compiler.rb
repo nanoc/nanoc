@@ -113,6 +113,13 @@ module Nanoc3
     def load
       stores.each { |s| s.load }
 
+      # Preprocess
+      load_rules
+      preprocess
+      site.setup_child_parent_links
+      build_reps
+      route_reps
+
       # Determine which reps need to be recompiled
       dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)

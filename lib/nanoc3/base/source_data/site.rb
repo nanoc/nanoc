@@ -179,6 +179,30 @@ module Nanoc3
       @config
     end
 
+    # Fills each item's parent reference and children array with the
+    # appropriate items. It is probably not necessary to call this method
+    # manually; it will be called when appropriate.
+    #
+    # @return [void]
+    def setup_child_parent_links
+      # Clear all links
+      @items.each do |item|
+        item.parent = nil
+        item.children = []
+      end
+
+      @items.each do |item|
+        # Get parent
+        parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
+        parent = @items.find { |p| p.identifier == parent_identifier }
+        next if parent.nil? or item.identifier == '/'
+
+        # Link
+        item.parent = parent
+        parent.children << item
+      end
+    end
+
     # TODO document
     #
     # @api private
@@ -186,14 +210,16 @@ module Nanoc3
       items + layouts + code_snippets + [ config, compiler.rules_with_reference ]
     end
 
-    # @deprecated It is no longer necessary to explicitly load site data. It is safe to remove all {#load_data} calls.
+    # @deprecated It is no longer necessary to explicitly load site data. It
+    #   is safe to remove all {#load_data} calls.
     def load_data(force=false)
       warn 'It is no longer necessary to call Nanoc3::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 
   private
 
-    # Loads the site data. It is not necessary to call this method explicitly; it will be called when it is necessary.
+    # Loads the site data. It is not necessary to call this method explicitly;
+    # it will be called when it is necessary.
     def load
       return if @data_loaded
       @data_loaded = true
@@ -206,13 +232,8 @@ module Nanoc3
       data_sources.each { |ds| ds.unuse }
       setup_child_parent_links
 
-      # Preprocess
-      # TODO move this to Compiler
-      compiler.load_rules
-      compiler.preprocess
-      setup_child_parent_links
-      compiler.build_reps
-      compiler.route_reps
+      # Load compiler too
+      compiler.load
     end
 
     # Loads this site’s code and executes it.
@@ -261,27 +282,6 @@ module Nanoc3
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts.concat(layouts_in_ds)
-      end
-    end
-
-    # Fills each item's parent reference and children array with the
-    # appropriate items.
-    def setup_child_parent_links
-      # Clear all links
-      @items.each do |item|
-        item.parent = nil
-        item.children = []
-      end
-
-      @items.each do |item|
-        # Get parent
-        parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
-        parent = @items.find { |p| p.identifier == parent_identifier }
-        next if parent.nil? or item.identifier == '/'
-
-        # Link
-        item.parent = parent
-        parent.children << item
       end
     end
 
