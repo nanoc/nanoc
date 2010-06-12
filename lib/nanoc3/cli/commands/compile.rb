@@ -69,6 +69,9 @@ module Nanoc3::CLI::Commands
       @filter_times  = {}
       setup_notifications
 
+      # Prepare for generating diffs
+      setup_diffs
+
       # Compile
       @base.site.compiler.run
 
@@ -84,8 +87,8 @@ module Nanoc3::CLI::Commands
         end
       end
 
-      # Show diff
-      write_diff_for(reps)
+      # Stop diffing
+      teardown_diffs
 
       # Give general feedback
       puts
@@ -101,6 +104,9 @@ module Nanoc3::CLI::Commands
 
     def setup_notifications
       # File notifications
+      Nanoc3::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
+        generate_diff_for(rep, snapshot)
+      end
       Nanoc3::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
         action = (is_created ? :create : (is_modified ? :update : :identical))
         duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
@@ -138,30 +144,67 @@ module Nanoc3::CLI::Commands
       end
     end
 
-    def write_diff_for(reps)
-      # Delete diff
+    def setup_diffs
+      @diff_lock    = Mutex.new
+      @diff_threads = []
       FileUtils.rm('output.diff') if File.file?('output.diff')
+    end
 
-      # Don’t generate diffs when diffs are disabled
+    def teardown_diffs
+      @diff_threads.each { |t| t.join }
+    end
+
+    def generate_diff_for(rep, snapshot)
       return if !@base.site.config[:enable_output_diff]
+      return if !File.file?(rep.raw_path(:snapshot => snapshot))
 
-      # Generate diff
-      full_diff = ''
-      reps.each do |rep|
-        diff = rep.diff
-        next if diff.nil?
+      # Get old and new content
+      old_content = File.read(rep.raw_path(:snapshot => snapshot))
+      new_content = rep.compiled_content(:snapshot => snapshot, :force => true)
 
-        # Fix header
-        # FIXME this may break for other lines starting with --- or +++
+      # Check whether there’s a different
+      return if old_content == new_content
+
+      require 'thread'
+      @diff_threads << Thread.new do
+        # Generate diff
+        diff = diff_strings(old_content, new_content)
         diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
         diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
 
-        # Add
-        full_diff << diff
+        # Write diff
+        @diff_lock.synchronize do
+          File.open('output.diff', 'a') { |io| io.write(diff) }
+        end
       end
+    end
 
-      # Write
-      File.open('output.diff', 'w') { |io| io.write(full_diff) }
+    # TODO move this elsewhere
+    def diff_strings(a, b)
+      require 'tempfile'
+      require 'open3'
+
+      # Create files
+      Tempfile.open('old') do |old_file|
+        Tempfile.open('new') do |new_file|
+          # Write files
+          old_file.write(a)
+          old_file.flush
+          new_file.write(b)
+          new_file.flush
+
+          # Diff
+          cmd = [ 'diff', '-u', old_file.path, new_file.path ]
+          Open3.popen3(*cmd) do |stdin, stdout, stderr|
+            result = stdout.read
+            return (result == '' ? nil : result)
+          end
+        end
+      end
+    rescue Errno::ENOENT
+      warn 'Failed to run `diff`, so no diff with the previously compiled ' \
+           'content will be available.'
+      nil
     end
 
     def start_filter_progress(rep, filter_name)

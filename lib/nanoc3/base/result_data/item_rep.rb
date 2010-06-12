@@ -108,6 +108,10 @@ module Nanoc3
 
       # Writes the item rep's compiled content to the rep's output file.
       #
+      # This method will send two notifications: one before writing the item
+      # representation, and one after. These notifications can be used for
+      # generating diffs, for example.
+      #
       # @api private
       #
       # @param [String, nil] raw_path The raw path to write the compiled rep
@@ -131,8 +135,8 @@ module Nanoc3
           size_old = File.size(raw_path)
         end
 
-        # Generate diff
-        generate_diff
+        # Notify
+        Nanoc3::NotificationCenter.post(:will_write_rep, self, snapshot)
 
         if self.binary?
           # Calculate characteristics of new content
@@ -157,10 +161,7 @@ module Nanoc3
         end
 
         # Notify
-        Nanoc3::NotificationCenter.post(
-          :rep_written,
-          self, raw_path, is_created, is_modified
-        )
+        Nanoc3::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
       end
 
       # Resets the compilation progress for this item representation. This is
@@ -171,24 +172,6 @@ module Nanoc3
       # @return [void]
       def forget_progress
         initialize_content
-      end
-
-      # Creates and returns a diff between the compiled content before the
-      # current compilation session and the content compiled in the current
-      # compilation session.
-      #
-      # @api private
-      #
-      # @return [String, nil] The difference between the old and new compiled
-      #   content in `diff(1)` format, or nil if there is no previous compiled
-      #   content
-      def diff
-        if self.binary?
-          nil
-        else
-           @diff_thread.join if @diff_thread
-          @diff
-        end
       end
 
       # Returns the type of this object. Will always return `:item_rep`,
@@ -456,45 +439,6 @@ module Nanoc3
 
     def filter_named(name)
       Nanoc3::Filter.named(name)
-    end
-
-    # TODO move this elsewhere
-    def generate_diff
-      if self.binary? || self.raw_path.nil? || !File.file?(self.raw_path) || !@item.site.config[:enable_output_diff]
-        @diff = nil
-      else
-        @diff_thread = Thread.new do
-          @diff = diff_strings(File.read(self.raw_path), @content[:last])
-          sleep 2
-          @diff_thread = nil
-        end
-      end
-    end
-
-    # TODO move this elsewhere
-    def diff_strings(a, b)
-      require 'tempfile'
-      require 'open3'
-
-      # Create files
-      Tempfile.open('old') do |old_file|
-        Tempfile.open('new') do |new_file|
-          # Write files
-          old_file.write(a)
-          new_file.write(b)
-
-          # Diff
-          cmd = [ 'diff', '-u', old_file.path, new_file.path ]
-          Open3.popen3(*cmd) do |stdin, stdout, stderr|
-            result = stdout.read
-            return (result == '' ? nil : result)
-          end
-        end
-      end
-    rescue Errno::ENOENT
-      warn 'Failed to run `diff`, so no diff with the previously compiled ' \
-           'content will be available.'
-      nil
     end
 
   end

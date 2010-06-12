@@ -9,7 +9,7 @@ module Nanoc3
 
     # @return [Nanoc3::Site] The site this item belongs to
     #
-    # TODO remove me
+    # TODO remove me (removal depends on removal of diff functionality)
     attr_accessor :site
 
     # @return [Hash] This item's attributes
