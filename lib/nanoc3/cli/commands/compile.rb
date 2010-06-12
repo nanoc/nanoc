@@ -177,14 +177,17 @@ module Nanoc3::CLI::Commands
         while !Thread.current[:stopped]
           sleep 0.1
 
+          # Wait for a while before showing text
           delay -= 0.1
-          next if !$stdout.tty? || delay > 0.05
+          next if delay > 0.05
 
+          # Print progress
           $stdout.print text + %w( | / - \\ )[step] + "\r"
           step = (step + 1) % 4
         end
 
-        if $stdout.tty? && delay < 0.05
+        # Clear text
+        if delay < 0.05
           $stdout.print ' ' * (text.length + 1 + 1) + "\r"
         end
       end
