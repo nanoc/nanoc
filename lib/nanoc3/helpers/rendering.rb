@@ -68,10 +68,11 @@ module Nanoc3::Helpers
       # Create filter
       filter = filter_class.new(assigns)
 
-      # Layout
+      # Notify start
       Nanoc3::NotificationCenter.post(:processing_started, layout)
+
+      # Layout
       result = filter.run(layout.raw_content, filter_args)
-      Nanoc3::NotificationCenter.post(:processing_ended, layout)
 
       # Append to erbout if we have a block
       if block_given?
@@ -81,6 +82,9 @@ module Nanoc3::Helpers
 
       # Done
       result
+    ensure
+      # Notify end
+      Nanoc3::NotificationCenter.post(:processing_ended, layout)
     end
 
   end

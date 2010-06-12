@@ -337,11 +337,13 @@ module Nanoc3
         raise Nanoc3::Errors::CannotUseTextualFilter.new(self, klass)
       end
 
+      # Notify start
+      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
+
       # Create filter
       filter = klass.new(assigns)
 
       # Run filter
-      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
       source = self.binary? ? @filenames[:last] : @content[:last]
       result = filter.run(source, filter_args)
       if klass.to_binary?
@@ -350,7 +352,6 @@ module Nanoc3
         @content[:last] = result
       end
       @binary = klass.to_binary?
-      Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
 
       # Check whether file was written
       if self.binary? && !File.file?(filter.output_filename)
@@ -360,6 +361,9 @@ module Nanoc3
 
       # Create snapshot
       snapshot(@content[:post] ? :post : :pre, :final => false) unless self.binary?
+    ensure
+      # Notify end
+      Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
     end
 
     # Lays out the item using the given layout. This method will replace the
@@ -398,15 +402,19 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:visit_started, layout)
       Nanoc3::NotificationCenter.post(:visit_ended,   layout)
 
-      # Layout
+      # Notify start
       Nanoc3::NotificationCenter.post(:processing_started, layout)
       Nanoc3::NotificationCenter.post(:filtering_started,  self, filter_name)
+
+      # Layout
       @content[:last] = filter.run(layout.raw_content, filter_args)
-      Nanoc3::NotificationCenter.post(:filtering_ended,    self, filter_name)
-      Nanoc3::NotificationCenter.post(:processing_ended,   layout)
 
       # Create "post" snapshot
       snapshot(:post, :final => false)
+    ensure
+      # Notify end
+      Nanoc3::NotificationCenter.post(:filtering_ended,    self, filter_name)
+      Nanoc3::NotificationCenter.post(:processing_ended,   layout)
     end
 
     # Creates a snapshot of the current compiled item content.
