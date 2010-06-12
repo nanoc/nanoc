@@ -165,6 +165,9 @@ module Nanoc3::CLI::Commands
     end
 
     def start_filter_progress(rep, filter_name)
+      # Only show progress on terminals
+      return if $stdout.tty?
+
       @progress_thread = Thread.new do
         delay = 1.0
         step  = 0
@@ -188,6 +191,9 @@ module Nanoc3::CLI::Commands
     end
 
     def stop_filter_progress(rep, filter_name)
+      # Only show progress on terminals
+      return if $stdout.tty?
+
       @progress_thread[:stopped] = true
     end
 
