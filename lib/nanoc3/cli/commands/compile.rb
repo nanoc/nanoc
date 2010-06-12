@@ -130,9 +130,11 @@ module Nanoc3::CLI::Commands
       end
       Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
         @filter_times[filter_name] = Time.now
+        start_filter_progress(rep, filter_name)
       end
       Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
         @filter_times[filter_name] = Time.now - @filter_times[filter_name]
+        stop_filter_progress(rep, filter_name)
       end
     end
 
@@ -160,6 +162,33 @@ module Nanoc3::CLI::Commands
 
       # Write
       File.open('output.diff', 'w') { |io| io.write(full_diff) }
+    end
+
+    def start_filter_progress(rep, filter_name)
+      @progress_thread = Thread.new do
+        delay = 1.0
+        step  = 0
+
+        text = "Running #{filter_name} filter… "
+
+        while !Thread.current[:stopped]
+          sleep 0.1
+
+          delay -= 0.1
+          next if !$stdout.tty? || delay > 0.05
+
+          $stdout.print text + %w( | / - \\ )[step] + "\r"
+          step = (step + 1) % 4
+        end
+
+        if $stdout.tty? && delay < 0.05
+          $stdout.print ' ' * (text.length + 1 + 1) + "\r"
+        end
+      end
+    end
+
+    def stop_filter_progress(rep, filter_name)
+      @progress_thread[:stopped] = true
     end
 
     def print_profiling_feedback(reps)
