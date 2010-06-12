@@ -2,6 +2,7 @@
 
 module Nanoc3::Filters
 
+  autoload 'AsciiDoc',        'nanoc3/filters/asciidoc'
   autoload 'BlueCloth',       'nanoc3/filters/bluecloth'
   autoload 'CodeRay',         'nanoc3/filters/coderay'
   autoload 'ColorizeSyntax',  'nanoc3/filters/colorize_syntax'
@@ -21,6 +22,7 @@ module Nanoc3::Filters
   autoload 'RubyPants',       'nanoc3/filters/rubypants'
   autoload 'Sass',            'nanoc3/filters/sass'
 
+  Nanoc3::Filter.register '::Nanoc3::Filters::AsciiDoc',        :asciidoc
   Nanoc3::Filter.register '::Nanoc3::Filters::BlueCloth',       :bluecloth
   Nanoc3::Filter.register '::Nanoc3::Filters::CodeRay',         :coderay
   Nanoc3::Filter.register '::Nanoc3::Filters::ColorizeSyntax',  :colorize_syntax
