@@ -172,7 +172,7 @@ module Nanoc3::CLI::Commands
         delay = 1.0
         step  = 0
 
-        text = "Running #{filter_name} filter… "
+        text = "Running #{filter_name} filter… ".make_compatible_with_env
 
         while !Thread.current[:stopped]
           sleep 0.1
