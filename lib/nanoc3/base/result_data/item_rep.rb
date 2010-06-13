@@ -89,14 +89,17 @@ module Nanoc3
       # @api private
       attr_accessor :paths
 
-      # @return [Hash<Symbol,String>] A hash containing the filenames for all
-      #   snapshots. This is only used when the item representation is binary.
-      #   The keys correspond with the snapshot names, and the values with the
-      #   filename.
+      # @return [Hash<Symbol,String>] A hash containing the paths to the
+      #   temporary _files_ that filters write binary content to. This is only
+      #   used when the item representation is binary. The keys correspond
+      #   with the snapshot names, and the values with the filename. When
+      #   writing the item representation, the file corresponding with the
+      #   requested snapshot (usually `:last`) will be copied from
+      #   `filenames[snapshot]` to `raw_paths[snapshot]`.
       #
       # @api private
       #
-      # TODO remove me (probably not necessary)
+      # TODO rename me
       attr_reader :filenames
 
       # @return [Hash<Symbol,String>] A hash containing the content at all
