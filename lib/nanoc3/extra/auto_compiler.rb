@@ -43,8 +43,8 @@ module Nanoc3::Extra
             r.raw_path == site.config[:output_dir] + path
         end
 
-        # Recompile rep
-        site.compiler.run(rep.item) if rep
+        # Recompile
+        site.compile if rep
 
         # Get paths by appending index filenames
         if path =~ /\/$/

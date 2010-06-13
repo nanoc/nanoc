@@ -21,15 +21,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       items[1].stubs(:reps).returns([ item_reps[2] ])
       item_reps[1].stubs(:item).returns(items[0])
 
-      # Create compiler
-      compiler = mock
-      compiler.expects(:run).with(item_reps[1].item)
-
       # Create site
       site = mock
       site.stubs(:items).returns(items)
       site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
-      site.stubs(:compiler).returns(compiler)
+      site.expects(:compile)
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -57,15 +53,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       items[1].stubs(:reps).returns([ item_reps[2] ])
       item_reps[1].stubs(:item).returns(items[0])
 
-      # Create compiler
-      compiler = mock
-      compiler.expects(:run).with(items[0])
-
       # Create site
       site = mock
       site.stubs(:items).returns(items)
       site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
-      site.stubs(:compiler).returns(compiler)
+      site.expects(:compile)
 
       # Create autocompiler
       autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -359,7 +351,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
         # Create site
         site = Nanoc3::Site.new('.')
-        site.compiler.expects(:run).with(site.items[0])
+        site.expects(:compile)
 
         # Create autocompiler
         autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
@@ -392,7 +384,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
         # Create site
         site = Nanoc3::Site.new('.')
-        site.compiler.expects(:run).raises(RuntimeError, 'aah! fail!')
+        site.expects(:compile).raises(RuntimeError, 'aah! fail!')
 
         # Create autocompiler
         autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
