@@ -95,7 +95,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval do
       @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
@@ -123,7 +123,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval do
       @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
@@ -149,7 +149,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval do
       @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
@@ -177,7 +177,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
     item_rep.raw_paths = { :moo => 'foo-moo.txt' }
 
@@ -206,7 +206,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     def item_rep.generate_diff ; end
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
     item_rep.raw_path = 'foo/bar/baz/quux.txt'
@@ -234,7 +234,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.raw_path = 'foo/bar/baz/quux'
 
     # Write once
@@ -256,7 +256,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
     item_rep.raw_path = 'foo/bar/baz/quux.txt'
 
@@ -276,7 +276,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :foo)
     def rep.assigns ; {} ; end
 
     # Create fake filter
@@ -304,7 +304,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :foo)
     def rep.assigns ; {} ; end
 
     # Create fake filter
@@ -331,7 +331,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :foo)
     def rep.compiled? ; true ; end
 
     # Check
@@ -345,7 +345,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       :config  => []
     )
     item.stubs(:site).returns(site)
-    rep = create_rep_for(item, '/foo/')
+    rep = create_rep_for(item, :foo)
     create_textual_filter
 
     assert rep.binary?
@@ -361,7 +361,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     File.open(in_filename, 'w') { |io| io.write(file_content) }
 
     item = create_binary_item
-    rep = create_rep_for(item, /foo/)
+    rep = create_rep_for(item, :foo)
     rep.instance_eval { @filenames[:last] = in_filename }
     rep.raw_paths[:last] = out_filename
 
@@ -377,7 +377,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create item and item rep
     item = create_binary_item
-    rep = create_rep_for(item, '/foo/')
+    rep = create_rep_for(item, :foo)
     rep.assigns = { :content => 'meh' }
 
     # Create filter
@@ -402,7 +402,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       :config  => []
     )
     item.stubs(:site).returns(site)
-    rep = create_rep_for(item, /foo/)
+    rep = create_rep_for(item, :foo)
     rep.assigns = {}
     create_textual_filter
 
@@ -439,7 +439,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       :config  => []
     )
     item.stubs(:site).returns(site)
-    rep = create_rep_for(item, '/foo/')
+    rep = create_rep_for(item, :foo)
     rep.assigns = {}
     create_binary_filter
 
