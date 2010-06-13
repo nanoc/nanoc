@@ -48,12 +48,17 @@ module Nanoc3
       build_config(dir_or_config_hash)
     end
 
+    # Compiles the site.
+    #
+    # @return [void]
+    def compile
+      compiler.run
+    end
+
     # Returns the compiler for this site. Will create a new compiler if none
     # exists yet.
     #
     # @return [Nanoc3::Compiler] The compiler for this site
-    #
-    # TODO remove/deprecate? maybe create a #compile method?
     def compiler
       @compiler ||= Compiler.new(self)
     end

@@ -73,7 +73,7 @@ module Nanoc3::CLI::Commands
       setup_diffs
 
       # Compile
-      @base.site.compiler.run
+      @base.site.compile
 
       # Find reps
       reps = @base.site.items.map { |i| i.reps }.flatten

@@ -59,7 +59,7 @@ module Nanoc3::CLI::Commands
         start = Time.now
         site = Nanoc3::Site.new('.')
         begin
-          site.compiler.run
+          site.compile
 
           # TODO include icon (--image misc/success-icon.png)
           notify_on_compilation_success = site.config.has_key?(:notify_on_compilation_success) ?
