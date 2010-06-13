@@ -111,6 +111,9 @@ module Nanoc3
     #
     # @return [void]
     def load
+      return if @loaded
+      @loaded = true
+
       stores.each { |s| s.load }
 
       # Preprocess
