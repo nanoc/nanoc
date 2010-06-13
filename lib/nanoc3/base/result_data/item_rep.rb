@@ -198,8 +198,8 @@ module Nanoc3
     attr_reader   :name
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
-    attr_reader :binary
-    alias_method :binary?, :binary
+    attr_reader   :binary
+    alias_method  :binary?, :binary
 
     # Creates a new item representation for the given item.
     #
@@ -415,7 +415,7 @@ module Nanoc3
       params[:final] = true if !params.has_key?(:final)
 
       # Create snapshot
-       @content[snapshot_name] = @content[:last] unless self.binary?
+      @content[snapshot_name] = @content[:last] unless self.binary?
 
       # Write
       write(snapshot_name) if params[:final]
