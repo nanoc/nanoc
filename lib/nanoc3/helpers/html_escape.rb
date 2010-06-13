@@ -43,7 +43,8 @@ module Nanoc3::Helpers
                gsub('>', '&gt;').
                gsub('"', '&quot;')
       else
-        raise RuntimeError, "TODO write me"
+        raise RuntimeError, "The #html_escape or #h function needs either a " \
+          "string or a block to HTML-escape, but neither a string nor a block was given"
       end
     end
 
