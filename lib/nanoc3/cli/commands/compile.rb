@@ -157,6 +157,7 @@ module Nanoc3::CLI::Commands
     def generate_diff_for(rep, snapshot)
       return if !@base.site.config[:enable_output_diff]
       return if !File.file?(rep.raw_path(:snapshot => snapshot))
+      return if rep.binary?
 
       # Get old and new content
       old_content = File.read(rep.raw_path(:snapshot => snapshot))
