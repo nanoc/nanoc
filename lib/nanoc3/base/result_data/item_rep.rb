@@ -98,9 +98,7 @@ module Nanoc3
       #   `filenames[snapshot]` to `raw_paths[snapshot]`.
       #
       # @api private
-      #
-      # TODO rename me
-      attr_reader :filenames
+      attr_reader :temporary_filenames
 
       # @return [Hash<Symbol,String>] A hash containing the content at all
       #   snapshots. The keys correspond with the snapshot names, and the
@@ -143,15 +141,15 @@ module Nanoc3
 
         if self.binary?
           # Calculate characteristics of new content
-          size_new = File.size(@filenames[:last])
-          hash_new = Nanoc3::Checksummer.checksum_for_file(@filenames[:last]) if size_old == size_new
+          size_new = File.size(temporary_filenames[:last])
+          hash_new = Nanoc3::Checksummer.checksum_for_file(temporary_filenames[:last]) if size_old == size_new
 
           # Check whether content was modified
           is_modified = (size_old != size_new || hash_old != hash_new)
 
           # Copy
           if is_modified
-            FileUtils.cp(@filenames[:last], raw_path)
+            FileUtils.cp(temporary_filenames[:last], raw_path)
           end
         else
           # Check whether content was modified
@@ -330,10 +328,10 @@ module Nanoc3
       filter = klass.new(assigns)
 
       # Run filter
-      source = self.binary? ? @filenames[:last] : @content[:last]
+      source = self.binary? ? temporary_filenames[:last] : @content[:last]
       result = filter.run(source, filter_args)
       if klass.to_binary?
-        @filenames[:last] = filter.output_filename
+        temporary_filenames[:last] = filter.output_filename
       else
         @content[:last] = result
       end
@@ -432,11 +430,11 @@ module Nanoc3
     def initialize_content
       # Initialize content and filenames
       if self.binary?
-        @filenames = { :last => @item.raw_filename }
-        @content   = {}
+        @temporary_filenames = { :last => @item.raw_filename }
+        @content             = {}
       else
-        @content   = { :last => @item.raw_content }
-        @filenames = {}
+        @content             = { :last => @item.raw_content }
+        @temporary_filenames = {}
       end
     end
 
