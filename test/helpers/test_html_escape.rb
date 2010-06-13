@@ -25,4 +25,10 @@ class Nanoc3::Helpers::HTMLEscapeTest < MiniTest::Unit::TestCase
     assert_equal 'moo&lt;h1&gt;Looks like a header&lt;/h1&gt;', _erbout
   end
 
+  def test_html_escape_without_string_or_block
+    assert_raises RuntimeError do
+      h
+    end
+  end
+
 end
