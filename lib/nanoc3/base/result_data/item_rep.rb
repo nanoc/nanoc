@@ -62,8 +62,8 @@ module Nanoc3
     module Private
 
       # @return [Hash] A hash containing the assigns that will be used in the
-      #   next filter or layout operation. The keys ({Symbol} instances) will
-      #   be made available during the next operation.
+      #   next filter or layout operation. The keys (symbols) will be made
+      #   available during the next operation.
       attr_accessor :assigns
 
       # @return [Boolean] true if this representation has already been
