@@ -38,6 +38,8 @@ module Nanoc3
     # @return [Array]
     attr_reader :vertices
 
+    # @group Creating a graph
+
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = vertices
@@ -54,6 +56,8 @@ module Nanoc3
 
       invalidate_caches
     end
+
+    # @group Modifying the graph
 
     # Adds an edge from the first vertex to the second vertex.
     #
@@ -149,6 +153,8 @@ module Nanoc3
       @roots.delete(v)
     end
 
+    # @group Querying the graph
+
     # Returns the direct predecessors of the given vertex, i.e. the vertices
     # x where there is an edge from x to the given vertex y.
     #
@@ -209,6 +215,8 @@ module Nanoc3
     def roots
       @roots
     end
+
+    # @group Deprecated methods
 
     # @deprecated Use {#delete_edge} instead
     def remove_edge(from, to)
