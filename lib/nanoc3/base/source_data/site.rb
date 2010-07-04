@@ -212,6 +212,7 @@ module Nanoc3
     #
     # @api private
     def objects
+      # FIXME remove reference to rules
       items + layouts + code_snippets + [ config, compiler.rules_with_reference ]
     end
 
@@ -238,6 +239,7 @@ module Nanoc3
       setup_child_parent_links
 
       # Load compiler too
+      # FIXME this should not be necessary
       compiler.load
     end
 
