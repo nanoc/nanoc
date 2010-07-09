@@ -218,7 +218,8 @@ module Nanoc3
       # Load edges
       new_data[:edges].each do |edge|
         from_index, to_index = *edge
-        from, to = @previous_objects[from_index], @previous_objects[to_index]
+        from = from_index && @previous_objects[from_index]
+        to   = to_index   && @previous_objects[to_index]
         @graph.add_edge(from, to)
       end
     end
