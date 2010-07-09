@@ -330,7 +330,7 @@ module Nanoc3
     #   operation
     def assigns_for(rep)
       if rep.binary?
-        content_or_filename_assigns = { :filename => rep.filenames[:last] }
+        content_or_filename_assigns = { :filename => rep.temporary_filenames[:last] }
       else
         content_or_filename_assigns = { :content => rep.content[:last] }
       end
