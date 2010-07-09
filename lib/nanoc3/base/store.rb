@@ -6,7 +6,7 @@ module Nanoc3
   # filesystem, such as checksums, cached compiled content and dependency
   # graphs.
   #
-  # @abstract Subclasses should implement {#data} and {#data=}, and may
+  # @abstract Subclasses must implement {#data} and {#data=}, and may
   #   implement {#no_data_found} and {#version_mismatch_detected}.
   #
   # @api private
@@ -34,12 +34,18 @@ module Nanoc3
       @version  = version
     end
 
+    # @group Loading and storing data
+
     # @return The data that should be written to the disk
+    #
+    # @abstract This method must be implemented by the subclass.
     def data
       raise NotImplementedError.new("Nanoc3::Store subclasses must implement #data and #data=")
     end
 
     # @param new_data The data that has been loaded from the disk
+    #
+    # @abstract This method must be implemented by the subclass.
     #
     # @return [void]
     def data=(new_data)
@@ -89,6 +95,8 @@ module Nanoc3
         pstore[:version] = self.version
       end
     end
+
+    # @group Callback methods
 
     # Callback method that is called when no data file was found. By default,
     # this implementation does nothing, but it should probably be overridden
