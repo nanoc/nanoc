@@ -119,7 +119,7 @@ module Nanoc3::CLI::Commands
       # @param [String] message The message to include in the notification
       def notify(message)
         return if tool.nil?
-        send(tool.tr('-', '_'), message, params)
+        send(tool.tr('-', '_'), message)
       end
 
     private
@@ -128,11 +128,11 @@ module Nanoc3::CLI::Commands
         @tool ||= TOOLS.find { |t| !`which #{t}`.empty? }
       end
 
-      def growlnotify(message, params={})
+      def growlnotify(message)
         system('growlnotify', '-m', message)
       end
 
-      def notify_send(message, params={})
+      def notify_send(message)
         system('notify-send', message)
       end
 
