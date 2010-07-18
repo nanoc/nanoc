@@ -23,9 +23,6 @@ module Nanoc3
     # @return [String] This item's identifier
     attr_accessor :identifier
 
-    # @return [Time] The time where this item was last modified
-    attr_reader   :mtime
-
     # @return [Array<Nanoc3::ItemRep>] This item’s list of item reps
     attr_reader   :reps
 
@@ -60,7 +57,8 @@ module Nanoc3
     #   this item was last modified (mtime).
     #
     # @option params [Time, nil] :mtime (nil) The time when this item was last
-    #   modified
+    #   modified. Deprecated; pass the modification time as the `:mtime`
+    #   attribute instead.
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
@@ -69,9 +67,6 @@ module Nanoc3
       params ||= {}
       params = { :mtime => params } if params.is_a?(Time)
       params[:binary] = false unless params.has_key?(:binary)
-
-      # Get mtime
-      @mtime = params[:mtime]
 
       # Get type and raw content or raw filename
       @is_binary = params[:binary]
@@ -84,6 +79,9 @@ module Nanoc3
       # Get rest of params
       @attributes   = attributes.symbolize_keys
       @identifier   = identifier.cleaned_identifier
+
+      # Set mtime
+      @attributes.merge(:mtime => params[:mtime]) if params[:mtime]
 
       @parent       = nil
       @children     = []
@@ -201,6 +199,11 @@ module Nanoc3
 
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.binary?}>"
+    end
+
+    # @deprecated Access the modification time using `item[:mtime]` instead.
+    def mtime
+      self[:mtime]
     end
 
   end
