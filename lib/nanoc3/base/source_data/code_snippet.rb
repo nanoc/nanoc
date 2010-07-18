@@ -22,20 +22,11 @@ module Nanoc3
     #
     # @param [String] filename The filename corresponding to this code snippet
     #
-    # @param [Time, Hash] params Extra parameters. For backwards
-    #   compatibility, this can be a Time instance indicating the time when
-    #   this code snippet was last modified (mtime).
-    #
-    # @option params [Time, nil] :mtime (nil) The time when this code snippet
-    #   was last modified
+    # @param [Time, Hash] params Extra parameters. Ignored by nanoc; it is
+    #   only included for backwards compatibility.
     def initialize(data, filename, params=nil)
-      # Parse params
-      params ||= {}
-      params = { :mtime => params } if params.is_a?(Time)
-
       @data     = data
       @filename = filename
-      @mtime    = params[:mtime]
     end
 
     # Loads the code by executing it.

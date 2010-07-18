@@ -16,9 +16,6 @@ module Nanoc3
     #   slash
     attr_accessor :identifier
 
-    # @return [Time] The time where this layout was last modified
-    attr_reader   :mtime
-
     # Creates a new layout.
     #
     # @param [String] raw_content The raw content of this layout.
@@ -32,18 +29,17 @@ module Nanoc3
     #   this layout was last modified (mtime).
     #
     # @option params [Time, nil] :mtime (nil) The time when this layout was
-    #   last modified
+    #   last modified. Deprecated; pass the modification time as the `:mtime`
+    #   attribute instead.
     def initialize(raw_content, attributes, identifier, params=nil)
-      # Parse params
-      params ||= {}
-      params = { :mtime => params } if params.is_a?(Time)
-
-      # Get mtime
-      @mtime        = params[:mtime]
-
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys
       @identifier   = identifier.cleaned_identifier
+
+      # Set mtime
+      params ||= {}
+      params = { :mtime => params } if params.is_a?(Time)
+      @attributes.merge(:mtime => params[:mtime]) if params[:mtime]
     end
 
     # Requests the attribute with the given key.
@@ -76,6 +72,11 @@ module Nanoc3
 
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier}>"
+    end
+
+    # @deprecated Access the modification time using `layout[:mtime]` instead.
+    def mtime
+      self[:mtime]
     end
 
   end
