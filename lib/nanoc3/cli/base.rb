@@ -91,6 +91,14 @@ module Nanoc3::CLI
 
     # Inherited from ::Cri::Base
     def run(args)
+      # Set exit handler
+      [ 'INT', 'TERM' ].each do |signal|
+        Signal.trap(signal) do
+          puts
+          exit!(0)
+        end
+      end
+
       super(args)
     rescue Interrupt => e
       exit(1)

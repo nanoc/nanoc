@@ -6,6 +6,16 @@
 * Added AsciiDoc filter
 * Added progress indicator for long-running filters
 
+## 3.1.4 (2010-07-25)
+
+* Made INT and TERM signals always quit the CLI
+* Allowed relative imports in LESS
+* Made sure modification times are unchanged for identical recompiled items
+* Improved link validator error handling
+* Made pygmentize not output extra divs and pres
+* Allowed colorizers to be specified using symbols instead of strings
+* Added scss to the default list of text extensions
+
 ## 3.1.3 (2010-04-25)
 
 * Removed annoying win32console warning [Eric Sunshine]
