@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.1.4 (???)
+## 3.1.4 (2010-07-25)
 
 * Made INT and TERM signals always quit the CLI
 * Allowed relative imports in LESS
