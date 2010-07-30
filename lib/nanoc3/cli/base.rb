@@ -212,9 +212,10 @@ module Nanoc3::CLI
       case option
       when :version
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
+        engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
 
         puts "nanoc #{Nanoc3::VERSION} (c) 2007-2010 Denis Defreyne."
-        puts "Ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) running on #{RUBY_PLATFORM} #{gem_info}"
+        puts "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}"
         exit 0
       when :verbose
         Nanoc3::CLI::Logger.instance.level = :low
