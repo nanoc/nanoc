@@ -41,8 +41,11 @@ class Nanoc3::ChecksumStoreTest < MiniTest::Unit::TestCase
     new_checksum = Nanoc3::Checksummer.checksum_for_string('Moo?') + '-' +
       Nanoc3::Checksummer.checksum_for_hash({})
 
+    compiler = mock
+    compiler.stubs(:objects).returns([ obj ])
+
     site = mock
-    site.stubs(:objects).returns([ obj ])
+    site.stubs(:compiler).returns(compiler)
 
     store = Nanoc3::ChecksumStore.new(:site => site)
     store.load

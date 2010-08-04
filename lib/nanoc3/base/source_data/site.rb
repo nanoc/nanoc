@@ -208,14 +208,6 @@ module Nanoc3
       end
     end
 
-    # TODO document
-    #
-    # @api private
-    def objects
-      # FIXME remove reference to rules
-      items + layouts + code_snippets + [ config, compiler.rules_with_reference ]
-    end
-
     # @deprecated It is no longer necessary to explicitly load site data. It
     #   is safe to remove all {#load_data} calls.
     def load_data(force=false)

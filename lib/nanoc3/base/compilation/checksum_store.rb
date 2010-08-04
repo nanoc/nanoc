@@ -82,7 +82,7 @@ module Nanoc3
     #
     # @return [void]
     def calculate_all_checksums
-      @site.objects.each { |obj| new_checksum_for(obj) }
+      @site.compiler.objects.each { |obj| new_checksum_for(obj) }
     end
 
     # @param [#reference] obj

@@ -260,6 +260,15 @@ module Nanoc3
       preprocessor_context.instance_eval(&preprocessor) if preprocessor
     end
 
+    # Returns all objects managed by the site (items, layouts, code snippets,
+    # site configuration and the rules).
+    #
+    # @api private
+    def objects
+      # FIXME remove reference to rules
+      site.items + site.layouts + site.code_snippets + [ site.config, self.rules_with_reference ]
+    end
+
     # FIXME get rid of this
     #
     # @api private
