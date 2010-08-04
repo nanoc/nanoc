@@ -296,6 +296,11 @@ module Nanoc3
     # {#initialize} for details.
     def build_config(dir_or_config_hash)
       if dir_or_config_hash.is_a? String
+        # Check whether it is supported
+        if dir_or_config_hash != '.'
+          warn 'WARNING: Calling Nanoc3::Site.new with a directory that is not the current working directory is not supported. It is recommended to change the directory before calling Nanoc3::Site.new. For example, instead of Nanoc3::Site.new(\'abc\'), use Dir.chdir(\'abc\') { Nanoc3::Site.new(\'.\') }.'
+        end
+
         # Read config from config.yaml in given dir
         config_path = File.join(dir_or_config_hash, 'config.yaml')
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
