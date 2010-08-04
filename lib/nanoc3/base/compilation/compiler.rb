@@ -40,6 +40,8 @@ module Nanoc3
   #   the specified object.
   class Compiler
 
+    # @group Accessors
+
     # @return [Nanoc3::Site] The site this compiler belongs to
     attr_reader :site
 
@@ -67,6 +69,8 @@ module Nanoc3
     # @return [Proc] The code block that will be executed after all data is
     #   loaded but before the site is compiled
     attr_accessor :preprocessor
+
+    # @group Public instance methods
 
     # Creates a new compiler fo the given site
     #
@@ -104,6 +108,8 @@ module Nanoc3
       # Cleanup
       FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
     end
+
+    # @group Private instance methods
 
     # Load the helper data that is used for compiling the site.
     #
@@ -269,7 +275,8 @@ module Nanoc3
       site.items + site.layouts + site.code_snippets + [ site.config, self.rules_with_reference ]
     end
 
-    # FIXME get rid of this
+    # Returns the rules along with an unique reference (`:rules`) so that the
+    # outdatedness checker can use them.
     #
     # @api private
     def rules_with_reference
@@ -337,6 +344,8 @@ module Nanoc3
     #
     # @return [Hash] The assigns that should be used in the next filter/layout
     #   operation
+    #
+    # @api private
     def assigns_for(rep)
       if rep.binary?
         content_or_filename_assigns = { :filename => rep.temporary_filenames[:last] }
