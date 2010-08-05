@@ -23,19 +23,24 @@ module Nanoc3::CLI
     attr_accessor :level
 
     # Whether to use color in log messages or not
-    attr_accessor :color
-    alias_method :color?, :color
+    attr_writer :color
 
     def initialize
       @level = :high
-      @color = $stdout.tty?
+    end
 
-      # Try enabling color support on Windows
-      begin
-        require 'Win32/Console/ANSI' if RUBY_PLATFORM =~/mswin|mingw/
-      rescue LoadError
-        @color = false
+    # @return [Boolean] true if colors are enabled, false otherwise
+    def color?
+      if @color.nil?
+        @color = true
+        begin
+          require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /mswin|mingw/
+        rescue LoadError
+          @color = false
+        end
       end
+
+      @color
     end
 
     # Logs a file-related action.

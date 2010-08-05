@@ -199,6 +199,10 @@ module Nanoc3::CLI
           :desc => 'show this help message and quit'
         },
         {
+          :long => 'color', :short => 'l', :argument => :forbidden,
+          :desc => 'enable color'
+        },
+        {
           :long => 'no-color', :short => 'C', :argument => :forbidden,
           :desc => 'disable color'
         },
@@ -236,6 +240,8 @@ module Nanoc3::CLI
         @debug = true
       when :warn
         $-w = true
+      when :color
+        Nanoc3::CLI::Logger.instance.color = true
       when :'no-color'
         Nanoc3::CLI::Logger.instance.color = false
       when :help
