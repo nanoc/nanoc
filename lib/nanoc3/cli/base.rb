@@ -23,12 +23,20 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::View.new)
     end
 
+    # Returns a fully initialised base instance. It is recommended to use this
+    # shared instance than to create new ones, as this will be the instance
+    # that will be used when reading all code from the `lib/` directory.
+    #
+    # @return [Nanoc3::CLI::Base]
     def self.shared_base
       @shared_base ||= Nanoc3::CLI::Base.new
     end
 
-    # Helper function which can be called when a command is executed that
-    # requires a site, such as the compile command.
+    # Asserts that the current working directory contains a site
+    # ({Nanoc3::Site} instance). If no site is present, prints an error
+    # message and exits.
+    #
+    # @return [void]
     def require_site
       if site.nil?
         $stderr.puts 'The current working directory does not seem to be a ' +
@@ -37,7 +45,10 @@ module Nanoc3::CLI
       end
     end
 
-    # Gets the site (Nanoc3::Site) in the current directory and loads its data.
+    # Gets the site ({Nanoc3::Site} instance) in the current directory and
+    # loads its data.
+    #
+    # @return [Nanoc3::Site] The site in the current working directory
     def site
       # Load site if possible
       if File.file?('config.yaml') && (!self.instance_variable_defined?(:@site) || @site.nil?)
@@ -52,7 +63,7 @@ module Nanoc3::CLI
       @site
     end
 
-    # Inherited from ::Cri::Base
+    # @see ::Cri::Base#run
     def run(args)
       # Set exit handler
       [ 'INT', 'TERM' ].each do |signal|
@@ -70,8 +81,12 @@ module Nanoc3::CLI
       exit(1)
     end
 
-    # Prints the given error to stderr. Includes message, possible resolution,
-    # compilation stack, backtrace, etc.
+    # Prints the given error to stderr. Includes message, possible resolution
+    # (see {#resolution_for}), compilation stack, backtrace, etc.
+    #
+    # @param [Error] error The error that should be described
+    #
+    # @return [void]
     def print_error(error)
       $stderr.puts
 
@@ -115,8 +130,12 @@ module Nanoc3::CLI
       $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
     end
 
-    # Returns a string containing hints for resolving the given error, or nil
-    # if no resolution can be automatically obtained.
+    # Attempts to find a resolution for the given error, or nil if no
+    # resolution can be automatically obtained.
+    #
+    # @param [Error] error The error to find a resolution for
+    #
+    # @return [String] The resolution for the given error
     def resolution_for(error)
       # FIXME this should probably go somewhere else so that 3rd-party code can add other gem names too
       gem_names = {
@@ -158,6 +177,10 @@ module Nanoc3::CLI
     # Sets the data source's VCS to the VCS with the given name. Does nothing
     # when the site's data source does not support VCSes (i.e. does not
     # implement #vcs=).
+    #
+    # @param [String] vcs_name The name of the VCS that should be used
+    #
+    # @return [void]
     def set_vcs(vcs_name)
       # Skip if not possible
       return if vcs_name.nil? || site.nil?
@@ -178,7 +201,7 @@ module Nanoc3::CLI
       end
     end
 
-    # Returns the list of global option definitionss.
+    # @return [Array] The list of global option definitions
     def global_option_definitions
       [
         {
@@ -208,6 +231,7 @@ module Nanoc3::CLI
       ]
     end
 
+    # @see Cri::Base#handle_option
     def handle_option(option)
       case option
       when :version
