@@ -31,6 +31,7 @@ module Nanoc3::CLI::Commands
 
     def run(options, arguments)
       require 'fssm'
+      require 'pathname'
 
       @notifier = Notifier.new
 
