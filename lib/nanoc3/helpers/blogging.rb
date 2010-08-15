@@ -39,10 +39,7 @@ module Nanoc3::Helpers
     def sorted_articles
       require 'time'
       articles.sort_by do |a|
-        time = a[:created_at]
-        time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
-        time = Time.parse(time) if time.is_a?(String)
-        time
+        attribute_to_time(a[:created_at])
       end.reverse
     end
 
@@ -185,10 +182,7 @@ module Nanoc3::Helpers
 
       # Get sorted relevant articles
       sorted_relevant_articles = relevant_articles.sort_by do |a|
-        time = a[:created_at]
-        time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
-        time = Time.parse(time) if time.is_a?(String)
-        time
+        attribute_to_time(a[:created_at])
       end.reverse.first(limit)
 
       # Get most recent article
@@ -208,10 +202,7 @@ module Nanoc3::Helpers
         xml.title   title
 
         # Add date
-        time = last_article[:created_at]
-        time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
-        time = Time.parse(time) if time.is_a?(String)
-        xml.updated(time.to_iso8601_time)
+        xml.updated(attribute_to_time(last_article[:created_at]).to_iso8601_time)
 
         # Add links
         xml.link(:rel => 'alternate', :href => root_url)
@@ -235,14 +226,8 @@ module Nanoc3::Helpers
             xml.title     a[:title], :type => 'html'
 
             # Add dates
-            create_time = a[:created_at]
-            create_time = Time.local(create_time.year, create_time.month, create_time.day) if create_time.is_a?(Date)
-            create_time = Time.parse(create_time) if create_time.is_a?(String)
-            update_time = a[:updated_at] || a[:created_at]
-            update_time = Time.local(update_time.year, update_time.month, update_time.day) if update_time.is_a?(Date)
-            update_time = Time.parse(update_time) if update_time.is_a?(String)
-            xml.published create_time.to_iso8601_time
-            xml.updated   update_time.to_iso8601_time
+            xml.published attribute_to_time(a[:created_at]).to_iso8601_time
+            xml.updated   attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
 
             # Add link
             xml.link(:rel => 'alternate', :href => url)
@@ -307,12 +292,22 @@ module Nanoc3::Helpers
 
       hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
 
-      time = item[:created_at]
-      time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
-      time = Time.parse(time) if time.is_a?(String)
-      formatted_date = time.to_iso8601_date
+      formatted_date = attribute_to_time(item[:created_at]).to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier)
+    end
+
+    # Converts the given attribute (which can be a string, a Time or a Date)
+    # into a Time.
+    #
+    # @param [String, Time, Date] time Something that contains time
+    #   information but is not necessarily a Time instance yet
+    #
+    # @return [Time] The Time instance corresponding to the given input
+    def attribute_to_time(time)
+      time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
+      time = Time.parse(time) if time.is_a?(String)
+      time
     end
 
   end
