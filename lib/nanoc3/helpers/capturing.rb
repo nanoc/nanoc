@@ -15,7 +15,7 @@ module Nanoc3::Helpers
   # This helper has been tested with ERB and Haml. Other filters may not work
   # correctly.
   #
-  # @example Capturing content into a `content_for_summary` attribute
+  # @example Capturing content for a summary
   #
   #   <% content_for :summary do %>
   #     <p>On this item, nanoc is introduced, blah blah.</p>
@@ -78,7 +78,7 @@ module Nanoc3::Helpers
     # @overload content_for(item, name)
     #
     #   Fetches the capture with the given name from the given item and
-    #   returns it. The captured content will not be outputted.
+    #   returns it.
     #
     #   @param [Nanoc3::Item] item The item for which to get the capture
     #
