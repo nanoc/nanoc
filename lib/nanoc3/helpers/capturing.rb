@@ -12,6 +12,9 @@ module Nanoc3::Helpers
   # you write the summary on the item itself, but capture it, and print it in
   # the sidebar layout.
   #
+  # This helper has been tested with ERB and Haml. Other filters may not work
+  # correctly.
+  #
   # @example Capturing content into a `content_for_summary` attribute
   #
   #   <% content_for :summary do %>
@@ -22,27 +25,75 @@ module Nanoc3::Helpers
   #
   #   <div id="sidebar">
   #     <h3>Summary</h3>
+  #     <%= content_for(@item, :summary) || '(no summary)' %>
+  #   </div>
+  #
+  # @example Showing captured content in a sidebar the old, deprecated way (do not use or I will become very angry)
+  #
+  #   <div id="sidebar">
+  #     <h3>Summary</h3>
   #     <%= @item[:content_for_summary] || '(no summary)' %>
   #   </div>
   module Capturing
 
-    # Captures the content inside the block and stores it in an item
-    # attribute named `content_for_` followed by the given name. The
-    # content of the block itself will not be outputted.
+    # @overload content_for(name, &block)
     #
-    # @param [Symbol, String] The base name of the attribute into which the
-    #   content should be stored
+    #   Captures the content inside the block and stores it so that it can be
+    #   referenced later on. The same method, {#content_for}, is used for
+    #   getting the captured content as well as setting it. When capturing,
+    #   the content of the block itself will not be outputted.
     #
-    # @return [void]
-    def content_for(name, &block)
-      eval("@item[:content_for_#{name.to_s}] = capture(&block)")
+    #   For backwards compatibility, it is also possible to fetch the captured
+    #   content by getting the contents of the attribute named `content_for_`
+    #   followed by the given name. This way of accessing captures is
+    #   deprecated.
+    #
+    #   @param [Symbol, String] name The base name of the attribute into which
+    #     the content should be stored
+    #
+    #   @return [void]
+    #
+    # @overload content_for(item, name)
+    #
+    #   Fetches the capture with the given name from the given item and
+    #   returns it. The captured content will not be outputted.
+    #
+    #   @param [Nanoc3::Item] item The item for which to get the capture
+    #
+    #   @param [Symbol, String] name The name of the capture to fetch
+    #
+    #   @return [String] The stored captured content
+    def content_for(*args, &block)
+      # Initialize
+      @_Nanoc3_Helpers_Capturing_captures ||= {}
+      @_Nanoc3_Helpers_Capturing_captures[@item.identifier] ||= {}
+
+      if block_given? # Set content
+        # Get args
+        if args.size != 1
+          raise ArgumentError, "expected 1 argument (the name of the capture) but got #{args.size} instead"
+        end
+        name = args[0]
+
+        # Capture and store
+        content = capture(&block)
+        @item["content_for_#{name}".to_sym] = content # FIXME don’t do this
+        @_Nanoc3_Helpers_Capturing_captures[@item.identifier][name.to_sym] = content
+      else # Get content
+        # Get args
+        if args.size != 2
+          raise ArgumentError, "expected 2 arguments (the item and the name of the capture) but got #{args.size} instead"
+        end
+        item = args[0]
+        name = args[1]
+
+        # Get content
+        @_Nanoc3_Helpers_Capturing_captures[item.identifier][name]
+      end
     end
 
-    # Evaluates the given block and returns the result. The contents of the
+    # Evaluates the given block and returns its contents. The contents of the
     # block is not outputted.
-    #
-    # This function has been tested with ERB and Haml. Other filters may not
-    # work correctly.
     #
     # @return [String] The captured result
     def capture(&block)
