@@ -21,8 +21,8 @@ class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
     result = ::ERB.new(content).result(binding)
 
     # Check
-    assert(@item[:content_for_sidebar].strip == '3')
-    assert(content_for(@item, :sidebar).strip == '3')
+    assert_equal '3', content_for(@item, :sidebar).strip
+    assert_equal '3', @item[:content_for_sidebar].strip
     assert_match(/^head\s+foot$/, result)
   end
 

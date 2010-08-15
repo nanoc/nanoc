@@ -161,6 +161,19 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:visit_started, self)
       Nanoc3::NotificationCenter.post(:visit_ended,   self)
 
+      # Get captured content (hax)
+      # TODO [in nanoc 4.0] remove me
+      if key.to_s =~ /^content_for_(.*)$/
+        # Include capturing helper if necessary
+        unless @_Nanoc3_Helpers_Capturing_included
+          self.class.send(:include, ::Nanoc3::Helpers::Capturing)
+          @_Nanoc3_Helpers_Capturing_included = true
+        end
+
+        # Get content
+        return content_for(self, $1.to_sym)
+      end
+
       @attributes[key]
     end
 

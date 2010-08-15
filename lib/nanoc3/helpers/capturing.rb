@@ -36,6 +36,28 @@ module Nanoc3::Helpers
   #   </div>
   module Capturing
 
+    # @api private
+    class CapturesStore
+
+      require 'singleton'
+      include Singleton
+
+      def initialize
+        @store = {}
+      end
+
+      def []=(item, name, content)
+        @store[item.identifier] ||= {}
+        @store[item.identifier][name] = content
+      end
+
+      def [](item, name)
+        @store[item.identifier] ||= {}
+        @store[item.identifier][name]
+      end
+
+    end
+
     # @overload content_for(name, &block)
     #
     #   Captures the content inside the block and stores it so that it can be
@@ -64,31 +86,28 @@ module Nanoc3::Helpers
     #
     #   @return [String] The stored captured content
     def content_for(*args, &block)
-      # Initialize
-      @_Nanoc3_Helpers_Capturing_captures ||= {}
-      @_Nanoc3_Helpers_Capturing_captures[@item.identifier] ||= {}
-
       if block_given? # Set content
         # Get args
         if args.size != 1
-          raise ArgumentError, "expected 1 argument (the name of the capture) but got #{args.size} instead"
+          raise ArgumentError, "expected 1 argument (the name " + 
+            "of the capture) but got #{args.size} instead"
         end
         name = args[0]
 
         # Capture and store
         content = capture(&block)
-        @item["content_for_#{name}".to_sym] = content # FIXME don’t do this
-        @_Nanoc3_Helpers_Capturing_captures[@item.identifier][name.to_sym] = content
+        CapturesStore.instance[@item, name] = content
       else # Get content
         # Get args
         if args.size != 2
-          raise ArgumentError, "expected 2 arguments (the item and the name of the capture) but got #{args.size} instead"
+          raise ArgumentError, "expected 2 arguments (the item " +
+            "and the name of the capture) but got #{args.size} instead"
         end
         item = args[0]
         name = args[1]
 
         # Get content
-        @_Nanoc3_Helpers_Capturing_captures[item.identifier][name]
+        CapturesStore.instance[item, name]
       end
     end
 
