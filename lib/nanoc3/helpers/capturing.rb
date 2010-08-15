@@ -96,7 +96,7 @@ module Nanoc3::Helpers
 
         # Capture and store
         content = capture(&block)
-        CapturesStore.instance[@item, name] = content
+        CapturesStore.instance[@item, name.to_sym] = content
       else # Get content
         # Get args
         if args.size != 2
@@ -107,7 +107,7 @@ module Nanoc3::Helpers
         name = args[1]
 
         # Get content
-        CapturesStore.instance[item, name]
+        CapturesStore.instance[item, name.to_sym]
       end
     end
 
