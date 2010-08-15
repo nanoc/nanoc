@@ -70,7 +70,7 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       ),
       Nanoc3::Item.new(
         'blah',
-        { :kind => 'article', :created_at => (Time.now - 1000).to_s },
+        { :kind => 'article', :created_at => (Date.today - 1).to_s }, 
         '/1/'
       ),
       Nanoc3::Item.new(
@@ -98,6 +98,14 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @items[0].stubs(:[]).with(:kind).returns('item')
 
       # Create item 1
+      @items[1].stubs(:[]).with(:updated_at).returns(Date.today - 1)
+      @items[1].stubs(:[]).with(:kind).returns('article')
+      @items[1].stubs(:[]).with(:created_at).returns((Date.today - 2).to_s)
+      @items[1].stubs(:[]).with(:title).returns('Item One')
+      @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
+      @items[1].stubs(:[]).with(:excerpt).returns(nil)
+      @items[1].stubs(:path).returns("/item1/")
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('item 1 content')
 
       # Create item 2
@@ -717,6 +725,32 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/somedir/foo/bar/', atom_tag_for(item))
+  end
+
+  def test_atom_tag_for_with_time
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
+
+    # Create article
+    item = Nanoc3::Item.new('content', { :created_at => Time.parse('2008-05-19') }, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+    item.reps[0].path = '/foo/bar/'
+
+    # Check
+    assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
+  end
+
+  def test_atom_tag_for_with_date
+    # Create site
+    @site = Nanoc3::Site.new({ :base_url => 'http://example.com' })
+
+    # Create article
+    item = Nanoc3::Item.new('content', { :created_at => Date.parse('2008-05-19') }, '/foo/')
+    item.reps << Nanoc3::ItemRep.new(item, :default)
+    item.reps[0].path = '/foo/bar/'
+
+    # Check
+    assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
   end
 
 end

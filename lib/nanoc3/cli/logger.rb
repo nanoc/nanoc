@@ -8,6 +8,8 @@ module Nanoc3::CLI
   # feedback in the terminal.
   class Logger
 
+    # Maps actions (`:create`, `:update`, `:identical` and `:skip`) onto their
+    # ANSI color codes.
     ACTION_COLORS = {
       :create         => "\e[1m" + "\e[32m", # bold + green
       :update         => "\e[1m" + "\e[33m", # bold + yellow
@@ -17,12 +19,14 @@ module Nanoc3::CLI
 
     include Singleton
 
-    # The log level, which can be :high, :low or :off (which will log all
-    # messages, only high-priority messages, or no messages at all,
+    # Returns the log level, which can be :high, :low or :off (which will log
+    # all messages, only high-priority messages, or no messages at all,
     # respectively).
+    #
+    # @return [Symbol] The log level
     attr_accessor :level
 
-    # Whether to use color in log messages or not
+    # @return [Boolean] True if color should be used, false otherwise
     attr_writer :color
 
     def initialize
@@ -45,12 +49,13 @@ module Nanoc3::CLI
 
     # Logs a file-related action.
     #
-    # +level+:: The importance of this action. Can be :high or :low.
+    # @param [:high, :low] level The importance of this action
     #
-    # +action+:: The kind of file action. Can be :create, :update or
-    #            :identical.
+    # @param [:create, :update, :identical] action The kind of file action
     #
-    # +identifier+:: The identifier of the item the action was performed on.
+    # @param [String] name The name of the file the action was performed on
+    #
+    # @return [void]
     def file(level, action, identifier, duration=nil)
       log(
         level,
@@ -66,18 +71,19 @@ module Nanoc3::CLI
 
     # Logs a message.
     #
-    # +level+:: The importance of this message. Can be :high or :low.
+    # @param [:high, :low] level The importance of this message
     #
-    # +s+:: The message to be logged.
+    # @param [String] message The message to be logged
     #
-    # +io+:: The IO instance to which the message will be written. Defaults to
-    #        standard output.
-    def log(level, s, io=$stdout)
+    # @param [#puts] io The stream to which the message should be written
+    #
+    # @return [void]
+    def log(level, message, io=$stdout)
       # Don't log when logging is disabled
       return if @level == :off
 
       # Log when level permits it
-      io.puts(s) if (@level == :low or @level == level)
+      io.puts(message) if (@level == :low or @level == level)
     end
 
   end

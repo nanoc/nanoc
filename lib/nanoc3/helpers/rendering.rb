@@ -7,7 +7,18 @@ module Nanoc3::Helpers
 
     include Nanoc3::Helpers::Capturing
 
-    # Returns a string containing the rendered given layout.
+    # Returns a string containing the rendered given layout. The given layout
+    # will first be run through the matching layout rule.
+    #
+    # The assigns (`@item`, `@config`, …) will not be available in the
+    # partial, but it is possible to pass custom assigns to the method. These
+    # assigns will be made available as instance variables inside the partial.
+    #
+    # The method can also take a block. In this case, the content of the block
+    # will be captured (using the {Nanoc3::Helpers::Capturing} helper) and
+    # this content will be made available with `yield`. In other words, a
+    # `yield` inside the partial will output the content of the block passed
+    # to the method.
     #
     # @param [String] identifier The identifier of the layout that should be
     #   rendered
@@ -28,6 +39,18 @@ module Nanoc3::Helpers
     #   # The item/layout where the partial is rendered
     #   <%= render 'head', :title => 'Foo' %>
     #   # => "<h1>Foo</h1>"
+    #
+    # @example Yielding inside a partial
+    #
+    #   # The 'box' partial
+    #   <div class="box">
+    #     <%= yield %>
+    #   </div>
+    #
+    #   # The item/layout where the partial is rendered
+    #   <% render 'box' do %>
+    #     I'm boxy! Luvz!
+    #   <% end %>
     #
     # @raise [Nanoc3::Errors::UnknownLayout] if the given layout does not
     #   exist
