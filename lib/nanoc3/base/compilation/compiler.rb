@@ -120,7 +120,8 @@ module Nanoc3
       return if @loaded
       @loaded = true
 
-      stores.each { |s| s.load }
+      # Load site if necessary
+      @site.load
 
       # Preprocess
       load_rules
@@ -128,6 +129,9 @@ module Nanoc3
       site.setup_child_parent_links
       build_reps
       route_reps
+
+      # Load auxiliary stores
+      stores.each { |s| s.load }
 
       # Determine which reps need to be recompiled
       dependency_tracker.propagate_outdatedness
