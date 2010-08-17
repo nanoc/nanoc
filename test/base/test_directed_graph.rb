@@ -66,6 +66,15 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
     assert_equal [ 1 ], graph.predecessors_of(2)
   end
 
+  def test_add_edge_with_new_vertices
+    graph = Nanoc3::DirectedGraph.new([ 1 ])
+    graph.add_edge(1, 2)
+    graph.add_edge(3, 2)
+
+    assert graph.vertices.include?(2)
+    assert graph.vertices.include?(3)
+  end
+
   def test_remove_edge
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(1,2)
