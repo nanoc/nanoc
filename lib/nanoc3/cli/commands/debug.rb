@@ -53,7 +53,7 @@ module Nanoc3::CLI::Commands
         puts "item #{item.identifier} depends on:"
         predecessors = dependency_tracker.direct_predecessors_of(item).sort_by { |i| i.identifier }
         predecessors.each do |pred|
-          puts "  #{pred.identifier}"
+          puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
         end
         puts "  (nothing)" if predecessors.empty?
         puts
