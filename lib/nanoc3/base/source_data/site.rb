@@ -214,10 +214,12 @@ module Nanoc3
       warn 'It is no longer necessary to call Nanoc3::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 
-  private
-
     # Loads the site data. It is not necessary to call this method explicitly;
     # it will be called when it is necessary.
+    #
+    # @api private
+    #
+    # @return [void]
     def load
       return if @data_loaded
       @data_loaded = true
@@ -234,6 +236,8 @@ module Nanoc3
       # FIXME this should not be necessary
       compiler.load
     end
+
+  private
 
     # Loads this site’s code and executes it.
     def load_code_snippets
