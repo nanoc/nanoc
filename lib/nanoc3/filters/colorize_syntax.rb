@@ -107,8 +107,23 @@ module Nanoc3::Filters
       code
     end
 
+    # Runs the content through [pygmentize](http://pygments.org/docs/cmdline/),
+    # the commandline frontend for [Pygments](http://pygments.org/).
+    #
+    # @api private
+    #
+    # @param [String] code The code to colorize
+    #
+    # @param [String] language The language the code is written in
+    #
+    # @option params [String, Symbol] :encoding The encoding of the code block
+    #
+    # @return [String] The colorized output
     def pygmentize(code, language, params={})
-      IO.popen("pygmentize -l #{language} -f html", "r+") do |io|
+      enc = ""
+      enc = "-O encoding=" + params[:encoding] if params[:encoding]
+
+      IO.popen("pygmentize -l #{language} -f html #{enc}", "r+") do |io|
         io.write(code)
         io.close_write
         highlighted_code = io.read
