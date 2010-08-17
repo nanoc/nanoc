@@ -110,6 +110,8 @@ module Nanoc3
       return if @vertices.include?(v)
 
       @vertices << v
+      @vertice_indexes[v] = @vertices.size-1
+
       @roots    << v
     end
 
