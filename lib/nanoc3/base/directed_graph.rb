@@ -67,6 +67,9 @@ module Nanoc3
     #
     # @return [void]
     def add_edge(from, to)
+      add_vertex(from)
+      add_vertex(to)
+
       @from_graph[from] ||= Set.new
       @from_graph[from] << to
 
