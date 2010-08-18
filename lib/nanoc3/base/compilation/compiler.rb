@@ -100,6 +100,7 @@ module Nanoc3
 
       # Compile reps
       load
+      @site.freeze
       dependency_tracker.start
       compile_reps(reps)
       dependency_tracker.stop
