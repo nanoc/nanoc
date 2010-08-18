@@ -184,6 +184,12 @@ module Nanoc3::CLI
         if gem_name
           "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) and then re-running the command."
         end
+      when RuntimeError
+        if error.message =~ /^can't modify frozen/
+          "You attempted to modify immutable data. Some data, such as " \
+          "item/layout attributes and raw item/layout content, can no " \
+          "longer be modified once compilation has started."
+        end
       end
     end
 

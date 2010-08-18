@@ -129,4 +129,14 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     assert_equal 'the correct path', item.path(:rep => :moo)
   end
 
+  def test_freeze_should_disallow_changes
+    item = Nanoc3::Item.new("foo", {}, '/foo/')
+    item.freeze
+
+    e = assert_raises(RuntimeError) do
+      item[:blah] = '123'
+    end
+    assert_match /^can't modify frozen /, e.message
+  end
+
 end

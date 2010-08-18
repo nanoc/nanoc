@@ -208,6 +208,18 @@ module Nanoc3
       end
     end
 
+    # Prevents all further modifications to itself, its items, its layouts etc.
+    #
+    # @return [void]
+    def freeze
+      super
+
+      config.freeze
+      items.each         { |i|  i.freeze  }
+      layouts.each       { |l|  l.freeze  }
+      code_snippets.each { |cs| cs.freeze }
+    end
+
     # @deprecated It is no longer necessary to explicitly load site data. It
     #   is safe to remove all {#load_data} calls.
     def load_data(force=false)
