@@ -214,8 +214,6 @@ module Nanoc3
     #
     # @return [void]
     def freeze
-      super
-
       attributes.freeze
     end
     def inspect
