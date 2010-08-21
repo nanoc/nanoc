@@ -385,6 +385,24 @@ class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert_equal(content, result[1])
   end
 
+  def test_parse_embedded_diff
+    content = \
+      "--- a/foo\n" \
+      "+++ b/foo\n" \
+      "blah blah\n"
+
+    # Create a file
+    File.open('test.html', 'w') { |io| io.write(content) }
+
+    # Create data source
+    data_source = Nanoc3::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({}, result[0])
+    assert_equal(content, result[1])
+  end
+
   def test_parse_external
     # Create a file
     File.open('test.html', 'w') { |io| io.write("blah blah") }

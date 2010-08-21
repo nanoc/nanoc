@@ -656,4 +656,31 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.send :forget_dependencies_if_outdated, items
   end
 
+  def test_disallow_routes_not_starting_with_slash
+    # Create site
+    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+
+    FileUtils.cd('bar') do
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  layout 'default'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  'index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Create site
+      site = Nanoc3::Site.new('.')
+      error = assert_raises(RuntimeError) do
+        site.compile
+      end
+      assert_match /^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message
+    end
+  end
+
 end

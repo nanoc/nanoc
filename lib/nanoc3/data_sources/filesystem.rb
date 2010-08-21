@@ -238,7 +238,7 @@ module Nanoc3::DataSources
       data = File.read(content_filename)
 
       # Check presence of metadata section
-      if data[0, 3] != '-'*3 && data[0, 5] != '-'*5
+      if data !~ /\A-{3,5}\s*$/
         return [ {}, data ]
       end
 
