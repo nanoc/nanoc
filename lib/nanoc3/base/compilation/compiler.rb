@@ -327,6 +327,9 @@ module Nanoc3
           # Get basic path by applying matching rule
           basic_path = rule.apply_to(rep, :compiler => self)
           next if basic_path.nil?
+          if basic_path !~ %r{^/}
+            raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash.".make_compatible_with_env
+          end
 
           # Get raw path by prepending output directory
           rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path
