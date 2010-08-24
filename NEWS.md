@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.1.5 (???)
+## 3.1.5 (2010-08-24)
 
 * Improved `#render` documentation
 * Improved metadata section check so that e.g. raw diffs are handled properly
