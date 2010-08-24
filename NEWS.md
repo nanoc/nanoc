@@ -5,6 +5,11 @@
 * Sped up nanoc quite a bit
 * Added AsciiDoc filter
 * Added progress indicator for long-running filters
+* Made all source data, such as item attributes, frozen during compilation
+* Exposed RedCloth parameters in the filter [Vincent Driessen]
+* Added --color option to force color on
+* Cleaned up internals, deprecating several parts and/or marking them as
+  private in the progress
 
 ## 3.1.5 (???)
 
