@@ -6,7 +6,7 @@
 * Improved metadata section check so that e.g. raw diffs are handled properly
 * Deprecated using `Nanoc3::Site#initialize` with a non-`"."` argument
 * Added Ruby engine to version string
-* Allowed the `created_at` and `updated_at` attributes used in  the`Blogging`
+* Allowed the `created_at` and `updated_at` attributes used in the `Blogging`
   helper to be `Date` instances
 
 ## 3.1.4 (2010-07-25)
