@@ -63,9 +63,23 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
       # Create filter
       filter = ::Nanoc3::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
 
-      # Run filter 
+      # Run filter
       result = filter.run('%p= yield')
       assert_equal("<p>Is this the Payne residence?</p>\n", result)
+    end
+  end
+
+  def test_filter_with_proper_indentation
+    if_have 'haml' do
+      # Create file to include
+      File.open('stuff', 'w') do |io|
+        io.write("<pre>Max Payne\nMona Sax</pre>")
+      end
+
+      # Run filter
+      filter = ::Nanoc3::Filters::Haml.new
+      result = filter.run("%body\n  ~ File.read('stuff')")
+      assert_match(/Max Payne&#x000A;Mona Sax/, result)
     end
   end
 
