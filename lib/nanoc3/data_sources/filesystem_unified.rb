@@ -14,10 +14,10 @@ module Nanoc3::DataSources
   # itself can start with a metadata section: it can be stored at the top of
   # the file, between `---` (three dashes) separators. For example:
   #
-  #   ---
-  #   title: "Moo!"
-  #   ---
-  #   h1. Hello!
+  #     ---
+  #     title: "Moo!"
+  #     ---
+  #     h1. Hello!
   #
   # The metadata section can be omitted. If the file does not start with
   # three or five dashes, the entire file will be considered as content.
@@ -26,7 +26,7 @@ module Nanoc3::DataSources
   # an `index.*` filename, such as `index.txt`, will have the filesystem path
   # with the `index.*` part stripped as a identifier. For example:
   #
-  #   foo/bar/index.html → /foo/bar/
+  #     foo/bar/index.html → /foo/bar/
   #
   # In other cases, the identifier is calculated by stripping the extension.
   # If the `allow_periods_in_identifiers` attribute in the configuration is
@@ -34,24 +34,24 @@ module Nanoc3::DataSources
   # extensions; if it is false or unset, all extensions will be stripped.
   # For example:
   #
-  #   (`allow_periods_in_identifiers` set to true)
-  #   foo.entry.html → /foo.entry/
-  #   
-  #   (`allow_periods_in_identifiers` set to false)
-  #   foo.html.erb → /foo/
+  #     (`allow_periods_in_identifiers` set to true)
+  #     foo.entry.html → /foo.entry/
+  #     
+  #     (`allow_periods_in_identifiers` set to false)
+  #     foo.html.erb → /foo/
   #
   # Note that it is possible for two different, separate files to have the
   # same identifier. It is recommended to avoid such situations.
   #
   # Some more examples:
   #
-  #   content/index.html          → /
-  #   content/foo.html            → /foo/
-  #   content/foo/index.html      → /foo/
-  #   content/foo/bar.html        → /foo/bar/
-  #   content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
-  #   content/foo/bar/index.html  → /foo/bar/
-  #   content/foo.bar/index.html  → /foo.bar/
+  #     content/index.html          → /
+  #     content/foo.html            → /foo/
+  #     content/foo/index.html      → /foo/
+  #     content/foo/bar.html        → /foo/bar/
+  #     content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
+  #     content/foo/bar/index.html  → /foo/bar/
+  #     content/foo.bar/index.html  → /foo.bar/
   #
   # The file extension does not determine the filters to run on items; the
   # Rules file is used to specify processing instructors for each item.

@@ -505,4 +505,58 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_compile_iso_8859_1_site
+    # Check encoding
+    if !''.respond_to?(:encode)
+      skip "Test only works on 1.9.x"
+      return
+    end
+
+    # Create data source
+    data_source = new_data_source
+
+    # Create item
+    data_source.create_item("Hëllö", {}, '/foo/')
+
+    # Parse
+    begin
+      original_default_external_encoding = Encoding.default_external
+      Encoding.default_external = 'ISO-8859-1'
+
+      items = data_source.items
+
+      assert_equal 1, items.size
+      assert_equal Encoding.find("UTF-8"), items[0].raw_content.encoding
+    ensure
+      Encoding.default_external = original_default_external_encoding
+    end
+  end
+
+  def test_compile_iso_8859_1_site_with_explicit_encoding
+    # Check encoding
+    if !''.respond_to?(:encode)
+      skip "Test only works on 1.9.x"
+      return
+    end
+
+    # Create data source
+    data_source = new_data_source({})
+    data_source.config[:encoding] = 'ISO-8859-1'
+
+    # Create item
+    begin
+      original_default_external_encoding = Encoding.default_external
+      Encoding.default_external = 'ISO-8859-1'
+
+      data_source.create_item("Hëllö", {}, '/foo/')
+    ensure
+      Encoding.default_external = original_default_external_encoding
+    end
+
+    # Parse
+    items = data_source.items
+    assert_equal 1, items.size
+    assert_equal Encoding.find("UTF-8"), items[0].raw_content.encoding
+  end
+
 end
