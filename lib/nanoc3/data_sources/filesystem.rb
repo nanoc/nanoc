@@ -265,8 +265,12 @@ module Nanoc3::DataSources
     # “encoding” configuration attribute in the data source configuration.
     def read(filename)
       data = File.read(filename)
-      data.force_encoding(@config[:encoding]) if @config && @config[:encoding]
-      data.encode('UTF-8')
+      if data.respond_to?(:encode)
+        data.force_encoding(@config[:encoding]) if @config && @config[:encoding]
+        data.encode('UTF-8')
+      else
+        data
+      end
     end
 
   end
