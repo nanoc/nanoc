@@ -506,6 +506,12 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_iso_8859_1_site
+    # Check encoding
+    if !''.respond_to?(:encode)
+      skip "Test only works on 1.9.x"
+      return
+    end
+
     # Create data source
     data_source = new_data_source
 
@@ -527,6 +533,12 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_iso_8859_1_site_with_explicit_encoding
+    # Check encoding
+    if !''.respond_to?(:encode)
+      skip "Test only works on 1.9.x"
+      return
+    end
+
     # Create data source
     data_source = new_data_source({})
     data_source.config[:encoding] = 'ISO-8859-1'
