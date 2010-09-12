@@ -11,13 +11,13 @@
 * Cleaned up internals, deprecating several parts and/or marking them as
   private in the progress
 
-## 3.1.5 (???)
+## 3.1.5 (2010-08-24)
 
 * Improved `#render` documentation
 * Improved metadata section check so that e.g. raw diffs are handled properly
 * Deprecated using `Nanoc3::Site#initialize` with a non-`"."` argument
 * Added Ruby engine to version string
-* Allowed the `created_at` and `updated_at` attributes used in  the`Blogging`
+* Allowed the `created_at` and `updated_at` attributes used in the `Blogging`
   helper to be `Date` instances
 
 ## 3.1.4 (2010-07-25)

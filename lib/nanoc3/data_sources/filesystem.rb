@@ -228,14 +228,14 @@ module Nanoc3::DataSources
     def parse(content_filename, meta_filename, kind)
       # Read content and metadata from separate files
       if meta_filename
-        content = content_filename ? File.read(content_filename) : ''
-        meta    = YAML.load_file(meta_filename) || {}
+        content = content_filename ? read(content_filename) : ''
+        meta    = YAML.load(read(meta_filename)) || {}
 
         return [ meta, content ]
       end
 
       # Read data
-      data = File.read(content_filename)
+      data = read(content_filename)
 
       # Check presence of metadata section
       if data !~ /\A-{3,5}\s*$/
@@ -256,6 +256,20 @@ module Nanoc3::DataSources
 
       # Done
       [ meta, content ]
+    end
+
+    # Reads the content of the file with the given name and returns a string
+    # in UTF-8 encoding. The original encoding of the string is derived from
+    # the default external encoding, but this can be overridden by the
+    # “encoding” configuration attribute in the data source configuration.
+    def read(filename)
+      data = File.read(filename)
+      if data.respond_to?(:encode)
+        data.force_encoding(@config[:encoding]) if @config && @config[:encoding]
+        data.encode('UTF-8')
+      else
+        data
+      end
     end
 
   end
