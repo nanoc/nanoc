@@ -133,10 +133,14 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     item = Nanoc3::Item.new("foo", {}, '/foo/')
     item.freeze
 
-    e = assert_raises(RuntimeError) do
+    raised = false
+    begin
       item[:blah] = '123'
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
     end
-    assert_match /^can't modify frozen /, e.message
+    assert raised
   end
 
 end
