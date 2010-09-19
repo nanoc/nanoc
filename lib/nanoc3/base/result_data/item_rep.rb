@@ -334,6 +334,7 @@ module Nanoc3
         temporary_filenames[:last] = filter.output_filename
       else
         @content[:last] = result
+        @content[:last].freeze
       end
       @binary = klass.to_binary?
 
@@ -434,6 +435,7 @@ module Nanoc3
         @content             = {}
       else
         @content             = { :last => @item.raw_content }
+        @content[:last].freeze
         @temporary_filenames = {}
       end
     end
