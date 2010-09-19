@@ -210,12 +210,13 @@ module Nanoc3
       [ type, self.identifier ]
     end
 
-    # Prevents all further modifications to itself, its items, its layouts etc.
+    # Prevents all further modifications to its attributes.
     #
     # @return [void]
     def freeze
       attributes.freeze
     end
+
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.binary?}>"
     end
