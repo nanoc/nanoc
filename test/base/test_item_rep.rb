@@ -457,6 +457,53 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_raises(Nanoc3::Errors::CannotUseBinaryFilter) { rep.filter(:binary_filter) }
   end
 
+  def test_new_content_should_be_frozen
+    filter_class = Class.new(::Nanoc3::Filter) do
+      def run(content, params={})
+        content.gsub!('foo', 'moo')
+        content
+      end
+    end
+
+    item = Nanoc3::Item.new("foo bar", {}, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :default)
+    rep.instance_eval { @filter_class = filter_class }
+    def rep.filter_named(name) ; @filter_class ; end
+
+    raised = false
+    begin
+      rep.filter(:whatever)
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
+  def test_filter_should_freeze_content
+    filter_class = Class.new(::Nanoc3::Filter) do
+      def run(content, params={})
+        content.gsub!('foo', 'moo')
+        content
+      end
+    end
+
+    item = Nanoc3::Item.new("foo bar", {}, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :default)
+    rep.instance_eval { @filter_class = filter_class }
+    def rep.filter_named(name) ; @filter_class ; end
+
+    raised = false
+    begin
+      rep.filter(:erb)
+      rep.filter(:whatever)
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
 private
 
   def create_binary_item
