@@ -214,7 +214,7 @@ module Nanoc3
     def freeze
       super
 
-      config.freeze
+      config.freeze_recursively
       items.each         { |i|  i.freeze  }
       layouts.each       { |l|  l.freeze  }
       code_snippets.each { |cs| cs.freeze }
@@ -319,7 +319,7 @@ module Nanoc3
       end
 
       # Merge data sources with default data source config
-      @config[:data_sources].map! { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
+      @config[:data_sources] = @config[:data_sources].map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
     end
 
   end

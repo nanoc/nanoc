@@ -130,12 +130,21 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
   end
 
   def test_freeze_should_disallow_changes
-    item = Nanoc3::Item.new("foo", {}, '/foo/')
+    item = Nanoc3::Item.new("foo", { :a => { :b => 123 }}, '/foo/')
     item.freeze
 
     raised = false
     begin
-      item[:blah] = '123'
+      item[:abc] = '123'
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+
+    raised = false
+    begin
+      item[:a][:b] = '456'
     rescue => e
       raised = true
       assert_match /^can't modify frozen /, e.message

@@ -61,6 +61,15 @@ module Nanoc3
       :layout
     end
 
+    # Prevents all further modifications to the layout.
+    #
+    # @return [void]
+    def freeze
+      attributes.freeze_recursively
+      identifier.freeze
+      raw_content.freeze
+    end
+
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @api private
