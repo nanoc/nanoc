@@ -214,7 +214,11 @@ module Nanoc3
     #
     # @return [void]
     def freeze
-      attributes.freeze
+      attributes.freeze_recursively
+      children.freeze
+      identifier.freeze
+      raw_filename.freeze if raw_filename
+      raw_content.freeze  if raw_content
     end
 
     def inspect

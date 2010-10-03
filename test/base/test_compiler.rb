@@ -614,23 +614,21 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_forget_dependencies_if_outdated
     # Mock items
-    items = (0..3).map { |i| mock("item #{i}") }
-    reps  = (0..3).map { |i| mock("rep #{i}") }
-    (0..4).each { |i| items[i].stubs(:reps).returns([ reps[i] ]) }
-    items.each { |i| i.stubs(:type).returns(:item) }
-    reps.each  { |i| i.stubs(:type).returns(:item_rep) }
+    items = (0..3).map { |i| Nanoc3::Item.new("content #{i}", {}, "/items/#{i}/") }
+    reps  = (0..3).map { |i| Nanoc3::ItemRep.new(items[i], "rep #{i}") }
+    (0..3).each { |i| items[i].reps << reps[i] }
 
     # Mock dependency tracker
     dependency_tracker = Object.new
     dependency_tracker.expects(:forget_dependencies_for).times(3)
     dependency_tracker.instance_eval do
-      @objs = [ items[0], items[1], items[2], items[3] ]
+      @items = items.dup
     end
     def dependency_tracker.outdated_due_to_dependencies?(obj)
       case obj
-      when @objs[0], @objs[1]
+      when @items[0], @items[1]
         false
-      when @objs[2], @objs[3]
+      when @items[2], @items[3]
         true
       else
         raise RuntimeError, "The dependency tracker did not expect #{obj.inspect}"
@@ -640,13 +638,13 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compiler.instance_eval do
-      @objs = [ reps[0], reps[1], reps[2], reps[3] ]
+      @reps = reps.dup
     end
     def compiler.outdated?(obj)
       case obj
-      when @objs[0], @objs[2]
+      when @reps[0], @reps[2]
         false
-      when @objs[1], @objs[3]
+      when @reps[1], @reps[3]
         true
       else
         raise RuntimeError, "The compiler did not expect #{obj.inspect}"

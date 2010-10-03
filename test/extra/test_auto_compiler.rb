@@ -9,20 +9,20 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_item_rep
     if_have 'rack' do
       # Create items and reps
-      item_reps = [ mock, mock, mock ]
+      item_reps = [ mock('Nanoc3::ItemRep'), mock('Nanoc3::ItemRep'), mock('Nanoc3::ItemRep') ]
       item_reps[0].stubs(:path).returns('/foo/1/')
       item_reps[0].stubs(:raw_path).returns('out/foo/1/index.html')
       item_reps[1].stubs(:path).returns('/foo/2/')
       item_reps[1].stubs(:raw_path).returns('out/foo/2/index.html')
       item_reps[2].stubs(:path).returns('/bar/')
       item_reps[2].stubs(:raw_path).returns('out/bar/index.html')
-      items = [ mock, mock ]
+      items = [ mock('Nanoc3::Item'), mock('Nanoc3::Item') ]
       items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
       items[1].stubs(:reps).returns([ item_reps[2] ])
       item_reps[1].stubs(:item).returns(items[0])
 
       # Create site
-      site = mock
+      site = mock('Nanoc3::Site')
       site.stubs(:items).returns(items)
       site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
       site.expects(:compile)
