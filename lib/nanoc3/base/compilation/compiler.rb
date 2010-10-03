@@ -242,6 +242,18 @@ module Nanoc3
       outdatedness_checker.outdatedness_reason_for(obj)
     end
 
+    # Checks whether the given item representation needs to be recompiled.
+    # This is the case if the representation itself has changed, or when any
+    # of the dependent items need to be recompiled.
+    #
+    # @api private
+    #
+    # @return [Boolean] true if the given item representation needs to be
+    #   recompiled, false otherwise.
+    def needs_recompiling?(rep)
+      outdated?(rep) || dependency_tracker.outdated_due_to_dependencies?(rep.item)
+    end
+
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
     #
     # @api private
@@ -393,7 +405,7 @@ module Nanoc3
       outdated_reps = Set.new
       skipped_reps  = Set.new
       reps.each do |rep|
-        target = (outdated?(rep) || dependency_tracker.outdated_due_to_dependencies?(rep.item)) ? outdated_reps : skipped_reps
+        target = needs_recompiling?(rep) ? outdated_reps : skipped_reps
         target.add(rep)
       end
 
@@ -446,7 +458,7 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:processing_started,  rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      if !outdated?(rep) && !dependency_tracker.outdated_due_to_dependencies?(rep.item) && compiled_content_cache[rep]
+      if !needs_recompiling?(rep) && compiled_content_cache[rep]
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
@@ -477,7 +489,7 @@ module Nanoc3
     # @return [void]
     def forget_dependencies_if_outdated(items)
       items.each do |i|
-        if i.reps.any? { |r| outdated?(r) } || dependency_tracker.outdated_due_to_dependencies?(i)
+        if i.reps.any? { |r| needs_recompiling?(r) }
           dependency_tracker.forget_dependencies_for(i)
         end
       end
