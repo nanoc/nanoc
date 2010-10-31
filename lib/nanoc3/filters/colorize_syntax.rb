@@ -63,7 +63,7 @@ module Nanoc3::Filters
         element.inner_html = highlighted_code
       end
 
-      doc.to_s
+      doc.to_html(:encoding => 'UTF-8')
     end
 
   private
