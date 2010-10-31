@@ -3,9 +3,6 @@
 module Nanoc3::Filters
   class AsciiDoc < Nanoc3::Filter
 
-    type :text
-    identifier :asciidoc
-
     # Runs the content through [AsciiDoc](http://www.methods.co.nz/asciidoc/).
     # This method takes no options.
     #
