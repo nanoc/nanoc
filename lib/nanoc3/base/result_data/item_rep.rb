@@ -321,34 +321,36 @@ module Nanoc3
         raise Nanoc3::Errors::CannotUseTextualFilter.new(self, klass)
       end
 
-      # Notify start
-      Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
+      begin
+        # Notify start
+        Nanoc3::NotificationCenter.post(:filtering_started, self, filter_name)
 
-      # Create filter
-      filter = klass.new(assigns)
+        # Create filter
+        filter = klass.new(assigns)
 
-      # Run filter
-      source = self.binary? ? temporary_filenames[:last] : @content[:last]
-      result = filter.run(source, filter_args)
-      if klass.to_binary?
-        temporary_filenames[:last] = filter.output_filename
-      else
-        @content[:last] = result
-        @content[:last].freeze
+        # Run filter
+        source = self.binary? ? temporary_filenames[:last] : @content[:last]
+        result = filter.run(source, filter_args)
+        if klass.to_binary?
+          temporary_filenames[:last] = filter.output_filename
+        else
+          @content[:last] = result
+          @content[:last].freeze
+        end
+        @binary = klass.to_binary?
+
+        # Check whether file was written
+        if self.binary? && !File.file?(filter.output_filename)
+          raise RuntimeError,
+            "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
+        end
+
+        # Create snapshot
+        snapshot(@content[:post] ? :post : :pre, :final => false) unless self.binary?
+      ensure
+        # Notify end
+        Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
       end
-      @binary = klass.to_binary?
-
-      # Check whether file was written
-      if self.binary? && !File.file?(filter.output_filename)
-        raise RuntimeError,
-          "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
-      end
-
-      # Create snapshot
-      snapshot(@content[:post] ? :post : :pre, :final => false) unless self.binary?
-    ensure
-      # Notify end
-      Nanoc3::NotificationCenter.post(:filtering_ended, self, filter_name)
     end
 
     # Lays out the item using the given layout. This method will replace the
