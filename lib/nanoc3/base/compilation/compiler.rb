@@ -119,7 +119,6 @@ module Nanoc3
     # @return [void]
     def load
       return if @loaded
-      @loaded = true
 
       # Load site if necessary
       @site.load
@@ -137,6 +136,8 @@ module Nanoc3
       # Determine which reps need to be recompiled
       dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)
+
+      @loaded = true
     end
 
     # Store the modified helper data used for compiling the site.
