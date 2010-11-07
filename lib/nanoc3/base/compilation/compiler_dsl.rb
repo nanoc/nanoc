@@ -141,6 +141,49 @@ module Nanoc3
       @compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
     end
 
+    # Creates a pair of compilation and routing rules that indicate that the
+    # specified item(s) should be copied to the output folder as-is. The items
+    # are selected using an identifier, which may either be a string
+    # containing the `*` wildcard, or a regular expression.
+    #
+    # This meta-rule will be applicable to reps with a name equal to
+    # `:default`; this can be changed by giving an explicit `:rep` parameter.
+    #
+    # @param [String] identifier A pattern matching identifiers of items that
+    #   should be processed using this meta-rule
+    #
+    # @option params [Symbol] :rep (:default) The name of the representation
+    #   that should be routed using this rule
+    #
+    # @return [void]
+    #
+    # @example Copying the `/foo/` item as-is
+    #
+    #     passthrough '/foo/'
+    #
+    # @example Copying the `:raw` rep of the `/bar/` item as-is
+    #
+    #     passthrough '/bar/', :rep => :raw
+    def passthrough(identifier, params={})
+      # Require no block
+      raise ArgumentError.new("#passthrough does not require a block") if block_given?
+
+      # Get rep name
+      rep_name = params[:rep] || :default
+
+      # Create compilation rule
+      compilation_block = lambda { }
+      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
+      @compiler.item_compilation_rules.unshift compilation_rule
+
+      # Create routing rule
+      routing_block = lambda do
+        item.identifier.chop + '.' + item[:extension]
+      end
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block)
+      @compiler.item_routing_rules.unshift routing_rule
+    end
+
   private
 
     # Converts the given identifier, which can contain the '*' or '+'
