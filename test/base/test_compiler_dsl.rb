@@ -118,4 +118,11 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
     refute('/foo/'     =~ actual)
   end
 
+  def test_dsl_has_no_access_to_compiler
+    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    assert_raises(NameError) do
+      compiler_dsl.instance_eval { compiler }
+    end
+  end
+
 end
