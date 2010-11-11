@@ -197,6 +197,15 @@ module Nanoc3
       self.load
     end
 
+    # Undoes the effects of {#load}. Used when {#load} raises an exception.
+    #
+    # @api private
+    def unload
+      @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
+      @previous_objects = []
+      @objects_outdated_due_to_dependencies = Set.new
+    end
+
   protected
 
     def data

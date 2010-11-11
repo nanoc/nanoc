@@ -115,6 +115,14 @@ module Nanoc3
       super
     end
 
+    # Undoes the effects of {#load}. Used when {#load} raises an exception.
+    #
+    # @api private
+    def unload
+      @new_checksums = {}
+      @old_checksums = {}
+    end
+
   protected
 
     def data

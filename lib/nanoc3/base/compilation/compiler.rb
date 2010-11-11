@@ -118,7 +118,8 @@ module Nanoc3
     #
     # @return [void]
     def load
-      return if @loaded
+      return if @loaded || @loading
+      @loading = true
 
       # Load site if necessary
       @site.load
@@ -138,6 +139,37 @@ module Nanoc3
       forget_dependencies_if_outdated(items)
 
       @loaded = true
+    rescue => e
+      unload
+      raise e
+    ensure
+      @loading = false
+    end
+
+    # Undoes the effects of {#load}. Used when {#load} raises an exception.
+    #
+    # @api private
+    #
+    # @return [void]
+    def unload
+      return if @unloading
+      @unloading = true
+
+      stores.each { |s| s.unload }
+
+      @stack = []
+
+      @item_compilation_rules  = []
+      @item_routing_rules      = []
+      @layout_filter_mapping   = OrderedHash.new
+
+      @site.items.each { |item| item.reps.clear }
+      @site.teardown_child_parent_links
+
+      @site.unload
+
+      @loaded = false
+      @unloading = false
     end
 
     # Store the modified helper data used for compiling the site.
