@@ -682,15 +682,22 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_load_should_be_idempotent
-    site = Nanoc3::Site.new({})
-    def site.load
-      raise 'oh my gosh it is borken'
+    # Create site
+    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+
+    FileUtils.cd('bar') do
+      site = Nanoc3::Site.new('.')
+
+      compiler = Nanoc3::Compiler.new(site)
+      def compiler.route_reps
+        raise 'oh my gosh it is borken'
+      end
+
+      assert site.instance_eval { !@loaded }
+      assert_raises(RuntimeError) { compiler.load }
+      assert site.instance_eval { !@loaded }
+      assert_raises(RuntimeError) { compiler.load }
     end
-
-    compiler = Nanoc3::Compiler.new(site)
-
-    assert_raises(RuntimeError) { compiler.load }
-    assert_raises(RuntimeError) { compiler.load }
   end
 
 end

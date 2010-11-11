@@ -190,12 +190,7 @@ module Nanoc3
     #
     # @return [void]
     def setup_child_parent_links
-      # Clear all links
-      @items.each do |item|
-        item.parent = nil
-        item.children = []
-      end
-
+      teardown_child_parent_links
       @items.each do |item|
         # Get parent
         parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
@@ -208,12 +203,22 @@ module Nanoc3
       end
     end
 
+    # Removes all child-parent links.
+    #
+    # @api private
+    #
+    # @return [void]
+    def teardown_child_parent_links
+      @items.each do |item|
+        item.parent = nil
+        item.children = []
+      end
+    end
+
     # Prevents all further modifications to itself, its items, its layouts etc.
     #
     # @return [void]
     def freeze
-      super
-
       config.freeze_recursively
       items.each         { |i|  i.freeze  }
       layouts.each       { |l|  l.freeze  }
@@ -233,8 +238,8 @@ module Nanoc3
     #
     # @return [void]
     def load
-      return if @data_loaded
-      @data_loaded = true
+      return if @loaded || @loading
+      @loading = true
 
       # Load all data
       load_code_snippets
@@ -247,6 +252,33 @@ module Nanoc3
       # Load compiler too
       # FIXME this should not be necessary
       compiler.load
+
+      @loaded = true
+    rescue => e
+      unload
+      raise e
+    ensure
+      @loading = false
+    end
+
+    # Undoes the effects of {#load}. Used when {#load} raises an exception.
+    #
+    # @api private
+    def unload
+      return if @unloading
+      @unloading = true
+
+      @items_loaded = false
+      @items = []
+      @layouts_loaded = false
+      @layouts = []
+      @code_snippets_loaded = false
+      @code_snippets = []
+
+      compiler.unload
+
+      @loaded = false
+      @unloading = false
     end
 
   private
