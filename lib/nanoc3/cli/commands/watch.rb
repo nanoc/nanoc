@@ -92,7 +92,7 @@ module Nanoc3::CLI::Commands
 
       # Watch
       puts "Watching for changes…".make_compatible_with_env
-      watcher = lambda do
+      watcher = lambda do |*args|
         update(&rebuilder)
         delete(&rebuilder)
         create(&rebuilder)
