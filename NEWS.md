@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.1.6 (???)
+## 3.1.6 (2010-11-21)
 
 * Fixed issues with incompatible encodings
 
