@@ -649,6 +649,35 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
   end
 
+  def test_filter_for_layout_with_unmapped_layout
+    # Mock site
+    site = mock
+
+    # Mock item
+    item = Nanoc3::Item.new(
+      "blah blah", {}, '/',
+      :binary => false
+    )
+    item.site = site
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, '/foo/')
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(site)
+    site.expects(:compiler).returns(compiler)
+    compiler.layout_filter_mapping.replace({})
+
+    # Mock layout
+    layout = MiniTest::Mock.new
+    layout.expect(:identifier, '/some_layout/')
+
+    # Check
+    assert_raises(Nanoc3::Errors::CannotDetermineFilter) do
+      rep.send :filter_for_layout, layout
+    end
+  end
+
   def test_hash
     # Mock item
     item = Nanoc3::Item.new(
