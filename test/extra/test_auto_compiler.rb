@@ -6,109 +6,66 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_handle_request_with_item_rep
-    if_have 'rack' do
-      # Create items and reps
-      item_reps = [ mock('Nanoc3::ItemRep'), mock('Nanoc3::ItemRep'), mock('Nanoc3::ItemRep') ]
-      item_reps[0].stubs(:path).returns('/foo/1/')
-      item_reps[0].stubs(:raw_path).returns('out/foo/1/index.html')
-      item_reps[1].stubs(:path).returns('/foo/2/')
-      item_reps[1].stubs(:raw_path).returns('out/foo/2/index.html')
-      item_reps[2].stubs(:path).returns('/bar/')
-      item_reps[2].stubs(:raw_path).returns('out/bar/index.html')
-      items = [ mock('Nanoc3::Item'), mock('Nanoc3::Item') ]
-      items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
-      items[1].stubs(:reps).returns([ item_reps[2] ])
-      item_reps[1].stubs(:item).returns(items[0])
-
-      # Create site
-      site = mock('Nanoc3::Site')
-      site.stubs(:items).returns(items)
-      site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
-      site.expects(:compile)
-
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
-      autocompiler.stubs(:build_site)
-      autocompiler.stubs(:site).returns(site)
-      autocompiler.stubs(:build_reps)
-
-      # Run
-      autocompiler.instance_eval { call('PATH_INFO' => '/foo/2/') }
-    end
-  end
-
   def test_handle_request_with_item_rep_with_index_filename
-    if_have 'rack' do
-      # Create items and reps
-      item_reps = [ mock, mock, mock ]
-      item_reps[0].stubs(:path).returns('/foo/1/')
-      item_reps[0].stubs(:raw_path).returns('out/foo/1/index.html')
-      item_reps[1].stubs(:path).returns('/foo/2/')
-      item_reps[1].stubs(:raw_path).returns('out/foo/2/index.html')
-      item_reps[2].stubs(:path).returns('/bar/')
-      item_reps[2].stubs(:raw_path).returns('out/bar/index.html')
-      items = [ mock, mock ]
-      items[0].stubs(:reps).returns([ item_reps[0], item_reps[1] ])
-      items[1].stubs(:reps).returns([ item_reps[2] ])
-      item_reps[1].stubs(:item).returns(items[0])
-
+    if_have 'mime/types', 'rack' do
       # Create site
-      site = mock
-      site.stubs(:items).returns(items)
-      site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
-      site.expects(:compile)
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
 
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
-      autocompiler.stubs(:build_site)
-      autocompiler.stubs(:site).returns(site)
-      autocompiler.stubs(:build_reps)
+      FileUtils.cd('bar') do
+        # Create item
+        FileUtils.mkdir_p('content/foo')
+        File.open('content/foo/index.html', 'w') do |io|
+          io.write "Moo!"
+        end
 
-      # Run
-      autocompiler.instance_eval { call('PATH_INFO' => '/foo/2/index.html') }
+        # Create output file
+        FileUtils.mkdir_p('output/foo')
+        File.open('output/foo/index.html', 'w') do |io|
+          io.write "Compiled moo!"
+        end
+
+        # Create site
+        site = Nanoc3::Site.new('.')
+        site.expects(:compile)
+
+        # Create autocompiler
+        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler.stubs(:build_site)
+        autocompiler.stubs(:site).returns(site)
+
+        # Serve
+        status, headers, body = autocompiler.instance_eval { call('PATH_INFO' => '/foo/index.html') }
+
+        # Check response
+        assert_equal(200, status)
+        assert_equal('text/html', headers['Content-Type'])
+        body.each do |b|
+          assert_equal "Compiled moo!", b
+        end
+      end
     end
   end
 
   def test_handle_request_with_broken_url
-    if_have 'rack' do
-      # Create items and reps
-      item_reps = [ mock, mock, mock ]
-      item_reps[0].stubs(:path).returns('/foo/1/')
-      item_reps[0].stubs(:raw_path).returns('/foo/1/index.html')
-      item_reps[1].stubs(:path).returns('/foo/2/')
-      item_reps[1].stubs(:raw_path).returns('/foo/2/index.html')
-      item_reps[2].stubs(:path).returns('/bar/')
-      item_reps[2].stubs(:raw_path).returns('/bar/index.html')
-      items = [ mock, mock ]
-      items[0].expects(:reps).returns([ item_reps[0], item_reps[1] ])
-      items[1].expects(:reps).returns([ item_reps[2] ])
-
+    if_have 'mime/types', 'rack' do
       # Create site
-      site = mock
-      site.expects(:items).returns(items)
-      site.stubs(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
 
-      # Create file server
-      file_server = mock
-      def file_server.call(env)
-        @expected_path_info = '/foo/2'
-        @actual_path_info   = env['PATH_INFO']
+      FileUtils.cd('bar') do
+        # Create site
+        site = Nanoc3::Site.new('.')
+
+        # Create autocompiler
+        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler.stubs(:build_site)
+        autocompiler.stubs(:site).returns(site)
+
+        # Serve
+        status, headers, body = autocompiler.instance_eval { call('PATH_INFO' => '/afjwiagoawf.html') }
+
+        # Check response
+        assert_equal(404, status)
       end
-      def file_server.expected_path_info ; @expected_path_info ; end
-      def file_server.actual_path_info   ; @actual_path_info   ; end
-
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
-      autocompiler.stubs(:build_site)
-      autocompiler.stubs(:site).returns(site)
-      autocompiler.expects(:file_server).returns(file_server)
-
-      # Run
-      autocompiler.instance_eval { call('PATH_INFO' => '/foo/2') }
-
-      # Check
-      assert_equal(file_server.expected_path_info, file_server.actual_path_info)
     end
   end
 

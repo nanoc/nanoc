@@ -182,7 +182,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     }
 
     # Create rule
-    rule_block = lambda do
+    rule_block = proc do
       filter :erb
       filter :erb
       layout '/blah/'
