@@ -15,7 +15,7 @@ module Nanoc3
       # Sets the identifiers for this plugin.
       #
       # @param [Array<Symbol>] identifier A list of identifiers to assign to
-      # this plugin.
+      #   this plugin.
       #
       # @return [void]
       def identifiers(*identifiers)
@@ -34,10 +34,10 @@ module Nanoc3
       # Registers the given class as a plugin with the given identifier.
       #
       # @param [Class, String] class_or_name The class to register, or a
-      # string containing the class name to register.
+      #   string containing the class name to register.
       #
       # @param [Array<Symbol>] identifiers A list of identifiers to assign to
-      # this plugin.
+      #   this plugin.
       #
       # @return [void]
       def register(class_or_name, *identifiers)
@@ -79,15 +79,15 @@ module Nanoc3
     # Registers the given class as a plugin.
     #
     # @param [Class] superclass The superclass of the plugin. For example:
-    # {Nanoc3::Filter}, {Nanoc3::Extra::VCS}.
+    #   {Nanoc3::Filter}, {Nanoc3::Extra::VCS}.
     #
     # @param [Class, String] class_or_name The class to register. This can be
-    # a string, in which case it will be automatically converted to a proper
-    # class at lookup. For example: `Nanoc3::Filters::ERB`,
-    # `"Nanoc3::Filters::Haml"`.
+    #   a string, in which case it will be automatically converted to a proper
+    #   class at lookup. For example: `Nanoc3::Filters::ERB`,
+    #   `"Nanoc3::Filters::Haml"`.
     #
     # @param [Symbol] identifiers One or more symbols identifying the class.
-    # For example: `:haml`, :`erb`.
+    #   For example: `:haml`, :`erb`.
     #
     # @return [void]
     def register(superclass, class_or_name, *identifiers)
@@ -159,7 +159,7 @@ module Nanoc3
 
   end
 
-  # @deprecated Use {Nanoc3::PluginRegistry.instace} instead
+  # @deprecated Use {Nanoc3::PluginRegistry.instance} instead
   Plugin = PluginRegistry.instance
 
 end

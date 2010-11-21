@@ -110,6 +110,9 @@ module Nanoc3
     #   used on binary items. When running a binary filter on a file, the
     #   resulting file must end up in the location returned by this method.
     #
+    # The returned filename will be absolute, so it is safe to change to
+    #   another directory inside the filter.
+    #
     # @return [String] The output filename
     def output_filename
       @output_filename ||= begin
@@ -120,7 +123,7 @@ module Nanoc3
         new_filename = tempfile.path
         tempfile.close!
 
-        new_filename
+        File.expand_path(new_filename)
       end
     end
 

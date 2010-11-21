@@ -5,27 +5,40 @@ module Nanoc3
   require 'nanoc3/base/core_ext'
   require 'nanoc3/base/ordered_hash'
 
-  autoload 'CodeSnippet',         'nanoc3/base/code_snippet'
-  autoload 'Compiler',            'nanoc3/base/compiler'
-  autoload 'CompilerDSL',         'nanoc3/base/compiler_dsl'
-  autoload 'Config',              'nanoc3/base/config'
-  autoload 'Context',             'nanoc3/base/context'
-  autoload 'DataSource',          'nanoc3/base/data_source'
-  autoload 'DependencyTracker',   'nanoc3/base/dependency_tracker'
-  autoload 'DirectedGraph',       'nanoc3/base/directed_graph'
-  autoload 'Errors',              'nanoc3/base/errors'
-  autoload 'Filter',              'nanoc3/base/filter'
-  autoload 'Item',                'nanoc3/base/item'
-  autoload 'ItemRep',             'nanoc3/base/item_rep'
-  autoload 'Layout',              'nanoc3/base/layout'
-  autoload 'NotificationCenter',  'nanoc3/base/notification_center'
-  autoload 'PluginRegistry',      'nanoc3/base/plugin_registry'
-  autoload 'Rule',                'nanoc3/base/rule'
-  autoload 'RuleContext',         'nanoc3/base/rule_context'
-  autoload 'Site',                'nanoc3/base/site'
+  # Load helper classes
+  autoload 'Context',              'nanoc3/base/context'
+  autoload 'DirectedGraph',        'nanoc3/base/directed_graph'
+  autoload 'Errors',               'nanoc3/base/errors'
+  autoload 'NotificationCenter',   'nanoc3/base/notification_center'
+  autoload 'PluginRegistry',       'nanoc3/base/plugin_registry'
+  autoload 'Store',                'nanoc3/base/store'
+
+  # Load source data classes
+  autoload 'CodeSnippet',          'nanoc3/base/source_data/code_snippet'
+  autoload 'DataSource',           'nanoc3/base/source_data/data_source'
+  autoload 'Item',                 'nanoc3/base/source_data/item'
+  autoload 'Layout',               'nanoc3/base/source_data/layout'
+  autoload 'Site',                 'nanoc3/base/source_data/site'
+
+  # Load result data classes
+  autoload 'ItemRep',              'nanoc3/base/result_data/item_rep'
+
+  # Load compilation classes
+  autoload 'Checksummer',          'nanoc3/base/compilation/checksummer'
+  autoload 'ChecksumStore',        'nanoc3/base/compilation/checksum_store'
+  autoload 'CompiledContentCache', 'nanoc3/base/compilation/compiled_content_cache'
+  autoload 'Compiler',             'nanoc3/base/compilation/compiler'
+  autoload 'CompilerDSL',          'nanoc3/base/compilation/compiler_dsl'
+  autoload 'DependencyTracker',    'nanoc3/base/compilation/dependency_tracker'
+  autoload 'Filter',               'nanoc3/base/compilation/filter'
+  autoload 'ItemRepProxy',         'nanoc3/base/compilation/item_rep_proxy'
+  autoload 'OutdatednessChecker',  'nanoc3/base/compilation/outdatedness_checker'
+  autoload 'OutdatednessReasons',  'nanoc3/base/compilation/outdatedness_reasons'
+  autoload 'Rule',                 'nanoc3/base/compilation/rule'
+  autoload 'RuleContext',          'nanoc3/base/compilation/rule_context'
 
   # Deprecated; use PluginRepository instead
   # TODO [in nanoc 4.0] remove me
-  autoload 'Plugin',              'nanoc3/base/plugin_registry'
+  autoload 'Plugin',               'nanoc3/base/plugin_registry'
 
 end

@@ -21,7 +21,7 @@ class Nanoc3::CLI::Commands::CreateLayoutTest < MiniTest::Unit::TestCase
 
       site = Nanoc3::Site.new('.')
       site.load_data
-      site.compiler.run
+      site.compile
     end
   end
 

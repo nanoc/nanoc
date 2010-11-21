@@ -17,17 +17,15 @@ module Nanoc3::CLI::Commands
     end
 
     def long_desc
-      'Compile all items of the current site. If an identifier is given, ' +
-      'only the item with the given identifier will be compiled. ' +
+      'Compile all items of the current site.' +
       "\n\n" +
       'By default, only item that are outdated will be compiled. This can ' +
       'speed up the compilation process quite a bit, but items that include ' +
-      'content from other items may have to be recompiled manually. In ' +
-      'order to compile items even when they are outdated, use the --force option.'
+      'content from other items may have to be recompiled manually.'
     end
 
     def usage
-      "nanoc3 compile [options] [identifier]"
+      "nanoc3 compile [options]"
     end
 
     def option_definitions
@@ -35,12 +33,12 @@ module Nanoc3::CLI::Commands
         # --all
         {
           :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => 'alias for --force (DEPRECATED)'
+          :desc => '(ignored)'
         },
         # --force
         {
           :long => 'force', :short => 'f', :argument => :forbidden,
-          :desc => 'compile items even when they are not outdated'
+          :desc => '(ignored)'
         }
       ]
     end
@@ -49,63 +47,55 @@ module Nanoc3::CLI::Commands
       # Make sure we are in a nanoc site directory
       puts "Loading site data..."
       @base.require_site
-      @base.site.load_data
 
       # Check presence of --all option
-      if options.has_key?(:all)
-        $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
+      if options.has_key?(:all) || options.has_key?(:force)
+        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
       end
 
-      # Find item(s) to compile
-      if arguments.size == 0
-        item = nil
-      elsif arguments.size == 1
-        # Find item
-        identifier = arguments[0].cleaned_identifier
-        item = @base.site.items.find { |item| item.identifier == identifier }
-
-        # Ensure item
-        if item.nil?
-          $stderr.puts "Unknown item: #{identifier}"
-          exit 1
-        end
+      # Warn if trying to compile a single item
+      if arguments.size == 1
+        $stderr.puts '-' * 80
+        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'.make_compatible_with_env
+        $stderr.puts '-' * 80
       end
 
       # Give feedback
-      puts "Compiling #{item.nil? ? 'site' : 'item'}..."
+      puts "Compiling site..."
 
       # Initialize profiling stuff
       time_before = Time.now
-      @filter_times ||= {}
-      @times_stack  ||= []
+      @rep_times     = {}
+      @filter_times  = {}
       setup_notifications
 
+      # Prepare for generating diffs
+      setup_diffs
+
       # Compile
-      @base.site.compiler.run(
-        item,
-        :force => options.has_key?(:all) || options.has_key?(:force)
-      )
+      @base.site.compile
 
       # Find reps
-      reps = @base.site.items.map  { |i| i.reps }.flatten
+      reps = @base.site.items.map { |i| i.reps }.flatten
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
-        next if rep.raw_path.nil?
-        duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:high, :skip, rep.raw_path, duration)
+        rep.raw_paths.each do |snapshot_name, filename|
+          next if filename.nil?
+          duration = @rep_times[filename]
+          Nanoc3::CLI::Logger.instance.file(:high, :skip, filename, duration)
+        end
       end
 
-      # Show diff
-      write_diff_for(reps)
+      # Stop diffing
+      teardown_diffs
 
       # Give general feedback
       puts
-      puts "No items were modified." unless reps.any? { |r| r.modified? }
-      puts "#{item.nil? ? 'Site' : 'Item'} compiled in #{format('%.2f', Time.now - time_before)}s."
+      puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
 
+      # Give detailed feedback
       if options.has_key?(:verbose)
-        print_state_feedback(reps)
         print_profiling_feedback(reps)
       end
     end
@@ -113,61 +103,145 @@ module Nanoc3::CLI::Commands
   private
 
     def setup_notifications
+      # File notifications
+      Nanoc3::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
+        generate_diff_for(rep, snapshot)
+      end
+      Nanoc3::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        action = (is_created ? :create : (is_modified ? :update : :identical))
+        duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
+        Nanoc3::CLI::Logger.instance.file(:high, action, path, duration)
+      end
+
+      # Debug notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
-        rep_compilation_started(rep)
+        puts "*** Started compilation of #{rep.inspect}" if @base.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
-        rep_compilation_ended(rep)
+        puts "*** Ended compilation of #{rep.inspect}" if @base.debug?
+      end
+      Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
+        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if @base.debug?
+      end
+      Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
+        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if @base.debug?
+      end
+
+      # Timing notifications
+      Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
+        @rep_times[rep.raw_path] = Time.now
+      end
+      Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
+        @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
       end
       Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-        rep_filtering_started(rep, filter_name)
+        @filter_times[filter_name] = Time.now
+        start_filter_progress(rep, filter_name)
       end
       Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-        rep_filtering_ended(rep, filter_name)
+        @filter_times[filter_name] = Time.now - @filter_times[filter_name]
+        stop_filter_progress(rep, filter_name)
       end
     end
 
-    def write_diff_for(reps)
-      # Delete diff
+    def setup_diffs
+      @diff_lock    = Mutex.new
+      @diff_threads = []
       FileUtils.rm('output.diff') if File.file?('output.diff')
+    end
 
-      # Don’t generate diffs when diffs are disabled
+    def teardown_diffs
+      @diff_threads.each { |t| t.join }
+    end
+
+    def generate_diff_for(rep, snapshot)
       return if !@base.site.config[:enable_output_diff]
+      return if !File.file?(rep.raw_path(:snapshot => snapshot))
+      return if rep.binary?
 
-      # Generate diff
-      full_diff = ''
-      reps.each do |rep|
-        diff = rep.diff
-        next if diff.nil?
+      # Get old and new content
+      old_content = File.read(rep.raw_path(:snapshot => snapshot))
+      new_content = rep.compiled_content(:snapshot => snapshot, :force => true)
 
-        # Fix header
+      # Check whether there’s a different
+      return if old_content == new_content
+
+      require 'thread'
+      @diff_threads << Thread.new do
+        # Generate diff
+        diff = diff_strings(old_content, new_content)
         diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
         diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
 
-        # Add
-        full_diff << diff
+        # Write diff
+        @diff_lock.synchronize do
+          File.open('output.diff', 'a') { |io| io.write(diff) }
+        end
       end
-
-      # Write
-      File.open('output.diff', 'w') { |io| io.write(full_diff) }
     end
 
-    def print_state_feedback(reps)
-      # Categorise reps
-      rest              = reps
-      created, rest     = *rest.partition { |r| r.created? }
-      modified, rest    = *rest.partition { |r| r.modified? }
-      skipped, rest     = *rest.partition { |r| !r.compiled? }
-      not_written, rest = *rest.partition { |r| r.compiled? && !r.written? }
-      identical         = rest
+    # TODO move this elsewhere
+    def diff_strings(a, b)
+      require 'tempfile'
+      require 'open3'
 
-      # Print
-      puts
-      puts format('  %4d  created',     created.size)
-      puts format('  %4d  modified',    modified.size)
-      puts format('  %4d  skipped',     skipped.size)
-      puts format('  %4d  not written', not_written.size)
-      puts format('  %4d  identical',   identical.size)
+      # Create files
+      Tempfile.open('old') do |old_file|
+        Tempfile.open('new') do |new_file|
+          # Write files
+          old_file.write(a)
+          old_file.flush
+          new_file.write(b)
+          new_file.flush
+
+          # Diff
+          cmd = [ 'diff', '-u', old_file.path, new_file.path ]
+          Open3.popen3(*cmd) do |stdin, stdout, stderr|
+            result = stdout.read
+            return (result == '' ? nil : result)
+          end
+        end
+      end
+    rescue Errno::ENOENT
+      warn 'Failed to run `diff`, so no diff with the previously compiled ' \
+           'content will be available.'
+      nil
+    end
+
+    def start_filter_progress(rep, filter_name)
+      # Only show progress on terminals
+      return if !$stdout.tty?
+
+      @progress_thread = Thread.new do
+        delay = 1.0
+        step  = 0
+
+        text = "Running #{filter_name} filter… ".make_compatible_with_env
+
+        while !Thread.current[:stopped]
+          sleep 0.1
+
+          # Wait for a while before showing text
+          delay -= 0.1
+          next if delay > 0.05
+
+          # Print progress
+          $stdout.print text + %w( | / - \\ )[step] + "\r"
+          step = (step + 1) % 4
+        end
+
+        # Clear text
+        if delay < 0.05
+          $stdout.print ' ' * (text.length + 1 + 1) + "\r"
+        end
+      end
+    end
+
+    def stop_filter_progress(rep, filter_name)
+      # Only show progress on terminals
+      return if !$stdout.tty?
+
+      @progress_thread[:stopped] = true
     end
 
     def print_profiling_feedback(reps)
@@ -209,51 +283,6 @@ module Nanoc3::CLI::Commands
         filter_name = format("%#{max_filter_name_length}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
-    end
-
-    def rep_compilation_started(rep)
-      # Profile compilation
-      @rep_times ||= {}
-      @rep_times[rep.raw_path] = Time.now
-    end
-
-    def rep_compilation_ended(rep)
-      # Profile compilation
-      @rep_times ||= {}
-      @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
-
-      # Skip if not outputted
-      return unless rep.written?
-
-      # Get action and level
-      action = if rep.created?
-        :create
-      elsif rep.modified?
-        :update
-      elsif !rep.compiled?
-        nil
-      else
-        :identical
-      end
-
-      # Log
-      unless action.nil?
-        duration = @rep_times[rep.raw_path]
-        Nanoc3::CLI::Logger.instance.file(:high, action, rep.raw_path, duration)
-      end
-    end
-
-    def rep_filtering_started(rep, filter_name)
-      @times_stack.push(Time.now)
-    end
-
-    def rep_filtering_ended(rep, filter_name)
-      # Get last time
-      time_start = @times_stack.pop
-
-      # Update times
-      @filter_times[filter_name.to_sym] ||= []
-      @filter_times[filter_name.to_sym] << Time.now - time_start
     end
 
   end

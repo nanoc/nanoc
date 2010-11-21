@@ -6,116 +6,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
-  def test_run_without_item
-    # Mock items
-    items = [ mock, mock ]
-    items[0]
-    items[1]
-
-    # Mock reps
-    items[0].stubs(:reps).returns([ mock ])
-    items[1].stubs(:reps).returns([ mock, mock ])
-    reps = items[0].reps + items[1].reps
-
-    # Mock site
-    site = mock
-    site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.stubs(:items).returns(items)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:forget_dependencies_if_outdated).with(items)
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:load_graph)
-    dependency_tracker.expects(:store_graph)
-    dependency_tracker.expects(:start)
-    dependency_tracker.expects(:stop)
-    dependency_tracker.expects(:propagate_outdatedness)
-    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
-
-    # Run
-    compiler.run
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-  end
-
-  def test_run_with_item
-    # Mock items
-    item = mock
-    other_items = [ mock, mock ]
-
-    # Mock reps
-    item.stubs(:reps).returns([ mock, mock, mock ])
-    other_items.each { |i| i.stubs(:reps).returns([ mock ]) }
-    reps = item.reps + other_items[0].reps
-
-    # Mock site
-    site = mock
-    site.expects(:config).returns({ :output_dir => 'foo/bar/baz' })
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:forget_dependencies_if_outdated).with([ item, other_items[0] ])
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:load_graph)
-    dependency_tracker.expects(:store_graph)
-    dependency_tracker.expects(:start)
-    dependency_tracker.expects(:stop)
-    dependency_tracker.expects(:propagate_outdatedness)
-    dependency_tracker.expects(:successors_of).with(item).returns([ other_items[0] ])
-    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
-
-    # Run
-    compiler.run(item)
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-  end
-
-  def test_run_with_force
-    # Mock items
-    items = [ mock, mock ]
-    items[0]
-    items[1]
-
-    # Mock reps
-    items[0].stubs(:reps).returns([ mock ])
-    items[1].stubs(:reps).returns([ mock, mock ])
-    reps = items[0].reps + items[1].reps
-    reps.each { |r| r.expects(:force_outdated=).with(true) }
-
-    # Mock site
-    site = mock
-    site.stubs(:config).returns({ :output_dir => 'foo/bar/baz' })
-    site.stubs(:items).returns(items)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compile_reps).with(reps)
-    compiler.expects(:forget_dependencies_if_outdated).with(items)
-
-    # Mock dependency tracker
-    dependency_tracker = mock
-    dependency_tracker.expects(:load_graph)
-    dependency_tracker.expects(:store_graph)
-    dependency_tracker.expects(:start)
-    dependency_tracker.expects(:stop)
-    compiler.stubs(:dependency_tracker).returns(dependency_tracker)
-
-    # Run
-    compiler.run(nil, :force => true)
-
-    # Make sure output dir is created
-    assert(File.directory?('foo/bar/baz'))
-  end
-
   def test_compilation_rule_for
     # Mock rules
     rules = [ mock, mock, mock ]
@@ -246,21 +136,87 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_compile_rep
     # Mock rep
-    item = mock
-    rep = mock
-    rep.expects(:compiled=).with(true)
-    rep.expects(:raw_path).returns('output/foo.html')
-    rep.expects(:write)
-    rep.stubs(:item).returns(item)
+    item = Nanoc3::Item.new('content', {}, '/moo/')
+    rep = Nanoc3::ItemRep.new(item, :blah)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
     compilation_rule = mock
-    compilation_rule.expects(:apply_to).with(rep)
+    compilation_rule.expects(:apply_to).with(rep, :compiler => compiler)
     compiler.expects(:compilation_rule_for).returns(compilation_rule)
 
     # Compile
     compiler.send :compile_rep, rep
+    assert rep.compiled?
+  end
+
+  def test_compile_rep_with_unmet_dependency
+    # Mock rep
+    item = Nanoc3::Item.new('content', {}, '/moo/')
+    rep = Nanoc3::ItemRep.new(item, :blah)
+    rep.expects(:forget_progress)
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(nil)
+    compilation_rule = mock
+    compilation_rule.expects(:apply_to).with(rep, :compiler => compiler).raises(Nanoc3::Errors::UnmetDependency, rep)
+    compiler.expects(:compilation_rule_for).returns(compilation_rule)
+
+    # Compile
+    assert_raises Nanoc3::Errors::UnmetDependency do
+      compiler.send :compile_rep, rep
+    end
+  end
+
+  def test_compile_rep_should_write_proper_snapshots
+    # Mock rep
+    item = Nanoc3::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
+    rep  = Nanoc3::ItemRep.new(item, :blah)
+
+    # Set snapshot filenames
+    rep.raw_paths = {
+      :raw  => 'raw.txt',
+      :pre  => 'pre.txt',
+      :post => 'post.txt',
+      :last => 'last.txt'
+    }
+
+    # Create rule
+    rule_block = proc do
+      filter :erb
+      filter :erb
+      layout '/blah/'
+      filter :erb
+    end
+    rule = Nanoc3::Rule.new(/blah/, :meh, rule_block)
+
+    # Create layout
+    layout = Nanoc3::Layout.new('head <%= yield %> foot', {}, '/blah/')
+
+    # Create site
+    site = mock
+    site.stubs(:config).returns({})
+    site.stubs(:items).returns([])
+    site.stubs(:layouts).returns([ layout ])
+
+    # Create compiler
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.expects(:compilation_rule_for).with(rep).returns(rule)
+    compiler.layout_filter_mapping[%r{^/blah/$}] = [ :erb, {} ]
+    site.stubs(:compiler).returns(compiler)
+
+    # Compile
+    compiler.send(:compile_rep, rep)
+
+    # Test
+    assert File.file?('raw.txt')
+    assert File.file?('pre.txt')
+    assert File.file?('post.txt')
+    assert File.file?('last.txt')
+    assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('raw.txt')
+    assert_equal '1 2 <%= 3 %>',                  File.read('pre.txt')
+    assert_equal 'head 1 2 3 foot',               File.read('post.txt')
+    assert_equal 'head 1 2 3 foot',               File.read('last.txt')
   end
 
   def test_compile_reps_with_no_reps
@@ -273,9 +229,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_reps_with_one_rep
-    # Mock rep
-    rep = mock
-    rep.expects(:outdated?).returns(true)
+    # Mock reps
+    item = Nanoc3::Item.new("content1", {}, '/one/')
+    rep  = Nanoc3::ItemRep.new(item, :moo)
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -287,9 +243,8 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_compile_reps_with_two_independent_reps
     # Mock reps
-    reps = [ mock, mock ]
-    reps[0].expects(:outdated?).returns(true)
-    reps[1].expects(:outdated?).returns(true)
+    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
+    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -303,17 +258,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_reps_with_two_dependent_reps
-    # Mock items
-    items = [ mock, mock ]
-    items[1].expects(:identifier).returns('/foo/bar/')
-
     # Mock reps
-    reps  = [ mock, mock ]
-    reps[0].expects(:outdated?).returns(true)
-    reps[0].expects(:forget_progress)
-    reps[1].expects(:item).returns(items[1])
-    reps[1].expects(:name).returns('somerepname')
-    reps[1].expects(:outdated?).returns(true)
+    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
+    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -346,21 +293,9 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_compile_reps_with_two_mutually_dependent_reps
-    # Mock items
-    items = [ mock, mock ]
-    items[0].expects(:identifier).returns('/first/')
-    items[1].expects(:identifier).returns('/second/')
-
     # Mock reps
-    reps  = [ mock, mock ]
-    reps[0].expects(:item).returns(items[0])
-    reps[0].expects(:name).returns('firstrep')
-    reps[0].expects(:outdated?).returns(true)
-    reps[0].expects(:forget_progress)
-    reps[1].expects(:item).returns(items[1])
-    reps[1].expects(:name).returns('secondrep')
-    reps[1].expects(:outdated?).returns(true)
-    reps[1].expects(:forget_progress)
+    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
+    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
@@ -371,7 +306,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       elsif rep == @_reps[1]
         raise Nanoc3::Errors::UnmetDependency.new(@_reps[0])
       else
-        raise RuntimeError.new("this shouldn't have happened")
+        raise RuntimeError, 'this shouldn not have happened'
       end
     end
 
@@ -381,26 +316,388 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_not_outdated
+    # Mock code snippets
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_nil compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_outdated_if_item_checksum_nil
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:outdated?).returns(false)
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_equal ::Nanoc3::OutdatednessReasons::NotEnoughData, compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_outdated_if_compiled_file_doesnt_exist
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:outdated?).returns(false)
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference => Nanoc3::ChecksumStore.new.new_checksum_for(item)
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert !File.file?('moo.html')
+    assert_equal ::Nanoc3::OutdatednessReasons::NotWritten, compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_outdated_if_item_checksum_is_different
+    # Mock code snippets
+    code_snippets = [ mock ]
+    code_snippets[0].stubs(:outdated?).returns(false)
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference             => 'OMG! DIFFERENT!',
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_equal ::Nanoc3::OutdatednessReasons::SourceModified, compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_not_outdated_if_layouts_outdated
+    # Item-layout dependencies, as well as item-item dependencies, are
+    # handled elsewhere
+
+    # Mock layouts
+    layouts = [ mock ]
+    layouts[0].stubs(:outdated?).returns(true)
+
+    # Mock code snippets
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:layouts).returns(layouts)
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+    item.stubs(:site).returns(site)
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_equal nil, compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_outdated_if_code_snippets_outdated
+    # Mock code snippets
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+    item.stubs(:site).returns(site)
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => 'OMG! DIFFERENT!',
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
+        :rules                     => Nanoc3::ChecksumStore.new.new_checksum_for(site.compiler.rules_with_reference)
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_equal ::Nanoc3::OutdatednessReasons::CodeSnippetsModified, compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_outdated_if_config_outdated
+    # Mock code snippets
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
+
+    # Mock site
+    site = Nanoc3::Site.new({})
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => 'OMG! DIFFERENT'
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_equal ::Nanoc3::OutdatednessReasons::ConfigurationModified, compiler.outdatedness_reason_for(rep)
+  end
+
+  def test_outdated_if_rules_outdated
+    # Mock code snippets
+    code_snippets = [ Nanoc3::CodeSnippet.new('def moo ; end', 'lib/cow.rb') ]
+
+    # Mock site
+    site = Nanoc3::Site.new({ :foo => 'bar' })
+    site.stubs(:code_snippets).returns(code_snippets)
+
+    # Mock item
+    item = Nanoc3::Item.new('blah blah blah', {}, '/')
+
+    # Create rep
+    rep = Nanoc3::ItemRep.new(item, 'blah')
+    rep.raw_path = 'moo.html'
+
+    # Write output file
+    File.open(rep.raw_path, 'w') { |io| io.write("o hai how r u") }
+
+    # Mock checksums
+    require 'pstore'
+    FileUtils.mkdir_p('tmp')
+    store = PStore.new('tmp/checksums')
+    store.transaction do
+      store[:version] = 1
+      store[:data] = {
+        item.reference             => Nanoc3::ChecksumStore.new.new_checksum_for(item),
+        code_snippets[0].reference => Nanoc3::ChecksumStore.new.new_checksum_for(code_snippets[0]),
+        :config                    => Nanoc3::ChecksumStore.new.new_checksum_for(site.config),
+        :rules                     => 'OMG! DIFFERENT'
+      }
+    end
+
+    # Check
+    compiler = Nanoc3::Compiler.new(site)
+    compiler.send(:checksum_store).load
+    assert_equal ::Nanoc3::OutdatednessReasons::RulesModified, compiler.outdatedness_reason_for(rep)
+  end
+
   def test_forget_dependencies_if_outdated
     # Mock items
-    items = [ mock, mock, mock, mock ]
-    items[0].stubs(:outdated?).returns(false)
-    items[0].stubs(:outdated_due_to_dependencies?).returns(false)
-    items[1].stubs(:outdated?).returns(true)
-    items[1].stubs(:outdated_due_to_dependencies?).returns(false)
-    items[2].stubs(:outdated?).returns(false)
-    items[2].stubs(:outdated_due_to_dependencies?).returns(true)
-    items[3].stubs(:outdated?).returns(true)
-    items[3].stubs(:outdated_due_to_dependencies?).returns(true)
+    items = (0..3).map { |i| Nanoc3::Item.new("content #{i}", {}, "/items/#{i}/") }
+    reps  = (0..3).map { |i| Nanoc3::ItemRep.new(items[i], "rep #{i}") }
+    (0..3).each { |i| items[i].reps << reps[i] }
 
     # Mock dependency tracker
-    dependency_tracker = mock
+    dependency_tracker = Object.new
     dependency_tracker.expects(:forget_dependencies_for).times(3)
+    dependency_tracker.instance_eval do
+      @items = items.dup
+    end
+    def dependency_tracker.outdated_due_to_dependencies?(obj)
+      case obj
+      when @items[0], @items[1]
+        false
+      when @items[2], @items[3]
+        true
+      else
+        raise RuntimeError, "The dependency tracker did not expect #{obj.inspect}"
+      end
+    end
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(nil)
+    compiler.instance_eval do
+      @reps = reps.dup
+    end
+    def compiler.outdated?(obj)
+      case obj
+      when @reps[0], @reps[2]
+        false
+      when @reps[1], @reps[3]
+        true
+      else
+        raise RuntimeError, "The compiler did not expect #{obj.inspect}"
+      end
+    end
     compiler.stubs(:dependency_tracker).returns(dependency_tracker)
     compiler.send :forget_dependencies_if_outdated, items
+  end
+
+  def test_disallow_routes_not_starting_with_slash
+    # Create site
+    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+
+    FileUtils.cd('bar') do
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  layout 'default'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  'index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Create site
+      site = Nanoc3::Site.new('.')
+      error = assert_raises(RuntimeError) do
+        site.compile
+      end
+      assert_match /^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message
+    end
+  end
+
+  def test_load_should_be_idempotent
+    # Create site
+    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+
+    FileUtils.cd('bar') do
+      site = Nanoc3::Site.new('.')
+
+      compiler = Nanoc3::Compiler.new(site)
+      def compiler.route_reps
+        raise 'oh my gosh it is borken'
+      end
+
+      assert site.instance_eval { !@loaded }
+      assert_raises(RuntimeError) { compiler.load }
+      assert site.instance_eval { !@loaded }
+      assert_raises(RuntimeError) { compiler.load }
+    end
   end
 
 end

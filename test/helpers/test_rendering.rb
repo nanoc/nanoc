@@ -15,9 +15,7 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
     layout.expect(:raw_content,  'This is the <%= @layout.identifier %> layout.')
 
     # Mock site, compiler and stack
-    stack    = []
     compiler = MiniTest::Mock.new
-    compiler.expect(:stack, stack)
     compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
     @site    = MiniTest::Mock.new
     @site.expect(:compiler, compiler)
@@ -86,9 +84,7 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
     layout.expect(:raw_content,  '[partial-before]<%= yield %>[partial-after]')
 
     # Mock compiler
-    stack    = []
     compiler = mock
-    compiler.stubs(:stack).returns(stack)
     compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
 
     # Mock site

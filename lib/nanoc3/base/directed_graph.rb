@@ -38,6 +38,8 @@ module Nanoc3
     # @return [Array]
     attr_reader :vertices
 
+    # @group Creating a graph
+
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = vertices
@@ -46,25 +48,35 @@ module Nanoc3
       @to_graph   = {}
 
       @vertice_indexes = {}
-      vertices.each_with_index do |v, i|
+      @vertices.each_with_index do |v, i|
         @vertice_indexes[v] = i
       end
+
+      @roots = Set.new(@vertices)
 
       invalidate_caches
     end
 
+    # @group Modifying the graph
+
     # Adds an edge from the first vertex to the second vertex.
     #
     # @param from Vertex where the edge should start
+    #
     # @param to   Vertex where the edge should end
     #
     # @return [void]
     def add_edge(from, to)
+      add_vertex(from)
+      add_vertex(to)
+
       @from_graph[from] ||= Set.new
       @from_graph[from] << to
 
       @to_graph[to] ||= Set.new
       @to_graph[to]  << from
+
+      @roots.delete(to)
 
       invalidate_caches
     end
@@ -73,17 +85,49 @@ module Nanoc3
     # edge does not exist, nothing is done.
     #
     # @param from Start vertex of the edge
+    #
     # @param to   End vertex of the edge
     #
     # @return [void]
-    def remove_edge(from, to)
+    def delete_edge(from, to)
       @from_graph[from] ||= Set.new
       @from_graph[from].delete(to)
 
       @to_graph[to] ||= Set.new
       @to_graph[to].delete(from)
 
+      @roots.add(to) if @to_graph[to].empty?
+
       invalidate_caches
+    end
+
+    # Adds the given vertex to the graph.
+    #
+    # @param [Vertex] v The vertex to add to the graph
+    #
+    # @return [void]
+    def add_vertex(v)
+      return if @vertices.include?(v)
+
+      @vertices << v
+      @vertice_indexes[v] = @vertices.size-1
+
+      @roots    << v
+    end
+
+    # Deletes all edges coming from the given vertex.
+    #
+    # @param from Vertex from which all edges should be removed
+    #
+    # @return [void]
+    def delete_edges_from(from)
+      return if @from_graph[from].nil?
+
+      @from_graph[from].each do |to|
+        @to_graph[to].delete(from)
+        @roots.add(to) if @to_graph[to].empty?
+      end
+      @from_graph.delete(from)
     end
 
     # Deletes all edges going to the given vertex.
@@ -92,12 +136,29 @@ module Nanoc3
     #
     # @return [void]
     def delete_edges_to(to)
-      @to_graph[to] ||= Set.new
+      return if @to_graph[to].nil?
+
       @to_graph[to].each do |from|
         @from_graph[from].delete(to)
       end
       @to_graph.delete(to)
+      @roots.add(to)
     end
+
+    # Removes the given vertex from the graph.
+    #
+    # @param v Vertex to remove from the graph
+    #
+    # @return [void]
+    def delete_vertex(v)
+      delete_edges_to(v)
+      delete_edges_from(v)
+
+      @vertices.delete(v)
+      @roots.delete(v)
+    end
+
+    # @group Querying the graph
 
     # Returns the direct predecessors of the given vertex, i.e. the vertices
     # x where there is an edge from x to the given vertex y.
@@ -151,6 +212,20 @@ module Nanoc3
         end
       end
       result
+    end
+
+    # Returns all root vertices, i.e. vertices where no edge points to.
+    #
+    # @return [Set] The set of all root vertices in this graph.
+    def roots
+      @roots
+    end
+
+    # @group Deprecated methods
+
+    # @deprecated Use {#delete_edge} instead
+    def remove_edge(from, to)
+      delete_edge(from, to)
     end
 
   private

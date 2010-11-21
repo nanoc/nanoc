@@ -4,15 +4,16 @@ $LOAD_PATH.unshift(File.expand_path('../lib/', __FILE__))
 require 'nanoc3'
 
 Gem::Specification.new do |s|
-  s.name     = 'nanoc3'
-  s.version  = Nanoc3::VERSION
-  s.summary  = 'a web publishing system written in Ruby for building small to medium-sized websites.'
-  s.homepage = 'http://nanoc.stoneship.org/'
+  s.name        = 'nanoc3'
+  s.version     = Nanoc3::VERSION
+  s.homepage    = 'http://nanoc.stoneship.org/'
+  s.summary     = 'a web publishing system written in Ruby for building small to medium-sized websites.'
+  s.description = 'nanoc is a simple but very flexible static site generator written in Ruby. It operates on local files, and therefore does not run on the server. nanoc “compiles” the local source files into HTML (usually), by evaluating eRuby, Markdown, etc.'
 
-  s.authors = 'Denis Defreyne'
-  s.email   = 'denis.defreyne@stoneship.org'
+  s.author = 'Denis Defreyne'
+  s.email  = 'denis.defreyne@stoneship.org'
 
-  s.files              = Dir['[A-Z]*'] + Dir['lib/**/*']
+  s.files              = Dir['[A-Z]*'] + Dir['lib/**/*'] + Dir['doc/yardoc_templates/**/*'] + [ 'nanoc3.gemspec' ]
   s.default_executable = 'nanoc3'
   s.executables        = [ 'nanoc3' ]
   s.require_paths      = [ 'lib' ]
@@ -24,15 +25,16 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('cri', '>= 1.0.0')
 
   s.post_install_message = %q{------------------------------------------------------------------------------
-Thanks for installing nanoc 3.1! Here are some resources to help you get
+Thanks for installing nanoc 3.2! Here are some resources to help you get
 started:
 
-* The tutorial at <http://nanoc.stoneship.org/tutorial/>
-* The manual at <http://nanoc.stoneship.org/manual/>
-* The discussion group at <http://groups.google.com/group/nanoc>
+* The web site at <http://nanoc.stoneship.org/>
+* The tutorial at <http://nanoc.stoneship.org/docs/3-getting-started/>
+* The manual at <http://nanoc.stoneship.org/docs/4-basic-concepts/>
 
-Because nanoc 3.1 has quite a few new features, be sure to check out the nanoc
-blog at <http://nanoc.stoneship.org/blog/> for details about this release.
+If you have questions, issues or simply want to share ideas, join the
+discussion at <http://groups.google.com/group/nanoc> or stop by in the IRC
+channel on irc.freenode.net, channel #nanoc. See you there!
 
 Enjoy!
 ------------------------------------------------------------------------------
