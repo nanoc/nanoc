@@ -62,7 +62,7 @@ module Nanoc3::Filters
       case syntax
       when :html
         klass = Nokogiri::HTML
-      when :xml
+      when :xml, :xhtml
         klass = Nokogiri::XML
       else
         raise RuntimeError, "unknown syntax: #{syntax.inspect} (expected :html or :xml)"

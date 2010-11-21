@@ -97,4 +97,19 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_colorize_syntax_with_xhtml
+    if_have 'coderay' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = '<p>foo<br/>bar</p>'
+      expected_output = '<p>foo<br />bar</p>'
+
+      # Run filter
+      actual_output = filter.run(input, :syntax => :xhtml)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
 end
