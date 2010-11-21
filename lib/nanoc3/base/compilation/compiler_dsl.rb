@@ -172,12 +172,12 @@ module Nanoc3
       rep_name = params[:rep] || :default
 
       # Create compilation rule
-      compilation_block = lambda { }
+      compilation_block = proc { }
       compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
       @compiler.item_compilation_rules.unshift compilation_rule
 
       # Create routing rule
-      routing_block = lambda do
+      routing_block = proc do
         item.identifier.chop + '.' + item[:extension]
       end
       routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block)
