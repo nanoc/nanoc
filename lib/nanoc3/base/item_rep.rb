@@ -442,7 +442,7 @@ module Nanoc3
     def filter_for_layout(layout)
       # Get filter name and args
       filter_name, filter_args  = @item.site.compiler.filter_for_layout(layout)
-      raise Nanoc3::Errors::CannotDetermineFilter.new(layout_identifier) if filter_name.nil?
+      raise Nanoc3::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
       filter_class = Nanoc3::Filter.named(filter_name)
