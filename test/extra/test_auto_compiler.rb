@@ -357,40 +357,42 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_reload_config_file_before_each_request
-    # Create site
-    Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
+    if_have 'rack' do
+      # Create site
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
 
-    FileUtils.cd('foo') do
-      # Create item that outputs config elements
-      File.open('content/index.html', 'w') do |io|
-        io.write "The Grand Value of Configuration is <%= @config[:value] %>!"
-      end
+      FileUtils.cd('foo') do
+        # Create item that outputs config elements
+        File.open('content/index.html', 'w') do |io|
+          io.write "The Grand Value of Configuration is <%= @config[:value] %>!"
+        end
 
-      # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        # Create autocompiler
+        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
 
-      # Set config to 1st value
-      File.open('config.yaml', 'w') do |io|
-        io.write "value: Foo"
-      end
-      File.utime(Time.now+5, Time.now+5, 'config.yaml')
+        # Set config to 1st value
+        File.open('config.yaml', 'w') do |io|
+          io.write "value: Foo"
+        end
+        File.utime(Time.now+5, Time.now+5, 'config.yaml')
 
-      # Check
-      status, headers, body = autocompiler.call('PATH_INFO' => '/')
-      body.each do |b|
-        assert_match /The Grand Value of Configuration is Foo!/, b
-      end
+        # Check
+        status, headers, body = autocompiler.call('PATH_INFO' => '/')
+        body.each do |b|
+          assert_match /The Grand Value of Configuration is Foo!/, b
+        end
 
-      # Set config to 2nd value
-      File.open('config.yaml', 'w') do |io|
-        io.write "value: Bar"
-      end
-      File.utime(Time.now+5, Time.now+5, 'config.yaml')
+        # Set config to 2nd value
+        File.open('config.yaml', 'w') do |io|
+          io.write "value: Bar"
+        end
+        File.utime(Time.now+5, Time.now+5, 'config.yaml')
 
-      # Check
-      status, headers, body = autocompiler.call('PATH_INFO' => '/')
-      body.each do |b|
-        assert_match /The Grand Value of Configuration is Bar!/, b
+        # Check
+        status, headers, body = autocompiler.call('PATH_INFO' => '/')
+        body.each do |b|
+          assert_match /The Grand Value of Configuration is Bar!/, b
+        end
       end
     end
   end
