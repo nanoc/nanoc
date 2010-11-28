@@ -44,6 +44,40 @@ module Nanoc3::TestHelpers
     end
   end
 
+  def with_site(params={})
+    site_name = 'my_test_site'
+
+    rules_content = <<EOS
+compile '*' do
+  {{compilation_rule_content}}
+end
+
+route '*' do
+  if item.binary?
+    item.identifier.chop + '.' + item[:extension]
+  else
+    item.identifier + 'index.html'
+  end
+end
+
+layout '*', :erb
+EOS
+  rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
+
+    FileUtils.mkdir_p(site_name)
+    FileUtils.cd(site_name) do
+      FileUtils.mkdir_p('content')
+      FileUtils.mkdir_p('layouts')
+      FileUtils.mkdir_p('lib')
+      FileUtils.mkdir_p('output')
+
+      File.open('config.yaml', 'w') { |io| io.write('stuff: 12345') }
+      File.open('Rules', 'w') { |io| io.write(rules_content) }
+      
+      yield Nanoc3::Site.new('.')
+    end
+  end
+
   def setup
     # Clean up
     GC.start
