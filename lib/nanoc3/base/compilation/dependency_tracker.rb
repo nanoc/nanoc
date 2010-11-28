@@ -18,9 +18,7 @@ module Nanoc3
   # attribute of item B and vice versa without problems).
   #
   # The dependency tracker remembers the dependency information between runs.
-  # Dependency information is stored in the `tmp/dependencies` file. This file
-  # also contains a version number; when a dependencies file with an
-  # incompatible version is found, it is ignored.
+  # Dependency information is stored in the `tmp/dependencies` file.
   class DependencyTracker < ::Nanoc3::Store
 
     # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The list of items and
@@ -41,8 +39,6 @@ module Nanoc3
       @objects = objects
 
       @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
-      @previous_objects = []
-      @objects_outdated_due_to_dependencies = Set.new
     end
 
     # Starts listening for dependency messages (`:visit_started` and
@@ -76,33 +72,25 @@ module Nanoc3
       Nanoc3::NotificationCenter.remove(:visit_ended,   self)
     end
 
-    # Checks whether the given object is outdated due to dependencies, i.e.
-    # check whether there are other objects that are outdated that cause this
-    # object to be outdated.
-    #
-    # @param [Nanoc3::Item, Nanoc3::Layout] obj The object to check
-    #
-    # @return [Boolean] true if the given object is outdated due to
-    #   dependencies, false if not.
-    def outdated_due_to_dependencies?(obj)
-      @objects_outdated_due_to_dependencies.include?(obj)
-    end
-
     # Returns the direct dependencies for the given object.
     #
-    # The direct dependencies of the given object include the items
-    # and layouts that, when outdated will cause the given object to be marked
-    # as outdated. Indirect dependencies will not be returned (e.g. if A
-    # depends on B which depends on C, then the direct dependencies of A do
-    # not include C).
+    # The direct dependencies of the given object include the items and
+    # layouts that, when outdated will cause the given object to be marked as
+    # outdated. Indirect dependencies will not be returned (e.g. if A depends
+    # on B which depends on C, then the direct dependencies of A do not
+    # include C).
+    #
+    # The direct predecessors can include nil, which indicates an item that is
+    # no longer present in the site.
     #
     # @param [Nanoc3::Item, Nanoc3::Layout] object The object for
     #   which to fetch the direct predecessors
     #
-    # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The direct predecessors of
+    # @return [Array<Nanoc3::Item, Nanoc3::Layout, nil>] The direct
+    # predecessors of
     #   the given object
     def direct_predecessors_of(object)
-      @graph.direct_predecessors_of(object).compact
+      @graph.direct_predecessors_of(object)
     end
 
     # Returns the direct inverse dependencies for the given object.
@@ -138,35 +126,6 @@ module Nanoc3
       @graph.add_edge(dst, src) unless src == dst
     end
 
-    # Traverses the dependency graph and marks all objects that (directly or
-    # indirectly) depend on an outdated object as outdated.
-    #
-    # @return [void]
-    def propagate_outdatedness
-      # Unmark everything
-      @objects_outdated_due_to_dependencies.clear
-
-      # Mark new objects as outdated
-      added_objects = @objects - @previous_objects
-      @objects_outdated_due_to_dependencies.merge(added_objects)
-
-      # Mark successors of outdated objects as outdated
-      require 'set'
-      unprocessed = [ nil ] + @objects.select { |o| compiler.outdated?(o) }
-      seen        = Set.new(unprocessed)
-      until unprocessed.empty?
-        obj = unprocessed.shift
-
-        self.direct_successors_of(obj).each do |successor|
-          next if seen.include?(successor)
-          seen << successor
-
-          @objects_outdated_due_to_dependencies << successor
-          unprocessed << successor
-        end
-      end
-    end
-
     # Empties the list of dependencies for the given object. This is necessary
     # before recompiling the given object, because otherwise old dependencies
     # will stick around and new dependencies will appear twice. This function
@@ -180,11 +139,6 @@ module Nanoc3
     # @return [void]
     def forget_dependencies_for(object)
       @graph.delete_edges_to(object)
-    end
-
-    # @deprecated Use {#propagate_outdatedness} instead.
-    def mark_outdated_items
-      propagate_outdatedness
     end
 
     # @deprecated Use {#store} instead
@@ -202,8 +156,6 @@ module Nanoc3
     # @api private
     def unload
       @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
-      @previous_objects = []
-      @objects_outdated_due_to_dependencies = Set.new
     end
 
   protected
@@ -220,16 +172,24 @@ module Nanoc3
       @graph = Nanoc3::DirectedGraph.new([ nil ] + @objects)
 
       # Load vertices
-      @previous_objects = new_data[:vertices].map do |reference|
+      previous_objects = new_data[:vertices].map do |reference|
         @objects.find { |obj| reference == obj.reference }
       end
 
       # Load edges
       new_data[:edges].each do |edge|
         from_index, to_index = *edge
-        from = from_index && @previous_objects[from_index]
-        to   = to_index   && @previous_objects[to_index]
+        from = from_index && previous_objects[from_index]
+        to   = to_index   && previous_objects[to_index]
         @graph.add_edge(from, to)
+      end
+
+      # Record dependency from all items on new items
+      new_objects = (@objects - previous_objects)
+      new_objects.each do |new_obj|
+        @objects.each do |obj|
+          @graph.add_edge(new_obj, obj)
+        end
       end
     end
 

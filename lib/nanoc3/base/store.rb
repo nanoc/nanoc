@@ -6,6 +6,10 @@ module Nanoc3
   # filesystem, such as checksums, cached compiled content and dependency
   # graphs.
   #
+  # Each store has a version number. When attempting to load data from a store
+  # that has an incompatible version number, no data will be loaded, but
+  # {#version_mismatch_detected} will be called.
+  #
   # @abstract Subclasses must implement {#data} and {#data=}, and may
   #   implement {#no_data_found} and {#version_mismatch_detected}.
   #

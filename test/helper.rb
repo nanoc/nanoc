@@ -45,8 +45,15 @@ module Nanoc3::TestHelpers
   end
 
   def with_site(params={})
-    site_name = 'my_test_site'
+    # Build site name
+    site_name = params[:name]
+    if site_name.nil?
+      @site_num ||= 0
+      site_name = "site-#{@site_num}"
+      @site_num += 1
+    end
 
+    # Build rules
     rules_content = <<EOS
 compile '*' do
   {{compilation_rule_content}}
@@ -62,18 +69,30 @@ end
 
 layout '*', :erb
 EOS
-  rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
+    rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
 
-    FileUtils.mkdir_p(site_name)
+    # Create site
+    unless File.directory?(site_name)
+      FileUtils.mkdir_p(site_name)
+      FileUtils.cd(site_name) do
+        FileUtils.mkdir_p('content')
+        FileUtils.mkdir_p('layouts')
+        FileUtils.mkdir_p('lib')
+        FileUtils.mkdir_p('output')
+
+        if params[:has_layout]
+          File.open('layouts/default.html', 'w') do |io|
+            io.write('... <%= @yield %> ...')
+          end
+        end
+
+        File.open('config.yaml', 'w') { |io| io.write('stuff: 12345') }
+        File.open('Rules', 'w') { |io| io.write(rules_content) }
+      end
+    end
+
+    # Yield site
     FileUtils.cd(site_name) do
-      FileUtils.mkdir_p('content')
-      FileUtils.mkdir_p('layouts')
-      FileUtils.mkdir_p('lib')
-      FileUtils.mkdir_p('output')
-
-      File.open('config.yaml', 'w') { |io| io.write('stuff: 12345') }
-      File.open('Rules', 'w') { |io| io.write(rules_content) }
-      
       yield Nanoc3::Site.new('.')
     end
   end
