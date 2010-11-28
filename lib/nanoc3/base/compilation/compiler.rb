@@ -135,7 +135,6 @@ module Nanoc3
       stores.each { |s| s.load }
 
       # Determine which reps need to be recompiled
-      dependency_tracker.propagate_outdatedness
       forget_dependencies_if_outdated(items)
 
       @loaded = true
@@ -257,34 +256,6 @@ module Nanoc3
         return filter_name_and_args if layout.identifier =~ layout_identifier
       end
       nil
-    end
-
-    # @api private
-    #
-    # @return [Boolean] true if the object is outdated, false otherwise
-    def outdated?(obj)
-      outdatedness_checker.outdated?(obj)
-    end
-
-    # Returns the reason why the given object is outdated.
-    #
-    # @see Nanoc3::OutdatednessChecker#outdatedness_reason_for
-    #
-    # @api private
-    def outdatedness_reason_for(obj)
-      outdatedness_checker.outdatedness_reason_for(obj)
-    end
-
-    # Checks whether the given item representation needs to be recompiled.
-    # This is the case if the representation itself has changed, or when any
-    # of the dependent items need to be recompiled.
-    #
-    # @api private
-    #
-    # @return [Boolean] true if the given item representation needs to be
-    #   recompiled, false otherwise.
-    def needs_recompiling?(rep)
-      outdated?(rep) || dependency_tracker.outdated_due_to_dependencies?(rep.item)
     end
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
@@ -438,7 +409,7 @@ module Nanoc3
       outdated_reps = Set.new
       skipped_reps  = Set.new
       reps.each do |rep|
-        target = needs_recompiling?(rep) ? outdated_reps : skipped_reps
+        target = outdatedness_checker.outdated?(rep) ? outdated_reps : skipped_reps
         target.add(rep)
       end
 
@@ -491,7 +462,7 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:processing_started,  rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
-      if !needs_recompiling?(rep) && compiled_content_cache[rep]
+      if !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
@@ -522,7 +493,7 @@ module Nanoc3
     # @return [void]
     def forget_dependencies_if_outdated(items)
       items.each do |i|
-        if i.reps.any? { |r| needs_recompiling?(r) }
+        if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
           dependency_tracker.forget_dependencies_for(i)
         end
       end
@@ -550,7 +521,10 @@ module Nanoc3
 
     # @return [Nanoc3::OutdatednessChecker] The outdatedness checker
     def outdatedness_checker
-      @outdatedness_checker ||= Nanoc3::OutdatednessChecker.new(:site => @site, :checksum_store => checksum_store)
+      @outdatedness_checker ||= Nanoc3::OutdatednessChecker.new(
+        :site => @site,
+        :checksum_store => checksum_store,
+        :dependency_tracker => dependency_tracker)
     end
 
     # Returns all stores that can load/store data that can be used for

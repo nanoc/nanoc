@@ -26,6 +26,9 @@ module Nanoc3
     ConfigurationModified = Generic.new(
       'The site configuration has been modified since the last time the site was compiled.')
 
+    DependenciesOutdated = Generic.new(
+      'This item uses content or attributes that have changed since the last time the site was compiled.')
+
     NotEnoughData = Generic.new(
       'Not enough data is present to correctly determine whether the item is outdated.')
 
