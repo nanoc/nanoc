@@ -13,10 +13,10 @@ module Nanoc3
     # @option params [Nanoc3::ChecksumStore] :checksum_store (nil) The
     #   checksum store where checksums of items, layouts, … are stored.
     def initialize(params={})
-      @site           = params[:site]           if params.has_key?(:site)
-      @checksum_store = params[:checksum_store] if params.has_key?(:checksum_store)
-
-      @outdatedness_reasons = {}
+      @site = params[:site] or raise ArgumentError,
+        'Nanoc3::OutdatednessChecker#initialize needs a :site parameter'
+      @checksum_store = params[:checksum_store] or raise ArgumentError,
+        'Nanoc3::OutdatednessChecker#initialize needs a :checksum_store parameter'
     end
 
     # Checks whether the given object is outdated and therefore needs to be

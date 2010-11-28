@@ -253,8 +253,11 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
       item.reps << Nanoc3::ItemRep.new(item, :blah)
     end
 
+    # Create site
+    site = Nanoc3::Site.new({})
+
     # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
+    compiler = Nanoc3::Compiler.new(site)
     compiler.instance_eval do
        @outdatedness_reasons = {
          item_0.reps[0] => false,
