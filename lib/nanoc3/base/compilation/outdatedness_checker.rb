@@ -163,13 +163,6 @@ module Nanoc3
       return true if processed.include?(obj)
 
       # Calculate
-      if $loud
-        STDOUT.puts
-        STDOUT.puts "direct predecessors of #{obj.inspect}:"
-        dependency_tracker.direct_predecessors_of(obj).each do |o|
-          STDOUT.puts '- ' + o.inspect
-        end
-      end
       is_outdated = dependency_tracker.direct_predecessors_of(obj).any? do |other|
         other.nil? || basic_outdated?(other) || outdated_due_to_dependencies?(other, processed.merge([obj]))
       end
