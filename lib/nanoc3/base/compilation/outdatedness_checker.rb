@@ -48,15 +48,16 @@ module Nanoc3
           return Nanoc3::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
 
           # Outdated if code snippets outdated
-          return Nanoc3::OutdatednessReasons::CodeSnippetsModified if @site.code_snippets.any? do |cs|
+          return Nanoc3::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
             checksum_store.object_modified?(cs)
           end
 
           # Outdated if configuration outdated
-          return Nanoc3::OutdatednessReasons::ConfigurationModified if checksum_store.object_modified?(@site.config)
+          return Nanoc3::OutdatednessReasons::ConfigurationModified if checksum_store.object_modified?(site.config)
 
           # Outdated if rules outdated
-          return Nanoc3::OutdatednessReasons::RulesModified if checksum_store.object_modified?(@site.compiler.rules_with_reference)
+          return Nanoc3::OutdatednessReasons::RulesModified if
+            checksum_store.object_modified?(site.compiler.rules_with_reference)
 
           # Not outdated
           return nil
@@ -79,6 +80,11 @@ module Nanoc3
     # @return [Nanoc3::ChecksumStore] The checksum store
     def checksum_store
       @checksum_store
+    end
+
+    # @return [Nanoc3::Site] The site
+    def site
+      @site
     end
 
   end
