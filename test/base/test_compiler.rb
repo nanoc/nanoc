@@ -134,40 +134,6 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_compile_rep
-    # Mock rep
-    item = Nanoc3::Item.new('content', {}, '/moo/')
-    rep = Nanoc3::ItemRep.new(item, :blah)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compilation_rule = mock
-    compilation_rule.expects(:apply_to).with(rep, :compiler => compiler)
-    compiler.expects(:compilation_rule_for).returns(compilation_rule)
-
-    # Compile
-    compiler.send :compile_rep, rep
-    assert rep.compiled?
-  end
-
-  def test_compile_rep_with_unmet_dependency
-    # Mock rep
-    item = Nanoc3::Item.new('content', {}, '/moo/')
-    rep = Nanoc3::ItemRep.new(item, :blah)
-    rep.expects(:forget_progress)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compilation_rule = mock
-    compilation_rule.expects(:apply_to).with(rep, :compiler => compiler).raises(Nanoc3::Errors::UnmetDependency, rep)
-    compiler.expects(:compilation_rule_for).returns(compilation_rule)
-
-    # Compile
-    assert_raises Nanoc3::Errors::UnmetDependency do
-      compiler.send :compile_rep, rep
-    end
-  end
-
   def test_compile_rep_should_write_proper_snapshots
     # Mock rep
     item = Nanoc3::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
@@ -219,100 +185,72 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     assert_equal 'head 1 2 3 foot',               File.read('last.txt')
   end
 
-  def test_compile_reps_with_no_reps
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.expects(:compile_rep).never
+  def test_compile_with_no_reps
+    with_site do |site|
+      site.compile
 
-    # Compile
-    compiler.send :compile_reps, []
-  end
-
-  def test_compile_reps_with_one_rep
-    # Mock reps
-    item = Nanoc3::Item.new("content1", {}, '/one/')
-    rep  = Nanoc3::ItemRep.new(item, :moo)
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.expects(:compile_rep).with(rep)
-
-    # Compile
-    compiler.send :compile_reps, [ rep ]
-  end
-
-  def test_compile_reps_with_two_independent_reps
-    # Mock reps
-    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
-    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.expects(:compile_rep).times(2)
-
-    # Compile
-    compiler.send :compile_reps, reps
-
-    # Check size of reps array
-    assert_equal 2, reps.size
-  end
-
-  def test_compile_reps_with_two_dependent_reps
-    # Mock reps
-    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
-    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
-
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.instance_eval { @_reps = reps }
-    def compiler.compile_rep(rep)
-      @_invocation_id ||= 0
-      @_called_reps   ||= []
-
-      case @_invocation_id
-      when 0
-        @_invocation_id = 1
-        @_called_reps[0] = rep
-        raise Nanoc3::Errors::UnmetDependency.new(@_reps[1])
-      when 1
-        @_invocation_id = 2
-        @_called_reps[1] = rep
-      when 2
-        @_invocation_id = 3
-        @_called_reps[2] = rep
-      end
+      assert Dir['output/*'].empty?
     end
-
-    # Compile
-    compiler.send :compile_reps, reps
-
-    # Check
-    assert_equal reps[0], compiler.instance_eval { @_called_reps[0] }
-    assert_equal reps[1], compiler.instance_eval { @_called_reps[1] }
-    assert_equal reps[0], compiler.instance_eval { @_called_reps[2] }
   end
 
-  def test_compile_reps_with_two_mutually_dependent_reps
-    # Mock reps
-    items = [ Nanoc3::Item.new("content1", {}, '/one/'), Nanoc3::Item.new("content2", {}, '/two/') ]
-    reps  = [ Nanoc3::ItemRep.new(items[0], :moo), Nanoc3::ItemRep.new(items[1], :blah) ]
+  def test_compile_with_one_rep
+    with_site do |site|
+      File.open('content/index.html', 'w') { |io| io.write('o hello') }
 
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
-    compiler.instance_eval { @_reps = reps }
-    def compiler.compile_rep(rep)
-      if rep == @_reps[0]
-        raise Nanoc3::Errors::UnmetDependency.new(@_reps[1])
-      elsif rep == @_reps[1]
-        raise Nanoc3::Errors::UnmetDependency.new(@_reps[0])
-      else
-        raise RuntimeError, 'this shouldn not have happened'
-      end
+      site.compile
+
+      assert Dir['output/*'].size == 1
+      assert File.file?('output/index.html')
+      assert File.read('output/index.html') == 'o hello'
     end
+  end
 
-    # Compile
-    assert_raises Nanoc3::Errors::RecursiveCompilation do
-      compiler.send :compile_reps, reps
+  def test_compile_with_two_independent_reps
+    with_site do |site|
+      File.open('content/foo.html', 'w') { |io| io.write('o hai') }
+      File.open('content/bar.html', 'w') { |io| io.write('o bai') }
+
+      site.compile
+
+      assert Dir['output/*'].size == 2
+      assert File.file?('output/foo/index.html')
+      assert File.file?('output/bar/index.html')
+      assert File.read('output/foo/index.html') == 'o hai'
+      assert File.read('output/bar/index.html') == 'o bai'
+    end
+  end
+
+  def test_compile_with_two_dependent_reps
+    with_site(:compilation_rule_content => 'filter :erb') do |site|
+      File.open('content/foo.html', 'w') do |io|
+        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
+      end
+      File.open('content/bar.html', 'w') do |io|
+        io.write('manatee')
+      end
+
+      site.compile
+
+      assert Dir['output/*'].size == 2
+      assert File.file?('output/foo/index.html')
+      assert File.file?('output/bar/index.html')
+      assert File.read('output/foo/index.html') == 'manatee!!!'
+      assert File.read('output/bar/index.html') == 'manatee'
+    end
+  end
+
+  def test_compile_with_two_mutually_dependent_reps
+    with_site(:compilation_rule_content => 'filter :erb') do |site|
+      File.open('content/foo.html', 'w') do |io|
+        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
+      end
+      File.open('content/bar.html', 'w') do |io|
+        io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
+      end
+
+      assert_raises Nanoc3::Errors::RecursiveCompilation do
+        site.compile
+      end
     end
   end
 
