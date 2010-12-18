@@ -19,7 +19,8 @@ module Nanoc3::Filters
       context = ::Nanoc3::Context.new(assigns)
 
       # Get result
-      ::Haml::Engine.new(content, options).render(context, assigns) { assigns[:content] }
+      proc = assigns[:content] ? lambda { assigns[:content] } : nil
+      ::Haml::Engine.new(content, options).render(context, assigns, &proc)
     end
 
   end
