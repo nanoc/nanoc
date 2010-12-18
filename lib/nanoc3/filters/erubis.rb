@@ -15,8 +15,12 @@ module Nanoc3::Filters
       # Create context
       context = ::Nanoc3::Context.new(assigns)
 
+      # Get binding
+      proc = assigns[:content] ? lambda { assigns[:content] } : nil
+      assigns_binding = context.get_binding(&proc)
+
       # Get result
-      ::Erubis::Eruby.new(content, :filename => filename).result(context.get_binding { assigns[:content] })
+      ::Erubis::Eruby.new(content, :filename => filename).result(assigns_binding)
     end
 
   end

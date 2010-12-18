@@ -59,4 +59,14 @@ class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
     assert_equal('I was hiding in a cheap motel.', result)
   end
 
+  def test_filter_with_yield_without_content
+    # Create filter
+    filter = ::Nanoc3::Filters::ERB.new({ :location => 'a cheap motel' })
+
+    # Run filter
+    assert_raises LocalJumpError do
+      filter.run('<%= "I was hiding in #{yield}." %>')
+    end
+  end
+
 end
