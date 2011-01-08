@@ -82,7 +82,7 @@ module Nanoc3::CLI::Commands
       items.sort_by { |i| i.identifier }.each do |item|
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           puts "item #{item.identifier}, rep #{rep.name}:"
-          outdatedness_reason = compiler.outdatedness_reason_for(rep)
+          outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(rep)
           if outdatedness_reason
             puts "  is outdated: #{outdatedness_reason.message}"
           else
@@ -97,7 +97,7 @@ module Nanoc3::CLI::Commands
       puts
       layouts.each do |layout|
         puts "layout #{layout.identifier}:"
-        outdatedness_reason = compiler.outdatedness_reason_for(layout)
+        outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(layout)
         if outdatedness_reason
           puts "  is outdated: #{outdatedness_reason.message}"
         else
