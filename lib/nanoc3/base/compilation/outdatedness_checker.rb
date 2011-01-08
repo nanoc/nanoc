@@ -120,7 +120,7 @@ module Nanoc3
           # Not outdated
           return nil
         when :item
-          obj.reps.find { |rep| outdatedness_reason_for(rep) }
+          obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
         when :layout
           # Outdated if checksums are missing or different
           return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj)
@@ -160,7 +160,9 @@ module Nanoc3
       end
 
       # Check processed
-      return true if processed.include?(obj)
+      # Don’t return true; the false will be or’ed into a true if there
+      # really is a dependency that is causing outdatedness.
+      return false if processed.include?(obj)
 
       # Calculate
       is_outdated = dependency_tracker.direct_predecessors_of(obj).any? do |other|

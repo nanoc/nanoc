@@ -387,6 +387,14 @@ module Nanoc3
       })
     end
 
+    # @return [Nanoc3::OutdatednessChecker] The outdatedness checker
+    def outdatedness_checker
+      @outdatedness_checker ||= Nanoc3::OutdatednessChecker.new(
+        :site => @site,
+        :checksum_store => checksum_store,
+        :dependency_tracker => dependency_tracker)
+    end
+
   private
 
     def items
@@ -517,14 +525,6 @@ module Nanoc3
     # @return [ChecksumStore] The checksum store
     def checksum_store
       @checksum_store ||= Nanoc3::ChecksumStore.new(:site => @site)
-    end
-
-    # @return [Nanoc3::OutdatednessChecker] The outdatedness checker
-    def outdatedness_checker
-      @outdatedness_checker ||= Nanoc3::OutdatednessChecker.new(
-        :site => @site,
-        :checksum_store => checksum_store,
-        :dependency_tracker => dependency_tracker)
     end
 
     # Returns all stores that can load/store data that can be used for
