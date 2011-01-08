@@ -9,8 +9,15 @@ module Nanoc3::Filters
 
     # Syntax-highlights code blocks in the given content. Code blocks should
     # be enclosed in `pre` elements that contain a `code` element. The code
-    # element should have a class starting with `language-` and followed by
-    # the programming language, as specified by HTML5.
+    # element should have an indication of the language the code is in. There
+    # are two possible ways of adding such an indication:
+    #
+    # 1. A HTML class starting with `language-` and followed by the
+    # code language, as specified by HTML5. For example, `<code class="language-ruby">`.
+    #
+    # 2. A comment on the very first line of the code block in the format
+    # `#!language` where `language` is the language the code is in. For
+    # example, `#!ruby`.
     #
     # Options for individual colorizers will be taken from the {#run}
     # options’ value for the given colorizer. For example, if the filter is
@@ -23,9 +30,18 @@ module Nanoc3::Filters
     # (http://www.andre-simon.de/doku/highlight/en/highlight.html) colorizers
     # are implemented. Additional colorizer implementations are welcome!
     #
-    # @example Content that will be highlighted
+    # @example Using a class to indicate type of code be highlighted
     #
     #     <pre><code class="language-ruby">
+    #     def foo
+    #       "asdf"
+    #     end
+    #     </code></pre>
+    #
+    # @example Using a comment to indicate type of code be highlighted
+    #
+    #     <pre><code>
+    #     #!ruby
     #     def foo
     #       "asdf"
     #     end
@@ -70,15 +86,36 @@ module Nanoc3::Filters
 
       # Colorize
       doc = klass.fragment(content)
-      doc.css('pre > code[class*="language-"]').each do |element|
+      doc.css('pre > code').each do |element|
         # Get language
-        match = element['class'].match(/(^| )language-([^ ]+)/)
-        next if match.nil?
-        language = match[2]
+        has_class = false
+        language = nil
+        if element['class']
+          # Get language from class
+          match = element['class'].match(/(^| )language-([^ ]+)/)
+          language = match[2] if match
+          has_class = true if language
+        else
+          # Get language from comment line
+          match = element.inner_text.match(/^#!([^\n]+)$/)
+          language = match[1] if match
+          element.content = element.content.sub(/^#!([^\n]+)$\n/, '') if language
+        end
+
+        # Give up if there is no hope left
+        next if language.nil?
 
         # Highlight
         highlighted_code = highlight(element.inner_text.strip, language, params)
         element.inner_html = highlighted_code.strip
+
+        # Add class
+        unless has_class
+          klass = element['class'] || ''
+          klass << ' ' unless [' ', nil].include?(klass[-1,1])
+          klass << "language-#{language}"
+          element['class'] = klass
+        end
       end
 
       method = "to_#{syntax}".to_sym
