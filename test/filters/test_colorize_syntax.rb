@@ -21,6 +21,36 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_coderay_with_comment
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = %[<pre title="moo"><code>#!ruby\n# comment</code></pre>]
+      expected_output = '<pre title="moo"><code class="language-ruby"><span class="c"># comment</span></code></pre>'
+
+      # Run filter
+      actual_output = filter.run(input)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
+  def test_coderay_with_comment_and_class
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = %[<pre title="moo"><code class="language-ruby">#!ruby\n# comment</code></pre>]
+      expected_output = %[<pre title="moo"><code class="language-ruby"><span class="dt">#!ruby</span>\n<span class="c"># comment</span></code></pre>]
+
+      # Run filter
+      actual_output = filter.run(input)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
   def test_coderay_with_more_classes
     if_have 'coderay', 'nokogiri' do
       # Create filter
