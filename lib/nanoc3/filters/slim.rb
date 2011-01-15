@@ -1,19 +1,23 @@
-class Slim < Nanoc3::Filter
-  identifier :slim
-  type :text
+# encoding: utf-8
 
-  # Runs the content through [Slim](http://slim-lang.com/)
-  # This method takes no options.
-  #
-  # @param [String] content The content to filter
-  #
-  # @return [String] The filtered content
-  def run(content, params={})
-    require 'slim'
+module Nanoc3::Filters
+  class Slim < Nanoc3::Filter
+    identifier :slim
+    type :text
 
-    # Create context
-    context = ::Nanoc3::Context.new(assigns)
+    # Runs the content through [Slim](http://slim-lang.com/)
+    # This method takes no options.
+    #
+    # @param [String] content The content to filter
+    #
+    # @return [String] The filtered content
+    def run(content, params={})
+      require 'slim'
 
-    Slim::Template.new({}) { content }.render(context) 
+      # Create context
+      context = ::Nanoc3::Context.new(assigns)
+
+      ::Slim::Template.new({}) { content }.render(context) 
+    end
   end
 end
