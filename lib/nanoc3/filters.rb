@@ -21,6 +21,7 @@ module Nanoc3::Filters
   autoload 'RelativizePaths', 'nanoc3/filters/relativize_paths'
   autoload 'RubyPants',       'nanoc3/filters/rubypants'
   autoload 'Sass',            'nanoc3/filters/sass'
+  autoload 'Slim',            'nanoc3/filters/slim'
 
   Nanoc3::Filter.register '::Nanoc3::Filters::AsciiDoc',        :asciidoc
   Nanoc3::Filter.register '::Nanoc3::Filters::BlueCloth',       :bluecloth
@@ -41,5 +42,6 @@ module Nanoc3::Filters
   Nanoc3::Filter.register '::Nanoc3::Filters::RelativizePaths', :relativize_paths
   Nanoc3::Filter.register '::Nanoc3::Filters::RubyPants',       :rubypants
   Nanoc3::Filter.register '::Nanoc3::Filters::Sass',            :sass
+  Nanoc3::Filter.register '::Nanoc3::Filters::Slim',            :slim
 
 end
