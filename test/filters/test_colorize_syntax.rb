@@ -46,11 +46,11 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
     # Get input and expected output
     input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
-    expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment</span></code></pre>'
+    expected_output = %r{^<pre title="moo"><code class="language-ruby"><span class="c1"># comment</span>\n?</code></pre>$}
 
     # Run filter
     actual_output = filter.run(input, :colorizers => { :ruby => :pygmentize })
-    assert_equal(expected_output, actual_output)
+    assert_match(expected_output, actual_output)
   end
 
 end
