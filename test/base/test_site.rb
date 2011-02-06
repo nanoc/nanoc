@@ -213,7 +213,7 @@ describe 'Nanoc3::Site#load_data' do
     site.expects(:route_reps)
 
     # Mock preprocessor
-    preprocessor = lambda { }
+    preprocessor = lambda { |*x| }
     site.expects(:preprocessor).times(2).returns(preprocessor)
 
     # Load data

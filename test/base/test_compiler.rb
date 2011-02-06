@@ -8,14 +8,15 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_run_without_item
     # Mock items
-    items = [ mock, mock ]
+    items = [ mock('Nanoc3::Item 1'), mock('Nanoc3::Item 2') ]
     items[0]
     items[1]
 
     # Mock reps
-    items[0].stubs(:reps).returns([ mock ])
-    items[1].stubs(:reps).returns([ mock, mock ])
+    items[0].stubs(:reps).returns([ mock('Nanoc3::ItemRep 1.1') ])
+    items[1].stubs(:reps).returns([ mock('Nanoc3::ItemRep 2.1'), mock('Nanoc3::ItemRep 2.2') ])
     reps = items[0].reps + items[1].reps
+    reps.each { |r| r.quacks_like(Object.new) }
 
     # Mock site
     site = mock
@@ -28,7 +29,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     compiler.expects(:forget_dependencies_if_outdated).with(items)
 
     # Mock dependency tracker
-    dependency_tracker = mock
+    dependency_tracker = mock('Nanoc3::DependencyTracker')
     dependency_tracker.expects(:load_graph)
     dependency_tracker.expects(:store_graph)
     dependency_tracker.expects(:start)
@@ -52,6 +53,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     item.stubs(:reps).returns([ mock, mock, mock ])
     other_items.each { |i| i.stubs(:reps).returns([ mock ]) }
     reps = item.reps + other_items[0].reps
+    reps.each { |r| r.quacks_like(Object.new) }
 
     # Mock site
     site = mock
@@ -81,13 +83,15 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_run_with_force
     # Mock items
-    items = [ mock, mock ]
-    items[0]
-    items[1]
+    items = [
+      Nanoc3::Item.new('content 0', {}, '/item0/'),
+      Nanoc3::Item.new('content 1', {}, '/item1/')
+    ]
 
     # Mock reps
-    items[0].stubs(:reps).returns([ mock ])
-    items[1].stubs(:reps).returns([ mock, mock ])
+    items[0].reps << Nanoc3::ItemRep.new(items[0], :rep00)
+    items[1].reps << Nanoc3::ItemRep.new(items[1], :rep10)
+    items[1].reps << Nanoc3::ItemRep.new(items[1], :rep11)
     reps = items[0].reps + items[1].reps
     reps.each { |r| r.expects(:force_outdated=).with(true) }
 
