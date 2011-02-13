@@ -156,16 +156,18 @@ a:hover {
   line-height: 20px;
 }
 
-#main ul {
+#main ul, #main ol {
   margin: 20px;
 }
 
 #main li {
-  list-style-type: square;
-
   font-size: 15px;
   
   line-height: 20px;
+}
+
+#main ul li {
+  list-style-type: square;
 }
 
 #sidebar {
