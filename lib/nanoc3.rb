@@ -10,6 +10,7 @@ end
 # Load requirements
 require 'fileutils'
 require 'thread'
+require 'time'
 require 'yaml'
 
 # Load nanoc
