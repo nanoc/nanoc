@@ -149,8 +149,12 @@ EOS
   def assert_contains_exactly(expected, actual)
     assert_equal expected.size, actual.size,
       'Expected %s to be of same size as %s' % [actual.inspect, expected.inspect]
-    contains_all = expected.all? { |e| actual.include? e }
-    assert contains_all,
+    remaining = actual.dup.to_a
+    expected.each do |e|
+      index = remaining.index(e)
+      remaining.delete_at(index) if index
+    end
+    assert remaining.empty?,
       'Expected %s to contain all the elements of %s' % [actual.inspect, expected.inspect]
   end
 
