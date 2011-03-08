@@ -62,7 +62,7 @@ module Nanoc3::CLI::Commands
       end
 
       if options.has_key?(:config)
-        @base.site.config.merge!(YAML.load(options[:config]))
+        @base.site.config.merge!(YAML.load(options[:config]).symbolize_keys)
       end
 
       # Find item(s) to compile
