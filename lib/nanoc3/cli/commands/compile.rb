@@ -41,6 +41,11 @@ module Nanoc3::CLI::Commands
         {
           :long => 'force', :short => 'f', :argument => :forbidden,
           :desc => 'compile items even when they are not outdated'
+        },
+        # --config
+        {
+          :long => 'config', :short => 'c', :argument => :required,
+          :desc => 'set config options for the site'
         }
       ]
     end
@@ -54,6 +59,10 @@ module Nanoc3::CLI::Commands
       # Check presence of --all option
       if options.has_key?(:all)
         $stderr.puts "Warning: the --all option is deprecated; please use --force instead."
+      end
+
+      if options.has_key?(:config)
+        @base.site.config.merge!(YAML.load(options[:config]))
       end
 
       # Find item(s) to compile
