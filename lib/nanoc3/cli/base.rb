@@ -240,7 +240,7 @@ module Nanoc3::CLI
     def handle_option(option)
       case option
       when :config
-        site.config.merge!(YAML.load(options[:config]).symbolize_keys)
+        site.config.merge!(YAML.load(parse(ARGV,global_option_definitions)[:config]).symbolize_keys)
       when :version
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
         engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
