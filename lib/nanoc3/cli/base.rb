@@ -227,6 +227,11 @@ module Nanoc3::CLI
         {
           :long => 'warn', :short => 'w', :argument => :forbidden,
           :desc => 'enable warnings'
+        },
+        # --config
+        {
+          :long => 'config', :short => 'c', :argument => :required,
+          :desc => 'set config options for the site'
         }
       ]
     end
@@ -234,6 +239,8 @@ module Nanoc3::CLI
     # @see Cri::Base#handle_option
     def handle_option(option)
       case option
+      when :config
+        site.config.merge!(YAML.load(options[:config]).symbolize_keys)
       when :version
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
         engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
