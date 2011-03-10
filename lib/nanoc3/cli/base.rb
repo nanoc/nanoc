@@ -240,7 +240,7 @@ module Nanoc3::CLI
     def handle_option(option)
       case option
       when :config
-        conf = OptionParser.parse(ARGV,global_option_definitions)[:config]
+        conf = Cri::OptionParser.parse(ARGV,global_option_definitions)[:config]
         site.config.merge!(YAML.load(conf).symbolize_keys)
       when :version
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
