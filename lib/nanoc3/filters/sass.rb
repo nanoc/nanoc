@@ -48,8 +48,8 @@ module Nanoc3::Filters
       import_paths.unshift(File.dirname(sass_filename)) if sass_filename
       # Get imported filenames
       imported_filenames = imported_nodes.map do |node|
-        ::Sass::Files.find_file_to_import(node.imported_filename, import_paths)
-      end
+           node.imported_file.options[:filename]
+      end.compact
 
       # Convert to items
       imported_items = imported_filenames.map do |filename|
