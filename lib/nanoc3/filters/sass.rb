@@ -48,7 +48,7 @@ module Nanoc3::Filters
       import_paths.unshift(File.dirname(sass_filename)) if sass_filename
       # Get imported filenames
       imported_filenames = imported_nodes.map do |node|
-           node.imported_file.options[:filename]
+           node.imported_file.options[:filename].gsub('.scss','.sass')
       end.compact
 
       # Convert to items
