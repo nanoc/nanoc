@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::ItemTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::ItemTest < Nanoc3::TestCase
 
   def test_initialize_with_attributes_with_string_keys
     item = Nanoc3::Item.new("foo", { 'abc' => 'xyz' }, '/foo/')

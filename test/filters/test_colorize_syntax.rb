@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::ColorizeSyntaxTest < Nanoc3::TestCase
 
   def test_coderay_simple
     if_have 'coderay', 'nokogiri' do

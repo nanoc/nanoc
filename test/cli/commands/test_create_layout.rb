@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::CLI::Commands::CreateLayoutTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::CLI::Commands::CreateLayoutTest < Nanoc3::TestCase
 
   def test_can_compile_new_layout
     Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])

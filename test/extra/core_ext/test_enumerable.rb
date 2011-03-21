@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::ExtraCoreExtEnumerableTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::ExtraCoreExtEnumerableTest < Nanoc3::TestCase
 
   class MyCollection
 

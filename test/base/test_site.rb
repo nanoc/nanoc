@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::SiteTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::SiteTest < Nanoc3::TestCase
 
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Errno::ENOENT) do

@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::RuleContextTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::RuleContextTest < Nanoc3::TestCase
 
   def test_objects
     # Mock everything

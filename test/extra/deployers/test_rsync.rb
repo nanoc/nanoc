@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Extra::Deployers::RsyncTest < Nanoc3::TestCase
 
   def test_new_without_site
     # Try creating site

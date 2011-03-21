@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::DataSources::FilesystemTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::DataSources::FilesystemTest < Nanoc3::TestCase
 
   class SampleFilesystemDataSource < Nanoc3::DataSource
     include Nanoc3::DataSources::Filesystem

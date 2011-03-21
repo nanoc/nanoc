@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::CompilerDSLTest < Nanoc3::TestCase
 
   def test_compile
     # TODO implement

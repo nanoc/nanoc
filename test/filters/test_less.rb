@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::LessTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::LessTest < Nanoc3::TestCase
 
   def test_filter
     if_have 'less' do

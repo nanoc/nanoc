@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Extra::AutoCompilerTest < Nanoc3::TestCase
 
   def test_handle_request_with_item_rep_with_index_filename
     if_have 'mime/types', 'rack' do

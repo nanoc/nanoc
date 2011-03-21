@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::ErubisTest < Nanoc3::TestCase
 
   def test_filter_with_instance_variable
     if_have 'erubis' do

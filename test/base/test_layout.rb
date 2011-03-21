@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::LayoutTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::LayoutTest < Nanoc3::TestCase
 
   def test_initialize
     # Make sure attributes are cleaned

@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::CLI::Commands::CompileTest < Nanoc3::TestCase
 
   def test_stub
   end

@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Extra::Validators::LinksTest < Nanoc3::TestCase
 
   def test_is_external_href?
     # Create validator

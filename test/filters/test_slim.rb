@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::SlimTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::SlimTest < Nanoc3::TestCase
 
   def test_filter
     if_have 'slim' do

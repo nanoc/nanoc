@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::CodeSnippetTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::CodeSnippetTest < Nanoc3::TestCase
 
   def test_load
     # Initialize

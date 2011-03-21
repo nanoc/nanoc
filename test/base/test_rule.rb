@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::RuleTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::RuleTest < Nanoc3::TestCase
 
   def test_initialize
     # TODO implement

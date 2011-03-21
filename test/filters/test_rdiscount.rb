@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::RDiscountTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::RDiscountTest < Nanoc3::TestCase
 
   def test_filter
     if_have 'rdiscount' do

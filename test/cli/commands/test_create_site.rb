@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::CLI::Commands::CreateSiteTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::CLI::Commands::CreateSiteTest < Nanoc3::TestCase
 
   def test_create_site_with_existing_name
     Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])

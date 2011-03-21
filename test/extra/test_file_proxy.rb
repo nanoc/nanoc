@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Extra::FileProxyTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Extra::FileProxyTest < Nanoc3::TestCase
 
   def test_create_many
     if_implemented do

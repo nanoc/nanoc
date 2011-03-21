@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::NotificationCenterTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::NotificationCenterTest < Nanoc3::TestCase
 
   def test_post
     # Set up notification

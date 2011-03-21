@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::DataSourceTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::DataSourceTest < Nanoc3::TestCase
 
   def test_loading
     # Create data source

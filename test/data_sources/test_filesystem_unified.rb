@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::DataSources::FilesystemUnifiedTest < Nanoc3::TestCase
 
   def new_data_source(params=nil)
     # Mock site

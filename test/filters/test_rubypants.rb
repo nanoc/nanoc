@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::RubyPantsTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::RubyPantsTest < Nanoc3::TestCase
 
   def test_filter
     if_have 'rubypants' do

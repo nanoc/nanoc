@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Filters::HamlTest < Nanoc3::TestCase
 
   def test_filter
     if_have 'haml' do

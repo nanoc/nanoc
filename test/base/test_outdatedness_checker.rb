@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::OutdatednessCheckerTest < Nanoc3::TestCase
 
   def test_not_outdated
     # Compile once

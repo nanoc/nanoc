@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::ContextTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::ContextTest < Nanoc3::TestCase
 
   def test_context_with_instance_variable
     # Create context

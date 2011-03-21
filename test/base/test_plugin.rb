@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::PluginTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::PluginTest < Nanoc3::TestCase
 
   class SampleFilter < Nanoc3::Filter
     identifier :_plugin_test_sample_filter

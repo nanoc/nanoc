@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::ItemRepTest < Nanoc3::StubSiteConfigTestCase
 
   def test_created_modified_compiled
     # TODO implement

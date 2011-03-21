@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::DependencyTrackerTest < Nanoc3::TestCase
 
   def setup
     super

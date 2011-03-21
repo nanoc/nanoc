@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Tasks::CleanTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Tasks::CleanTest < Nanoc3::TestCase
 
   def test_simple
     if_have 'w3c_validators' do

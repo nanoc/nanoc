@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::FilterTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::FilterTest < Nanoc3::StubSiteConfigTestCase
 
   def test_initialize
     # Create filter

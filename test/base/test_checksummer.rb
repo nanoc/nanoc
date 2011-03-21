@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::ChecksummerTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::ChecksummerTest < Nanoc3::TestCase
 
   def test_checksum_for_file
     # Create files

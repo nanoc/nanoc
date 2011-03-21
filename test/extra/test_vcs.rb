@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Extra::VCSTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Extra::VCSTest < Nanoc3::TestCase
 
   def test_named
     assert_nil(Nanoc3::Extra::VCS.named(:lkasjdlkfjlkasdfkj))

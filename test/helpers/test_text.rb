@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Helpers::TextTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Helpers::TextTest < Nanoc3::TestCase
 
   include Nanoc3::Helpers::Text
 

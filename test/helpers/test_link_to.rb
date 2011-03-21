@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::Helpers::LinkToTest < Nanoc3::TestCase
 
   include Nanoc3::Helpers::LinkTo
 

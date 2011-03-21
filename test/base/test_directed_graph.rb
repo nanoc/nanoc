@@ -2,9 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
-
-  include Nanoc3::TestHelpers
+class Nanoc3::DirectedGraphTest < Nanoc3::TestCase
 
   def test_direct_predecessors
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
