@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::MustacheTest < Nanoc3::TestCase
+class Nanoc3::Filters::MustacheTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter
     if_have 'mustache' do

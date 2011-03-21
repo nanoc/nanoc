@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::CodeRayTest < Nanoc3::TestCase
+class Nanoc3::Filters::CodeRayTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter_without_language
     if_have 'coderay' do

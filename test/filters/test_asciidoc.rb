@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::AsciiDocTest < Nanoc3::TestCase
+class Nanoc3::Filters::AsciiDocTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter
     if `which asciidoc`.strip.empty?

@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::LessTest < Nanoc3::TestCase
+class Nanoc3::Filters::LessTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter
     if_have 'less' do

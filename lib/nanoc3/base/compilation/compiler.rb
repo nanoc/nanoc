@@ -107,7 +107,7 @@ module Nanoc3
       store
     ensure
       # Cleanup
-      FileUtils.rm_rf(Nanoc3::Filter::TMP_BINARY_ITEMS_DIR)
+      FileUtils.rm_rf("#{site.config[:tmp_dir]}/#{Nanoc3::Filter::TMP_BINARY_ITEMS_DIR}")
     end
 
     # @group Private instance methods

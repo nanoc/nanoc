@@ -28,8 +28,9 @@ module Nanoc3
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Context
 
-    # The path to the directory where temporary binary items are stored
-    TMP_BINARY_ITEMS_DIR = 'tmp/binary_items'
+    # The path to the directory under site's temporary directory where
+    # temporary binary items are stored
+    TMP_BINARY_ITEMS_DIR = 'binary_items'
 
     # A hash containing variables that will be made available during
     # filtering.
@@ -118,8 +119,10 @@ module Nanoc3
       @output_filename ||= begin
         require 'tempfile'
 
-        FileUtils.mkdir_p(TMP_BINARY_ITEMS_DIR)
-        tempfile = Tempfile.new(filename.gsub(/[^a-z]/, '-'), TMP_BINARY_ITEMS_DIR)
+        tmp_dir = Nanoc3::CLI::Base.shared_base.site.config[:tmp_dir]
+        tmp_bin_dir = "#{tmp_dir}/#{TMP_BINARY_ITEMS_DIR}"
+        FileUtils.mkdir_p(tmp_bin_dir)
+        tempfile = Tempfile.new(filename.gsub(/[^a-z]/, '-'), tmp_bin_dir)
         new_filename = tempfile.path
         tempfile.close!
 

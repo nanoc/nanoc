@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::ERBTest < Nanoc3::TestCase
+class Nanoc3::Filters::ERBTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter_with_instance_variable
     # Create filter

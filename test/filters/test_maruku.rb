@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::MarukuTest < Nanoc3::TestCase
+class Nanoc3::Filters::MarukuTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter
     if_have 'maruku' do

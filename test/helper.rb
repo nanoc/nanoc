@@ -99,6 +99,16 @@ EOS
       end
     end
 
+    def stub_site_config(config)
+      site = mock
+      site.stubs(:config).returns(config)
+      Nanoc3::CLI::Base.shared_base.stubs(:site).returns(site)
+    end
+
+    def clear_site_config
+      Nanoc3::CLI::Base.instance_variable_set(:@shared_base, nil)
+    end
+
     def setup
       # Clean up
       GC.start
@@ -170,6 +180,22 @@ EOS
 
     include TestHelpers
     include Assertions
+
+  end
+
+  class StubSiteConfigTestCase < TestCase
+
+    def setup
+      super
+
+      stub_site_config :tmp_dir => 'tmp'
+    end
+
+    def teardown
+      super
+
+      clear_site_config
+    end
 
   end
 

@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::RedClothTest < Nanoc3::TestCase
+class Nanoc3::Filters::RedClothTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter
     if_have 'redcloth' do

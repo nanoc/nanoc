@@ -2,7 +2,7 @@
 
 require 'test/helper'
 
-class Nanoc3::Filters::RDocTest < Nanoc3::TestCase
+class Nanoc3::Filters::RDocTest < Nanoc3::StubSiteConfigTestCase
 
   def test_filter
     # Get filter
