@@ -7,9 +7,11 @@ module Nanoc3
   #
   # @api private
   class CompiledContentCache < ::Nanoc3::Store
+    CACHE_FILE = 'compiled_content'
 
-    def initialize
-      super('tmp/compiled_content', 1)
+    # @param [Nanoc3::Site] site The site where this cache belongs to
+    def initialize(site)
+      super("#{site.config[:tmp_dir]}/#{CACHE_FILE}", 1)
 
       @cache = {}
     end

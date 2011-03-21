@@ -34,6 +34,7 @@ module Nanoc3
     DEFAULT_CONFIG = {
       :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml ),
       :output_dir         => 'output',
+      :tmp_dir            => 'tmp',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],
       :enable_output_diff => false

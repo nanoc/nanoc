@@ -13,14 +13,13 @@ module Nanoc3
   #
   # @api private
   class ChecksumStore < ::Nanoc3::Store
+    CHECKSUM_FILE = 'checksum'
 
-    # @option params [Nanoc3::Site] site The site where this checksum store
-    #   belongs to
-    def initialize(params={})
-      super('tmp/checksums', 1)
+    # @param [Nanoc3::Site] site The site where this checksum store belongs to
+    def initialize(site)
+      super("#{site.config[:tmp_dir]}/#{CHECKSUM_FILE}", 1)
 
-      @site = params[:site] if params.has_key?(:site)
-
+      @site = site
       @new_checksums = {}
       @old_checksums = {}
     end

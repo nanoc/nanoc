@@ -188,7 +188,7 @@ module Nanoc3
     # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
       @dependency_tracker ||= begin
-        dt = Nanoc3::DependencyTracker.new(@site.items + @site.layouts)
+        dt = Nanoc3::DependencyTracker.new(@site, @site.items + @site.layouts)
         dt.compiler = self
         dt
       end
@@ -519,12 +519,12 @@ module Nanoc3
 
     # @return [CompiledContentCache] The compiled content cache
     def compiled_content_cache
-      @compiled_content_cache ||= Nanoc3::CompiledContentCache.new
+      @compiled_content_cache ||= Nanoc3::CompiledContentCache.new(@site)
     end
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      @checksum_store ||= Nanoc3::ChecksumStore.new(:site => @site)
+      @checksum_store ||= Nanoc3::ChecksumStore.new(@site)
     end
 
     # Returns all stores that can load/store data that can be used for

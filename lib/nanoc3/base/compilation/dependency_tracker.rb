@@ -18,8 +18,10 @@ module Nanoc3
   # attribute of item B and vice versa without problems).
   #
   # The dependency tracker remembers the dependency information between runs.
-  # Dependency information is stored in the `tmp/dependencies` file.
+  # Dependency information is stored in `DEPENDENCY_FILE` in the temporary
+  # directory of the site.
   class DependencyTracker < ::Nanoc3::Store
+    DEPENDENCY_FILE = 'dependencies'
 
     # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The list of items and
     #   layouts that are being tracked by the dependency tracker
@@ -31,10 +33,13 @@ module Nanoc3
 
     # Creates a new dependency tracker for the given items and layouts.
     #
+    # @param [Nanoc3::Site] site The site where this dependency tracker
+    #   belongs to
+    #
     # @param [Array<Nanoc3::Item, Nanoc3::Layout>] objects The list of items
     #   and layouts whose dependencies should be managed
-    def initialize(objects)
-      super('tmp/dependencies', 4)
+    def initialize(site, objects)
+      super("#{site.config[:tmp_dir]}/#{DEPENDENCY_FILE}", 4)
 
       @objects = objects
 

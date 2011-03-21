@@ -26,6 +26,11 @@ text_extensions: #{array_to_yaml(Nanoc3::Site::DEFAULT_CONFIG[:text_extensions])
 # relative to the site directory.
 output_dir: #{Nanoc3::Site::DEFAULT_CONFIG[:output_dir]}
 
+# The path to the directory where all temporary files will be stored. This can
+# be an absolute path starting with a slash, but it can also be path relative
+# to the site directory.
+tmp_dir: #{Nanoc3::Site::DEFAULT_CONFIG[:tmp_dir]}
+
 # A list of index filenames, i.e. names of files that will be served by a web
 # server when a directory is requested. Usually, index files are named
 # “index.hml”, but depending on the web server, this may be something else,
@@ -62,10 +67,11 @@ data_sources:
 # recompiles if necessary.
 watcher:
   # A list of directories to watch for changes. When editing this, make sure
-  # that the “output/” and “tmp/” directories are _not_ included in this list,
-  # because recompiling the site will cause these directories to change, which
-  # will cause the site to be recompiled, which will cause these directories
-  # to change, which will cause the site to be recompiled again, and so on.
+  # that `output_dir` and `tmp_dir` (specified above) are _not_ included in
+  # this list, because recompiling the site will cause these directories to
+  # change, which will cause the site to be recompiled, which will cause these
+  # directories to change, which will cause the site to be recompiled again,
+  # and so on.
   dirs_to_watch: [ 'content', 'layouts', 'lib' ]
 
   # A list of single files to watch for changes. As mentioned above, don’t put
