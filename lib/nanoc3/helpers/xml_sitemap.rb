@@ -29,8 +29,17 @@ module Nanoc3::Helpers
     #   if the site is at "http://example.com/", the `base_url` would be
     #   "http://example.com".
     #
+    # @param [Proc] block An optional block accepting an item. When given, the block will
+    #   be evaluated to determine whether to include the item in the sitemap.
+    #   Note: If the block evaluates to true, the item's `:is_hidden` attribute will be ignored
+    #
+    # @example Include items in the sitemap only if they meet a certain criteria
+    #
+    #    xml_sitemap { |item| item[:include_in_sitemap] && item[:extension] =~ /haml|pdf/ }
+    #
+    #
     # @return [String] The XML sitemap
-    def xml_sitemap
+    def xml_sitemap(&block)
       require 'builder'
 
       # Create builder
@@ -46,7 +55,7 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
         # Add item
-        @items.reject { |i| i[:is_hidden] }.each do |item|
+        @items.reject { |i| (block_given? && !(yield i)) || i[:is_hidden] }.each do |item|
           item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
