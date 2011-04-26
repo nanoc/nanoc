@@ -35,13 +35,15 @@ module Nanoc3::Filters
       pathname = Pathname.new(filename)
       item = @items.find { |i| i[:content_filename] && Pathname.new(i[:content_filename]).realpath == pathname.realpath }
 
-      # Notify
-      Nanoc3::NotificationCenter.post(:visit_started, item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   item)
+      unless item.nil?
+        # Notify
+        Nanoc3::NotificationCenter.post(:visit_started, item)
+        Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
-      # Raise unmet dependency error if item is not yet compiled
-      # any_uncompiled_rep = item.reps.find { |r| !r.compiled? }
-      # raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
+        # Raise unmet dependency error if item is not yet compiled
+        any_uncompiled_rep = item.reps.find { |r| !r.compiled? }
+        raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
+      end
     end
 
   end
