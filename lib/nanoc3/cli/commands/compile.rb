@@ -145,6 +145,7 @@ module Nanoc3::CLI::Commands
     end
 
     def setup_diffs
+      require 'thread'
       @diff_lock    = Mutex.new
       @diff_threads = []
       FileUtils.rm('output.diff') if File.file?('output.diff')

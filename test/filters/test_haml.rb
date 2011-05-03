@@ -69,6 +69,18 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_yield_without_content
+    if_have 'haml' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Haml.new({ :location => 'Is this the Payne residence?' })
+
+      # Run filter
+      assert_raises LocalJumpError do
+        filter.run('%p= yield')
+      end
+    end
+  end
+
   def test_filter_with_proper_indentation
     if_have 'haml' do
       # Create file to include

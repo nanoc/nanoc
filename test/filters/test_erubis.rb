@@ -57,4 +57,16 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter_with_yield_without_content
+    if_have 'erubis' do
+      # Create filter
+      filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
+
+      # Run filter
+      assert_raises LocalJumpError do
+        filter.run('<%= "I was hiding in #{yield}." %>')
+      end
+    end
+  end
+
 end
