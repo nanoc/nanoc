@@ -2,6 +2,9 @@
 
 module Nanoc3::Filters
   class Sass < Nanoc3::Filter
+    FILES = []
+    identifier :sass
+    type :text
 
     # Runs the content through [Sass](http://sass-lang.com/).
     # Parameters passed to this filter will be passed on to Sass.
@@ -10,57 +13,29 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'sass'
-
-      # Add imported_filename read accessor to ImportNode
-      # … but… but… nex3 said I could monkey patch it! :(
-      methods = ::Sass::Tree::ImportNode.instance_methods
-      if !methods.include?(:import_filename) && !methods.include?('import_filename')
-        ::Sass::Tree::ImportNode.send(:attr_reader, :imported_filename)
-      end
-
       # Get options
       options = params.dup
       sass_filename = options[:filename] || (@item && @item[:content_filename])
       options[:filename] ||= sass_filename
+      options[:filesystem_importer] ||= Nanoc3::Importers::Nanoc
 
       # Build engine
       engine = ::Sass::Engine.new(content, options)
+      output = engine.render
 
-      # Get import nodes
-      require 'set'
-      imported_nodes = []
-      unprocessed_nodes = Set.new([ engine.to_tree ])
-      until unprocessed_nodes.empty?
-        # Get an unprocessed node
-        node = unprocessed_nodes.each { |n| break n }
-        unprocessed_nodes.delete(node)
-
-        # Add to list of import nodes if necessary
-        imported_nodes << node if node.is_a?(::Sass::Tree::ImportNode)
-
-        # Mark children of this node for processing
-        node.children.each { |c| unprocessed_nodes << c }
+      until Nanoc3::Filters::Sass::FILES.empty?
+        filename = Nanoc3::Filters::Sass::FILES.pop
+        notify(filename)
       end
 
-      # Get import paths
-      import_paths = (options[:load_paths] || []).dup
-      import_paths.unshift(File.dirname(sass_filename)) if sass_filename
-      # Get imported filenames
-      imported_filenames = imported_nodes.map do |node|
-        ::Sass::Files.find_file_to_import(node.imported_filename, import_paths)
-      end
+      return output
+    end
 
-      # Convert to items
-      imported_items = imported_filenames.map do |filename|
-        pathname = Pathname.new(filename)
-        next unless pathname.file?
-        normalized_filename = pathname.realpath
-        @items.find { |i| i[:content_filename] && Pathname.new(i[:content_filename]).realpath == normalized_filename }
-      end.compact
+    def notify(filename)
+      pathname = Pathname.new(filename)
+      item = @items.find { |i| i[:content_filename] && Pathname.new(i[:content_filename]).realpath == pathname.realpath }
 
-      # Require compilation of each item
-      imported_items.each do |item|
+      unless item.nil?
         # Notify
         Nanoc3::NotificationCenter.post(:visit_started, item)
         Nanoc3::NotificationCenter.post(:visit_ended,   item)
@@ -69,10 +44,32 @@ module Nanoc3::Filters
         any_uncompiled_rep = item.reps.find { |r| !r.compiled? }
         raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
       end
-
-      # Done
-      engine.render
     end
 
   end
+end
+
+
+module Nanoc3::Importers
+
+  ##
+  # Essentially the {Sass::Importers::Filesystem} but registering each import
+  # file path.
+  class Nanoc < ::Sass::Importers::Filesystem
+
+    private
+
+    def _find(dir, name, options)
+      full_filename, syntax = find_real_file(dir, name)
+      return unless full_filename && File.readable?(full_filename)
+
+      Nanoc3::Filters::Sass::FILES << full_filename
+
+      options[:syntax] = syntax
+      options[:filename] = full_filename
+      options[:importer] = self
+      ::Sass::Engine.new(File.read(full_filename), options)
+    end
+  end
+
 end
