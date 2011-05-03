@@ -459,6 +459,7 @@ module Nanoc3
       if @old_content.nil? || self.raw_path.nil? || !@item.site.config[:enable_output_diff]
         @diff = nil
       else
+        require 'thread'
         @diff_thread = Thread.new do
           @diff = diff_strings(@old_content, @content[:last])
           sleep 2
