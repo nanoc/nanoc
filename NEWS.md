@@ -1,5 +1,9 @@
 # nanoc news
 
+## 3.1.7 (2011-05-03)
+
+* Restored compatibility with Sass 3.1
+
 ## 3.1.6 (2010-11-21)
 
 * Fixed issues with incompatible encodings
