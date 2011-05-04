@@ -24,4 +24,14 @@ class Nanoc3::Filters::SlimTest < MiniTest::Unit::TestCase
       assert_equal("<p>The rabbit is on the branch.</p>", result)
     end
   end
+
+  def test_filter_with_yield
+    if_have 'slim' do
+      filter = ::Nanoc3::Filters::Slim.new({ :content => 'The rabbit is on the branch.' })
+
+      result = filter.run('p = yield')
+      assert_equal("<p>The rabbit is on the branch.</p>", result)
+    end
+  end
+
 end
