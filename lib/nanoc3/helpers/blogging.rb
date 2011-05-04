@@ -37,7 +37,6 @@ module Nanoc3::Helpers
     #
     # @return [Array] A sorted array containing all articles
     def sorted_articles
-      require 'time'
       articles.sort_by do |a|
         attribute_to_time(a[:created_at])
       end.reverse
@@ -145,7 +144,6 @@ module Nanoc3::Helpers
     # @return [String] The generated feed content
     def atom_feed(params={})
       require 'builder'
-      require 'time'
 
       # Extract parameters
       limit             = params[:limit] || 5
@@ -296,8 +294,6 @@ module Nanoc3::Helpers
     #
     # @return [String] The atom tag for the given item
     def atom_tag_for(item)
-      require 'time'
-
       hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
 
       formatted_date = attribute_to_time(item[:created_at]).to_iso8601_date
