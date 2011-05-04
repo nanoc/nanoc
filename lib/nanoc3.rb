@@ -8,8 +8,10 @@ module Nanoc3
 end
 
 # Load requirements
-require 'yaml'
 require 'fileutils'
+require 'thread'
+require 'time'
+require 'yaml'
 
 # Load nanoc
 require 'nanoc3/base'
