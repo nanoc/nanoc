@@ -145,7 +145,6 @@ module Nanoc3::CLI::Commands
     end
 
     def setup_diffs
-      require 'thread'
       @diff_lock    = Mutex.new
       @diff_threads = []
       FileUtils.rm('output.diff') if File.file?('output.diff')
@@ -167,7 +166,6 @@ module Nanoc3::CLI::Commands
       # Check whether there’s a different
       return if old_content == new_content
 
-      require 'thread'
       @diff_threads << Thread.new do
         # Generate diff
         diff = diff_strings(old_content, new_content)

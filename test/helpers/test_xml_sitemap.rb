@@ -10,8 +10,6 @@ class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
   def test_xml_sitemap
     if_have 'builder' do
-      require 'time'
-
       # Create items
       @items = [ mock, mock, mock, mock ]
 

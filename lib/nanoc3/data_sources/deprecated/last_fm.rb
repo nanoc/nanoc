@@ -8,9 +8,7 @@ module Nanoc3::DataSources
     def items
       @items ||= begin
         require 'json'
-        require 'time'
         require 'uri'
-        require 'enumerator'
 
         # Check configuration
         if self.config[:username].nil?

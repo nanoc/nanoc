@@ -160,7 +160,6 @@ module Nanoc3::CLI
       end
 
       # Backtrace
-      require 'enumerator'
       $stderr.puts
       $stderr.puts '=== BACKTRACE:'
       $stderr.puts
