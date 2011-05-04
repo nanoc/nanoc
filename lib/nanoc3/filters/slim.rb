@@ -17,7 +17,7 @@ module Nanoc3::Filters
       # Create context
       context = ::Nanoc3::Context.new(assigns)
 
-      ::Slim::Template.new({}) { content }.render(context) 
+      ::Slim::Template.new { content }.render(context) { assigns[:content] }
     end
   end
 end
