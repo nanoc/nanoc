@@ -238,7 +238,7 @@ module Nanoc3::CLI
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
         engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
 
-        puts "nanoc #{Nanoc3::VERSION} (c) 2007-2010 Denis Defreyne."
+        puts "nanoc #{Nanoc3::VERSION} (c) 2007-2011 Denis Defreyne."
         puts "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}"
         exit 0
       when :verbose
