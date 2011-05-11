@@ -81,7 +81,7 @@ module Nanoc3
       @identifier   = identifier.cleaned_identifier
 
       # Set mtime
-      @attributes.merge(:mtime => params[:mtime]) if params[:mtime]
+      @attributes.merge!(:mtime => params[:mtime]) if params[:mtime]
 
       @parent       = nil
       @children     = []
