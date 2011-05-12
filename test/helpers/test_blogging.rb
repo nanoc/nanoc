@@ -60,6 +60,34 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @items = nil
   end
 
+  def test_articles_with_attr_hash
+    # Create items
+     @items = [
+        Nanoc3::Item.new(
+          'blah',
+          { :kind => 'item' },
+          '/0/'
+        ),
+        Nanoc3::Item.new(
+          'blah blah',
+          { :kind => 'article' },
+          '/1/'
+        ),
+        Nanoc3::Item.new(
+          'blah blah blah',
+          { :kind => 'article', :category => 'featured' },
+          '/2/'
+        )
+      ]
+
+      # Check
+      assert_equal(1, articles(:category => 'featured').size)
+      assert articles(:category => 'featured').include?(@items[2])
+    ensure
+      # Cleanup
+      @items = nil
+  end
+
   def test_sorted_articles
     # Create items
     @items = [
@@ -87,6 +115,33 @@ class Nanoc3::Helpers::BloggingTest < MiniTest::Unit::TestCase
   ensure
     # Cleanup
     @items = nil
+  end
+
+  def test_sorted_articles_with_attr_hash
+   # Create items
+    @items = [
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'item' },
+        '/0/'
+      ),
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'article', :category => 'featured', :created_at => (Date.today - 1).to_s }, 
+        '/1/'
+      ),
+      Nanoc3::Item.new(
+        'blah',
+        { :kind => 'article', :category => 'featured', :created_at => (Time.now - 500).to_s },
+        '/2/'
+      )
+    ]
+
+    # Check
+    assert_equal(2,         sorted_articles(:category => 'featured').size)
+    assert_equal(@items[2], sorted_articles(:category => 'featured')[0])
+    assert_equal(@items[1], sorted_articles(:category => 'featured')[1])
+    assert !sorted_articles(:category => 'featured').include?(@items[0])
   end
 
   def test_atom_feed
