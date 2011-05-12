@@ -74,9 +74,11 @@ may be interested in the development dependencies:
 * Dmitry Bilunov
 * Devon Luke Buchanan
 * Brian Candler
+* Michal Cichra
 * Zaiste de Grengolada
 * Vincent Driessen
 * Chris Eppstein
+* Jeff Forcier
 * Felix Hanley
 * Starr Horne
 * Tuomas Kareinen
