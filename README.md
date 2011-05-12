@@ -80,6 +80,7 @@ may be interested in the development dependencies:
 * Chris Eppstein
 * Jeff Forcier
 * Felix Hanley
+* Justin Hileman
 * Starr Horne
 * Tuomas Kareinen
 * Daniel Mendler
