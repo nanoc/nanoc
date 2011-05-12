@@ -82,6 +82,7 @@ may be interested in the development dependencies:
 * Felix Hanley
 * Starr Horne
 * Tuomas Kareinen
+* Daniel Mendler
 * Ale Muñoz
 * Nicky Peeters
 * Christian Plessl
