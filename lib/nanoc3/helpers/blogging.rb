@@ -26,18 +26,38 @@ module Nanoc3::Helpers
     # Returns an unsorted list of articles, i.e. items where the `kind`
     # attribute is set to `"article"`.
     #
-    # @return [Array] An array containing all articles
-    def articles
-      @items.select { |item| item[:kind] == 'article' }
+    # Also accepts a hash of attribute conditions i.e :category => '"featured"'
+    # would only return articles which have a 'category' attribute set to
+    # '"featured"'
+    #
+    # If no conditions are passed, it returns all articles
+    #
+    # @return [Array] An array containing all articles meeting supplied
+    # attribute conditions
+    def articles(conditions={})
+      article_condition = { :kind => 'article' }
+      conditions.merge!(article_condition)
+      @items.select {|item|
+         conditions.all? {|k, v|
+            item[k] == v
+         }
+      }
     end
 
     # Returns a sorted list of articles, i.e. items where the `kind`
     # attribute is set to `"article"`. Articles are sorted by descending
     # creation date, so newer articles appear before older articles.
     #
-    # @return [Array] A sorted array containing all articles
-    def sorted_articles
-      articles.sort_by do |a|
+    # Also accepts a hash of attribute conditions i.e :category => '"featured"'
+    # would only return articles which have a 'category' attribute set to
+    # '"featured"'
+    #
+    # If no conditions are passed, it returns all articles
+    #
+    # @return [Array] A sorted array containing all articles meeting supplied 
+    # attribute conditions
+    def sorted_articles(conditions={})
+      articles(conditions).sort_by do |a|
         attribute_to_time(a[:created_at])
       end.reverse
     end
