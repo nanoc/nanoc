@@ -78,7 +78,7 @@ module Nanoc3
 
       # Get rest of params
       @attributes   = attributes.symbolize_keys
-      @identifier   = identifier.cleaned_identifier
+      @identifier   = identifier.cleaned_identifier.freeze
 
       # Set mtime
       @attributes.merge!(:mtime => params[:mtime]) if params[:mtime]

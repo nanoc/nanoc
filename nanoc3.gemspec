@@ -14,11 +14,9 @@ Gem::Specification.new do |s|
   s.email  = 'denis.defreyne@stoneship.org'
 
   s.files              = Dir['[A-Z]*'] + Dir['lib/**/*'] + Dir['doc/yardoc_templates/**/*'] + [ 'nanoc3.gemspec' ]
-  s.default_executable = 'nanoc3'
   s.executables        = [ 'nanoc3' ]
   s.require_paths      = [ 'lib' ]
 
-  s.has_rdoc         = 'yard'
   s.rdoc_options     = [ '--main', 'README.md' ]
   s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
 
