@@ -48,7 +48,7 @@ module Nanoc3
 
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys
-      @identifier   = identifier.cleaned_identifier
+      @identifier   = identifier.cleaned_identifier.freeze
     end
 
     # Requests the attribute with the given key.
