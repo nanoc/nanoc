@@ -132,7 +132,7 @@ module Nanoc3
 
         # Calculate characteristics of old content
         if File.file?(raw_path)
-          hash_old = Nanoc3::Checksummer.checksum_for_file(raw_path)
+          hash_old = Pathname.new(raw_path).checksum
           size_old = File.size(raw_path)
         end
 
@@ -142,7 +142,7 @@ module Nanoc3
         if self.binary?
           # Calculate characteristics of new content
           size_new = File.size(temporary_filenames[:last])
-          hash_new = Nanoc3::Checksummer.checksum_for_file(temporary_filenames[:last]) if size_old == size_new
+          hash_new = Pathname.new(temporary_filenames[:last]).checksum if size_old == size_new
 
           # Check whether content was modified
           is_modified = (size_old != size_new || hash_old != hash_new)
@@ -422,6 +422,39 @@ module Nanoc3
 
       # Write
       write(snapshot_name) if params[:final]
+    end
+
+    # Returns a recording proxy that is used for determining whether the
+    # compilation has changed, and thus whether the item rep needs to be
+    # recompiled.
+    #
+    # @api private
+    #
+    # @return [Nanoc3::ItemRepRecorderProxy] The recording proxy
+    def to_recording_proxy
+      Nanoc3::ItemRepRecorderProxy.new(self)
+    end
+
+    # Returns false because this item is not yet a proxy, and therefore does
+    # need to be wrapped in a proxy during compilation.
+    #
+    # @api private
+    #
+    # @return [false]
+    #
+    # @see Nanoc3::ItemRepRecorderProxy#is_proxy?
+    # @see Nanoc3::ItemRepProxy#is_proxy?
+    def is_proxy?
+      false
+    end
+
+    # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @api private
+    #
+    # @return [Object] An unique reference to this object
+    def reference
+      [ type, self.item.identifier, self.name ]
     end
 
     def inspect

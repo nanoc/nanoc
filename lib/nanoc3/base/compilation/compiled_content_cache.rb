@@ -42,9 +42,7 @@ module Nanoc3
       @cache[rep.item.identifier][rep.name] = content
     end
 
-    # Undoes the effects of {#load}. Used when {#load} raises an exception.
-    #
-    # @api private
+    # @see Nanoc3::Store#unload
     def unload
       @cache = {}
     end
