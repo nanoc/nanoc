@@ -14,17 +14,23 @@ module Nanoc3
 
       @site = params[:site] if params.has_key?(:site)
 
-      @rule_memories = {}
+      @old_rule_memories = {}
+      @new_rule_memories = {}
     end
 
     # TODO document
-    def [](obj)
-      @rule_memories[obj.reference]
+    def old_rule_memory_for(obj)
+      @old_rule_memories[obj.reference]
     end
 
     # TODO document
-    def []=(obj, rule_memory)
-      @rule_memories[obj.reference] = rule_memory
+    def new_rule_memory_for_rep(rep)
+      @new_rule_memories[rep.reference] ||= @site.compiler.new_rule_memory_for_rep(rep)
+    end
+
+    # TODO document
+    def new_rule_memory_for_layout(layout)
+      @new_rule_memories[layout.reference] ||= @site.compiler.new_rule_memory_for_layout(layout)
     end
 
     # @see Nanoc3::Store#store
@@ -35,14 +41,6 @@ module Nanoc3
 
   protected
 
-    def new_rule_memory_for_rep(rep)
-      @site.compiler.new_rule_memory_for_rep(rep)
-    end
-
-    def new_rule_memory_for_layout(layout)
-      @site.compiler.new_rule_memory_for_layout(layout)
-    end
-
     def calculate_all_rule_memories
       reps    = @site.items.map { |i| i.reps }.flatten
       layouts = @site.layouts
@@ -52,11 +50,11 @@ module Nanoc3
     end
 
     def data
-      @rule_memories
+      @new_rule_memories
     end
 
     def data=(new_data)
-      @rule_memories = new_data
+      @old_rule_memories = new_data
     end
 
   end

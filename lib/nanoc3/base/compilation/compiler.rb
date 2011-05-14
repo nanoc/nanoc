@@ -393,32 +393,28 @@ module Nanoc3
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
       compilation_rule_for(rep).apply_to(recording_proxy, :compiler => self)
-      new_rule_memory = recording_proxy.rule_memory
-      rule_memory_store[rep] = new_rule_memory # TODO ugly
-      new_rule_memory
+      recording_proxy.rule_memory
     end
     memoize :new_rule_memory_for_rep
 
     # TODO document
     def rule_memory_differs_for_rep(rep)
-      old_rule_memory = rule_memory_store[rep]
-      new_rule_memory = new_rule_memory_for_rep(rep)
+      old_rule_memory = rule_memory_store.old_rule_memory_for(rep)
+      new_rule_memory = rule_memory_store.new_rule_memory_for_rep(rep)
       old_rule_memory != new_rule_memory
     end
     memoize :rule_memory_differs_for_rep
 
     # TODO document
     def new_rule_memory_for_layout(layout)
-      new_rule_memory = *filter_for_layout(layout)
-      rule_memory_store[layout] = new_rule_memory # TODO ugly
-      new_rule_memory
+      filter_for_layout(layout)
     end
     memoize :new_rule_memory_for_layout
 
     # TODO document
     def rule_memory_differs_for_layout(layout)
-      old_rule_memory = rule_memory_store[layout]
-      new_rule_memory = new_rule_memory_for_layout(layout)
+      old_rule_memory = rule_memory_store.old_rule_memory_for(layout)
+      new_rule_memory = rule_memory_store.new_rule_memory_for_layout(layout)
       old_rule_memory != new_rule_memory
     end
     memoize :rule_memory_differs_for_layout
