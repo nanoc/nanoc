@@ -10,8 +10,8 @@ module Nanoc3
 
     extend Nanoc3::Memoization
 
-    # @option params [Nanoc3::Site] site The site where this rule memory store
-    #   belongs to
+    # @option params [Nanoc3::Site] site The site where this rule memory
+    #   calculator belongs to
     def initialize(params={})
       super('tmp/rule_memory', 1)
 

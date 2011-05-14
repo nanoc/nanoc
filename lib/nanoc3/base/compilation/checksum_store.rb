@@ -50,11 +50,11 @@ module Nanoc3
 
         # Calculate content checksum
         checksum_parts << if obj.respond_to?(:binary?) && obj.binary?
-          Nanoc3::Checksummer.checksum_for_file(obj.raw_filename)
+          Pathname.new(obj.raw_filename).checksum
         elsif obj.respond_to?(:raw_content)
-          Nanoc3::Checksummer.checksum_for_string(obj.raw_content)
+          obj.raw_content.checksum
         elsif obj.respond_to?(:data)
-          Nanoc3::Checksummer.checksum_for_string(obj.data)
+          obj.data.checksum
         else
           raise RuntimeError, "Couldn’t figure out how to calculate the " \
             "content checksum for #{obj.inspect} (tried #raw_filename, " \
@@ -65,7 +65,7 @@ module Nanoc3
         if obj.respond_to?(:attributes)
           attributes = obj.attributes.dup
           attributes.delete(:file)
-          checksum_parts << Nanoc3::Checksummer.checksum_for_hash(attributes)
+          checksum_parts << attributes.checksum
         end
 
         # Done

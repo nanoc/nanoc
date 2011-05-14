@@ -71,3 +71,12 @@ describe 'Hash#freeze_recursively' do
   end
 
 end
+
+describe 'Hash#checksum' do
+
+  it 'should work' do
+    expectation = '2da008bddb0a2906ed76456fd564e470857333f6'
+    { :foo => 123 }.checksum.must_equal expectation
+  end
+
+end
