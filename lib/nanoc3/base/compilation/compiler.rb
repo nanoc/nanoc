@@ -179,6 +179,14 @@ module Nanoc3
     #
     # @return [void]
     def store
+      item    = @site.items
+      reps    = items.map { |i| i.reps }.flatten
+      layouts = @site.layouts
+
+      (reps + layouts).each do |obj|
+        rule_memory_store[obj] = rule_memory_calculator[obj]
+      end
+
       stores.each { |s| s.store }
     end
 
@@ -400,18 +408,6 @@ module Nanoc3
     end
     memoize :new_rule_memory_for_rep
 
-    # @param [Nanoc3::ItemRep] rep The item representation for which the old
-    #   and new rule memories should be checked
-    #
-    # @return [Boolean] true if the old and the new rule memories for the
-    #   given item representation differ, false otherwise
-    def rule_memory_differs_for_rep(rep)
-      old_rule_memory = rule_memory_store.old_rule_memory_for(rep)
-      new_rule_memory = rule_memory_store.new_rule_memory_for_rep(rep)
-      old_rule_memory != new_rule_memory
-    end
-    memoize :rule_memory_differs_for_rep
-
     # @param [Nanoc3::Layout] layout The layout to get the rule memory for
     #
     # @return [Array] The rule memory for the given layout
@@ -420,17 +416,11 @@ module Nanoc3
     end
     memoize :new_rule_memory_for_layout
 
-    # @param [Nanoc3::Layout] layout The layout for which the old and new rule 
-    #   memories should be checked
-    #
-    # @return [Boolean] true if the old and the new rule memories for the
-    #   given layout differ, false otherwise
-    def rule_memory_differs_for_layout(layout)
-      old_rule_memory = rule_memory_store.old_rule_memory_for(layout)
-      new_rule_memory = rule_memory_store.new_rule_memory_for_layout(layout)
-      old_rule_memory != new_rule_memory
+    # TODO document
+    def rule_memory_differs_for(obj)
+      rule_memory_store[obj] != rule_memory_calculator[obj]
     end
-    memoize :rule_memory_differs_for_layout
+    memoize :rule_memory_differs_for
 
     # @return [Nanoc3::OutdatednessChecker] The outdatedness checker
     def outdatedness_checker
@@ -443,12 +433,14 @@ module Nanoc3
   private
 
     def items
-      @items ||= @site.items
+      @site.items
     end
+    memoize :items
 
     def reps
-      @reps ||= items.map { |i| i.reps }.flatten
+      items.map { |i| i.reps }.flatten
     end
+    memoize :reps
 
     # Compiles the given representations.
     #
@@ -579,8 +571,15 @@ module Nanoc3
 
     # @return [RuleMemoryStore] The rule memory store store
     def rule_memory_store
-      @rule_memory_store ||= Nanoc3::RuleMemoryStore.new(:site => @site)
+      Nanoc3::RuleMemoryStore.new(:site => @site)
     end
+    memoize :rule_memory_store
+
+    # TODO document
+    def rule_memory_calculator
+      Nanoc3::RuleMemoryCalculator.new(:site => @site)
+    end
+    memoize :rule_memory_calculator
 
     # Returns all stores that can load/store data that can be used for
     # compilation.

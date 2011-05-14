@@ -38,6 +38,7 @@ module Nanoc3
   autoload 'OutdatednessReasons',  'nanoc3/base/compilation/outdatedness_reasons'
   autoload 'Rule',                 'nanoc3/base/compilation/rule'
   autoload 'RuleContext',          'nanoc3/base/compilation/rule_context'
+  autoload 'RuleMemoryCalculator', 'nanoc3/base/compilation/rule_memory_calculator'
   autoload 'RuleMemoryStore',      'nanoc3/base/compilation/rule_memory_store'
 
   # Deprecated; use PluginRepository instead

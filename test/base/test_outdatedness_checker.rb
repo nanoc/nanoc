@@ -320,24 +320,41 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
   end
 
   def test_outdated_if_relevant_rule_modified
-    # Compile once
+    # Create site
     with_site(:name => 'foo') do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.open('Rules', 'w') do |io|
+        io.write("compile '/' do\n")
+        io.write("  filter :erb\n")
+        io.write("end\n")
+        io.write("\n")
+        io.write("route '/' do\n")
+        io.write("  '/index.html'\n")
+        io.write("end\n")
+      end
+    end
 
+    # Compile once
+    FileUtils.cd('foo') do
+      site = Nanoc3::Site.new('.')
       site.compile
     end
 
-    # Change code
+    # Modify rules
     FileUtils.cd('foo') do
-      old_rules = File.read('Rules')
       File.open('Rules', 'w') do |io|
-        io.write("compile '/' do filter :blah end\n")
-        io.write old_rules
+        io.write("compile '/' do\n")
+        io.write("end\n")
+        io.write("\n")
+        io.write("route '/' do\n")
+        io.write("  '/index.html'\n")
+        io.write("end\n")
       end
     end
 
     # Check
-    with_site(:name => 'foo') do |site|
+    FileUtils.cd('foo') do
+      site = Nanoc3::Site.new('.')
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
       assert_equal ::Nanoc3::OutdatednessReasons::RulesModified,

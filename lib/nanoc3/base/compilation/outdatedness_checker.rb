@@ -86,7 +86,7 @@ module Nanoc3
         when :item_rep
           # Outdated if rules outdated
           return Nanoc3::OutdatednessReasons::RulesModified if
-            rule_memory_differs_for_rep(obj)
+            rule_memory_differs_for(obj)
 
           # Outdated if checksums are missing or different
           return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj.item)
@@ -110,7 +110,7 @@ module Nanoc3
         when :layout
           # Outdated if rules outdated
           return Nanoc3::OutdatednessReasons::RulesModified if
-            rule_memory_differs_for_layout(obj)
+            rule_memory_differs_for(obj)
 
           # Outdated if checksums are missing or different
           return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj)
@@ -161,21 +161,13 @@ module Nanoc3
       is_outdated
     end
 
-    # @param [Nanoc3::ItemRep] rep The item representation to check the rule
-    #   memory for
+    # @param [Nanoc3::ItemRep, Nanoc3::Layout] obj The layout or item
+    #   representation to check the rule memory for
     #
     # @return [Boolean] true if the rule memory for the given item
     #   represenation has changed, false otherwise
-    def rule_memory_differs_for_rep(rep)
-      site.compiler.rule_memory_differs_for_rep(rep)
-    end
-
-    # @param [Nanoc3::Layout] layout The layout to check the rule memory for
-    #
-    # @return [Boolean] true if the rule memory for the given layout has
-    #   changed, false otherwise
-    def rule_memory_differs_for_layout(layout)
-      site.compiler.rule_memory_differs_for_layout(layout)
+    def rule_memory_differs_for(obj)
+      site.compiler.rule_memory_differs_for(obj)
     end
 
     # @return [Nanoc3::ChecksumStore] The checksum store
