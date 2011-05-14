@@ -19,6 +19,15 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     assert_equal '/foo/', item.identifier
   end
 
+  def test_frozen_identifier
+    item = Nanoc3::Item.new("foo", {}, '/foo')
+
+    error = assert_raises(RuntimeError) do
+      item.identifier.chop!
+    end
+    assert_equal "can't modify frozen string", error.message
+  end
+
   def test_lookup
     # Create item
     item = Nanoc3::Item.new(

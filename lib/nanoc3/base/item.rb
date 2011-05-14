@@ -96,7 +96,7 @@ module Nanoc3
 
       # Get rest of params
       @attributes   = attributes.symbolize_keys
-      @identifier   = identifier.cleaned_identifier
+      @identifier   = identifier.cleaned_identifier.freeze
 
       @parent       = nil
       @children     = []
