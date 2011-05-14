@@ -201,12 +201,11 @@ module Nanoc3
     #
     # @return [Nanoc3::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
-      @dependency_tracker ||= begin
-        dt = Nanoc3::DependencyTracker.new(@site.items + @site.layouts)
-        dt.compiler = self
-        dt
-      end
+      dt = Nanoc3::DependencyTracker.new(@site.items + @site.layouts)
+      dt.compiler = self
+      dt
     end
+    memoize :dependency_tracker
 
     # Finds the first matching compilation rule for the given item
     # representation.
@@ -276,8 +275,9 @@ module Nanoc3
     #
     # @api private
     def dsl
-      @dsl ||= Nanoc3::CompilerDSL.new(self)
+      Nanoc3::CompilerDSL.new(self)
     end
+    memoize :dsl
 
     # Loads this site’s rules.
     #
@@ -436,11 +436,13 @@ module Nanoc3
 
   private
 
+    # @return [Array<Nanoc3::Item>] The site’s items
     def items
       @site.items
     end
     memoize :items
 
+    # @return [Array<Nanoc3::ItemRep>] The site’s item representations
     def reps
       items.map { |i| i.reps }.flatten
     end
@@ -555,23 +557,26 @@ module Nanoc3
 
     # Returns a preprocessor context, creating one if none exists yet.
     def preprocessor_context
-      @preprocessor_context ||= Nanoc3::Context.new({
+      Nanoc3::Context.new({
         :site    => @site,
         :config  => @site.config,
         :items   => @site.items,
         :layouts => @site.layouts
       })
     end
+    memoize :preprocessor_context
 
     # @return [CompiledContentCache] The compiled content cache
     def compiled_content_cache
-      @compiled_content_cache ||= Nanoc3::CompiledContentCache.new
+      Nanoc3::CompiledContentCache.new
     end
+    memoize :compiled_content_cache
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      @checksum_store ||= Nanoc3::ChecksumStore.new(:site => @site)
+      Nanoc3::ChecksumStore.new(:site => @site)
     end
+    memoize :checksum_store
 
     # @return [ChecksumCalculator] The checksum calculator
     def checksum_calculator
@@ -579,13 +584,13 @@ module Nanoc3
     end
     memoize :checksum_calculator
 
-    # @return [RuleMemoryStore] The rule memory store store
+    # @return [RuleMemoryStore] The rule memory store
     def rule_memory_store
       Nanoc3::RuleMemoryStore.new(:site => @site)
     end
     memoize :rule_memory_store
 
-    # TODO document
+    # @return [RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
       Nanoc3::RuleMemoryCalculator.new(:site => @site)
     end
