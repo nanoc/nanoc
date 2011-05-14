@@ -13,6 +13,10 @@ module Nanoc3::Extra
       @path = path
     end
 
+    def freeze
+      super
+    end
+
     def respond_to?(meth)
       File.instance_methods.any? { |m| m == meth.to_s || m == meth.to_sym }
     end
