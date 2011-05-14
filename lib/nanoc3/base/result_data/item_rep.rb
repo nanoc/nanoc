@@ -424,6 +424,27 @@ module Nanoc3
       write(snapshot_name) if params[:final]
     end
 
+    # TODO document
+    #
+    # @api private
+    def to_recording_proxy
+      Nanoc3::ItemRepRecorderProxy.new(self)
+    end
+
+    # TODO document
+    def is_proxy?
+      false
+    end
+
+    # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @api private
+    #
+    # @return [Object] An unique reference to this object
+    def reference
+      [ type, self.item.identifier, self.name ]
+    end
+
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} name=#{self.name} binary=#{self.binary?} raw_path=#{self.raw_path} item.identifier=#{self.item.identifier}>"
     end

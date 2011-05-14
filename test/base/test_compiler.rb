@@ -167,7 +167,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
     # Create compiler
     compiler = Nanoc3::Compiler.new(site)
-    compiler.expects(:compilation_rule_for).with(rep).returns(rule)
+    compiler.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
     compiler.layout_filter_mapping[%r{^/blah/$}] = [ :erb, {} ]
     site.stubs(:compiler).returns(compiler)
 

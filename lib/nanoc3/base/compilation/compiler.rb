@@ -40,6 +40,8 @@ module Nanoc3
   #   the specified object.
   class Compiler
 
+    extend Nanoc3::Memoization
+
     # @group Accessors
 
     # @return [Nanoc3::Site] The site this compiler belongs to
@@ -387,6 +389,40 @@ module Nanoc3
       })
     end
 
+    # TODO document
+    def new_rule_memory_for_rep(rep)
+      recording_proxy = rep.to_recording_proxy
+      compilation_rule_for(rep).apply_to(recording_proxy, :compiler => self)
+      new_rule_memory = recording_proxy.rule_memory
+      rule_memory_store[rep] = new_rule_memory # TODO ugly
+      new_rule_memory
+    end
+    memoize :new_rule_memory_for_rep
+
+    # TODO document
+    def rule_memory_differs_for_rep(rep)
+      old_rule_memory = rule_memory_store[rep]
+      new_rule_memory = new_rule_memory_for_rep(rep)
+      old_rule_memory != new_rule_memory
+    end
+    memoize :rule_memory_differs_for_rep
+
+    # TODO document
+    def new_rule_memory_for_layout(layout)
+      new_rule_memory = *filter_for_layout(layout)
+      rule_memory_store[layout] = new_rule_memory # TODO ugly
+      new_rule_memory
+    end
+    memoize :new_rule_memory_for_layout
+
+    # TODO document
+    def rule_memory_differs_for_layout(layout)
+      old_rule_memory = rule_memory_store[layout]
+      new_rule_memory = new_rule_memory_for_layout(layout)
+      old_rule_memory != new_rule_memory
+    end
+    memoize :rule_memory_differs_for_layout
+
     # @return [Nanoc3::OutdatednessChecker] The outdatedness checker
     def outdatedness_checker
       @outdatedness_checker ||= Nanoc3::OutdatednessChecker.new(
@@ -470,10 +506,15 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:processing_started,  rep)
       Nanoc3::NotificationCenter.post(:visit_started,       rep.item)
 
+      # Calculate rule memory if we haven’t yet done do
+      new_rule_memory_for_rep(rep)
+
       if !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
+        # Reuse content
         Nanoc3::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
+        # Recalculate content
         rep.snapshot(:raw)
         rep.snapshot(:pre, :final => false)
         compilation_rule_for(rep).apply_to(rep, :compiler => self)
@@ -527,10 +568,15 @@ module Nanoc3
       @checksum_store ||= Nanoc3::ChecksumStore.new(:site => @site)
     end
 
+    # @return [RuleMemoryStore] The rule memory store store
+    def rule_memory_store
+      @rule_memory_store ||= Nanoc3::RuleMemoryStore.new(:site => @site)
+    end
+
     # Returns all stores that can load/store data that can be used for
     # compilation.
     def stores
-      [ compiled_content_cache, checksum_store, dependency_tracker ]
+      [ compiled_content_cache, checksum_store, dependency_tracker, rule_memory_store ]
     end
 
   end

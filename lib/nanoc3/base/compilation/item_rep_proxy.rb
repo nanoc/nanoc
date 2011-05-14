@@ -70,6 +70,11 @@ module Nanoc3
       @item_rep.layout(layout, filter_name, filter_args)
     end
 
+    # TODO document
+    def is_proxy?
+      true
+    end
+
   private
 
     def set_assigns

@@ -87,6 +87,10 @@ module Nanoc3
       end
     end
 
+    # TODO document
+    def unload
+    end
+
     # Stores the data contained in memory to the filesystem. This method will
     #   use the {#data} method to fetch the data that should be written.
     #
