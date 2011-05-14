@@ -34,7 +34,7 @@ module Nanoc3
     def initialize(raw_content, attributes, identifier, params=nil)
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys
-      @identifier   = identifier.cleaned_identifier
+      @identifier   = identifier.cleaned_identifier.freeze
 
       # Set mtime
       params ||= {}
