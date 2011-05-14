@@ -8,6 +8,8 @@ class Nanoc3::MemoizationTest < MiniTest::Unit::TestCase
 
   class Sample1
 
+    extend Nanoc3::Memoization
+
     def initialize(value)
       @value = value
     end
@@ -15,10 +17,13 @@ class Nanoc3::MemoizationTest < MiniTest::Unit::TestCase
     def run(n)
       @value*10 + n
     end
+    memoize :run
 
   end
 
   class Sample2
+
+    extend Nanoc3::Memoization
 
     def initialize(value)
       @value = value
@@ -27,6 +32,7 @@ class Nanoc3::MemoizationTest < MiniTest::Unit::TestCase
     def run(n)
       @value*100 + n
     end
+    memoize :run
 
   end
 
