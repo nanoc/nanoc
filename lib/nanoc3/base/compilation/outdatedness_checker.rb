@@ -7,6 +7,8 @@ module Nanoc3
   # @api private
   class OutdatednessChecker
 
+    extend Nanoc3::Memoization
+
     # @option params [Nanoc3::Site] :site (nil) The site this outdatedness
     #   checker belongs to.
     #
@@ -47,23 +49,13 @@ module Nanoc3
     # @return [Nanoc3::OutdatednessReasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def outdatedness_reason_for(obj)
-      # Get from cache
-      if @outdatedness_reasons.has_key?(obj)
-        return @outdatedness_reasons[obj]
-      end
-
-      # Calculate
       reason = basic_outdatedness_reason_for(obj)
       if reason.nil? && outdated_due_to_dependencies?(obj)
         reason = Nanoc3::OutdatednessReasons::DependenciesOutdated
       end
-
-      # Cache
-      @outdatedness_reasons[obj] = reason
-
-      # Done
       reason
     end
+    memoize :outdatedness_reason_for
 
   private
 
@@ -90,54 +82,47 @@ module Nanoc3
     # @return [Nanoc3::OutdatednessReasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
-      # Get from cache
-      if @basic_outdatedness_reasons.has_key?(obj)
-        return @basic_outdatedness_reasons[obj]
-      end
-
-      # Calculate
-      reason = case obj.type
+      case obj.type
         when :item_rep
+          # Outdated if rules outdated
+          return Nanoc3::OutdatednessReasons::RulesModified if
+            rule_memory_differs_for(obj)
+
           # Outdated if checksums are missing or different
-          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj.item)
-          return Nanoc3::OutdatednessReasons::SourceModified if !checksum_store.checksums_identical?(obj.item)
+          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksums_available?(obj.item)
+          return Nanoc3::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
 
           # Outdated if compiled file doesn't exist (yet)
           return Nanoc3::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
 
           # Outdated if code snippets outdated
           return Nanoc3::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
-            checksum_store.object_modified?(cs)
+            object_modified?(cs)
           end
 
           # Outdated if configuration outdated
-          return Nanoc3::OutdatednessReasons::ConfigurationModified if checksum_store.object_modified?(site.config)
-
-          # Outdated if rules outdated
-          return Nanoc3::OutdatednessReasons::RulesModified if
-            checksum_store.object_modified?(site.compiler.rules_with_reference)
+          return Nanoc3::OutdatednessReasons::ConfigurationModified if object_modified?(site.config)
 
           # Not outdated
           return nil
         when :item
           obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
         when :layout
+          # Outdated if rules outdated
+          return Nanoc3::OutdatednessReasons::RulesModified if
+            rule_memory_differs_for(obj)
+
           # Outdated if checksums are missing or different
-          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj)
-          return Nanoc3::OutdatednessReasons::SourceModified if !checksum_store.checksums_identical?(obj)
+          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksums_available?(obj)
+          return Nanoc3::OutdatednessReasons::SourceModified if !checksums_identical?(obj)
 
           # Not outdated
           return nil
         else
           raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
       end
-
-      # Cache
-      @basic_outdatedness_reasons[obj] = reason
-
-      # Done
-      reason
     end
+    memoize :basic_outdatedness_reason_for
 
     # Checks whether the given object is outdated due to dependencies.
     #
@@ -176,10 +161,49 @@ module Nanoc3
       is_outdated
     end
 
+    # @param [Nanoc3::ItemRep, Nanoc3::Layout] obj The layout or item
+    #   representation to check the rule memory for
+    #
+    # @return [Boolean] true if the rule memory for the given item
+    #   represenation has changed, false otherwise
+    def rule_memory_differs_for(obj)
+      site.compiler.rule_memory_differs_for(obj)
+    end
+
+    # @param obj
+    #
+    # @return [Boolean] false if either the new or the old checksum for the
+    #   given object is not available, true if both checksums are available
+    def checksums_available?(obj)
+      !!checksum_store[obj] && checksum_calculator[obj]
+    end
+
+    # @param obj
+    #
+    # @return [Boolean] false if the old and new checksums for the given
+    #   object differ, true if they are identical
+    def checksums_identical?(obj)
+      checksum_store[obj] == checksum_calculator[obj]
+    end
+
+    # @param obj
+    #
+    # @return [Boolean] true if the old and new checksums for the given object
+    #   are available and identical, false otherwise
+    def object_modified?(obj)
+      !checksums_available?(obj) || !checksums_identical?(obj)
+    end
+
     # @return [Nanoc3::ChecksumStore] The checksum store
     def checksum_store
       @checksum_store
     end
+
+    # @return [Nanoc3::ChecksumCalculator] The checksum calculator
+    def checksum_calculator
+      Nanoc3::ChecksumCalculator.new
+    end
+    memoize :checksum_calculator
 
     # @return [Nanoc3::DependencyTracker] The dependency tracker
     def dependency_tracker

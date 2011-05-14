@@ -10,6 +10,7 @@ end
 # Load general requirements
 require 'enumerator'
 require 'fileutils'
+require 'pathname'
 require 'thread'
 require 'time'
 require 'yaml'

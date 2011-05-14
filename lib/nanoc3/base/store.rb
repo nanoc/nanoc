@@ -87,6 +87,12 @@ module Nanoc3
       end
     end
 
+    # Undoes the effects of {#load}. Used when {#load} raises an exception.
+    #
+    # @api private
+    def unload
+    end
+
     # Stores the data contained in memory to the filesystem. This method will
     #   use the {#data} method to fetch the data that should be written.
     #

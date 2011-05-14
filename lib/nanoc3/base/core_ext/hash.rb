@@ -42,6 +42,16 @@ module Nanoc3::HashExtensions
     end
   end
 
+  # Calculates the checksum for this hash. Any change to this hash will result
+  # in a different checksum.
+  #
+  # @return [String] The checksum for this hash
+  #
+  # @api private
+  def checksum
+    YAML.dump(self).checksum
+  end
+
 end
 
 class Hash

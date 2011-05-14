@@ -27,6 +27,20 @@ module Nanoc3::StringExtensions
     self.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...')
   end
 
+  # Calculates the checksum for this string. Any change to this string will
+  # result in a different checksum.
+  #
+  # @return [String] The checksum for this string
+  #
+  # @api private
+  def checksum
+    require 'digest'
+
+    digest = Digest::SHA1.new
+    digest.update(self)
+    digest.hexdigest
+  end
+
 end
 
 class String
