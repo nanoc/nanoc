@@ -25,7 +25,7 @@ module Nanoc3
   autoload 'ItemRep',              'nanoc3/base/result_data/item_rep'
 
   # Load compilation classes
-  autoload 'Checksummer',          'nanoc3/base/compilation/checksummer'
+  autoload 'ChecksumCalculator',    'nanoc3/base/compilation/checksum_calculator'
   autoload 'ChecksumStore',        'nanoc3/base/compilation/checksum_store'
   autoload 'CompiledContentCache', 'nanoc3/base/compilation/compiled_content_cache'
   autoload 'Compiler',             'nanoc3/base/compilation/compiler'

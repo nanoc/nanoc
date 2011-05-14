@@ -89,19 +89,19 @@ module Nanoc3
             rule_memory_differs_for(obj)
 
           # Outdated if checksums are missing or different
-          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj.item)
-          return Nanoc3::OutdatednessReasons::SourceModified if !checksum_store.checksums_identical?(obj.item)
+          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksums_available?(obj.item)
+          return Nanoc3::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
 
           # Outdated if compiled file doesn't exist (yet)
           return Nanoc3::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
 
           # Outdated if code snippets outdated
           return Nanoc3::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
-            checksum_store.object_modified?(cs)
+            object_modified?(cs)
           end
 
           # Outdated if configuration outdated
-          return Nanoc3::OutdatednessReasons::ConfigurationModified if checksum_store.object_modified?(site.config)
+          return Nanoc3::OutdatednessReasons::ConfigurationModified if object_modified?(site.config)
 
           # Not outdated
           return nil
@@ -113,8 +113,8 @@ module Nanoc3
             rule_memory_differs_for(obj)
 
           # Outdated if checksums are missing or different
-          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksum_store.checksums_available?(obj)
-          return Nanoc3::OutdatednessReasons::SourceModified if !checksum_store.checksums_identical?(obj)
+          return Nanoc3::OutdatednessReasons::NotEnoughData if !checksums_available?(obj)
+          return Nanoc3::OutdatednessReasons::SourceModified if !checksums_identical?(obj)
 
           # Not outdated
           return nil
@@ -170,10 +170,40 @@ module Nanoc3
       site.compiler.rule_memory_differs_for(obj)
     end
 
+    # @param obj
+    #
+    # @return [Boolean] false if either the new or the old checksum for the
+    #   given object is not available, true if both checksums are available
+    def checksums_available?(obj)
+      !!checksum_store[obj] && checksum_calculator[obj]
+    end
+
+    # @param obj
+    #
+    # @return [Boolean] false if the old and new checksums for the given
+    #   object differ, true if they are identical
+    def checksums_identical?(obj)
+      checksum_store[obj] == checksum_calculator[obj]
+    end
+
+    # @param obj
+    #
+    # @return [Boolean] true if the old and new checksums for the given object
+    #   are available and identical, false otherwise
+    def object_modified?(obj)
+      !checksums_available?(obj) || !checksums_identical?(obj)
+    end
+
     # @return [Nanoc3::ChecksumStore] The checksum store
     def checksum_store
       @checksum_store
     end
+
+    # @return [Nanoc3::ChecksumCalculator] The checksum calculator
+    def checksum_calculator
+      Nanoc3::ChecksumCalculator.new
+    end
+    memoize :checksum_calculator
 
     # @return [Nanoc3::DependencyTracker] The dependency tracker
     def dependency_tracker

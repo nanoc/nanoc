@@ -5,12 +5,6 @@ module Nanoc3
   # Stores checksums for objects in order to be able to detect whether a file
   # has changed since the last site compilation.
   #
-  # Old checksums are checksums that were in effect during the previous site
-  # compilation. New checksums are checksums that are in effect right now. If
-  # an old checksum differs from a new checksum, the corresponding object was
-  # modified and will need to be recompiled (along with the objects that
-  # depend on that object).
-  #
   # @api private
   class ChecksumStore < ::Nanoc3::Store
 
@@ -21,114 +15,41 @@ module Nanoc3
 
       @site = params[:site] if params.has_key?(:site)
 
-      @new_checksums = {}
-      @old_checksums = {}
+      @checksums = {}
     end
 
-    # Returns the old checksum for the given object. The object must respond
-    # to `#reference` (for example, {Nanoc3::Item#reference},
-    # {Nanoc3::Layout#reference}, {Nanoc3::CodeSnippet#reference}, …).
+    # Returns the old checksum for the given object. This makes sense for
+    # items, layouts and code snippets.
     #
-    # @param [#reference] obj The object for which to fetch the old checksum
+    # @param [#reference] obj The object for which to fetch the checksum
     #
-    # @return [String] The old checksum for the given object
-    def old_checksum_for(obj)
-      @old_checksums[obj.reference]
+    # @return [String] The checksum for the given object
+    def [](obj)
+      @checksums[obj.reference]
     end
 
-    # Returns the new checksum for the given object. The object must respond
-    # to `#reference` (for example, {Nanoc3::Item#reference},
-    # {Nanoc3::Layout#reference}, {Nanoc3::CodeSnippet#reference}, …).
+    # Sets the checksum for the given object.
     #
-    # @param [#reference] obj The object for which to calculate the new
-    #   checksum
+    # @param [#reference] obj The object for which to set the checksum
     #
-    # @return [String] The new checksum for the given object
-    def new_checksum_for(obj)
-      @new_checksums[obj.reference] ||= begin
-        checksum_parts = []
-
-        # Calculate content checksum
-        checksum_parts << if obj.respond_to?(:binary?) && obj.binary?
-          Pathname.new(obj.raw_filename).checksum
-        elsif obj.respond_to?(:raw_content)
-          obj.raw_content.checksum
-        elsif obj.respond_to?(:data)
-          obj.data.checksum
-        else
-          raise RuntimeError, "Couldn’t figure out how to calculate the " \
-            "content checksum for #{obj.inspect} (tried #raw_filename, " \
-            "#raw_content and #data but none of these worked)"
-        end
-
-        # Calculate attributes checksum
-        if obj.respond_to?(:attributes)
-          attributes = obj.attributes.dup
-          attributes.delete(:file)
-          checksum_parts << attributes.checksum
-        end
-
-        # Done
-        checksum_parts.join('-')
-      end
-    end
-
-    # Calculates the checksums for all objects in the site. This method should
-    # be used to make the checksum store remember the new checksums for all
-    # given objects; it is probably necessary to call this method before
-    # calling {#store}, to make sure that all new checksums are calculated. It
-    # is not necessary to call this method in order to use
-    # {#new_checksum_for}.
-    #
-    # @return [void]
-    def calculate_all_checksums
-      @site.compiler.objects.each { |obj| new_checksum_for(obj) }
-    end
-
-    # @param [#reference] obj
-    #
-    # @return [Boolean] false if either the new or the old checksum for the
-    #   given object is not available, true if both checksums are available
-    def checksums_available?(obj)
-      !!old_checksum_for(obj) && !!new_checksum_for(obj)
-    end
-
-    # @param [#reference] obj
-    #
-    # @return [Boolean] false if the old and new checksums for the given
-    #   object differ, true if they are identical
-    def checksums_identical?(obj)
-      old_checksum_for(obj) == new_checksum_for(obj)
-    end
-
-    # @param [#reference] obj
-    #
-    # @return [Boolean] true if the old and new checksums for the given object
-    #   are available and identical, false otherwise
-    def object_modified?(obj)
-      !checksums_available?(obj) || !checksums_identical?(obj)
-    end
-
-    # @see Nanoc3::Store#store
-    def store
-      calculate_all_checksums
-      super
+    # @param [String] checksum The checksum
+    def []=(obj, checksum)
+      @checksums[obj.reference] = checksum
     end
 
     # @see Nanoc3::Store#unload
     def unload
-      @new_checksums = {}
-      @old_checksums = {}
+      @checksums = {}
     end
 
   protected
 
     def data
-      @new_checksums
+      @checksums
     end
 
     def data=(new_data)
-      @old_checksums = new_data
+      @checksums = new_data
     end
 
   end
