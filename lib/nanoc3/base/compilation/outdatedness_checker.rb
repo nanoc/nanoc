@@ -161,12 +161,19 @@ module Nanoc3
       is_outdated
     end
 
-    # TODO document
+    # @param [Nanoc3::ItemRep] rep The item representation to check the rule
+    #   memory for
+    #
+    # @return [Boolean] true if the rule memory for the given item
+    #   represenation has changed, false otherwise
     def rule_memory_differs_for_rep(rep)
       site.compiler.rule_memory_differs_for_rep(rep)
     end
 
-    # TODO document
+    # @param [Nanoc3::Layout] layout The layout to check the rule memory for
+    #
+    # @return [Boolean] true if the rule memory for the given layout has
+    #   changed, false otherwise
     def rule_memory_differs_for_layout(layout)
       site.compiler.rule_memory_differs_for_layout(layout)
     end

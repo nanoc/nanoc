@@ -424,14 +424,26 @@ module Nanoc3
       write(snapshot_name) if params[:final]
     end
 
-    # TODO document
+    # Returns a recording proxy that is used for determining whether the
+    # compilation has changed, and thus whether the item rep needs to be
+    # recompiled.
     #
     # @api private
+    #
+    # @return [Nanoc3::ItemRepRecorderProxy] The recording proxy
     def to_recording_proxy
       Nanoc3::ItemRepRecorderProxy.new(self)
     end
 
-    # TODO document
+    # Returns false because this item is not yet a proxy, and therefore does
+    # need to be wrapped in a proxy during compilation.
+    #
+    # @api private
+    #
+    # @return [false]
+    #
+    # @see Nanoc3::ItemRepRecorderProxy#is_proxy?
+    # @see Nanoc3::ItemRepProxy#is_proxy?
     def is_proxy?
       false
     end

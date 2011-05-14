@@ -2,12 +2,19 @@
 
 module Nanoc3
 
-  # TODO document
+  # Adds support for memoizing functions.
   module Memoization
 
     CACHE = {}
 
-    # TODO document
+    # Memoizes the method with the given name. The modified method will cache
+    # the results of the original method, so that calling a method twice with
+    # the same arguments will short-circuit and return the cached results
+    # immediately.
+    #
+    # @param [Symbol, String] method_name The name of the method to memoize
+    #
+    # @return [void]
     def memoize(method_name)
       # Alias
       original_method_name = '__nonmemoized_' + method_name.to_s

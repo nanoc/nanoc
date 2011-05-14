@@ -87,7 +87,9 @@ module Nanoc3
       end
     end
 
-    # TODO document
+    # Undoes the effects of {#load}. Used when {#load} raises an exception.
+    #
+    # @api private
     def unload
     end
 

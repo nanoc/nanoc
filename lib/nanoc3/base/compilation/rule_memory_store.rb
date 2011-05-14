@@ -2,12 +2,13 @@
 
 module Nanoc3
 
-  # TODO document
+  # Stores rule memories for objects that can be run through a rule (item
+  # representations and layouts).
   #
   # @api private
   class RuleMemoryStore < ::Nanoc3::Store
 
-    # @option params [Nanoc3::Site] site The site where this checksum store
+    # @option params [Nanoc3::Site] site The site where this rule memory store
     #   belongs to
     def initialize(params={})
       super('tmp/rule_memory', 1)
@@ -18,19 +19,27 @@ module Nanoc3
       @new_rule_memories = {}
     end
 
-    # TODO document
+    # @param [#reference] obj The object to get the rule memory for
+    #
+    # @return [Array] The old rule memory for the given object
     def old_rule_memory_for(obj)
       @old_rule_memories[obj.reference]
     end
 
-    # TODO document
+    # @param [Nanoc3::ItemRep] rep The item rep to get the rule memory for
+    #
+    # @return [Array] The new rule memory for the given item representation
     def new_rule_memory_for_rep(rep)
-      @new_rule_memories[rep.reference] ||= @site.compiler.new_rule_memory_for_rep(rep)
+      @new_rule_memories[rep.reference] ||=
+        @site.compiler.new_rule_memory_for_rep(rep)
     end
 
-    # TODO document
+    # @param [Nanoc3::Layout] layout The layout to get the rule memory for
+    #
+    # @return [Array] The new rule memory for the given layout
     def new_rule_memory_for_layout(layout)
-      @new_rule_memories[layout.reference] ||= @site.compiler.new_rule_memory_for_layout(layout)
+      @new_rule_memories[layout.reference] ||=
+        @site.compiler.new_rule_memory_for_layout(layout)
     end
 
     # @see Nanoc3::Store#store

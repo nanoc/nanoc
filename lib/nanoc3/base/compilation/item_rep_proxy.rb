@@ -70,7 +70,15 @@ module Nanoc3
       @item_rep.layout(layout, filter_name, filter_args)
     end
 
-    # TODO document
+    # Returns true because this item is already a proxy, and therefore doesn’t
+    # need to be wrapped anymore.
+    #
+    # @api private
+    #
+    # @return [true]
+    #
+    # @see Nanoc3::ItemRep#is_proxy?
+    # @see Nanoc3::ItemRepRecorderProxy#is_proxy?
     def is_proxy?
       true
     end

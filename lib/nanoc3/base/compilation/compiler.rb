@@ -389,7 +389,10 @@ module Nanoc3
       })
     end
 
-    # TODO document
+    # @param [Nanoc3::ItemRep] rep The item representation to get the rule
+    #   memory for
+    #
+    # @return [Array] The rule memory for the given item representation
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
       compilation_rule_for(rep).apply_to(recording_proxy, :compiler => self)
@@ -397,7 +400,11 @@ module Nanoc3
     end
     memoize :new_rule_memory_for_rep
 
-    # TODO document
+    # @param [Nanoc3::ItemRep] rep The item representation for which the old
+    #   and new rule memories should be checked
+    #
+    # @return [Boolean] true if the old and the new rule memories for the
+    #   given item representation differ, false otherwise
     def rule_memory_differs_for_rep(rep)
       old_rule_memory = rule_memory_store.old_rule_memory_for(rep)
       new_rule_memory = rule_memory_store.new_rule_memory_for_rep(rep)
@@ -405,13 +412,19 @@ module Nanoc3
     end
     memoize :rule_memory_differs_for_rep
 
-    # TODO document
+    # @param [Nanoc3::Layout] layout The layout to get the rule memory for
+    #
+    # @return [Array] The rule memory for the given layout
     def new_rule_memory_for_layout(layout)
       filter_for_layout(layout)
     end
     memoize :new_rule_memory_for_layout
 
-    # TODO document
+    # @param [Nanoc3::Layout] layout The layout for which the old and new rule 
+    #   memories should be checked
+    #
+    # @return [Boolean] true if the old and the new rule memories for the
+    #   given layout differ, false otherwise
     def rule_memory_differs_for_layout(layout)
       old_rule_memory = rule_memory_store.old_rule_memory_for(layout)
       new_rule_memory = rule_memory_store.new_rule_memory_for_layout(layout)
