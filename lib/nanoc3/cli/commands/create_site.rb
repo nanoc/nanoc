@@ -95,8 +95,12 @@ compile '/stylesheet/' do
 end
 
 compile '*' do
-  filter :erb
-  layout 'default'
+  if item.binary?
+    # don’t filter binary items
+  else
+    filter :erb
+    layout 'default'
+  end
 end
 
 route '/stylesheet/' do
