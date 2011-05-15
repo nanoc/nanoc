@@ -166,7 +166,7 @@ module Nanoc3::Extra::Validators
       end
 
       # Skip non-HTTP URLs
-      return true if uri.scheme != 'http'
+      return true if uri.scheme !~ /^https?$/
 
       # Get status
       status = fetch_http_status_for(uri)
