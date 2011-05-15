@@ -26,7 +26,7 @@ module Nanoc3::HashExtensions
 
   # Freezes the contents of the hash, as well as all hash values. The hash
   # values will be frozen using {#freeze_recursively} if they respond to
-  # that message, or {#freeze} if they do not.
+  # that message, or #freeze if they do not.
   #
   # @see Array#freeze_recursively
   #
