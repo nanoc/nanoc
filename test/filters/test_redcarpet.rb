@@ -6,6 +6,10 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 
+  def test_find
+    refute Nanoc3::Filter.named(:redcarpet).nil?
+  end
+
   def test_filter
     if_have 'redcarpet' do
       # Create filter

@@ -40,7 +40,7 @@ module Nanoc3::Filters
   Nanoc3::Filter.register '::Nanoc3::Filters::Rainpress',       :rainpress
   Nanoc3::Filter.register '::Nanoc3::Filters::RDiscount',       :rdiscount
   Nanoc3::Filter.register '::Nanoc3::Filters::RDoc',            :rdoc
-  Nanoc3::Filter.register '::Nanoc3::Filters::RedCarpet',       :redcarpet
+  Nanoc3::Filter.register '::Nanoc3::Filters::Redcarpet',       :redcarpet
   Nanoc3::Filter.register '::Nanoc3::Filters::RedCloth',        :redcloth
   Nanoc3::Filter.register '::Nanoc3::Filters::RelativizePaths', :relativize_paths
   Nanoc3::Filter.register '::Nanoc3::Filters::RubyPants',       :rubypants
