@@ -27,6 +27,7 @@ module Nanoc3::CLI
       'rack/cache'     => 'rack-cache',
       'rainpress'      => 'rainpress',
       'rdiscount'      => 'rdiscount',
+      'redcarpet'      => 'redcarpet',
       'redcloth'       => 'redcloth',
       'rubypants'      => 'rubypants',
       'sass'           => 'sass',
