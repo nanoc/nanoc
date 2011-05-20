@@ -7,10 +7,13 @@ class Nanoc3::Filters::MarkabyTest < MiniTest::Unit::TestCase
   include Nanoc3::TestHelpers
 
   def test_filter
-    if_have 'markaby' do
-      # Don’t run this test on 1.9.x, because it breaks and it annoys me
-      break if RUBY_VERSION > '1.9'
+    # Don’t run this test on 1.9.x, because it breaks and it annoys me
+    if RUBY_VERSION >= '1.9'
+      skip "Markaby is not compatible with 1.9.x"
+      return
+    end
 
+    if_have 'markaby' do
       # Create filter
       filter = ::Nanoc3::Filters::Markaby.new
 
