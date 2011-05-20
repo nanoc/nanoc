@@ -18,13 +18,27 @@ module Nanoc3::StringExtensions
   # @return [String] The decomposed string
   def make_compatible_with_env
     # Check whether environment supports Unicode
-    # TODO this is ugly, and there most likely are better ways to do this
+    # FIXME this is ugly, and there most likely are better ways to do this
     is_unicode_supported = %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
     return self if is_unicode_supported
 
     # Decompose if necessary
-    # TODO this decomposition is not generally usable
+    # FIXME this decomposition is not generally usable
     self.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...')
+  end
+
+  # Calculates the checksum for this string. Any change to this string will
+  # result in a different checksum.
+  #
+  # @return [String] The checksum for this string
+  #
+  # @api private
+  def checksum
+    require 'digest'
+
+    digest = Digest::SHA1.new
+    digest.update(self)
+    digest.hexdigest
   end
 
 end

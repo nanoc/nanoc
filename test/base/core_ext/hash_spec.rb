@@ -39,3 +39,44 @@ describe 'Hash#stringify_keys' do
   end
 
 end
+
+describe 'Hash#freeze_recursively' do
+
+  it 'should prevent first-level elements from being modified' do
+    hash = { :a => { :b => :c } }
+    hash.freeze_recursively
+
+    raised = false
+    begin
+      hash[:a] = 123
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
+  it 'should prevent second-level elements from being modified' do
+    hash = { :a => { :b => :c } }
+    hash.freeze_recursively
+
+    raised = false
+    begin
+      hash[:a][:b] = 123
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
+end
+
+describe 'Hash#checksum' do
+
+  it 'should work' do
+    expectation = '2da008bddb0a2906ed76456fd564e470857333f6'
+    { :foo => 123 }.checksum.must_equal expectation
+  end
+
+end

@@ -7,17 +7,17 @@ module Nanoc3::Extra::Validators
   class Links
 
     # @param [String] dir The directory that will be searched for HTML files
-    # to validate
+    #   to validate
     #
     # @param [Array<String>] index_filenames An array of index filenames that
-    # will be appended to URLs by web servers if a directory is requested
-    # instead of a file
+    #   will be appended to URLs by web servers if a directory is requested
+    #   instead of a file
     #
     # @option params [Boolean] :internal (false) True if internal links should
-    # be checked; false if they should not
+    #   be checked; false if they should not
     #
     # @option params [Boolean] :external (false) True if external links should
-    # be checked; false if they should not
+    #   be checked; false if they should not
     def initialize(dir, index_filenames, params={})
       @dir              = dir
       @index_filenames  = index_filenames

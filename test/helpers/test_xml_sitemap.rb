@@ -10,8 +10,6 @@ class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
   def test_xml_sitemap
     if_have 'builder' do
-      require 'time'
-
       # Create items
       @items = [ mock, mock, mock, mock ]
 
@@ -64,6 +62,44 @@ class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
     @items = nil
     @item  = nil
     @site  = nil
+  end
+
+  def test_sitemap_with_items_as_param
+    if_have 'builder' do
+      # Create items
+      @items = [ mock, mock, mock ]
+
+      # Create item 0
+      @items[0].expects(:[]).never
+
+      # Create item 1
+      @items[1].expects(:[]).never
+
+      # Create item 2
+      @items[2].expects(:mtime).times(2).returns(nil)
+      @items[2].expects(:[]).times(2).with(:changefreq).returns(nil)
+      @items[2].expects(:[]).times(2).with(:priority).returns(nil)
+      item_reps = [ mock, mock ]
+      item_reps[0].expects(:path).returns('/kkk/')
+      item_reps[0].expects(:raw_path).returns('output/kkk/index.html')
+      item_reps[1].expects(:path).returns('/lll/')
+      item_reps[1].expects(:raw_path).returns('output/lll/index.html')
+      @items[2].expects(:reps).returns(item_reps)
+
+      # Create sitemap item
+      @item = mock
+
+      # Create site
+      config = mock
+      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
+      @site = mock
+      @site.expects(:config).at_least_once.returns(config)
+
+      # Check
+      xml_sitemap(
+        :items => [@items[2]]
+      )
+    end
   end
 
 end

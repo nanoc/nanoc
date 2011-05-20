@@ -10,13 +10,8 @@ Note: This documentation looks best with Yardoc, not RDoc.
 ## Resources
 
 The [nanoc web site](http://nanoc.stoneship.org) contains a few useful
-resources to help you get started with nanoc:
-
-* The [tutorial](http://nanoc.stoneship.org/tutorial)
-* The [manual](http://nanoc.stoneship.org/manual)
-* The [migration guide](http://nanoc.stoneship.org/migrating)
-
-If you need assistance, the following places will help you out:
+resources to help you get started with nanoc. If you need further assistance,
+the following places will help you out:
 
 * The [discussion group](http://groups.google.com/group/nanoc)
 * The [IRC channel](irc://chat.freenode.net/#nanoc)
@@ -27,6 +22,9 @@ The source code is located in `lib/nanoc3` and is structured in a few
 directories:
 
 * `base` contains the bare essentials necessary for nanoc to function
+  * `source_data` contains raw, uncompiled content that will be compiled
+  * `result_data` contains the compiled content
+  * `compilation` contains the compilation functionality
 * `cli` contains the commandline interface
 * `data_sources` contains the standard data sources ({Nanoc3::DataSource}
   subclasses), such as the filesystem data source
@@ -74,11 +72,19 @@ may be interested in the development dependencies:
 * Ben Armston
 * Colin Barrett
 * Dmitry Bilunov
+* Devon Luke Buchanan
 * Brian Candler
+* Michal Cichra
+* Zaiste de Grengolada
+* Vincent Driessen
 * Chris Eppstein
+* Jeff Forcier
 * Felix Hanley
+* Justin Hileman
 * Starr Horne
 * Tuomas Kareinen
+* Daniel Mendler
+* Ale Muñoz
 * Nicky Peeters
 * Christian Plessl
 * Šime Ramov
@@ -86,8 +92,6 @@ may be interested in the development dependencies:
 * “Soryu”
 * Eric Sunshine
 * Dennis Sutch
-
-Special thanks to Ale Muñoz.
 
 ## Contact
 

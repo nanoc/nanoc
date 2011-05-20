@@ -63,10 +63,10 @@ module Nanoc3::Extra::Deployers
     # Runs the task. Possible params:
     #
     # @option params [Boolean] :dry_run (false) True if the action itself
-    # should not be executed, but still printed; false otherwise.
+    #   should not be executed, but still printed; false otherwise.
     #
     # @option params [String] :config_name (:default) The name of the
-    # deployment configuration to use.
+    #   deployment configuration to use.
     #
     # @return [void]
     def run(params={})

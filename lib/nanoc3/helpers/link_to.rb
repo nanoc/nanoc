@@ -17,10 +17,10 @@ module Nanoc3::Helpers
     # @param [String] text The visible link text
     #
     # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
-    # item or item representation that should be linked to
+    #   item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
-    # `rel`, `title`, …) that will be added to the link.
+    #   `rel`, `title`, …) that will be added to the link.
     #
     # @return [String] The link text
     #
@@ -71,10 +71,10 @@ module Nanoc3::Helpers
     # @param [String] text The visible link text
     #
     # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
-    # item or item representation that should be linked to
+    #   item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
-    # `rel`, `title`, …) that will be added to the link.
+    #   `rel`, `title`, …) that will be added to the link.
     #
     # @return [String] The link text
     #
@@ -103,8 +103,8 @@ module Nanoc3::Helpers
     # item representation. The returned path will not be HTML-escaped.
     #
     # @param [String, Nanoc3::Item, Nanoc3::ItemRep] target The path/URL,
-    # item or item representation to which the relative path should be
-    # generated
+    #   item or item representation to which the relative path should be
+    #   generated
     #
     # @return [String] The relative path to the target
     #

@@ -14,7 +14,8 @@ module Nanoc3::Filters
     #
     # @param [String] content The content to filter
     #
-    # @option params [Symbol] :type The type of content to filter; can be either `:html` or `:css`.
+    # @option params [Symbol] :type The type of content to filter; can be
+    #   either `:html` or `:css`.
     #
     # @return [String] The filtered content
     def run(content, params={})
@@ -22,7 +23,7 @@ module Nanoc3::Filters
       @item_rep = assigns[:item_rep] if @item_rep.nil?
 
       # Filter
-      # TODO use nokogiri or csspool instead of regular expressions
+      # FIXME use nokogiri or csspool instead of regular expressions
       case params[:type]
       when :html
         content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/.*?)\3([ >])/) do

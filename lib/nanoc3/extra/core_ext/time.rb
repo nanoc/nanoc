@@ -9,7 +9,7 @@ module Nanoc3::Extra::TimeExtensions
 
   # @return [String] The time in an ISO-8601 time format.
   def to_iso8601_time
-    self.gmtime.strftime("%Y-%m-%dT%H:%M:%SZ")
+    self.getutc.strftime("%Y-%m-%dT%H:%M:%SZ")
   end
 
 end

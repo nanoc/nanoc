@@ -3,13 +3,17 @@
 module Nanoc3
 
   # The current nanoc version.
-  VERSION = '3.1.8'
+  VERSION = '3.2.0a3'
 
 end
 
-# Load requirements
-require 'yaml'
+# Load general requirements
+require 'enumerator'
 require 'fileutils'
+require 'pathname'
+require 'thread'
+require 'time'
+require 'yaml'
 
 # Load nanoc
 require 'nanoc3/base'

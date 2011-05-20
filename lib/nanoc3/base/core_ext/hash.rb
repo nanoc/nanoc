@@ -24,6 +24,34 @@ module Nanoc3::HashExtensions
     end
   end
 
+  # Freezes the contents of the hash, as well as all hash values. The hash
+  # values will be frozen using {#freeze_recursively} if they respond to
+  # that message, or #freeze if they do not.
+  #
+  # @see Array#freeze_recursively
+  #
+  # @return [void]
+  def freeze_recursively
+    freeze
+    each_pair do |key, value|
+      if value.respond_to?(:freeze_recursively)
+        value.freeze_recursively
+      else
+        value.freeze
+      end
+    end
+  end
+
+  # Calculates the checksum for this hash. Any change to this hash will result
+  # in a different checksum.
+  #
+  # @return [String] The checksum for this hash
+  #
+  # @api private
+  def checksum
+    YAML.dump(self).checksum
+  end
+
 end
 
 class Hash

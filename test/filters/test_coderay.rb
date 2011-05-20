@@ -38,7 +38,7 @@ class Nanoc3::Filters::CodeRayTest < MiniTest::Unit::TestCase
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
-      result = filter.run(code, :language => 'skldfhjsdhfjszfnocmluhfixmersumulh')
+      result = filter.run(code, :language => 'skldfhjsdhfjszfnocmluhfixfmersumulh')
       assert_equal code, result
     end
   end

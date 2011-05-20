@@ -7,9 +7,11 @@ module Nanoc3
 
     # Creates a new compiler DSL for the given compiler.
     #
+    # @api private
+    #
     # @param [Nanoc3::Site] site The site this DSL belongs to
-    def initialize(site)
-      @site = site
+    def initialize(compiler)
+      @compiler = compiler
     end
 
     # Creates a preprocessor block that will be executed after all data is
@@ -19,7 +21,7 @@ module Nanoc3
     #
     # @return [void]
     def preprocess(&block)
-      @site.preprocessor = block
+      @compiler.preprocessor = block
     end
 
     # Creates a compilation rule for all items whose identifier match the
@@ -33,13 +35,13 @@ module Nanoc3
     # rep as a block argument.
     #
     # @param [String] identifier A pattern matching identifiers of items that
-    # should be compiled using this rule
+    #   should be compiled using this rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
-    # that should be compiled using this rule
+    #   that should be compiled using this rule
     #
     # @yield The block that will be executed when an item matching this
-    # compilation rule needs to be compiled
+    #   compilation rule needs to be compiled
     #
     # @return [void]
     #
@@ -63,7 +65,7 @@ module Nanoc3
 
       # Create rule
       rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
-      @site.compiler.item_compilation_rules << rule
+      @compiler.item_compilation_rules << rule
     end
 
     # Creates a routing rule for all items whose identifier match the
@@ -77,13 +79,13 @@ module Nanoc3
     # and passing the rep as a block argument.
     #
     # @param [String] identifier A pattern matching identifiers of items that
-    # should be routed using this rule
+    #   should be routed using this rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
-    # that should be routed using this rule
+    #   that should be routed using this rule
     #
     # @yield The block that will be executed when an item matching this
-    # compilation rule needs to be routed
+    #   compilation rule needs to be routed
     #
     # @return [void]
     #
@@ -103,11 +105,12 @@ module Nanoc3
       raise ArgumentError.new("#route requires a block") unless block_given?
 
       # Get rep name
-      rep_name = params[:rep] || :default
+      rep_name      = params[:rep] || :default
+      snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
-      @site.compiler.item_routing_rules << rule
+      rule = Rule.new(identifier_to_regex(identifier), rep_name, block, :snapshot_name => snapshot_name)
+      @compiler.item_routing_rules << rule
     end
 
     # Creates a layout rule for all layouts whose identifier match the given
@@ -117,13 +120,13 @@ module Nanoc3
     # contains filter arguments that will be passed to the filter.
     #
     # @param [String] identifier A pattern matching identifiers of layouts
-    # that should be filtered using this rule
+    #   that should be filtered using this rule
     #
     # @param [Symbol] filter_name The name of the filter that should be run
-    # when processing the layout
+    #   when processing the layout
     #
     # @param [Hash] params Extra filter arguments that should be passed to the
-    # filter when processing the layout (see {Nanoc3::Filter#run})
+    #   filter when processing the layout (see {Nanoc3::Filter#run})
     #
     # @return [void]
     #
@@ -135,7 +138,50 @@ module Nanoc3
     #
     #     layout '/custom/',  :haml, :format => :html5
     def layout(identifier, filter_name, params={})
-      @site.compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
+      @compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
+    end
+
+    # Creates a pair of compilation and routing rules that indicate that the
+    # specified item(s) should be copied to the output folder as-is. The items
+    # are selected using an identifier, which may either be a string
+    # containing the `*` wildcard, or a regular expression.
+    #
+    # This meta-rule will be applicable to reps with a name equal to
+    # `:default`; this can be changed by giving an explicit `:rep` parameter.
+    #
+    # @param [String] identifier A pattern matching identifiers of items that
+    #   should be processed using this meta-rule
+    #
+    # @option params [Symbol] :rep (:default) The name of the representation
+    #   that should be routed using this rule
+    #
+    # @return [void]
+    #
+    # @example Copying the `/foo/` item as-is
+    #
+    #     passthrough '/foo/'
+    #
+    # @example Copying the `:raw` rep of the `/bar/` item as-is
+    #
+    #     passthrough '/bar/', :rep => :raw
+    def passthrough(identifier, params={})
+      # Require no block
+      raise ArgumentError.new("#passthrough does not require a block") if block_given?
+
+      # Get rep name
+      rep_name = params[:rep] || :default
+
+      # Create compilation rule
+      compilation_block = proc { }
+      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
+      @compiler.item_compilation_rules.unshift compilation_rule
+
+      # Create routing rule
+      routing_block = proc do
+        item.identifier.chop + '.' + item[:extension]
+      end
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block)
+      @compiler.item_routing_rules.unshift routing_rule
     end
 
   private

@@ -29,7 +29,7 @@ module Nanoc3::Extra
     # @param [Hash] env The environment, as defined by the Rack specification
     #
     # @return [Array] An array containing the status, the headers, and the
-    # body, as defined by the Rack specification
+    #   body, as defined by the Rack specification
     def call(env)
       @mutex.synchronize do
         # Start with a new site
@@ -43,8 +43,8 @@ module Nanoc3::Extra
             r.raw_path == site.config[:output_dir] + path
         end
 
-        # Recompile rep
-        site.compiler.run(rep.item) if rep
+        # Recompile
+        site.compile if rep
 
         # Get paths by appending index filenames
         if path =~ /\/$/
@@ -82,7 +82,6 @@ module Nanoc3::Extra
 
     def build_site
       @site = Nanoc3::Site.new(@site_path)
-      @site.load_data
     end
 
     def mime_type_of(path, fallback)
