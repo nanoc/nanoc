@@ -40,8 +40,8 @@ module Nanoc3::DataSources
   #     (`allow_periods_in_identifiers` set to false)
   #     foo.html.erb → /foo/
   #
-  # Note that it is possible for two different, separate files to have the
-  # same identifier. It is recommended to avoid such situations.
+  # Note that each item must have an unique identifier. nanoc will display an
+  # error if two items with the same identifier are found.
   #
   # Some more examples:
   #
