@@ -17,6 +17,7 @@ module Nanoc3::Filters
   autoload 'Rainpress',       'nanoc3/filters/rainpress'
   autoload 'RDiscount',       'nanoc3/filters/rdiscount'
   autoload 'RDoc',            'nanoc3/filters/rdoc'
+  autoload 'Redcarpet',       'nanoc3/filters/redcarpet'
   autoload 'RedCloth',        'nanoc3/filters/redcloth'
   autoload 'RelativizePaths', 'nanoc3/filters/relativize_paths'
   autoload 'RubyPants',       'nanoc3/filters/rubypants'
@@ -39,6 +40,7 @@ module Nanoc3::Filters
   Nanoc3::Filter.register '::Nanoc3::Filters::Rainpress',       :rainpress
   Nanoc3::Filter.register '::Nanoc3::Filters::RDiscount',       :rdiscount
   Nanoc3::Filter.register '::Nanoc3::Filters::RDoc',            :rdoc
+  Nanoc3::Filter.register '::Nanoc3::Filters::RedCarpet',       :redcarpet
   Nanoc3::Filter.register '::Nanoc3::Filters::RedCloth',        :redcloth
   Nanoc3::Filter.register '::Nanoc3::Filters::RelativizePaths', :relativize_paths
   Nanoc3::Filter.register '::Nanoc3::Filters::RubyPants',       :rubypants
