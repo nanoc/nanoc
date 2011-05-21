@@ -51,7 +51,7 @@ module Nanoc3::CLI::Commands
       puts
       items.sort_by { |i| i.identifier }.each do |item|
         puts "item #{item.identifier} depends on:"
-        predecessors = dependency_tracker.direct_predecessors_of(item).sort_by { |i| i.identifier }
+        predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i.identifier }
         predecessors.each do |pred|
           puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
         end
