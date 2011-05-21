@@ -89,7 +89,7 @@ module Nanoc3
     # @return [Array<Nanoc3::Item, Nanoc3::Layout, nil>] The direct
     # predecessors of
     #   the given object
-    def direct_predecessors_of(object)
+    def objects_causing_outdatedness_of(object)
       @graph.direct_predecessors_of(object)
     end
 
@@ -106,7 +106,7 @@ module Nanoc3
     #
     # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The direct successors of
     #   the given object
-    def direct_successors_of(object)
+    def objects_outdated_due_to(object)
       @graph.direct_successors_of(object).compact
     end
 

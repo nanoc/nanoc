@@ -150,7 +150,7 @@ module Nanoc3
       return false if processed.include?(obj)
 
       # Calculate
-      is_outdated = dependency_tracker.direct_predecessors_of(obj).any? do |other|
+      is_outdated = dependency_tracker.objects_causing_outdatedness_of(obj).any? do |other|
         other.nil? || basic_outdated?(other) || outdated_due_to_dependencies?(other, processed.merge([obj]))
       end
 

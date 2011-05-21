@@ -14,8 +14,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker = Nanoc3::DependencyTracker.new(items)
 
     # Verify no dependencies yet
-    assert_empty tracker.direct_predecessors_of(items[0])
-    assert_empty tracker.direct_predecessors_of(items[1])
+    assert_empty tracker.objects_causing_outdatedness_of(items[0])
+    assert_empty tracker.objects_causing_outdatedness_of(items[1])
   end
 
   def test_record_dependency
@@ -29,7 +29,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
   end
 
   def test_record_dependency_no_self
@@ -44,7 +44,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
   end
 
   def test_record_dependency_no_doubles
@@ -60,10 +60,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[0], items[1])
 
     # Verify dependencies
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
   end
 
-  def test_direct_predecessors_of
+  def test_objects_causing_outdatedness_of
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -75,10 +75,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
   end
 
-  def test_direct_successors_of
+  def test_objects_outdated_due_to
     # Mock items
     items = [ mock, mock, mock ]
 
@@ -90,7 +90,7 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.record_dependency(items[1], items[2])
 
     # Verify dependencies
-    assert_contains_exactly [ items[0] ], tracker.direct_successors_of(items[1])
+    assert_contains_exactly [ items[0] ], tracker.objects_outdated_due_to(items[1])
   end
 
   def test_start_and_stop
@@ -109,8 +109,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.stop
 
     # Verify dependencies
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
-    assert_empty tracker.direct_predecessors_of(items[1])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
+    assert_empty tracker.objects_causing_outdatedness_of(items[1])
   end
 
   def test_store_graph_and_load_graph_simple
@@ -141,10 +141,10 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_contains_exactly [ items[1] ],           tracker.direct_predecessors_of(items[0])
-    assert_contains_exactly [ items[2], items[3] ], tracker.direct_predecessors_of(items[1])
-    assert_empty tracker.direct_predecessors_of(items[2])
-    assert_empty tracker.direct_predecessors_of(items[3])
+    assert_contains_exactly [ items[1] ],           tracker.objects_causing_outdatedness_of(items[0])
+    assert_contains_exactly [ items[2], items[3] ], tracker.objects_causing_outdatedness_of(items[1])
+    assert_empty tracker.objects_causing_outdatedness_of(items[2])
+    assert_empty tracker.objects_causing_outdatedness_of(items[3])
   end
 
   def test_store_graph_and_load_graph_with_removed_items
@@ -179,9 +179,9 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_contains_exactly [ items[1] ],       tracker.direct_predecessors_of(items[0])
-    assert_contains_exactly [ items[2], nil ],  tracker.direct_predecessors_of(items[1])
-    assert_empty tracker.direct_predecessors_of(items[2])
+    assert_contains_exactly [ items[1] ],       tracker.objects_causing_outdatedness_of(items[0])
+    assert_contains_exactly [ items[2], nil ],  tracker.objects_causing_outdatedness_of(items[1])
+    assert_empty tracker.objects_causing_outdatedness_of(items[2])
   end
 
   def test_store_graph_with_nils_in_dst
@@ -210,8 +210,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
-    assert_contains_exactly [ nil ],      tracker.direct_predecessors_of(items[1])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
+    assert_contains_exactly [ nil ],      tracker.objects_causing_outdatedness_of(items[1])
   end
 
   def test_store_graph_with_nils_in_src
@@ -240,8 +240,8 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     tracker.load_graph
 
     # Check loaded graph
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
-    assert_empty tracker.direct_predecessors_of(items[1])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
+    assert_empty tracker.objects_causing_outdatedness_of(items[1])
   end
 
   def test_forget_dependencies_for
@@ -254,11 +254,11 @@ class Nanoc3::DependencyTrackerTest < MiniTest::Unit::TestCase
     # Record some dependencies
     tracker.record_dependency(items[0], items[1])
     tracker.record_dependency(items[1], items[2])
-    assert_contains_exactly [ items[1] ], tracker.direct_predecessors_of(items[0])
+    assert_contains_exactly [ items[1] ], tracker.objects_causing_outdatedness_of(items[0])
 
     # Forget dependencies
     tracker.forget_dependencies_for(items[0])
-    assert_empty tracker.direct_predecessors_of(items[0])
+    assert_empty tracker.objects_causing_outdatedness_of(items[0])
   end
 
 end
