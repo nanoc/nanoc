@@ -38,7 +38,7 @@ class Nanoc3::SiteTest < MiniTest::Unit::TestCase
 
     # Create site
     site = Nanoc3::Site.new({})
-    site.compiler.expects(:dsl).returns(dsl)
+    site.compiler.rules_collection.expects(:dsl).returns(dsl)
 
     # Create rules file
     File.open('Rules', 'w') do |io|
@@ -50,7 +50,7 @@ EOF
     end
 
     # Load rules
-    site.compiler.send :load_rules
+    site.compiler.rules_collection.load
   end
 
   def test_load_data_sources_first

@@ -5,13 +5,14 @@ module Nanoc3
   # Contains methods that will be executed by the site’s `Rules` file.
   class CompilerDSL
 
-    # Creates a new compiler DSL for the given compiler.
+    # Creates a new compiler DSL for the given collection of rules.
     #
     # @api private
     #
-    # @param [Nanoc3::Site] site The site this DSL belongs to
-    def initialize(compiler)
-      @compiler = compiler
+    # @param [Nanoc3::RulesCollection] rules_collection The collection of rules
+    #   to modify when loading this DSL
+    def initialize(rules_collection)
+      @rules_collection = rules_collection
     end
 
     # Creates a preprocessor block that will be executed after all data is
@@ -21,7 +22,7 @@ module Nanoc3
     #
     # @return [void]
     def preprocess(&block)
-      @compiler.preprocessor = block
+      @rules_collection.preprocessor = block
     end
 
     # Creates a compilation rule for all items whose identifier match the
@@ -65,7 +66,7 @@ module Nanoc3
 
       # Create rule
       rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
-      @compiler.item_compilation_rules << rule
+      @rules_collection.add_item_compilation_rule(rule)
     end
 
     # Creates a routing rule for all items whose identifier match the
@@ -110,7 +111,7 @@ module Nanoc3
 
       # Create rule
       rule = Rule.new(identifier_to_regex(identifier), rep_name, block, :snapshot_name => snapshot_name)
-      @compiler.item_routing_rules << rule
+      @rules_collection.add_item_routing_rule(rule)
     end
 
     # Creates a layout rule for all layouts whose identifier match the given
@@ -138,7 +139,7 @@ module Nanoc3
     #
     #     layout '/custom/',  :haml, :format => :html5
     def layout(identifier, filter_name, params={})
-      @compiler.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
+      @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
     end
 
     # Creates a pair of compilation and routing rules that indicate that the
@@ -174,14 +175,14 @@ module Nanoc3
       # Create compilation rule
       compilation_block = proc { }
       compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
-      @compiler.item_compilation_rules.unshift compilation_rule
+      @rules_collection.add_item_compilation_rule(compilation_rule, :before)
 
       # Create routing rule
       routing_block = proc do
         item.identifier.chop + '.' + item[:extension]
       end
       routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block)
-      @compiler.item_routing_rules.unshift routing_rule
+      @rules_collection.add_item_routing_rule(routing_rule, :before)
     end
 
   private

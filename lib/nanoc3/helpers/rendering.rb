@@ -81,7 +81,7 @@ module Nanoc3::Helpers
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name, filter_args = @site.compiler.filter_for_layout(layout)
+      filter_name, filter_args = @site.compiler.rules_collection.filter_for_layout(layout)
       raise Nanoc3::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class

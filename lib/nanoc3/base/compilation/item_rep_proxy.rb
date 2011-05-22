@@ -65,7 +65,7 @@ module Nanoc3
       set_assigns
 
       layout = layout_with_identifier(layout_identifier)
-      filter_name, filter_args = @compiler.filter_for_layout(layout)
+      filter_name, filter_args = @compiler.rules_collection.filter_for_layout(layout)
 
       @item_rep.layout(layout, filter_name, filter_args)
     end

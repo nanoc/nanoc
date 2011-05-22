@@ -40,6 +40,7 @@ module Nanoc3
   autoload 'RuleContext',          'nanoc3/base/compilation/rule_context'
   autoload 'RuleMemoryCalculator', 'nanoc3/base/compilation/rule_memory_calculator'
   autoload 'RuleMemoryStore',      'nanoc3/base/compilation/rule_memory_store'
+  autoload 'RulesCollection',      'nanoc3/base/compilation/rules_collection'
 
   # Deprecated; use PluginRepository instead
   # TODO [in nanoc 4.0] remove me
