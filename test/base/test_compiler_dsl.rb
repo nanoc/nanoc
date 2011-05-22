@@ -30,13 +30,14 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
       site = Nanoc3::Site.new('.')
       site.items << item
       compiler = site.compiler
-      dsl = site.compiler.dsl
+      dsl = site.compiler.rules_collection.dsl
 
       # Create rule
       dsl.passthrough '/foo/'
 
       # Route and compile
-      path = compiler.routing_rule_for(rep).apply_to(rep, :compiler => compiler)
+      rule = compiler.rules_collection.routing_rule_for(rep)
+      path = rule.apply_to(rep, :compiler => compiler)
       compiler.send :compile_rep, rep
 
       # Check result

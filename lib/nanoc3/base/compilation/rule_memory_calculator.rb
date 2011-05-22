@@ -24,9 +24,9 @@ module Nanoc3
     def [](obj)
       result = case obj.type
         when :item_rep
-          @site.compiler.new_rule_memory_for_rep(obj)
+          @site.compiler.rules_collection.new_rule_memory_for_rep(obj)
         when :layout
-          @site.compiler.new_rule_memory_for_layout(obj)
+          @site.compiler.rules_collection.new_rule_memory_for_layout(obj)
         else
           raise RuntimeError,
             "Do not know how to calculate the rule memory for #{obj.inspect}"

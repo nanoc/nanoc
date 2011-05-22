@@ -167,7 +167,7 @@ module Nanoc3
     # @return [Boolean] true if the rule memory for the given item
     #   represenation has changed, false otherwise
     def rule_memory_differs_for(obj)
-      site.compiler.rule_memory_differs_for(obj)
+      site.compiler.rules_collection.rule_memory_differs_for(obj)
     end
 
     # @param obj
