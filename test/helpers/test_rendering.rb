@@ -9,97 +9,82 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
   include Nanoc3::Helpers::Rendering
 
   def test_render
-    # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  'This is the <%= @layout.identifier %> layout.')
+    with_site do |site|
+      @site = site
 
-    # Mock site, compiler and stack
-    compiler = MiniTest::Mock.new
-    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
-    @site    = MiniTest::Mock.new
-    @site.expect(:compiler, compiler)
-    @site.expect(:layouts, [ layout ])
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :erb\n")
+      end
 
-    # Render
-    assert_equal('This is the /foo/ layout.', render('/foo/'))
+      File.open('layouts/foo.xyz', 'w') do |io|
+        io.write 'This is the <%= @layout.identifier %> layout.'
+      end
+
+      assert_equal('This is the /foo/ layout.', render('/foo/'))
+    end
   end
 
   def test_render_with_unknown_layout
-    # Mock site
-    @site = MiniTest::Mock.new.expect(:layouts, [])
+    with_site do |site|
+      @site = site
 
-    # Render
-    assert_raises(Nanoc3::Errors::UnknownLayout) do
-      render('/fawgooafwagwfe/')
+      assert_raises(Nanoc3::Errors::UnknownLayout) do
+        render '/dsfghjkl/'
+      end
     end
   end
 
   def test_render_without_filter
-    # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  'This is the <%= "foo" %> layout.')
+    with_site do |site|
+      @site = site
 
-    # Mock compiler
-    compiler = mock
-    compiler.stubs(:filter_for_layout).with(layout).returns(nil)
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', nil\n")
+      end
 
-    # Mock site
-    @site = MiniTest::Mock.new
-    @site.expect(:layouts, [ layout ])
-    @site.expect(:compiler, compiler)
+      File.open('layouts/foo.xyz', 'w')
 
-    # Render
-    assert_raises(Nanoc3::Errors::CannotDetermineFilter) do
-      render '/foo/'
+      assert_raises(Nanoc3::Errors::CannotDetermineFilter) do
+        render '/foo/'
+      end
     end
   end
 
   def test_render_with_unknown_filter
-    # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  'This is the <%= "foo" %> layout.')
+    with_site do |site|
+      @site = site
 
-    # Mock compiler
-    compiler = mock
-    compiler.stubs(:filter_for_layout).with(layout).returns([ :kjsdalfjwagihlawfji, {} ])
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :asdf\n")
+      end
 
-    # Mock site
-    @site = MiniTest::Mock.new
-    @site.expect(:layouts, [ layout ])
-    @site.expect(:compiler, compiler)
+      File.open('layouts/foo.xyz', 'w')
 
-    # Render
-    assert_raises(Nanoc3::Errors::UnknownFilter) do
-      render '/foo/'
+      assert_raises(Nanoc3::Errors::UnknownFilter) do
+        render '/foo/'
+      end
     end
   end
 
   def test_render_with_block
-    # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  '[partial-before]<%= yield %>[partial-after]')
+    with_site do |site|
+      @site = site
 
-    # Mock compiler
-    compiler = mock
-    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :erb\n")
+      end
 
-    # Mock site
-    @site    = MiniTest::Mock.new
-    @site.expect(:compiler, compiler)
-    @site.expect(:layouts, [ layout ])
+      File.open('layouts/foo.xyz', 'w') do |io|
+        io.write '[partial-before]<%= yield %>[partial-after]'
+      end
 
-    # Mock erbout
-    _erbout = '[erbout-before]'
+      _erbout = '[erbout-before]'
+      render '/foo/' do
+        _erbout << "This is some extra content"
+      end
 
-    # Render
-    render '/foo/' do
-      _erbout << "This is some extra content"
+      assert_equal('[erbout-before][partial-before]This is some extra content[partial-after]', _erbout)
     end
-    assert_equal('[erbout-before][partial-before]This is some extra content[partial-after]', _erbout)
   end
 
 end
