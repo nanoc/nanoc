@@ -453,7 +453,7 @@ module Nanoc3
 
     # @return [RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
-      Nanoc3::RuleMemoryCalculator.new(:site => @site)
+      Nanoc3::RuleMemoryCalculator.new(:rules_collection => rules_collection)
     end
     memoize :rule_memory_calculator
 

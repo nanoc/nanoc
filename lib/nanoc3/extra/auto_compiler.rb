@@ -66,7 +66,7 @@ module Nanoc3::Extra
     rescue StandardError, ScriptError => e
       # Add compilation stack to env
       env['nanoc.stack'] = []
-      site.compiler.stack.reverse.each do |obj|
+      stack.reverse.each do |obj|
         if obj.is_a?(Nanoc3::ItemRep) # item rep
           env['nanoc.stack'] << "[item] #{obj.item.identifier} (rep #{obj.name})"
         else # layout
@@ -91,6 +91,10 @@ module Nanoc3::Extra
 
     def file_server
       @file_server ||= ::Rack::File.new(site.config[:output_dir])
+    end
+
+    def stack
+      site.compiler.stack
     end
 
   end

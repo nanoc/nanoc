@@ -10,12 +10,13 @@ module Nanoc3
 
     extend Nanoc3::Memoization
 
-    # @option params [Nanoc3::Site] site The site where this rule memory
-    #   calculator belongs to
+    # @option params [Nanoc3::RulesCollection] rules_collection The rules
+    #   collection
     def initialize(params={})
       super('tmp/rule_memory', 1)
 
-      @site = params[:site] if params.has_key?(:site)
+      @rules_collection = params[:rules_collection] or
+        raise ArgumentError, "Required :rules_collection option is missing"
     end
 
     # @param [#reference] obj The object to calculate the rule memory for
@@ -24,9 +25,9 @@ module Nanoc3
     def [](obj)
       result = case obj.type
         when :item_rep
-          @site.compiler.rules_collection.new_rule_memory_for_rep(obj)
+          @rules_collection.new_rule_memory_for_rep(obj)
         when :layout
-          @site.compiler.rules_collection.new_rule_memory_for_layout(obj)
+          @rules_collection.new_rule_memory_for_layout(obj)
         else
           raise RuntimeError,
             "Do not know how to calculate the rule memory for #{obj.inspect}"

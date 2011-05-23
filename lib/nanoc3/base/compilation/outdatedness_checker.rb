@@ -167,7 +167,7 @@ module Nanoc3
     # @return [Boolean] true if the rule memory for the given item
     #   represenation has changed, false otherwise
     def rule_memory_differs_for(obj)
-      site.compiler.rules_collection.rule_memory_differs_for(obj)
+      rules_collection.rule_memory_differs_for(obj)
     end
 
     # @param obj
@@ -204,6 +204,11 @@ module Nanoc3
       Nanoc3::ChecksumCalculator.new
     end
     memoize :checksum_calculator
+
+    # TODO document
+    def rules_collection
+      site.compiler.rules_collection
+    end
 
     # @return [Nanoc3::DependencyTracker] The dependency tracker
     def dependency_tracker
