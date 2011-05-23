@@ -105,7 +105,7 @@ module Nanoc3
 
     # Adds the given vertex to the graph.
     #
-    # @param [Vertex] v The vertex to add to the graph
+    # @param v The vertex to add to the graph
     #
     # @return [void]
     #
