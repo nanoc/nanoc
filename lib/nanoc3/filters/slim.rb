@@ -4,8 +4,6 @@ module Nanoc3::Filters
 
   # @since 3.2.0
   class Slim < Nanoc3::Filter
-    identifier :slim
-    type :text
 
     # Runs the content through [Slim](http://slim-lang.com/)
     # This method takes no options.
