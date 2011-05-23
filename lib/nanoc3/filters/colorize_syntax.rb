@@ -135,12 +135,31 @@ module Nanoc3::Filters
       end
     end
 
+    # Runs the code through [CodeRay](http://coderay.rubychan.de/).
+    #
+    # @api private
+    #
+    # @param [String] code The code to colorize
+    #
+    # @param [String] language The language the code is written in
+    #
+    # @param [Hash] params Parameters to pass on to CodeRay
+    #
+    # @return [String] The colorized output
     def coderay(code, language, params={})
       require 'coderay'
 
       ::CodeRay.scan(code, language).html(params)
     end
 
+    # Returns the input itself, not performing any code highlighting.
+    #
+    # @param [String] code The code to colorize
+    #
+    # @param [String] language The language the code is written in (unused)
+    #
+    # @return [String] The colorized output, which is identical to the input
+    #   in this case
     def dummy(code, language, params={})
       code
     end
@@ -177,6 +196,17 @@ module Nanoc3::Filters
         :line_numbers  => '-l',
     }
 
+    # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).
+    #
+    # @api private
+    #
+    # @param [String] code The code to colorize
+    #
+    # @param [String] language The language the code is written in
+    #
+    # @option params [String] :style The style to use
+    #
+    # @since 3.2.0
     def simon_highlight(code, language, params={})
       opts = []
 
