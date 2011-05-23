@@ -19,6 +19,8 @@ module Nanoc3
   #
   # The dependency tracker remembers the dependency information between runs.
   # Dependency information is stored in the `tmp/dependencies` file.
+  #
+  # @api private
   class DependencyTracker < ::Nanoc3::Store
 
     # @return [Array<Nanoc3::Item, Nanoc3::Layout>] The list of items and
