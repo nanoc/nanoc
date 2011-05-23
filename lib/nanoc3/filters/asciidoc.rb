@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 module Nanoc3::Filters
+
+  # @since 3.2.0
   class AsciiDoc < Nanoc3::Filter
 
     # Runs the content through [AsciiDoc](http://www.methods.co.nz/asciidoc/).
@@ -9,8 +11,6 @@ module Nanoc3::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    #
-    # @since 3.2.0
     def run(content, params={})
       require 'escape'
       require 'tempfile'
@@ -54,4 +54,5 @@ module Nanoc3::Filters
     end
 
   end
+
 end

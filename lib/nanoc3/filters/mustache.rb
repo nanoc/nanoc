@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 module Nanoc3::Filters
+
+  # @since 3.2.0
   class Mustache < Nanoc3::Filter
 
     # Runs the content through
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    #
-    # @since 3.2.0
     def run(content, params={})
       require 'mustache'
 
@@ -20,4 +20,5 @@ module Nanoc3::Filters
     end
 
   end
+
 end
