@@ -148,10 +148,10 @@ module Nanoc3::CLI
       $stderr.puts
       $stderr.puts '=== COMPILATION STACK:'
       $stderr.puts
-      if ((self.site && self.site.compiler.stack) || []).empty?
+      if stack.empty?
         $stderr.puts "  (empty)"
       else
-        self.site.compiler.stack.reverse.each do |obj|
+        stack.reverse.each do |obj|
           if obj.is_a?(Nanoc3::ItemRep)
             $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
           else # layout
@@ -282,6 +282,12 @@ module Nanoc3::CLI
         show_help
         exit 0
       end
+    end
+
+  protected
+
+    def stack
+      (self.site && self.site.compiler.stack) || []
     end
 
   end

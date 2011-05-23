@@ -89,8 +89,12 @@ module Nanoc3
       @item_rep.assigns = @compiler.assigns_for(@item_rep)
     end
 
+    def layouts
+      @compiler.site.layouts
+    end
+
     def layout_with_identifier(layout_identifier)
-      layout ||= @compiler.site.layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
+      layout ||= layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
       raise Nanoc3::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
       layout
     end
