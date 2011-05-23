@@ -3,6 +3,8 @@
 module Nanoc3
 
   # Adds support for memoizing functions.
+  #
+  # @since 3.2.0
   module Memoization
 
     CACHE = {}

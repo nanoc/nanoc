@@ -158,6 +158,8 @@ module Nanoc3
     #
     # @return [void]
     #
+    # @since 3.2.0
+    #
     # @example Copying the `/foo/` item as-is
     #
     #     passthrough '/foo/'

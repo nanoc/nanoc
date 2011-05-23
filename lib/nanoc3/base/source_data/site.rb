@@ -51,6 +51,8 @@ module Nanoc3
     # Compiles the site.
     #
     # @return [void]
+    #
+    # @since 3.2.0
     def compile
       compiler.run
     end

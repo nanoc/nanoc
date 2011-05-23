@@ -31,6 +31,8 @@ module Nanoc3::HashExtensions
   # @see Array#freeze_recursively
   #
   # @return [void]
+  #
+  # @since 3.2.0
   def freeze_recursively
     freeze
     each_pair do |key, value|

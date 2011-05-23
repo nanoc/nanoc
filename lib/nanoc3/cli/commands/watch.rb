@@ -2,6 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
+  # @since 3.2.0
   class Watch < Cri::Command
 
     def name

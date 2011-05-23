@@ -66,6 +66,8 @@ module Nanoc3::CLI
     end
 
     # @return [Boolean] true if debug output is enabled, false if not
+    #
+    # @since 3.2.0
     def debug?
       @debug
     end

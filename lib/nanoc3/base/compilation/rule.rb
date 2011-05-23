@@ -16,6 +16,8 @@ module Nanoc3
 
     # @return [Symbol] The name of the snapshot this rule will apply to.
     #   Ignored for compilation rules, but used for routing rules.
+    #
+    # @since 3.2.0
     attr_reader :snapshot_name
 
     # Creates a new item compilation rule with the given identifier regex,

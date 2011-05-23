@@ -89,6 +89,8 @@ module Nanoc3
     # @param to   End vertex of the edge
     #
     # @return [void]
+    #
+    # @since 3.2.0
     def delete_edge(from, to)
       @from_graph[from] ||= Set.new
       @from_graph[from].delete(to)
@@ -106,6 +108,8 @@ module Nanoc3
     # @param [Vertex] v The vertex to add to the graph
     #
     # @return [void]
+    #
+    # @since 3.2.0
     def add_vertex(v)
       return if @vertices.include?(v)
 
@@ -120,6 +124,8 @@ module Nanoc3
     # @param from Vertex from which all edges should be removed
     #
     # @return [void]
+    #
+    # @since 3.2.0
     def delete_edges_from(from)
       return if @from_graph[from].nil?
 
@@ -150,6 +156,8 @@ module Nanoc3
     # @param v Vertex to remove from the graph
     #
     # @return [void]
+    #
+    # @since 3.2.0
     def delete_vertex(v)
       delete_edges_to(v)
       delete_edges_from(v)
@@ -217,6 +225,8 @@ module Nanoc3
     # Returns all root vertices, i.e. vertices where no edge points to.
     #
     # @return [Set] The set of all root vertices in this graph.
+    #
+    # @since 3.2.0
     def roots
       @roots
     end

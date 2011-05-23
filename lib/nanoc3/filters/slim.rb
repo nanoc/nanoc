@@ -11,6 +11,8 @@ module Nanoc3::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
+    #
+    # @since 3.2.0
     def run(content, params={})
       require 'slim'
 
