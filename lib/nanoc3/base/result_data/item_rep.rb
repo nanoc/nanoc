@@ -263,6 +263,8 @@ module Nanoc3
     #
     # @return [Boolean] True if content exists for the snapshot with the
     #   given name, false otherwise
+    #
+    # @since 3.2.0
     def has_snapshot?(snapshot_name)
       !@content[snapshot_name].nil?
     end
