@@ -6,11 +6,14 @@ module Nanoc3::Filters
     # Runs the content through [Redcarpet](https://github.com/tanoku/redcarpet/).
     # This method optionally takes processing options to pass on to Redcarpet.
     #
-    # @content [String] content The content to filter
+    # @param [String] content The content to filter
     #
-    # @params [Hash{Symbol => Array<Symbol>}]
+    # @option params [Array] :options ([]) A list of options to pass on to
+    #   Redcarpet
     #
     # @return [String] The filtered content
+    #
+    # @since 3.2.0
     def run(content, params={})
       require 'redcarpet'
 
