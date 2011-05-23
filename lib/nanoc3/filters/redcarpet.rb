@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 module Nanoc3::Filters
+
+  # @since 3.2.0
   class Redcarpet < Nanoc3::Filter
 
     # Runs the content through [Redcarpet](https://github.com/tanoku/redcarpet/).
@@ -12,8 +14,6 @@ module Nanoc3::Filters
     #   Redcarpet
     #
     # @return [String] The filtered content
-    #
-    # @since 3.2.0
     def run(content, params={})
       require 'redcarpet'
 
@@ -23,4 +23,5 @@ module Nanoc3::Filters
     end
 
   end
+
 end

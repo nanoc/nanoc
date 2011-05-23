@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 module Nanoc3::Filters
+
+  # @since 3.2.0
   class Slim < Nanoc3::Filter
     identifier :slim
     type :text
@@ -11,8 +13,6 @@ module Nanoc3::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    #
-    # @since 3.2.0
     def run(content, params={})
       require 'slim'
 
@@ -21,5 +21,7 @@ module Nanoc3::Filters
 
       ::Slim::Template.new { content }.render(context) { assigns[:content] }
     end
+
   end
+
 end
