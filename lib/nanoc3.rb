@@ -11,6 +11,7 @@ end
 require 'enumerator'
 require 'fileutils'
 require 'pathname'
+require 'set'
 require 'thread'
 require 'time'
 require 'yaml'
