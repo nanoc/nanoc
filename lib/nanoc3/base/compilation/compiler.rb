@@ -315,17 +315,7 @@ module Nanoc3
     #
     # @return [void]
     def compile_reps(reps)
-      require 'set'
-
-      # Partition in outdated and non-outdated
-      outdated_reps = Set.new
-      skipped_reps  = Set.new
-      reps.each do |rep|
-        target = outdatedness_checker.outdated?(rep) ? outdated_reps : skipped_reps
-        target.add(rep)
-      end
-
-      # Build graph for outdated reps
+      outdated_reps = Set.new(reps.select { |rep| outdatedness_checker.outdated?(rep) })
       content_dependency_graph = Nanoc3::DirectedGraph.new(outdated_reps)
 
       # Listen to processing start/stop
@@ -345,7 +335,6 @@ module Nanoc3
         rescue Nanoc3::Errors::UnmetDependency => e
           content_dependency_graph.add_edge(e.rep, rep)
           unless content_dependency_graph.vertices.include?(e.rep)
-            skipped_reps.delete(e.rep)
             content_dependency_graph.add_vertex(e.rep)
           end
         end
