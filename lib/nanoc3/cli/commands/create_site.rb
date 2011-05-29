@@ -82,6 +82,9 @@ EOS
 
 # A few helpful tips about the Rules file:
 #
+# * The string given to #compile and #route are matching patterns for
+#   identifiers--not for paths. Therefore, you can’t match on extension.
+#
 # * The order of rules is important: for each item, only the first matching
 #   rule is applied.
 #
@@ -109,10 +112,10 @@ end
 
 route '*' do
   if item.binary?
-    # /foo/ -> /foo.ext
+    # Write item with identifier /foo/ to /foo.ext
     item.identifier.chop + '.' + item[:extension]
   else
-    # /foo/ -> /foo/index.html
+    # Write item with identifier /foo/ to /foo/index.html
     item.identifier + 'index.html'
   end
 end
