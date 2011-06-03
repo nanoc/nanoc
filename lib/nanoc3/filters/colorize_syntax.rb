@@ -177,10 +177,8 @@ module Nanoc3::Filters
     #
     # @return [String] The colorized output
     def pygmentize(code, language, params={})
-      enc = ""
-      enc = "-O encoding=" + params[:encoding] if params[:encoding]
-
-      IO.popen("pygmentize -l #{language} -f html #{enc}", "r+") do |io|
+      opts = "-O #{params.map {|k,v| "#{k}=#{v}"} * ','}" unless params.empty?
+      IO.popen("pygmentize #{opts} -l #{language} -f html", "r+") do |io|
         io.write(code)
         io.close_write
         highlighted_code = io.read
