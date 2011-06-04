@@ -31,6 +31,7 @@ module Nanoc3::CLI
       'redcloth'       => 'redcloth',
       'rubypants'      => 'rubypants',
       'sass'           => 'sass',
+      'systemu'        => 'systemu',
       'w3c_validators' => 'w3c_validators'
     }
 
