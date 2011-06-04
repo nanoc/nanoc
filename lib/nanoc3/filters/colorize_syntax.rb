@@ -177,15 +177,24 @@ module Nanoc3::Filters
     #
     # @return [String] The colorized output
     def pygmentize(code, language, params={})
-      opts = "-O #{params.map {|k,v| "#{k}=#{v}"} * ','}" unless params.empty?
-      IO.popen("pygmentize #{opts} -l #{language} -f html", "r+") do |io|
-        io.write(code)
-        io.close_write
-        highlighted_code = io.read
+      require 'stringio'
+      require 'systemu'
 
-        doc = Nokogiri::HTML.fragment(highlighted_code)
-        return doc.xpath('./div[@class="highlight"]/pre').inner_html
-      end
+      # Build command
+      cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
+      cmd << '-O' << params.map { |k,v| "#{k}=#{v}" }.join(',') unless params.empty?
+
+      # Run command
+      stdout = StringIO.new
+      systemu cmd, 'stdin' => code, 'stdout' => stdout
+
+      # Get result
+      stdout.rewind
+      highlighted_code = stdout.read
+
+      # Clean result
+      doc = Nokogiri::HTML.fragment(highlighted_code)
+      doc.xpath('./div[@class="highlight"]/pre').inner_html
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
@@ -206,26 +215,30 @@ module Nanoc3::Filters
     #
     # @since 3.2.0
     def simon_highlight(code, language, params={})
-      opts = []
+      require 'stringio'
+      require 'systemu'
 
+      # Build command
+      cmd = [ 'highlight', '--syntax', language, '--fragment' ]
       params.each do |key, value|
         if SIMON_HIGHLIGHT_OPT_MAP[key]
-          opts << SIMON_HIGHLIGHT_OPT_MAP[key]
+          cmd << SIMON_HIGHLIGHT_OPT_MAP[key]
         else
           # TODO allow passing other options
           case key
           when :style
-            opts << "--style #{params[:style]}"
+            cmd << '--style' << params[:style]
           end
         end
       end
 
-      commandline = "highlight --syntax #{language} --fragment #{opts.join(" ")} /dev/stdin" 
-      IO.popen(commandline, "r+") do |io|
-        io.write(code)
-        io.close_write
-        return io.read
-      end
+      # Run command
+      stdout = StringIO.new
+      systemu cmd, 'stdin' => code, 'stdout' => stdout
+
+      # Get result
+      stdout.rewind
+      stdout.read
     end
   end
 end
