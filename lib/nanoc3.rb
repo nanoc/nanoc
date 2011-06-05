@@ -7,6 +7,18 @@ module Nanoc3
 
 end
 
+# Switch #require for a faster variant
+require 'set'
+$_nanoc_requires ||= Set.new
+module Kernel
+  alias_method :nanoc_original_require, :require
+  def require(r)
+    return if $_nanoc_requires.include?(r)
+    nanoc_original_require(r)
+    $_nanoc_requires << r
+  end
+end
+
 # Load general requirements
 require 'digest'
 require 'enumerator'
