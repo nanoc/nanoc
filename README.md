@@ -83,6 +83,7 @@ may be interested in the development dependencies:
 * Justin Hileman
 * Starr Horne
 * Tuomas Kareinen
+* Nikhil Marathe
 * Daniel Mendler
 * Ale Muñoz
 * Nicky Peeters
@@ -92,6 +93,7 @@ may be interested in the development dependencies:
 * “Soryu”
 * Eric Sunshine
 * Dennis Sutch
+* Matthias Vallentin
 
 ## Contact
 
