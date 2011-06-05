@@ -34,8 +34,6 @@ module Nanoc3::StringExtensions
   #
   # @api private
   def checksum
-    require 'digest'
-
     digest = Digest::SHA1.new
     digest.update(self)
     digest.hexdigest

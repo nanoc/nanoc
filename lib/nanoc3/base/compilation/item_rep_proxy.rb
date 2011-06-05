@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'forwardable'
-
 module Nanoc3
 
   # Represents an item representation, but provides an interface that is

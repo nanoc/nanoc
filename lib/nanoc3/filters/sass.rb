@@ -28,7 +28,6 @@ module Nanoc3::Filters
       engine = ::Sass::Engine.new(content, options)
 
       # Get import nodes
-      require 'set'
       imported_nodes = []
       unprocessed_nodes = Set.new([ engine.to_tree ])
       until unprocessed_nodes.empty?

@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'pstore'
-
 module Nanoc3
 
   # Responsible for remembering dependencies between items and layouts. It is
