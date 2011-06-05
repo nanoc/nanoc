@@ -43,6 +43,10 @@ module Nanoc3
       [ :code_snippet, filename ]
     end
 
+    def inspect
+      "<#{self.class}:0x#{self.object_id.to_s(16)} filename=#{self.filename}>"
+    end
+
   end
 
 end
