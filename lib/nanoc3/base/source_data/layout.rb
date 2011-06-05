@@ -6,6 +6,8 @@ module Nanoc3
   # identifier and a modification time (to speed up compilation).
   class Layout
 
+    extend Nanoc3::Memoization
+
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
@@ -82,6 +84,14 @@ module Nanoc3
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier}>"
     end
+
+    # TODO document
+    def checksum
+      attributes = @attributes.dup
+      attributes.delete(:file)
+      @raw_content.checksum + ',' + attributes.checksum
+    end
+    memoize :checksum
 
     # @deprecated Access the modification time using `layout[:mtime]` instead.
     def mtime

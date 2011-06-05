@@ -169,20 +169,6 @@ module Nanoc3
     #
     # @return [Hash] The site configuration
     def config
-      # Add reference to config if necessary
-      if !@config.respond_to?(:reference)
-        def @config.reference
-          :config
-        end
-      end
-
-      # Add data to config if necessary
-      if !@config.respond_to?(:data)
-        def @config.data
-          self.inspect
-        end
-      end
-
       @config
     end
 
@@ -354,6 +340,9 @@ module Nanoc3
 
       # Merge data sources with default data source config
       @config[:data_sources] = @config[:data_sources].map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
+
+      # Convert to proper configuration
+      @config = Nanoc3::Configuration.new(@config)
     end
 
   end

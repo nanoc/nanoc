@@ -16,6 +16,7 @@ module Nanoc3
 
   # Load source data classes
   autoload 'CodeSnippet',          'nanoc3/base/source_data/code_snippet'
+  autoload 'Configuration',        'nanoc3/base/source_data/configuration'
   autoload 'DataSource',           'nanoc3/base/source_data/data_source'
   autoload 'Item',                 'nanoc3/base/source_data/item'
   autoload 'Layout',               'nanoc3/base/source_data/layout'
@@ -25,7 +26,6 @@ module Nanoc3
   autoload 'ItemRep',              'nanoc3/base/result_data/item_rep'
 
   # Load compilation classes
-  autoload 'ChecksumCalculator',   'nanoc3/base/compilation/checksum_calculator'
   autoload 'ChecksumStore',        'nanoc3/base/compilation/checksum_store'
   autoload 'CompiledContentCache', 'nanoc3/base/compilation/compiled_content_cache'
   autoload 'Compiler',             'nanoc3/base/compilation/compiler'

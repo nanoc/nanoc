@@ -47,6 +47,11 @@ module Nanoc3
       "<#{self.class}:0x#{self.object_id.to_s(16)} filename=#{self.filename}>"
     end
 
+    # TODO document
+    def checksum
+      @data.checksum
+    end
+
   end
 
 end

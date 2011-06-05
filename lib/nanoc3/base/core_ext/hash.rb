@@ -51,7 +51,7 @@ module Nanoc3::HashExtensions
   #
   # @api private
   def checksum
-    YAML.dump(self).checksum
+    Marshal.dump(self).checksum
   end
 
 end
