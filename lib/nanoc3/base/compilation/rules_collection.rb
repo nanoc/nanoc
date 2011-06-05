@@ -186,7 +186,7 @@ module Nanoc3
 
     # TODO document
     def rule_memory_differs_for(obj)
-      rule_memory_store[obj] != rule_memory_calculator[obj]
+      !rule_memory_store[obj].eql?(rule_memory_calculator[obj])
     end
     memoize :rule_memory_differs_for
 
