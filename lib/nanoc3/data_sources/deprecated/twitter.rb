@@ -8,8 +8,6 @@ module Nanoc3::DataSources
     def items
       @item ||= begin
         require 'json'
-        require 'time'
-        require 'enumerator'
 
         # Get data
         @http_client ||= Nanoc3::Extra::CHiCk::Client.new
@@ -25,7 +23,6 @@ module Nanoc3::DataSources
           attributes = {
             :created_at  => raw_item['created_at'],
             :source      => raw_item['source']
-            # TODO add more
           }
           identifier = "/#{raw_item['id']}/"
           mtime = Time.parse(raw_item['created_at'])

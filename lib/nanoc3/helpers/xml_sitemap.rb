@@ -29,9 +29,18 @@ module Nanoc3::Helpers
     #   if the site is at "http://example.com/", the `base_url` would be
     #   "http://example.com".
     #
+    # @example Excluding binary items from the sitemap
+    #
+    #   <%= xml_sitemap :items => @items.reject{ |i| i[:is_hidden] || i[:binary] } %>
+    #
+    # @option params [Array] :items A list of items to include in the sitemap
+    #
     # @return [String] The XML sitemap
-    def xml_sitemap
+    def xml_sitemap(params={})
       require 'builder'
+
+      # Extract parameters
+      items = params[:items] || @items.reject { |i| i[:is_hidden] }
 
       # Create builder
       buffer = ''
@@ -46,7 +55,7 @@ module Nanoc3::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
         # Add item
-        @items.reject { |i| i[:is_hidden] }.each do |item|
+        items.each do |item|
           item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path

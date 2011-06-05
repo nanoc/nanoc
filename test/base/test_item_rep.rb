@@ -10,358 +10,6 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     # TODO implement
   end
 
-  def test_not_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(Time.now-1100)
-    site.stubs(:rules_mtime).returns(Time.now-1200)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-100, Time.now-200, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    refute(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_mtime_nil
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/'
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-100, Time.now-200, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_force_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :mtime => Time.now-500, :binary => false
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-100, Time.now-200, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-    rep.instance_eval { @force_outdated = true }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_compiled_file_doesnt_exist
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_source_file_too_old
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-100
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-500, Time.now-600, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_layouts_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-100)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_code_snippets_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-100)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_config_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(Time.now-100)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_config_mtime_missing
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(nil)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
-  def test_outdated_if_rules_outdated
-    # Mock item
-    item = Nanoc3::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
-    )
-
-    # Mock layouts
-    layouts = [ mock ]
-    layouts[0].stubs(:mtime).returns(Time.now-800)
-
-    # Mock code snippets
-    code_snippets = [ mock ]
-    code_snippets[0].stubs(:mtime).returns(Time.now-900)
-
-    # Mock site
-    site = mock
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:code_snippets).returns(code_snippets)
-    site.stubs(:config_mtime).returns(Time.now-1100)
-    site.stubs(:rules_mtime).returns(Time.now-100)
-    item.stubs(:site).returns(site)
-
-    # Create output file
-    File.open('output.html', 'w') { |io| io.write('Testing testing 123...') }
-    File.utime(Time.now-200, Time.now-300, 'output.html')
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, 'blah')
-    rep.instance_eval { @raw_path = 'output.html' }
-
-    # Test
-    assert(rep.outdated?)
-  ensure
-    FileUtils.rm_f('output.html')
-  end
-
   def test_compiled_content_with_only_last_available
     # Create rep
     item = Nanoc3::Item.new(
@@ -445,104 +93,46 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       %[<%= '<%= "blah" %' + '>' %>], {}, '/',
       :binary => false
     )
-    item.site = site
 
     # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval do
       @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
     end
 
     # Filter once
+    item_rep.assigns = {}
     item_rep.filter(:erb)
     assert_equal(%[<%= "blah" %>], item_rep.instance_eval { @content[:last] })
 
     # Filter twice
+    item_rep.assigns = {}
     item_rep.filter(:erb)
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
   end
 
   def test_layout
     # Mock layout
-    layout = mock
-    layout.stubs(:identifier).returns('/somelayout/')
-    layout.stubs(:raw_content).returns(%[<%= "blah" %>])
-
-    # Mock compiler
-    stack = mock
-    stack.expects(:push).with(layout)
-    stack.expects(:pop)
-    compiler = mock
-    compiler.stubs(:stack).returns(stack)
-    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
-
-    # Mock site
-    site = mock
-    site.stubs(:items).returns([])
-    site.stubs(:config).returns([])
-    site.stubs(:layouts).returns([ layout ])
-    site.stubs(:compiler).returns(compiler)
+    layout = Nanoc3::Layout.new(%[<%= "blah" %>], {}, '/somelayout/')
 
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
       :binary => false
     )
-    item.site = site
 
     # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval do
       @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
     end
 
     # Layout
-    item_rep.layout('/somelayout/')
+    item_rep.assigns = {}
+    item_rep.layout(layout, :erb, {})
     assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
-  end
-
-  def test_layout_multiple
-    # Mock layout 1
-    layouts = [ mock, mock ]
-    layouts[0].stubs(:identifier).returns('/one/')
-    layouts[0].stubs(:raw_content).returns('{one}<%= yield %>{/one}')
-    layouts[1].stubs(:identifier).returns('/two/')
-    layouts[1].stubs(:raw_content).returns('{two}<%= yield %>{/two}')
-
-    # Mock compiler
-    stack = mock
-    stack.stubs(:push)
-    stack.stubs(:pop)
-    compiler = mock
-    compiler.stubs(:stack).returns(stack)
-    compiler.stubs(:filter_for_layout).returns([ :erb, {} ])
-
-    # Mock site
-    site = mock
-    site.stubs(:items).returns([])
-    site.stubs(:config).returns([])
-    site.stubs(:layouts).returns(layouts)
-    site.stubs(:compiler).returns(compiler)
-
-    # Mock item
-    item = Nanoc3::Item.new('blah', {}, '/', :binary => false)
-    item.site = site
-
-    # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
-    item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
-      @content[:last] = @content[:raw]
-    end
-
-    # Layout
-    item_rep.layout('/one/')
-    item_rep.layout('/two/')
-    assert_equal('blah',                       item_rep.instance_eval { @content[:pre]  })
-    assert_equal('{two}{one}blah{/one}{/two}', item_rep.instance_eval { @content[:post] })
-    assert_equal('{two}{one}blah{/one}{/two}', item_rep.instance_eval { @content[:last] })
   end
 
   def test_snapshot
@@ -557,16 +147,16 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
       :binary => false
     )
-    item.site = site
 
     # Create item rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval do
       @content[:raw]  = item.raw_content
       @content[:last] = @content[:raw]
     end
 
     # Filter while taking snapshots
+    item_rep.assigns = {}
     item_rep.snapshot(:foo)
     item_rep.filter(:erb)
     item_rep.snapshot(:bar)
@@ -579,7 +169,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal(%[blah],                        item_rep.instance_eval { @content[:qux] })
   end
 
-  def test_write
+  def test_snapshot_should_be_written
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
@@ -587,16 +177,25 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
-    item_rep.raw_path = 'foo/bar/baz/quux.txt'
+    item_rep.raw_paths = { :moo => 'foo-moo.txt' }
 
-    # Write
-    item_rep.write
+    # Test non-final
+    refute File.file?(item_rep.raw_path(:snapshot => :moo))
+    item_rep.snapshot(:moo, :final => false)
+    refute File.file?(item_rep.raw_path(:snapshot => :moo))
 
-    # Check
-    assert(File.file?('foo/bar/baz/quux.txt'))
-    assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
+    # Test final 1
+    item_rep.snapshot(:moo, :final => true)
+    assert File.file?(item_rep.raw_path(:snapshot => :moo))
+    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
+    FileUtils.rm_f(item_rep.raw_path(:snapshot => :moo))
+
+    # Test final 2
+    item_rep.snapshot(:moo)
+    assert File.file?(item_rep.raw_path(:snapshot => :moo))
+    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
   end
 
   def test_write_should_not_touch_identical_textual_files
@@ -607,7 +206,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     def item_rep.generate_diff ; end
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
     item_rep.raw_path = 'foo/bar/baz/quux.txt'
@@ -635,7 +234,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
     item_rep.raw_path = 'foo/bar/baz/quux'
 
     # Write once
@@ -649,54 +248,24 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
   end
 
-  def test_filter_for_layout_with_unmapped_layout
-    # Mock site
-    site = mock
-
+  def test_write
     # Mock item
     item = Nanoc3::Item.new(
       "blah blah", {}, '/',
       :binary => false
     )
-    item.site = site
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    item_rep = Nanoc3::ItemRep.new(item, :foo)
+    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    item_rep.raw_path = 'foo/bar/baz/quux.txt'
 
-    # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
-    site.expects(:compiler).returns(compiler)
-    compiler.layout_filter_mapping.replace({})
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/some_layout/')
+    # Write
+    item_rep.write
 
     # Check
-    assert_raises(Nanoc3::Errors::CannotDetermineFilter) do
-      rep.send :filter_for_layout, layout
-    end
-  end
-
-  def test_hash
-    # Mock item
-    item = Nanoc3::Item.new(
-      "blah blah", {}, '/',
-      :binary => false
-    )
-
-    # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
-
-    # Create files
-    File.open('one', 'w') { |io| io.write('abc') }
-    File.open('two', 'w') { |io| io.write('abcdefghijklmnopqrstuvwxyz') }
-
-    # Test
-    assert_equal 'a9993e364706816aba3e25717850c26c9cd0d89d',
-      rep.send(:hash_for_file, 'one')
-    assert_equal '32d10c7b8cf96570ca04ce37f2a19d84240d3a89',
-      rep.send(:hash_for_file, 'two')
+    assert(File.file?('foo/bar/baz/quux.txt'))
+    assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
   end
 
   def test_filter_text_to_binary
@@ -707,7 +276,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :foo)
     def rep.assigns ; {} ; end
 
     # Create fake filter
@@ -735,7 +304,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :foo)
     def rep.assigns ; {} ; end
 
     # Create fake filter
@@ -762,7 +331,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc3::ItemRep.new(item, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :foo)
     def rep.compiled? ; true ; end
 
     # Check
@@ -776,7 +345,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       :config  => []
     )
     item.stubs(:site).returns(site)
-    rep = create_rep_for(item, '/foo/')
+    rep = create_rep_for(item, :foo)
     create_textual_filter
 
     assert rep.binary?
@@ -792,9 +361,9 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     File.open(in_filename, 'w') { |io| io.write(file_content) }
 
     item = create_binary_item
-    rep = create_rep_for(item, /foo/)
-    rep.instance_eval { @filenames[:last] = in_filename }
-    rep.raw_path = out_filename
+    rep = create_rep_for(item, :foo)
+    rep.temporary_filenames[:last] = in_filename
+    rep.raw_paths[:last]           = out_filename
 
     rep.write
 
@@ -803,53 +372,38 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
   end
 
   def test_converted_binary_rep_can_be_layed_out
-    layout = mock_and_stub(
-      :identifier => '/somelayout/',
-      :raw_content => %[<%= "blah" %> <%= yield %>]
-    )
+    # Mock layout
+    layout = Nanoc3::Layout.new(%[<%= "blah" %> <%= yield %>], {}, '/somelayout/')
 
-    # Mock compiler
-    stack = mock_and_stub(:pop => layout)
-    stack.stubs(:push).returns(stack)
-    compiler = mock_and_stub(
-      :stack => stack,
-      :filter_for_layout => [ :erb, {} ]
-    )
-
-    # Mock site
-    site = mock_and_stub(
-      :items    => [],
-      :config   => [],
-      :layouts  => [ layout ],
-      :compiler => compiler
-    )
-
+    # Create item and item rep
     item = create_binary_item
-    item.site = site
+    rep = create_rep_for(item, :foo)
+    rep.assigns = { :content => 'meh' }
 
-    rep = create_rep_for(item, '/foo/')
-    def rep.filter_named(name)
-      @filter ||= Class.new(::Nanoc3::Filter) do
-        type :binary => :text
-        def run(content, params={})
-          "Some textual content"
-        end
+    # Create filter
+    Class.new(::Nanoc3::Filter) do
+      type       :binary => :text
+      identifier :binary_to_text
+      def run(content, params={})
+        content + ' textified'
       end
     end
 
+    # Run and check
     rep.filter(:binary_to_text)
-    rep.layout('/somelayout/')
-    assert_equal('blah Some textual content', rep.instance_eval { @content[:last] })
+    rep.layout(layout, :erb, {})
+    assert_equal('blah meh', rep.instance_eval { @content[:last] })
   end
 
-  def test_converted_binary_rep_can_be_filterd_with_textual_filters
+  def test_converted_binary_rep_can_be_filtered_with_textual_filters
     item = create_binary_item
     site = mock_and_stub(:items => [item],
       :layouts => [],
       :config  => []
     )
     item.stubs(:site).returns(site)
-    rep = create_rep_for(item, /foo/)
+    rep = create_rep_for(item, :foo)
+    rep.assigns = {}
     create_textual_filter
 
     assert rep.binary?
@@ -877,7 +431,7 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
     assert !rep.binary?
   end
 
-  def test_converted_binary_rep_cannot_be_filterd_with_binary_filters
+  def test_converted_binary_rep_cannot_be_filtered_with_binary_filters
     item = create_binary_item
     site = mock_and_stub(
       :items   => [item],
@@ -885,7 +439,8 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       :config  => []
     )
     item.stubs(:site).returns(site)
-    rep = create_rep_for(item, '/foo/')
+    rep = create_rep_for(item, :foo)
+    rep.assigns = {}
     create_binary_filter
 
     assert rep.binary?
@@ -898,8 +453,55 @@ class Nanoc3::ItemRepTest < MiniTest::Unit::TestCase
       end
     end
     rep.filter(:binary_to_text)
-    assert ! rep.binary?
+    refute rep.binary?
     assert_raises(Nanoc3::Errors::CannotUseBinaryFilter) { rep.filter(:binary_filter) }
+  end
+
+  def test_new_content_should_be_frozen
+    filter_class = Class.new(::Nanoc3::Filter) do
+      def run(content, params={})
+        content.gsub!('foo', 'moo')
+        content
+      end
+    end
+
+    item = Nanoc3::Item.new("foo bar", {}, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :default)
+    rep.instance_eval { @filter_class = filter_class }
+    def rep.filter_named(name) ; @filter_class ; end
+
+    raised = false
+    begin
+      rep.filter(:whatever)
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
+  def test_filter_should_freeze_content
+    filter_class = Class.new(::Nanoc3::Filter) do
+      def run(content, params={})
+        content.gsub!('foo', 'moo')
+        content
+      end
+    end
+
+    item = Nanoc3::Item.new("foo bar", {}, '/foo/')
+    rep = Nanoc3::ItemRep.new(item, :default)
+    rep.instance_eval { @filter_class = filter_class }
+    def rep.filter_named(name) ; @filter_class ; end
+
+    raised = false
+    begin
+      rep.filter(:erb)
+      rep.filter(:whatever)
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
   end
 
 private

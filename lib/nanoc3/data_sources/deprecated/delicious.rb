@@ -8,8 +8,6 @@ module Nanoc3::DataSources
     def items
       @items ||= begin
         require 'json'
-        require 'time'
-        require 'enumerator'
 
         # Get data
         @http_client ||= Nanoc3::Extra::CHiCk::Client.new

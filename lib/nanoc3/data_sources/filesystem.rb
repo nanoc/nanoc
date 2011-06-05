@@ -86,8 +86,7 @@ module Nanoc3::DataSources
           meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
           content_or_filename = content_filename
         else
-          meta, content_or_filename = parse(
-            content_filename, meta_filename, kind)
+          meta, content_or_filename = parse(content_filename, meta_filename, kind)
         end
 
         # Get attributes

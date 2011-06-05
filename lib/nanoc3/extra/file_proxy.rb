@@ -13,8 +13,12 @@ module Nanoc3::Extra
       @path = path
     end
 
+    def freeze
+      super
+    end
+
     def respond_to?(meth)
-      File.instance_methods.any? { |m| m == meth.to_s || m == meth.to_sym }
+      file_instance_methods.include?(meth.to_sym)
     end
 
     def method_missing(sym, *args, &block)
@@ -24,6 +28,12 @@ module Nanoc3::Extra
       end
 
       File.open(@path, 'r') { |io| io.__send__(sym, *args, &block) }
+    end
+
+  private
+
+    def file_instance_methods
+      @@file_instance_methods ||= Set.new(File.instance_methods.map { |m| m.to_sym })
     end
 
   end

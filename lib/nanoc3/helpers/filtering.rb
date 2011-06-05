@@ -23,7 +23,7 @@ module Nanoc3::Helpers
     #   <% end %>
     #
     # @param [Symbol] filter_name The name of the filter to run on the
-    # contents of the block
+    #   contents of the block
     #
     # @param [Hash] argument Arguments to pass to the filter
     #

@@ -13,12 +13,9 @@ module Nanoc3::Filters
       require 'less'
 
       # Add filename to load path
-      $LESS_LOAD_PATH << File.dirname(@item[:content_filename])
-
-      ::Less::Engine.new(content).to_css
-    ensure
-      # Restore load path
-      $LESS_LOAD_PATH.delete_at(-1)
+      paths = [ File.dirname(@item[:content_filename]) ]
+      parser = ::Less::Parser.new(:paths => paths)
+      parser.parse(content).to_css
     end
 
   end

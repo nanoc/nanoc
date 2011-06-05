@@ -57,12 +57,33 @@ data_sources:
     # The path where layouts should be mounted. The layouts root behaves the
     # same as the items root, but applies to layouts rather than items.
     layouts_root: #{Nanoc3::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
+
+# Configuration for the “watch” command, which watches a site for changes and
+# recompiles if necessary.
+watcher:
+  # A list of directories to watch for changes. When editing this, make sure
+  # that the “output/” and “tmp/” directories are _not_ included in this list,
+  # because recompiling the site will cause these directories to change, which
+  # will cause the site to be recompiled, which will cause these directories
+  # to change, which will cause the site to be recompiled again, and so on.
+  dirs_to_watch: [ 'content', 'layouts', 'lib' ]
+
+  # A list of single files to watch for changes. As mentioned above, don’t put
+  # any files from the “output/” or “tmp/” directories in here.
+  files_to_watch: [ 'config.yaml', 'Rules' ]
+
+  # When to send notifications (using Growl or notify-send).
+  notify_on_compilation_success: true
+  notify_on_compilation_failure: true
 EOS
 
     DEFAULT_RULES = <<EOS
 #!/usr/bin/env ruby
 
 # A few helpful tips about the Rules file:
+#
+# * The string given to #compile and #route are matching patterns for
+#   identifiers--not for paths. Therefore, you can’t match on extension.
 #
 # * The order of rules is important: for each item, only the first matching
 #   rule is applied.
@@ -77,8 +98,12 @@ compile '/stylesheet/' do
 end
 
 compile '*' do
-  filter :erb
-  layout 'default'
+  if item.binary?
+    # don’t filter binary items
+  else
+    filter :erb
+    layout 'default'
+  end
 end
 
 route '/stylesheet/' do
@@ -86,7 +111,13 @@ route '/stylesheet/' do
 end
 
 route '*' do
-  item.identifier + 'index.html'
+  if item.binary?
+    # Write item with identifier /foo/ to /foo.ext
+    item.identifier.chop + '.' + item[:extension]
+  else
+    # Write item with identifier /foo/ to /foo/index.html
+    item.identifier + 'index.html'
+  end
 end
 
 layout '*', :erb

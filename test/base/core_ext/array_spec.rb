@@ -21,3 +21,35 @@ describe 'Array#stringify_keys' do
   end
 
 end
+
+describe 'Array#freeze_recursively' do
+
+  it 'should prevent first-level elements from being modified' do
+    array = [ :a, [ :b, :c ], :d ]
+    array.freeze_recursively
+
+    raised = false
+    begin
+      array[0] = 123
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
+  it 'should prevent second-level elements from being modified' do
+    array = [ :a, [ :b, :c ], :d ]
+    array.freeze_recursively
+
+    raised = false
+    begin
+      array[1][0] = 123
+    rescue => e
+      raised = true
+      assert_match /^can't modify frozen /, e.message
+    end
+    assert raised
+  end
+
+end

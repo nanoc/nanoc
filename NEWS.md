@@ -1,5 +1,27 @@
 # nanoc news
 
+## 3.2 (???)
+
+Base:
+
+* Sped up nanoc quite a bit
+* Added progress indicator for long-running filters
+* Made all source data, such as item attributes, frozen during compilation
+* Added --color option to forhace color on
+* Cleaned up internals, deprecating several parts and/or marking them as
+  private in the progress
+
+Extensions:
+
+* Added AsciiDoc filter
+* Added Redcarpet filter [Peter Aronoff]
+* Added Typogruby filter
+* Added Slim filter [Zaiste de Grengolada]
+* Added :items parameter for the XML site map [Justin Hileman]
+* Added support for params to ERB
+* Allowed for passing arbitrary options to pygmentize [Matthias Vallentin]
+* Exposed RedCloth parameters in the filter [Vincent Driessen]
+
 ## 3.1.7 (2011-05-03)
 
 * Restored compatibility with Sass 3.1

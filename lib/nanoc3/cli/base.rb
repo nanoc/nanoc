@@ -4,8 +4,41 @@ module Nanoc3::CLI
 
   class Base < Cri::Base
 
+    # A hash that contains the name of the gem for a given required file. If a
+    # `#require` fails, the gem name is looked up in this hash.
+    GEM_NAMES = {
+      'adsf'           => 'adsf',
+      'bluecloth'      => 'bluecloth',
+      'builder'        => 'builder',
+      'coderay'        => 'coderay',
+      'cri'            => 'cri',
+      'erubis'         => 'erubis',
+      'escape'         => 'escape',
+      'fssm'           => 'fssm',
+      'haml'           => 'haml',
+      'json'           => 'json',
+      'kramdown'       => 'kramdown',
+      'less'           => 'less',
+      'markaby'        => 'markaby',
+      'maruku'         => 'maruku',
+      'mime/types'     => 'mime-types',
+      'nokogiri'       => 'nokogiri',
+      'rack'           => 'rack',
+      'rack/cache'     => 'rack-cache',
+      'rainpress'      => 'rainpress',
+      'rdiscount'      => 'rdiscount',
+      'redcarpet'      => 'redcarpet',
+      'redcloth'       => 'redcloth',
+      'rubypants'      => 'rubypants',
+      'sass'           => 'sass',
+      'systemu'        => 'systemu',
+      'w3c_validators' => 'w3c_validators'
+    }
+
     def initialize
       super('nanoc3')
+
+      @debug = false
 
       # Add help command
       self.help_command = Nanoc3::CLI::Commands::Help.new
@@ -21,6 +54,7 @@ module Nanoc3::CLI
       add_command(Nanoc3::CLI::Commands::Info.new)
       add_command(Nanoc3::CLI::Commands::Update.new)
       add_command(Nanoc3::CLI::Commands::View.new)
+      add_command(Nanoc3::CLI::Commands::Watch.new)
     end
 
     # Returns a fully initialised base instance. It is recommended to use this
@@ -30,6 +64,13 @@ module Nanoc3::CLI
     # @return [Nanoc3::CLI::Base]
     def self.shared_base
       @shared_base ||= Nanoc3::CLI::Base.new
+    end
+
+    # @return [Boolean] true if debug output is enabled, false if not
+    #
+    # @since 3.2.0
+    def debug?
+      @debug
     end
 
     # Asserts that the current working directory contains a site
@@ -110,10 +151,10 @@ module Nanoc3::CLI
       $stderr.puts
       $stderr.puts '=== COMPILATION STACK:'
       $stderr.puts
-      if ((self.site && self.site.compiler.stack) || []).empty?
+      if stack.empty?
         $stderr.puts "  (empty)"
       else
-        self.site.compiler.stack.reverse.each do |obj|
+        stack.reverse.each do |obj|
           if obj.is_a?(Nanoc3::ItemRep)
             $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
           else # layout
@@ -123,7 +164,6 @@ module Nanoc3::CLI
       end
 
       # Backtrace
-      require 'enumerator'
       $stderr.puts
       $stderr.puts '=== BACKTRACE:'
       $stderr.puts
@@ -137,41 +177,25 @@ module Nanoc3::CLI
     #
     # @return [String] The resolution for the given error
     def resolution_for(error)
-      # FIXME this should probably go somewhere else so that 3rd-party code can add other gem names too
-      gem_names = {
-        'adsf'           => 'adsf',
-        'bluecloth'      => 'bluecloth',
-        'builder'        => 'builder',
-        'coderay'        => 'coderay',
-        'cri'            => 'cri',
-        'erubis'         => 'erubis',
-        'haml'           => 'haml',
-        'json'           => 'json',
-        'less'           => 'less',
-        'markaby'        => 'markaby',
-        'maruku'         => 'maruku',
-        'mime/types'     => 'mime-types',
-        'rack'           => 'rack',
-        'rack/cache'     => 'rack-cache',
-        'rainpress'      => 'rainpress',
-        'rdiscount'      => 'rdiscount',
-        'redcloth'       => 'redcloth',
-        'rubypants'      => 'rubypants',
-        'sass'           => 'sass',
-        'w3c_validators' => 'w3c_validators'
-      }
-
       case error
       when LoadError
         # Get gem name
         matches = error.message.match(/no such file to load -- ([^\s]+)/)
         return nil if matches.empty?
         lib_name = matches[1]
-        gem_name = gem_names[$1]
+        gem_name = GEM_NAMES[$1]
 
         # Build message
         if gem_name
           "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) and then re-running the command."
+        end
+      when RuntimeError
+        if error.message =~ /^can't modify frozen/
+          "You attempted to modify immutable data. Some data, such as " \
+          "item/layout attributes and raw item/layout content, can not " \
+          "be modified once compilation has started. (This was " \
+          "unintentionally possible in 3.1.x and before, but has been " \
+          "disabled in 3.2.x in order to allow compiler optimisations.)"
         end
       end
     end
@@ -211,6 +235,10 @@ module Nanoc3::CLI
           :desc => 'show this help message and quit'
         },
         {
+          :long => 'color', :short => 'l', :argument => :forbidden,
+          :desc => 'enable color'
+        },
+        {
           :long => 'no-color', :short => 'C', :argument => :forbidden,
           :desc => 'disable color'
         },
@@ -224,7 +252,7 @@ module Nanoc3::CLI
         },
         {
           :long => 'debug', :short => 'd', :argument => :forbidden,
-          :desc => 'enable debugging (set $DEBUG to true)'
+          :desc => 'enable debugging'
         },
         {
           :long => 'warn', :short => 'w', :argument => :forbidden,
@@ -246,15 +274,23 @@ module Nanoc3::CLI
       when :verbose
         Nanoc3::CLI::Logger.instance.level = :low
       when :debug
-        $DEBUG = true
+        @debug = true
       when :warn
         $-w = true
+      when :color
+        Nanoc3::CLI::Logger.instance.color = true
       when :'no-color'
         Nanoc3::CLI::Logger.instance.color = false
       when :help
         show_help
         exit 0
       end
+    end
+
+  protected
+
+    def stack
+      (self.site && self.site.compiler.stack) || []
     end
 
   end

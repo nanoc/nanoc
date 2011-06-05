@@ -102,7 +102,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     (0..expected_out.size-1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3], actual_out[i].stuff[3], 'mtime must match'
+      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
       assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
       expected_out[i].stuff[1][:file].close;
       actual_out[i].stuff[1][:file].close
@@ -316,7 +316,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     (0..expected_out.size-1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3], actual_out[i].stuff[3], 'mtime must match'
+      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
 
       actual_file   = actual_out[i].stuff[1][:file]
       expected_file = expected_out[i].stuff[1][:file]
@@ -404,7 +404,7 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     (0..expected_out.size-1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3], actual_out[i].stuff[3], 'mtime must match'
+      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
 
       actual_file   = actual_out[i].stuff[1][:file]
       expected_file = expected_out[i].stuff[1][:file]

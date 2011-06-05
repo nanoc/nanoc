@@ -69,4 +69,33 @@ class Nanoc3::Filters::ERBTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_safe_level
+    # Set up
+    filter = ::Nanoc3::Filters::ERB.new
+    File.open('moo', 'w') { |io| io.write("one miiillion dollars") }
+
+    # Without
+    res = filter.run('<%= File.read("moo") %>', :safe_level => nil)
+    assert_equal 'one miiillion dollars', res
+
+    # With
+    assert_raises(SecurityError) do
+      res = filter.run('<%= File.read("moo") %>', :safe_level => 4)
+    end
+  end
+
+  def test_trim_mode
+    # Set up
+    filter = ::Nanoc3::Filters::ERB.new({ :location => 'a cheap motel' })
+    $trim_mode_works = false
+
+    # Without
+    filter.run('% $trim_mode_works = true')
+    refute $trim_mode_works
+
+    # With
+    filter.run('% $trim_mode_works = true', :trim_mode => '%')
+    assert $trim_mode_works
+  end
+
 end

@@ -61,6 +61,10 @@ module Nanoc3::Helpers
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
       raise Nanoc3::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?
 
+      # Visit
+      Nanoc3::NotificationCenter.post(:visit_started, layout)
+      Nanoc3::NotificationCenter.post(:visit_ended,   layout)
+
       # Capture content, if any
       captured_content = block_given? ? capture(&block) : nil
 
@@ -77,7 +81,7 @@ module Nanoc3::Helpers
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name, filter_args = @site.compiler.filter_for_layout(layout)
+      filter_name, filter_args = @site.compiler.rules_collection.filter_for_layout(layout)
       raise Nanoc3::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
@@ -87,10 +91,11 @@ module Nanoc3::Helpers
       # Create filter
       filter = filter_class.new(assigns)
 
+      # Notify start
+      Nanoc3::NotificationCenter.post(:processing_started, layout)
+
       # Layout
-      @site.compiler.stack.push(layout)
       result = filter.run(layout.raw_content, filter_args)
-      @site.compiler.stack.pop
 
       # Append to erbout if we have a block
       if block_given?
@@ -100,6 +105,9 @@ module Nanoc3::Helpers
 
       # Done
       result
+    ensure
+      # Notify end
+      Nanoc3::NotificationCenter.post(:processing_ended, layout)
     end
 
   end

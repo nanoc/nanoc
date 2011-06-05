@@ -3,13 +3,34 @@
 module Nanoc3
 
   # The current nanoc version.
-  VERSION = '3.1.8'
+  VERSION = '3.2.0a4'
 
 end
 
-# Load requirements
-require 'yaml'
+# Switch #require for a faster variant
+require 'set'
+$_nanoc_requires ||= Set.new
+module Kernel
+  alias_method :nanoc_original_require, :require
+  def require(r)
+    return if $_nanoc_requires.include?(r)
+    nanoc_original_require(r)
+    $_nanoc_requires << r
+  end
+end
+
+# Load general requirements
+require 'digest'
+require 'enumerator'
 require 'fileutils'
+require 'forwardable'
+require 'pathname'
+require 'pstore'
+require 'set'
+require 'tempfile'
+require 'thread'
+require 'time'
+require 'yaml'
 
 # Load nanoc
 require 'nanoc3/base'

@@ -6,10 +6,10 @@ module Nanoc3::Extra::Validators
   class W3C
 
     # @param [String] dir The directory that will be searched for HTML and/or
-    # CSS files to validate
+    #   CSS files to validate
     #
     # @param [Array<Symbol>] types A list of types to check. Allowed types are
-    # `:html` and `:css`.
+    #   `:html` and `:css`.
     def initialize(dir, types)
       @dir   = dir
       @types = types

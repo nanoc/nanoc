@@ -20,14 +20,14 @@ module Nanoc3::Helpers
     # HTML-escaping rules for {#link_for_tag} apply here as well.
     #
     # @option params [String] base_url ("http://technorati.com/tag/") The URL
-    # to which the tag will be appended to construct the link URL. This URL
-    # must have a trailing slash.
+    #   to which the tag will be appended to construct the link URL. This URL
+    #   must have a trailing slash.
     #
     # @option params [String] none_text ("(none)") The text to display when
-    # the item has no tags
+    #   the item has no tags
     #
     # @option params [String] separator (", ") The separator to put between
-    # tags
+    #   tags
     #
     # @return [String] A hyperlinked list of tags for the given item
     def tags_for(item, params={})
@@ -56,10 +56,10 @@ module Nanoc3::Helpers
     # escaped, as will the content of the `a` element.
     #
     # @param [String] tag The name of the tag, which should consist of letters
-    # and numbers (no spaces, slashes, or other special characters).
+    #   and numbers (no spaces, slashes, or other special characters).
     #
     # @param [String] base_url The URL to which the tag will be appended to
-    # construct the link URL. This URL must have a trailing slash.
+    #   construct the link URL. This URL must have a trailing slash.
     #
     # @return [String] A link for the given tag and the given base URL
     def link_for_tag(tag, base_url)

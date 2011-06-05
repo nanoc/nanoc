@@ -17,7 +17,7 @@ class Nanoc3::CLI::Commands::CreateSiteTest < MiniTest::Unit::TestCase
     FileUtils.cd('foo') do
       site = Nanoc3::Site.new('.')
       site.load_data
-      site.compiler.run
+      site.compile
     end
   end
 
