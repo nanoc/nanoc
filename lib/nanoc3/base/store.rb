@@ -127,7 +127,6 @@ module Nanoc3
   private
 
     def pstore
-      require 'pstore'
       @pstore ||= PStore.new(self.filename)
     end
 

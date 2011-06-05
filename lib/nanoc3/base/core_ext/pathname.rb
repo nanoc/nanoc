@@ -9,8 +9,6 @@ module Nanoc3::PathnameExtensions
   #
   # @api private
   def checksum
-    require 'digest'
-
     digest = Digest::SHA1.new
     File.open(self.to_s, 'r') do |io|
       until io.eof

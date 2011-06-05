@@ -116,8 +116,6 @@ module Nanoc3
     # @return [String] The output filename
     def output_filename
       @output_filename ||= begin
-        require 'tempfile'
-
         FileUtils.mkdir_p(TMP_BINARY_ITEMS_DIR)
         tempfile = Tempfile.new(filename.gsub(/[^a-z]/, '-'), TMP_BINARY_ITEMS_DIR)
         new_filename = tempfile.path

@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'set'
-
 module Nanoc3
 
   # Represents a directed graph. It is used by the dependency tracker for

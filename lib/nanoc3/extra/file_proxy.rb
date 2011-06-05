@@ -33,10 +33,7 @@ module Nanoc3::Extra
   private
 
     def file_instance_methods
-      @@file_instance_methods ||= begin
-        require 'set'
-        Set.new(File.instance_methods.map { |m| m.to_sym })
-      end
+      @@file_instance_methods ||= Set.new(File.instance_methods.map { |m| m.to_sym })
     end
 
   end

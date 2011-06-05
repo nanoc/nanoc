@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'forwardable'
-
 module Nanoc3
 
   # Represents a fake iem representation that does not actually perform any

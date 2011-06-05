@@ -181,7 +181,6 @@ module Nanoc3::CLI::Commands
 
     # TODO move this elsewhere
     def diff_strings(a, b)
-      require 'tempfile'
       require 'open3'
 
       # Create files

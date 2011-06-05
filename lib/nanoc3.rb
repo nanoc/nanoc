@@ -8,10 +8,14 @@ module Nanoc3
 end
 
 # Load general requirements
+require 'digest'
 require 'enumerator'
 require 'fileutils'
+require 'forwardable'
 require 'pathname'
+require 'pstore'
 require 'set'
+require 'tempfile'
 require 'thread'
 require 'time'
 require 'yaml'
