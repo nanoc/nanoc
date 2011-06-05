@@ -40,8 +40,8 @@ module Nanoc3::DataSources
   #     (`allow_periods_in_identifiers` set to false)
   #     foo.html.erb → /foo/
   #
-  # Note that it is possible for two different, separate files to have the
-  # same identifier. It is recommended to avoid such situations.
+  # Note that each item must have an unique identifier. nanoc will display an
+  # error if two items with the same identifier are found.
   #
   # Some more examples:
   #
@@ -103,10 +103,10 @@ module Nanoc3::DataSources
     # Returns the identifier derived from the given filename, first stripping
     # the given directory name off the filename.
     def identifier_for_filename(filename)
-      if filename =~ /index\.[^\/]+$/
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /index\.[^\/\.]+$/ : /index\.[^\/]+$/)
+      if filename =~ /(^|\/)index\.[^\/]+$/
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\/?index\.[^\/\.]+$/ : /\/?index\.[^\/]+$/)
       else
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/      : /\.[^\/]+$/)
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/         : /\.[^\/]+$/)
       end
       filename.sub(regex, '').cleaned_identifier
     end
