@@ -169,22 +169,25 @@ module Nanoc3
     def rule_memory_differs_for(obj)
       rules_collection.rule_memory_differs_for(obj)
     end
+    memoize :rule_memory_differs_for
 
     # @param obj
     #
     # @return [Boolean] false if either the new or the old checksum for the
     #   given object is not available, true if both checksums are available
     def checksums_available?(obj)
-      !!checksum_store[obj] && checksum_calculator[obj]
+      !!checksum_store[obj] && obj.checksum
     end
+    memoize :checksums_available?
 
     # @param obj
     #
     # @return [Boolean] false if the old and new checksums for the given
     #   object differ, true if they are identical
     def checksums_identical?(obj)
-      checksum_store[obj] == checksum_calculator[obj]
+      checksum_store[obj] == obj.checksum
     end
+    memoize :checksums_identical?
 
     # @param obj
     #
@@ -193,17 +196,12 @@ module Nanoc3
     def object_modified?(obj)
       !checksums_available?(obj) || !checksums_identical?(obj)
     end
+    memoize :object_modified?
 
     # @return [Nanoc3::ChecksumStore] The checksum store
     def checksum_store
       @checksum_store
     end
-
-    # @return [Nanoc3::ChecksumCalculator] The checksum calculator
-    def checksum_calculator
-      Nanoc3::ChecksumCalculator.new
-    end
-    memoize :checksum_calculator
 
     # TODO document
     def rules_collection

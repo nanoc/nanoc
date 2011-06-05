@@ -168,7 +168,7 @@ module Nanoc3
 
       # Calculate checksums
       self.objects.each do |obj|
-        checksum_store[obj] = checksum_calculator[obj]
+        checksum_store[obj] = obj.checksum
       end
 
       # Store
@@ -427,12 +427,6 @@ module Nanoc3
       Nanoc3::ChecksumStore.new(:site => @site)
     end
     memoize :checksum_store
-
-    # @return [ChecksumCalculator] The checksum calculator
-    def checksum_calculator
-      Nanoc3::ChecksumCalculator.new
-    end
-    memoize :checksum_calculator
 
     # @return [RuleMemoryStore] The rule memory store
     def rule_memory_store

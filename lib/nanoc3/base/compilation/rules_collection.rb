@@ -99,8 +99,6 @@ module Nanoc3
 
     # Finds the first matching routing rule for the given item representation.
     #
-    # @api private
-    #
     # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rule
     #
     # @return [Nanoc3::Rule, nil] The routing rule for the given item rep, or
@@ -115,8 +113,6 @@ module Nanoc3
     # representation. For each snapshot, the first matching rule will be
     # returned. The result is a hash containing the corresponding rule for
     # each snapshot.
-    #
-    # @api private
     #
     # @return [Hash<Symbol, Nanoc3::Rule>] The routing rules for the given rep
     def routing_rules_for(rep)
@@ -133,8 +129,6 @@ module Nanoc3
 
     # Finds the filter name and arguments to use for the given layout.
     #
-    # @api private
-    #
     # @param [Nanoc3::Layout] layout The layout for which to fetch the filter.
     #
     # @return [Array, nil] A tuple containing the filter name and the filter 
@@ -147,8 +141,6 @@ module Nanoc3
     end
 
     # Returns the Nanoc3::CompilerDSL that should be used for this site.
-    #
-    # @api private
     def dsl
       Nanoc3::CompilerDSL.new(self)
     end
@@ -162,6 +154,11 @@ module Nanoc3
     # TODO document
     def data
       @data
+    end
+
+    # TODO document
+    def checksum
+      @data.checksum
     end
 
     def inspect

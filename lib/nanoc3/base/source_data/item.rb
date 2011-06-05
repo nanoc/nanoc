@@ -7,6 +7,8 @@ module Nanoc3
   # store the modification time to speed up compilation.
   class Item
 
+    extend Nanoc3::Memoization
+
     # @return [Hash] This item's attributes
     attr_accessor :attributes
 
@@ -230,6 +232,18 @@ module Nanoc3
     def inspect
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.binary?}>"
     end
+
+    # TODO document
+    def checksum
+      if binary?
+        Pathname.new(raw_filename).checksum
+      else
+        attributes = @attributes.dup
+        attributes.delete(:file)
+        @raw_content.checksum + ',' + attributes.checksum
+      end
+    end
+    memoize :checksum
 
     # @deprecated Access the modification time using `item[:mtime]` instead.
     def mtime
