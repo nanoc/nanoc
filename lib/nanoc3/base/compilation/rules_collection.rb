@@ -164,6 +164,10 @@ module Nanoc3
       @data
     end
 
+    def inspect
+      "<#{self.class}:0x#{self.object_id.to_s(16)}>"
+    end
+
     # @param [Nanoc3::ItemRep] rep The item representation to get the rule
     #   memory for
     #
