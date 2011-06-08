@@ -11,6 +11,9 @@ test = namespace :test do
 
     $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
 
+    # require our test helper so we don't have to in each individual test
+    require 'test/helper'
+
     MiniTest::Unit.autorun
 
     test_files = Dir['test/**/*_spec.rb'] + Dir['test/**/test_*.rb']
@@ -24,6 +27,9 @@ test = namespace :test do
       ENV['QUIET'] ||= 'true'
 
       $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
+
+      # require our test helper so we don't have to in each individual test
+      require 'test/helper'
 
       MiniTest::Unit.autorun
 
