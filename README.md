@@ -94,6 +94,7 @@ may be interested in the development dependencies:
 * Eric Sunshine
 * Dennis Sutch
 * Matthias Vallentin
+* Toon Willems
 
 ## Contact
 
