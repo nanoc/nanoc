@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'test/helper'
-
 describe 'Array#symbolize_keys' do
 
   it 'should convert keys to symbols' do

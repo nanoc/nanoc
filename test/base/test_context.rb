@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'test/helper'
-
 class Nanoc3::ContextTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers

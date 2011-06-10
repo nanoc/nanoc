@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'test/helper'
-
 describe 'Pathname#checksum' do
 
   it 'should work on empty files' do
