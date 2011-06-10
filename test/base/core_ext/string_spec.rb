@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'test/helper'
-
 describe 'String#cleaned_identifier' do
 
   it 'should not convert already clean paths' do

@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'test/helper'
-
 class Nanoc3::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers

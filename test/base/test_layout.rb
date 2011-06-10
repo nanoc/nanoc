@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'test/helper'
-
 class Nanoc3::LayoutTest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
