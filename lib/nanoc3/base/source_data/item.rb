@@ -236,7 +236,11 @@ module Nanoc3
     # TODO document
     def checksum
       content_checksum = if binary?
-        Pathname.new(raw_filename).checksum
+        if File.exist?(raw_filename)
+          Pathname.new(raw_filename).checksum
+        else
+          ''.checksum
+        end
       else
         @raw_content.checksum
       end
