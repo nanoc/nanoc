@@ -235,13 +235,17 @@ module Nanoc3
 
     # TODO document
     def checksum
-      if binary?
+      content_checksum = if binary?
         Pathname.new(raw_filename).checksum
       else
-        attributes = @attributes.dup
-        attributes.delete(:file)
-        @raw_content.checksum + ',' + attributes.checksum
+        @raw_content.checksum
       end
+
+      attributes = @attributes.dup
+      attributes.delete(:file)
+      attributes_checksum = attributes.checksum
+
+      content_checksum + ',' + attributes_checksum
     end
     memoize :checksum
 
