@@ -100,9 +100,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
   def test_recompile_includes
     if_have 'sass' do
-      # Create site
-      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
-      FileUtils.cd('bar') do
+      with_site do |site|
         # Create two Sass files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         File.open('content/a.sass', 'w') do |io|
@@ -129,8 +127,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
         # Compile
         site = Nanoc3::Site.new('.')
-        site.load_data
-        site.compiler.run
+        site.compile
 
         # Check
         assert Dir['output/*'].size == 1
@@ -145,8 +142,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
 
         # Recompile
         site = Nanoc3::Site.new('.')
-        site.load_data
-        site.compiler.run
+        site.compile
 
         # Recheck
         assert Dir['output/*'].size == 1
