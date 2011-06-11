@@ -9,7 +9,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter
     if_have 'sass' do
       # Get filter
-      filter = ::Nanoc3::Filters::Sass.new({ :foo => 'bar' })
+      filter = create_filter({ :foo => 'bar' })
 
       # Run filter
       result = filter.run(".foo #bar\n  color: #f00")
@@ -20,7 +20,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_with_params
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc3::Filters::Sass.new({ :foo => 'bar' })
+      filter = create_filter({ :foo => 'bar' })
 
       # Check with compact
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
@@ -35,7 +35,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_error
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc3::Filters::Sass.new({ :foo => 'bar' })
+      filter = create_filter
 
       # Run filter
       raised = false
@@ -52,7 +52,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_can_import_external_files
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc3::Filters::Sass.new(:items => [])
+      filter = create_filter
 
       # Create sample file
       File.open('moo.sass', 'w') { |io| io.write "body\n  color: red" }
@@ -65,7 +65,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_can_import_relative_files
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc3::Filters::Sass.new(:items => [])
+      filter = create_filter
 
       # Create sample file
       File.open('moo.sass', 'w') { |io| io.write %Q{@import subdir/relative} }
@@ -80,7 +80,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
   def test_filter_will_skip_items_without_filename
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc3::Filters::Sass.new(:items => [ Nanoc3::Item.new('blah', {}, '/blah/') ])
+      filter = create_filter
 
       # Create sample file
       File.open('moo.sass', 'w') { |io| io.write "body\n  color: red" }
@@ -89,15 +89,82 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
       filter.run('@import moo')
     end
   end
-  
+
   def test_css_imports_work
     if_have 'sass' do
       # Create filter
-      filter = ::Nanoc3::Filters::Sass.new(:items => [ Nanoc3::Item.new('blah', {}, '/blah/') ])
+      filter = create_filter
 
       # Run filter
       filter.run('@import moo.css')
     end
+  end
+
+  def test_recompile_includes
+    if_have 'sass' do
+      # Create site
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+      FileUtils.cd('bar') do
+        # Create two Sass files
+        Dir['content/*'].each { |i| FileUtils.rm(i) }
+        File.open('content/a.sass', 'w') do |io|
+          io.write('@import b.sass')
+        end
+        File.open('content/b.sass', 'w') do |io|
+          io.write("p\n  color: red")
+        end
+
+        # Update rules
+        File.open('Rules', 'w') do |io|
+          io.write "compile '*' do\n"
+          io.write "  filter :sass\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/a/' do\n"
+          io.write "  item.identifier.chop + '.css'\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/b/' do\n"
+          io.write "  nil\n"
+          io.write "end\n"
+        end
+
+        # Compile
+        site = Nanoc3::Site.new('.')
+        site.load_data
+        site.compiler.run
+
+        # Check
+        assert Dir['output/*'].size == 1
+        assert File.file?('output/a.css')
+        refute File.file?('output/b.css')
+        assert_match /^p\s*{\s*color:\s*red;?\s*}/, File.read('output/a.css')
+
+        # Update included file
+        File.open('content/b.sass', 'w') do |io|
+          io.write("p\n  color: blue")
+        end
+
+        # Recompile
+        site = Nanoc3::Site.new('.')
+        site.load_data
+        site.compiler.run
+
+        # Recheck
+        assert Dir['output/*'].size == 1
+        assert File.file?('output/a.css')
+        refute File.file?('output/b.css')
+        assert_match /^p\s*{\s*color:\s*blue;?\s*}/, File.read('output/a.css')
+      end
+    end
+  end
+
+private
+
+  def create_filter(params={})
+    items = [ Nanoc3::Item.new('blah', { :content_filename => 'xyzzy.sass' }, '/blah/') ]
+    params = { :item => items[0], :items => items }.merge(params)
+    ::Nanoc3::Filters::Sass.new(params)
   end
 
 end
