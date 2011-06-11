@@ -13,8 +13,6 @@ module Nanoc3
     # @option params [Nanoc3::RulesCollection] rules_collection The rules
     #   collection
     def initialize(params={})
-      super('tmp/rule_memory', 1)
-
       @rules_collection = params[:rules_collection] or
         raise ArgumentError, "Required :rules_collection option is missing"
     end
