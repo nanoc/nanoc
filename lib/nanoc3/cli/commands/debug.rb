@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class Debug < Cri::Command
+  class Debug < ::Nanoc3::CLI::Command
 
     def name
       'debug'

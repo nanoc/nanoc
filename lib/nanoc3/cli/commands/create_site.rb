@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class CreateSite < Cri::Command
+  class CreateSite < ::Nanoc3::CLI::Command
 
     class << self
 

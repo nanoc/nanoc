@@ -2,7 +2,11 @@
 
 module Nanoc3::CLI::Commands
 
-  class Help < Cri::Command
+  class Help < ::Nanoc3::CLI::Command
+
+    def added_to_base(base)
+      base.help_command = self
+    end
 
     def name
       'help'

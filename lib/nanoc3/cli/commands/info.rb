@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class Info < Cri::Command
+  class Info < ::Nanoc3::CLI::Command
 
     def name
       'info'

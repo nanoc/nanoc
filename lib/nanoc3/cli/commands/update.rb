@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class Update < Cri::Command
+  class Update < ::Nanoc3::CLI::Command
 
     def name
       'update'

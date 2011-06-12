@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class Autocompile < Cri::Command
+  class Autocompile < ::Nanoc3::CLI::Command
 
     def name
       'autocompile'
