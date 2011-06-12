@@ -3,7 +3,6 @@ syntax: glob
 .yardoc
 doc/yardoc
 *.gem
-*.gemspec
 *.rbc
 *.tmproj
 *~
