@@ -249,8 +249,10 @@ module Nanoc3::CLI
     end
 
     # @see Cri::Base#handle_option
-    def handle_option(option)
-      case option
+    def handle_option(*args)
+      key, value, command = *args # for backwards compatibility
+
+      case key
       when :version
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
         engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
@@ -269,7 +271,7 @@ module Nanoc3::CLI
       when :'no-color'
         Nanoc3::CLI::Logger.instance.color = false
       when :help
-        show_help
+        show_help(command)
         exit 0
       end
     end
