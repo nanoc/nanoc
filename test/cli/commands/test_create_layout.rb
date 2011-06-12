@@ -5,11 +5,13 @@ class Nanoc3::CLI::Commands::CreateLayoutTest < MiniTest::Unit::TestCase
   include Nanoc3::TestHelpers
 
   def test_can_compile_new_layout
-    Nanoc3::CLI::Base.new.run([ 'create_site', 'foo' ])
+    require 'nanoc3/cli'
+
+    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'foo' ])
 
     FileUtils.cd('foo') do
       # Create new layout
-      Nanoc3::CLI::Base.new.run([ 'create_layout', 'moo' ])
+      Nanoc3::CLI::Base.shared_base.run([ 'create_layout', 'moo' ])
 
       # Makes rules use new layout
       rules_raw = File.read('Rules')

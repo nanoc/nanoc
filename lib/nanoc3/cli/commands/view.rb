@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class View < Cri::Command
+  class View < ::Nanoc3::CLI::Command
 
     def name
       'view'

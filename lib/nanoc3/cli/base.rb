@@ -39,22 +39,6 @@ module Nanoc3::CLI
       super('nanoc3')
 
       @debug = false
-
-      # Add help command
-      self.help_command = Nanoc3::CLI::Commands::Help.new
-      add_command(self.help_command)
-
-      # Add other commands
-      add_command(Nanoc3::CLI::Commands::Autocompile.new)
-      add_command(Nanoc3::CLI::Commands::Compile.new)
-      add_command(Nanoc3::CLI::Commands::CreateLayout.new)
-      add_command(Nanoc3::CLI::Commands::CreateItem.new)
-      add_command(Nanoc3::CLI::Commands::CreateSite.new)
-      add_command(Nanoc3::CLI::Commands::Debug.new)
-      add_command(Nanoc3::CLI::Commands::Info.new)
-      add_command(Nanoc3::CLI::Commands::Update.new)
-      add_command(Nanoc3::CLI::Commands::View.new)
-      add_command(Nanoc3::CLI::Commands::Watch.new)
     end
 
     # Returns a fully initialised base instance. It is recommended to use this
@@ -113,6 +97,9 @@ module Nanoc3::CLI
           exit!(0)
         end
       end
+
+      # Load custom commands
+      Dir['./lib/commands/*.rb'].each { |f| require f }
 
       super(args)
     rescue Interrupt => e

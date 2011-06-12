@@ -18,7 +18,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_passthrough
     # Create site
-    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
     FileUtils.cd('bar') do
       # Create rep
       item = Nanoc3::Item.new('foo', { :extension => 'bar' }, '/foo/')

@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI::Commands
 
-  class Compile < Cri::Command
+  class Compile < ::Nanoc3::CLI::Command
 
     def name
       'compile'

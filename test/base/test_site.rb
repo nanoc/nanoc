@@ -53,7 +53,7 @@ EOF
 
   def test_load_data_sources_first
     # Create site
-    Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
 
     FileUtils.cd('bar') do
       # Create data source code
