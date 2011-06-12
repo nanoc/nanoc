@@ -9,15 +9,9 @@ module Nanoc3::CLI
     end
 
     # TODO document
-    def added_to_base(base)
-    end
-
-    # TODO document
     def self.inherited(command_subclass)
-      shared_base = Nanoc3::CLI::Base.shared_base
-      shared_instance = command_subclass.shared_instance
-      shared_base.add_command(shared_instance)
-      shared_instance.added_to_base(shared_base)
+      Nanoc3::CLI::Base.shared_base.add_command(
+        command_subclass.shared_instance)
     end
 
   end
