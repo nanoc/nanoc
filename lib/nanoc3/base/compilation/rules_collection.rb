@@ -34,7 +34,14 @@ module Nanoc3
       @layout_filter_mapping   = OrderedHash.new
     end
 
-    # TODO document
+    # Add the given rule to the list of item compilation rules.
+    #
+    # @param [Nanoc3::Rule] rule The item compilation rule to add
+    #
+    # @param [:before, :after] position The place where the rule should be
+    #   added (either at the beginning or the end of the list of rules)
+    #
+    # @return [void]
     def add_item_compilation_rule(rule, position=:after)
       case position
       when :before
@@ -46,7 +53,14 @@ module Nanoc3
       end
     end
 
-    # TODO document
+    # Add the given rule to the list of item routing rules.
+    #
+    # @param [Nanoc3::Rule] rule The item routing rule to add
+    #
+    # @param [:before, :after] position The place where the rule should be
+    #   added (either at the beginning or the end of the list of rules)
+    #
+    # @return [void]
     def add_item_routing_rule(rule, position=:after)
       case position
       when :before
@@ -58,12 +72,17 @@ module Nanoc3
       end
     end
 
-    # TODO document
+    # @param [Nanoc3::Item] item The item for which the compilation rules
+    #   should be retrieved
+    #
+    # @return [Array] The list of item compilation rules for the given item
     def item_compilation_rules_for(item)
       @item_compilation_rules.select { |r| r.applicable_to?(item) }
     end
 
     # Loads this site’s rules.
+    #
+    # @return [void]
     def load
       # Find rules file
       rules_filenames = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
@@ -78,6 +97,8 @@ module Nanoc3
     end
 
     # Unloads this site’s rules.
+    #
+    # @return [void]
     def unload
       @item_compilation_rules  = []
       @item_routing_rules      = []
@@ -114,6 +135,8 @@ module Nanoc3
     # returned. The result is a hash containing the corresponding rule for
     # each snapshot.
     #
+    # @param [Nanoc3::ItemRep] rep The item rep for which to fetch the rules
+    #
     # @return [Hash<Symbol, Nanoc3::Rule>] The routing rules for the given rep
     def routing_rules_for(rep)
       rules = {}
@@ -146,17 +169,15 @@ module Nanoc3
     end
     memoize :dsl
 
-    # TODO document
+    # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @return [Object] An unique reference to this object
     def reference
       :rules
     end
 
-    # TODO document
-    def data
-      @data
-    end
-
-    # TODO document
+    # @return [String] The checksum for this object. If its contents change,
+    #   the checksum will change as well.
     def checksum
       @data.checksum
     end
@@ -184,18 +205,21 @@ module Nanoc3
     end
     memoize :new_rule_memory_for_layout
 
-    # TODO document
+    # @param [Nanoc3::Item] obj The object for which to check the rule memory
+    #
+    # @return [Boolean] true if the rule memory for the given object has
+    # changed since the last compilation, false otherwise
     def rule_memory_differs_for(obj)
       !rule_memory_store[obj].eql?(rule_memory_calculator[obj])
     end
     memoize :rule_memory_differs_for
 
-    # TODO document
+    # @return [Nanoc3::RuleMemoryStore] The rule memory store
     def rule_memory_store
       @compiler.rule_memory_store
     end
 
-    # TODO document
+    # @return [Nanoc3::RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
       @compiler.rule_memory_calculator
     end
