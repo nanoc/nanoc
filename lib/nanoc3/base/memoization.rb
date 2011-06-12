@@ -49,21 +49,18 @@ module Nanoc3
 
       # Redefine
       define_method(method_name) do |*args|
-        # Get method-specific cache
-        key = [ self, method_name ]
-        if !CACHE.has_key?(key)
-          CACHE[key] = {}
-        end
-        method_cache = CACHE[key]
+        # Get cache
+        @cache ||= {}
+        @cache[method_name] ||= {}
 
         # Recalculate if necessary
-        if !method_cache.has_key?(args)
+        if !@cache[method_name].has_key?(args)
           result = send(original_method_name, *args)
-          method_cache[args] = result
+          @cache[method_name][args] = result
         end
 
         # Done
-        method_cache[args]
+        @cache[method_name][args]
       end
     end
 
