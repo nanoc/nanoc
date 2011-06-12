@@ -20,8 +20,6 @@ module Nanoc3
 
     def_delegators :@item_rep, :item, :name, :binary, :binary?, :compiled_content, :has_snapshot?, :raw_path, :path, :assigns, :assigns=
 
-    # @return The list of recorded actions (“rule memory”)
-    #
     # @example The compilation rule and the corresponding rule memory
     #
     #     # rule
@@ -38,7 +36,7 @@ module Nanoc3
     #       [ :layout, 'meh' ]
     #     ]
     #
-    # @return [Array] The rule memory
+    # @return [Array] The list of recorded actions (“rule memory”)
     attr_reader :rule_memory
 
     # @param [Nanoc3::ItemRep] item_rep The item representation that this
