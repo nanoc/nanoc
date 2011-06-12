@@ -203,7 +203,7 @@ module Nanoc3
       @checksum_store
     end
 
-    # TODO document
+    # @return [Nanoc3::RulesCollection] The rules collection
     def rules_collection
       site.compiler.rules_collection
     end

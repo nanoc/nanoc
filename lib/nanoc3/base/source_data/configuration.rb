@@ -2,15 +2,19 @@
 
 module Nanoc3
 
-  # TODO document
+  # Represents the site configuration.
   class Configuration < ::Hash
 
-    # TODO document
+    # Creates a new configuration with the given hash.
+    #
+    # @param [Hash] hash The actual configuration hash
     def initialize(hash)
       self.replace(hash)
     end
 
-    # TODO document
+    # Returns an object that can be used for uniquely identifying objects.
+    #
+    # @return [Object] An unique reference to this object
     def reference
       :config
     end
