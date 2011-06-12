@@ -85,7 +85,8 @@ module Nanoc3
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier}>"
     end
 
-    # TODO document
+    # @return [String] The checksum for this object. If its contents change,
+    #   the checksum will change as well.
     def checksum
       attributes = @attributes.dup
       attributes.delete(:file)

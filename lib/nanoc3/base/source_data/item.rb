@@ -233,7 +233,8 @@ module Nanoc3
       "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier} binary?=#{self.binary?}>"
     end
 
-    # TODO document
+    # @return [String] The checksum for this object. If its contents change,
+    #   the checksum will change as well.
     def checksum
       content_checksum = if binary?
         if File.exist?(raw_filename)
