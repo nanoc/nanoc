@@ -249,9 +249,7 @@ module Nanoc3::CLI
     end
 
     # @see Cri::Base#handle_option
-    def handle_option(*args)
-      key, value, command = *args # for backwards compatibility
-
+    def handle_option(key, value, command)
       case key
       when :version
         gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
