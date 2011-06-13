@@ -39,4 +39,17 @@ class Nanoc3::LayoutTest < MiniTest::Unit::TestCase
     assert_equal(nil, layout[:filter])
   end
 
+  def test_dump_and_load
+    layout = Nanoc3::Layout.new(
+      "foobar",
+      { :a => { :b => 123 }},
+      '/foo/')
+
+    layout = Marshal.load(Marshal.dump(layout))
+
+    assert_equal '/foo/', layout.identifier
+    assert_equal 'foobar', layout.raw_content
+    assert_equal({ :a => { :b => 123 }}, layout.attributes)
+  end
+
 end

@@ -266,6 +266,24 @@ module Nanoc3
       self.eql?(other)
     end
 
+    def marshal_dump
+      [
+        @is_binary,
+        @raw_filename,
+        @raw_content,
+        @attributes,
+        @identifier
+      ]
+    end
+
+    def marshal_load(source)
+      @is_binary,
+      @raw_filename,
+      @raw_content,
+      @attributes,
+      @identifier = *source
+    end
+
     # @deprecated Access the modification time using `item[:mtime]` instead.
     def mtime
       self[:mtime]
