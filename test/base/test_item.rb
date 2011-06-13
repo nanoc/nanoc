@@ -159,4 +159,17 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     assert raised
   end
 
+  def test_dump_and_load
+    item = Nanoc3::Item.new(
+      "foobar",
+      { :a => { :b => 123 }},
+      '/foo/')
+
+    item = Marshal.load(Marshal.dump(item))
+
+    assert_equal '/foo/', item.identifier
+    assert_equal 'foobar', item.raw_content
+    assert_equal({ :a => { :b => 123 }}, item.attributes)
+  end
+
 end

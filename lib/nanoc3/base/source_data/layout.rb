@@ -106,6 +106,20 @@ module Nanoc3
       self.eql?(other)
     end
 
+    def marshal_dump
+      [
+        @raw_content,
+        @attributes,
+        @identifier
+      ]
+    end
+
+    def marshal_load(source)
+      @raw_content,
+      @attributes,
+      @identifier = *source
+    end
+
     # @deprecated Access the modification time using `layout[:mtime]` instead.
     def mtime
       self[:mtime]
