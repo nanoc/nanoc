@@ -90,6 +90,7 @@ module Nanoc3::CLI::Commands
       watcher_config = @base.site.config[:watcher] || {}
       dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
       files_to_watch = watcher_config[:files_to_watch] || %w( config.yaml Rules rules Rules.rb rules.rb' )
+      files_to_watch.delete_if { |f| !File.file?(f) }
 
       # Watch
       puts "Watching for changes…".make_compatible_with_env
