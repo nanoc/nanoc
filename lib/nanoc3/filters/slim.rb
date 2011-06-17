@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'slim'
+
 module Nanoc3::Filters
 
   # @since 3.2.0
@@ -12,8 +14,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'slim'
-
       # Create context
       context = ::Nanoc3::Context.new(assigns)
 

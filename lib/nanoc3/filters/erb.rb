@@ -1,5 +1,7 @@
 # encoding: utf-8                                                                                                           
 
+require 'erb'
+
 module Nanoc3::Filters
   class ERB < Nanoc3::Filter
 
@@ -14,8 +16,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'erb'
-
       # Create context
       context = ::Nanoc3::Context.new(assigns)
 

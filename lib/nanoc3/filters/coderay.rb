@@ -1,12 +1,12 @@
 # encoding: utf-8
 
+require 'coderay'
+
 module Nanoc3::Filters
   class CodeRay < Nanoc3::Filter
 
     # @deprecated Use the `:colorize_syntax` filter instead.
     def run(content, params={})
-      require 'coderay'
-
       # Warn
       warn 'The :coderay filter is deprecated; consider using the :colorize_syntax filter instead.'
 

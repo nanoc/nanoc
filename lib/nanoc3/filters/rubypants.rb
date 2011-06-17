@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'rubypants'
+
 module Nanoc3::Filters
   class RubyPants < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'rubypants'
-
       # Get result
       ::RubyPants.new(content).to_html
     end

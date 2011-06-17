@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'haml'
+
 module Nanoc3::Filters
   class Haml < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'haml'
-
       # Get options
       options = params.merge(:filename => filename)
 

@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'markaby'
+
 module Nanoc3::Filters
   class Markaby < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'markaby'
-
       # Get result
       ::Markaby::Builder.new(assigns).instance_eval(content).to_s
     end

@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'bluecloth'
+
 module Nanoc3::Filters
   class BlueCloth < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'bluecloth'
-
       ::BlueCloth.new(content).to_html
     end
 

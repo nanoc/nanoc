@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'mustache'
+
 module Nanoc3::Filters
 
   # @since 3.2.0
@@ -13,8 +15,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'mustache'
-
       # Get result
       ::Mustache.render(content, item.attributes)
     end

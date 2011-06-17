@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'sass'
+
 module Nanoc3::Filters
   class Sass < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'sass'
-
       # Add imported_filename read accessor to ImportNode
       # … but… but… nex3 said I could monkey patch it! :(
       methods = ::Sass::Tree::ImportNode.instance_methods

@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'redcloth'
+
 module Nanoc3::Filters
   class RedCloth < Nanoc3::Filter
 
@@ -24,8 +26,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'redcloth'
-
       # Create formatter
       r = ::RedCloth.new(content)
 

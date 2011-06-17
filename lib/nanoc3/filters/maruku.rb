@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'maruku'
+
 module Nanoc3::Filters
   class Maruku < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'maruku'
-
       # Get result
       ::Maruku.new(content, params).to_html
     end
