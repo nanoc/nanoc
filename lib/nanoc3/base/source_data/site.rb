@@ -179,11 +179,15 @@ module Nanoc3
     # @return [void]
     def setup_child_parent_links
       teardown_child_parent_links
-      @items.each do |item|
+
+      items = @items.sort_by { |i| i.identifier }
+      items.each_with_index do |item, index|
         # Get parent
         parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
-        parent = @items.find { |p| p.identifier == parent_identifier }
-        next if parent.nil? or item.identifier == '/'
+        parent = nil
+        candidate = items[index-1] if index > 0
+        parent = candidate if candidate && candidate.identifier == parent_identifier
+        next if parent.nil?
 
         # Link
         item.parent = parent
