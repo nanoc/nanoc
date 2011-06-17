@@ -80,6 +80,38 @@ EOF
     end
   end
 
+  def test_setup_child_parent_links
+    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+    FileUtils.cd('bar') do
+      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/' ])
+      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/foo/' ])
+      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/bar/' ])
+      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/bar/qux/' ])
+
+      $loud = true
+      site = Nanoc3::Site.new('.')
+
+      root   = site.items.find { |i| i.identifier == '/' }
+      style  = site.items.find { |i| i.identifier == '/stylesheet/' }
+      parent = site.items.find { |i| i.identifier == '/parent/' }
+      foo    = site.items.find { |i| i.identifier == '/parent/foo/' }
+      bar    = site.items.find { |i| i.identifier == '/parent/bar/' }
+      qux    = site.items.find { |i| i.identifier == '/parent/bar/qux/' }
+
+      assert_equal Set.new([ parent, style ]), Set.new(root.children)
+      assert_equal Set.new([ foo, bar ]),      Set.new(parent.children)
+      assert_equal Set.new([ qux ]),           Set.new(bar.children)
+
+      assert_equal nil,    root.parent
+      assert_equal root,   parent.parent
+      assert_equal parent, foo.parent
+      assert_equal parent, bar.parent
+      assert_equal bar,    qux.parent
+    end
+  ensure
+    $loud = false
+  end
+
 end
 
 describe 'Nanoc3::Site#initialize' do
