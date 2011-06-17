@@ -166,16 +166,19 @@ module Nanoc3
       # Get captured content (hax)
       # TODO [in nanoc 4.0] remove me
       if key.to_s =~ /^content_for_(.*)$/
+        @@_content_for_warning_issued ||= false
+        @@_Nanoc3_Helpers_Capturing_included ||= false
+
         # Warn
-        unless @_content_for_warning_issued
+        unless @@_content_for_warning_issued
           warn 'WARNING: Accessing captured content should happen using the #content_for method defined in the Capturing helper instead of using item[:content_for_something]. The latter way of accessing captured content will be removed in nanoc 4.0.'
-          @_content_for_warning_issued = true
+          @@_content_for_warning_issued = true
         end
 
         # Include capturing helper if necessary
-        unless @_Nanoc3_Helpers_Capturing_included
+        unless @@_Nanoc3_Helpers_Capturing_included
           self.class.send(:include, ::Nanoc3::Helpers::Capturing)
-          @_Nanoc3_Helpers_Capturing_included = true
+          @@_Nanoc3_Helpers_Capturing_included = true
         end
 
         # Get content
