@@ -14,7 +14,6 @@ module Nanoc3::Extra
     end
 
     def freeze
-      super
     end
 
     def respond_to?(meth)
