@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'less'
+
 module Nanoc3::Filters
   class Less < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'less'
-
       # Add filename to load path
       paths = [ File.dirname(@item[:content_filename]) ]
       parser = ::Less::Parser.new(:paths => paths)

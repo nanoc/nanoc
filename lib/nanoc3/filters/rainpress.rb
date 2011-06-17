@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'rainpress'
+
 module Nanoc3::Filters
   class Rainpress < Nanoc3::Filter
 
@@ -10,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'rainpress'
-
       ::Rainpress.compress(content, params)
     end
 

@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'nokogiri'
+require 'stringio'
+
 module Nanoc3::Filters
   class ColorizeSyntax < Nanoc3::Filter
 
@@ -65,8 +68,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      require 'nokogiri'
-
       # Take colorizers from parameters
       @colorizers = Hash.new(params[:default_colorizer] || DEFAULT_COLORIZER)
       (params[:colorizers] || {}).each_pair do |language, colorizer|
@@ -177,7 +178,6 @@ module Nanoc3::Filters
     #
     # @return [String] The colorized output
     def pygmentize(code, language, params={})
-      require 'stringio'
       require 'systemu'
 
       # Build command
@@ -215,7 +215,6 @@ module Nanoc3::Filters
     #
     # @since 3.2.0
     def simon_highlight(code, language, params={})
-      require 'stringio'
       require 'systemu'
 
       # Build command
