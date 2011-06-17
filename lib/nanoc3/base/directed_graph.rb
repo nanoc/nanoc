@@ -31,16 +31,16 @@ module Nanoc3
   #     # => %w( b c )
   class DirectedGraph
 
-    # The list of vertices in this graph.
+    # The set of vertices in this graph.
     #
-    # @return [Array]
+    # @return [Set]
     attr_reader :vertices
 
     # @group Creating a graph
 
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
-      @vertices = vertices
+      @vertices = Set.new(vertices)
 
       @from_graph = {}
       @to_graph   = {}
