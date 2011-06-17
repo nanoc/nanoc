@@ -183,10 +183,17 @@ module Nanoc3
       items = @items.sort_by { |i| i.identifier }
       items.each_with_index do |item, index|
         # Get parent
+        next if index == 0
         parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
         parent = nil
-        candidate = items[index-1] if index > 0
-        parent = candidate if candidate && candidate.identifier == parent_identifier
+        (0..index-1).reverse_each do |candidate_index|
+          candidate = items[candidate_index]
+          if candidate.identifier == parent_identifier
+            parent = candidate
+          elsif candidate.identifier[0..parent_identifier.size-1] != parent_identifier
+            break
+          end
+        end
         next if parent.nil?
 
         # Link
