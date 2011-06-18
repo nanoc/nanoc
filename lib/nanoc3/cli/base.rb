@@ -63,6 +63,7 @@ module Nanoc3::CLI
     #
     # @return [void]
     def require_site
+      @site = nil
       if site.nil?
         $stderr.puts 'The current working directory does not seem to be a ' +
                      'valid/complete nanoc site directory; aborting.'
@@ -76,7 +77,8 @@ module Nanoc3::CLI
     # @return [Nanoc3::Site] The site in the current working directory
     def site
       # Load site if possible
-      if File.file?('config.yaml') && (!self.instance_variable_defined?(:@site) || @site.nil?)
+      @site ||= nil
+      if File.file?('config.yaml') && @site.nil?
         begin
           @site = Nanoc3::Site.new('.')
         rescue Nanoc3::Errors::UnknownDataSource => e
