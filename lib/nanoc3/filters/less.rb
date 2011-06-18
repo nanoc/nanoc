@@ -16,9 +16,11 @@ module Nanoc3::Filters
 
       # Find imports (hacky)
       imports = []
-      imports.concat(content.scan(/^@import\s+(["'])([^\1]+)\1;/))
-      imports.concat(content.scan(/^@import\s+url\((["']?)([^)]+)\1\);/))
-      imported_filenames = imports.map { |i| i[1] }
+      imports.concat(content.scan(/^@import\s+(["'])([^\1]+?)\1;/))
+      imports.concat(content.scan(/^@import\s+url\((["']?)([^)]+?)\1\);/))
+      imported_filenames = imports.map do |i|
+        i[1].match(/\.(less|css)$/) ? i[1] : i[1] + '.less'
+      end
 
       # Convert to items
       imported_items = imported_filenames.map do |filename|
