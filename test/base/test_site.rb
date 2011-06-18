@@ -88,7 +88,6 @@ EOF
       Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/bar/' ])
       Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/bar/qux/' ])
 
-      $loud = true
       site = Nanoc3::Site.new('.')
 
       root   = site.items.find { |i| i.identifier == '/' }
@@ -108,8 +107,6 @@ EOF
       assert_equal parent, bar.parent
       assert_equal bar,    qux.parent
     end
-  ensure
-    $loud = false
   end
 
 end
