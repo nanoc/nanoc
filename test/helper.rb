@@ -97,6 +97,10 @@ EOS
     end
   end
 
+  def cli(args)
+    Nanoc3::CLI::Base.shared_base.run(args)
+  end
+
   def setup
     # Clean up
     GC.start

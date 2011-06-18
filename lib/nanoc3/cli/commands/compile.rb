@@ -135,11 +135,12 @@ module Nanoc3::CLI::Commands
         @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
       end
       Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-        @filter_times[filter_name] = Time.now
+        @filter_times[filter_name] ||= []
+        @filter_times[filter_name] << Time.now
         start_filter_progress(rep, filter_name)
       end
       Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-        @filter_times[filter_name] = Time.now - @filter_times[filter_name]
+        @filter_times[filter_name] << Time.now - @filter_times[filter_name].pop
         stop_filter_progress(rep, filter_name)
       end
     end
