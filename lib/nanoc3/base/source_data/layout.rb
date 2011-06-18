@@ -94,6 +94,18 @@ module Nanoc3
     end
     memoize :checksum
 
+    def hash
+      self.class.hash ^ self.identifier.hash
+    end
+
+    def eql?(other)
+      self.class == other.class && self.identifier == other.identifier
+    end
+
+    def ==(other)
+      self.eql?(other)
+    end
+
     def marshal_dump
       [
         @raw_content,

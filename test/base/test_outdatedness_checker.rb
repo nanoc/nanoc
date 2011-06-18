@@ -360,4 +360,35 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_items_in_rules_should_not_cause_outdatedness
+    # Create site
+    with_site(:name => 'foo') do |site|
+      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.open('Rules', 'w') do |io|
+        io.write("compile '/' do\n")
+        io.write("  filter :erb, :stuff => @items\n")
+        io.write("end\n")
+        io.write("\n")
+        io.write("route '/' do\n")
+        io.write("  '/index.html'\n")
+        io.write("end\n")
+      end
+    end
+
+    # Compile
+    FileUtils.cd('foo') do
+      site = Nanoc3::Site.new('.')
+      site.compile
+    end
+
+    # Assert not outdated
+    FileUtils.cd('foo') do
+      site = Nanoc3::Site.new('.')
+      outdatedness_checker = site.compiler.outdatedness_checker
+      site.items.each do |item|
+        refute outdatedness_checker.outdated?(item), "item should not be outdated"
+      end
+    end
+  end
+
 end
