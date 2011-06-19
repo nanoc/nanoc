@@ -1,47 +1,25 @@
 # encoding: utf-8
 
+usage       'view [options]'
+summary     'start the web server that serves static files'
+description <<-EOS
+Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running the autocompiler requires 'adsf' and 'rack'.
+EOS
+
+option :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
+option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
+option :p, :port,    'specify the port to listen on (default: 3000)'
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::View.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class View < ::Nanoc3::CLI::Command
+  class View
 
-    def name
-      'view'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'start the web server that serves static files'
-    end
-
-    def long_desc
-      'Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running the autocompiler requires \'adsf\' and \'rack\'.'
-    end
-
-    def usage
-      "nanoc3 view [options]"
-    end
-
-    def option_definitions
-      [
-        # --handler
-        {
-          :long => 'handler', :short => 'H', :argument => :required,
-          :desc => 'specify the handler to use (webrick/mongrel/...)'
-        },
-        # --host
-        {
-          :long => 'host', :short => 'o', :argument => :required,
-          :desc => 'specify the host to listen on (default: 0.0.0.0)'
-        },
-        # --port
-        {
-          :long => 'port', :short => 'p', :argument => :required,
-          :desc => 'specify the port to listen on (default: 3000)'
-        }
-      ]
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

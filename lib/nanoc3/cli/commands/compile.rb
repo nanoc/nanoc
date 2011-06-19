@@ -1,46 +1,28 @@
 # encoding: utf-8
 
+usage       'compile [options]'
+summary     'compile items of this site'
+description <<-EOS
+Compile all items of the current site.
+
+By default, only item that are outdated will be compiled. This can speed up
+the compilation process quite a bit, but items that include content from other
+items may have to be recompiled manually.
+EOS
+
+option :a, :all,   '(ignored)'
+option :f, :force, '(ignored)'
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::Compile.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class Compile < ::Nanoc3::CLI::Command
+  class Compile
 
-    def name
-      'compile'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'compile items of this site'
-    end
-
-    def long_desc
-      'Compile all items of the current site.' +
-      "\n\n" +
-      'By default, only item that are outdated will be compiled. This can ' +
-      'speed up the compilation process quite a bit, but items that include ' +
-      'content from other items may have to be recompiled manually.'
-    end
-
-    def usage
-      "nanoc3 compile [options]"
-    end
-
-    def option_definitions
-      [
-        # --all
-        {
-          :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => '(ignored)'
-        },
-        # --force
-        {
-          :long => 'force', :short => 'f', :argument => :forbidden,
-          :desc => '(ignored)'
-        }
-      ]
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)
@@ -99,8 +81,6 @@ module Nanoc3::CLI::Commands
         print_profiling_feedback(reps)
       end
     end
-
-  private
 
     def setup_notifications
       # File notifications

@@ -1,32 +1,22 @@
 # encoding: utf-8
 
+usage       'debug'
+summary     'show debug information for this site'
+description <<-EOS
+Show information about all items, item representations and layouts in the
+current site.
+EOS
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::Debug.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class Debug < ::Nanoc3::CLI::Command
+  class Debug
 
-    def name
-      'debug'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'show debug information for this site'
-    end
-
-    def long_desc
-      'Show information about all items, item representations and layouts ' \
-      'in the current site.'
-    end
-
-    def usage
-      "nanoc3 debug"
-    end
-
-    def option_definitions
-      []
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

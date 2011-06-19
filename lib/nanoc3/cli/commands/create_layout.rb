@@ -1,37 +1,23 @@
 # encoding: utf-8
 
+usage       'create_layout [options] identifier'
+aliases     'cl'
+summary     'create a layout'
+description <<-EOS
+Create a new layout in the current site. The first data source in the site
+configuration will be used.
+EOS
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::CreateLayout.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class CreateLayout < ::Nanoc3::CLI::Command
+  class CreateLayout
 
-    def name
-      'create_layout'
-    end
-
-    def aliases
-      [ 'cl' ]
-    end
-
-    def short_desc
-      'create a layout'
-    end
-
-    def long_desc
-      'Create a new layout in the current site. The first data source in the site configuration will be used.'
-    end
-
-    def usage
-      "nanoc3 create_layout [options] identifier"
-    end
-
-    def option_definitions
-      [
-        # --vcs
-        {
-          :long => 'vcs', :short => 'c', :argument => :required,
-          :desc => 'select the VCS to use'
-        }
-      ]
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

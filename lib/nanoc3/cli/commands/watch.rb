@@ -1,33 +1,21 @@
 # encoding: utf-8
 
+usage       'watch [options]'
+summary     'start the watcher'
+description <<-EOS
+Start the watcher. When a change is detected, the site will be recompiled.
+EOS
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::Watch.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  # @since 3.2.0
-  class Watch < ::Nanoc3::CLI::Command
+  class Watch
 
-    def name
-      'watch'
-    end
-
-    def aliases
-      [ ]
-    end
-
-    def short_desc
-      'start the watcher'
-    end
-
-    def long_desc
-      'Start the watcher. When a change is detected, the site will be ' \
-      'recompiled.'
-    end
-
-    def usage
-      "nanoc3 watch"
-    end
-
-    def option_definitions
-      []
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

@@ -2,7 +2,7 @@
 
 module Nanoc3::CLI
 
-  class Base < Cri::Base
+  class Base
 
     # A hash that contains the name of the gem for a given required file. If a
     # `#require` fails, the gem name is looked up in this hash.
@@ -36,8 +36,6 @@ module Nanoc3::CLI
     }
 
     def initialize
-      super('nanoc3')
-
       @debug = false
     end
 

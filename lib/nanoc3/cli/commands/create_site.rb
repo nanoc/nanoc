@@ -1,8 +1,21 @@
 # encoding: utf-8
 
+usage       'create_site [options] path'
+aliases     'cs'
+summary     'create a site'
+description <<-EOS
+Create a new site at the given path. The site will use the filesystem_unified data source by default, but this can be changed using the --datasource commandline option.
+EOS
+
+required :d, :datasource, 'specify the data source for the new site'
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::CreateSite.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class CreateSite < ::Nanoc3::CLI::Command
+  class CreateSite
 
     class << self
 
@@ -270,36 +283,8 @@ EOS
 </html>
 EOS
 
-    def name
-      'create_site'
-    end
-
-    def aliases
-      [ 'cs' ]
-    end
-
-    def short_desc
-      'create a site'
-    end
-
-    def long_desc
-      'Create a new site at the given path. The site will use the ' +
-      'filesystem_unified data source by default, but this can be ' +
-      'changed using the --datasource commandline option.'
-    end
-
-    def usage
-      "nanoc3 create_site [options] path"
-    end
-
-    def option_definitions
-      [
-        # --datasource
-        {
-          :long => 'datasource', :short => 'd', :argument => :required,
-          :desc => 'specify the data source for the new site'
-        }
-      ]
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

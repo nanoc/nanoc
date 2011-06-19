@@ -1,49 +1,30 @@
 # encoding: utf-8
 
+usage   'update [options]'
+summary 'update the data stored by the data source to a newer version'
+description <<-EOS
+Update the data stored by the data source to a newer format. The format in
+which data is stored can change between releases, and even though backward
+compatibility is usually preserved, it is often a good idea to store the site
+data in a newer format so newer features can be taken advantage of.
+
+This command will change data, and it is therefore recommended to make a
+backup in case something goes wrong.
+EOS
+
+option :c, :vcs, 'select the VCS to use'
+flag   :y, :yes, 'update the data without warning'
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::Update.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class Update < ::Nanoc3::CLI::Command
+  class Update
 
-    def name
-      'update'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'update the data stored by the data source to a newer version'
-    end
-
-    def long_desc
-      'Update the data stored by the data source to a newer format. The ' +
-      'format in which data is stored can change between releases, and ' +
-      'even though backward compatibility is usually preserved, it is ' +
-      'often a good idea to store the site data in a newer format so newer ' +
-      'features can be taken advantage of.' +
-      "\n" +
-      'This command will change data, and it is therefore recommended to ' +
-      'make a backup in case something goes wrong.'
-    end
-
-    def usage
-      "nanoc3 update [options]"
-    end
-
-    def option_definitions
-      [
-        # --vcs
-        {
-          :long => 'vcs', :short => 'c', :argument => :required,
-          :desc => 'select the VCS to use'
-        },
-        # --yes
-        {
-          :long => 'yes', :short => 'y', :argument => :forbidden,
-          :desc => 'updates the data without warning'
-        }
-      ]
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

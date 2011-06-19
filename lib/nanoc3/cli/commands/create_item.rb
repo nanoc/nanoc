@@ -1,37 +1,25 @@
 # encoding: utf-8
 
+usage       'create_item [options] identifier'
+summary     'create an item'
+aliases     :ci
+description <<-EOS
+Create a new item in the current site. The first data source in the site
+configuration will be used.
+EOS
+
+option :c, :vcs, 'specify the VCS to use'
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::CreateItem.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class CreateItem < ::Nanoc3::CLI::Command
+  class CreateItem
 
-    def name
-      'create_item'
-    end
-
-    def aliases
-      [ 'ci' ]
-    end
-
-    def short_desc
-      'create a item'
-    end
-
-    def long_desc
-      'Create a new item in the current site. The first data source in the site configuration will be used.'
-    end
-
-    def usage
-      "nanoc3 create_item [options] identifier"
-    end
-
-    def option_definitions
-      [
-        # --vcs
-        {
-          :long => 'vcs', :short => 'c', :argument => :required,
-          :desc => 'select the VCS to use'
-        }
-      ]
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)

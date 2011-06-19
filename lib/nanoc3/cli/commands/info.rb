@@ -1,33 +1,22 @@
 # encoding: utf-8
 
+summary     'show info about available plugins'
+usage       'info [options]'
+description <<-EOS
+Show a list of available plugins, including filters, data sources and VCSes.
+If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
+EOS
+
+run do |opts, args|
+  Nanoc3::CLI::Commands::Info.new.run(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class Info < ::Nanoc3::CLI::Command
+  class Info
 
-    def name
-      'info'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'show info about available plugins'
-    end
-
-    def long_desc
-      'Show a list of available plugins, including filters, data sources ' +
-      'and VCSes. If the current directory contains a nanoc web site, ' +
-      'the plugins defined in this site will be shown as well.'
-    end
-
-    def usage
-      "nanoc3 info [options]"
-    end
-
-    def option_definitions
-      []
+    def initialize
+      @base = Nanoc3::CLI::Base.shared_base
     end
 
     def run(options, arguments)
