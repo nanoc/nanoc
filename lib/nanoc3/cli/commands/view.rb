@@ -73,6 +73,7 @@ module Nanoc3::CLI::Commands
         use Rack::ShowExceptions
         use Rack::Lint
         use Rack::Head
+        use Rack::Head
         use Adsf::Rack::IndexFileFinder, :root => site.config[:output_dir]
         run Rack::File.new(site.config[:output_dir])
       end.to_app
