@@ -15,8 +15,9 @@ Extensions:
 
 * Added AsciiDoc filter
 * Added Redcarpet filter [Peter Aronoff]
-* Added Typogruby filter
 * Added Slim filter [Zaiste de Grengolada]
+* Added Typogruby filter
+* Added UglifyJS filter [Justin Hileman]
 * Added :items parameter for the XML site map [Justin Hileman]
 * Added support for params to ERB
 * Allowed for passing arbitrary options to pygmentize [Matthias Vallentin]
