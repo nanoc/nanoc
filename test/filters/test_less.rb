@@ -90,7 +90,7 @@ class Nanoc3::Filters::LessTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*{\s*color:\s*red;?\s*}/, File.read('output/a.css')
+        assert_match /^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css')
 
         # Update included file
         File.open('content/b.less', 'w') do |io|
@@ -105,7 +105,7 @@ class Nanoc3::Filters::LessTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*{\s*color:\s*blue;?\s*}/, File.read('output/a.css')
+        assert_match /^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css')
       end
     end
   end
