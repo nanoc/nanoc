@@ -7,16 +7,12 @@ Start the watcher. When a change is detected, the site will be recompiled.
 EOS
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::Watch.new.run(opts, args)
+  Nanoc3::CLI::Commands::Watch.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class Watch
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class Watch < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       require 'fssm'
@@ -66,7 +62,7 @@ module Nanoc3::CLI::Commands
           end
 
           puts
-          @base.print_error(e)
+          base.print_error(e)
           puts
         end
       end
@@ -75,7 +71,7 @@ module Nanoc3::CLI::Commands
       rebuilder.call(nil, nil)
 
       # Get directories to watch
-      watcher_config = @base.site.config[:watcher] || {}
+      watcher_config = base.site.config[:watcher] || {}
       dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
       files_to_watch = watcher_config[:files_to_watch] || %w( config.yaml Rules rules Rules.rb rules.rb' )
       files_to_watch.delete_if { |f| !File.file?(f) }

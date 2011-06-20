@@ -9,16 +9,12 @@ configuration will be used.
 EOS
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::CreateLayout.new.run(opts, args)
+  Nanoc3::CLI::Commands::CreateLayout.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class CreateLayout
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class CreateLayout < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       # Check arguments
@@ -31,13 +27,13 @@ module Nanoc3::CLI::Commands
       identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set VCS if possible
-      @base.set_vcs(options[:vcs])
+      base.set_vcs(options[:vcs])
 
       # Check whether layout is unique
-      if !@base.site.layouts.find { |l| l.identifier == identifier }.nil?
+      if !base.site.layouts.find { |l| l.identifier == identifier }.nil?
         $stderr.puts "A layout already exists at #{identifier}. Please " +
                      "pick a unique name for the layout you are creating."
         exit 1
@@ -56,7 +52,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Create layout
-      data_source = @base.site.data_sources[0]
+      data_source = base.site.data_sources[0]
       data_source.create_layout(
         "<html>\n" +
         "  <head>\n" +

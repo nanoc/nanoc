@@ -8,7 +8,7 @@ opt :l, :color, 'enable color' do
 end
 
 opt :d, :debug, 'enable debugging' do
-  # TODO implement
+  Nanoc3::CLI.base.debug = true
 end
 
 opt :h, :help, 'show the help message and quit' do

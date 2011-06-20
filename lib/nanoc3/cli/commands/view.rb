@@ -11,23 +11,19 @@ option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 option :p, :port,    'specify the port to listen on (default: 3000)'
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::View.new.run(opts, args)
+  Nanoc3::CLI::Commands::View.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class View
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class View < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       require 'rack'
       require 'adsf'
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set options
       options_for_rack = {
@@ -45,7 +41,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Build app
-      site = @base.site
+      site = base.site
       app = Rack::Builder.new do
         use Rack::CommonLogger
         use Rack::ShowExceptions

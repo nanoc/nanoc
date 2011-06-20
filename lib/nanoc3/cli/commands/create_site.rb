@@ -10,12 +10,12 @@ EOS
 required :d, :datasource, 'specify the data source for the new site'
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::CreateSite.new.run(opts, args)
+  Nanoc3::CLI::Commands::CreateSite.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class CreateSite
+  class CreateSite < ::Nanoc3::CLI::Command
 
     class << self
 
@@ -282,10 +282,6 @@ EOS
   </body>
 </html>
 EOS
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
 
     def run(options, arguments)
       # Check arguments

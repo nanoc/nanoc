@@ -13,22 +13,18 @@ option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 option :p, :port,    'specify the port to listen on (default: 3000)'
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::AutoCompile.new.run(opts, args)
+  Nanoc3::CLI::Commands::AutoCompile.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class AutoCompile
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class AutoCompile < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       require 'rack'
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set options
       options_for_rack = {

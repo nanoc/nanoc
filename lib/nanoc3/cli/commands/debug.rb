@@ -8,31 +8,27 @@ current site.
 EOS
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::Debug.new.run(opts, args)
+  Nanoc3::CLI::Commands::Debug.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class Debug
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class Debug < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       # Make sure we are in a nanoc site directory
       print "Loading site data... "
-      @base.require_site
+      base.require_site
       puts "done"
       puts
 
       # Get data
-      items   = @base.site.items
+      items   = base.site.items
       reps    = items.map { |i| i.reps }.flatten
-      layouts = @base.site.layouts
+      layouts = base.site.layouts
 
       # Get dependency tracker
-      compiler = @base.site.compiler
+      compiler = base.site.compiler
       compiler.load
       dependency_tracker = compiler.dependency_tracker
 

@@ -14,21 +14,17 @@ option :a, :all,   '(ignored)'
 option :f, :force, '(ignored)'
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::Compile.new.run(opts, args)
+  Nanoc3::CLI::Commands::Compile.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class Compile
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class Compile < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       # Make sure we are in a nanoc site directory
       puts "Loading site data..."
-      @base.require_site
+      base.require_site
 
       # Check presence of --all option
       if options.has_key?(:all) || options.has_key?(:force)
@@ -55,10 +51,10 @@ module Nanoc3::CLI::Commands
       setup_diffs
 
       # Compile
-      @base.site.compile
+      base.site.compile
 
       # Find reps
-      reps = @base.site.items.map { |i| i.reps }.flatten
+      reps = base.site.items.map { |i| i.reps }.flatten
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
@@ -95,16 +91,16 @@ module Nanoc3::CLI::Commands
 
       # Debug notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
-        puts "*** Started compilation of #{rep.inspect}" if @base.debug?
+        puts "*** Started compilation of #{rep.inspect}" if base.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
-        puts "*** Ended compilation of #{rep.inspect}" if @base.debug?
+        puts "*** Ended compilation of #{rep.inspect}" if base.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
-        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if @base.debug?
+        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if base.debug?
       end
       Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
-        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if @base.debug?
+        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if base.debug?
       end
 
       # Timing notifications
@@ -136,7 +132,7 @@ module Nanoc3::CLI::Commands
     end
 
     def generate_diff_for(rep, snapshot)
-      return if !@base.site.config[:enable_output_diff]
+      return if !base.site.config[:enable_output_diff]
       return if !File.file?(rep.raw_path(:snapshot => snapshot))
       return if rep.binary?
 

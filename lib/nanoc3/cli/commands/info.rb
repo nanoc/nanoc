@@ -8,16 +8,12 @@ If the current directory contains a nanoc web site, the plugins defined in this 
 EOS
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::Info.new.run(opts, args)
+  Nanoc3::CLI::Commands::Info.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class Info
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class Info < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       # Check arguments
@@ -28,7 +24,7 @@ module Nanoc3::CLI::Commands
 
       # Get list of plugins (before and after)
       plugins_before = Nanoc3::Plugin.all
-      @base.site.code_snippets if @base.site
+      base.site.code_snippets if base.site
       plugins_after  = Nanoc3::Plugin.all
 
       # Divide list of plugins into builtin and custom

@@ -16,16 +16,12 @@ option :c, :vcs, 'select the VCS to use'
 flag   :y, :yes, 'update the data without warning'
 
 run do |opts, args|
-  Nanoc3::CLI::Commands::Update.new.run(opts, args)
+  Nanoc3::CLI::Commands::Update.call(opts, args)
 end
 
 module Nanoc3::CLI::Commands
 
-  class Update
-
-    def initialize
-      @base = Nanoc3::CLI::Base.shared_base
-    end
+  class Update < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       # Check arguments
@@ -35,10 +31,10 @@ module Nanoc3::CLI::Commands
       end
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set VCS if possible
-      @base.set_vcs(options[:vcs])
+      base.set_vcs(options[:vcs])
 
       # Check for -y switch
       unless options.has_key?(:yes)
@@ -66,7 +62,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Update
-      @base.site.data_sources.each do |data_source|
+      base.site.data_sources.each do |data_source|
         data_source.update
       end
     end
