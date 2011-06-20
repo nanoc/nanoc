@@ -7,50 +7,26 @@ class Nanoc3::CLI::BaseTest < MiniTest::Unit::TestCase
   COMMAND_CODE = <<EOS
 # encoding: utf-8
 
-module Nanoc3::CLI::Commands
+usage       '_test [options]'
+summary     'meh'
+description 'longer meh'
 
-  class ExampleCommandUsedForTesting < ::Nanoc3::CLI::Command
-
-    def name
-      '_test'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'meh'
-    end
-
-    def long_desc
-      'longer meh'
-    end
-
-    def usage
-      "nanoc3 _test"
-    end
-
-    def run(options, arguments)
-      File.open('_test.out', 'w') { |io| io.write('It works!') }
-    end
-
-  end
-
+run do |opts, args|
+  File.open('_test.out', 'w') { |io| io.write('It works!') }
 end
 EOS
 
   def test_load_custom_commands
-    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'foo' ])
+    Nanoc3::CLI.run %w( create_site foo )
 
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('lib/commands')
-      File.open('lib/commands/whatever.rb', 'w') { |io| io.write(COMMAND_CODE) }
+      File.open('lib/commands/_test.rb', 'w') { |io| io.write(COMMAND_CODE) }
 
       # Run command
       begin
-        Nanoc3::CLI::Base.shared_base.run([ '_test' ])
+        Nanoc3::CLI.run %w( _test )
       rescue SystemExit
         assert false, 'Running _test should not cause system exit'
       end

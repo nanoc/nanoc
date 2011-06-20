@@ -254,7 +254,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_disallow_routes_not_starting_with_slash
     # Create site
-    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+    Nanoc3::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
       # Create routes
@@ -281,7 +281,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_load_should_be_idempotent
     # Create site
-    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+    Nanoc3::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
       site = Nanoc3::Site.new('.')

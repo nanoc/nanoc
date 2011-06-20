@@ -9,24 +9,30 @@ module Nanoc3::CLI
 
   # TODO document
   def self.run(args)
+    self.load_custom_commands
     self.root_command.run(args)
+  end
+
+  # @todo Document
+  def self.load_custom_commands
+    Dir['lib/commands/*.rb'].each do |filename|
+      cmd = Nanoc3::CLI.load_command_at(filename)
+      Nanoc3::CLI.root_command.add_command(cmd)
+    end
   end
 
 private
 
-  def self.root_command
-    @root_command ||= self.load_command_named('nanoc')
-  end
-
-  def self.load_command_named(name)
-    filename = File.dirname(__FILE__) + "/cli/commands/#{name}.rb"
-    self.load_command_at(filename)
-  end
-
+  # @todo Document
   def self.load_command_at(filename)
     code = File.read(filename)
     cmd = Cri::Command.define(code)
     cmd.modify { name File.basename(filename, '.rb') }
+  end
+
+  def self.root_command
+    filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
+    @root_command ||= self.load_command_at(filename)
   end
 
 end
