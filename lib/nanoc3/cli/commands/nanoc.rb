@@ -11,8 +11,8 @@ opt :d, :debug, 'enable debugging' do
   Nanoc3::CLI.base.debug = true
 end
 
-opt :h, :help, 'show the help message and quit' do
-  puts self.help
+opt :h, :help, 'show the help message and quit' do |value, cmd|
+  puts cmd.help
   exit 0
 end
 
