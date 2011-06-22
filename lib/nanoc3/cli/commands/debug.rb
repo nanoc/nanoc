@@ -7,7 +7,7 @@ Show information about all items, item representations and layouts in the
 current site.
 EOS
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::Debug.call(opts, args)
 end
 

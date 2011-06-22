@@ -11,7 +11,7 @@ usage       '_test [options]'
 summary     'meh'
 description 'longer meh'
 
-run do |opts, args|
+run do |opts, args, cmd|
   File.open('_test.out', 'w') { |io| io.write('It works!') }
 end
 EOS

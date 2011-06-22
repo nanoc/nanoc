@@ -7,7 +7,7 @@ Show a list of available plugins, including filters, data sources and VCSes.
 If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
 EOS
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::Info.call(opts, args)
 end
 

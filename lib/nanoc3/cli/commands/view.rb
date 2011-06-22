@@ -10,7 +10,7 @@ option :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
 option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 option :p, :port,    'specify the port to listen on (default: 3000)'
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::View.call(opts, args)
 end
 

@@ -20,7 +20,7 @@ EOS
 option :a, :all,   '(ignored)'
 option :f, :force, '(ignored)'
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::Compile.call(opts, args)
 end
 

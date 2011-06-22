@@ -8,7 +8,7 @@ Create a new layout in the current site. The first data source in the site
 configuration will be used.
 EOS
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::CreateLayout.call(opts, args)
 end
 

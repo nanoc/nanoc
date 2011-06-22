@@ -9,7 +9,7 @@ EOS
 
 required :d, :datasource, 'specify the data source for the new site'
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::CreateSite.call(opts, args)
 end
 

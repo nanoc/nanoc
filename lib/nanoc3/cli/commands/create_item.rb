@@ -10,7 +10,7 @@ EOS
 
 option :c, :vcs, 'specify the VCS to use'
 
-run do |opts, args|
+run do |opts, args, cmd|
   Nanoc3::CLI::Commands::CreateItem.call(opts, args)
 end
 
