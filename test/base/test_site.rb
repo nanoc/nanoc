@@ -53,7 +53,7 @@ EOF
 
   def test_load_data_sources_first
     # Create site
-    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+    Nanoc3::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
       # Create data source code
@@ -81,12 +81,12 @@ EOF
   end
 
   def test_setup_child_parent_links
-    Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+    Nanoc3::CLI.run %w( create_site bar)
     FileUtils.cd('bar') do
-      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/' ])
-      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/foo/' ])
-      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/bar/' ])
-      Nanoc3::CLI::Base.shared_base.run([ 'create_item', '/parent/bar/qux/' ])
+      Nanoc3::CLI.run %w( create_item /parent/ )
+      Nanoc3::CLI.run %w( create_item /parent/foo/ )
+      Nanoc3::CLI.run %w( create_item /parent/bar/ )
+      Nanoc3::CLI.run %w( create_item /parent/bar/qux/ )
 
       site = Nanoc3::Site.new('.')
 

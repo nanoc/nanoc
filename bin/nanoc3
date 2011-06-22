@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-puts "Starting..."
-
 # Add lib to load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 
@@ -11,4 +9,4 @@ require 'nanoc3'
 require 'nanoc3/cli'
 
 # Run base
-Nanoc3::CLI::Base.shared_base.run(ARGV)
+Nanoc3::CLI.run(ARGV)

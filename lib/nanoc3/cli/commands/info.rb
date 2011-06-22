@@ -1,34 +1,19 @@
 # encoding: utf-8
 
+summary     'show info about available plugins'
+usage       'info [options]'
+description <<-EOS
+Show a list of available plugins, including filters, data sources and VCSes.
+If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
+EOS
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::Info.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
   class Info < ::Nanoc3::CLI::Command
-
-    def name
-      'info'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'show info about available plugins'
-    end
-
-    def long_desc
-      'Show a list of available plugins, including filters, data sources ' +
-      'and VCSes. If the current directory contains a nanoc web site, ' +
-      'the plugins defined in this site will be shown as well.'
-    end
-
-    def usage
-      "nanoc3 info [options]"
-    end
-
-    def option_definitions
-      []
-    end
 
     def run(options, arguments)
       # Check arguments
@@ -39,7 +24,7 @@ module Nanoc3::CLI::Commands
 
       # Get list of plugins (before and after)
       plugins_before = Nanoc3::Plugin.all
-      @base.site.code_snippets if @base.site
+      base.site.code_snippets if base.site
       plugins_after  = Nanoc3::Plugin.all
 
       # Divide list of plugins into builtin and custom

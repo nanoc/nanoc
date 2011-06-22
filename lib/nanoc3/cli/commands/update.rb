@@ -1,50 +1,27 @@
 # encoding: utf-8
 
+usage   'update [options]'
+summary 'update the data stored by the data source to a newer version'
+description <<-EOS
+Update the data stored by the data source to a newer format. The format in
+which data is stored can change between releases, and even though backward
+compatibility is usually preserved, it is often a good idea to store the site
+data in a newer format so newer features can be taken advantage of.
+
+This command will change data, and it is therefore recommended to make a
+backup in case something goes wrong.
+EOS
+
+option :c, :vcs, 'select the VCS to use'
+flag   :y, :yes, 'update the data without warning'
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::Update.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
   class Update < ::Nanoc3::CLI::Command
-
-    def name
-      'update'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'update the data stored by the data source to a newer version'
-    end
-
-    def long_desc
-      'Update the data stored by the data source to a newer format. The ' +
-      'format in which data is stored can change between releases, and ' +
-      'even though backward compatibility is usually preserved, it is ' +
-      'often a good idea to store the site data in a newer format so newer ' +
-      'features can be taken advantage of.' +
-      "\n" +
-      'This command will change data, and it is therefore recommended to ' +
-      'make a backup in case something goes wrong.'
-    end
-
-    def usage
-      "nanoc3 update [options]"
-    end
-
-    def option_definitions
-      [
-        # --vcs
-        {
-          :long => 'vcs', :short => 'c', :argument => :required,
-          :desc => 'select the VCS to use'
-        },
-        # --yes
-        {
-          :long => 'yes', :short => 'y', :argument => :forbidden,
-          :desc => 'updates the data without warning'
-        }
-      ]
-    end
 
     def run(options, arguments)
       # Check arguments
@@ -54,10 +31,10 @@ module Nanoc3::CLI::Commands
       end
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set VCS if possible
-      @base.set_vcs(options[:vcs])
+      base.set_vcs(options[:vcs])
 
       # Check for -y switch
       unless options.has_key?(:yes)
@@ -85,7 +62,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Update
-      @base.site.data_sources.each do |data_source|
+      base.site.data_sources.each do |data_source|
         data_source.update
       end
     end

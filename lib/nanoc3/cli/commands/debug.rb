@@ -1,48 +1,34 @@
 # encoding: utf-8
 
+usage       'debug'
+summary     'show debug information for this site'
+description <<-EOS
+Show information about all items, item representations and layouts in the
+current site.
+EOS
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::Debug.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
   class Debug < ::Nanoc3::CLI::Command
 
-    def name
-      'debug'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'show debug information for this site'
-    end
-
-    def long_desc
-      'Show information about all items, item representations and layouts ' \
-      'in the current site.'
-    end
-
-    def usage
-      "nanoc3 debug"
-    end
-
-    def option_definitions
-      []
-    end
-
     def run(options, arguments)
       # Make sure we are in a nanoc site directory
       print "Loading site data... "
-      @base.require_site
+      base.require_site
       puts "done"
       puts
 
       # Get data
-      items   = @base.site.items
+      items   = base.site.items
       reps    = items.map { |i| i.reps }.flatten
-      layouts = @base.site.layouts
+      layouts = base.site.layouts
 
       # Get dependency tracker
-      compiler = @base.site.compiler
+      compiler = base.site.compiler
       compiler.load
       dependency_tracker = compiler.dependency_tracker
 

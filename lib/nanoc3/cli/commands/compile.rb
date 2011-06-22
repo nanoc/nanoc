@@ -1,52 +1,37 @@
 # encoding: utf-8
 
+usage       'compile [options]'
+summary     'compile items of this site'
+description <<-EOS
+Compile all items of the current site.
+
+The compile command will show all items of the site as they are processed. The time spent compiling the item will be printed, as well as a status message, which can be one of the following:
+
+CREATED - The compiled item did not yet exist and has been created
+
+UPDATED - The compiled item did already exist and has been modified
+
+IDENTICAL - The item was deemed outdated and has been recompiled, but the compiled version turned out to be identical to the already existing version
+
+SKIP - The item was deemed not outdated and was therefore not recompiled
+
+EOS
+
+option :a, :all,   '(ignored)'
+option :f, :force, '(ignored)'
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::Compile.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
   class Compile < ::Nanoc3::CLI::Command
 
-    def name
-      'compile'
-    end
-
-    def aliases
-      []
-    end
-
-    def short_desc
-      'compile items of this site'
-    end
-
-    def long_desc
-      'Compile all items of the current site.' +
-      "\n\n" +
-      'By default, only item that are outdated will be compiled. This can ' +
-      'speed up the compilation process quite a bit, but items that include ' +
-      'content from other items may have to be recompiled manually.'
-    end
-
-    def usage
-      "nanoc3 compile [options]"
-    end
-
-    def option_definitions
-      [
-        # --all
-        {
-          :long => 'all', :short => 'a', :argument => :forbidden,
-          :desc => '(ignored)'
-        },
-        # --force
-        {
-          :long => 'force', :short => 'f', :argument => :forbidden,
-          :desc => '(ignored)'
-        }
-      ]
-    end
-
     def run(options, arguments)
       # Make sure we are in a nanoc site directory
       puts "Loading site data..."
-      @base.require_site
+      base.require_site
 
       # Check presence of --all option
       if options.has_key?(:all) || options.has_key?(:force)
@@ -73,10 +58,10 @@ module Nanoc3::CLI::Commands
       setup_diffs
 
       # Compile
-      @base.site.compile
+      base.site.compile
 
       # Find reps
-      reps = @base.site.items.map { |i| i.reps }.flatten
+      reps = base.site.items.map { |i| i.reps }.flatten
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
@@ -100,8 +85,6 @@ module Nanoc3::CLI::Commands
       end
     end
 
-  private
-
     def setup_notifications
       # File notifications
       Nanoc3::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
@@ -115,16 +98,16 @@ module Nanoc3::CLI::Commands
 
       # Debug notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
-        puts "*** Started compilation of #{rep.inspect}" if @base.debug?
+        puts "*** Started compilation of #{rep.inspect}" if base.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
-        puts "*** Ended compilation of #{rep.inspect}" if @base.debug?
+        puts "*** Ended compilation of #{rep.inspect}" if base.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
-        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if @base.debug?
+        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if base.debug?
       end
       Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
-        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if @base.debug?
+        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if base.debug?
       end
 
       # Timing notifications
@@ -156,7 +139,7 @@ module Nanoc3::CLI::Commands
     end
 
     def generate_diff_for(rep, snapshot)
-      return if !@base.site.config[:enable_output_diff]
+      return if !base.site.config[:enable_output_diff]
       return if !File.file?(rep.raw_path(:snapshot => snapshot))
       return if rep.binary?
 

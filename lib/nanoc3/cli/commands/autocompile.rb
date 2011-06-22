@@ -1,56 +1,30 @@
 # encoding: utf-8
 
+usage       'autocompile [options]'
+summary     'start the autocompiler'
+description <<-EOS
+Start the autocompiler web server. Unless specified, the web server will run
+on port 3000 and listen on all IP addresses. Running the autocompiler requires
+the 'mime/types' and 'rack' gems.
+EOS
+
+option :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
+option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
+option :p, :port,    'specify the port to listen on (default: 3000)'
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::AutoCompile.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  class Autocompile < ::Nanoc3::CLI::Command
-
-    def name
-      'autocompile'
-    end
-
-    def aliases
-      [ 'aco' ]
-    end
-
-    def short_desc
-      'start the autocompiler'
-    end
-
-    def long_desc
-      'Start the autocompiler web server. Unless specified, the web ' +
-      'server will run on port 3000 and listen on all IP addresses. ' +
-      'Running the autocompiler requires \'mime/types\' and \'rack\'.'
-    end
-
-    def usage
-      "nanoc3 autocompile [options]"
-    end
-
-    def option_definitions
-      [
-        # --handler
-        {
-          :long => 'handler', :short => 'H', :argument => :required,
-          :desc => 'specify the handler to use (webrick/mongrel/...)'
-        },
-        # --host
-        {
-          :long => 'host', :short => 'o', :argument => :required,
-          :desc => 'specify the host to listen on (default: 0.0.0.0)'
-        },
-        # --port
-        {
-          :long => 'port', :short => 'p', :argument => :required,
-          :desc => 'specify the port to listen on (default: 3000)'
-        }
-      ]
-    end
+  class AutoCompile < ::Nanoc3::CLI::Command
 
     def run(options, arguments)
       require 'rack'
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set options
       options_for_rack = {

@@ -7,7 +7,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_item_rep_with_index_filename
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+      Nanoc3::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create item
@@ -47,7 +47,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_broken_url
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+      Nanoc3::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create site
@@ -291,7 +291,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_serve_with_working_item
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+      Nanoc3::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create item
@@ -329,7 +329,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_serve_with_broken_item
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'bar' ])
+      Nanoc3::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create item
@@ -357,7 +357,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_reload_config_file_before_each_request
     if_have 'rack' do
       # Create site
-      Nanoc3::CLI::Base.shared_base.run([ 'create_site', 'foo' ])
+      Nanoc3::CLI.run %w( create_site foo )
 
       FileUtils.cd('foo') do
         # Create item that outputs config elements

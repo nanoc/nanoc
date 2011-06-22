@@ -1,38 +1,20 @@
 # encoding: utf-8
 
+usage       'create_layout [options] identifier'
+aliases     'cl'
+summary     'create a layout'
+description <<-EOS
+Create a new layout in the current site. The first data source in the site
+configuration will be used.
+EOS
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::CreateLayout.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
   class CreateLayout < ::Nanoc3::CLI::Command
-
-    def name
-      'create_layout'
-    end
-
-    def aliases
-      [ 'cl' ]
-    end
-
-    def short_desc
-      'create a layout'
-    end
-
-    def long_desc
-      'Create a new layout in the current site. The first data source in the site configuration will be used.'
-    end
-
-    def usage
-      "nanoc3 create_layout [options] identifier"
-    end
-
-    def option_definitions
-      [
-        # --vcs
-        {
-          :long => 'vcs', :short => 'c', :argument => :required,
-          :desc => 'select the VCS to use'
-        }
-      ]
-    end
 
     def run(options, arguments)
       # Check arguments
@@ -45,13 +27,13 @@ module Nanoc3::CLI::Commands
       identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
-      @base.require_site
+      base.require_site
 
       # Set VCS if possible
-      @base.set_vcs(options[:vcs])
+      base.set_vcs(options[:vcs])
 
       # Check whether layout is unique
-      if !@base.site.layouts.find { |l| l.identifier == identifier }.nil?
+      if !base.site.layouts.find { |l| l.identifier == identifier }.nil?
         $stderr.puts "A layout already exists at #{identifier}. Please " +
                      "pick a unique name for the layout you are creating."
         exit 1
@@ -70,7 +52,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Create layout
-      data_source = @base.site.data_sources[0]
+      data_source = base.site.data_sources[0]
       data_source.create_layout(
         "<html>\n" +
         "  <head>\n" +

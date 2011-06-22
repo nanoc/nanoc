@@ -6,9 +6,9 @@ class Nanoc3::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
 
   def test_profiling_information
     with_site do |site|
-      cli(%w(create_item foo))
-      cli(%w(create_item bar))
-      cli(%w(create_item baz))
+      Nanoc3::CLI.run %w( create_item foo )
+      Nanoc3::CLI.run %w( create_item bar )
+      Nanoc3::CLI.run %w( create_item baz )
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -26,7 +26,7 @@ class Nanoc3::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      cli(%w(compile --verbose))
+      Nanoc3::CLI.run %w( compile --verbose )
     end
   end
 

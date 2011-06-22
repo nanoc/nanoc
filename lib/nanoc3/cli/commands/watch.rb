@@ -1,34 +1,18 @@
 # encoding: utf-8
 
+usage       'watch [options]'
+summary     'start the watcher'
+description <<-EOS
+Start the watcher. When a change is detected, the site will be recompiled.
+EOS
+
+run do |opts, args, cmd|
+  Nanoc3::CLI::Commands::Watch.call(opts, args)
+end
+
 module Nanoc3::CLI::Commands
 
-  # @since 3.2.0
   class Watch < ::Nanoc3::CLI::Command
-
-    def name
-      'watch'
-    end
-
-    def aliases
-      [ ]
-    end
-
-    def short_desc
-      'start the watcher'
-    end
-
-    def long_desc
-      'Start the watcher. When a change is detected, the site will be ' \
-      'recompiled.'
-    end
-
-    def usage
-      "nanoc3 watch"
-    end
-
-    def option_definitions
-      []
-    end
 
     def run(options, arguments)
       require 'fssm'
@@ -78,7 +62,7 @@ module Nanoc3::CLI::Commands
           end
 
           puts
-          @base.print_error(e)
+          base.print_error(e)
           puts
         end
       end
@@ -87,7 +71,7 @@ module Nanoc3::CLI::Commands
       rebuilder.call(nil, nil)
 
       # Get directories to watch
-      watcher_config = @base.site.config[:watcher] || {}
+      watcher_config = base.site.config[:watcher] || {}
       dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
       files_to_watch = watcher_config[:files_to_watch] || %w( config.yaml Rules rules Rules.rb rules.rb' )
       files_to_watch.delete_if { |f| !File.file?(f) }
