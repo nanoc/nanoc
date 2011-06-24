@@ -139,6 +139,27 @@ module Nanoc3
       end
     end
 
+    # Creates a dependency from the item that is currently being filtered onto
+    # the given collection of items. In other words, require the given items
+    # to be compiled first before this items is processed.
+    #
+    # @param [Array<Nanoc3::Item>] items The items that are depended on.
+    #
+    # @return [void]
+    def depend_on(items)
+      # Notify
+      items.each do |item|
+        Nanoc3::NotificationCenter.post(:visit_started, item)
+        Nanoc3::NotificationCenter.post(:visit_ended,   item)
+      end
+
+      # Raise unmet dependency error if necessary
+      items.each do |item|
+        rep = item.reps.find { |r| !r.compiled? }
+        raise Nanoc3::Errors::UnmetDependency.new(rep) if rep
+      end
+    end
+
   end
 
 end

@@ -43,12 +43,7 @@ module Nanoc3::Filters
       end.compact
 
       # Create dependencies
-      imported_items.each do |i|
-        Nanoc3::NotificationCenter.post(:visit_started, i)
-        Nanoc3::NotificationCenter.post(:visit_ended,   i)
-        any_uncompiled_rep = i.reps.find { |r| !r.compiled? }
-        raise Nanoc3::Errors::UnmetDependency.new(any_uncompiled_rep) if any_uncompiled_rep
-      end
+      depend_on(imported_items)
 
       # Add filename to load path
       paths = [ File.dirname(@item[:content_filename]) ]
