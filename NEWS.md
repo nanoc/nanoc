@@ -23,6 +23,15 @@ Extensions:
 * Allowed for passing arbitrary options to pygmentize [Matthias Vallentin]
 * Exposed RedCloth parameters in the filter [Vincent Driessen]
 
+## 3.1.8 (2001-06-24)
+
+* Made link validator accept https: URLs
+* Fixed erronous handling of layouts with names ending in index
+* Fixed dependency generation between Sass partials
+* Fixed errors related to thread requires
+* Fixed crash while handling load errors
+* Improved encoding handling while reading files
+
 ## 3.1.7 (2011-05-03)
 
 * Restored compatibility with Sass 3.1

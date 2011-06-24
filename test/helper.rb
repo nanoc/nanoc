@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+# Set up gem loading (necessary for cri dependency)
+require File.dirname(__FILE__) + '/gem_loader.rb'
+
 # Load unit testing stuff
 begin
   require 'minitest/unit'
