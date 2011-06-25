@@ -8,12 +8,26 @@ module Nanoc3::CLI
     # @todo Document
     attr_reader :base
 
+    # @todo Document
+    attr_reader :options
+
+    # @todo Document
+    attr_reader :arguments
+
+    # @todo Document
+    attr_reader :command
+
     def initialize
       @base ||= Nanoc3::CLI.base
     end
 
     # @todo Document
-    def self.call(opts, args)
+    def self.call(options, arguments, command)
+      self.new.call(options, arguments, command)
+    end
+
+    # @todo Document
+    def call(options, arguments, command)
       # Set exit handler
       [ 'INT', 'TERM' ].each do |signal|
         Signal.trap(signal) do
@@ -22,12 +36,17 @@ module Nanoc3::CLI
         end
       end
 
+      # Set attributes
+      @options   = options
+      @arguments = arguments
+      @command   = command
+
       # Run
-      self.new.run(opts, args)
+      self.run
     rescue Interrupt => e
       exit(1)
     rescue StandardError, ScriptError => e
-      print_error(e)
+      self.print_error(e)
       exit(1)
     end
 

@@ -7,14 +7,14 @@ Start the watcher. When a change is detected, the site will be recompiled.
 EOS
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::Watch.call(opts, args)
+  Nanoc3::CLI::Commands::Watch.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class Watch < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       require 'fssm'
       require 'pathname'
 

@@ -11,14 +11,14 @@ option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 option :p, :port,    'specify the port to listen on (default: 3000)'
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::View.call(opts, args)
+  Nanoc3::CLI::Commands::View.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class View < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       require 'rack'
       require 'adsf'
 

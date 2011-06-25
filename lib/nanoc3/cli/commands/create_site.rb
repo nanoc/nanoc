@@ -10,7 +10,7 @@ EOS
 required :d, :datasource, 'specify the data source for the new site'
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::CreateSite.call(opts, args)
+  Nanoc3::CLI::Commands::CreateSite.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
@@ -283,7 +283,7 @@ EOS
 </html>
 EOS
 
-    def run(options, arguments)
+    def run
       # Check arguments
       if arguments.length != 1
         $stderr.puts "usage: #{usage}"

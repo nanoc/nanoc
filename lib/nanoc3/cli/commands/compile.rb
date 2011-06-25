@@ -21,14 +21,14 @@ option :a, :all,   '(ignored)'
 option :f, :force, '(ignored)'
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::Compile.call(opts, args)
+  Nanoc3::CLI::Commands::Compile.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class Compile < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       # Make sure we are in a nanoc site directory
       puts "Loading site data..."
       base.require_site

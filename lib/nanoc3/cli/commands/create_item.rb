@@ -11,17 +11,17 @@ EOS
 option :c, :vcs, 'specify the VCS to use'
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::CreateItem.call(opts, args)
+  Nanoc3::CLI::Commands::CreateItem.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class CreateItem < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       # Check arguments
       if arguments.length != 1
-        $stderr.puts "usage: #{usage}"
+        $stderr.puts "usage: #{command.usage}"
         exit 1
       end
 

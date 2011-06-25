@@ -9,14 +9,14 @@ configuration will be used.
 EOS
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::CreateLayout.call(opts, args)
+  Nanoc3::CLI::Commands::CreateLayout.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class CreateLayout < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       # Check arguments
       if arguments.length != 1
         $stderr.puts "usage: #{usage}"

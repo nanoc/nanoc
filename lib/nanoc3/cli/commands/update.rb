@@ -16,14 +16,14 @@ option :c, :vcs, 'select the VCS to use'
 flag   :y, :yes, 'update the data without warning'
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::Update.call(opts, args)
+  Nanoc3::CLI::Commands::Update.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class Update < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       # Check arguments
       if arguments.size != 0
         $stderr.puts "usage: #{usage}"

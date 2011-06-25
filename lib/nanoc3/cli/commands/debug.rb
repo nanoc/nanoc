@@ -8,14 +8,14 @@ current site.
 EOS
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::Debug.call(opts, args)
+  Nanoc3::CLI::Commands::Debug.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class Debug < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       # Make sure we are in a nanoc site directory
       print "Loading site data... "
       base.require_site

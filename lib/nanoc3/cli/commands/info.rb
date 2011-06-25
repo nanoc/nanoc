@@ -8,14 +8,14 @@ If the current directory contains a nanoc web site, the plugins defined in this 
 EOS
 
 run do |opts, args, cmd|
-  Nanoc3::CLI::Commands::Info.call(opts, args)
+  Nanoc3::CLI::Commands::Info.call(opts, args, cmd)
 end
 
 module Nanoc3::CLI::Commands
 
   class Info < ::Nanoc3::CLI::Command
 
-    def run(options, arguments)
+    def run
       # Check arguments
       if arguments.size != 0
         $stderr.puts "usage: #{usage}"
