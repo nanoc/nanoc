@@ -24,7 +24,7 @@ module Nanoc3::CLI::Commands
 
       # Get list of plugins (before and after)
       plugins_before = Nanoc3::Plugin.all
-      base.site.code_snippets if base.site
+      self.site.code_snippets if self.site
       plugins_after  = Nanoc3::Plugin.all
 
       # Divide list of plugins into builtin and custom

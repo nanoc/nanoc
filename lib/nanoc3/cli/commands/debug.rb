@@ -18,17 +18,17 @@ module Nanoc3::CLI::Commands
     def run
       # Make sure we are in a nanoc site directory
       print "Loading site data... "
-      base.require_site
+      self.require_site
       puts "done"
       puts
 
       # Get data
-      items   = base.site.items
+      items   = self.site.items
       reps    = items.map { |i| i.reps }.flatten
-      layouts = base.site.layouts
+      layouts = self.site.layouts
 
       # Get dependency tracker
-      compiler = base.site.compiler
+      compiler = self.site.compiler
       compiler.load
       dependency_tracker = compiler.dependency_tracker
 

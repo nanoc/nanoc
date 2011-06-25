@@ -55,7 +55,7 @@ protected
     @setup = true
   end
 
-  # @todo Document
+  # @return [Nanoc3::Base] A base
   def self.base
     @base ||= Nanoc3::CLI::Base.new
   end

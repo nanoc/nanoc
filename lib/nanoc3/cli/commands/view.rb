@@ -23,7 +23,7 @@ module Nanoc3::CLI::Commands
       require 'adsf'
 
       # Make sure we are in a nanoc site directory
-      base.require_site
+      self.require_site
 
       # Set options
       options_for_rack = {
@@ -41,7 +41,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Build app
-      site = base.site
+      site = self.site
       app = Rack::Builder.new do
         use Rack::CommonLogger
         use Rack::ShowExceptions

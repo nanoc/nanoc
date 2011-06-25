@@ -27,13 +27,13 @@ module Nanoc3::CLI::Commands
       identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
-      base.require_site
+      self.require_site
 
       # Set VCS if possible
-      base.set_vcs(options[:vcs])
+      self.set_vcs(options[:vcs])
 
       # Check whether layout is unique
-      if !base.site.layouts.find { |l| l.identifier == identifier }.nil?
+      if !self.site.layouts.find { |l| l.identifier == identifier }.nil?
         $stderr.puts "A layout already exists at #{identifier}. Please " +
                      "pick a unique name for the layout you are creating."
         exit 1
@@ -52,7 +52,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Create layout
-      data_source = base.site.data_sources[0]
+      data_source = self.site.data_sources[0]
       data_source.create_layout(
         "<html>\n" +
         "  <head>\n" +

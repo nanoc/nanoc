@@ -29,13 +29,13 @@ module Nanoc3::CLI::Commands
       identifier = arguments[0].cleaned_identifier
 
       # Make sure we are in a nanoc site directory
-      base.require_site
+      self.require_site
 
       # Set VCS if possible
-      base.set_vcs(options[:vcs])
+      self.set_vcs(options[:vcs])
 
       # Check whether item is unique
-      if !base.site.items.find { |i| i.identifier == identifier }.nil?
+      if !self.site.items.find { |i| i.identifier == identifier }.nil?
         $stderr.puts "An item already exists at #{identifier}. Please " +
                      "pick a unique name for the item you are creating."
         exit 1
@@ -47,7 +47,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Create item
-      data_source = base.site.data_sources[0]
+      data_source = self.site.data_sources[0]
       data_source.create_item(
         "Hi, I'm a new item!\n",
         { :title => "A New Item" },

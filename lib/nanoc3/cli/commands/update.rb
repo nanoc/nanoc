@@ -31,10 +31,10 @@ module Nanoc3::CLI::Commands
       end
 
       # Make sure we are in a nanoc site directory
-      base.require_site
+      self.require_site
 
       # Set VCS if possible
-      base.set_vcs(options[:vcs])
+      self.set_vcs(options[:vcs])
 
       # Check for -y switch
       unless options.has_key?(:yes)
@@ -62,7 +62,7 @@ module Nanoc3::CLI::Commands
       end
 
       # Update
-      base.site.data_sources.each do |data_source|
+      self.site.data_sources.each do |data_source|
         data_source.update
       end
     end

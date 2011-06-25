@@ -25,7 +25,7 @@ module Nanoc3::CLI::Commands
       require 'rack'
 
       # Make sure we are in a nanoc site directory
-      base.require_site
+      self.require_site
 
       # Set options
       options_for_rack = {

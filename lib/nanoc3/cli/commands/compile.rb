@@ -31,7 +31,7 @@ module Nanoc3::CLI::Commands
     def run
       # Make sure we are in a nanoc site directory
       puts "Loading site data..."
-      base.require_site
+      self.require_site
 
       # Check presence of --all option
       if options.has_key?(:all) || options.has_key?(:force)
@@ -58,10 +58,10 @@ module Nanoc3::CLI::Commands
       setup_diffs
 
       # Compile
-      base.site.compile
+      self.site.compile
 
       # Find reps
-      reps = base.site.items.map { |i| i.reps }.flatten
+      reps = self.site.items.map { |i| i.reps }.flatten
 
       # Show skipped reps
       reps.select { |r| !r.compiled? }.each do |rep|
@@ -139,7 +139,7 @@ module Nanoc3::CLI::Commands
     end
 
     def generate_diff_for(rep, snapshot)
-      return if !base.site.config[:enable_output_diff]
+      return if !self.site.config[:enable_output_diff]
       return if !File.file?(rep.raw_path(:snapshot => snapshot))
       return if rep.binary?
 
