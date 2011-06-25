@@ -58,6 +58,37 @@ module Nanoc3::CLI
 
   protected
 
+    # A hash that contains the name of the gem for a given required file. If a
+    # `#require` fails, the gem name is looked up in this hash.
+    GEM_NAMES = {
+      'adsf'           => 'adsf',
+      'bluecloth'      => 'bluecloth',
+      'builder'        => 'builder',
+      'coderay'        => 'coderay',
+      'cri'            => 'cri',
+      'erubis'         => 'erubis',
+      'escape'         => 'escape',
+      'fssm'           => 'fssm',
+      'haml'           => 'haml',
+      'json'           => 'json',
+      'kramdown'       => 'kramdown',
+      'less'           => 'less',
+      'markaby'        => 'markaby',
+      'maruku'         => 'maruku',
+      'mime/types'     => 'mime-types',
+      'nokogiri'       => 'nokogiri',
+      'rack'           => 'rack',
+      'rack/cache'     => 'rack-cache',
+      'rainpress'      => 'rainpress',
+      'rdiscount'      => 'rdiscount',
+      'redcarpet'      => 'redcarpet',
+      'redcloth'       => 'redcloth',
+      'rubypants'      => 'rubypants',
+      'sass'           => 'sass',
+      'systemu'        => 'systemu',
+      'w3c_validators' => 'w3c_validators'
+    }
+
     # Prints the given error to stderr. Includes message, possible resolution
     # (see {#resolution_for}), compilation stack, backtrace, etc.
     #
