@@ -6,9 +6,6 @@ module Nanoc3::CLI
   class Command
 
     # @todo Document
-    attr_reader :base
-
-    # @todo Document
     attr_reader :options
 
     # @todo Document
