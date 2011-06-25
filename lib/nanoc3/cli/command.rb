@@ -2,24 +2,47 @@
 
 module Nanoc3::CLI
 
-  # @todo Document
+  # An abstract superclass for commands that can be executed. These are not
+  # the same as Cri commands, but are used in conjuction with Cri commands.
+  # nanoc commands will be called by Cri commands and will perform the actual
+  # execution of the command, as well as perform error handling if necessary.
   class Command
 
-    # @todo Document
+    # @return [Hash] A hash contain the options and their values
     attr_reader :options
 
-    # @todo Document
+    # @return [Array] The list of arguments
     attr_reader :arguments
 
-    # @todo Document
+    # @return [Cri::Command] The Cri command
     attr_reader :command
 
-    # @todo Document
+    # Runs the command with the given options, arguments and Cri command. This
+    # is a convenience method so that no individual command needs to be
+    # created.
+    #
+    # @param [Hash] options A hash contain the options and their values
+    #
+    # @param [Array] arguments The list of arguments
+    #
+    # @param [Cri::Command] command The Cri command
+    #
+    # @return [void]
     def self.call(options, arguments, command)
       self.new.call(options, arguments, command)
     end
 
-    # @todo Document
+    # Runs the command with the given options, arguments and Cri command.
+    #
+    # @param [Hash] options A hash contain the options and their values
+    #
+    # @param [Array] arguments The list of arguments
+    #
+    # @param [Cri::Command] command The Cri command
+    #
+    # @return [void]
+    #
+    # @see Nanoc3::CLI::Command.call
     def call(options, arguments, command)
       # Set exit handler
       [ 'INT', 'TERM' ].each do |signal|
@@ -43,7 +66,9 @@ module Nanoc3::CLI
       exit(1)
     end
 
-    # @todo Document
+    # Performs the actual execution of the command.
+    #
+    # @return [void]
     #
     # @abstract
     def run
