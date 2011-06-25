@@ -2,6 +2,7 @@
 
 usage       'autocompile [options]'
 summary     'start the autocompiler'
+aliases     :aco
 description <<-EOS
 Start the autocompiler web server. Unless specified, the web server will run
 on port 3000 and listen on all IP addresses. Running the autocompiler requires
