@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc3::CLI::BaseTest < MiniTest::Unit::TestCase
+class Nanoc3::CLITest < MiniTest::Unit::TestCase
 
   include Nanoc3::TestHelpers
 

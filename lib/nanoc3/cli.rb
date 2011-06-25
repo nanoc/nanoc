@@ -7,8 +7,24 @@ module Nanoc3::CLI
   module Commands
   end
 
+  # @return [Boolean] true if debug output is enabled, false if not
+  #
+  # @since 3.2.0
+  def self.debug?
+    @debug || false
+  end
+
+  # @param [Boolean] boolean true if debug output should be enabled,
+  #   false if it should not
+  #
+  # @return [void]
+  #
+  # @since 3.2.0
+  def self.debug=(boolean)
+    @debug = boolean
+  end
+
   autoload 'Logger',             'nanoc3/cli/logger'
-  autoload 'Base',               'nanoc3/cli/base'
   autoload 'Command',            'nanoc3/cli/command'
 
   # Invokes the nanoc commandline tool with the given arguments.
@@ -53,11 +69,6 @@ protected
     end
 
     @setup = true
-  end
-
-  # @return [Nanoc3::Base] A base
-  def self.base
-    @base ||= Nanoc3::CLI::Base.new
   end
 
   # Loads the commands in `lib/commands/`.

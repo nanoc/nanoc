@@ -17,10 +17,6 @@ module Nanoc3::CLI
     # @todo Document
     attr_reader :command
 
-    def initialize
-      @base ||= Nanoc3::CLI.base
-    end
-
     # @todo Document
     def self.call(options, arguments, command)
       self.new.call(options, arguments, command)
@@ -57,6 +53,13 @@ module Nanoc3::CLI
     end
 
   protected
+
+    # @return [Boolean] true if debug output is enabled, false if not
+    #
+    # @see Nanoc3::CLI.debug?
+    def debug?
+      Nanoc3::CLI.debug?
+    end
 
     # A hash that contains the name of the gem for a given required file. If a
     # `#require` fails, the gem name is looked up in this hash.

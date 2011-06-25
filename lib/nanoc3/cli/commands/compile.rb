@@ -98,16 +98,16 @@ module Nanoc3::CLI::Commands
 
       # Debug notifications
       Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
-        puts "*** Started compilation of #{rep.inspect}" if base.debug?
+        puts "*** Started compilation of #{rep.inspect}" if self.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
-        puts "*** Ended compilation of #{rep.inspect}" if base.debug?
+        puts "*** Ended compilation of #{rep.inspect}" if self.debug?
       end
       Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
-        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if base.debug?
+        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if self.debug?
       end
       Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
-        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if base.debug?
+        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if self.debug?
       end
 
       # Timing notifications
