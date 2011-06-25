@@ -23,7 +23,7 @@ Extensions:
 * Allowed for passing arbitrary options to pygmentize [Matthias Vallentin]
 * Exposed RedCloth parameters in the filter [Vincent Driessen]
 
-## 3.1.8 (2001-06-24)
+## 3.1.8 (2011-06-25)
 
 * Made link validator accept https: URLs
 * Fixed erronous handling of layouts with names ending in index
