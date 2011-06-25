@@ -105,32 +105,6 @@ module Nanoc3::CLI
       end
     end
 
-    # @see Cri::Base#handle_option
-    def handle_option(key, value, command)
-      case key
-      when :version
-        gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
-        engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
-
-        puts "nanoc #{Nanoc3::VERSION} (c) 2007-2011 Denis Defreyne."
-        puts "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}"
-        exit 0
-      when :verbose
-        Nanoc3::CLI::Logger.instance.level = :low
-      when :debug
-        @debug = true
-      when :warn
-        $-w = true
-      when :color
-        Nanoc3::CLI::Logger.instance.color = true
-      when :'no-color'
-        Nanoc3::CLI::Logger.instance.color = false
-      when :help
-        show_help(command)
-        exit 0
-      end
-    end
-
   protected
 
     def stack
