@@ -17,6 +17,17 @@ module Nanoc3::CLI
     # @return [Cri::Command] The Cri command
     attr_reader :command
 
+    # @param [Hash] options A hash contain the options and their values
+    #
+    # @param [Array] arguments The list of arguments
+    #
+    # @param [Cri::Command] command The Cri command
+    def initialize(options, arguments, command)
+      @options   = options
+      @arguments = arguments
+      @command   = command
+    end
+
     # Runs the command with the given options, arguments and Cri command. This
     # is a convenience method so that no individual command needs to be
     # created.
@@ -29,21 +40,13 @@ module Nanoc3::CLI
     #
     # @return [void]
     def self.call(options, arguments, command)
-      self.new.call(options, arguments, command)
+      self.new(options, arguments, command).call
     end
 
-    # Runs the command with the given options, arguments and Cri command.
-    #
-    # @param [Hash] options A hash contain the options and their values
-    #
-    # @param [Array] arguments The list of arguments
-    #
-    # @param [Cri::Command] command The Cri command
+    # Runs the command.
     #
     # @return [void]
-    #
-    # @see Nanoc3::CLI::Command.call
-    def call(options, arguments, command)
+    def call
       # Set exit handler
       [ 'INT', 'TERM' ].each do |signal|
         Signal.trap(signal) do
@@ -53,9 +56,6 @@ module Nanoc3::CLI
       end
 
       # Set attributes
-      @options   = options
-      @arguments = arguments
-      @command   = command
 
       # Run
       self.run
