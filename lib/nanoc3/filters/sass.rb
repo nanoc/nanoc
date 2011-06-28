@@ -1,9 +1,37 @@
 # encoding: utf-8
 
 require 'sass'
+require 'set'
 
 module Nanoc3::Filters
   class Sass < Nanoc3::Filter
+
+    class << self
+      # The current filter. This is definitely going to bite me if I ever get
+      # to multithreading nanoc.
+      attr_accessor :current
+    end
+
+    # Essentially the {Sass::Importers::Filesystem} but registering each
+    # import file path.
+    class SassFilesystemImporter < ::Sass::Importers::Filesystem
+
+      private
+
+      def _find(dir, name, options)
+        full_filename, syntax = find_real_file(dir, name)
+        return unless full_filename && File.readable?(full_filename)
+
+        filter = Nanoc3::Filters::Sass.current
+        item = filter.imported_filename_to_item(full_filename)
+        filter.depend_on([ item ]) unless item.nil?
+
+        options[:syntax] = syntax
+        options[:filename] = full_filename
+        options[:importer] = self
+        ::Sass::Engine.new(File.read(full_filename), options)
+      end
+    end
 
     # Runs the content through [Sass](http://sass-lang.com/).
     # Parameters passed to this filter will be passed on to Sass.
@@ -12,66 +40,26 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      # Add imported_filename read accessor to ImportNode
-      # … but… but… nex3 said I could monkey patch it! :(
-      methods = ::Sass::Tree::ImportNode.instance_methods
-      if !methods.include?(:import_filename) && !methods.include?('import_filename')
-        ::Sass::Tree::ImportNode.send(:attr_reader, :imported_filename)
-      end
-
-      # Get options
+      # Build options
       options = params.dup
-      sass_filename = options[:filename] || (@item && @item[:content_filename])
+      sass_filename = options[:filename] ||
+        (@item && @item[:content_filename])
       options[:filename] ||= sass_filename
+      options[:filesystem_importer] ||=
+        Nanoc3::Filters::Sass::SassFilesystemImporter
 
-      # Build engine
+      # Render
       engine = ::Sass::Engine.new(content, options)
-
-      # Get import nodes
-      imported_nodes = []
-      unprocessed_nodes = Set.new([ engine.to_tree ])
-      until unprocessed_nodes.empty?
-        # Get an unprocessed node
-        node = unprocessed_nodes.each { |n| break n }
-        unprocessed_nodes.delete(node)
-
-        # Add to list of import nodes if necessary
-        imported_nodes << node if node.is_a?(::Sass::Tree::ImportNode)
-
-        # Mark children of this node for processing
-        node.children.each { |c| unprocessed_nodes << c }
-      end
-
-      # Get import paths
-      import_paths = (options[:load_paths] || []).dup
-      import_paths.unshift(File.dirname(sass_filename)) if sass_filename
-      imported_filenames = imported_nodes.map { |node| node.imported_filename }
-
-      # Convert to items
-      imported_items = imported_filenames.map do |filename|
-        # Find directory for this item
-        current_dir_pathname = Pathname.new(@item[:content_filename]).dirname.realpath
-
-        # Find absolute pathname for imported item
-        imported_pathname    = Pathname.new(filename)
-        if imported_pathname.relative?
-          imported_pathname = current_dir_pathname + imported_pathname
-        end
-        next if !imported_pathname.exist?
-        imported_filename = imported_pathname.realpath
-
-        # Find matching item
-        @items.find do |i|
-          next if i[:content_filename].nil?
-          Pathname.new(i[:content_filename]).realpath == imported_filename
-        end
-      end.compact
-
-      # Require compilation of each item
-      depend_on(imported_items)
-
-      # Done
+      self.class.current = self
       engine.render
+    end
+
+    def imported_filename_to_item(filename)
+      path = Pathname.new(filename).realpath
+      @items.find do |i|
+        next if i[:content_filename].nil?
+        Pathname.new(i[:content_filename]).realpath == path
+      end
     end
 
   end

@@ -153,10 +153,71 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_recompile_includes_with_underscore_without_extension
+    if_have 'sass' do
+      with_site do |site|
+        # Create two Sass files
+        Dir['content/*'].each { |i| FileUtils.rm(i) }
+        File.open('content/a.sass', 'w') do |io|
+          io.write('@import b')
+        end
+        File.open('content/_b.sass', 'w') do |io|
+          io.write("p\n  color: red")
+        end
+
+        # Update rules
+        File.open('Rules', 'w') do |io|
+          io.write "compile '*' do\n"
+          io.write "  filter :sass\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/a/' do\n"
+          io.write "  item.identifier.chop + '.css'\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/_b/' do\n"
+          io.write "  nil\n"
+          io.write "end\n"
+        end
+
+        # Compile
+        site = Nanoc3::Site.new('.')
+        site.compile
+
+        # Check
+        assert Dir['output/*'].size == 1
+        assert File.file?('output/a.css')
+        refute File.file?('output/b.css')
+        assert_match /^p\s*{\s*color:\s*red;?\s*}/, File.read('output/a.css')
+
+        # Update included file
+        File.open('content/_b.sass', 'w') do |io|
+          io.write("p\n  color: blue")
+        end
+
+        # Recompile
+        site = Nanoc3::Site.new('.')
+        site.compile
+
+        # Recheck
+        assert Dir['output/*'].size == 1
+        assert File.file?('output/a.css')
+        refute File.file?('output/b.css')
+        assert_match /^p\s*{\s*color:\s*blue;?\s*}/, File.read('output/a.css')
+      end
+    end
+  end
+
 private
 
   def create_filter(params={})
-    items = [ Nanoc3::Item.new('blah', { :content_filename => 'xyzzy.sass' }, '/blah/') ]
+    FileUtils.mkdir_p('content')
+    File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green')}
+
+    items = [ Nanoc3::Item.new(
+      'blah',
+      { :content_filename => 'content/xyzzy.sass' },
+      '/blah/') ]
     params = { :item => items[0], :items => items }.merge(params)
     ::Nanoc3::Filters::Sass.new(params)
   end
