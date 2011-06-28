@@ -58,9 +58,12 @@ module Nanoc3::Filters
     #
     # @param [String] content The content to filter
     #
-    # @option params [symbol] :default_colorizer (DEFAULT_COLORIZER) The
+    # @option params [Symbol] :default_colorizer (DEFAULT_COLORIZER) The
     #   default colorizer, i.e. the colorizer that will be used when the
     #   colorizer is not overriden for a specific language.
+    #
+    # @option params [Symbol] :syntax (:html) The syntax to use, which can be
+    #   `:html`, `:xml` or `:xhtml`, the latter two being the same.
     #
     # @option params [Hash] :colorizers ({}) A hash containing
     #   a mapping of programming languages (symbols, not strings) onto

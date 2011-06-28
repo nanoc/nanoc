@@ -144,4 +144,24 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_colorize_syntax_with_default_colorizer
+    if `which pygmentize`.strip.empty?
+      skip 'no pygmentize found, which is required for this test'
+      return
+    end
+
+    if_have 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
+      expected_output = '<pre><code class="language-ruby"><span class="nb">puts</span> <span class="s2">"foo"</span></code></pre>'
+
+      # Run filter
+      actual_output = filter.run(input, :default_colorizer => :pygmentize)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
 end
