@@ -10,6 +10,7 @@ Base:
 * Added --color option to forhace color on
 * Cleaned up internals, deprecating several parts and/or marking them as
   private in the progress
+* Allowed custom commands in commands/
 
 Extensions:
 
@@ -18,8 +19,9 @@ Extensions:
 * Added Slim filter [Zaiste de Grengolada]
 * Added Typogruby filter
 * Added UglifyJS filter [Justin Hileman]
-* Added :items parameter for the XML site map [Justin Hileman]
+* Added `:items` parameter for the XML site map [Justin Hileman]
 * Added support for params to ERB
+* Added `:default_colorizer` parameter to the `:colorize_syntax` filter
 * Allowed for passing arbitrary options to pygmentize [Matthias Vallentin]
 * Exposed RedCloth parameters in the filter [Vincent Driessen]
 
