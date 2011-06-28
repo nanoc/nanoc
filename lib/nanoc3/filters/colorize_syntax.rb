@@ -36,6 +36,9 @@ module Nanoc3::Filters
     #
     # @param [String] content The content to filter
     #
+    # @option params [Symbol] :syntax (:html) The syntax to use, which can be
+    #   `:html`, `:xml` or `:xhtml`, the latter two being the same.
+    #
     # @option params [Hash] :colorizers (DEFAULT_COLORIZER) A hash containing
     #   a mapping of programming languages (symbols, not strings) onto
     #   colorizers (symbols).
