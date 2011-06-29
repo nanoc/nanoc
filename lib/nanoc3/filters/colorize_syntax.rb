@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'open3'
+
 module Nanoc3::Filters
   class ColorizeSyntax < Nanoc3::Filter
 
@@ -93,6 +95,8 @@ module Nanoc3::Filters
     end
 
     def pygmentize(code, language, params={})
+      check_availability('pygmentize --V')
+
       IO.popen("pygmentize -l #{language} -f html", "r+") do |io|
         io.write(code)
         io.close_write
@@ -101,6 +105,11 @@ module Nanoc3::Filters
         doc = Nokogiri::HTML.fragment(highlighted_code)
         return doc.xpath('./div[@class="highlight"]/pre').inner_html
       end
+    end
+
+    def check_availability(cmd)
+      # Will raise on error
+      Open3.popen3('highlight --version') { |stdin, stdout, stderr| }
     end
 
   end
