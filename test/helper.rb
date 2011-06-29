@@ -16,14 +16,14 @@ end
 
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
-require 'nanoc3'
-require 'nanoc3/cli'
-require 'nanoc3/tasks'
+require 'nanoc'
+require 'nanoc/cli'
+require 'nanoc/tasks'
 
 # Load miscellaneous requirements
 require 'stringio'
 
-module Nanoc3::TestHelpers
+module Nanoc::TestHelpers
 
   def if_have(*libs)
     libs.each do |lib|
@@ -96,7 +96,7 @@ EOS
 
     # Yield site
     FileUtils.cd(site_name) do
-      yield Nanoc3::Site.new('.')
+      yield Nanoc::Site.new('.')
     end
   end
 

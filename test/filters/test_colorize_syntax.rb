@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_coderay_simple
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
@@ -22,7 +22,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_coderay_with_comment
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = %[<pre title="moo"><code>#!ruby\n# comment</code></pre>]
@@ -37,7 +37,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_coderay_with_comment_and_class
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = %[<pre title="moo"><code class="language-ruby">#!ruby\n# comment</code></pre>]
@@ -52,7 +52,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_coderay_with_more_classes
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<pre title="moo"><code class="abc language-ruby xyz"># comment</code></pre>'
@@ -71,7 +71,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
       end
 
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
@@ -90,7 +90,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
       end
 
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = %Q[<pre title="moo"><code class="language-ruby">\n# comment\n</code></pre>]
@@ -105,7 +105,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_colorize_syntax_with_unknown_syntax
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Run filter
       assert_raises RuntimeError do
@@ -117,7 +117,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_colorize_syntax_with_xml
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<p>foo<br/>bar</p>'
@@ -132,7 +132,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_colorize_syntax_with_xhtml
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<p>foo<br/>bar</p>'
@@ -152,7 +152,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
     if_have 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
@@ -171,7 +171,7 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
         ENV['PATH'] = './blooblooblah'
 
         # Create filter
-        filter = ::Nanoc3::Filters::ColorizeSyntax.new
+        filter = ::Nanoc::Filters::ColorizeSyntax.new
 
         # Get input and expected output
         input = '<pre><code class="language-ruby">puts "foo"</code></pre>'

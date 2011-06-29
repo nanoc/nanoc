@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::CapturingTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::Capturing
+  include Nanoc::Helpers::Capturing
 
   def test_content_for
     require 'erb'
@@ -15,7 +15,7 @@ class Nanoc3::Helpers::CapturingTest < MiniTest::Unit::TestCase
               "<% end %> foot"
 
     # Evaluate content
-    @item = Nanoc3::Item.new('moo', {}, '/blah/')
+    @item = Nanoc::Item.new('moo', {}, '/blah/')
     result = ::ERB.new(content).result(binding)
 
     # Check

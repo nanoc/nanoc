@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter_html_with_double_quotes
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -25,7 +25,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_with_single_quotes
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -44,7 +44,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_without_quotes
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -63,7 +63,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_multiple
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -82,7 +82,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_outside_tag
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -101,7 +101,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_html_root
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -120,7 +120,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_implicit
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Test
     assert_raises(RuntimeError) do
@@ -130,7 +130,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_with_double_quotes
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -149,7 +149,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_with_single_quotes
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -168,7 +168,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_without_quotes
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -187,7 +187,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
   def test_filter_css_multiple
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do
@@ -209,7 +209,7 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     # test case for this situation anyway. Can’t hurt…
 
     # Create filter with mock item
-    filter = Nanoc3::Filters::RelativizePaths.new
+    filter = Nanoc::Filters::RelativizePaths.new
 
     # Mock item
     filter.instance_eval do

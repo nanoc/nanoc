@@ -46,7 +46,7 @@ Extensions:
 
 * Improved `#render` documentation
 * Improved metadata section check so that e.g. raw diffs are handled properly
-* Deprecated using `Nanoc3::Site#initialize` with a non-`"."` argument
+* Deprecated using `Nanoc::Site#initialize` with a non-`"."` argument
 * Added Ruby engine to version string
 * Allowed the `created_at` and `updated_at` attributes used in the `Blogging`
   helper to be `Date` instances
@@ -118,7 +118,7 @@ Changed:
 
 Deprecated:
 
-* `Nanoc3::FileProxy`; use one of the filename attributes instead
+* `Nanoc::FileProxy`; use one of the filename attributes instead
 * `ItemRep#content_at_snapshot`; use `#compiled_content` instead
 * The `last_fm`, `delicious` and `twitter` data sources; fetch online content
   into a cache by a rake task and load data from this cache instead

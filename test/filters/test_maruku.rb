@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::MarukuTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::MarukuTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'maruku' do
       # Create filter
-      filter = ::Nanoc3::Filters::Maruku.new
+      filter = ::Nanoc::Filters::Maruku.new
 
       # Run filter
       result = filter.run("This is _so_ *cool*!")

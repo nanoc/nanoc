@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::Tagging
+  include Nanoc::Helpers::Tagging
 
   def test_tags_for_without_tags
     # Create item
-    item = Nanoc3::Item.new('content', {}, '/path/')
+    item = Nanoc::Item.new('content', {}, '/path/')
 
     # Check
     assert_equal(
@@ -19,7 +19,7 @@ class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc3::Item.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
 
     # Check
     assert_equal(
@@ -31,7 +31,7 @@ class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc3::Item.new('content', { :tags => [ ]}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => [ ]}, '/path/')
 
     # Check
     assert_equal(
@@ -42,7 +42,7 @@ class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc3::Item.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
 
     # Check
     assert_equal(
@@ -55,9 +55,9 @@ class Nanoc3::Helpers::TaggingTest < MiniTest::Unit::TestCase
   def test_items_with_tag
     # Create items
     @items = [
-      Nanoc3::Item.new('item 1', { :tags => [ :foo ]       }, '/item1/'),
-      Nanoc3::Item.new('item 2', { :tags => [ :bar ]       }, '/item2/'),
-      Nanoc3::Item.new('item 3', { :tags => [ :foo, :bar ] }, '/item3/')
+      Nanoc::Item.new('item 1', { :tags => [ :foo ]       }, '/item1/'),
+      Nanoc::Item.new('item 2', { :tags => [ :bar ]       }, '/item2/'),
+      Nanoc::Item.new('item 3', { :tags => [ :foo, :bar ] }, '/item3/')
     ]
 
     # Find items

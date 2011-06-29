@@ -1,17 +1,17 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RedcarpetTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_find
-    refute Nanoc3::Filter.named(:redcarpet).nil?
+    refute Nanoc::Filter.named(:redcarpet).nil?
   end
 
   def test_filter
     if_have 'redcarpet' do
       # Create filter
-      filter = ::Nanoc3::Filters::Redcarpet.new
+      filter = ::Nanoc::Filters::Redcarpet.new
 
       # Run filter
       result = filter.run("> Quote")
@@ -22,7 +22,7 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
   def test_with_extensions
     if_have 'redcarpet' do
       # Create filter
-      filter = ::Nanoc3::Filters::Redcarpet.new
+      filter = ::Nanoc::Filters::Redcarpet.new
 
       # Run filter
       input           = "The quotation 'marks' sure make this look sarcastic!"
@@ -35,7 +35,7 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
   def test_html_by_default
     if_have 'redcarpet' do
       # Create filter
-      filter = ::Nanoc3::Filters::Redcarpet.new
+      filter = ::Nanoc::Filters::Redcarpet.new
 
       # Run filter
       input           = "![Alt](/path/to/img 'Title')"
@@ -48,7 +48,7 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
   def test_xhtml_if_requested
     if_have 'redcarpet' do
       # Create filter
-      filter = ::Nanoc3::Filters::Redcarpet.new
+      filter = ::Nanoc::Filters::Redcarpet.new
 
       # Run filter
       input           = "![Alt](/path/to/img 'Title')"

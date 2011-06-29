@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::AsciiDocTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::AsciiDocTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if `which asciidoc`.strip.empty?
@@ -10,7 +10,7 @@ class Nanoc3::Filters::AsciiDocTest < MiniTest::Unit::TestCase
     end
 
     # Create filter
-    filter = ::Nanoc3::Filters::AsciiDoc.new
+    filter = ::Nanoc::Filters::AsciiDoc.new
 
     # Run filter
     result = filter.run("== Blah blah")

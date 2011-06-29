@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
+class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_compilation_rule_for
     # Mock rules
@@ -14,7 +14,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     rules[2].expects(:rep_name).returns('right')
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
+    compiler = Nanoc::Compiler.new(nil)
     compiler.rules_collection.instance_eval { @item_compilation_rules = rules }
 
     # Mock rep
@@ -37,7 +37,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     rules[2].expects(:rep_name).returns('right')
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(nil)
+    compiler = Nanoc::Compiler.new(nil)
     compiler.rules_collection.instance_eval { @item_routing_rules = rules }
 
     # Mock rep
@@ -55,7 +55,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
+    compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[/.*/] = [ :erb, { :foo => 'bar' } ]
 
     # Mock layout
@@ -71,7 +71,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
+    compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[/.*/] = [ :some_unknown_filter, { :foo => 'bar' } ]
 
     # Mock layout
@@ -87,7 +87,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
+    compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [ :erb, { :foo => 'bar' } ]
 
     # Mock layout
@@ -103,7 +103,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
+    compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [ :erb, { :char => 'd' } ]
     compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [ :erb, { :char => 'b' } ]
     compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [ :erb, { :char => 'c' } ] # never used!
@@ -134,8 +134,8 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_compile_rep_should_write_proper_snapshots
     # Mock rep
-    item = Nanoc3::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
-    rep  = Nanoc3::ItemRep.new(item, :blah)
+    item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
+    rep  = Nanoc::ItemRep.new(item, :blah)
 
     # Set snapshot filenames
     rep.raw_paths = {
@@ -152,10 +152,10 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       layout '/blah/'
       filter :erb
     end
-    rule = Nanoc3::Rule.new(/blah/, :meh, rule_block)
+    rule = Nanoc::Rule.new(/blah/, :meh, rule_block)
 
     # Create layout
-    layout = Nanoc3::Layout.new('head <%= yield %> foot', {}, '/blah/')
+    layout = Nanoc::Layout.new('head <%= yield %> foot', {}, '/blah/')
 
     # Create site
     site = mock
@@ -164,7 +164,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
     site.stubs(:layouts).returns([ layout ])
 
     # Create compiler
-    compiler = Nanoc3::Compiler.new(site)
+    compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
     compiler.rules_collection.layout_filter_mapping[%r{^/blah/$}] = [ :erb, {} ]
     site.stubs(:compiler).returns(compiler)
@@ -246,7 +246,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
         io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
       end
 
-      assert_raises Nanoc3::Errors::RecursiveCompilation do
+      assert_raises Nanoc::Errors::RecursiveCompilation do
         site.compile
       end
     end
@@ -254,7 +254,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_disallow_routes_not_starting_with_slash
     # Create site
-    Nanoc3::CLI.run %w( create_site bar)
+    Nanoc::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
       # Create routes
@@ -271,7 +271,7 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
       end
 
       # Create site
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       error = assert_raises(RuntimeError) do
         site.compile
       end
@@ -281,12 +281,12 @@ class Nanoc3::CompilerTest < MiniTest::Unit::TestCase
 
   def test_load_should_be_idempotent
     # Create site
-    Nanoc3::CLI.run %w( create_site bar)
+    Nanoc::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
 
-      compiler = Nanoc3::Compiler.new(site)
+      compiler = Nanoc::Compiler.new(site)
       def compiler.route_reps
         raise 'oh my gosh it is borken'
       end

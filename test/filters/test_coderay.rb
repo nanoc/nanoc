@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::CodeRayTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::CodeRayTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter_without_language
     if_have 'coderay' do
       # Get filter
-      filter = ::Nanoc3::Filters::CodeRay.new
+      filter = ::Nanoc::Filters::CodeRay.new
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
@@ -20,7 +20,7 @@ class Nanoc3::Filters::CodeRayTest < MiniTest::Unit::TestCase
   def test_filter_with_known_language
     if_have 'coderay' do
       # Get filter
-      filter = ::Nanoc3::Filters::CodeRay.new
+      filter = ::Nanoc::Filters::CodeRay.new
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
@@ -32,7 +32,7 @@ class Nanoc3::Filters::CodeRayTest < MiniTest::Unit::TestCase
   def test_filter_with_unknown_language
     if_have 'coderay' do
       # Get filter
-      filter = ::Nanoc3::Filters::CodeRay.new
+      filter = ::Nanoc::Filters::CodeRay.new
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"

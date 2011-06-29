@@ -1,24 +1,24 @@
 # encoding: utf-8
 
-class Nanoc3::ItemTest < MiniTest::Unit::TestCase
+class Nanoc::ItemTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_initialize_with_attributes_with_string_keys
-    item = Nanoc3::Item.new("foo", { 'abc' => 'xyz' }, '/foo/')
+    item = Nanoc::Item.new("foo", { 'abc' => 'xyz' }, '/foo/')
 
     assert_equal nil,   item.attributes['abc']
     assert_equal 'xyz', item.attributes[:abc]
   end
 
   def test_initialize_with_unclean_identifier
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
 
     assert_equal '/foo/', item.identifier
   end
 
   def test_frozen_identifier
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
 
     error = assert_raises(RuntimeError) do
       item.identifier.chop!
@@ -28,7 +28,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
 
   def test_lookup
     # Create item
-    item = Nanoc3::Item.new(
+    item = Nanoc::Item.new(
       "content",
       { :one => 'one in item' },
       '/path/'
@@ -42,7 +42,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
   end
 
   def test_set_attribute
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     assert_equal nil, item[:motto]
 
     item[:motto] = 'More human than human'
@@ -58,7 +58,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     end
 
     # Mock item
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     item.expects(:reps).returns([ rep ])
 
     # Check
@@ -74,7 +74,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     end
 
     # Mock item
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     item.expects(:reps).returns([ rep ])
 
     # Check
@@ -90,7 +90,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     end
 
     # Mock item
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     item.expects(:reps).returns([ rep ])
 
     # Check
@@ -99,11 +99,11 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
 
   def test_compiled_content_with_custom_nonexistant_rep
     # Mock item
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     item.expects(:reps).returns([])
 
     # Check
-    assert_raises(Nanoc3::Errors::Generic) do
+    assert_raises(Nanoc::Errors::Generic) do
       item.compiled_content(:rep => :lkasdhflahgwfe)
     end
   end
@@ -115,7 +115,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     rep.expects(:path).returns('the correct path')
 
     # Mock item
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     item.expects(:reps).returns([ rep ])
 
     # Check
@@ -129,7 +129,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
     rep.expects(:path).returns('the correct path')
 
     # Mock item
-    item = Nanoc3::Item.new("foo", {}, '/foo')
+    item = Nanoc::Item.new("foo", {}, '/foo')
     item.expects(:reps).returns([ rep ])
 
     # Check
@@ -137,7 +137,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
   end
 
   def test_freeze_should_disallow_changes
-    item = Nanoc3::Item.new("foo", { :a => { :b => 123 }}, '/foo/')
+    item = Nanoc::Item.new("foo", { :a => { :b => 123 }}, '/foo/')
     item.freeze
 
     raised = false
@@ -160,7 +160,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
   end
 
   def test_dump_and_load
-    item = Nanoc3::Item.new(
+    item = Nanoc::Item.new(
       "foobar",
       { :a => { :b => 123 }},
       '/foo/')

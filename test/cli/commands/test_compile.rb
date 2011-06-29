@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-class Nanoc3::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
+class Nanoc::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_profiling_information
     with_site do |site|
-      Nanoc3::CLI.run %w( create_item foo )
-      Nanoc3::CLI.run %w( create_item bar )
-      Nanoc3::CLI.run %w( create_item baz )
+      Nanoc::CLI.run %w( create_item foo )
+      Nanoc::CLI.run %w( create_item bar )
+      Nanoc::CLI.run %w( create_item baz )
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -26,7 +26,7 @@ class Nanoc3::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      Nanoc3::CLI.run %w( compile --verbose )
+      Nanoc::CLI.run %w( compile --verbose )
     end
   end
 

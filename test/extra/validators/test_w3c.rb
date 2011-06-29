@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_simple
     if_have 'w3c_validators' do
@@ -14,7 +14,7 @@ class Nanoc3::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
       end
 
       # Create validator
-      w3c = Nanoc3::Extra::Validators::W3C.new('.', [ :xxx ])
+      w3c = Nanoc::Extra::Validators::W3C.new('.', [ :xxx ])
 
       # Configure expectations
       validator_result = mock
@@ -34,7 +34,7 @@ class Nanoc3::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
   def test_with_unknown_types
     if_have 'w3c_validators' do
       # Create validator
-      w3c = Nanoc3::Extra::Validators::W3C.new('.', [ :foo ])
+      w3c = Nanoc::Extra::Validators::W3C.new('.', [ :foo ])
 
       # Test
       exception = assert_raises RuntimeError do

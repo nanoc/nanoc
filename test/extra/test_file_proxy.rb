@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::Extra::FileProxyTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::FileProxyTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_create_many
     if_implemented do
@@ -12,7 +12,7 @@ class Nanoc3::Extra::FileProxyTest < MiniTest::Unit::TestCase
       # Create lots of file proxies
       count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
       file_proxies = []
-      count.times { file_proxies << Nanoc3::Extra::FileProxy.new('test.txt') }
+      count.times { file_proxies << Nanoc::Extra::FileProxy.new('test.txt') }
     end
   end
 

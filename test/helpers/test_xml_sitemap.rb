@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::XMLSitemap
+  include Nanoc::Helpers::XMLSitemap
 
   def test_xml_sitemap
     if_have 'builder' do

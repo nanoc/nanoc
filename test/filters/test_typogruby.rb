@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::TypogrubyTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::TypogrubyTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'typogruby' do
       # Get filter
-      filter = ::Nanoc3::Filters::Typogruby.new
+      filter = ::Nanoc::Filters::Typogruby.new
 
       # Run filter
       a = '"Typogruby makes HTML look smarter &amp; better, don\'t you think?"'

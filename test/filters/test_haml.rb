@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc3::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
 
       # Run filter (no assigns)
       result = filter.run('%html')
@@ -26,7 +26,7 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter_with_params
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
+      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
 
       # Check with HTML5
       result = filter.run('%img', :format => :html5)
@@ -41,7 +41,7 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter_error
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc3::Filters::Haml.new({ :foo => 'bar' })
+      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
 
       # Run filter
       raised = false
@@ -59,7 +59,7 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter_with_yield
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc3::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
 
       # Run filter
       result = filter.run('%p= yield')
@@ -70,7 +70,7 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
   def test_filter_with_yield_without_content
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc3::Filters::Haml.new({ :location => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ :location => 'Is this the Payne residence?' })
 
       # Run filter
       assert_raises LocalJumpError do
@@ -87,7 +87,7 @@ class Nanoc3::Filters::HamlTest < MiniTest::Unit::TestCase
       end
 
       # Run filter
-      filter = ::Nanoc3::Filters::Haml.new
+      filter = ::Nanoc::Filters::Haml.new
       result = filter.run("%body\n  ~ File.read('stuff')")
       assert_match(/Max Payne&#x000A;Mona Sax/, result)
     end

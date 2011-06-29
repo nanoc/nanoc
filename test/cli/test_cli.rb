@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::CLITest < MiniTest::Unit::TestCase
+class Nanoc::CLITest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   COMMAND_CODE = <<EOS
 # encoding: utf-8
@@ -17,7 +17,7 @@ end
 EOS
 
   def test_load_custom_commands
-    Nanoc3::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w( create_site foo )
 
     FileUtils.cd('foo') do
       # Create command
@@ -26,7 +26,7 @@ EOS
 
       # Run command
       begin
-        Nanoc3::CLI.run %w( _test )
+        Nanoc::CLI.run %w( _test )
       rescue SystemExit
         assert false, 'Running _test should not cause system exit'
       end

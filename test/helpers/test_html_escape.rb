@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::HTMLEscapeTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::HTMLEscapeTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::HTMLEscape
+  include Nanoc::Helpers::HTMLEscape
 
   def test_html_escape_with_string
     assert_equal('&lt;',    html_escape('<'))

@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::SlimTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::SlimTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'slim' do
       # Create filter
-      filter = ::Nanoc3::Filters::Slim.new({ :rabbit => 'The rabbit is on the branch.' })
+      filter = ::Nanoc::Filters::Slim.new({ :rabbit => 'The rabbit is on the branch.' })
 
       # Run filter (no assigns)
       result = filter.run('html')
@@ -25,7 +25,7 @@ class Nanoc3::Filters::SlimTest < MiniTest::Unit::TestCase
 
   def test_filter_with_yield
     if_have 'slim' do
-      filter = ::Nanoc3::Filters::Slim.new({ :content => 'The rabbit is on the branch.' })
+      filter = ::Nanoc::Filters::Slim.new({ :content => 'The rabbit is on the branch.' })
 
       result = filter.run('p = yield')
       assert_equal("<p>The rabbit is on the branch.</p>", result)

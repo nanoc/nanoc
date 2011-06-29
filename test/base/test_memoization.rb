@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-class Nanoc3::MemoizationTest < MiniTest::Unit::TestCase
+class Nanoc::MemoizationTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   class Sample1
 
-    extend Nanoc3::Memoization
+    extend Nanoc::Memoization
 
     def initialize(value)
       @value = value
@@ -21,7 +21,7 @@ class Nanoc3::MemoizationTest < MiniTest::Unit::TestCase
 
   class Sample2
 
-    extend Nanoc3::Memoization
+    extend Nanoc::Memoization
 
     def initialize(value)
       @value = value
@@ -36,7 +36,7 @@ class Nanoc3::MemoizationTest < MiniTest::Unit::TestCase
 
   class EqualSample
 
-    extend Nanoc3::Memoization
+    extend Nanoc::Memoization
 
     def initialize(value)
       @value = value

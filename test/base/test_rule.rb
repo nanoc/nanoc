@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::RuleTest < MiniTest::Unit::TestCase
+class Nanoc::RuleTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_initialize
     # TODO implement

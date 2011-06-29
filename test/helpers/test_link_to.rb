@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::LinkTo
+  include Nanoc::Helpers::LinkTo
 
   def test_link_to_with_path
     # Check
@@ -202,7 +202,7 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
 
   def test_examples_link_to
     # Parse
-    YARD.parse('../lib/nanoc3/helpers/link_to.rb')
+    YARD.parse('../lib/nanoc/helpers/link_to.rb')
 
     # Mock
     @items = [ mock, mock, mock ]
@@ -217,12 +217,12 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     @items[0].stubs(:rep).with(:vcard).returns(about_rep_vcard)
 
     # Run
-    assert_examples_correct 'Nanoc3::Helpers::LinkTo#link_to'
+    assert_examples_correct 'Nanoc::Helpers::LinkTo#link_to'
   end
 
   def test_examples_link_to_unless_current
     # Parse
-    YARD.parse('../lib/nanoc3/helpers/link_to.rb')
+    YARD.parse('../lib/nanoc/helpers/link_to.rb')
 
     # Mock
     @item_rep = mock
@@ -231,19 +231,19 @@ class Nanoc3::Helpers::LinkToTest < MiniTest::Unit::TestCase
     @item.stubs(:path).returns(@item_rep.path)
 
     # Run
-    assert_examples_correct 'Nanoc3::Helpers::LinkTo#link_to_unless_current'
+    assert_examples_correct 'Nanoc::Helpers::LinkTo#link_to_unless_current'
   end
 
   def test_examples_relative_path_to
     # Parse
-    YARD.parse('../lib/nanoc3/helpers/link_to.rb')
+    YARD.parse('../lib/nanoc/helpers/link_to.rb')
 
     # Mock
     @item_rep = mock
     @item_rep.stubs(:path).returns('/foo/bar/')
 
     # Run
-    assert_examples_correct 'Nanoc3::Helpers::LinkTo#relative_path_to'
+    assert_examples_correct 'Nanoc::Helpers::LinkTo#relative_path_to'
   end
 
 end

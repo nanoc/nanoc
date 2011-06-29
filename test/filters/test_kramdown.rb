@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::KramdownTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::KramdownTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'kramdown' do
       # Create filter
-      filter = ::Nanoc3::Filters::Kramdown.new
+      filter = ::Nanoc::Filters::Kramdown.new
 
       # Run filter
       result = filter.run("This is _so_ **cool**!")

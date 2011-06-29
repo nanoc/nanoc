@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-class Nanoc3::CLI::Commands::HelpTest < MiniTest::Unit::TestCase
+class Nanoc::CLI::Commands::HelpTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_run
-    Nanoc3::CLI.run %w( help )
-    Nanoc3::CLI.run %w( help co )
+    Nanoc::CLI.run %w( help )
+    Nanoc::CLI.run %w( help co )
   end
 
 end

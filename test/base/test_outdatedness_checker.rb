@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
+class Nanoc::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_not_outdated
     # Compile once
@@ -39,7 +39,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::NotEnoughData,
+      assert_equal ::Nanoc::OutdatednessReasons::NotEnoughData,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -62,7 +62,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::NotWritten,
+      assert_equal ::Nanoc::OutdatednessReasons::NotWritten,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -86,7 +86,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/new/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::SourceModified,
+      assert_equal ::Nanoc::OutdatednessReasons::SourceModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -112,7 +112,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -144,7 +144,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -179,7 +179,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -211,7 +211,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -245,7 +245,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -269,7 +269,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::CodeSnippetsModified,
+      assert_equal ::Nanoc::OutdatednessReasons::CodeSnippetsModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -291,7 +291,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::ConfigurationModified,
+      assert_equal ::Nanoc::OutdatednessReasons::ConfigurationModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -334,7 +334,7 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
     # Compile once
     FileUtils.cd('foo') do
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       site.compile
     end
 
@@ -352,10 +352,10 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
     # Check
     FileUtils.cd('foo') do
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc3::OutdatednessReasons::RulesModified,
+      assert_equal ::Nanoc::OutdatednessReasons::RulesModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -377,13 +377,13 @@ class Nanoc3::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         refute outdatedness_checker.outdated?(item), "item should not be outdated"

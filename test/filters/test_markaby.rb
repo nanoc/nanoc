@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::MarkabyTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::MarkabyTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     # Don’t run this test on 1.9.x, because it breaks and it annoys me
@@ -13,7 +13,7 @@ class Nanoc3::Filters::MarkabyTest < MiniTest::Unit::TestCase
 
     if_have 'markaby' do
       # Create filter
-      filter = ::Nanoc3::Filters::Markaby.new
+      filter = ::Nanoc::Filters::Markaby.new
 
       # Run filter
       result = filter.run("html do\nend")

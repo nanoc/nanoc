@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-class Nanoc3::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_is_external_href?
     # Create validator
-    validator = Nanoc3::Extra::Validators::Links.new(nil, nil)
+    validator = Nanoc::Extra::Validators::Links.new(nil, nil)
 
     # Test
     assert  validator.send(:is_external_href?, 'http://example.com/')
@@ -25,7 +25,7 @@ class Nanoc3::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
     File.open('output/stuff/blah', 'w') { |io| io.write('hi') }
 
     # Create validator
-    validator = Nanoc3::Extra::Validators::Links.new('output', [ 'index.html' ])
+    validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
 
     # Test
     assert validator.send(:is_valid_internal_href?, 'foo',         'output/origin')
@@ -38,7 +38,7 @@ class Nanoc3::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
 
   def test_is_valid_external_href?
     # Create validator
-    validator = Nanoc3::Extra::Validators::Links.new('output', [ 'index.html' ])
+    validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
     validator.stubs(:fetch_http_status_for).returns(200)
 
     # Test

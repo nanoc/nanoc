@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::BlueClothTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::BlueClothTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'bluecloth' do
       # Create filter
-      filter = ::Nanoc3::Filters::BlueCloth.new
+      filter = ::Nanoc::Filters::BlueCloth.new
 
       # Run filter
       result = filter.run("> Quote")

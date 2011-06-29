@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RDocTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RDocTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     # Get filter
-    filter = ::Nanoc3::Filters::RDoc.new
+    filter = ::Nanoc::Filters::RDoc.new
 
     # Run filter
     result = filter.run("= Foo")

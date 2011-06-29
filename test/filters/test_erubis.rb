@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter_with_instance_variable
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
       result = filter.run('<%= "I was hiding in #{@location}." %>')
@@ -18,7 +18,7 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter_with_instance_method
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
       result = filter.run('<%= "I was hiding in #{location}." %>')
@@ -29,7 +29,7 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter_error
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc3::Filters::Erubis.new
+      filter = ::Nanoc::Filters::Erubis.new
 
       # Run filter
       raised = false
@@ -47,7 +47,7 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter_with_yield
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc3::Filters::Erubis.new({ :content => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ :content => 'a cheap motel' })
 
       # Run filter
       result = filter.run('<%= "I was hiding in #{yield}." %>')
@@ -58,7 +58,7 @@ class Nanoc3::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter_with_yield_without_content
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc3::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
       assert_raises LocalJumpError do

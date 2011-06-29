@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RDiscountTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RDiscountTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'rdiscount' do
       # Create filter
-      filter = ::Nanoc3::Filters::RDiscount.new
+      filter = ::Nanoc::Filters::RDiscount.new
 
       # Run filter
       result = filter.run("> Quote")
@@ -18,7 +18,7 @@ class Nanoc3::Filters::RDiscountTest < MiniTest::Unit::TestCase
   def test_with_extensions
     if_have 'rdiscount' do
       # Create filter
-      filter = ::Nanoc3::Filters::RDiscount.new
+      filter = ::Nanoc::Filters::RDiscount.new
 
       # Run filter
       input           = "The quotation 'marks' sure make this look sarcastic!"

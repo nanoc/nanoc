@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_handle_request_with_item_rep_with_index_filename
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI.run %w( create_site bar)
+      Nanoc::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create item
@@ -23,11 +23,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         end
 
         # Create site
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.expects(:compile)
 
         # Create autocompiler
-        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler = Nanoc::Extra::AutoCompiler.new('.')
         autocompiler.stubs(:build_site)
         autocompiler.stubs(:site).returns(site)
 
@@ -47,14 +47,14 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_handle_request_with_broken_url
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI.run %w( create_site bar)
+      Nanoc::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create site
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
 
         # Create autocompiler
-        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler = Nanoc::Extra::AutoCompiler.new('.')
         autocompiler.stubs(:build_site)
         autocompiler.stubs(:site).returns(site)
 
@@ -88,7 +88,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:config).returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler = Nanoc::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
@@ -122,7 +122,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler = Nanoc::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
@@ -156,7 +156,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler = Nanoc::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
@@ -190,7 +190,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler = Nanoc::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
@@ -224,7 +224,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler = Nanoc::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
@@ -254,7 +254,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => [ 'index.html' ] })
 
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+      autocompiler = Nanoc::Extra::AutoCompiler.new('.')
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)
       autocompiler.expects(:file_server).returns(file_server)
@@ -270,7 +270,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_mime_type_of
     if_have 'mime/types', 'rack'  do
       # Create autocompiler
-      autocompiler = Nanoc3::Extra::AutoCompiler.new(nil)
+      autocompiler = Nanoc::Extra::AutoCompiler.new(nil)
 
       # Create known test file
       File.open('foo.html', 'w') { |io| io.write('hello') }
@@ -291,7 +291,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_serve_with_working_item
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI.run %w( create_site bar)
+      Nanoc::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create item
@@ -305,11 +305,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         end
 
         # Create site
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.expects(:compile)
 
         # Create autocompiler
-        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler = Nanoc::Extra::AutoCompiler.new('.')
         autocompiler.stubs(:build_site)
         autocompiler.stubs(:site).returns(site)
 
@@ -329,7 +329,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_serve_with_broken_item
     if_have 'mime/types', 'rack' do
       # Create site
-      Nanoc3::CLI.run %w( create_site bar)
+      Nanoc::CLI.run %w( create_site bar)
 
       FileUtils.cd('bar') do
         # Create item
@@ -338,11 +338,11 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         end
 
         # Create site
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.expects(:compile).raises(RuntimeError, 'aah! fail!')
 
         # Create autocompiler
-        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler = Nanoc::Extra::AutoCompiler.new('.')
         autocompiler.stubs(:build_site)
         autocompiler.stubs(:site).returns(site)
 
@@ -357,7 +357,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   def test_reload_config_file_before_each_request
     if_have 'rack' do
       # Create site
-      Nanoc3::CLI.run %w( create_site foo )
+      Nanoc::CLI.run %w( create_site foo )
 
       FileUtils.cd('foo') do
         # Create item that outputs config elements
@@ -366,7 +366,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         end
 
         # Create autocompiler
-        autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+        autocompiler = Nanoc::Extra::AutoCompiler.new('.')
 
         # Set config to 1st value
         File.open('config.yaml', 'w') do |io|
@@ -397,7 +397,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
   def test_call_with_uri_encoded_path
     # Create autocompiler
-    autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+    autocompiler = Nanoc::Extra::AutoCompiler.new('.')
 
     # Mock dependencies
     site = mock

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
+class Nanoc::CompilerDSLTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_compile
     # TODO implement
@@ -18,14 +18,14 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_passthrough
     # Create site
-    Nanoc3::CLI.run %w( create_site bar)
+    Nanoc::CLI.run %w( create_site bar)
     FileUtils.cd('bar') do
       # Create rep
-      item = Nanoc3::Item.new('foo', { :extension => 'bar' }, '/foo/')
-      rep = Nanoc3::ItemRep.new(item, :default)
+      item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
+      rep = Nanoc::ItemRep.new(item, :default)
 
       # Create other necessary stuff
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       site.items << item
       compiler = site.compiler
       dsl = site.compiler.rules_collection.dsl
@@ -46,7 +46,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_without_wildcards
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo') }
     expected = %r{^/foo/$}
@@ -60,7 +60,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_with_one_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar') }
     expected = %r{^/foo/(.*?)/bar/$}
@@ -74,7 +74,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_with_two_wildcards
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
     expected = %r{^/foo/(.*?)/bar/(.*?)/qux/$}
@@ -88,7 +88,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_with_just_one_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('*') }
     expected = %r{^/(.*?)$}
@@ -102,7 +102,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_with_root
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/') }
     expected = %r{^/$}
@@ -116,7 +116,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_with_only_children
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/*/') }
     expected = %r{^/foo/(.*?)/$}
@@ -130,7 +130,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_identifier_to_regex_with_plus_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/+') }
     expected = %r{^/foo/(.+?)/$}
@@ -145,7 +145,7 @@ class Nanoc3::CompilerDSLTest < MiniTest::Unit::TestCase
   end
 
   def test_dsl_has_no_access_to_compiler
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
     assert_raises(NameError) do
       compiler_dsl.instance_eval { compiler }
     end

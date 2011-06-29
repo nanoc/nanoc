@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RedClothTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RedClothTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'redcloth' do
       # Get filter
-      filter = ::Nanoc3::Filters::RedCloth.new
+      filter = ::Nanoc::Filters::RedCloth.new
 
       # Run filter
       result = filter.run("h1. Foo")
@@ -18,7 +18,7 @@ class Nanoc3::Filters::RedClothTest < MiniTest::Unit::TestCase
   def test_filter_with_options
     if_have 'redcloth' do
       # Get filter
-      filter = ::Nanoc3::Filters::RedCloth.new
+      filter = ::Nanoc::Filters::RedCloth.new
 
       # Run filter without options
       result = filter.run("I am a member of SPECTRE.")

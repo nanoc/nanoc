@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RubyPantsTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RubyPantsTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'rubypants' do
       # Get filter
-      filter = ::Nanoc3::Filters::RubyPants.new
+      filter = ::Nanoc::Filters::RubyPants.new
 
       # Run filter
       result = filter.run("Wait---what?")

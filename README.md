@@ -18,7 +18,7 @@ the following places will help you out:
 
 ## Source Code Documentation
 
-The source code is located in `lib/nanoc3` and is structured in a few
+The source code is located in `lib/nanoc` and is structured in a few
 directories:
 
 * `base` contains the bare essentials necessary for nanoc to function
@@ -26,11 +26,11 @@ directories:
   * `result_data` contains the compiled content
   * `compilation` contains the compilation functionality
 * `cli` contains the commandline interface
-* `data_sources` contains the standard data sources ({Nanoc3::DataSource}
+* `data_sources` contains the standard data sources ({Nanoc::DataSource}
   subclasses), such as the filesystem data source
 * `extra` contains stuff that is not needed by nanoc itself, but which may
   be used by helpers, data sources, filters or VCSes.
-* `filters` contains the standard filters ({Nanoc3::Filter} subclasses)
+* `filters` contains the standard filters ({Nanoc::Filter} subclasses)
   such as ERB, Markdown, Haml, …
 * `helpers` contains helpers, which provide functionality some sites
   may find useful, such as the blogging and tagging helpers
@@ -39,15 +39,15 @@ directories:
 
 The namespaces (modules) are organised like this:
 
-* {Nanoc3} is the namespace for everything nanoc-related (obviously). The
-  classes in `lib/nanoc3/base` are part of this module (not `Nanoc3::Base`)
-* {Nanoc3::CLI} containing everything related to the commandline tool.
-* {Nanoc3::DataSources} contains the data sources
-* {Nanoc3::Helpers} contains the helpers
-* {Nanoc3::Extra} contains useful stuff not needed by nanoc itself
-* {Nanoc3::Filters} contains the (textual) filters
+* {Nanoc} is the namespace for everything nanoc-related (obviously). The
+  classes in `lib/nanoc/base` are part of this module (not `Nanoc::Base`)
+* {Nanoc::CLI} containing everything related to the commandline tool.
+* {Nanoc::DataSources} contains the data sources
+* {Nanoc::Helpers} contains the helpers
+* {Nanoc::Extra} contains useful stuff not needed by nanoc itself
+* {Nanoc::Filters} contains the (textual) filters
 
-The central class in nanoc is {Nanoc3::Site}, so you should start there if
+The central class in nanoc is {Nanoc::Site}, so you should start there if
 you want to explore nanoc from a technical perspective.
 
 ## Dependencies

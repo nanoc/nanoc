@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::FilteringTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::Filtering
+  include Nanoc::Helpers::Filtering
 
   def test_filter_simple
     if_have 'rubypants' do
@@ -63,7 +63,7 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
               "<% end %>\n"
 
     # Evaluate content
-    error = assert_raises(Nanoc3::Errors::UnknownFilter) do
+    error = assert_raises(Nanoc::Errors::UnknownFilter) do
       ::ERB.new(content).result(binding)
     end
   end

@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::RainpressTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::RainpressTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'rainpress' do
       # Create filter
-      filter = ::Nanoc3::Filters::Rainpress.new
+      filter = ::Nanoc::Filters::Rainpress.new
 
       # Run filter
       result = filter.run("body { color: black; }")
@@ -18,7 +18,7 @@ class Nanoc3::Filters::RainpressTest < MiniTest::Unit::TestCase
   def test_filter_with_options
     if_have 'rainpress' do
       # Create filter
-      filter = ::Nanoc3::Filters::Rainpress.new
+      filter = ::Nanoc::Filters::Rainpress.new
 
       # Run filter
       result = filter.run("body { color: #aabbcc; }", :colors => false)

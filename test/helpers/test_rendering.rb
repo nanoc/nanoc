@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
+class Nanoc::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
-  include Nanoc3::Helpers::Rendering
+  include Nanoc::Helpers::Rendering
 
   def test_render
     with_site do |site|
@@ -26,7 +26,7 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
     with_site do |site|
       @site = site
 
-      assert_raises(Nanoc3::Errors::UnknownLayout) do
+      assert_raises(Nanoc::Errors::UnknownLayout) do
         render '/dsfghjkl/'
       end
     end
@@ -42,7 +42,7 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
       File.open('layouts/foo.xyz', 'w')
 
-      assert_raises(Nanoc3::Errors::CannotDetermineFilter) do
+      assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo/'
       end
     end
@@ -58,7 +58,7 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
       File.open('layouts/foo.xyz', 'w')
 
-      assert_raises(Nanoc3::Errors::UnknownFilter) do
+      assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo/'
       end
     end

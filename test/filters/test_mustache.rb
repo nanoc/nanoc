@@ -1,20 +1,20 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::MustacheTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::MustacheTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'mustache' do
       # Create item
-      item = Nanoc3::Item.new(
+      item = Nanoc::Item.new(
         'content',
         { :title => 'Max Payne', :protagonist => 'Max Payne' },
         '/games/max-payne/'
       )
 
       # Create filter
-      filter = ::Nanoc3::Filters::Mustache.new({ :item => item })
+      filter = ::Nanoc::Filters::Mustache.new({ :item => item })
 
       # Run filter
       result = filter.run('The protagonist of {{title}} is {{protagonist}}.')

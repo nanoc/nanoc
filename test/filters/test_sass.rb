@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
+class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
 
-  include Nanoc3::TestHelpers
+  include Nanoc::TestHelpers
 
   def test_filter
     if_have 'sass' do
@@ -126,7 +126,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
         end
 
         # Compile
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.compile
 
         # Check
@@ -141,7 +141,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
         end
 
         # Recompile
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.compile
 
         # Recheck
@@ -181,7 +181,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
         end
 
         # Compile
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.compile
 
         # Check
@@ -196,7 +196,7 @@ class Nanoc3::Filters::SassTest < MiniTest::Unit::TestCase
         end
 
         # Recompile
-        site = Nanoc3::Site.new('.')
+        site = Nanoc::Site.new('.')
         site.compile
 
         # Recheck
@@ -214,12 +214,12 @@ private
     FileUtils.mkdir_p('content')
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green')}
 
-    items = [ Nanoc3::Item.new(
+    items = [ Nanoc::Item.new(
       'blah',
       { :content_filename => 'content/xyzzy.sass' },
       '/blah/') ]
     params = { :item => items[0], :items => items }.merge(params)
-    ::Nanoc3::Filters::Sass.new(params)
+    ::Nanoc::Filters::Sass.new(params)
   end
 
 end
