@@ -2,6 +2,7 @@
 
 require 'nokogiri'
 require 'stringio'
+require 'open3'
 
 module Nanoc3::Filters
   class ColorizeSyntax < Nanoc3::Filter
@@ -182,6 +183,7 @@ module Nanoc3::Filters
     # @return [String] The colorized output
     def pygmentize(code, language, params={})
       require 'systemu'
+      check_availability('pygmentize --V')
 
       # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
@@ -220,6 +222,8 @@ module Nanoc3::Filters
     def simon_highlight(code, language, params={})
       require 'systemu'
 
+      check_availability('highlight --version')
+
       # Build command
       cmd = [ 'highlight', '--syntax', language, '--fragment' ]
       params.each do |key, value|
@@ -242,5 +246,11 @@ module Nanoc3::Filters
       stdout.rewind
       stdout.read
     end
+
+    def check_availability(cmd)
+      # Will raise on error
+      Open3.popen3('highlight --version') { |stdin, stdout, stderr| }
+    end
+
   end
 end

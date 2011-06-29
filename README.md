@@ -92,6 +92,7 @@ may be interested in the development dependencies:
 * Christian Plessl
 * Šime Ramov
 * Xavier Shay
+* Arnau Siches
 * “Soryu”
 * Eric Sunshine
 * Dennis Sutch
