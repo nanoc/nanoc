@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.1.9 (???)
+## 3.1.9 (2011-06-30)
 
 * Really fixed dependency generation between Sass partials this time
 * Updated Less filter to 2.0
