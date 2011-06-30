@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.1.9 (???)
+
+* Really fixed dependency generation between Sass partials this time
+* Updated Less filter to 2.0
+* Made colorize_syntax filter throw an error if pygmentize is not available
+
 ## 3.1.8 (2011-06-25)
 
 * Made link validator accept https: URLs
