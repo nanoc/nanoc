@@ -45,14 +45,73 @@ class Nanoc3::Filters::LessTest < MiniTest::Unit::TestCase
       File.open('content/foo/bar/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
 
       # Create item
+      File.open('content/foo/bar.txt', 'w') { |io| io.write('meh') }
       @item = Nanoc3::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc3::Filters::Less.new(:item => @item)
+      filter = ::Nanoc3::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter
       result = filter.run('@import "bar/imported_file.less";')
       assert_match /p\s*\{\s*color:\s*red;?\s*\}/, result
+    end
+  end
+
+  def test_recompile_includes
+    if_have 'less' do
+      Nanoc3::CLI::Base.new.run([ 'create_site', 'bar' ])
+      FileUtils.cd('bar') do
+        # Create two less files
+        Dir['content/*'].each { |i| FileUtils.rm(i) }
+        File.open('content/a.less', 'w') do |io|
+          io.write('@import "b.less";')
+        end
+        File.open('content/b.less', 'w') do |io|
+          io.write("p { color: red; }")
+        end
+
+        # Update rules
+        File.open('Rules', 'w') do |io|
+          io.write "compile '*' do\n"
+          io.write "  filter :less\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/a/' do\n"
+          io.write "  item.identifier.chop + '.css'\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/b/' do\n"
+          io.write "  nil\n"
+          io.write "end\n"
+        end
+
+        # Compile
+        site = Nanoc3::Site.new('.')
+        site.load_data
+        site.compiler.run
+
+        # Check
+        assert Dir['output/*'].size == 1
+        assert File.file?('output/a.css')
+        refute File.file?('output/b.css')
+        assert_match /^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css')
+
+        # Update included file
+        File.open('content/b.less', 'w') do |io|
+          io.write("p { color: blue; }")
+        end
+
+        # Recompile
+        site = Nanoc3::Site.new('.')
+        site.load_data
+        site.compiler.run
+
+        # Recheck
+        assert Dir['output/*'].size == 1
+        assert File.file?('output/a.css')
+        refute File.file?('output/b.css')
+        assert_match /^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css')
+      end
     end
   end
 
