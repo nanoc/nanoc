@@ -20,6 +20,7 @@ module Nanoc::Extra
       @site_path = site_path
 
       # Create mutex to prevent parallel requests
+      require 'thread'
       @mutex = Mutex.new
     end
 

@@ -20,10 +20,14 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
   def test_frozen_identifier
     item = Nanoc::Item.new("foo", {}, '/foo')
 
-    error = assert_raises(RuntimeError) do
+    raised = false
+    begin
       item.identifier.chop!
+    rescue => error
+      raised = true
+      assert_equal "can't modify frozen string", error.message
     end
-    assert_equal "can't modify frozen string", error.message
+    assert raised, 'Should have raised when trying to modify a frozen string'
   end
 
   def test_lookup
