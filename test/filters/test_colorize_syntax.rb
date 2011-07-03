@@ -165,7 +165,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   end
 
   def test_colorize_syntax_with_missing_executables
-    if_have 'nokogiri' do
+    if_have 'nokogiri', 'systemu' do
       begin
         original_path = ENV['PATH']
         ENV['PATH'] = './blooblooblah'
