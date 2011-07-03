@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    nanoc (3.2.0b1)
+      cri (~> 2.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    cri (2.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  nanoc!
