@@ -77,6 +77,7 @@ DEPENDENCIES
   sass
   slim
   systemu
+  tilt
   typogruby
   uglifier
   w3c_validators

@@ -23,6 +23,7 @@ module Nanoc::Filters
   autoload 'RubyPants',       'nanoc/filters/rubypants'
   autoload 'Sass',            'nanoc/filters/sass'
   autoload 'Slim',            'nanoc/filters/slim'
+  autoload 'Tilt',            'nanoc/filters/tilt'
   autoload 'Typogruby',       'nanoc/filters/typogruby'
   autoload 'UglifyJS',        'nanoc/filters/uglify_js'
 
@@ -47,6 +48,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::RubyPants',       :rubypants
   Nanoc::Filter.register '::Nanoc::Filters::Sass',            :sass
   Nanoc::Filter.register '::Nanoc::Filters::Slim',            :slim
+  Nanoc::Filter.register '::Nanoc::Filters::Tilt',            :tilt
   Nanoc::Filter.register '::Nanoc::Filters::Typogruby',       :typogruby
   Nanoc::Filter.register '::Nanoc::Filters::UglifyJS',        :uglify_js
 

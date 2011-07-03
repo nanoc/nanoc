@@ -49,6 +49,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('sass')
   s.add_development_dependency('slim')
   s.add_development_dependency('systemu')
+  s.add_development_dependency('tilt')
   s.add_development_dependency('typogruby')
   s.add_development_dependency('uglifier')
   s.add_development_dependency('w3c_validators')
