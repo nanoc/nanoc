@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'systemu'
+
 module Nanoc::Extra::Deployers
 
   # A deployer that deploys a site using rsync.
@@ -105,8 +107,8 @@ module Nanoc::Extra::Deployers
 
     # Runs the given shell command. This is a simple wrapper around Kernel#system.
     def run_shell_cmd(args)
-      system(*args)
-      raise "command exited with a nonzero status code #{$?.exitstatus} (command: #{args.join(' ')})" if !$?.success?
+      status = systemu(args, 'stdout' => $stdout, 'stderr' => $stderr)
+      raise "command exited with a nonzero status code #{$?.exitstatus} (command: #{args.join(' ')})" if !status.success?
     end
 
   end
