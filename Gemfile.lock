@@ -8,9 +8,15 @@ GEM
   remote: http://rubygems.org/
   specs:
     cri (2.0.0)
+    mocha (0.9.12)
+    rdiscount (1.6.8)
+    yard (0.7.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  mocha
   nanoc!
+  rdiscount
+  yard

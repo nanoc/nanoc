@@ -25,6 +25,10 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('cri', '~> 2.0')
 
+  s.add_development_dependency('mocha') # for the tests
+  s.add_development_dependency('rdiscount') # for the docs
+  s.add_development_dependency('yard') # for the docs
+
   s.post_install_message = %q{------------------------------------------------------------------------------
 Thanks for installing nanoc 3.2! Here are some resources to help you get
 started:
