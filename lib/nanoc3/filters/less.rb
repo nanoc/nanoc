@@ -12,8 +12,6 @@ module Nanoc3::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      # FIXME way too much code duplication between this and the Sass filter
-
       # Find imports (hacky)
       imports = []
       imports.concat(content.scan(/^@import\s+(["'])([^\1]+?)\1;/))

@@ -249,7 +249,7 @@ module Nanoc3::Filters
 
     def check_availability(cmd)
       # Will raise on error
-      Open3.popen3('highlight --version') { |stdin, stdout, stderr| }
+      Open3.popen3(cmd) { |stdin, stdout, stderr| }
     end
 
   end
