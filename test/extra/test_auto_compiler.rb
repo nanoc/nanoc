@@ -68,7 +68,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_file
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create file
       FileUtils.mkdir_p('out')
       File.open('out/somefile.txt', 'w') { |io| io.write('hello') }
@@ -102,7 +102,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_with_slash_with_index_file
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create file
       FileUtils.mkdir_p('out/foo/bar')
       File.open('out/foo/bar/index.html', 'w') { |io| io.write('hello') }
@@ -136,7 +136,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_with_slash_without_index_file
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create file
       FileUtils.mkdir_p('out/foo/bar')
       File.open('out/foo/bar/someotherfile.txt', 'w') { |io| io.write('hello') }
@@ -170,7 +170,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_without_slash_with_index_file
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create file
       FileUtils.mkdir_p('out/foo/bar')
       File.open('out/foo/bar/index.html', 'w') { |io| io.write('hello') }
@@ -204,7 +204,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_dir_without_slash_without_index_file
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create file
       FileUtils.mkdir_p('out/foo/bar')
       File.open('out/foo/bar/someotherfile.txt', 'w') { |io| io.write('hello') }
@@ -238,7 +238,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_handle_request_with_404
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create file server
       file_server = mock
       def file_server.call(env)
@@ -355,7 +355,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_reload_config_file_before_each_request
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create site
       Nanoc::CLI.run %w( create_site foo )
 
@@ -396,7 +396,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_call_with_uri_encoded_path
-    if_have 'rack' do
+    if_have 'mime/types', 'rack' do
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
 
