@@ -248,8 +248,9 @@ module Nanoc3::Filters
     end
 
     def check_availability(cmd)
-      # Will raise on error
-      Open3.popen3(cmd) { |stdin, stdout, stderr| }
+      Open3.popen3(*cmd) do |stdin, stdout, stderr, thread|
+        raise "Could not spawn #{cmd.join(' ')}" if thread.nil?
+      end
     end
 
   end

@@ -185,7 +185,6 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
               :colorizers => { :ruby => colorizer })
             flunk "expected colorizer to raise if no executable is available"
           rescue => e
-            assert_match /No such file or directory/, e.message
           end
         end
       ensure
