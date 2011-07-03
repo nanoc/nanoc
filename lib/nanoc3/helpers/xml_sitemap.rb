@@ -44,7 +44,7 @@ module Nanoc3::Helpers
 
       # Build sitemap
       xml.instruct!
-      xml.urlset(:xmlns => 'http://www.google.com/schemas/sitemap/0.84') do
+      xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
         @items.reject { |i| i[:is_hidden] }.each do |item|
           item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
