@@ -10,15 +10,16 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
   def test_render
     # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  'This is the <%= @layout.identifier %> layout.')
+    layout = Nanoc3::Layout.new(
+      'This is the <%= @layout.identifier %> layout.',
+      {},
+      '/foo/')
 
     # Mock site, compiler and stack
     stack    = []
     compiler = MiniTest::Mock.new
     compiler.expect(:stack, stack)
-    compiler.expects(:filter_for_layout).with(layout).returns([ :erb, {} ])
+    compiler.expect(:filter_for_layout, [ :erb, {} ], [ layout ])
     @site    = MiniTest::Mock.new
     @site.expect(:compiler, compiler)
     @site.expect(:layouts, [ layout ])
@@ -39,9 +40,10 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
   def test_render_without_filter
     # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  'This is the <%= "foo" %> layout.')
+    layout = Nanoc3::Layout.new(
+      'This is the <%= @layout.identifier %> layout.',
+      {},
+      '/foo/')
 
     # Mock compiler
     compiler = mock
@@ -60,9 +62,10 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
   def test_render_with_unknown_filter
     # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  'This is the <%= "foo" %> layout.')
+    layout = Nanoc3::Layout.new(
+      'This is the <%= @layout.identifier %> layout.',
+      {},
+      '/foo/')
 
     # Mock compiler
     compiler = mock
@@ -81,9 +84,10 @@ class Nanoc3::Helpers::RenderingTest < MiniTest::Unit::TestCase
 
   def test_render_with_block
     # Mock layouts
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier,   '/foo/')
-    layout.expect(:raw_content,  '[partial-before]<%= yield %>[partial-after]')
+    layout = Nanoc3::Layout.new(
+       '[partial-before]<%= yield %>[partial-after]',
+      {},
+      '/foo/')
 
     # Mock compiler
     stack    = []

@@ -12,8 +12,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -31,8 +36,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -50,8 +60,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -69,8 +84,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -88,8 +108,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -107,8 +132,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/woof/meow/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/woof/meow/'
     end
 
     # Set content
@@ -136,8 +166,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -155,8 +190,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -174,8 +214,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -193,8 +238,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/foo/bar/baz/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
     end
 
     # Set content
@@ -215,8 +265,13 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = MiniTest::Mock.new
-      @item_rep.expect(:path, '/woof/meow/')
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/woof/meow/'
     end
 
     # Set content

@@ -95,12 +95,13 @@ module Nanoc3::Filters
     end
 
     def pygmentize(code, language, params={})
-      check_availability('pygmentize --V')
+      check_availability(%w( pygmentize --V ))
 
-      IO.popen("pygmentize -l #{language} -f html", "r+") do |io|
-        io.write(code)
-        io.close_write
-        highlighted_code = io.read
+      cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
+      Open3.popen3(*cmd) do |stdin, stdout, stderr,|
+        stdin.write(code)
+        stdin.close_write
+        highlighted_code = stdout.read
 
         doc = Nokogiri::HTML.fragment(highlighted_code)
         return doc.xpath('./div[@class="highlight"]/pre').inner_html
@@ -108,8 +109,9 @@ module Nanoc3::Filters
     end
 
     def check_availability(cmd)
-      # Will raise on error
-      Open3.popen3('highlight --version') { |stdin, stdout, stderr| }
+      Open3.popen3(*cmd) do |stdin, stdout, stderr, thread|
+        raise "Could not spawn #{cmd.join(' ')}" if thread.nil?
+      end
     end
 
   end
