@@ -21,8 +21,8 @@ EOS
 
     FileUtils.cd('foo') do
       # Create command
-      FileUtils.mkdir_p('lib/commands')
-      File.open('lib/commands/_test.rb', 'w') { |io| io.write(COMMAND_CODE) }
+      FileUtils.mkdir_p('commands')
+      File.open('commands/_test.rb', 'w') { |io| io.write(COMMAND_CODE) }
 
       # Run command
       begin

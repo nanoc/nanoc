@@ -71,11 +71,11 @@ protected
     @setup = true
   end
 
-  # Loads the commands in `lib/commands/`.
+  # Loads the commands in `commands/`.
   #
   # @return [void]
   def self.load_custom_commands
-    Dir['lib/commands/*.rb'].each do |filename|
+    Dir['commands/*.rb'].each do |filename|
       cmd = Nanoc::CLI.load_command_at(filename)
       Nanoc::CLI.root_command.add_command(cmd)
     end
