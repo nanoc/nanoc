@@ -121,15 +121,9 @@ module Nanoc3::CLI
     #
     # @return [void]
     def print_error(error)
-      $stderr.puts
-
       # Header
-      $stderr.puts '+--- /!\ ERROR /!\ -------------------------------------------+'
-      $stderr.puts '| An exception occured while running nanoc. If you think this |'
-      $stderr.puts '| is a bug in nanoc, please do report it at                   |'
-      $stderr.puts '| <http://projects.stoneship.org/trac/nanoc/newticket> --     |'
-      $stderr.puts '| thanks in advance!                                          |'
-      $stderr.puts '+-------------------------------------------------------------+'
+      $stderr.puts
+      $stderr.puts "Captain! We’ve been hit!"
 
       # Exception and resolution (if any)
       $stderr.puts
@@ -160,6 +154,11 @@ module Nanoc3::CLI
       $stderr.puts '=== BACKTRACE:'
       $stderr.puts
       $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
+
+      # Issue link
+      $stderr.puts
+      $stderr.puts "If you believe this is a bug in nanoc, please do report it at"
+      $stderr.puts "<https://github.com/ddfreyne/nanoc/issues/new>--thanks!"
     end
 
     # Attempts to find a resolution for the given error, or nil if no
