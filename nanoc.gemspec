@@ -25,6 +25,35 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('cri', '~> 2.0')
 
+  s.add_development_dependency('mocha') # for the tests
+  s.add_development_dependency('rdiscount') # for the docs
+  s.add_development_dependency('yard') # for the docs
+
+  # optional tools and plugin dependencies
+  s.add_development_dependency('bluecloth')
+  s.add_development_dependency('builder')
+  s.add_development_dependency('coderay')
+  s.add_development_dependency('erubis')
+  s.add_development_dependency('haml')
+  s.add_development_dependency('kramdown')
+  s.add_development_dependency('less')
+  s.add_development_dependency('maruku')
+  s.add_development_dependency('mime-types')
+  s.add_development_dependency('mustache')
+  s.add_development_dependency('nokogiri')
+  s.add_development_dependency('rack')
+  s.add_development_dependency('rainpress')
+  s.add_development_dependency('redcarpet')
+  s.add_development_dependency('RedCloth')
+  s.add_development_dependency('rubypants')
+  s.add_development_dependency('sass')
+  s.add_development_dependency('slim')
+  s.add_development_dependency('systemu')
+  s.add_development_dependency('tilt')
+  s.add_development_dependency('typogruby')
+  s.add_development_dependency('uglifier')
+  s.add_development_dependency('w3c_validators')
+
   s.post_install_message = %q{------------------------------------------------------------------------------
 Thanks for installing nanoc 3.2! Here are some resources to help you get
 started:
