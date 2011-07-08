@@ -62,7 +62,7 @@ module Nanoc3::CLI::Commands
           end
 
           puts
-          base.print_error(e)
+          self.print_error(e)
           puts
         end
       end
