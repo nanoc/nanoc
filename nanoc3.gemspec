@@ -24,6 +24,11 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('cri', '~> 1.0')
 
+  s.add_development_dependency('minitest')
+  s.add_development_dependency('mocha')
+  s.add_development_dependency('rdiscount')
+  s.add_development_dependency('yard')
+
   s.post_install_message = %q{------------------------------------------------------------------------------
 Thanks for installing nanoc 3.1! Here are some resources to help you get
 started:
