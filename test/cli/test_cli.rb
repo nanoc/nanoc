@@ -16,6 +16,18 @@ run do |opts, args, cmd|
 end
 EOS
 
+  SUBCOMMAND_CODE = <<EOS
+# encoding: utf-8
+
+usage       '_sub [options]'
+summary     'meh sub'
+description 'longer meh sub'
+
+run do |opts, args, cmd|
+  File.open('_test_sub.out', 'w') { |io| io.write('It works sub!') }
+end
+EOS
+
   def test_load_custom_commands
     Nanoc::CLI.run %w( create_site foo )
 
@@ -34,6 +46,34 @@ EOS
       # Check
       assert File.file?('_test.out')
       assert_equal 'It works!', File.read('_test.out')
+    end
+  end
+
+  def test_load_custom_commands_nested
+    Nanoc3::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
+      # Create command
+      FileUtils.mkdir_p('commands')
+      File.open('commands/_test.rb', 'w') do |io|
+        io.write(COMMAND_CODE)
+      end
+
+      # Create subcommand
+      FileUtils.mkdir_p('commands/_test')
+      File.open('commands/_test/_sub.rb', 'w') do |io|
+        io.write(SUBCOMMAND_CODE)
+      end
+
+      # Run command
+      begin
+        Nanoc3::CLI.run %w( _test _sub )
+      rescue SystemExit
+        assert false, 'Running _test sub should not cause system exit'
+      end
+
+      # Check
+      assert File.file?('_test_sub.out')
+      assert_equal 'It works sub!', File.read('_test_sub.out')
     end
   end
 

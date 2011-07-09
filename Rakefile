@@ -1,7 +1,10 @@
 # encoding: utf-8
 
-# Load nanoc
+# Set up env
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/lib'))
+require './test/gem_loader.rb'
+
+# Load nanoc
 require 'nanoc'
 
 # Load tasks
