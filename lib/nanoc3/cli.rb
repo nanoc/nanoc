@@ -53,8 +53,8 @@ protected
   #
   # @return [void]
   def self.setup
-    # Don’t set up twice
-    return if @setup
+    # Reinit
+    @root_command = nil
 
     # Add help command
     help_cmd = Cri::Command.new_basic_help
@@ -67,17 +67,29 @@ protected
       cmd = self.load_command_at(filename)
       self.add_command(cmd)
     end
-
-    @setup = true
   end
 
   # Loads the commands in `commands/`.
   #
   # @return [void]
   def self.load_custom_commands
-    Dir['commands/*.rb'].each do |filename|
-      cmd = Nanoc3::CLI.load_command_at(filename)
-      Nanoc3::CLI.root_command.add_command(cmd)
+    self.recursive_contents_of('commands').each do |filename|
+      # Create command
+      command = Nanoc3::CLI.load_command_at(filename)
+
+      # Get supercommand
+      pieces = filename.gsub(/^commands\/|\.rb$/, '').split('/')
+      pieces = pieces[0, pieces.size-1] || []
+      root = Nanoc3::CLI.root_command
+      supercommand = pieces.inject(root) do |cmd, piece|
+        cmd.nil? ? nil : cmd.command_named(piece)
+      end
+
+      # Add to supercommand
+      if supercommand.nil?
+        raise "Cannot load command at #{filename} because its supercommand cannot be found"
+      end
+      supercommand.add_command(command)
     end
   end
 
@@ -86,10 +98,16 @@ protected
   # @param [String] filename The name of the file that contains the command
   #
   # @return [Cri::Command] The loaded command
-  def self.load_command_at(filename)
+  def self.load_command_at(filename, command_name=nil)
+    # Load
     code = File.read(filename)
     cmd = Cri::Command.define(code)
-    cmd.modify { name File.basename(filename, '.rb') }
+
+    # Set name
+    command_name ||= File.basename(filename, '.rb')
+    cmd.modify { name command_name }
+
+    # Done
     cmd
   end
 
@@ -99,6 +117,14 @@ protected
       filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
       self.load_command_at(filename)
     end
+  end
+
+  # @return [Array] The directory contents
+  def self.recursive_contents_of(path)
+    return [] unless File.directory?(path)
+    files, dirs = *Dir[path + '/*'].sort.partition { |e| File.file?(e) }
+    dirs.each { |d| files.concat self.recursive_contents_of(d) }
+    files
   end
 
 end
