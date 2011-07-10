@@ -101,22 +101,26 @@ module Nanoc
     # Finds the plugin that is a subclass of the given class and has the given
     # name.
     #
+    # @param [Class] klass The class of the plugin to return
+    #
     # @param [Symbol] name The name of the plugin to return
     #
     # @return [Class, nil] The plugin with the given name
     def find(klass, name)
-      # Initialize
       @map[klass] ||= {}
+      resolve(@map[klass][name.to_sym], klass)
+    end
 
-      # Lookup
-      class_or_name = @map[klass][name.to_sym]
-
-      # Get class
-      if class_or_name.is_a?(String)
-        class_or_name.scan(/\w+/).inject(klass) { |memo, part| memo.const_get(part) }
-      else
-        class_or_name
-      end
+    # Returns all plugins of the given class.
+    #
+    # @param [Class] klass The class of the plugin to return
+    #
+    # @return [Enumerable<Class>] A collection of class plugins
+    def find_all(klass)
+      @map[klass] ||= {}
+      res = {}
+      @map[klass].each_pair { |k,v| res[k] = resolve(v, k) }
+      res
     end
 
     # Returns a list of all plugins. The returned list of plugins is an array
@@ -157,6 +161,18 @@ module Nanoc
       find(self, name)
     end
 
+  protected
+
+    def resolve(class_or_name, klass)
+      if class_or_name.is_a?(String)
+        class_or_name.scan(/\w+/).inject(Kernel) do |memo, part|
+          memo.const_get(part)
+        end
+      else
+        class_or_name
+      end
+    end
+  
   end
 
   # @deprecated Use {Nanoc::PluginRegistry.instance} instead

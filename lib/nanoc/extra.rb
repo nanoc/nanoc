@@ -4,7 +4,6 @@ module Nanoc::Extra
 
   autoload 'AutoCompiler',      'nanoc/extra/auto_compiler'
   autoload 'CHiCk',             'nanoc/extra/chick'
-  autoload 'Deployers',         'nanoc/extra/deployers'
   autoload 'Validators',        'nanoc/extra/validators'
 
   # Deprecated; use {Nanoc::Context} instead
@@ -18,5 +17,7 @@ module Nanoc::Extra
 end
 
 require 'nanoc/extra/core_ext'
+require 'nanoc/extra/deployer'
+require 'nanoc/extra/deployers'
 require 'nanoc/extra/vcs'
 require 'nanoc/extra/vcses'

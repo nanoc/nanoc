@@ -334,12 +334,6 @@ EOS
       File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG.make_compatible_with_env) }
       Nanoc::NotificationCenter.post(:file_created, 'config.yaml')
 
-      # Create rakefile
-      File.open('Rakefile', 'w') do |io|
-        io.write "require 'nanoc/tasks'"
-      end
-      Nanoc::NotificationCenter.post(:file_created, 'Rakefile')
-
       # Create rules
       File.open('Rules', 'w') do |io|
         io.write DEFAULT_RULES.make_compatible_with_env

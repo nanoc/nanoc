@@ -80,13 +80,15 @@ module Nanoc::CLI::Commands
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,
       Nanoc::Extra::VCS,
-      Nanoc::DataSource
+      Nanoc::DataSource,
+      Nanoc::Extra::Deployer
     ]
 
     PLUGIN_CLASSES = {
-      Nanoc::Filter       => 'Filters',
-      Nanoc::DataSource   => 'Data Sources',
-      Nanoc::Extra::VCS   => 'VCSes'
+      Nanoc::Filter          => 'Filters',
+      Nanoc::DataSource      => 'Data Sources',
+      Nanoc::Extra::VCS      => 'VCSes',
+      Nanoc::Extra::Deployer => 'Deployers'
     }
 
     def name_for_plugin_class(klass)

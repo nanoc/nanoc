@@ -1,23 +1,17 @@
 # encoding: utf-8
 
-module Nanoc::CLI::Commands
-
-  class Deploy < ::Nanoc::CLI::Command
-
-    KIND_MAPPING = {
-      'rsync' => Nanoc3::Extra::Deployers::Rsync
-    }
-
-  end
-
-end
+# Find all
+registry       = Nanoc::PluginRegistry.instance
+deployer_class = Nanoc::Extra::Deployer
+deployers      = registry.find_all(deployer_class)
+deployer_names = deployers.keys.sort
 
 usage       'deploy [options]'
 summary     'deploy the compiled site'
 description <<-EOS
 Deploys the compiled site. The compiled site contents in the output directory will be uploaded to the destination, which is specified using the -t/--target option.
 
-Available deployers: #{Nanoc::CLI::Commands::Deploy::KIND_MAPPING.keys.join(', ')}
+Available deployers: #{deployer_names.join(', ')}
 
 EOS
 
@@ -51,20 +45,23 @@ module Nanoc::CLI::Commands
       end
 
       # Get deployer
-      kind = config.fetch(:kind) do
+      name = config.fetch(:kind) do
         $stderr.puts "The specified deploy target does not have a kind."
         $stderr.puts "(expected one of #{KIND_MAPPING.keys.join(', ')})"
         exit 1
       end
-      deployer_class = KIND_MAPPING.fetch(kind) do
+      deployer_class = Nanoc::Extra::Deployer.named(name) do
         $stderr.puts "The specified deploy target has an unrecognised kind (#{kind})."
         $stderr.puts "(expected one of #{KIND_MAPPING.keys.join(', ')})"
         exit 1
       end
 
       # Run
-      deployer = deployer_class.new
-      deployer.run(:config_name => target, :dry_run => options[:'dry-run'])
+      deployer = deployer_class.new(
+        site.config[:output_dir],
+        config,
+        :dry_run => options[:'dry-run'])
+      deployer.run
     end
 
   end

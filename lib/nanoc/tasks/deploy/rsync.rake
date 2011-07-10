@@ -7,8 +7,10 @@ namespace :deploy do
     dry_run     = !!ENV['dry_run']
     config_name = ENV['config'] || :default
 
-    deployer = Nanoc::Extra::Deployers::Rsync.new
-    deployer.run(:config_name => config_name, :dry_run => dry_run)
+    cmd = [ 'deploy', '-t', config_name ]
+    cmd << '-n' if dry_run
+
+    Nanoc3::CLI.run cmd
   end
 
 end
