@@ -94,12 +94,14 @@ module Nanoc3::Helpers
 
       # Append to erbout if we have a block
       if block_given?
+        # Append result and return nothing
         erbout = eval('_erbout', block.binding)
         erbout << result
+        ''
+      else
+        # Return result
+        result
       end
-
-      # Done
-      result
     end
 
   end
