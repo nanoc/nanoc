@@ -1,5 +1,10 @@
 # nanoc news
 
+## 3.3
+
+* Turned Rake tasks into proper nanoc commands
+* Added support for deployment using Fog [Jack Chu]
+
 ## 3.2 (???)
 
 Base:
