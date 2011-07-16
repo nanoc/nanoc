@@ -77,4 +77,25 @@ EOS
     end
   end
 
+  def test_load_custom_commands_broken
+    Nanoc3::CLI.run %w( create_site foo )
+
+    FileUtils.cd('foo') do
+      # Create command
+      FileUtils.mkdir_p('commands')
+      File.open('commands/_test.rb', 'w') { |io| io.write('raise "meh"') }
+
+      # Run command
+      position_before = $stderr.tell
+      assert_raises SystemExit do
+        Nanoc3::CLI.run %w( _test )
+      end
+      position_after = $stderr.tell
+
+      # Check error output
+      stderr_addition = $stderr.string[position_before, position_after]
+      assert_match(/=== BACKTRACE:/, stderr_addition)
+    end
+  end
+
 end

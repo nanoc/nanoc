@@ -7,6 +7,10 @@ module Nanoc3::CLI
   module Commands
   end
 
+  autoload 'Logger',             'nanoc3/cli/logger'
+  autoload 'Command',            'nanoc3/cli/command'
+  autoload 'ErrorHandler',       'nanoc3/cli/error_handler'
+
   # @return [Boolean] true if debug output is enabled, false if not
   #
   # @since 3.2.0
@@ -24,18 +28,17 @@ module Nanoc3::CLI
     @debug = boolean
   end
 
-  autoload 'Logger',             'nanoc3/cli/logger'
-  autoload 'Command',            'nanoc3/cli/command'
-
   # Invokes the nanoc commandline tool with the given arguments.
   #
   # @param [Array<String>] args An array of commandline arguments
   #
   # @return [void]
   def self.run(args)
-    self.setup
-    self.load_custom_commands
-    self.root_command.run(args)
+    Nanoc3::CLI::ErrorHandler.handle_while do
+      self.setup
+      self.load_custom_commands
+      self.root_command.run(args)
+    end
   end
 
   # Adds the given command to the collection of available commands.
