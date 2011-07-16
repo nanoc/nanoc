@@ -22,17 +22,19 @@ module Nanoc::Extra::Deployers
   class Fog < ::Nanoc::Extra::Deployer
 
     # @see Nanoc::Extra::Deployer#run
-    #
-    # @todo Allow dry runs
     def run
       # Get params
       src      = File.expand_path(self.source_path)
-      bucket   = self.config[:bucket]
+      bucket   = self.config[:bucket] || self.config[:bucket_name]
       path     = self.config[:path]
 
       # Validate params
-      error 'No bucket found in deployment configuration' if bucket.nil?
       error 'The path requires no trailing slash' if path && path[-1,1] == '/'
+
+      # Mock if necessary
+      if self.dry_run?
+        ::Fog.mock!
+      end
 
       # Get connection
       puts "Connecting"
@@ -69,13 +71,14 @@ module Nanoc::Extra::Deployers
 
       # Upload all the files in the output folder to the clouds
       puts "Uploading local files"
-      Dir.chdir(src)
-      files = Dir['**/*'].select { |f| File.file?(f) }
-      files.each do |file_path|
-        directory.files.create(
-          :key => "#{path}#{file_path}",
-          :body => File.open(file_path),
-          :public => true)
+      FileUtils.cd(src) do
+        files = Dir['**/*'].select { |f| File.file?(f) }
+        files.each do |file_path|
+          directory.files.create(
+            :key => "#{path}#{file_path}",
+            :body => File.open(file_path),
+            :public => true)
+        end
       end
 
       puts "Done!"
