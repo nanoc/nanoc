@@ -4,7 +4,21 @@ require 'fog'
 
 module Nanoc::Extra::Deployers
 
-  # TODO document
+  # A deployer that deploys a site using [fog](https://github.com/geemus/fog).
+  #
+  # @example A deployment configuration with public and staging configurations
+  #
+  #   deploy:
+  #     public:
+  #       kind:       fog
+  #       provider:   local
+  #       local_root: ~/myCloud
+  #       bucket:     nanoc-site
+  #     staging:
+  #       kind:       fog
+  #       provider:   local
+  #       local_root: ~/myCloud
+  #       bucket:     nanoc-site-staging
   class Fog < ::Nanoc::Extra::Deployer
 
     # @see Nanoc::Extra::Deployer#run
