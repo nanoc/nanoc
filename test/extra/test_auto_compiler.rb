@@ -396,20 +396,22 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_call_with_uri_encoded_path
-    # Create autocompiler
-    autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
+    if_have 'rack' do
+      # Create autocompiler
+      autocompiler = Nanoc3::Extra::AutoCompiler.new('.')
 
-    # Mock dependencies
-    site = mock
-    site.stubs(:config).returns({ :output_dir => 'output/' })
-    site.stubs(:items).returns([])
-    autocompiler.stubs(:build_site)
-    autocompiler.stubs(:site).returns(site)
+      # Mock dependencies
+      site = mock
+      site.stubs(:config).returns({ :output_dir => 'output/' })
+      site.stubs(:items).returns([])
+      autocompiler.stubs(:build_site)
+      autocompiler.stubs(:site).returns(site)
 
-    # Test
-    result = autocompiler.call('PATH_INFO' => '/%73oftware')
-    assert_equal 404, result[0]
-    assert_match "File not found: /software\n", result[2][0]
+      # Test
+      result = autocompiler.call('PATH_INFO' => '/%73oftware')
+      assert_equal 404, result[0]
+      assert_match "File not found: /software\n", result[2][0]
+    end
   end
 
 end

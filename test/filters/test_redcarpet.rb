@@ -5,7 +5,9 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
   include Nanoc3::TestHelpers
 
   def test_find
-    refute Nanoc3::Filter.named(:redcarpet).nil?
+    if_have 'redcarpet' do
+      refute Nanoc3::Filter.named(:redcarpet).nil?
+    end
   end
 
   def test_filter
