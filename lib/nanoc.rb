@@ -7,7 +7,7 @@ module Nanoc
 
 end
 
-Nanoc = Nanoc
+Nanoc3 = Nanoc
 
 # Load general requirements
 require 'digest'
