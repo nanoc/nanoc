@@ -10,7 +10,7 @@ namespace :deploy do
     cmd = [ 'deploy', '-t', config_name ]
     cmd << '-n' if dry_run
 
-    Nanoc3::CLI.run cmd
+    Nanoc::CLI.run cmd
   end
 
 end

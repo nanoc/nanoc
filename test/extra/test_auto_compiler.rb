@@ -396,7 +396,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_call_with_uri_encoded_path
-    if_have 'mime/types', 'rack' do
+    if_have 'rack' do
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
 

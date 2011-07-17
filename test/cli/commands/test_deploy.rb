@@ -16,7 +16,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
       FileUtils.mkdir_p('output')
       File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
-      Nanoc3::CLI.run %w( deploy -t public )
+      Nanoc::CLI.run %w( deploy -t public )
 
       assert File.directory?('mydestination')
       assert File.file?('mydestination/blah.html')
@@ -35,7 +35,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
       FileUtils.mkdir_p('output')
       File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
-      Nanoc3::CLI.run %w( deploy -t public -n )
+      Nanoc::CLI.run %w( deploy -t public -n )
 
       refute File.directory?('mydestination')
       refute File.file?('mydestination/blah.html')

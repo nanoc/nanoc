@@ -65,7 +65,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   end
 
   def test_pygmentize
-    if_have 'nokogiri' do
+    if_have 'nokogiri', 'systemu' do
       if `which pygmentize`.strip.empty?
         skip "could not find pygmentize"
       end
@@ -84,7 +84,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   end
 
   def test_simon_highlight
-    if_have 'nokogiri' do
+    if_have 'nokogiri', 'systemu' do
       if `which highlight`.strip.empty?
         skip "could not find `highlight`"
       end
@@ -150,7 +150,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
       return
     end
 
-    if_have 'nokogiri' do
+    if_have 'nokogiri', 'systemu' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -165,7 +165,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   end
 
   def test_colorize_syntax_with_missing_executables
-    if_have 'nokogiri' do
+    if_have 'nokogiri', 'systemu' do
       begin
         original_path = ENV['PATH']
         ENV['PATH'] = './blooblooblah'

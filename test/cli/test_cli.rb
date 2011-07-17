@@ -50,7 +50,7 @@ EOS
   end
 
   def test_load_custom_commands_nested
-    Nanoc3::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w( create_site foo )
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
@@ -66,7 +66,7 @@ EOS
 
       # Run command
       begin
-        Nanoc3::CLI.run %w( _test _sub )
+        Nanoc::CLI.run %w( _test _sub )
       rescue SystemExit
         assert false, 'Running _test sub should not cause system exit'
       end
@@ -74,6 +74,27 @@ EOS
       # Check
       assert File.file?('_test_sub.out')
       assert_equal 'It works sub!', File.read('_test_sub.out')
+    end
+  end
+
+  def test_load_custom_commands_broken
+    Nanoc::CLI.run %w( create_site foo )
+
+    FileUtils.cd('foo') do
+      # Create command
+      FileUtils.mkdir_p('commands')
+      File.open('commands/_test.rb', 'w') { |io| io.write('raise "meh"') }
+
+      # Run command
+      position_before = $stderr.tell
+      assert_raises SystemExit do
+        Nanoc::CLI.run %w( _test )
+      end
+      position_after = $stderr.tell
+
+      # Check error output
+      stderr_addition = $stderr.string[position_before, position_after]
+      assert_match(/=== BACKTRACE:/, stderr_addition)
     end
   end
 

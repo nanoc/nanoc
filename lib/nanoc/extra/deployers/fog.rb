@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'fog'
-
 module Nanoc::Extra::Deployers
 
   # A deployer that deploys a site using [fog](https://github.com/geemus/fog).
@@ -23,6 +21,8 @@ module Nanoc::Extra::Deployers
 
     # @see Nanoc::Extra::Deployer#run
     def run
+      require 'fog'
+
       # Get params
       src      = File.expand_path(self.source_path)
       bucket   = self.config[:bucket] || self.config[:bucket_name]

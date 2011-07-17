@@ -3,11 +3,11 @@
 module Nanoc
 
   # The current nanoc version.
-  VERSION = '3.2.0b1'
+  VERSION = '3.2.0b2'
 
 end
 
-Nanoc3 = Nanoc
+Nanoc = Nanoc
 
 # Load general requirements
 require 'digest'

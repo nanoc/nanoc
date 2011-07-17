@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'systemu'
-
 module Nanoc::Extra::Deployers
 
   # A deployer that deploys a site using rsync.
@@ -33,6 +31,8 @@ module Nanoc::Extra::Deployers
 
     # @see Nanoc::Extra::Deployer#run
     def run
+      require 'systemu'
+
       # Get params
       src = File.expand_path(self.source_path) + '/'
       dst = self.config[:dst]
