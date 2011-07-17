@@ -391,19 +391,21 @@ module Nanoc3
       Nanoc3::NotificationCenter.post(:visit_started, layout)
       Nanoc3::NotificationCenter.post(:visit_ended,   layout)
 
-      # Notify start
-      Nanoc3::NotificationCenter.post(:processing_started, layout)
-      Nanoc3::NotificationCenter.post(:filtering_started,  self, filter_name)
+      begin
+        # Notify start
+        Nanoc3::NotificationCenter.post(:processing_started, layout)
+        Nanoc3::NotificationCenter.post(:filtering_started,  self, filter_name)
 
-      # Layout
-      @content[:last] = filter.run(layout.raw_content, filter_args)
+        # Layout
+        @content[:last] = filter.run(layout.raw_content, filter_args)
 
-      # Create "post" snapshot
-      snapshot(:post, :final => false)
-    ensure
-      # Notify end
-      Nanoc3::NotificationCenter.post(:filtering_ended,    self, filter_name)
-      Nanoc3::NotificationCenter.post(:processing_ended,   layout)
+        # Create "post" snapshot
+        snapshot(:post, :final => false)
+      ensure
+        # Notify end
+        Nanoc3::NotificationCenter.post(:filtering_ended,    self, filter_name)
+        Nanoc3::NotificationCenter.post(:processing_ended,   layout)
+      end
     end
 
     # Creates a snapshot of the current compiled item content.
