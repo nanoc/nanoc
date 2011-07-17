@@ -97,17 +97,25 @@ module Nanoc3::CLI::Commands
       end
 
       # Debug notifications
-      Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
-        puts "*** Started compilation of #{rep.inspect}" if self.debug?
-      end
-      Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
-        puts "*** Ended compilation of #{rep.inspect}" if self.debug?
-      end
-      Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
-        puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies" if self.debug?
-      end
-      Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
-        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling" if self.debug?
+      if self.debug?
+        Nanoc3::NotificationCenter.on(:compilation_started) do |rep|
+          puts "*** Started compilation of #{rep.inspect}"
+        end
+        Nanoc3::NotificationCenter.on(:compilation_ended) do |rep|
+          puts "*** Ended compilation of #{rep.inspect}"
+        end
+        Nanoc3::NotificationCenter.on(:compilation_failed) do |rep|
+          puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies"
+        end
+        Nanoc3::NotificationCenter.on(:cached_content_used) do |rep|
+          puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling"
+        end
+        Nanoc3::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+          puts "*** Started filtering #{rep.inspect} with #{filter_name}"
+        end
+        Nanoc3::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+          puts "*** Ended filtering #{rep.inspect} with #{filter_name}"
+        end
       end
 
       # Timing notifications
