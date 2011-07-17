@@ -91,23 +91,27 @@ module Nanoc3::Helpers
       # Create filter
       filter = filter_class.new(assigns)
 
-      # Notify start
-      Nanoc3::NotificationCenter.post(:processing_started, layout)
+      begin
+        # Notify start
+        Nanoc3::NotificationCenter.post(:processing_started, layout)
 
-      # Layout
-      result = filter.run(layout.raw_content, filter_args)
+        # Layout
+        result = filter.run(layout.raw_content, filter_args)
 
-      # Append to erbout if we have a block
-      if block_given?
-        erbout = eval('_erbout', block.binding)
-        erbout << result
+        # Append to erbout if we have a block
+        if block_given?
+          # Append result and return nothing
+          erbout = eval('_erbout', block.binding)
+          erbout << result
+          ''
+        else
+          # Return result
+          result
+        end
+      ensure
+        # Notify end
+        Nanoc3::NotificationCenter.post(:processing_ended, layout)
       end
-
-      # Done
-      result
-    ensure
-      # Notify end
-      Nanoc3::NotificationCenter.post(:processing_ended, layout)
     end
 
   end
