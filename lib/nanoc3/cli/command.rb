@@ -60,6 +60,25 @@ module Nanoc3::CLI
     def run
     end
 
+    # Gets the site ({Nanoc3::Site} instance) in the current directory and
+    # loads its data.
+    #
+    # @return [Nanoc3::Site] The site in the current working directory
+    def site
+      # Load site if possible
+      @site ||= nil
+      if File.file?('config.yaml') && @site.nil?
+        begin
+          @site = Nanoc3::Site.new('.')
+        rescue Nanoc3::Errors::UnknownDataSource => e
+          $stderr.puts "Unknown data source: #{e}"
+          exit 1
+        end
+      end
+
+      @site
+    end
+
   protected
 
     # @return [Boolean] true if debug output is enabled, false if not
@@ -81,25 +100,6 @@ module Nanoc3::CLI
                      'valid/complete nanoc site directory; aborting.'
         exit 1
       end
-    end
-
-    # Gets the site ({Nanoc3::Site} instance) in the current directory and
-    # loads its data.
-    #
-    # @return [Nanoc3::Site] The site in the current working directory
-    def site
-      # Load site if possible
-      @site ||= nil
-      if File.file?('config.yaml') && @site.nil?
-        begin
-          @site = Nanoc3::Site.new('.')
-        rescue Nanoc3::Errors::UnknownDataSource => e
-          $stderr.puts "Unknown data source: #{e}"
-          exit 1
-        end
-      end
-
-      @site
     end
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing
