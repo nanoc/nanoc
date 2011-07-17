@@ -3,7 +3,7 @@
 usage       'view [options]'
 summary     'start the web server that serves static files'
 description <<-EOS
-Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running the autocompiler requires 'adsf' and 'rack'.
+Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running this static web server requires 'adsf' (not 'adsf'!).
 EOS
 
 option :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
@@ -19,8 +19,8 @@ module Nanoc3::CLI::Commands
   class View < ::Nanoc3::CLI::Command
 
     def run
+      load_adsf
       require 'rack'
-      require 'adsf'
 
       # Make sure we are in a nanoc site directory
       self.require_site
@@ -53,6 +53,30 @@ module Nanoc3::CLI::Commands
 
       # Run autocompiler
       handler.run(app, options_for_rack)
+    end
+
+  protected
+
+    def load_adsf
+      # Load adsf
+      begin
+        require 'adsf'
+        return
+      rescue LoadError
+        $stderr.puts "Could not find the required 'adsf' gem, " \
+          "which is necessary for the view command."
+      end
+
+      # Check asdf
+      begin
+        require 'asdf'
+        $stderr.puts "You appear to have 'asdf' installed, " \
+          "but not 'adsf'. Please install 'adsf' (check the spelling)!"
+      rescue LoadError
+      end
+
+      # Done
+      exit 1
     end
 
   end
