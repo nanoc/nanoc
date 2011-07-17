@@ -104,7 +104,7 @@ protected
   def self.load_command_at(filename, command_name=nil)
     # Load
     code = File.read(filename)
-    cmd = Cri::Command.define(code)
+    cmd = Cri::Command.define(code, filename)
 
     # Set name
     command_name ||= File.basename(filename, '.rb')

@@ -95,6 +95,7 @@ EOS
       # Check error output
       stderr_addition = $stderr.string[position_before, position_after]
       assert_match(/=== BACKTRACE:/, stderr_addition)
+      assert_match(/commands\/_test.rb/, stderr_addition)
     end
   end
 
