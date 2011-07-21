@@ -52,7 +52,8 @@ module Nanoc3::HashExtensions
   #
   # @api private
   def checksum
-    Marshal.dump(self).checksum
+    array = self.to_a.sort_by { |kv| kv[0] }
+    array.checksum
   end
 
 end

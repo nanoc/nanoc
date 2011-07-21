@@ -62,3 +62,12 @@ describe 'Array#freeze_recursively' do
   end
 
 end
+
+describe 'Array#checksum' do
+
+  it 'should work' do
+    expectation = '78468f950645150238a26f5b8f2dde39a75a7028'
+    [ [ :foo, 123 ]].checksum.must_equal expectation
+  end
+
+end

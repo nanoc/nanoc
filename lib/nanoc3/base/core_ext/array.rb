@@ -45,6 +45,16 @@ module Nanoc3::ArrayExtensions
     end
   end
 
+  # Calculates the checksum for this array. Any change to this array will
+  # result in a different checksum.
+  #
+  # @return [String] The checksum for this array
+  #
+  # @api private
+  def checksum
+    Marshal.dump(self).checksum
+  end
+
 end
 
 class Array
