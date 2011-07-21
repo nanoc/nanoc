@@ -34,6 +34,7 @@ module Nanoc3::HashExtensions
   #
   # @since 3.2.0
   def freeze_recursively
+    return if self.frozen?
     freeze
     each_pair do |key, value|
       if value.respond_to?(:freeze_recursively)

@@ -68,6 +68,17 @@ describe 'Hash#freeze_recursively' do
     assert raised
   end
 
+  it 'should not freeze infinitely' do
+    a = {}
+    a[:x] = a
+
+    a.freeze_recursively
+
+    assert a.frozen?
+    assert a[:x].frozen?
+    assert_equal a, a[:x]
+  end
+
 end
 
 describe 'Hash#checksum' do

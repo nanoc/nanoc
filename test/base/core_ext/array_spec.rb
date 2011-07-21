@@ -50,4 +50,15 @@ describe 'Array#freeze_recursively' do
     assert raised
   end
 
+  it 'should not freeze infinitely' do
+    a = []
+    a << a
+
+    a.freeze_recursively
+
+    assert a.frozen?
+    assert a[0].frozen?
+    assert_equal a, a[0]
+  end
+
 end
