@@ -34,6 +34,7 @@ module Nanoc::ArrayExtensions
   #
   # @since 3.2.0
   def freeze_recursively
+    return if self.frozen?
     freeze
     each do |value|
       if value.respond_to?(:freeze_recursively)
@@ -42,6 +43,16 @@ module Nanoc::ArrayExtensions
         value.freeze
       end
     end
+  end
+
+  # Calculates the checksum for this array. Any change to this array will
+  # result in a different checksum.
+  #
+  # @return [String] The checksum for this array
+  #
+  # @api private
+  def checksum
+    Marshal.dump(self).checksum
   end
 
 end

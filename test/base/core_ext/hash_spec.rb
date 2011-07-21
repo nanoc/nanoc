@@ -68,13 +68,31 @@ describe 'Hash#freeze_recursively' do
     assert raised
   end
 
+  it 'should not freeze infinitely' do
+    a = {}
+    a[:x] = a
+
+    a.freeze_recursively
+
+    assert a.frozen?
+    assert a[:x].frozen?
+    assert_equal a, a[:x]
+  end
+
 end
 
 describe 'Hash#checksum' do
 
   it 'should work' do
-    expectation = 'fec9ae7163e8b8d57a15d51821d2c68d4a6bb169'
+    expectation = '78468f950645150238a26f5b8f2dde39a75a7028'
     { :foo => 123 }.checksum.must_equal expectation
+    [ [ :foo, 123 ]].checksum.must_equal expectation
+  end
+
+  it 'should sort keys' do
+    a = { :a => 1, :c => 2, :b => 3 }.checksum
+    b = { :a => 1, :b => 3, :c => 2 }.checksum
+    a.must_equal b
   end
 
 end
