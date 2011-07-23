@@ -37,9 +37,13 @@ module Nanoc3::CLI::Commands
       puts
       items.sort_by { |i| i.identifier }.each do |item|
         puts "item #{item.identifier} depends on:"
-        predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i.identifier }
+        predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
         predecessors.each do |pred|
-          puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
+          if pred
+            puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
+          else
+            puts "  ( removed item )"
+          end
         end
         puts "  (nothing)" if predecessors.empty?
         puts
@@ -78,10 +82,27 @@ module Nanoc3::CLI::Commands
         puts
       end
 
+      # Print layout dependencies
+      puts '=== Layout dependencies ====================================================='
+      puts
+      layouts.sort_by { |l| l.identifier }.each do |layout|
+        puts "layout #{layout.identifier} depends on:"
+        predecessors = dependency_tracker.objects_causing_outdatedness_of(layout).sort_by { |i| i ? i.identifier : '' }
+        predecessors.each do |pred|
+          if pred
+            puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
+          else
+            puts "  ( removed item )"
+          end
+        end
+        puts "  (nothing)" if predecessors.empty?
+        puts
+      end
+
       # Print layouts
       puts '=== Layouts'
       puts
-      layouts.each do |layout|
+      layouts.sort_by { |l| l.identifier }.each do |layout|
         puts "layout #{layout.identifier}:"
         outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(layout)
         if outdatedness_reason
