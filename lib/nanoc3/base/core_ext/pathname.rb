@@ -12,7 +12,7 @@ module Nanoc3::PathnameExtensions
     digest = Digest::SHA1.new
     File.open(self.to_s, 'r') do |io|
       until io.eof
-        data = io.readpartial(2**10)
+        data = io.read(2**10)
         digest.update(data)
       end
     end
