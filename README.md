@@ -86,6 +86,7 @@ may be interested in the development dependencies:
 * Justin Hileman
 * Starr Horne
 * Tuomas Kareinen
+* Matt Keveney
 * Nikhil Marathe
 * Daniel Mendler
 * Ale Muñoz
