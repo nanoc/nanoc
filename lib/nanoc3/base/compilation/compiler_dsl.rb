@@ -9,10 +9,13 @@ module Nanoc3
     #
     # @api private
     #
-    # @param [Nanoc3::RulesCollection] rules_collection The collection of rules
-    #   to modify when loading this DSL
-    def initialize(rules_collection)
+    # @param [Nanoc3::RulesCollection] rules_collection The collection of
+    #   rules to modify when loading this DSL
+    #
+    # @param [Hash] config The site configuration
+    def initialize(rules_collection, config)
       @rules_collection = rules_collection
+      @config = config
     end
 
     # Creates a preprocessor block that will be executed after all data is
