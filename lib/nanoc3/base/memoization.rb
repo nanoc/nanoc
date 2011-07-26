@@ -48,17 +48,17 @@ module Nanoc3
       # Redefine
       define_method(method_name) do |*args|
         # Get cache
-        @cache ||= {}
-        @cache[method_name] ||= {}
+        @__memoization_cache ||= {}
+        @__memoization_cache[method_name] ||= {}
 
         # Recalculate if necessary
-        if !@cache[method_name].has_key?(args)
+        if !@__memoization_cache[method_name].has_key?(args)
           result = send(original_method_name, *args)
-          @cache[method_name][args] = result
+          @__memoization_cache[method_name][args] = result
         end
 
         # Done
-        @cache[method_name][args]
+        @__memoization_cache[method_name][args]
       end
     end
 
