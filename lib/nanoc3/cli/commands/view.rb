@@ -6,9 +6,9 @@ description <<-EOS
 Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running this static web server requires 'adsf' (not 'asdf'!).
 EOS
 
-option :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
-option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
-option :p, :port,    'specify the port to listen on (default: 3000)'
+required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
+required :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
+required :p, :port,    'specify the port to listen on (default: 3000)'
 
 run do |opts, args, cmd|
   Nanoc3::CLI::Commands::View.call(opts, args, cmd)

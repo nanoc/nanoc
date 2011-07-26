@@ -12,8 +12,8 @@ This command will change data, and it is therefore recommended to make a
 backup in case something goes wrong.
 EOS
 
-option :c, :vcs, 'select the VCS to use'
-flag   :y, :yes, 'update the data without warning'
+required :c, :vcs, 'select the VCS to use'
+flag     :y, :yes, 'update the data without warning'
 
 run do |opts, args, cmd|
   Nanoc3::CLI::Commands::Update.call(opts, args, cmd)

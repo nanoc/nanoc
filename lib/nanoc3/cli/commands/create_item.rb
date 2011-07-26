@@ -8,7 +8,7 @@ Create a new item in the current site. The first data source in the site
 configuration will be used.
 EOS
 
-option :c, :vcs, 'specify the VCS to use'
+required :c, :vcs, 'specify the VCS to use'
 
 run do |opts, args, cmd|
   Nanoc3::CLI::Commands::CreateItem.call(opts, args, cmd)
