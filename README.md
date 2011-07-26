@@ -75,6 +75,7 @@ may be interested in the development dependencies:
 * Colin Barrett
 * Dmitry Bilunov
 * Devon Luke Buchanan
+* Stefan Bühler
 * Brian Candler
 * Jack Chu
 * Michal Cichra
@@ -86,6 +87,7 @@ may be interested in the development dependencies:
 * Justin Hileman
 * Starr Horne
 * Tuomas Kareinen
+* Matt Keveney
 * Nikhil Marathe
 * Daniel Mendler
 * Ale Muñoz

@@ -9,9 +9,9 @@ on port 3000 and listen on all IP addresses. Running the autocompiler requires
 the 'mime/types' and 'rack' gems.
 EOS
 
-option :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
-option :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
-option :p, :port,    'specify the port to listen on (default: 3000)'
+required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
+required :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
+required :p, :port,    'specify the port to listen on (default: 3000)'
 
 run do |opts, args, cmd|
   Nanoc::CLI::Commands::AutoCompile.call(opts, args, cmd)

@@ -6,7 +6,15 @@
 * Added support for deployment using Fog [Jack Chu]
 * Dropped the “3” suffix on nanoc3/Nanoc3
 
-## 3.2 (???)
+## 3.2.1 (???)
+
+* Made `@config` available in rules file
+* Fixed `#readpartial` issue on JRuby
+* Fixed possible `@cache` name clash in memoization module
+* Fixed options with required arguments (such as `--port` and `--host`)
+* Fixed broken `#check_availability`
+
+## 3.2 (2011-07-24)
 
 Base:
 

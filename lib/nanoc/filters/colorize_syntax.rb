@@ -183,7 +183,7 @@ module Nanoc::Filters
     # @return [String] The colorized output
     def pygmentize(code, language, params={})
       require 'systemu'
-      check_availability('pygmentize --V')
+      check_availability('pygmentize', '-V')
 
       # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
@@ -222,7 +222,7 @@ module Nanoc::Filters
     def simon_highlight(code, language, params={})
       require 'systemu'
 
-      check_availability('highlight --version')
+      check_availability('highlight', '--version')
 
       # Build command
       cmd = [ 'highlight', '--syntax', language, '--fragment' ]
@@ -247,10 +247,9 @@ module Nanoc::Filters
       stdout.read
     end
 
-    def check_availability(cmd)
-      Open3.popen3(*cmd) do |stdin, stdout, stderr, thread|
-        raise "Could not spawn #{cmd.join(' ')}" if thread.nil?
-      end
+    def check_availability(*cmd)
+      systemu cmd
+      raise "Could not spawn #{cmd.join(' ')}" if $?.exitstatus != 0
     end
 
   end
