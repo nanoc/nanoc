@@ -3,7 +3,7 @@
 ## 3.2.1 (???)
 
 * Made `@config` available in rules file
-* Fixed `#readpartial` issue on JRuby
+* Fixed `#readpartial` issue on JRuby [Matt Keveney]
 * Fixed possible `@cache` name clash in memoization module
 * Fixed options with required arguments (such as `--port` and `--host`)
 * Fixed broken `#check_availability`
