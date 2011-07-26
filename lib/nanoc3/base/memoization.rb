@@ -7,8 +7,6 @@ module Nanoc3
   # @since 3.2.0
   module Memoization
 
-    CACHE = {}
-
     # Memoizes the method with the given name. The modified method will cache
     # the results of the original method, so that calling a method twice with
     # the same arguments will short-circuit and return the cached results
