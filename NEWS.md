@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.2.1 (???)
+## 3.2.1 (2011-07-27)
 
 * Made `@config` available in rules file
 * Fixed `#readpartial` issue on JRuby [Matt Keveney]
