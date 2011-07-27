@@ -101,6 +101,13 @@ EOS
   end
 
   def setup
+    # Check skipped
+    if ENV['skip']
+      if ENV['skip'].split(',').include?(self.class.to_s)
+        skip 'manually skipped'
+      end
+    end
+
     # Clean up
     GC.start
 
