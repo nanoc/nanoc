@@ -47,6 +47,63 @@ module Nanoc3::CLI
       exit(1)
     end
 
+    # Prints the given error to stderr. Includes message, possible resolution
+    # (see {#resolution_for}), compilation stack, backtrace, etc.
+    #
+    # @param [Error] error The error that should be described
+    #
+    # @return [void]
+    def self.print_error(error)
+      self.new.print_error(error)
+    end
+
+    # Prints the given error to stderr. Includes message, possible resolution
+    # (see {#resolution_for}), compilation stack, backtrace, etc.
+    #
+    # @param [Error] error The error that should be described
+    #
+    # @return [void]
+    def print_error(error)
+      # Header
+      $stderr.puts
+      $stderr.puts "Captain! We’ve been hit!"
+
+      # Exception and resolution (if any)
+      $stderr.puts
+      $stderr.puts '=== MESSAGE:'
+      $stderr.puts
+      $stderr.puts "#{error.class}: #{error.message}"
+      resolution = self.resolution_for(error)
+      $stderr.puts "#{resolution}" if resolution
+
+      # Compilation stack
+      $stderr.puts
+      $stderr.puts '=== COMPILATION STACK:'
+      $stderr.puts
+      if self.stack.empty?
+        $stderr.puts "  (empty)"
+      else
+        self.stack.reverse.each do |obj|
+          if obj.is_a?(Nanoc3::ItemRep)
+            $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
+          else # layout
+            $stderr.puts "  - [layout] #{obj.identifier}"
+          end
+        end
+      end
+
+      # Backtrace
+      $stderr.puts
+      $stderr.puts '=== BACKTRACE:'
+      $stderr.puts
+      $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
+
+      # Issue link
+      $stderr.puts
+      $stderr.puts "If you believe this is a bug in nanoc, please do report it at"
+      $stderr.puts "<https://github.com/ddfreyne/nanoc/issues/new>--thanks!"
+    end
+
   protected
 
     # @return [Boolean] true if debug output is enabled, false if not
@@ -101,53 +158,6 @@ module Nanoc3::CLI
       'systemu'        => 'systemu',
       'w3c_validators' => 'w3c_validators'
     }
-
-    # Prints the given error to stderr. Includes message, possible resolution
-    # (see {#resolution_for}), compilation stack, backtrace, etc.
-    #
-    # @param [Error] error The error that should be described
-    #
-    # @return [void]
-    def print_error(error)
-      # Header
-      $stderr.puts
-      $stderr.puts "Captain! We’ve been hit!"
-
-      # Exception and resolution (if any)
-      $stderr.puts
-      $stderr.puts '=== MESSAGE:'
-      $stderr.puts
-      $stderr.puts "#{error.class}: #{error.message}"
-      resolution = self.resolution_for(error)
-      $stderr.puts "#{resolution}" if resolution
-
-      # Compilation stack
-      $stderr.puts
-      $stderr.puts '=== COMPILATION STACK:'
-      $stderr.puts
-      if self.stack.empty?
-        $stderr.puts "  (empty)"
-      else
-        self.stack.reverse.each do |obj|
-          if obj.is_a?(Nanoc3::ItemRep)
-            $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
-          else # layout
-            $stderr.puts "  - [layout] #{obj.identifier}"
-          end
-        end
-      end
-
-      # Backtrace
-      $stderr.puts
-      $stderr.puts '=== BACKTRACE:'
-      $stderr.puts
-      $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
-
-      # Issue link
-      $stderr.puts
-      $stderr.puts "If you believe this is a bug in nanoc, please do report it at"
-      $stderr.puts "<https://github.com/ddfreyne/nanoc/issues/new>--thanks!"
-    end
 
     # Attempts to find a resolution for the given error, or nil if no
     # resolution can be automatically obtained.
