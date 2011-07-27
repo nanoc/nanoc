@@ -15,11 +15,11 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # Remove files to make sure they are recreated
     FileUtils.rm_rf('content')
     FileUtils.rm_rf('layouts/default')
-    FileUtils.rm_rf('lib/default.rb')
+    FileUtils.rm_rf('lib')
 
     # Mock VCS
     vcs = mock
-    vcs.expects(:add).times(3) # One time for each directory
+    vcs.expects(:add).times(2) # One time for each directory
     data_source.vcs = vcs
 
     # Recreate files
@@ -28,12 +28,11 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     # Ensure essential files have been recreated
     assert(File.directory?('content/'))
     assert(File.directory?('layouts/'))
-    assert(File.directory?('lib/'))
 
     # Ensure no non-essential files have been recreated
     assert(!File.file?('content/index.html'))
     assert(!File.file?('layouts/default.html'))
-    assert(!File.file?('lib/default.rb'))
+    refute(File.directory?('lib/'))
   end
 
   def test_items

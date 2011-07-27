@@ -165,7 +165,7 @@ module Nanoc
 
     # Returns the Nanoc::CompilerDSL that should be used for this site.
     def dsl
-      Nanoc::CompilerDSL.new(self)
+      Nanoc::CompilerDSL.new(self, @compiler.site.config)
     end
     memoize :dsl
 

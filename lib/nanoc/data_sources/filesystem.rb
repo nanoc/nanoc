@@ -26,7 +26,7 @@ module Nanoc::DataSources
     # See {Nanoc::DataSource#setup}.
     def setup
       # Create directories
-      %w( content layouts lib ).each do |dir|
+      %w( content layouts ).each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end

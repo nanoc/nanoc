@@ -7,8 +7,6 @@ module Nanoc
   # @since 3.2.0
   module Memoization
 
-    CACHE = {}
-
     # Memoizes the method with the given name. The modified method will cache
     # the results of the original method, so that calling a method twice with
     # the same arguments will short-circuit and return the cached results
@@ -50,17 +48,17 @@ module Nanoc
       # Redefine
       define_method(method_name) do |*args|
         # Get cache
-        @cache ||= {}
-        @cache[method_name] ||= {}
+        @__memoization_cache ||= {}
+        @__memoization_cache[method_name] ||= {}
 
         # Recalculate if necessary
-        if !@cache[method_name].has_key?(args)
+        if !@__memoization_cache[method_name].has_key?(args)
           result = send(original_method_name, *args)
-          @cache[method_name][args] = result
+          @__memoization_cache[method_name][args] = result
         end
 
         # Done
-        @cache[method_name][args]
+        @__memoization_cache[method_name][args]
       end
     end
 
