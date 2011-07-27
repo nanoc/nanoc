@@ -7,6 +7,7 @@
 * Fixed possible `@cache` name clash in memoization module
 * Fixed options with required arguments (such as `--port` and `--host`)
 * Fixed broken `#check_availability`
+* Fixed error handling in watch command
 
 ## 3.2 (2011-07-24)
 
