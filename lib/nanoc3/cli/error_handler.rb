@@ -3,6 +3,8 @@
 module Nanoc3::CLI
 
   # Catches errors and prints nice diagnostic messages, then exits.
+  #
+  # @api private
   class ErrorHandler
 
     # @option params [Nanoc3::CLI::Command, nil] command The command that is
