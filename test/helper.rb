@@ -169,3 +169,11 @@ EOS
   end
 
 end
+
+# A more precise inspect method for Time improves assert failure messages.
+#
+class Time
+  def inspect
+    strftime("%a %b %d %H:%M:%S.#{"%06d" % usec} %Z %Y")
+  end
+end
