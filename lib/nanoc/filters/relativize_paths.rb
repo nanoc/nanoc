@@ -48,6 +48,10 @@ module Nanoc::Filters
       when :xhtml
         selectors = params[:select] || ['//a/@href | a/@href', '//img/@src | img/@src', '//script/@src | script/@src', '//link/@href | link/@href']
         namespaces = params[:namespaces] || {}
+        # FIXME cleans the XHTML namespace to process fragments and full
+        # documents in the same way. At least, Nokogiri adds this namespace if
+        # detects the `html` element.
+        content.sub!(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
         nokogiri_process(content, selectors, namespaces, params[:type])
       else
         raise RuntimeError.new(
