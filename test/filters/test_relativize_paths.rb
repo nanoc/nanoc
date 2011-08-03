@@ -445,5 +445,42 @@ XML
     end
   end
 
+  def test_filter_fragment_xhtml
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
+
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content = <<-XML
+<a href="/foo">bar</a>
+<p>
+  <img src="/img"/>
+</p>
+XML
+
+      expected_content = <<-XML
+<a href="../..">bar</a>
+<p>
+  <img src="../../../img" />
+</p>
+XML
+
+      # Test
+      actual_content = filter.run(raw_content, :type => :xhtml)
+      assert_equal(expected_content, actual_content)
+    end
+  end
+
 
 end
