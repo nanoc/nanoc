@@ -394,7 +394,7 @@ XML
     end
   end
 
-  def test_filter_xml_with_doctype
+  def test_filter_xhtml
     if_have 'nokogiri' do
       # Create filter with mock item
       filter = Nanoc::Filters::RelativizePaths.new
