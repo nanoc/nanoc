@@ -286,7 +286,7 @@ EOS
     def run
       # Check arguments
       if arguments.length != 1
-        $stderr.puts "usage: #{usage}"
+        $stderr.puts "usage: #{command.usage}"
         exit 1
       end
 
