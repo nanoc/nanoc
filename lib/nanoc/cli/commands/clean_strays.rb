@@ -64,17 +64,11 @@ module Nanoc3::CLI::Commands
       end
 
       # Remove empty directories
-      loop do
-        changed = false
-        Dir['output/**/*'].select { |f| File.directory?(f) }.each do |dir|
-          is_empty = !Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
-          next if !is_empty
+      Dir['output/**/*'].select { |f| File.directory?(f) }.sort_by{ |d| -d.length }.each do |dir|
+        next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
 
-          Nanoc3::CLI::Logger.instance.rm(:dir, dir)
-          Dir.rmdir(dir)
-          changed = true
-        end
-        break if !changed
+        Nanoc3::CLI::Logger.instance.rm(:dir, dir)
+        Dir.rmdir(dir)
       end
     end
   end
