@@ -4,7 +4,7 @@
 registry       = Nanoc::PluginRegistry.instance
 deployer_class = Nanoc::Extra::Deployer
 deployers      = registry.find_all(deployer_class)
-deployer_names = deployers.keys.sort
+deployer_names = deployers.keys.sort_by { |k| k.to_s }
 
 usage       'deploy [options]'
 summary     'deploy the compiled site'
