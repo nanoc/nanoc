@@ -315,7 +315,7 @@ XML
 XML
 
       # Test
-      actual_content = filter.run(raw_content, :type => :xml, :select => ['//@boo'])
+      actual_content = filter.run(raw_content, :type => :xml, :select => ['*/@boo'])
       assert_equal(expected_content, actual_content)
     end
   end
@@ -350,7 +350,7 @@ XML
 XML
 
       # Test
-      actual_content = filter.run(raw_content, :type => :xml, :select => ['//far/@href'])
+      actual_content = filter.run(raw_content, :type => :xml, :select => ['far/@href'])
       assert_equal(expected_content, actual_content)
     end
   end
@@ -388,7 +388,7 @@ XML
       actual_content = filter.run(raw_content, {
         :type => :xml, 
         :namespaces => {:ex => 'http://example.org'}, 
-        :select => ['//ex:a/@href']
+        :select => ['ex:a/@href']
       })
       assert_equal(expected_content, actual_content)
     end
