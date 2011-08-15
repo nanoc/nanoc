@@ -134,6 +134,22 @@ EOS
     end
   end
 
+  def capturing_stdio(&block)
+    # Store
+    orig_stdout = $stdout
+    orig_stderr = $stderr
+
+    # Run
+    $stdout = StringIO.new
+    $stderr = StringIO.new
+    yield
+    { :stdout => $stdout.string, :stderr => $stderr.string }
+  ensure
+    # Restore
+    $stdout = orig_stdout
+    $stderr = orig_stderr
+  end
+
   # Adapted from http://github.com/lsegal/yard-examples/tree/master/doctest
   def assert_examples_correct(object)
     P(object).tags(:example).each do |example|

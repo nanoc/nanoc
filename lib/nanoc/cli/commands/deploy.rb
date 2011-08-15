@@ -16,6 +16,7 @@ Available deployers: #{deployer_names.join(', ')}
 EOS
 
 option :t, :target,    'specify the location to deploy to', :argument => :required
+flag   :l, :list,      'list available locations to deploy to'
 option :n, :'dry-run', 'show what would be deployed'
 
 run do |opts, args, cmd|
@@ -29,16 +30,27 @@ module Nanoc::CLI::Commands
     def run
       require_site
 
+      # Get config
+      deploy_configs = site.config.fetch(:deploy) do
+        $stderr.puts "The site configuration has no deploy configuration."
+        exit 1
+      end
+
+      # List
+      if options[:list]
+        puts "Available deployment configurations:"
+        deploy_configs.keys.each do |name|
+          puts "  #{name}"
+        end
+        return
+      end
+
       # Get target
       target = options.fetch(:target) do
         $stderr.puts "The deploy command requires a --target option."
         exit 1
       end
       target = target.to_sym
-      deploy_configs = site.config.fetch(:deploy) do
-        $stderr.puts "The site configuration has no deploy configuration."
-        exit 1
-      end
       config = deploy_configs.fetch(target) do
         $stderr.puts "The site configuration has no deploy configuration for #{target}."
         exit 1
