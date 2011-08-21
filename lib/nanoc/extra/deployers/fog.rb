@@ -25,8 +25,10 @@ module Nanoc::Extra::Deployers
 
       # Get params
       src      = File.expand_path(self.source_path)
-      bucket   = self.config[:bucket] || self.config[:bucket_name]
+      bucket   = self.config.delete(:bucket) || self.config.delete(:bucket_name)
       path     = self.config[:path]
+
+      self.config.delete(:kind)
 
       # Validate params
       error 'The path requires no trailing slash' if path && path[-1,1] == '/'
