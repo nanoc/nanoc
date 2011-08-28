@@ -193,4 +193,61 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_colorize_syntax_with_non_language_shebang_line
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = <<EOS
+before
+<pre><code>
+#!/usr/bin/env ruby
+puts 'hi!'
+</code></pre>
+after
+EOS
+      expected_output = <<EOS
+before
+<pre><code>
+#!/usr/bin/env ruby
+puts 'hi!'
+</code></pre>
+after
+EOS
+
+      # Run filter
+      actual_output = filter.run(input)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
+  def test_colorize_syntax_with_non_language_shebang_line_and_language_line
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = <<EOS
+before
+<pre><code>
+#!ruby
+#!/usr/bin/env ruby
+puts 'hi!'
+</code></pre>
+after
+EOS
+      expected_output = <<EOS
+before
+<pre><code class=\"language-ruby\"><span class=\"dt\">#!/usr/bin/env ruby</span>
+puts <span class=\"s\"><span class=\"dl\">'</span><span class=\"k\">hi!</span><span class=\"dl\">'</span></span></code></pre>
+after
+EOS
+
+      # Run filter
+      actual_output = filter.run(input)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
 end

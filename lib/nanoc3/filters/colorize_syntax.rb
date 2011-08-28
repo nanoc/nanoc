@@ -102,9 +102,9 @@ module Nanoc3::Filters
           has_class = true if language
         else
           # Get language from comment line
-          match = element.inner_text.match(/^#!([^\n]+)$/)
+          match = element.inner_text.match(/^#!([^\/][^\n]*)$/)
           language = match[1] if match
-          element.content = element.content.sub(/^#!([^\n]+)$\n/, '') if language
+          element.content = element.content.sub(/^#!([^\/][^\n]*)$\n/, '') if language
         end
 
         # Give up if there is no hope left
