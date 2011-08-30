@@ -305,4 +305,28 @@ class Nanoc3::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     assert_equal(expected_content, actual_content)
   end
 
+  def test_filter_css_network_path
+    # Create filter with mock item
+    filter = Nanoc3::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc3::ItemRep.new(
+        Nanoc3::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/woof/meow/'
+    end
+
+    # Set content
+    raw_content      = %[background: url(//example.com);]
+    expected_content = %[background: url(//example.com);]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :css)
+    assert_equal(expected_content, actual_content)
+  end
+
 end

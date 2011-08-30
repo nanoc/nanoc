@@ -30,7 +30,7 @@ module Nanoc3::Filters
           $1 + '=' + $3 + relative_path_to($4) + $3 + $5
         end
       when :css
-        content.gsub(/url\((['"]?)(\/.*?)\1\)/) do
+        content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
           'url(' + $1 + relative_path_to($2) + $1 + ')'
         end
       else
