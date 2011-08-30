@@ -41,7 +41,7 @@ module Nanoc::Filters
         end
       when :css
         # FIXME parse CSS the proper way using csspool or something
-        content.gsub(/url\((['"]?)(\/.*?)\1\)/) do
+        content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
           'url(' + $1 + relative_path_to($2) + $1 + ')'
         end
       when :xml, :xhtml
