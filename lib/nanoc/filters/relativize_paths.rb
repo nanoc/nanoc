@@ -36,7 +36,7 @@ module Nanoc::Filters
       case params[:type]
       when :html
         # FIXME parse HTML the proper way using nokogiri
-        content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/.*?)\3([\s\/>])/) do
+        content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/(?:[^\/].*?)?)\3([\s\/>])/) do
           $1 + '=' + $3 + relative_path_to($4) + $3 + $5
         end
       when :css
