@@ -26,7 +26,7 @@ module Nanoc3::Filters
       # FIXME use nokogiri or csspool instead of regular expressions
       case params[:type]
       when :html
-        content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/.*?)\3([ >])/) do
+        content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/(?:[^\/].*?)?)\3([\s\/>])/) do
           $1 + '=' + $3 + relative_path_to($4) + $3 + $5
         end
       when :css
