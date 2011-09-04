@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
     def run
       # Check arguments
       if arguments.size != 0
-        $stderr.puts "usage: #{usage}"
+        $stderr.puts "usage: #{command.usage}"
         exit 1
       end
 
