@@ -1,5 +1,12 @@
 # nanoc news
 
+## 3.2.2 (2011-09-04)
+
+* Fixed command usage printing
+* Made relativize_paths filter handle Windows network paths [Ruben Verborgh]
+* Made watcher use correct configuration
+* Allowed code blocks to start with a non-language shebang line
+
 ## 3.2.1 (2011-07-27)
 
 * Made `@config` available in rules file
