@@ -18,6 +18,8 @@ module Nanoc::CLI::Commands
       require 'fssm'
       require 'pathname'
 
+      watcher_config = self.site.config[:watcher] || {}
+
       @notifier = Notifier.new
 
       # Define rebuilder
@@ -43,9 +45,7 @@ module Nanoc::CLI::Commands
           site.compile
 
           # TODO include icon (--image misc/success-icon.png)
-          notify_on_compilation_success = site.config.has_key?(:notify_on_compilation_success) ?
-            site.config[:notify_on_compilation_success] :
-            true
+          notify_on_compilation_success = watcher_config.fetch(:notify_on_compilation_success) { true }
           if notify_on_compilation_success
             @notifier.notify('Compilation complete')
           end
@@ -54,9 +54,7 @@ module Nanoc::CLI::Commands
           puts "done in #{format '%is %ims', *(time_spent.divmod(1000))}"
         rescue Exception => e
           # TODO include icon (--image misc/error-icon.png)
-          notify_on_compilation_failure = site.config.has_key?(:notify_on_compilation_failure) ?
-            site.config[:notify_on_compilation_failure] :
-            true
+          notify_on_compilation_failure = watcher_config.fetch(:notify_on_compilation_failure) { true }
           if notify_on_compilation_failure
             @notifier.notify('Compilation failed')
           end
@@ -71,7 +69,6 @@ module Nanoc::CLI::Commands
       rebuilder.call(nil, nil)
 
       # Get directories to watch
-      watcher_config = self.site.config[:watcher] || {}
       dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
       files_to_watch = watcher_config[:files_to_watch] || %w( config.yaml Rules rules Rules.rb rules.rb' )
       files_to_watch.delete_if { |f| !File.file?(f) }
