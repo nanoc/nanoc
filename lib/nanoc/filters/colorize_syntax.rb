@@ -91,7 +91,7 @@ module Nanoc::Filters
 
       # Colorize
       doc = klass.fragment(content)
-      doc.css('pre > code').each do |element|
+      doc.css('code').each do |element|
         # Get language
         has_class = false
         language = nil
