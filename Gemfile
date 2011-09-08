@@ -5,6 +5,7 @@ gemspec
 gem 'bluecloth'
 gem 'builder'
 gem 'coderay'
+gem 'coffee-script'
 gem 'erubis'
 gem 'haml'
 gem 'kramdown'

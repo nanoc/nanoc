@@ -6,6 +6,7 @@ module Nanoc::Filters
   autoload 'BlueCloth',       'nanoc/filters/bluecloth'
   autoload 'CodeRay',         'nanoc/filters/coderay'
   autoload 'ColorizeSyntax',  'nanoc/filters/colorize_syntax'
+  autoload 'CoffeeScript',    'nanoc/filters/coffeescript'
   autoload 'ERB',             'nanoc/filters/erb'
   autoload 'Erubis',          'nanoc/filters/erubis'
   autoload 'Haml',            'nanoc/filters/haml'
@@ -31,6 +32,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::BlueCloth',       :bluecloth
   Nanoc::Filter.register '::Nanoc::Filters::CodeRay',         :coderay
   Nanoc::Filter.register '::Nanoc::Filters::ColorizeSyntax',  :colorize_syntax
+  Nanoc::Filter.register '::Nanoc::Filters::CoffeeScript',    :coffeescript
   Nanoc::Filter.register '::Nanoc::Filters::ERB',             :erb
   Nanoc::Filter.register '::Nanoc::Filters::Erubis',          :erubis
   Nanoc::Filter.register '::Nanoc::Filters::Haml',            :haml
