@@ -9,6 +9,10 @@ module Nanoc::DataSources
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemVerbose',  :filesystem_verbose
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemUnified',  :filesystem_unified
 
+  autoload 'Static', 'nanoc/data_sources/static'
+
+  Nanoc::DataSource.register '::Nanoc::DataSources::Static',             :static
+
   # Deprecated; fetch data from online data sources manually instead
   # TODO [in nanoc 4.0] remove me
   autoload 'Delicious', 'nanoc/data_sources/deprecated/delicious'
