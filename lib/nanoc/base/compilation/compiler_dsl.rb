@@ -61,8 +61,16 @@ module Nanoc
     #       # do nothing
     #     end
     def compile(identifier, params={}, &block)
-      # Require block
-      raise ArgumentError.new("#compile requires a block") unless block_given?
+      unless block_given?
+        if params.nil?
+          # Allow shortcut notation
+          params = {}
+          block = Proc.new {}
+        else
+          # Require block
+          raise ArgumentError.new("#compile requires a block")
+        end
+      end
 
       # Get rep name
       rep_name = params[:rep] || :default
@@ -105,8 +113,16 @@ module Nanoc
     #       '/raw' + item.identifier + 'index.txt'
     #     end
     def route(identifier, params={}, &block)
-      # Require block
-      raise ArgumentError.new("#route requires a block") unless block_given?
+      unless block_given?
+        if params.nil?
+          # Allow shortcut notation
+          params = {}
+          block = Proc.new {}
+        else
+          # Require block
+          raise ArgumentError.new("#route requires a block")
+        end
+      end
 
       # Get rep name
       rep_name      = params[:rep] || :default
