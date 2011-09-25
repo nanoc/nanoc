@@ -70,8 +70,9 @@ module Nanoc::Filters
     #   a mapping of programming languages (symbols, not strings) onto
     #   colorizers (symbols).
     #
-    # @option params [String] :colorize_selector ('code') The CSS selector used
-    #   to find page elements to colorize.
+    # @option params [Boolean] :outside_pre (false) `true` if the colorizer
+    #   should be applied on `code` elements outside `pre` elements, false
+    #   if only `code` elements inside` pre` elements should be colorized.
     #
     # @return [String] The filtered content
     def run(content, params={})
@@ -94,7 +95,8 @@ module Nanoc::Filters
 
       # Colorize
       doc = klass.fragment(content)
-      doc.css(params[:colorize_selector] || 'code').each do |element|
+      selector = params[:outside_pre] ? 'code' : 'pre > code'
+      doc.css(selector).each do |element|
         # Get language
         has_class = false
         language = nil
