@@ -5,6 +5,7 @@
 * Turned Rake tasks into proper nanoc commands
 * Added support for deployment using Fog [Jack Chu]
 * Dropped the “3” suffix on nanoc3/Nanoc3
+* Added CoffeeScript filter [Riley Goodside]
 
 ## 3.2.1 (2011-07-27)
 
