@@ -83,6 +83,7 @@ may be interested in the development dependencies:
 * Vincent Driessen
 * Chris Eppstein
 * Jeff Forcier
+* Riley Goodside
 * Felix Hanley
 * Justin Hileman
 * Starr Horne
