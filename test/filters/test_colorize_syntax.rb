@@ -250,4 +250,34 @@ EOS
     end
   end
 
+  def test_not_outside_pre
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input           = '<code class="language-ruby"># comment</code>'
+      expected_output = '<code class="language-ruby"># comment</code>'
+
+      # Run filter
+      actual_output = filter.run(input, :outside_pre => false)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
+  def test_outside_pre
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input           = '<code class="language-ruby"># comment</code>'
+      expected_output = '<code class="language-ruby"><span class="comment"># comment</span></code>'
+
+      # Run filter
+      actual_output = filter.run(input, :outside_pre => true)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
 end
