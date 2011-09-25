@@ -6,6 +6,7 @@
 * Added support for deployment using Fog [Jack Chu]
 * Dropped the “3” suffix on nanoc3/Nanoc3
 * Added CoffeeScript filter [Riley Goodside]
+* Allowed syntax colorizer to colorize outside `pre` elements [Kevin Lynagh]
 
 ## 3.2.2 (2011-09-04)
 
