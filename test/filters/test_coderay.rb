@@ -25,7 +25,7 @@ class Nanoc3::Filters::CodeRayTest < MiniTest::Unit::TestCase
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
       result = filter.run(code, :language => 'ruby')
-      assert_match %r{^<span class="r">def</span> <span class="fu">some_function</span>}, result
+      assert_match %r{^<span class="keyword">def</span> <span class="function">some_function</span>}, result
     end
   end
 

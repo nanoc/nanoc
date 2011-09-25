@@ -81,7 +81,7 @@ class Nanoc3::Helpers::FilteringTest < MiniTest::Unit::TestCase
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
-      assert_match(%r{<span class="r">def</span> <span class="fu">some_function</span>}, result)
+      assert_match(%r{<span class="keyword">def</span> <span class="function">some_function</span>}, result)
     end
   end
 
