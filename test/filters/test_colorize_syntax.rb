@@ -11,7 +11,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
       # Get input and expected output
       input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
-      expected_output = '<pre title="moo"><code class="language-ruby"><span class="c"># comment</span></code></pre>'
+      expected_output = '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>'
 
       # Run filter
       actual_output = filter.run(input)
@@ -26,7 +26,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
       # Get input and expected output
       input = %[<pre title="moo"><code>#!ruby\n# comment</code></pre>]
-      expected_output = '<pre title="moo"><code class="language-ruby"><span class="c"># comment</span></code></pre>'
+      expected_output = '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>'
 
       # Run filter
       actual_output = filter.run(input)
@@ -41,7 +41,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
       # Get input and expected output
       input = %[<pre title="moo"><code class="language-ruby">#!ruby\n# comment</code></pre>]
-      expected_output = %[<pre title="moo"><code class="language-ruby"><span class="dt">#!ruby</span>\n<span class="c"># comment</span></code></pre>]
+      expected_output = %[<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>\n<span class="comment"># comment</span></code></pre>]
 
       # Run filter
       actual_output = filter.run(input)
@@ -56,7 +56,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
       # Get input and expected output
       input = '<pre title="moo"><code class="abc language-ruby xyz"># comment</code></pre>'
-      expected_output = '<pre title="moo"><code class="abc language-ruby xyz"><span class="c"># comment</span></code></pre>'
+      expected_output = '<pre title="moo"><code class="abc language-ruby xyz"><span class="comment"># comment</span></code></pre>'
 
       # Run filter
       actual_output = filter.run(input)
@@ -239,8 +239,8 @@ after
 EOS
       expected_output = <<EOS
 before
-<pre><code class=\"language-ruby\"><span class=\"dt\">#!/usr/bin/env ruby</span>
-puts <span class=\"s\"><span class=\"dl\">'</span><span class=\"k\">hi!</span><span class=\"dl\">'</span></span></code></pre>
+<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
+puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>
 after
 EOS
 

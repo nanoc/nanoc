@@ -7,6 +7,13 @@
 * Dropped the “3” suffix on nanoc3/Nanoc3
 * Added CoffeeScript filter [Riley Goodside]
 
+## 3.2.2 (2011-09-04)
+
+* Fixed command usage printing
+* Made relativize_paths filter handle Windows network paths [Ruben Verborgh]
+* Made watcher use correct configuration
+* Allowed code blocks to start with a non-language shebang line
+
 ## 3.2.1 (2011-07-27)
 
 * Made `@config` available in rules file
@@ -68,7 +75,7 @@ Extensions:
 
 * Improved `#render` documentation
 * Improved metadata section check so that e.g. raw diffs are handled properly
-* Deprecated using `Nanoc::Site#initialize` with a non-`"."` argument
+* Deprecated using `Nanoc3::Site#initialize` with a non-`"."` argument
 * Added Ruby engine to version string
 * Allowed the `created_at` and `updated_at` attributes used in the `Blogging`
   helper to be `Date` instances
@@ -140,7 +147,7 @@ Changed:
 
 Deprecated:
 
-* `Nanoc::FileProxy`; use one of the filename attributes instead
+* `Nanoc3::FileProxy`; use one of the filename attributes instead
 * `ItemRep#content_at_snapshot`; use `#compiled_content` instead
 * The `last_fm`, `delicious` and `twitter` data sources; fetch online content
   into a cache by a rake task and load data from this cache instead
