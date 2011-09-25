@@ -283,6 +283,15 @@ EOS
 </html>
 EOS
 
+    DEFAULT_RAKEFILE = <<EOS
+begin
+  require 'nanoc3/tasks'
+rescue LoadError
+  require 'rubygems'
+  require 'nanoc3/tasks'
+end
+EOS
+
     def run
       # Check arguments
       if arguments.length != 1
@@ -336,7 +345,7 @@ EOS
 
       # Create rakefile
       File.open('Rakefile', 'w') do |io|
-        io.write "require 'nanoc3/tasks'"
+        io.write DEFAULT_RAKEFILE.make_compatible_with_env
       end
       Nanoc3::NotificationCenter.post(:file_created, 'Rakefile')
 
