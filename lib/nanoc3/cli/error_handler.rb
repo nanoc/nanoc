@@ -169,9 +169,9 @@ module Nanoc3::CLI
       case error
       when LoadError
         # Get gem name
-        matches = error.message.match(/no such file to load -- ([^\s]+)/)
+        matches = error.message.match(/(no such file to load|cannot load such file) -- ([^\s]+)/)
         return nil if matches.nil?
-        gem_name = GEM_NAMES[matches[1]]
+        gem_name = GEM_NAMES[matches[2]]
 
         # Build message
         if gem_name
