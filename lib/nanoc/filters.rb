@@ -26,6 +26,7 @@ module Nanoc::Filters
   autoload 'Slim',            'nanoc/filters/slim'
   autoload 'Typogruby',       'nanoc/filters/typogruby'
   autoload 'UglifyJS',        'nanoc/filters/uglify_js'
+  autoload 'XSL',             'nanoc/filters/xsl'
   autoload 'YUICompressor',   'nanoc/filters/yui_compressor'
 
   Nanoc::Filter.register '::Nanoc::Filters::AsciiDoc',        :asciidoc
@@ -52,6 +53,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::Slim',            :slim
   Nanoc::Filter.register '::Nanoc::Filters::Typogruby',       :typogruby
   Nanoc::Filter.register '::Nanoc::Filters::UglifyJS',        :uglify_js
+  Nanoc::Filter.register '::Nanoc::Filters::XSL',             :xsl
   Nanoc::Filter.register '::Nanoc::Filters::YUICompressor',   :yui_compressor
 
 end
