@@ -2,10 +2,17 @@
 
 ## 3.3
 
-* Turned Rake tasks into proper nanoc commands
-* Added support for deployment using Fog [Jack Chu]
+Base:
+
 * Dropped the “3” suffix on nanoc3/Nanoc3
+* Turned Rake tasks into proper nanoc commands
+
+Extensions:
+
+* Added support for deployment using Fog [Jack Chu]
 * Added CoffeeScript filter [Riley Goodside]
+* Added XSL filter [Arnau Siches]
+* Added YUICompress filter [Matt Keveney]
 * Allowed syntax colorizer to colorize outside `pre` elements [Kevin Lynagh]
 
 ## 3.2.2 (2011-09-04)
