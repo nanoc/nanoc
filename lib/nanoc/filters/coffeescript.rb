@@ -1,6 +1,8 @@
 require 'coffee-script'
 
 module Nanoc::Filters
+
+  # @since 3.3.0
   class CoffeeScript < Nanoc::Filter
 
     # Runs the content through [CoffeeScript](http://coffeescript.org/).
@@ -14,4 +16,5 @@ module Nanoc::Filters
     end
 
   end
+
 end
