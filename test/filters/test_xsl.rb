@@ -1,77 +1,104 @@
 # encoding: utf-8
 
+require 'tempfile'
+
 class Nanoc::Filters::XSLTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
-  def test_filter
-    if_have 'nokogiri' do
-      require 'tempfile'
-      # Create a simple XSL file
-      xsl_file = Tempfile.new('simple_xsl')
-      xsl_file.puts <<-EOS
+  SAMPLE_XSL = <<-EOS
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" omit-xml-declaration="yes"/>
-
-  <xsl:template match="/ | node() | @* | comment() | processing-instruction()">
-    <xsl:copy>
-      <xsl:apply-templates select="@* | node()"/>
-    </xsl:copy>
+  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
+  <xsl:template match="/">
+    <html>
+      <head>
+        <title><xsl:value-of select="report/title"/></title>
+      </head>
+      <body>
+        <h1><xsl:value-of select="report/title"/></h1>
+      </body>
+    </html>
   </xsl:template>
 </xsl:stylesheet>
 EOS
-      
-      xml_content = <<-EOS
-<?xml version="1.0" encoding="utf-8"?>
-<test foo="bar">
-  <shouldbe>identical</shouldbe>
-</test>
-EOS
-      xsl_file.open
-      # Create filter
-      filter = ::Nanoc::Filters::XSL.new
 
-      # Run filter
-      result = filter.run(xml_content, { :template => xsl_file.path })
-      assert_equal(xml_content, result)
-      xsl_file.close
+  SAMPLE_XML_IN = <<-EOS
+<?xml version="1.0" encoding="utf-8"?>
+<report>
+  <title>My Report</title>
+</report>
+EOS
+
+  SAMPLE_XML_OUT = <<-EOS
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <title>My Report</title>
+  </head>
+  <body>
+    <h1>My Report</h1>
+  </body>
+</html>
+EOS
+
+  SAMPLE_XSL_WITH_PARAMS = <<-EOS
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
+  <xsl:template match="/">
+    <html>
+      <head>
+        <title><xsl:value-of select="$foo"/></title>
+      </head>
+      <body>
+        <h1><xsl:value-of select="$foo"/></h1>
+      </body>
+    </html>
+  </xsl:template>
+</xsl:stylesheet>
+EOS
+
+  SAMPLE_XML_IN_WITH_PARAMS = <<-EOS
+<?xml version="1.0" encoding="utf-8"?>
+<report>
+  <title>My Report</title>
+</report>
+EOS
+
+  SAMPLE_XML_OUT_WITH_PARAMS = <<-EOS
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <title>bar</title>
+  </head>
+  <body>
+    <h1>bar</h1>
+  </body>
+</html>
+EOS
+
+  def test_filter_as_layout
+    if_have 'nokogiri' do
+      layout = Nanoc::Layout.new(SAMPLE_XSL, {}, '/layout/')
+
+      filter = ::Nanoc::Filters::XSL.new(
+        :layout => layout, :content => SAMPLE_XSL)
+      result = filter.run(SAMPLE_XML_IN)
+
+      assert_equal SAMPLE_XML_OUT, result
     end
   end
 
-  def test_filter_with_param
+  def test_filter_with_params
     if_have 'nokogiri' do
-      require 'tempfile'
-      # Create a simple XSL file
-      xsl_file = Tempfile.new('simple_xsl')
-      xsl_file.puts <<-EOS
-<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" omit-xml-declaration="yes"/>
-  <xsl:param name="foo"/>
-  <xsl:template match="/">
-    <result><xsl:value-of select="$foo"/></result>
-  </xsl:template>
-</xsl:stylesheet>
-EOS
-      
-      xml_content = <<-EOS
-<?xml version="1.0" encoding="utf-8"?>
-<test with="param"/>
-EOS
-      xml_expected = <<-EOS
-<?xml version="1.0" encoding="utf-8"?>
-<result>bar</result>
-EOS
+      layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout/')
 
-      xsl_file.open
-      # Create filter
-      filter = ::Nanoc::Filters::XSL.new
+      filter = ::Nanoc::Filters::XSL.new(
+        :layout => layout, :content => SAMPLE_XSL_WITH_PARAMS)
+      result = filter.run(SAMPLE_XML_IN_WITH_PARAMS, :foo => 'bar')
 
-      # Run filter
-      result = filter.run(xml_content, { :template => xsl_file.path, :foo => 'bar' })
-      assert_equal(xml_expected, result)
-      xsl_file.close
+      assert_equal SAMPLE_XML_OUT_WITH_PARAMS, result
     end
   end
 
