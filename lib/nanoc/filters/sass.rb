@@ -12,11 +12,11 @@ module Nanoc::Filters
       attr_accessor :current
     end
 
-    # Essentially the {Sass::Importers::Filesystem} but registering each
+    # Essentially the `Sass::Importers::Filesystem` but registering each
     # import file path.
     class SassFilesystemImporter < ::Sass::Importers::Filesystem
 
-      private
+    private
 
       def _find(dir, name, options)
         full_filename, syntax = find_real_file(dir, name)
