@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('yard')
 
   s.post_install_message = %q{------------------------------------------------------------------------------
-Thanks for installing nanoc 3.2! Here are some resources to help you get
+Thanks for installing nanoc 3.3! Here are some resources to help you get
 started:
 
 * The web site at <http://nanoc.stoneship.org/>
