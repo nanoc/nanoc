@@ -99,6 +99,7 @@ may be interested in the development dependencies:
 * Eric Sunshine
 * Dennis Sutch
 * Matthias Vallentin
+* Ruben Verborgh
 * Toon Willems
 
 ## Contact
