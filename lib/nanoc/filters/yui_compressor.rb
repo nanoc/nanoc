@@ -7,9 +7,9 @@ module Nanoc::Filters
     # This method optionally takes options to pass directly to the
     # YUICompressor gem.
     #
-    # @params [String] content JavaScript or CSS input
+    # @param [String] content JavaScript or CSS input
     #
-    # @params [Hash] params Options passed to YUICompressor
+    # @param [Hash] params Options passed to YUICompressor
     #
     # @return [String] Compressed but equivalent JavaScript or CSS
     def run(content, params = {})
