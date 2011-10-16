@@ -50,9 +50,7 @@ module Nanoc::Extra::Validators
 
     # Enumerates all key-value pairs of a given hash in a thread-safe way.
     #
-    # This class is a helper class, which means that it is not used directly
-    # by nanoc. Future versions of nanoc may no longer contain this class. Do
-    # not depend on this class to be available.
+    # @api private
     class ThreadsafeHashEnumerator
 
       # Creates a new enumerator for the given hash.
