@@ -32,11 +32,12 @@ module Nanoc
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
-      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee ),
-      :output_dir         => 'output',
-      :data_sources       => [ {} ],
-      :index_filenames    => [ 'index.html' ],
-      :enable_output_diff => false
+      :text_extensions        => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee ),
+      :output_dir             => 'output',
+      :data_sources           => [ {} ],
+      :index_filenames        => [ 'index.html' ],
+      :enable_output_diff     => false,
+      :exclude_code_snippets  => []
     }
 
     # Creates a site object for the site specified by the given
@@ -149,6 +150,12 @@ module Nanoc
     #
     # * `enable_output_diff` (`Boolean`) - True when diffs should be generated
     #   for the compiled content of this site; false otherwise.
+    #
+    # * `exclude_code_snippets` (`Array<String>`) - A list of filenames, names
+    #   or pathes to exclude code snippets in lib directory. If the given name
+    #   is found in code snippet filename, the code snippet won't be loaded.
+    #   This is particularily useful when you have some code/gems in lib
+    #   folder, but don't want to load them for nanoc.
     #
     # The list of data sources consists of hashes with the following keys:
     #
@@ -288,12 +295,18 @@ module Nanoc
       return if @code_snippets_loaded
       @code_snippets_loaded = true
 
+      # Exclude code "snippets" listed in @config.exclude_code_snippets
+      exclusion_list = @config[:exclude_code_snippets] || []
+      snippet_list = Dir['lib/**/*.rb'].sort.map.reject do |filename|
+        exclusion_list.any? {|exclude| filename.include? exclude}
+      end
+
       # Get code snippets
-      @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
-        Nanoc::CodeSnippet.new(
+      @code_snippets = snippet_list.map do |filename|
+        Nanoc3::CodeSnippet.new(
           File.read(filename),
           filename
-        )
+        ) 
       end
 
       # Execute code snippets
