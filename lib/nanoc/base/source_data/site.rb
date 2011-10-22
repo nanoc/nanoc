@@ -303,7 +303,7 @@ module Nanoc
 
       # Get code snippets
       @code_snippets = snippet_list.map do |filename|
-        Nanoc3::CodeSnippet.new(
+        Nanoc::CodeSnippet.new(
           File.read(filename),
           filename
         ) 
