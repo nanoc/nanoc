@@ -27,8 +27,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     assert File.file?('foobar/asdf.html')
 
     # Check file content
-    expected = "--- \nfoo: bar\n---\n\ncontent here"
-    assert_equal expected, File.read('foobar/asdf.html')
+    expected = /^--- ?\nfoo: bar\n---\n\ncontent here$/
+    assert_match expected, File.read('foobar/asdf.html')
   end
 
   def test_create_object_at_root
@@ -43,8 +43,8 @@ class Nanoc3::DataSources::FilesystemUnifiedTest < MiniTest::Unit::TestCase
     assert File.file?('foobar/index.html')
 
     # Check file content
-    expected = "--- \nfoo: bar\n---\n\ncontent here"
-    assert_equal expected, File.read('foobar/index.html')
+    expected = /^--- ?\nfoo: bar\n---\n\ncontent here$/
+    assert_match expected, File.read('foobar/index.html')
   end
 
   def test_load_objects

@@ -25,7 +25,7 @@ class Nanoc3::ItemTest < MiniTest::Unit::TestCase
       item.identifier.chop!
     rescue => error
       raised = true
-      assert_equal "can't modify frozen string", error.message
+      assert_match /^can't modify frozen [Ss]tring$/, error.message
     end
     assert raised, 'Should have raised when trying to modify a frozen string'
   end
