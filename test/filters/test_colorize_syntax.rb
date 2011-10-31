@@ -250,4 +250,34 @@ EOS
     end
   end
 
+  def test_strip
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Simple test
+      assert_equal "  bar", filter.send(:strip, "\n  bar")
+
+      # Get input and expected output
+      input = <<EOS
+before
+<pre><code class="language-ruby">
+  def foo
+  end
+</code></pre>
+after
+EOS
+      expected_output = <<EOS
+before
+<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
+  <span class=\"keyword\">end</span></code></pre>
+after
+EOS
+
+      # Run filter
+      actual_output = filter.run(input)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
 end
