@@ -50,6 +50,15 @@ index_filenames: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:index_filenames])}
 # before and after the last site compilation.
 enable_output_diff: false
 
+# By default, nanoc loads additional code in lib folder as 'code snippet'.
+# It looks recursively for any *.rb file and loads the containing code.
+# This is pretty useful for own little extensions or functionality to use.
+# However, it might be the case that you explicitly don't want to load particular
+# code files (since they are being used for any other purpose. Here, you can
+# exclude files by just entering their name (or any part of it). Example:
+# exclude_code_snippets: ['configatron']
+exclude_code_snippets: []
+
 # The data sources where nanoc loads its data from. This is an array of
 # hashes; each array element represents a single data source. By default,
 # there is only a single data source that reads data from the “content/” and
