@@ -28,11 +28,14 @@ module Nanoc::Filters
     # invoked with a `:coderay => coderay_options_hash` option, the
     # `coderay_options_hash` hash will be passed to the CodeRay colorizer.
     #
-    # Currently, only the `:coderay` (http://coderay.rubychan.de/),
+    # Currently, only the
+    # `:albino` (https://github.com/github/albino),
+    # `:coderay` (http://coderay.rubychan.de/),
     # `:pygmentize` (http://pygments.org/, http://pygments.org/docs/cmdline/),
-    # and `:simon_highlight`
-    # (http://www.andre-simon.de/doku/highlight/en/highlight.html) colorizers
-    # are implemented. Additional colorizer implementations are welcome!
+    # and
+    # `:simon_highlight` (http://www.andre-simon.de/doku/highlight/en/highlight.html)
+    # colorizers are implemented. Additional colorizer implementations are
+    # welcome!
     #
     # @example Using a class to indicate type of code be highlighted
     #
@@ -134,7 +137,7 @@ module Nanoc::Filters
 
   private
 
-    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :simon_highlight ]
+    KNOWN_COLORIZERS = [ :albino, :coderay, :dummy, :pygmentize, :simon_highlight ]
 
     def highlight(code, language, params={})
       colorizer = @colorizers[language.to_sym]
@@ -201,6 +204,31 @@ module Nanoc::Filters
       # Get result
       stdout.rewind
       highlighted_code = stdout.read
+
+      # Clean result
+      doc = Nokogiri::HTML.fragment(highlighted_code)
+      doc.xpath('./div[@class="highlight"]/pre').inner_html
+    end
+
+    # Runs the content through [Pygments](http://pygments.org/) via
+    # [Albino](https://github.com/github/albino).
+    #
+    # @api private
+    #
+    # @param [String] code The code to colorize
+    #
+    # @param [String] language The language the code is written in
+    #
+    # @option params [String, Symbol] :encoding The encoding of the code block
+    #
+    # @return [String] The colorized output
+    def albino(code, language, params={})
+      require 'albino'
+      begin
+        highlighted_code = Albino.colorize(code, language)
+      rescue Errno::ENOENT
+        raise "Could not spawn pygmentize"
+      end
 
       # Clean result
       doc = Nokogiri::HTML.fragment(highlighted_code)

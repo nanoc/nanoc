@@ -13,6 +13,7 @@ Extensions:
 * Added CoffeeScript filter [Riley Goodside]
 * Added XSL filter [Arnau Siches]
 * Added YUICompress filter [Matt Keveney]
+* Added Albino to supported syntax colorizers [Dan Callahan]
 * Allowed syntax colorizer to colorize outside `pre` elements [Kevin Lynagh]
 
 ## 3.2.2 (2011-09-04)
