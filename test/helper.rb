@@ -153,22 +153,30 @@ EOS
   # Adapted from http://github.com/lsegal/yard-examples/tree/master/doctest
   def assert_examples_correct(object)
     P(object).tags(:example).each do |example|
-      begin
-        # Get input and output
-        parts = example.text.split(/# ?=>/).map { |s| s.strip }
-        code             = parts[0].strip
-        expected_out_raw = parts[1].strip
-
-        # Evaluate
-        expected_out     = eval(parts[1])
-        actual_out       = instance_eval("#{code}")
-      rescue Exception => e
-        e.message << " (code: #{code}; expected output: #{expected_out_raw})"
-        raise e
+      # Classify
+      lines = example.text.lines.map do |line|
+        [ line =~ /^\s*# ?=>/ ? :result : :code, line ]
       end
 
-      assert_equal expected_out, actual_out,
-        "Incorrect example: #{code}"
+      # Join
+      pieces = []
+      lines.each do |line|
+        if !pieces.empty? && pieces.last.first == line.first
+          pieces.last.last << line.last
+        else
+          pieces << line
+        end
+      end
+      lines = pieces.map { |p| p.last }
+
+      # Test
+      lines.each_slice(2) do |pair|
+        actual_out   = eval(pair.first)
+        expected_out = eval(pair.last.match(/# ?=>(.*)/)[1])
+      
+        assert_equal expected_out, actual_out,
+          "Incorrect example:\n#{pair.first}"
+      end
     end
   end
 
