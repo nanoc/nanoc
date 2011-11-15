@@ -116,8 +116,9 @@ module Nanoc::Filters
         next if language.nil?
 
         # Highlight
-        highlighted_code = highlight(element.inner_text.strip, language, params)
-        element.inner_html = highlighted_code.strip
+        raw = strip(element.inner_text)
+        highlighted_code = highlight(raw, language, params)
+        element.inner_html = strip(highlighted_code)
 
         # Add class
         unless has_class
@@ -135,6 +136,11 @@ module Nanoc::Filters
   private
 
     KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :simon_highlight ]
+
+    # Removes the first blank lines and any whitespace at the end.
+    def strip(s)
+      s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
+    end
 
     def highlight(code, language, params={})
       colorizer = @colorizers[language.to_sym]

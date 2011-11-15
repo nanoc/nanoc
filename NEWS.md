@@ -15,6 +15,13 @@ Extensions:
 * Added YUICompress filter [Matt Keveney]
 * Allowed syntax colorizer to colorize outside `pre` elements [Kevin Lynagh]
 
+## 3.2.3 (2011-10-31)
+
+* Made syntax colorizer only strip trailing blank lines instead of all blanks
+* Improved Ruby 1.9.x compatibility
+* Made default rakefile require rubygems if necessary
+* Made filename/content argument of `Nanoc3::Item#initialize` mandatory
+
 ## 3.2.2 (2011-09-04)
 
 * Fixed command usage printing

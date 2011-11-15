@@ -1,1 +1,1 @@
-script: "bundle exec rake skip=Nanoc3::Filters::LessTest"
+rvm: 1.9.3
