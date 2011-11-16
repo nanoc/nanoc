@@ -240,7 +240,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)
 
       # Require compilation
-      raise Nanoc::Errors::UnmetDependency.new(self) if !compiled? && !params[:force]
+      raise Nanoc::Errors::UnmetDependency.new(self) if !compiled?
 
       # Get name of last pre-layout snapshot
       snapshot_name = params[:snapshot]
