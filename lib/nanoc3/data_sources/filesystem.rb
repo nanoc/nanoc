@@ -283,6 +283,9 @@ module Nanoc3::DataSources
         raise_encoding_error(filename, original_encoding) if !data.valid_encoding?
       end
 
+      # Remove UTF-8 BOM (ugly)
+      data.gsub!("\xEF\xBB\xBF", '')
+
       data
     end
 
