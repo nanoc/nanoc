@@ -16,7 +16,7 @@ module Nanoc::Helpers
     # When this method is invoked _with_ a block, an empty string will be
     # returned and the rendered content will be appended to `_erbout`. In this
     # case, the content of the block will be captured (using the
-    # {Nanoc3::Helpers::Capturing} helper) and this content will be made
+    # {Nanoc::Helpers::Capturing} helper) and this content will be made
     # available with `yield`. In other words, a `yield` inside the partial
     # will output the content of the block passed to the method.
     #
