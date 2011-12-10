@@ -7,24 +7,33 @@ module Nanoc::Helpers
 
     include Nanoc::Helpers::Capturing
 
-    # Returns a string containing the rendered given layout. The given layout
-    # will first be run through the matching layout rule.
+    # Renders the given layout. The given layout will be run through the first
+    # matching layout rule.
     #
-    # The assigns (`@item`, `@config`, …) will not be available in the
-    # partial, but it is possible to pass custom assigns to the method. These
-    # assigns will be made available as instance variables inside the partial.
+    # When this method is invoked _without_ a block, the return value will be
+    # the rendered layout (a string)  and `_erbout` will not be modified.
     #
-    # The method can also take a block. In this case, the content of the block
-    # will be captured (using the {Nanoc::Helpers::Capturing} helper) and
-    # this content will be made available with `yield`. In other words, a
-    # `yield` inside the partial will output the content of the block passed
-    # to the method.
+    # When this method is invoked _with_ a block, an empty string will be
+    # returned and the rendered content will be appended to `_erbout`. In this
+    # case, the content of the block will be captured (using the
+    # {Nanoc3::Helpers::Capturing} helper) and this content will be made
+    # available with `yield`. In other words, a `yield` inside the partial
+    # will output the content of the block passed to the method.
+    #
+    # (For the curious: the reason why {#render} with a block has this
+    # behaviour of returning an empty string and modifying `_erbout` is
+    # because ERB does not support combining the `<%= ... %>` form with a
+    # method call that takes a block.)
+    #
+    # The assigns (`@item`, `@config`, …) will be available in the partial. It
+    # is also possible to pass custom assigns to the method; these assigns
+    # will be made available as instance variables inside the partial.
     #
     # @param [String] identifier The identifier of the layout that should be
     #   rendered
     #
-    # @param [Hash] other_assigns A hash containing assigns that will be made
-    #   available as instance variables in the partial
+    # @param [Hash] other_assigns A hash containing extra assigns that will be
+    #   made available as instance variables in the partial
     #
     # @example Rendering a head and a foot partial around some text
     #
@@ -52,10 +61,22 @@ module Nanoc::Helpers
     #     I'm boxy! Luvz!
     #   <% end %>
     #
+    #   # Result
+    #   <div class="box">
+    #     I'm boxy! Luvz!
+    #   </div>
+    #
     # @raise [Nanoc::Errors::UnknownLayout] if the given layout does not
     #   exist
     #
-    # @return [String] The rendered partial
+    # @raise [Nanoc::Errors::CannotDetermineFilter] if there is no layout
+    #   rule for the given layout
+    #
+    # @raise [Nanoc::Errors::UnknownFilter] if the layout rule for the given
+    #   layout specifies an unknown filter
+    #
+    # @return [String, nil] The rendered partial, or nil if this method was
+    #   invoked with a block
     def render(identifier, other_assigns={}, &block)
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }

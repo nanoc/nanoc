@@ -365,6 +365,22 @@ class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
     assert_equal('blah blah', result[1])
   end
 
+  def test_parse_utf8_bom
+    File.open('test.html', 'w') do |io|
+      io.write [ 0xEF, 0xBB, 0xBF ].map { |i| i.chr }.join
+      io.write "-----\n"
+      io.write "utf8bomawareness: high\n"
+      io.write "-----\n"
+      io.write "content goes here\n"
+    end
+
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+
+    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    assert_equal({ 'utf8bomawareness' => 'high' }, result[0])
+    assert_equal('content goes here', result[1])
+  end
+
   def test_parse_embedded_no_meta
     content = "blah\n" \
       "blah blah blah\n" \

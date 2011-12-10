@@ -73,6 +73,7 @@ may be interested in the development dependencies:
 
 * Ben Armston
 * Colin Barrett
+* Bil Bas
 * Dmitry Bilunov
 * Devon Luke Buchanan
 * Stefan Bühler
