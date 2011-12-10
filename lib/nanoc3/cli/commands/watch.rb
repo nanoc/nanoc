@@ -92,6 +92,9 @@ module Nanoc3::CLI::Commands
       # A list of commandline tool names that can be used to send notifications
       TOOLS = %w( growlnotify notify-send )
 
+      # The tool to use for discovering binaries' locations
+      FIND_BINARY_COMMAND = RUBY_PLATFORM =~ /mingw|mswin/ ? "where" : "which"
+
       # Send a notification. If no notifier is found, no notification will be
       # created.
       #
@@ -104,7 +107,7 @@ module Nanoc3::CLI::Commands
     private
 
       def tool
-        @tool ||= TOOLS.find { |t| !`which #{t}`.empty? }
+        @tool ||= TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
       end
 
       def growlnotify(message)
