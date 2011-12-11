@@ -81,14 +81,14 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
     assert graph.vertices.include?(3)
   end
 
-  def test_remove_edge
+  def test_delete_edge
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(1,2)
 
     assert_equal [ 2 ], graph.successors_of(1)
     assert_equal [ 1 ], graph.predecessors_of(2)
 
-    graph.remove_edge(1, 2)
+    graph.delete_edge(1, 2)
 
     assert_equal [], graph.successors_of(1)
     assert_equal [], graph.predecessors_of(2)
@@ -246,37 +246,37 @@ class Nanoc3::DirectedGraphTest < MiniTest::Unit::TestCase
   def test_roots_after_removing_edge
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(1, 2)
-    graph.remove_edge(1, 2)
+    graph.delete_edge(1, 2)
     assert_equal Set.new([ 1, 2, 3 ]), graph.roots
 
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(1, 3)
     assert_equal Set.new([ 1, 2 ]), graph.roots
-    graph.remove_edge(1, 2) # no such edge
+    graph.delete_edge(1, 2) # no such edge
     assert_equal Set.new([ 1, 2 ]), graph.roots
 
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(2, 1)
-    graph.remove_edge(2, 1)
+    graph.delete_edge(2, 1)
     assert_equal Set.new([ 1, 2, 3 ]), graph.roots
 
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
-    graph.remove_edge(1, 2)
+    graph.delete_edge(1, 2)
     assert_equal Set.new([ 1, 2 ]), graph.roots
-    graph.remove_edge(2, 3)
+    graph.delete_edge(2, 3)
     assert_equal Set.new([ 1, 2, 3 ]), graph.roots
 
     graph = Nanoc3::DirectedGraph.new([ 1, 2, 3 ])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
     graph.add_edge(3, 1)
-    graph.remove_edge(1, 2)
+    graph.delete_edge(1, 2)
     assert_equal Set.new([ 2 ]), graph.roots
-    graph.remove_edge(2, 3)
+    graph.delete_edge(2, 3)
     assert_equal Set.new([ 2, 3 ]), graph.roots
-    graph.remove_edge(3, 1)
+    graph.delete_edge(3, 1)
     assert_equal Set.new([ 1, 2, 3 ]), graph.roots
   end
 

@@ -22,7 +22,7 @@ module Nanoc3
   #     # => %w( a b c )
   #   
   #   # Modify edges
-  #   graph.remove_edge('a', 'b')
+  #   graph.delete_edge('a', 'b')
   #   
   #   # Get (direct) predecessors again
   #   graph.direct_predecessors_of('d').sort
