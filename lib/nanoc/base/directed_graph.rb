@@ -8,7 +8,7 @@ module Nanoc
   # @example Creating and using a directed graph
   #
   #   # Create a graph with three vertices
-  #   graph = DirectedGraph.new(%w( a b c d ))
+  #   graph = Nanoc::DirectedGraph.new(%w( a b c d ))
   #   
   #   # Add edges
   #   graph.add_edge('a', 'b')

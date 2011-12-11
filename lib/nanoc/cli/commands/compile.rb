@@ -153,7 +153,7 @@ module Nanoc::CLI::Commands
 
       # Get old and new content
       old_content = File.read(rep.raw_path(:snapshot => snapshot))
-      new_content = rep.compiled_content(:snapshot => snapshot, :force => true)
+      new_content = rep.compiled_content(:snapshot => snapshot)
 
       # Check whether there’s a different
       return if old_content == new_content

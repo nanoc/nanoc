@@ -280,4 +280,9 @@ class Nanoc::DirectedGraphTest < MiniTest::Unit::TestCase
     assert_equal Set.new([ 1, 2, 3 ]), graph.roots
   end
 
+  def test_example
+    YARD.parse('../lib/nanoc/base/directed_graph.rb')
+    assert_examples_correct 'Nanoc::DirectedGraph'
+  end
+
 end

@@ -315,8 +315,7 @@ module Nanoc
     #
     # @return [void]
     def compile_reps(reps)
-      outdated_reps = Set.new(reps.select { |rep| outdatedness_checker.outdated?(rep) })
-      content_dependency_graph = Nanoc::DirectedGraph.new(outdated_reps)
+      content_dependency_graph = Nanoc::DirectedGraph.new(reps)
 
       # Listen to processing start/stop
       Nanoc::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }

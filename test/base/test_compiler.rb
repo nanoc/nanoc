@@ -298,4 +298,19 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_compile_should_recompile_all_reps
+    Nanoc3::CLI.run %w( create_site bar )
+
+    FileUtils.cd('bar') do
+      Nanoc3::CLI.run %w( compile )
+
+      site = Nanoc3::Site.new('.')
+      site.compile
+
+      # At this point, even the already compiled items in the previous pass
+      # should have their compiled content assigned, so this should work:
+      site.items[0].reps[0].compiled_content
+    end
+  end
+
 end
