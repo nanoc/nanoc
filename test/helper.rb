@@ -170,9 +170,10 @@ EOS
       lines = pieces.map { |p| p.last }
 
       # Test
+      b = binding
       lines.each_slice(2) do |pair|
-        actual_out   = eval(pair.first)
-        expected_out = eval(pair.last.match(/# ?=>(.*)/)[1])
+        actual_out   = eval(pair.first, b)
+        expected_out = eval(pair.last.match(/# ?=>(.*)/)[1], b)
       
         assert_equal expected_out, actual_out,
           "Incorrect example:\n#{pair.first}"
