@@ -213,8 +213,7 @@ module Nanoc::Filters
       highlighted_code = stdout.read
 
       # Clean result
-      doc = Nokogiri::HTML.fragment(highlighted_code)
-      doc.xpath('./div[@class="highlight"]/pre').inner_html
+      cleanup_pygments_result(highlighted_code)
     end
 
     # Runs the content through [Pygments](http://pygments.org/) via
@@ -231,15 +230,14 @@ module Nanoc::Filters
     # @return [String] The colorized output
     def albino(code, language, params={})
       require 'albino'
+
       begin
         highlighted_code = Albino.colorize(code, language)
       rescue Errno::ENOENT
         raise "Could not spawn pygmentize"
       end
 
-      # Clean result
-      doc = Nokogiri::HTML.fragment(highlighted_code)
-      doc.xpath('./div[@class="highlight"]/pre').inner_html
+      cleanup_pygments_result(highlighted_code)
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
@@ -285,6 +283,11 @@ module Nanoc::Filters
       # Get result
       stdout.rewind
       stdout.read
+    end
+
+    def cleanup_pygments_result(s)
+      doc = Nokogiri::HTML.fragment(s)
+      doc.xpath('./div[@class="highlight"]/pre').inner_html
     end
 
     def check_availability(*cmd)
