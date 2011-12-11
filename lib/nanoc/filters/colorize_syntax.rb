@@ -28,14 +28,15 @@ module Nanoc::Filters
     # invoked with a `:coderay => coderay_options_hash` option, the
     # `coderay_options_hash` hash will be passed to the CodeRay colorizer.
     #
-    # Currently, only the
-    # `:albino` (https://github.com/github/albino),
-    # `:coderay` (http://coderay.rubychan.de/),
-    # `:pygmentize` (http://pygments.org/, http://pygments.org/docs/cmdline/),
-    # and
-    # `:simon_highlight` (http://www.andre-simon.de/doku/highlight/en/highlight.html)
-    # colorizers are implemented. Additional colorizer implementations are
-    # welcome!
+    # Currently, the following colorizers are supported:
+    #
+    # * `:albino` for [Albino](https://github.com/github/albino)
+    # * `:coderay` for [Coderay](http://coderay.rubychan.de/)
+    # * `:pygmentize` for [pygmentize](http://pygments.org/docs/cmdline/), the
+    #   commandline frontend for [Pygments](http://pygments.org/)
+    # * `:simon_highlight` for [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html)
+    #
+    # Additional colorizer implementations are welcome!
     #
     # @example Using a class to indicate type of code be highlighted
     #
