@@ -77,6 +77,7 @@ may be interested in the development dependencies:
 * Dmitry Bilunov
 * Devon Luke Buchanan
 * Stefan Bühler
+* Dan Callahan
 * Brian Candler
 * Jack Chu
 * Michal Cichra
