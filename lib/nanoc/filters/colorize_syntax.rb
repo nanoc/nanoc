@@ -230,7 +230,14 @@ module Nanoc::Filters
     def pygmentsrb(code, language, params={})
       require 'pygments'
 
-      result = Pygments.highlight(code, { :lexer => language }.merge(params))
+      # Build args
+      args = params.dup
+      args[:lexer] ||= language
+      args[:options] ||= {}
+      args[:options][:encoding] ||= 'utf-8'
+
+      # Run
+      result = Pygments.highlight(code, args)
       cleanup_pygments_result(result)
     end
 
@@ -280,7 +287,7 @@ module Nanoc::Filters
     end
 
     def cleanup_pygments_result(s)
-      doc = Nokogiri::HTML.fragment(s)
+      doc = Nokogiri::HTML.fragment(s, 'utf-8')
       doc.xpath('./div[@class="highlight"]/pre').inner_html
     end
 

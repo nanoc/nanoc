@@ -89,8 +89,8 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
-      expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment</span></code></pre>'
+      input = '<pre title="moo"><code class="language-ruby"># comment…</code></pre>'
+      expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment…</span></code></pre>'
 
       # Run filter
       actual_output = filter.run(input, :colorizers => { :ruby => :pygmentsrb })
