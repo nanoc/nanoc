@@ -30,10 +30,11 @@ module Nanoc::Filters
     #
     # Currently, the following colorizers are supported:
     #
-    # * `:albino` for [Albino](https://github.com/github/albino)
     # * `:coderay` for [Coderay](http://coderay.rubychan.de/)
     # * `:pygmentize` for [pygmentize](http://pygments.org/docs/cmdline/), the
     #   commandline frontend for [Pygments](http://pygments.org/)
+    # * `:pygmentsrb` for [pygments.rb](https://github.com/tmm1/pygments.rb),
+    #   a Ruby interface for [Pygments](http://pygments.org/)
     # * `:simon_highlight` for [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html)
     #
     # Additional colorizer implementations are welcome!
@@ -139,7 +140,7 @@ module Nanoc::Filters
 
   private
 
-    KNOWN_COLORIZERS = [ :albino, :coderay, :dummy, :pygmentize, :simon_highlight ]
+    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)
@@ -217,7 +218,7 @@ module Nanoc::Filters
     end
 
     # Runs the content through [Pygments](http://pygments.org/) via
-    # [Albino](https://github.com/github/albino).
+    # [pygments.rb](https://github.com/tmm1/pygments.rb).
     #
     # @api private
     #
@@ -225,19 +226,12 @@ module Nanoc::Filters
     #
     # @param [String] language The language the code is written in
     #
-    # @option params [String, Symbol] :encoding The encoding of the code block
-    #
     # @return [String] The colorized output
-    def albino(code, language, params={})
-      require 'albino'
+    def pygmentsrb(code, language, params={})
+      require 'pygments'
 
-      begin
-        highlighted_code = Albino.colorize(code, language)
-      rescue Errno::ENOENT
-        raise "Could not spawn pygmentize"
-      end
-
-      cleanup_pygments_result(highlighted_code)
+      result = Pygments.highlight(code, { :lexer => language }.merge(params))
+      cleanup_pygments_result(result)
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
