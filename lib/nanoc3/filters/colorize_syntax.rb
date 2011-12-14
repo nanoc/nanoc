@@ -113,7 +113,7 @@ module Nanoc3::Filters
         # Highlight
         raw = strip(element.inner_text)
         highlighted_code = highlight(raw, language, params)
-        element.inner_html = strip(highlighted_code)
+        element.inner_html = Nokogiri::HTML.fragment(strip(highlighted_code), 'utf-8')
 
         # Add class
         unless has_class
