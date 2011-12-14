@@ -191,6 +191,9 @@ module Nanoc3::Filters
       require 'systemu'
       check_availability('pygmentize', '-V')
 
+      params[:encoding] ||= 'utf-8'
+      params[:nowrap]   ||= 'True'
+
       # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
       cmd << '-O' << params.map { |k,v| "#{k}=#{v}" }.join(',') unless params.empty?
@@ -201,11 +204,7 @@ module Nanoc3::Filters
 
       # Get result
       stdout.rewind
-      highlighted_code = stdout.read
-
-      # Clean result
-      doc = Nokogiri::HTML.fragment(highlighted_code)
-      doc.xpath('./div[@class="highlight"]/pre').inner_html
+      stdout.read
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
