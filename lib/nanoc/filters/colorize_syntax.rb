@@ -123,7 +123,7 @@ module Nanoc::Filters
         # Highlight
         raw = strip(element.inner_text)
         highlighted_code = highlight(raw, language, params)
-        element.inner_html = strip(highlighted_code)
+        element.inner_html = Nokogiri::HTML.fragment(strip(highlighted_code), 'utf-8')
 
         # Add class
         unless has_class
@@ -201,6 +201,9 @@ module Nanoc::Filters
       require 'systemu'
       check_availability('pygmentize', '-V')
 
+      params[:encoding] ||= 'utf-8'
+      params[:nowrap]   ||= 'True'
+
       # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
       cmd << '-O' << params.map { |k,v| "#{k}=#{v}" }.join(',') unless params.empty?
@@ -211,10 +214,7 @@ module Nanoc::Filters
 
       # Get result
       stdout.rewind
-      highlighted_code = stdout.read
-
-      # Clean result
-      cleanup_pygments_result(highlighted_code)
+      stdout.read
     end
 
     # Runs the content through [Pygments](http://pygments.org/) via
@@ -230,15 +230,13 @@ module Nanoc::Filters
     def pygmentsrb(code, language, params={})
       require 'pygments'
 
-      # Build args
       args = params.dup
       args[:lexer] ||= language
       args[:options] ||= {}
       args[:options][:encoding] ||= 'utf-8'
+      args[:options][:nowrap]   ||= 'True'
 
-      # Run
-      result = Pygments.highlight(code, args)
-      cleanup_pygments_result(result)
+      Pygments.highlight(code, args)
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
@@ -284,11 +282,6 @@ module Nanoc::Filters
       # Get result
       stdout.rewind
       stdout.read
-    end
-
-    def cleanup_pygments_result(s)
-      doc = Nokogiri::HTML.fragment(s, 'utf-8')
-      doc.xpath('./div[@class="highlight"]/pre').inner_html
     end
 
     def check_availability(*cmd)
