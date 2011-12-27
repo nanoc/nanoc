@@ -168,4 +168,23 @@ describe 'Nanoc3::Site#data_sources' do
     end.must_raise Nanoc3::Errors::UnknownDataSource
   end
 
+  it 'should also use the toplevel config for data sources' do
+    with_site do
+      File.open('config.yaml', 'w') do |io|
+        io.write "data_sources:\n"
+        io.write "  -\n"
+        io.write "    type: filesystem_unified\n"
+        io.write "    aaa: one\n"
+        io.write "    config:\n"
+        io.write "      bbb: two\n"
+      end
+
+      site = Nanoc3::Site.new('.')
+      data_sources = site.data_sources
+
+      assert data_sources.first.config[:aaa] = 'one'
+      assert data_sources.first.config[:bbb] = 'two'
+    end
+  end
+
 end
