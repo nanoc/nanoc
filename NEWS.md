@@ -1,5 +1,14 @@
 # nanoc news
 
+## 3.2.4 (???)
+
+* Fixed bug which would cause some reps not to be compiled when invoking nanoc
+  programmatically
+* Made data source configuration location a bit more obvious
+* Fixed watch command under Windows
+* Made filesystem data source ignore UTF-8 BOM
+* Improved compatibility of colorize_syntax filter with older libxml versions
+
 ## 3.2.3 (2011-10-31)
 
 * Made syntax colorizer only strip trailing blank lines instead of all blanks
