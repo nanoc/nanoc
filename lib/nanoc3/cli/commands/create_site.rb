@@ -41,7 +41,7 @@ output_dir: #{Nanoc3::Site::DEFAULT_CONFIG[:output_dir]}
 
 # A list of index filenames, i.e. names of files that will be served by a web
 # server when a directory is requested. Usually, index files are named
-# “index.hml”, but depending on the web server, this may be something else,
+# “index.html”, but depending on the web server, this may be something else,
 # such as “default.htm”. This list is used by nanoc to generate pretty URLs.
 index_filenames: #{array_to_yaml(Nanoc3::Site::DEFAULT_CONFIG[:index_filenames])}
 

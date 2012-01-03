@@ -12,7 +12,7 @@ module Nanoc3::Filters
       attr_accessor :current
     end
 
-    # Essentially the {Sass::Importers::Filesystem} but registering each
+    # Essentially the `Sass::Importers::Filesystem` but registering each
     # import file path.
     class SassFilesystemImporter < ::Sass::Importers::Filesystem
 

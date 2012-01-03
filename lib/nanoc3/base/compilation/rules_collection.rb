@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc3
 
   # Keeps track of the rules in a site.
