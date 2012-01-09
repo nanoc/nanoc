@@ -24,7 +24,7 @@ module Nanoc::StringExtensions
 
     # Decompose if necessary
     # FIXME this decomposition is not generally usable
-    self.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...')
+    self.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...').gsub('©', '(c)')
   end
 
   # Calculates the checksum for this string. Any change to this string will

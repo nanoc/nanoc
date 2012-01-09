@@ -41,7 +41,7 @@ output_dir: #{Nanoc::Site::DEFAULT_CONFIG[:output_dir]}
 
 # A list of index filenames, i.e. names of files that will be served by a web
 # server when a directory is requested. Usually, index files are named
-# “index.hml”, but depending on the web server, this may be something else,
+# “index.html”, but depending on the web server, this may be something else,
 # such as “default.htm”. This list is used by nanoc to generate pretty URLs.
 index_filenames: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:index_filenames])}
 
@@ -70,6 +70,14 @@ data_sources:
     # The path where layouts should be mounted. The layouts root behaves the
     # same as the items root, but applies to layouts rather than items.
     layouts_root: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
+
+    # Whether to allow periods in identifiers. When turned off, everything
+    # past the first period is considered to be the extension, and when
+    # turned on, only the characters past the last period are considered to
+    # be the extension. For example,  a file named “content/about.html.erb”
+    # will have the identifier “/about/” when turned off, but when turned on
+    # it will become “/about.html/” instead.
+    allow_periods_in_identifiers: false
 
 # Configuration for the “watch” command, which watches a site for changes and
 # recompiles if necessary.

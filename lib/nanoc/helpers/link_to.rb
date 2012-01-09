@@ -63,9 +63,9 @@ module Nanoc::Helpers
       "<a #{attributes}href=\"#{h path}\">#{text}</a>"
     end
 
-    # Creates a HTML link using link_to, except when the linked item is the
-    # current one. In this case, a span element with class “active” and with
-    # the given text will be returned. The HTML-escaping rules for
+    # Creates a HTML link using {#link_to}, except when the linked item is
+    # the current one. In this case, a span element with class “active” and
+    # with the given text will be returned. The HTML-escaping rules for
     # {#link_to} apply here as well.
     #
     # @param [String] text The visible link text
