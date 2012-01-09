@@ -27,7 +27,7 @@ end
 opt :v, :version, 'show version information and quit' do
   gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : "without RubyGems"
   engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
-  puts "nanoc #{Nanoc3::VERSION} (c) 2007-2012 Denis Defreyne."
+  puts "nanoc #{Nanoc3::VERSION} © 2007-2012 Denis Defreyne.".make_compatible_with_env
   puts "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}"
   exit 0
 end
