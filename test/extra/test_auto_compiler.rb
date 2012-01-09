@@ -32,7 +32,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         autocompiler.stubs(:site).returns(site)
 
         # Serve
-        status, headers, body = autocompiler.instance_eval { call('PATH_INFO' => '/foo/index.html') }
+        status, headers, body = autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/foo/index.html') }
 
         # Check response
         assert_equal(200, status)
@@ -59,7 +59,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         autocompiler.stubs(:site).returns(site)
 
         # Serve
-        status, headers, body = autocompiler.instance_eval { call('PATH_INFO' => '/afjwiagoawf.html') }
+        status, headers, body = autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/afjwiagoawf.html') }
 
         # Check response
         assert_equal(404, status)
@@ -94,7 +94,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => 'somefile.txt') }
+      autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => 'somefile.txt') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -128,7 +128,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => '/foo/bar/') }
+      autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/foo/bar/') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -162,7 +162,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar/') }
+      autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => 'foo/bar/') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -196,7 +196,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar') }
+      autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => 'foo/bar') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -230,7 +230,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => 'foo/bar') }
+      autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => 'foo/bar') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -260,7 +260,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.expects(:file_server).returns(file_server)
 
       # Run
-      autocompiler.instance_eval { call('PATH_INFO' => 'four-oh-four.txt') }
+      autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => 'four-oh-four.txt') }
 
       # Check
       assert_equal(file_server.expected_path_info, file_server.actual_path_info)
@@ -314,7 +314,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         autocompiler.stubs(:site).returns(site)
 
         # Serve
-        status, headers, body = autocompiler.instance_eval { call('PATH_INFO' => '/') }
+        status, headers, body = autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/') }
 
         # Check response
         assert_equal(200, status)
@@ -348,7 +348,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
 
         # Serve
         assert_raises(RuntimeError) do
-          autocompiler.instance_eval { call('PATH_INFO' => '/whatever/') }
+          autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/whatever/') }
         end
       end
     end
@@ -375,7 +375,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         File.utime(Time.now+5, Time.now+5, 'config.yaml')
 
         # Check
-        status, headers, body = autocompiler.call('PATH_INFO' => '/')
+        status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
         body.each do |b|
           assert_match /The Grand Value of Configuration is Foo!/, b
         end
@@ -387,7 +387,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         File.utime(Time.now+5, Time.now+5, 'config.yaml')
 
         # Check
-        status, headers, body = autocompiler.call('PATH_INFO' => '/')
+        status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
         body.each do |b|
           assert_match /The Grand Value of Configuration is Bar!/, b
         end
@@ -408,7 +408,7 @@ class Nanoc3::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       autocompiler.stubs(:site).returns(site)
 
       # Test
-      result = autocompiler.call('PATH_INFO' => '/%73oftware')
+      result = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/%73oftware')
       assert_equal 404, result[0]
       assert_match "File not found: /software\n", result[2][0]
     end
