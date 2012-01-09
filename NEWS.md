@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.2.4 (???)
+## 3.2.4 (2012-01-09)
 
 * Fixed bug which would cause some reps not to be compiled when invoking nanoc programmatically
 * Made data source configuration location a bit more obvious
