@@ -48,4 +48,15 @@ class Nanoc::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
     refute validator.send(:is_valid_external_href?, 'http://example.com/">')
   end
 
+  def test_fetch_http_status_for
+    # Create validator
+    validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
+
+    # Test
+    assert validator.send(:fetch_http_status_for, URI.parse('http://heise.de/'), 200)
+    assert validator.send(:fetch_http_status_for, URI.parse('https://www.google.com/'), 200)
+    assert validator.send(:fetch_http_status_for, URI.parse('https://google.com/'), 200)
+    assert validator.send(:fetch_http_status_for, URI.parse('http://google.com/foo/bar'), 404)
+  end
+
 end
