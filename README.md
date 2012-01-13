@@ -75,6 +75,7 @@ may be interested in the development dependencies:
 * Colin Barrett
 * Bil Bas
 * Dmitry Bilunov
+* Fabian Buch
 * Devon Luke Buchanan
 * Stefan Bühler
 * Dan Callahan

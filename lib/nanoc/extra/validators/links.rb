@@ -234,10 +234,16 @@ module Nanoc::Extra::Validators
     end
 
     def request_url_once(url)
+      require 'net/https'
+
       path = (url.path.nil? || url.path.empty? ? '/' : url.path)
       req = Net::HTTP::Head.new(path)
-      res = Net::HTTP.start(url.host, url.port) { |h| h.request(req) }
-      res
+      http=Net::HTTP.new(url.host, url.port)
+      if url.instance_of? URI::HTTPS
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+      res = http.request(req)
     end
 
     def external_href_validated(href, is_valid)
