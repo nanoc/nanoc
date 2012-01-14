@@ -3,7 +3,12 @@
 usage       'purge'
 summary     'removes files not managed by nanoc from the output directory'
 description <<-EOS
-Find all files in the output directory that do not correspond to an item managed by nanoc and remove them. Since this is a hazardous operation, an additional --yes flag is needed as confirmation.
+Find all files in the output directory that do not correspond to an item
+managed by nanoc and remove them. Since this is a hazardous operation, an
+additional --yes flag is needed as confirmation.
+
+Also see the auto_purge site configuration option in config.yaml, which will
+automatically prune after compilation.
 EOS
 
 flag :y, :yes,       'confirm deletion' # TODO implement
@@ -18,36 +23,17 @@ module Nanoc::CLI::Commands
   class Purge < ::Nanoc::CLI::Command
 
     def run
-      require 'find'
+      require_site
 
-      # Get compiled files
-      compiled_files = self.site.items.map do |item|
-        item.reps.map do |rep|
-          rep.raw_path
-        end
-      end.flatten.compact.select { |f| File.file?(f) }
-
-      # Get present files and dirs
-      present_files_and_dirs = Set.new
-      Find.find(self.site.config[:output_dir]) do |f|
-        present_files_and_dirs << f
-      end
-      present_files = present_files_and_dirs.select { |f| File.file?(f) }
-      present_dirs  = present_files_and_dirs.select { |f| File.directory?(f) }
-
-      # Remove stray files
-      stray_files = present_files - compiled_files
-      stray_files.each do |f|
-        Nanoc3::CLI::Logger.instance.file(:high, :delete, f)
-        FileUtils.rm(f)
-      end
-
-      # Remove empty directories
-      present_dirs.sort_by{ |d| -d.length }.each do |dir|
-        next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
-
-        Nanoc3::CLI::Logger.instance.file(:high, :delete, dir)
-        Dir.rmdir(dir)
+      if options.has_key?(:yes)
+        Nanoc::Extra::Pruner.new(self.site).run
+      elsif options.has_key?(:'dry-run')
+        Nanoc::Extra::Pruner.new(self.site, :dry_run => true).run
+      else
+        $stderr.puts "WARNING: Since the prune command is a destructive command, it requires an additional --yes flag in order to work."
+        $stderr.puts
+        $stderr.puts "Please ensure that the output directory does not contain any files (such as images or stylesheets) that are necessary but are not managed by nanoc. If you want to get a list of all files that would be removed, pass --dry-run."
+        exit 1
       end
     end
   end
