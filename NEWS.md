@@ -16,6 +16,7 @@ Extensions:
 * Added pygments.rb to supported syntax colorizers
 * Allowed syntax colorizer to colorize outside `pre` elements [Kevin Lynagh]
 * Added support for HTTPS link validation [Fabian Buch]
+* Added support for (automatically) pruning stray output files [Justin Hileman]
 
 ## 3.2.4 (2012-01-09)
 

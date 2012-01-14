@@ -8,13 +8,14 @@ module Nanoc::CLI
   # feedback in the terminal.
   class Logger
 
-    # Maps actions (`:create`, `:update`, `:identical` and `:skip`) onto their
-    # ANSI color codes.
+    # Maps actions (`:create`, `:update`, `:identical`, `:skip` and `:delete`)
+    # onto their ANSI color codes.
     ACTION_COLORS = {
       :create         => "\e[1m" + "\e[32m", # bold + green
       :update         => "\e[1m" + "\e[33m", # bold + yellow
       :identical      => "\e[1m",            # bold
-      :skip           => "\e[1m"             # bold
+      :skip           => "\e[1m",            # bold
+      :delete         => "\e[1m" + "\e[31m"  # bold + red
     }
 
     include Singleton

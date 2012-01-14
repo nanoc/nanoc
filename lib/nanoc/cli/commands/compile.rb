@@ -75,6 +75,11 @@ module Nanoc::CLI::Commands
       # Stop diffing
       teardown_diffs
 
+      # Prune
+      if self.site.config[:auto_prune]
+        Nanoc::Extra::Pruner.new(self.site).run
+      end
+
       # Give general feedback
       puts
       puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
