@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::Commands::PurgeTest < MiniTest::Unit::TestCase
+class Nanoc::CLI::Commands::PruneTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
@@ -18,7 +18,7 @@ class Nanoc::CLI::Commands::PurgeTest < MiniTest::Unit::TestCase
       File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
 
       assert_raises SystemExit do
-        Nanoc::CLI.run %w( purge )
+        Nanoc::CLI.run %w( prune )
       end
 
       assert File.file?('output2/index.html')
@@ -39,7 +39,7 @@ class Nanoc::CLI::Commands::PurgeTest < MiniTest::Unit::TestCase
       File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
       File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
 
-      Nanoc::CLI.run %w( purge --yes )
+      Nanoc::CLI.run %w( prune --yes )
 
       assert File.file?('output2/index.html')
       assert !File.file?('output2/foo.html')
@@ -59,7 +59,7 @@ class Nanoc::CLI::Commands::PurgeTest < MiniTest::Unit::TestCase
       File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
       File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
 
-      Nanoc::CLI.run %w( purge --dry-run )
+      Nanoc::CLI.run %w( prune --dry-run )
 
       assert File.file?('output2/index.html')
       assert File.file?('output2/foo.html')

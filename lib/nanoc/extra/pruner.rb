@@ -2,8 +2,9 @@
 
 module Nanoc::Extra
 
-  # TODO document
-	class Pruner
+  # Responsible for finding and deleting files in the site’s output directory
+  # that are not managed by nanoc.
+  class Pruner
 
     # @return [Nanoc::Site] The site this pruner belongs to  
     attr_reader :site

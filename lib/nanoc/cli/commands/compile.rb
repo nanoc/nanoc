@@ -75,10 +75,9 @@ module Nanoc::CLI::Commands
       # Stop diffing
       teardown_diffs
 
-      # Auto-remove stale items
-      if self.site.config[:auto_remove_stale_items]
-        puts "Removing stale items..."
-        Nanoc3::CLI.run %w( purge )
+      # Prune
+      if self.site.config[:auto_prune]
+        Nanoc::Extra::Pruner.new(self.site).run
       end
 
       # Give general feedback
