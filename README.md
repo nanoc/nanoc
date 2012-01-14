@@ -56,7 +56,7 @@ nanoc has few dependencies. It is possible to use nanoc programmatically
 without any dependencies at all, but if you want to use nanoc in a proper way,
 you’ll likely need some dependencies:
 
-* The **commandline frontend** depends on `cli`.
+* The **commandline frontend** depends on `cri`.
 * The **autocompiler** depends on `mime-types` and `rack`.
 * Filters and helpers likely have dependencies on their own too.
 
