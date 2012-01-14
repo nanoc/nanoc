@@ -78,7 +78,7 @@ module Nanoc::CLI::Commands
       # Auto-remove stale items
       if self.site.config[:auto_remove_stale_items]
         puts "Removing stale items..."
-        Nanoc3::CLI.run %w( clean_strays )
+        Nanoc3::CLI.run %w( purge )
       end
 
       # Give general feedback
