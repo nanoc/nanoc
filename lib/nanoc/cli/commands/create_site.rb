@@ -50,6 +50,10 @@ index_filenames: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:index_filenames])}
 # before and after the last site compilation.
 enable_output_diff: false
 
+# Whether to automatically remove files not managed by nanoc from the output
+# directory. For safety reasons, this is turned off by default.
+auto_prune: false
+
 # The data sources where nanoc loads its data from. This is an array of
 # hashes; each array element represents a single data source. By default,
 # there is only a single data source that reads data from the “content/” and
