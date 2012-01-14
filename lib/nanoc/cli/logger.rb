@@ -52,7 +52,7 @@ module Nanoc::CLI
     #
     # @param [:high, :low] level The importance of this action
     #
-    # @param [:create, :update, :identical] action The kind of file action
+    # @param [:create, :update, :identical, :skip, :delete] action The kind of file action
     #
     # @param [String] name The name of the file the action was performed on
     #
