@@ -75,6 +75,12 @@ module Nanoc::CLI::Commands
       # Stop diffing
       teardown_diffs
 
+      # Auto-remove stale items
+      if self.site.config[:auto_remove_stale_items]
+        puts "Removing stale items..."
+        Nanoc3::CLI.run %w( clean_strays )
+      end
+
       # Give general feedback
       puts
       puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
