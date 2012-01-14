@@ -15,13 +15,9 @@ EOS
 required :c, :vcs, 'select the VCS to use'
 flag     :y, :yes, 'update the data without warning'
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Update.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class Update < ::Nanoc::CLI::Command
+  class Update < ::Nanoc::CLI::CommandRunner
 
     def run
       # Check arguments
@@ -70,3 +66,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::Update

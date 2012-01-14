@@ -7,13 +7,9 @@ Show information about all items, item representations and layouts in the
 current site.
 EOS
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Debug.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class Debug < ::Nanoc::CLI::Command
+  class Debug < ::Nanoc::CLI::CommandRunner
 
     def run
       # Make sure we are in a nanoc site directory
@@ -117,3 +113,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::Debug

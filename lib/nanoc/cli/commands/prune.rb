@@ -11,16 +11,12 @@ Also see the auto_prune site configuration option in config.yaml, which will
 automatically prune after compilation.
 EOS
 
-flag :y, :yes,       'confirm deletion' # TODO implement
-flag :n, :'dry-run', 'print files to be deleted instead of actually deleting them' # TODO implement
-
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Prune.call(opts, args, cmd)
-end
+flag :y, :yes,       'confirm deletion'
+flag :n, :'dry-run', 'print files to be deleted instead of actually deleting them'
 
 module Nanoc::CLI::Commands
 
-  class Prune < ::Nanoc::CLI::Command
+  class Prune < ::Nanoc::CLI::CommandRunner
 
     def run
       require_site
@@ -38,3 +34,5 @@ module Nanoc::CLI::Commands
     end
   end
 end
+
+runner Nanoc::CLI::Commands::Prune

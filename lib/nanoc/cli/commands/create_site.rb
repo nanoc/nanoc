@@ -9,13 +9,9 @@ EOS
 
 required :d, :datasource, 'specify the data source for the new site'
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::CreateSite.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class CreateSite < ::Nanoc::CLI::Command
+  class CreateSite < ::Nanoc::CLI::CommandRunner
 
     class << self
 
@@ -405,3 +401,5 @@ EOS
   end
 
 end
+
+runner Nanoc::CLI::Commands::CreateSite

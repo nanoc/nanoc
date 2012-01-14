@@ -19,13 +19,9 @@ option :t, :target,    'specify the location to deploy to', :argument => :requir
 flag   :l, :list,      'list available locations to deploy to'
 option :n, :'dry-run', 'show what would be deployed'
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Deploy.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class Deploy < ::Nanoc::CLI::Command
+  class Deploy < ::Nanoc::CLI::CommandRunner
 
     def run
       require_site
@@ -79,3 +75,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::Deploy

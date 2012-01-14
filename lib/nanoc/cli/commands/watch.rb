@@ -6,18 +6,15 @@ description <<-EOS
 Start the watcher. When a change is detected, the site will be recompiled.
 EOS
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Watch.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class Watch < ::Nanoc::CLI::Command
+  class Watch < ::Nanoc::CLI::CommandRunner
 
     def run
       require 'fssm'
       require 'pathname'
 
+      require_site
       watcher_config = self.site.config[:watcher] || {}
 
       @notifier = Notifier.new
@@ -123,3 +120,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::Watch

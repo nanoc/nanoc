@@ -20,13 +20,9 @@ EOS
 option :a, :all,   '(ignored)'
 option :f, :force, '(ignored)'
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Compile.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class Compile < ::Nanoc::CLI::Command
+  class Compile < ::Nanoc::CLI::CommandRunner
 
     def run
       # Make sure we are in a nanoc site directory
@@ -283,3 +279,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::Compile

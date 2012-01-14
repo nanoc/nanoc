@@ -10,13 +10,9 @@ EOS
 
 required :c, :vcs, 'specify the VCS to use'
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::CreateItem.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class CreateItem < ::Nanoc::CLI::Command
+  class CreateItem < ::Nanoc::CLI::CommandRunner
 
     def run
       # Check arguments
@@ -60,3 +56,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::CreateItem

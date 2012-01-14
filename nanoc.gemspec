@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.rdoc_options     = [ '--main', 'README.md' ]
   s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
 
-  s.add_runtime_dependency('cri', '~> 2.0')
+  s.add_runtime_dependency('cri', '~> 2.1')
 
   s.add_development_dependency('minitest')
   s.add_development_dependency('mocha')

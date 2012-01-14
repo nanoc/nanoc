@@ -7,13 +7,9 @@ Show a list of available plugins, including filters, data sources and VCSes.
 If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
 EOS
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::Info.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class Info < ::Nanoc::CLI::Command
+  class Info < ::Nanoc::CLI::CommandRunner
 
     def run
       # Check arguments
@@ -98,3 +94,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::Info

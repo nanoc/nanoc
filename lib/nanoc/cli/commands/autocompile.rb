@@ -13,13 +13,9 @@ required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
 required :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::AutoCompile.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class AutoCompile < ::Nanoc::CLI::Command
+  class AutoCompile < ::Nanoc::CLI::CommandRunner
 
     def run
       require 'rack'
@@ -58,3 +54,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::AutoCompile

@@ -8,8 +8,12 @@ module Nanoc::CLI
   end
 
   autoload 'Logger',             'nanoc/cli/logger'
-  autoload 'Command',            'nanoc/cli/command'
+  autoload 'CommandRunner',      'nanoc/cli/command_runner'
   autoload 'ErrorHandler',       'nanoc/cli/error_handler'
+
+  # Deprecated; use CommandRunner instead
+  # TODO [in nanoc 4.0] remove me
+  autoload 'Command',            'nanoc/cli/command_runner'
 
   # @return [Boolean] true if debug output is enabled, false if not
   #

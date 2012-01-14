@@ -2,62 +2,15 @@
 
 module Nanoc::CLI
 
-  # An abstract superclass for commands that can be executed. These are not
-  # the same as Cri commands, but are used in conjuction with Cri commands.
-  # nanoc commands will be called by Cri commands and will perform the actual
-  # execution of the command, as well as perform error handling if necessary.
-  class Command
+  # A command runner subclass for nanoc commands that adds nanoc-specific
+  # convenience methods and error handling.
+  class CommandRunner < ::Cri::CommandRunner
 
-    # @return [Hash] A hash contain the options and their values
-    attr_reader :options
-
-    # @return [Array] The list of arguments
-    attr_reader :arguments
-
-    # @return [Cri::Command] The Cri command
-    attr_reader :command
-
-    # @param [Hash] options A hash contain the options and their values
-    #
-    # @param [Array] arguments The list of arguments
-    #
-    # @param [Cri::Command] command The Cri command
-    def initialize(options, arguments, command)
-      @options   = options
-      @arguments = arguments
-      @command   = command
-    end
-
-    # Runs the command with the given options, arguments and Cri command. This
-    # is a convenience method so that no individual command needs to be
-    # created.
-    #
-    # @param [Hash] options A hash contain the options and their values
-    #
-    # @param [Array] arguments The list of arguments
-    #
-    # @param [Cri::Command] command The Cri command
-    #
-    # @return [void]
-    def self.call(options, arguments, command)
-      self.new(options, arguments, command).call
-    end
-
-    # Runs the command.
-    #
-    # @return [void]
+    # @see ::Cri::CommandRunner#call
     def call
       Nanoc::CLI::ErrorHandler.handle_while(:command => self) do
         self.run
       end
-    end
-
-    # Performs the actual execution of the command.
-    #
-    # @return [void]
-    #
-    # @abstract
-    def run
     end
 
     # Gets the site ({Nanoc::Site} instance) in the current directory and
@@ -77,6 +30,11 @@ module Nanoc::CLI
       end
 
       @site
+    end
+
+    # @deprecated use {Cri::CommandDSL#runner}
+    def self.call(opts, args, cmd)
+      self.new(opts, args, cmd).call
     end
 
   protected
@@ -135,5 +93,8 @@ module Nanoc::CLI
     end
 
   end
+
+  # @deprecated Use {Nanoc::CLI::CommandRunner} instead
+  Command = CommandRunner
 
 end

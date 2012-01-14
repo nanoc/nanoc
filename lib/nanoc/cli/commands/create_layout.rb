@@ -8,13 +8,9 @@ Create a new layout in the current site. The first data source in the site
 configuration will be used.
 EOS
 
-run do |opts, args, cmd|
-  Nanoc::CLI::Commands::CreateLayout.call(opts, args, cmd)
-end
-
 module Nanoc::CLI::Commands
 
-  class CreateLayout < ::Nanoc::CLI::Command
+  class CreateLayout < ::Nanoc::CLI::CommandRunner
 
     def run
       # Check arguments
@@ -73,3 +69,5 @@ module Nanoc::CLI::Commands
   end
 
 end
+
+runner Nanoc::CLI::Commands::CreateLayout
