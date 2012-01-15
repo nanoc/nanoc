@@ -156,7 +156,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::ItemRep.new(
-        Nanoc3::Item.new(
+        Nanoc::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),

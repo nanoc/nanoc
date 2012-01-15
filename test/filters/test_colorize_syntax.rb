@@ -22,7 +22,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_dummy
     if_have 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
@@ -37,7 +37,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   def test_full_page
     if_have 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = <<EOS
@@ -262,7 +262,7 @@ EOS
   def test_colorize_syntax_with_non_language_shebang_line
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = <<EOS
@@ -291,7 +291,7 @@ EOS
   def test_colorize_syntax_with_non_language_shebang_line_and_language_line
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input = <<EOS
@@ -319,7 +319,7 @@ EOS
   def test_not_outside_pre
     if_have 'coderay', 'nokogiri' do
       # Create filter
-      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
       input           = '<code class="language-ruby"># comment</code>'

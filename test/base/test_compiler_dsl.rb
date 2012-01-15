@@ -153,7 +153,7 @@ class Nanoc::CompilerDSLTest < MiniTest::Unit::TestCase
 
   def test_config
     $venetian = 'unsnares'
-    compiler_dsl = Nanoc3::CompilerDSL.new(nil, { :venetian => 'snares' })
+    compiler_dsl = Nanoc::CompilerDSL.new(nil, { :venetian => 'snares' })
     compiler_dsl.instance_eval { $venetian = @config[:venetian] }
     assert_equal 'snares', $venetian
   end

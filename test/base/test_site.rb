@@ -179,7 +179,7 @@ describe 'Nanoc::Site#data_sources' do
         io.write "      bbb: two\n"
       end
 
-      site = Nanoc3::Site.new('.')
+      site = Nanoc::Site.new('.')
       data_sources = site.data_sources
 
       assert data_sources.first.config[:aaa] = 'one'

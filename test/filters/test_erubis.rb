@@ -69,7 +69,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
 
   def test_filter_with_erbout
     if_have 'erubis' do
-      filter = ::Nanoc3::Filters::Erubis.new
+      filter = ::Nanoc::Filters::Erubis.new
       result = filter.run('stuff<% _erbout << _erbout %>')
       assert_equal 'stuffstuff', result
     end
