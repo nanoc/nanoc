@@ -19,6 +19,57 @@ class Nanoc3::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_dummy
+    if_have 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
+      expected_output = input # because we are using a dummy
+
+      # Run filter
+      actual_output = filter.run(input, :default_colorizer => :dummy)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
+  def test_full_page
+    if_have 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc3::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = <<EOS
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Foo</title>
+  </head>
+  <body>
+    <pre title="moo"><code class="language-ruby"># comment</code></pre>
+  </body>
+</html>
+EOS
+      expected_output = <<EOS
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
+<title>Foo</title>
+</head>
+<body>
+    <pre title="moo"><code class="language-ruby"># comment</code></pre>
+  </body>
+</html>
+EOS
+
+      # Run filter
+      actual_output = filter.run(input, :default_colorizer => :dummy, :is_fullpage => true)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
   def test_coderay_with_comment
     if_have 'coderay', 'nokogiri' do
       # Create filter
