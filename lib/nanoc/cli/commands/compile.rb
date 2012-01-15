@@ -117,6 +117,12 @@ module Nanoc::CLI::Commands
         Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
           puts "*** Ended filtering #{rep.inspect} with #{filter_name}"
         end
+        Nanoc::NotificationCenter.on(:visit_started) do |item|
+          puts "*** Started visiting #{item.inspect}"
+        end
+        Nanoc::NotificationCenter.on(:visit_ended) do |item|
+          puts "*** Ended visiting #{item.inspect}"
+        end
       end
 
       # Timing notifications

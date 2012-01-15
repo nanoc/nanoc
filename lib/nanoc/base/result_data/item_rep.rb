@@ -387,12 +387,9 @@ module Nanoc
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(assigns.merge({ :layout => layout }))
 
-      # Visit
-      Nanoc::NotificationCenter.post(:visit_started, layout)
-      Nanoc::NotificationCenter.post(:visit_ended,   layout)
-
       begin
         # Notify start
+        Nanoc::NotificationCenter.post(:visit_started,      layout, self.item)
         Nanoc::NotificationCenter.post(:processing_started, layout)
         Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
 
@@ -403,8 +400,9 @@ module Nanoc
         snapshot(:post, :final => false)
       ensure
         # Notify end
-        Nanoc::NotificationCenter.post(:filtering_ended,    self, filter_name)
-        Nanoc::NotificationCenter.post(:processing_ended,   layout)
+        Nanoc::NotificationCenter.post(:filtering_ended,  self, filter_name)
+        Nanoc::NotificationCenter.post(:processing_ended, layout)
+        Nanoc::NotificationCenter.post(:visit_ended,      layout)
       end
     end
 

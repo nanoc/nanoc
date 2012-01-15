@@ -52,13 +52,20 @@ module Nanoc
       @stack = []
 
       # Register start of visits
-      Nanoc::NotificationCenter.on(:visit_started, self) do |obj|
-        self.record_dependency(@stack[-1], obj) unless @stack.empty?
-        @stack.push(obj)
+      Nanoc::NotificationCenter.on(:visit_started, self) do |subject, context|
+        if !@stack.empty? && (@stack[-1][:context].nil? || @stack[-1][:subject] != context)
+          prev_subject = @stack.last[:subject]
+          prev_context = @stack.last[:context]
+          if prev_context.nil? || prev_context != subject
+            self.record_dependency(@stack[-1][:subject], subject)
+          end
+        end
+
+        @stack.push({ :subject => subject, :context => context })
       end
 
       # Register end of visits
-      Nanoc::NotificationCenter.on(:visit_ended, self) do |obj|
+      Nanoc::NotificationCenter.on(:visit_ended, self) do |subject|
         @stack.pop
       end
     end
