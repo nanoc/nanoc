@@ -79,6 +79,10 @@ module Nanoc::Filters
     #   should be applied on `code` elements outside `pre` elements, false
     #   if only `code` elements inside` pre` elements should be colorized.
     #
+    # @option params [Symbol] :is_fullpage (false) Whether to treat the input
+    #   as a full HTML page or a page fragment. When true, HTML boilerplate
+    #   such as the doctype, `html`, `head` and `body` elements will be added.
+    #
     # @return [String] The filtered content
     def run(content, params={})
       # Take colorizers from parameters
@@ -99,7 +103,8 @@ module Nanoc::Filters
       end
 
       # Colorize
-      doc = klass.fragment(content)
+      is_fullpage = params.fetch(:is_fullpage) { false }
+      doc = is_fullpage ? klass.parse(content, nil, 'UTF-8') : klass.fragment(content)
       selector = params[:outside_pre] ? 'code' : 'pre > code'
       doc.css(selector).each do |element|
         # Get language
