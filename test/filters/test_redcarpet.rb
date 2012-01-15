@@ -27,9 +27,15 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
       filter = ::Nanoc3::Filters::Redcarpet.new
 
       # Run filter
-      input           = "The quotation 'marks' sure make this look sarcastic!"
-      output_expected = /The quotation &lsquo;marks&rsquo; sure make this look sarcastic!/
-      output_actual   = filter.run(input, :options => [ :smart ])
+      if ::Redcarpet::VERSION > '2'
+        input           = "this is ~~good~~ bad"
+        output_expected = /this is <del>good<\/del> bad/
+        output_actual   = filter.run(input, :options => { :strikethrough => true })
+      else
+        input           = "The quotation 'marks' sure make this look sarcastic!"
+        output_expected = /The quotation &lsquo;marks&rsquo; sure make this look sarcastic!/
+        output_actual   = filter.run(input, :options => [ :smart ])
+      end
       assert_match(output_expected, output_actual)
     end
   end
@@ -55,7 +61,11 @@ class Nanoc3::Filters::RedcarpetTest < MiniTest::Unit::TestCase
       # Run filter
       input           = "![Alt](/path/to/img 'Title')"
       output_expected = %r{<img src="/path/to/img" alt="Alt" title="Title"/>}
-      output_actual   = filter.run(input, :options => [ :xhtml ])
+      if ::Redcarpet::VERSION > '2'
+        output_actual   = filter.run(input, :renderer_options => { :xhtml => true })
+      else
+        output_actual   = filter.run(input, :options => [ :xhtml ])
+      end
       assert_match(output_expected, output_actual)
     end
   end
