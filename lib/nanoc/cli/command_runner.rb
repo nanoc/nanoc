@@ -6,7 +6,9 @@ module Nanoc::CLI
   # convenience methods and error handling.
   class CommandRunner < ::Cri::CommandRunner
 
-    # @see ::Cri::CommandRunner#call
+    # @see http://rubydoc.info/gems/cri/Cri/CommandRunner#call-instance_method
+    #
+    # @return [void]
     def call
       Nanoc::CLI::ErrorHandler.handle_while(:command => self) do
         self.run
@@ -32,7 +34,9 @@ module Nanoc::CLI
       @site
     end
 
-    # @deprecated use {Cri::CommandDSL#runner}
+    # @deprecated use `Cri::CommandDSL#runner`
+    #
+    # @see http://rubydoc.info/gems/cri/Cri/CommandDSL#runner-instance_method
     def self.call(opts, args, cmd)
       self.new(opts, args, cmd).call
     end
