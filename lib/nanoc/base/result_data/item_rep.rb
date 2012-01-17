@@ -387,9 +387,12 @@ module Nanoc
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(assigns.merge({ :layout => layout }))
 
+      # Visit
+      Nanoc::NotificationCenter.post(:visit_started, layout)
+      Nanoc::NotificationCenter.post(:visit_ended,   layout)
+
       begin
         # Notify start
-        Nanoc::NotificationCenter.post(:visit_started,      layout, self.item)
         Nanoc::NotificationCenter.post(:processing_started, layout)
         Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
 
@@ -402,7 +405,6 @@ module Nanoc
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended,  self, filter_name)
         Nanoc::NotificationCenter.post(:processing_ended, layout)
-        Nanoc::NotificationCenter.post(:visit_ended,      layout)
       end
     end
 
@@ -416,14 +418,9 @@ module Nanoc
     #
     # @return [void]
     def snapshot(snapshot_name, params={})
-      # Parse params
-      params[:final] = true if !params.has_key?(:final)
-
-      # Create snapshot
+      is_final = params.fetch(:final) { true }
       @content[snapshot_name] = @content[:last] unless self.binary?
-
-      # Write
-      write(snapshot_name) if params[:final]
+      self.write(snapshot_name) if is_final
     end
 
     # Returns a recording proxy that is used for determining whether the

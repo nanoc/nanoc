@@ -87,10 +87,24 @@ module Nanoc::CLI::Commands
     end
 
     def setup_notifications
-      # File notifications
+      # Diff generation
+      require 'tempfile'
+      old_contents = {}
       Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
-        generate_diff_for(rep, snapshot)
+        path = rep.raw_path(:snapshot => snapshot)
+        old_contents[rep] = File.file?(path) ? File.read(path) : nil
       end
+      Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        if !rep.binary? && self.site.config[:enable_output_diff]
+          old_contents = old_contents[rep]
+          new_contents = File.file?(path) ? File.read(path) : nil
+          if old_contents && new_contents
+            generate_diff_for(rep, old_contents, new_contents)
+          end
+        end
+      end
+
+      # File notifications
       Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
         action = (is_created ? :create : (is_modified ? :update : :identical))
         duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
@@ -104,9 +118,10 @@ module Nanoc::CLI::Commands
         end
         Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
           puts "*** Ended compilation of #{rep.inspect}"
+          puts
         end
-        Nanoc::NotificationCenter.on(:compilation_failed) do |rep|
-          puts "*** Suspended compilation of #{rep.inspect} due to unmet dependencies"
+        Nanoc::NotificationCenter.on(:compilation_failed) do |rep, e|
+          puts "*** Suspended compilation of #{rep.inspect}: #{e.message}"
         end
         Nanoc::NotificationCenter.on(:cached_content_used) do |rep|
           puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling"
@@ -122,6 +137,9 @@ module Nanoc::CLI::Commands
         end
         Nanoc::NotificationCenter.on(:visit_ended) do |item|
           puts "*** Ended visiting #{item.inspect}"
+        end
+        Nanoc::NotificationCenter.on(:dependency_created) do |src, dst|
+          puts "*** Dependency created from #{src.inspect} onto #{dst.inspect}"
         end
       end
 
@@ -153,16 +171,7 @@ module Nanoc::CLI::Commands
       @diff_threads.each { |t| t.join }
     end
 
-    def generate_diff_for(rep, snapshot)
-      return if !self.site.config[:enable_output_diff]
-      return if !File.file?(rep.raw_path(:snapshot => snapshot))
-      return if rep.binary?
-
-      # Get old and new content
-      old_content = File.read(rep.raw_path(:snapshot => snapshot))
-      new_content = rep.compiled_content(:snapshot => snapshot)
-
-      # Check whether there’s a different
+    def generate_diff_for(rep, old_content, new_content)
       return if old_content == new_content
 
       @diff_threads << Thread.new do

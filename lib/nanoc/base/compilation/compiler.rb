@@ -382,7 +382,7 @@ module Nanoc
       compiled_content_cache[rep] = rep.content
     rescue => e
       rep.forget_progress
-      Nanoc::NotificationCenter.post(:compilation_failed, rep)
+      Nanoc::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
     ensure
       Nanoc::NotificationCenter.post(:visit_ended,       rep.item)

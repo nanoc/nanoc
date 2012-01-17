@@ -52,20 +52,16 @@ module Nanoc
       @stack = []
 
       # Register start of visits
-      Nanoc::NotificationCenter.on(:visit_started, self) do |subject, context|
-        if !@stack.empty? && (@stack[-1][:context].nil? || @stack[-1][:subject] != context)
-          prev_subject = @stack.last[:subject]
-          prev_context = @stack.last[:context]
-          if prev_context.nil? || prev_context != subject
-            self.record_dependency(@stack[-1][:subject], subject)
-          end
+      Nanoc::NotificationCenter.on(:visit_started, self) do |obj|
+        if !@stack.empty?
+          Nanoc::NotificationCenter.post(:dependency_created, @stack.last, obj)
+          self.record_dependency(@stack.last, obj)
         end
-
-        @stack.push({ :subject => subject, :context => context })
+        @stack.push(obj)
       end
 
       # Register end of visits
-      Nanoc::NotificationCenter.on(:visit_ended, self) do |subject|
+      Nanoc::NotificationCenter.on(:visit_ended, self) do |obj|
         @stack.pop
       end
     end
@@ -193,6 +189,7 @@ module Nanoc
       new_objects = (@objects - previous_objects)
       new_objects.each do |new_obj|
         @objects.each do |obj|
+          next unless obj.is_a?(Nanoc::Item)
           @graph.add_edge(new_obj, obj)
         end
       end
