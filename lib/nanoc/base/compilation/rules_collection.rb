@@ -185,7 +185,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)}>"
+      "<#{self.class}>"
     end
 
     # @param [Nanoc::ItemRep] rep The item representation to get the rule

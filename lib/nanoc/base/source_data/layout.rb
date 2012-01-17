@@ -82,7 +82,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class}:0x#{self.object_id.to_s(16)} identifier=#{self.identifier}>"
+      "<#{self.class} identifier=#{self.identifier}>"
     end
 
     # @return [String] The checksum for this object. If its contents change,
