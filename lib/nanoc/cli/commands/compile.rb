@@ -96,10 +96,9 @@ module Nanoc::CLI::Commands
       end
       Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
         if !rep.binary? && self.site.config[:enable_output_diff]
-          old_contents = old_contents[rep]
           new_contents = File.file?(path) ? File.read(path) : nil
-          if old_contents && new_contents
-            generate_diff_for(rep, old_contents, new_contents)
+          if old_contents[rep] && new_contents
+            generate_diff_for(rep, old_contents[rep], new_contents)
           end
         end
       end
