@@ -55,6 +55,11 @@ module Nanoc3::DataSources
   #
   # The file extension does not determine the filters to run on items; the
   # Rules file is used to specify processing instructors for each item.
+  #
+  # It is possible to set an explicit encoding that should be used when reading
+  # files. In the data source configuration, set `encoding` to an encoding
+  # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
+  # one will be inferred from the environment.
   class FilesystemUnified < Nanoc3::DataSource
 
     include Nanoc3::DataSources::Filesystem
