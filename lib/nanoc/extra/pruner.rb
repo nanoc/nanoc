@@ -17,6 +17,7 @@ module Nanoc::Extra
     def initialize(site, params={})
       @site    = site
       @dry_run = params.fetch(:dry_run) { false }
+      @exclude = params.fetch(:exclude) { [] }
     end
 
     # Prunes all output files not managed by nanoc.
@@ -41,17 +42,26 @@ module Nanoc::Extra
       present_dirs  = present_files_and_dirs.select { |f| File.directory?(f) }
 
       # Remove stray files
-      stray_files = present_files - compiled_files
-      stray_files.each { |f| self.delete_file(f) }
+      stray_files = (present_files - compiled_files)
+      stray_files.each do |f|
+        next if filename_excluded?(f)
+        self.delete_file(f)
+      end
 
       # Remove empty directories
       present_dirs.sort_by{ |d| -d.length }.each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
+        next if filename_excluded?(dir)
         self.delete_dir(dir)
       end
     end
 
   protected
+
+    def filename_excluded?(f)
+      pathname = Pathname.new(f)
+      @exclude.any? { |e| pathname.include_component?(e) } 
+    end
 
     def delete_file(file)
       if @dry_run

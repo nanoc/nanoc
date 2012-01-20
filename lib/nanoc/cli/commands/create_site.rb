@@ -46,9 +46,15 @@ index_filenames: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:index_filenames])}
 # before and after the last site compilation.
 enable_output_diff: false
 
-# Whether to automatically remove files not managed by nanoc from the output
-# directory. For safety reasons, this is turned off by default.
-auto_prune: false
+prune:
+  # Whether to automatically remove files not managed by nanoc from the output
+  # directory. For safety reasons, this is turned off by default.
+  auto_prune: false
+
+  # Which files and directories you want to exclude from pruning. If you version
+  # your output directory, you should probably exclude VCS directories such as
+  # .git, .svn etc.
+  exclude: [ '.git', '.hg', '.svn', 'CVS' ]
 
 # The data sources where nanoc loads its data from. This is an array of
 # hashes; each array element represents a single data source. By default,
