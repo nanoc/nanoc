@@ -186,7 +186,7 @@ module Nanoc3
         next if index == 0
         parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
         parent = nil
-        (0..index-1).reverse_each do |candidate_index|
+        (index-1).downto(0) do |candidate_index|
           candidate = items[candidate_index]
           if candidate.identifier == parent_identifier
             parent = candidate
