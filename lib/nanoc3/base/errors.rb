@@ -65,7 +65,8 @@ module Nanoc3
       # @param [Array<Nanoc3::ItemRep>] reps A list of item representations
       #   that mutually depend on each other
       def initialize(reps)
-        super("The site cannot be compiled because the following items mutually depend on each other: #{reps.inspect}.".make_compatible_with_env)
+        list = reps.map { |r| r.inspect }.join("\n")
+        super("The site cannot be compiled because the following items mutually depend on each other:\n#{list}.".make_compatible_with_env)
       end
 
     end
