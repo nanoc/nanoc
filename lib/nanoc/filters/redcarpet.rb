@@ -45,6 +45,13 @@ module Nanoc::Filters
         renderer_class   = params[:renderer]         || ::Redcarpet::Render::HTML
         renderer_options = params[:renderer_options] || {}
 
+		# Redcarpet 2 requires the options to be in the form of a hash
+		if options.is_a? Array
+			hash = {}
+			options.each { |opt| hash[opt] = true }
+			options = hash
+		end
+
         renderer = renderer_class.new(renderer_options)
         ::Redcarpet::Markdown.new(renderer, options).render(content)
       else
