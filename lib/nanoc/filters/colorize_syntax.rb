@@ -116,10 +116,15 @@ module Nanoc::Filters
           language = match[2] if match
           has_class = true if language
         else
-          # Get language from comment line
-          match = element.inner_text.match(/^#!([^\/][^\n]*)$/)
-          language = match[1] if match
-          element.content = element.content.sub(/^#!([^\/][^\n]*)$\n/, '') if language
+          # Get language from delimiter
+          if element.inner_text.match(/<\?php$/)
+            language = 'php'
+          else
+            # Get language from comment line
+            match = element.inner_text.match(/^#!([^\/][^\n]*)$/)
+            language = match[1] if match
+            element.content = element.content.sub(/^#!([^\/][^\n]*)$\n/, '') if language
+          end
         end
 
         # Give up if there is no hope left

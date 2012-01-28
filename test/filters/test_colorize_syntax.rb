@@ -85,6 +85,21 @@ EOS
     end
   end
 
+  def test_coderay_with_delimiter
+    if_have 'coderay', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = %[<pre title="moo"><code>&lt;?php\n// comment</code></pre>]
+      expected_output = %[<pre title="moo"><code class="language-php"><span class="inline-delimiter">&lt;?php</span>\n<span class="comment">// comment</span></code></pre>]
+
+      # Run filter
+      actual_output = filter.run(input)
+      assert_equal(expected_output, actual_output)
+    end
+  end
+
   def test_coderay_with_comment_and_class
     if_have 'coderay', 'nokogiri' do
       # Create filter
