@@ -34,6 +34,11 @@ module Nanoc::DataSources
   # The identifier is calculated by stripping the extension; if there is more
   # than one extension, only the last extension is stripped and the previous
   # extensions will be part of the identifier.
+  #
+  # It is possible to set an explicit encoding that should be used when reading
+  # files. In the data source configuration, set `encoding` to an encoding
+  # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
+  # one will be inferred from the environment.
   class FilesystemVerbose < Nanoc::DataSource
 
     include Nanoc::DataSources::Filesystem

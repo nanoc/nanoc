@@ -502,6 +502,46 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert raised
   end
 
+  def test_raw_path_should_generate_dependency
+    items = [
+      Nanoc3::Item.new("foo", {}, '/foo/'),
+      Nanoc3::Item.new("bar", {}, '/bar/')
+    ]
+    item_reps = [
+      Nanoc3::ItemRep.new(items[0], :default),
+      Nanoc3::ItemRep.new(items[1], :default)
+    ]
+
+    dt = Nanoc3::DependencyTracker.new(items)
+    dt.start
+    Nanoc3::NotificationCenter.post(:visit_started, items[0])
+    item_reps[1].raw_path
+    Nanoc3::NotificationCenter.post(:visit_ended,   items[0])
+    dt.stop
+
+    assert_equal [ items[1] ], dt.objects_causing_outdatedness_of(items[0])
+  end
+
+  def test_path_should_generate_dependency
+    items = [
+      Nanoc3::Item.new("foo", {}, '/foo/'),
+      Nanoc3::Item.new("bar", {}, '/bar/')
+    ]
+    item_reps = [
+      Nanoc3::ItemRep.new(items[0], :default),
+      Nanoc3::ItemRep.new(items[1], :default)
+    ]
+
+    dt = Nanoc3::DependencyTracker.new(items)
+    dt.start
+    Nanoc3::NotificationCenter.post(:visit_started, items[0])
+    item_reps[1].path
+    Nanoc3::NotificationCenter.post(:visit_ended,   items[0])
+    dt.stop
+
+    assert_equal [ items[1] ], dt.objects_causing_outdatedness_of(items[0])
+  end
+
 private
 
   def create_binary_item
