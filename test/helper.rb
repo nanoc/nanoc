@@ -64,7 +64,7 @@ end
 
 route '*' do
   if item.binary?
-    item.identifier.chop + '.' + item[:extension]
+    item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
   else
     item.identifier + 'index.html'
   end
