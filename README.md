@@ -106,6 +106,7 @@ may be interested in the development dependencies:
 * Dennis Sutch
 * Matthias Vallentin
 * Ruben Verborgh
+* Scott Vokes
 * Toon Willems
 
 ## Contact
