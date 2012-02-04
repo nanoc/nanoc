@@ -35,3 +35,7 @@ end
 opt :w, :warn, 'enable warnings' do
   $-w = true
 end
+
+run do |opts, args, cmd|
+  cmd.command_named('compile').run([])
+end
