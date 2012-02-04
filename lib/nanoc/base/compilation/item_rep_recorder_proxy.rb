@@ -67,13 +67,13 @@ module Nanoc
       @rule_memory << [ :snapshot, snapshot_name, params ]
 
       # Count
-      counts ||= {}
-      @rule_memory.select { |r| r[0] == :snapshot }.map do |r|
-        counts[r[1]] ||= 0
-        counts[r[1]] += 1
-        if counts[r[1]] > 1
+      existing = Set.new
+      names = @rule_memory.select { |r| r[0] == :snapshot }.map { |r| r[2] }
+      names.each do |n|
+        if existing.include?(n)
           raise Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, snapshot_name)
         end
+        existing << n
       end
     end
 
