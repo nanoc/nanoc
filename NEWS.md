@@ -6,6 +6,7 @@ Base:
 
 * Dropped the “3” suffix on nanoc3/Nanoc3
 * Turned Rake tasks into proper nanoc commands
+* Improved dependency tracking
 
 Extensions:
 
