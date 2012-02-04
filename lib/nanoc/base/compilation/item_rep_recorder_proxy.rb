@@ -65,6 +65,16 @@ module Nanoc
     # @see Nanoc::ItemRep#snapshot
     def snapshot(snapshot_name, params={})
       @rule_memory << [ :snapshot, snapshot_name, params ]
+
+      # Count
+      counts ||= {}
+      @rule_memory.select { |r| r[0] == :snapshot }.map do |r|
+        counts[r[1]] ||= 0
+        counts[r[1]] += 1
+        if counts[r[1]] > 1
+          raise Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, snapshot_name)
+        end
+      end
     end
 
     # @return [{}]

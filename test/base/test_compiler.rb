@@ -313,4 +313,31 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_disallow_multiple_snapshots_with_the_same_name
+    # Create site
+    Nanoc::CLI.run %w( create_site bar )
+
+    FileUtils.cd('bar') do
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  snapshot :aaa\n"
+        io.write "  snapshot :aaa\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Create site
+      site = Nanoc::Site.new('.')
+      assert_raises Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName do
+        site.compile
+      end
+    end
+  end
+
 end

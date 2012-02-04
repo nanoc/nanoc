@@ -161,6 +161,42 @@ module Nanoc
 
     end
 
+    # Error that is raised when the compiled content at a non-existing snapshot
+    # is requested.
+    class NoSuchSnapshot < Generic
+
+      # @return [Nanoc::ItemRep] The item rep from which the compiled content
+      #   was requested
+      attr_reader :item_rep
+
+      # @return [Symbol] The requested snapshot
+      attr_reader :snapshot
+
+      # @param [Nanoc::ItemRep] item_rep The item rep from which the compiled
+      #   content was requested
+      #
+      # @param [Symbol] snapshot The requested snapshot
+      def initialize(item_rep, snapshot)
+        @item_rep, @snapshot = item_rep, snapshot
+        super("The “#{item_rep.inspect}” item rep does not have a snapshot “#{snapshot.inspect}”")
+      end
+
+    end
+
+    # Error that is raised when a snapshot with an existing name is made.
+    class CannotCreateMultipleSnapshotsWithSameName < Generic
+
+      # @param [Nanoc::ItemRep] rep The item representation for which a
+      #   snapshot was attempted to be made
+      #
+      # @param [Symbol] snapshot The name of the snapshot that was attempted to
+      #   be made
+      def initialize(rep, snapshot)
+        super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep “#{rep.inspect}”".make_compatible_with_env)
+      end
+
+    end
+
     # @deprecated No longer necessary, but kept for backwards compatibility.
     class DataNotYetAvailable < Generic
 

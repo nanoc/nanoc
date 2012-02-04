@@ -207,6 +207,18 @@ module Nanoc
     end
     memoize :new_rule_memory_for_layout
 
+    # @param [Nanoc::ItemRep] rep The item representation for which to fetch
+    #   the list of snapshots
+    #
+    # @return [Array] A list of snapshots, represented as arrays where the
+    #   first element is the snapshot name (a Symbol) and the last element is
+    #   a Boolean indicating whether the snapshot is final or not
+    def snapshots_for(rep)
+      new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
+        [ e[1], e[2].fetch(:final) { true } ]
+      end
+    end
+
     # @param [Nanoc::Item] obj The object for which to check the rule memory
     #
     # @return [Boolean] true if the rule memory for the given object has

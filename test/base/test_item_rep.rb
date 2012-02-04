@@ -58,10 +58,11 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
-    rep.expects(:compiled?).returns(true)
 
     # Check
-    assert_equal nil, rep.compiled_content(:snapshot => :klsjflkasdfl)
+    assert_raises Nanoc::Errors::NoSuchSnapshot do
+      rep.compiled_content(:snapshot => :klsjflkasdfl)
+    end
   end
 
   def test_compiled_content_with_uncompiled_content
@@ -319,21 +320,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert_raises ::Nanoc::Errors::CannotUseBinaryFilter do
       rep.filter(:foo)
     end
-  end
-
-  def test_filter_get_compiled_content_from_binary_item
-    # Mock item
-    item = Nanoc::Item.new(
-      "blah blah", {}, '/',
-      :binary => true
-    )
-
-    # Create rep
-    rep = Nanoc::ItemRep.new(item, :foo)
-    def rep.compiled? ; true ; end
-
-    # Check
-    assert_nil rep.compiled_content
   end
 
   def test_using_textual_filters_on_binary_reps_raises

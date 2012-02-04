@@ -201,6 +201,11 @@ module Nanoc
     attr_reader   :binary
     alias_method  :binary?, :binary
 
+    # @return [Array] A list of snapshots, represented as arrays where the
+    #   first element is the snapshot name (a Symbol) and the last element is
+    #   a Boolean indicating whether the snapshot is final or not
+    attr_accessor :snapshots
+
     # Creates a new item representation for the given item.
     #
     # @param [Nanoc::Item] item The item to which the new representation will
@@ -219,6 +224,7 @@ module Nanoc
       @raw_paths  = {}
       @paths      = {}
       @assigns    = {}
+      @snapshots  = []
       initialize_content
 
       # Reset flags
@@ -239,24 +245,21 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started, self.item)
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)
 
-      # Require compilation
-      raise Nanoc::Errors::UnmetDependency.new(self) if !compiled?
-
       # Get name of last pre-layout snapshot
-      snapshot_name = params[:snapshot]
-      if @content[:pre]
-        snapshot_name ||= :pre
+      snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
+      is_moving = [ :pre, :post, :last ].include?(snapshot)
+
+      # Check existance of snapshot
+      if !is_moving && snapshots.find { |s| s.first == snapshot && s.last == true }.nil?
+        raise Nanoc::Errors::NoSuchSnapshot.new(self, snapshot)
+      end
+
+      # Require compilation
+      if @content[snapshot].nil? || (!self.compiled? && is_moving)
+        raise Nanoc::Errors::UnmetDependency.new(self)
       else
-        snapshot_name ||= :last
+        @content[snapshot]
       end
-
-      # Check presence of snapshot
-      if @content[snapshot_name].nil?
-        warn(('-' * 78 + "\nWARNING: The “#{self.item.identifier}” item (rep “#{self.name}”) does not have the requested snapshot named #{snapshot_name.inspect}.\n\n* Make sure that you are requesting the correct snapshot.\n* It is not possible to request the compiled content of a binary item representation; if this item is marked as binary even though you believe it should be textual, you may need to add the extension of this item to the site configuration’s `text_extensions` array.\n" + '-' * 78).make_compatible_with_env)
-      end
-
-      # Get content
-      @content[snapshot_name]
     end
 
     # Checks whether content exists at a given snapshot.
