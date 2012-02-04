@@ -332,11 +332,42 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      # Create site
+      # Compile
       site = Nanoc::Site.new('.')
       assert_raises Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName do
         site.compile
       end
+    end
+  end
+
+  def test_include_compiled_content_of_active_item_at_previous_snapshot
+    with_site do |site|
+      # Create item
+      File.open('content/index.html', 'w') do |io|
+        io.write('[<%= @item.compiled_content(:snapshot => :aaa) %>]')
+      end
+
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  snapshot :aaa\n"
+        io.write "  filter :erb\n"
+        io.write "  filter :erb\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert_equal '[[[<%= @item.compiled_content(:snapshot => :aaa) %>]]]', File.read('output/index.html')
     end
   end
 
