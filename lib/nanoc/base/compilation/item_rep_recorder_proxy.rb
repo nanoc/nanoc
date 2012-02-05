@@ -56,8 +56,12 @@ module Nanoc
     # @return [void]
     #
     # @see Nanoc::ItemRepProxy#layout, Nanoc::ItemRep#layout
-    def layout(layout_identifier)
-      @rule_memory << [ :layout, layout_identifier ]
+    def layout(layout_identifier, extra_filter_args=nil)
+      if extra_filter_args
+        @rule_memory << [ :layout, layout_identifier, extra_filter_args ]
+      else
+        @rule_memory << [ :layout, layout_identifier ]
+      end
     end
 
     # @return [void]

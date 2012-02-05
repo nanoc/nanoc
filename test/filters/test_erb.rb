@@ -96,4 +96,10 @@ class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
     assert $trim_mode_works
   end
 
+  def test_locals
+    filter = ::Nanoc::Filters::ERB.new
+    result = filter.run('<%= @local %>', :locals => { :local => 123 })
+    assert_equal '123', result
+  end
+
 end

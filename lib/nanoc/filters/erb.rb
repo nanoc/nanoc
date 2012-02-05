@@ -16,6 +16,9 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
+      # Add locals
+      assigns.merge!(params[:locals] || {})
+
       # Create context
       context = ::Nanoc::Context.new(assigns)
 

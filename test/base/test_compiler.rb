@@ -371,4 +371,33 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_layout_with_extra_filter_args
+    with_site do |site|
+      # Create item
+      File.open('content/index.html', 'w') do |io|
+        io.write('This is <%= @foo %>.')
+      end
+
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  filter :erb, :locals => { :foo => 123 }\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert_equal 'This is 123.', File.read('output/index.html')
+    end
+  end
+
 end
