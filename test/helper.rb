@@ -170,6 +170,9 @@ EOS
 
 end
 
+# Unexpected system exit is unexpected
+::MiniTest::Unit::TestCase::PASSTHROUGH_EXCEPTIONS.delete(SystemExit)
+
 # A more precise inspect method for Time improves assert failure messages.
 #
 class Time
