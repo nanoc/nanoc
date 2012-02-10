@@ -100,8 +100,8 @@ class Nanoc::DependencyTrackerTest < MiniTest::Unit::TestCase
 
     # Start, do something and stop
     tracker.start
-    Nanoc::NotificationCenter.post(:visit_started, items[0], nil)
-    Nanoc::NotificationCenter.post(:visit_started, items[1], nil)
+    Nanoc::NotificationCenter.post(:visit_started, items[0])
+    Nanoc::NotificationCenter.post(:visit_started, items[1])
     Nanoc::NotificationCenter.post(:visit_ended,   items[1])
     Nanoc::NotificationCenter.post(:visit_ended,   items[0])
     tracker.stop
