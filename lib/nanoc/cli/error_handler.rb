@@ -98,6 +98,12 @@ module Nanoc::CLI
       $stderr.puts
       $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
 
+      # Extra information
+      $stderr.puts
+      $stderr.puts '=== VERSION INFORMATION:'
+      $stderr.puts
+      $stderr.puts Nanoc.version_information
+
       # Issue link
       $stderr.puts
       $stderr.puts "If you believe this is a bug in nanoc, please do report it at"
