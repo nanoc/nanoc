@@ -53,7 +53,7 @@ class Nanoc::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
     validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
 
     # Test
-    assert validator.send(:fetch_http_status_for, URI.parse('http://heise.de/'), 200)
+    assert validator.send(:fetch_http_status_for, URI.parse('http://www.heise.de/'), 200)
     assert validator.send(:fetch_http_status_for, URI.parse('https://www.google.com/'), 200)
     assert validator.send(:fetch_http_status_for, URI.parse('https://google.com/'), 200)
     assert validator.send(:fetch_http_status_for, URI.parse('http://google.com/foo/bar'), 404)
