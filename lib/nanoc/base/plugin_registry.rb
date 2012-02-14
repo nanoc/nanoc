@@ -50,6 +50,12 @@ module Nanoc
         registry.register(klass, class_or_name, *identifiers)
       end
 
+      # @return [Hash<Symbol, Class>] All plugins of this type, with keys
+      #   being the identifiers and values the plugin classes
+      def all
+        Nanoc::Plugin.find_all(self)
+      end
+
       # Returns the plugin with the given name (identifier)
       #
       # @param [String] name The name of the plugin class to find

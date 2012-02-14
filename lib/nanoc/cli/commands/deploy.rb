@@ -53,14 +53,15 @@ module Nanoc::CLI::Commands
       end
 
       # Get deployer
+      names = Nanoc::Extra::Deployer.all.keys
       name = config.fetch(:kind) do
         $stderr.puts "The specified deploy target does not have a kind."
-        $stderr.puts "(expected one of #{KIND_MAPPING.keys.join(', ')})"
+        $stderr.puts "(expected one of #{names.join(', ')})"
         exit 1
       end
       deployer_class = Nanoc::Extra::Deployer.named(name) do
         $stderr.puts "The specified deploy target has an unrecognised kind (#{kind})."
-        $stderr.puts "(expected one of #{KIND_MAPPING.keys.join(', ')})"
+        $stderr.puts "(expected one of #{names.join(', ')})"
         exit 1
       end
 

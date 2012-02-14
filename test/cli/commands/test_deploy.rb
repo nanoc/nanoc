@@ -71,4 +71,32 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_deploy_without_kind
+    if_have 'systemu' do
+      with_site do |site|
+        File.open('config.yaml', 'w') do |io|
+          io.write "deploy:\n"
+          io.write "  public:\n"
+          io.write "    dst: mydestination"
+        end
+
+        FileUtils.mkdir_p('output')
+        File.open('output/blah.html', 'w') { |io| io.write 'moo' }
+
+        ios = capturing_stdio do
+          assert_raises SystemExit do
+            Nanoc::CLI.run %w( deploy -t public )
+          end
+        end
+
+        assert ios[:stdout].empty?
+        assert ios[:stderr].include?('The specified deploy target does not have a kind.')
+        assert ios[:stderr].include?('(expected one of ')
+
+        refute File.directory?('mydestination')
+        refute File.file?('mydestination/blah.html')
+      end
+    end
+  end
+
 end
