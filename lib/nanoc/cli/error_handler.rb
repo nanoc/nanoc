@@ -144,6 +144,7 @@ module Nanoc::CLI
       'cri'            => 'cri',
       'erubis'         => 'erubis',
       'escape'         => 'escape',
+      'fog'            => 'fog',
       'fssm'           => 'fssm',
       'haml'           => 'haml',
       'json'           => 'json',
