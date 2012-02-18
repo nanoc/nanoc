@@ -168,7 +168,7 @@ module Nanoc::Extra::Validators
 
       # Get status
       status = fetch_http_status_for(uri)
-      is_valid = !!(status && status >= 200 && status <= 299)
+      is_valid = !status.nil? && status == 200
 
       # Notify
       @delegate && @delegate.send(:external_href_validated, href, is_valid)
@@ -222,8 +222,19 @@ module Nanoc::Extra::Validators
           end
 
           if res.code =~ /^3..$/
-            url = URI.parse(res['location'])
             return nil if i == 5
+
+            # Find proper location
+            location = res['Location']
+            if location !~ /^https?:\/\//
+              base_url = url.dup
+              base_url.path = (location =~ /^\// ? '' : '/')
+              base_url.query = nil
+              base_url.fragment = nil
+              location = base_url.to_s + location
+            end
+
+            url = URI.parse(location)
           else
             return res.code.to_i
           end
@@ -238,7 +249,7 @@ module Nanoc::Extra::Validators
 
       path = (url.path.nil? || url.path.empty? ? '/' : url.path)
       req = Net::HTTP::Head.new(path)
-      http=Net::HTTP.new(url.host, url.port)
+      http = Net::HTTP.new(url.host, url.port)
       if url.instance_of? URI::HTTPS
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
