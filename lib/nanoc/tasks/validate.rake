@@ -38,55 +38,19 @@ namespace :validate do
 
     desc 'Validate the site’s internal links'.make_compatible_with_env
     task :internal do
-      # Get output directory
-      site = Nanoc::Site.new('.')
-      if site.nil?
-        $stderr.puts 'The current working directory does not seem to be a ' +
-                     'valid/complete nanoc site directory; aborting.'
-        exit 1
-      end
-      dir             = site.config[:output_dir]
-      index_filenames = site.config[:index_filenames]
-
-      # Validate
-      validator = ::Nanoc::Extra::Validators::Links.new(dir, index_filenames, :internal => true)
-      validator.run
+      Nanoc::CLI.run %w( validate_links --internal )
     end
 
-    desc 'Validate the site’s internal links'.make_compatible_with_env
+    desc 'Validate the site’s external links'.make_compatible_with_env
     task :external do
-      # Get output directory
-      site = Nanoc::Site.new('.')
-      if site.nil?
-        $stderr.puts 'The current working directory does not seem to be a ' +
-                     'valid/complete nanoc site directory; aborting.'
-        exit 1
-      end
-      dir             = site.config[:output_dir]
-      index_filenames = site.config[:index_filenames]
-
-      # Validate
-      validator = ::Nanoc::Extra::Validators::Links.new(dir, index_filenames, :external => true)
-      validator.run
+      Nanoc::CLI.run %w( validate_links --external )
     end
 
   end
 
   desc 'Validate the site’s internal and external links'.make_compatible_with_env
   task :links do
-    # Get output directory
-    site = Nanoc::Site.new('.')
-    if site.nil?
-      $stderr.puts 'The current working directory does not seem to be a ' +
-                   'valid/complete nanoc site directory; aborting.'
-      exit 1
-    end
-    dir             = site.config[:output_dir]
-    index_filenames = site.config[:index_filenames]
-
-    # Validate
-    validator = ::Nanoc::Extra::Validators::Links.new(dir, index_filenames, :internal => true, :external => true)
-    validator.run
+    Nanoc::CLI.run %w( validate_links )
   end
 
 end
