@@ -107,7 +107,7 @@ module Nanoc::CLI
       # Issue link
       $stderr.puts
       $stderr.puts "If you believe this is a bug in nanoc, please do report it at"
-      $stderr.puts "<https://github.com/ddfreyne/nanoc/issues/new>--thanks!"
+      $stderr.puts "https://github.com/ddfreyne/nanoc/issues/new -- thanks!"
     end
 
   protected
