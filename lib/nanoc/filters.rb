@@ -10,6 +10,7 @@ module Nanoc::Filters
   autoload 'ERB',             'nanoc/filters/erb'
   autoload 'Erubis',          'nanoc/filters/erubis'
   autoload 'Haml',            'nanoc/filters/haml'
+  autoload 'Handlebars',      'nanoc/filters/handlebars'
   autoload 'Kramdown',        'nanoc/filters/kramdown'
   autoload 'Less',            'nanoc/filters/less'
   autoload 'Markaby',         'nanoc/filters/markaby'
@@ -37,6 +38,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::ERB',             :erb
   Nanoc::Filter.register '::Nanoc::Filters::Erubis',          :erubis
   Nanoc::Filter.register '::Nanoc::Filters::Haml',            :haml
+  Nanoc::Filter.register '::Nanoc::Filters::Handlebars',      :handlebars
   Nanoc::Filter.register '::Nanoc::Filters::Kramdown',        :kramdown
   Nanoc::Filter.register '::Nanoc::Filters::Less',            :less
   Nanoc::Filter.register '::Nanoc::Filters::Markaby',         :markaby

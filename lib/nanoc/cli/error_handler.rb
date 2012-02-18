@@ -147,6 +147,7 @@ module Nanoc::CLI
       'fog'            => 'fog',
       'fssm'           => 'fssm',
       'haml'           => 'haml',
+      'handlebars'     => 'hbs',
       'json'           => 'json',
       'kramdown'       => 'kramdown',
       'less'           => 'less',
