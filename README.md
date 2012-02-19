@@ -96,6 +96,7 @@ may be interested in the development dependencies:
 * Nikhil Marathe
 * Daniel Mendler
 * Ale Muñoz
+* John Nishinaga
 * Nicky Peeters
 * Christian Plessl
 * Šime Ramov

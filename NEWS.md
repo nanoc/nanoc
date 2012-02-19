@@ -7,6 +7,13 @@ Extensions:
 * Added `:yield` key for Mustache filter
 * Added Handebars filter
 
+## 3.3.1 (2012-02-18)
+
+* Fixed issue with long paths on Windows
+* Fixed a few deployer crashes
+* Added nanoc3.rb, nanoc3/tasks.rb, … for compatibility with older versions
+* Made nanoc setup Bundler at startup [John Nishinaga]
+
 ## 3.3 (2012-02-12)
 
 Base:
