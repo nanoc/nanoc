@@ -1,5 +1,12 @@
 # nanoc news
 
+## 3.4 (???)
+
+Extensions:
+
+* Added `:yield` key for Mustache filter
+* Added Handebars filter
+
 ## 3.3 (2012-02-12)
 
 Base:
