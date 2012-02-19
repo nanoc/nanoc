@@ -2,7 +2,7 @@
 
 usage       'validate_links [options]'
 aliases     [ 'vlink' ]
-summary     'validate_links links in site'
+summary     'validate links in site'
 description <<-EOS
 Validates the site’s links. By default, both internal and external links will be checked.
 EOS
