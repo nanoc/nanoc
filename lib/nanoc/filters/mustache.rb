@@ -4,7 +4,7 @@ require 'mustache'
 
 module Nanoc::Filters
 
-  # @since 3.2.0
+  # @since 3.4.0
   class Mustache < Nanoc::Filter
 
     # Runs the content through

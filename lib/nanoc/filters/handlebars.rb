@@ -4,7 +4,7 @@ require 'handlebars'
 
 module Nanoc::Filters
 
-  # @since 3.2.0
+  # @since 3.4.0
   class Handlebars < Nanoc::Filter
 
     # Runs the content through
