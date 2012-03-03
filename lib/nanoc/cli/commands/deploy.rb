@@ -55,9 +55,8 @@ module Nanoc::CLI::Commands
       # Get deployer
       names = Nanoc::Extra::Deployer.all.keys
       name = config.fetch(:kind) do
-        $stderr.puts "The specified deploy target does not have a kind."
-        $stderr.puts "(expected one of #{names.join(', ')})"
-        exit 1
+        $stderr.puts "Warning: The specified deploy target does not have a kind attribute. Assuming rsync."
+        'rsync'
       end
       deployer_class = Nanoc::Extra::Deployer.named(name) do
         $stderr.puts "The specified deploy target has an unrecognised kind (#{kind})."
