@@ -90,6 +90,7 @@ may be interested in the development dependencies:
 * Felix Hanley
 * Justin Hileman
 * Starr Horne
+* Daniel Hofstetter
 * Tuomas Kareinen
 * Matt Keveney
 * Kevin Lynagh

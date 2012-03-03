@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'nanoc/cli'
+
 namespace :deploy do
 
   desc 'Upload the compiled site using rsync'
