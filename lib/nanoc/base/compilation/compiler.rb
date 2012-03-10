@@ -321,6 +321,11 @@ module Nanoc
       Nanoc::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
       Nanoc::NotificationCenter.on(:processing_ended,   self) { |obj| @stack.pop       }
 
+      # Assign snapshots
+      reps.each do |rep|
+        rep.snapshots = rules_collection.snapshots_for(rep)
+      end
+
       # Attempt to compile all active reps
       loop do
         # Find rep to compile
@@ -364,9 +369,6 @@ module Nanoc
 
       # Calculate rule memory if we haven’t yet done do
       rules_collection.new_rule_memory_for_rep(rep)
-
-      # Assign snapshots
-      rep.snapshots = rules_collection.snapshots_for(rep)
 
       if !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
