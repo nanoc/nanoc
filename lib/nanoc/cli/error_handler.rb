@@ -66,7 +66,7 @@ module Nanoc::CLI
     def print_error(error)
       # Header
       $stderr.puts
-      $stderr.puts "Captain! We’ve been hit!"
+      $stderr.puts "Captain! We’ve been hit!".make_compatible_with_env
 
       # Exception and resolution (if any)
       $stderr.puts
