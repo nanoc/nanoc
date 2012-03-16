@@ -1,5 +1,13 @@
 # nanoc news
 
+## 3.3.2 (2012-03-16)
+
+* Removed bin/nanoc3 (use nanoc3 gem if you want it)
+* Fixed wrong “no such snapshot” errors
+* Made deployer default to rsync for backwards compatibility
+* Fixed missing Nanoc::CLI in deployment tasks
+* Fixed “unrecognised kind” deployer error
+
 ## 3.3.1 (2012-02-18)
 
 * Fixed issue with long paths on Windows
