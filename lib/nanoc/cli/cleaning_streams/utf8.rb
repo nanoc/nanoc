@@ -8,7 +8,7 @@ module Nanoc::CLI::CleaningStreams
     # @see Nanoc::CLI::CleaningStreams::Abstract#clean
     def clean(s)
       # FIXME this decomposition is not generally usable
-      self.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...').gsub('©', '(c)')
+      s.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...').gsub('©', '(c)')
     end
 
   end
