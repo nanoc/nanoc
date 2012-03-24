@@ -7,6 +7,7 @@ module Nanoc::CLI
   module Commands
   end
 
+  autoload 'CleaningStreams',    'nanoc/cli/cleaning_streams'
   autoload 'Logger',             'nanoc/cli/logger'
   autoload 'CommandRunner',      'nanoc/cli/command_runner'
   autoload 'ErrorHandler',       'nanoc/cli/error_handler'

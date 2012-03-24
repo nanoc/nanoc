@@ -10,6 +10,7 @@ module Nanoc::CLI
     #
     # @return [void]
     def call
+      setup_cleaning_streams
       Nanoc::CLI::ErrorHandler.handle_while(:command => self) do
         self.run
       end
@@ -42,6 +43,43 @@ module Nanoc::CLI
     end
 
   protected
+
+    # Wraps `$stdout` and `$stderr` in appropriate cleaning streams, depending
+    # on the available support for UTF-8 and ANSI colors.
+    #
+    # @return [void]
+    def setup_cleaning_streams
+      if !self.enable_utf8?
+        $stdout = Nanoc::CLI::CleaningStreams::UTF.new($stdout)
+        $stderr = Nanoc::CLI::CleaningStreams::UTF.new($stderr)
+      end
+
+      if !self.enable_ansi_colors?
+        $stdout = Nanoc::CLI::CleaningStreams::ANSIColors.new($stdout)
+        $stderr = Nanoc::CLI::CleaningStreams::ANSIColors.new($stderr)
+      end
+    end
+
+    # @return [Boolean] true if UTF-8 support is present, false if not
+    def enable_utf8?
+      %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
+    end
+
+    # @return [Boolean] true if ANSI color support is present, false if not
+    def enable_ansi_colors?
+      return true if self.options.has_key?(:color)
+      return false if self.options.has_key?(:'no-color')
+
+      return false if !$stdout.tty?
+
+      begin
+        require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /mswin|mingw/
+      rescue LoadError
+        return false
+      end
+      
+      return true
+    end
 
     # @return [Boolean] true if debug output is enabled, false if not
     #

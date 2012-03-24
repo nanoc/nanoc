@@ -30,9 +30,9 @@ module Nanoc::CLI::Commands
 
         # Notify
         if filename
-          print "Change detected to #{filename}; recompiling… ".make_compatible_with_env
+          print "Change detected to #{filename}; recompiling… "
         else
-          print "Watcher started; compiling the entire site… ".make_compatible_with_env
+          print "Watcher started; compiling the entire site… "
         end
 
         # Recompile
@@ -71,7 +71,7 @@ module Nanoc::CLI::Commands
       files_to_watch.delete_if { |f| !File.file?(f) }
 
       # Watch
-      puts "Watching for changes…".make_compatible_with_env
+      puts "Watching for changes…"
       watcher = lambda do |*args|
         update(&rebuilder)
         delete(&rebuilder)

@@ -16,7 +16,7 @@ module Nanoc
       # @param [String] data_source_name The data source name for which no
       #   data source could be found
       def initialize(data_source_name)
-        super("The data source specified in the site’s configuration file, “#{data_source_name}”, does not exist.".make_compatible_with_env)
+        super("The data source specified in the site’s configuration file, “#{data_source_name}”, does not exist.")
       end
 
     end
@@ -28,7 +28,7 @@ module Nanoc
       # @param [String] layout_identifier The layout identifier for which no
       #   layout could be found
       def initialize(layout_identifier)
-        super("The site does not have a layout with identifier “#{layout_identifier}”.".make_compatible_with_env)
+        super("The site does not have a layout with identifier “#{layout_identifier}”.")
       end
 
     end
@@ -40,7 +40,7 @@ module Nanoc
       # @param [Symbol] filter_name The filter name for which no filter could
       #   be found
       def initialize(filter_name)
-        super("The requested filter, “#{filter_name}”, does not exist.".make_compatible_with_env)
+        super("The requested filter, “#{filter_name}”, does not exist.")
       end
 
     end
@@ -53,7 +53,7 @@ module Nanoc
       # @param [String] layout_identifier The identifier of the layout for
       #   which the filter could not be determined
       def initialize(layout_identifier)
-        super("The filter to be used for the “#{layout_identifier}” layout could not be determined. Make sure the layout does have a filter.".make_compatible_with_env)
+        super("The filter to be used for the “#{layout_identifier}” layout could not be determined. Make sure the layout does have a filter.")
       end
 
     end
@@ -66,7 +66,7 @@ module Nanoc
       #   that mutually depend on each other
       def initialize(reps)
         list = reps.map { |r| r.inspect }.join("\n")
-        super("The site cannot be compiled because the following items mutually depend on each other:\n#{list}.".make_compatible_with_env)
+        super("The site cannot be compiled because the following items mutually depend on each other:\n#{list}.")
       end
 
     end
@@ -76,7 +76,7 @@ module Nanoc
     class NoRulesFileFound < Generic
 
       def initialize
-        super("This site does not have a rules file, which is required for nanoc sites.".make_compatible_with_env)
+        super("This site does not have a rules file, which is required for nanoc sites.")
       end
 
     end
@@ -88,7 +88,7 @@ module Nanoc
       # @param [Nanoc::Item] item The item for which no compilation rule
       #   could be found
       def initialize(item)
-        super("No compilation rules were found for the “#{item.identifier}” item.".make_compatible_with_env)
+        super("No compilation rules were found for the “#{item.identifier}” item.")
       end
 
     end
@@ -100,7 +100,7 @@ module Nanoc
       # @param [Nanoc::Item] item The item for which no routing rule could be
       #   found
       def initialize(rep)
-        super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).".make_compatible_with_env)
+        super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
       end
 
     end
@@ -117,7 +117,7 @@ module Nanoc
       #   compiled
       def initialize(rep)
         @rep = rep
-        super("The current item cannot be compiled yet because of an unmet dependency on the “#{rep.item.identifier}” item (rep “#{rep.name}”).".make_compatible_with_env)
+        super("The current item cannot be compiled yet because of an unmet dependency on the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
       end
 
     end
@@ -128,7 +128,7 @@ module Nanoc
       # @param [Nanoc::ItemRep] The item representation that was attempted to
       #   be laid out
       def initialize(rep)
-        super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.".make_compatible_with_env)
+        super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
       end
 
     end
@@ -142,7 +142,7 @@ module Nanoc
       #
       # @param [Class] filter_class The filter class that was used
       def initialize(rep, filter_class)
-        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because textual filters cannot be used on binary items.".make_compatible_with_env)
+        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because textual filters cannot be used on binary items.")
       end
 
     end
@@ -156,7 +156,7 @@ module Nanoc
       #
       # @param [Class] filter_class The filter class that was used
       def initialize(rep, filter_class)
-        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.".make_compatible_with_env)
+        super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
       end
 
     end
@@ -192,7 +192,7 @@ module Nanoc
       # @param [Symbol] snapshot The name of the snapshot that was attempted to
       #   be made
       def initialize(rep, snapshot)
-        super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep “#{rep.inspect}”".make_compatible_with_env)
+        super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep “#{rep.inspect}”")
       end
 
     end
@@ -201,7 +201,7 @@ module Nanoc
     class DataNotYetAvailable < Generic
 
       def initialize(type, plural)
-        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.".make_compatible_with_env)
+        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.")
       end
 
     end

@@ -237,7 +237,7 @@ module Nanoc
           basic_path = rule.apply_to(rep, :compiler => self)
           next if basic_path.nil?
           if basic_path !~ %r{^/}
-            raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash.".make_compatible_with_env
+            raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
           end
 
           # Get raw path by prepending output directory

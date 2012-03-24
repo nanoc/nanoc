@@ -37,7 +37,7 @@ module Nanoc::CLI::Commands
       # Warn if trying to compile a single item
       if arguments.size == 1
         $stderr.puts '-' * 80
-        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'.make_compatible_with_env
+        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'
         $stderr.puts '-' * 80
       end
 
@@ -221,7 +221,7 @@ module Nanoc::CLI::Commands
         delay = 1.0
         step  = 0
 
-        text = "Running #{filter_name} filter… ".make_compatible_with_env
+        text = "Running #{filter_name} filter… "
 
         while !Thread.current[:stopped]
           sleep 0.1

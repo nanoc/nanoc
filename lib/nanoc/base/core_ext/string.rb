@@ -9,24 +9,6 @@ module Nanoc::StringExtensions
     "/#{self}/".gsub(/^\/+|\/+$/, '/')
   end
 
-  # Replaces Unicode characters with their ASCII decompositions if the
-  # environment does not support Unicode.
-  #
-  # This method is not suited for general usage. If you need similar
-  # functionality, consider using the Iconv library instead.
-  #
-  # @return [String] The decomposed string
-  def make_compatible_with_env
-    # Check whether environment supports Unicode
-    # FIXME this is ugly, and there most likely are better ways to do this
-    is_unicode_supported = %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
-    return self if is_unicode_supported
-
-    # Decompose if necessary
-    # FIXME this decomposition is not generally usable
-    self.gsub(/“|”/, '"').gsub(/‘|’/, '\'').gsub('…', '...').gsub('©', '(c)')
-  end
-
   # Calculates the checksum for this string. Any change to this string will
   # result in a different checksum.
   #

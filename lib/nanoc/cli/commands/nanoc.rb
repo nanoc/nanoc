@@ -3,9 +3,7 @@
 usage   'nanoc command [options] [arguments]'
 summary 'nanoc, a static site compiler written in Ruby'
 
-opt :l, :color, 'enable color' do
-  Nanoc::CLI::Logger.instance.color = true
-end
+opt :l, :color, 'enable color'
 
 opt :d, :debug, 'enable debugging' do
   Nanoc::CLI.debug = true
@@ -16,9 +14,7 @@ opt :h, :help, 'show the help message and quit' do |value, cmd|
   exit 0
 end
 
-opt :C, :'no-color', 'disable color' do
-  Nanoc::CLI::Logger.instance.color = false
-end
+opt :C, :'no-color', 'disable color'
 
 opt :V, :verbose, 'make nanoc output more detailed' do
   Nanoc::CLI::Logger.instance.level = :low

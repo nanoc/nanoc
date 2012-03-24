@@ -345,12 +345,12 @@ EOS
       FileUtils.mkdir_p('output')
 
       # Create config
-      File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG.make_compatible_with_env) }
+      File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
       Nanoc::NotificationCenter.post(:file_created, 'config.yaml')
 
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write DEFAULT_RULES.make_compatible_with_env
+        io.write DEFAULT_RULES
       end
       Nanoc::NotificationCenter.post(:file_created, 'Rules')
     end
@@ -376,14 +376,14 @@ EOS
 
       # Create home page
       data_source.create_item(
-        DEFAULT_ITEM.make_compatible_with_env,
+        DEFAULT_ITEM,
         { :title => "Home" },
         '/'
       )
 
       # Create stylesheet
       data_source.create_item(
-        DEFAULT_STYLESHEET.make_compatible_with_env,
+        DEFAULT_STYLESHEET,
         {},
         '/stylesheet/',
         :extension => '.css'
@@ -391,7 +391,7 @@ EOS
 
       # Create layout
       data_source.create_layout(
-        DEFAULT_LAYOUT.make_compatible_with_env,
+        DEFAULT_LAYOUT,
         {},
         '/default/'
       )

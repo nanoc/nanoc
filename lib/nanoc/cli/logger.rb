@@ -27,25 +27,8 @@ module Nanoc::CLI
     # @return [Symbol] The log level
     attr_accessor :level
 
-    # @return [Boolean] True if color should be used, false otherwise
-    attr_writer :color
-
     def initialize
       @level = :high
-    end
-
-    # @return [Boolean] true if colors are enabled, false otherwise
-    def color?
-      if @color.nil?
-        @color = true
-        begin
-          require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /mswin|mingw/
-        rescue LoadError
-          @color = false
-        end
-      end
-
-      @color
     end
 
     # Logs a file-related action.
@@ -61,9 +44,9 @@ module Nanoc::CLI
       log(
         level,
         '%s%12s%s  %s%s' % [
-          color? ? ACTION_COLORS[action.to_sym] : '',
+          ACTION_COLORS[action.to_sym],
           action,
-          color? ? "\e[0m" : '',
+          "\e[0m",
           duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
           identifier
         ]
