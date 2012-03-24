@@ -41,6 +41,7 @@ module Nanoc::CLI
   # @return [void]
   def self.run(args)
     Nanoc::CLI::ErrorHandler.handle_while do
+      self.setup_cleaning_streams
       self.setup
       self.load_custom_commands
       self.root_command.run(args)
@@ -134,6 +135,21 @@ protected
     files, dirs = *Dir[path + '/*'].sort.partition { |e| File.file?(e) }
     dirs.each { |d| files.concat self.recursive_contents_of(d) }
     files
+  end
+
+  # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
+  #
+  # @return [void]
+  def self.setup_cleaning_streams
+    if !self.enable_utf8?
+      $stdout = Nanoc::CLI::CleaningStreams::UTF8.new($stdout)
+      $stderr = Nanoc::CLI::CleaningStreams::UTF8.new($stderr)
+    end
+  end
+
+  # @return [Boolean] true if UTF-8 support is present, false if not
+  def self.enable_utf8?
+    %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
   end
 
 end

@@ -44,25 +44,14 @@ module Nanoc::CLI
 
   protected
 
-    # Wraps `$stdout` and `$stderr` in appropriate cleaning streams, depending
-    # on the available support for UTF-8 and ANSI colors.
+    # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
     #
     # @return [void]
     def setup_cleaning_streams
-      if !self.enable_utf8?
-        $stdout = Nanoc::CLI::CleaningStreams::UTF.new($stdout)
-        $stderr = Nanoc::CLI::CleaningStreams::UTF.new($stderr)
-      end
-
       if !self.enable_ansi_colors?
         $stdout = Nanoc::CLI::CleaningStreams::ANSIColors.new($stdout)
         $stderr = Nanoc::CLI::CleaningStreams::ANSIColors.new($stderr)
       end
-    end
-
-    # @return [Boolean] true if UTF-8 support is present, false if not
-    def enable_utf8?
-      %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
     end
 
     # @return [Boolean] true if ANSI color support is present, false if not
