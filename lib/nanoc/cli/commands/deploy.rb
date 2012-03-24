@@ -42,11 +42,7 @@ module Nanoc::CLI::Commands
       end
 
       # Get target
-      target = options.fetch(:target) do
-        $stderr.puts "The deploy command requires a --target option."
-        exit 1
-      end
-      target = target.to_sym
+      target = options.fetch(:target, :default).to_sym
       config = deploy_configs.fetch(target) do
         $stderr.puts "The site configuration has no deploy configuration for #{target}."
         exit 1
