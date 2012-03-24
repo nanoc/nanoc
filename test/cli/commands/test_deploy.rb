@@ -84,17 +84,13 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
         File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
         ios = capturing_stdio do
-          assert_raises SystemExit do
-            Nanoc::CLI.run %w( deploy -t public )
-          end
+          Nanoc::CLI.run %w( deploy -t public )
         end
 
-        assert ios[:stdout].empty?
-        assert ios[:stderr].include?('The specified deploy target does not have a kind.')
-        assert ios[:stderr].include?('(expected one of ')
+        assert ios[:stderr].include?('Warning: The specified deploy target does not have a kind attribute. Assuming rsync.')
 
-        refute File.directory?('mydestination')
-        refute File.file?('mydestination/blah.html')
+        assert File.directory?('mydestination')
+        assert File.file?('mydestination/blah.html')
       end
     end
   end

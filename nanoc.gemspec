@@ -17,13 +17,13 @@ Gem::Specification.new do |s|
                          Dir['doc/yardoc_templates/**/*'] +
                          Dir['{bin,lib,tasks,test}/**/*'] +
                          [ 'nanoc.gemspec', '.gemtest' ]
-  s.executables        = [ 'nanoc', 'nanoc3' ]
+  s.executables        = [ 'nanoc' ]
   s.require_paths      = [ 'lib' ]
 
   s.rdoc_options     = [ '--main', 'README.md' ]
   s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
 
-  s.add_runtime_dependency('cri', '~> 2.1')
+  s.add_runtime_dependency('cri', '~> 2.2')
 
   s.add_development_dependency('minitest')
   s.add_development_dependency('mocha')

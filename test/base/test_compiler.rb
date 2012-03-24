@@ -371,6 +371,40 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_mutually_include_compiled_content_at_previous_snapshot
+    with_site do |site|
+      # Create items
+      File.open('content/a.html', 'w') do |io|
+        io.write('[<%= @items.find { |i| i.identifier == "/z/" }.compiled_content(:snapshot => :guts) %>]')
+      end
+      File.open('content/z.html', 'w') do |io|
+        io.write('stuff')
+      end
+
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  snapshot :guts\n"
+        io.write "  filter :erb\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  item.identifier + 'index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert_equal '[stuff]', File.read('output/a/index.html')
+      assert_equal 'stuff', File.read('output/z/index.html')
+    end
+  end
+
   def test_layout_with_extra_filter_args
     with_site do |site|
       # Create item
