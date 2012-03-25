@@ -52,7 +52,7 @@ class Nanoc::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
     if_have 'systemu' do
       # Create deployer
       rsync = Nanoc::Extra::Deployers::Rsync.new(
-        'output/',
+        'output',
         { :dst => 'asdf' })
 
       # Mock run_shell_cmd
@@ -66,7 +66,7 @@ class Nanoc::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
       # Check args
       opts = Nanoc::Extra::Deployers::Rsync::DEFAULT_OPTIONS
       assert_equal(
-        [ 'rsync', opts, File.expand_path('output') + '/', 'asdf' ].flatten,
+        [ 'rsync', opts, 'output/', 'asdf' ].flatten,
         rsync.instance_eval { @shell_cms_args }
       )
     end
@@ -76,7 +76,7 @@ class Nanoc::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
     if_have 'systemu' do
       # Create deployer
       rsync = Nanoc::Extra::Deployers::Rsync.new(
-        'output/',
+        'output',
         { :dst => 'asdf' },
         :dry_run => true)
 
@@ -91,7 +91,7 @@ class Nanoc::Extra::Deployers::RsyncTest < MiniTest::Unit::TestCase
       # Check args
       opts = Nanoc::Extra::Deployers::Rsync::DEFAULT_OPTIONS
       assert_equal(
-        [ 'echo', 'rsync', opts, File.expand_path('output') + '/', 'asdf' ].flatten,
+        [ 'echo', 'rsync', opts, 'output/', 'asdf' ].flatten,
         rsync.instance_eval { @shell_cms_args }
       )
     end

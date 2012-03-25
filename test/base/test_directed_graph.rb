@@ -54,8 +54,11 @@ class Nanoc::DirectedGraphTest < MiniTest::Unit::TestCase
 
   def test_edges_with_new_vertices
     graph = Nanoc::DirectedGraph.new([ 1 ])
+    assert_equal [ 1 ], graph.vertices
     graph.add_edge(1, 2)
+    assert_equal [ 1, 2 ], graph.vertices
     graph.add_edge(3, 2)
+    assert_equal [ 1, 2, 3 ], graph.vertices
 
     assert_equal [ [ 0, 1 ], [ 2, 1 ] ], graph.edges.sort
   end

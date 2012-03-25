@@ -34,7 +34,7 @@ module Nanoc::Extra::Deployers
       require 'systemu'
 
       # Get params
-      src = File.expand_path(self.source_path) + '/'
+      src = self.source_path + '/'
       dst = self.config[:dst]
       options = self.config[:options] || DEFAULT_OPTIONS
 
