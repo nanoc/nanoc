@@ -35,17 +35,15 @@ module Nanoc
 
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
-      @vertices = Set.new(vertices)
+      @vertices = {}
+      vertices.each_with_index do |v,i|
+        @vertices[v] = i
+      end
 
       @from_graph = {}
       @to_graph   = {}
 
-      @vertice_indexes = {}
-      vertices.each_with_index do |v, i|
-        @vertice_indexes[v] = i
-      end
-
-      @roots = Set.new(@vertices)
+      @roots = Set.new(@vertices.keys)
 
       invalidate_caches
     end
@@ -67,7 +65,7 @@ module Nanoc
       @from_graph[from] << to
 
       @to_graph[to] ||= Set.new
-      @to_graph[to]  << from
+      @to_graph[to] << from
 
       @roots.delete(to)
 
@@ -104,12 +102,11 @@ module Nanoc
     #
     # @since 3.2.0
     def add_vertex(v)
-      return if @vertices.include?(v)
+      return if @vertices.has_key?(v)
 
-      @vertices << v
-      @vertice_indexes[v] = @vertices.size-1
+      @vertices[v] = @vertices.size
 
-      @roots    << v
+      @roots << v
     end
 
     # Deletes all edges coming from the given vertex.
@@ -203,7 +200,7 @@ module Nanoc
 
     # @return [Array] The list of all vertices in this graph.
     def vertices
-      @vertices.sort_by { |v| @vertice_indexes[v] }
+      @vertices.keys.sort_by { |v| @vertices[v] }
     end
 
     # Returns an array of tuples representing the edges. The result of this
@@ -212,8 +209,8 @@ module Nanoc
     # @return [Array] The list of all edges in this graph.
     def edges
       result = []
-      @vertice_indexes.each_pair do |v1, i1|
-        direct_successors_of(v1).map { |v2| @vertice_indexes[v2] }.each do |i2|
+      @vertices.each_pair do |v1, i1|
+        direct_successors_of(v1).map { |v2| @vertices[v2] }.each do |i2|
           result << [ i1, i2 ]
         end
       end
