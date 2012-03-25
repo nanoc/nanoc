@@ -31,11 +31,6 @@ module Nanoc
   #     # => %w( b c )
   class DirectedGraph
 
-    # The set of vertices in this graph.
-    #
-    # @return [Set]
-    attr_reader :vertices
-
     # @group Creating a graph
 
     # Creates a new directed graph with the given vertices.
@@ -46,7 +41,7 @@ module Nanoc
       @to_graph   = {}
 
       @vertice_indexes = {}
-      @vertices.each_with_index do |v, i|
+      vertices.each_with_index do |v, i|
         @vertice_indexes[v] = i
       end
 
@@ -206,15 +201,20 @@ module Nanoc
       @successors[from] ||= recursively_find_vertices(from, :direct_successors_of)
     end
 
+    # @return [Array] The list of all vertices in this graph.
+    def vertices
+      @vertices.sort_by { |v| @vertice_indexes[v] }
+    end
+
     # Returns an array of tuples representing the edges. The result of this
     # method may take a while to compute and should be cached if possible.
     #
     # @return [Array] The list of all edges in this graph.
     def edges
       result = []
-      @vertices.each_with_index do |v, i|
-        direct_successors_of(v).map { |v2| @vertice_indexes[v2] }.each do |i2|
-          result << [ i, i2 ]
+      @vertice_indexes.each_pair do |v1, i1|
+        direct_successors_of(v1).map { |v2| @vertice_indexes[v2] }.each do |i2|
+          result << [ i1, i2 ]
         end
       end
       result
