@@ -391,4 +391,37 @@ class Nanoc::OutdatednessCheckerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_non_serializable_parameters_in_rules_should_be_allowed
+    # Create site
+    with_site(:name => 'foo') do |site|
+      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.open('Rules', 'w') do |io|
+        io.write("compile '/' do\n")
+        io.write("  c = Class.new {}\n")
+        io.write("  def c.inspect ; 'I am so classy' ; end\n")
+        io.write("  filter :erb, :stuff => c\n")
+        io.write("end\n")
+        io.write("\n")
+        io.write("route '/' do\n")
+        io.write("  '/index.html'\n")
+        io.write("end\n")
+      end
+    end
+
+    # Compile
+    FileUtils.cd('foo') do
+      site = Nanoc::Site.new('.')
+      site.compile
+    end
+
+    # Assert not outdated
+    FileUtils.cd('foo') do
+      site = Nanoc::Site.new('.')
+      outdatedness_checker = site.compiler.outdatedness_checker
+      site.items.each do |item|
+        refute outdatedness_checker.outdated?(item), "item should not be outdated"
+      end
+    end
+  end
+
 end
