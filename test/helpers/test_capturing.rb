@@ -38,4 +38,27 @@ class Nanoc::Helpers::CapturingTest < MiniTest::Unit::TestCase
     assert_equal 'bar', captured_content
   end
 
+  def test_content_for_recursively
+    require 'erb'
+
+    content = <<EOS
+head
+<% content_for :box do %>
+  basic
+<% end %>
+<% content_for :box do %>
+  before <%= content_for @item, :box %> after
+<% end %>
+<%= content_for @item, :box %>
+foot
+EOS
+
+    @item = Nanoc::Item.new('content', {}, '/')
+    result = ::ERB.new(content).result(binding)
+
+    expected = %w( head before basic after foot )
+    actual   = result.scan(/[a-z]+/)
+    assert_equal expected, actual
+  end
+
 end
