@@ -160,7 +160,7 @@ module Nanoc::CLI
       'rainpress'      => 'rainpress',
       'rdiscount'      => 'rdiscount',
       'redcarpet'      => 'redcarpet',
-      'redcloth'       => 'redcloth',
+      'redcloth'       => 'RedCloth',
       'rubypants'      => 'rubypants',
       'sass'           => 'sass',
       'systemu'        => 'systemu',
