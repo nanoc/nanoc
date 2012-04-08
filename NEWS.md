@@ -1,5 +1,12 @@
 # nanoc news
 
+## 3.3.3 (???)
+
+* Fixed directed graph implementation on Rubinius
+* Made capturing helper not remember content between runs
+* Fixed Date#freeze issue on Ruby 1.8.x
+* Made it possible to have any kind of object as parameters in the Rules file
+
 ## 3.3.2 (2012-03-16)
 
 * Removed bin/nanoc3 (use nanoc3 gem if you want it)
