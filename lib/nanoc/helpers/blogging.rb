@@ -309,6 +309,9 @@ module Nanoc::Helpers
     #
     # @return [Time] The Time instance corresponding to the given input
     def attribute_to_time(time)
+      if time.is_a?(Date)
+        time = time.dup
+      end
       time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
       time = Time.parse(time) if time.is_a?(String)
       time
