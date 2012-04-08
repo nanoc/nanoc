@@ -16,6 +16,7 @@ module Nanoc::Filters
   autoload 'Markaby',         'nanoc/filters/markaby'
   autoload 'Maruku',          'nanoc/filters/maruku'
   autoload 'Mustache',        'nanoc/filters/mustache'
+  autoload 'Pandoc',          'nanoc/filters/pandoc'
   autoload 'Rainpress',       'nanoc/filters/rainpress'
   autoload 'RDiscount',       'nanoc/filters/rdiscount'
   autoload 'RDoc',            'nanoc/filters/rdoc'
@@ -44,6 +45,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::Markaby',         :markaby
   Nanoc::Filter.register '::Nanoc::Filters::Maruku',          :maruku
   Nanoc::Filter.register '::Nanoc::Filters::Mustache',        :mustache
+  Nanoc::Filter.register '::Nanoc::Filters::Pandoc',          :pandoc
   Nanoc::Filter.register '::Nanoc::Filters::Rainpress',       :rainpress
   Nanoc::Filter.register '::Nanoc::Filters::RDiscount',       :rdiscount
   Nanoc::Filter.register '::Nanoc::Filters::RDoc',            :rdoc
