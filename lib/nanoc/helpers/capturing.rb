@@ -39,9 +39,6 @@ module Nanoc::Helpers
     # @api private
     class CapturesStore
 
-      require 'singleton'
-      include Singleton
-
       def initialize
         @store = {}
       end
@@ -54,6 +51,15 @@ module Nanoc::Helpers
       def [](item, name)
         @store[item.identifier] ||= {}
         @store[item.identifier][name]
+      end
+
+    end
+
+    class ::Nanoc::Site
+
+      # @api private
+      def captures_store
+        @captures_store ||= CapturesStore.new
       end
 
     end
@@ -96,7 +102,7 @@ module Nanoc::Helpers
 
         # Capture and store
         content = capture(&block)
-        CapturesStore.instance[@item, name.to_sym] = content
+        @site.captures_store[@item, name.to_sym] = content
       else # Get content
         # Get args
         if args.size != 2
@@ -107,7 +113,7 @@ module Nanoc::Helpers
         name = args[1]
 
         # Get content
-        CapturesStore.instance[item, name.to_sym]
+        @site.captures_store[item, name.to_sym]
       end
     end
 

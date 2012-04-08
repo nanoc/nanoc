@@ -311,7 +311,10 @@ module Nanoc
       @items = []
       data_sources.each do |ds|
         items_in_ds = ds.items
-        items_in_ds.each { |i| i.identifier = File.join(ds.items_root, i.identifier) }
+        items_in_ds.each do |i|
+          i.identifier = File.join(ds.items_root, i.identifier)
+          i.site = self
+        end
         @items.concat(items_in_ds)
       end
     end
