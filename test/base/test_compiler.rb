@@ -434,4 +434,58 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_change_routing_rule_and_recompile
+    with_site do |site|
+      # Create items
+      File.open('content/a.html', 'w') do |io|
+        io.write('<h1>A</h1>')
+      end
+      File.open('content/b.html', 'w') do |io|
+        io.write('<h1>B</h1>')
+      end
+
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '/a/' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  nil\n"
+        io.write "end\n"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert_equal '<h1>A</h1>', File.read('output/index.html')
+
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '/b/' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  nil\n"
+        io.write "end\n"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert_equal '<h1>B</h1>', File.read('output/index.html')
+    end
+  end
+
 end
