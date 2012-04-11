@@ -6,7 +6,7 @@
 * Made capturing helper not remember content between runs
 * Fixed Date#freeze issue on Ruby 1.8.x
 * Made it possible to have any kind of object as parameters in the Rules file
-* Fixed bug which caused changes routes not to cause a recompile
+* Fixed bug which caused changed routes not to cause a recompile
 
 ## 3.3.2 (2012-03-16)
 
