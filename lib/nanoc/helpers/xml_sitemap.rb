@@ -31,7 +31,7 @@ module Nanoc::Helpers
     #
     # @example Excluding binary items from the sitemap
     #
-    #   <%= xml_sitemap :items => @items.reject{ |i| i[:is_hidden] || i[:binary] } %>
+    #   <%= xml_sitemap :items => @items.reject{ |i| i[:is_hidden] || i.binary? } %>
     #
     # @option params [Array] :items A list of items to include in the sitemap
     #
