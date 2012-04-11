@@ -399,7 +399,7 @@ class Nanoc::OutdatednessCheckerTest < MiniTest::Unit::TestCase
         io.write("compile '/' do\n")
         io.write("  c = Class.new {}\n")
         io.write("  def c.inspect ; 'I am so classy' ; end\n")
-        io.write("  filter :erb, :stuff => c\n")
+        io.write("  filter :erb, :stuff => c, :more => 123\n")
         io.write("end\n")
         io.write("\n")
         io.write("route '/' do\n")

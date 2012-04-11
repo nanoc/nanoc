@@ -210,7 +210,7 @@ module Nanoc
     def make_rule_memory_serializable(rs)
       rs.map do |r|
         if r[0] == :filter
-          [ r[0], r[1], r[2].to_a.sort.map { |a| a.inspect }  ]
+          [ r[0], r[1], r[2].to_a.map { |a| a.inspect }  ]
         else
           r
         end
