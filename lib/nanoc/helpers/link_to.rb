@@ -124,6 +124,11 @@ module Nanoc::Helpers
         raise RuntimeError, "Cannot get the relative path to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
       end
 
+      # Handle Windows network (UNC) paths
+      if path.start_with?('//') || path.start_with?('\\\\')
+        return path
+      end
+
       # Get source and destination paths
       dst_path   = Pathname.new(path)
       raise RuntimeError, "Cannot get the relative path to #{path} because the current item representation, #{@item_rep.inspect}, is not outputted (its routing rule returns nil)" if @item_rep.path.nil?
