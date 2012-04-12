@@ -58,7 +58,7 @@ module Nanoc::Filters
           content.sub!(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
         end
 
-        nokogiri_process(content, selectors, namespaces, ::Nokogiri::XML, params[:type])
+        nokogiri_process(content, selectors, namespaces, klass, params[:type])
       else
         raise RuntimeError.new(
           "The relativize_paths needs to know the type of content to " +
