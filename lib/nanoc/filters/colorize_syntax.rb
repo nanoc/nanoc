@@ -143,24 +143,6 @@ module Nanoc::Filters
       doc.send(method, :encoding => 'UTF-8')
     end
 
-  private
-
-    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
-
-    # Removes the first blank lines and any whitespace at the end.
-    def strip(s)
-      s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
-    end
-
-    def highlight(code, language, params={})
-      colorizer = @colorizers[language.to_sym]
-      if KNOWN_COLORIZERS.include?(colorizer)
-        send(colorizer, code, language, params[colorizer] || {})
-      else
-        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
-      end
-    end
-
     # Runs the code through [CodeRay](http://coderay.rubychan.de/).
     #
     # @api private
@@ -254,13 +236,15 @@ module Nanoc::Filters
     #
     # @api private
     #
+    # @since 3.2.0
+    #
     # @param [String] code The code to colorize
     #
     # @param [String] language The language the code is written in
     #
     # @option params [String] :style The style to use
     #
-    # @since 3.2.0
+    # @return [String] The colorized output
     def simon_highlight(code, language, params={})
       require 'systemu'
 
@@ -287,6 +271,24 @@ module Nanoc::Filters
       # Get result
       stdout.rewind
       stdout.read
+    end
+
+  private
+
+    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
+
+    # Removes the first blank lines and any whitespace at the end.
+    def strip(s)
+      s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
+    end
+
+    def highlight(code, language, params={})
+      colorizer = @colorizers[language.to_sym]
+      if KNOWN_COLORIZERS.include?(colorizer)
+        send(colorizer, code, language, params[colorizer] || {})
+      else
+        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+      end
     end
 
     def check_availability(*cmd)

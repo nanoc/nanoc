@@ -7,6 +7,18 @@ Extensions:
 * Added `:yield` key for Mustache filter
 * Added Handebars filter
 
+## 3.3.4 (???)
+
+* Fixed bug which caused the compilation stack to be empty
+
+## 3.3.3 (2012-04-11)
+
+* Fixed directed graph implementation on Rubinius
+* Made capturing helper not remember content between runs
+* Fixed Date#freeze issue on Ruby 1.8.x
+* Made it possible to have any kind of object as parameters in the Rules file
+* Fixed bug which caused changed routes not to cause a recompile
+
 ## 3.3.2 (2012-03-16)
 
 * Removed bin/nanoc3 (use nanoc3 gem if you want it)

@@ -36,6 +36,9 @@ module Nanoc
     #   item’s content (only available for binary items)
     attr_reader   :raw_filename
 
+    # @return [Nanoc::Site] The site this item belongs to
+    attr_accessor :site
+
     # @return [Nanoc::Item, nil] The parent item of this item. This can be
     #   nil even for non-root items.
     attr_accessor :parent

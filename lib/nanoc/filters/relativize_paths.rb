@@ -34,21 +34,23 @@ module Nanoc::Filters
 
       # Filter
       case params[:type]
-      when :html
-        # FIXME parse HTML the proper way using nokogiri
-        content.gsub(/(<[^>]+\s+(src|href))=(['"]?)(\/(?:[^\/].*?)?)\3([\s\/>])/) do
-          $1 + '=' + $3 + relative_path_to($4) + $3 + $5
-        end
       when :css
         # FIXME parse CSS the proper way using csspool or something
         content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
           'url(' + $1 + relative_path_to($2) + $1 + ')'
         end
-      when :xml, :xhtml
+      when :html, :xml, :xhtml
         selectors  = params.fetch(:select) { SELECTORS }
         namespaces = params[:namespaces] || {}
 
-        if params[:type] == :xhtml
+        require 'nokogiri'
+        case params[:type]
+        when :html
+          klass = ::Nokogiri::HTML
+        when :xml
+          klass = ::Nokogiri::XML
+        when :xhtml
+          klass = ::Nokogiri::XML
           # FIXME cleanup because it is ugly
           # this cleans the XHTML namespace to process fragments and full
           # documents in the same way. At least, Nokogiri adds this namespace
@@ -56,7 +58,7 @@ module Nanoc::Filters
           content.sub!(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
         end
 
-        nokogiri_process(content, selectors, namespaces, params[:type])
+        nokogiri_process(content, selectors, namespaces, klass, params[:type])
       else
         raise RuntimeError.new(
           "The relativize_paths needs to know the type of content to " +
@@ -67,13 +69,11 @@ module Nanoc::Filters
 
   private
 
-    def nokogiri_process(content, selectors, namespaces, type)
-      require 'nokogiri'
-
+    def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings
       namespaces = namespaces.inject({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
-      doc = ::Nokogiri::XML.fragment(content)
+      doc = klass.fragment(content)
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
         doc.xpath(selector, namespaces).each do |node|
           node.content = relative_path_to(node.content)
@@ -88,7 +88,6 @@ module Nanoc::Filters
 
       result
     end
-    
-    
+
   end
 end

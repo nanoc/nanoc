@@ -46,7 +46,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Set content
     raw_content      = %[<a href='/foo'>foo</a>]
-    expected_content = %[<a href='../..'>foo</a>]
+    expected_content = %[<a href="../..">foo</a>]
 
     # Test
     actual_content = filter.run(raw_content, :type => :html)
@@ -70,7 +70,7 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
 
     # Set content
     raw_content      = %[<a href=/foo>foo</a>]
-    expected_content = %[<a href=../..>foo</a>]
+    expected_content = %[<a href="../..">foo</a>]
 
     # Test
     actual_content = filter.run(raw_content, :type => :html)
@@ -95,6 +95,30 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     # Set content
     raw_content      = %[<a href="/foo">foo</a> <a href="/bar">bar</a>]
     expected_content = %[<a href="../..">foo</a> <a href="../../../bar">bar</a>]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
+
+  def test_filter_html_nested
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::ItemRep.new(
+        Nanoc::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
+    end
+
+    # Set content
+    raw_content      = %[<a href="/"><img src="/bar.png" /></a>]
+    expected_content = %[<a href="../../../"><img src="../../../bar.png"></a>]
 
     # Test
     actual_content = filter.run(raw_content, :type => :html)

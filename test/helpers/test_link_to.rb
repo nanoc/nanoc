@@ -200,6 +200,13 @@ class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_relative_path_to_to_windows_path
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/foo/quux/')
+
+    assert_equal '//mydomain/tahontaenrat', relative_path_to('//mydomain/tahontaenrat')
+  end
+
   def test_examples_link_to
     # Parse
     YARD.parse('../lib/nanoc/helpers/link_to.rb')

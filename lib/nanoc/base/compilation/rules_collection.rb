@@ -195,9 +195,27 @@ module Nanoc
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
       compilation_rule_for(rep).apply_to(recording_proxy, :compiler => @compiler)
-      recording_proxy.rule_memory
+      recording_proxy.rule_memory << [ :write, rep.path ]
+      make_rule_memory_serializable(recording_proxy.rule_memory)
     end
     memoize :new_rule_memory_for_rep
+
+    # Makes the given rule memory serializable by calling `#inspect` on the
+    # filter arguments, so that objects such as classes and filenames can be
+    # serialized.
+    #
+    # @param [Array] rs The rule memory for a certain item rep
+    #
+    # @return [Array] The serializable rule memory
+    def make_rule_memory_serializable(rs)
+      rs.map do |r|
+        if r[0] == :filter
+          [ r[0], r[1], r[2].to_a.map { |a| a.inspect }  ]
+        else
+          r
+        end
+      end
+    end
 
     # @param [Nanoc::Layout] layout The layout to get the rule memory for
     #
