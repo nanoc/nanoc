@@ -1,5 +1,9 @@
 # nanoc news
 
+## 3.3.4 (???)
+
+* Fixed bug which caused the compilation stack to be empty
+
 ## 3.3.3 (2012-04-11)
 
 * Fixed directed graph implementation on Rubinius
