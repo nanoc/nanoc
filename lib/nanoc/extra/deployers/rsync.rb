@@ -39,8 +39,8 @@ module Nanoc::Extra::Deployers
       options = self.config[:options] || DEFAULT_OPTIONS
 
       # Validate
-      error 'No dst found in deployment configuration' if dst.nil?
-      error 'dst requires no trailing slash' if dst[-1,1] == '/'
+      raise 'No dst found in deployment configuration' if dst.nil?
+      raise 'dst requires no trailing slash' if dst[-1,1] == '/'
 
       # Run
       if dry_run
@@ -52,11 +52,6 @@ module Nanoc::Extra::Deployers
     end
 
   private
-
-    # Prints the given message on stderr and exits.
-    def error(msg)
-      raise RuntimeError.new(msg)
-    end
 
     # Runs the given shell command. It will raise an error if execution fails 
     # (results in a nonzero exit code).
