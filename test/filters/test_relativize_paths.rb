@@ -197,6 +197,54 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     assert_equal(expected_content, actual_content)
   end
 
+  def test_filter_html_with_anchor
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::ItemRep.new(
+        Nanoc::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/woof/meow/'
+    end
+
+    # Set content
+    raw_content      = %[<a href="#max-payne">Max Payne</a>]
+    expected_content = %[<a href="#max-payne">Max Payne</a>]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
+
+  def test_filter_html_with_url
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::ItemRep.new(
+        Nanoc::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/woof/meow/'
+    end
+
+    # Set content
+    raw_content      = %[<a href="http://example.com/">Example</a>]
+    expected_content = %[<a href="http://example.com/">Example</a>]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
+
   def test_filter_implicit
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
