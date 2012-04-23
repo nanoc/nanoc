@@ -1,8 +1,9 @@
 # nanoc news
 
-## 3.3.4 (???)
+## 3.3.4 (2012-04-23)
 
 * Fixed bug which caused the compilation stack to be empty
+* Restored Ruby 1.8 compatibility
 
 ## 3.3.3 (2012-04-11)
 
