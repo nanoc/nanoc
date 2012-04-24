@@ -92,10 +92,7 @@ module Nanoc::Filters
     end
 
     def path_is_relativizable?(s)
-      require 'uri'
-      return false if s =~ URI.regexp
-      return false if s[0,1] == '#'
-      return true
+      s[0,1] == '/'
     end
 
   end
