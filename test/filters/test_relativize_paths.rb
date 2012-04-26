@@ -626,7 +626,7 @@ XML
       raw_content = <<-XML
 <a href="/foo">bar</a>
 <p>
-  <img src="/img"/>
+  <img src="/img">
 </p>
 XML
 
@@ -663,7 +663,7 @@ XML
       raw_content = <<-XML
 <p><a href="/foo">bar</a>
 <p>
-  <img src="/img"/>
+  <img src="/img">
 </p>
 XML
 
