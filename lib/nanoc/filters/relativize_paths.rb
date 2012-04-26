@@ -73,7 +73,7 @@ module Nanoc::Filters
       # Ensure that all prefixes are strings
       namespaces = namespaces.inject({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
-      doc = klass.fragment(content)
+      doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
         doc.xpath(selector, namespaces).each do |node|
           if self.path_is_relativizable?(node.content)

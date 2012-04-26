@@ -77,6 +77,42 @@ class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
     assert_equal(expected_content, actual_content)
   end
 
+  def test_filter_html_with_boilerplate
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::ItemRep.new(
+        Nanoc::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
+    end
+
+    # Set content
+    raw_content = <<EOS
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello</title>
+  </head>
+  <body>
+    <a href=/foo>foo</a>
+  </body>
+</html>
+EOS
+    expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
+    expected_match_1 = %r{^<!DOCTYPE html>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*$}
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_match(expected_match_0, actual_content)
+    assert_match(expected_match_1, actual_content)
+  end
+
   def test_filter_html_multiple
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
@@ -568,10 +604,9 @@ XML
 </html>
 XML
 
-      expected_content = <<-XML
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+      expected_match = %r{^<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+  <head>.*<meta.*charset.*>
     <link rel="stylesheet" href="../../../css" />
     <script src="../../../js"></script>
   </head>
@@ -579,12 +614,11 @@ XML
     <a href="../..">bar</a>
     <img src="../../../img" />
   </body>
-</html>
-XML
+</html>}
 
       # Test
       actual_content = filter.run(raw_content, :type => :xhtml)
-      assert_equal(expected_content, actual_content)
+      assert_match expected_match, actual_content
     end
   end
 
