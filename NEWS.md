@@ -7,9 +7,14 @@ Extensions:
 * Added `:yield` key for Mustache filter
 * Added Handebars filter
 
-## 3.3.4 (???)
+## 3.3.5 (2012-04-23)
+
+* Fixed issue with relative_link_to not working properly
+
+## 3.3.4 (2012-04-23)
 
 * Fixed bug which caused the compilation stack to be empty
+* Restored Ruby 1.8 compatibility
 
 ## 3.3.3 (2012-04-11)
 

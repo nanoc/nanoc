@@ -67,26 +67,32 @@ module Nanoc::Filters
       end
     end
 
-  private
+  protected
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings
       namespaces = namespaces.inject({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
-      doc = klass.fragment(content)
+      doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
         doc.xpath(selector, namespaces).each do |node|
-          node.content = relative_path_to(node.content)
+          if self.path_is_relativizable?(node.content)
+            node.content = relative_path_to(node.content)
+          end
         end
       end
       result = doc.send("to_#{type}")
 
       # FIXME cleanup because it is ugly
-      # Because using the `Nokogiri::XML::DocumentFragment` class DOCTYPE 
+      # # Because using the `Nokogiri::XML::DocumentFragment` class DOCTYPE 
       # pseudonodes becomes even more creepy than usual.
       result.sub!(/(!DOCTYPE.+?)(&gt;)/, '<\1>')
 
       result
+    end
+
+    def path_is_relativizable?(s)
+      s[0,1] == '/'
     end
 
   end

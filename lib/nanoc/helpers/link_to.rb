@@ -121,7 +121,9 @@ module Nanoc::Helpers
         path = target
       else
         path = target.path
-        raise RuntimeError, "Cannot get the relative path to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
+        if path.nil?
+          raise "Cannot get the relative path to #{target.inspect} because this target is not outputted (its routing rule returns nil)"
+        end
       end
 
       # Handle Windows network (UNC) paths
@@ -131,7 +133,9 @@ module Nanoc::Helpers
 
       # Get source and destination paths
       dst_path   = Pathname.new(path)
-      raise RuntimeError, "Cannot get the relative path to #{path} because the current item representation, #{@item_rep.inspect}, is not outputted (its routing rule returns nil)" if @item_rep.path.nil?
+      if @item_rep.path.nil?
+        raise "Cannot get the relative path to #{path} because the current item representation, #{@item_rep.inspect}, is not outputted (its routing rule returns nil)"
+      end
       src_path   = Pathname.new(@item_rep.path)
 
       # Calculate the relative path (method depends on whether destination is
