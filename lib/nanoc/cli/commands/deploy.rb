@@ -16,7 +16,7 @@ Available deployers: #{deployer_names.join(', ')}
 EOS
 
 option :t, :target,    'specify the location to deploy to', :argument => :required
-flag   :l, :list,      'list available locations to deploy to'
+flag   :L, :list,      'list available locations to deploy to'
 option :n, :'dry-run', 'show what would be deployed'
 
 module Nanoc::CLI::Commands
