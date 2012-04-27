@@ -18,7 +18,7 @@ test = namespace :test do
     test_files = Dir['test/**/*_spec.rb'] + Dir['test/**/test_*.rb']
     test_files.each { |f| require f }
 
-    MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
+    exit MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
   end
 
   # test:...
@@ -36,7 +36,7 @@ test = namespace :test do
       test_files = Dir["test/#{dir}/**/*_spec.rb"] + Dir["test/#{dir}/**/test_*.rb"]
       test_files.each { |f| require f }
 
-      MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
+      exit MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
     end
   end
 
