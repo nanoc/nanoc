@@ -55,7 +55,7 @@ module Nanoc::Filters
           # this cleans the XHTML namespace to process fragments and full
           # documents in the same way. At least, Nokogiri adds this namespace
           # if detects the `html` element.
-          content.sub!(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
+          content = content.sub(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
         end
 
         nokogiri_process(content, selectors, namespaces, klass, params[:type])
