@@ -1,5 +1,9 @@
 # nanoc news
 
+## 3.3.6 (2012-04-27)
+
+* Fixed issue with relative_link_to stripping HTML boilerplate
+
 ## 3.3.5 (2012-04-23)
 
 * Fixed issue with relative_link_to not working properly
