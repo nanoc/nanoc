@@ -654,7 +654,7 @@ XML
 XML
 
       # Test
-      actual_content = filter.run(raw_content, :type => :xhtml)
+      actual_content = filter.run(raw_content.freeze, :type => :xhtml)
       assert_equal(expected_content, actual_content)
     end
   end

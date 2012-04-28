@@ -80,7 +80,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < MiniTest::Unit::TestCase
     end
     
     # Load
-    items = data_source.items
+    items = data_source.items.sort_by { |i| i[:title] }
     
     # Check
     assert_equal 2, items.size

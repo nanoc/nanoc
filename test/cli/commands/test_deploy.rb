@@ -60,7 +60,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
         File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
         ios = capturing_stdio do
-          Nanoc::CLI.run %w( deploy -l )
+          Nanoc::CLI.run %w( deploy -L )
         end
 
         assert ios[:stdout].include?('Available deployment configurations:')
