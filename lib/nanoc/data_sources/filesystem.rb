@@ -229,8 +229,12 @@ module Nanoc::DataSources
       # Read content and metadata from separate files
       if meta_filename
         content = content_filename ? read(content_filename) : ''
-        meta    = YAML.load(read(meta_filename)) || {}
-
+        meta_raw = read(meta_filename)
+        begin
+          meta = YAML.load(meta_raw) || {}
+        rescue Exception => e
+          raise "Could not parse YAML for #{meta_filename}: #{e.message}"
+        end
         return [ meta, content ]
       end
 
@@ -251,7 +255,11 @@ module Nanoc::DataSources
       end
 
       # Parse
-      meta    = YAML.load(pieces[2]) || {}
+      begin
+        meta = YAML.load(pieces[2]) || {}
+      rescue Exception => e
+        raise "Could not parse YAML for #{content_filename}: #{e.message}"
+      end
       content = pieces[4..-1].join.strip
 
       # Done
