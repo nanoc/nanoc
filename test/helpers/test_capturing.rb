@@ -121,4 +121,25 @@ EOS
     end
   end
 
+  def test_self
+    with_site do |site|
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+
+      File.open('content/self.erb', 'w') do |io|
+        io.write "<% content_for :foo do %>Foo!<% end %>"
+        io.write "<%= content_for(@item, :foo) %>"
+      end
+
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      Nanoc::CLI.run(%w(compile))
+      assert_equal 'Foo!', File.read('output/self/index.html')
+    end
+  end
+
 end
