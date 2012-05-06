@@ -91,4 +91,55 @@ EOS
     assert_equal 'Content Two', content_for(@item, :b)
   end
 
+  def test_dependencies
+    with_site do |site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '[<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      # Compile once
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>Old content<% end %>}'
+      end
+      Nanoc::CLI.run(%w(compile))
+      assert_equal '[Old content]', File.read('output/includer/index.html')
+
+      # Compile again
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>New content<% end %>}'
+      end
+      Nanoc::CLI.run(%w(compile))
+      assert_equal '[New content]', File.read('output/includer/index.html')
+    end
+  end
+
+  def test_self
+    with_site do |site|
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+
+      File.open('content/self.erb', 'w') do |io|
+        io.write "<% content_for :foo do %>Foo!<% end %>"
+        io.write "<%= content_for(@item, :foo) %>"
+      end
+
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      Nanoc::CLI.run(%w(compile))
+      assert_equal 'Foo!', File.read('output/self/index.html')
+    end
+  end
+
 end

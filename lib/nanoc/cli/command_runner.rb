@@ -83,7 +83,6 @@ module Nanoc::CLI
     #
     # @return [void]
     def require_site
-      @site = nil
       if site.nil?
         $stderr.puts 'The current working directory does not seem to be a ' +
                      'valid/complete nanoc site directory; aborting.'
