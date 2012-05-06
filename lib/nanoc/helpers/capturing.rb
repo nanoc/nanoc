@@ -112,6 +112,12 @@ module Nanoc::Helpers
         item = args[0]
         name = args[1]
 
+        # Create dependency
+        Nanoc::NotificationCenter.post(:visit_started, item)
+        Nanoc::NotificationCenter.post(:visit_ended,   item)
+        rep = item.reps.find { |r| !r.compiled? }
+        raise Nanoc::Errors::UnmetDependency.new(rep) if rep
+
         # Get content
         @site.captures_store[item, name.to_sym]
       end
