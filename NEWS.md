@@ -1,5 +1,10 @@
 # nanoc news
 
+## 3.3.7 (???)
+
+* Added filename to YAML parser errors
+* Fixed issue which caused extra dependencies to be generated
+
 ## 3.3.6 (2012-04-27)
 
 * Fixed issue with relative_link_to stripping HTML boilerplate
