@@ -85,50 +85,133 @@ module Nanoc::CLI
     #
     # @return [void]
     def print_error(error)
+      write_compact_error(error, $stderr)
+      File.open('crash.log', 'w') { |io| write_verbose_error(error, io) }
+    end
+
+    # Writes a compact representation of the error, suitable for a terminal, on
+    # the given stream (probably stderr).
+    #
+    # @param [Error] error The error that should be described
+    #
+    # @param [IO] stream The stream to write the description too
+    #
+    # @api private
+    #
+    # @return [void]
+    def write_compact_error(error, stream)
       # Header
-      $stderr.puts
-      $stderr.puts "Captain! We’ve been hit!"
+      stream.puts
+      stream.puts "Captain! We’ve been hit!"
 
       # Exception and resolution (if any)
-      $stderr.puts
-      $stderr.puts '=== MESSAGE:'
-      $stderr.puts
-      $stderr.puts "#{error.class}: #{error.message}"
+      stream.puts
+      stream.puts format_title('Message:')
+      stream.puts
+      stream.puts "#{error.class}: #{error.message}"
       resolution = self.resolution_for(error)
-      $stderr.puts "#{resolution}" if resolution
+      stream.puts "#{resolution}" if resolution
 
       # Compilation stack
-      $stderr.puts
-      $stderr.puts '=== COMPILATION STACK:'
-      $stderr.puts
+      stream.puts
+      stream.puts format_title('Compilation stack:')
+      stream.puts
       if self.stack.empty?
-        $stderr.puts "  (empty)"
+        stream.puts "  (empty)"
       else
         self.stack.reverse.each do |obj|
           if obj.is_a?(Nanoc::ItemRep)
-            $stderr.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
+            stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
           else # layout
-            $stderr.puts "  - [layout] #{obj.identifier}"
+            stream.puts "  - [layout] #{obj.identifier}"
           end
         end
       end
 
       # Backtrace
-      $stderr.puts
-      $stderr.puts '=== BACKTRACE:'
-      $stderr.puts
-      $stderr.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
-
-      # Extra information
-      $stderr.puts
-      $stderr.puts '=== VERSION INFORMATION:'
-      $stderr.puts
-      $stderr.puts Nanoc.version_information
+      stream.puts
+      stream.puts format_title('Stack trace:')
+      stream.puts
+      count = 10
+      error.backtrace[0...count].each_with_index do |item, index|
+        stream.puts "  #{index}. #{item}"
+      end
+      if error.backtrace.size > count
+        puts "  ... #{error.backtrace.size - count} more lines omitted. See full crash log for details."
+      end
 
       # Issue link
-      $stderr.puts
-      $stderr.puts "If you believe this is a bug in nanoc, please do report it at"
-      $stderr.puts "https://github.com/ddfreyne/nanoc/issues/new -- thanks!"
+      stream.puts
+      stream.puts "If you believe this is a bug in nanoc, please do report it at"
+      stream.puts "-> https://github.com/ddfreyne/nanoc/issues/new <-"
+      stream.puts
+      stream.puts "A detailed crash log has been written to ./crash.log."
+    end
+
+    # Writes a verbose representation of the error on the given stream.
+    #
+    # @param [Error] error The error that should be described
+    #
+    # @param [IO] stream The stream to write the description too
+    #
+    # @api private
+    #
+    # @return [void]
+    def write_verbose_error(error, stream)
+      # Date and time
+      stream.puts "Crashlog created at #{Time.now}"
+      stream.puts
+
+      # Exception and resolution (if any)
+      stream.puts '=== MESSAGE:'
+      stream.puts
+      stream.puts "#{error.class}: #{error.message}"
+      resolution = self.resolution_for(error)
+      stream.puts "#{resolution}" if resolution
+      stream.puts
+
+      # Compilation stack
+      stream.puts '=== COMPILATION STACK:'
+      stream.puts
+      if self.stack.empty?
+        stream.puts "  (empty)"
+      else
+        self.stack.reverse.each do |obj|
+          if obj.is_a?(Nanoc::ItemRep)
+            stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
+          else # layout
+            stream.puts "  - [layout] #{obj.identifier}"
+          end
+        end
+      end
+      stream.puts
+
+      # Backtrace
+      stream.puts '=== BACKTRACE:'
+      stream.puts
+      stream.puts error.backtrace.to_enum(:each_with_index).map { |item, index| "  #{index}. #{item}" }.join("\n")
+      stream.puts
+
+      # Version information
+      stream.puts '=== VERSION INFORMATION:'
+      stream.puts
+      stream.puts Nanoc.version_information
+      stream.puts
+
+      # Installed gems
+      stream.puts '=== INSTALLED GEMS:'
+      stream.puts
+      self.gems_and_versions.each do |g|
+        stream.puts "  #{g.first} #{g.last.join(', ')}"
+      end
+      stream.puts
+
+      # Environment
+      stream.puts '=== ENVIRONMENT:'
+      stream.puts
+      ENV.sort.each do |e|
+        stream.puts "#{e.first} => #{e.last.inspect}"
+      end
     end
 
   protected
@@ -153,6 +236,15 @@ module Nanoc::CLI
     # @return [Array] The current compilation stack
     def stack
       (compiler && compiler.stack) || []
+    end
+
+    def gems_and_versions
+      gems = {}
+      Gem::Specification.find_all.sort_by { |s| [ s.name, s.version ] }.each do |spec|
+        gems[spec.name] ||= []
+        gems[spec.name] << spec.version.to_s
+      end
+      gems
     end
 
     # A hash that contains the name of the gem for a given required file. If a
@@ -215,6 +307,10 @@ module Nanoc::CLI
           "disabled in 3.2.x in order to allow compiler optimisations.)"
         end
       end
+    end
+
+    def format_title(s)
+      "\e[1m\e[31m" + s + "\e[0m"
     end
 
   end
