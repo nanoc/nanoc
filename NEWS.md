@@ -4,6 +4,7 @@
 
 * Added filename to YAML parser errors
 * Fixed issue which caused extra dependencies to be generated
+* Made timing information take filtering helper into account
 
 ## 3.3.6 (2012-04-27)
 
