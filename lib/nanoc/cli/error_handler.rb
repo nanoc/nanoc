@@ -212,6 +212,22 @@ module Nanoc::CLI
       ENV.sort.each do |e|
         stream.puts "#{e.first} => #{e.last.inspect}"
       end
+      stream.puts
+
+      # Gemfile
+      if File.exist?('Gemfile.lock')
+        stream.puts '=== GEMFILE.LOCK:'
+        stream.puts
+        stream.puts File.read('Gemfile.lock')
+        stream.puts
+      end
+
+      # Load paths
+      stream.puts '=== $LOAD_PATH:'
+      stream.puts
+      $LOAD_PATH.each_with_index do |i, index|
+        stream.puts "  #{index}. #{i}"
+      end
     end
 
   protected
