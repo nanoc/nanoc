@@ -114,7 +114,7 @@ module Nanoc::Helpers
 
         # Create dependency
         current_item = @site.compiler.dependency_tracker.top
-        if item != @item #current_item
+        if item != current_item
           Nanoc::NotificationCenter.post(:visit_started, item)
           Nanoc::NotificationCenter.post(:visit_ended,   item)
           rep = item.reps.find { |r| !r.compiled? }
