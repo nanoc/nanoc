@@ -1,7 +1,8 @@
 # encoding: utf-8
 
-summary     'show info about available plugins'
-usage       'info [options]'
+summary     'show all available plugins'
+aliases     :info
+usage       'show-plugins [options]'
 description <<-EOS
 Show a list of available plugins, including filters, data sources and VCSes.
 If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
@@ -9,7 +10,7 @@ EOS
 
 module Nanoc::CLI::Commands
 
-  class Info < ::Nanoc::CLI::CommandRunner
+  class ShowPlugins < ::Nanoc::CLI::CommandRunner
 
     def run
       # Check arguments
@@ -95,4 +96,4 @@ module Nanoc::CLI::Commands
 
 end
 
-runner Nanoc::CLI::Commands::Info
+runner Nanoc::CLI::Commands::ShowPlugins

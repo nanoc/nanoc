@@ -1,6 +1,7 @@
 # encoding: utf-8
 
-usage       'explain [thing]'
+usage       'show-rules [thing]'
+aliases     :explain
 summary     'describes the rules for each item'
 description <<-EOS
 Prints the rules used for all items and layouts in the current site. An argument can be given, which can be either an item identifier (e.g. /foo/), the path to the source file (e.g. content/foo.html) or the path to the output file (e.g. output/foo.html).
@@ -8,7 +9,7 @@ EOS
 
 module Nanoc::CLI::Commands
 
-  class Explain < ::Nanoc::CLI::CommandRunner
+  class ShowRules < ::Nanoc::CLI::CommandRunner
 
     def run
       self.require_site
@@ -65,4 +66,4 @@ module Nanoc::CLI::Commands
 
 end
 
-runner Nanoc::CLI::Commands::Explain
+runner Nanoc::CLI::Commands::ShowRules

@@ -1,15 +1,16 @@
 # encoding: utf-8
 
-usage       'debug'
-summary     'show debug information for this site'
+usage       'show-data'
+aliases     :debug
+summary     'show data in this site'
 description <<-EOS
 Show information about all items, item representations and layouts in the
-current site.
+current site, along with dependency information.
 EOS
 
 module Nanoc::CLI::Commands
 
-  class Debug < ::Nanoc::CLI::CommandRunner
+  class ShowData < ::Nanoc::CLI::CommandRunner
 
     def run
       # Make sure we are in a nanoc site directory
@@ -114,4 +115,4 @@ module Nanoc::CLI::Commands
 
 end
 
-runner Nanoc::CLI::Commands::Debug
+runner Nanoc::CLI::Commands::ShowData
