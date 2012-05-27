@@ -120,9 +120,15 @@ EOS
     # Enter tmp
     FileUtils.mkdir_p('tmp')
     FileUtils.cd('tmp')
+
+    # Let us get to the raw errors
+    Nanoc::CLI::ErrorHandler.disable
   end
 
   def teardown
+    # Restore normal error handling
+    Nanoc::CLI::ErrorHandler.enable
+
     # Exit tmp
     FileUtils.cd('..')
     FileUtils.rm_rf('tmp')

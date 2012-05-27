@@ -20,7 +20,28 @@ module Nanoc::CLI
     #
     # @return [void]
     def self.handle_while(params={}, &block)
-      self.new(params).handle_while(&block)
+      if @disabled
+        yield
+      else
+        self.new(params).handle_while(&block)
+      end
+    end
+
+    # Disables error handling. This is used by the test cases to prevent error
+    # from being handled by the CLI while tests are running.
+    #
+    # @api private
+    def self.disable
+      @disabled = true
+    end
+
+    # Re-enables error handling after it was disabled. This is used by the test
+    # cases to prevent error from being handled by the CLI while tests are
+    # running.
+    #
+    # @api private
+    def self.enable
+      @disabled = false
     end
 
     # Enables error handling in the given block. This method should not be

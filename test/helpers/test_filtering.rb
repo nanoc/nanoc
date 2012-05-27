@@ -103,4 +103,24 @@ class Nanoc::Helpers::FilteringTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_notifications
+    notifications = Set.new
+    Nanoc::NotificationCenter.on(:filtering_started) { notifications << :filtering_started }
+    Nanoc::NotificationCenter.on(:filtering_ended)   { notifications << :filtering_ended   }
+
+    # Build content to be evaluated
+    content = "<% filter :erb do %>\n" +
+              "   ... stuff ...\n" +
+              "<% end %>\n"
+
+    # Mock item and rep
+    @item_rep = mock
+    @item_rep.expects(:assigns).returns({})
+
+    ::ERB.new(content).result(binding)
+
+    assert notifications.include?(:filtering_started)
+    assert notifications.include?(:filtering_ended)
+  end
+
 end

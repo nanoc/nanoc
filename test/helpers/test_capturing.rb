@@ -9,6 +9,11 @@ class Nanoc::Helpers::CapturingTest < MiniTest::Unit::TestCase
   def test_content_for
     require 'erb'
 
+    File.open('Rules', 'w') do |io|
+      io.write "compile '*' do ; filter :erb ; end\n"
+      io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+    end
+
     # Build content to be evaluated
     content = "head <% content_for :sidebar do %>\n" +
               "  <%= 1+2 %>\n" +
@@ -49,6 +54,11 @@ class Nanoc::Helpers::CapturingTest < MiniTest::Unit::TestCase
   def test_content_for_recursively
     require 'erb'
 
+    File.open('Rules', 'w') do |io|
+      io.write "compile '*' do ; filter :erb ; end\n"
+      io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+    end
+
     content = <<EOS
 head
 <% content_for :box do %>
@@ -73,6 +83,11 @@ EOS
 
   def test_different_sites
     require 'erb'
+
+    File.open('Rules', 'w') do |io|
+      io.write "compile '*' do ; filter :erb ; end\n"
+      io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+    end
 
     @site = Nanoc3::Site.new({})
     @item = Nanoc::Item.new('content', {}, '/')
@@ -118,6 +133,41 @@ EOS
       end
       Nanoc::CLI.run(%w(compile))
       assert_equal '[New content]', File.read('output/includer/index.html')
+    end
+  end
+
+  def test_dependency_without_item_variable
+    with_site do |site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write "include Nanoc::Helpers::Capturing\n"
+        io.write "include Nanoc::Helpers::Rendering\n"
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '{<%= render \'partial\', :item => nil %>}'
+      end
+      File.open('layouts/partial.erb', 'w') do |io|
+        io.write '[<%= @item.inspect %>-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Compile once
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>Old content<% end %>}'
+      end
+      Nanoc::CLI.run(%w(compile))
+      assert_equal '{[nil-Old content]}', File.read('output/includer/index.html')
+
+      # Compile again
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>New content<% end %>}'
+      end
+      Nanoc::CLI.run(%w(compile))
+      assert_equal '{[nil-New content]}', File.read('output/includer/index.html')
     end
   end
 

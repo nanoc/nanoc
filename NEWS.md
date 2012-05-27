@@ -7,6 +7,12 @@ Extensions:
 * Added `:yield` key for Mustache filter
 * Added Handebars filter
 
+## 3.3.7 (???)
+
+* Added filename to YAML parser errors
+* Fixed issue which caused extra dependencies to be generated
+* Made timing information take filtering helper into account
+
 ## 3.3.6 (2012-04-27)
 
 * Fixed issue with relative_link_to stripping HTML boilerplate
