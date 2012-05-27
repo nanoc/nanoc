@@ -87,6 +87,11 @@ EOS
 
       # Run command
       position_before = $stderr.tell
+      Nanoc::CLI::ErrorHandler.disable_error_handling
+      assert_raises RuntimeError do
+        Nanoc::CLI.run %w( _test )
+      end
+      Nanoc::CLI::ErrorHandler.enable_error_handling
       assert_raises SystemExit do
         Nanoc::CLI.run %w( _test )
       end
