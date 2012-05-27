@@ -122,12 +122,12 @@ EOS
     FileUtils.cd('tmp')
 
     # Let us get to the raw errors
-    Nanoc::CLI::ErrorHandler.disable_error_handling
+    Nanoc::CLI::ErrorHandler.disable
   end
 
   def teardown
     # Restore normal error handling
-    Nanoc::CLI::ErrorHandler.enable_error_handling
+    Nanoc::CLI::ErrorHandler.enable
 
     # Exit tmp
     FileUtils.cd('..')

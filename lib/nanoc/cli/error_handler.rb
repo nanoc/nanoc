@@ -31,7 +31,7 @@ module Nanoc::CLI
     # from being handled by the CLI while tests are running.
     #
     # @api private
-    def self.disable_error_handling
+    def self.disable
       @disabled = true
     end
 
@@ -40,7 +40,7 @@ module Nanoc::CLI
     # running.
     #
     # @api private
-    def self.enable_error_handling
+    def self.enable
       @disabled = false
     end
 
