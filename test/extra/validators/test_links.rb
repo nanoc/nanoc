@@ -53,9 +53,9 @@ class Nanoc::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
     validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
 
     # Test
-    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('http://www.apple.com/'))
-    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('https://www.apple.com/'))
-    assert_equal 404, validator.send(:fetch_http_status_for, URI.parse('http://www.apple.com/sdfghgfdsdfgh'))
+    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('http://httpstat.us/200'))
+    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('https://httpstat.us/200'))
+    assert_equal 404, validator.send(:fetch_http_status_for, URI.parse('http://httpstat.us/404'))
   end
 
 end
