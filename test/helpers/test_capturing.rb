@@ -192,4 +192,37 @@ EOS
     end
   end
 
+  def test_recompile_dependency
+    with_site do |site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>Content<% end %>}'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      # Compile once
+      File.open('content/includer.erb', 'w') do |io|
+        io.write 'Old-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
+      end
+      Nanoc::CLI.run(%w(compile))
+      assert_equal 'Old-Content', File.read('output/includer/index.html')
+
+      # Compile again
+      $LOUD = true
+      File.open('content/includer.erb', 'w') do |io|
+        io.write 'New-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
+      end
+      Nanoc::CLI.run(%w(compile))
+      assert_equal 'New-Content', File.read('output/includer/index.html')
+    end
+  ensure
+    $LOUD = false 
+  end
+
 end

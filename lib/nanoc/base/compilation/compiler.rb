@@ -370,7 +370,7 @@ module Nanoc
       # Calculate rule memory if we haven’t yet done do
       rules_collection.new_rule_memory_for_rep(rep)
 
-      if !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
+      if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
         Nanoc::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
