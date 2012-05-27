@@ -37,8 +37,8 @@ module Nanoc
       super('tmp/dependencies', 4)
 
       @objects = objects
-
-      @graph = Nanoc::DirectedGraph.new([ nil ] + @objects)
+      @graph   = Nanoc::DirectedGraph.new([ nil ] + @objects)
+      @stack   = []
     end
 
     # Starts listening for dependency messages (`:visit_started` and
@@ -73,6 +73,14 @@ module Nanoc
       # Unregister
       Nanoc::NotificationCenter.remove(:visit_started, self)
       Nanoc::NotificationCenter.remove(:visit_ended,   self)
+    end
+
+    # @return The topmost item on the stack, i.e. the one currently being
+    #   compiled
+    #
+    # @api private
+    def top
+      @stack.last
     end
 
     # Returns the direct dependencies for the given object.
