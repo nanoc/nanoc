@@ -103,7 +103,7 @@ module Nanoc::Extra::Checking::Checkers
       return true if File.file?(path)
 
       # Check whether directory with index file exists
-      return true if File.directory?(path) && @index_filenames.any? { |fn| File.file?(File.join(path, fn)) }
+      return true if File.directory?(path) && @site.config[:index_filenames].any? { |fn| File.file?(File.join(path, fn)) }
 
       # Nope :(
       return false
