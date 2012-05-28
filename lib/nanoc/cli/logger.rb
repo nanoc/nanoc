@@ -57,7 +57,7 @@ module Nanoc::CLI
     # @param [String] name The name of the file the action was performed on
     #
     # @return [void]
-    def file(level, action, identifier, duration=nil)
+    def file(level, action, name, duration=nil)
       log(
         level,
         '%s%12s%s  %s%s' % [
@@ -65,7 +65,7 @@ module Nanoc::CLI
           action,
           color? ? "\e[0m" : '',
           duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
-          identifier
+          name
         ]
       )
     end

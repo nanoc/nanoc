@@ -25,7 +25,7 @@ module Nanoc::Helpers
     # @param [Symbol] filter_name The name of the filter to run on the
     #   contents of the block
     #
-    # @param [Hash] argument Arguments to pass to the filter
+    # @param [Hash] arguments Arguments to pass to the filter
     #
     # @return [void]
     def filter(filter_name, arguments={}, &block)
