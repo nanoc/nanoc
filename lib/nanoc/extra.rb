@@ -3,6 +3,7 @@
 module Nanoc::Extra
 
   autoload 'AutoCompiler',      'nanoc/extra/auto_compiler'
+  autoload 'Checking',          'nanoc/extra/checking'
   autoload 'CHiCk',             'nanoc/extra/chick'
   autoload 'Pruner',            'nanoc/extra/pruner'
   autoload 'Validators',        'nanoc/extra/validators'

@@ -12,9 +12,7 @@ module Nanoc::CLI::Commands
   class ValidateCSS < ::Nanoc::CLI::CommandRunner
 
     def run
-      require_site
-      validator = ::Nanoc::Extra::Validators::W3C.new(site.config[:output_dir], [ :css ])
-      validator.run
+      Nanoc::CLI.run %w( check css )
     end
 
   end

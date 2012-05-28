@@ -15,17 +15,10 @@ module Nanoc::CLI::Commands
   class ValidateLinks < ::Nanoc::CLI::CommandRunner
 
     def run
-      require_site
-
-      dir             = site.config[:output_dir]
-      index_filenames = site.config[:index_filenames]
-
-      validator = ::Nanoc::Extra::Validators::Links.new(
-        dir,
-        index_filenames,
-        :internal => (options[:external] ? false : true),
-        :external => (options[:internal] ? false : true))
-      validator.run
+      checkers = []
+      checkers << 'ilinks' if options[:internal]
+      checkers << 'elinks' if options[:external]
+      Nanoc::CLI.run [ 'check', checkers ].flatten
     end
 
   end
