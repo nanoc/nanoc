@@ -6,6 +6,8 @@ description <<-EOS
 Run the given issue checks (or all, if none are given) on the current site.
 EOS
 
+flag :a, :all, 'run all issue checks'
+
 module Nanoc::CLI::Commands
 
   class Check < ::Nanoc::CLI::CommandRunner
@@ -16,16 +18,20 @@ module Nanoc::CLI::Commands
       self.require_site
 
       # Find checker classes
-      classes = {}
-      arguments.each do |a|
-        klass = Nanoc::Extra::Checking::Checker.named(a)
-        raise "Unknown checker: #{a}" if klass.nil?
-        classes[klass] = a
+      if options[:all]
+        classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
+      else
+        classes = []
+        arguments.each do |a|
+          klass = Nanoc::Extra::Checking::Checker.named(a)
+          raise "Unknown checker: #{a}" if klass.nil?
+          classes << klass
+        end
       end
 
       # Run all the checkers!
-      classes.each_pair do |klass, identifier|
-        print "Running #{identifier} checker... "
+      classes.each do |klass|
+        print "Running #{klass.identifier} checker... "
 
         issues = []
         klass.new(site, issues).run
