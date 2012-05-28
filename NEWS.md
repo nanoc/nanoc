@@ -15,7 +15,7 @@ Extensions:
 * Converted HTML/CSS/link validation tasks to commands
 * Made link validator follow relative redirects
 
-## 3.3.7 (???)
+## 3.3.7 (2012-05-28)
 
 * Added filename to YAML parser errors
 * Fixed issue which caused extra dependencies to be generated

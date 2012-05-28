@@ -294,6 +294,16 @@ module Nanoc
       @identifier = *source
     end
 
+    # @api private
+    def forced_outdated=(bool)
+      @forced_outdated = bool
+    end
+
+    # @api private
+    def forced_outdated?
+      @forced_outdated || false
+    end
+
     # @deprecated Access the modification time using `item[:mtime]` instead.
     def mtime
       self[:mtime]

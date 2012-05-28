@@ -62,6 +62,12 @@ module Nanoc::Helpers
         @captures_store ||= CapturesStore.new
       end
 
+      # @api private
+      def captures_store_compiled_items
+        require 'set'
+        @captures_store_compiled_items ||= Set.new
+      end
+
     end
 
     # @overload content_for(name, &block)
@@ -117,8 +123,20 @@ module Nanoc::Helpers
         if item != current_item
           Nanoc::NotificationCenter.post(:visit_started, item)
           Nanoc::NotificationCenter.post(:visit_ended,   item)
-          rep = item.reps.find { |r| !r.compiled? }
-          raise Nanoc::Errors::UnmetDependency.new(rep) if rep
+
+          # This is an extremely ugly hack to get the compiler to recompile the
+          # item from which we use content. For this, we need to manually edit
+          # the content attribute to reset it. :(
+          # FIXME clean this up
+          if !@site.captures_store_compiled_items.include? item
+            @site.captures_store_compiled_items << item 
+            item.forced_outdated = true
+            item.reps.each do |r|
+              raw_content = item.raw_content
+              r.content = { :raw => raw_content, :last => raw_content }
+              @site.compiler.send(:compile_rep, r)
+            end
+          end
         end
 
         # Get content
