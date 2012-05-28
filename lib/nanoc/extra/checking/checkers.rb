@@ -8,10 +8,10 @@ module Nanoc::Extra::Checking::Checkers
   autoload 'InternalLinks', 'nanoc/extra/checking/checkers/internal_links'
 
   Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::CSS',           :css
-  Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::ExternalLinks', :elinks
   Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::ExternalLinks', :external_links
+  Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::ExternalLinks', :elinks
   Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::HTML',          :html
-  Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::InternalLinks', :ilinks
   Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::InternalLinks', :internal_links
+  Nanoc::Extra::Checking::Checker.register '::Nanoc::Extra::Checking::Checkers::InternalLinks', :ilinks
 
 end
