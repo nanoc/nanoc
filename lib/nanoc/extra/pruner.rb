@@ -9,11 +9,11 @@ module Nanoc::Extra
     # @return [Nanoc::Site] The site this pruner belongs to  
     attr_reader :site
 
-    # @param [Nanoc::Site] The site for which a pruner is created
+    # @param [Nanoc::Site] site The site for which a pruner is created
     #
     # @option params [Boolean] :dry_run (false) true if the files to be deleted
-    # should only be printed instead of actually deleted, false if the files
-    # should actually be deleted.
+    #   should only be printed instead of actually deleted, false if the files
+    #   should actually be deleted.
     def initialize(site, params={})
       @site    = site
       @dry_run = params.fetch(:dry_run) { false }

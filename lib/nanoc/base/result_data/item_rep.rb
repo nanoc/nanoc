@@ -115,8 +115,7 @@ module Nanoc
       #
       # @api private
       #
-      # @param [String, nil] raw_path The raw path to write the compiled rep
-      #   to. If nil, the default raw path will be used.
+      # @param [Symbol, nil] snapshot The name of the snapshot to write.
       #
       # @return [void]
       def write(snapshot=:last)

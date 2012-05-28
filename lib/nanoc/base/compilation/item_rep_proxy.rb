@@ -35,11 +35,11 @@ module Nanoc
     #
     # @see Nanoc::ItemRep#filter
     #
-    # @param [Symbol] filter_name The name of the filter to run the item
+    # @param [Symbol] name The name of the filter to run the item
     #   representations' content through
     #
-    # @param [Hash] filter_args The filter arguments that should be passed to
-    #   the filter's #run method
+    # @param [Hash] args The filter arguments that should be passed to the
+    #   filter's #run method
     #
     # @return [void]
     def filter(name, args={})
