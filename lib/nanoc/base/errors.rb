@@ -97,8 +97,8 @@ module Nanoc
     # current item can be found.
     class NoMatchingRoutingRuleFound < Generic
 
-      # @param [Nanoc::Item] item The item for which no routing rule could be
-      #   found
+      # @param [Nanoc::ItemRep] rep The item repiresentation for which no
+      #   routing rule could be found
       def initialize(rep)
         super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
       end
@@ -113,7 +113,7 @@ module Nanoc
       #   compiled
       attr_reader :rep
 
-      # @param [Nanoc::ItemRep] The item representation that cannot yet be
+      # @param [Nanoc::ItemRep] rep The item representation that cannot yet be
       #   compiled
       def initialize(rep)
         @rep = rep
@@ -125,8 +125,8 @@ module Nanoc
     # Error that is raised when a binary item is attempted to be laid out.
     class CannotLayoutBinaryItem < Generic
 
-      # @param [Nanoc::ItemRep] The item representation that was attempted to
-      #   be laid out
+      # @param [Nanoc::ItemRep] rep The item representation that was attempted
+      #   to be laid out
       def initialize(rep)
         super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
       end

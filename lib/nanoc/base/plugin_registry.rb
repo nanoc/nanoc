@@ -14,7 +14,7 @@ module Nanoc
 
       # Sets the identifiers for this plugin.
       #
-      # @param [Array<Symbol>] identifier A list of identifiers to assign to
+      # @param [Array<Symbol>] identifiers A list of identifiers to assign to
       #   this plugin.
       #
       # @return [void]
