@@ -10,11 +10,13 @@ module ::Nanoc::Extra::Checking::Checkers
     def run
       require 'nokogiri'
 
+      issues = []
       all_broken_hrefs.each_pair do |href, filenames|
         filenames.each do |filename|
-          self.issues << "Broken link: #{href} (referenced from #{filename})"
+          issues << "Broken link: #{href} (referenced from #{filename})"
         end
       end
+      issues
     end
 
   private

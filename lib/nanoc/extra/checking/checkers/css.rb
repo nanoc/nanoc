@@ -9,12 +9,14 @@ module ::Nanoc::Extra::Checking::Checkers
     def run
       require 'w3c_validators'
 
+      issues = []
       Dir[site.config[:output_dir] + '/**/*.css'].each do |filename|
         results = ::W3CValidators::CSSValidator.new.validate_file(filename)
         results.errors.each do |e|
-          self.issues << "#{filename}: #{e}"
+          issues << "#{filename}: #{e}"
         end
       end
+      issues
     end
 
   end

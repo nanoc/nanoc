@@ -7,11 +7,9 @@ module Nanoc::Extra::Checking
     extend Nanoc::PluginRegistry::PluginMethods
 
     attr_reader :site
-    attr_reader :issues
 
-    def initialize(site, issues)
-      @site   = site
-      @issues = issues
+    def initialize(site)
+      @site = site
     end
 
     def run

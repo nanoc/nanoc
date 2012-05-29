@@ -21,11 +21,10 @@ module Nanoc::CLI::Commands
       if options[:all]
         classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
       else
-        classes = []
-        arguments.each do |a|
+        classes = arguments.map do |a|
           klass = Nanoc::Extra::Checking::Checker.named(a)
-          raise "Unknown checker: #{a}" if klass.nil?
-          classes << klass
+          raise Nanoc::Errors::GenericTrivial, "Unknown checker: #{a}" if klass.nil?
+          klass
         end
       end
 
@@ -33,8 +32,7 @@ module Nanoc::CLI::Commands
       classes.each do |klass|
         print "Running #{klass.identifier} checker... "
 
-        issues = []
-        klass.new(site, issues).run
+        issues = klass.new(site).run
 
         puts issues.empty? ? 'ok' : 'not ok'
         issues.each do |e|
