@@ -11,7 +11,10 @@ module Nanoc::Extra::Validators
     end
 
     def run
-      Nanoc::CLI.run(%w( check html css ))
+      args = []
+      args << 'html' if @types.include?(:html)
+      args << 'css'  if @types.include?(:css)
+      Nanoc::CLI.run([ 'check', args ].flatten)
     end
 
   end
