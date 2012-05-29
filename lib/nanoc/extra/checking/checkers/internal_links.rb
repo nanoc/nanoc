@@ -20,34 +20,6 @@ module Nanoc::Extra::Checking::Checkers
 
   private
 
-    # Enumerates all key-value pairs of a given hash in a thread-safe way.
-    #
-    # @api private
-    class ThreadsafeHashEnumerator
-
-      # Creates a new enumerator for the given hash.
-      #
-      # @param [Hash] hash The hash for which the enumerator should return
-      #   key-value pairs
-      def initialize(hash)
-        @hash             = hash
-        @unprocessed_keys = @hash.keys.dup
-        @mutex            = Mutex.new
-      end
-
-      # Returns the next key-value pair in the hash.
-      #
-      # @return [Array] An array containing the key and the corresponding
-      #   value of teh next key-value pair
-      def next_pair
-        @mutex.synchronize do
-          key = @unprocessed_keys.shift
-          return (key ? [ key, @hash[key] ] : nil)
-        end
-      end
-
-    end
-
     def all_broken_hrefs
       broken_hrefs  = {}
       grouped_hrefs = {}
