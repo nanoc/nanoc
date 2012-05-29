@@ -6,7 +6,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < MiniTest::Unit::TestCase
 
   def test_create_site_with_existing_name
     Nanoc::CLI.run %w( create_site foo )
-    assert_raises(SystemExit) do
+    assert_raises(::Nanoc::Errors::GenericTrivial) do
       Nanoc::CLI.run %w( create_site foo )
     end
   end

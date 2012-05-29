@@ -9,6 +9,11 @@ module Nanoc
     class Generic < ::StandardError
     end
 
+    # Generic trivial error. Superclass for all nanoc-specific errors that are
+    # considered "trivial", i.e. errors that do not require a full crash report.
+    class GenericTrivial < Generic
+    end
+
     # Error that is raised when a site is loaded that uses a data source with
     # an unknown identifier.
     class UnknownDataSource < Generic

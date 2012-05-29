@@ -24,12 +24,7 @@ module Nanoc::CLI
       # Load site if possible
       @site ||= nil
       if File.file?('config.yaml') && @site.nil?
-        begin
-          @site = Nanoc::Site.new('.')
-        rescue Nanoc::Errors::UnknownDataSource => e
-          $stderr.puts "Unknown data source: #{e}"
-          exit 1
-        end
+        @site = Nanoc::Site.new('.')
       end
 
       @site
@@ -84,9 +79,7 @@ module Nanoc::CLI
     # @return [void]
     def require_site
       if site.nil?
-        $stderr.puts 'The current working directory does not seem to be a ' +
-                     'valid/complete nanoc site directory; aborting.'
-        exit 1
+        raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
       end
     end
 
@@ -104,8 +97,7 @@ module Nanoc::CLI
       # Find VCS
       vcs_class = Nanoc::Extra::VCS.named(vcs_name.to_sym)
       if vcs_class.nil?
-        $stderr.puts "A VCS named #{vcs_name} was not found; aborting."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "A VCS named #{vcs_name} was not found"
       end
 
       site.data_sources.each do |data_source|
