@@ -49,13 +49,23 @@ class Nanoc::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
   end
 
   def test_fetch_http_status_for
-    # Create validator
-    validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
+    @app = lambda { |env| [ env['REQUEST_PATH'][1..-1].to_i, {}, [ '... Useless body ...' ] ] }
+    @server = nil
 
-    # Test
-    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('http://httpstat.us/200'))
-    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('https://httpstat.us/200'))
-    assert_equal 404, validator.send(:fetch_http_status_for, URI.parse('http://httpstat.us/404'))
+    @thread = Thread.new do
+      Rack::Handler::WEBrick.run(@app, :Host => @host='127.0.0.1', :Port => @port=9204) do |server|
+        @server = server
+      end
+    end
+
+    Thread.pass until @server
+
+    validator = Nanoc::Extra::Validators::Links.new('output', [ 'index.html' ])
+    assert_equal 200, validator.send(:fetch_http_status_for, URI.parse('http://127.0.0.1:9204/200'))
+    assert_equal 404, validator.send(:fetch_http_status_for, URI.parse('http://127.0.0.1:9204/404'))
+
+    @server.stop
+    @thread.kill
   end
 
 end
