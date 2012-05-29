@@ -17,8 +17,7 @@ module Nanoc::CLI::Commands
     def run
       # Check arguments
       if arguments.length != 1
-        $stderr.puts "usage: #{command.usage}"
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 
       # Extract arguments and options
@@ -32,9 +31,9 @@ module Nanoc::CLI::Commands
 
       # Check whether item is unique
       if !self.site.items.find { |i| i.identifier == identifier }.nil?
-        $stderr.puts "An item already exists at #{identifier}. Please " +
-                     "pick a unique name for the item you are creating."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial,
+          "An item already exists at #{identifier}. Please " +
+          "pick a unique name for the item you are creating."
       end
 
       # Setup notifications

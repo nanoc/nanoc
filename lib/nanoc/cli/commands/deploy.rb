@@ -28,8 +28,7 @@ module Nanoc::CLI::Commands
 
       # Get config
       deploy_configs = site.config.fetch(:deploy) do
-        $stderr.puts "The site configuration has no deploy configuration."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "The site configuration has no deploy configuration."
       end
 
       # List
@@ -44,8 +43,7 @@ module Nanoc::CLI::Commands
       # Get target
       target = options.fetch(:target, :default).to_sym
       config = deploy_configs.fetch(target) do
-        $stderr.puts "The site configuration has no deploy configuration for #{target}."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "The site configuration has no deploy configuration for #{target}."
       end
 
       # Get deployer
@@ -56,9 +54,7 @@ module Nanoc::CLI::Commands
       end
       deployer_class = Nanoc::Extra::Deployer.named(name)
       if deployer_class.nil?
-        $stderr.puts "The specified deploy target has an unrecognised kind (#{name})."
-        $stderr.puts "(expected one of #{names.join(', ')})"
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "The specified deploy target has an unrecognised kind “#{name}” (expected one of #{names.join(', ')})."
       end
 
       # Run

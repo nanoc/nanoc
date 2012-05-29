@@ -302,8 +302,7 @@ EOS
     def run
       # Check arguments
       if arguments.length != 1
-        $stderr.puts "usage: #{command.usage}"
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 
       # Extract arguments and options
@@ -312,14 +311,12 @@ EOS
 
       # Check whether site exists
       if File.exist?(path)
-        $stderr.puts "A site at '#{path}' already exists."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "A site at '#{path}' already exists."
       end
 
       # Check whether data source exists
       if Nanoc::DataSource.named(data_source).nil?
-        $stderr.puts "Unrecognised data source: #{data_source}"
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "Unrecognised data source: #{data_source}"
       end
 
       # Setup notifications

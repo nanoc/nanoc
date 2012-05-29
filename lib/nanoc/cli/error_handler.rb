@@ -61,6 +61,9 @@ module Nanoc::CLI
 
       # Run
       yield
+    rescue Nanoc::Errors::GenericTrivial => e
+      $stderr.puts "Error: #{e.message}"
+      exit(1)
     rescue Interrupt => e
       exit(1)
     rescue StandardError, ScriptError => e

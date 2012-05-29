@@ -15,8 +15,7 @@ module Nanoc::CLI::Commands
     def run
       # Check arguments
       if arguments.length != 1
-        $stderr.puts "usage: #{command.usage}"
-        exit 1
+        raise Nanoc::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 
       # Extract arguments
@@ -30,16 +29,16 @@ module Nanoc::CLI::Commands
 
       # Check whether layout is unique
       if !self.site.layouts.find { |l| l.identifier == identifier }.nil?
-        $stderr.puts "A layout already exists at #{identifier}. Please " +
-                     "pick a unique name for the layout you are creating."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial,
+          "A layout already exists at #{identifier}. Please " +
+          "pick a unique name for the layout you are creating."
       end
 
       # Check whether layout is not at /
       if identifier == '/'
-        $stderr.puts "There cannot be a layout with the identifier '/'; " +
-                     "please pick a different identifier for this layout."
-        exit 1
+        raise Nanoc::Errors::GenericTrivial,
+          "There cannot be a layout with the identifier '/'; " +
+          "please pick a different identifier for this layout."
       end
 
       # Setup notifications
