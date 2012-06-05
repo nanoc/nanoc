@@ -85,6 +85,24 @@ data_sources:
     # it will become “/about.html/” instead.
     allow_periods_in_identifiers: false
 
+# Create a directory named “assets/” in the site directory and uncomment the
+# following to enable a static data source for assets:
+#  -
+#    # The static data source provides items from a single directory. Unlike the
+#    # filesystem data sources, static provides no additional item metadata.  As
+#    # such, it is most useful for simple assets, not for standard content.
+#    type: static
+#
+#    # The path where static assets should be mounted. This should be different
+#    # from items_root in the `filesystem_unified` data source above to prevent
+#    # item identifier collisions.
+#    items_root: /assets/
+#
+#    # By default, the `static` data source will read items from the “static/”
+#    # directory of your site. This may be overridden by changing the `prefix`
+#    # configuration option
+#    prefix: assets
+
 # Configuration for the “watch” command, which watches a site for changes and
 # recompiles if necessary.
 watcher:
@@ -119,10 +137,17 @@ EOS
 #   “content/about.html”). To select all children, grandchildren, … of an
 #   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
 #   because “*” matches zero or more characters.
+#
+# * A set of rules is provided—but not enabled—for static assets. Uncomment the
+#   rules below if you are using a static data source.
 
 compile '/stylesheet/' do
   # don’t filter or layout
 end
+
+# compile '/assets/*' do
+#   # nothing at all
+# end
 
 compile '*' do
   if item.binary?
@@ -136,6 +161,11 @@ end
 route '/stylesheet/' do
   '/style.css'
 end
+
+# route '/assets/*' do
+#   # /assets/foo.css/ → /foo.css
+#   item.identifier[7..-2]
+# end
 
 route '*' do
   if item.binary?
@@ -208,9 +238,9 @@ a:hover {
 
 #main p {
   margin: 20px 0;
-  
+
   font-size: 15px;
-  
+
   line-height: 20px;
 }
 
@@ -220,7 +250,7 @@ a:hover {
 
 #main li {
   font-size: 15px;
-  
+
   line-height: 20px;
 }
 
