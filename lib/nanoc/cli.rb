@@ -8,9 +8,10 @@ module Nanoc::CLI
   end
 
   autoload 'ANSIStringColorizer', 'nanoc/cli/ansi_string_colorizer'
-  autoload 'CleaningStreams',     'nanoc/cli/cleaning_streams'
   autoload 'Logger',              'nanoc/cli/logger'
   autoload 'CommandRunner',       'nanoc/cli/command_runner'
+  autoload 'CleaningStream',      'nanoc/cli/cleaning_stream'
+  autoload 'StreamCleaners',      'nanoc/cli/stream_cleaners'
   autoload 'ErrorHandler',        'nanoc/cli/error_handler'
 
   # Deprecated; use CommandRunner instead
@@ -41,7 +42,6 @@ module Nanoc::CLI
   # @return [void]
   def self.run(args)
     Nanoc::CLI::ErrorHandler.handle_while do
-      self.setup_cleaning_streams
       self.setup
       self.load_custom_commands
       self.root_command.run(args)
@@ -63,6 +63,9 @@ protected
   #
   # @return [void]
   def self.setup
+    # Set up output streams
+    self.setup_cleaning_streams
+
     # Reinit
     @root_command = nil
 
@@ -141,15 +144,36 @@ protected
   #
   # @return [void]
   def self.setup_cleaning_streams
+    $stdout = Nanoc::CLI::CleaningStream.new($stdout)
+    $stderr = Nanoc::CLI::CleaningStream.new($stderr)
+
     if !self.enable_utf8?
-      $stdout = Nanoc::CLI::CleaningStreams::UTF8.new($stdout)
-      $stderr = Nanoc::CLI::CleaningStreams::UTF8.new($stderr)
+      $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
+      $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
+    end
+
+    if !self.enable_ansi_colors?
+      $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
+      $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
     end
   end
 
   # @return [Boolean] true if UTF-8 support is present, false if not
   def self.enable_utf8?
     %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
+  end
+
+  # @return [Boolean] true if color support is present, false if not
+  def self.enable_ansi_colors?
+    return false if !$stdout.tty?
+
+    begin
+      require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /mswin|mingw/
+    rescue LoadError
+      return false
+    end
+    
+    return true
   end
 
 end
