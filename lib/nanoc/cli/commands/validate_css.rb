@@ -3,6 +3,7 @@
 usage       'validate_css [options]'
 aliases     [ 'vcss' ]
 summary     'validate the site’s CSS'
+be_hidden
 description <<-EOS
 Validates the site’s CSS files.
 EOS
