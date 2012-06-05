@@ -1,9 +1,17 @@
 # encoding: utf-8
 
+# Find all
+registry      = Nanoc::PluginRegistry.instance
+checker_class = Nanoc::Extra::Checking::Checker
+checkers      = registry.find_all(checker_class)
+checker_names = checkers.map { |p| p.last }.uniq.map { |c| c.identifier }.sort
+
 usage       'check [names]'
 summary     'run issue checks'
 description <<-EOS
 Run the given issue checks (or all, if none are given) on the current site.
+
+Available checkers: #{checker_names.join(', ')}
 EOS
 
 flag :a, :all, 'run all issue checks'
