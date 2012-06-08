@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'create_layout [options] identifier'
-aliases     'cl'
+usage       'create-layout [options] identifier'
+aliases     :create_layout, :cl
 summary     'create a layout'
 description <<-EOS
 Create a new layout in the current site. The first data source in the site
