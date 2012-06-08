@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'validate_links [options]'
-aliases     [ 'vlink' ]
+usage       'validate-links [options]'
+aliases     :validate_links, :vlink
 summary     'validate links in site'
 description <<-EOS
 Validates the site’s links. By default, both internal and external links will be checked.

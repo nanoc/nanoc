@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'validate_html [options]'
-aliases     [ 'vhtml' ]
+usage       'validate-html [options]'
+aliases     :validate_html, :vhtml
 summary     'validate the site’s HTML'
 description <<-EOS
 Validates the site’s HTML files.
