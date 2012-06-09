@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.4 (???)
+## 3.4 (2012-06-09)
 
 * Improved error output and added crash log
 * Renamed `debug` and `info` commands to `show-data` and `show-plugins`, respectively 
