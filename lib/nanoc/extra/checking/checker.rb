@@ -25,6 +25,12 @@ module Nanoc::Extra::Checking
       @issues << Issue.new(desc, subject, severity, self.class)
     end
 
+    def max_severity
+      severities = Set.new
+      issues.each { |i| severities << i.severity }
+      severities.max_by { |s| Issue::SEVERITIES.index(s) }
+    end
+
     def output_filenames
       Dir[@site.config[:output_dir] + '/**/*.html']
     end

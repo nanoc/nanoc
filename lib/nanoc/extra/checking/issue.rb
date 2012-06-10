@@ -22,6 +22,10 @@ module Nanoc::Extra::Checking
       end 
     end
 
+    def important?
+      [ :warning, :error ].include?(self.severity)
+    end
+
   end
 
 end

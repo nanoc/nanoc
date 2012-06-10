@@ -22,7 +22,7 @@ module ::Nanoc::Extra::Checking::Checkers
         filenames = hrefs_with_filenames[res.href]
         filenames.each do |filename|
           self.add_issue(
-            "Broken reference to #{res.href} (#{res.explanation})",
+            "reference to #{res.href}: #{res.explanation}",
             :subject => filename,
             :severity => res.severity)
         end
@@ -36,9 +36,9 @@ module ::Nanoc::Extra::Checking::Checkers
       attr_reader :severity
 
       def initialize(href, explanation, severity)
-        @href = href
+        @href        = href
         @explanation = explanation
-        @severity = severity
+        @severity    = severity
       end
 
     end
@@ -72,10 +72,8 @@ module ::Nanoc::Extra::Checking::Checkers
             href = enum.next
             break if href.nil?
             res = self.validate(href)
-            unless res.nil?
-              mutex.synchronize do
-                invalid << res
-              end
+            mutex.synchronize do
+              invalid << res
             end
           end
         end
@@ -87,26 +85,17 @@ module ::Nanoc::Extra::Checking::Checkers
 
     def validate(href)
       # Parse
-      uri = nil
+      url = nil
       begin
-        uri = URI.parse(href)
+        url = URI.parse(href)
       rescue URI::InvalidURIError
         return Result.new(href, 'invalid URI', :error)
       end
 
       # Skip non-HTTP URLs
-      return Result.new(href, 'can only check http/https', :skipped) if uri.scheme !~ /^https?$/
+      return Result.new(href, 'can only check http/https', :skipped) if url.scheme !~ /^https?$/
 
       # Get status
-      failure, severity = failure_for(uri)
-      if severity == :ok
-        Result.new(href, 'ok', :ok)
-      else
-        Result.new(href, failure, severity)
-      end
-    end
-
-    def failure_for(url, params={})
       res = nil
       5.times do |i|
         begin
@@ -114,11 +103,13 @@ module ::Nanoc::Extra::Checking::Checkers
             res = request_url_once(url)
           end
         rescue => e
-          return e.message, :error
+          return Result.new(href, e.message, :error)
         end
 
         if res.code =~ /^3..$/
-          return 'too many redirects', :warning if i == 4
+          if i == 4
+            return Result.new(href, 'too many redirects', :warning)
+          end
 
           # Find proper location
           location = res['Location']
@@ -132,12 +123,12 @@ module ::Nanoc::Extra::Checking::Checkers
 
           url = URI.parse(location)
         elsif res.code == '200'
-          return nil, :ok
+          return Result.new(href, 'ok', :ok)
         else
-          return res.code, :error
+          return Result.new(href, res.code, :error)
         end
       end
-      return '???', :error
+      raise 'should not have gotten here'
     end
 
     def request_url_once(url)

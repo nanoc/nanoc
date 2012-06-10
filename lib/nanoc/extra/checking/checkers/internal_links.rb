@@ -16,7 +16,7 @@ module Nanoc::Extra::Checking::Checkers
         filenames.each do |filename|
           unless valid?(href, filename)
           self.add_issue(
-            "Broken reference to #{href}",
+            "reference to #{href}",
             :subject  => filename,
             :severity => :error)
           end

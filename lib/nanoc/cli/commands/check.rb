@@ -20,6 +20,13 @@ module Nanoc::CLI::Commands
 
   class Check < ::Nanoc::CLI::CommandRunner
 
+    SEVERITY_COLORS = {
+      :ok      => :green,
+      :skipped => :blue,
+      :warning => :yellow,
+      :error   => :red
+    }
+
     def run
       require 'colored'
 
@@ -39,51 +46,37 @@ module Nanoc::CLI::Commands
       end
 
       # Run all the checkers!
+      puts
       checkers = []
+      issues = Set.new
+      length = classes.map { |c| c.identifier.length }.max + 20
       classes.each do |klass|
-        print "Running #{klass.identifier} checker... "
+        print format("%-#{length}s", "Running #{klass.identifier} checker... ")
 
         checker = klass.new(site)
         checkers << checker
         checker.run
+        issues.merge checker.issues
 
-        puts formatted_severity_for(max_severity_for(checker.issues))
+        # TODO report progress
+
+        severity = checker.max_severity
+        puts severity.to_s.send(SEVERITY_COLORS[severity])
       end
+      puts
 
       # Print results
-      issues = Set.new
-      checkers.each { |c| issues.merge c.issues }
-      puts
       issues.group_by { |i| i.subject }.each_pair do |subject, issues|
-        if ![ :ok, :skipped].include?(max_severity_for(issues)) || options[:verbose]
+        if issues.any? { |i| i.important? } || options[:verbose]
           puts "#{subject}:"
           issues.each do |i|
-            puts "  #{self.issue_string_for(i)}" unless [ :ok, :skipped ].include?(i.severity) && !options[:verbose]
+            if i.important? || options[:verbose]
+              severity_string = ('[' + i.severity.to_s.upcase.center(7) + ']').send(SEVERITY_COLORS[i.severity])
+              puts "  #{severity_string} #{i.checker_class.identifier} - #{i.description}"
+            end
           end
         end
       end
-    end
-
-    def max_severity_for(issues)
-      issues.max_by { |i| Nanoc::Extra::Checking::Issue::SEVERITIES.index(i.severity) }.severity || :ok
-    end
-
-    def formatted_severity_for(severity)
-      r = case severity
-      when :ok
-        [ 'OK',      :green  ]
-      when :warning
-        [ 'WARNING', :yellow ]
-      when :error
-        [ 'ERROR',   :red    ]
-      when :skipped
-        [ 'SKIPPED', :blue   ]
-      end
-      r.first.center(7).send(r.last)
-    end
-
-    def issue_string_for(i)
-      "[#{formatted_severity_for(i.severity)}] #{i.checker_class.identifier} - #{i.description}"
     end
 
   end
