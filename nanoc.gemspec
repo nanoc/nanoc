@@ -30,20 +30,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_development_dependency('rdiscount')
   s.add_development_dependency('yard')
-
-  s.post_install_message = %q{------------------------------------------------------------------------------
-Thanks for installing nanoc 3.3! Here are some resources to help you get
-started:
-
-* The web site at <http://nanoc.stoneship.org/>
-* The tutorial at <http://nanoc.stoneship.org/docs/3-getting-started/>
-* The manual at <http://nanoc.stoneship.org/docs/4-basic-concepts/>
-
-If you have questions, issues or simply want to share ideas, join the
-discussion at <http://groups.google.com/group/nanoc> or stop by in the IRC
-channel on irc.freenode.net, channel #nanoc. See you there!
-
-Enjoy!
-------------------------------------------------------------------------------
-}
 end

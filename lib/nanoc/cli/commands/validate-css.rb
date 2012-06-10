@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'validate_css [options]'
-aliases     [ 'vcss' ]
+usage       'validate-css [options]'
+aliases     :validate_css, :vcss
 summary     'validate the site’s CSS'
 be_hidden
 description <<-EOS

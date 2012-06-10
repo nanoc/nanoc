@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'validate_links [options]'
-aliases     [ 'vlink' ]
+usage       'validate-links [options]'
+aliases     :validate_links, :vlink
 summary     'validate links in site'
 be_hidden
 description <<-EOS

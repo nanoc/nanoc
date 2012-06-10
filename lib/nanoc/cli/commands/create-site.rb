@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'create_site [options] path'
-aliases     'cs'
+usage       'create-site [options] path'
+aliases     :create_site, :cs
 summary     'create a site'
 description <<-EOS
 Create a new site at the given path. The site will use the filesystem_unified data source by default, but this can be changed using the --datasource commandline option.
