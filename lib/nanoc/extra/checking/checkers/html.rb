@@ -9,14 +9,14 @@ module ::Nanoc::Extra::Checking::Checkers
     def run
       require 'w3c_validators'
 
-      issues = []
       Dir[site.config[:output_dir] + '/**/*.{htm,html}'].each do |filename|
         results = ::W3CValidators::MarkupValidator.new.validate_file(filename)
         results.errors.each do |e|
-          issues << "#{filename}: #{e}"
+          desc = e.message.gsub(%r{\s+}, ' ').strip
+          severity = e.is_warning? ? :warning : :error
+          self.add_issue(desc, :subject => filename, :severity => severity)
         end
       end
-      issues
     end
 
   end

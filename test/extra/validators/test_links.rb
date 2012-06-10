@@ -4,18 +4,6 @@ class Nanoc::Extra::Validators::LinksTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
-  def test_is_external_href?
-    # Create validator
-    validator = Nanoc::Extra::Validators::Links.new(nil, nil)
-
-    # Test
-    assert  validator.send(:is_external_href?, 'http://example.com/')
-    assert  validator.send(:is_external_href?, 'https://example.com/')
-    assert  validator.send(:is_external_href?, 'mailto:bob@example.com')
-    assert !validator.send(:is_external_href?, '../stuff')
-    assert !validator.send(:is_external_href?, '/stuff')
-  end
-
   def test_is_valid_internal_href?
     # Create files
     FileUtils.mkdir_p('output')

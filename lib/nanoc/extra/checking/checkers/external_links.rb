@@ -8,167 +8,139 @@ module ::Nanoc::Extra::Checking::Checkers
     identifiers :external_links, :elinks
 
     def run
-      require 'nokogiri'
-
-      issues = []
-      all_broken_hrefs.each_pair do |href, filenames|
-        filenames.each do |filename|
-          issues << "Broken link: #{href} (referenced from #{filename})"
-        end
-      end
-      issues
-    end
-
-  private
-
-    # Enumerates all key-value pairs of a given hash in a thread-safe way.
-    #
-    # @api private
-    class ThreadsafeHashEnumerator
-
-      # Creates a new enumerator for the given hash.
-      #
-      # @param [Hash] hash The hash for which the enumerator should return
-      #   key-value pairs
-      def initialize(hash)
-        @hash             = hash
-        @unprocessed_keys = @hash.keys.dup
-        @mutex            = Mutex.new
-      end
-
-      # Returns the next key-value pair in the hash.
-      #
-      # @return [Array] An array containing the key and the corresponding
-      #   value of teh next key-value pair
-      def next_pair
-        @mutex.synchronize do
-          key = @unprocessed_keys.shift
-          return (key ? [ key, @hash[key] ] : nil)
-        end
-      end
-
-    end
-
-    def all_broken_hrefs
-      broken_hrefs  = {}
-      grouped_hrefs = {}
-
-      all_hrefs_per_filename.each_pair do |filename, hrefs|
-        hrefs.select { |href| is_external_href?(href) }.each do |href|
-          grouped_hrefs[href] ||= []
-          grouped_hrefs[href] << filename
-        end
-      end
-
-      validate_hrefs(grouped_hrefs)
-    end
-
-    def all_files
-      Dir[@site.config[:output_dir] + '/**/*.html']
-    end
-
-    def all_hrefs_per_filename
-      hrefs = {}
-      all_files.each do |filename|
-        hrefs[filename] ||= all_hrefs_in_file(filename)
-      end
-      hrefs
-    end
-
-    def all_hrefs_in_file(filename)
-      doc = Nokogiri::HTML(::File.read(filename))
-      doc.css('a').map { |l| l[:href] }.compact
-    end
-
-    def is_external_href?(href)
-      !!(href =~ %r{^[a-z\-]+:})
-    end
-
-    def is_valid_external_href?(href)
       require 'net/http'
+      require 'net/https'
+      require 'nokogiri'
       require 'uri'
 
-      # Parse
-      uri = nil
-      begin
-        uri = URI.parse(href)
-      rescue URI::InvalidURIError
-        @delegate && @delegate.send(:external_href_validated, href, false)
-        return false
+      # Find all broken external hrefs
+      hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(self.output_filenames, :external).filenames_per_href
+      results = self.select_invalid(hrefs_with_filenames.keys)
+
+      # Report them
+      results.each do |res|
+        filenames = hrefs_with_filenames[res.href]
+        filenames.each do |filename|
+          self.add_issue(
+            "Broken reference to #{res.href} (#{res.explanation})",
+            :subject => filename,
+            :severity => res.severity)
+        end
       end
-
-      # Skip non-HTTP URLs
-      return true if uri.scheme !~ /^https?$/
-
-      # Get status
-      status = fetch_http_status_for(uri)
-      is_valid = !status.nil? && status == 200
-
-      # Done
-      is_valid
     end
 
-    def validate_hrefs(hrefs)
-      broken_hrefs = {}
-      @mutex = Mutex.new
-      enum = ThreadsafeHashEnumerator.new(hrefs)
+    class Result
+
+      attr_reader :href
+      attr_reader :explanation
+      attr_reader :severity
+
+      def initialize(href, explanation, severity)
+        @href = href
+        @explanation = explanation
+        @severity = severity
+      end
+
+    end
+
+    class ArrayEnumerator
+
+      def initialize(array)
+        @array = array
+        @index = 0
+        @mutex = Mutex.new
+      end
+
+      def next
+        @mutex.synchronize do
+          @index += 1
+          return @array[@index-1]
+        end
+      end
+
+    end
+
+    def select_invalid(hrefs)
+      enum = ArrayEnumerator.new(hrefs.sort)
+      mutex = Mutex.new
+      invalid = Set.new
 
       threads = []
       10.times do
         threads << Thread.new do
           loop do
-            # Get next pair
-            pair = enum.next_pair
-            break if pair.nil?
-            href, filenames = pair[0], pair[1]
-
-            # Validate
-            if !is_valid_external_href?(href)
-              @mutex.synchronize do
-                broken_hrefs[href] = filenames
+            href = enum.next
+            break if href.nil?
+            res = self.validate(href)
+            unless res.nil?
+              mutex.synchronize do
+                invalid << res
               end
             end
           end
         end
       end
       threads.each { |t| t.join }
-      broken_hrefs
+
+      invalid
     end
 
-    def fetch_http_status_for(url, params={})
-      5.times do |i|
-        begin
-          res = nil
-          Timeout::timeout(10) do
-            res = request_url_once(url)
-          end
+    def validate(href)
+      # Parse
+      uri = nil
+      begin
+        uri = URI.parse(href)
+      rescue URI::InvalidURIError
+        return Result.new(href, 'invalid URI', :error)
+      end
 
-          if res.code =~ /^3..$/
-            return nil if i == 5
+      # Skip non-HTTP URLs
+      return Result.new(href, 'can only check http/https', :skipped) if uri.scheme !~ /^https?$/
 
-            # Find proper location
-            location = res['Location']
-            if location !~ /^https?:\/\//
-              base_url = url.dup
-              base_url.path = (location =~ /^\// ? '' : '/')
-              base_url.query = nil
-              base_url.fragment = nil
-              location = base_url.to_s + location
-            end
-
-            url = URI.parse(location)
-          else
-            return res.code.to_i
-          end
-        rescue
-          return nil
-        end
+      # Get status
+      failure, severity = failure_for(uri)
+      if severity == :ok
+        Result.new(href, 'ok', :ok)
+      else
+        Result.new(href, failure, severity)
       end
     end
 
-    def request_url_once(url)
-      require 'net/https'
+    def failure_for(url, params={})
+      res = nil
+      5.times do |i|
+        begin
+          Timeout::timeout(10) do
+            res = request_url_once(url)
+          end
+        rescue => e
+          return e.message, :error
+        end
 
+        if res.code =~ /^3..$/
+          return 'too many redirects', :warning if i == 4
+
+          # Find proper location
+          location = res['Location']
+          if location !~ /^https?:\/\//
+            base_url = url.dup
+            base_url.path = (location =~ /^\// ? '' : '/')
+            base_url.query = nil
+            base_url.fragment = nil
+            location = base_url.to_s + location
+          end
+
+          url = URI.parse(location)
+        elsif res.code == '200'
+          return nil, :ok
+        else
+          return res.code, :error
+        end
+      end
+      return '???', :error
+    end
+
+    def request_url_once(url)
       path = (url.path.nil? || url.path.empty? ? '/' : url.path)
       req = Net::HTTP::Head.new(path)
       http = Net::HTTP.new(url.host, url.port)
@@ -182,4 +154,3 @@ module ::Nanoc::Extra::Checking::Checkers
   end
 
 end
-

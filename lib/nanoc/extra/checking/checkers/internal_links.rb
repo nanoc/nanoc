@@ -11,53 +11,22 @@ module Nanoc::Extra::Checking::Checkers
     def run
       require 'nokogiri'
 
-      issues = []
-      all_broken_hrefs.each_pair do |href, filenames|
+      hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(self.output_filenames, :internal).filenames_per_href
+      hrefs_with_filenames.each_pair do |href, filenames|
         filenames.each do |filename|
-          issues << "Broken link: #{href} (referenced from #{filename})"
+          unless valid?(href, filename)
+          self.add_issue(
+            "Broken reference to #{href}",
+            :subject  => filename,
+            :severity => :error)
+          end
         end
       end
-      issues
     end
 
-  private
+  protected
 
-    def all_broken_hrefs
-      broken_hrefs  = {}
-      grouped_hrefs = {}
-
-      all_hrefs_per_filename.each_pair do |filename, hrefs|
-        hrefs.reject { |href| is_external_href?(href) }.each do |href|
-          grouped_hrefs[href] ||= []
-          grouped_hrefs[href] << filename
-        end
-      end
-
-      validate_hrefs(grouped_hrefs)
-    end
-
-    def all_files
-      Dir[@site.config[:output_dir] + '/**/*.html']
-    end
-
-    def all_hrefs_per_filename
-      hrefs = {}
-      all_files.each do |filename|
-        hrefs[filename] ||= all_hrefs_in_file(filename)
-      end
-      hrefs
-    end
-
-    def all_hrefs_in_file(filename)
-      doc = Nokogiri::HTML(::File.read(filename))
-      doc.css('a').map { |l| l[:href] }.compact
-    end
-
-    def is_external_href?(href)
-      !!(href =~ %r{^[a-z\-]+:})
-    end
-
-    def is_valid_internal_href?(href, origin)
+    def valid?(href, origin)
       # Skip hrefs that point to self
       # FIXME this is ugly and won’t always be correct
       return true if href == '.'
@@ -81,18 +50,6 @@ module Nanoc::Extra::Checking::Checkers
 
       # Nope :(
       return false
-    end
-
-    def validate_hrefs(hrefs)
-      broken_hrefs = {}
-      hrefs.each_pair do |href, filenames|
-        filenames.each do |filename|
-          if !is_valid_internal_href?(href, filename)
-            broken_hrefs[href] = filenames
-          end
-        end
-      end
-      broken_hrefs
     end
 
   end

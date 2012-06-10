@@ -21,6 +21,8 @@ module Nanoc::CLI::Commands
   class Check < ::Nanoc::CLI::CommandRunner
 
     def run
+      require 'colored'
+
       # Make sure we are in a nanoc site directory
       puts "Loading site data..."
       self.require_site
@@ -37,16 +39,51 @@ module Nanoc::CLI::Commands
       end
 
       # Run all the checkers!
+      checkers = []
       classes.each do |klass|
         print "Running #{klass.identifier} checker... "
 
-        issues = klass.new(site).run
+        checker = klass.new(site)
+        checkers << checker
+        checker.run
 
-        puts issues.empty? ? 'ok' : 'not ok'
-        issues.each do |e|
-          puts "  - #{e}"
+        puts formatted_severity_for(max_severity_for(checker.issues))
+      end
+
+      # Print results
+      issues = Set.new
+      checkers.each { |c| issues.merge c.issues }
+      puts
+      issues.group_by { |i| i.subject }.each_pair do |subject, issues|
+        if ![ :ok, :skipped].include?(max_severity_for(issues)) || options[:verbose]
+          puts "#{subject}:"
+          issues.each do |i|
+            puts "  #{self.issue_string_for(i)}" unless [ :ok, :skipped ].include?(i.severity) && !options[:verbose]
+          end
         end
       end
+    end
+
+    def max_severity_for(issues)
+      issues.max_by { |i| Nanoc::Extra::Checking::Issue::SEVERITIES.index(i.severity) }.severity || :ok
+    end
+
+    def formatted_severity_for(severity)
+      r = case severity
+      when :ok
+        [ 'OK',      :green  ]
+      when :warning
+        [ 'WARNING', :yellow ]
+      when :error
+        [ 'ERROR',   :red    ]
+      when :skipped
+        [ 'SKIPPED', :blue   ]
+      end
+      r.first.center(7).send(r.last)
+    end
+
+    def issue_string_for(i)
+      "[#{formatted_severity_for(i.severity)}] #{i.checker_class.identifier} - #{i.description}"
     end
 
   end
