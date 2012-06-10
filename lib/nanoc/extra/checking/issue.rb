@@ -4,7 +4,7 @@ module Nanoc::Extra::Checking
 
   class Issue
 
-    SEVERITIES = [ :ok, :warning, :error, :skipped ]
+    SEVERITIES = [ :ok, :skipped, :warning, :error ]
 
     attr_reader :description
     attr_reader :subject
