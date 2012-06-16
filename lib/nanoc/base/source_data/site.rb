@@ -36,7 +36,8 @@ module Nanoc
       :output_dir         => 'output',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],
-      :enable_output_diff => false
+      :enable_output_diff => false,
+      :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
     }
 
     # Creates a site object for the site specified by the given
