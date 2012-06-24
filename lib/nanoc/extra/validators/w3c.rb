@@ -12,8 +12,13 @@ module Nanoc::Extra::Validators
 
     def run
       args = []
-      args << 'html' if @types.include?(:html)
-      args << 'css'  if @types.include?(:css)
+      types = @types.dup
+      args << 'html' if types.delete(:html)
+      args << 'css'  if types.delete(:css)
+      unless types.empty?
+        raise Nanoc::Errors::GenericTrivial, "unknown type(s) specified: #{types.join(', ')}"
+      end
+
       Nanoc::CLI.run([ 'check', args ].flatten)
     end
 

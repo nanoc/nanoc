@@ -28,7 +28,7 @@ module Nanoc::Extra::Checking
     def max_severity
       severities = Set.new
       issues.each { |i| severities << i.severity }
-      severities.max_by { |s| Issue::SEVERITIES.index(s) }
+      severities.max_by { |s| Issue::SEVERITIES.index(s) } || Issue::SEVERITIES.first
     end
 
     def output_filenames

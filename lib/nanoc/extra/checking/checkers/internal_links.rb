@@ -37,7 +37,7 @@ module Nanoc::Extra::Checking::Checkers
 
       # Make absolute
       if path[0, 1] == '/'
-        path = @dir + path
+        path = @site.config[:output_dir] + path
       else
         path = ::File.expand_path(path, ::File.dirname(origin))
       end

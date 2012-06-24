@@ -15,7 +15,7 @@ class Nanoc::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
         end
 
         # Create validator
-        w3c = Nanoc::Extra::Validators::W3C.new('.', [ :xxx ])
+        w3c = Nanoc::Extra::Validators::W3C.new('.', [ :html ])
 
         # Run
         w3c.run
@@ -30,10 +30,10 @@ class Nanoc::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
         w3c = Nanoc::Extra::Validators::W3C.new('.', [ :foo ])
 
         # Test
-        exception = assert_raises RuntimeError do
+        exception = assert_raises Nanoc::Errors::GenericTrivial do
           w3c.run
         end
-        assert_equal 'unknown type: foo', exception.message
+        assert_equal 'unknown type(s) specified: foo', exception.message
       end
     end
   end

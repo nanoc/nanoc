@@ -1,5 +1,11 @@
 # encoding: utf-8
 
+require 'net/http'
+require 'net/https'
+require 'nokogiri'
+require 'timeout'
+require 'uri'
+
 module ::Nanoc::Extra::Checking::Checkers
 
   # A validator that verifies that all external links point to a location that exists.
@@ -8,11 +14,6 @@ module ::Nanoc::Extra::Checking::Checkers
     identifiers :external_links, :elinks
 
     def run
-      require 'net/http'
-      require 'net/https'
-      require 'nokogiri'
-      require 'uri'
-
       # Find all broken external hrefs
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(self.output_filenames, :external).filenames_per_href
       results = self.select_invalid(hrefs_with_filenames.keys)

@@ -44,6 +44,9 @@ module Nanoc::CLI::Commands
           klass
         end
       end
+      if classes.empty?
+        raise Nanoc::Errors::GenericTrivial, "No checkers specified (use --all to run all checkers)"
+      end
 
       # Run all the checkers!
       puts
