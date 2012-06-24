@@ -12,23 +12,43 @@ module Nanoc
     # classes should extend this module.
     module PluginMethods
 
-      # Sets the identifiers for this plugin.
+      # @overload identifiers(*identifiers)
       #
-      # @param [Array<Symbol>] identifiers A list of identifiers to assign to
-      #   this plugin.
+      #   Sets the identifiers for this plugin.
       #
-      # @return [void]
+      #   @param [Array<Symbol>] identifiers A list of identifiers to assign to
+      #     this plugin.
+      #
+      #   @return [void]
+      #
+      # @overload identifiers
+      #
+      #   @return [Array<Symbol>] The identifiers for this plugin
       def identifiers(*identifiers)
-        register(self, *identifiers)
+        if identifiers.empty?
+          Nanoc::PluginRegistry.instance.identifiers_of(self.superclass, self)
+        else
+          register(self, *identifiers)
+        end
       end
 
-      # Sets the identifier for this plugin.
+      # @overload identifier(identifier)
       #
-      # @param [Symbol] identifier An identifier to assign to this plugin.
+      #   Sets the identifier for this plugin.
       #
-      # @return [void]
-      def identifier(identifier)
-        register(self, identifier)
+      #   @param [Symbol] identifier An identifier to assign to this plugin.
+      #
+      #   @return [void]
+      #
+      # @overload identifier
+      #
+      #   @return [Symbol] The first identifier for this plugin
+      def identifier(identifier=nil)
+        if identifier
+          self.identifiers(identifier)
+        else
+          Nanoc::PluginRegistry.instance.identifiers_of(self.superclass, self).first
+        end
       end
 
       # Registers the given class as a plugin with the given identifier.
@@ -79,7 +99,8 @@ module Nanoc
     # is recommended to use the shared instance (obtained from
     # {Nanoc::PluginRegistry.instance}).
     def initialize
-      @map = {}
+      @identifiers_to_classes = {}
+      @classes_to_identifiers = {}
     end
 
     # Registers the given class as a plugin.
@@ -97,11 +118,24 @@ module Nanoc
     #
     # @return [void]
     def register(superclass, class_or_name, *identifiers)
-      @map[superclass] ||= {}
+      @identifiers_to_classes[superclass] ||= {}
+      @classes_to_identifiers[superclass] ||= {}
 
       identifiers.each do |identifier|
-        @map[superclass][identifier.to_sym] = class_or_name
+        @identifiers_to_classes[superclass][identifier.to_sym] = class_or_name
+        (@classes_to_identifiers[superclass][name_for_class(class_or_name)] ||= []) << identifier.to_sym
       end
+    end
+
+    # @param [Class] superclass The superclass of the plugin. For example:
+    #   {Nanoc::Filter}, {Nanoc::Extra::VCS}.
+    #
+    # @param [Class, String] class_or_name The class to get the identifiers for.
+    #   This can also be a string containing the name of the class.
+    #
+    # @return [Array<Symbol>] An array of identifiers for the given class
+    def identifiers_of(superclass, klass)
+      (@classes_to_identifiers[superclass] || {})[name_for_class(klass)] || []
     end
 
     # Finds the plugin that is a subclass of the given class and has the given
@@ -113,8 +147,8 @@ module Nanoc
     #
     # @return [Class, nil] The plugin with the given name
     def find(klass, name)
-      @map[klass] ||= {}
-      resolve(@map[klass][name.to_sym], klass)
+      @identifiers_to_classes[klass] ||= {}
+      resolve(@identifiers_to_classes[klass][name.to_sym], klass)
     end
 
     # Returns all plugins of the given class.
@@ -123,9 +157,9 @@ module Nanoc
     #
     # @return [Enumerable<Class>] A collection of class plugins
     def find_all(klass)
-      @map[klass] ||= {}
+      @identifiers_to_classes[klass] ||= {}
       res = {}
-      @map[klass].each_pair { |k,v| res[k] = resolve(v, k) }
+      @identifiers_to_classes[klass].each_pair { |k,v| res[k] = resolve(v, k) }
       res
     end
 
@@ -137,7 +171,7 @@ module Nanoc
     # @return [Array<Hash>] A list of all plugins in the format described
     def all
       plugins = []
-      @map.each_pair do |superclass, submap|
+      @identifiers_to_classes.each_pair do |superclass, submap|
         submap.each_pair do |identifier, klass|
           # Find existing plugin
           existing_plugin = plugins.find do |p|
@@ -178,7 +212,11 @@ module Nanoc
         class_or_name
       end
     end
-  
+
+    def name_for_class(klass)
+      klass.to_s.sub(/^(::)?/, '::')
+    end
+
   end
 
   # @deprecated Use {Nanoc::PluginRegistry.instance} instead
