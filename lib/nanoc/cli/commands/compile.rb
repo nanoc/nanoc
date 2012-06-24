@@ -72,7 +72,7 @@ module Nanoc::CLI::Commands
       teardown_diffs
 
       # Prune
-      if self.site.config[:auto_prune]
+      if self.site.config[:prune][:auto_prune]
         Nanoc::Extra::Pruner.new(self.site).run
       end
 
