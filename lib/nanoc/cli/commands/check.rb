@@ -4,7 +4,7 @@
 registry      = Nanoc::PluginRegistry.instance
 checker_class = Nanoc::Extra::Checking::Checker
 checkers      = registry.find_all(checker_class)
-checker_names = checkers.map { |p| p.last }.uniq.map { |c| c.identifier }.sort
+checker_names = checkers.map { |p| p.last }.uniq.map { |c| c.identifier }.sort_by { |s| s.to_s }
 
 usage       'check [names]'
 summary     'run issue checks'
@@ -52,7 +52,7 @@ module Nanoc::CLI::Commands
       puts
       checkers = []
       issues = Set.new
-      length = classes.map { |c| c.identifier.length }.max + 20
+      length = classes.map { |c| c.identifier.to_s.length }.max + 20
       classes.each do |klass|
         print format("%-#{length}s", "Running #{klass.identifier} checker... ")
 
