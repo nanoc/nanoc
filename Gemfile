@@ -3,6 +3,7 @@ source "http://rubygems.org"
 gemspec
 
 gem 'albino'
+gem 'adsf'
 gem 'bluecloth'
 gem 'builder'
 gem 'coderay'
