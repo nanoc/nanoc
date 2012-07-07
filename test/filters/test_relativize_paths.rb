@@ -305,6 +305,32 @@ EOS
     assert_equal(expected_content, actual_content)
   end
 
+
+  def test_filter_html_object_with_relative_path
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::ItemRep.new(
+        Nanoc::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/woof/meow/'
+    end
+
+    # Set content
+    raw_content      = %[<object data="/example"><param name="movie" content="/example"></object>]
+    expected_content = %[<object data="../../example"><param name="movie" content="../../example"></object>]
+
+    # Test
+    actual_content = filter.run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
+
+
   def test_filter_implicit
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
