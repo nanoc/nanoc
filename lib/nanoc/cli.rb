@@ -1,6 +1,12 @@
 # encoding: utf-8
 
-require 'cri'
+begin
+  require 'cri'
+rescue LoadError => e
+  $stderr.puts e
+  $stderr.puts "If you are using a Gemfile, make sure that the Gemile contains nanoc ('gem \"nanoc\"')."
+  exit 1
+end
 
 module Nanoc::CLI
 
