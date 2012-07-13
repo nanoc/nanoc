@@ -32,7 +32,7 @@ module Nanoc::Extra::Checking
     end
 
     def output_filenames
-      Dir[@site.config[:output_dir] + '/**/*.html']
+      Dir[@site.config[:output_dir] + '/**/*']
     end
 
   end
