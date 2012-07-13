@@ -51,7 +51,7 @@ module Nanoc::CLI
 
     # @see IO#tty?
     def tty?
-      @stream.tty?
+      @cached_is_tty ||= @stream.tty?
     end
 
     # @see IO#flush
