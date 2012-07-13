@@ -10,12 +10,10 @@ GEM
     RedCloth (4.2.9)
     adsf (1.1.1)
       rack (>= 1.0.0)
-    albino (1.3.3)
-      posix-spawn (>= 0.3.6)
     blankslate (2.1.2.4)
     bluecloth (2.2.0)
     builder (3.0.0)
-    coderay (1.0.6)
+    coderay (1.0.7)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -25,13 +23,13 @@ GEM
     cri (2.3.0)
       colored (>= 1.2)
     erubis (2.7.0)
-    excon (0.13.4)
+    excon (0.14.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
     ffi (1.0.11)
-    fog (1.3.1)
+    fog (1.4.0)
       builder
-      excon (~> 0.13.0)
+      excon (~> 0.14.0)
       formatador (~> 0.2.0)
       mime-types
       multi_json (~> 1.0)
@@ -51,8 +49,8 @@ GEM
       syntax (>= 1.0.0)
     metaclass (0.0.1)
     mime-types (1.19)
-    minitest (3.1.0)
-    mocha (0.11.4)
+    minitest (3.2.0)
+    mocha (0.12.0)
       metaclass (~> 0.0.1)
     multi_json (1.3.6)
     mustache (0.99.4)
@@ -60,7 +58,6 @@ GEM
       net-ssh (>= 1.99.1)
     net-ssh (2.5.2)
     nokogiri (1.5.5)
-    posix-spawn (0.3.6)
     pygments.rb (0.2.13)
       rubypython (~> 0.5.3)
     rack (1.4.1)
@@ -75,7 +72,7 @@ GEM
     rubypython (0.5.3)
       blankslate (>= 2.1.2.3)
       ffi (~> 1.0.7)
-    sass (3.1.19)
+    sass (3.1.20)
     slim (1.2.2)
       temple (~> 0.4.0)
       tilt (~> 1.3.3)
@@ -85,7 +82,7 @@ GEM
     tilt (1.3.3)
     typogruby (1.0.15)
       rubypants
-    uglifier (1.2.5)
+    uglifier (1.2.6)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
     w3c_validators (1.2)
@@ -100,7 +97,6 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   adsf
-  albino
   bluecloth
   builder
   coderay
