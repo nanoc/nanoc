@@ -4,7 +4,7 @@ begin
   require 'cri'
 rescue LoadError => e
   $stderr.puts e
-  $stderr.puts "If you are using a Gemfile, make sure that the Gemile contains nanoc ('gem \"nanoc\"')."
+  $stderr.puts "If you are using a Gemfile, make sure that the Gemfile contains nanoc ('gem \"nanoc\"')."
   exit 1
 end
 
