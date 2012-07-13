@@ -106,8 +106,9 @@ module Nanoc::CLI::Commands
       # File notifications
       Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
         action = (is_created ? :create : (is_modified ? :update : :identical))
+        level  = (is_created ? :high   : (is_modified ? :high   : :low))
         duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
-        Nanoc::CLI::Logger.instance.file(:high, action, path, duration)
+        Nanoc::CLI::Logger.instance.file(level, action, path, duration)
       end
 
       # Debug notifications
