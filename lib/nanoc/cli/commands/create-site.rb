@@ -273,7 +273,7 @@ EOS
   <head>
     <meta charset="utf-8">
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
-    <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
+    <link rel="stylesheet" href="/style.css">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
     <meta name="generator" content="nanoc <%= Nanoc::VERSION %>"> 
