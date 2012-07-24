@@ -14,10 +14,15 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
+      params = {
+          :disable_capture => true, # Capture managed by Nanoc.
+          :buffer => '_erbout',     # Force slim to output to the buffer used by Nanoc.
+      }.merge! params
+
       # Create context
       context = ::Nanoc::Context.new(assigns)
 
-      ::Slim::Template.new { content }.render(context) { assigns[:content] }
+      ::Slim::Template.new(params) { content }.render(context) { assigns[:content] }
     end
 
   end

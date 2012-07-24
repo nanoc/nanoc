@@ -162,7 +162,11 @@ module Nanoc::Helpers
       # Remove addition
       erbout[erbout_length..-1] = ''
 
-      # Done
+      # Depending on how the filter outputs, the result might be a
+      # single string or an array of strings (slim outputs the latter).
+      erbout_addition = erbout_addition.join if erbout_addition.is_a? Array
+
+      # Done.
       erbout_addition
     end
 
