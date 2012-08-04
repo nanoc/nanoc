@@ -33,7 +33,7 @@ module ::Nanoc::Extra
     end
 
     def external_href?(href)
-      !!(href =~ %r{^[a-z\-]+:})
+      !!(href =~ %r{^(\/\/|[a-z\-]+:)})
     end
 
     def hrefs_in_file(filename)
@@ -41,6 +41,11 @@ module ::Nanoc::Extra
       doc = Nokogiri::HTML(::File.read(filename))
       doc.css('a').each   { |e| hrefs_in_file << e[:href] }
       doc.css('img').each { |e| hrefs_in_file << e[:src]  }
+
+      # Convert protocol-relative urls
+      # e.g. //example.com => http://example.com
+      hrefs_in_file.map! { |href| href.gsub /^\/\//, 'http://' }
+      
       hrefs_in_file.select(&@filter)
     end
 
