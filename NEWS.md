@@ -1,5 +1,20 @@
 # nanoc news
 
+## 3.4.1 (2012-??-??)
+
+Fixes:
+
+* Fixed auto-pruning
+* Made slim filter work with the capturing helper [Bil Bas]
+
+Improvements:
+
+* Made several speed improvements
+* Added prune configuration to config.yaml
+* Made nanoc check for presence of nanoc in Gemfile
+* Made compile command not show identicals (use `--verbose` if you want them)
+* Made relativize_paths filter recognise more paths to relativize [Arnau Siches]
+
 ## 3.4 (2012-06-09)
 
 * Improved error output and added crash log

@@ -7,6 +7,8 @@ module Nanoc
   # ({Nanoc::Extra::VCS}).
   class PluginRegistry
 
+    extend Nanoc::Memoization
+
     # A module that contains class methods for plugins. It provides functions
     # for setting identifiers, registering plugins and finding plugins. Plugin
     # classes should extend this module.
@@ -212,6 +214,7 @@ module Nanoc
         class_or_name
       end
     end
+    memoize :resolve
 
     def name_for_class(klass)
       klass.to_s.sub(/^(::)?/, '::')
