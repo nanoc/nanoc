@@ -57,6 +57,10 @@ module Nanoc::CLI::Commands
       # Prepare for generating diffs
       setup_diffs
 
+      # Set up GC control
+      @gc_lock = Mutex.new
+      @gc_count = 0
+
       # Compile
       self.site.compile
 
@@ -149,6 +153,12 @@ module Nanoc::CLI::Commands
 
       # Timing notifications
       Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+        if @gc_count % 20 == 0
+          GC.enable
+          GC.start
+          GC.disable
+        end
+        @gc_count += 1
         @rep_times[rep.raw_path] = Time.now
       end
       Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
