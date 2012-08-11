@@ -16,6 +16,10 @@ the following places will help you out:
 * The [discussion group](http://groups.google.com/group/nanoc)
 * The [IRC channel](irc://chat.freenode.net/#nanoc)
 
+## Versioning
+
+nanoc uses [Semantic Versioning](semver.org).
+
 ## Source Code Documentation
 
 The source code is located in `lib/nanoc` and is structured in a few

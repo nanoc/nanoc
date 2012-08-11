@@ -50,8 +50,16 @@ module Nanoc::CLI::Commands
       @filter_times  = {}
       setup_notifications
 
+      # Set up progress indicator threads
+      @progress_locks   = {}
+      @progress_threads = {}
+
       # Prepare for generating diffs
       setup_diffs
+
+      # Set up GC control
+      @gc_lock = Mutex.new
+      @gc_count = 0
 
       # Compile
       self.site.compile
@@ -145,6 +153,12 @@ module Nanoc::CLI::Commands
 
       # Timing notifications
       Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+        if @gc_count % 20 == 0
+          GC.enable
+          GC.start
+          GC.disable
+        end
+        @gc_count += 1
         @rep_times[rep.raw_path] = Time.now
       end
       Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
@@ -218,27 +232,30 @@ module Nanoc::CLI::Commands
       # Only show progress on terminals
       return if !$stdout.tty?
 
-      @progress_thread = Thread.new do
-        delay = 1.0
-        step  = 0
+      @progress_locks[rep.inspect + filter_name.inspect] = lock = Mutex.new
+      lock.synchronize do
+        @progress_threads[rep.inspect + filter_name.inspect] = Thread.new do
+          delay = 1.0
+          step  = 0
 
-        text = "Running #{filter_name} filter… "
+          text = "Running #{filter_name} filter… "
 
-        while !Thread.current[:stopped]
-          sleep 0.1
+          while !Thread.current[:stopped]
+            sleep 0.1
 
-          # Wait for a while before showing text
-          delay -= 0.1
-          next if delay > 0.05
+            # Wait for a while before showing text
+            delay -= 0.1
+            next if delay > 0.05
 
-          # Print progress
-          $stdout.print text + %w( | / - \\ )[step] + "\r"
-          step = (step + 1) % 4
-        end
+            # Print progress
+            $stdout.print text + %w( | / - \\ )[step] + "\r"
+            step = (step + 1) % 4
+          end
 
-        # Clear text
-        if delay < 0.05
-          $stdout.print ' ' * (text.length + 1 + 1) + "\r"
+          # Clear text
+          if delay < 0.05
+            $stdout.print ' ' * (text.length + 1 + 1) + "\r"
+          end
         end
       end
     end
@@ -247,7 +264,10 @@ module Nanoc::CLI::Commands
       # Only show progress on terminals
       return if !$stdout.tty?
 
-      @progress_thread[:stopped] = true
+      lock = @progress_locks[rep.inspect + filter_name.inspect]
+      lock.synchronize do
+        @progress_threads[rep.inspect + filter_name.inspect][:stopped] = true
+      end
     end
 
     def print_profiling_feedback(reps)
