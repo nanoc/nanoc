@@ -104,7 +104,16 @@ module Nanoc::CLI::Commands
     private
 
       def tool
-        @tool ||= TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
+        @tool ||= begin
+          require 'terminal-notifier'
+          'terminal-notify'
+        rescue LoadError
+          TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
+        end
+      end
+
+      def terminal_notify(message)
+        TerminalNotifier.notify(message, :title => "nanoc")
       end
 
       def growlnotify(message)
