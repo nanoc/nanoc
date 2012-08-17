@@ -190,6 +190,25 @@ module Nanoc
       @rules_collection.add_item_routing_rule(routing_rule, :before)
     end
 
+    # Includes an additional rules file in the current rules collection.
+    #
+    # @param [String] name The name of the rules file — an ".rb" extension is
+    #   implied if not explicitly given
+    #
+    # @return [void]
+    #
+    # @example Including two additional rules files, 'rules/assets.rb' and
+    #   'rules/content.rb'
+    #
+    #     include_rules 'rules/assets'
+    #     include_rules 'rules/content'
+    def include_rules(name)
+      filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
+      raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
+
+      self.instance_eval(File.read(filename), filename)
+    end
+
   private
 
     # Converts the given identifier, which can contain the '*' or '+'
