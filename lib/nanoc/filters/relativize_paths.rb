@@ -20,8 +20,8 @@ module Nanoc::Filters
     #   `:html`, `:xhtml`, `:xml` or `:css`.
     #
     # @option params [Array] :select The XPath expressions that matches the
-    #   nodes to modify. This param is useful only for the `:xml` and `:xhtml`
-    #   types.
+    #   nodes to modify. This param is useful only for the `:html`, `:xml` and
+    #   `:xhtml` types.
     #
     # @option params [Hash] :namespaces The pairs `prefix => uri` to define
     #   any namespace you want to use in the XPath expressions. This param 
