@@ -2,7 +2,7 @@
 
 ## 3.5 (???)
 
-* Added `#include_rules` for modularising Rules files
+* Added `#include_rules` for modularising Rules files [Justin Hileman]
 * Replaced FSSM with Listen [Takashi Uchibe]
 
 ## 3.4.1 (2012-??-??)
