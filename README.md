@@ -110,6 +110,7 @@ may be interested in the development dependencies:
 * “Soryu”
 * Eric Sunshine
 * Dennis Sutch
+* Takashi Uchibe
 * Matthias Vallentin
 * Ruben Verborgh
 * Scott Vokes
