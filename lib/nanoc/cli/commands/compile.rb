@@ -153,7 +153,7 @@ module Nanoc::CLI::Commands
 
       # Timing notifications
       Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-        if @gc_count % 20 == 0
+        if @gc_count % 20 == 0 && !ENV.has_key?('TRAVIS')
           GC.enable
           GC.start
           GC.disable
