@@ -201,6 +201,16 @@ module Nanoc::CLI
       stream.puts Nanoc.version_information
       stream.puts
 
+      # System information
+      begin
+        uname = `uname -a`
+        stream.puts '=== SYSTEM INFORMATION:'
+        stream.puts
+        stream.puts uname
+        stream.puts
+      rescue Errno::ENOENT
+      end
+
       # Installed gems
       stream.puts '=== INSTALLED GEMS:'
       stream.puts

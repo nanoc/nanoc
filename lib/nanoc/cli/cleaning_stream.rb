@@ -79,6 +79,11 @@ module Nanoc::CLI
       @stream.string
     end
 
+    # @see IO#reopen
+    def reopen(*a)
+      @stream.reopen(*a)
+    end
+
   protected
 
     def clean(s)
