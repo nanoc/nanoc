@@ -685,5 +685,42 @@ XML
     end
   end
 
+  def test_filter_fragment_xhtml_with_comments
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
+
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/baz/'),
+          :blah)
+        @item_rep.path = '/foo/baz/'
+      end
+
+      # Set content
+      raw_content = %[
+<link rel="stylesheet" href="/foo.css" />
+<!--[if lt IE 9]>
+    <script src="/js/lib/html5shiv.js"></script>
+<![endif]-->
+]
+
+      expected_content = %[
+<link rel="stylesheet" href="../../foo.css" />
+<!--[if lt IE 9]>
+    <script src="../../js/lib/html5shiv.js"></script>
+<![endif]-->
+]
+
+      # Test
+      actual_content = filter.run(raw_content.freeze, :type => :xhtml)
+      assert_equal(expected_content, actual_content)
+    end
+  end
+
 
 end
