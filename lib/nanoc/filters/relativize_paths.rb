@@ -6,7 +6,7 @@ module Nanoc::Filters
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
-    SELECTORS = [ '*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content' ]
+    SELECTORS = [ '*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'comment()' ]
 
     # Relativizes all paths in the given content, which can be HTML, XHTML, XML
     # or CSS. This filter is quite useful if a site needs to be hosted in a
@@ -76,7 +76,16 @@ module Nanoc::Filters
       doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
         doc.xpath(selector, namespaces).each do |node|
-          if self.path_is_relativizable?(node.content)
+          if node.name == 'comment'
+            content = node.content.dup
+            content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |m|
+              fragment = nokogiri_process($2, selectors, namespaces, klass, type)
+              $1 + fragment + $3
+            end
+            comment = Nokogiri::XML::Comment.new(doc, content)
+            # Works w/ Nokogiri 1.5.5 but fails w/ Nokogiri 1.5.2
+            node.replace(comment)
+          elsif self.path_is_relativizable?(node.content)
             node.content = relative_path_to(node.content)
           end
         end
