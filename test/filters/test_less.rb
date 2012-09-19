@@ -110,4 +110,18 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_compression
+    if_have 'less' do
+      # Create item
+      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+
+      # Create filter
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+
+      # Run filter with compress option
+      result = filter.run('.foo { bar: a; } .bar { foo: b; }', :compress => true)
+      assert_match /^\.foo{bar:a;}\n\.bar{foo:b;}/, result
+    end
+  end
+
 end
