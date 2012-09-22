@@ -84,6 +84,16 @@ module Nanoc::CLI
       @stream.reopen(*a)
     end
 
+    # @see File#exist?
+    def exist?
+      @stream.exist?
+    end
+
+    # @see File.exists?
+    def exists?
+      @stream.exists?
+    end
+
   protected
 
     def clean(s)
