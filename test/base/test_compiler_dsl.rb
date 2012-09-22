@@ -68,6 +68,34 @@ class Nanoc::CompilerDSLTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_passthrough_no_ext
+    # Create site
+    Nanoc::CLI.run %w( create_site bar)
+    FileUtils.cd('bar') do
+      # Create rep
+      item = Nanoc::Item.new('foo', { :extension => nil }, '/foo/')
+      rep = Nanoc::ItemRep.new(item, :default)
+
+      # Create other necessary stuff
+      site = Nanoc::Site.new('.')
+      site.items << item
+      compiler = site.compiler
+      dsl = site.compiler.rules_collection.dsl
+
+      # Create rule
+      dsl.passthrough '/foo/'
+
+      # Route and compile
+      rule = compiler.rules_collection.routing_rule_for(rep)
+      path = rule.apply_to(rep, :compiler => compiler)
+      compiler.send :compile_rep, rep
+
+      # Check result
+      assert_equal 'foo', rep.compiled_content
+      assert_equal '/foo', path
+    end
+  end
+
   def test_identifier_to_regex_without_wildcards
     # Create compiler DSL
     compiler_dsl = Nanoc::CompilerDSL.new(nil, {})

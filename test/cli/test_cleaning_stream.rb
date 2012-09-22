@@ -19,7 +19,7 @@ class Nanoc::CLI::CleaningStreamTest < MiniTest::Unit::TestCase
   end
 
   def test_forward
-    methods = [ :write, :<<, :tty?, :flush, :tell, :print, :puts, :string, :reopen ]
+    methods = [ :write, :<<, :tty?, :flush, :tell, :print, :puts, :string, :reopen, :exist?, :exists? ]
 
     s = Stream.new
     cs = Nanoc::CLI::CleaningStream.new(s)
@@ -33,6 +33,8 @@ class Nanoc::CLI::CleaningStreamTest < MiniTest::Unit::TestCase
     cs.puts('dd')
     cs.string
     cs.reopen('/dev/null', 'r')
+    cs.exist?
+    cs.exists?
 
     methods.each do |m|
       assert s.called_methods.include?(m), "expected #{m} to be called"

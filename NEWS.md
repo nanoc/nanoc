@@ -5,7 +5,7 @@
 * Added `#include_rules` for modularising Rules files [Justin Hileman]
 * Replaced FSSM with Listen [Takashi Uchibe]
 
-## 3.4.1 (2012-??-??)
+## 3.4.1 (2012-09-22)
 
 Fixes:
 
@@ -19,6 +19,8 @@ Improvements:
 * Made nanoc check for presence of nanoc in Gemfile
 * Made compile command not show identicals (use `--verbose` if you want them)
 * Made relativize_paths filter recognise more paths to relativize [Arnau Siches]
+* Fixed #passthrough for items without extensions [Justin Hileman]
+* Added more IO/File proxy methods to cleaning streams
 
 ## 3.4 (2012-06-09)
 
