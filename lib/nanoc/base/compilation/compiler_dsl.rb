@@ -186,7 +186,7 @@ module Nanoc
       routing_block = proc do
         item[:extension].nil? ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
       end
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block)
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule, :before)
     end
 
