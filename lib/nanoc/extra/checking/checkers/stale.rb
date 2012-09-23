@@ -12,7 +12,7 @@ module Nanoc::Extra::Checking::Checkers
           self.add_issue(
             "file without matching item",
             :subject  => f,
-            :severity => :warning)
+            :severity => :error)
         end
       end
     end

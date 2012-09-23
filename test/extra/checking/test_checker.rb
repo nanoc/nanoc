@@ -12,8 +12,6 @@ class Nanoc::Extra::Checking::CheckerTest < MiniTest::Unit::TestCase
       assert_equal :ok, checker.max_severity
       checker.add_issue('bar', :severity => :error)
       assert_equal :error, checker.max_severity
-      checker.add_issue('baz', :severity => :warning)
-      assert_equal :error, checker.max_severity
     end
   end
 

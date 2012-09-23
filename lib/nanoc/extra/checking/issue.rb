@@ -4,7 +4,7 @@ module Nanoc::Extra::Checking
 
   class Issue
 
-    SEVERITIES = [ :ok, :skipped, :warning, :error ]
+    SEVERITIES = [ :ok, :error ]
 
     attr_reader :description
     attr_reader :subject
@@ -20,10 +20,6 @@ module Nanoc::Extra::Checking
       unless SEVERITIES.include?(severity)
         raise ArgumentError, "Invalid severity given: was #{severity.inspect} but expected one of #{SEVERITIES.map { |s| s.inspect }.join(', ')}"
       end 
-    end
-
-    def important?
-      [ :warning, :error ].include?(self.severity)
     end
 
   end
