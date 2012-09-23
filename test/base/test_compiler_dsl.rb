@@ -41,30 +41,29 @@ class Nanoc::CompilerDSLTest < MiniTest::Unit::TestCase
   end
 
   def test_passthrough
-    # Create site
-    Nanoc::CLI.run %w( create_site bar)
-    FileUtils.cd('bar') do
-      # Create rep
-      item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
-      rep = Nanoc::ItemRep.new(item, :default)
+    with_site do
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write <<EOS
+passthrough "/robots/"
+        
+compile '*' do ; end
+route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
+EOS
+      end
 
-      # Create other necessary stuff
+      # Create items
+      assert Dir['content/*'].empty?
+      File.open('content/robots.txt', 'w') do |io|
+        io.write "Hello I am robots"
+      end
+
+      # Compile
       site = Nanoc::Site.new('.')
-      site.items << item
-      compiler = site.compiler
-      dsl = site.compiler.rules_collection.dsl
+      site.compile
 
-      # Create rule
-      dsl.passthrough '/foo/'
-
-      # Route and compile
-      rule = compiler.rules_collection.routing_rule_for(rep)
-      path = rule.apply_to(rep, :compiler => compiler)
-      compiler.send :compile_rep, rep
-
-      # Check result
-      assert_equal 'foo', rep.compiled_content
-      assert_equal '/foo.bar', path
+      # Check paths
+      assert_equal [ 'output/robots.txt' ], Dir['output/*']
     end
   end
 
