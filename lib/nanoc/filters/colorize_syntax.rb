@@ -177,7 +177,7 @@ module Nanoc::Filters
     #
     # By default the pygmentize highlighter is invoked with the parameters
     # `:nowrap => 'True'` and `:encoding => 'utf-8'`. Note that using `nowrap`
-    # disables some of other parameters of pygmentize i.e. line numbering.
+    # disables some other options of pygmentize i.e. line numbering.
     #
     # @api private
     #
@@ -289,7 +289,7 @@ module Nanoc::Filters
       s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
     end
 
-    # Determine if the specified value is a 'falsy' value
+    # Determine if the specified value/parameter is a 'falsy' value
     def falsy(v)
         [false, 'false', 'False', '0', 0].include?(v)
     end
