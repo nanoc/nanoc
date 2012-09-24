@@ -146,22 +146,32 @@ protected
     files
   end
 
+  # Wraps the given stream in a cleaning stream. The cleaning streams will
+  # have the proper stream cleaners configured.
+  #
+  # @param [IO] io The stream to wrap
+  #
+  # @return [::Nanoc::CLI::CleaningStream]
+  def self.wrap_in_cleaning_stream(io)
+    cio = ::Nanoc::CLI::CleaningStream.new(io)
+
+    if !self.enable_utf8?
+      cio.add_stream_cleaner(::Nanoc::CLI::StreamCleaners::UTF8)
+    end
+
+    if !self.enable_ansi_colors?
+      cio.add_stream_cleaner(::Nanoc::CLI::StreamCleaners::ANSIColors)
+    end
+
+    cio
+  end
+
   # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
   #
   # @return [void]
   def self.setup_cleaning_streams
-    $stdout = Nanoc::CLI::CleaningStream.new($stdout)
-    $stderr = Nanoc::CLI::CleaningStream.new($stderr)
-
-    if !self.enable_utf8?
-      $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
-      $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
-    end
-
-    if !self.enable_ansi_colors?
-      $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
-      $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
-    end
+    $stdout = self.wrap_in_cleaning_stream($stdout)
+    $stderr = self.wrap_in_cleaning_stream($stderr)
   end
 
   # @return [Boolean] true if UTF-8 support is present, false if not
