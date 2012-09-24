@@ -174,7 +174,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -200,7 +200,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -226,7 +226,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -252,7 +252,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -326,7 +326,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns(nil)
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -354,7 +354,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -627,7 +627,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = Nanoc::Site.new({})
 
     # Check
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::Errors::GenericTrivial) do
       url_for(nil)
     end
   end
@@ -682,7 +682,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = Nanoc::Site.new({})
 
     # Check
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::Errors::GenericTrivial) do
       feed_url
     end
   end
