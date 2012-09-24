@@ -20,8 +20,6 @@ module Nanoc::CLI::Commands
     }
 
     def run
-      require 'colored'
-
       # Make sure we have anything to do
       if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
         raise Nanoc::Errors::GenericTrivial, "nothing to do (pass either --all, --deploy or --list or a list of checkers)"
@@ -34,11 +32,7 @@ module Nanoc::CLI::Commands
 
       # List
       if options[:list]
-        classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
-
-        puts "Available checkers:"
-        puts
-        puts classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
+        self.list_checkers
         return
       end
 
@@ -46,7 +40,23 @@ module Nanoc::CLI::Commands
       puts "Loading site data..."
       self.require_site
 
-      # Find checker classes
+      # Find and run
+      classes = self.find_checker_classes(options, arguments, dsl)
+      issues = self.run_checkers(classes)
+      self.print_issues(issues)
+    end
+
+  protected
+
+    def list_checkers
+      classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
+
+      puts "Available checkers:"
+      puts
+      puts classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
+    end
+
+    def find_checker_classes(options, arguments, dsl)
       if options[:all]
         classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
       elsif options[:deploy]
@@ -70,8 +80,10 @@ module Nanoc::CLI::Commands
       if classes.empty?
         raise Nanoc::Errors::GenericTrivial, "No checkers to run"
       end
+      classes
+    end
 
-      # Run all the checkers!
+    def run_checkers(classes)
       puts
       checkers = []
       issues = Set.new
@@ -89,8 +101,12 @@ module Nanoc::CLI::Commands
         severity = checker.max_severity
         puts severity.to_s.send(SEVERITY_COLORS[severity])
       end
+      issues
+    end
 
-      # Print results
+    def print_issues(issues)
+      require 'colored'
+
       have_issues = false
       issues.group_by { |i| i.subject }.each_pair do |subject, issues|
         if issues.any? { |i| i.severity == :error } || options[:verbose]
