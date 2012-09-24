@@ -12,27 +12,22 @@ module Nanoc::CLI::Commands
 
   class ShowData < ::Nanoc::CLI::CommandRunner
 
-    def run
-      # Make sure we are in a nanoc site directory
-      print "Loading site data... "
-      self.require_site
-      puts "done"
+    def print_header(title)
+      header = '=' * 78
+      header[3..(title.length+5)] = " #{title} "
+
       puts
-
-      # Get data
-      items   = self.site.items
-      reps    = items.map { |i| i.reps }.flatten
-      layouts = self.site.layouts
-
-      # Get dependency tracker
-      compiler = self.site.compiler
-      compiler.load
-      dependency_tracker = compiler.dependency_tracker
-
-      # Print item dependencies
-      puts '=== Item dependencies ======================================================='
+      puts header
       puts
+    end
+
+    def print_item_dependencies(items, dependency_tracker)
+      self.print_header('Item dependencies')
+
+      is_first = true
       items.sort_by { |i| i.identifier }.each do |item|
+        puts unless is_first
+        is_first = false
         puts "item #{item.identifier} depends on:"
         predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
         predecessors.each do |pred|
@@ -43,13 +38,16 @@ module Nanoc::CLI::Commands
           end
         end
         puts "  (nothing)" if predecessors.empty?
-        puts
       end
+    end
 
-      # Print representation paths
-      puts '=== Representation paths ===================================================='
-      puts
+    def print_item_rep_paths(items)
+      self.print_header('Item representation paths')
+
+      is_first = true
       items.sort_by { |i| i.identifier }.each do |item|
+        puts unless is_first
+        is_first = false
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           puts "item #{item.identifier}, rep #{rep.name}:"
           if rep.raw_paths.empty?
@@ -60,13 +58,16 @@ module Nanoc::CLI::Commands
             puts "  [ %-#{length}s ] %s" % [ snapshot_name, raw_path ]
           end
         end
-        puts
       end
+    end
 
-      # Print representation outdatedness
-      puts '=== Representation outdatedness ============================================='
-      puts
+    def print_item_rep_outdatedness(items, compiler)
+      self.print_header('Item representation outdatedness')
+
+      is_first = true
       items.sort_by { |i| i.identifier }.each do |item|
+        puts unless is_first
+        is_first = false
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           puts "item #{item.identifier}, rep #{rep.name}:"
           outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(rep)
@@ -76,30 +77,16 @@ module Nanoc::CLI::Commands
             puts "  is not outdated"
           end
         end
-        puts
       end
+    end
 
-      # Print layout dependencies
-      puts '=== Layout dependencies ====================================================='
-      puts
-      layouts.sort_by { |l| l.identifier }.each do |layout|
-        puts "layout #{layout.identifier} depends on:"
-        predecessors = dependency_tracker.objects_causing_outdatedness_of(layout).sort_by { |i| i ? i.identifier : '' }
-        predecessors.each do |pred|
-          if pred
-            puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
-          else
-            puts "  ( removed item )"
-          end
-        end
-        puts "  (nothing)" if predecessors.empty?
-        puts
-      end
+    def print_layouts(layouts, compiler)
+      self.print_header('Layouts')
 
-      # Print layouts
-      puts '=== Layouts'
-      puts
+      is_first = true
       layouts.sort_by { |l| l.identifier }.each do |layout|
+        puts unless is_first
+        is_first = false
         puts "layout #{layout.identifier}:"
         outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(layout)
         if outdatedness_reason
@@ -109,6 +96,29 @@ module Nanoc::CLI::Commands
         end
         puts
       end
+    end
+
+    def run
+      # Make sure we are in a nanoc site directory
+      print "Loading site data... "
+      self.require_site
+      puts "done"
+
+      # Get data
+      items     = self.site.items
+      item_reps = items.map { |i| i.reps }.flatten
+      layouts   = self.site.layouts
+
+      # Get dependency tracker
+      compiler = self.site.compiler
+      compiler.load
+      dependency_tracker = compiler.dependency_tracker
+
+      # Print data
+      self.print_item_dependencies(items, dependency_tracker)
+      self.print_item_rep_paths(items)
+      self.print_item_rep_outdatedness(items, compiler)
+      self.print_layouts(layouts, compiler)
     end
 
   end
