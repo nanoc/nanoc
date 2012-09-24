@@ -175,6 +175,10 @@ module Nanoc::Filters
     # Runs the content through [pygmentize](http://pygments.org/docs/cmdline/),
     # the commandline frontend for [Pygments](http://pygments.org/).
     #
+    # By default the pygmentize highlighter is invoked with the parameters
+    # `:nowrap => 'True'` and `:encoding => 'utf-8'`. Note that using `nowrap`
+    # disables some of other parameters of pygmentize i.e. line numbering.
+    #
     # @api private
     #
     # @param [String] code The code to colorize
