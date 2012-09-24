@@ -62,12 +62,37 @@ module Nanoc::Helpers
       end
 
       def validate
-        # Check config attributes
+        self.validate_config
+        self.validate_feed_item
+        self.validate_articles
+      end
+
+      def build
+        buffer = ''
+        xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
+        self.build_for_feed(xml)
+        buffer
+      end
+
+    protected
+
+      def sorted_relevant_articles
+        relevant_articles.sort_by do |a|
+          attribute_to_time(a[:created_at])
+        end.reverse.first(limit)
+      end
+
+      def last_article
+        sorted_relevant_articles.first
+      end
+
+      def validate_config
         if @site.config[:base_url].nil?
           raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
         end
+      end
 
-        # Check feed item attributes
+      def validate_feed_item
         if title.nil?
           raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no title in params, item or site config')
         end
@@ -77,8 +102,9 @@ module Nanoc::Helpers
         if author_uri.nil?
           raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no author_uri in params, item or site config')
         end
+      end
 
-        # Check article attributes
+      def validate_articles
         if relevant_articles.empty?
           raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no articles')
         end
@@ -87,20 +113,7 @@ module Nanoc::Helpers
         end
       end
 
-      def build
-        # Get sorted relevant articles
-        sorted_relevant_articles = relevant_articles.sort_by do |a|
-          attribute_to_time(a[:created_at])
-        end.reverse.first(limit)
-
-        # Get most recent article
-        last_article = sorted_relevant_articles.first
-
-        # Create builder
-        buffer = ''
-        xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
-
-        # Build feed
+      def build_for_feed(xml)
         xml.instruct!
         xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
           root_url = @site.config[:base_url] + '/'
@@ -124,39 +137,41 @@ module Nanoc::Helpers
 
           # Add articles
           sorted_relevant_articles.each do |a|
-            # Get URL
-            url = url_for(a)
-            next if url.nil?
-
-            xml.entry do
-              # Add primary attributes
-              xml.id        atom_tag_for(a)
-              xml.title     a[:title], :type => 'html'
-
-              # Add dates
-              xml.published attribute_to_time(a[:created_at]).to_iso8601_time
-              xml.updated   attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
-
-              # Add specific author information
-              if a[:author_name] || a[:author_uri]
-                xml.author do
-                  xml.name  a[:author_name] || author_name
-                  xml.uri   a[:author_uri]  || author_uri
-                end
-              end
-
-              # Add link
-              xml.link(:rel => 'alternate', :href => url)
-
-              # Add content
-              summary = excerpt_proc.call(a)
-              xml.content   content_proc.call(a), :type => 'html'
-              xml.summary   summary, :type => 'html' unless summary.nil?
-            end
+            self.build_for_article(a, xml)
           end
         end
+      end
 
-        buffer
+      def build_for_article(a, xml)
+        # Get URL
+        url = url_for(a)
+        return if url.nil?
+
+        xml.entry do
+          # Add primary attributes
+          xml.id        atom_tag_for(a)
+          xml.title     a[:title], :type => 'html'
+
+          # Add dates
+          xml.published attribute_to_time(a[:created_at]).to_iso8601_time
+          xml.updated   attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
+
+          # Add specific author information
+          if a[:author_name] || a[:author_uri]
+            xml.author do
+              xml.name  a[:author_name] || author_name
+              xml.uri   a[:author_uri]  || author_uri
+            end
+          end
+
+          # Add link
+          xml.link(:rel => 'alternate', :href => url)
+
+          # Add content
+          summary = excerpt_proc.call(a)
+          xml.content   content_proc.call(a), :type => 'html'
+          xml.summary   summary, :type => 'html' unless summary.nil?
+        end
       end
 
     end
