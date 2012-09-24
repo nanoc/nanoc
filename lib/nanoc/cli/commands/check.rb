@@ -20,10 +20,7 @@ module Nanoc::CLI::Commands
     }
 
     def run
-      # Make sure we have anything to do
-      if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
-        raise Nanoc::Errors::GenericTrivial, "nothing to do (pass either --all, --deploy or --list or a list of checkers)"
-      end
+      validate_options_and_arguments
 
       # Load DSL
       if File.exist?('Checkers')
@@ -37,28 +34,36 @@ module Nanoc::CLI::Commands
       end
 
       # Make sure we are in a nanoc site directory
-      puts "Loading site data..."
       self.require_site
 
       # Find and run
-      classes = self.find_checker_classes(options, arguments, dsl)
+      classes = self.find_checker_classes(dsl)
       issues = self.run_checkers(classes)
       self.print_issues(issues)
     end
 
   protected
 
-    def list_checkers
-      classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
-
-      puts "Available checkers:"
-      puts
-      puts classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
+    def validate_options_and_arguments
+      if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
+        raise Nanoc::Errors::GenericTrivial,
+          "nothing to do (pass either --all, --deploy or --list or a list of checkers)"
+      end
     end
 
-    def find_checker_classes(options, arguments, dsl)
+    def all_checker_classes
+      Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
+    end
+
+    def list_checkers
+      puts "Available checkers:"
+      puts
+      puts all_checker_classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
+    end
+
+    def find_checker_classes(dsl)
       if options[:all]
-        classes = Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
+        classes = self.all_checker_classes
       elsif options[:deploy]
         # TODO implement
         if dsl

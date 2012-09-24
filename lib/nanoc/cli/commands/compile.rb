@@ -25,8 +25,6 @@ module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
 
     def run
-      # Make sure we are in a nanoc site directory
-      puts "Loading site data..."
       self.require_site
 
       # Check presence of --all option

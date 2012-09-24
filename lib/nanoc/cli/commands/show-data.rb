@@ -13,10 +13,7 @@ module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
 
     def run
-      # Make sure we are in a nanoc site directory
-      print "Loading site data... "
       self.require_site
-      puts "done"
 
       # Get data
       items     = self.site.items
