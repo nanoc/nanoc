@@ -61,31 +61,26 @@ module Nanoc::CLI::Commands
       puts all_checker_classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
     end
 
+    def checker_classes_named(n)
+      classes = n.map do |a|
+        klass = Nanoc::Extra::Checking::Checker.named(a)
+        raise Nanoc::Errors::GenericTrivial, "Unknown checker: #{a}" if klass.nil?
+        klass
+      end
+    end
+
     def find_checker_classes(dsl)
       if options[:all]
-        classes = self.all_checker_classes
+        return self.all_checker_classes
       elsif options[:deploy]
-        # TODO implement
         if dsl
-          classes = dsl.deploy_checks.map do |a|
-            klass = Nanoc::Extra::Checking::Checker.named(a)
-            raise Nanoc::Errors::GenericTrivial, "Unknown checker: #{a}" if klass.nil?
-            klass
-          end
-        else
-          classes = []
+          return self.checker_classes_named(dsl.deploy_checks)
         end
       else
-        classes = arguments.map do |a|
-          klass = Nanoc::Extra::Checking::Checker.named(a)
-          raise Nanoc::Errors::GenericTrivial, "Unknown checker: #{a}" if klass.nil?
-          klass
-        end
+        return self.checker_classes_named(arguments)
       end
-      if classes.empty?
-        raise Nanoc::Errors::GenericTrivial, "No checkers to run"
-      end
-      classes
+
+      raise Nanoc::Errors::GenericTrivial, "No checkers to run"
     end
 
     def run_checkers(classes)
