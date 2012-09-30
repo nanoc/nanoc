@@ -40,38 +40,18 @@ module Nanoc
     #
     # @param [Nanoc::Rule] rule The item compilation rule to add
     #
-    # @param [:before, :after] position The place where the rule should be
-    #   added (either at the beginning or the end of the list of rules)
-    #
     # @return [void]
-    def add_item_compilation_rule(rule, position=:after)
-      case position
-      when :before
-        @item_compilation_rules.unshift(rule)
-      when :after
-        @item_compilation_rules << rule
-      else
-        raise "#add_item_routing_rule expected position to be :after or :before"
-      end
+    def add_item_compilation_rule(rule)
+      @item_compilation_rules << rule
     end
 
     # Add the given rule to the list of item routing rules.
     #
     # @param [Nanoc::Rule] rule The item routing rule to add
     #
-    # @param [:before, :after] position The place where the rule should be
-    #   added (either at the beginning or the end of the list of rules)
-    #
     # @return [void]
-    def add_item_routing_rule(rule, position=:after)
-      case position
-      when :before
-        @item_routing_rules.unshift(rule)
-      when :after
-        @item_routing_rules << rule
-      else
-        raise "#add_item_routing_rule expected position to be :after or :before"
-      end
+    def add_item_routing_rule(rule)
+      @item_routing_rules << rule
     end
 
     # @param [Nanoc::Item] item The item for which the compilation rules
