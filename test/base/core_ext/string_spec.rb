@@ -35,3 +35,27 @@ describe 'String#checksum' do
   end
 
 end
+
+describe 'String#slug' do
+
+  it 'should work on empty strings' do
+    ''.slug.must_equal ''
+  end
+
+  it 'should remove single quotes' do
+    "don'tdon't".slug.must_equal 'dontdont'
+  end
+
+  it 'should remove double quotes' do
+    'a"b"c'.slug.must_equal 'abc'
+  end
+
+  it 'should transform uppercase A-Z to lowercase a-z' do
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slug.must_equal 'abcdefghijklmnopqrstuvwxyz'
+  end
+
+  it 'should replace sequences of non-alphanumerics with a single - and then remove any leading or trailing -' do
+    ',.[;abc!@#$%^&*(123{}":>?:"{'.slug.must_equal 'abc-123'
+  end
+
+end
