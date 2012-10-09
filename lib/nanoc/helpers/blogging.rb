@@ -55,6 +55,7 @@ module Nanoc::Helpers
       attr_accessor :title
       attr_accessor :author_name
       attr_accessor :author_uri
+      attr_accessor :icon
 
       def initialize(site, item)
         @site = site
@@ -134,6 +135,9 @@ module Nanoc::Helpers
             xml.name  author_name
             xml.uri   author_uri
           end
+
+          # Add icon
+          xml.icon icon if icon
 
           # Add articles
           sorted_relevant_articles.each do |a|
@@ -275,6 +279,8 @@ module Nanoc::Helpers
     # @option params [String] :author_uri The URI of the feed's author, if it
     #   is not given in the item attributes.
     #
+    # @option params [String] :icon The URI of the feed's icon.
+    #
     # @return [String] The generated feed content
     def atom_feed(params={})
       require 'builder'
@@ -290,6 +296,7 @@ module Nanoc::Helpers
       builder.title             = params[:title] || @item[:title] || @site.config[:title]
       builder.author_name       = params[:author_name] || @item[:author_name] || @site.config[:author_name]
       builder.author_uri        = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
+      builder.icon              = params[:icon]
 
       # Run
       builder.validate
