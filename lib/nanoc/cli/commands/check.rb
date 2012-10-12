@@ -98,8 +98,7 @@ module Nanoc::CLI::Commands
 
         # TODO report progress
 
-        severity = checker.max_severity
-        puts severity.to_s.send(SEVERITY_COLORS[severity])
+        puts issues.empty? ? 'ok'.green : 'error'.red
       end
       issues
     end
@@ -109,15 +108,12 @@ module Nanoc::CLI::Commands
 
       have_issues = false
       issues.group_by { |i| i.subject }.each_pair do |subject, issues|
-        if issues.any? { |i| i.severity == :error } || options[:verbose]
+        unless issues.empty?
           puts unless have_issues
           have_issues = true
           puts "#{subject}:"
           issues.each do |i|
-            if i.severity == :error || options[:verbose]
-              severity_string = ('[' + i.severity.to_s.upcase.center(7) + ']').send(SEVERITY_COLORS[i.severity])
-              puts "  #{severity_string} #{i.checker_class.identifier} - #{i.description}"
-            end
+            puts "  [ #{'ERROR'.red} ] #{i.checker_class.identifier} - #{i.description}"
           end
         end
       end

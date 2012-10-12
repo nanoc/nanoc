@@ -18,15 +18,15 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
 
       # Test
       self.run_server_while do
-        assert_equal :ok,      check(checker, 'http://127.0.0.1:9204/200')
-        assert_equal :skipped, check(checker, 'foo://example.com/')
-        assert_equal :error,   check(checker, 'http://127.0.0.1:9204">')
+        assert ok?(checker, 'http://127.0.0.1:9204/200')
+        assert ok?(checker, 'foo://example.com/')
+        refute ok?(checker, 'http://127.0.0.1:9204">')
       end
     end
   end
 
-  def check(checker, url)
-    checker.validate(url).severity
+  def ok?(checker, url)
+    checker.validate(url).nil?
   end
 
   def run_server_while

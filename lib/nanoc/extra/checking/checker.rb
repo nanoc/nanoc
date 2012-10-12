@@ -20,15 +20,8 @@ module Nanoc::Extra::Checking
 
     def add_issue(desc, params={})
       subject  = params.fetch(:subject, nil)
-      severity = params.fetch(:severity, :error)
 
-      @issues << Issue.new(desc, subject, severity, self.class)
-    end
-
-    def max_severity
-      severities = Set.new
-      issues.each { |i| severities << i.severity }
-      severities.max_by { |s| Issue::SEVERITIES.index(s) } || Issue::SEVERITIES.first
+      @issues << Issue.new(desc, subject, self.class)
     end
 
     def output_filenames

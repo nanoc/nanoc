@@ -17,8 +17,7 @@ module Nanoc::Extra::Checking::Checkers
           unless valid?(href, filename)
           self.add_issue(
             "reference to #{href}",
-            :subject  => filename,
-            :severity => :error)
+            :subject  => filename)
           end
         end
       end

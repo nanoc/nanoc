@@ -13,8 +13,7 @@ module ::Nanoc::Extra::Checking::Checkers
         results = ::W3CValidators::CSSValidator.new.validate_file(filename)
         results.errors.each do |e|
           desc = e.message.gsub(%r{\s+}, ' ').strip
-          severity = e.is_warning? ? :warning : :error
-          self.add_issue(desc, :subject => filename, :severity => severity)
+          self.add_issue(desc, :subject => filename)
         end
       end
     end

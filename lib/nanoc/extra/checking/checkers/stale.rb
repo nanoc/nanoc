@@ -11,8 +11,7 @@ module Nanoc::Extra::Checking::Checkers
         if !item_rep_paths.include?(f)
           self.add_issue(
             "file without matching item",
-            :subject  => f,
-            :severity => :error)
+            :subject  => f)
         end
       end
     end

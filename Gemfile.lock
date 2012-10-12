@@ -123,7 +123,7 @@ DEPENDENCIES
   mocha
   mustache
   nanoc!
-  nokogiri
+  nokogiri (~> 1.5.5)
   pygments.rb
   rack
   rainpress
