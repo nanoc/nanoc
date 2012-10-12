@@ -14,11 +14,6 @@ module Nanoc::CLI::Commands
 
   class Check < ::Nanoc::CLI::CommandRunner
 
-    SEVERITY_COLORS = {
-      :ok      => :green,
-      :error   => :red
-    }
-
     def run
       validate_options_and_arguments
 
