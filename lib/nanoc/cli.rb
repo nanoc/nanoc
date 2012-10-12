@@ -153,25 +153,33 @@ protected
     $stdout = Nanoc::CLI::CleaningStream.new($stdout)
     $stderr = Nanoc::CLI::CleaningStream.new($stderr)
 
-    if !self.enable_utf8?
+    if !self.enable_utf8?($stdout)
       $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
+    end
+
+    if !self.enable_utf8?($stderr)
       $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
     end
 
-    if !self.enable_ansi_colors?
+    if !self.enable_ansi_colors?($stdout)
       $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
+    end
+
+    if !self.enable_ansi_colors?($stderr)
       $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
     end
   end
 
   # @return [Boolean] true if UTF-8 support is present, false if not
-  def self.enable_utf8?
+  def self.enable_utf8?(io)
+    return true if !io.tty?
+
     %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
   end
 
   # @return [Boolean] true if color support is present, false if not
-  def self.enable_ansi_colors?
-    return false if !$stdout.tty?
+  def self.enable_ansi_colors?(io)
+    return false if !io.tty?
 
     begin
       require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /mswin|mingw/

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanoc (3.4.0)
+    nanoc (3.4.1)
       cri (~> 2.2)
 
 GEM
@@ -113,7 +113,7 @@ DEPENDENCIES
   mocha
   mustache
   nanoc!
-  nokogiri
+  nokogiri (~> 1.5.5)
   pygments.rb
   rack
   rainpress
