@@ -24,7 +24,7 @@ module Nanoc::CLI::Commands
 
     end
 
-    DEFAULT_CONFIG = <<EOS
+    DEFAULT_CONFIG ||= <<EOS
 # A list of file extensions that nanoc will consider to be textual rather than
 # binary. If an item with an extension not in this list is found,  the file
 # will be considered as binary.
@@ -104,7 +104,7 @@ watcher:
   notify_on_compilation_failure: true
 EOS
 
-    DEFAULT_RULES = <<EOS
+    DEFAULT_RULES ||= <<EOS
 #!/usr/bin/env ruby
 
 # A few helpful tips about the Rules file:
@@ -150,7 +150,7 @@ end
 layout '*', :erb
 EOS
 
-    DEFAULT_ITEM = <<EOS
+    DEFAULT_ITEM ||= <<EOS
 <h1>A Brand New nanoc Site</h1>
 
 <p>You’ve just created a new nanoc site. The page you are looking at right now is the home page for your site. To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
@@ -163,7 +163,7 @@ EOS
 <p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
 EOS
 
-    DEFAULT_STYLESHEET = <<EOS
+    DEFAULT_STYLESHEET ||= <<EOS
 * {
   margin: 0;
   padding: 0;
@@ -267,7 +267,7 @@ a:hover {
 }
 EOS
 
-    DEFAULT_LAYOUT = <<EOS
+    DEFAULT_LAYOUT ||= <<EOS
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
