@@ -49,7 +49,6 @@ module Nanoc::CLI
   def self.run(args)
     Nanoc::CLI::ErrorHandler.handle_while do
       self.setup
-      self.load_custom_commands
       self.root_command.run(args)
     end
   end
@@ -65,13 +64,19 @@ module Nanoc::CLI
 
 protected
 
-  # Makes the commandline interface ready for using by loading the commands.
+  # Makes the commandline interface ready for use.
   #
   # @return [void]
   def self.setup
-    # Set up output streams
     self.setup_cleaning_streams
+    self.setup_commands
+    self.load_custom_commands
+  end
 
+  # Sets up the root command and base subcommands.
+  #
+  # @return [void]
+  def self.setup_commands
     # Reinit
     @root_command = nil
 
@@ -88,7 +93,7 @@ protected
     end
   end
 
-  # Loads the commands in `commands/`.
+  # Loads site-specific commands in `commands/`.
   #
   # @return [void]
   def self.load_custom_commands
