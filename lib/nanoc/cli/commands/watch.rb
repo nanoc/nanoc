@@ -87,10 +87,10 @@ module Nanoc::CLI::Commands
     class Notifier
 
       # A list of commandline tool names that can be used to send notifications
-      TOOLS ||= %w( growlnotify notify-send )
+      TOOLS = %w( growlnotify notify-send ) unless defined? TOOLS
 
       # The tool to use for discovering binaries' locations
-      FIND_BINARY_COMMAND ||= RUBY_PLATFORM =~ /mingw|mswin/ ? "where" : "which"
+      FIND_BINARY_COMMAND = RUBY_PLATFORM =~ /mingw|mswin/ ? "where" : "which" unless defined? FIND_BINARY_COMMAND
 
       # Send a notification. If no notifier is found, no notification will be
       # created.
