@@ -79,7 +79,7 @@ module Nanoc::CLI::Commands
 
       # Prune
       if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site).run
+        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
       end
 
       # Give general feedback
@@ -307,6 +307,16 @@ module Nanoc::CLI::Commands
         filter_name = format("%#{max_filter_name_length}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
+    end
+
+  protected
+
+    def prune_config
+      self.site.config[:prune] || {}
+    end
+
+    def prune_config_exclude
+      self.prune_config[:exclude] || {}
     end
 
   end
