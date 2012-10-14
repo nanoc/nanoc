@@ -4,6 +4,9 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
+  CODERAY_PRE  = '<div class="CodeRay"><div class="code">'
+  CODERAY_POST = '</div></div>'
+
   def test_coderay_simple
     if_have 'coderay', 'nokogiri' do
       # Create filter
@@ -11,7 +14,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
 
       # Get input and expected output
       input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
-      expected_output = '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>'
+      expected_output = CODERAY_PRE + '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
       actual_output = filter.run(input)
@@ -77,7 +80,7 @@ EOS
 
       # Get input and expected output
       input = %[<pre title="moo"><code>#!ruby\n# comment</code></pre>]
-      expected_output = '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>'
+      expected_output = CODERAY_PRE + '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
       actual_output = filter.run(input)
@@ -92,7 +95,7 @@ EOS
 
       # Get input and expected output
       input = %[<pre title="moo"><code class="language-ruby">#!ruby\n# comment</code></pre>]
-      expected_output = %[<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>\n<span class="comment"># comment</span></code></pre>]
+      expected_output = CODERAY_PRE + %[<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>\n<span class="comment"># comment</span></code></pre>] + CODERAY_POST
 
       # Run filter
       actual_output = filter.run(input)
@@ -107,7 +110,7 @@ EOS
 
       # Get input and expected output
       input = '<pre title="moo"><code class="abc language-ruby xyz"># comment</code></pre>'
-      expected_output = '<pre title="moo"><code class="abc language-ruby xyz"><span class="comment"># comment</span></code></pre>'
+      expected_output = CODERAY_PRE + '<pre title="moo"><code class="abc language-ruby xyz"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
       actual_output = filter.run(input)
@@ -305,8 +308,8 @@ after
 EOS
       expected_output = <<EOS
 before
-<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
-puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>
+#{CODERAY_PRE}<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
+puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>#{CODERAY_POST}
 after
 EOS
 
@@ -365,8 +368,8 @@ after
 EOS
       expected_output = <<EOS
 before
-<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
-  <span class=\"keyword\">end</span></code></pre>
+#{CODERAY_PRE}<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
+  <span class=\"keyword\">end</span></code></pre>#{CODERAY_POST}
 after
 EOS
 
