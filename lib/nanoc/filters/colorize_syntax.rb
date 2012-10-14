@@ -130,13 +130,15 @@ module Nanoc::Filters
         highlighted_code = highlight(raw, language, params)
         element.children = Nokogiri::HTML.fragment(strip(highlighted_code), 'utf-8')
 
-        # Add class
+        # Add language-something class
         unless has_class
           klass = element['class'] || ''
           klass << ' ' unless [' ', nil].include?(klass[-1,1])
           klass << "language-#{language}"
           element['class'] = klass
         end
+
+        self.highlight_postprocess(language, element.parent)
       end
 
       method = "to_#{syntax}".to_sym
@@ -273,9 +275,28 @@ module Nanoc::Filters
       stdout.read
     end
 
-  private
+  protected
 
     KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
+
+    # Wraps the element in <div class="CodeRay"><div class="code">
+    def coderay_postprocess(language, element)
+      # Skip if we're a free <code>
+      return if element.parent.nil?
+      
+      # <div class="code">
+      div_inner = Nokogiri::XML::Node.new('div', element.document)
+      div_inner['class'] = 'code'
+      div_inner.children = element.dup
+
+      # <div class="CodeRay">
+      div_outer = Nokogiri::XML::Node.new('div', element.document)
+      div_outer['class'] = 'CodeRay'
+      div_outer.children = div_inner
+
+      # orig element
+      element.swap div_outer
+    end
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)
@@ -286,6 +307,18 @@ module Nanoc::Filters
       colorizer = @colorizers[language.to_sym]
       if KNOWN_COLORIZERS.include?(colorizer)
         send(colorizer, code, language, params[colorizer] || {})
+      else
+        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+      end
+    end
+
+    def highlight_postprocess(language, element)
+      colorizer = @colorizers[language.to_sym]
+      if KNOWN_COLORIZERS.include?(colorizer)
+        sym = (colorizer.to_s + '_postprocess').to_sym
+        if self.respond_to?(sym)
+          self.send(sym, language, element)
+        end
       else
         raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end

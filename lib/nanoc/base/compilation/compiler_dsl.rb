@@ -180,14 +180,14 @@ module Nanoc
       # Create compilation rule
       compilation_block = proc { }
       compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
-      @rules_collection.add_item_compilation_rule(compilation_rule, :before)
+      @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
       routing_block = proc do
         item[:extension].nil? ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
       end
       routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, :snapshot_name => :last)
-      @rules_collection.add_item_routing_rule(routing_rule, :before)
+      @rules_collection.add_item_routing_rule(routing_rule)
     end
 
     # Includes an additional rules file in the current rules collection.

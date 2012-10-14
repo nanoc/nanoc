@@ -22,9 +22,12 @@ option :f, :force, '(ignored)'
 
 module Nanoc::CLI::Commands
 
+  # FIXME this command is horribly long and complicated and does way too much. plz cleanup thx.
   class Compile < ::Nanoc::CLI::CommandRunner
 
     def run
+      # Make sure we are in a nanoc site directory
+      puts "Loading site data…"
       self.require_site
 
       # Check presence of --all option
@@ -40,17 +43,13 @@ module Nanoc::CLI::Commands
       end
 
       # Give feedback
-      puts "Compiling site..."
+      puts "Compiling site…"
 
       # Initialize profiling stuff
       time_before = Time.now
       @rep_times     = {}
       @filter_times  = {}
       setup_notifications
-
-      # Set up progress indicator threads
-      @progress_locks   = {}
-      @progress_threads = {}
 
       # Prepare for generating diffs
       setup_diffs
@@ -79,7 +78,7 @@ module Nanoc::CLI::Commands
 
       # Prune
       if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site).run
+        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
       end
 
       # Give general feedback
@@ -230,31 +229,32 @@ module Nanoc::CLI::Commands
       # Only show progress on terminals
       return if !$stdout.tty?
 
-      @progress_locks[rep.inspect + filter_name.inspect] = lock = Mutex.new
-      lock.synchronize do
-        @progress_threads[rep.inspect + filter_name.inspect] = Thread.new do
-          delay = 1.0
-          step  = 0
+      @progress_thread = Thread.new do
+        delay = 1.0
+        step  = 0
 
-          text = "Running #{filter_name} filter… "
+        text = "  running #{filter_name} filter… "
 
-          while !Thread.current[:stopped]
-            sleep 0.1
+        loop do
+          if Thread.current[:stopped]
+            # Clear
+            if delay < 0.1
+              $stdout.print ' ' * (text.length + 3) + "\r"
+            end
 
-            # Wait for a while before showing text
-            delay -= 0.1
-            next if delay > 0.05
+            break
+          end
 
-            # Print progress
+          # Show progress
+          if delay < 0.1
             $stdout.print text + %w( | / - \\ )[step] + "\r"
             step = (step + 1) % 4
           end
 
-          # Clear text
-          if delay < 0.05
-            $stdout.print ' ' * (text.length + 1 + 1) + "\r"
-          end
+          sleep 0.1
+          delay -= 0.1
         end
+
       end
     end
 
@@ -262,10 +262,7 @@ module Nanoc::CLI::Commands
       # Only show progress on terminals
       return if !$stdout.tty?
 
-      lock = @progress_locks[rep.inspect + filter_name.inspect]
-      lock.synchronize do
-        @progress_threads[rep.inspect + filter_name.inspect][:stopped] = true
-      end
+      @progress_thread[:stopped] = true
     end
 
     def print_profiling_feedback(reps)
@@ -307,6 +304,16 @@ module Nanoc::CLI::Commands
         filter_name = format("%#{max_filter_name_length}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
+    end
+
+  protected
+
+    def prune_config
+      self.site.config[:prune] || {}
+    end
+
+    def prune_config_exclude
+      self.prune_config[:exclude] || {}
     end
 
   end
