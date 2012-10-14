@@ -50,10 +50,6 @@ module Nanoc::CLI::Commands
       @filter_times  = {}
       setup_notifications
 
-      # Set up progress indicator threads
-      @progress_locks   = {}
-      @progress_threads = {}
-
       # Prepare for generating diffs
       setup_diffs
 
@@ -232,30 +228,27 @@ module Nanoc::CLI::Commands
       # Only show progress on terminals
       return if !$stdout.tty?
 
-      @progress_locks[rep.inspect + filter_name.inspect] = lock = Mutex.new
-      lock.synchronize do
-        @progress_threads[rep.inspect + filter_name.inspect] = Thread.new do
-          delay = 1.0
-          step  = 0
+      @progress_thread = Thread.new do
+        delay = 1.0
+        step  = 0
 
-          text = "Running #{filter_name} filter… "
+        text = "Running #{filter_name} filter… "
 
-          while !Thread.current[:stopped]
-            sleep 0.1
+        while !Thread.current[:stopped]
+          sleep 0.1
 
-            # Wait for a while before showing text
-            delay -= 0.1
-            next if delay > 0.05
+          # Wait for a while before showing text
+          delay -= 0.1
+          next if delay > 0.05
 
-            # Print progress
-            $stdout.print text + %w( | / - \\ )[step] + "\r"
-            step = (step + 1) % 4
-          end
+          # Print progress
+          $stdout.print text + %w( | / - \\ )[step] + "\r"
+          step = (step + 1) % 4
+        end
 
-          # Clear text
-          if delay < 0.05
-            $stdout.print ' ' * (text.length + 1 + 1) + "\r"
-          end
+        # Clear text
+        if delay < 0.05
+          $stdout.print ' ' * (text.length + 1 + 1) + "\r"
         end
       end
     end
@@ -264,10 +257,7 @@ module Nanoc::CLI::Commands
       # Only show progress on terminals
       return if !$stdout.tty?
 
-      lock = @progress_locks[rep.inspect + filter_name.inspect]
-      lock.synchronize do
-        @progress_threads[rep.inspect + filter_name.inspect][:stopped] = true
-      end
+      @progress_thread[:stopped] = true
     end
 
     def print_profiling_feedback(reps)
