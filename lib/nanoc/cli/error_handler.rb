@@ -58,6 +58,10 @@ module Nanoc::CLI
           exit!(0)
         end
       end
+      Signal.trap('USR1') do
+        puts "Caught USR1; dumping a stack trace"
+        puts caller.map { |i| "  #{i}" }.join("\n")
+      end
 
       # Run
       yield
