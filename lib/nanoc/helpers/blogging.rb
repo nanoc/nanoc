@@ -189,7 +189,10 @@ module Nanoc::Helpers
     #
     # * `title` - The title of the blog post
     #
-    # * `kind` and `created_at` (described above)
+    # * `created_at` (described above)
+    #
+    # * `kind` (described above) *unless* you are passing an explicit list of
+    #   articles using the `:articles` parameter
     #
     # The following attributes can optionally be set on blog articles to
     # change the behaviour of the Atom feed:
