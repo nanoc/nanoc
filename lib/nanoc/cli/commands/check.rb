@@ -84,7 +84,7 @@ module Nanoc::CLI::Commands
       issues = Set.new
       length = classes.map { |c| c.identifier.to_s.length }.max + 20
       classes.each do |klass|
-        print format("%-#{length}s", "Running #{klass.identifier} checker... ")
+        print format("%-#{length}s", "Running #{klass.identifier} checker… ")
 
         checker = klass.new(site)
         checkers << checker

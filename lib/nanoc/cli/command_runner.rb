@@ -51,7 +51,7 @@ module Nanoc::CLI
     #
     # @return [void]
     def require_site
-      print "Loading site data... "
+      print "Loading site data… "
       if site.nil?
         puts
         raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
