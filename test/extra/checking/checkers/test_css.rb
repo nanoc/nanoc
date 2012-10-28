@@ -8,8 +8,8 @@ class Nanoc::Extra::Checking::Checkers::CSSTest < MiniTest::Unit::TestCase
     with_site do |site|
       # Create files
       FileUtils.mkdir_p('output')
-      File.write('output/blah.html', '<h1>Hi!</h1>')
-      File.write('output/style.css', 'h1 { color: red; }')
+      File.open('output/blah.html', 'w') { | io| io.write('<h1>Hi!</h1>') }
+      File.open('output/style.css', 'w') { | io| io.write('h1 { color: red; }') }
 
       # Run checker
       checker = Nanoc::Extra::Checking::Checkers::CSS.new(site)
@@ -24,8 +24,8 @@ class Nanoc::Extra::Checking::Checkers::CSSTest < MiniTest::Unit::TestCase
     with_site do |site|
       # Create files
       FileUtils.mkdir_p('output')
-      File.write('output/blah.html', '<h1>Hi!</h1>')
-      File.write('output/style.css', 'h1 { coxlor: rxed; }')
+      File.open('output/blah.html', 'w') { | io| io.write('<h1>Hi!</h1>') }
+      File.open('output/style.css', 'w') { | io| io.write('h1 { coxlor: rxed; }') }
 
       # Run checker
       checker = Nanoc::Extra::Checking::Checkers::CSS.new(site)
