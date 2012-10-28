@@ -21,6 +21,13 @@ module Nanoc::StringExtensions
     digest.hexdigest
   end
 
+  # Transforms string into a slug containing only lowercase a-z, digits 0-9, and -
+  #
+  # @return [String] The slug generated from the receiver
+  def slug
+    self.gsub(/'|"/, '').downcase.tr_s('^a-z0-9', ' ').strip.tr(' ', '-')
+  end
+
 end
 
 class String
