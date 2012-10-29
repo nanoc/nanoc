@@ -64,4 +64,40 @@ class Nanoc::Extra::Deployers::FogTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_run_delete_stray
+    if_have 'fog' do
+      # Create deployer
+      fog = Nanoc::Extra::Deployers::Fog.new(
+        'output/',
+        {
+          :bucket     => 'mybucket',
+          :provider   => 'local',
+          :local_root => 'mylocalcloud'})
+
+      # Setup fake local cloud
+      FileUtils.mkdir_p('mylocalcloud/mybucket')
+      File.open('mylocalcloud/mybucket/etc', 'w')  { |io| io.write('meh-etc')  }
+      File.open('mylocalcloud/mybucket/meow', 'w') { |io| io.write('meh-meow') }
+      File.open('mylocalcloud/mybucket/bark', 'w') { |io| io.write('meh-bark') }
+
+      # Create site
+      FileUtils.mkdir_p('output')
+      File.open('output/meow', 'w') { |io| io.write "I am a cat!" }
+      File.open('output/bark', 'w') { |io| io.write "I am a dog!" }
+
+      # Create local cloud (but not bucket)
+      FileUtils.mkdir_p('mylocalcloud')
+
+      # Run
+      fog.run
+
+      # Check
+      refute File.file?('mylocalcloud/mybucket/etc')
+      assert File.file?('mylocalcloud/mybucket/meow')
+      assert File.file?('mylocalcloud/mybucket/bark')
+      assert_equal "I am a cat!", File.read('mylocalcloud/mybucket/meow')
+      assert_equal "I am a dog!", File.read('mylocalcloud/mybucket/bark')
+    end
+  end
+
 end
