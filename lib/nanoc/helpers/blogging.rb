@@ -42,6 +42,146 @@ module Nanoc::Helpers
       end.reverse
     end
 
+    class AtomFeedBuilder
+
+      include Nanoc::Helpers::Blogging
+
+      attr_accessor :site
+
+      attr_accessor :limit
+      attr_accessor :relevant_articles
+      attr_accessor :content_proc
+      attr_accessor :excerpt_proc
+      attr_accessor :title
+      attr_accessor :author_name
+      attr_accessor :author_uri
+      attr_accessor :icon
+      attr_accessor :logo
+
+      def initialize(site, item)
+        @site = site
+        @item = item
+      end
+
+      def validate
+        self.validate_config
+        self.validate_feed_item
+        self.validate_articles
+      end
+
+      def build
+        buffer = ''
+        xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
+        self.build_for_feed(xml)
+        buffer
+      end
+
+    protected
+
+      def sorted_relevant_articles
+        relevant_articles.sort_by do |a|
+          attribute_to_time(a[:created_at])
+        end.reverse.first(limit)
+      end
+
+      def last_article
+        sorted_relevant_articles.first
+      end
+
+      def validate_config
+        if @site.config[:base_url].nil?
+          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
+        end
+      end
+
+      def validate_feed_item
+        if title.nil?
+          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no title in params, item or site config')
+        end
+        if author_name.nil?
+          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no author_name in params, item or site config')
+        end
+        if author_uri.nil?
+          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no author_uri in params, item or site config')
+        end
+      end
+
+      def validate_articles
+        if relevant_articles.empty?
+          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no articles')
+        end
+        if relevant_articles.any? { |a| a[:created_at].nil? }
+          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: one or more articles lack created_at')
+        end
+      end
+
+      def build_for_feed(xml)
+        xml.instruct!
+        xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
+          root_url = @site.config[:base_url] + '/'
+
+          # Add primary attributes
+          xml.id      root_url
+          xml.title   title
+
+          # Add date
+          xml.updated(attribute_to_time(last_article[:created_at]).to_iso8601_time)
+
+          # Add links
+          xml.link(:rel => 'alternate', :href => root_url)
+          xml.link(:rel => 'self',      :href => feed_url)
+
+          # Add author information
+          xml.author do
+            xml.name  author_name
+            xml.uri   author_uri
+          end
+
+          # Add icon and logo
+          xml.icon icon if icon
+          xml.logo logo if logo
+
+          # Add articles
+          sorted_relevant_articles.each do |a|
+            self.build_for_article(a, xml)
+          end
+        end
+      end
+
+      def build_for_article(a, xml)
+        # Get URL
+        url = url_for(a)
+        return if url.nil?
+
+        xml.entry do
+          # Add primary attributes
+          xml.id        atom_tag_for(a)
+          xml.title     a[:title], :type => 'html'
+
+          # Add dates
+          xml.published attribute_to_time(a[:created_at]).to_iso8601_time
+          xml.updated   attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
+
+          # Add specific author information
+          if a[:author_name] || a[:author_uri]
+            xml.author do
+              xml.name  a[:author_name] || author_name
+              xml.uri   a[:author_uri]  || author_uri
+            end
+          end
+
+          # Add link
+          xml.link(:rel => 'alternate', :href => url)
+
+          # Add content
+          summary = excerpt_proc.call(a)
+          xml.content   content_proc.call(a), :type => 'html'
+          xml.summary   summary, :type => 'html' unless summary.nil?
+        end
+      end
+
+    end
+
     # Returns a string representing the atom feed containing recent articles,
     # sorted by descending creation date.
     #
@@ -83,7 +223,7 @@ module Nanoc::Helpers
     # The feed item will need to know about the feed title, the feed author
     # name, and the URI corresponding to the author. These can be specified
     # using parameters, as attributes in the feed item, or in the site
-    # configuration.   
+    # configuration.
     #
     # * `title` - The title of the feed, which is usually also the title of
     #   the blog.
@@ -144,112 +284,31 @@ module Nanoc::Helpers
     # @option params [String] :author_uri The URI of the feed's author, if it
     #   is not given in the item attributes.
     #
+    # @option params [String] :icon The URI of the feed's icon.
+    #
+    # @option params [String] :logo The URI of the feed's logo.
+    #
     # @return [String] The generated feed content
     def atom_feed(params={})
       require 'builder'
 
-      # Extract parameters
-      limit             = params[:limit] || 5
-      relevant_articles = params[:articles] || articles || []
-      content_proc      = params[:content_proc] || lambda { |a| a.compiled_content(:snapshot => :pre) }
-      excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
-
-      # Check config attributes
-      if @site.config[:base_url].nil?
-        raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
-      end
-
-      # Check feed item attributes
-      title = params[:title] || @item[:title] || @site.config[:title]
-      if title.nil?
-        raise RuntimeError.new('Cannot build Atom feed: no title in params, item or site config')
-      end
-      author_name = params[:author_name] || @item[:author_name] || @site.config[:author_name]
-      if author_name.nil?
-        raise RuntimeError.new('Cannot build Atom feed: no author_name in params, item or site config')
-      end
-      author_uri = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
-      if author_uri.nil?
-        raise RuntimeError.new('Cannot build Atom feed: no author_uri in params, item or site config')
-      end
-
-      # Check article attributes
-      if relevant_articles.empty?
-        raise RuntimeError.new('Cannot build Atom feed: no articles')
-      end
-      if relevant_articles.any? { |a| a[:created_at].nil? }
-        raise RuntimeError.new('Cannot build Atom feed: one or more articles lack created_at')
-      end
-
-      # Get sorted relevant articles
-      sorted_relevant_articles = relevant_articles.sort_by do |a|
-        attribute_to_time(a[:created_at])
-      end.reverse.first(limit)
-
-      # Get most recent article
-      last_article = sorted_relevant_articles.first
-
       # Create builder
-      buffer = ''
-      xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
+      builder = AtomFeedBuilder.new(@site, @item)
 
-      # Build feed
-      xml.instruct!
-      xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
-        root_url = @site.config[:base_url] + '/'
+      # Fill builder
+      builder.limit             = params[:limit] || 5
+      builder.relevant_articles = params[:articles] || articles || []
+      builder.content_proc      = params[:content_proc] || lambda { |a| a.compiled_content(:snapshot => :pre) }
+      builder.excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
+      builder.title             = params[:title] || @item[:title] || @site.config[:title]
+      builder.author_name       = params[:author_name] || @item[:author_name] || @site.config[:author_name]
+      builder.author_uri        = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
+      builder.icon              = params[:icon]
+      builder.logo              = params[:logo]
 
-        # Add primary attributes
-        xml.id      root_url
-        xml.title   title
-
-        # Add date
-        xml.updated(attribute_to_time(last_article[:created_at]).to_iso8601_time)
-
-        # Add links
-        xml.link(:rel => 'alternate', :href => root_url)
-        xml.link(:rel => 'self',      :href => feed_url)
-
-        # Add author information
-        xml.author do
-          xml.name  author_name
-          xml.uri   author_uri
-        end
-
-        # Add articles
-        sorted_relevant_articles.each do |a|
-          # Get URL
-          url = url_for(a)
-          next if url.nil?
-
-          xml.entry do
-            # Add primary attributes
-            xml.id        atom_tag_for(a)
-            xml.title     a[:title], :type => 'html'
-
-            # Add dates
-            xml.published attribute_to_time(a[:created_at]).to_iso8601_time
-            xml.updated   attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
-        
-            # Add specific author information
-            if a[:author_name] || a[:author_uri]
-              xml.author do
-                xml.name  a[:author_name] || author_name
-                xml.uri   a[:author_uri]  || author_uri
-              end
-            end
-
-            # Add link
-            xml.link(:rel => 'alternate', :href => url)
-
-            # Add content
-            summary = excerpt_proc.call(a)
-            xml.content   content_proc.call(a), :type => 'html'
-            xml.summary   summary, :type => 'html' unless summary.nil?
-          end
-        end
-      end
-
-      buffer
+      # Run
+      builder.validate
+      builder.build
     end
 
     # Returns the URL for the given item. It will return the URL containing
@@ -261,7 +320,7 @@ module Nanoc::Helpers
     def url_for(item)
       # Check attributes
       if @site.config[:base_url].nil?
-        raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
+        raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
       # Build URL
@@ -281,7 +340,7 @@ module Nanoc::Helpers
     def feed_url
       # Check attributes
       if @site.config[:base_url].nil?
-        raise RuntimeError.new('Cannot build Atom feed: site configuration has no base_url')
+        raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
       @item[:feed_url] || @site.config[:base_url] + @item.path

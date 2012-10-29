@@ -174,7 +174,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -200,7 +200,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -226,7 +226,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -252,7 +252,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -326,7 +326,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns(nil)
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -354,7 +354,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -550,6 +550,50 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_atom_feed_with_icon_param
+    if_have 'builder' do
+      # Mock article
+      @items = [ mock_article ]
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
+      @item.stubs(:[]).with(:author_name).returns('J. Doe')
+      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      result = atom_feed :icon => 'http://example.com/icon.png'
+      assert_match '<icon>http://example.com/icon.png</icon>', result
+    end
+  end
+
+  def test_atom_feed_with_logo_param
+    if_have 'builder' do
+      # Mock article
+      @items = [ mock_article ]
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
+      @item.stubs(:[]).with(:author_name).returns('J. Doe')
+      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      result = atom_feed :logo => 'http://example.com/logo.png'
+      assert_match '<logo>http://example.com/logo.png</logo>', result
+    end
+  end
+
   def test_atom_feed_with_item_without_path
     if_have 'builder' do
       # Create items
@@ -627,7 +671,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = Nanoc::Site.new({})
 
     # Check
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::Errors::GenericTrivial) do
       url_for(nil)
     end
   end
@@ -682,7 +726,7 @@ class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
     @site = Nanoc::Site.new({})
 
     # Check
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::Errors::GenericTrivial) do
       feed_url
     end
   end
