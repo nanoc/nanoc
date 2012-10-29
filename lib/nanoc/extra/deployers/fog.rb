@@ -64,23 +64,26 @@ module Nanoc::Extra::Deployers
         truncated = set.is_truncated
         files = files + set
       end
-
-      # Delete all the files in the bucket
-      puts "Removing remote files"
-      files.all.each do |file|
-        file.destroy
-      end
+      keys_to_destroy = files.all.map {|file| file.key}
 
       # Upload all the files in the output folder to the clouds
       puts "Uploading local files"
       FileUtils.cd(src) do
         files = Dir['**/*'].select { |f| File.file?(f) }
         files.each do |file_path|
+          key = "#{path}#{file_path}"
           directory.files.create(
-            :key => "#{path}#{file_path}",
+            :key => key,
             :body => File.open(file_path),
             :public => true)
+          keys_to_destroy.delete(key)
         end
+      end
+
+      # delete extraneous remote files
+      puts "Removing remote files"
+      keys_to_destroy.each do |key|
+        directory.files.get(key).destroy
       end
 
       puts "Done!"
