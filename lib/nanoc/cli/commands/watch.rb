@@ -104,7 +104,11 @@ module Nanoc::CLI::Commands
     private
 
       def tool
-        @tool ||= TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
+        @tool ||= begin
+          TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
+        rescue Errno::ENOENT
+          nil
+        end
       end
 
       def growlnotify(message)
