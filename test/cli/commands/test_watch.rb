@@ -4,14 +4,6 @@ class Nanoc::CLI::Commands::WatchTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
-  def setup
-    super
-    @@warned ||= begin
-      STDERR.puts "\n(fssm deprecation warning can be ignored; master branch uses guard/listen)"
-      true
-    end
-  end
-
   def test_run
     with_site do |s|
       watch_thread = Thread.new do
