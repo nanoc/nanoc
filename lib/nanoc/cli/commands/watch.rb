@@ -117,7 +117,11 @@ module Nanoc::CLI::Commands
           require 'terminal-notifier'
           'terminal-notify'
         rescue LoadError
-          TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
+          begin
+            TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
+          rescue Errno::ENOENT
+            nil
+          end
         end
       end
 

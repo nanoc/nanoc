@@ -202,6 +202,16 @@ module Nanoc
 
     end
 
+    # Error that is raised when the compiled content of a binary item is attempted to be accessed.
+    class CannotGetCompiledContentOfBinaryItem < Generic
+
+      # @param [Nanoc::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
+      def initialize(rep)
+        super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep.inspect}.")
+      end
+
+    end
+
     # @deprecated No longer necessary, but kept for backwards compatibility.
     class DataNotYetAvailable < Generic
 
