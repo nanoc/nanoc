@@ -7,12 +7,15 @@ Fixes:
 * Made passthrough rules be inserted in the right place [Gregory Pakosz]
 * Fixed crashes in the progress indicator when compiling
 * Made auto-pruning honor excluded files [Greg Karékinian]
+* Made lack of which/where not crash watch command
 
 Improvements:
 
 * Fixed constant reinitialization warnings [Damien Pollet]
 * Made UTF-8 not be decomposed when outputting to a file from a non-UTF-8 terminal
 * Made syntax colorizer wrap CodeRay output in required CodeRay divs
+* Made fog delete after upload, not before [Go Maeda]
+* Made requesting compiled content of binary item impossible
 
 ## 3.4.1 (2012-09-22)
 
