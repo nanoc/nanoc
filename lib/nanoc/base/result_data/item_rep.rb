@@ -240,6 +240,11 @@ module Nanoc
     # @return [String] The compiled content at the given snapshot (or the
     #   default snapshot if no snapshot is specified)
     def compiled_content(params={})
+      # Make sure we're not binary
+      if self.item.binary?
+        raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
+      end
+
       # Notify
       Nanoc::NotificationCenter.post(:visit_started, self.item)
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)

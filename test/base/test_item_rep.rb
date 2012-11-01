@@ -528,6 +528,14 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal [ items[1] ], dt.objects_causing_outdatedness_of(items[0])
   end
 
+  def test_access_compiled_content_of_binary_item
+    item = Nanoc::Item.new("content/somefile.dat", {}, '/somefile/', :binary => true)
+    item_rep = Nanoc::ItemRep.new(item, :foo)
+    assert_raises(Nanoc::Errors::CannotGetCompiledContentOfBinaryItem) do
+      item_rep.compiled_content
+    end
+  end
+
 private
 
   def create_binary_item
