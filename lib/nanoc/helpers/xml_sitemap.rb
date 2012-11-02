@@ -59,7 +59,7 @@ module Nanoc::Helpers
           item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
-              xml.lastmod     item.mtime.to_iso8601_date unless item.mtime.nil?
+              xml.lastmod     item[:mtime].to_iso8601_date unless item[:mtime].nil?
               xml.changefreq  item[:changefreq] unless item[:changefreq].nil?
               xml.priority    item[:priority] unless item[:priority].nil?
             end
