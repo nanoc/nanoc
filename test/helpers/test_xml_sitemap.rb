@@ -13,7 +13,7 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
       # Create item 0
       @items[0].expects(:[]).with(:is_hidden).returns(false)
-      @items[0].expects(:mtime).times(2).returns(nil)
+      @items[0].expects(:[]).with(:mtime).times(2).returns(nil)
       @items[0].expects(:[]).times(2).with(:changefreq).returns(nil)
       @items[0].expects(:[]).times(2).with(:priority).returns(nil)
       item_reps = [ mock, mock ]
@@ -28,7 +28,7 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
       # Create item 2
       @items[2].expects(:[]).with(:is_hidden).returns(false)
-      @items[2].expects(:mtime).times(4).returns(Time.parse('12/07/2004'))
+      @items[2].expects(:[]).with(:mtime).times(4).returns(Time.parse('12/07/2004'))
       @items[2].expects(:[]).with(:changefreq).times(4).returns('daily')
       @items[2].expects(:[]).with(:priority).times(4).returns(0.5)
       item_reps = [ mock, mock ]
@@ -74,7 +74,7 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
       @items[1].expects(:[]).never
 
       # Create item 2
-      @items[2].expects(:mtime).times(2).returns(nil)
+      @items[2].expects(:[]).with(:mtime).times(2).returns(nil)
       @items[2].expects(:[]).times(2).with(:changefreq).returns(nil)
       @items[2].expects(:[]).times(2).with(:priority).returns(nil)
       item_reps = [ mock, mock ]
