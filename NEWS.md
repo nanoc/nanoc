@@ -2,8 +2,20 @@
 
 ## 3.5 (???)
 
+Major changes:
+
+* Added checkers
+
+Minor changes:
+
 * Added `#include_rules` for modularising Rules files [Justin Hileman]
 * Replaced FSSM with Listen [Takashi Uchibe]
+* Made USR1 print stack trace
+
+Exensions:
+
+* Added support for parameters in Less filter [Ruben Verborgh]
+* Added support for icon and logo in Atom feed [Ruben Verborgh]
 
 ## 3.4.2 (2012-11-01)
 
