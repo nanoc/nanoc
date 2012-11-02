@@ -6,98 +6,113 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
 
   include Nanoc::Helpers::XMLSitemap
 
-  def test_xml_sitemap
-    if_have 'builder' do
-      # Create items
-      @items = [ mock, mock, mock, mock ]
-
-      # Create item 0
-      @items[0].expects(:[]).with(:is_hidden).returns(false)
-      @items[0].expects(:[]).with(:mtime).times(2).returns(nil)
-      @items[0].expects(:[]).times(2).with(:changefreq).returns(nil)
-      @items[0].expects(:[]).times(2).with(:priority).returns(nil)
-      item_reps = [ mock, mock ]
-      item_reps[0].expects(:path).returns('/kkk/')
-      item_reps[0].expects(:raw_path).returns('output/kkk/index.html')
-      item_reps[1].expects(:path).returns('/lll/')
-      item_reps[1].expects(:raw_path).returns('output/lll/index.html')
-      @items[0].expects(:reps).returns(item_reps)
-
-      # Create item 1
-      @items[1].expects(:[]).with(:is_hidden).returns(true)
-
-      # Create item 2
-      @items[2].expects(:[]).with(:is_hidden).returns(false)
-      @items[2].expects(:[]).with(:mtime).times(4).returns(Time.parse('12/07/2004'))
-      @items[2].expects(:[]).with(:changefreq).times(4).returns('daily')
-      @items[2].expects(:[]).with(:priority).times(4).returns(0.5)
-      item_reps = [ mock, mock ]
-      item_reps[0].expects(:path).returns('/aaa/')
-      item_reps[0].expects(:raw_path).returns('output/aaa/index.html')
-      item_reps[1].expects(:path).returns('/bbb/')
-      item_reps[1].expects(:raw_path).returns('output/bbb/index.html')
-      @items[2].expects(:reps).returns(item_reps)
-
-      # Create item 3
-      @items[3].expects(:[]).with(:is_hidden).returns(false)
-      item_rep = mock
-      item_rep.expects(:raw_path).returns(nil)
-      @items[3].expects(:reps).returns([ item_rep ])
-
-      # Create sitemap item
-      @item = mock
-
-      # Create site
-      config = mock
-      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-      @site = mock
-      @site.expects(:config).at_least_once.returns(config)
-
-      # Check
-      xml_sitemap
-    end
-  ensure
+  def teardown
     @items = nil
     @item  = nil
     @site  = nil
   end
 
-  def test_sitemap_with_items_as_param
-    if_have 'builder' do
+  def test_xml_sitemap
+    if_have 'builder', 'nokogiri' do
       # Create items
-      @items = [ mock, mock, mock ]
-
-      # Create item 0
-      @items[0].expects(:[]).never
+      @items = []
 
       # Create item 1
-      @items[1].expects(:[]).never
+      @items << Nanoc::Item.new('some content 1', {}, '/item-one/')
+      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
+      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
 
       # Create item 2
-      @items[2].expects(:[]).with(:mtime).times(2).returns(nil)
-      @items[2].expects(:[]).times(2).with(:changefreq).returns(nil)
-      @items[2].expects(:[]).times(2).with(:priority).returns(nil)
-      item_reps = [ mock, mock ]
-      item_reps[0].expects(:path).returns('/kkk/')
-      item_reps[0].expects(:raw_path).returns('output/kkk/index.html')
-      item_reps[1].expects(:path).returns('/lll/')
-      item_reps[1].expects(:raw_path).returns('output/lll/index.html')
-      @items[2].expects(:reps).returns(item_reps)
+      @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two/')
+
+      # Create item 3
+      attrs = { :mtime => Time.parse('12/07/2004'), :changefreq => 'daily', :priority => 0.5 }
+      @items << Nanoc::Item.new('some content 3', attrs, '/item-three/')
+      self.create_item_rep(@items.last, :three_a, '/item-three/a/')
+      self.create_item_rep(@items.last, :three_b, '/item-three/b/')
+
+      # Create item 4
+      @items << Nanoc::Item.new('some content 4', {}, '/item-four/')
+      self.create_item_rep(@items.last, :four_a, nil)
 
       # Create sitemap item
-      @item = mock
+      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
 
       # Create site
-      config = mock
-      config.expects(:[]).with(:base_url).at_least_once.returns('http://example.com')
-      @site = mock
-      @site.expects(:config).at_least_once.returns(config)
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+
+      # Build sitemap
+      res = xml_sitemap
 
       # Check
-      xml_sitemap(
-        :items => [@items[2]]
-      )
+      doc = Nokogiri::XML(res)
+      urlsets = doc.css('> urlset')
+      assert_equal 1, urlsets.size
+      urls = urlsets.css('> url')
+      assert_equal 4, urls.size
+      assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
+      assert_equal 'http://example.com/item-one/b/',   urls[1].css('> loc').inner_text
+      assert_equal 'http://example.com/item-three/a/', urls[2].css('> loc').inner_text
+      assert_equal 'http://example.com/item-three/b/', urls[3].css('> loc').inner_text
+      assert_equal '',                                 urls[0].css('> changefreq').inner_text
+      assert_equal '',                                 urls[1].css('> changefreq').inner_text
+      assert_equal 'daily',                            urls[2].css('> changefreq').inner_text
+      assert_equal 'daily',                            urls[3].css('> changefreq').inner_text
+      assert_equal '',                                 urls[0].css('> priority').inner_text
+      assert_equal '',                                 urls[1].css('> priority').inner_text
+      assert_equal '0.5',                              urls[2].css('> priority').inner_text
+      assert_equal '0.5',                              urls[3].css('> priority').inner_text
+      assert_equal '',                                 urls[0].css('> lastmod').inner_text
+      assert_equal '',                                 urls[1].css('> lastmod').inner_text
+      assert_equal '2004-07-12',                       urls[2].css('> lastmod').inner_text
+      assert_equal '2004-07-12',                       urls[3].css('> lastmod').inner_text
     end
+  end
+
+  def test_sitemap_with_items_as_param
+    if_have 'builder', 'nokogiri' do
+      # Create items
+      @items = []
+      @items << nil
+      @items << Nanoc::Item.new('some content 1', {}, '/item-one/')
+      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
+      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+      @items << nil
+
+      # Create sitemap item
+      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+
+      # Create site
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+
+      # Build sitemap
+      res = xml_sitemap(:items => [ @items[1] ])
+
+      # Check
+      doc = Nokogiri::XML(res)
+      urlsets = doc.css('> urlset')
+      assert_equal 1, urlsets.size
+      urls = urlsets.css('> url')
+      assert_equal 2, urls.size
+      assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
+      assert_equal 'http://example.com/item-one/b/',   urls[1].css('> loc').inner_text
+      assert_equal '',                                 urls[0].css('> changefreq').inner_text
+      assert_equal '',                                 urls[1].css('> changefreq').inner_text
+      assert_equal '',                                 urls[0].css('> priority').inner_text
+      assert_equal '',                                 urls[1].css('> priority').inner_text
+      assert_equal '',                                 urls[0].css('> lastmod').inner_text
+      assert_equal '',                                 urls[1].css('> lastmod').inner_text
+    end
+  end
+
+protected
+
+  def create_item_rep(item, name, path)
+    rep = Nanoc::ItemRep.new(item, name)
+    rep.paths     = { :last => path }
+    rep.raw_paths = { :last => path }
+    item.reps << rep
+    rep
   end
 
 end

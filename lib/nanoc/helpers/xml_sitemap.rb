@@ -40,7 +40,7 @@ module Nanoc::Helpers
       require 'builder'
 
       # Extract parameters
-      items = params[:items] || @items.reject { |i| i[:is_hidden] }
+      items = params.fetch(:items) { @items.reject { |i| i[:is_hidden] } }
 
       # Create builder
       buffer = ''
