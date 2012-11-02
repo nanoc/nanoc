@@ -41,6 +41,7 @@ module Nanoc::Helpers
 
       # Extract parameters
       items = params[:items] || @items.reject { |i| i[:is_hidden] }
+      excluded_reps = params[:excluded_reps] || []
 
       # Create builder
       buffer = ''
@@ -56,7 +57,7 @@ module Nanoc::Helpers
       xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
         items.each do |item|
-          item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
+          item.reps.reject { |r| r.raw_path.nil? || excluded_reps.include?(r.name) }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
               xml.lastmod     item.mtime.to_iso8601_date unless item.mtime.nil?
