@@ -120,7 +120,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
 
       # Run filter with compress option
       result = filter.run('.foo { bar: a; } .bar { foo: b; }', :compress => true)
-      assert_match /^\.foo{bar:a;}\n\.bar{foo:b;}/, result
+      assert_match(/^\.foo{bar:a;}\n\.bar{foo:b;}/, result)
     end
   end
 
