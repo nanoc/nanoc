@@ -25,7 +25,7 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
       item.identifier.chop!
     rescue => error
       raised = true
-      assert_match /(^can't modify frozen [Ss]tring|^unable to modify frozen object$)/, error.message
+      assert_match(/(^can't modify frozen [Ss]tring|^unable to modify frozen object$)/, error.message)
     end
     assert raised, 'Should have raised when trying to modify a frozen string'
   end
@@ -149,7 +149,7 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
       item[:abc] = '123'
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
 
@@ -158,7 +158,7 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
       item[:a][:b] = '456'
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end

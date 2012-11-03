@@ -63,7 +63,7 @@ class Nanoc::Helpers::FilteringTest < MiniTest::Unit::TestCase
               "<% end %>\n"
 
     # Evaluate content
-    error = assert_raises(Nanoc::Errors::UnknownFilter) do
+    assert_raises(Nanoc::Errors::UnknownFilter) do
       ::ERB.new(content).result(binding)
     end
   end

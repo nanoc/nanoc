@@ -249,11 +249,11 @@ EOS
         [ :albino, :pygmentize, :simon_highlight ].each do |colorizer|
           begin
             input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
-            actual_output = filter.run(
+            filter.run(
               input,
               :colorizers => { :ruby => colorizer })
             flunk "expected colorizer to raise if no executable is available"
-          rescue => e
+          rescue
           end
         end
       ensure

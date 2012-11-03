@@ -68,10 +68,10 @@ class Nanoc::MemoizationTest < MiniTest::Unit::TestCase
     sample2b = Sample2.new(25)
 
     3.times do
-      assert_equal (10*10+5),  sample1a.run(5)
-      assert_equal (10*15+7),  sample1b.run(7)
-      assert_equal (100*20+5), sample2a.run(5)
-      assert_equal (100*25+7), sample2b.run(7)
+      assert_equal 10*10+5,  sample1a.run(5)
+      assert_equal 10*15+7,  sample1b.run(7)
+      assert_equal 100*20+5, sample2a.run(5)
+      assert_equal 100*25+7, sample2b.run(7)
     end
   end
 
@@ -80,10 +80,10 @@ class Nanoc::MemoizationTest < MiniTest::Unit::TestCase
     sample2 = EqualSample.new(3)
 
     3.times do
-      assert_equal (2*10+5), sample1.run(5)
-      assert_equal (2*10+3), sample1.run(3)
-      assert_equal (3*10+5), sample2.run(5)
-      assert_equal (3*10+3), sample2.run(3)
+      assert_equal 2*10+5, sample1.run(5)
+      assert_equal 2*10+3, sample1.run(3)
+      assert_equal 3*10+5, sample2.run(5)
+      assert_equal 3*10+3, sample2.run(3)
     end
   end
 

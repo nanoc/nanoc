@@ -28,7 +28,6 @@ class Nanoc::ChecksumStoreTest < MiniTest::Unit::TestCase
 
     # Check
     obj = Nanoc::Item.new('Moo?', {}, '/animals/cow/')
-    new_checksum = 'Moo?'.checksum + '-' + {}.checksum
     assert_equal nil, store[obj]
   end
 

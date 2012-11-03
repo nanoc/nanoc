@@ -6,7 +6,7 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
 
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Errno::ENOENT) do
-      site = Nanoc::Site.new('.')
+      Nanoc::Site.new('.')
     end
   end
 
