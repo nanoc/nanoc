@@ -31,7 +31,7 @@ describe 'Array#freeze_recursively' do
       array[0] = 123
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end
@@ -45,7 +45,7 @@ describe 'Array#freeze_recursively' do
       array[1][0] = 123
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end

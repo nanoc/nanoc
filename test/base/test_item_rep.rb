@@ -459,7 +459,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       rep.filter(:whatever)
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end
@@ -483,7 +483,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       rep.filter(:whatever)
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end

@@ -275,7 +275,7 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
       error = assert_raises(RuntimeError) do
         site.compile
       end
-      assert_match /^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message
+      assert_match(/^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message)
     end
   end
 

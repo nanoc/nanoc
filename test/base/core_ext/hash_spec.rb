@@ -49,7 +49,7 @@ describe 'Hash#freeze_recursively' do
       hash[:a] = 123
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end
@@ -63,7 +63,7 @@ describe 'Hash#freeze_recursively' do
       hash[:a][:b] = 123
     rescue => e
       raised = true
-      assert_match /(^can't modify frozen |^unable to modify frozen object$)/, e.message
+      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
     assert raised
   end

@@ -59,7 +59,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         autocompiler.stubs(:site).returns(site)
 
         # Serve
-        status, headers, body = autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/afjwiagoawf.html') }
+        status, _, _ = autocompiler.instance_eval { call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/afjwiagoawf.html') }
 
         # Check response
         assert_equal(404, status)
@@ -377,7 +377,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         # Check
         status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
         body.each do |b|
-          assert_match /The Grand Value of Configuration is Foo!/, b
+          assert_match(/The Grand Value of Configuration is Foo!/, b)
         end
 
         # Set config to 2nd value
@@ -389,7 +389,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         # Check
         status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
         body.each do |b|
-          assert_match /The Grand Value of Configuration is Bar!/, b
+          assert_match(/The Grand Value of Configuration is Bar!/, b)
         end
       end
     end
@@ -410,7 +410,7 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
       # Test
       result = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/%73oftware')
       assert_equal 404, result[0]
-      assert_match "File not found: /software\n", result[2][0]
+      assert_match("File not found: /software\n", result[2][0])
     end
   end
 

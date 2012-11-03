@@ -22,7 +22,7 @@ class Nanoc::LayoutTest < MiniTest::Unit::TestCase
       layout.identifier.chop!
     rescue => error
       raised = true
-      assert_match /(^can't modify frozen [Ss]tring|^unable to modify frozen object$)/, error.message
+      assert_match(/(^can't modify frozen [Ss]tring|^unable to modify frozen object$)/, error.message)
     end
     assert raised, 'Should have raised when trying to modify a frozen string'
   end

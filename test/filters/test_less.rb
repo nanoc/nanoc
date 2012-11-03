@@ -14,7 +14,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.run('.foo { bar: 1 + 1 }')
-      assert_match /\.foo\s*\{\s*bar:\s*2;?\s*\}/, result
+      assert_match(/\.foo\s*\{\s*bar:\s*2;?\s*\}/, result)
     end
   end
 
@@ -32,7 +32,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.run('@import "content/foo/bar/imported_file.less";')
-      assert_match /p\s*\{\s*color:\s*red;?\s*\}/, result
+      assert_match(/p\s*\{\s*color:\s*red;?\s*\}/, result)
     end
   end
 
@@ -51,7 +51,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.run('@import "bar/imported_file.less";')
-      assert_match /p\s*\{\s*color:\s*red;?\s*\}/, result
+      assert_match(/p\s*\{\s*color:\s*red;?\s*\}/, result)
     end
   end
 
@@ -90,7 +90,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css')
+        assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css'))
 
         # Update included file
         File.open('content/b.less', 'w') do |io|
@@ -105,7 +105,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css')
+        assert_match(/^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css'))
       end
     end
   end

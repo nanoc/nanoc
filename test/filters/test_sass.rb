@@ -22,11 +22,11 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
 
       # Check with compact
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
-      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*(red|#f00);?[\s\n]*\}/m, result)
+      assert_match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m, result)
 
       # Check with compressed
       result = filter.run(".foo #bar\n  color: #f00", :style => 'compressed')
-      assert_match(/^\.foo #bar[\s\n]*\{[\s\n]*color:\s*(red|#f00);?[\s\n]*\}/m, result)
+      assert_match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m, result)
     end
   end
 
@@ -133,8 +133,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*\{\s*color:\s*red;?\s*\}/,
-          File.read('output/a.css')
+        assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css'))
 
         # Update included file
         File.open('content/b.sass', 'w') do |io|
@@ -149,8 +148,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*\{\s*color:\s*blue;?\s*\}/,
-          File.read('output/a.css')
+        assert_match(/^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css'))
       end
     end
   end
@@ -190,8 +188,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*\{\s*color:\s*red;?\s*\}/,
-          File.read('output/a.css')
+        assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css'))
 
         # Update included file
         File.open('content/_b.sass', 'w') do |io|
@@ -206,8 +203,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
         assert Dir['output/*'].size == 1
         assert File.file?('output/a.css')
         refute File.file?('output/b.css')
-        assert_match /^p\s*\{\s*color:\s*blue;?\s*\}/,
-          File.read('output/a.css')
+        assert_match(/^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css'))
       end
     end
   end
