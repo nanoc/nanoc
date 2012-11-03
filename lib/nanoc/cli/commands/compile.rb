@@ -105,6 +105,9 @@ module Nanoc::CLI::Commands
     # TODO document
     class TimingRecorder
 
+      attr_reader :filter_times
+      attr_reader :rep_times
+
       def initialize
         @rep_times    = {}
         @filter_times = {}
@@ -124,6 +127,47 @@ module Nanoc::CLI::Commands
         end
         Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
           @filter_times[filter_name] << Time.now - @filter_times[filter_name].pop
+        end
+      end
+
+      def print_profiling_feedback(reps)
+        # Get max filter length
+        max_filter_name_length = @filter_times.keys.map { |k| k.to_s.size }.max
+        return if max_filter_name_length.nil?
+
+        # Print warning if necessary
+        if reps.any? { |r| !r.compiled? }
+          $stderr.puts
+          $stderr.puts "Warning: profiling information may not be accurate because " +
+                       "some items were not compiled."
+        end
+
+        # Print header
+        puts
+        puts ' ' * max_filter_name_length + ' | count    min    avg    max     tot'
+        puts '-' * max_filter_name_length + '-+-----------------------------------'
+
+        @filter_times.to_a.sort_by { |r| r[1] }.each do |row|
+          # Extract data
+          filter_name, samples = *row
+
+          # Calculate stats
+          count = samples.size
+          min   = samples.min
+          tot   = samples.inject { |memo, i| memo + i}
+          avg   = tot/count
+          max   = samples.max
+
+          # Format stats
+          count = format('%4d',   count)
+          min   = format('%4.2f', min)
+          avg   = format('%4.2f', avg)
+          max   = format('%4.2f', max)
+          tot   = format('%5.2f', tot)
+
+          # Output stats
+          filter_name = format("%#{max_filter_name_length}s", filter_name)
+          puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
         end
       end
 
@@ -247,25 +291,13 @@ module Nanoc::CLI::Commands
       puts "Loading site data…"
       self.require_site
 
-      # Check presence of --all option
-      if options.has_key?(:all) || options.has_key?(:force)
-        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
-      end
-
-      # Warn if trying to compile a single item
-      if arguments.size == 1
-        $stderr.puts '-' * 80
-        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'
-        $stderr.puts '-' * 80
-      end
+      self.check_for_deprecated_usage
 
       # Give feedback
       puts "Compiling site…"
 
       # Initialize profiling stuff
       time_before = Time.now
-      @rep_times     = {}
-      @filter_times  = {}
       setup_notifications
 
       # Prepare for generating diffs
@@ -274,10 +306,6 @@ module Nanoc::CLI::Commands
         @diff_generator.start
       end
 
-      # Set up GC control
-      @gc_lock = Mutex.new
-      @gc_count = 0
-
       # Compile
       self.site.compile
 
@@ -285,6 +313,7 @@ module Nanoc::CLI::Commands
       reps = self.site.items.map { |i| i.reps }.flatten
 
       # Show skipped reps
+      # TODO move this into the file action printer
       reps.select { |r| !r.compiled? }.each do |rep|
         rep.raw_paths.each do |snapshot_name, filename|
           next if filename.nil?
@@ -309,67 +338,43 @@ module Nanoc::CLI::Commands
 
       # Give detailed feedback
       if options.has_key?(:verbose)
-        print_profiling_feedback(reps)
+        # TODO test
+        @timing_recorder.print_profiling_feedback(reps)
       end
     end
 
     def setup_notifications
       # File notifications
+      # TODO move this in a separate class
       Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
         action = (is_created ? :create : (is_modified ? :update : :identical))
         level  = (is_created ? :high   : (is_modified ? :high   : :low))
-        duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
+        duration = Time.now - @timing_recorder.rep_times[rep.raw_path] if @timing_recorder.rep_times[rep.raw_path]
         Nanoc::CLI::Logger.instance.file(level, action, path, duration)
       end
 
       Nanoc::CLI::Commands::Compile::DebugPrinter.new.start if self.debug?
       Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new.start
       Nanoc::CLI::Commands::Compile::GCController.new.start
-      Nanoc::CLI::Commands::Compile::TimingRecorder.new.start
-    end
-
-    def print_profiling_feedback(reps)
-      # Get max filter length
-      max_filter_name_length = @filter_times.keys.map { |k| k.to_s.size }.max
-      return if max_filter_name_length.nil?
-
-      # Print warning if necessary
-      if reps.any? { |r| !r.compiled? }
-        $stderr.puts
-        $stderr.puts "Warning: profiling information may not be accurate because " +
-                     "some items were not compiled."
-      end
-
-      # Print header
-      puts
-      puts ' ' * max_filter_name_length + ' | count    min    avg    max     tot'
-      puts '-' * max_filter_name_length + '-+-----------------------------------'
-
-      @filter_times.to_a.sort_by { |r| r[1] }.each do |row|
-        # Extract data
-        filter_name, samples = *row
-
-        # Calculate stats
-        count = samples.size
-        min   = samples.min
-        tot   = samples.inject { |memo, i| memo + i}
-        avg   = tot/count
-        max   = samples.max
-
-        # Format stats
-        count = format('%4d',   count)
-        min   = format('%4.2f', min)
-        avg   = format('%4.2f', avg)
-        max   = format('%4.2f', max)
-        tot   = format('%5.2f', tot)
-
-        # Output stats
-        filter_name = format("%#{max_filter_name_length}s", filter_name)
-        puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
-      end
+      @timing_recorder = Nanoc::CLI::Commands::Compile::TimingRecorder.new
+      @timing_recorder.start
     end
 
   protected
+
+    def check_for_deprecated_usage
+      # Check presence of --all option
+      if options.has_key?(:all) || options.has_key?(:force)
+        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
+      end
+
+      # Warn if trying to compile a single item
+      if arguments.size == 1
+        $stderr.puts '-' * 80
+        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'
+        $stderr.puts '-' * 80
+      end
+    end
 
     def prune_config
       self.site.config[:prune] || {}
