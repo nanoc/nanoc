@@ -25,99 +25,191 @@ module Nanoc::CLI::Commands
   # FIXME this command is horribly long and complicated and does way too much. plz cleanup thx.
   class Compile < ::Nanoc::CLI::CommandRunner
 
-    def run
-      # Make sure we are in a nanoc site directory
-      puts "Loading site data…"
-      self.require_site
+    # TODO document
+    class DiffGenerator
 
-      # Check presence of --all option
-      if options.has_key?(:all) || options.has_key?(:force)
-        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
-      end
-
-      # Warn if trying to compile a single item
-      if arguments.size == 1
-        $stderr.puts '-' * 80
-        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'
-        $stderr.puts '-' * 80
-      end
-
-      # Give feedback
-      puts "Compiling site…"
-
-      # Initialize profiling stuff
-      time_before = Time.now
-      @rep_times     = {}
-      @filter_times  = {}
-      setup_notifications
-
-      # Prepare for generating diffs
-      setup_diffs
-
-      # Set up GC control
-      @gc_lock = Mutex.new
-      @gc_count = 0
-
-      # Compile
-      self.site.compile
-
-      # Find reps
-      reps = self.site.items.map { |i| i.reps }.flatten
-
-      # Show skipped reps
-      reps.select { |r| !r.compiled? }.each do |rep|
-        rep.raw_paths.each do |snapshot_name, filename|
-          next if filename.nil?
-          duration = @rep_times[filename]
-          Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
+      # TODO document
+      def start
+        require 'tempfile'
+        old_contents = {}
+        Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
+          path = rep.raw_path(:snapshot => snapshot)
+          old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
-      end
-
-      # Stop diffing
-      teardown_diffs
-
-      # Prune
-      if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
-      end
-
-      # Give general feedback
-      puts
-      puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
-
-      # Give detailed feedback
-      if options.has_key?(:verbose)
-        print_profiling_feedback(reps)
-      end
-    end
-
-    def setup_notifications
-      # Diff generation
-      require 'tempfile'
-      old_contents = {}
-      Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
-        path = rep.raw_path(:snapshot => snapshot)
-        old_contents[rep] = File.file?(path) ? File.read(path) : nil
-      end
-      Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-        if !rep.binary? && self.site.config[:enable_output_diff]
-          new_contents = File.file?(path) ? File.read(path) : nil
-          if old_contents[rep] && new_contents
-            generate_diff_for(rep, old_contents[rep], new_contents)
+        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+          if !rep.binary?
+            new_contents = File.file?(path) ? File.read(path) : nil
+            if old_contents[rep] && new_contents
+              generate_diff_for(rep, old_contents[rep], new_contents)
+            end
           end
         end
       end
 
-      # File notifications
-      Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-        action = (is_created ? :create : (is_modified ? :update : :identical))
-        level  = (is_created ? :high   : (is_modified ? :high   : :low))
-        duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
-        Nanoc::CLI::Logger.instance.file(level, action, path, duration)
+      def setup_diffs
+        @diff_lock    = Mutex.new
+        @diff_threads = []
+        FileUtils.rm('output.diff') if File.file?('output.diff')
       end
 
-      # Debug notifications
-      if self.debug?
+      def teardown_diffs
+        @diff_threads.each { |t| t.join }
+      end
+
+      def generate_diff_for(rep, old_content, new_content)
+        return if old_content == new_content
+
+        @diff_threads << Thread.new do
+          # Generate diff
+          diff = diff_strings(old_content, new_content)
+          diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
+          diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
+
+          # Write diff
+          @diff_lock.synchronize do
+            File.open('output.diff', 'a') { |io| io.write(diff) }
+          end
+        end
+      end
+
+      # TODO move this elsewhere
+      def diff_strings(a, b)
+        require 'open3'
+
+        # Create files
+        Tempfile.open('old') do |old_file|
+          Tempfile.open('new') do |new_file|
+            # Write files
+            old_file.write(a)
+            old_file.flush
+            new_file.write(b)
+            new_file.flush
+
+            # Diff
+            cmd = [ 'diff', '-u', old_file.path, new_file.path ]
+            Open3.popen3(*cmd) do |stdin, stdout, stderr|
+              result = stdout.read
+              return (result == '' ? nil : result)
+            end
+          end
+        end
+      rescue Errno::ENOENT
+        warn 'Failed to run `diff`, so no diff with the previously compiled ' \
+             'content will be available.'
+        nil
+      end
+
+
+    end
+
+    # TODO document
+    class TimingRecorder
+
+      def initialize
+        @rep_times    = {}
+        @filter_times = {}
+      end
+
+      # TODO document
+      def start
+        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+          @rep_times[rep.raw_path] = Time.now
+        end
+        Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
+          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
+        end
+        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+          @filter_times[filter_name] ||= []
+          @filter_times[filter_name] << Time.now
+        end
+        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+          @filter_times[filter_name] << Time.now - @filter_times[filter_name].pop
+        end
+      end
+
+    end
+
+    # TODO document
+    class FilterProgressPrinter
+
+      # TODO document
+      def start
+        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+          start_filter_progress(rep, filter_name)
+        end
+        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+          stop_filter_progress(rep, filter_name)
+        end
+      end
+
+      def start_filter_progress(rep, filter_name)
+        # Only show progress on terminals
+        return if !$stdout.tty?
+
+        @progress_thread = Thread.new do
+          delay = 1.0
+          step  = 0
+
+          text = "  running #{filter_name} filter… "
+
+          loop do
+            if Thread.current[:stopped]
+              # Clear
+              if delay < 0.1
+                $stdout.print ' ' * (text.length + 3) + "\r"
+              end
+
+              break
+            end
+
+            # Show progress
+            if delay < 0.1
+              $stdout.print text + %w( | / - \\ )[step] + "\r"
+              step = (step + 1) % 4
+            end
+
+            sleep 0.1
+            delay -= 0.1
+          end
+
+        end
+      end
+
+      def stop_filter_progress(rep, filter_name)
+        # Only show progress on terminals
+        return if !$stdout.tty?
+
+        @progress_thread[:stopped] = true
+      end
+
+    end
+
+    # TODO document
+    class GCController
+
+      def initialize
+        @gc_count = 0
+      end
+
+      # TODO document
+      def start
+        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+          if @gc_count % 20 == 0 && !ENV.has_key?('TRAVIS')
+            GC.enable
+            GC.start
+            GC.disable
+          end
+          @gc_count += 1
+        end
+      end
+
+    end
+
+    # TODO document
+    class DebugPrinter
+
+      # TODO document
+      def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           puts "*** Started compilation of #{rep.inspect}"
         end
@@ -148,121 +240,92 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # Timing notifications
-      Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-        if @gc_count % 20 == 0 && !ENV.has_key?('TRAVIS')
-          GC.enable
-          GC.start
-          GC.disable
-        end
-        @gc_count += 1
-        @rep_times[rep.raw_path] = Time.now
-      end
-      Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
-        @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
-      end
-      Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-        @filter_times[filter_name] ||= []
-        @filter_times[filter_name] << Time.now
-        start_filter_progress(rep, filter_name)
-      end
-      Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-        @filter_times[filter_name] << Time.now - @filter_times[filter_name].pop
-        stop_filter_progress(rep, filter_name)
-      end
     end
 
-    def setup_diffs
-      @diff_lock    = Mutex.new
-      @diff_threads = []
-      FileUtils.rm('output.diff') if File.file?('output.diff')
-    end
+    def run
+      # Make sure we are in a nanoc site directory
+      puts "Loading site data…"
+      self.require_site
 
-    def teardown_diffs
-      @diff_threads.each { |t| t.join }
-    end
-
-    def generate_diff_for(rep, old_content, new_content)
-      return if old_content == new_content
-
-      @diff_threads << Thread.new do
-        # Generate diff
-        diff = diff_strings(old_content, new_content)
-        diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
-        diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
-
-        # Write diff
-        @diff_lock.synchronize do
-          File.open('output.diff', 'a') { |io| io.write(diff) }
-        end
+      # Check presence of --all option
+      if options.has_key?(:all) || options.has_key?(:force)
+        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
       end
-    end
 
-    # TODO move this elsewhere
-    def diff_strings(a, b)
-      require 'open3'
+      # Warn if trying to compile a single item
+      if arguments.size == 1
+        $stderr.puts '-' * 80
+        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'
+        $stderr.puts '-' * 80
+      end
 
-      # Create files
-      Tempfile.open('old') do |old_file|
-        Tempfile.open('new') do |new_file|
-          # Write files
-          old_file.write(a)
-          old_file.flush
-          new_file.write(b)
-          new_file.flush
+      # Give feedback
+      puts "Compiling site…"
 
-          # Diff
-          cmd = [ 'diff', '-u', old_file.path, new_file.path ]
-          Open3.popen3(*cmd) do |stdin, stdout, stderr|
-            result = stdout.read
-            return (result == '' ? nil : result)
-          end
+      # Initialize profiling stuff
+      time_before = Time.now
+      @rep_times     = {}
+      @filter_times  = {}
+      setup_notifications
+
+      # Prepare for generating diffs
+      if self.site.config[:enable_output_diff]
+        @diff_generator = Nanoc::CLI::Commands::Compile::DiffGenerator.new
+        @diff_generator.start
+      end
+
+      # Set up GC control
+      @gc_lock = Mutex.new
+      @gc_count = 0
+
+      # Compile
+      self.site.compile
+
+      # Find reps
+      reps = self.site.items.map { |i| i.reps }.flatten
+
+      # Show skipped reps
+      reps.select { |r| !r.compiled? }.each do |rep|
+        rep.raw_paths.each do |snapshot_name, filename|
+          next if filename.nil?
+          duration = @rep_times[filename]
+          Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
         end
       end
-    rescue Errno::ENOENT
-      warn 'Failed to run `diff`, so no diff with the previously compiled ' \
-           'content will be available.'
-      nil
-    end
 
-    def start_filter_progress(rep, filter_name)
-      # Only show progress on terminals
-      return if !$stdout.tty?
+      # Stop diffing
+      if self.site.config[:enable_output_diff]
+        @diff_generator.stop
+      end
 
-      @progress_thread = Thread.new do
-        delay = 1.0
-        step  = 0
+      # Prune
+      if self.site.config[:prune][:auto_prune]
+        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
+      end
 
-        text = "  running #{filter_name} filter… "
+      # Give general feedback
+      puts
+      puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
 
-        loop do
-          if Thread.current[:stopped]
-            # Clear
-            if delay < 0.1
-              $stdout.print ' ' * (text.length + 3) + "\r"
-            end
-
-            break
-          end
-
-          # Show progress
-          if delay < 0.1
-            $stdout.print text + %w( | / - \\ )[step] + "\r"
-            step = (step + 1) % 4
-          end
-
-          sleep 0.1
-          delay -= 0.1
-        end
-
+      # Give detailed feedback
+      if options.has_key?(:verbose)
+        print_profiling_feedback(reps)
       end
     end
 
-    def stop_filter_progress(rep, filter_name)
-      # Only show progress on terminals
-      return if !$stdout.tty?
+    def setup_notifications
+      # File notifications
+      Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        action = (is_created ? :create : (is_modified ? :update : :identical))
+        level  = (is_created ? :high   : (is_modified ? :high   : :low))
+        duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
+        Nanoc::CLI::Logger.instance.file(level, action, path, duration)
+      end
 
-      @progress_thread[:stopped] = true
+      Nanoc::CLI::Commands::Compile::DebugPrinter.new.start if self.debug?
+      Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new.start
+      Nanoc::CLI::Commands::Compile::GCController.new.start
+      Nanoc::CLI::Commands::Compile::TimingRecorder.new.start
     end
 
     def print_profiling_feedback(reps)
