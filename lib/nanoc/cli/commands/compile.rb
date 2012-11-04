@@ -46,7 +46,6 @@ module Nanoc::CLI::Commands
       #
       # @return [void]
       def stop
-        Nanoc::NotificationCenter.remove_all(self)
       end
 
     end
