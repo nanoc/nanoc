@@ -181,27 +181,31 @@ module Nanoc::CLI::Commands
         puts '-' * max_filter_name_length + '-+-----------------------------------'
 
         @filter_times.to_a.sort_by { |r| r[1] }.each do |row|
-          # Extract data
-          filter_name, samples = *row
-
-          # Calculate stats
-          count = samples.size
-          min   = samples.min
-          tot   = samples.inject { |memo, i| memo + i}
-          avg   = tot/count
-          max   = samples.max
-
-          # Format stats
-          count = format('%4d',   count)
-          min   = format('%4.2f', min)
-          avg   = format('%4.2f', avg)
-          max   = format('%4.2f', max)
-          tot   = format('%5.2f', tot)
-
-          # Output stats
-          filter_name = format("%#{max_filter_name_length}s", filter_name)
-          puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
+          self.print_row(row)
         end
+      end
+
+      def print_row(row)
+        # Extract data
+        filter_name, samples = *row
+
+        # Calculate stats
+        count = samples.size
+        min   = samples.min
+        tot   = samples.inject { |memo, i| memo + i}
+        avg   = tot/count
+        max   = samples.max
+
+        # Format stats
+        count = format('%4d',   count)
+        min   = format('%4.2f', min)
+        avg   = format('%4.2f', avg)
+        max   = format('%4.2f', max)
+        tot   = format('%5.2f', tot)
+
+        # Output stats
+        filter_name = format("%#{max_filter_name_length}s", filter_name)
+        puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
 
     end
