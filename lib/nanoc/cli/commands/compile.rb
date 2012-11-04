@@ -218,9 +218,6 @@ module Nanoc::CLI::Commands
     protected
 
       def start_filter_progress(rep, filter_name)
-        # Only show progress on terminals
-        return if !$stdout.tty?
-
         @progress_thread = Thread.new do
           delay = 1.0
           step  = 0
@@ -251,9 +248,6 @@ module Nanoc::CLI::Commands
       end
 
       def stop_filter_progress(rep, filter_name)
-        # Only show progress on terminals
-        return if !$stdout.tty?
-
         @progress_thread[:stopped] = true
       end
 
@@ -404,7 +398,10 @@ module Nanoc::CLI::Commands
         @listeners << Nanoc::CLI::Commands::Compile::GCController.new
       end
 
-      @listeners << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
+      if $stdout.tty?
+        @listeners << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
+      end
+
       @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => self.reps)
 
       @listeners.each { |s| s.start }
