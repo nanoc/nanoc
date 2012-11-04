@@ -70,6 +70,11 @@ module Nanoc
         @notifications[name].reject! { |i| i[:id] == id }
       end
 
+      # TODO docuemnt
+      def remove_all(name)
+        @notifications.delete(name)
+      end
+
     private
 
       def initialize_if_necessary(name)

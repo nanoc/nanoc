@@ -25,10 +25,26 @@ module Nanoc::CLI::Commands
   # FIXME this command is horribly long and complicated and does way too much. plz cleanup thx.
   class Compile < ::Nanoc::CLI::CommandRunner
 
+    extend Nanoc::Memoization
+
     # TODO document
-    class DiffGenerator
+    class SubService
 
       # TODO document
+      def start
+        raise NotImplementedError, "Subclasses of SubService should implement #start"
+      end
+
+      # TODO document
+      def stop
+      end
+
+    end
+
+    # TODO document
+    class DiffGenerator < SubService
+
+      # @see SubService#start
       def start
         require 'tempfile'
         old_contents = {}
@@ -45,6 +61,14 @@ module Nanoc::CLI::Commands
           end
         end
       end
+
+      # @see SubService#stop
+      def stop
+        Nanoc::NotificationCenter.remove_all(self)
+        self.teardown_diffs
+      end
+
+    protected
 
       def setup_diffs
         @diff_lock    = Mutex.new
@@ -72,7 +96,6 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # TODO move this elsewhere
       def diff_strings(a, b)
         require 'open3'
 
@@ -99,21 +122,23 @@ module Nanoc::CLI::Commands
         nil
       end
 
-
     end
 
     # TODO document
-    class TimingRecorder
+    class TimingRecorder < SubService
 
       attr_reader :filter_times
       attr_reader :rep_times
 
-      def initialize
+      def initialize(params={})
         @rep_times    = {}
         @filter_times = {}
+
+        @is_verbose = params.fetch(:verbose, false)
+        @reps       = params.fetch(:reps)
       end
 
-      # TODO document
+      # @see SubService#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           @rep_times[rep.raw_path] = Time.now
@@ -130,13 +155,23 @@ module Nanoc::CLI::Commands
         end
       end
 
-      def print_profiling_feedback(reps)
+      # @see SubService#stop
+      def stop
+        Nanoc::NotificationCenter.remove_all(self)
+        if @is_verbose
+          self.print_profiling_feedback
+        end
+      end
+
+    protected
+
+      def print_profiling_feedback
         # Get max filter length
         max_filter_name_length = @filter_times.keys.map { |k| k.to_s.size }.max
         return if max_filter_name_length.nil?
 
         # Print warning if necessary
-        if reps.any? { |r| !r.compiled? }
+        if @reps.any? { |r| !r.compiled? }
           $stderr.puts
           $stderr.puts "Warning: profiling information may not be accurate because " +
                        "some items were not compiled."
@@ -174,9 +209,9 @@ module Nanoc::CLI::Commands
     end
 
     # TODO document
-    class FilterProgressPrinter
+    class FilterProgressPrinter < SubService
 
-      # TODO document
+      # @see SubService#start
       def start
         Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
           start_filter_progress(rep, filter_name)
@@ -185,6 +220,13 @@ module Nanoc::CLI::Commands
           stop_filter_progress(rep, filter_name)
         end
       end
+
+      # @see SubService#stop
+      def stop
+        Nanoc::NotificationCenter.remove_all(self)
+      end
+
+    protected
 
       def start_filter_progress(rep, filter_name)
         # Only show progress on terminals
@@ -229,13 +271,13 @@ module Nanoc::CLI::Commands
     end
 
     # TODO document
-    class GCController
+    class GCController < SubService
 
       def initialize
         @gc_count = 0
       end
 
-      # TODO document
+      # @see SubService#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           if @gc_count % 20 == 0 && !ENV.has_key?('TRAVIS')
@@ -247,12 +289,17 @@ module Nanoc::CLI::Commands
         end
       end
 
+      # @see SubService#stop
+      def stop
+        Nanoc::NotificationCenter.remove_all(self)
+      end
+
     end
 
     # TODO document
-    class DebugPrinter
+    class DebugPrinter < SubService
 
-      # TODO document
+      # @see SubService#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           puts "*** Started compilation of #{rep.inspect}"
@@ -284,13 +331,15 @@ module Nanoc::CLI::Commands
         end
       end
 
+      # @see SubService#stop
+      def stop
+        Nanoc::NotificationCenter.remove_all(self)
+      end
+
     end
 
     def run
-      # Make sure we are in a nanoc site directory
-      puts "Loading site data…"
       self.require_site
-
       self.check_for_deprecated_usage
 
       # Give feedback
@@ -309,12 +358,9 @@ module Nanoc::CLI::Commands
       # Compile
       self.site.compile
 
-      # Find reps
-      reps = self.site.items.map { |i| i.reps }.flatten
-
       # Show skipped reps
       # TODO move this into the file action printer
-      reps.select { |r| !r.compiled? }.each do |rep|
+      self.reps.select { |r| !r.compiled? }.each do |rep|
         rep.raw_paths.each do |snapshot_name, filename|
           next if filename.nil?
           duration = @rep_times[filename]
@@ -337,10 +383,7 @@ module Nanoc::CLI::Commands
       puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
 
       # Give detailed feedback
-      if options.has_key?(:verbose)
-        # TODO test
-        @timing_recorder.print_profiling_feedback(reps)
-      end
+      @timing_recorder.stop
     end
 
     def setup_notifications
@@ -356,11 +399,18 @@ module Nanoc::CLI::Commands
       Nanoc::CLI::Commands::Compile::DebugPrinter.new.start if self.debug?
       Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new.start
       Nanoc::CLI::Commands::Compile::GCController.new.start
-      @timing_recorder = Nanoc::CLI::Commands::Compile::TimingRecorder.new
+      @timing_recorder = Nanoc::CLI::Commands::Compile::TimingRecorder.new(
+        :verbose => options.fetch(:verbose, false),
+        :reps    => self.reps)
       @timing_recorder.start
     end
 
   protected
+
+    def reps
+      self.site.items.map { |i| i.reps }.flatten
+    end
+    memoize :reps
 
     def check_for_deprecated_usage
       # Check presence of --all option
