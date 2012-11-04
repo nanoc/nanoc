@@ -35,12 +35,16 @@ module Nanoc::CLI::Commands
 
       # Starts the listener. Subclasses should override this method and set up listener notifications.
       #
+      # @return [void]
+      #
       # @abstract
       def start
         raise NotImplementedError, "Subclasses of Listener should implement #start"
       end
 
       # Stops the listener. The default implementation removes self from all notification center observers.
+      #
+      # @return [void]
       def stop
         Nanoc::NotificationCenter.remove_all(self)
       end
