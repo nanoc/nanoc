@@ -269,7 +269,7 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-          if @gc_count % 20 == 0 && !ENV.has_key?('TRAVIS')
+          if @gc_count % 20 == 0
             GC.enable
             GC.start
             GC.disable
@@ -400,8 +400,11 @@ module Nanoc::CLI::Commands
         @listeners << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:reps => self.reps)
       end
 
+      unless ENV.has_key?('TRAVIS')
+        @listeners << Nanoc::CLI::Commands::Compile::GCController.new
+      end
+
       @listeners << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
-      @listeners << Nanoc::CLI::Commands::Compile::GCController.new
       @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => self.reps)
 
       @listeners.each { |s| s.start }
