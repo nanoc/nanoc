@@ -22,29 +22,35 @@ option :f, :force, '(ignored)'
 
 module Nanoc::CLI::Commands
 
-  # FIXME this command is horribly long and complicated and does way too much. plz cleanup thx.
   class Compile < ::Nanoc::CLI::CommandRunner
 
     extend Nanoc::Memoization
 
-    # TODO document
-    class SubService
+    # Listens to compilation events and reacts to them. This abstract class
+    # does not have a real implementation; subclasses should override {#start}
+    # and set up notifications to listen to.
+    #
+    # @abstract Subclasses must override {#start} and may override {#stop}.
+    class Listener
 
-      # TODO document
+      # Starts the listener. Subclasses should override this method and set up listener notifications.
+      #
+      # @abstract
       def start
-        raise NotImplementedError, "Subclasses of SubService should implement #start"
+        raise NotImplementedError, "Subclasses of Listener should implement #start"
       end
 
-      # TODO document
+      # Stops the listener. The default implementation removes self from all notification center observers.
       def stop
+        Nanoc::NotificationCenter.remove_all(self)
       end
 
     end
 
-    # TODO document
-    class DiffGenerator < SubService
+    # Generates diffs for every output file written
+    class DiffGenerator < Listener
 
-      # @see SubService#start
+      # @see Listener#start
       def start
         require 'tempfile'
         old_contents = {}
@@ -62,9 +68,9 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # @see SubService#stop
+      # @see Listener#stop
       def stop
-        Nanoc::NotificationCenter.remove_all(self)
+        super
         self.teardown_diffs
       end
 
@@ -124,12 +130,15 @@ module Nanoc::CLI::Commands
 
     end
 
-    # TODO document
-    class TimingRecorder < SubService
+    # Records the time spent per filter and per item representation
+    class TimingRecorder < Listener
 
       attr_reader :filter_times
       attr_reader :rep_times
 
+      # @option params [Boolean] :verbose Whether to print profiling feedback at the end of compilation or not
+      #
+      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
         @rep_times    = {}
         @filter_times = {}
@@ -138,7 +147,7 @@ module Nanoc::CLI::Commands
         @reps       = params.fetch(:reps)
       end
 
-      # @see SubService#start
+      # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           @rep_times[rep.raw_path] = Time.now
@@ -155,9 +164,9 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # @see SubService#stop
+      # @see Listener#stop
       def stop
-        Nanoc::NotificationCenter.remove_all(self)
+        super
         if @is_verbose
           self.print_profiling_feedback
         end
@@ -208,10 +217,10 @@ module Nanoc::CLI::Commands
 
     end
 
-    # TODO document
-    class FilterProgressPrinter < SubService
+    # Shows a progress bar if filtering a certain item rep takes longer than a certain threshold
+    class FilterProgressPrinter < Listener
 
-      # @see SubService#start
+      # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
           start_filter_progress(rep, filter_name)
@@ -219,11 +228,6 @@ module Nanoc::CLI::Commands
         Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
           stop_filter_progress(rep, filter_name)
         end
-      end
-
-      # @see SubService#stop
-      def stop
-        Nanoc::NotificationCenter.remove_all(self)
       end
 
     protected
@@ -270,14 +274,14 @@ module Nanoc::CLI::Commands
 
     end
 
-    # TODO document
-    class GCController < SubService
+    # Controls garbage collection so that it only occurs once every 20 items
+    class GCController < Listener
 
       def initialize
         @gc_count = 0
       end
 
-      # @see SubService#start
+      # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           if @gc_count % 20 == 0 && !ENV.has_key?('TRAVIS')
@@ -289,17 +293,18 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # @see SubService#stop
+      # @see Listener#stop
       def stop
-        Nanoc::NotificationCenter.remove_all(self)
+        super
+        GC.enable
       end
 
     end
 
-    # TODO document
-    class DebugPrinter < SubService
+    # Prints debug information (compilation started/ended, filtering started/ended, …)
+    class DebugPrinter < Listener
 
-      # @see SubService#start
+      # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           puts "*** Started compilation of #{rep.inspect}"
@@ -331,23 +336,20 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # @see SubService#stop
-      def stop
-        Nanoc::NotificationCenter.remove_all(self)
-      end
-
     end
 
-    # TODO document
-    class FileActionPrinter < SubService
+    # Prints file actions (created, updated, deleted, identical, skipped)
+    class FileActionPrinter < Listener
 
-      # TODO document
+      # @option params [TimingRecorder] :timing_recorder The timing recorder that has the representation times
+      #
+      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
       def initialize(params={})
         @timing_recorder = params.fetch(:timing_recorder)
-        @reps = params.fetch(:reps)
+        @reps            = params.fetch(:reps)
       end
 
-      # @see SubService#start
+      # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           action = (is_created ? :create : (is_modified ? :update : :identical))
@@ -357,9 +359,9 @@ module Nanoc::CLI::Commands
         end
       end
 
-      # @see SubServie#stop
+      # @see Listener#stop
       def stop
-        Nanoc::NotificationCenter.remove_all(self)
+        super
         @reps.select { |r| !r.compiled? }.each do |rep|
           rep.raw_paths.each do |snapshot_name, filename|
             next if filename.nil?
@@ -376,7 +378,7 @@ module Nanoc::CLI::Commands
       self.check_for_deprecated_usage
 
       # Setup subservices
-      self.setup_sub_services
+      self.setup_listeners
 
       # Compile
       puts "Compiling site…"
@@ -394,30 +396,30 @@ module Nanoc::CLI::Commands
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
     end
 
-    def setup_sub_services
-      @sub_services = []
+  protected
+
+    def setup_listeners
+      @listeners = []
 
       if self.site.config[:enable_output_diff]
-        @sub_services << Nanoc::CLI::Commands::Compile::DiffGenerator.new
+        @listeners << Nanoc::CLI::Commands::Compile::DiffGenerator.new
       end
 
       if self.debug?
-        @sub_services << Nanoc::CLI::Commands::Compile::DebugPrinter.new
+        @listeners << Nanoc::CLI::Commands::Compile::DebugPrinter.new
       end
 
-      @sub_services << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
-      @sub_services << Nanoc::CLI::Commands::Compile::GCController.new
-      @sub_services << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:verbose => options.fetch(:verbose, false), :reps => self.reps)
-      @sub_services << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:timing_recorder => @sub_services.last, :reps => self.reps)
+      @listeners << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
+      @listeners << Nanoc::CLI::Commands::Compile::GCController.new
+      @listeners << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:verbose => options.fetch(:verbose, false), :reps => self.reps)
+      @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:timing_recorder => @listeners.last, :reps => self.reps)
 
-      @sub_services.each { |s| s.start }
+      @listeners.each { |s| s.start }
     end
 
-    def teardown_sub_services
-      @sub_services.each { |s| s.stop }
+    def teardown_listeners
+      @listeners.each { |s| s.stop }
     end
-
-  protected
 
     def reps
       self.site.items.map { |i| i.reps }.flatten
