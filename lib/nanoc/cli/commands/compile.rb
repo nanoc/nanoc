@@ -338,40 +338,51 @@ module Nanoc::CLI::Commands
 
     end
 
+    # TODO document
+    class FileActionPrinter < SubService
+
+      # TODO document
+      def initialize(params={})
+        @timing_recorder = params.fetch(:timing_recorder)
+        @reps = params.fetch(:reps)
+      end
+
+      # @see SubService#start
+      def start
+        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+          action = (is_created ? :create : (is_modified ? :update : :identical))
+          level  = (is_created ? :high   : (is_modified ? :high   : :low))
+          duration = Time.now - @timing_recorder.rep_times[rep.raw_path] if @timing_recorder.rep_times[rep.raw_path]
+          Nanoc::CLI::Logger.instance.file(level, action, path, duration)
+        end
+      end
+
+      # @see SubServie#stop
+      def stop
+        Nanoc::NotificationCenter.remove_all(self)
+        @reps.select { |r| !r.compiled? }.each do |rep|
+          rep.raw_paths.each do |snapshot_name, filename|
+            next if filename.nil?
+            duration = @timing_recorder.rep_times[filename]
+            Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
+          end
+        end
+      end
+
+    end
+
     def run
       self.require_site
       self.check_for_deprecated_usage
 
-      # Give feedback
-      puts "Compiling site…"
-
-      # Initialize profiling stuff
-      time_before = Time.now
-      setup_notifications
-
-      # Prepare for generating diffs
-      if self.site.config[:enable_output_diff]
-        @diff_generator = Nanoc::CLI::Commands::Compile::DiffGenerator.new
-        @diff_generator.start
-      end
+      # Setup subservices
+      self.setup_sub_services
 
       # Compile
+      puts "Compiling site…"
+      time_before = Time.now
       self.site.compile
-
-      # Show skipped reps
-      # TODO move this into the file action printer
-      self.reps.select { |r| !r.compiled? }.each do |rep|
-        rep.raw_paths.each do |snapshot_name, filename|
-          next if filename.nil?
-          duration = @rep_times[filename]
-          Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
-        end
-      end
-
-      # Stop diffing
-      if self.site.config[:enable_output_diff]
-        @diff_generator.stop
-      end
+      time_after = Time.now
 
       # Prune
       if self.site.config[:prune][:auto_prune]
@@ -380,29 +391,30 @@ module Nanoc::CLI::Commands
 
       # Give general feedback
       puts
-      puts "Site compiled in #{format('%.2f', Time.now - time_before)}s."
-
-      # Give detailed feedback
-      @timing_recorder.stop
+      puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
     end
 
-    def setup_notifications
-      # File notifications
-      # TODO move this in a separate class
-      Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-        action = (is_created ? :create : (is_modified ? :update : :identical))
-        level  = (is_created ? :high   : (is_modified ? :high   : :low))
-        duration = Time.now - @timing_recorder.rep_times[rep.raw_path] if @timing_recorder.rep_times[rep.raw_path]
-        Nanoc::CLI::Logger.instance.file(level, action, path, duration)
+    def setup_sub_services
+      @sub_services = []
+
+      if self.site.config[:enable_output_diff]
+        @sub_services << Nanoc::CLI::Commands::Compile::DiffGenerator.new
       end
 
-      Nanoc::CLI::Commands::Compile::DebugPrinter.new.start if self.debug?
-      Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new.start
-      Nanoc::CLI::Commands::Compile::GCController.new.start
-      @timing_recorder = Nanoc::CLI::Commands::Compile::TimingRecorder.new(
-        :verbose => options.fetch(:verbose, false),
-        :reps    => self.reps)
-      @timing_recorder.start
+      if self.debug?
+        @sub_services << Nanoc::CLI::Commands::Compile::DebugPrinter.new
+      end
+
+      @sub_services << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
+      @sub_services << Nanoc::CLI::Commands::Compile::GCController.new
+      @sub_services << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:verbose => options.fetch(:verbose, false), :reps => self.reps)
+      @sub_services << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:timing_recorder => @sub_services.last, :reps => self.reps)
+
+      @sub_services.each { |s| s.start }
+    end
+
+    def teardown_sub_services
+      @sub_services.each { |s| s.stop }
     end
 
   protected
