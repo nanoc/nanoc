@@ -133,28 +133,15 @@ module Nanoc::CLI::Commands
     # Records the time spent per filter and per item representation
     class TimingRecorder < Listener
 
-      attr_reader :filter_times
-      attr_reader :rep_times
-
-      # @option params [Boolean] :verbose Whether to print profiling feedback at the end of compilation or not
-      #
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
-        @rep_times    = {}
         @filter_times = {}
 
-        @is_verbose = params.fetch(:verbose, false)
         @reps       = params.fetch(:reps)
       end
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-          @rep_times[rep.raw_path] = Time.now
-        end
-        Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
-          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
-        end
         Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
           @filter_times[filter_name] ||= []
           @filter_times[filter_name] << Time.now
@@ -167,9 +154,7 @@ module Nanoc::CLI::Commands
       # @see Listener#stop
       def stop
         super
-        if @is_verbose
-          self.print_profiling_feedback
-        end
+        self.print_profiling_feedback
       end
 
     protected
@@ -341,20 +326,25 @@ module Nanoc::CLI::Commands
     # Prints file actions (created, updated, deleted, identical, skipped)
     class FileActionPrinter < Listener
 
-      # @option params [TimingRecorder] :timing_recorder The timing recorder that has the representation times
-      #
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
       def initialize(params={})
-        @timing_recorder = params.fetch(:timing_recorder)
+        @rep_times       = {}
+
         @reps            = params.fetch(:reps)
       end
 
       # @see Listener#start
       def start
+        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+          @rep_times[rep.raw_path] = Time.now
+        end
+        Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
+          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
+        end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           action = (is_created ? :create : (is_modified ? :update : :identical))
           level  = (is_created ? :high   : (is_modified ? :high   : :low))
-          duration = Time.now - @timing_recorder.rep_times[rep.raw_path] if @timing_recorder.rep_times[rep.raw_path]
+          duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
           Nanoc::CLI::Logger.instance.file(level, action, path, duration)
         end
       end
@@ -365,7 +355,7 @@ module Nanoc::CLI::Commands
         @reps.select { |r| !r.compiled? }.each do |rep|
           rep.raw_paths.each do |snapshot_name, filename|
             next if filename.nil?
-            duration = @timing_recorder.rep_times[filename]
+            duration = @rep_times[filename]
             Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
           end
         end
@@ -376,27 +366,24 @@ module Nanoc::CLI::Commands
     def run
       self.require_site
       self.check_for_deprecated_usage
-
-      # Setup subservices
       self.setup_listeners
 
-      # Compile
       puts "Compiling site…"
       time_before = Time.now
       self.site.compile
+      self.prune
       time_after = Time.now
-
-      # Prune
-      if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
-      end
-
-      # Give general feedback
       puts
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
     end
 
   protected
+
+    def prune  
+      if self.site.config[:prune][:auto_prune]
+        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
+      end
+    end
 
     def setup_listeners
       @listeners = []
@@ -409,10 +396,13 @@ module Nanoc::CLI::Commands
         @listeners << Nanoc::CLI::Commands::Compile::DebugPrinter.new
       end
 
+      if options.fetch(:verbose, false)
+        @listeners << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:reps => self.reps)
+      end
+
       @listeners << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
       @listeners << Nanoc::CLI::Commands::Compile::GCController.new
-      @listeners << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:verbose => options.fetch(:verbose, false), :reps => self.reps)
-      @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:timing_recorder => @listeners.last, :reps => self.reps)
+      @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => self.reps)
 
       @listeners.each { |s| s.start }
     end
