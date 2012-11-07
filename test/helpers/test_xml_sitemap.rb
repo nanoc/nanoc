@@ -7,6 +7,7 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
   include Nanoc::Helpers::XMLSitemap
 
   def teardown
+    super
     @items = nil
     @item  = nil
     @site  = nil
