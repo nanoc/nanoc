@@ -39,7 +39,7 @@ module ::Nanoc::Extra
     def hrefs_in_file(filename)
       hrefs_in_file = Set.new
       doc = Nokogiri::HTML(::File.read(filename))
-      doc.css('a').each   { |e| hrefs_in_file << e[:href] }
+      doc.css('a').each { |e| hrefs_in_file << e[:href] unless e[:href].nil? }
       doc.css('img').each { |e| hrefs_in_file << e[:src]  }
 
       # Convert protocol-relative urls

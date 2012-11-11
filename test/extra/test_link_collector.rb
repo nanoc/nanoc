@@ -10,6 +10,7 @@ class Nanoc::Extra::LinkCollectorTest < MiniTest::Unit::TestCase
       io << %[<a href="http://example.com/">A 1</a>\n]
       io << %[<a href="https://example.com/">A 2</a>\n]
       io << %[<a href="stuff/"A 3></a>\n]
+      io << %[<a name="href-less-anchor">A 4</a>]
     end
     File.open('file-b.html', 'w') do |io|
       io << %[<a href="mailto:bob@example.com">B 1</a>\n]
@@ -26,6 +27,7 @@ class Nanoc::Extra::LinkCollectorTest < MiniTest::Unit::TestCase
     assert_includes hrefs, 'http://example.com/'
     assert_includes hrefs, 'https://example.com/'
     assert_includes hrefs, 'stuff/'
+    refute_includes hrefs, nil
     assert_includes hrefs, 'mailto:bob@example.com'
     assert_includes hrefs, '../stuff'
     assert_includes hrefs, '/stuff'
