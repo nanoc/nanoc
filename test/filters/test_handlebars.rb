@@ -24,7 +24,6 @@ class Nanoc::Filters::HandlebarsTest < MiniTest::Unit::TestCase
         :config  => config,
         :content => 'No Payne No Gayne'
       }
-      Handlebars.register_helper(:upcase) { |b| b.call.upcase }
       filter = ::Nanoc::Filters::Handlebars.new(assigns)
 
       # Run filter
@@ -34,8 +33,6 @@ class Nanoc::Filters::HandlebarsTest < MiniTest::Unit::TestCase
       assert_equal('We can’t stop here! This is the Max Payne layout!', result)
       result = filter.run('It’s raining {{config.animals}} here!')
       assert_equal('It’s raining cats and dogs here!', result)
-      result = filter.run('I am {{#upcase}}shouting{{/upcase}}!')
-      assert_equal('I am SHOUTING!', result)
     end
   end
 

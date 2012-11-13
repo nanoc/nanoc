@@ -22,7 +22,9 @@ module Nanoc::Filters
       context[:config] = assigns[:config]
       context[:yield]  = assigns[:content]
 
-      ::Handlebars.compile(content).call(context)
+      handlebars = ::Handlebars::Context.new
+      template = handlebars.compile(content)
+      template.call(context)
     end
 
   end
