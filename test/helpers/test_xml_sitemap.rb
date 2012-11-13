@@ -10,6 +10,7 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
     @items = nil
     @item  = nil
     @site  = nil
+    super
   end
 
   def test_xml_sitemap
