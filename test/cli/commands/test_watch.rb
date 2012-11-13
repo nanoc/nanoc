@@ -34,7 +34,7 @@ class Nanoc::CLI::Commands::WatchTest < MiniTest::Unit::TestCase
   def test_notify
     old_path = ENV['PATH']
     with_site do |s|
-      Thread.new do
+      watch_thread = Thread.new do
         Nanoc::CLI.run %w( watch )
       end
       sleep 1
@@ -43,6 +43,8 @@ class Nanoc::CLI::Commands::WatchTest < MiniTest::Unit::TestCase
       File.open('content/index.html', 'w') { |io| io.write('Hello there!') }
       sleep 1
       assert_equal 'Hello there!', File.read('output/index.html')
+
+      watch_thread.kill
     end
   ensure
     ENV['PATH'] = old_path
