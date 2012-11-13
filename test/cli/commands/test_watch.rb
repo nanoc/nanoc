@@ -39,7 +39,7 @@ class Nanoc::CLI::Commands::WatchTest < MiniTest::Unit::TestCase
   end
 
   def wait_until_exists(filename)
-    10.times do
+    20.times do
       break if File.file?(filename)
       sleep 0.5
     end
@@ -51,7 +51,7 @@ class Nanoc::CLI::Commands::WatchTest < MiniTest::Unit::TestCase
   def wait_until_content_equals(filename, content)
     self.wait_until_exists(filename)
 
-    10.times do
+    20.times do
       break if File.read(filename) == content
       sleep 0.5
     end
