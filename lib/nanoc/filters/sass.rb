@@ -19,10 +19,10 @@ module Nanoc::Filters
     private
 
       def _find(dir, name, options)
-        full_filename, syntax = find_real_file(dir, name, options)
+        full_filename, syntax = ::Sass::Util.destructure(find_real_file(dir, name, options))
         return unless full_filename && File.readable?(full_filename)
 
-        filter = Nanoc::Filters::Sass.current
+        filter = Nanoc::Filters::Sass.current # FIXME ew global
         item = filter.imported_filename_to_item(full_filename)
         filter.depend_on([ item ]) unless item.nil?
 
