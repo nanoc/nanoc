@@ -221,32 +221,6 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
   end
 
-  def test_write_should_not_touch_identical_binary_files
-    # Create temporary source file
-    File.open('blahblah', 'w') { |io| io.write("Blah blah…") }
-    full_file_path = File.expand_path('blahblah')
-
-    # Mock item
-    item = Nanoc::Item.new(
-      full_file_path, {}, '/',
-      :binary => true
-    )
-
-    # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
-    item_rep.raw_path = 'foo/bar/baz/quux'
-
-    # Write once
-    item_rep.write
-    a_long_time_ago = Time.now-1_000_000
-    File.utime(a_long_time_ago, a_long_time_ago, item_rep.raw_path)
-
-    # Write again
-    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
-    item_rep.write
-    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
-  end
-
   def test_write
     # Mock item
     item = Nanoc::Item.new(

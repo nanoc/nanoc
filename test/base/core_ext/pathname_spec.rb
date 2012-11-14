@@ -4,10 +4,15 @@ describe 'Pathname#checksum' do
 
   it 'should work on empty files' do
     begin
+      # Create file
       FileUtils.mkdir_p('tmp')
       File.open('tmp/myfile', 'w') { |io| io.write('') }
+      now = Time.now
+      File.utime(now, now, 'tmp/myfile')
+
+      # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal 'da39a3ee5e6b4b0d3255bfef95601890afd80709'
+      pathname.checksum.must_equal '0-' + now.to_s
     ensure
       FileUtils.rm_rf('tmp')
     end
@@ -15,10 +20,15 @@ describe 'Pathname#checksum' do
 
   it 'should work on all files' do
     begin
+      # Create file
       FileUtils.mkdir_p('tmp')
       File.open('tmp/myfile', 'w') { |io| io.write('abc') }
+      now = Time.now
+      File.utime(now, now, 'tmp/myfile')
+
+      # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal 'a9993e364706816aba3e25717850c26c9cd0d89d'
+      pathname.checksum.must_equal '3-' + now.to_s
     ensure
       FileUtils.rm_rf('tmp')
     end

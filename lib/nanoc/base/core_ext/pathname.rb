@@ -9,14 +9,8 @@ module Nanoc::PathnameExtensions
   #
   # @api private
   def checksum
-    digest = Digest::SHA1.new
-    File.open(self.to_s, 'r') do |io|
-      until io.eof
-        data = io.read(2**10)
-        digest.update(data)
-      end
-    end
-    digest.hexdigest
+    stat = File.stat(self.to_s)
+    stat.size.to_s + '-' + stat.mtime.to_s
   end
 
 end

@@ -129,27 +129,12 @@ module Nanoc
         # Check if file will be created
         is_created = !File.file?(raw_path)
 
-        # Calculate characteristics of old content
-        if File.file?(raw_path)
-          hash_old = Pathname.new(raw_path).checksum
-          size_old = File.size(raw_path)
-        end
-
         # Notify
         Nanoc::NotificationCenter.post(:will_write_rep, self, snapshot)
 
         if self.binary?
-          # Calculate characteristics of new content
-          size_new = File.size(temporary_filenames[:last])
-          hash_new = Pathname.new(temporary_filenames[:last]).checksum if size_old == size_new
-
-          # Check whether content was modified
-          is_modified = (size_old != size_new || hash_old != hash_new)
-
-          # Copy
-          if is_modified
-            FileUtils.cp(temporary_filenames[:last], raw_path)
-          end
+          # Always copy (time spent checking modification is not useful)
+          FileUtils.cp(temporary_filenames[:last], raw_path)
         else
           # Check whether content was modified
           is_modified = (!File.file?(raw_path) || File.read(raw_path) != @content[:last])
