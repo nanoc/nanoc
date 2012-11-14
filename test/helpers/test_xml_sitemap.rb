@@ -28,7 +28,7 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
       @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two/')
 
       # Create item 3
-      attrs = { :mtime => Time.parse('12/07/2004'), :changefreq => 'daily', :priority => 0.5 }
+      attrs = { :mtime => Time.parse('2004-07-12'), :changefreq => 'daily', :priority => 0.5 }
       @items << Nanoc::Item.new('some content 3', attrs, '/item-three/')
       self.create_item_rep(@items.last, :three_a, '/item-three/a/')
       self.create_item_rep(@items.last, :three_b, '/item-three/b/')

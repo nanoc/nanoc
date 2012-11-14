@@ -272,6 +272,7 @@ module Nanoc
 
       content_or_filename_assigns.merge({
         :item       => rep.item,
+        :rep        => rep,
         :item_rep   => rep,
         :items      => site.items,
         :layouts    => site.layouts,

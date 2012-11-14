@@ -17,6 +17,13 @@ Exensions:
 * Added support for parameters in Less filter [Ruben Verborgh]
 * Added support for icon and logo in Atom feed [Ruben Verborgh]
 
+## 3.4.3 (???)
+
+Improvements:
+
+* Item reps are now accessible in a consistent way: in Rules and during
+  compilation, they can be accessed using both `@rep` and `@item_rep`
+
 ## 3.4.2 (2012-11-01)
 
 Fixes:
