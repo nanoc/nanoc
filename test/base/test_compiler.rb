@@ -488,4 +488,35 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_rep_assigns
+    with_site do |site|
+      # Create item
+      File.open('content/index.html', 'w') do |io|
+        io.write('@rep.name = <%= @rep.name %> - @item_rep.name = <%= @item_rep.name %>')
+      end
+
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  if @rep.name == :default && @item_rep.name == :default\n"
+        io.write "    filter :erb\n"
+        io.write "  end\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert_equal '@rep.name = default - @item_rep.name = default', File.read('output/index.html')
+    end
+  end
+
 end
