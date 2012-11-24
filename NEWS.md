@@ -6,6 +6,8 @@ Improvements:
 
 * Item reps are now accessible in a consistent way: in Rules and during
   compilation, they can be accessed using both `@rep` and `@item_rep`
+* Made cleaning streams (stdout/stderr as used by nanoc) compatible with
+  Ruby’s built-in Logger
 
 ## 3.4.2 (2012-11-01)
 
