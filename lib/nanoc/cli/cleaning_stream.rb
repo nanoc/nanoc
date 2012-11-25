@@ -84,6 +84,11 @@ module Nanoc::CLI
       @stream.reopen(*a)
     end
 
+    # @see IO#close
+    def close
+      @stream.close
+    end
+
     # @see File#exist?
     def exist?
       @stream.exist?
