@@ -15,9 +15,10 @@ Available deployers: #{deployer_names.join(', ')}
 
 EOS
 
-option :t, :target,    'specify the location to deploy to', :argument => :required
-flag   :L, :list,      'list available locations to deploy to'
-option :n, :'dry-run', 'show what would be deployed'
+option :t, :target,     'specify the location to deploy to', :argument => :required
+flag   :C, :'no-check', 'do not run the issue checks marked for deployment'
+flag   :L, :list,       'list available locations to deploy to'
+option :n, :'dry-run',  'show what would be deployed'
 
 module Nanoc::CLI::Commands
 
@@ -55,6 +56,17 @@ module Nanoc::CLI::Commands
       deployer_class = Nanoc::Extra::Deployer.named(name)
       if deployer_class.nil?
         raise Nanoc::Errors::GenericTrivial, "The specified deploy target has an unrecognised kind “#{name}” (expected one of #{names.join(', ')})."
+      end
+
+      # Check
+      unless options[:'no-check']
+        puts "Running issue checks…"
+        ok = Nanoc::Extra::Checking::Runner.new(site).run_for_deploy
+        if !ok
+          puts "Issues found, deploy aborted."
+          return
+        end
+        puts "No issues found. Deploying!"
       end
 
       # Run
