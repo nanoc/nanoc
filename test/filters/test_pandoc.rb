@@ -6,6 +6,10 @@ class Nanoc::Filters::PandocTest < MiniTest::Unit::TestCase
 
   def test_filter
     if_have 'pandoc-ruby' do
+      if `which pandoc`.strip.empty?
+        skip "could not find pandoc"
+      end
+
       # Create filter
       filter = ::Nanoc::Filters::Pandoc.new
 
