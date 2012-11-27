@@ -94,5 +94,27 @@ class Nanoc::CLI::Commands::PruneTest < MiniTest::Unit::TestCase
     end
   end
 
-end
+  def test_run_with_symlink_to_output_dir
+    with_site do |site|
+      # Set output dir
+      FileUtils.rm_rf('output')
+      FileUtils.mkdir_p('output-real')
+      File.symlink('output-real', 'output')
 
+      # Create source files
+      File.open('content/index.html', 'w') { |io| io.write 'stuff' }
+
+      # Create output files
+      FileUtils.mkdir_p('output-real/some-dir')
+      File.open('output-real/some-file.html', 'w') { |io| io.write 'stuff' }
+      File.open('output-real/index.html', 'w')     { |io| io.write 'stuff' }
+
+      Nanoc::CLI.run %w( prune --yes )
+
+      assert File.file?('output-real/index.html')
+      assert !File.directory?('output-real/some-dir')
+      assert !File.file?('output-real/some-file.html')
+    end
+  end
+
+end

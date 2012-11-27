@@ -35,7 +35,7 @@ module Nanoc::Extra
 
       # Get present files and dirs
       present_files_and_dirs = Set.new
-      Find.find(self.site.config[:output_dir]) do |f|
+      Find.find(self.site.config[:output_dir] + '/') do |f|
         present_files_and_dirs << f
       end
       present_files = present_files_and_dirs.select { |f| File.file?(f) }
