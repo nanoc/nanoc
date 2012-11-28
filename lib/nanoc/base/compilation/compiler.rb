@@ -81,6 +81,10 @@ module Nanoc
       # Compile reps
       load
       @site.freeze
+
+      # Determine which reps need to be recompiled
+      forget_dependencies_if_outdated(items)
+
       dependency_tracker.start
       compile_reps(reps)
       dependency_tracker.stop
@@ -120,9 +124,6 @@ module Nanoc
 
       # Load auxiliary stores
       stores.each { |s| s.load }
-
-      # Determine which reps need to be recompiled
-      forget_dependencies_if_outdated(items)
 
       @loaded = true
     rescue => e
