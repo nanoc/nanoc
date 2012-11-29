@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files              = Dir['[A-Z]*'] +
                          Dir['doc/yardoc_templates/**/*'] +
                          Dir['{bin,lib,tasks,test}/**/*'] +
-                         [ 'nanoc.gemspec', '.gemtest' ]
+                         [ 'nanoc.gemspec' ]
   s.executables        = [ 'nanoc' ]
   s.require_paths      = [ 'lib' ]
 
