@@ -13,6 +13,8 @@ Fixes:
   Ruby’s built-in Logger
 * Made prune work when the output directory is a symlink
 * Made Handlebars filter compatible with the latest version
+* Made `show-data` command show more accurate dependencies [Stefan Bühler]
+* Restored compatibility with Sass 3.2.2
 
 ## 3.4.2 (2012-11-01)
 
