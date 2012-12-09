@@ -23,8 +23,15 @@ Improvements:
 
 * Item reps are now accessible in a consistent way: in Rules and during
   compilation, they can be accessed using both `@rep` and `@item_rep`
+
+Fixes:
+
 * Made cleaning streams (stdout/stderr as used by nanoc) compatible with
   Ruby’s built-in Logger
+* Made prune work when the output directory is a symlink
+* Made Handlebars filter compatible with the latest version
+* Made `show-data` command show more accurate dependencies [Stefan Bühler]
+* Restored compatibility with Sass 3.2.2
 
 ## 3.4.2 (2012-11-01)
 

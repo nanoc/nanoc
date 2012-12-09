@@ -119,6 +119,7 @@ EOS
 
     # Enter tmp
     FileUtils.mkdir_p('tmp')
+    @orig_wd = FileUtils.pwd
     FileUtils.cd('tmp')
 
     # Let us get to the raw errors
@@ -130,7 +131,7 @@ EOS
     Nanoc::CLI::ErrorHandler.enable
 
     # Exit tmp
-    FileUtils.cd('..')
+    FileUtils.cd(@orig_wd)
     FileUtils.rm_rf('tmp')
 
     # Go unquiet
