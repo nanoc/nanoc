@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.4.3 (???)
+## 3.4.3 (2012-12-09)
 
 Improvements:
 
