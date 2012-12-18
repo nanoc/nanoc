@@ -86,7 +86,7 @@ module Nanoc
       end
 
       # Get rest of params
-      @attributes   = attributes.symbolize_keys
+      @attributes   = attributes.symbolize_keys_recursively
       @identifier   = identifier.cleaned_identifier.freeze
 
       # Set mtime

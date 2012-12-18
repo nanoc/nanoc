@@ -346,8 +346,8 @@ module Nanoc
 
         # Read config from config.yaml in given dir
         config_path = File.join(dir_or_config_hash, 'config.yaml')
-        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
-        @config[:data_sources].map! { |ds| ds.symbolize_keys }
+        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
+        @config[:data_sources].map! { |ds| ds.symbolize_keys_recursively }
       else
         # Use passed config hash
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
