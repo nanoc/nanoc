@@ -53,6 +53,11 @@ module Nanoc::CLI
     end
   end
 
+  # @return [Cri::Command] The root command, i.e. the commandline tool itself
+  def self.root_command
+    @root_command
+  end
+
   # Adds the given command to the collection of available commands.
   #
   # @param [Cri::Command] cmd The command to add
@@ -79,6 +84,10 @@ protected
   def self.setup_commands
     # Reinit
     @root_command = nil
+
+    # Add root command
+    filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
+    @root_command = self.load_command_at(filename)
 
     # Add help command
     help_cmd = Cri::Command.new_basic_help
@@ -133,14 +142,6 @@ protected
 
     # Done
     cmd
-  end
-
-  # @return [Cri::Command] The root command, i.e. the commandline tool itself
-  def self.root_command
-    @root_command ||= begin
-      filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
-      self.load_command_at(filename)
-    end
   end
 
   # @return [Array] The directory contents

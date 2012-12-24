@@ -1,21 +1,21 @@
 # encoding: utf-8
 
-describe 'Array#symbolize_keys' do
+describe 'Array#symbolize_keys_recursively' do
 
   it 'should convert keys to symbols' do
     array_old = [ :abc, 'xyz', { 'foo' => 'bar', :baz => :qux } ]
     array_new = [ :abc, 'xyz', { :foo  => 'bar', :baz => :qux } ]
-    array_old.symbolize_keys.must_equal array_new
+    array_old.symbolize_keys_recursively.must_equal array_new
   end
 
 end
 
-describe 'Array#stringify_keys' do
+describe 'Array#stringify_keys_recursively' do
 
   it 'should convert keys to strings' do
     array_old = [ :abc, 'xyz', { :foo  => 'bar', 'baz' => :qux } ]
     array_new = [ :abc, 'xyz', { 'foo' => 'bar', 'baz' => :qux } ]
-    array_old.stringify_keys.must_equal array_new
+    array_old.stringify_keys_recursively.must_equal array_new
   end
 
 end

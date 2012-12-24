@@ -181,25 +181,21 @@ module Nanoc
     def setup_child_parent_links
       teardown_child_parent_links
 
-      items = @items.sort_by { |i| i.identifier }
-      items.each_with_index do |item, index|
-        # Get parent
-        next if index == 0
-        parent_identifier = item.identifier.sub(/[^\/]+\/$/, '')
-        parent = nil
-        (index-1).downto(0) do |candidate_index|
-          candidate = items[candidate_index]
-          if candidate.identifier == parent_identifier
-            parent = candidate
-          elsif candidate.identifier[0..parent_identifier.size-1] != parent_identifier
-            break
+      item_map = {}
+      @items.each do |item|
+        item_map[item.identifier] = item
+      end
+
+      @items.each do |item|
+        parent_id_end = item.identifier.rindex('/', -2)
+        if parent_id_end
+          parent_id = item.identifier[0..parent_id_end]
+          parent = item_map[parent_id]
+          if parent
+            item.parent = parent
+            parent.children << item
           end
         end
-        next if parent.nil?
-
-        # Link
-        item.parent = parent
-        parent.children << item
       end
     end
 
@@ -346,8 +342,8 @@ module Nanoc
 
         # Read config from config.yaml in given dir
         config_path = File.join(dir_or_config_hash, 'config.yaml')
-        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys)
-        @config[:data_sources].map! { |ds| ds.symbolize_keys }
+        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
+        @config[:data_sources].map! { |ds| ds.symbolize_keys_recursively }
       else
         # Use passed config hash
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)

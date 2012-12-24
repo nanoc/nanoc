@@ -85,7 +85,7 @@ module Nanoc::DataSources
       # Write item
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        meta = attributes.stringify_keys
+        meta = attributes.stringify_keys_recursively
         unless meta == {}
           io.write(YAML.dump(meta).strip + "\n")
           io.write("---\n\n")
