@@ -209,57 +209,6 @@ module Nanoc::CLI::Commands
 
     end
 
-    # Shows a progress bar if filtering a certain item rep takes longer than a certain threshold
-    class FilterProgressPrinter < Listener
-
-      # @see Listener#start
-      def start
-        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-          start_filter_progress(rep, filter_name)
-        end
-        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-          stop_filter_progress(rep, filter_name)
-        end
-      end
-
-    protected
-
-      def start_filter_progress(rep, filter_name)
-        @progress_thread = Thread.new do
-          delay = 1.0
-          step  = 0
-
-          text = "  running #{filter_name} filter… "
-
-          loop do
-            if Thread.current[:stopped]
-              # Clear
-              if delay < 0.1
-                $stdout.print ' ' * (text.length + 3) + "\r"
-              end
-
-              break
-            end
-
-            # Show progress
-            if delay < 0.1
-              $stdout.print text + %w( | / - \\ )[step] + "\r"
-              step = (step + 1) % 4
-            end
-
-            sleep 0.1
-            delay -= 0.1
-          end
-
-        end
-      end
-
-      def stop_filter_progress(rep, filter_name)
-        @progress_thread[:stopped] = true
-      end
-
-    end
-
     # Controls garbage collection so that it only occurs once every 20 items
     class GCController < Listener
 
@@ -403,10 +352,6 @@ module Nanoc::CLI::Commands
 
       unless ENV.has_key?('TRAVIS')
         @listeners << Nanoc::CLI::Commands::Compile::GCController.new
-      end
-
-      if $stdout.tty?
-        @listeners << Nanoc::CLI::Commands::Compile::FilterProgressPrinter.new
       end
 
       @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => self.reps)
