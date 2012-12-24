@@ -7,7 +7,7 @@ Run issue checks on the current site. If the --all option is passed, all availab
 EOS
 
 flag :a, :all,    'run all checkers'
-flag :l, :list,   'list all checkers'
+flag :L, :list,   'list all checkers'
 flag :d, :deploy, 'run checkers for deployment'
 
 module Nanoc::CLI::Commands
