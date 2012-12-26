@@ -56,6 +56,7 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         require 'tempfile'
+        self.setup_diffs
         old_contents = {}
         Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
           path = rep.raw_path(:snapshot => snapshot)
