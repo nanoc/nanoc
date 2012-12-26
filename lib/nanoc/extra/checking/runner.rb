@@ -97,13 +97,14 @@ module Nanoc::Extra::Checking
         print format("  %-#{length}s", "Running #{klass.identifier} checker… ")
 
         checker = klass.new(@site)
-        checkers << checker
         checker.run
-        issues.merge checker.issues
+
+        checkers << checker
+        issues.merge(checker.issues)
 
         # TODO report progress
 
-        puts issues.empty? ? 'ok'.green : 'error'.red
+        puts checker.issues.empty? ? 'ok'.green : 'error'.red
       end
       issues
     end
