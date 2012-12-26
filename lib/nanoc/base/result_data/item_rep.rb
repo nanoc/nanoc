@@ -133,6 +133,28 @@ module Nanoc
         Nanoc::NotificationCenter.post(:will_write_rep, self, snapshot)
 
         if self.binary?
+          # Check whether content was modified
+          if !File.file?(raw_path)
+            is_modified = true
+          else
+            part1 = ''
+            part2 = ''
+            File.open(raw_path, 'r') do |io1|
+              File.open(temporary_filenames[:last], 'r') do |io2|
+                loop do
+                  io1.read(1024, part1)
+                  io2.read(1024, part2)
+                  if part1 != part2
+                    is_modified = true
+                  end
+                  if part1.empty? || part2.empty?
+                    break
+                  end
+                end
+              end
+            end
+          end
+
           # Always copy (time spent checking modification is not useful)
           FileUtils.cp(temporary_filenames[:last], raw_path)
         else
