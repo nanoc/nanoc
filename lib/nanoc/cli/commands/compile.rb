@@ -68,6 +68,7 @@ module Nanoc::CLI::Commands
             if old_contents[rep] && new_contents
               generate_diff_for(rep, old_contents[rep], new_contents)
             end
+            old_contents.delete(rep)
           end
         end
       end
