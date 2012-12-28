@@ -16,15 +16,6 @@ class NanocRegisterFilterHandler < ::YARD::Handlers::Ruby::AttributeHandler
 
   # e.g. Nanoc::Filter.register '::Nanoc::Filters::AsciiDoc', :asciidoc
 
-  # s(:command_call,
-  #   s(:const_path_ref, s(:var_ref, s(:const, "Nanoc")), s(:const, "Filter")),
-  #   :".",
-  #   s(:ident, "register"),
-  #   s(
-  #     s(:string_literal, s(:string_content, s(:tstring_content, "::Nanoc::Filters::Less"))),
-  #     s(:symbol_literal, s(:symbol, s(:ident, "less"))),
-  #     false))
-
   handles method_call(:register)
   namespace_only
 
