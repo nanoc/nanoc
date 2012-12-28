@@ -11,6 +11,7 @@ YARD::Rake::YardocTask.new(:doc) do |yard|
     '--readme',          'README.md',
     '--files',           'NEWS.md,LICENSE',
     '--output-dir',      'doc/yardoc',
-    '--template-path',   'doc/yardoc_templates'
+    '--template-path',   'doc/yardoc_templates',
+    '--load',            'doc/yardoc_handlers/identifier.rb'
   ]
 end
