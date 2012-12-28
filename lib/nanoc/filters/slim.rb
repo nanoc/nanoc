@@ -7,7 +7,7 @@ module Nanoc::Filters
   # @since 3.2.0
   class Slim < Nanoc::Filter
 
-    # Runs the content through [Slim](http://slim-lang.com/)
+    # Runs the content through [Slim](http://slim-lang.com/).
     # This method takes no options.
     #
     # @param [String] content The content to filter
