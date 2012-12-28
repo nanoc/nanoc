@@ -18,7 +18,7 @@ the following places will help you out:
 
 ## Versioning
 
-nanoc uses [Semantic Versioning](semver.org).
+nanoc uses [Semantic Versioning](http://semver.org/).
 
 ## Source Code Documentation
 
