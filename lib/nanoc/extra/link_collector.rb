@@ -45,7 +45,10 @@ module ::Nanoc::Extra
       # Convert protocol-relative urls
       # e.g. //example.com => http://example.com
       hrefs_in_file.map! { |href| href.gsub /^\/\//, 'http://' }
-      
+
+      # Strip fragment
+      hrefs_in_file.map! { |href| href.gsub(/#.*$/, '') }
+
       hrefs_in_file.select(&@filter)
     end
 
