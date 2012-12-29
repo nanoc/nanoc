@@ -4,6 +4,11 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
 
   include Nanoc::TestHelpers
 
+  def setup
+    super
+    require 'timeout'
+  end
+
   def test_run
     with_site do |site|
       # Create files
@@ -43,7 +48,9 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
   end
 
   def ok?(checker, url)
-    checker.validate(url).nil?
+    Timeout.timeout(3) do
+      checker.validate(url).nil?
+    end
   end
 
   def run_server_while
@@ -56,7 +63,9 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
       end
     end
 
-    Thread.pass until @server
+    Timeout::timeout(5) do
+      Thread.pass until @server
+    end
 
     yield
 
