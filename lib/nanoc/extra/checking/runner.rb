@@ -114,7 +114,9 @@ module Nanoc::Extra::Checking
 
       return if issues.empty?
       puts "Issues found!"
-      issues.group_by { |i| i.subject }.each_pair do |subject, issues|
+      issues.group_by { |i| i.subject }.to_a.sort_by { |p| p.first }.each do |pair|
+        subject = pair.first
+        issues  = pair.last
         unless issues.empty?
           puts "  #{subject}:"
           issues.each do |i|
