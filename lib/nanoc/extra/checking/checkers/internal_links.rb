@@ -9,9 +9,9 @@ module Nanoc::Extra::Checking::Checkers
     #
     # @return [void]
     def run
-      require 'nokogiri'
-
-      hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(self.output_filenames, :internal).filenames_per_href
+      # TODO de-duplicate this (duplicated in external links checker)
+      filenames = self.output_filenames.select { |f| File.extname(f) == '.html' }
+      hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
       hrefs_with_filenames.each_pair do |href, filenames|
         filenames.each do |filename|
           unless valid?(href, filename)

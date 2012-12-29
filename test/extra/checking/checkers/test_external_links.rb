@@ -4,6 +4,23 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
 
   include Nanoc::TestHelpers
 
+  def test_run
+    with_site do |site|
+      # Create files
+      FileUtils.mkdir_p('output')
+      FileUtils.mkdir_p('output/stuff')
+      File.open('output/foo.txt',  'w') { |io| io.write('<a href="http://example.com/404">broken</a>') }
+      File.open('output/bar.html', 'w') { |io| io.write('<a href="http://example.com/">not broken</a>') }
+
+      # Create checker
+      checker = Nanoc::Extra::Checking::Checkers::InternalLinks.new(site)
+      checker.run
+
+      # Test
+      assert checker.issues.empty?
+    end
+  end
+
   def test_valid?
     with_site do |site|
       # Create files
