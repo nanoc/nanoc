@@ -46,8 +46,6 @@ module Nanoc::Extra::Validators
       end
     end
 
-  private
-
     # Enumerates all key-value pairs of a given hash in a thread-safe way.
     #
     # @api private
@@ -75,6 +73,8 @@ module Nanoc::Extra::Validators
       end
 
     end
+
+  private
 
     def all_broken_hrefs
       broken_hrefs = {}
