@@ -49,7 +49,7 @@ module Nanoc::Extra
       end
 
       # Remove empty directories
-      present_dirs.sort_by{ |d| -d.length }.each do |dir|
+      present_dirs.each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
         next if filename_excluded?(dir)
         self.delete_dir(dir)
