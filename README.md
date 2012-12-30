@@ -102,6 +102,7 @@ may be interested in the development dependencies:
 * Go Maeda
 * Nikhil Marathe
 * Daniel Mendler
+* Stuart Montgomery
 * Ale Muñoz
 * John Nishinaga
 * Gregory Pakosz
