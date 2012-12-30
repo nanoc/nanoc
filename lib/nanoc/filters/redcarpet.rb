@@ -7,7 +7,7 @@ module Nanoc::Filters
   # @since 3.2.0
   class Redcarpet < Nanoc::Filter
 
-    # Runs the content through [Redcarpet](https://github.com/tanoku/redcarpet/).
+    # Runs the content through [Redcarpet](https://github.com/vmg/redcarpet).
     # This method optionally takes processing options to pass on to Redcarpet.
     #
     # @overload run(content, params={})

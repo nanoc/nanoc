@@ -20,6 +20,13 @@ Exensions:
 * Added support for parameters in Less filter [Ruben Verborgh]
 * Added support for icon and logo in Atom feed [Ruben Verborgh]
 
+## 3.4.4 (???)
+
+Fixes:
+
+* Made syntax colorizer only use the first non-empty line when extracting the
+  language comment
+
 ## 3.4.3 (2012-12-09)
 
 Improvements:

@@ -5,7 +5,7 @@ require 'rubypants'
 module Nanoc::Filters
   class RubyPants < Nanoc::Filter
 
-    # Runs the content through [RubyPants](http://chneukirchen.org/blog/static/projects/rubypants.html).
+    # Runs the content through [RubyPants](http://rubydoc.info/gems/rubypants/).
     # This method takes no options.
     #
     # @param [String] content The content to filter
