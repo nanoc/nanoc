@@ -8,7 +8,8 @@ Start the autocompiler web server. Unless overridden with commandline options
 or configuration entries, the web server will run on port 3000 and listen on all
 IP addresses. Running the autocompiler requires the 'mime/types' and 'rack' gems.
 
-To specify the host and/or port options in config.yaml, you can add the following:
+To specify the host and/or port options in config.yaml, you can add either (or
+both) of the following:
 
   autocompile:
     host: '10.0.2.0'  # override the default host
