@@ -11,6 +11,7 @@ Minor changes:
 * Added `#include_rules` for modularising Rules files [Justin Hileman]
 * Replaced FSSM with Listen [Takashi Uchibe]
 * Made USR1 print stack trace
+* Added ability to configure autocompiler host/port in config.yaml [Stuart Montgomery]
 
 Exensions:
 
