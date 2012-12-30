@@ -61,7 +61,7 @@ module Nanoc::Helpers
         # Add item
         items.each do |item|
           reps = item.reps.reject { |r| r.raw_path.nil? }
-          reps.select! { |r| select_proc[r] } if select_proc
+          reps.reject! { |r| !select_proc[r] } if select_proc
           reps.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
