@@ -107,6 +107,35 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_filter
+    if_have 'builder', 'nokogiri' do
+      # Create items
+      @items = [ Nanoc::Item.new('some content 1', {}, '/item-one/') ]
+      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
+      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+
+      # Create sitemap item
+      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+
+      # Create site
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+
+      # Build sitemap
+      res = xml_sitemap(:rep_select => lambda { |rep| rep.name == :one_a } )
+
+      # Check
+      doc = Nokogiri::XML(res)
+      urlsets = doc.css('> urlset')
+      assert_equal 1, urlsets.size
+      urls = urlsets.css('> url')
+      assert_equal 1, urls.size
+      assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
+      assert_equal '',                                 urls[0].css('> changefreq').inner_text
+      assert_equal '',                                 urls[0].css('> priority').inner_text
+      assert_equal '',                                 urls[0].css('> lastmod').inner_text
+    end
+  end
+
 protected
 
   def create_item_rep(item, name, path)

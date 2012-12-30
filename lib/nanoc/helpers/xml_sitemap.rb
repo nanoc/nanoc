@@ -35,12 +35,16 @@ module Nanoc::Helpers
     #
     # @option params [Array] :items A list of items to include in the sitemap
     #
+    # @option params [Proc] :rep_select A proc to filter reps through. If the
+    #   proc returns true, the rep will be included; otherwise, it will not.
+    #
     # @return [String] The XML sitemap
     def xml_sitemap(params={})
       require 'builder'
 
       # Extract parameters
-      items = params.fetch(:items) { @items.reject { |i| i[:is_hidden] } }
+      items       = params.fetch(:items) { @items.reject { |i| i[:is_hidden] } }
+      select_proc = params.fetch(:rep_select, nil)
 
       # Create builder
       buffer = ''
@@ -56,7 +60,9 @@ module Nanoc::Helpers
       xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
         items.each do |item|
-          item.reps.reject { |r| r.raw_path.nil? }.each do |rep|
+          reps = item.reps.reject { |r| r.raw_path.nil? }
+          reps.select! { |r| select_proc[r] } if select_proc
+          reps.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
               xml.lastmod     item[:mtime].to_iso8601_date unless item[:mtime].nil?
