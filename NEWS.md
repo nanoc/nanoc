@@ -12,6 +12,7 @@ Minor changes:
 * Replaced FSSM with Listen [Takashi Uchibe]
 * Made USR1 print stack trace
 * Added ability to configure autocompiler host/port in config.yaml [Stuart Montgomery]
+* Added static data source
 
 Exensions:
 
