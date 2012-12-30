@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc3::DataSources
+module Nanoc::DataSources
 
   # The static data source provides items from a single directory. Unlike the
   # filesystem data sources, static provides no additional item metadata. In
@@ -18,15 +18,14 @@ module Nanoc3::DataSources
   # in the data source configuration:
   #
   #    data_sources:
-  #      - type:         static
-  #        config:
-  #          prefix:     assets
+  #      - type:   static
+  #        prefix: assets
   #
   # Unless the `hide_items` configuration attribute is false, items from static
   # data sources will have the :is_hidden attribute set by default, which will
   # exclude them from the Blogging helper's atom feed generator, among other
   # things.
-  class Static < Nanoc3::DataSource
+  class Static < Nanoc::DataSource
     identifier :static
 
     def items
@@ -46,9 +45,9 @@ module Nanoc3::DataSources
         identifier = filename[(prefix.length+1)..-1] + '/'
 
         mtime      = File.mtime(filename)
-        checksum   = checksum_for(filename)
+        checksum   = Pathname.new(filename).checksum
 
-        Nanoc3::Item.new(
+        Nanoc::Item.new(
           filename,
           attributes,
           identifier,
@@ -57,21 +56,5 @@ module Nanoc3::DataSources
       end
     end
 
-  private
-
-    # Returns a checksum of the given filenames
-    # TODO un-duplicate this somewhere
-    def checksum_for(*filenames)
-      filenames.flatten.map do |filename|
-        digest = Digest::SHA1.new
-        File.open(filename, 'r') do |io|
-          until io.eof
-            data = io.readpartial(2**10)
-            digest.update(data)
-          end
-        end
-        digest.hexdigest
-      end.join('-')
-    end
   end
 end

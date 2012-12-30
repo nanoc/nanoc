@@ -34,7 +34,7 @@ class Nanoc::DataSources::StaticTest < MiniTest::Unit::TestCase
         '/bar.png/',
         :binary => true,
         :mtime => File.mtime('foo/bar.png'),
-        :checksum => data_source.send(:checksum_for, 'foo/bar.png')
+        :checksum => Pathname.new('foo/bar.png').checksum
       ),
       Nanoc::Item.new(
         'foo/b.c.css',
@@ -42,7 +42,7 @@ class Nanoc::DataSources::StaticTest < MiniTest::Unit::TestCase
         '/b.c.css/',
         :binary => true,
         :mtime => File.mtime('foo/b.c.css'),
-        :checksum => data_source.send(:checksum_for, 'foo/b.c.css')
+        :checksum => Pathname.new('foo/b.c.css').checksum
       ),
       Nanoc::Item.new(
         'foo/a/b/c.gif',
@@ -50,7 +50,7 @@ class Nanoc::DataSources::StaticTest < MiniTest::Unit::TestCase
         '/a/b/c.gif/',
         :binary => true,
         :mtime => File.mtime('foo/a/b/c.gif'),
-        :checksum => data_source.send(:checksum_for, 'foo/a/b/c.gif')
+        :checksum => Pathname.new('foo/a/b/c.gif').checksum
       )
     ].sort_by { |i| i.identifier }
 
