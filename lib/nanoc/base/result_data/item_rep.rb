@@ -134,7 +134,7 @@ module Nanoc
 
         if self.binary?
           # Check whether content was modified
-          is_modified = File.file?(raw_path) && FileUtils.compare_file(raw_path, temporary_filenames[:last])
+          is_modified = !File.file?(raw_path) || !FileUtils.identical?(raw_path, temporary_filenames[:last])
 
           # Always copy (time spent checking modification is not useful)
           FileUtils.cp(temporary_filenames[:last], raw_path)

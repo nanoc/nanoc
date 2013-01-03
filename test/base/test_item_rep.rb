@@ -510,6 +510,34 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_write_should_calculate_is_modified_correctly_for_binary_items
+    # Mock item
+    FileUtils.mkdir_p('content')
+    File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
+    item = Nanoc::Item.new(
+      "content/meow.dat", {}, '/',
+      :binary => true
+    )
+
+    # Create rep
+    item_rep = Nanoc::ItemRep.new(item, :foo)
+    FileUtils.mkdir_p('tmp')
+    File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
+    item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
+    item_rep.raw_path = 'output/woof.dat'
+
+    # Write
+    notified = false
+    Nanoc::NotificationCenter.on(:rep_written, self) do |rep, raw_path, is_created, is_modified|
+      notified = true
+      assert is_created
+      assert is_modified
+    end
+    item_rep.write
+    assert notified
+    Nanoc::NotificationCenter.remove(:rep_written, self)
+  end
+
 private
 
   def create_binary_item
