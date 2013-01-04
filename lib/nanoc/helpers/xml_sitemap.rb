@@ -59,10 +59,10 @@ module Nanoc::Helpers
       xml.instruct!
       xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
-        items.each do |item|
+        items.sort_by { |i| i.identifier }.each do |item|
           reps = item.reps.reject { |r| r.raw_path.nil? }
           reps.reject! { |r| !select_proc[r] } if select_proc
-          reps.each do |rep|
+          reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
               xml.lastmod     item[:mtime].to_iso8601_date unless item[:mtime].nil?

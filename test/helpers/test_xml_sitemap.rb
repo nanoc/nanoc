@@ -136,6 +136,44 @@ class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_sorted
+    if_have 'builder', 'nokogiri' do
+      # Create items
+      @items = []
+      @items << Nanoc::Item.new('some content 1', {}, '/george/')
+      self.create_item_rep(@items.last, :a_alice,   '/george/alice/')
+      self.create_item_rep(@items.last, :b_zoey,    '/george/zoey/')
+      @items << Nanoc::Item.new('some content 1', {}, '/walton/')
+      self.create_item_rep(@items.last, :a_eve,     '/walton/eve/')
+      self.create_item_rep(@items.last, :b_bob,     '/walton/bob/')
+      @items << Nanoc::Item.new('some content 1', {}, '/lucas/')
+      self.create_item_rep(@items.last, :a_trudy,   '/lucas/trudy/')
+      self.create_item_rep(@items.last, :b_mallory, '/lucas/mallory/')
+
+      # Create sitemap item
+      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+
+      # Create site
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+
+      # Build sitemap
+      res = xml_sitemap(:items => @items)
+
+      # Check
+      doc = Nokogiri::XML(res)
+      urlsets = doc.css('> urlset')
+      assert_equal 1, urlsets.size
+      urls = urlsets.css('> url')
+      assert_equal 6, urls.size
+      assert_equal 'http://example.com/george/alice/',  urls[0].css('> loc').inner_text
+      assert_equal 'http://example.com/george/zoey/',   urls[1].css('> loc').inner_text
+      assert_equal 'http://example.com/lucas/trudy/',   urls[2].css('> loc').inner_text
+      assert_equal 'http://example.com/lucas/mallory/', urls[3].css('> loc').inner_text
+      assert_equal 'http://example.com/walton/eve/',    urls[4].css('> loc').inner_text
+      assert_equal 'http://example.com/walton/bob/',    urls[5].css('> loc').inner_text
+    end
+  end
+
 protected
 
   def create_item_rep(item, name, path)
