@@ -4,7 +4,7 @@ usage       'show-rules [thing]'
 aliases     :explain
 summary     'describe the rules for each item'
 description <<-EOS
-Prints the rules used for all items and layouts in the current site. An argument can be given, which can be either an item identifier (e.g. /foo/), the path to the source file (e.g. content/foo.html) or the path to the output file (e.g. output/foo.html).
+Prints the rules used for all items and layouts in the current site.
 EOS
 
 module Nanoc::CLI::Commands
