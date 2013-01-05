@@ -9,8 +9,8 @@ module Nanoc::Filters
 
     # Runs the content through
     # [Handlebars](http://handlebarsjs.com/) using
-	  # [Handlebars.rb](https://github.com/cowboyd/handlebars.rb).
-	  # This method takes no options.
+    # [Handlebars.rb](https://github.com/cowboyd/handlebars.rb).
+    # This method takes no options.
     #
     # @param [String] content The content to filter
     #
