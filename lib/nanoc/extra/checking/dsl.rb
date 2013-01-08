@@ -16,7 +16,7 @@ module Nanoc::Extra::Checking
       @deploy_checks = []
     end
 
-    def check(identifier, description, &block)
+    def check(identifier, &block)
       klass = Class.new(::Nanoc::Extra::Checking::Checker)
       klass.send(:define_method, :run, &block)
       klass.send(:identifier, identifier)
