@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require 'slim'
-
 module Nanoc::Filters
 
   # @since 3.2.0
   class Slim < Nanoc::Filter
+
+    requires 'slim'
 
     # Runs the content through [Slim](http://slim-lang.com/).
     # This method takes no options.

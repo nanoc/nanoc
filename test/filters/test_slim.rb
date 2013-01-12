@@ -10,15 +10,15 @@ class Nanoc::Filters::SlimTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Slim.new({ :rabbit => 'The rabbit is on the branch.' })
 
       # Run filter (no assigns)
-      result = filter.run('html')
+      result = filter.setup_and_run('html')
       assert_match(/<html>.*<\/html>/, result)
 
       # Run filter (assigns without @)
-      result = filter.run('p = rabbit')
+      result = filter.setup_and_run('p = rabbit')
       assert_equal("<p>The rabbit is on the branch.</p>", result)
 
       # Run filter (assigns with @)
-      result = filter.run('p = @rabbit')
+      result = filter.setup_and_run('p = @rabbit')
       assert_equal("<p>The rabbit is on the branch.</p>", result)
     end
   end
@@ -27,7 +27,7 @@ class Nanoc::Filters::SlimTest < MiniTest::Unit::TestCase
     if_have 'slim' do
       filter = ::Nanoc::Filters::Slim.new({ :content => 'The rabbit is on the branch.' })
 
-      result = filter.run('p = yield')
+      result = filter.setup_and_run('p = yield')
       assert_equal("<p>The rabbit is on the branch.</p>", result)
     end
   end

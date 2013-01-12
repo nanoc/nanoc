@@ -10,7 +10,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       filter = create_filter({ :foo => 'bar' })
 
       # Run filter
-      result = filter.run(".foo #bar\n  color: #f00")
+      result = filter.setup_and_run(".foo #bar\n  color: #f00")
       assert_match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}/, result)
     end
   end
@@ -21,11 +21,11 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       filter = create_filter({ :foo => 'bar' })
 
       # Check with compact
-      result = filter.run(".foo #bar\n  color: #f00", :style => 'compact')
+      result = filter.setup_and_run(".foo #bar\n  color: #f00", :style => 'compact')
       assert_match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m, result)
 
       # Check with compressed
-      result = filter.run(".foo #bar\n  color: #f00", :style => 'compressed')
+      result = filter.setup_and_run(".foo #bar\n  color: #f00", :style => 'compressed')
       assert_match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m, result)
     end
   end
@@ -38,7 +38,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       # Run filter
       raised = false
       begin
-        filter.run('$*#&!@($')
+        filter.setup_and_run('$*#&!@($')
       rescue Sass::SyntaxError => e
         assert_match ':1', e.backtrace[0]
         raised = true
@@ -56,7 +56,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       File.open('moo.sass', 'w') { |io| io.write "body\n  color: red" }
 
       # Run filter
-      filter.run('@import moo')
+      filter.setup_and_run('@import moo')
     end
   end
 
@@ -71,7 +71,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       File.open('subdir/relative.sass', 'w') { |io| io.write "body\n  color: red" }
 
       # Run filter
-      filter.run('@import moo')
+      filter.setup_and_run('@import moo')
     end
   end
 
@@ -84,7 +84,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       File.open('moo.sass', 'w') { |io| io.write "body\n  color: red" }
 
       # Run filter
-      filter.run('@import moo')
+      filter.setup_and_run('@import moo')
     end
   end
 
@@ -94,7 +94,7 @@ class Nanoc::Filters::SassTest < MiniTest::Unit::TestCase
       filter = create_filter
 
       # Run filter
-      filter.run('@import moo.css')
+      filter.setup_and_run('@import moo.css')
     end
   end
 

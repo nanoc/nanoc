@@ -10,7 +10,7 @@ class Nanoc::Filters::RainpressTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Rainpress.new
 
       # Run filter
-      result = filter.run("body { color: black; }")
+      result = filter.setup_and_run("body { color: black; }")
       assert_equal("body{color:#000}", result)
     end
   end
@@ -21,7 +21,7 @@ class Nanoc::Filters::RainpressTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Rainpress.new
 
       # Run filter
-      result = filter.run("body { color: #aabbcc; }", :colors => false)
+      result = filter.setup_and_run("body { color: #aabbcc; }", :colors => false)
       assert_equal("body{color:#aabbcc}", result)
     end
   end

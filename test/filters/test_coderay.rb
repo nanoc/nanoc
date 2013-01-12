@@ -12,7 +12,7 @@ class Nanoc::Filters::CodeRayTest < MiniTest::Unit::TestCase
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
       assert_raises(ArgumentError) do
-        filter.run(code)
+        filter.setup_and_run(code)
       end
     end
   end
@@ -24,7 +24,7 @@ class Nanoc::Filters::CodeRayTest < MiniTest::Unit::TestCase
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
-      result = filter.run(code, :language => 'ruby')
+      result = filter.setup_and_run(code, :language => 'ruby')
       assert_match %r{^<span class="keyword">def</span> <span class="function">some_function</span>}, result
     end
   end
@@ -36,7 +36,7 @@ class Nanoc::Filters::CodeRayTest < MiniTest::Unit::TestCase
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
-      result = filter.run(code, :language => 'skldfhjsdhfjszfnocmluhfixfmersumulh')
+      result = filter.setup_and_run(code, :language => 'skldfhjsdhfjszfnocmluhfixfmersumulh')
       assert_equal code, result
     end
   end

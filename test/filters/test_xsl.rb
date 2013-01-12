@@ -84,7 +84,7 @@ EOS
 
       filter = ::Nanoc::Filters::XSL.new(
         :layout => layout, :content => SAMPLE_XSL)
-      result = filter.run(SAMPLE_XML_IN)
+      result = filter.setup_and_run(SAMPLE_XML_IN)
 
       assert_equal SAMPLE_XML_OUT, result
     end
@@ -96,7 +96,7 @@ EOS
 
       filter = ::Nanoc::Filters::XSL.new(
         :layout => layout, :content => SAMPLE_XSL_WITH_PARAMS)
-      result = filter.run(SAMPLE_XML_IN_WITH_PARAMS, :foo => 'bar')
+      result = filter.setup_and_run(SAMPLE_XML_IN_WITH_PARAMS, :foo => 'bar')
 
       assert_equal SAMPLE_XML_OUT_WITH_PARAMS, result
     end

@@ -333,7 +333,7 @@ module Nanoc
 
         # Run filter
         source = self.binary? ? temporary_filenames[:last] : @content[:last]
-        result = filter.run(source, filter_args)
+        result = filter.setup_and_run(source, filter_args)
         if klass.to_binary?
           temporary_filenames[:last] = filter.output_filename
         else
@@ -398,7 +398,7 @@ module Nanoc
         Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
 
         # Layout
-        @content[:last] = filter.run(layout.raw_content, filter_args)
+        @content[:last] = filter.setup_and_run(layout.raw_content, filter_args)
 
         # Create "post" snapshot
         snapshot(:post, :final => false)

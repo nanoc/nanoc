@@ -39,7 +39,7 @@ module Nanoc::Helpers
 
       # Filter captured data
       Nanoc::NotificationCenter.post(:filtering_started, @item_rep, filter_name)
-      filtered_data = filter.run(data, arguments)
+      filtered_data = filter.setup_and_run(data, arguments)
       Nanoc::NotificationCenter.post(:filtering_ended, @item_rep, filter_name)
 
       # Append filtered data to buffer

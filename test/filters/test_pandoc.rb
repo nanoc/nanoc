@@ -14,7 +14,7 @@ class Nanoc::Filters::PandocTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Pandoc.new
 
       # Run filter
-      result = filter.run("# Heading\n")
+      result = filter.setup_and_run("# Heading\n")
       assert_equal("<h1 id=\"heading\">Heading</h1>", result)
     end
   end

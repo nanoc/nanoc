@@ -17,7 +17,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
       expected_output = CODERAY_PRE + '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -32,7 +32,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
       expected_output = input # because we are using a dummy
 
       # Run filter
-      actual_output = filter.run(input, :default_colorizer => :dummy)
+      actual_output = filter.setup_and_run(input, :default_colorizer => :dummy)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -68,7 +68,7 @@ EOS
 EOS
 
       # Run filter
-      actual_output = filter.run(input, :default_colorizer => :dummy, :is_fullpage => true)
+      actual_output = filter.setup_and_run(input, :default_colorizer => :dummy, :is_fullpage => true)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -83,7 +83,7 @@ EOS
       expected_output = CODERAY_PRE + '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -98,7 +98,7 @@ EOS
       expected_output = "<pre title=\"moo\"><code>def moo ; end\n#!ruby\n# comment</code></pre>"
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -113,7 +113,7 @@ EOS
       expected_output = CODERAY_PRE + %[<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>\n<span class="comment"># comment</span></code></pre>] + CODERAY_POST
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -128,7 +128,7 @@ EOS
       expected_output = CODERAY_PRE + '<pre title="moo"><code class="abc language-ruby xyz"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -147,7 +147,7 @@ EOS
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment</span></code></pre>'
 
       # Run filter
-      actual_output = filter.run(input, :colorizers => { :ruby => :pygmentize })
+      actual_output = filter.setup_and_run(input, :colorizers => { :ruby => :pygmentize })
       assert_equal(expected_output, actual_output)
     end
   end
@@ -162,7 +162,7 @@ EOS
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment…</span></code></pre>'
 
       # Run filter
-      actual_output = filter.run(input, :colorizers => { :ruby => :pygmentsrb })
+      actual_output = filter.setup_and_run(input, :colorizers => { :ruby => :pygmentsrb })
       assert_equal(expected_output, actual_output)
     end
   end
@@ -181,7 +181,7 @@ EOS
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="hl slc"># comment</span></code></pre>'
 
       # Run filter
-      actual_output = filter.run(input, :default_colorizer => :simon_highlight)
+      actual_output = filter.setup_and_run(input, :default_colorizer => :simon_highlight)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -193,7 +193,7 @@ EOS
 
       # Run filter
       assert_raises RuntimeError do
-        filter.run('<p>whatever</p>', :syntax => :kasflwafhaweoineurl)
+        filter.setup_and_run('<p>whatever</p>', :syntax => :kasflwafhaweoineurl)
       end
     end
   end
@@ -208,7 +208,7 @@ EOS
       expected_output = '<p>foo<br/>bar</p>'
 
       # Run filter
-      actual_output = filter.run(input, :syntax => :xml)
+      actual_output = filter.setup_and_run(input, :syntax => :xml)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -223,7 +223,7 @@ EOS
       expected_output = '<p>foo<br />bar</p>'
 
       # Run filter
-      actual_output = filter.run(input, :syntax => :xhtml)
+      actual_output = filter.setup_and_run(input, :syntax => :xhtml)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -243,7 +243,7 @@ EOS
       expected_output = '<pre><code class="language-ruby"><span class="nb">puts</span> <span class="s2">"foo"</span></code></pre>'
 
       # Run filter
-      actual_output = filter.run(input, :default_colorizer => :pygmentize)
+      actual_output = filter.setup_and_run(input, :default_colorizer => :pygmentize)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -264,7 +264,7 @@ EOS
         [ :albino, :pygmentize, :simon_highlight ].each do |colorizer|
           begin
             input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
-            filter.run(
+            filter.setup_and_run(
               input,
               :colorizers => { :ruby => colorizer })
             flunk "expected colorizer to raise if no executable is available"
@@ -301,7 +301,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -329,7 +329,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -344,7 +344,7 @@ EOS
       expected_output = '<code class="language-ruby"># comment</code>'
 
       # Run filter
-      actual_output = filter.run(input, :outside_pre => false)
+      actual_output = filter.setup_and_run(input, :outside_pre => false)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -359,7 +359,7 @@ EOS
       expected_output = '<code class="language-ruby"><span class="comment"># comment</span></code>'
 
       # Run filter
-      actual_output = filter.run(input, :outside_pre => true)
+      actual_output = filter.setup_and_run(input, :outside_pre => true)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -389,7 +389,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.run(input)
+      actual_output = filter.setup_and_run(input)
       assert_equal(expected_output, actual_output)
     end
   end

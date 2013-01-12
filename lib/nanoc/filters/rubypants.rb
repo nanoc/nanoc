@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'rubypants'
-
 module Nanoc::Filters
   class RubyPants < Nanoc::Filter
+
+    requires 'rubypants'
 
     # Runs the content through [RubyPants](http://rubydoc.info/gems/rubypants/).
     # This method takes no options.

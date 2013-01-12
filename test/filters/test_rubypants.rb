@@ -10,7 +10,7 @@ class Nanoc::Filters::RubyPantsTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::RubyPants.new
 
       # Run filter
-      result = filter.run("Wait---what?")
+      result = filter.setup_and_run("Wait---what?")
       assert_equal("Wait&#8212;what?", result)
     end
   end

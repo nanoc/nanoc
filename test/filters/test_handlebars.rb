@@ -27,11 +27,11 @@ class Nanoc::Filters::HandlebarsTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Handlebars.new(assigns)
 
       # Run filter
-      result = filter.run('{{protagonist}} says: {{yield}}.')
+      result = filter.setup_and_run('{{protagonist}} says: {{yield}}.')
       assert_equal('Max Payne says: No Payne No Gayne.', result)
-      result = filter.run('We can’t stop {{item.location}}! This is the {{layout.name}} layout!')
+      result = filter.setup_and_run('We can’t stop {{item.location}}! This is the {{layout.name}} layout!')
       assert_equal('We can’t stop here! This is the Max Payne layout!', result)
-      result = filter.run('It’s raining {{config.animals}} here!')
+      result = filter.setup_and_run('It’s raining {{config.animals}} here!')
       assert_equal('It’s raining cats and dogs here!', result)
     end
   end

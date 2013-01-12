@@ -1,11 +1,9 @@
 # encoding: utf-8
 
-require 'nokogiri'
-require 'stringio'
-require 'open3'
-
 module Nanoc::Filters
   class ColorizeSyntax < Nanoc::Filter
+
+    requires 'nokogiri', 'stringio', 'open3'
 
     # The default colorizer to use for a language if the colorizer for that
     # language is not overridden.

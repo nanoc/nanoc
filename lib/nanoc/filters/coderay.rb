@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'coderay'
-
 module Nanoc::Filters
   class CodeRay < Nanoc::Filter
+
+    requires 'coderay'
 
     # @deprecated Use the `:colorize_syntax` filter instead.
     def run(content, params={})

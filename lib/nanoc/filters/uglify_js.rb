@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'uglifier'
-
 module Nanoc::Filters
   class UglifyJS < Nanoc::Filter
+
+    requires 'uglifier'
 
     # Runs the content through [UglifyJS](https://github.com/mishoo/UglifyJS/).
     # This method optionally takes options to pass directly to Uglifier:

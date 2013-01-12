@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'pandoc-ruby'
-
 module Nanoc::Filters
   class Pandoc < Nanoc::Filter
+
+    requires 'pandoc-ruby'
 
     # Runs the content through [Pandoc](http://johnmacfarlane.net/pandoc/)
     # using [PandocRuby](https://github.com/alphabetum/pandoc-ruby). Options

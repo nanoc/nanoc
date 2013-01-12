@@ -1,9 +1,9 @@
 # encoding: utf-8                                                                                                           
 
-require 'erb'
-
 module Nanoc::Filters
   class ERB < Nanoc::Filter
+
+    requires 'erb'
 
     # Runs the content through [ERB](http://ruby-doc.org/stdlib/libdoc/erb/rdoc/classes/ERB.html).
     #

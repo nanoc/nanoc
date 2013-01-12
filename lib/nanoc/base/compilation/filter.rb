@@ -77,6 +77,31 @@ module Nanoc
         (@to || :text) == :binary
       end
 
+      # @overload requires(*requires)
+      #   Sets the required libraries for this filter.
+      #   @param [Array<String>] requires A list of library names that are required
+      #   @return [void]
+      # @overload requires
+      #   Returns the required libraries for this filter.
+      #   @return [Enumerable<String>] This filter’s list of library names that are required
+      def requires(*requires)
+        if requires.size > 0
+          @requires = requires
+        else
+          @requires || []
+        end
+      end
+
+      # Requires the filter’s required library if necessary.
+      #
+      # @return [void]
+      def setup
+        @setup ||= begin
+          self.requires.each { |r| require r }
+          true
+        end
+      end
+
     end
 
     # Creates a new filter that has access to the given assigns.
@@ -86,6 +111,15 @@ module Nanoc
     def initialize(hash={})
       @assigns = hash
       super
+    end
+
+    # Sets up the filter and runs the filter. This method passes its arguments
+    # to {#run} unchanged and returns the return value from {#run}.
+    #
+    # @see {#run}
+    def setup_and_run(*args)
+      self.class.setup
+      self.run(*args)
     end
 
     # Runs the filter on the given content or filename.

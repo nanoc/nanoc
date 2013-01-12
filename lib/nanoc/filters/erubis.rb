@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'erubis'
-
 module Nanoc::Filters
   class Erubis < Nanoc::Filter
+
+    requires 'erubis'
 
     # The same as `::Erubis::Eruby` but adds `_erbout` as an alias for the
     # `_buf` variable, making it compatible with nanoc’s helpers that rely

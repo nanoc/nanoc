@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'haml'
-
 module Nanoc::Filters
   class Haml < Nanoc::Filter
+
+    requires 'haml'
 
     # Runs the content through [Haml](http://haml-lang.com/).
     # Parameters passed to this filter will be passed on to Haml.

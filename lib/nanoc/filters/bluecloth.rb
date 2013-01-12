@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'bluecloth'
-
 module Nanoc::Filters
   class BlueCloth < Nanoc::Filter
+
+    requires 'bluecloth'
 
     # Runs the content through [BlueCloth](http://deveiate.org/projects/BlueCloth).
     # This method takes no options.

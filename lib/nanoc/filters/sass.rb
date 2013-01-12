@@ -1,10 +1,9 @@
 # encoding: utf-8
 
-require 'sass'
-require 'set'
-
 module Nanoc::Filters
   class Sass < Nanoc::Filter
+
+    requires 'sass'
 
     class << self
       # The current filter. This is definitely going to bite me if I ever get

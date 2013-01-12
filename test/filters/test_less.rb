@@ -13,7 +13,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter
-      result = filter.run('.foo { bar: 1 + 1 }')
+      result = filter.setup_and_run('.foo { bar: 1 + 1 }')
       assert_match(/\.foo\s*\{\s*bar:\s*2;?\s*\}/, result)
     end
   end
@@ -31,7 +31,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter
-      result = filter.run('@import "content/foo/bar/imported_file.less";')
+      result = filter.setup_and_run('@import "content/foo/bar/imported_file.less";')
       assert_match(/p\s*\{\s*color:\s*red;?\s*\}/, result)
     end
   end
@@ -50,7 +50,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter
-      result = filter.run('@import "bar/imported_file.less";')
+      result = filter.setup_and_run('@import "bar/imported_file.less";')
       assert_match(/p\s*\{\s*color:\s*red;?\s*\}/, result)
     end
   end
@@ -119,7 +119,7 @@ class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter with compress option
-      result = filter.run('.foo { bar: a; } .bar { foo: b; }', :compress => true)
+      result = filter.setup_and_run('.foo { bar: a; } .bar { foo: b; }', :compress => true)
       assert_match(/^\.foo{bar:a;}\n\.bar{foo:b;}/, result)
     end
   end

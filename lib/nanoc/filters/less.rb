@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'less'
-
 module Nanoc::Filters
   class Less < Nanoc::Filter
+
+    requires 'less'
 
     # Runs the content through [LESS](http://lesscss.org/).
     # This method takes no options.

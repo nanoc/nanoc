@@ -10,15 +10,15 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
 
       # Run filter (no assigns)
-      result = filter.run('%html')
+      result = filter.setup_and_run('%html')
       assert_match(/<html>.*<\/html>/, result)
 
       # Run filter (assigns without @)
-      result = filter.run('%p= question')
+      result = filter.setup_and_run('%p= question')
       assert_equal("<p>Is this the Payne residence?</p>\n", result)
 
       # Run filter (assigns with @)
-      result = filter.run('%p= @question')
+      result = filter.setup_and_run('%p= @question')
       assert_equal("<p>Is this the Payne residence?</p>\n", result)
     end
   end
@@ -29,11 +29,11 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
 
       # Check with HTML5
-      result = filter.run('%img', :format => :html5)
+      result = filter.setup_and_run('%img', :format => :html5)
       assert_match(/<img>/, result)
 
       # Check with XHTML
-      result = filter.run('%img', :format => :xhtml)
+      result = filter.setup_and_run('%img', :format => :xhtml)
       assert_match(/<img\s*\/>/, result)
     end
   end
@@ -46,7 +46,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
       # Run filter
       raised = false
       begin
-        filter.run('%p= this isn\'t really ruby so it\'ll break, muahaha')
+        filter.setup_and_run('%p= this isn\'t really ruby so it\'ll break, muahaha')
       rescue SyntaxError => e
         e.message =~ /(.+?):\d+: /
         assert_match '?', $1
@@ -62,7 +62,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
 
       # Run filter
-      result = filter.run('%p= yield')
+      result = filter.setup_and_run('%p= yield')
       assert_equal("<p>Is this the Payne residence?</p>\n", result)
     end
   end
@@ -74,7 +74,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
 
       # Run filter
       assert_raises LocalJumpError do
-        filter.run('%p= yield')
+        filter.setup_and_run('%p= yield')
       end
     end
   end
@@ -88,7 +88,7 @@ class Nanoc::Filters::HamlTest < MiniTest::Unit::TestCase
 
       # Run filter
       filter = ::Nanoc::Filters::Haml.new
-      result = filter.run("%body\n  ~ File.read('stuff')")
+      result = filter.setup_and_run("%body\n  ~ File.read('stuff')")
       assert_match(/Max Payne&#x000A;Mona Sax/, result)
     end
   end

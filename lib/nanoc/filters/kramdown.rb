@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'kramdown'
-
 module Nanoc::Filters
   class Kramdown < Nanoc::Filter
+
+    requires 'kramdown'
 
     # Runs the content through [Kramdown](http://kramdown.rubyforge.org/).
     # Parameters passed to this filter will be passed on to Kramdown.

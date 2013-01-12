@@ -10,7 +10,7 @@ class Nanoc::Filters::RDocTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::RDoc.new
 
       # Run filter
-      result = filter.run("= Foo")
+      result = filter.setup_and_run("= Foo")
       assert_match(%r{<h1( id="label-Foo")?>Foo</h1>\Z}, result)
     end
   end

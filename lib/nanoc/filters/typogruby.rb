@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require 'typogruby'
-
 module Nanoc::Filters
 
   # @since 3.2.0
   class Typogruby < Nanoc::Filter
+
+    requires 'typogruby'
 
     # Runs the content through [Typogruby](http://avdgaag.github.com/typogruby/).
     # This method takes no options.

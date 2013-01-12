@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require 'handlebars'
-
 module Nanoc::Filters
 
   # @since 3.4.0
   class Handlebars < Nanoc::Filter
+
+    requires 'handlebars'
 
     # Runs the content through
     # [Handlebars](http://handlebarsjs.com/) using

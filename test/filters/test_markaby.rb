@@ -16,7 +16,7 @@ class Nanoc::Filters::MarkabyTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Markaby.new
 
       # Run filter
-      result = filter.run("html do\nend")
+      result = filter.setup_and_run("html do\nend")
       assert_equal("<html></html>", result)
     end
   end

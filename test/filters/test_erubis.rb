@@ -10,7 +10,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
-      result = filter.run('<%= "I was hiding in #{@location}." %>')
+      result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>')
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
@@ -21,7 +21,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
 
       # Run filter
-      result = filter.run('<%= "I was hiding in #{location}." %>')
+      result = filter.setup_and_run('<%= "I was hiding in #{location}." %>')
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
@@ -34,7 +34,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
       # Run filter
       raised = false
       begin
-        filter.run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
+        filter.setup_and_run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
       rescue SyntaxError => e
         e.message =~ /(.+?):\d+: /
         assert_match '?', $1
@@ -50,7 +50,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
       filter = ::Nanoc::Filters::Erubis.new({ :content => 'a cheap motel' })
 
       # Run filter
-      result = filter.run('<%= "I was hiding in #{yield}." %>')
+      result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
@@ -62,7 +62,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
 
       # Run filter
       assert_raises LocalJumpError do
-        filter.run('<%= "I was hiding in #{yield}." %>')
+        filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
       end
     end
   end
@@ -70,7 +70,7 @@ class Nanoc::Filters::ErubisTest < MiniTest::Unit::TestCase
   def test_filter_with_erbout
     if_have 'erubis' do
       filter = ::Nanoc::Filters::Erubis.new
-      result = filter.run('stuff<% _erbout << _erbout %>')
+      result = filter.setup_and_run('stuff<% _erbout << _erbout %>')
       assert_equal 'stuffstuff', result
     end
   end
