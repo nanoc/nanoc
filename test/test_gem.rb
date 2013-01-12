@@ -13,7 +13,7 @@ class Nanoc::GemTest < MiniTest::Unit::TestCase
     require 'systemu'
 
     # Require clean environment
-    assert_empty Dir['nanoc-*.gem'], "Ensure no nanoc-*.gem files exist"
+    Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
 
     # Build
     files_before = Set.new Dir['**/*']
