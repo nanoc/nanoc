@@ -132,8 +132,7 @@ module Nanoc
     # @param [Class] superclass The superclass of the plugin. For example:
     #   {Nanoc::Filter}, {Nanoc::Extra::VCS}.
     #
-    # @param [Class, String] class_or_name The class to get the identifiers for.
-    #   This can also be a string containing the name of the class.
+    # @param [Class] klass The class to get the identifiers for.
     #
     # @return [Array<Symbol>] An array of identifiers for the given class
     def identifiers_of(superclass, klass)
