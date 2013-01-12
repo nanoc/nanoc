@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/ddfreyne/nanoc.png)](https://travis-ci.org/ddfreyne/nanoc)
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/ddfreyne/nanoc)
+
 # nanoc 3
 
 nanoc is a simple but very flexible static site generator written in Ruby.
