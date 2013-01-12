@@ -1,8 +1,8 @@
 # encoding: utf-8   
 
-module ::Nanoc::Extra::Checking::Checkers
+module ::Nanoc::Extra::Checking::Checks
 
-  class CSS < ::Nanoc::Extra::Checking::Checker
+  class CSS < ::Nanoc::Extra::Checking::Check
 
     identifier :css
 

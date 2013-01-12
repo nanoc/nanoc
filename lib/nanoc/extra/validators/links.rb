@@ -11,10 +11,10 @@ module Nanoc::Extra::Validators
     end
 
     def run
-      checkers = []
-      checkers << 'ilinks' if options[:internal]
-      checkers << 'elinks' if options[:external]
-      Nanoc::CLI.run [ 'check', checkers ].flatten
+      checks = []
+      checks << 'ilinks' if options[:internal]
+      checks << 'elinks' if options[:external]
+      Nanoc::CLI.run [ 'check', checks ].flatten
     end
 
   end

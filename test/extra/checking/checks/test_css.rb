@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checkers::CSSTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::Checking::Checks::CSSTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
@@ -11,12 +11,12 @@ class Nanoc::Extra::Checking::Checkers::CSSTest < MiniTest::Unit::TestCase
       File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
       File.open('output/style.css', 'w') { |io| io.write('h1 { color: red; }') }
 
-      # Run checker
-      checker = Nanoc::Extra::Checking::Checkers::CSS.new(site)
-      checker.run
+      # Run check
+      check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+      check.run
 
       # Check
-      assert checker.issues.empty?
+      assert check.issues.empty?
     end
   end
 
@@ -27,12 +27,12 @@ class Nanoc::Extra::Checking::Checkers::CSSTest < MiniTest::Unit::TestCase
       File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
       File.open('output/style.css', 'w') { |io| io.write('h1 { coxlor: rxed; }') }
 
-      # Run checker
-      checker = Nanoc::Extra::Checking::Checkers::CSS.new(site)
-      checker.run
+      # Run check
+      check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+      check.run
 
       # Check
-      refute checker.issues.empty?
+      refute check.issues.empty?
     end
   end
 

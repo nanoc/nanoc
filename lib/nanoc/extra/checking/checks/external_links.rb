@@ -6,16 +6,16 @@ require 'nokogiri'
 require 'timeout'
 require 'uri'
 
-module ::Nanoc::Extra::Checking::Checkers
+module ::Nanoc::Extra::Checking::Checks
 
   # A validator that verifies that all external links point to a location that exists.
-  class ExternalLinks < ::Nanoc::Extra::Checking::Checker
+  class ExternalLinks < ::Nanoc::Extra::Checking::Check
 
     identifiers :external_links, :elinks
 
     def run
       # Find all broken external hrefs
-      # TODO de-duplicate this (duplicated in internal links checker)
+      # TODO de-duplicate this (duplicated in internal links check)
       filenames = self.output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :external).filenames_per_href
       results = self.select_invalid(hrefs_with_filenames.keys)

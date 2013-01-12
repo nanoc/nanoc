@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checkers::InternalLinksTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::Checking::Checks::InternalLinksTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
@@ -12,12 +12,12 @@ class Nanoc::Extra::Checking::Checkers::InternalLinksTest < MiniTest::Unit::Test
       File.open('output/foo.txt',  'w') { |io| io.write('<a href="/broken">broken</a>') }
       File.open('output/bar.html', 'w') { |io| io.write('<a href="/foo.txt">not broken</a>') }
 
-      # Create checker
-      checker = Nanoc::Extra::Checking::Checkers::InternalLinks.new(site)
-      checker.run
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check.run
 
       # Test
-      assert checker.issues.empty?
+      assert check.issues.empty?
     end
   end
 
@@ -30,16 +30,16 @@ class Nanoc::Extra::Checking::Checkers::InternalLinksTest < MiniTest::Unit::Test
       File.open('output/foo',        'w') { |io| io.write('hi') }
       File.open('output/stuff/blah', 'w') { |io| io.write('hi') }
 
-      # Create checker
-      checker = Nanoc::Extra::Checking::Checkers::InternalLinks.new(site)
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
 
       # Test
-      assert checker.send(:valid?, 'foo',         'output/origin')
-      assert checker.send(:valid?, 'origin',      'output/origin')
-      assert checker.send(:valid?, 'stuff/blah',  'output/origin')
-      assert checker.send(:valid?, '/foo',        'output/origin')
-      assert checker.send(:valid?, '/origin',     'output/origin')
-      assert checker.send(:valid?, '/stuff/blah', 'output/origin')
+      assert check.send(:valid?, 'foo',         'output/origin')
+      assert check.send(:valid?, 'origin',      'output/origin')
+      assert check.send(:valid?, 'stuff/blah',  'output/origin')
+      assert check.send(:valid?, '/foo',        'output/origin')
+      assert check.send(:valid?, '/origin',     'output/origin')
+      assert check.send(:valid?, '/stuff/blah', 'output/origin')
     end
   end
 

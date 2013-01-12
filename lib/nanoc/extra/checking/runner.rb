@@ -17,41 +17,41 @@ module Nanoc::Extra::Checking
     # @return [void]
     def require_dsl
       if self.dsl.nil?
-        raise Nanoc::Errors::GenericTrivial, "No checks defined (no Checkers file present)"
+        raise Nanoc::Errors::GenericTrivial, "No checks defined (no Checks file present)"
       end
     end
 
-    # Lists all available checkers on stdout.
+    # Lists all available checks on stdout.
     #
     # @return [void]
-    def list_checkers
-      puts "Available checkers:"
+    def list_checks
+      puts "Available checks:"
       puts
-      puts all_checker_classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
+      puts all_check_classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
     end
 
-    # Runs all checkers.
+    # Runs all checks.
     #
     # @return [Boolean] true if successful, false otherwise
     def run_all
-      self.run_checker_classes(self.all_checker_classes)
+      self.run_check_classes(self.all_check_classes)
     end
 
-    # Runs the checkers marked for deployment.
+    # Runs the checks marked for deployment.
     #
     # @return [Boolean] true if successful, false otherwise
     def run_for_deploy
       return true if self.dsl.nil?
-      self.run_checker_classes(self.checker_classes_named(self.dsl.deploy_checks))
+      self.run_check_classes(self.check_classes_named(self.dsl.deploy_checks))
     end
 
-    # Runs the checkers with the given names.
+    # Runs the checks with the given names.
     #
-    # @param [Array<Symbol>] checker_class_names The names of the checkers
+    # @param [Array<Symbol>] check_class_names The names of the checks
     #
     # @return [Boolean] true if successful, false otherwise
-    def run_specific(checker_class_names)
-      self.run_checker_classes(self.checker_classes_named(checker_class_names))
+    def run_specific(check_class_names)
+      self.run_check_classes(self.check_classes_named(check_class_names))
     end
 
   protected
@@ -59,8 +59,8 @@ module Nanoc::Extra::Checking
     def dsl
       @dsl_loaded ||= false
       if !@dsl_loaded
-        if File.exist?('Checkers')
-          @dsl = Nanoc::Extra::Checking::DSL.from_file('Checkers')
+        if File.exist?('Checks')
+          @dsl = Nanoc::Extra::Checking::DSL.from_file('Checks')
         else
           @dsl = nil
         end
@@ -69,42 +69,42 @@ module Nanoc::Extra::Checking
       @dsl
     end
 
-    def run_checker_classes(classes)
-      issues = self.run_checkers(classes)
+    def run_check_classes(classes)
+      issues = self.run_checks(classes)
       self.print_issues(issues)
       issues.empty? ? true : false
     end
 
-    def all_checker_classes
-      Nanoc::Extra::Checking::Checker.all.map { |p| p.last }.uniq
+    def all_check_classes
+      Nanoc::Extra::Checking::Check.all.map { |p| p.last }.uniq
     end
 
-    def checker_classes_named(n)
+    def check_classes_named(n)
       classes = n.map do |a|
-        klass = Nanoc::Extra::Checking::Checker.named(a)
-        raise Nanoc::Errors::GenericTrivial, "Unknown checker: #{a}" if klass.nil?
+        klass = Nanoc::Extra::Checking::Check.named(a)
+        raise Nanoc::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
         klass
       end
     end
 
-    def run_checkers(classes)
+    def run_checks(classes)
       return [] if classes.empty?
 
-      checkers = []
+      checks = []
       issues = Set.new
       length = classes.map { |c| c.identifier.to_s.length }.max + 18
       classes.each do |klass|
-        print format("  %-#{length}s", "Running #{klass.identifier} checker… ")
+        print format("  %-#{length}s", "Running #{klass.identifier} check… ")
 
-        checker = klass.new(@site)
-        checker.run
+        check = klass.new(@site)
+        check.run
 
-        checkers << checker
-        issues.merge(checker.issues)
+        checks << check
+        issues.merge(check.issues)
 
         # TODO report progress
 
-        puts checker.issues.empty? ? 'ok'.green : 'error'.red
+        puts check.issues.empty? ? 'ok'.green : 'error'.red
       end
       issues
     end
@@ -120,7 +120,7 @@ module Nanoc::Extra::Checking
         unless issues.empty?
           puts "  #{subject}:"
           issues.each do |i|
-            puts "    [ #{'ERROR'.red} ] #{i.checker_class.identifier} - #{i.description}"
+            puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
           end
         end
       end

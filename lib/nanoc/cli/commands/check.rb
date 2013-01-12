@@ -6,9 +6,9 @@ description <<-EOS
 Run issue checks on the current site. If the `--all` option is passed, all available issue checks will be run. If the `--deploy` option is passed, the issue checks marked for deployment will be fun.
 EOS
 
-flag :a, :all,    'run all checkers'
-flag :L, :list,   'list all checkers'
-flag :d, :deploy, 'run checkers for deployment'
+flag :a, :all,    'run all checks'
+flag :L, :list,   'list all checks'
+flag :d, :deploy, 'run checks for deployment'
 
 module Nanoc::CLI::Commands
 
@@ -20,7 +20,7 @@ module Nanoc::CLI::Commands
 
       runner = Nanoc::Extra::Checking::Runner.new(site)
       if options[:list]
-        runner.list_checkers
+        runner.list_checks
       elsif options[:all]
         runner.run_all
       elsif options[:deploy]
@@ -36,7 +36,7 @@ module Nanoc::CLI::Commands
     def validate_options_and_arguments
       if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
         raise Nanoc::Errors::GenericTrivial,
-          "nothing to do (pass either --all, --deploy or --list or a list of checkers)"
+          "nothing to do (pass either --all, --deploy or --list or a list of checks)"
       end
     end
 

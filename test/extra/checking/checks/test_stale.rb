@@ -1,18 +1,18 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checkers::StaleTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::Checking::Checks::StaleTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
-  def checker_class
-    Nanoc::Extra::Checking::Checkers::Stale
+  def check_class
+    Nanoc::Extra::Checking::Checks::Stale
   end
 
   def calc_issues
     site = Nanoc::Site.new('.')
-    checker = checker_class.new(site)
-    checker.run
-    checker.issues
+    check = check_class.new(site)
+    check.run
+    check.issues
   end
 
   def test_run_ok

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::TestCase
+class Nanoc::Extra::Checking::Checks::ExternalLinksTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
@@ -17,12 +17,12 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
       File.open('output/foo.txt',  'w') { |io| io.write('<a href="http://example.com/404">broken</a>') }
       File.open('output/bar.html', 'w') { |io| io.write('<a href="http://example.com/">not broken</a>') }
 
-      # Create checker
-      checker = Nanoc::Extra::Checking::Checkers::InternalLinks.new(site)
-      checker.run
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check.run
 
       # Test
-      assert checker.issues.empty?
+      assert check.issues.empty?
     end
   end
 
@@ -35,21 +35,21 @@ class Nanoc::Extra::Checking::Checkers::ExternalLinksTest < MiniTest::Unit::Test
       File.open('output/foo',        'w') { |io| io.write('hi') }
       File.open('output/stuff/blah', 'w') { |io| io.write('hi') }
 
-      # Create checker
-      checker = Nanoc::Extra::Checking::Checkers::ExternalLinks.new(site)
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
 
       # Test
       self.run_server_while do
-        assert ok?(checker, 'http://127.0.0.1:9204/200')
-        assert ok?(checker, 'foo://example.com/')
-        refute ok?(checker, 'http://127.0.0.1:9204">')
+        assert ok?(check, 'http://127.0.0.1:9204/200')
+        assert ok?(check, 'foo://example.com/')
+        refute ok?(check, 'http://127.0.0.1:9204">')
       end
     end
   end
 
-  def ok?(checker, url)
+  def ok?(check, url)
     Timeout.timeout(3) do
-      checker.validate(url).nil?
+      check.validate(url).nil?
     end
   end
 

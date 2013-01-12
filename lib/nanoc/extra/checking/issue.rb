@@ -6,12 +6,12 @@ module Nanoc::Extra::Checking
 
     attr_reader :description
     attr_reader :subject
-    attr_reader :checker_class
+    attr_reader :check_class
 
-    def initialize(desc, subject, checker_class)
+    def initialize(desc, subject, check_class)
       @description   = desc
       @subject       = subject
-      @checker_class = checker_class
+      @check_class = check_class
     end
 
   end

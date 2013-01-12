@@ -16,10 +16,10 @@ module Nanoc::CLI::Commands
   class ValidateLinks < ::Nanoc::CLI::CommandRunner
 
     def run
-      checkers = []
-      checkers << 'ilinks' if options[:internal]
-      checkers << 'elinks' if options[:external]
-      Nanoc::CLI.run [ 'check', checkers ].flatten
+      checks = []
+      checks << 'ilinks' if options[:internal]
+      checks << 'elinks' if options[:external]
+      Nanoc::CLI.run [ 'check', checks ].flatten
     end
 
   end

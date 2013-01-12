@@ -1,8 +1,8 @@
 # encoding: utf-8   
 
-module ::Nanoc::Extra::Checking::Checkers
+module ::Nanoc::Extra::Checking::Checks
 
-  class HTML < ::Nanoc::Extra::Checking::Checker
+  class HTML < ::Nanoc::Extra::Checking::Check
 
     identifier :html
 

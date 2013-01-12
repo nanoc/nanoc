@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-module Nanoc::Extra::Checking::Checkers
+module Nanoc::Extra::Checking::Checks
 
-  class Stale < ::Nanoc::Extra::Checking::Checker
+  class Stale < ::Nanoc::Extra::Checking::Check
 
     def run
       require 'set'

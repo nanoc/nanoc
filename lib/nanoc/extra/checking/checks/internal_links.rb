@@ -1,15 +1,15 @@
 # encoding: utf-8
 
-module Nanoc::Extra::Checking::Checkers
+module Nanoc::Extra::Checking::Checks
 
-  # A checker that verifies that all internal links point to a location that exists.
-  class InternalLinks < ::Nanoc::Extra::Checking::Checker
+  # A check that verifies that all internal links point to a location that exists.
+  class InternalLinks < ::Nanoc::Extra::Checking::Check
 
     # Starts the validator. The results will be printed to stdout.
     #
     # @return [void]
     def run
-      # TODO de-duplicate this (duplicated in external links checker)
+      # TODO de-duplicate this (duplicated in external links check)
       filenames = self.output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
       hrefs_with_filenames.each_pair do |href, filenames|

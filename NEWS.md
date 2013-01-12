@@ -4,7 +4,7 @@
 
 Major changes:
 
-* Added checkers
+* Added checks
 
 Minor changes:
 
