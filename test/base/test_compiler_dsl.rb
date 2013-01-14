@@ -124,6 +124,69 @@ EOS
     end
   end
 
+  def test_ignore
+    with_site do
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write <<EOS
+ignore '/lame/'
+
+passthrough '*'
+EOS
+      end
+
+      # Create items
+      assert Dir['content/*'].empty?
+      File.open('content/lame.txt', 'w') do |io|
+        io.write "Hello I am lame"
+      end
+
+      File.open('content/notlame.txt', 'w') do |io|
+        io.write "Hello I am not lame"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check paths
+      assert_equal [ 'output/notlame.txt'], Dir['output/*']
+    end
+  end
+
+  def test_ignore_priority
+    with_site do
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write <<EOS
+compile '*' do
+  filter :erb
+end
+
+route '*' do
+  item.identifier + 'index.html'
+end
+
+ignore "/foo/"
+EOS
+      end
+
+      # Create items
+      assert Dir['content/*'].empty?
+      File.open('content/foo.txt', 'w') do |io|
+        io.write "Hello I am <%= 'foo' %>"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check paths
+      assert_equal [ 'output/foo' ],            Dir['output/*']
+      assert_equal [ 'output/foo/index.html' ], Dir['output/foo/*']
+    end
+  end
+
   def test_identifier_to_regex_without_wildcards
     # Create compiler DSL
     compiler_dsl = Nanoc::CompilerDSL.new(nil, {})

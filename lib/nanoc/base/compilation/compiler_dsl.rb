@@ -190,6 +190,37 @@ module Nanoc
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
+    # Creates a pair of compilation and routing rules that indicate that the
+    # specified item(s) should be ignored, e.g. compiled and routed with an
+    # empty rule. The items are selected using an identifier, which may either
+    # be a string containing the `*` wildcard, or a regular expression.
+    #
+    # This meta-rule will be applicable to reps with a name equal to
+    # `:default`; this can be changed by giving an explicit `:rep` parameter.
+    #
+    # @param [String] identifier A pattern matching identifiers of items that
+    #   should be processed using this meta-rule
+    #
+    # @option params [Symbol] :rep (:default) The name of the representation
+    #   that should be routed using this rule
+    #
+    # @return [void]
+    #
+    # @example Suppressing compilation and output for all all `/foo/*` items.
+    #
+    #     ignore '/foo/*'
+    def ignore(identifier, params={})
+      raise ArgumentError.new("#ignore does not require a block") if block_given?
+
+      rep_name = params[:rep] || :default
+
+      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { })
+      @rules_collection.add_item_compilation_rule(compilation_rule)
+
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { }, :snapshot_name => :last)
+      @rules_collection.add_item_routing_rule(routing_rule)
+    end
+
     # Includes an additional rules file in the current rules collection.
     #
     # @param [String] name The name of the rules file — an ".rb" extension is
