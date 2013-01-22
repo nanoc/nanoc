@@ -38,19 +38,37 @@ module Nanoc::Filters
     #   @option params [Hash] :renderer_options ({}) A list of options to pass
     #     on to the Redcarpet renderer
     #
+    #   @option params [Boolean] :with_toc (false) A boolean to request a table
+    #     of contents
+
     #   @return [String] The filtered content
     def run(content, params={})
       if ::Redcarpet::VERSION > '2'
         options          = params[:options]          || {}
         renderer_class   = params[:renderer]         || ::Redcarpet::Render::HTML
         renderer_options = params[:renderer_options] || {}
+        with_toc         = params[:with_toc]         || false
 
         if options.is_a?(Array)
           warn 'WARNING: You are passing an array of options to the :redcarpet filter, but Redcarpet 2.x expects a hash instead. This will likely fail.'
         end
 
         renderer = renderer_class.new(renderer_options)
-        ::Redcarpet::Markdown.new(renderer, options).render(content)
+
+        # add support for a table of contents
+        # check if TOC-support is requested and we have the HTML renderer
+        if (with_toc == true) && (renderer_options[:with_toc_data] == true) && (renderer_class == ::Redcarpet::Render::HTML)
+          # if so, also include the TOC itself
+          # to include a TOC, Redcarpet needs two passes:
+          # the first pass with the HTML_TOC renderer creates the TOC, its output
+          # needs to be joined with the second pass from the HTML renderer
+          # see http://dev.af83.com/2012/02/27/howto-extend-the-redcarpet2-markdown-lib.html
+          renderer_toc = ::Redcarpet::Render::HTML_TOC.new()
+          toc = ::Redcarpet::Markdown.new(renderer_toc, options).render(content)
+          toc + ::Redcarpet::Markdown.new(renderer,     options).render(content)
+        else
+          ::Redcarpet::Markdown.new(renderer, options).render(content)
+        end
       else
         options = params[:options] || []
         ::Redcarpet.new(content, *options).to_html
