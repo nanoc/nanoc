@@ -34,6 +34,10 @@ module Nanoc::Extra::Checking::Checks
       path = href.sub(/#.*$/, '')
       return true if path.empty?
 
+      # Remove query string
+      path = path.sub(/\?.*$/, '')
+      return true if path.empty?
+
       # Make absolute
       if path[0, 1] == '/'
         path = @site.config[:output_dir] + path

@@ -43,4 +43,16 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < MiniTest::Unit::TestCa
     end
   end
 
+  def test_remove_query_string
+    with_site do |site|
+      FileUtils.mkdir_p('output/stuff')
+      File.open('output/stuff/right', 'w') { |io| io.write('hi') }
+
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+
+      assert check.send(:valid?, 'stuff/right?foo=123', 'output/origin')
+      refute check.send(:valid?, 'stuff/wrong?foo=123', 'output/origin')
+    end
+  end
+
 end
