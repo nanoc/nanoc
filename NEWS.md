@@ -14,6 +14,7 @@ Minor changes:
 * Added ability to configure autocompiler host/port in config.yaml [Stuart Montgomery]
 * Added static data source
 * Added `:rep_select` parameter to XML sitemap to allow filtering reps
+* Removed use of bright/bold colors for compatibility with Solarized
 
 Exensions:
 
@@ -26,6 +27,7 @@ Fixes:
 
 * Made syntax colorizer only use the first non-empty line when extracting the
   language comment
+* Fixed XSL filter
 
 ## 3.4.3 (2012-12-09)
 

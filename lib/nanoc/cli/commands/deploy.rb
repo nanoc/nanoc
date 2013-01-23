@@ -60,13 +60,16 @@ module Nanoc::CLI::Commands
 
       # Check
       unless options[:'no-check']
-        puts "Running issue checks…"
-        ok = Nanoc::Extra::Checking::Runner.new(site).run_for_deploy
-        if !ok
-          puts "Issues found, deploy aborted."
-          return
+        runner = Nanoc::Extra::Checking::Runner.new(site)
+        if runner.has_dsl?
+          puts "Running issue checks…"
+          ok = runner.run_for_deploy
+          if !ok
+            puts "Issues found, deploy aborted."
+            return
+          end
+          puts "No issues found. Deploying!"
         end
-        puts "No issues found. Deploying!"
       end
 
       # Run

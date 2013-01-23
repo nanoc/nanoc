@@ -82,8 +82,7 @@ EOS
     if_have 'nokogiri' do
       layout = Nanoc::Layout.new(SAMPLE_XSL, {}, '/layout/')
 
-      filter = ::Nanoc::Filters::XSL.new(
-        :layout => layout, :content => SAMPLE_XSL)
+      filter = ::Nanoc::Filters::XSL.new(:layout => layout)
       result = filter.setup_and_run(SAMPLE_XML_IN)
 
       assert_equal SAMPLE_XML_OUT, result
@@ -94,8 +93,7 @@ EOS
     if_have 'nokogiri' do
       layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout/')
 
-      filter = ::Nanoc::Filters::XSL.new(
-        :layout => layout, :content => SAMPLE_XSL_WITH_PARAMS)
+      filter = ::Nanoc::Filters::XSL.new(:layout => layout)
       result = filter.setup_and_run(SAMPLE_XML_IN_WITH_PARAMS, :foo => 'bar')
 
       assert_equal SAMPLE_XML_OUT_WITH_PARAMS, result

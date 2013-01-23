@@ -7,9 +7,16 @@ module Nanoc::Extra::Checking
   # @api private
   class Runner
 
+    CHECKS_FILENAME = 'Checks'
+
     # @param [Nanoc::Site] site The nanoc site this runner is for
     def initialize(site)
       @site = site
+    end
+
+    # @return [Boolean] true if a Checks file exists, false otherwise
+    def has_dsl?
+      File.exist?(CHECKS_FILENAME)
     end
 
     # Lists all available checks on stdout.
@@ -58,8 +65,8 @@ module Nanoc::Extra::Checking
     def load_dsl_if_available
       @dsl_loaded ||= false
       if !@dsl_loaded
-        if File.exist?('Checks')
-          @dsl = Nanoc::Extra::Checking::DSL.from_file('Checks')
+        if self.has_dsl?
+          @dsl = Nanoc::Extra::Checking::DSL.from_file(CHECKS_FILENAME)
         else
           @dsl = nil
         end
@@ -70,7 +77,7 @@ module Nanoc::Extra::Checking
     def require_dsl
       self.load_dsl_if_available
       if self.dsl.nil?
-        raise Nanoc::Errors::GenericTrivial, "No checks defined (no Checks file present)"
+        raise Nanoc::Errors::GenericTrivial, "No checks defined (no #{CHECKS_FILENAME} file present)"
       end
     end
 
