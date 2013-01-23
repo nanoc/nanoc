@@ -10,7 +10,7 @@ Minor changes:
 
 * Added `#include_rules` for modularising Rules files [Justin Hileman]
 * Replaced FSSM with Listen [Takashi Uchibe]
-* Made USR1 print stack trace
+* Made USR1 print stack trace (not on Windows)
 * Added ability to configure autocompiler host/port in config.yaml [Stuart Montgomery]
 * Added static data source
 * Added `:rep_select` parameter to XML sitemap to allow filtering reps
