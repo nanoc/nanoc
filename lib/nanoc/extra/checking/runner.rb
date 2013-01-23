@@ -12,19 +12,12 @@ module Nanoc::Extra::Checking
       @site = site
     end
 
-    # Ensures that there is a deployer DSL present.
-    #
-    # @return [void]
-    def require_dsl
-      if self.dsl.nil?
-        raise Nanoc::Errors::GenericTrivial, "No checks defined (no Checks file present)"
-      end
-    end
-
     # Lists all available checks on stdout.
     #
     # @return [void]
     def list_checks
+      self.load_dsl_if_available
+
       puts "Available checks:"
       puts
       puts all_check_classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
@@ -34,6 +27,8 @@ module Nanoc::Extra::Checking
     #
     # @return [Boolean] true if successful, false otherwise
     def run_all
+      self.load_dsl_if_available
+
       self.run_check_classes(self.all_check_classes)
     end
 
@@ -41,6 +36,8 @@ module Nanoc::Extra::Checking
     #
     # @return [Boolean] true if successful, false otherwise
     def run_for_deploy
+      self.require_dsl
+
       return true if self.dsl.nil?
       self.run_check_classes(self.check_classes_named(self.dsl.deploy_checks))
     end
@@ -51,12 +48,14 @@ module Nanoc::Extra::Checking
     #
     # @return [Boolean] true if successful, false otherwise
     def run_specific(check_class_names)
+      self.load_dsl_if_available
+
       self.run_check_classes(self.check_classes_named(check_class_names))
     end
 
   protected
 
-    def dsl
+    def load_dsl_if_available
       @dsl_loaded ||= false
       if !@dsl_loaded
         if File.exist?('Checks')
@@ -66,6 +65,16 @@ module Nanoc::Extra::Checking
         end
         @dsl_loaded = true
       end
+    end
+
+    def require_dsl
+      self.load_dsl_if_available
+      if self.dsl.nil?
+        raise Nanoc::Errors::GenericTrivial, "No checks defined (no Checks file present)"
+      end
+    end
+
+    def dsl
       @dsl
     end
 

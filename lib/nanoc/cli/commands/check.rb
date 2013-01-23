@@ -24,7 +24,6 @@ module Nanoc::CLI::Commands
       elsif options[:all]
         runner.run_all
       elsif options[:deploy]
-        runner.require_dsl
         runner.run_for_deploy
       else
         runner.run_specific(arguments)
