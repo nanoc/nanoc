@@ -6,6 +6,7 @@ Fixes:
 
 * Made syntax colorizer only use the first non-empty line when extracting the
   language comment
+* Fixed XSL filter
 
 ## 3.4.3 (2012-12-09)
 
