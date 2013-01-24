@@ -148,6 +148,18 @@ module Nanoc
     def update
     end
 
+    # Sync the content for this data source with an external source.
+    # This method is called by the `nanoc sync` command so that data sources may
+    # update local caches of external data, such as items fetched from
+    # third-party APIs.
+    #
+    # Subclasses may override this method, but are not required to do so; the
+    # default implementation simply does nothing.
+    #
+    # @return [void]
+    def sync
+    end
+
     # Returns the list of items (represented by {Nanoc::Item}) in this site.
     # The default implementation simply returns an empty array.
     #
