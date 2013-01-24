@@ -1,5 +1,12 @@
 # nanoc news
 
+## 3.6 (???)
+
+Improvements:
+
+ * Added `sync` command, allowing data sources to update local caches of
+   external data [Justin Hileman]
+
 ## 3.5 (???)
 
 Major changes:
