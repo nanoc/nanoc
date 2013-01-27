@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.5 (???)
+## 3.5 (2013-01-27)
 
 Major changes:
 
