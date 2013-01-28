@@ -208,6 +208,7 @@ module Nanoc::CLI
       'maruku'         => 'maruku',
       'mime/types'     => 'mime-types',
       'nokogiri'       => 'nokogiri',
+      'pry'            => 'pry',
       'rack'           => 'rack',
       'rack/cache'     => 'rack-cache',
       'rainpress'      => 'rainpress',

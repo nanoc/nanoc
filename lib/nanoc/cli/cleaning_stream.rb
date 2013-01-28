@@ -99,6 +99,16 @@ module Nanoc::CLI
       @stream.exists?
     end
 
+    # @see IO.winsize
+    def winsize
+      @stream.winsize
+    end
+
+    # @see IO.winsize=
+    def winsize=(arg)
+      @stream.winsize=(arg)
+    end
+
   protected
 
     def clean(s)
