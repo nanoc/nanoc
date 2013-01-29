@@ -7,7 +7,7 @@ Improvements:
  * Added `sync` command, allowing data sources to update local caches of
    external data [Justin Hileman]
 
-## 3.5 (???)
+## 3.5 (2013-01-27)
 
 Major changes:
 
@@ -27,8 +27,6 @@ Exensions:
 
 * Added support for parameters in Less filter [Ruben Verborgh]
 * Added support for icon and logo in Atom feed [Ruben Verborgh]
-
-## 3.4.4 (???)
 
 Fixes:
 
