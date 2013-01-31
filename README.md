@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/ddfreyne/nanoc.png)](https://travis-ci.org/ddfreyne/nanoc)
-[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/ddfreyne/nanoc)
-[![Dependency Status](https://gemnasium.com/ddfreyne/nanoc.png)](https://gemnasium.com/ddfreyne/nanoc)
+[![Build Status](https://travis-ci.org/nanoc/nanoc.png)](https://travis-ci.org/nanoc/nanoc)
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/nanoc/nanoc)
+[![Dependency Status](https://gemnasium.com/nanoc/nanoc.png)](https://gemnasium.com/nanoc/nanoc)
 
 **Please take a moment and [donate](http://pledgie.com/campaigns/9282) to nanoc. A lot of time has gone into developing nanoc, and I would like to keep the current pace. Your support will ensure that nanoc will continue to improve.**
 
