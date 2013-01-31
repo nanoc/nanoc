@@ -7,6 +7,10 @@ Improvements:
  * Added `sync` command, allowing data sources to update local caches of
    external data [Justin Hileman]
 
+## 3.5.1 (???)
+
+* Updated all `ddfreyne/nanoc` references to `nanoc/nanoc`
+
 ## 3.5 (2013-01-27)
 
 Major changes:
