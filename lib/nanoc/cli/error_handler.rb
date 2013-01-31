@@ -235,9 +235,8 @@ module Nanoc::CLI
         gem_name = GEM_NAMES[matches[2]]
 
         # Build message
-        is_bundler_available = ENV['BUNDLE_GEMFILE'] && !ENV['BUNDLE_GEMFILE'].empty?
         if gem_name
-          if is_bundler_available
+          if defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
             "Make sure the gem is added to Gemfile and run `bundle up`."
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
