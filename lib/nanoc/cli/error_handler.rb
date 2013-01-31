@@ -236,7 +236,9 @@ module Nanoc::CLI
 
         # Build message
         if gem_name
-          "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) and then re-running the command."
+          "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) " \
+          "and then re-running the command. If you use Bundler, make sure " \
+          "that the gem is added to the Gemfile."
         end
       when RuntimeError
         if error.message =~ /^can't modify frozen/
