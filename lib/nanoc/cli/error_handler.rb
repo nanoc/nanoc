@@ -235,10 +235,13 @@ module Nanoc::CLI
         gem_name = GEM_NAMES[matches[2]]
 
         # Build message
+        is_bundler_available = ENV['BUNDLE_GEMFILE'] && !ENV['BUNDLE_GEMFILE'].empty?
         if gem_name
-          "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) " \
-          "and then re-running the command. If you use Bundler, make sure " \
-          "that the gem is added to the Gemfile."
+          if is_bundler_available
+            "Make sure the gem is added to Gemfile and run `bundle up`."
+          else
+            "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
+          end
         end
       when RuntimeError
         if error.message =~ /^can't modify frozen/
