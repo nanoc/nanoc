@@ -316,7 +316,7 @@ module Nanoc::CLI::Commands
     end
 
     def run
-      self.require_site
+      self.load_site
       self.check_for_deprecated_usage
       self.setup_listeners
 

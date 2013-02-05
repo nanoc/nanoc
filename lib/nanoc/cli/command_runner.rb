@@ -22,7 +22,7 @@ module Nanoc::CLI
     def site
       # Load site if possible
       @site ||= nil
-      if File.file?('config.yaml') && @site.nil?
+      if self.is_in_site_dir? && @site.nil?
         @site = Nanoc::Site.new('.')
       end
 
@@ -34,6 +34,12 @@ module Nanoc::CLI
     # @see http://rubydoc.info/gems/cri/Cri/CommandDSL#runner-instance_method
     def self.call(opts, args, cmd)
       self.new(opts, args, cmd).call
+    end
+
+    # @return [Boolean] true if the current working directory is a nanoc site
+    #   directory, false otherwise
+    def is_in_site_dir?
+      File.file?('config.yaml')
     end
 
   protected
@@ -51,13 +57,20 @@ module Nanoc::CLI
     #
     # @return [void]
     def require_site
-      print "Loading site data… "
       if site.nil?
-        puts "error"
         raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
-      else
-        puts "done"
       end
+    end
+
+    # Asserts that the current workign directory contains a site (just like
+    # {#require_site}) and loads the site into memory.
+    #
+    # @return [void]
+    def load_site
+      self.require_site
+      print "Loading site data… "
+      self.site.load
+      puts "done"
     end
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing
