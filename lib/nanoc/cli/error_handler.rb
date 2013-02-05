@@ -236,7 +236,7 @@ module Nanoc::CLI
 
         # Build message
         if gem_name
-          if defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
+          if self.using_bundler?
             "Make sure the gem is added to Gemfile and run `bundle up`."
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
@@ -251,6 +251,10 @@ module Nanoc::CLI
           "disabled in 3.2.x in order to allow compiler optimisations.)"
         end
       end
+    end
+
+    def using_bundler?
+      defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
     end
 
     def write_section_header(stream, title, params={})
