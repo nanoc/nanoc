@@ -42,15 +42,6 @@ module Nanoc::CLI
       File.file?('config.yaml')
     end
 
-  protected
-
-    # @return [Boolean] true if debug output is enabled, false if not
-    #
-    # @see Nanoc::CLI.debug?
-    def debug?
-      Nanoc::CLI.debug?
-    end
-
     # Asserts that the current working directory contains a site
     # ({Nanoc::Site} instance). If no site is present, prints an error
     # message and exits.
@@ -71,6 +62,15 @@ module Nanoc::CLI
       print "Loading site data… "
       self.site.load
       puts "done"
+    end
+
+  protected
+
+    # @return [Boolean] true if debug output is enabled, false if not
+    #
+    # @see Nanoc::CLI.debug?
+    def debug?
+      Nanoc::CLI.debug?
     end
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing
