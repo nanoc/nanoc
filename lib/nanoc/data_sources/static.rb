@@ -33,7 +33,16 @@ module Nanoc::DataSources
       prefix = config[:prefix] || 'static'
 
       # Get all files under prefix dir
-      filenames = Dir[prefix + '/**/*'].select { |f| File.file?(f) }
+      filenames = []
+      entries = Dir[prefix + '/**/*']
+      until entries.empty? do
+        entry = entries.pop
+        filenames << entry if File.file?(entry)
+        if File.symlink?(entry) && File.directory?(entry) then
+          entries += Dir[entry + '/**/*'] unless File.readlink(entry) == '.' # maybe some more checks like '..'
+          raise 'Directory Stack too large' if entries.size > 100000         # TODO proper Error and limit
+        end
+      end
 
       # Convert filenames to items
       filenames.map do |filename|
