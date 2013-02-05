@@ -8,12 +8,13 @@ Start the autocompiler web server. Unless overridden with commandline options
 or configuration entries, the web server will run on port 3000 and listen on all
 IP addresses. Running the autocompiler requires the `mime/types` and `rack` gems.
 
-To specify the host and/or port options in config.yaml, you can add either (or
-both) of the following:
+To specify the host, port, and/or handler options in config.yaml, you can add
+any of the following:
 
     autocompile:
       host: '10.0.2.0'  # override the default host
       port: 4000        # override the default port
+      handler: thin     # override the default handler
 
 EOS
 
@@ -39,7 +40,8 @@ module Nanoc::CLI::Commands
       }
 
       # Guess which handler we should use
-      unless handler = Rack::Handler.get(options[:handler])
+      handler_option = options[:handler] || autocompile_config[:handler]
+      unless handler = Rack::Handler.get(handler_option)
         begin
           handler = Rack::Handler::Mongrel
         rescue LoadError => e
