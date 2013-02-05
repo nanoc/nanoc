@@ -285,14 +285,14 @@ EOS
     <div id="sidebar">
       <h2>Documentation</h2>
       <ul>
-        <li><a href="http://nanoc.stoneship.org/docs/">Documentation</a></li>
-        <li><a href="http://nanoc.stoneship.org/docs/3-getting-started/">Getting Started</a></li>
+        <li><a href="http://nanoc.ws/docs/">Documentation</a></li>
+        <li><a href="http://nanoc.ws/docs/tutorial/">Getting Started</a></li>
       </ul>
       <h2>Community</h2>
       <ul>
         <li><a href="http://groups.google.com/group/nanoc/">Discussion Group</a></li>
         <li><a href="irc://chat.freenode.net/#nanoc">IRC Channel</a></li>
-        <li><a href="http://projects.stoneship.org/trac/nanoc/">Wiki</a></li>
+        <li><a href="http://github.com/nanoc/nanoc/wiki/">Wiki</a></li>
       </ul>
     </div>
   </body>

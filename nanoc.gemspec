@@ -6,7 +6,7 @@ require 'nanoc'
 Gem::Specification.new do |s|
   s.name        = 'nanoc'
   s.version     = Nanoc::VERSION
-  s.homepage    = 'http://nanoc.stoneship.org/'
+  s.homepage    = 'http://nanoc.ws/'
   s.summary     = 'a web publishing system written in Ruby for building small to medium-sized websites.'
   s.description = 'nanoc is a simple but very flexible static site generator written in Ruby. It operates on local files, and therefore does not run on the server. nanoc “compiles” the local source files into HTML (usually), by evaluating eRuby, Markdown, etc.'
 
