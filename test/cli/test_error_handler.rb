@@ -10,11 +10,8 @@ class Nanoc::CLI::ErrorHandlerTest < MiniTest::Unit::TestCase
   end
 
   def test_resolution_for_with_known_gem
-    $loud = true
     error = LoadError.new('no such file to load -- kramdown')
     assert_match(/^Make sure the gem is added to Gemfile/, handler.send(:resolution_for, error))
-  ensure
-    $loud = false
   end
 
   def test_resolution_for_with_not_load_error
