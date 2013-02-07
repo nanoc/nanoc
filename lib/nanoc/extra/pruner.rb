@@ -6,7 +6,7 @@ module Nanoc::Extra
   # that are not managed by nanoc.
   class Pruner
 
-    # @return [Nanoc::Site] The site this pruner belongs to  
+    # @return [Nanoc::Site] The site this pruner belongs to
     attr_reader :site
 
     # @param [Nanoc::Site] site The site for which a pruner is created
@@ -49,7 +49,7 @@ module Nanoc::Extra
       end
 
       # Remove empty directories
-      present_dirs.each do |dir|
+      present_dirs.reverse_each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
         next if filename_excluded?(dir)
         self.delete_dir(dir)
@@ -60,7 +60,7 @@ module Nanoc::Extra
 
     def filename_excluded?(f)
       pathname = Pathname.new(f)
-      @exclude.any? { |e| pathname.include_component?(e) } 
+      @exclude.any? { |e| pathname.include_component?(e) }
     end
 
     def delete_file(file)
