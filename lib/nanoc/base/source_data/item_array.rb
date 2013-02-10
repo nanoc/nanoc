@@ -5,6 +5,8 @@ module Nanoc
   # Acts as an array, but allows fetching items using identifiers, e.g. `@items['blah']`.
   class ItemArray
 
+    include Enumerable
+
     extend Forwardable
 
     DELEGATED_METHODS = [
@@ -81,10 +83,9 @@ module Nanoc
     ]
     DELEGATED_METHODS.each { |m| def_delegator :@items, m }
 
-    def initialize(items)
-      @items   = items.dup
+    def initialize
+      @items   = []
       @mapping = {}
-      items.each { |i| self._added(i) }
     end
 
     def update(item, old_identifier, new_identifier)

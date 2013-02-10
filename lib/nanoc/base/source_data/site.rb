@@ -305,7 +305,7 @@ module Nanoc
       @items_loaded = true
 
       # Get items
-      @items = []
+      @items = Nanoc::ItemArray.new
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|

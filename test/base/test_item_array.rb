@@ -10,7 +10,9 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     @one = Nanoc::Item.new('Item One', {}, '/one/')
     @two = Nanoc::Item.new('Item Two', {}, '/two/')
 
-    @items = Nanoc::ItemArray.new([ @one, @two ])
+    @items = Nanoc::ItemArray.new
+    @items << @one
+    @items << @two
   end
 
   def test_change_item_identifier
@@ -21,6 +23,10 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
 
     assert_nil @items['/one/']
     assert_equal @one, @items['/foo/']
+  end
+
+  def test_enumerable
+    assert_equal @one, @items.find { |i| i.identifier == '/one/' }
   end
 
   def test_brackets_and_slice_and_at_with_index
