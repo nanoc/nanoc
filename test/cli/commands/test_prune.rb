@@ -117,4 +117,23 @@ class Nanoc::CLI::Commands::PruneTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_run_with_nested_empty_dirs
+    with_site do |site|
+      # Set output dir
+      File.open('config.yaml', 'w') { |io| io.write 'output_dir: output' }
+      FileUtils.mkdir_p('output')
+
+      # Create output files
+      FileUtils.mkdir_p('output/a/b/c')
+      File.open('output/a/b/c/index.html', 'w') { |io| io.write 'stuff' }
+
+      Nanoc::CLI.run %w( prune --yes )
+
+      assert !File.file?('output/a/b/c/index.html')
+      assert !File.directory?('output/a/b/c')
+      assert !File.directory?('output/a/b')
+      assert !File.directory?('output/a')
+    end
+  end
+
 end
