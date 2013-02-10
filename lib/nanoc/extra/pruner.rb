@@ -34,12 +34,12 @@ module Nanoc::Extra
       end.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs
-      present_files_and_dirs = Set.new
+      present_files = []
+      present_dirs = []
       Find.find(self.site.config[:output_dir] + '/') do |f|
-        present_files_and_dirs << f
+        present_files << f if File.file?(f)
+        present_dirs  << f if File.directory?(f)
       end
-      present_files = present_files_and_dirs.select { |f| File.file?(f) }
-      present_dirs  = present_files_and_dirs.select { |f| File.directory?(f) }
 
       # Remove stray files
       stray_files = (present_files - compiled_files)
