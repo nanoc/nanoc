@@ -19,6 +19,7 @@ module Nanoc
   autoload 'Configuration',        'nanoc/base/source_data/configuration'
   autoload 'DataSource',           'nanoc/base/source_data/data_source'
   autoload 'Item',                 'nanoc/base/source_data/item'
+  autoload 'ItemArray',            'nanoc/base/source_data/item_array'
   autoload 'Layout',               'nanoc/base/source_data/layout'
   autoload 'Site',                 'nanoc/base/source_data/site'
 
