@@ -200,6 +200,11 @@ EOS
       'Expected %s to contain all the elements of %s' % [actual.inspect, expected.inspect]
   end
 
+  def assert_raises_frozen_error
+    error = assert_raises(RuntimeError, TypeError) { yield }
+    assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, error.message)
+  end
+
 end
 
 # Unexpected system exit is unexpected
