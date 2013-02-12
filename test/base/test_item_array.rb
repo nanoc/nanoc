@@ -233,16 +233,18 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal "Item 1", @items['/new/1/'].raw_content
   end
 
-  def test_keep_if
-    assert_equal @two, @items[1]
-    assert_equal @two, @items['/two/']
+  if Array.new.respond_to?(:keep_if)
+    def test_keep_if
+      assert_equal @two, @items[1]
+      assert_equal @two, @items['/two/']
 
-    @items.keep_if { |i| i.identifier == '/one/' }
+      @items.keep_if { |i| i.identifier == '/one/' }
 
-    assert_equal @one, @items[0]
-    assert_equal @one, @items['/one/']
-    assert_nil @items[1]
-    assert_nil @items['/two/']
+      assert_equal @one, @items[0]
+      assert_equal @one, @items['/one/']
+      assert_nil @items[1]
+      assert_nil @items['/two/']
+    end
   end
 
   def test_pop
@@ -291,14 +293,16 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal mona, @items['/mona/']
   end
 
-  def test_select_bang
-    assert_equal @two, @items[1]
-    assert_equal @two, @items['/two/']
+  if Array.new.respond_to?(:select!)
+    def test_select_bang
+      assert_equal @two, @items[1]
+      assert_equal @two, @items['/two/']
 
-    @items.select! { |i| i.identifier == '/two/' }
+      @items.select! { |i| i.identifier == '/two/' }
 
-    assert_nil @items[1]
-    assert_nil @items['/one/']
+      assert_nil @items[1]
+      assert_nil @items['/one/']
+    end
   end
 
   def test_shift
