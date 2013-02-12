@@ -160,6 +160,17 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal "New Item Two", @items['/new/two/'].raw_content
   end
 
+  def test_collect_bang_frozen
+    @items.freeze
+
+    error = assert_raises(RuntimeError) do
+      @items.collect! do |i|
+        Nanoc::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
+      end
+    end
+    assert_equal "can't modify frozen Array", error.message
+  end
+
   def test_concat
     new_item = Nanoc::Item.new('New item', {}, '/new/')
     @items.concat([ new_item ])
