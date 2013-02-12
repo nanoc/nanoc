@@ -40,32 +40,24 @@ end
 
 describe 'Hash#freeze_recursively' do
 
+  include Nanoc::TestHelpers
+
   it 'should prevent first-level elements from being modified' do
     hash = { :a => { :b => :c } }
     hash.freeze_recursively
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       hash[:a] = 123
-    rescue => e
-      raised = true
-      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
-    assert raised
   end
 
   it 'should prevent second-level elements from being modified' do
     hash = { :a => { :b => :c } }
     hash.freeze_recursively
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       hash[:a][:b] = 123
-    rescue => e
-      raised = true
-      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
-    assert raised
   end
 
   it 'should not freeze infinitely' do

@@ -17,14 +17,9 @@ class Nanoc::LayoutTest < MiniTest::Unit::TestCase
   def test_frozen_identifier
     layout = Nanoc::Layout.new("foo", {}, '/foo')
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       layout.identifier.chop!
-    rescue => error
-      raised = true
-      assert_match(/(^can't modify frozen [Ss]tring|^unable to modify frozen object$)/, error.message)
     end
-    assert raised, 'Should have raised when trying to modify a frozen string'
   end
 
   def test_lookup_with_known_attribute
