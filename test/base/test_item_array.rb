@@ -87,6 +87,18 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_nil @items.at('//one/')
   end
 
+  def test_brackets_and_slice_and_at_frozen
+    @items.freeze
+
+    assert_equal @one, @items['/one/']
+    assert_equal @one, @items.slice('/one/')
+    assert_equal @one, @items.at('/one/')
+
+    assert_nil @items['/tenthousand/']
+    assert_nil @items.slice('/tenthousand/')
+    assert_nil @items.at('/tenthousand/')
+  end
+
   def test_less_than_less_than
     assert_nil @items[2]
     assert_nil @items['/foo/']
@@ -109,6 +121,17 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal new_item, @items[0]
     assert_equal new_item, @items['/one-new/']
     assert_nil @items['/one/']
+  end
+
+  def test_assign_frozen
+    @items.freeze
+
+    new_item = Nanoc::Item.new('New Item One', {}, '/one-new/')
+
+    error = assert_raises(RuntimeError) do
+      @items[0] = new_item
+    end
+    assert_equal "can't modify frozen Array", error.message
   end
 
   def test_clear

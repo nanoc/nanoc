@@ -13,13 +13,13 @@ module Nanoc
     def_delegators :@items, *DELEGATED_METHODS
 
     def initialize
-      @items   = []
-      @mapping = {}
+      @items = []
     end
 
     def freeze
-      super
+      @items.freeze
       self.build_mapping
+      super
     end
 
     def [](*args)
@@ -50,9 +50,11 @@ module Nanoc
     end
 
     def build_mapping
+      @mapping = {}
       @items.each do |item|
         @mapping[item.identifier] = item
       end
+      @mapping.freeze
     end
 
   end
