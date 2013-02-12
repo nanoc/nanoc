@@ -428,14 +428,9 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     rep.instance_eval { @filter_class = filter_class }
     def rep.filter_named(name) ; @filter_class ; end
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       rep.filter(:whatever)
-    rescue => e
-      raised = true
-      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
-    assert raised
   end
 
   def test_filter_should_freeze_content
@@ -451,15 +446,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     rep.instance_eval { @filter_class = filter_class }
     def rep.filter_named(name) ; @filter_class ; end
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       rep.filter(:erb)
       rep.filter(:whatever)
-    rescue => e
-      raised = true
-      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
-    assert raised
   end
 
   def test_raw_path_should_generate_dependency

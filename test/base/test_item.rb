@@ -20,14 +20,9 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
   def test_frozen_identifier
     item = Nanoc::Item.new("foo", {}, '/foo')
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       item.identifier.chop!
-    rescue => error
-      raised = true
-      assert_match(/(^can't modify frozen [Ss]tring|^unable to modify frozen object$)/, error.message)
     end
-    assert raised, 'Should have raised when trying to modify a frozen string'
   end
 
   def test_lookup
@@ -144,23 +139,13 @@ class Nanoc::ItemTest < MiniTest::Unit::TestCase
     item = Nanoc::Item.new("foo", { :a => { :b => 123 }}, '/foo/')
     item.freeze
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       item[:abc] = '123'
-    rescue => e
-      raised = true
-      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
-    assert raised
 
-    raised = false
-    begin
+    assert_raises_frozen_error do
       item[:a][:b] = '456'
-    rescue => e
-      raised = true
-      assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, e.message)
     end
-    assert raised
   end
 
   def test_dump_and_load
