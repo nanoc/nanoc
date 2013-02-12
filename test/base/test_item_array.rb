@@ -91,7 +91,7 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
   end
 
   def test_assign
-    assert_raises(ArgumentError) do
+    assert_raises(TypeError) do
       @items['/blah/'] = Nanoc::Item.new('Item blah', {}, '/blah/')
     end
 
@@ -191,12 +191,6 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal "Item 1", @items['/new/1/'].raw_content
   end
 
-  def test_flatten_bang
-    assert_raises RuntimeError do
-      @items.flatten!
-    end
-  end
-
   def test_keep_if
     assert_equal @two, @items[1]
     assert_equal @two, @items['/two/']
@@ -281,12 +275,6 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal @one, @items['/one/']
     assert_nil @items[1]
     assert_nil @items['/two/']
-  end
-
-  def test_uniq_bang
-    assert_raises(RuntimeError) do
-      @items.uniq!
-    end
   end
 
   def test_unshift

@@ -14,17 +14,25 @@ module Nanoc
       :*,
       :+,
       :-,
+      :<<,
       :<=>,
       :==,
+      :[]=,
       :abbrev,
       :assoc,
+      :clear,
+      :collect!,
       :collect,
       :combination,
+      :compact!,
       :compact,
-      :compact!, # modifies, but has no relevant effect
+      :concat,
       :count,
       :cycle,
       :dclone,
+      :delete,
+      :delete_at,
+      :delete_if,
       :drop,
       :drop_while,
       :each,
@@ -32,43 +40,55 @@ module Nanoc
       :empty?,
       :eql?,
       :fetch,
+      :fill,
       :find_index,
       :first,
+      :flatten!,
       :flatten,
       :frozen?,
       :hash,
       :include?,
       :index,
+      :initialize_copy,
       :insert,
       :join,
+      :keep_if,
       :last,
       :length,
+      :map!,
       :map,
       :pack,
       :permutation,
+      :pop,
       :pretty_print,
       :pretty_print_cycle,
       :product,
+      :push,
       :rassoc,
+      :reject!,
       :reject,
       :repeated_combination,
       :repeated_permutation,
+      :replace,
+      :reverse!,
       :reverse,
-      :reverse!, # modifies, but has no relevant effect
       :reverse_each,
       :rindex,
+      :rotate!,
       :rotate,
-      :rotate!, # modifies, but has no relevant effect
       :sample,
+      :select!,
       :select,
       :shelljoin,
+      :shift,
+      :shuffle!,
       :shuffle,
-      :shuffle!, # modifies, but has no relevant effect
       :size,
+      :slice!,
+      :sort!,
       :sort,
-      :sort!, # modifies, but has no relevant effect
+      :sort_by!,
       :sort_by,
-      :sort_by!, # modifies, but has no relevant effect
       :take,
       :take_while,
       :to_a,
@@ -76,29 +96,28 @@ module Nanoc
       :to_csv,
       :to_s,
       :transpose,
+      :uniq!,
       :uniq,
+      :unshift,
       :values_at,
       :zip,
-      :|
+      :|,
     ]
-    DELEGATED_METHODS.each { |m| def_delegator :@items, m }
+    def_delegators :@items, *DELEGATED_METHODS
 
     def initialize
       @items   = []
       @mapping = {}
     end
 
-    def update(item, old_identifier, new_identifier)
-      @mapping.delete(old_identifier)
-      @mapping[new_identifier] = item
+    def freeze
+      super
+      self.build_mapping
     end
 
-    # @!group Getting
-
     def [](*args)
-      STDOUT.puts args.inspect if $LOUD
       if 1 == args.size && args.first.is_a?(String)
-        @mapping[args.first]
+        self.item_with_identifier(args.first)
       else
         @items[*args]
       end
@@ -107,153 +126,26 @@ module Nanoc
 
     def at(arg)
       if arg.is_a?(String)
-        @mapping[arg]
+        self.item_with_identifier(arg)
       else
         @items[arg]
       end
     end
 
-    # @!group Modifying
-
-    def <<(item)
-      @items << item
-      self._added(item)
-    end
-
-    def []=(index, new_item)
-      if index.is_a?(String)
-        raise ArgumentError, "Nanoc::ItemArray#[]= cannot be used with a string as index"
-      end
-
-      old_item = self[index]
-      @items[index] = new_item
-
-      self._removed(old_item)
-      self._added(new_item)
-    end
-
-    def clear
-      @items.each { |i| self._removed(i) }
-      @items.clear
-    end
-
-    def collect!(&block)
-      @items.each { |i| self._removed(i) }
-      @items.collect!(&block)
-      @items.each { |i| self._added(i) }
-    end
-    alias_method :map!, :collect!
-
-    def concat(arr)
-      @items.concat(arr)
-      arr.each { |i| self._added(i) }
-    end
-
-    def delete(item)
-      @items.delete(item)
-      self._removed(item)
-    end
-
-    def delete_at(idx)
-      # FIXME Should idx be allowed to be an identifier string?
-
-      self._removed(@items[idx])
-      @items.delete_at(idx)
-    end
-
-    def delete_if(&block)
-      @items.each do |i|
-        self._removed(i) if block[i]
-      end
-
-      @items.delete_if(&block)
-    end
-
-    def fill(*args, &block)
-      # FIXME Make this more efficient
-
-      @items.each { |i| self._removed(i) }
-      @items.fill(*args, &block)
-      @items.each { |i| self._added(i) }
-    end
-
-    def flatten!
-      raise "The items array is already supposed to be flat!"
-    end
-
-    def keep_if(&block)
-      @items.each do |i|
-        self._removed(i) unless block[i]
-      end
-
-      @items.keep_if(&block)
-    end
-
-    def pop(n=1)
-      @items.last(n).each { |i| self._removed(i) }
-      @items.pop(n)
-    end
-
-    def push(*items)
-      @items.push(*items)
-      items.each { |i| self._added(i) }
-    end
-
-    def reject!(&block)
-      @items.each do |i|
-        self._removed(i) if block[i]
-      end
-
-      @items.reject!(&block)
-    end
-
-    def replace(arr)
-      @items.each { |i| self._removed(i) }
-      @items.replace(arr)
-      @items.each { |i| self._added(i) }
-    end
-    alias_method :initialize_copy, :replace
-
-    def select!(&block)
-      @items.each do |i|
-        self._removed(i) unless block[i]
-      end
-
-      @items.select!(&block)
-    end
-
-    def shift(n=1)
-      @items.first(n).each { |i| self._removed(i) }
-      @items.shift(n)
-    end
-
-    def slice!(*args)
-      # FIXME Make this more efficient
-
-      @items.each { |i| self._removed(i) }
-      @items.slice!(*args)
-      @items.each { |i| self._added(i) }
-    end
-
-    def uniq!
-      raise "An items array cannot have duplicates!"
-    end
-
-    def unshift(*items)
-      items.each { |i| self._added(i) }
-      @items.unshift(*items)
-    end
-
     protected
 
-    def _added(item)
-      item.add_observer(self)
-      @mapping[item.identifier] = item
+    def item_with_identifier(identifier)
+      if self.frozen?
+        @mapping[identifier]
+      else
+        @items.find { |i| i.identifier == identifier }
+      end
     end
 
-    def _removed(item)
-      item.delete_observer(self)
-      @mapping.delete(item.identifier)
+    def build_mapping
+      @items.each do |item|
+        @mapping[item.identifier] = item
+      end
     end
 
   end

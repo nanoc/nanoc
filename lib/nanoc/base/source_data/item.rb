@@ -9,8 +9,6 @@ module Nanoc
 
     extend Nanoc::Memoization
 
-    include Observable
-
     # @return [Hash] This item's attributes
     attr_accessor :attributes
 
@@ -98,13 +96,6 @@ module Nanoc
       @children     = []
 
       @reps         = []
-    end
-
-    def identifier=(new_identifier)
-      old_identifier = @identifier
-      @identifier = new_identifier
-      self.changed
-      self.notify_observers(self, old_identifier, new_identifier)
     end
 
     # Returns the rep with the given name.
