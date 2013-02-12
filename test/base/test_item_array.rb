@@ -47,6 +47,14 @@ class Nanoc::ItemArrayTest < MiniTest::Unit::TestCase
     assert_equal @two, @items.at(-1)
   end
 
+  def test_brackets_and_slice_with_range
+    assert_equal [ @one, @two ], @items[0..1]
+    assert_equal [ @one, @two ], @items[0, 2]
+
+    assert_equal [ @one, @two ], @items.slice(0..1)
+    assert_equal [ @one, @two ], @items.slice(0, 2)
+  end
+
   def test_brackets_and_slice_and_at_with_identifier
     assert_equal @one, @items['/one/']
     assert_equal @one, @items.slice('/one/')
