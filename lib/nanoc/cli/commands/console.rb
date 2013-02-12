@@ -22,6 +22,7 @@ module Nanoc::CLI::Commands
 
     def env
       {
+        :site    => self.site,
         :items   => self.site.items,
         :layouts => self.site.layouts,
         :config  => self.site.config
