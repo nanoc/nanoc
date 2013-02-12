@@ -1,14 +1,15 @@
 # encoding: utf-8
 
-usage       'console'
-summary     'open a console on the nanoc environment'
+usage       'shell'
+summary     'open a shell on the nanoc environment'
+aliases     'console'
 description <<-EOS
-Open an IRB console on a context that contains @items, @layouts, and @config.
+Open an IRB shell on a context that contains @items, @layouts, and @config.
 EOS
 
 module Nanoc::CLI::Commands
 
-  class Console < ::Nanoc::CLI::CommandRunner
+  class Shell < ::Nanoc::CLI::CommandRunner
 
     def run
       require 'pry'
@@ -33,4 +34,4 @@ module Nanoc::CLI::Commands
 
 end
 
-runner Nanoc::CLI::Commands::Console
+runner Nanoc::CLI::Commands::Shell
