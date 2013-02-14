@@ -6,7 +6,7 @@ module Nanoc::Extra
   # that are not managed by nanoc.
   class Pruner
 
-    # @return [Nanoc::Site] The site this pruner belongs to  
+    # @return [Nanoc::Site] The site this pruner belongs to
     attr_reader :site
 
     # @param [Nanoc::Site] site The site for which a pruner is created
@@ -34,12 +34,12 @@ module Nanoc::Extra
       end.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs
-      present_files_and_dirs = Set.new
+      present_files = []
+      present_dirs = []
       Find.find(self.site.config[:output_dir] + '/') do |f|
-        present_files_and_dirs << f
+        present_files << f if File.file?(f)
+        present_dirs  << f if File.directory?(f)
       end
-      present_files = present_files_and_dirs.select { |f| File.file?(f) }
-      present_dirs  = present_files_and_dirs.select { |f| File.directory?(f) }
 
       # Remove stray files
       stray_files = (present_files - compiled_files)
@@ -49,7 +49,7 @@ module Nanoc::Extra
       end
 
       # Remove empty directories
-      present_dirs.each do |dir|
+      present_dirs.reverse_each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
         next if filename_excluded?(dir)
         self.delete_dir(dir)
@@ -60,7 +60,7 @@ module Nanoc::Extra
 
     def filename_excluded?(f)
       pathname = Pathname.new(f)
-      @exclude.any? { |e| pathname.include_component?(e) } 
+      @exclude.any? { |e| pathname.include_component?(e) }
     end
 
     def delete_file(file)

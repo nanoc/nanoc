@@ -237,9 +237,11 @@ module Nanoc::CLI
 
         # Build message
         if gem_name
-          "Try installing the '#{gem_name}' gem (`gem install #{gem_name}`) " \
-          "and then re-running the command. If you use Bundler, make sure " \
-          "that the gem is added to the Gemfile."
+          if self.using_bundler?
+            "Make sure the gem is added to Gemfile and run `bundle up`."
+          else
+            "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
+          end
         end
       when RuntimeError
         if error.message =~ /^can't modify frozen/
@@ -250,6 +252,10 @@ module Nanoc::CLI
           "disabled in 3.2.x in order to allow compiler optimisations.)"
         end
       end
+    end
+
+    def using_bundler?
+      defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
     end
 
     def write_section_header(stream, title, params={})

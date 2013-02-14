@@ -22,7 +22,7 @@ module Nanoc::CLI
     def site
       # Load site if possible
       @site ||= nil
-      if File.file?('config.yaml') && @site.nil?
+      if self.is_in_site_dir? && @site.nil?
         @site = Nanoc::Site.new('.')
       end
 
@@ -36,13 +36,10 @@ module Nanoc::CLI
       self.new(opts, args, cmd).call
     end
 
-  protected
-
-    # @return [Boolean] true if debug output is enabled, false if not
-    #
-    # @see Nanoc::CLI.debug?
-    def debug?
-      Nanoc::CLI.debug?
+    # @return [Boolean] true if the current working directory is a nanoc site
+    #   directory, false otherwise
+    def is_in_site_dir?
+      File.file?('config.yaml')
     end
 
     # Asserts that the current working directory contains a site
@@ -51,13 +48,29 @@ module Nanoc::CLI
     #
     # @return [void]
     def require_site
-      print "Loading site data… "
       if site.nil?
-        puts "error"
         raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
-      else
-        puts "done"
       end
+    end
+
+    # Asserts that the current workign directory contains a site (just like
+    # {#require_site}) and loads the site into memory.
+    #
+    # @return [void]
+    def load_site
+      self.require_site
+      print "Loading site data… "
+      self.site.load
+      puts "done"
+    end
+
+  protected
+
+    # @return [Boolean] true if debug output is enabled, false if not
+    #
+    # @see Nanoc::CLI.debug?
+    def debug?
+      Nanoc::CLI.debug?
     end
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing

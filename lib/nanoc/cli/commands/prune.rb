@@ -19,7 +19,7 @@ module Nanoc::CLI::Commands
   class Prune < ::Nanoc::CLI::CommandRunner
 
     def run
-      require_site
+      self.load_site
 
       if options.has_key?(:yes)
         Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run

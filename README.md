@@ -14,9 +14,7 @@ Note: This documentation looks best with Yardoc, not RDoc.
 
 ## Resources
 
-The [nanoc web site](http://nanoc.stoneship.org) contains a few useful
-resources to help you get started with nanoc. If you need further assistance,
-the following places will help you out:
+The [nanoc web site](http://nanoc.ws) contains a few useful resources to help you get started with nanoc. If you need further assistance, the following places will help you out:
 
 * The [discussion group](http://groups.google.com/group/nanoc)
 * The [IRC channel](irc://chat.freenode.net/#nanoc)

@@ -9,7 +9,8 @@ Improvements:
 
 ## 3.5.1 (???)
 
-* Updated all `ddfreyne/nanoc` references to `nanoc/nanoc`
+* Updated references to old web site and old repository
+* Made `require` errors mention Bundler if appropriate
 
 ## 3.5 (2013-01-27)
 

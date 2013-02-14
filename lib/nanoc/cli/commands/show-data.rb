@@ -13,7 +13,7 @@ module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
 
     def run
-      self.require_site
+      self.load_site
 
       # Get data
       items     = self.site.items
