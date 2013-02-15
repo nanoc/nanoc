@@ -350,7 +350,7 @@ module Nanoc::Helpers
     # used in the Atom feed to uniquely identify articles. These IDs are
     # created using a procedure suggested by Mark Pilgrim and described in his
     # ["How to make a good ID in Atom" blog post]
-    # (http://diveintomark.org/archives/2004/05/28/howto-atom-id).
+    # (http://web.archive.org/web/20110915110202/http://diveintomark.org/archives/2004/05/28/howto-atom-id).
     #
     # @param [Nanoc::Item] item The item for which to create an atom tag
     #
