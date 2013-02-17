@@ -71,7 +71,7 @@ EOF
       end
 
       # Update configuration
-      File.open('config.yaml', 'w') do |io|
+      File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
         io.write "  - type: site_test_foo"
       end
@@ -176,7 +176,7 @@ describe 'Nanoc::Site#data_sources' do
 
   it 'should also use the toplevel config for data sources' do
     with_site do
-      File.open('config.yaml', 'w') do |io|
+      File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
         io.write "  -\n"
         io.write "    type: filesystem_unified\n"

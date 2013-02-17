@@ -369,10 +369,10 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         autocompiler = Nanoc::Extra::AutoCompiler.new('.')
 
         # Set config to 1st value
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "value: Foo"
         end
-        File.utime(Time.now+5, Time.now+5, 'config.yaml')
+        File.utime(Time.now+5, Time.now+5, 'nanoc.yaml')
 
         # Check
         status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
@@ -381,10 +381,10 @@ class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
         end
 
         # Set config to 2nd value
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "value: Bar"
         end
-        File.utime(Time.now+5, Time.now+5, 'config.yaml')
+        File.utime(Time.now+5, Time.now+5, 'nanoc.yaml')
 
         # Check
         status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
