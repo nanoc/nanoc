@@ -14,6 +14,7 @@ Improvements:
 
 * Updated references to old web site and old repository
 * Made `require` errors mention Bundler if appropriate
+* Fixed bug which caused pruner not to delete directories in some cases [@reima]
 
 ## 3.5 (2013-01-27)
 

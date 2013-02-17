@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    nanoc (3.5.0b1)
-      cri (~> 2.2)
+    nanoc (3.6.0)
+      cri (~> 2.3)
 
 GEM
   remote: http://rubygems.org/
@@ -36,11 +36,12 @@ GEM
       nokogiri (~> 1.5.0)
       ruby-hmac
     formatador (0.2.4)
-    haml (3.1.7)
+    haml (4.0.0)
+      tilt
     handlebars (0.3.2)
       commonjs (~> 0.2.3)
       therubyracer (~> 0.11.1)
-    json (1.7.6)
+    json (1.7.7)
     kramdown (0.14.2)
     less (2.2.2)
       commonjs (~> 0.2.6)
@@ -52,30 +53,30 @@ GEM
       syntax (>= 1.0.0)
     metaclass (0.0.1)
     method_source (0.8.1)
-    mime-types (1.19)
-    minitest (4.5.0)
+    mime-types (1.21)
+    minitest (4.6.1)
     mocha (0.13.2)
       metaclass (~> 0.0.1)
-    multi_json (1.5.0)
+    multi_json (1.6.1)
     mustache (0.99.4)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
-    net-ssh (2.6.3)
+    net-ssh (2.6.5)
     nokogiri (1.5.6)
     pandoc-ruby (0.6.0)
     posix-spawn (0.3.6)
-    pry (0.9.11.4)
+    pry (0.9.12)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
     pygments.rb (0.3.7)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
-    rack (1.5.0)
+    rack (1.5.2)
     rainpress (1.0)
     rake (10.0.3)
-    rdiscount (1.6.8)
-    rdoc (3.12)
+    rdiscount (2.0.7)
+    rdoc (3.12.1)
       json (~> 1.4)
     redcarpet (2.2.2)
     ref (1.0.2)
@@ -102,7 +103,7 @@ GEM
       json
       nokogiri
     yajl-ruby (1.1.0)
-    yard (0.8.3)
+    yard (0.8.4.1)
     yuicompressor (1.2.0)
 
 PLATFORMS
