@@ -19,14 +19,22 @@ module Nanoc::CLI::Commands
       self.require_site
 
       runner = Nanoc::Extra::Checking::Runner.new(site)
+
       if options[:list]
         runner.list_checks
-      elsif options[:all]
+        return
+      end
+
+      success = if options[:all]
         runner.run_all
       elsif options[:deploy]
         runner.run_for_deploy
       else
         runner.run_specific(arguments)
+      end
+
+      unless success
+        raise Nanoc::Errors::GenericTrivial, 'One or more checks failed'
       end
     end
 
