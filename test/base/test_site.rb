@@ -5,13 +5,19 @@ class Nanoc::SiteTest < MiniTest::Unit::TestCase
   include Nanoc::TestHelpers
 
   def test_initialize_with_dir_without_config_yaml
-    assert_raises(Errno::ENOENT) do
+    assert_raises(Nanoc::Errors::GenericTrivial) do
       Nanoc::Site.new('.')
     end
   end
 
   def test_initialize_with_dir_with_config_yaml
     File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
+    site = Nanoc::Site.new('.')
+    assert_equal 'public_html', site.config[:output_dir]
+  end
+
+  def test_initialize_with_dir_with_nanoc_yaml
+    File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
     site = Nanoc::Site.new('.')
     assert_equal 'public_html', site.config[:output_dir]
   end
