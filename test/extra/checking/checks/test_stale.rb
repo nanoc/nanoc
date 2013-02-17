@@ -45,5 +45,16 @@ class Nanoc::Extra::Checking::Checks::StaleTest < MiniTest::Unit::TestCase
     end
   end
 
-end
+  def test_run_excluded
+    with_site do |site|
+      assert Dir['content/*'].empty?
+      assert Dir['output/*'].empty?
 
+      File.open('config.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'excluded.html' ]" }
+      File.open('content/index.html', 'w') { |io| io.write('stuff') }
+      File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
+      assert self.calc_issues.empty?
+    end
+  end
+
+end
