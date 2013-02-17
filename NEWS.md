@@ -4,8 +4,8 @@
 
 Improvements:
 
- * Added `sync` command, allowing data sources to update local caches of
-   external data [Justin Hileman]
+* Added `sync` command, allowing data sources to update local caches of
+  external data [Justin Hileman]
 * Added `#ignore` compiler DSL method
 * Allowed accessing items by identifier using e.g. `@items['/about/']`
 * Added `shell` command
