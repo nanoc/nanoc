@@ -56,12 +56,15 @@ module Nanoc::Extra
       end
     end
 
-  protected
-
-    def filename_excluded?(f)
-      pathname = Pathname.new(f)
+    # @param [String] filename The filename to check
+    #
+    # @return [Boolean] true if the given file is excluded, false otherwise
+    def filename_excluded?(filename)
+      pathname = Pathname.new(filename)
       @exclude.any? { |e| pathname.include_component?(e) }
     end
+
+  protected
 
     def delete_file(file)
       if @dry_run
