@@ -1,0 +1,22 @@
+# encoding: utf-8
+
+class Nanoc::CLI::Commands::CheckTest < MiniTest::Unit::TestCase
+
+  include Nanoc::TestHelpers
+
+  def test_check_stale
+    with_site do |site|
+      FileUtils.mkdir_p('output')
+
+      # Should not raise now
+      Nanoc::CLI.run %w( check stale )
+
+      # Should raise now
+      File.open('output/blah.html', 'w') { |io| io.write 'moo' }
+      assert_raises Nanoc::Errors::GenericTrivial do
+        Nanoc::CLI.run %w( check stale )
+      end
+    end
+  end
+
+end
