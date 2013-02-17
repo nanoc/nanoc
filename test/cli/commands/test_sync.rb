@@ -15,7 +15,7 @@ class Nanoc::CLI::Commands::SyncTest < MiniTest::Unit::TestCase
         io.write "end\n"
       end
 
-      File.open('config.yaml', 'w') do |io|
+      File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
         io.write "  - type: sync_test_foo\n"
         io.write "    items_root: /"

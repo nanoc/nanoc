@@ -7,7 +7,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
   def test_deploy
     if_have 'systemu' do
       with_site do |site|
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
           io.write "    kind: rsync\n"
@@ -28,7 +28,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
   def test_deploy_with_dry_run
     if_have 'systemu' do
       with_site do |site|
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
           io.write "    kind: rsync\n"
@@ -49,7 +49,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
   def test_deploy_with_list
     if_have 'systemu' do
       with_site do |site|
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
           io.write "    kind: rsync\n"
@@ -74,7 +74,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
   def test_deploy_without_kind
     if_have 'systemu' do
       with_site do |site|
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
           io.write "    dst: mydestination"
@@ -98,7 +98,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
   def test_deploy_without_target_without_default
     if_have 'systemu' do
       with_site do |site|
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
           io.write "    dst: mydestination"
@@ -120,7 +120,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
   def test_deploy_without_target_with_default
     if_have 'systemu' do
       with_site do |site|
-        File.open('config.yaml', 'w') do |io|
+        File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  default:\n"
           io.write "    dst: mydestination"

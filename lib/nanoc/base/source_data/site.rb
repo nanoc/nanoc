@@ -277,6 +277,21 @@ module Nanoc
       @unloading = false
     end
 
+    # @return [Boolean] true if the current working directory is a nanoc site, false otherwise
+    #
+    # @api private
+    def self.cwd_is_nanoc_site?
+      !self.config_filename_for_cwd.nil?
+    end
+
+    # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none
+    #
+    # @api private
+    def self.config_filename_for_cwd
+      filenames = %w( nanoc.yaml config.yaml )
+      filenames.find { |f| File.file?(f) }
+    end
+
   private
 
     # Loads this site’s code and executes it.
@@ -340,8 +355,14 @@ module Nanoc
           warn 'WARNING: Calling Nanoc::Site.new with a directory that is not the current working directory is not supported. It is recommended to change the directory before calling Nanoc::Site.new. For example, instead of Nanoc::Site.new(\'abc\'), use Dir.chdir(\'abc\') { Nanoc::Site.new(\'.\') }.'
         end
 
-        # Read config from config.yaml in given dir
-        config_path = File.join(dir_or_config_hash, 'config.yaml')
+        # Read config from nanoc.yaml/config.yaml in given dir
+        config_path = Dir.chdir(dir_or_config_hash) do
+          filename = self.class.config_filename_for_cwd
+          if filename.nil?
+            raise Nanoc::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
+          end
+          File.join(dir_or_config_hash, filename)
+        end
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
         @config[:data_sources].map! { |ds| ds.symbolize_keys_recursively }
       else
