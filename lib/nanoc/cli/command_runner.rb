@@ -39,7 +39,7 @@ module Nanoc::CLI
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def is_in_site_dir?
-      File.file?('config.yaml')
+      Nanoc::Site.cwd_is_nanoc_site?
     end
 
     # Asserts that the current working directory contains a site

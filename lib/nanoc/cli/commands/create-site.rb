@@ -344,8 +344,8 @@ EOS
       FileUtils.mkdir_p('output')
 
       # Create config
-      File.open('config.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
-      Nanoc::NotificationCenter.post(:file_created, 'config.yaml')
+      File.open('nanoc.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
+      Nanoc::NotificationCenter.post(:file_created, 'nanoc.yaml')
 
       # Create rules
       File.open('Rules', 'w') do |io|

@@ -89,7 +89,7 @@ EOS
           end
         end
 
-        File.open('config.yaml', 'w') { |io| io.write('stuff: 12345') }
+        File.open('nanoc.yaml', 'w') { |io| io.write('stuff: 12345') }
         File.open('Rules', 'w') { |io| io.write(rules_content) }
       end
     end
