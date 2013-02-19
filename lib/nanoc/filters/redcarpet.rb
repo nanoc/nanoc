@@ -49,7 +49,11 @@ module Nanoc::Filters
           warn 'WARNING: You are passing an array of options to the :redcarpet filter, but Redcarpet 2.x expects a hash instead. This will likely fail.'
         end
 
-        renderer = renderer_class.new(renderer_options)
+        if renderer_class == ::Redcarpet::Render::HTML_TOC
+          renderer = renderer_class.new
+        else
+          renderer = renderer_class.new(renderer_options)
+        end
         ::Redcarpet::Markdown.new(renderer, options).render(content)
       else
         options = params[:options] || []
