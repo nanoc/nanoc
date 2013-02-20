@@ -284,7 +284,7 @@ class Nanoc::OutdatednessCheckerTest < MiniTest::Unit::TestCase
 
     # Change code
     FileUtils.cd('foo') do
-      File.open('config.yaml', 'w') { |io| io.write('awesome: true') }
+      File.open('nanoc.yaml', 'w') { |io| io.write('awesome: true') }
     end
 
     # Check

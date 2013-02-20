@@ -60,7 +60,7 @@ class Nanoc::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
       Nanoc::CLI.run %w( compile )
       assert File.file?('output/stray.html')
 
-      File.open('config.yaml', 'w') do |io|
+      File.open('nanoc.yaml', 'w') do |io|
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
       end
@@ -103,7 +103,7 @@ class Nanoc::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
       Nanoc::CLI.run %w( compile )
       assert File.file?('output/stray.html')
 
-      File.open('config.yaml', 'w') do |io|
+      File.open('nanoc.yaml', 'w') do |io|
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
         io.write "  exclude: [ 'excluded_dir' ]\n"
