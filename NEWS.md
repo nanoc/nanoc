@@ -9,6 +9,7 @@ Improvements:
 * Added `#ignore` compiler DSL method
 * Allowed accessing items by identifier using e.g. `@items['/about/']`
 * Added `shell` command
+* Renamed the nanoc configuration file from `config.yaml` to `nanoc.yaml`
 
 ## 3.5.1 (???)
 
