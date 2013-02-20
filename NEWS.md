@@ -15,6 +15,9 @@ Improvements:
 * Updated references to old web site and old repository
 * Made `require` errors mention Bundler if appropriate
 * Fixed bug which caused pruner not to delete directories in some cases [@reima]
+* Made `check` command exit with the proper exit status
+* Added support for the `HTML_TOC` Redcarpet renderer
+* Made `stale` check honor files excluded by the pruner
 
 ## 3.5 (2013-01-27)
 

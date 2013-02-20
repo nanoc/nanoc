@@ -70,4 +70,19 @@ class Nanoc::Filters::RedcarpetTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_html_toc
+    if_have 'redcarpet' do
+      unless ::Redcarpet::VERSION > '2'
+        skip "Requires Redcarpet >= 2"
+      end
+
+      # Create filter
+      filter = ::Nanoc::Filters::Redcarpet.new
+
+      # Run filter
+      input = "# Heading 1\n## Heading 2\n"
+      filter.run(input, :renderer => Redcarpet::Render::HTML_TOC)
+    end
+  end
+
 end
