@@ -55,4 +55,17 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < MiniTest::Unit::TestCa
     end
   end
 
+  def test_exclude
+    with_site do |site|
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      site.config.update({ :checks => { :internal_links => { :exclude => ['^/excluded\d+'] } } })
+
+      # Test
+      assert check.send(:valid?, '/excluded1', 'output/origin')
+      assert check.send(:valid?, '/excluded2', 'output/origin')
+      assert !check.send(:valid?, '/excluded_not', 'output/origin')
+    end
+  end
+
 end

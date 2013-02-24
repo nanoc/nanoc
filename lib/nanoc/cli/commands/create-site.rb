@@ -102,6 +102,17 @@ watcher:
   # When to send notifications (using Growl or notify-send).
   notify_on_compilation_success: true
   notify_on_compilation_failure: true
+
+# Configuration for the “check” command, which run unit tests on the site.
+checks:
+  # Configuration for the “internal_links” checker, which checks whether all
+  # internal links are valid.
+  internal_links:
+    # A list of patterns, specified as regular expressions, to exclude from the check.
+    # If an internal link matches this pattern, the validity check will be skipped.
+    # E.g.:
+    #   exclude: ['^/server_status']
+    exclude: []
 EOS
 
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
