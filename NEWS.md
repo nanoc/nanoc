@@ -14,7 +14,7 @@ Enhancements:
 
 * Renamed the nanoc configuration file from `config.yaml` to `nanoc.yaml`
 
-## 3.5.1 (???)
+Fixes:
 
 * Updated references to old web site and old repository
 * Made `require` errors mention Bundler if appropriate
