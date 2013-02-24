@@ -238,7 +238,7 @@ module Nanoc::CLI
         # Build message
         if gem_name
           if self.using_bundler?
-            "Make sure the gem is added to Gemfile and run `bundle up`."
+            "Make sure the gem is added to Gemfile and run `bundle install`."
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
           end
