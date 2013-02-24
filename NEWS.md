@@ -2,13 +2,16 @@
 
 ## 3.6 (???)
 
-Improvements:
+Features:
 
 * Added `sync` command, allowing data sources to update local caches of
   external data [Justin Hileman]
 * Added `#ignore` compiler DSL method
 * Allowed accessing items by identifier using e.g. `@items['/about/']`
 * Added `shell` command
+
+Enhancements:
+
 * Renamed the nanoc configuration file from `config.yaml` to `nanoc.yaml`
 
 ## 3.5.1 (???)
