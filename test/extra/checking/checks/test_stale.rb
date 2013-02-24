@@ -57,4 +57,16 @@ class Nanoc::Extra::Checking::Checks::StaleTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_run_excluded_with_broken_config
+    with_site do |site|
+      assert Dir['content/*'].empty?
+      assert Dir['output/*'].empty?
+
+      File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  blah: meh" }
+      File.open('content/index.html', 'w') { |io| io.write('stuff') }
+      File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
+      refute self.calc_issues.empty?
+    end
+  end
+
 end
