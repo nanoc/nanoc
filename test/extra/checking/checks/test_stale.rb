@@ -50,7 +50,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < MiniTest::Unit::TestCase
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
-      File.open('config.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'excluded.html' ]" }
+      File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'excluded.html' ]" }
       File.open('content/index.html', 'w') { |io| io.write('stuff') }
       File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
       assert self.calc_issues.empty?
