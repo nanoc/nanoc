@@ -53,7 +53,7 @@ module Nanoc::CLI
       end
     end
 
-    # Asserts that the current workign directory contains a site (just like
+    # Asserts that the current working directory contains a site (just like
     # {#require_site}) and loads the site into memory.
     #
     # @return [void]
