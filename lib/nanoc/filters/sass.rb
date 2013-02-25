@@ -3,7 +3,7 @@
 module Nanoc::Filters
   class Sass < Nanoc::Filter
 
-    requires 'sass', 'nanoc/filters/sass_filesystem_importer'
+    requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
     class << self
       # The current filter. This is definitely going to bite me if I ever get
