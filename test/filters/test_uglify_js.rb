@@ -11,7 +11,7 @@ class Nanoc::Filters::UglifyJSTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.setup_and_run("foo = 1; (function(bar) { if (true) alert(bar); })(foo)")
-      assert_match(/foo=1,function\((.)\){alert\(\1\)}\(foo\);/, result)
+      assert_match(/foo=1,function\((.)\)\{alert\(\1\)\}\(foo\);/, result)
     end
   end
 
@@ -23,7 +23,7 @@ class Nanoc::Filters::UglifyJSTest < MiniTest::Unit::TestCase
 
       # Run filter
       result = filter.setup_and_run("foo = 1; (function(bar) { if (true) alert(bar); })(foo)", :toplevel => true)
-      assert_match(/foo=1,function\((.)\){alert\(\1\)}\(foo\);/, result)
+      assert_match(/foo=1,function\((.)\)\{alert\(\1\)\}\(foo\);/, result)
     end
   end
 
