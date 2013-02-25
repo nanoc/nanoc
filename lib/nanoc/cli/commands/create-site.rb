@@ -97,7 +97,7 @@ watcher:
 
   # A list of single files to watch for changes. As mentioned above, don’t put
   # any files from the “output/” or “tmp/” directories in here.
-  files_to_watch: [ 'config.yaml', 'Rules' ]
+  files_to_watch: [ 'nanoc.yaml', 'Rules' ]
 
   # When to send notifications (using Growl or notify-send).
   notify_on_compilation_success: true
