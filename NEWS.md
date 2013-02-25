@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.6.1 (2013-02-25)
+
+Fixes:
+
+* Fixed bug which could cause the Sass filter to raise a load error [Damien Pollet]
+
 ## 3.6 (2013-02-24)
 
 Features:
