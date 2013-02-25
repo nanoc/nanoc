@@ -6,6 +6,7 @@ Fixes:
 
 * Fixed bug which could cause the Sass filter to raise a load error [Damien Pollet]
 * Fixed warnings about `__send__` and `object_id` being redefined [Justin Hileman]
+* Made `files_to_watch` contain `nanoc.yaml`, not `config.yaml` by default
 
 ## 3.6 (2013-02-24)
 
