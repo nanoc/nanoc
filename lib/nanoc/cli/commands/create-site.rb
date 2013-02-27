@@ -85,6 +85,10 @@ data_sources:
     # it will become “/about.html/” instead.
     allow_periods_in_identifiers: false
 
+    # The encoding to use for input files. If your input files are not in
+    # UTF-8 (which they should be!), change this.
+    encoding: utf-8
+
 # Configuration for the “watch” command, which watches a site for changes and
 # recompiles if necessary.
 watcher:
