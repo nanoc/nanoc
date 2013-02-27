@@ -133,23 +133,31 @@ module Nanoc
         Nanoc::NotificationCenter.post(:will_write_rep, self, snapshot)
 
         if self.binary?
-          # Check whether content was modified
-          is_modified = !File.file?(raw_path) || !FileUtils.identical?(raw_path, temporary_filenames[:last])
-
-          # Always copy (time spent checking modification is not useful)
-          FileUtils.cp(temporary_filenames[:last], raw_path)
+          temp_path = temporary_filenames[:last]
         else
-          # Check whether content was modified
-          is_modified = (!File.file?(raw_path) || File.read(raw_path) != @content[:last])
-
-          # Write
-          if is_modified
-            File.open(raw_path, 'w') { |io| io.write(@content[:last]) }
-          end
+          temp_path = self.temp_filename
+          File.open(temp_path, 'w') { |io| io.write(@content[:last]) }
         end
+
+        # Check whether content was modified
+        is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
+
+        # Write
+        FileUtils.mv(temp_path, raw_path) if is_modified
 
         # Notify
         Nanoc::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
+      end
+
+      TMP_TEXT_ITEMS_DIR = 'tmp/text_items'
+
+      def temp_filename
+        FileUtils.mkdir_p(TMP_TEXT_ITEMS_DIR)
+        tempfile = Tempfile.new('', TMP_TEXT_ITEMS_DIR)
+        new_filename = tempfile.path
+        tempfile.close!
+
+        File.expand_path(new_filename)
       end
 
       # Resets the compilation progress for this item representation. This is
