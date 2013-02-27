@@ -24,6 +24,7 @@ module Nanoc::CLI::Commands
         deployers      = Nanoc::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
         deployer_names = deployers.keys.sort_by { |k| k.to_s }
         puts "Available deployers: #{deployer_names.join(', ')}"
+        return
       end
 
       # Get & list configs
@@ -38,8 +39,8 @@ module Nanoc::CLI::Commands
             puts "  #{name}"
           end
         end
+        return
       end
-      return if options[:list] || options[:'list-deployers']
 
       # Can't proceed further without a deploy config
       if deploy_configs.empty?
