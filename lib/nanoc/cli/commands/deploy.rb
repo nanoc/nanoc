@@ -23,7 +23,10 @@ module Nanoc::CLI::Commands
       if options[:'list-deployers']
         deployers      = Nanoc::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
         deployer_names = deployers.keys.sort_by { |k| k.to_s }
-        puts "Available deployers: #{deployer_names.join(', ')}"
+        puts "Available deployers:"
+        deployer_names.each do |name|
+          puts "  #{name}"
+        end
         return
       end
 
