@@ -56,7 +56,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
           Nanoc::CLI.run %w( deploy -L )
         end
 
-        assert ios[:stdout].include?('No deployment configuration.')
+        assert ios[:stdout].include?('No deployment configurations.')
 
         refute File.directory?('mydestination')
         refute File.file?('mydestination/blah.html')
