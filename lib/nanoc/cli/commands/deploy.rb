@@ -35,7 +35,7 @@ module Nanoc::CLI::Commands
 
       if options[:list]
         if deploy_configs.empty?
-          puts  "No deployment configuration."
+          puts  "No deployment configurations."
         else
           puts "Available deployment configurations:"
           deploy_configs.keys.each do |name|
@@ -47,13 +47,13 @@ module Nanoc::CLI::Commands
 
       # Can't proceed further without a deploy config
       if deploy_configs.empty?
-        raise Nanoc::Errors::GenericTrivial, "The site configuration has no deploy configuration."
+        raise Nanoc::Errors::GenericTrivial, "The site has no deployment configurations."
       end
 
       # Get target
       target = options.fetch(:target, :default).to_sym
       config = deploy_configs.fetch(target) do
-        raise Nanoc::Errors::GenericTrivial, "The site configuration has no deploy configuration for #{target}."
+        raise Nanoc::Errors::GenericTrivial, "The site has no deployment configuration for #{target}."
       end
 
       # Get deployer
