@@ -154,7 +154,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
           err = assert_raises Nanoc::Errors::GenericTrivial do
             Nanoc::CLI.run %w( deploy )
           end
-          assert_equal 'The site configuration has no deploy configuration for default.', err.message
+          assert_equal 'The site has no deployment configuration for default.', err.message
         end
       end
     end
