@@ -7,6 +7,9 @@ module Nanoc::Extra::Checking::Checks
 
     # Starts the validator. The results will be printed to stdout.
     #
+    # Internal links that match a regexp pattern in `@config[:checks][:internal_links][:exclude]` will
+    # be skipped.
+    #
     # @return [void]
     def run
       # TODO de-duplicate this (duplicated in external links check)
@@ -29,6 +32,9 @@ module Nanoc::Extra::Checking::Checks
       # Skip hrefs that point to self
       # FIXME this is ugly and won’t always be correct
       return true if href == '.'
+
+      # Skip hrefs that are specified in the exclude configuration
+      return true if self.excluded?(href)
 
       # Remove target
       path = href.sub(/#.*$/, '')
@@ -53,6 +59,11 @@ module Nanoc::Extra::Checking::Checks
 
       # Nope :(
       return false
+    end
+
+    def excluded?(href)
+      excludes =  @site.config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
+      excludes.any? { |pattern| Regexp.new(pattern).match(href) }
     end
 
   end
