@@ -46,6 +46,24 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_deploy_with_list_without_config
+    if_have 'systemu' do
+      with_site do |site|
+        FileUtils.mkdir_p('output')
+        File.open('output/blah.html', 'w') { |io| io.write 'moo' }
+
+        ios = capturing_stdio do
+          Nanoc::CLI.run %w( deploy -L )
+        end
+
+        assert ios[:stdout].include?('No deployment configuration.')
+
+        refute File.directory?('mydestination')
+        refute File.file?('mydestination/blah.html')
+      end
+    end
+  end
+
   def test_deploy_with_list
     if_have 'systemu' do
       with_site do |site|
@@ -64,6 +82,31 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
         end
 
         assert ios[:stdout].include?('Available deployment configurations:')
+
+        refute File.directory?('mydestination')
+        refute File.file?('mydestination/blah.html')
+      end
+    end
+  end
+
+  def test_deploy_with_deployers
+    if_have 'systemu' do
+      with_site do |site|
+        File.open('nanoc.yaml', 'w') do |io|
+          io.write "deploy:\n"
+          io.write "  public:\n"
+          io.write "    kind: rsync\n"
+          io.write "    dst: mydestination"
+        end
+
+        FileUtils.mkdir_p('output')
+        File.open('output/blah.html', 'w') { |io| io.write 'moo' }
+
+        ios = capturing_stdio do
+          Nanoc::CLI.run %w( deploy -D )
+        end
+
+        assert ios[:stdout].include?('Available deployers:')
 
         refute File.directory?('mydestination')
         refute File.file?('mydestination/blah.html')
