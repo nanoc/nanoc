@@ -89,7 +89,7 @@ class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
     end
   end
 
-  def test_deploy_with_deployers
+  def test_deploy_with_list_deployers
     if_have 'systemu' do
       with_site do |site|
         File.open('nanoc.yaml', 'w') do |io|

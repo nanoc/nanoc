@@ -17,17 +17,18 @@ module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
 
     def run
-      require_site
-      site.load
+      self.load_site
 
-      deploy_configs = site.config.fetch(:deploy, {})
-
-      # List deployers & targets
+      # List deployers
       if options[:'list-deployers']
         deployers      = Nanoc::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
         deployer_names = deployers.keys.sort_by { |k| k.to_s }
         puts "Available deployers: #{deployer_names.join(', ')}"
       end
+
+      # Get & list configs
+      deploy_configs = site.config.fetch(:deploy, {})
+
       if options[:list]
         if deploy_configs.empty?
           puts  "No deployment configuration."
@@ -40,7 +41,7 @@ module Nanoc::CLI::Commands
       end
       return if options[:list] || options[:'list-deployers']
 
-      # Can't proceed without a deploy config
+      # Can't proceed further without a deploy config
       if deploy_configs.empty?
         raise Nanoc::Errors::GenericTrivial, "The site configuration has no deploy configuration."
       end
