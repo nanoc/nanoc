@@ -6,11 +6,11 @@ description <<-EOS
 Deploys the compiled site. The compiled site contents in the output directory will be uploaded to the destination, which is specified using the `--target` option.
 EOS
 
-option :t, :target,     'specify the location to deploy to (default: `default`)', :argument => :required
-flag   :C, :'no-check', 'do not run the issue checks marked for deployment'
-flag   :D, :deployers,  'list available deployers'
-flag   :L, :list,       'list available locations to deploy to'
-option :n, :'dry-run',  'show what would be deployed'
+option :t, :target,           'specify the location to deploy to (default: `default`)', :argument => :required
+flag   :C, :'no-check',       'do not run the issue checks marked for deployment'
+flag   :L, :list,             'list available locations to deploy to'
+flag   :D, :'list-deployers', 'list available deployers'
+option :n, :'dry-run',        'show what would be deployed'
 
 module Nanoc::CLI::Commands
 
@@ -23,7 +23,7 @@ module Nanoc::CLI::Commands
       deploy_configs = site.config.fetch(:deploy, {})
 
       # List deployers & targets
-      if options[:deployers]
+      if options[:'list-deployers']
         deployers      = Nanoc::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
         deployer_names = deployers.keys.sort_by { |k| k.to_s }
         puts "Available deployers: #{deployer_names.join(', ')}"
@@ -38,7 +38,7 @@ module Nanoc::CLI::Commands
           end
         end
       end
-      return if options[:list] || options[:deployers]
+      return if options[:list] || options[:'list-deployers']
 
       # Can't proceed without a deploy config
       if deploy_configs.empty?
