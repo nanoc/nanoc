@@ -9,7 +9,16 @@ module Nanoc
 
     extend Forwardable
 
-    DELEGATED_METHODS = Array.instance_methods + Enumerable.instance_methods - [ :[], :slice, :at, :initialize, :freeze ]
+    EXCLUDED_METHODS  = [
+      :[], :at, :slice, :class, :singleton_class, :clone, :dup, :initialize_dup, :initialize_clone,
+      :freeze, :methods, :singleton_methods, :protected_methods, :private_methods, :public_methods,
+      :instance_variables, :instance_variable_get, :instance_variable_set, :instance_variable_defined?,
+      :instance_of?, :kind_of?, :is_a?, :tap, :send, :public_send, :respond_to?, :respond_to_missing?,
+      :extend, :display, :method, :public_method, :define_singleton_method, :object_id, :equal?,
+      :instance_eval, :instance_exec, :__send__, :__id__
+    ]
+
+    DELEGATED_METHODS = Array.instance_methods + Enumerable.instance_methods - EXCLUDED_METHODS
     def_delegators :@items, *DELEGATED_METHODS
 
     def initialize
