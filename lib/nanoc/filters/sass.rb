@@ -3,33 +3,12 @@
 module Nanoc::Filters
   class Sass < Nanoc::Filter
 
-    requires 'sass'
+    requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
     class << self
       # The current filter. This is definitely going to bite me if I ever get
       # to multithreading nanoc.
       attr_accessor :current
-    end
-
-    # Essentially the `Sass::Importers::Filesystem` but registering each
-    # import file path.
-    class SassFilesystemImporter < ::Sass::Importers::Filesystem
-
-    private
-
-      def _find(dir, name, options)
-        full_filename, syntax = ::Sass::Util.destructure(find_real_file(dir, name, options))
-        return unless full_filename && File.readable?(full_filename)
-
-        filter = Nanoc::Filters::Sass.current # FIXME ew global
-        item = filter.imported_filename_to_item(full_filename)
-        filter.depend_on([ item ]) unless item.nil?
-
-        options[:syntax] = syntax
-        options[:filename] = full_filename
-        options[:importer] = self
-        ::Sass::Engine.new(File.read(full_filename), options)
-      end
     end
 
     # Runs the content through [Sass](http://sass-lang.com/).
