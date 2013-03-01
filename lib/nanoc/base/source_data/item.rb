@@ -294,6 +294,26 @@ module Nanoc
       @identifier = *source
     end
 
+    # defines a getter method for a attribute identified by a key
+    #
+    # @param [Symbol] key The key for the attributes-hash
+    #
+    # @return [void]
+    def define_attr_getter(key)
+      define_method symbol do 
+        return @attributes[symbol]
+      end
+    end
+
+    # defines getter methods for all passed attribute-keys
+    #
+    # @param [Array] keys Array of keys for the attributes-hash
+    #
+    # @return [void]
+    def define_attr_getters(keys)
+      keys.each { |key| define_attr_getter(key) }
+    end
+
     # @api private
     def forced_outdated=(bool)
       @forced_outdated = bool
