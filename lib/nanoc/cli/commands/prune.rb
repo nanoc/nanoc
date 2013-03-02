@@ -7,7 +7,7 @@ Find all files in the output directory that do not correspond to an item
 managed by nanoc and remove them. Since this is a hazardous operation, an
 additional `--yes` flag is needed as confirmation.
 
-Also see the `auto_prune` site configuration option in `config.yamlz, which
+Also see the `auto_prune` site configuration option in `config.yaml`, which
 will automatically prune after compilation.
 EOS
 
