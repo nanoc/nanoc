@@ -107,10 +107,14 @@ module Nanoc::CLI::Commands
       # @param [String] message The message to include in the notification
       def notify(message)
         return if tool.nil?
-        send(tool.tr('-', '_'), message)
+        if tool == 'growlnotify' && self.on_windows?
+          self.growlnotify_windows(message)
+        else
+          send(tool.tr('-', '_'), message)
+        end
       end
 
-    private
+    protected
 
       def tool
         @tool ||= begin
@@ -133,8 +137,16 @@ module Nanoc::CLI::Commands
         system('growlnotify', '-m', message)
       end
 
+      def growlnotify_windows(message)
+        system('grownotify', '/t:nanoc', message)
+      end
+
       def notify_send(message)
         system('notify-send', message)
+      end
+
+      def on_windows?
+        !!(RUBY_PLATFORM =~ /(mingw|bccwin|wince|mswin32)/i)
       end
 
     end
