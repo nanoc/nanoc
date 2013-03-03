@@ -17,7 +17,7 @@ module Nanoc::CLI::Commands
       require_site
       watcher_config = self.site.config[:watcher] || {}
 
-      @notifier = Notifier.new
+      @notifier = Nanoc::Extra::UserNotifier.new
 
       # Define rebuilder
       rebuilder = lambda do |file_path|
@@ -90,53 +90,6 @@ module Nanoc::CLI::Commands
           listener.stop
           listener_root.stop
         end
-    end
-
-    # Allows sending user notifications in a cross-platform way.
-    class Notifier
-
-      # A list of commandline tool names that can be used to send notifications
-      TOOLS = %w( growlnotify notify-send ) unless defined? TOOLS
-
-      # The tool to use for discovering binaries' locations
-      FIND_BINARY_COMMAND = RUBY_PLATFORM =~ /mingw|mswin/ ? "where" : "which" unless defined? FIND_BINARY_COMMAND
-
-      # Send a notification. If no notifier is found, no notification will be
-      # created.
-      #
-      # @param [String] message The message to include in the notification
-      def notify(message)
-        return if tool.nil?
-        send(tool.tr('-', '_'), message)
-      end
-
-    private
-
-      def tool
-        @tool ||= begin
-          require 'terminal-notifier'
-          'terminal-notify'
-        rescue LoadError
-          begin
-            TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
-          rescue Errno::ENOENT
-            nil
-          end
-        end
-      end
-
-      def terminal_notify(message)
-        TerminalNotifier.notify(message, :title => "nanoc")
-      end
-
-      def growlnotify(message)
-        system('growlnotify', '-m', message)
-      end
-
-      def notify_send(message)
-        system('notify-send', message)
-      end
-
     end
 
   end

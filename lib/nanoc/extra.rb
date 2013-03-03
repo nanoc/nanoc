@@ -7,6 +7,7 @@ module Nanoc::Extra
   autoload 'CHiCk',             'nanoc/extra/chick'
   autoload 'LinkCollector',     'nanoc/extra/link_collector.rb'
   autoload 'Pruner',            'nanoc/extra/pruner'
+  autoload 'UserNotifier',      'nanoc/extra/user_notifier'
   autoload 'Validators',        'nanoc/extra/validators'
 
   # Deprecated; use {Nanoc::Context} instead
