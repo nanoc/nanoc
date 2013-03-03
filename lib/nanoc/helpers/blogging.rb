@@ -28,8 +28,12 @@ module Nanoc::Helpers
     #
     # @return [Array] An array containing all articles
     def articles
-      @article_items ||= @items.select { |item| item[:kind] == 'article' }
-      @article_items
+      if @items.frozen?
+        @article_items ||= @items.select { |item| item[:kind] == 'article' }
+        @article_items
+      else 
+        @items.select { |item| item[:kind] == 'article' }
+      end
     end
 
     # Returns a sorted list of articles, i.e. items where the `kind`
@@ -38,11 +42,17 @@ module Nanoc::Helpers
     #
     # @return [Array] A sorted array containing all articles
     def sorted_articles
-      @sorted_article_items ||= articles.sort_by do |a|
-        attribute_to_time(a[:created_at])
-      end.reverse
+      if @items.frozen?
+        @sorted_article_items ||= articles.sort_by do |a|
+          attribute_to_time(a[:created_at])
+        end.reverse
 
-      @sorted_article_items
+        @sorted_article_items
+      else 
+        articles.sort_by do |a| 
+          attribute_to_time(a[:created_at])
+        end.reverse
+      end
     end
 
     class AtomFeedBuilder
