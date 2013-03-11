@@ -18,7 +18,7 @@ module Nanoc
       :instance_eval, :instance_exec, :__send__, :__id__
     ]
 
-    DELEGATED_METHODS = Array.instance_methods + Enumerable.instance_methods - EXCLUDED_METHODS
+    DELEGATED_METHODS = (Array.instance_methods + Enumerable.instance_methods).map { |m| m.to_sym } - EXCLUDED_METHODS
     def_delegators :@items, *DELEGATED_METHODS
 
     def initialize
