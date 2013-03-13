@@ -13,7 +13,7 @@ module Nanoc::Filters
     # @return [String] The filtered content
     def run(content, params={})
       # Get result
-      ::Kramdown::Document.new(content, params).to_html
+      ::Kramdown::Document.new(content.dup, params).to_html
     end
 
   end

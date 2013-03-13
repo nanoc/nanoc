@@ -143,7 +143,7 @@ module Nanoc
         is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
 
         # Write
-        FileUtils.mv(temp_path, raw_path) if is_modified
+        FileUtils.cp(temp_path, raw_path) if is_modified
 
         # Notify
         Nanoc::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)

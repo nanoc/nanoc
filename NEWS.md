@@ -1,5 +1,18 @@
 # nanoc news
 
+## 3.6.2 (???)
+
+Fixes:
+
+* Removed the list of available deployers from the `deploy` help text and moved
+  them into a new `--list-deployers` option [Damien Pollet]
+
+Enhancements:
+
+* Added possible alternative names for the `Checks` file for consistency with
+  the `Rules` file: `Checks.rb`, `checks`, `checks.rb` [Damien Pollet]
+* Made sure unchanged files never have their mtime updated [Justin Hileman]
+
 ## 3.6.1 (2013-02-25)
 
 Fixes:
