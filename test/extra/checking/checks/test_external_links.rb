@@ -12,7 +12,7 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < MiniTest::Unit::TestCa
       File.open('output/bar.html', 'w') { |io| io.write('<a href="http://example.com/">not broken</a>') }
 
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
       def check.request_url_once(url)
         Net::HTTPResponse.new('1.1', url.path == '/' ? '200' : '404', 'okay')
       end
