@@ -103,6 +103,9 @@ module ::Nanoc::Extra::Checking::Checks
         begin
           Timeout::timeout(10) do
             res = request_url_once(url)
+            if res.code == '405'
+              res = request_url_once(url, Net::HTTP::Get)
+            end
           end
         rescue => e
           return Result.new(href, e.message)
@@ -133,9 +136,9 @@ module ::Nanoc::Extra::Checking::Checks
       raise 'should not have gotten here'
     end
 
-    def request_url_once(url)
+    def request_url_once(url, req_method = Net::HTTP::Head)
       path = (url.path.nil? || url.path.empty? ? '/' : url.path)
-      req = Net::HTTP::Head.new(path)
+      req = req_method.new(path)
       http = Net::HTTP.new(url.host, url.port)
       if url.instance_of? URI::HTTPS
         http.use_ssl = true
