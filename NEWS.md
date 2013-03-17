@@ -6,6 +6,8 @@ Fixes:
 
 * Removed the list of available deployers from the `deploy` help text and moved
   them into a new `--list-deployers` option [Damien Pollet]
+* Fixed warning about `__send__ `and `object_id` being redefined on Ruby
+  1.8.x [Justin Hileman]
 
 Enhancements:
 
