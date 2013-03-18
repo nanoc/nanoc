@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::SiteTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::SiteTest < Nanoc::TestCase
 
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Errors::GenericTrivial) do

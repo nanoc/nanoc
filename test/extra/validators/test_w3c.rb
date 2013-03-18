@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Validators::W3CTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
 
   def test_simple
     if_have 'w3c_validators' do

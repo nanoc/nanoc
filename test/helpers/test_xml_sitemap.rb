@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::XMLSitemapTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   include Nanoc::Helpers::XMLSitemap
 

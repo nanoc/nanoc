@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::FileProxyTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::FileProxyTest < Nanoc::TestCase
 
   def test_create_many
     if_implemented do

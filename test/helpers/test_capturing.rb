@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::CapturingTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Capturing
 

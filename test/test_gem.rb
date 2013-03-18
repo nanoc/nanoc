@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::GemTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::GemTest < Nanoc::TestCase
 
   def setup
     super

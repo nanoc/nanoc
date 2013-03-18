@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Breadcrumbs
 

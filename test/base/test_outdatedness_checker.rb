@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::OutdatednessCheckerTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
   def test_not_outdated
     # Compile once

@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::VCSTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::VCSTest < Nanoc::TestCase
 
   def test_named
     assert_nil(Nanoc::Extra::VCS.named(:lkasjdlkfjlkasdfkj))

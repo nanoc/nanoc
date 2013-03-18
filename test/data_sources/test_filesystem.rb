@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::DataSources::FilesystemTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   class SampleFilesystemDataSource < Nanoc::DataSource
     include Nanoc::DataSources::Filesystem

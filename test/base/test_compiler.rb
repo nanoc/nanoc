@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CompilerTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compilation_rule_for
     # Mock rules

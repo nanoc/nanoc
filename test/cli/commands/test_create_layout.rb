@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::Commands::CreateLayoutTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::Commands::CreateLayoutTest < Nanoc::TestCase
 
   def test_can_compile_new_layout
     require 'nanoc/cli'

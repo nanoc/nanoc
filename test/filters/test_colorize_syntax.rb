@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
 
   CODERAY_PRE  = '<div class="CodeRay"><div class="code">'
   CODERAY_POST = '</div></div>'

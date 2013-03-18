@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::YUICompressorTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
 
   def test_filter_javascript
     if_have 'yuicompressor' do

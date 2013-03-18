@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::Commands::HelpTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::Commands::HelpTest < Nanoc::TestCase
 
   def test_run
     Nanoc::CLI.run %w( help )

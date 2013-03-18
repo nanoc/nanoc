@@ -2,9 +2,7 @@
 
 require 'tempfile'
 
-class Nanoc::Filters::XSLTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
   SAMPLE_XSL = <<-EOS
 <?xml version="1.0" encoding="utf-8"?>
