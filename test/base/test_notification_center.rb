@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::NotificationCenterTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::NotificationCenterTest < Nanoc::TestCase
 
   def test_post
     # Set up notification

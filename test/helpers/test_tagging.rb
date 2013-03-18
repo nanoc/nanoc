@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::TaggingTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Tagging
 

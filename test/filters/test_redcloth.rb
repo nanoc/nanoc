@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::RedClothTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::RedClothTest < Nanoc::TestCase
 
   def test_filter
     if_have 'redcloth' do

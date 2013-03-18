@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::BloggingTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Blogging
   include Nanoc::Helpers::Text

@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::DataSources::StaticTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::DataSources::StaticTest < Nanoc::TestCase
 
   def new_data_source(params=nil)
     # Mock site

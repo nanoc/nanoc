@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::LessTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::LessTest < Nanoc::TestCase
 
   def test_filter
     if_have 'less' do

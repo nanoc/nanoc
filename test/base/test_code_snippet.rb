@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CodeSnippetTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CodeSnippetTest < Nanoc::TestCase
 
   def test_load
     # Initialize

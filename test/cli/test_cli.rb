@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLITest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLITest < Nanoc::TestCase
 
   COMMAND_CODE = <<EOS
 # encoding: utf-8

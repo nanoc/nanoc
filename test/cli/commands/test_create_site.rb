@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::Commands::CreateSiteTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
   def test_create_site_with_existing_name
     Nanoc::CLI.run %w( create_site foo )

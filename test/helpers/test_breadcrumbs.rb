@@ -1,81 +1,43 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::BreadcrumbsTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Breadcrumbs
 
   def test_breadcrumbs_trail_at_root
-    # Mock item
-    @item = mock
-    @item.stubs(:identifier).returns('/')
-    @items = [ @item ]
+    @items = Nanoc::ItemArray.new
+    @items << Nanoc::Item.new("root", {}, '/')
+    @item = @items.last
 
-    # Build trail
-    trail = breadcrumbs_trail
-
-    # Check
-    assert_equal(
-      [ @item ],
-      trail
-    )
+    assert_equal [ @items[0] ], breadcrumbs_trail
   end
 
   def test_breadcrumbs_trail_with_1_parent
-    # Mock item
-    parent = mock
-    parent.stubs(:identifier).returns('/')
-    @item = mock
-    @item.stubs(:identifier).returns('/foo/')
-    @items = [ parent, @item ]
+    @items = Nanoc::ItemArray.new
+    @items << Nanoc::Item.new("parent", {}, '/')
+    @items << Nanoc::Item.new("child",  {}, '/foo/')
+    @item = @items.last
 
-    # Build trail
-    trail = breadcrumbs_trail
-
-    # Check
-    assert_equal(
-      [ parent, @item ],
-      trail
-    )
+    assert_equal [ @items[0], @items[1] ], breadcrumbs_trail
   end
 
   def test_breadcrumbs_trail_with_many_parents
-    # Mock item
-    grandparent = mock
-    grandparent.stubs(:identifier).returns('/')
-    parent = mock
-    parent.stubs(:identifier).returns('/foo/')
-    @item = mock
-    @item.stubs(:identifier).returns('/foo/bar/')
-    @items = [ grandparent, parent, @item ]
+    @items = Nanoc::ItemArray.new
+    @items << Nanoc::Item.new("grandparent", {}, '/')
+    @items << Nanoc::Item.new("parent",      {}, '/foo/')
+    @items << Nanoc::Item.new("child",       {}, '/foo/bar/')
+    @item = @items.last
 
-    # Build trail
-    trail = breadcrumbs_trail
-
-    # Check
-    assert_equal(
-      [ grandparent, parent, @item ],
-      trail
-    )
+    assert_equal [ @items[0], @items[1], @items[2] ], breadcrumbs_trail
   end
 
   def test_breadcrumbs_trail_with_nils
-    # Mock item
-    grandparent = mock
-    grandparent.stubs(:identifier).returns('/')
-    @item = mock
-    @item.stubs(:identifier).returns('/foo/bar/')
-    @items = [ grandparent, @item ]
+    @items = Nanoc::ItemArray.new
+    @items << Nanoc::Item.new("grandparent", {}, '/')
+    @items << Nanoc::Item.new("child",       {}, '/foo/bar/')
+    @item = @items.last
 
-    # Build trail
-    trail = breadcrumbs_trail
-
-    # Check
-    assert_equal(
-      [ grandparent, nil, @item ],
-      trail
-    )
+    assert_equal [ @items[0], nil, @items[1] ], breadcrumbs_trail
   end
 
 end

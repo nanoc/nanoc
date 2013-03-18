@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::Commands::CompileTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_profiling_information
     with_site do |site|

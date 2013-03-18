@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::TypogrubyTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::TypogrubyTest < Nanoc::TestCase
 
   def test_filter
     if_have 'typogruby' do

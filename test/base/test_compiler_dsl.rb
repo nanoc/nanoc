@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CompilerDSLTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CompilerDSLTest < Nanoc::TestCase
 
   def test_compile
     # TODO implement

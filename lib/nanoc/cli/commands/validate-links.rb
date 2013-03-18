@@ -16,6 +16,8 @@ module Nanoc::CLI::Commands
   class ValidateLinks < ::Nanoc::CLI::CommandRunner
 
     def run
+      warn "The `validate-links` command is deprecated. Please use the new `check` command instead."
+
       checks = []
       checks << 'ilinks' if options[:internal]
       checks << 'elinks' if options[:external]

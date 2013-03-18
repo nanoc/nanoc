@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::CodeRayTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::CodeRayTest < Nanoc::TestCase
 
   def test_filter_without_language
     if_have 'coderay' do

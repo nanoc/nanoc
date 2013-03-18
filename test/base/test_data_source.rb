@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::DataSourceTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::DataSourceTest < Nanoc::TestCase
 
   def test_loading
     # Create data source

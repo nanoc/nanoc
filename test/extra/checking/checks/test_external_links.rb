@@ -1,24 +1,19 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checks::ExternalLinksTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
-
-  def setup
-    super
-    require 'timeout'
-  end
+class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
 
   def test_run
     with_site do |site|
       # Create files
       FileUtils.mkdir_p('output')
-      FileUtils.mkdir_p('output/stuff')
       File.open('output/foo.txt',  'w') { |io| io.write('<a href="http://example.com/404">broken</a>') }
       File.open('output/bar.html', 'w') { |io| io.write('<a href="http://example.com/">not broken</a>') }
 
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
+      def check.request_url_once(url)
+        Net::HTTPResponse.new('1.1', url.path == '/' ? '200' : '404', 'okay')
+      end
       check.run
 
       # Test
@@ -28,49 +23,31 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < MiniTest::Unit::TestCa
 
   def test_valid?
     with_site do |site|
-      # Create files
-      FileUtils.mkdir_p('output')
-      FileUtils.mkdir_p('output/stuff')
-      File.open('output/origin',     'w') { |io| io.write('hi') }
-      File.open('output/foo',        'w') { |io| io.write('hi') }
-      File.open('output/stuff/blah', 'w') { |io| io.write('hi') }
-
       # Create check
       check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
+      def check.request_url_once(url)
+        Net::HTTPResponse.new('1.1', url.path == '/200' ? '200' : '404', 'okay')
+      end
 
       # Test
-      self.run_server_while do
-        assert ok?(check, 'http://127.0.0.1:9204/200')
-        assert ok?(check, 'foo://example.com/')
-        refute ok?(check, 'http://127.0.0.1:9204">')
-      end
+      assert_nil check.validate('http://127.0.0.1:9204/200')
+      assert_nil check.validate('foo://example.com/')
+      refute_nil check.validate('http://127.0.0.1:9204">')
     end
   end
 
-  def ok?(check, url)
-    Timeout.timeout(3) do
-      check.validate(url).nil?
-    end
-  end
-
-  def run_server_while
-    @app = lambda { |env| [ env['REQUEST_PATH'][1..-1].to_i, {}, [ '... Useless body ...' ] ] }
-    @server = nil
-
-    @thread = Thread.new do
-      Rack::Handler::WEBrick.run(@app, :Host => @host='127.0.0.1', :Port => @port=9204) do |server|
-        @server = server
+  def test_fallback_to_get_when_head_is_not_allowed
+    with_site do |site|
+      #Create check
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
+      def check.request_url_once(url, req_method = Net::HTTP::Head)
+        Net::HTTPResponse.new('1.1', (req_method == Net::HTTP::Head || url.path == '/405') ? '405' : '200', 'okay')
       end
+
+      #Test
+      assert_nil check.validate('http://127.0.0.1:9204')
+      refute_nil check.validate('http://127.0.0.1:9204/405')
     end
-
-    Timeout::timeout(5) do
-      Thread.pass until @server
-    end
-
-    yield
-
-    @server.stop
-    @thread.kill
   end
 
 end

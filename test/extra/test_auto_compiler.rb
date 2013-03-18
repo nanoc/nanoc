@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::AutoCompilerTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
 
   def test_handle_request_with_item_rep_with_index_filename
     if_have 'mime/types', 'rack' do

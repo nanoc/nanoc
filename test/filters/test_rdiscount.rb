@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::RDiscountTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::RDiscountTest < Nanoc::TestCase
 
   def test_filter
     if_have 'rdiscount' do

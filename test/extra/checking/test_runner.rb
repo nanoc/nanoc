@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::RunnerTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
 
   def test_run_specific
     with_site do |site|

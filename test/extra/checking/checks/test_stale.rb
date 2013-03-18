@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checks::StaleTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
 
   def check_class
     Nanoc::Extra::Checking::Checks::Stale

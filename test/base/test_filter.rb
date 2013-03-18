@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::FilterTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::FilterTest < Nanoc::TestCase
 
   def test_initialize
     # Create filter

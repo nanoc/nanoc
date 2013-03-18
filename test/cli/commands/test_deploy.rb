@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::Commands::DeployTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy
     if_have 'systemu' do
