@@ -214,7 +214,7 @@ module Nanoc
       # Set primary attributes
       @item   = item
       @name   = name
-      @snapshot_store = params[:snapshot_store]
+      @snapshot_store = params.fetch(:snapshot_store)
 
       # Set binary
       @binary = @item.binary?
