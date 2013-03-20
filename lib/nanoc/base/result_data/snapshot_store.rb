@@ -93,13 +93,11 @@ module Nanoc
       def set(item_identifier, rep_name, snapshot_name, content)
         query = 'INSERT OR REPLACE INTO snapshots (item_identifier, rep_name, snapshot_name, content) VALUES (?, ?, ?, ?)'
         @db.execute(query, [ item_identifier, rep_name.to_s, snapshot_name.to_s, content ])
-        # TODO error check
       end
 
       def exist?(item_identifier, rep_name, snapshot_name)
         query = 'SELECT COUNT(*) FROM snapshots WHERE item_identifier = ? AND rep_name = ? AND snapshot_name = ?'
         rows = @db.execute(query, [ item_identifier, rep_name.to_s, snapshot_name.to_s ])
-        # TODO error check
         rows[0][0].to_i != 0
       end
 

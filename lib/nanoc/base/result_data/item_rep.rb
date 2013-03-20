@@ -61,7 +61,7 @@ module Nanoc
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
     module Private
 
-      # TODO document
+      # @return [Nanoc::SnapshotStore] The snapshot store to store content in
       attr_accessor :snapshot_store
 
       # @return [Hash] A hash containing the assigns that will be used in the
@@ -210,6 +210,9 @@ module Nanoc
     #   belong.
     #
     # @param [Symbol] name The unique name for the new item representation.
+    #
+    # @option params [Nanoc::SnapshotStore] :snapshot_store The snapshot
+    #   store to use for the item rep (required)
     def initialize(item, name, params={})
       # Set primary attributes
       @item   = item
@@ -266,10 +269,18 @@ module Nanoc
       end
     end
 
+    # @param [Symbol] snapshot_name The name of the snapshot to fetch the content for
+    #
+    # @return [String] The content at the given snapshot
     def stored_content_at_snapshot(snapshot_name)
       self.snapshot_store.query(self.item.identifier, self.name, snapshot_name)
     end
 
+    # @param [Symbol] snapshot_name The name of the snapshot to set the content for
+    #
+    # @param [String] compiled_content The content to store for the given snapshot name
+    #
+    # @return [void]
     def set_stored_content_at_snapshot(snapshot_name, compiled_content)
       self.snapshot_store.set(self.item.identifier, self.name, snapshot_name, compiled_content)
     end
@@ -496,7 +507,6 @@ module Nanoc
       if self.binary?
         @temporary_filenames = { :last => @item.raw_filename }
       else
-        # FIXME snapshot_store will not be set
         self.snapshot_store.set(@item.identifier, self.name, :last, @item.raw_content)
         # FIXME this needs to happen elsewhere
         @item.raw_content.freeze
