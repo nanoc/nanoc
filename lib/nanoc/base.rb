@@ -25,6 +25,7 @@ module Nanoc
 
   # Load result data classes
   autoload 'ItemRep',              'nanoc/base/result_data/item_rep'
+  autoload 'SnapshotStore',        'nanoc/base/result_data/snapshot_store'
 
   # Load compilation classes
   autoload 'ChecksumStore',        'nanoc/base/compilation/checksum_store'

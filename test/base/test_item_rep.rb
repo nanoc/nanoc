@@ -4,6 +4,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
   include Nanoc::TestHelpers
 
+  def new_snapshot_store
+    Nanoc::SnapshotStore::SQLite3.new
+  end
+
   def test_created_modified_compiled
     # TODO implement
   end
@@ -14,8 +18,9 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       'blah blah blah', {}, '/',
       :binary => false, :mtime => Time.now-500
     )
-    rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :last => 'last content' } }
+    snapshot_store = self.new_snapshot_store
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :last, 'last content')
     rep.expects(:compiled?).returns(true)
 
     # Check
@@ -28,8 +33,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       'blah blah blah', {}, '/',
       :binary => false, :mtime => Time.now-500
     )
-    rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    snapshot_store = self.new_snapshot_store
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :pre,  'pre content')
+    snapshot_store.set('/', :foo, :last, 'last content')
     rep.expects(:compiled?).returns(true)
 
     # Check
@@ -42,8 +49,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       'blah blah blah', {}, '/',
       :binary => false, :mtime => Time.now-500
     )
-    rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    snapshot_store = self.new_snapshot_store
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :pre,  'pre content')
+    snapshot_store.set('/', :foo, :last, 'last content')
     rep.expects(:compiled?).returns(true)
 
     # Check
@@ -56,8 +65,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       'blah blah blah', {}, '/',
       :binary => false, :mtime => Time.now-500
     )
-    rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    snapshot_store = self.new_snapshot_store
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :pre,  'pre content')
+    snapshot_store.set('/', :foo, :last, 'last content')
 
     # Check
     assert_raises Nanoc::Errors::NoSuchSnapshot do
@@ -71,7 +82,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       "blah blah", {}, '/',
       :binary => false
     )
-    rep = Nanoc::ItemRep.new(item, nil)
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     rep.expects(:compiled?).returns(false)
 
     # Check
@@ -94,21 +105,20 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
-    item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
-      @content[:last] = @content[:raw]
-    end
+    snapshot_store = self.new_snapshot_store
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :raw,  item.raw_content)
+    snapshot_store.set('/', :foo, :last, item.raw_content)
 
     # Filter once
     item_rep.assigns = {}
     item_rep.filter(:erb)
-    assert_equal(%[<%= "blah" %>], item_rep.instance_eval { @content[:last] })
+    assert_equal(%[<%= "blah" %>], snapshot_store.query('/', :foo, :last))
 
     # Filter twice
     item_rep.assigns = {}
     item_rep.filter(:erb)
-    assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
+    assert_equal(%[blah], snapshot_store.query('/', :foo, :last))
   end
 
   def test_layout
@@ -122,16 +132,15 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
-    item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
-      @content[:last] = @content[:raw]
-    end
+    snapshot_store = self.new_snapshot_store
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :raw,  item.raw_content)
+    snapshot_store.set('/', :foo, :last, item.raw_content)
 
     # Layout
     item_rep.assigns = {}
     item_rep.layout(layout, :erb, {})
-    assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
+    assert_equal(%[blah], snapshot_store.query('/', :foo, :last))
   end
 
   def test_snapshot
@@ -148,11 +157,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create item rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
-    item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
-      @content[:last] = @content[:raw]
-    end
+    snapshot_store = self.new_snapshot_store
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :raw,  item.raw_content)
+    snapshot_store.set('/', :foo, :last, item.raw_content)
 
     # Filter while taking snapshots
     item_rep.assigns = {}
@@ -163,9 +171,9 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     item_rep.snapshot(:qux)
 
     # Check snapshots
-    assert_equal(%[<%= '<%= "blah" %' + '>' %>], item_rep.instance_eval { @content[:foo] })
-    assert_equal(%[<%= "blah" %>],               item_rep.instance_eval { @content[:bar] })
-    assert_equal(%[blah],                        item_rep.instance_eval { @content[:qux] })
+    assert_equal(%[<%= '<%= "blah" %' + '>' %>], snapshot_store.query(item.identifier, :foo, :foo))
+    assert_equal(%[<%= "blah" %>],               snapshot_store.query(item.identifier, :foo, :bar))
+    assert_equal(%[blah],                        snapshot_store.query(item.identifier, :foo, :qux))
   end
 
   def test_snapshot_should_be_written
@@ -176,8 +184,9 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
-    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    snapshot_store = self.new_snapshot_store
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
     item_rep.raw_paths = { :moo => 'foo-moo.txt' }
 
     # Test non-final
@@ -205,9 +214,10 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
+    snapshot_store = self.new_snapshot_store
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     def item_rep.generate_diff ; end
-    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
     item_rep.raw_path = 'foo/bar/baz/quux.txt'
 
     # Write once
@@ -229,8 +239,9 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
-    item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
+    snapshot_store = self.new_snapshot_store
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
+    snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
     item_rep.raw_path = 'foo/bar/baz/quux.txt'
 
     # Write
@@ -249,7 +260,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, :foo)
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     def rep.assigns ; {} ; end
 
     # Create fake filter
@@ -277,7 +288,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    rep = Nanoc::ItemRep.new(item, :foo)
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     def rep.assigns ; {} ; end
 
     # Create fake filter
@@ -335,7 +346,8 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
     # Create item and item rep
     item = create_binary_item
-    rep = create_rep_for(item, :foo)
+    snapshot_store = self.new_snapshot_store
+    rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     rep.assigns = { :content => 'meh' }
 
     # Create filter
@@ -350,7 +362,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     # Run and check
     rep.filter(:binary_to_text)
     rep.layout(layout, :erb, {})
-    assert_equal('blah meh', rep.instance_eval { @content[:last] })
+    assert_equal('blah meh', snapshot_store.query(item.identifier, :foo, :last))
   end
 
   def test_converted_binary_rep_can_be_filtered_with_textual_filters
@@ -424,7 +436,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     item = Nanoc::Item.new("foo bar", {}, '/foo/')
-    rep = Nanoc::ItemRep.new(item, :default)
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => self.new_snapshot_store)
     rep.instance_eval { @filter_class = filter_class }
     def rep.filter_named(name) ; @filter_class ; end
 
@@ -442,7 +454,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     end
 
     item = Nanoc::Item.new("foo bar", {}, '/foo/')
-    rep = Nanoc::ItemRep.new(item, :default)
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => self.new_snapshot_store)
     rep.instance_eval { @filter_class = filter_class }
     def rep.filter_named(name) ; @filter_class ; end
 
@@ -458,8 +470,8 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       Nanoc3::Item.new("bar", {}, '/bar/')
     ]
     item_reps = [
-      Nanoc3::ItemRep.new(items[0], :default),
-      Nanoc3::ItemRep.new(items[1], :default)
+      Nanoc3::ItemRep.new(items[0], :default, :snapshot_store => self.new_snapshot_store),
+      Nanoc3::ItemRep.new(items[1], :default, :snapshot_store => self.new_snapshot_store)
     ]
 
     dt = Nanoc3::DependencyTracker.new(items)
@@ -478,8 +490,8 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
       Nanoc3::Item.new("bar", {}, '/bar/')
     ]
     item_reps = [
-      Nanoc3::ItemRep.new(items[0], :default),
-      Nanoc3::ItemRep.new(items[1], :default)
+      Nanoc3::ItemRep.new(items[0], :default, :snapshot_store => self.new_snapshot_store),
+      Nanoc3::ItemRep.new(items[1], :default, :snapshot_store => self.new_snapshot_store)
     ]
 
     dt = Nanoc3::DependencyTracker.new(items)
@@ -494,7 +506,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
 
   def test_access_compiled_content_of_binary_item
     item = Nanoc::Item.new("content/somefile.dat", {}, '/somefile/', :binary => true)
-    item_rep = Nanoc::ItemRep.new(item, :foo)
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     assert_raises(Nanoc::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
     end
@@ -510,7 +522,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     FileUtils.mkdir_p('tmp')
     File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
     item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
@@ -538,7 +550,7 @@ class Nanoc::ItemRepTest < MiniTest::Unit::TestCase
     )
 
     # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo)
+    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     FileUtils.mkdir_p('tmp')
     File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
     FileUtils.mkdir_p('output')
@@ -576,7 +588,7 @@ private
   end
 
   def create_rep_for(item, name)
-    Nanoc::ItemRep.new(item, name)
+    Nanoc::ItemRep.new(item, name, :snapshot_store => self.new_snapshot_store)
   end
 
   def create_textual_filter
