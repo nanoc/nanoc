@@ -5,6 +5,8 @@ module Nanoc
   # Stores compiled item rep snapshots.
   class SnapshotStore
 
+    extend Nanoc::PluginRegistry::PluginMethods
+
     # Fetches the content for the given snapshot.
     #
     # @param [String] item_identifier The identifier of the item
@@ -42,6 +44,8 @@ module Nanoc
     # A snapshot store that keeps content in memory as Ruby objects.
     class InMemory < Nanoc::SnapshotStore
 
+      identifier :in_memory
+
       def initialize
         @store = {}
       end
@@ -65,6 +69,8 @@ module Nanoc
 
     # A snapshot store that keeps content in an in-memory SQLite3 database.
     class SQLite3 < Nanoc::SnapshotStore
+
+      identifier :sqlite3
 
       def initialize
         require 'sqlite3'

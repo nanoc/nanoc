@@ -291,10 +291,17 @@ module Nanoc
     end
     memoize :outdatedness_checker
 
-    # TODO document
-    # TODO make the class configurable
+    # Returns the snapshot store, creating it if it does not exist yet. The
+    # `:store_type` site configuration variable will determine the snapshot
+    # store type.
+    #
+    # @return [Nanoc::SnapshotStore] The snapshot store
     def snapshot_store
-      @snapshot_store ||= Nanoc::SnapshotStore::InMemory.new
+      @snapshot_store ||= begin
+        name = @site.config.fetch(:store_type, :in_memory)
+        klass = Nanoc::SnapshotStore.named(name)
+        klass.new
+      end
     end
 
   private
