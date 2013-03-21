@@ -61,6 +61,9 @@ module Nanoc
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
     module Private
 
+      # @return [Nanoc::SnapshotStore] The snapshot store to store content in
+      attr_accessor :snapshot_store
+
       # @return [Hash] A hash containing the assigns that will be used in the
       #   next filter or layout operation. The keys (symbols) will be made
       #   available during the next operation.
@@ -136,7 +139,7 @@ module Nanoc
           temp_path = temporary_filenames[:last]
         else
           temp_path = self.temp_filename
-          File.open(temp_path, 'w') { |io| io.write(@content[:last]) }
+          File.open(temp_path, 'w') { |io| io.write(self.stored_content_at_snapshot(:last)) }
         end
 
         # Check whether content was modified
@@ -207,10 +210,14 @@ module Nanoc
     #   belong.
     #
     # @param [Symbol] name The unique name for the new item representation.
-    def initialize(item, name)
+    #
+    # @option params [Nanoc::SnapshotStore] :snapshot_store The snapshot
+    #   store to use for the item rep (required)
+    def initialize(item, name, params={})
       # Set primary attributes
       @item   = item
       @name   = name
+      @snapshot_store = params.fetch(:snapshot_store)
 
       # Set binary
       @binary = @item.binary?
@@ -246,7 +253,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)
 
       # Get name of last pre-layout snapshot
-      snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
+      snapshot = params.fetch(:snapshot) { self.has_snapshot?(:pre) ? :pre : :last }
       is_moving = [ :pre, :post, :last ].include?(snapshot)
 
       # Check existance of snapshot
@@ -255,11 +262,27 @@ module Nanoc
       end
 
       # Require compilation
-      if @content[snapshot].nil? || (!self.compiled? && is_moving)
+      if !self.has_snapshot?(snapshot) || (!self.compiled? && is_moving)
         raise Nanoc::Errors::UnmetDependency.new(self)
       else
-        @content[snapshot]
+        self.stored_content_at_snapshot(snapshot)
       end
+    end
+
+    # @param [Symbol] snapshot_name The name of the snapshot to fetch the content for
+    #
+    # @return [String] The content at the given snapshot
+    def stored_content_at_snapshot(snapshot_name)
+      self.snapshot_store.query(self.item.identifier, self.name, snapshot_name)
+    end
+
+    # @param [Symbol] snapshot_name The name of the snapshot to set the content for
+    #
+    # @param [String] compiled_content The content to store for the given snapshot name
+    #
+    # @return [void]
+    def set_stored_content_at_snapshot(snapshot_name, compiled_content)
+      self.snapshot_store.set(self.item.identifier, self.name, snapshot_name, compiled_content)
     end
 
     # Checks whether content exists at a given snapshot.
@@ -269,7 +292,7 @@ module Nanoc
     #
     # @since 3.2.0
     def has_snapshot?(snapshot_name)
-      !@content[snapshot_name].nil?
+      self.snapshot_store.exist?(self.item.identifier, self.name, snapshot_name)
     end
 
     # Returns the item rep’s raw path. It includes the path to the output
@@ -340,13 +363,18 @@ module Nanoc
         filter = klass.new(assigns)
 
         # Run filter
-        source = self.binary? ? temporary_filenames[:last] : @content[:last]
+        source =
+          if self.binary?
+            temporary_filenames[:last]
+          else
+            self.stored_content_at_snapshot(:last)
+          end
         result = filter.setup_and_run(source, filter_args)
         if klass.to_binary?
           temporary_filenames[:last] = filter.output_filename
         else
-          @content[:last] = result
-          @content[:last].freeze
+          self.set_stored_content_at_snapshot(:last, result)
+          result.freeze
         end
         @binary = klass.to_binary?
 
@@ -357,7 +385,7 @@ module Nanoc
         end
 
         # Create snapshot
-        snapshot(@content[:post] ? :post : :pre, :final => false) unless self.binary?
+        snapshot(self.has_snapshot?(:post) ? :post : :pre, :final => false) unless self.binary?
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended, self, filter_name)
@@ -387,7 +415,7 @@ module Nanoc
       raise Nanoc::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
 
       # Create "pre" snapshot
-      if @content[:post].nil?
+      if !self.has_snapshot?(:post)
         snapshot(:pre, :final => true)
       end
 
@@ -406,7 +434,8 @@ module Nanoc
         Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
 
         # Layout
-        @content[:last] = filter.setup_and_run(layout.raw_content, filter_args)
+        content = filter.setup_and_run(layout.raw_content, filter_args)
+        self.set_stored_content_at_snapshot(:last, content)
 
         # Create "post" snapshot
         snapshot(:post, :final => false)
@@ -428,7 +457,9 @@ module Nanoc
     # @return [void]
     def snapshot(snapshot_name, params={})
       is_final = params.fetch(:final) { true }
-      @content[snapshot_name] = @content[:last] unless self.binary?
+      if !self.binary
+        self.set_stored_content_at_snapshot(snapshot_name, self.stored_content_at_snapshot(:last))
+      end
       self.write(snapshot_name) if is_final
     end
 
@@ -475,10 +506,10 @@ module Nanoc
       # Initialize content and filenames
       if self.binary?
         @temporary_filenames = { :last => @item.raw_filename }
-        @content             = {}
       else
-        @content             = { :last => @item.raw_content }
-        @content[:last].freeze
+        self.snapshot_store.set(@item.identifier, self.name, :last, @item.raw_content)
+        # FIXME this needs to happen elsewhere
+        @item.raw_content.freeze
         @temporary_filenames = {}
       end
     end

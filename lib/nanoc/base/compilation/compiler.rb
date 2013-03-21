@@ -219,7 +219,7 @@ module Nanoc
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
         rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name)
+          item.reps << ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
         end
       end
     end
@@ -268,7 +268,7 @@ module Nanoc
       if rep.binary?
         content_or_filename_assigns = { :filename => rep.temporary_filenames[:last] }
       else
-        content_or_filename_assigns = { :content => rep.content[:last] }
+        content_or_filename_assigns = { :content => rep.stored_content_at_snapshot(:last) }
       end
 
       content_or_filename_assigns.merge({
@@ -290,6 +290,19 @@ module Nanoc
         :dependency_tracker => dependency_tracker)
     end
     memoize :outdatedness_checker
+
+    # Returns the snapshot store, creating it if it does not exist yet. The
+    # `:store_type` site configuration variable will determine the snapshot
+    # store type.
+    #
+    # @return [Nanoc::SnapshotStore] The snapshot store
+    def snapshot_store
+      @snapshot_store ||= begin
+        name = @site.config.fetch(:store_type, :in_memory)
+        klass = Nanoc::SnapshotStore.named(name)
+        klass.new
+      end
+    end
 
   private
 

@@ -14,13 +14,17 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     # TODO implement
   end
 
+  def new_snapshot_store
+    Nanoc::SnapshotStore::InMemory.new
+  end
+
   def test_include_rules
     # Create site
     Nanoc::CLI.run %w( create_site with_bonus_rules )
     FileUtils.cd('with_bonus_rules') do
       # Create rep
       item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
-      rep  = Nanoc::ItemRep.new(item, :default)
+      rep  = Nanoc::ItemRep.new(item, :default, :snapshot_store => self.new_snapshot_store)
 
       # Create a bonus rules file
       File.open('more_rules.rb', 'w') { |io| io.write "passthrough '/foo/'" }

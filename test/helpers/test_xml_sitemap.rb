@@ -4,12 +4,16 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   include Nanoc::Helpers::XMLSitemap
 
+  def setup
+    super
+    @snapshot_store = Nanoc::SnapshotStore::InMemory.new
+  end
+
   def teardown
     super
     @items = nil
     @item  = nil
     @site  = nil
-    super
   end
 
   def test_xml_sitemap
@@ -175,7 +179,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 protected
 
   def create_item_rep(item, name, path)
-    rep = Nanoc::ItemRep.new(item, name)
+    rep = Nanoc::ItemRep.new(item, name, :snapshot_store => @snapshot_store)
     rep.paths     = { :last => path }
     rep.raw_paths = { :last => path }
     item.reps << rep

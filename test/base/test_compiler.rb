@@ -2,6 +2,10 @@
 
 class Nanoc::CompilerTest < Nanoc::TestCase
 
+  def new_snapshot_store
+    Nanoc::SnapshotStore::InMemory.new
+  end
+
   def test_compilation_rule_for
     # Mock rules
     rules = [ mock, mock, mock ]
@@ -133,7 +137,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   def test_compile_rep_should_write_proper_snapshots
     # Mock rep
     item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
-    rep  = Nanoc::ItemRep.new(item, :blah)
+    rep  = Nanoc::ItemRep.new(item, :blah, :snapshot_store => self.new_snapshot_store)
 
     # Set snapshot filenames
     rep.raw_paths = {
