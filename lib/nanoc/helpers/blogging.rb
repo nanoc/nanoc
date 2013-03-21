@@ -30,7 +30,6 @@ module Nanoc::Helpers
     def articles
       if @items.frozen?
         @article_items ||= @items.select { |item| item[:kind] == 'article' }
-        @article_items
       else 
         @items.select { |item| item[:kind] == 'article' }
       end
@@ -46,8 +45,6 @@ module Nanoc::Helpers
         @sorted_article_items ||= articles.sort_by do |a|
           attribute_to_time(a[:created_at])
         end.reverse
-
-        @sorted_article_items
       else 
         articles.sort_by do |a| 
           attribute_to_time(a[:created_at])
