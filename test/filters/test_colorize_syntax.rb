@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
 
   CODERAY_PRE  = '<div class="CodeRay"><div class="code">'
   CODERAY_POST = '</div></div>'
@@ -54,22 +52,11 @@ class Nanoc::Filters::ColorizeSyntaxTest < MiniTest::Unit::TestCase
   </body>
 </html>
 EOS
-      expected_output = <<EOS
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
-<title>Foo</title>
-</head>
-<body>
-    <pre title="moo"><code class="language-ruby"># comment</code></pre>
-  </body>
-</html>
-EOS
+      expected_output_regex = %r[^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>]
 
       # Run filter
       actual_output = filter.setup_and_run(input, :default_colorizer => :dummy, :is_fullpage => true)
-      assert_equal(expected_output, actual_output)
+      assert_match expected_output_regex, actual_output
     end
   end
 

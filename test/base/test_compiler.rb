@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CompilerTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compilation_rule_for
     # Mock rules
@@ -516,6 +514,29 @@ class Nanoc::CompilerTest < MiniTest::Unit::TestCase
 
       # Check
       assert_equal '@rep.name = default - @item_rep.name = default', File.read('output/index.html')
+    end
+  end
+
+  def test_unfiltered_binary_item_should_not_be_moved_outside_content
+    with_site do
+      File.open('content/blah.dat', 'w') { |io| io.write('o hello') }
+
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  item.identifier.chop + '.' + item[:extension]\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      assert_equal Set.new(%w( content/blah.dat )), Set.new(Dir['content/*'])
+      assert_equal Set.new(%w( output/blah.dat )), Set.new(Dir['output/*'])
     end
   end
 

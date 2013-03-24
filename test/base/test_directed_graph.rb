@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::DirectedGraphTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::DirectedGraphTest < Nanoc::TestCase
 
   def test_direct_predecessors
     graph = Nanoc::DirectedGraph.new([ 1, 2, 3 ])

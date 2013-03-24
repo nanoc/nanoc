@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::HTMLEscapeTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::HTMLEscapeTest < Nanoc::TestCase
 
   include Nanoc::Helpers::HTMLEscape
 

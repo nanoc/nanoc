@@ -6,12 +6,16 @@ Fixes:
 
 * Removed the list of available deployers from the `deploy` help text and moved
   them into a new `--list-deployers` option [Damien Pollet]
+* Fixed warning about `__send__ `and `object_id` being redefined on Ruby
+  1.8.x [Justin Hileman]
 
 Enhancements:
 
 * Added possible alternative names for the `Checks` file for consistency with
   the `Rules` file: `Checks.rb`, `checks`, `checks.rb` [Damien Pollet]
 * Made sure unchanged files never have their mtime updated [Justin Hileman]
+* Made link checker retry 405 Method Not Allowed results with GET instead of
+  HEAD [Daniel Hofstetter]
 
 ## 3.6.1 (2013-02-25)
 

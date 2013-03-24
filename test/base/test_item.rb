@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::ItemTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::ItemTest < Nanoc::TestCase
 
   def test_initialize_with_attributes_with_string_keys
     item = Nanoc::Item.new("foo", { 'abc' => 'xyz' }, '/foo/')

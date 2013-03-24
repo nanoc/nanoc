@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::DependencyTrackerTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::DependencyTrackerTest < Nanoc::TestCase
 
   def test_initialize
     # Mock items

@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::ERBTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_instance_variable
     # Create filter

@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::PandocTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::PandocTest < Nanoc::TestCase
 
   def test_filter
     if_have 'pandoc-ruby' do

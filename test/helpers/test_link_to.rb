@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::LinkToTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   include Nanoc::Helpers::LinkTo
 

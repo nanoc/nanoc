@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Helpers::RenderingTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Rendering
 

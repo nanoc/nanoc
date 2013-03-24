@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Filters::RelativizePathsTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
 
   def test_filter_html_with_double_quotes
@@ -746,14 +744,9 @@ XML
 <![endif]-->
 ]
 
-      expected_content = %[
-<!--[if lt IE 9]>
-    <script src="../../js/lib/html5shiv.js"></script>
-<![endif]-->]
-
       # Test
       actual_content = filter.setup_and_run(raw_content.freeze, :type => :html)
-      assert_equal(expected_content, actual_content)
+      assert actual_content.include? %[<script src="../../js/lib/html5shiv.js">]
     end
   end
 

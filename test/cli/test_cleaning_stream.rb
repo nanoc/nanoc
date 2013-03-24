@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CLI::CleaningStreamTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
 
   class Stream
 

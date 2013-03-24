@@ -3,7 +3,7 @@
 usage       'check [options] [names]'
 summary     'run issue checks'
 description <<-EOS
-Run issue checks on the current site. If the `--all` option is passed, all available issue checks will be run. If the `--deploy` option is passed, the issue checks marked for deployment will be fun.
+Run issue checks on the current site. If the `--all` option is passed, all available issue checks will be run. If the `--deploy` option is passed, the issue checks marked for deployment will be run.
 EOS
 
 flag :a, :all,    'run all checks'

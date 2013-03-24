@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::Extra::Checking::Checks::InternalLinksTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
 
   def test_run
     with_site do |site|
@@ -52,6 +50,19 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < MiniTest::Unit::TestCa
 
       assert check.send(:valid?, 'stuff/right?foo=123', 'output/origin')
       refute check.send(:valid?, 'stuff/wrong?foo=123', 'output/origin')
+    end
+  end
+
+  def test_exclude
+    with_site do |site|
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      site.config.update({ :checks => { :internal_links => { :exclude => ['^/excluded\d+'] } } })
+
+      # Test
+      assert check.send(:valid?, '/excluded1', 'output/origin')
+      assert check.send(:valid?, '/excluded2', 'output/origin')
+      assert !check.send(:valid?, '/excluded_not', 'output/origin')
     end
   end
 

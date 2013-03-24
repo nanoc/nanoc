@@ -207,6 +207,12 @@ EOS
 
 end
 
+class Nanoc::TestCase < MiniTest::Unit::TestCase
+
+  include Nanoc::TestHelpers
+
+end
+
 # Unexpected system exit is unexpected
 ::MiniTest::Unit::TestCase::PASSTHROUGH_EXCEPTIONS.delete(SystemExit)
 

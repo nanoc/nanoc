@@ -13,6 +13,7 @@ module Nanoc::CLI::Commands
   class ValidateCSS < ::Nanoc::CLI::CommandRunner
 
     def run
+      warn "The `validate-css` command is deprecated. Please use the new `check` command instead."
       Nanoc::CLI.run %w( check css )
     end
 

@@ -1,6 +1,4 @@
-class Nanoc::CLI::Commands::SyncTest < MiniTest::Unit::TestCase
-
-  include Nanoc::TestHelpers
+class Nanoc::CLI::Commands::SyncTest < Nanoc::TestCase
 
   def test_run
     with_site do

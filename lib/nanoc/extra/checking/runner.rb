@@ -12,12 +12,16 @@ module Nanoc::Extra::Checking
     # @param [Nanoc::Site] site The nanoc site this runner is for
     def initialize(site)
       @site = site
-      @checks_filename = CHECKS_FILENAMES.find { |f| File.file?(f) }
+    end
+
+    # @param [String] The name of the Checks file
+    def checks_filename
+      @_checks_filename ||= CHECKS_FILENAMES.find { |f| File.file?(f) }
     end
 
     # @return [Boolean] true if a Checks file exists, false otherwise
     def has_dsl?
-      @checks_filename && File.file?(@checks_filename)
+      self.checks_filename && File.file?(self.checks_filename)
     end
 
     # Lists all available checks on stdout.
@@ -67,7 +71,7 @@ module Nanoc::Extra::Checking
       @dsl_loaded ||= false
       if !@dsl_loaded
         if self.has_dsl?
-          @dsl = Nanoc::Extra::Checking::DSL.from_file(@checks_filename)
+          @dsl = Nanoc::Extra::Checking::DSL.from_file(self.checks_filename)
         else
           @dsl = nil
         end
