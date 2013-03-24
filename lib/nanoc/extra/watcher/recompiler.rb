@@ -4,8 +4,14 @@ class Nanoc::Extra::Watcher
 
   class Recompiler
 
-    def initialize(watcher_config)
+    NOTIFICATION_MESSAGE_SUCCESS = 'Compilation complete'
+    NOTIFICATION_MESSAGE_FAILURE = 'Compilation failed'
+
+    attr_accessor :user_notifier
+
+    def initialize(watcher_config, params={})
       @watcher_config = watcher_config
+      @user_notifier  = params.fetch(:user_notifier) { Nanoc::Extra::UserNotifier.new }
     end
 
     def recompile
@@ -29,16 +35,15 @@ class Nanoc::Extra::Watcher
     end
 
     def notify_success
-      self.notify('Compilation complete')
+      self.notify(NOTIFICATION_MESSAGE_SUCCESS)
     end
 
     def notify_failure
-      self.notify('Compilation failed')
+      self.notify(NOTIFICATION_MESSAGE_FAILURE)
     end
 
     def notify(message)
-      @_notifier ||= Nanoc::Extra::UserNotifier.new
-      @_notifier.notify(message)
+      self.user_notifier.notify(message)
     end
 
   end
