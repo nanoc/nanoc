@@ -9,11 +9,13 @@ class Nanoc::Extra::Watcher
 
     attr_accessor :user_notifier
 
-    def initialize(watcher_config, params={})
-      @watcher_config = watcher_config
+    # TODO document
+    def initialize(params={})
+      @watcher_config = params.fetch(:watcher_config)
       @user_notifier  = params.fetch(:user_notifier) { Nanoc::Extra::UserNotifier.new }
     end
 
+    # TODO document
     def recompile
       begin
         site = Nanoc::Site.new('.')
@@ -26,22 +28,27 @@ class Nanoc::Extra::Watcher
       end
     end
 
+    # TODO document
     def should_notify_success?
       @_should_notify_success ||= @watcher_config.fetch(:notify_on_compilation_success, true)
     end
 
+    # TODO document
     def should_notify_failure?
       @_should_notify_failure ||= @watcher_config.fetch(:notify_on_compilation_failure, true)
     end
 
+    # TODO document
     def notify_success
       self.notify(NOTIFICATION_MESSAGE_SUCCESS)
     end
 
+    # TODO document
     def notify_failure
       self.notify(NOTIFICATION_MESSAGE_FAILURE)
     end
 
+    # TODO document
     def notify(message)
       self.user_notifier.notify(message)
     end

@@ -12,7 +12,16 @@ module Nanoc::CLI::Commands
 
     def run
       require_site
-      Nanoc::Extra::Watcher.run
+
+      watcher_config = self.site.config.fetch(:watcher, {})
+      watcher = Nanoc::Extra::Watcher.new(:config => watcher_config)
+
+      begin
+        watcher.start
+        sleep
+      rescue Interrupt
+        watcher.stop
+      end
     end
 
   end

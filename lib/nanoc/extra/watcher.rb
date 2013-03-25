@@ -5,36 +5,42 @@ module Nanoc::Extra
   # Watches the working directory for changes and recompiles if necessary.
   class Watcher
 
-    # Runs the watcher.
-    #
-    # @return [void]
-    def run
-      require 'pathname'
+    attr_reader :config
 
-      require_site
+    # TODO document
+    def initialize(params={})
+      @config          = params.fetch(:config)
+      @change_detector = params.fetch(:change_detector) { self.new_change_detector }
+      @recompiler      = params.fetch(:recompiler)      { self.new_recompiler }
+    end
 
-      # Build recompiler
-      recompiler = Recompiler.new
+    # TODO document
+    def start
+      @recompiler.recompile
+      @change_detector.start
+    end
 
-      # Rebuild once
-      print "Watcher started; compiling the entire site… "
-      recompiler.run
+    # TODO document
+    def stop
+      @change_detector.stop
+    end
 
-      # Build change detector
-      change_detector = ChangeDetector.new(self.site.config[:watcher] || {})
-      change_detector.on_change do
-        # FIXME what is file_path?
-        filename = ::Pathname.new(file_path).relative_path_from(::Pathname.new(Dir.getwd)).to_s
-        print "Change detected to #{filename}; recompiling… "
-        recompiler.run
-      end
+    # TODO document
+    def recompile
+      puts 'Change detected; recompiling.'
+      @recompiler.recompile
+    end
 
-      # Run
-      begin
-        change_detector.run
-      rescue Interrupt
-        change_detector.stop
-      end
+    # TODO document
+    def new_change_detector
+      change_detector = ChangeDetector.new(self.config)
+      change_detector.on_change { self.recompile }
+      change_detector
+    end
+
+    # TODO document
+    def new_recompiler
+      Recompiler.new(:watcher_config => self.config)
     end
 
   end
