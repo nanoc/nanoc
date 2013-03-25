@@ -6,9 +6,6 @@ class Nanoc::Extra::UserNotifierTest < MiniTest::Unit::TestCase
 
   def test_notify
     # TODO implement
-
-    notifier = Nanoc::Extra::UserNotifier.new
-    notifier.notify("nanoc test notification")
   end
 
   def test_find_tool
