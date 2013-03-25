@@ -2,8 +2,6 @@
 
 class Nanoc::Extra::Watcher::ChangeDetectorTest < Nanoc::TestCase
 
-  # TODO use polling (cross-platform) every 0.1s to speed up test
-
   def setup
     super
     @num = 0
@@ -16,7 +14,7 @@ class Nanoc::Extra::Watcher::ChangeDetectorTest < Nanoc::TestCase
   end
 
   def wait_for_change
-    10.times do
+    20.times do
       break if @changed
       sleep 0.1
     end
@@ -38,11 +36,9 @@ class Nanoc::Extra::Watcher::ChangeDetectorTest < Nanoc::TestCase
   def run_detector_while
     detector = Nanoc::Extra::Watcher::ChangeDetector.new
     detector.on_change { @changed = true }
-
+    detector.start
+    sleep 0.5 # needed to let the listener catch up
     begin
-      Thread.new { detector.run }
-      sleep 0.1 # needed to let the listener catch up
-
       yield
     ensure
       detector.stop

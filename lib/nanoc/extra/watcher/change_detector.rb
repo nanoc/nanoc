@@ -25,7 +25,7 @@ class Nanoc::Extra::Watcher
       Regexp.new(regex_string)
     end
 
-    def run
+    def start
       require 'listen'
 
       callback = Proc.new do |modified, added, removed|
@@ -36,12 +36,12 @@ class Nanoc::Extra::Watcher
       @listener = Listen::MultiListener.new(*self.dirs_to_watch).change(&callback)
 
       @listener_root.start(false)
-      @listener.start
+      @listener.start(false)
     end
 
     def stop
-      @listener.stop
       @listener_root.stop
+      @listener.stop
     end
 
   end
