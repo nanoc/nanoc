@@ -5,7 +5,7 @@ module Nanoc::Filters
 
     identifier :erubis
 
-    requires 'erubis', 'nanoc/filters/erubis/erubis/erubis_with_erbout'
+    requires 'erubis', 'nanoc/filters/erubis/erubis_with_erbout'
 
     # Runs the content through [Erubis](http://www.kuwata-lab.com/erubis/).
     # This method takes no options.
