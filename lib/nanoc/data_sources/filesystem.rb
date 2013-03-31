@@ -5,16 +5,6 @@ module Nanoc::DataSources
   # Provides functionality common across all filesystem data sources.
   module Filesystem
 
-    # The VCS that will be called when adding, deleting and moving files. If
-    # no VCS has been set, or if the VCS has been set to `nil`, a dummy VCS
-    # will be returned.
-    #
-    # @return [Nanoc::Extra::VCS, nil] The VCS that will be used.
-    def vcs
-      @vcs ||= Nanoc::Extra::VCSes::Dummy.new
-    end
-    attr_writer :vcs
-
     # See {Nanoc::DataSource#up}.
     def up
     end
@@ -28,7 +18,6 @@ module Nanoc::DataSources
       # Create directories
       %w( content layouts ).each do |dir|
         FileUtils.mkdir_p(dir)
-        vcs.add(dir)
       end
     end
 

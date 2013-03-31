@@ -15,11 +15,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     FileUtils.rm_rf('layouts/default')
     FileUtils.rm_rf('lib')
 
-    # Mock VCS
-    vcs = mock
-    vcs.expects(:add).times(2) # One time for each directory
-    data_source.vcs = vcs
-
     # Recreate files
     data_source.setup
 

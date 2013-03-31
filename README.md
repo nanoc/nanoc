@@ -36,13 +36,11 @@ directories:
 * `data_sources` contains the standard data sources ({Nanoc::DataSource}
   subclasses), such as the filesystem data source
 * `extra` contains stuff that is not needed by nanoc itself, but which may
-  be used by helpers, data sources, filters or VCSes.
+  be used by helpers, data sources or filters.
 * `filters` contains the standard filters ({Nanoc::Filter} subclasses)
   such as ERB, Markdown, Haml, …
 * `helpers` contains helpers, which provide functionality some sites
   may find useful, such as the blogging and tagging helpers
-* `tasks` contains rake tasks that perform a variety of functions such as
-  validating HTML and CSS, uploading compiled files, …
 
 The namespaces (modules) are organised like this:
 
