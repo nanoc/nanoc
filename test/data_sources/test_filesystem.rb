@@ -71,7 +71,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Write sample files
     FileUtils.mkdir_p('foo')
@@ -98,7 +98,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Write sample files
     FileUtils.mkdir_p('foo')
@@ -125,7 +125,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_with_multiple_dirs
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Write sample files
     %w( aaa/foo.html bbb/foo.html ccc/foo.html ).each do |filename|
@@ -144,7 +144,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_with_multiple_content_files
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Write sample files
     %w( foo.html foo.xhtml foo.txt foo.yaml bar.html qux.yaml ).each do |filename|
@@ -159,7 +159,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_basename_of_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Get input and expected output
     expected = {
@@ -189,7 +189,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_basename_of_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Get input and expected output
     expected = {
@@ -219,7 +219,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_ext_of_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
 
     # Get input and expected output
     expected = {
@@ -249,7 +249,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_ext_of_disallowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Get input and expected output
     expected = {
@@ -285,7 +285,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     assert_raises(RuntimeError) do
@@ -302,7 +302,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
@@ -320,7 +320,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
@@ -338,7 +338,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
@@ -355,7 +355,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
@@ -372,7 +372,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       io.write "content goes here\n"
     end
 
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'utf8bomawareness' => 'high' }, result[0])
@@ -388,7 +388,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('test.html', 'w') { |io| io.write(content) }
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
@@ -406,7 +406,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('test.html', 'w') { |io| io.write(content) }
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
@@ -420,7 +420,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('test.yaml', 'w') { |io| io.write("foo: bar") }
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }

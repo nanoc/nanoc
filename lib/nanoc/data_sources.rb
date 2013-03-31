@@ -11,12 +11,4 @@ module Nanoc::DataSources
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemUnified',  :filesystem_unified
   Nanoc::DataSource.register '::Nanoc::DataSources::Static',             :static
 
-  # Deprecated; use `filesystem_verbose` or `filesystem_unified` instead
-  # TODO [in nanoc 4.0] remove me
-  Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemVerbose',  :filesystem
-  Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemUnified',  :filesystem_combined
-  Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemUnified',  :filesystem_compact
-  FilesystemCombined = FilesystemUnified
-  FilesystemCompact  = FilesystemUnified
-
 end

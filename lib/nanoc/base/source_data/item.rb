@@ -61,16 +61,11 @@ module Nanoc
     #   compatibility, this can be a Time instance indicating the time when
     #   this item was last modified (mtime).
     #
-    # @option params [Time, nil] :mtime (nil) The time when this item was last
-    #   modified. Deprecated; pass the modification time as the `:mtime`
-    #   attribute instead.
-    #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
     def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
       # Parse params
       params ||= {}
-      params = { :mtime => params } if params.is_a?(Time)
       params[:binary] = false unless params.has_key?(:binary)
 
       if raw_content_or_raw_filename.nil?
@@ -88,9 +83,6 @@ module Nanoc
       # Get rest of params
       @attributes   = attributes.symbolize_keys_recursively
       @identifier   = identifier.cleaned_identifier.freeze
-
-      # Set mtime
-      @attributes.merge!(:mtime => params[:mtime]) if params[:mtime]
 
       @parent       = nil
       @children     = []
