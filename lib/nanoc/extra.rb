@@ -6,7 +6,6 @@ module Nanoc::Extra
   autoload 'Checking',          'nanoc/extra/checking'
   autoload 'LinkCollector',     'nanoc/extra/link_collector.rb'
   autoload 'Pruner',            'nanoc/extra/pruner'
-  autoload 'Validators',        'nanoc/extra/validators'
 
 end
 
