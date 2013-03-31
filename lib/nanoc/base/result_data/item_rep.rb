@@ -8,56 +8,6 @@ module Nanoc
   # a different set of filters with a different layout.
   class ItemRep
 
-    # Contains all deprecated methods. Mixed into {Nanoc::ItemRep}.
-    module Deprecated
-
-      # @deprecated Modify the {#raw_paths} attribute instead
-      def raw_path=(raw_path)
-        raw_paths[:last] = raw_path
-      end
-
-      # @deprecated Modify the {#paths} attribute instead
-      def path=(path)
-        paths[:last] = path
-      end
-
-      # @deprecated Use {Nanoc::ItemRep#compiled_content} instead.
-      def content_at_snapshot(snapshot=:pre)
-        compiled_content(:snapshot => snapshot)
-      end
-
-      # @deprecated
-      def created
-        raise NotImplementedError, "Nanoc::ItemRep#created is no longer implemented"
-      end
-
-      # @deprecated
-      def created?
-        raise NotImplementedError, "Nanoc::ItemRep#created? is no longer implemented"
-      end
-
-      # @deprecated
-      def modified
-        raise NotImplementedError, "Nanoc::ItemRep#modified is no longer implemented"
-      end
-
-      # @deprecated
-      def modified?
-        raise NotImplementedError, "Nanoc::ItemRep#modified? is no longer implemented"
-      end
-
-      # @deprecated
-      def written
-        raise NotImplementedError, "Nanoc::ItemRep#written is no longer implemented"
-      end
-
-      # @deprecated
-      def written?
-        raise NotImplementedError, "Nanoc::ItemRep#written? is no longer implemented"
-      end
-
-    end
-
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
     module Private
 
@@ -186,7 +136,6 @@ module Nanoc
 
     end
 
-    include Deprecated
     include Private
 
     # @return [Nanoc::Item] The item to which this rep belongs

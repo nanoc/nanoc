@@ -628,7 +628,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
     item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].path = '/foo/bar/'
+    item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('http://example.com/foo/bar/', url_for(item))
@@ -686,7 +686,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
     item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].path = nil
+    item.reps[0].paths = { :last => nil }
 
     # Check
     assert_equal(nil, url_for(item))
@@ -699,7 +699,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     @item = Nanoc::Item.new('content', {}, '/foo/')
     @item.reps << Nanoc::ItemRep.new(@item, :default, :snapshot_store => @snapshot_store)
-    @item.reps[0].path = '/foo/bar/'
+    @item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
@@ -715,7 +715,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create feed item
     @item = Nanoc::Item.new('content', { :feed_url => 'http://example.com/feed/' }, '/foo/')
     @item.reps << Nanoc::ItemRep.new(@item, :default, :snapshot_store => @snapshot_store)
-    @item.reps[0].path = '/foo/bar/'
+    @item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('http://example.com/feed/', feed_url)
@@ -741,7 +741,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/foo/')
     item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].path = '/foo/bar/'
+    item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
@@ -766,7 +766,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/foo/')
     item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].path = '/foo/bar/'
+    item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/somedir/foo/bar/', atom_tag_for(item))
@@ -779,7 +779,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     item = Nanoc::Item.new('content', { :created_at => Time.parse('2008-05-19') }, '/foo/')
     item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].path = '/foo/bar/'
+    item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
@@ -792,7 +792,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Create article
     item = Nanoc::Item.new('content', { :created_at => Date.parse('2008-05-19') }, '/foo/')
     item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].path = '/foo/bar/'
+    item.reps[0].paths = { :last => '/foo/bar/' }
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))

@@ -19,9 +19,9 @@ module Nanoc::CLI::Commands
       end
 
       # Get list of plugins (before and after)
-      plugins_before = Nanoc::Plugin.all
+      plugins_before = Nanoc::PluginRegistry.instance.all
       self.site.code_snippets if self.site
-      plugins_after  = Nanoc::Plugin.all
+      plugins_after  = Nanoc::PluginRegistry.instance.all
 
       # Divide list of plugins into builtin and custom
       plugins_builtin = plugins_before

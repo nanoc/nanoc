@@ -226,13 +226,6 @@ module Nanoc
       @roots
     end
 
-    # @group Deprecated methods
-
-    # @deprecated Use {#delete_edge} instead
-    def remove_edge(from, to)
-      delete_edge(from, to)
-    end
-
   private
 
     # Invalidates cached data. This method should be called when the internal

@@ -216,7 +216,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     def item_rep.generate_diff ; end
     snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
-    item_rep.raw_path = 'foo/bar/baz/quux.txt'
+    item_rep.raw_paths = { :last => 'foo/bar/baz/quux.txt' }
 
     # Write once
     item_rep.write
@@ -240,7 +240,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
-    item_rep.raw_path = 'foo/bar/baz/quux.txt'
+    item_rep.raw_paths = { :last =>  'foo/bar/baz/quux.txt' }
 
     # Write
     item_rep.write
@@ -524,7 +524,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('tmp')
     File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
     item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
-    item_rep.raw_path = 'output/woof.dat'
+    item_rep.raw_paths = { :last => 'output/woof.dat' }
 
     # Write
     notified = false
@@ -554,7 +554,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('output')
     File.open('output/woof.dat', 'w') { |io| io.write('fdsa but different') }
     item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
-    item_rep.raw_path = 'output/woof.dat'
+    item_rep.raw_paths = { :last => 'output/woof.dat' }
 
     # Write
     notified = false

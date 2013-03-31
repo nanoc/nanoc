@@ -14,7 +14,6 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       site = Nanoc::Site.new('.')
-      site.load_data
       site.compile
     end
   end

@@ -27,7 +27,6 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
     # Check
     assert_equal '3', content_for(@item, :sidebar).strip
-    assert_equal '3', @item[:content_for_sidebar].strip
     assert_match(/^head\s+foot$/, result)
   end
 

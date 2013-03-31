@@ -317,7 +317,6 @@ module Nanoc::CLI::Commands
 
     def run
       self.load_site
-      self.check_for_deprecated_usage
       self.setup_listeners
 
       puts "Compiling site…"
@@ -369,20 +368,6 @@ module Nanoc::CLI::Commands
       self.site.items.map { |i| i.reps }.flatten
     end
     memoize :reps
-
-    def check_for_deprecated_usage
-      # Check presence of --all option
-      if options.has_key?(:all) || options.has_key?(:force)
-        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
-      end
-
-      # Warn if trying to compile a single item
-      if arguments.size == 1
-        $stderr.puts '-' * 80
-        $stderr.puts 'Note: As of nanoc 3.2, it is no longer possible to compile a single item. When invoking the “compile” command, all items in the site will be compiled.'
-        $stderr.puts '-' * 80
-      end
-    end
 
     def prune_config
       self.site.config[:prune] || {}
