@@ -8,8 +8,6 @@ Create a new item in the current site. The first data source in the site
 configuration will be used.
 EOS
 
-required :c, :vcs, 'specify the VCS to use'
-
 module Nanoc::CLI::Commands
 
   class CreateItem < ::Nanoc::CLI::CommandRunner
@@ -25,9 +23,6 @@ module Nanoc::CLI::Commands
 
       # Make sure we are in a nanoc site directory
       self.require_site
-
-      # Set VCS if possible
-      self.set_vcs(options[:vcs])
 
       # Check whether item is unique
       if !self.site.items.find { |i| i.identifier == identifier }.nil?

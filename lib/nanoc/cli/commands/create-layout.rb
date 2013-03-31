@@ -24,9 +24,6 @@ module Nanoc::CLI::Commands
       # Make sure we are in a nanoc site directory
       self.require_site
 
-      # Set VCS if possible
-      self.set_vcs(options[:vcs])
-
       # Check whether layout is unique
       if !self.site.layouts.find { |l| l.identifier == identifier }.nil?
         raise Nanoc::Errors::GenericTrivial,

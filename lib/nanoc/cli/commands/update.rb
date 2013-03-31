@@ -12,7 +12,6 @@ This command will change data, and it is therefore recommended to make a
 backup in case something goes wrong.
 EOS
 
-required :c, :vcs, 'select the VCS to use'
 flag     :y, :yes, 'update the data without warning'
 
 module Nanoc::CLI::Commands
@@ -28,9 +27,6 @@ module Nanoc::CLI::Commands
       # Make sure we are in a nanoc site directory
       self.require_site
 
-      # Set VCS if possible
-      self.set_vcs(options[:vcs])
-
       # Check for -y switch
       unless options.has_key?(:yes)
         $stderr.puts '*************'
@@ -44,12 +40,6 @@ module Nanoc::CLI::Commands
                      'Please do not interrupt this operation; doing so can ' +
                      'result in data loss. As always, consider making a ' +
                      'backup copy.'
-        $stderr.puts
-        $stderr.puts 'If this nanoc site is versioned using a VCS ' +
-                     'supported by nanoc, consider using the --vcs option ' +
-                     'to have nanoc perform add/delete/move operations ' +
-                     'using the specified VCS. To get a list of VCSes ' +
-                     'supported by nanoc, issue the "info" command.'
         $stderr.puts
         $stderr.puts 'To continue, use the -y/--yes option, like "nanoc ' +
                      'update -y".'
