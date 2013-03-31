@@ -41,8 +41,6 @@ directories:
   such as ERB, Markdown, Haml, …
 * `helpers` contains helpers, which provide functionality some sites
   may find useful, such as the blogging and tagging helpers
-* `tasks` contains rake tasks that perform a variety of functions such as
-  validating HTML and CSS, uploading compiled files, …
 
 The namespaces (modules) are organised like this:
 
