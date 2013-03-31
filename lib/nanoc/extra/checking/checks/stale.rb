@@ -4,6 +4,8 @@ module Nanoc::Extra::Checking::Checks
 
   class Stale < ::Nanoc::Extra::Checking::Check
 
+    identifier :stale
+
     def run
       require 'set'
 

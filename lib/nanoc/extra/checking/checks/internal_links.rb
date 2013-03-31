@@ -5,6 +5,8 @@ module Nanoc::Extra::Checking::Checks
   # A check that verifies that all internal links point to a location that exists.
   class InternalLinks < ::Nanoc::Extra::Checking::Check
 
+    identifiers :internal_links, :ilinks
+
     # Starts the validator. The results will be printed to stdout.
     #
     # Internal links that match a regexp pattern in `@config[:checks][:internal_links][:exclude]` will
