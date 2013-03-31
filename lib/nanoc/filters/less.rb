@@ -3,7 +3,7 @@
 module Nanoc::Filters
   class Less < Nanoc::Filter
 
-    identifier :identifier
+    identifier :less
 
     requires 'less'
 
