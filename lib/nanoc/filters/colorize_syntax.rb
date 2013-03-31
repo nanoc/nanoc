@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class ColorizeSyntax < Nanoc::Filter
 
+    identifier :colorize_syntax
+
     requires 'nokogiri', 'stringio', 'open3'
 
     # The default colorizer to use for a language if the colorizer for that

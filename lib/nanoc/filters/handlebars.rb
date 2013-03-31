@@ -5,6 +5,8 @@ module Nanoc::Filters
   # @since 3.4.0
   class Handlebars < Nanoc::Filter
 
+    identifier :handlebars
+
     requires 'handlebars'
 
     # Runs the content through

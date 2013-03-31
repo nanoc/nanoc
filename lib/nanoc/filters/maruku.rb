@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Maruku < Nanoc::Filter
 
+    identifier :maruku
+
     requires 'maruku'
 
     # Runs the content through [Maruku](http://maruku.rubyforge.org/).

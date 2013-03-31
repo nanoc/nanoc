@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Markaby < Nanoc::Filter
 
+    identifier :markaby
+
     requires 'markaby'
 
     # Runs the content through [Markaby](http://markaby.rubyforge.org/).

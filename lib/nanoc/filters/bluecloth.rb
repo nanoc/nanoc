@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class BlueCloth < Nanoc::Filter
 
+    identifier :bluecloth
+
     requires 'bluecloth'
 
     # Runs the content through [BlueCloth](http://deveiate.org/projects/BlueCloth).

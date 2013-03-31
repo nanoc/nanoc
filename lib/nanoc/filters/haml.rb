@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Haml < Nanoc::Filter
 
+    identifier :haml
+
     requires 'haml'
 
     # Runs the content through [Haml](http://haml-lang.com/).

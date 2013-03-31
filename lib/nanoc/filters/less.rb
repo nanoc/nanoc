@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Less < Nanoc::Filter
 
+    identifier :identifier
+
     requires 'less'
 
     # Runs the content through [LESS](http://lesscss.org/).

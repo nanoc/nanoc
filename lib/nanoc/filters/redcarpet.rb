@@ -5,6 +5,8 @@ module Nanoc::Filters
   # @since 3.2.0
   class Redcarpet < Nanoc::Filter
 
+    identifier :redcarpet
+
     requires 'redcarpet'
 
     # Runs the content through [Redcarpet](https://github.com/vmg/redcarpet).
