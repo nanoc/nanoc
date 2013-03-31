@@ -83,15 +83,6 @@ module Nanoc
           data_source_class = Nanoc::DataSource.named(data_source_hash[:type])
           raise Nanoc::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
 
-          # Warn about deprecated data sources
-          # TODO [in nanoc 4.0] remove me
-          case data_source_hash[:type]
-            when 'filesystem'
-              warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
-            when 'filesystem_combined', 'filesystem_compact'
-              warn "Warning: the 'filesystem_combined' and 'filesystem_compact' data source has been merged into the new 'filesystem_unified' data source. Using 'filesystem_combined' and 'filesystem_compact' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem_combined' and 'filesystem_compact with 'filesystem_unified'."
-          end
-
           # Create data source
           data_source_class.new(
             self,
@@ -219,12 +210,6 @@ module Nanoc
       items.each         { |i|  i.freeze  }
       layouts.each       { |l|  l.freeze  }
       code_snippets.each { |cs| cs.freeze }
-    end
-
-    # @deprecated It is no longer necessary to explicitly load site data. It
-    #   is safe to remove all {#load_data} calls.
-    def load_data(force=false)
-      warn 'It is no longer necessary to call Nanoc::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 
     # Loads the site data. It is not necessary to call this method explicitly;

@@ -11,15 +11,6 @@ module Nanoc::DataSources
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemUnified',  :filesystem_unified
   Nanoc::DataSource.register '::Nanoc::DataSources::Static',             :static
 
-  # Deprecated; fetch data from online data sources manually instead
-  # TODO [in nanoc 4.0] remove me
-  autoload 'Delicious', 'nanoc/data_sources/deprecated/delicious'
-  autoload 'LastFM',    'nanoc/data_sources/deprecated/last_fm'
-  autoload 'Twitter',   'nanoc/data_sources/deprecated/twitter'
-  Nanoc::DataSource.register '::Nanoc::DataSources::Delicious',          :delicious
-  Nanoc::DataSource.register '::Nanoc::DataSources::LastFM',             :last_fm
-  Nanoc::DataSource.register '::Nanoc::DataSources::Twitter',            :twitter
-
   # Deprecated; use `filesystem_verbose` or `filesystem_unified` instead
   # TODO [in nanoc 4.0] remove me
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemVerbose',  :filesystem

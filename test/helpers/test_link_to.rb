@@ -4,8 +4,20 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   include Nanoc::Helpers::LinkTo
 
+  def new_item_rep_with_path(path)
+    item = Nanoc::Item.new('content', {}, '/')
+    snapshot_store = Nanoc::SnapshotStore::InMemory.new
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => snapshot_store)
+    rep.paths = { :last => path }
+    rep
+  end
+
+  def teardown
+    @item     = nil
+    @item_rep = nil
+  end
+
   def test_link_to_with_path
-    # Check
     assert_equal(
       '<a href="/foo/">Foo</a>',
       link_to('Foo', '/foo/')
@@ -13,11 +25,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_link_to_with_rep
-    # Create rep
-    rep = mock
-    rep.stubs(:path).returns('/bar/')
-
-    # Check
+    rep = new_item_rep_with_path('/bar/')
     assert_equal(
       '<a href="/bar/">Bar</a>',
       link_to('Bar', rep)
@@ -25,19 +33,15 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_link_to_with_item
-    # Create rep
-    item = mock
-    item.stubs(:path).returns('/bar/')
-
-    # Check
+    rep = new_item_rep_with_path('/bar/')
+    rep.item.reps << rep
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to('Bar', item)
+      link_to('Bar', rep.item)
     )
   end
 
   def test_link_to_with_attributes
-    # Check
     assert_equal(
       '<a title="Dis mai foo!" href="/foo/">Foo</a>',
       link_to('Foo', '/foo/', :title => 'Dis mai foo!')
@@ -45,7 +49,6 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_link_to_escape
-    # Check
     assert_equal(
       '<a title="Foo &amp; Bar" href="/foo&amp;bar/">Foo &amp; Bar</a>',
       link_to('Foo &amp; Bar', '/foo&bar/', :title => 'Foo & Bar')
@@ -62,25 +65,17 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_link_to_unless_current_current
-    # Create item
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/')
+    @item_rep = new_item_rep_with_path('/foo/')
 
-    # Check
     assert_equal(
       '<span class="active" title="You\'re here.">Bar</span>',
       link_to_unless_current('Bar', @item_rep)
     )
-  ensure
-    @item = nil
   end
 
   def test_link_to_unless_current_not_current
-    # Create item
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/')
+    @item_rep = new_item_rep_with_path('/foo/')
 
-    # Check
     assert_equal(
       '<a href="/abc/xyz/">Bar</a>',
       link_to_unless_current('Bar', '/abc/xyz/')
@@ -88,11 +83,8 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_relative_path_to_with_self
-    # Mock item
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/baz/')
+    @item_rep = new_item_rep_with_path('/foo/bar/baz/')
 
-    # Test
     assert_equal(
       './',
       relative_path_to('/foo/bar/baz/')
@@ -100,11 +92,8 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_relative_path_to_with_root
-    # Mock item
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/baz/')
+    @item_rep = new_item_rep_with_path('/foo/bar/baz/')
 
-    # Test
     assert_equal(
       '../../../',
       relative_path_to('/')
@@ -112,11 +101,8 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_relative_path_to_file
-    # Mock item
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/baz/')
+    @item_rep = new_item_rep_with_path('/foo/bar/baz/')
 
-    # Test
     assert_equal(
       '../../quux',
       relative_path_to('/foo/quux')
@@ -124,11 +110,8 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_relative_path_to_dir
-    # Mock item
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/baz/')
+    @item_rep = new_item_rep_with_path('/foo/bar/baz/')
 
-    # Test
     assert_equal(
       '../../quux/',
       relative_path_to('/foo/quux/')
@@ -136,15 +119,9 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_relative_path_to_rep
-    # Mock self
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/baz/')
+    @item_rep = new_item_rep_with_path('/foo/bar/baz/')
+    other_item_rep = new_item_rep_with_path('/foo/quux/')
 
-    # Mock other
-    other_item_rep = mock
-    other_item_rep.stubs(:path).returns('/foo/quux/')
-
-    # Test
     assert_equal(
       '../../quux/',
       relative_path_to(other_item_rep)
@@ -153,54 +130,35 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
 
   def test_relative_path_to_item
-    # Mock self
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/baz/')
+    @item_rep = new_item_rep_with_path('/foo/bar/baz/')
+    other_item_rep = new_item_rep_with_path('/foo/quux/')
 
-    # Mock other
-    other_item = mock
-    other_item.stubs(:path).returns('/foo/quux/')
-
-    # Test
     assert_equal(
       '../../quux/',
-      relative_path_to(other_item)
+      relative_path_to(other_item_rep)
     )
   end
 
   def test_relative_path_to_to_nil
-    # Mock self
-    @item_rep = mock
-    @item_rep.stubs(:path).returns(nil)
+    @item_rep = new_item_rep_with_path(nil)
+    other_item_rep = new_item_rep_with_path('/foo/quux/')
 
-    # Mock other
-    other_item_rep = mock
-    other_item_rep.stubs(:path).returns('/foo/quux/')
-
-    # Test
     assert_raises RuntimeError do
       relative_path_to(other_item_rep)
     end
   end
 
   def test_relative_path_to_from_nil
-    # Mock self
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/quux/')
+    @item_rep = new_item_rep_with_path('/foo/quux/')
+    other_item_rep = new_item_rep_with_path(nil)
 
-    # Mock other
-    other_item_rep = mock
-    other_item_rep.stubs(:path).returns(nil)
-
-    # Test
     assert_raises RuntimeError do
       relative_path_to(other_item_rep)
     end
   end
 
   def test_relative_path_to_to_windows_path
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/quux/')
+    @item_rep = new_item_rep_with_path('/foo/quux/')
 
     assert_equal '//mydomain/tahontaenrat', relative_path_to('//mydomain/tahontaenrat')
   end

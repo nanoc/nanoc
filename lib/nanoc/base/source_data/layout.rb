@@ -120,11 +120,6 @@ module Nanoc
       @identifier = *source
     end
 
-    # @deprecated Access the modification time using `layout[:mtime]` instead.
-    def mtime
-      self[:mtime]
-    end
-
   end
 
 end

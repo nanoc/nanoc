@@ -170,28 +170,6 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
-      # Get captured content (hax)
-      # TODO [in nanoc 4.0] remove me
-      if key.to_s =~ /^content_for_(.*)$/
-        @@_content_for_warning_issued ||= false
-        @@_Nanoc_Helpers_Capturing_included ||= false
-
-        # Warn
-        unless @@_content_for_warning_issued
-          warn 'WARNING: Accessing captured content should happen using the #content_for method defined in the Capturing helper instead of using item[:content_for_something]. The latter way of accessing captured content will be removed in nanoc 4.0.'
-          @@_content_for_warning_issued = true
-        end
-
-        # Include capturing helper if necessary
-        unless @@_Nanoc_Helpers_Capturing_included
-          self.class.send(:include, ::Nanoc::Helpers::Capturing)
-          @@_Nanoc_Helpers_Capturing_included = true
-        end
-
-        # Get content
-        return content_for(self, $1.to_sym)
-      end
-
       @attributes[key]
     end
 
@@ -302,11 +280,6 @@ module Nanoc
     # @api private
     def forced_outdated?
       @forced_outdated || false
-    end
-
-    # @deprecated Access the modification time using `item[:mtime]` instead.
-    def mtime
-      self[:mtime]
     end
 
   end
