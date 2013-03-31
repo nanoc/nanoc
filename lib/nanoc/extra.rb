@@ -2,10 +2,10 @@
 
 module Nanoc::Extra
 
-  autoload 'AutoCompiler',      'nanoc/extra/auto_compiler'
-  autoload 'Checking',          'nanoc/extra/checking'
-  autoload 'LinkCollector',     'nanoc/extra/link_collector.rb'
-  autoload 'Pruner',            'nanoc/extra/pruner'
+  require 'nanoc/extra/auto_compiler'
+  require 'nanoc/extra/checking'
+  require 'nanoc/extra/link_collector.rb'
+  require 'nanoc/extra/pruner'
 
 end
 
