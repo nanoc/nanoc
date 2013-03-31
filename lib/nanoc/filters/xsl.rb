@@ -5,6 +5,8 @@ module Nanoc::Filters
   # @since 3.3.0
   class XSL < Nanoc::Filter
 
+    identifier :xsl
+
     requires 'nokogiri'
 
     # Runs the item content through an [XSLT](http://www.w3.org/TR/xslt) 

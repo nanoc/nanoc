@@ -62,6 +62,8 @@ module Nanoc::DataSources
   # one will be inferred from the environment.
   class FilesystemUnified < Nanoc::DataSource
 
+    identifier :filesystem_unified
+
     include Nanoc::DataSources::Filesystem
 
   private

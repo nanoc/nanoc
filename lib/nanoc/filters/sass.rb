@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Sass < Nanoc::Filter
 
+    identifier :sass
+
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
     class << self

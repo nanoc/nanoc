@@ -1,14 +1,12 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
-  autoload 'AutoCompiler',      'nanoc/extra/auto_compiler'
-  autoload 'Checking',          'nanoc/extra/checking'
-  autoload 'LinkCollector',     'nanoc/extra/link_collector.rb'
-  autoload 'Pruner',            'nanoc/extra/pruner'
-
 end
 
 require 'nanoc/extra/core_ext'
 require 'nanoc/extra/deployer'
 require 'nanoc/extra/deployers'
+require 'nanoc/extra/auto_compiler'
+require 'nanoc/extra/checking'
+require 'nanoc/extra/link_collector'
+require 'nanoc/extra/pruner'

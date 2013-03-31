@@ -19,6 +19,8 @@ module Nanoc::Extra::Deployers
   #       bucket:     nanoc-site-staging
   class Fog < ::Nanoc::Extra::Deployer
 
+    identifier :fog
+
     # @see Nanoc::Extra::Deployer#run
     def run
       require 'fog'

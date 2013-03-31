@@ -3,6 +3,8 @@ module Nanoc::Filters
   # @since 3.3.0
   class YUICompressor < Nanoc::Filter
 
+    identifier :yui_compressor
+
     requires 'yuicompressor'
 
     # Compress Javascript or CSS using [YUICompressor](http://rubydoc.info/gems/yuicompressor).
