@@ -41,6 +41,8 @@ module Nanoc::DataSources
   # one will be inferred from the environment.
   class FilesystemVerbose < Nanoc::DataSource
 
+    identifier :filesystem_verbose
+
     include Nanoc::DataSources::Filesystem
 
   private

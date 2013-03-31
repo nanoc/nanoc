@@ -26,6 +26,7 @@ module Nanoc::DataSources
   # exclude them from the Blogging helper's atom feed generator, among other
   # things.
   class Static < Nanoc::DataSource
+
     identifier :static
 
     def items
