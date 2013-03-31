@@ -13,12 +13,12 @@ module Nanoc::CLI
   module Commands
   end
 
-  autoload 'ANSIStringColorizer', 'nanoc/cli/ansi_string_colorizer'
-  autoload 'Logger',              'nanoc/cli/logger'
-  autoload 'CommandRunner',       'nanoc/cli/command_runner'
-  autoload 'CleaningStream',      'nanoc/cli/cleaning_stream'
-  autoload 'StreamCleaners',      'nanoc/cli/stream_cleaners'
-  autoload 'ErrorHandler',        'nanoc/cli/error_handler'
+  require 'nanoc/cli/ansi_string_colorizer'
+  require 'nanoc/cli/logger'
+  require 'nanoc/cli/command_runner'
+  require 'nanoc/cli/cleaning_stream'
+  require 'nanoc/cli/stream_cleaners'
+  require 'nanoc/cli/error_handler'
 
   # @return [Boolean] true if debug output is enabled, false if not
   #
