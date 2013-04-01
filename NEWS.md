@@ -1,5 +1,14 @@
 # nanoc news
 
+## 3.6.3 (???)
+
+Fixes:
+
+* Added support for growlnotify on Windows
+* Fixed bug which caused the external links checker to ignore the query string
+* Removed weird treatment of `DOCTYPE`s in the relativize_paths filter
+* Fixed CodeRay syntax coloring on Ruby 2.0
+
 ## 3.6.2 (2013-03-23)
 
 Fixes:
