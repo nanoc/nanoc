@@ -19,6 +19,11 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   end
 
   def test_default_encoding
+    if !defined?(Encoding)
+      skip 'No Encoding class'
+      return
+    end
+
     original_encoding = Encoding.default_external
     Encoding.default_external = 'ISO-8859-1' # ew!
 

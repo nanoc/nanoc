@@ -275,10 +275,6 @@ module Nanoc::Filters
       stdout.read
     end
 
-  protected
-
-    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
-
     # Wraps the element in <div class="CodeRay"><div class="code">
     def coderay_postprocess(language, element)
       # Skip if we're a free <code>
@@ -297,6 +293,10 @@ module Nanoc::Filters
       # orig element
       element.swap div_outer
     end
+
+  protected
+
+    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)
