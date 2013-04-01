@@ -98,9 +98,6 @@ module Nanoc::CLI::Commands
       # A list of commandline tool names that can be used to send notifications
       TOOLS = %w( growlnotify notify-send ) unless defined? TOOLS
 
-      # The tool to use for discovering binaries' locations
-      FIND_BINARY_COMMAND = RUBY_PLATFORM =~ /mingw|mswin/ ? "where" : "which" unless defined? FIND_BINARY_COMMAND
-
       # Send a notification. If no notifier is found, no notification will be
       # created.
       #
@@ -116,16 +113,32 @@ module Nanoc::CLI::Commands
 
     protected
 
+      def have_tool_nix?(tool)
+        !`which #{tool}`.empty?
+      rescue Errno::ENOENT
+        false
+      end
+
+      def have_tool_windows?(tool)
+        !`where #{tool} 2> nul`.empty?
+      rescue Errno::ENOENT
+        false
+      end
+
+      def have_tool?(tool)
+        if self.on_windows?
+          self.have_tool_windows?(tool)
+        else
+          self.have_tool_nix?(tool)
+        end
+      end
+
       def tool
         @tool ||= begin
           require 'terminal-notifier'
           'terminal-notify'
         rescue LoadError
-          begin
-            TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
-          rescue Errno::ENOENT
-            nil
-          end
+          TOOLS.find { |t| have_tool?(t) }
         end
       end
 
