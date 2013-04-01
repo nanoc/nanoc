@@ -19,7 +19,7 @@ module Nanoc::Helpers
       idx_start  = 0
 
       loop do
-        idx = @item.identifier.index(?/, idx_start)
+        idx = @item.identifier.index('/', idx_start)
         break if idx.nil?
 
         idx_start = idx+1
