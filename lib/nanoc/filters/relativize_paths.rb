@@ -90,14 +90,7 @@ module Nanoc::Filters
           end
         end
       end
-      result = doc.send("to_#{type}")
-
-      # FIXME cleanup because it is ugly
-      # # Because using the `Nokogiri::XML::DocumentFragment` class DOCTYPE 
-      # pseudonodes becomes even more creepy than usual.
-      result.sub!(/(!DOCTYPE.+?)(&gt;)/, '<\1>')
-
-      result
+      doc.send("to_#{type}")
     end
 
     def path_is_relativizable?(s)

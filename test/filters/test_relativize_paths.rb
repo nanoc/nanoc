@@ -750,5 +750,28 @@ XML
     end
   end
 
+  def test_filter_html_doctype
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::ItemRep.new(
+        Nanoc::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/'),
+        :blah)
+      @item_rep.path = '/foo/bar/baz/'
+    end
+
+    # Set content
+    raw_content      = %[&lt;!DOCTYPE html>]
+    expected_content = %[&lt;!DOCTYPE html&gt;]
+
+    # Test
+    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    assert_equal(expected_content, actual_content)
+  end
 
 end
