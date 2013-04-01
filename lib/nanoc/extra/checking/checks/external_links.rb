@@ -136,9 +136,22 @@ module ::Nanoc::Extra::Checking::Checks
       raise 'should not have gotten here'
     end
 
+    def path_for_url(url)
+      if url.path.nil? || url.path.empty?
+        path = '/'
+      else
+        path = url.path
+      end
+
+      if url.query
+        path << '?' << url.query
+      end
+
+      path
+    end
+
     def request_url_once(url, req_method = Net::HTTP::Head)
-      path = (url.path.nil? || url.path.empty? ? '/' : url.path)
-      req = req_method.new(path)
+      req = req_method.new(self.path_for_url(url))
       http = Net::HTTP.new(url.host, url.port)
       if url.instance_of? URI::HTTPS
         http.use_ssl = true
