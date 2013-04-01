@@ -142,7 +142,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify_windows_cmd_for(message)
-        [ 'grownotify', '/t:nanoc', message ]
+        [ 'growlnotify', '/t:nanoc', message ]
       end
 
       def growlnotify_windows(message)
