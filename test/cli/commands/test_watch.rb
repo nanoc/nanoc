@@ -58,6 +58,16 @@ class Nanoc::CLI::Commands::WatchTest < MiniTest::Unit::TestCase
     end
   end
 
+  def test_growlnotify_cmd
+    notifier = Nanoc::CLI::Commands::Watch::Notifier.new
+    assert_equal [ 'growlnotify', '-m', 'foo' ], notifier.send(:growlnotify_cmd_for, 'foo')
+  end
+
+  def test_growlnotify_windows_cmd
+    notifier = Nanoc::CLI::Commands::Watch::Notifier.new
+    assert_equal [ 'growlnotify', '/t:nanoc', 'foo' ], notifier.send(:growlnotify_windows_cmd_for, 'foo')
+  end
+
   def wait_until_exists(filename)
     20.times do
       break if File.file?(filename)

@@ -133,12 +133,20 @@ module Nanoc::CLI::Commands
         TerminalNotifier.notify(message, :title => "nanoc")
       end
 
+      def growlnotify_cmd_for(message)
+        [ 'growlnotify', '-m', message ]
+      end
+
       def growlnotify(message)
-        system('growlnotify', '-m', message)
+        system(*self.growlnotify_cmd_for(message))
+      end
+
+      def growlnotify_windows_cmd_for(message)
+        [ 'grownotify', '/t:nanoc', message ]
       end
 
       def growlnotify_windows(message)
-        system('grownotify', '/t:nanoc', message)
+        system(*self.growlnotify_windows_cmd_for(message))
       end
 
       def notify_send(message)
