@@ -21,7 +21,7 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
     end
   end
 
-  def test_valid?
+  def test_valid_by_path
     with_site do |site|
       # Create check
       check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
@@ -36,6 +36,20 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
     end
   end
 
+  def test_valid_by_query
+    with_site do |site|
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
+      def check.request_url_once(url)
+        Net::HTTPResponse.new('1.1', url.query == 'status=200' ? '200' : '404', 'okay')
+      end
+
+      # Test
+      assert_nil check.validate('http://example.com/?status=200')
+      refute_nil check.validate('http://example.com/?status=404')
+    end
+  end
+
   def test_fallback_to_get_when_head_is_not_allowed
     with_site do |site|
       #Create check
@@ -47,6 +61,18 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
       #Test
       assert_nil check.validate('http://127.0.0.1:9204')
       refute_nil check.validate('http://127.0.0.1:9204/405')
+    end
+  end
+
+  def test_path_for_url
+    with_site do |site|
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
+
+      assert_equal '/',             check.send(:path_for_url, URI.parse('http://example.com'))
+      assert_equal '/',             check.send(:path_for_url, URI.parse('http://example.com/'))
+      assert_equal '/?foo=bar',     check.send(:path_for_url, URI.parse('http://example.com?foo=bar'))
+      assert_equal '/?foo=bar',     check.send(:path_for_url, URI.parse('http://example.com/?foo=bar'))
+      assert_equal '/meow?foo=bar', check.send(:path_for_url, URI.parse('http://example.com/meow?foo=bar'))
     end
   end
 
