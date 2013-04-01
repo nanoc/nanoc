@@ -122,9 +122,13 @@ module Nanoc::CLI::Commands
           'terminal-notify'
         rescue LoadError
           begin
+            old_stderr = $stderr
+            $stderr = StringIO.new
             TOOLS.find { |t| !`#{FIND_BINARY_COMMAND} #{t}`.empty? }
           rescue Errno::ENOENT
             nil
+          ensure
+            $stderr = old_stderr
           end
         end
       end
