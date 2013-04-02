@@ -202,8 +202,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     YARD.parse(File.dirname(__FILE__) + '/../../lib/nanoc/helpers/link_to.rb')
 
     # Mock
-    @item_rep = mock
-    @item_rep.stubs(:path).returns('/foo/bar/')
+    @item_rep = self.new_item_rep_with_path('/foo/bar/')
 
     # Run
     assert_examples_correct 'Nanoc::Helpers::LinkTo#relative_path_to'
