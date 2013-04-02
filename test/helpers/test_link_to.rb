@@ -165,7 +165,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_examples_link_to
     # Parse
-    YARD.parse('../lib/nanoc/helpers/link_to.rb')
+    YARD.parse(File.dirname(__FILE__) + '/../../lib/nanoc/helpers/link_to.rb')
 
     # Mock
     @items = [ mock, mock, mock ]
@@ -185,7 +185,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_examples_link_to_unless_current
     # Parse
-    YARD.parse('../lib/nanoc/helpers/link_to.rb')
+    YARD.parse(File.dirname(__FILE__) + '/../../lib/nanoc/helpers/link_to.rb')
 
     # Mock
     @item_rep = mock
@@ -199,7 +199,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_examples_relative_path_to
     # Parse
-    YARD.parse('../lib/nanoc/helpers/link_to.rb')
+    YARD.parse(File.dirname(__FILE__) + '/../../lib/nanoc/helpers/link_to.rb')
 
     # Mock
     @item_rep = mock
