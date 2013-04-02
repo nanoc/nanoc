@@ -13,6 +13,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def teardown
+    super
     @item     = nil
     @item_rep = nil
   end

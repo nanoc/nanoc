@@ -13,6 +13,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   end
 
   def teardown
+    super
     @filter = nil
   end
 
