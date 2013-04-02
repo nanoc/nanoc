@@ -157,6 +157,40 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
   end
 
+  def test_all_split_files_follows_symlink
+    # Create data source
+    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, nil)
+
+    # Write sample files
+    %w( dir1/foo.html dir2/infinite.html ).each do |filename|
+      FileUtils.mkdir_p(File.dirname(filename))
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
+    File.symlink 'dir1','dir3'
+    File.symlink '.', 'dir2/dir2'
+
+    # Expected
+    expected_files = %w[
+      ./dir1/foo
+      ./dir3/foo
+      ./dir2/infinite
+      ./dir2/dir2/infinite
+      ./dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/infinite
+      ./dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/dir2/infinite
+    ]
+    # Check
+    assert_equal \
+      expected_files.sort,
+      data_source.send(:all_split_files_in, '.').keys.sort
+  end
+
   def test_basename_of_allowing_periods_in_identifiers
     # Create data source
     data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
