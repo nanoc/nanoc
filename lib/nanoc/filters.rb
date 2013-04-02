@@ -5,7 +5,6 @@ end
 
 require 'nanoc/filters/asciidoc'
 require 'nanoc/filters/bluecloth'
-require 'nanoc/filters/coderay'
 require 'nanoc/filters/colorize_syntax'
 require 'nanoc/filters/coffeescript'
 require 'nanoc/filters/erb'

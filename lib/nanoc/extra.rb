@@ -6,7 +6,6 @@ end
 require 'nanoc/extra/core_ext'
 require 'nanoc/extra/deployer'
 require 'nanoc/extra/deployers'
-require 'nanoc/extra/auto_compiler'
 require 'nanoc/extra/checking'
 require 'nanoc/extra/link_collector'
 require 'nanoc/extra/pruner'
