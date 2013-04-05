@@ -318,7 +318,6 @@ module Nanoc::CLI::Commands
     def run
       self.load_site
       self.check_for_deprecated_usage
-      self.setup_listeners
 
       puts "Compiling site…"
       time_before = Time.now
