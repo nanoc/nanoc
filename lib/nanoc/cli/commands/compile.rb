@@ -205,7 +205,7 @@ module Nanoc::CLI::Commands
         tot   = format('%5.2f', tot)
 
         # Output stats
-        filter_name = format("%#{max_filter_name_length}s", filter_name)
+        filter_name = format("%#{max}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
 
@@ -322,8 +322,10 @@ module Nanoc::CLI::Commands
 
       puts "Compiling site…"
       time_before = Time.now
-      self.site.compile
-      self.prune
+      self.run_listeners_while do
+        self.site.compile
+        self.prune
+      end
       time_after = Time.now
       puts
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
@@ -359,6 +361,13 @@ module Nanoc::CLI::Commands
       @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => self.reps)
 
       @listeners.each { |s| s.start }
+    end
+
+    def run_listeners_while
+      self.setup_listeners
+      yield
+    ensure
+      self.teardown_listeners
     end
 
     def teardown_listeners
