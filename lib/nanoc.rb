@@ -15,8 +15,6 @@ module Nanoc
 
 end
 
-Nanoc3 = Nanoc
-
 # Load general requirements
 require 'digest'
 require 'enumerator'
