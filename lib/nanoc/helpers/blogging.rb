@@ -42,14 +42,14 @@ module Nanoc::Helpers
     #
     # @return [Array] A sorted array containing all articles
     def sorted_articles
+      blk = lambda do 
+        articles.sort_by { |a| attribute_to_time(a[:created_at]) }.reverse
+      end
+
       if @items.frozen?
-        @sorted_article_items ||= articles.sort_by do |a|
-          attribute_to_time(a[:created_at])
-        end.reverse
+        @sorted_article_items ||= blk.call
       else 
-        articles.sort_by do |a| 
-          attribute_to_time(a[:created_at])
-        end.reverse
+        blk.call
       end
     end
 
