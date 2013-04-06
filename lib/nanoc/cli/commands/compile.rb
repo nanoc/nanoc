@@ -33,6 +33,18 @@ module Nanoc::CLI::Commands
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
 
+      def initialize(params={})
+      end
+
+      # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
+      #
+      # @return [Boolean] true if this listener should be enabled for the given command runner, false otherwise
+      #
+      # @abstract Returns `true` by default, but subclasses may override this.
+      def self.enable_for?(command_runner)
+        true
+      end
+
       # Starts the listener. Subclasses should override this method and set up listener notifications.
       #
       # @return [void]
@@ -52,6 +64,11 @@ module Nanoc::CLI::Commands
 
     # Generates diffs for every output file written
     class DiffGenerator < Listener
+
+      # @see Listener#enable_for?
+      def self.enable_for?(command_runner)
+        command_runner.site.config[:enable_output_diff]
+      end
 
       # @see Listener#start
       def start
@@ -138,6 +155,11 @@ module Nanoc::CLI::Commands
     # Records the time spent per filter and per item representation
     class TimingRecorder < Listener
 
+      # @see Listener#enable_for?
+      def self.enable_for?(command_runner)
+        command_runner.options.fetch(:verbose, false)
+      end
+
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
         @filter_times = {}
@@ -205,7 +227,7 @@ module Nanoc::CLI::Commands
         tot   = format('%5.2f', tot)
 
         # Output stats
-        filter_name = format("%#{max_filter_name_length}s", filter_name)
+        filter_name = format("%#{max}s", filter_name)
         puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
       end
 
@@ -214,7 +236,12 @@ module Nanoc::CLI::Commands
     # Controls garbage collection so that it only occurs once every 20 items
     class GCController < Listener
 
-      def initialize
+      # @see Listener#enable_for?
+      def self.enable_for?(command_runner)
+        ! ENV.has_key?('TRAVIS')
+      end
+
+      def initialize(params={})
         @gc_count = 0
       end
 
@@ -240,6 +267,11 @@ module Nanoc::CLI::Commands
 
     # Prints debug information (compilation started/ended, filtering started/ended, …)
     class DebugPrinter < Listener
+
+      # @see Listener#enable_for?
+      def self.enable_for?(command_runner)
+        command_runner.debug?
+      end
 
       # @see Listener#start
       def start
@@ -315,15 +347,21 @@ module Nanoc::CLI::Commands
 
     end
 
+    def initialize(options, arguments, command, params={})
+      super(options, arguments, command)
+      @listener_classes = params.fetch(:listener_classes, self.default_listener_classes)
+    end
+
     def run
       self.load_site
       self.check_for_deprecated_usage
-      self.setup_listeners
 
       puts "Compiling site…"
       time_before = Time.now
-      self.site.compile
-      self.prune
+      self.run_listeners_while do
+        self.site.compile
+        self.prune
+      end
       time_after = Time.now
       puts
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
@@ -337,28 +375,33 @@ module Nanoc::CLI::Commands
       end
     end
 
+    def default_listener_classes
+      [
+        Nanoc::CLI::Commands::Compile::DiffGenerator,
+        Nanoc::CLI::Commands::Compile::DebugPrinter,
+        Nanoc::CLI::Commands::Compile::TimingRecorder,
+        Nanoc::CLI::Commands::Compile::GCController,
+        Nanoc::CLI::Commands::Compile::FileActionPrinter
+      ]
+    end
+
     def setup_listeners
-      @listeners = []
-
-      if self.site.config[:enable_output_diff]
-        @listeners << Nanoc::CLI::Commands::Compile::DiffGenerator.new
-      end
-
-      if self.debug?
-        @listeners << Nanoc::CLI::Commands::Compile::DebugPrinter.new
-      end
-
-      if options.fetch(:verbose, false)
-        @listeners << Nanoc::CLI::Commands::Compile::TimingRecorder.new(:reps => self.reps)
-      end
-
-      unless ENV.has_key?('TRAVIS')
-        @listeners << Nanoc::CLI::Commands::Compile::GCController.new
-      end
-
-      @listeners << Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => self.reps)
+      @listeners = @listener_classes.
+        select { |klass| klass.enable_for?(self) }.
+        map    { |klass| klass.new(:reps => self.reps) }
 
       @listeners.each { |s| s.start }
+    end
+
+    def listeners
+      @listeners
+    end
+
+    def run_listeners_while
+      self.setup_listeners
+      yield
+    ensure
+      self.teardown_listeners
     end
 
     def teardown_listeners

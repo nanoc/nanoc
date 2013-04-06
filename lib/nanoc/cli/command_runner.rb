@@ -64,14 +64,14 @@ module Nanoc::CLI
       puts "done"
     end
 
-  protected
-
     # @return [Boolean] true if debug output is enabled, false if not
     #
     # @see Nanoc::CLI.debug?
     def debug?
       Nanoc::CLI.debug?
     end
+
+  protected
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing
     # when the site's data source does not support VCSes (i.e. does not
