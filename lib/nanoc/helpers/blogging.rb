@@ -28,10 +28,11 @@ module Nanoc::Helpers
     #
     # @return [Array] An array containing all articles
     def articles
+      blk = lambda { @items.select { |item| item[:kind] == 'article' } }
       if @items.frozen?
-        @article_items ||= @items.select { |item| item[:kind] == 'article' }
+        @article_items ||= blk.call
       else 
-        @items.select { |item| item[:kind] == 'article' }
+        blk.call
       end
     end
 
