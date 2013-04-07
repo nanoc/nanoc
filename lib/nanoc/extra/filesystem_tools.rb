@@ -25,6 +25,20 @@ module Nanoc::Extra
 
     end
 
+    class UnsupportedFileTypeError < ::Nanoc::Errors::GenericTrivial
+
+      # @return [String] The filename of the file whose type is not supported
+      attr_reader :filename
+
+      # @param [String] filename The filename of the file whose type is not
+      #   supported
+      def initialize(filename)
+        @filename = filename
+        super("The file at #{filename} is of an unsupported type (expected file, directory or link, but it is #{File.ftype(filename)}")
+      end
+
+    end
+
     # Returns all files in the given directory and directories below it,
     # following symlinks up to a maximum of `recursion_limit` times.
     #
@@ -35,6 +49,9 @@ module Nanoc::Extra
     #   recurse into a symlink to a directory
     #
     # @return [Array<String>] A list of filenames
+    #
+    # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
+    #   detected (something other than file, directory or link)
     def all_files_in(dir_name, recursion_limit=10)
       Dir[dir_name + '/**/*'].map do |fn|
         case File.ftype(fn)
@@ -53,9 +70,10 @@ module Nanoc::Extra
           end
         when 'file'
           fn
-        else
-          # We only want files, so ignore the rest
+        when 'directory'
           nil
+        else
+          raise UnsupportedFileTypeError.new(fn)
         end
       end.compact.flatten
     end
@@ -72,18 +90,24 @@ module Nanoc::Extra
     #
     # @raise [MaxSymlinkDepthExceeded] if too many indirections are encountered
     #   while resolving symlinks
+    #
+    # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
+    #   detected (something other than file, directory or link)
     def resolve_symlink(filename, recursion_limit=5)
       target = File.readlink(filename)
       absolute_target = File.expand_path(target, File.dirname(filename))
 
-      if File.symlink?(absolute_target)
+      case File.ftype(absolute_target)
+      when 'link'
         if 0 == recursion_limit
           raise MaxSymlinkDepthExceededError.new(absolute_target)
         else
           self.resolve_symlink(absolute_target, recursion_limit-1)
         end
-      else
+      when 'file', 'directory'
         absolute_target
+      else
+        raise UnsupportedFileTypeError.new(absolute_target)
       end
     end
     module_function :resolve_symlink
