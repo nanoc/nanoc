@@ -111,7 +111,33 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       Nanoc::CLI.run %w( compile )
       refute File.file?('output/stray.html')
       assert File.directory?('output/excluded_dir'),
-             'excluded_dir should still be there'
+        'excluded_dir should still be there'
     end
   end
+
+  def test_setup_and_teardown_listeners
+    with_site do
+      test_listener_class = Class.new(::Nanoc::CLI::Commands::Compile::Listener) do
+        def start ; @started = true ; end
+        def stop  ; @stopped = true ; end
+        def started? ; @started ; end
+        def stopped? ; @stopped ; end
+      end
+
+      options = {}
+      arguments = []
+      cmd = nil
+      listener_classes = [ test_listener_class ]
+      cmd_runner = Nanoc::CLI::Commands::Compile.new(
+        options, arguments, cmd, :listener_classes => listener_classes)
+
+      cmd_runner.run
+
+      listeners = cmd_runner.send(:listeners)
+      assert listeners.size == 1
+      assert listeners.first.started?
+      assert listeners.first.stopped?
+    end
+  end
+
 end
