@@ -59,4 +59,27 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     assert_equal expected_files, actual_files
   end
 
+  def test_resolve_symlink
+    File.open('foo', 'w') { |io| io.write('o hai') }
+    File.symlink('foo', 'bar')
+    File.symlink('bar', 'baz')
+    File.symlink('baz', 'qux')
+
+    expected = File.expand_path('foo')
+    actual   = Nanoc::Extra::FilesystemTools.resolve_symlink('qux')
+    assert_equal expected, actual
+  end
+
+  def test_resolve_symlink_too_many
+    File.open('foo', 'w') { |io| io.write('o hai') }
+    File.symlink('foo', 'symlin-0')
+    (1..7).each do |i|
+      File.symlink("symlink-#{i-1}", "symlink-#{i}")
+    end
+
+    assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
+      Nanoc::Extra::FilesystemTools.resolve_symlink('symlink-7')
+    end
+  end
+
 end
