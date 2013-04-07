@@ -4,7 +4,6 @@ module Nanoc
 end
 
 require 'nanoc/base/core_ext'
-require 'nanoc/base/ordered_hash'
 
 # Load helper classes
 require 'nanoc/base/context'
