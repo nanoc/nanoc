@@ -25,6 +25,10 @@ module Nanoc::Extra
 
     end
 
+    # Error that is raised when a file of an unknown type is encountered
+    # (something other than file, directory or link).
+    #
+    # @api private
     class UnsupportedFileTypeError < ::Nanoc::Errors::GenericTrivial
 
       # @return [String] The filename of the file whose type is not supported
