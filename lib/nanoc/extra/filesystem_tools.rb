@@ -18,9 +18,14 @@ module Nanoc::Extra
     #
     # @return [Array<String>] A list of filenames
     def all_files_in(dir_name, recursion_limit=10)
-      res = Dir[dir_name + '/**/*'].map do |fn|
+      Dir[dir_name + '/**/*'].map do |fn|
         if File.symlink?(fn) && recursion_limit > 0
-          all_files_in(File.readlink(fn), recursion_limit-1)
+          dest = File.readlink(fn)
+          if File.file?(dest)
+            dest
+          else
+            all_files_in(dest, recursion_limit-1)
+          end
         elsif File.file?(fn)
           fn
         end

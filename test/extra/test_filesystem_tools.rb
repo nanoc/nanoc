@@ -25,10 +25,10 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('bar', 'w') { |io| io.write('o hai from bar') }
     FileUtils.mkdir_p('dir')
     File.open('dir/foo', 'w') { |io| io.write('o hai from foo') }
-    File.symlink('bar', 'dir/bar')
+    File.symlink('bar', 'dir/bar-link')
 
     # Check
-    expected_files = [ 'dir/bar', 'dir/foo' ]
+    expected_files = [ 'bar', 'dir/foo' ]
     actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('dir').sort
     assert_equal expected_files, actual_files
   end
