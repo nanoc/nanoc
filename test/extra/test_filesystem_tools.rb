@@ -8,7 +8,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       FileUtils.mkdir_p("dir#{i}")
       File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
     end
-    (1..15).each do |i|
+    (1..10).each do |i|
       File.symlink("../dir#{i}", "dir#{i-1}/sub")
     end
 
@@ -30,6 +30,21 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     ]
     actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir0').sort
     assert_equal expected_files, actual_files
+  end
+
+  def test_all_files_in_follows_symlinks_to_dirs_too_many
+    # Write sample files
+    (0..15).each do |i|
+      FileUtils.mkdir_p("dir#{i}")
+      File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
+    end
+    (1..15).each do |i|
+      File.symlink("../dir#{i}", "dir#{i-1}/sub")
+    end
+
+    assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
+      Nanoc::Extra::FilesystemTools.all_files_in('dir0')
+    end
   end
 
   def test_all_files_in_relativizes_directory_names

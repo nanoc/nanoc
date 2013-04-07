@@ -39,7 +39,9 @@ module Nanoc::Extra
       Dir[dir_name + '/**/*'].map do |fn|
         case File.ftype(fn)
         when 'link'
-          if recursion_limit > 0
+          if 0 == recursion_limit
+            raise MaxSymlinkDepthExceededError.new(fn)
+          else
             absolute_target = self.resolve_symlink(fn)
             if File.file?(absolute_target)
               fn
