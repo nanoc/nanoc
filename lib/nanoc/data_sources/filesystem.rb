@@ -173,16 +173,9 @@ module Nanoc::DataSources
       grouped_filenames
     end
 
-    # Returns all files in the given directory, following symlinks up to a
-    # maximum of `recursion_limit` times.
-    def all_files_in(dir_name, recursion_limit=10)
-      res = Dir[dir_name + '/**/*'].map do |fn|
-        if File.symlink?(fn) && recursion_limit > 0
-          all_files_in(File.readlink(fn), recursion_limit-1)
-        elsif File.file?(fn)
-          fn
-        end
-      end.compact.flatten
+    # Returns all files in the given directory and directories below it.
+    def all_files_in(dir_name)
+      Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
     end
 
     # Returns the filename for the given base filename and the extension.
