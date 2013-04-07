@@ -57,8 +57,6 @@ module Nanoc::CLI
       puts "done"
     end
 
-  protected
-
     # @return [Boolean] true if debug output is enabled, false if not
     #
     # @see Nanoc::CLI.debug?
