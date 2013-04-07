@@ -52,7 +52,7 @@ module Nanoc::DataSources
       create_object('layouts', content, attributes, identifier, params)
     end
 
-  private
+  protected
 
     # Creates a new object (item or layout) on disk in dir_name according to
     # the given identifier. The file will have its attributes taken from the
@@ -144,7 +144,7 @@ module Nanoc::DataSources
     #   }
     def all_split_files_in(dir_name)
       # Get all good file names
-      filenames = Dir[dir_name + '/**/*'].select { |i| File.file?(i) }
+      filenames = self.all_files_in(dir_name)
       filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
 
       # Group by identifier
@@ -171,6 +171,18 @@ module Nanoc::DataSources
 
       # Done
       grouped_filenames
+    end
+
+    # Returns all files in the given directory, following symlinks up to a
+    # maximum of `recursion_limit` times.
+    def all_files_in(dir_name, recursion_limit=10)
+      res = Dir[dir_name + '/**/*'].map do |fn|
+        if File.symlink?(fn) && recursion_limit > 0
+          all_files_in(File.readlink(fn), recursion_limit-1)
+        elsif File.file?(fn)
+          fn
+        end
+      end.compact.flatten
     end
 
     # Returns the filename for the given base filename and the extension.
