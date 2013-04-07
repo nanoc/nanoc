@@ -5,6 +5,7 @@ module Nanoc::Extra
   autoload 'AutoCompiler',      'nanoc/extra/auto_compiler'
   autoload 'Checking',          'nanoc/extra/checking'
   autoload 'CHiCk',             'nanoc/extra/chick'
+  autoload 'FilesystemTools',   'nanoc/extra/filesystem_tools'
   autoload 'LinkCollector',     'nanoc/extra/link_collector.rb'
   autoload 'Pruner',            'nanoc/extra/pruner'
   autoload 'Validators',        'nanoc/extra/validators'
