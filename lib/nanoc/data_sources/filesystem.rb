@@ -143,8 +143,23 @@ module Nanoc::DataSources
     #     'content/qux' => [ nil,    'html' ]
     #   }
     def all_split_files_in(dir_name)
+      # follow symlinks to directory
+      symlink_depth = Hash.new 0
+      follow_symlink = proc do |i|
+        if symlink_depth[i] >= 10 # at most 10 times
+          i
+        elsif File.directory?(i) and File.symlink?(i)
+          Dir[ i + '/**/*' ]
+            .each {|descedent| symlink_depth[descedent] = symlink_depth[i] + 1 }
+            .map(&follow_symlink)
+        else
+          i
+        end
+      end
+
       # Get all good file names
-      filenames = Dir[dir_name + '/**/*'].select { |i| File.file?(i) }
+      filenames = Dir[dir_name + '/**/*'].map(&follow_symlink).flatten
+      filenames.select! { |i| File.file?(i) }
       filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
 
       # Group by identifier
