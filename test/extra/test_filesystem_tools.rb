@@ -9,7 +9,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
     end
     (1..15).each do |i|
-      File.symlink("dir#{i}", "dir#{i-1}/sub")
+      File.symlink("../dir#{i}", "dir#{i-1}/sub")
     end
 
     # Check
@@ -39,7 +39,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('foo/x.md', 'w') { |io| io.write('o hai from foo/x') }
     File.open('bar/y.md', 'w') { |io| io.write('o hai from bar/y') }
 
-    File.symlink('bar', 'foo/barlink')
+    File.symlink('../bar', 'foo/barlink')
 
     expected_files = [ 'foo/barlink/y.md', 'foo/x.md' ]
     actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('foo').sort
@@ -51,7 +51,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('bar', 'w') { |io| io.write('o hai from bar') }
     FileUtils.mkdir_p('dir')
     File.open('dir/foo', 'w') { |io| io.write('o hai from foo') }
-    File.symlink('bar', 'dir/bar-link')
+    File.symlink('../bar', 'dir/bar-link')
 
     # Check
     expected_files = [ 'dir/bar-link', 'dir/foo' ]

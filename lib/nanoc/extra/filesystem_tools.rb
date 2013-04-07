@@ -20,12 +20,13 @@ module Nanoc::Extra
     def all_files_in(dir_name, recursion_limit=10)
       Dir[dir_name + '/**/*'].map do |fn|
         if File.symlink?(fn) && recursion_limit > 0
-          dest = File.readlink(fn)
-          if File.file?(dest)
+          target = File.readlink(fn)
+          absolute_target = File.expand_path(target, File.dirname(fn))
+          if File.file?(absolute_target)
             fn
           else
-            all_files_in(dest, recursion_limit-1).map do |sfn|
-              fn + sfn[dest.size..-1]
+            all_files_in(absolute_target, recursion_limit-1).map do |sfn|
+              fn + sfn[absolute_target.size..-1]
             end
           end
         elsif File.file?(fn)
