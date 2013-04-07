@@ -22,9 +22,11 @@ module Nanoc::Extra
         if File.symlink?(fn) && recursion_limit > 0
           dest = File.readlink(fn)
           if File.file?(dest)
-            dest
+            fn
           else
-            all_files_in(dest, recursion_limit-1)
+            all_files_in(dest, recursion_limit-1).map do |sfn|
+              fn + sfn[dest.size..-1]
+            end
           end
         elsif File.file?(fn)
           fn
