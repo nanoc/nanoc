@@ -54,6 +54,9 @@ module Nanoc::Extra
     #
     # @return [Array<String>] A list of filenames
     #
+    # @raise [MaxSymlinkDepthExceededError] if too many indirections are
+    #   encountered while resolving symlinks
+    #
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
     def all_files_in(dir_name, recursion_limit=10)
@@ -92,8 +95,8 @@ module Nanoc::Extra
     #
     # @return [String] The absolute resolved filename of the symlink target
     #
-    # @raise [MaxSymlinkDepthExceeded] if too many indirections are encountered
-    #   while resolving symlinks
+    # @raise [MaxSymlinkDepthExceededError] if too many indirections are
+    #   encountered while resolving symlinks
     #
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
