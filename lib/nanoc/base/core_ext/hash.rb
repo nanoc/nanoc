@@ -8,8 +8,8 @@ module Nanoc::HashExtensions
   #
   # @return [Hash] The converted hash
   def symbolize_keys_recursively
-    inject({}) do |hash, (key, value)|
-      hash.merge(key.to_sym => value.respond_to?(:symbolize_keys_recursively) ? value.symbolize_keys_recursively : value)
+    inject({}) do |h, (k, v)|
+      h.merge((k.to_sym rescue k) => v.respond_to?(__method__) ? v.send(__method__) : v)
     end
   end
 
