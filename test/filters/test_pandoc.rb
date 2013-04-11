@@ -13,7 +13,7 @@ class Nanoc::Filters::PandocTest < Nanoc::TestCase
 
       # Run filter
       result = filter.setup_and_run("# Heading\n")
-      assert_equal("<h1 id=\"heading\">Heading</h1>", result)
+      assert_match(%r{<h1 id=\"heading\">Heading</h1>\s*}, result)
     end
   end
 

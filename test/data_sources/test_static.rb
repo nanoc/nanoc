@@ -13,6 +13,34 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     data_source
   end
 
+  def test_items_with_symlinks
+    # Create data source
+    data_source = new_data_source(:prefix => 'foo')
+
+    # Create sample files
+    FileUtils.mkdir_p('foo')
+    FileUtils.mkdir_p('foo-outside-1')
+    FileUtils.mkdir_p('foo-outside-2')
+    File.open('foo/a.png',           'w') { |io| io.write("random binary data") }
+    File.open('foo-outside-1/b.png', 'w') { |io| io.write("more binary data") }
+    File.open('foo-outside-2/c.png', 'w') { |io| io.write("yet more binary data") }
+
+    # Create symlinks
+    File.symlink('../foo-outside-1', 'foo/1')
+    File.symlink('../foo-outside-2/c.png', 'foo/c.png')
+
+    # Check all files
+    expected_filenames = [ 'foo/a.png', 'foo/1/b.png', 'foo/c.png' ].sort
+    actual_filenames   = Nanoc::Extra::FilesystemTools.all_files_in('foo').sort
+    assert_equal expected_filenames, actual_filenames
+
+    # Check items
+    items = data_source.send(:items).sort_by { |i| i.identifier }
+    actual_item_identifiers   = items.map { |i| i.identifier }.sort
+    expected_item_identifiers = %w( /a.png/ /1/b.png/ /c.png/ ).sort
+    assert_equal expected_item_identifiers, actual_item_identifiers
+  end
+
   def test_items
     # Create data source
     data_source = new_data_source(:prefix => 'foo')

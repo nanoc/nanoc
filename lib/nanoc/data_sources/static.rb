@@ -33,18 +33,14 @@ module Nanoc::DataSources
       # Get prefix
       prefix = config[:prefix] || 'static'
 
-      # Get all files under prefix dir
-      filenames = Dir[prefix + '/**/*'].select { |f| File.file?(f) }
-
       # Convert filenames to items
-      filenames.map do |filename|
+      self.all_files_in(prefix).map do |filename|
         attributes = {
           :extension => File.extname(filename)[1..-1],
           :filename  => filename,
         }
         attributes[:is_hidden] = true unless config[:hide_items] == false
         identifier = filename[(prefix.length+1)..-1] + '/'
-
         mtime      = File.mtime(filename)
         checksum   = Pathname.new(filename).checksum
 
@@ -57,5 +53,12 @@ module Nanoc::DataSources
       end
     end
 
+  protected
+
+    def all_files_in(dir_name)
+      Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
+    end
+
   end
+
 end
