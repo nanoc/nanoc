@@ -4,7 +4,7 @@ usage       'create-site [options] path'
 aliases     :create_site, :cs
 summary     'create a site'
 description <<-EOS
-Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` commandline option.
+Create a new site at the given path. The site will use the `filesystem` data source by default, but this can be changed using the `--datasource` commandline option.
 EOS
 
 required :d, :datasource, 'specify the data source for the new site'
@@ -63,7 +63,7 @@ prune:
 data_sources:
   -
     # The type is the identifier of the data source. By default, this will be
-    # `filesystem_unified`.
+    # `filesystem`.
     type: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:type]}
 
     # The path where items should be mounted (comparable to mount points in
@@ -304,7 +304,7 @@ EOS
 
       # Extract arguments and options
       path        = arguments[0]
-      data_source = options[:datasource] || 'filesystem_unified'
+      data_source = options.fetch(:datasource, 'filesystem')
 
       # Check whether site exists
       if File.exist?(path)
