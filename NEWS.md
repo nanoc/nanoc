@@ -1,5 +1,25 @@
 # nanoc news
 
+## 4.0.0
+
+Removed:
+
+* Support for Ruby 1.8.x
+* All code that was deprecated in nanoc 3.x
+* Bundler support
+* `filesystem_verbose`
+* VCS interface
+* `create-item` and `create-layout` commands (create the fiels manually)
+* `watch` and `autocompile` commands (use `guard-nanoc`)
+* `update` command
+* All rake tasks
+
+Changed:
+
+* Let nanoc determine encoding only from the configuration file and ignore
+  the environment settings (default to utf-8)
+* Renamed `filesystem_unified` to `filesystem`
+
 ## 3.6.3 (???)
 
 Fixes:
