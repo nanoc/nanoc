@@ -423,4 +423,30 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal("blah blah",       result[1])
   end
 
+  def test_encoding_default
+    File.write('test.txt', 'I ♥ Ruby')
+
+    # Create data sources
+    config = {}
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, config)
+
+    # Parse
+    data = data_source.send(:read, 'test.txt')
+    assert_equal Encoding.find('utf-8'), data.encoding
+    assert_equal 'I ♥ Ruby', data
+  end
+
+  def test_encoding_custom
+    File.write('test.txt', "Hall\xE5!")
+
+    # Create data sources
+    config = { encoding: 'ISO-8859-1' }
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, config)
+
+    # Parse
+    data = data_source.send(:read, 'test.txt')
+    assert_equal Encoding.find('utf-8'), data.encoding
+    assert_equal 'Hallå!', data
+  end
+
 end
