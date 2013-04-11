@@ -258,25 +258,17 @@ module Nanoc::DataSources
     def read(filename)
       # Read
       begin
-        data = File.read(filename)
+        data = File.binread(filename)
       rescue => e
         raise RuntimeError.new("Could not read #{filename}: #{e.inspect}")
       end
 
-      # Fix
-      if data.respond_to?(:encode!)
-        if @config && @config[:encoding]
-          original_encoding = Encoding.find(@config[:encoding])
-          data.force_encoding(@config[:encoding])
-        else
-          original_encoding = data.encoding
-        end
+      # Re-encode
+      encoding = (@config && @config[:encoding]) || 'utf-8'
+      data.force_encoding(encoding)
+      data.encode!('utf-8')
 
-        data.encode!('UTF-8') rescue raise_encoding_error(filename, original_encoding)
-        raise_encoding_error(filename, original_encoding) if !data.valid_encoding?
-      end
-
-      # Remove UTF-8 BOM (ugly)
+      # Remove UTF-8 BOM
       data.gsub!("\xEF\xBB\xBF", '')
 
       data
