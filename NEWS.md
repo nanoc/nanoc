@@ -9,7 +9,7 @@ Removed:
 * Bundler support
 * `filesystem_verbose`
 * VCS interface
-* `create-item` and `create-layout` commands (create the fiels manually)
+* `create-item` and `create-layout` commands (create the files manually)
 * `watch` and `autocompile` commands (use `guard-nanoc`)
 * `update` command
 * All rake tasks
