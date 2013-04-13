@@ -139,28 +139,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal 'random binary data', items[0].raw_content
   end
 
-  def test_identifier_for_filename_allowing_periods_in_identifiers
-    # Create data source
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
-
-    # Get input and expected output
-    expected = {
-      '/foo'            => '/foo/',
-      '/foo.html'       => '/foo/',
-      '/foo/index.html' => '/foo/',
-      '/foo.entry.html' => '/foo.entry/'
-    }
-
-    # Check
-    expected.each_pair do |input, expected_output|
-      actual_output = data_source.send(:identifier_for_filename, input)
-      assert_equal(
-        expected_output, actual_output,
-        "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
-      )
-    end
-  end
-
   def test_identifier_for_filename_disallowing_periods_in_identifiers
     # Create data source
     data_source = new_data_source
@@ -180,32 +158,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
         expected_output, actual_output,
         "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
       )
-    end
-  end
-
-  def test_identifier_for_filename_with_subfilename_allowing_periods_in_identifiers
-    expectations = {
-      'foo/bar.yaml'         => '/foo/bar/',
-      'foo/quxbar.yaml'      => '/foo/quxbar/',
-      'foo/barqux.yaml'      => '/foo/barqux/',
-      'foo/quxbarqux.yaml'   => '/foo/quxbarqux/',
-      'foo/qux.bar.yaml'     => '/foo/qux.bar/',
-      'foo/bar.qux.yaml'     => '/foo/bar.qux/',
-      'foo/qux.bar.qux.yaml' => '/foo/qux.bar.qux/',
-      'foo/index.yaml'       => '/foo/',
-      'index.yaml'           => '/',
-      'foo/blah_index.yaml'  => '/foo/blah_index/'
-    }
-
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
-    expectations.each_pair do |meta_filename, expected_identifier|
-      content_filename = meta_filename.sub(/yaml$/, 'html')
-      [ meta_filename, content_filename ].each do |filename|
-        assert_equal(
-          expected_identifier,
-          data_source.instance_eval { identifier_for_filename(filename) }
-        )
-      end
     end
   end
 
@@ -231,90 +183,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
           expected_identifier,
           data_source.instance_eval { identifier_for_filename(filename) }
         )
-      end
-    end
-  end
-
-  def test_load_objects_allowing_periods_in_identifiers
-    # Create data source
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
-
-    # Create a fake class
-    klass = Class.new do
-      attr_reader :stuff
-      def initialize(*stuff)
-        @stuff = stuff
-      end
-      def ==(other)
-        @stuff == other.stuff
-      end
-    end
-
-    # Create sample files
-    FileUtils.mkdir_p('foo')
-    FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/a/b/c.yaml',     'w') { |io| io.write("---\nnum: 1\n") }
-    File.open('foo/b.c.yaml',       'w') { |io| io.write("---\nnum: 2\n") }
-    File.open('foo/b.c.html',       'w') { |io| io.write("test 2")        }
-    File.open('foo/car.html',       'w') { |io| io.write("test 3")        }
-    File.open('foo/ugly.yaml~',     'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html~',     'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write("blah")          }
-
-    # Get expected output
-    expected_out = [
-      klass.new(
-        '',
-        {
-          'num'             => 1,
-          :content_filename => nil,
-          :meta_filename    => 'foo/a/b/c.yaml',
-          :extension        => nil
-        },
-        '/a/b/c/',
-        :binary => false, :mtime => File.mtime('foo/a/b/c.yaml')
-      ),
-      klass.new(
-        'test 2',
-        {
-          'num'             => 2,
-          :content_filename => 'foo/b.c.html',
-          :meta_filename    => 'foo/b.c.yaml',
-          :extension        => 'html'
-        },
-        '/b.c/',
-        :binary => false, :mtime => File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
-      ),
-      klass.new(
-        'test 3',
-        {
-          :content_filename => 'foo/car.html',
-          :meta_filename    => nil,
-          :extension        => 'html'
-        },
-        '/car/',
-        :binary => false, :mtime => File.mtime('foo/car.html')
-      )
-    ]
-
-    # Get actual output ordered by identifier
-    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[2] }
-
-    # Check
-    (0..expected_out.size-1).each do |i|
-      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
-      assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
-
-      actual_file   = actual_out[i].stuff[1][:file]
-      expected_file = expected_out[i].stuff[1][:file]
-      actual_file.close unless actual_file.nil?
-      expected_file.close unless expected_file.nil?
-
-      [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
-        assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
   end
@@ -399,42 +267,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
-    end
-  end
-
-  def test_create_object_allowing_periods_in_identifiers
-    # Create data source
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
-
-    # Create object without period
-    data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/asdf/')
-    assert File.file?('foo/asdf.html')
-    data = data_source.send(:parse, 'foo/asdf.html', nil, 'moo')
-    assert_equal({ 'some' => 'attributes' }, data[0])
-    assert_equal('some content',             data[1])
-
-    # Create object with period
-    data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/as.df/')
-    assert File.file?('foo/as.df.html')
-    data = data_source.send(:parse, 'foo/as.df.html', nil, 'moo')
-    assert_equal({ 'some' => 'attributes' }, data[0])
-    assert_equal('some content',             data[1])
-  end
-
-  def test_create_object_disallowing_periods_in_identifiers
-    # Create data source
-    data_source = new_data_source
-
-    # Create object without period
-    data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/asdf/')
-    assert File.file?('foo/asdf.html')
-    data = data_source.send(:parse, 'foo/asdf.html', nil, 'moo')
-    assert_equal({ 'some' => 'attributes' }, data[0])
-    assert_equal('some content',             data[1])
-
-    # Create object with period
-    assert_raises(RuntimeError) do
-      data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/as.df/')
     end
   end
 
@@ -577,33 +409,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source.create_layout('the content', 'the attributes', 'the identifier')
   end
 
-  def test_all_split_files_in_allowing_periods_in_identifiers
-    # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
-
-    # Write sample files
-    FileUtils.mkdir_p('foo')
-    %w( foo.html foo.yaml bar.entry.html foo/qux.yaml ).each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
-    end
-
-    # Write stray files
-    %w( foo.html~ foo.yaml.orig bar.entry.html.bak ).each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
-    end
-
-    # Get all files
-    output_expected = {
-      './foo'       => [ 'yaml', 'html' ],
-      './bar.entry' => [ nil,    'html' ],
-      './foo/qux'   => [ 'yaml', nil    ]
-    }
-    output_actual = data_source.send :all_split_files_in, '.'
-
-    # Check
-    assert_equal output_expected, output_actual
-  end
-
   def test_all_split_files_in_disallowing_periods_in_identifiers
     # Create data source
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
@@ -665,36 +470,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
   end
 
-  def test_basename_of_allowing_periods_in_identifiers
-    # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
-
-    # Get input and expected output
-    expected = {
-      '/'                 => '/',
-      '/foo'              => '/foo',
-      '/foo.html'         => '/foo',
-      '/foo.xyz.html'     => '/foo.xyz',
-      '/foo/'             => '/foo/',
-      '/foo.xyz/'         => '/foo.xyz/',
-      '/foo/bar'          => '/foo/bar',
-      '/foo/bar.html'     => '/foo/bar',
-      '/foo/bar.xyz.html' => '/foo/bar.xyz',
-      '/foo/bar/'         => '/foo/bar/',
-      '/foo/bar.xyz/'     => '/foo/bar.xyz/',
-      '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/'
-    }
-
-    # Check
-    expected.each_pair do |input, expected_output|
-      actual_output = data_source.send(:basename_of, input)
-      assert_equal(
-        expected_output, actual_output,
-        "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
-      )
-    end
-  end
-
   def test_basename_of_disallowing_periods_in_identifiers
     # Create data source
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
@@ -718,36 +493,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:basename_of, input)
-      assert_equal(
-        expected_output, actual_output,
-        "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
-      )
-    end
-  end
-
-  def test_ext_of_allowing_periods_in_identifiers
-    # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
-
-    # Get input and expected output
-    expected = {
-      '/'                 => '',
-      '/foo'              => '',
-      '/foo.html'         => '.html',
-      '/foo.xyz.html'     => '.html',
-      '/foo/'             => '',
-      '/foo.xyz/'         => '',
-      '/foo/bar'          => '',
-      '/foo/bar.html'     => '.html',
-      '/foo/bar.xyz.html' => '.html',
-      '/foo/bar/'         => '',
-      '/foo/bar.xyz/'     => '',
-      '/foo.xyz/bar.xyz/' => ''
-    }
-
-    # Check
-    expected.each_pair do |input, expected_output|
-      actual_output = data_source.send(:ext_of, input)
       assert_equal(
         expected_output, actual_output,
         "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"

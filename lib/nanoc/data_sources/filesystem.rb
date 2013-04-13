@@ -28,17 +28,7 @@ module Nanoc::DataSources
   #
   #     foo/bar/index.html → /foo/bar/
   #
-  # In other cases, the identifier is calculated by stripping the extension.
-  # If the `allow_periods_in_identifiers` attribute in the configuration is
-  # true, only the last extension will be stripped if the file has multiple
-  # extensions; if it is false or unset, all extensions will be stripped.
-  # For example:
-  #
-  #     (`allow_periods_in_identifiers` set to true)
-  #     foo.entry.html → /foo.entry/
-  #     
-  #     (`allow_periods_in_identifiers` set to false)
-  #     foo.html.erb → /foo/
+  # In other cases, the identifier is calculated by stripping all extensions.
   #
   # Note that each item must have an unique identifier. nanoc will display an
   # error if two items with the same identifier are found.
@@ -60,6 +50,8 @@ module Nanoc::DataSources
   # files. In the data source configuration, set `encoding` to an encoding
   # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
   # UTF-8 will be used.
+  # 
+  # TODO update description
   class Filesystem < Nanoc::DataSource
 
     identifier :filesystem
@@ -106,12 +98,6 @@ module Nanoc::DataSources
     # the given identifier. The file will have its attributes taken from the
     # attributes hash argument and its content from the content argument.
     def create_object(dir_name, content, attributes, identifier, params={})
-      # Check for periods
-      if (@config.nil? || !@config[:allow_periods_in_identifiers]) && identifier.include?('.')
-        raise RuntimeError,
-          "Attempted to create an object in #{dir_name} with identifier #{identifier} containing a period, but allow_periods_in_identifiers is not enabled in the site configuration. (Enabling allow_periods_in_identifiers may cause the site to break, though.)"
-      end
-
       # Determine path
       ext = params[:extension] || '.html'
       path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + ext)
@@ -267,17 +253,14 @@ module Nanoc::DataSources
     # can be the content filename or the meta filename.
     def identifier_for_filename(filename)
       if filename =~ /(^|\/)index\.[^\/]+$/
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\/?index\.[^\/\.]+$/ : /\/?index\.[^\/]+$/)
+        regex = /\/?index\.[^\/]+$/
       else
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/         : /\.[^\/]+$/)
+        regex = /\.[^\/]+$/
       end
       filename.sub(regex, '').cleaned_identifier
     end
 
-    # Returns the base name of filename, i.e. filename with the first or all
-    # extensions stripped off. By default, all extensions are stripped off,
-    # but when allow_periods_in_identifiers is set to true in the site
-    # configuration, only the last extension will be stripped .
+    # Returns the base name of filename, i.e. filename with all extensions stripped off.
     def basename_of(filename)
       filename.sub(extension_regex, '')
     end
@@ -292,11 +275,7 @@ module Nanoc::DataSources
     # name. The first match group will be the entire extension, including the
     # leading period.
     def extension_regex
-      if @config && @config[:allow_periods_in_identifiers]
-        /(\.[^\/\.]+$)/
-      else
-        /(\.[^\/]+$)/
-      end
+      /(\.[^\/]+$)/
     end
 
     # Parses the file named `filename` and returns an array with its first
