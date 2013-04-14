@@ -59,34 +59,6 @@ module Nanoc
       @item_compilation_rules.select { |r| r.applicable_to?(item) }
     end
 
-    # @return [String] The name of the Rules filename
-    def rules_filename
-      'Rules'
-    end
-
-    # Loads this site’s rules.
-    #
-    # @return [void]
-    def load
-      # Get rule data
-      if !File.file?(self.rules_filename)
-        raise Nanoc::Errors::NoRulesFileFound.new
-      end
-      @data = File.read(self.rules_filename)
-
-      # Load DSL
-      dsl.instance_eval(@data, "./#{self.rules_filename}")
-    end
-
-    # Unloads this site’s rules.
-    #
-    # @return [void]
-    def unload
-      @item_compilation_rules  = []
-      @item_routing_rules      = []
-      @layout_filter_mapping   = {}
-    end
-
     # Finds the first matching compilation rule for the given item
     # representation.
     #
@@ -145,23 +117,11 @@ module Nanoc
       nil
     end
 
-    # Returns the Nanoc::CompilerDSL that should be used for this site.
-    def dsl
-      Nanoc::CompilerDSL.new(self)
-    end
-    memoize :dsl
-
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @return [Object] An unique reference to this object
     def reference
       :rules
-    end
-
-    # @return [String] The checksum for this object. If its contents change,
-    #   the checksum will change as well.
-    def checksum
-      @data.checksum
     end
 
     def inspect

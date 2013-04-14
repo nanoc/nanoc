@@ -116,7 +116,7 @@ module Nanoc
       site.load
 
       # Preprocess
-      rules_collection.load
+      self.load_rules
       preprocess
       site.setup_child_parent_links
       build_reps
@@ -131,6 +131,28 @@ module Nanoc
       raise e
     ensure
       @loading = false
+    end
+
+    # @return [String] The name of the Rules filename
+    def rules_filename
+      'Rules'
+    end
+
+    # Loads the Rules
+    #
+    # @api private
+    #
+    # @return [void]
+    def load_rules
+      # Get rule data
+      if !File.file?(self.rules_filename)
+        raise Nanoc::Errors::NoRulesFileFound.new
+      end
+      @rules_data = File.read(self.rules_filename)
+
+      # Load DSL
+      dsl = Nanoc::CompilerDSL.new(self.rules_collection)
+      dsl.instance_eval(@rules_data, "./#{self.rules_filename}")
     end
 
     # Undoes the effects of {#load}. Used when {#load} raises an exception.
@@ -148,7 +170,6 @@ module Nanoc
 
       items.each { |item| item.reps.clear }
       site.teardown_child_parent_links
-      rules_collection.unload
 
       site.unload
 
@@ -171,6 +192,7 @@ module Nanoc
       self.objects.each do |obj|
         checksum_store[obj] = obj.checksum
       end
+      checksum_store[self.rules_collection] = @rule_data
 
       # Store
       stores.each { |s| s.store }
@@ -202,8 +224,7 @@ module Nanoc
     #
     # @api private
     def objects
-      site.items + site.layouts + site.code_snippets +
-        [ site.config, rules_collection ]
+      site.items + site.layouts + site.code_snippets + [ site.config ]
     end
 
     # Creates the representations of all items as defined by the compilation

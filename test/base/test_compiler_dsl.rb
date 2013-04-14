@@ -32,7 +32,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
       # Create other necessary stuff
       site = Nanoc::Site.new('.')
       site.items << item
-      dsl = site.compiler.rules_collection.dsl
+      dsl = Nanoc::CompilerDSL.new(site.compiler.rules_collection)
 
       # Include rules
       dsl.include_rules 'more_rules'
