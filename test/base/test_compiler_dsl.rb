@@ -191,7 +191,7 @@ EOS
 
   def test_identifier_to_regex_without_wildcards
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo') }
     expected = %r{^/foo/$}
@@ -205,7 +205,7 @@ EOS
 
   def test_identifier_to_regex_with_one_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar') }
     expected = %r{^/foo/(.*?)/bar/$}
@@ -219,7 +219,7 @@ EOS
 
   def test_identifier_to_regex_with_two_wildcards
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
     expected = %r{^/foo/(.*?)/bar/(.*?)/qux/$}
@@ -233,7 +233,7 @@ EOS
 
   def test_identifier_to_regex_with_just_one_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('*') }
     expected = %r{^/(.*?)$}
@@ -247,7 +247,7 @@ EOS
 
   def test_identifier_to_regex_with_root
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/') }
     expected = %r{^/$}
@@ -261,7 +261,7 @@ EOS
 
   def test_identifier_to_regex_with_only_children
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/*/') }
     expected = %r{^/foo/(.*?)/$}
@@ -275,7 +275,7 @@ EOS
 
   def test_identifier_to_regex_with_plus_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/+') }
     expected = %r{^/foo/(.+?)/$}
@@ -290,17 +290,10 @@ EOS
   end
 
   def test_dsl_has_no_access_to_compiler
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::CompilerDSL.new(nil)
     assert_raises(NameError) do
       compiler_dsl.instance_eval { compiler }
     end
-  end
-
-  def test_config
-    $venetian = 'unsnares'
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, { :venetian => 'snares' })
-    compiler_dsl.instance_eval { $venetian = @config[:venetian] }
-    assert_equal 'snares', $venetian
   end
 
 end
