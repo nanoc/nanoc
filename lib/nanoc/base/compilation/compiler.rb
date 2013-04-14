@@ -443,7 +443,7 @@ module Nanoc
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      Nanoc::ChecksumStore.new(:site => @site)
+      Nanoc::ChecksumStore.new
     end
     memoize :checksum_store
 
