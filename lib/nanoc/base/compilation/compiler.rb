@@ -99,7 +99,7 @@ module Nanoc
     # @return [Nanoc::RulesCollection] The collection of rules to be used
     #   for compiling this site
     def rules_collection
-      Nanoc::RulesCollection.new(self)
+      Nanoc::RulesCollection.new
     end
     memoize :rules_collection
 
@@ -338,7 +338,7 @@ module Nanoc
 
       # Assign snapshots
       reps.each do |rep|
-        rep.snapshots = rules_collection.snapshots_for(rep)
+        rep.snapshots = self.rule_memory_calculator.snapshots_for(rep)
       end
 
       # Attempt to compile all active reps
@@ -383,7 +383,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started,       rep.item)
 
       # Calculate rule memory if we haven’t yet done do
-      rules_collection.new_rule_memory_for_rep(rep)
+      self.rule_memory_calculator.new_rule_memory_for_rep(rep)
 
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
@@ -455,7 +455,7 @@ module Nanoc
 
     # @return [RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
-      Nanoc::RuleMemoryCalculator.new(:rules_collection => rules_collection)
+      Nanoc::RuleMemoryCalculator.new(:compiler => self, :rules_collection => rules_collection)
     end
     memoize :rule_memory_calculator
 
