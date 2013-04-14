@@ -7,6 +7,8 @@ module Nanoc
   # @api private
   class FilesystemRulesStore < ::Nanoc::RulesStore
 
+    identifier :filesystem
+
     # TODO remove me (necessary for storing checksum for rules)
     attr_reader :rule_data
 

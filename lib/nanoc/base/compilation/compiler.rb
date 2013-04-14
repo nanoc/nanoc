@@ -133,10 +133,12 @@ module Nanoc
       @loading = false
     end
 
+    # @return [Class<Nanoc::RulesStore>] The rules store class given in the
+    #   configuration file
     # TODO document
-    # TODO make rule loader class customisable
     def rules_store_class
-      Nanoc::FilesystemRulesStore
+      identifier = @site.config.fetch(:rules_store_identifier, :filesystem)
+      Nanoc::RulesStore.named(identifier)
     end
 
     # TODO document
