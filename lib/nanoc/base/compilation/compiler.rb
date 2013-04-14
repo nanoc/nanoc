@@ -133,26 +133,14 @@ module Nanoc
       @loading = false
     end
 
-    # @return [String] The name of the Rules filename
-    def rules_filename
-      'Rules'
+    # TODO document
+    def rule_loader
+      @_rule_loader ||= Nanoc::RuleLoader.new(self.rules_collection)
     end
 
-    # Loads the Rules
-    #
-    # @api private
-    #
-    # @return [void]
+    # TODO document
     def load_rules
-      # Get rule data
-      if !File.file?(self.rules_filename)
-        raise Nanoc::Errors::NoRulesFileFound.new
-      end
-      @rules_data = File.read(self.rules_filename)
-
-      # Load DSL
-      dsl = Nanoc::CompilerDSL.new(self.rules_collection)
-      dsl.instance_eval(@rules_data, "./#{self.rules_filename}")
+      self.rule_loader.load
     end
 
     # Undoes the effects of {#load}. Used when {#load} raises an exception.
@@ -192,7 +180,7 @@ module Nanoc
       self.objects.each do |obj|
         checksum_store[obj] = obj.checksum
       end
-      checksum_store[self.rules_collection] = @rule_data
+      checksum_store[self.rules_collection] = self.rule_loader.rule_data
 
       # Store
       stores.each { |s| s.store }
