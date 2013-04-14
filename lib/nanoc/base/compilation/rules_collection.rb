@@ -62,20 +62,23 @@ module Nanoc
       @item_compilation_rules.select { |r| r.applicable_to?(item) }
     end
 
+    # @return [String] The name of the Rules filename
+    def rules_filename
+      'Rules'
+    end
+
     # Loads this site’s rules.
     #
     # @return [void]
     def load
-      # Find rules file
-      rules_filenames = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
-      rules_filename = rules_filenames.find { |f| File.file?(f) }
-      raise Nanoc::Errors::NoRulesFileFound.new if rules_filename.nil?
-
       # Get rule data
-      @data = File.read(rules_filename)
+      if !File.file?(self.rules_filename)
+        raise Nanoc::Errors::NoRulesFileFound.new
+      end
+      @data = File.read(self.rules_filename)
 
       # Load DSL
-      dsl.instance_eval(@data, "./#{rules_filename}")
+      dsl.instance_eval(@data, "./#{self.rules_filename}")
     end
 
     # Unloads this site’s rules.

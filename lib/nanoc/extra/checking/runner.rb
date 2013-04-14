@@ -7,8 +7,6 @@ module Nanoc::Extra::Checking
   # @api private
   class Runner
 
-    CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb']
-
     # @param [Nanoc::Site] site The nanoc site this runner is for
     def initialize(site)
       @site = site
@@ -16,7 +14,7 @@ module Nanoc::Extra::Checking
 
     # @param [String] The name of the Checks file
     def checks_filename
-      @_checks_filename ||= CHECKS_FILENAMES.find { |f| File.file?(f) }
+      'Checks'
     end
 
     # @return [Boolean] true if a Checks file exists, false otherwise
