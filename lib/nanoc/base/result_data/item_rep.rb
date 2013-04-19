@@ -72,7 +72,8 @@ module Nanoc
       #
       # @return [void]
       def write(snapshot=:last)
-        Nanoc::ItemRepWriter.new.write(self, snapshot)
+        writer_class = Nanoc::ItemRepWriter.named(:filesystem)
+        writer_class.new.write(self, snapshot)
       end
 
       # Resets the compilation progress for this item representation. This is

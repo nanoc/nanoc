@@ -4,6 +4,18 @@ module Nanoc
 
   class ItemRepWriter
 
+    extend Nanoc::PluginRegistry::PluginMethods
+
+    def write(rep, snapshot=:last)
+      raise NotImplementedError
+    end
+
+  end
+
+  class FilesystemItemRepWriter < ItemRepWriter
+
+    identifier :filesystem
+
     # Writes the item rep's compiled content to the rep's output file.
     #
     # This method will send two notifications: one before writing the item
