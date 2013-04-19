@@ -2,7 +2,6 @@
 
 require 'net/http'
 require 'net/https'
-require 'nokogiri'
 require 'timeout'
 require 'uri'
 
@@ -14,6 +13,8 @@ module ::Nanoc::Extra::Checking::Checks
     identifiers :external_links, :elinks
 
     def run
+      require 'nokogiri'
+
       # Find all broken external hrefs
       # TODO de-duplicate this (duplicated in internal links check)
       filenames = self.output_filenames.select { |f| File.extname(f) == '.html' }
