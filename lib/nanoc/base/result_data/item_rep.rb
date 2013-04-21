@@ -72,45 +72,8 @@ module Nanoc
       #
       # @return [void]
       def write(snapshot=:last)
-        # Get raw path
-        raw_path = self.raw_path(:snapshot => snapshot)
-        return if raw_path.nil?
-
-        # Create parent directory
-        FileUtils.mkdir_p(File.dirname(raw_path))
-
-        # Check if file will be created
-        is_created = !File.file?(raw_path)
-
-        # Notify
-        Nanoc::NotificationCenter.post(:will_write_rep, self, snapshot)
-
-        if self.binary?
-          temp_path = temporary_filenames[:last]
-        else
-          temp_path = self.temp_filename
-          File.open(temp_path, 'w') { |io| io.write(self.stored_content_at_snapshot(:last)) }
-        end
-
-        # Check whether content was modified
-        is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
-
-        # Write
-        FileUtils.cp(temp_path, raw_path) if is_modified
-
-        # Notify
-        Nanoc::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
-      end
-
-      TMP_TEXT_ITEMS_DIR = 'tmp/text_items'
-
-      def temp_filename
-        FileUtils.mkdir_p(TMP_TEXT_ITEMS_DIR)
-        tempfile = Tempfile.new('', TMP_TEXT_ITEMS_DIR)
-        new_filename = tempfile.path
-        tempfile.close!
-
-        File.expand_path(new_filename)
+        writer_class = Nanoc::ItemRepWriter.named(:filesystem)
+        writer_class.new.write(self, snapshot)
       end
 
       # Resets the compilation progress for this item representation. This is
