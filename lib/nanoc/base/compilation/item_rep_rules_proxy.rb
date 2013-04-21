@@ -9,7 +9,7 @@ module Nanoc
   #
   # The API provided by item representation proxies allows layout identifiers
   # to be given as literals instead of as references to {Nanoc::Layout}.
-  class ItemRepProxy
+  class ItemRepRulesProxy
 
     extend Forwardable
 

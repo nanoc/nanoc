@@ -1,5 +1,11 @@
 # encoding: utf-8
 
+# Kinds of item reps:
+#
+# - core entity
+# - in rules (#filter, #layout, #snapshot, #[], #path, ...)
+# - in compilation context (#[], #path, ...)
+
 module Nanoc
 
   # A single representation (rep) of an item ({Nanoc::Item}). An item can
@@ -246,7 +252,7 @@ module Nanoc
     # This method is supposed to be called only in a compilation rule block
     # (see {Nanoc::CompilerDSL#compile}).
     #
-    # @see Nanoc::ItemRepProxy#filter
+    # @see Nanoc::ItemRepRulesProxy#filter
     #
     # @param [Symbol] filter_name The name of the filter to run the item
     #   representations' content through
@@ -311,7 +317,7 @@ module Nanoc
     # This method is supposed to be called only in a compilation rule block
     # (see {Nanoc::CompilerDSL#compile}).
     #
-    # @see Nanoc::ItemRepProxy#layout
+    # @see Nanoc::ItemRepRulesProxy#layout
     #
     # @param [Nanoc::Layout] layout The layout to use
     #
@@ -394,7 +400,7 @@ module Nanoc
     # @return [false]
     #
     # @see Nanoc::ItemRepRecorderProxy#is_proxy?
-    # @see Nanoc::ItemRepProxy#is_proxy?
+    # @see Nanoc::ItemRepRulesProxy#is_proxy?
     def is_proxy?
       false
     end
