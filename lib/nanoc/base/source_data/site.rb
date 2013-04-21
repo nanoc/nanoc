@@ -170,6 +170,8 @@ module Nanoc
     #
     # @return [void]
     def setup_child_parent_links
+      # FIXME this should not be necessary anymore. Don't precalculate child/parent links
+
       teardown_child_parent_links
 
       item_map = {}
@@ -178,14 +180,10 @@ module Nanoc
       end
 
       @items.each do |item|
-        parent_id_end = item.identifier.rindex('/', -2)
-        if parent_id_end
-          parent_id = item.identifier[0..parent_id_end]
-          parent = item_map[parent_id]
-          if parent
-            item.parent = parent
-            parent.children << item
-          end
+        parent = item_map[item.identifier.parent]
+        if parent
+          item.parent = parent
+          parent.children << item
         end
       end
     end
@@ -309,7 +307,7 @@ module Nanoc
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|
-          i.identifier = File.join(ds.items_root, i.identifier)
+          i.identifier = Nanoc::Identifier.from_string(File.join(ds.items_root, i.identifier))
           i.site = self
         end
         @items.concat(items_in_ds)
