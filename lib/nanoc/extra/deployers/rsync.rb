@@ -23,7 +23,15 @@ module Nanoc::Extra::Deployers
 
     # Default rsync options
     DEFAULT_OPTIONS = [
-      '-glpPrtvz',
+      '--group',
+      '--links',
+      '--perms',
+      '--partial',
+      '--progress',
+      '--recursive',
+      '--times',
+      '--verbose',
+      '--compress',
       '--exclude=".hg"',
       '--exclude=".svn"',
       '--exclude=".git"'
