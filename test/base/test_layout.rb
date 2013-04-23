@@ -3,20 +3,25 @@
 class Nanoc::LayoutTest < Nanoc::TestCase
 
   def test_initialize
-    # Make sure attributes are cleaned
     layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
     assert_equal({ :foo => 'bar' }, layout.attributes)
+  end
 
+  def test_initialize_with_unclean_identifier
     # Make sure identifier is cleaned
     layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, 'foo')
-    assert_equal('/foo/', layout.identifier)
+    assert_equal('/foo/', layout.identifier.to_s)
   end
 
   def test_frozen_identifier
     layout = Nanoc::Layout.new("foo", {}, '/foo')
 
     assert_raises_frozen_error do
-      layout.identifier.chop!
+      layout.identifier.components << 'blah'
+    end
+
+    assert_raises_frozen_error do
+      layout.identifier.components[0] << 'blah'
     end
   end
 
@@ -44,7 +49,7 @@ class Nanoc::LayoutTest < Nanoc::TestCase
 
     layout = Marshal.load(Marshal.dump(layout))
 
-    assert_equal '/foo/', layout.identifier
+    assert_equal '/foo/', layout.identifier.to_s
     assert_equal 'foobar', layout.raw_content
     assert_equal({ :a => { :b => 123 }}, layout.attributes)
   end

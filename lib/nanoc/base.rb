@@ -21,6 +21,7 @@ require 'nanoc/base/source_data/data_source'
 require 'nanoc/base/source_data/item'
 require 'nanoc/base/source_data/item_array'
 require 'nanoc/base/source_data/layout'
+require 'nanoc/base/source_data/identifier'
 require 'nanoc/base/source_data/site'
 
 # Load result data classes

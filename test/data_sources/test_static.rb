@@ -36,7 +36,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
 
     # Check items
     items = data_source.send(:items).sort_by { |i| i.identifier }
-    actual_item_identifiers   = items.map { |i| i.identifier }.sort
+    actual_item_identifiers   = items.map { |i| i.identifier.to_s }.sort
     expected_item_identifiers = %w( /a.png/ /1/b.png/ /c.png/ ).sort
     assert_equal expected_item_identifiers, actual_item_identifiers
   end
