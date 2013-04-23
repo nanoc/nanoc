@@ -6,7 +6,7 @@ Fixes:
 
 * Added support for growlnotify on Windows (#253, #267)
 * Fixed bug which caused the external links checker to ignore the query string (#279, #297)
-* Removed weird treatment of `DOCTYPE`s in the relativize_paths filter (#296)
+* Removed weird treatment of `DOCTYPE`s in the `relativize_paths` filter (#296)
 * Fixed CodeRay syntax coloring on Ruby 2.0
 * Silenced "Could not find files for the given pattern(s)" message on Windows (#298)
 * Fixed issue which could cause `output.diff` not to be generated correctly (#255, #301)
@@ -133,7 +133,7 @@ Improvements:
 * Added prune configuration to config.yaml
 * Made nanoc check for presence of nanoc in Gemfile
 * Made compile command not show identicals (use `--verbose` if you want them)
-* Made relativize_paths filter recognise more paths to relativize [Arnau Siches]
+* Made `relativize_paths` filter recognise more paths to relativize [Arnau Siches]
 * Fixed #passthrough for items without extensions [Justin Hileman]
 * Added more IO/File proxy methods to cleaning streams
 
@@ -221,7 +221,7 @@ Extensions:
 * Made data source configuration location a bit more obvious
 * Fixed watch command under Windows
 * Made filesystem data source ignore UTF-8 BOM
-* Improved compatibility of colorize_syntax filter with older libxml versions
+* Improved compatibility of `colorize_syntax` filter with older libxml versions
 
 ## 3.2.3 (2011-10-31)
 
@@ -233,7 +233,7 @@ Extensions:
 ## 3.2.2 (2011-09-04)
 
 * Fixed command usage printing
-* Made relativize_paths filter handle Windows network paths [Ruben Verborgh]
+* Made `relativize_paths` filter handle Windows network paths [Ruben Verborgh]
 * Made watcher use correct configuration
 * Allowed code blocks to start with a non-language shebang line
 
@@ -274,7 +274,7 @@ Extensions:
 
 * Really fixed dependency generation between Sass partials this time
 * Updated Less filter to 2.0
-* Made colorize_syntax filter throw an error if pygmentize is not available
+* Made `colorize_syntax` filter throw an error if pygmentize is not available
 
 ## 3.1.8 (2011-06-25)
 
@@ -371,10 +371,10 @@ Deprecated:
 
 ## 3.0.8 (2010-02-24)
 
-* `#atom_tag_for` now works with base_urls that contain a path [Eric Sunshine]
+* `#atom_tag_for` now works with `base_url`s that contain a path [Eric Sunshine]
 * Generated root URLs in `#atom_feed` now end with a slash [Eric Sunshine]
 * Autocompiler now recognises requests to index files
-* `Blogging` helper now allows created_at to be a Time instance
+* `Blogging` helper now allows `created_at` to be a Time instance
 
 ## 3.0.7 (2010-01-29)
 
