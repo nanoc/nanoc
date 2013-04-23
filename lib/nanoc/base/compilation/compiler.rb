@@ -133,14 +133,22 @@ module Nanoc
       @loading = false
     end
 
+    # @return [Class<Nanoc::RulesStore>] The rules store class given in the
+    #   configuration file
     # TODO document
-    def rule_loader
-      @_rule_loader ||= Nanoc::RuleLoader.new(self.rules_collection)
+    def rules_store_class
+      identifier = @site.config.fetch(:rules_store_identifier, :filesystem)
+      Nanoc::RulesStore.named(identifier)
+    end
+
+    # TODO document
+    def rules_store
+      @_rules_store ||= self.rules_store_class.new(self.rules_collection)
     end
 
     # TODO document
     def load_rules
-      self.rule_loader.load
+      self.rules_store.load_rules
     end
 
     # Undoes the effects of {#load}. Used when {#load} raises an exception.
@@ -180,7 +188,7 @@ module Nanoc
       self.objects.each do |obj|
         checksum_store[obj] = obj.checksum
       end
-      checksum_store[self.rules_collection] = self.rule_loader.rule_data
+      checksum_store[self.rules_collection] = self.rules_store.rule_data
 
       # Store
       stores.each { |s| s.store }

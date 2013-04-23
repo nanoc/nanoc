@@ -42,7 +42,10 @@ require 'nanoc/base/compilation/outdatedness_checker'
 require 'nanoc/base/compilation/outdatedness_reasons'
 require 'nanoc/base/compilation/rule'
 require 'nanoc/base/compilation/rule_context'
-require 'nanoc/base/compilation/rule_loader'
 require 'nanoc/base/compilation/rule_memory_calculator'
 require 'nanoc/base/compilation/rule_memory_store'
 require 'nanoc/base/compilation/rules_collection'
+require 'nanoc/base/compilation/rules_store'
+
+# Load stuff that should be loaded elsewhere
+require 'nanoc/base/compilation/filesystem_rules_store'
