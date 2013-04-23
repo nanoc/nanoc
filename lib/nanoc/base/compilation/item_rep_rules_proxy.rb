@@ -93,7 +93,11 @@ module Nanoc
     end
 
     def layout_with_identifier(layout_identifier)
-      layout ||= layouts.find { |l| l.identifier == layout_identifier.cleaned_identifier }
+      # FIXME ugly
+      if layout_identifier.is_a?(String)
+        layout_identifier = Nanoc::Identifier.from_string(layout_identifier)
+      end
+      layout = layouts.find { |l| l.identifier == layout_identifier }
       raise Nanoc::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
       layout
     end

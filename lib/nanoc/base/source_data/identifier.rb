@@ -8,16 +8,14 @@ module Nanoc
 
     def self.from_string(string)
       components = string.split('/').reject { |c| c.empty? }
-      components.freeze
       self.new(components)
     end
 
     def initialize(components)
-      unless components.frozen?
-        raise ArgumentError, "Nanoc::Identifier components must be frozen"
-      end
-
       @components = components
+
+      @components.freeze
+      @components.each { |c| c.freeze }
     end
 
     def parent
@@ -25,9 +23,13 @@ module Nanoc
         nil
       else
         parent_components = self.components[0..-2]
-        parent_components.freeze
         self.class.new(parent_components)
       end
+    end
+
+    # FIXME ugly
+    def prefix(prefix)
+      self.class.from_string(prefix + self.to_s)
     end
 
     # FIXME ugly
@@ -45,7 +47,6 @@ module Nanoc
     end
 
     def eql?(other)
-      # TODO compare components, not strings
       self.to_s == other.to_s
     end
 
@@ -53,7 +54,9 @@ module Nanoc
       self.eql?(other)
     end
 
-    # TODO implement === so comparison with string is possible
+    def <=>(other)
+      self.to_s <=> other.to_s
+    end
 
     def inspect
       "<#{self.class} #{self.to_s.inspect}>"

@@ -307,7 +307,7 @@ module Nanoc
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|
-          i.identifier = Nanoc::Identifier.from_string(File.join(ds.items_root, i.identifier))
+          i.identifier = i.identifier.prefix(ds.items_root)
           i.site = self
         end
         @items.concat(items_in_ds)
@@ -324,7 +324,9 @@ module Nanoc
       @layouts = []
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
-        layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
+        layouts_in_ds.each do |i|
+          i.identifier = i.identifier.prefix(ds.layouts_root)
+        end
         @layouts.concat(layouts_in_ds)
       end
     end
