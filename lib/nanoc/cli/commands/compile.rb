@@ -353,15 +353,17 @@ module Nanoc::CLI::Commands
     end
 
     def run
+      time_before = Time.now
+
       self.load_site
       self.check_for_deprecated_usage
 
       puts "Compiling site…"
-      time_before = Time.now
       self.run_listeners_while do
         self.site.compile
         self.prune
       end
+
       time_after = Time.now
       puts
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
