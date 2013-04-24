@@ -11,6 +11,8 @@ Fixes:
 * Silenced "Could not find files for the given pattern(s)" message on Windows (#298)
 * Fixed issue which could cause `output.diff` not to be generated correctly (#255, #301)
 * Let filesystem and static data sources follow symlinks (#299, #302)
+* Added compatibility with Listen 1.0 (#309)
+* Let `#passthrough` in Rules work well with the static data source (#251)
 
 ## 3.6.2 (2013-03-23)
 
