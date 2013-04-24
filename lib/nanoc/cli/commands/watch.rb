@@ -80,12 +80,12 @@ module Nanoc::CLI::Commands
           rebuilder.call(removed[0]) if removed[0]
         end
 
-        listener = Listen::MultiListener.new(*dirs_to_watch).change(&callback)
-        listener_root = Listen::MultiListener.new('', :filter => files_to_watch, :ignore => ignore_dir).change(&callback)
+        listener = Listen::Listener.new(*dirs_to_watch).change(&callback)
+        listener_root = Listen::Listener.new('.', :filter => files_to_watch, :ignore => ignore_dir).change(&callback)
 
         begin
-          listener_root.start(false)
-          listener.start
+          listener_root.start
+          listener.start!
         rescue Interrupt
           listener.stop
           listener_root.stop
