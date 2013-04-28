@@ -172,7 +172,7 @@ module Nanoc::DataSources
 
         # Get identifier
         # TODO make base dir name configurable
-        identifier = base_filename.sub(/^content\//, '')
+        identifier = base_filename.sub(/^content\//, '/')
 
         # Get modification times
         mtime = self.max_mtime_for_filenames([ attributes_filename, base_filename ])
