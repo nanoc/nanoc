@@ -14,6 +14,10 @@ rescue => e
   raise e
 end
 
+# Setup coverage
+require 'coveralls'
+Coveralls.wear!
+
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'nanoc'
