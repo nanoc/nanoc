@@ -33,7 +33,7 @@ module Nanoc
     attr_reader   :raw_content
 
     # @return [String] The filename pointing to the file containing this
-    #   item’s content (only available for binary items)
+    #   item’s content
     attr_reader   :raw_filename
 
     # @return [Nanoc::Site] The site this item belongs to
@@ -77,6 +77,7 @@ module Nanoc
       if @is_binary
         @raw_filename = raw_content_or_raw_filename
       else
+        @raw_filename = attributes[:content_filename]
         @raw_content  = raw_content_or_raw_filename
       end
 

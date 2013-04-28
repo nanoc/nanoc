@@ -184,7 +184,11 @@ module Nanoc
 
       # Create routing rule
       routing_block = proc do
-        item[:extension].nil? ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
+        # This is a temporary solution until an item can map back to its data
+        # source.
+        # ATM item[:content_filename] is nil for items coming from the static
+        # data source.
+        item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
       end
       routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)

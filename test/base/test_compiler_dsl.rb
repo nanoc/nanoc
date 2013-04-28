@@ -93,6 +93,36 @@ EOS
     end
   end
 
+  def test_passthrough_with_ext_from_static_data_source
+    with_site do
+      # Create config
+      File.open('nanoc.yaml', 'w') do |io|
+        io.write "data_sources:\n"
+        io.write "  - type: static\n"
+      end
+
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write <<EOS
+passthrough "/foo.txt/"
+EOS
+      end
+
+      # Create items
+      FileUtils.mkdir_p('static')
+      File.open('static/foo.txt', 'w') do |io|
+        io.write "Hello I am foo"
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check paths
+      assert_equal [ 'output/foo.txt' ], Dir['output/*']
+    end
+  end
+
   def test_passthrough_priority
     with_site do
       # Create rules
