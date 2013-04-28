@@ -33,28 +33,6 @@ class Nanoc::SiteTest < Nanoc::TestCase
     assert_equal({},      site.config[:data_sources][0][:config])
   end
 
-  def test_load_rules_with_existing_rules_file
-    # Mock DSL
-    dsl = mock
-    dsl.expects(:compile).with('*')
-
-    # Create site
-    site = Nanoc::Site.new({})
-    site.compiler.rules_collection.expects(:dsl).returns(dsl)
-
-    # Create rules file
-    File.open('Rules', 'w') do |io|
-      io.write <<-EOF
-compile '*' do
-  # ... do nothing ...
-end
-EOF
-    end
-
-    # Load rules
-    site.compiler.rules_collection.load
-  end
-
   def test_load_data_sources_first
     # Create site
     Nanoc::CLI.run %w( create_site bar)
@@ -79,7 +57,7 @@ EOF
 
       # Check
       assert_equal 1,       site.data_sources.size
-      assert_equal '/foo/', site.items[0].identifier
+      assert_equal '/foo/', site.items[0].identifier.to_s
     end
   end
 

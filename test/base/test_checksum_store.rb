@@ -9,7 +9,7 @@ class Nanoc::ChecksumStoreTest < Nanoc::TestCase
     FileUtils.mkdir_p('tmp')
     pstore = PStore.new('tmp/checksums')
     pstore.transaction do
-      pstore[:data] = { [ :item, '/moo/' ] => 'zomg' }
+      pstore[:data] = { [ :item, Nanoc::Identifier.from_string('/moo/') ] => 'zomg' }
       pstore[:version] = 1
     end
 

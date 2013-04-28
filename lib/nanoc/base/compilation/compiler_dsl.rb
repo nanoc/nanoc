@@ -11,11 +11,8 @@ module Nanoc
     #
     # @param [Nanoc::RulesCollection] rules_collection The collection of
     #   rules to modify when loading this DSL
-    #
-    # @param [Hash] config The site configuration
-    def initialize(rules_collection, config)
+    def initialize(rules_collection)
       @rules_collection = rules_collection
-      @config = config
     end
 
     # Creates a preprocessor block that will be executed after all data is

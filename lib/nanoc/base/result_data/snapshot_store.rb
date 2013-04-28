@@ -83,7 +83,7 @@ module Nanoc
 
       def query(item_identifier, rep_name, snapshot_name)
         query = 'SELECT content FROM snapshots WHERE item_identifier = ? AND rep_name = ? AND snapshot_name = ?'
-        rows = @db.execute(query, [ item_identifier, rep_name.to_s, snapshot_name.to_s ])
+        rows = @db.execute(query, [ item_identifier.to_s, rep_name.to_s, snapshot_name.to_s ])
         raise "No row found" if rows.empty?
         res = rows.first[0]
         res.freeze
@@ -92,12 +92,12 @@ module Nanoc
 
       def set(item_identifier, rep_name, snapshot_name, content)
         query = 'INSERT OR REPLACE INTO snapshots (item_identifier, rep_name, snapshot_name, content) VALUES (?, ?, ?, ?)'
-        @db.execute(query, [ item_identifier, rep_name.to_s, snapshot_name.to_s, content ])
+        @db.execute(query, [ item_identifier.to_s, rep_name.to_s, snapshot_name.to_s, content ])
       end
 
       def exist?(item_identifier, rep_name, snapshot_name)
         query = 'SELECT COUNT(*) FROM snapshots WHERE item_identifier = ? AND rep_name = ? AND snapshot_name = ?'
-        rows = @db.execute(query, [ item_identifier, rep_name.to_s, snapshot_name.to_s ])
+        rows = @db.execute(query, [ item_identifier.to_s, rep_name.to_s, snapshot_name.to_s ])
         rows[0][0].to_i != 0
       end
 

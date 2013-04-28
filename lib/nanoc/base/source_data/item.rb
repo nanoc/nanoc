@@ -64,6 +64,10 @@ module Nanoc
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
     def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
+      if identifier.is_a?(String)
+        identifier = Nanoc::Identifier.from_string(identifier)
+      end
+
       # Parse params
       params ||= {}
       params[:binary] = false unless params.has_key?(:binary)
@@ -83,7 +87,7 @@ module Nanoc
 
       # Get rest of params
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.cleaned_identifier.freeze
+      @identifier   = identifier
 
       @parent       = nil
       @children     = []
@@ -211,7 +215,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} identifier=\"#{self.identifier}\" binary?=#{self.binary?}>"
+      "<#{self.class} identifier=#{self.identifier.inspect} binary?=#{self.binary?}>"
     end
 
     # @return [String] The checksum for this object. If its contents change,

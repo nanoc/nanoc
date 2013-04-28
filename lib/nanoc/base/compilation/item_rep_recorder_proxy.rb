@@ -48,14 +48,14 @@ module Nanoc
 
     # @return [void]
     #
-    # @see Nanoc::ItemRepProxy#filter, Nanoc::ItemRep#filter
+    # @see Nanoc::ItemRepRulesProxy#filter, Nanoc::ItemRep#filter
     def filter(name, args={})
       @rule_memory << [ :filter, name, args ]
     end
 
     # @return [void]
     #
-    # @see Nanoc::ItemRepProxy#layout, Nanoc::ItemRep#layout
+    # @see Nanoc::ItemRepRulesProxy#layout, Nanoc::ItemRep#layout
     def layout(layout_identifier, extra_filter_args=nil)
       if extra_filter_args
         @rule_memory << [ :layout, layout_identifier, extra_filter_args ]
@@ -92,7 +92,7 @@ module Nanoc
     # @return [true]
     #
     # @see Nanoc::ItemRep#is_proxy?
-    # @see Nanoc::ItemRepProxy#is_proxy?
+    # @see Nanoc::ItemRepRulesProxy#is_proxy?
     def is_proxy?
       true
     end

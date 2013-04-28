@@ -16,15 +16,12 @@ module Nanoc::Helpers
     #   with the item itself
     def breadcrumbs_trail
       trail      = []
-      idx_start  = 0
 
+      identifier = @item.identifier
       loop do
-        idx = @item.identifier.index('/', idx_start)
-        break if idx.nil?
-
-        idx_start = idx+1
-        identifier = @item.identifier[0..idx]
-        trail << @items[identifier]
+        trail.unshift(@items[identifier])
+        identifier = identifier.parent
+        break if identifier.nil?
       end
 
       trail

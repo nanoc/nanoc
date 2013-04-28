@@ -53,7 +53,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_equal [ @one, @two ], @items.slice(0, 2)
   end
 
-  def test_brackets_and_slice_and_at_with_identifier
+  def test_brackets_and_slice_and_at_with_string_identifier
     assert_equal @one, @items['/one/']
     assert_equal @one, @items.slice('/one/')
     assert_equal @one, @items.at('/one/')
@@ -65,6 +65,23 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items['/max-payne/']
     assert_nil @items.slice('/max-payne/')
     assert_nil @items.at('/max-payne/')
+  end
+
+  def test_brackets_and_slice_and_at_with_object_identifier
+    identifier_one = Nanoc::Identifier.from_string('/one/')
+    assert_equal @one, @items[identifier_one]
+    assert_equal @one, @items.slice(identifier_one)
+    assert_equal @one, @items.at(identifier_one)
+
+    identifier_two = Nanoc::Identifier.from_string('/two/')
+    assert_equal @two, @items[identifier_two]
+    assert_equal @two, @items.slice(identifier_two)
+    assert_equal @two, @items.at(identifier_two)
+
+    identifier_max_payne = Nanoc::Identifier.from_string('/max-payne/')
+    assert_nil @items[identifier_max_payne]
+    assert_nil @items.slice(identifier_max_payne)
+    assert_nil @items.at(identifier_max_payne)
   end
 
   def test_brackets_and_slice_and_at_with_malformed_identifier

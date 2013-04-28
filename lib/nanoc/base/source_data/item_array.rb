@@ -32,7 +32,7 @@ module Nanoc
     end
 
     def [](*args)
-      if 1 == args.size && args.first.is_a?(String)
+      if 1 == args.size && (args.first.is_a?(String) || args.first.is_a?(Nanoc::Identifier))
         self.item_with_identifier(args.first)
       else
         @items[*args]
@@ -41,7 +41,7 @@ module Nanoc
     alias_method :slice, :[]
 
     def at(arg)
-      if arg.is_a?(String)
+      if arg.is_a?(String) || arg.is_a?(Nanoc::Identifier)
         self.item_with_identifier(arg)
       else
         @items[arg]
@@ -62,6 +62,7 @@ module Nanoc
       @mapping = {}
       @items.each do |item|
         @mapping[item.identifier] = item
+        @mapping[item.identifier.to_s] = item
       end
       @mapping.freeze
     end

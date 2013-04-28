@@ -271,7 +271,8 @@ module Nanoc::DataSources
       else
         regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/         : /\.[^\/]+$/)
       end
-      filename.sub(regex, '').cleaned_identifier
+
+      Nanoc::Identifier.from_string(filename.sub(regex, ''))
     end
 
     # Returns the base name of filename, i.e. filename with the first or all
