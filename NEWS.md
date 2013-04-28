@@ -2,6 +2,12 @@
 
 ## 3.6.3 (???)
 
+Enhancements:
+
+* Deprecated `watch` and `autocompile` commands in favour of [`guard-nanoc`](https://github.com/nanoc/guard-nanoc)
+
+## 3.6.3 (2013-04-24)
+
 Fixes:
 
 * Added support for growlnotify on Windows (#253, #267)
@@ -12,7 +18,8 @@ Fixes:
 * Fixed issue which could cause `output.diff` not to be generated correctly (#255, #301)
 * Let filesystem and static data sources follow symlinks (#299, #302)
 * Added compatibility with Listen 1.0 (#309)
-* Let `#passthrough` in Rules work well with the static data source (#251)
+* Let `#passthrough` in Rules work well with the static data source (#251) [Gregory Pakosz]
+* Made timing information be more accurate (#303)
 
 ## 3.6.2 (2013-03-23)
 

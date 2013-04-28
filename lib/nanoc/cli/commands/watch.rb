@@ -11,6 +11,8 @@ module Nanoc::CLI::Commands
   class Watch < ::Nanoc::CLI::CommandRunner
 
     def run
+      warn 'WARNING: The `watch` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
+
       require 'listen'
       require 'pathname'
 
@@ -66,30 +68,30 @@ module Nanoc::CLI::Commands
       rebuilder.call(nil)
 
       # Get directories to watch
-      dirs_to_watch  = watcher_config[:dirs_to_watch]  || ['content', 'layouts', 'lib']
-      files_to_watch = watcher_config[:files_to_watch] || ['nanoc.yaml', 'config.yaml', 'Rules', 'rules', 'Rules.rb', 'rules.rb']
-      files_to_watch = Regexp.new(files_to_watch.map { |name| "#{Regexp.quote(name)}$"}.join("|"))
-      ignore_dir = Regexp.new(Dir.glob("*").map{|dir| dir if File::ftype(dir) == "directory" }.compact.join("|"))
+      dirs_to_watch  = watcher_config[:dirs_to_watch]  || [ 'content', 'layouts', 'lib' ]
+      files_to_watch = watcher_config[:files_to_watch] || [ 'nanoc.yaml', 'config.yaml', 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
+      files_to_watch = Regexp.new(files_to_watch.map { |name| Regexp.quote(name) + '$' }.join('|'))
+      ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.dir?(dir) }.compact.join('|'))
 
       # Watch
       puts "Watching for changes…"
 
-        callback = Proc.new do |modified, added, removed|
-          rebuilder.call(modified[0]) if modified[0]
-          rebuilder.call(added[0]) if added[0]
-          rebuilder.call(removed[0]) if removed[0]
-        end
+      callback = Proc.new do |modified, added, removed|
+        rebuilder.call(modified[0]) if modified[0]
+        rebuilder.call(added[0]) if added[0]
+        rebuilder.call(removed[0]) if removed[0]
+      end
 
-        listener = Listen::Listener.new(*dirs_to_watch).change(&callback)
-        listener_root = Listen::Listener.new('.', :filter => files_to_watch, :ignore => ignore_dir).change(&callback)
+      listener = Listen::Listener.new(*dirs_to_watch).change(&callback)
+      listener_root = Listen::Listener.new('.', :filter => files_to_watch, :ignore => ignore_dir).change(&callback)
 
-        begin
-          listener_root.start
-          listener.start!
-        rescue Interrupt
-          listener.stop
-          listener_root.stop
-        end
+      begin
+        listener_root.start
+        listener.start!
+      rescue Interrupt
+        listener.stop
+        listener_root.stop
+      end
     end
 
     # Allows sending user notifications in a cross-platform way.
@@ -111,7 +113,7 @@ module Nanoc::CLI::Commands
         end
       end
 
-    protected
+      protected
 
       def have_tool_nix?(tool)
         !`which #{tool}`.empty?
