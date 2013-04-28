@@ -114,11 +114,11 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
           io.write "  filter :sass\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/a/' do\n"
-          io.write "  item.identifier.chop + '.css'\n"
+          io.write "route '/a.*' do\n"
+          io.write "  item.identifier.sub(/\.sass$/, '.css')\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/b/' do\n"
+          io.write "route '/b.*' do\n"
           io.write "  nil\n"
           io.write "end\n"
         end
@@ -169,11 +169,11 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
           io.write "  filter :sass\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/a/' do\n"
-          io.write "  item.identifier.chop + '.css'\n"
+          io.write "route '/a.sass' do\n"
+          io.write "  item.identifier.sub(/\.sass$/, '.css')\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/_b/' do\n"
+          io.write "route '/_b.sass' do\n"
           io.write "  nil\n"
           io.write "end\n"
         end
@@ -210,12 +210,12 @@ private
 
   def create_filter(params={})
     FileUtils.mkdir_p('content')
-    File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green')}
+    File.open('content/blah.sass', 'w') { |io| io.write('p\n  color: green')}
 
-    items = [ Nanoc::Item.new(
-      'blah',
-      { :content_filename => 'content/xyzzy.sass' },
-      '/blah/') ]
+    item = Nanoc::Item.new( 'blah', {}, '/blah.sass')
+    item.raw_filename = 'content/blah.sass'
+
+    items = [ item ]
     params = { :item => items[0], :items => items }.merge(params)
     ::Nanoc::Filters::Sass.new(params)
   end

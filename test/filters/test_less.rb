@@ -2,11 +2,15 @@
 
 class Nanoc::Filters::LessTest < Nanoc::TestCase
 
+  def setup
+    super
+
+    @item = Nanoc::Item.new("blah", {}, '/foo/bar.txt')
+    @item.raw_filename = 'content/foo/bar.txt'
+  end
+
   def test_filter
     if_have 'less' do
-      # Create item
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
-
       # Create filter
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
@@ -19,17 +23,14 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_filter_with_paths_relative_to_site_directory
     if_have 'less' do
       # Create file to import
-      FileUtils.mkdir_p('content/foo/bar')
-      File.open('content/foo/bar/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
-
-      # Create item
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+      FileUtils.mkdir_p('content/foo/qux')
+      File.open('content/foo/qux/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter
-      result = filter.setup_and_run('@import "content/foo/bar/imported_file.less";')
+      result = filter.setup_and_run('@import "content/foo/qux/imported_file.less";')
       assert_match(/p\s*\{\s*color:\s*red;?\s*\}/, result)
     end
   end
@@ -37,18 +38,17 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_filter_with_paths_relative_to_current_file
     if_have 'less' do
       # Create file to import
-      FileUtils.mkdir_p('content/foo/bar')
-      File.open('content/foo/bar/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
+      FileUtils.mkdir_p('content/foo/qux')
+      File.write('content/foo/qux/imported_file.less', 'p { color: red; }')
 
       # Create item
-      File.open('content/foo/bar.txt', 'w') { |io| io.write('meh') }
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+      File.write('content/foo/bar.txt', 'meh')
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
       # Run filter
-      result = filter.setup_and_run('@import "bar/imported_file.less";')
+      result = filter.setup_and_run('@import "qux/imported_file.less";')
       assert_match(/p\s*\{\s*color:\s*red;?\s*\}/, result)
     end
   end
@@ -71,11 +71,11 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
           io.write "  filter :less\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/a/' do\n"
-          io.write "  item.identifier.chop + '.css'\n"
+          io.write "route '/a.less' do\n"
+          io.write "  item.identifier.sub(/\.less$/, '.css')\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/b/' do\n"
+          io.write "route '/b.less' do\n"
           io.write "  nil\n"
           io.write "end\n"
         end
@@ -110,9 +110,6 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
   def test_compression
     if_have 'less' do
-      # Create item
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
-
       # Create filter
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
 
