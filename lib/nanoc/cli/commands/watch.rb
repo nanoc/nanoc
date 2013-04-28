@@ -11,6 +11,8 @@ module Nanoc::CLI::Commands
   class Watch < ::Nanoc::CLI::CommandRunner
 
     def run
+      warn 'WARNING: The `watch` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
+
       require 'listen'
       require 'pathname'
 

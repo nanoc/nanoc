@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.6.3 (???)
+
+Enhancements:
+
+* Deprecated `watch` and `autocompile` commands in favour of [`guard-nanoc`](https://github.com/nanoc/guard-nanoc)
+
 ## 3.6.3 (2013-04-24)
 
 Fixes:
