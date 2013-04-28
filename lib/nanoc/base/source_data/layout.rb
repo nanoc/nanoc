@@ -11,6 +11,9 @@ module Nanoc
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
+    # TODO document
+    attr_accessor :raw_filename
+
     # @return [Hash] This layout's attributes
     attr_reader :attributes
 
@@ -32,7 +35,7 @@ module Nanoc
     def initialize(raw_content, attributes, identifier, params=nil)
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.cleaned_identifier.freeze
+      @identifier   = identifier.freeze
     end
 
     # Requests the attribute with the given key.

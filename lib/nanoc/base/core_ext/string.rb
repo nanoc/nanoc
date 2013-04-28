@@ -2,11 +2,14 @@
 
 module Nanoc::StringExtensions
 
-  # Transforms string into an actual identifier
-  #
-  # @return [String] The identifier generated from the receiver
-  def cleaned_identifier
-    "/#{self}/".gsub(/^\/+|\/+$/, '/')
+  # TODO remove me
+  def stem
+    extension = File.extname(self)
+    if extension.empty?
+      self
+    else
+      self[0..-(1+extension.length)].stem
+    end
   end
 
   # Calculates the checksum for this string. Any change to this string will

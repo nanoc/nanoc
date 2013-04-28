@@ -34,7 +34,7 @@ module Nanoc
 
     # @return [String] The filename pointing to the file containing this
     #   item’s content
-    attr_reader   :raw_filename
+    attr_accessor :raw_filename
 
     # @return [Nanoc::Site] The site this item belongs to
     attr_accessor :site
@@ -82,8 +82,12 @@ module Nanoc
       end
 
       # Get rest of params
+      # TODO validate identifier (must start with slash, cannot end with slash)
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.cleaned_identifier.freeze
+      @identifier   = identifier.freeze
+      if @identifier !~ /^\/.*[^\/]$/
+        raise "Not a valid identifier: #{@identifier}"
+      end
 
       @parent       = nil
       @children     = []

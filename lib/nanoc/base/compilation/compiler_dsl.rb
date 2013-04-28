@@ -184,11 +184,7 @@ module Nanoc
 
       # Create routing rule
       routing_block = proc do
-        # This is a temporary solution until an item can map back to its data
-        # source.
-        # ATM item[:content_filename] is nil for items coming from the static
-        # data source.
-        item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
+        item.identifier
       end
       routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
@@ -252,10 +248,9 @@ module Nanoc
     # into /^foo\/(.*?)\/bar$/ and 'foo+' is transformed into /^foo(.+?)/.
     def identifier_to_regex(identifier)
       if identifier.is_a? String
-        # Add leading/trailing slashes if necessary
+        # Add leading slash if necessary
         new_identifier = identifier.dup
-        new_identifier[/^/] = '/' if identifier[0,1] != '/'
-        new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1,1])
+        new_identifier[0,0] = '/' unless identifier.start_with?('/')
 
         /^#{new_identifier.gsub('*', '(.*?)').gsub('+', '(.+?)')}$/
       else

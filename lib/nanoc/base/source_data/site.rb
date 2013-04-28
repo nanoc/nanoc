@@ -170,6 +170,9 @@ module Nanoc
     #
     # @return [void]
     def setup_child_parent_links
+      # TODO re-enable this
+=begin
+
       teardown_child_parent_links
 
       item_map = {}
@@ -188,6 +191,7 @@ module Nanoc
           end
         end
       end
+=end
     end
 
     # Removes all child-parent links.
