@@ -97,7 +97,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     (0..expected_out.size-1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
-      assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
+      assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2].to_s, 'identifier must match'
       assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
       [ 'num', :filename, :extension ].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
@@ -153,11 +153,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check
     expected.each_pair do |input, expected_output|
-      actual_output = data_source.send(:identifier_for_filename, input)
-      assert_equal(
-        expected_output, actual_output,
-        "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
-      )
+      actual_output = data_source.send(:identifier_for_filename, input).to_s
+      assert_equal(expected_output, actual_output)
     end
   end
 
@@ -181,7 +178,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       [ meta_filename, content_filename ].each do |filename|
         assert_equal(
           expected_identifier,
-          data_source.instance_eval { identifier_for_filename(filename) }
+          data_source.instance_eval { identifier_for_filename(filename) }.to_s
         )
       end
     end
@@ -257,7 +254,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     (0..expected_out.size-1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
-      assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
+      assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2].to_s, 'identifier must match'
       assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
 
       actual_file   = actual_out[i].stuff[1][:file]

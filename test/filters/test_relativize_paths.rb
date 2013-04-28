@@ -18,46 +18,53 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   end
 
   def test_filter_html_with_double_quotes
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[<a href="/foo">foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
+      # Set content
+      raw_content      = %[<a href="/foo">foo</a>]
+      expected_content = %[<a href="../..">foo</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_with_single_quotes
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[<a href='/foo'>foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
+      # Set content
+      raw_content      = %[<a href='/foo'>foo</a>]
+      expected_content = %[<a href="../..">foo</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_without_quotes
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[<a href=/foo>foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
+      # Set content
+      raw_content      = %[<a href=/foo>foo</a>]
+      expected_content = %[<a href="../..">foo</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_with_boilerplate
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content = <<EOS
+      # Set content
+      raw_content = <<EOS
 <!DOCTYPE html>
 <html>
   <head>
@@ -68,207 +75,240 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   </body>
 </html>
 EOS
-    expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
-    expected_match_1 = %r{^<!DOCTYPE html>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*$}
+      expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
+      expected_match_1 = %r{^<!DOCTYPE html>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*$}
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_match(expected_match_0, actual_content)
-    assert_match(expected_match_1, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_match(expected_match_0, actual_content)
+      assert_match(expected_match_1, actual_content)
+    end
   end
 
   def test_filter_html_multiple
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[<a href="/foo">foo</a> <a href="/bar">bar</a>]
-    expected_content = %[<a href="../..">foo</a> <a href="../../../bar">bar</a>]
+      # Set content
+      raw_content      = %[<a href="/foo">foo</a> <a href="/bar">bar</a>]
+      expected_content = %[<a href="../..">foo</a> <a href="../../../bar">bar</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_nested
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[<a href="/"><img src="/bar.png" /></a>]
-    expected_content = %[<a href="../../../"><img src="../../../bar.png"></a>]
+      # Set content
+      raw_content      = %[<a href="/"><img src="/bar.png" /></a>]
+      expected_content = %[<a href="../../../"><img src="../../../bar.png"></a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_outside_tag
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[stuff href="/foo" more stuff]
-    expected_content = %[stuff href="/foo" more stuff]
+      # Set content
+      raw_content      = %[stuff href="/foo" more stuff]
+      expected_content = %[stuff href="/foo" more stuff]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_root
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[<a href="/">foo</a>]
-    expected_content = %[<a href="../../">foo</a>]
+      # Set content
+      raw_content      = %[<a href="/">foo</a>]
+      expected_content = %[<a href="../../">foo</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_network_path
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[<a href="//example.com/">example.com</a>]
-    expected_content = %[<a href="//example.com/">example.com</a>]
+      # Set content
+      raw_content      = %[<a href="//example.com/">example.com</a>]
+      expected_content = %[<a href="//example.com/">example.com</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_with_anchor
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[<a href="#max-payne">Max Payne</a>]
-    expected_content = %[<a href="#max-payne">Max Payne</a>]
+      # Set content
+      raw_content      = %[<a href="#max-payne">Max Payne</a>]
+      expected_content = %[<a href="#max-payne">Max Payne</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_with_url
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[<a href="http://example.com/">Example</a>]
-    expected_content = %[<a href="http://example.com/">Example</a>]
+      # Set content
+      raw_content      = %[<a href="http://example.com/">Example</a>]
+      expected_content = %[<a href="http://example.com/">Example</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_html_with_relative_path
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[<a href="example">Example</a>]
-    expected_content = %[<a href="example">Example</a>]
+      # Set content
+      raw_content      = %[<a href="example">Example</a>]
+      expected_content = %[<a href="example">Example</a>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
 
   def test_filter_html_object_with_relative_path
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[<object data="/example"><param name="movie" content="/example"></object>]
-    expected_content = %[<object data="../../example"><param name="movie" content="../../example"></object>]
+      # Set content
+      raw_content      = %[<object data="/example"><param name="movie" content="/example"></object>]
+      expected_content = %[<object data="../../example"><param name="movie" content="../../example"></object>]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_implicit
-    # Create filter with mock item
-    @filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      @filter = Nanoc::Filters::RelativizePaths.new
 
-    # Test
-    assert_raises(RuntimeError) do
-      @filter.setup_and_run("moo")
+      # Test
+      assert_raises(RuntimeError) do
+        @filter.setup_and_run("moo")
+      end
     end
   end
 
   def test_filter_css_with_double_quotes
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[background: url("/foo/bar/background.png");]
-    expected_content = %[background: url("../background.png");]
+      # Set content
+      raw_content      = %[background: url("/foo/bar/background.png");]
+      expected_content = %[background: url("../background.png");]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :css)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :css)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_css_with_single_quotes
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[background: url('/foo/bar/background.png');]
-    expected_content = %[background: url('../background.png');]
+      # Set content
+      raw_content      = %[background: url('/foo/bar/background.png');]
+      expected_content = %[background: url('../background.png');]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :css)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :css)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_css_without_quotes
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[background: url(/foo/bar/background.png);]
-    expected_content = %[background: url(../background.png);]
+      # Set content
+      raw_content      = %[background: url(/foo/bar/background.png);]
+      expected_content = %[background: url(../background.png);]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :css)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :css)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_css_multiple
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[background: url(/foo/bar/a.png) url(/foo/bar/b.png);]
-    expected_content = %[background: url(../a.png) url(../b.png);]
+      # Set content
+      raw_content      = %[background: url(/foo/bar/a.png) url(/foo/bar/b.png);]
+      expected_content = %[background: url(../a.png) url(../b.png);]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :css)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :css)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_css_root
-    # It is probably a bit weird to have “url(/)” in CSS, but I’ve made a
-    # test case for this situation anyway. Can’t hurt…
+    if_have 'nokogiri' do
+      # It is probably a bit weird to have “url(/)” in CSS, but I’ve made a
+      # test case for this situation anyway. Can’t hurt…
 
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[background: url(/);]
-    expected_content = %[background: url(../../);]
+      # Set content
+      raw_content      = %[background: url(/);]
+      expected_content = %[background: url(../../);]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :css)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :css)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_css_network_path
-    self.create_filter_and_item_rep_with_path('/woof/meow/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/woof/meow/')
 
-    # Set content
-    raw_content      = %[background: url(//example.com);]
-    expected_content = %[background: url(//example.com);]
+      # Set content
+      raw_content      = %[background: url(//example.com);]
+      expected_content = %[background: url(//example.com);]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :css)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :css)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
   def test_filter_xml
@@ -452,15 +492,17 @@ XML
   end
 
   def test_filter_html_doctype
-    self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
+    if_have 'nokogiri' do
+      self.create_filter_and_item_rep_with_path('/foo/bar/baz/')
 
-    # Set content
-    raw_content      = %[&lt;!DOCTYPE html>]
-    expected_content = %[&lt;!DOCTYPE html&gt;]
+      # Set content
+      raw_content      = %[&lt;!DOCTYPE html>]
+      expected_content = %[&lt;!DOCTYPE html&gt;]
 
-    # Test
-    actual_content = @filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
+      # Test
+      actual_content = @filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
+    end
   end
 
 end

@@ -371,7 +371,7 @@ module Nanoc::Helpers
 
       formatted_date = attribute_to_time(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier)
+      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier.to_s)
     end
 
     # Converts the given attribute (which can be a string, a Time or a Date)

@@ -33,9 +33,13 @@ module Nanoc
     #   compatibility, this can be a Time instance indicating the time when
     #   this layout was last modified (mtime).
     def initialize(raw_content, attributes, identifier, params=nil)
+      if identifier.is_a?(String)
+        identifier = Nanoc::Identifier.from_string(identifier)
+      end
+
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.freeze
+      @identifier   = identifier
     end
 
     # Requests the attribute with the given key.

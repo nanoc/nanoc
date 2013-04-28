@@ -13,6 +13,7 @@ Removed:
 * `watch` and `autocompile` commands (use `guard-nanoc`)
 * `update` command
 * All rake tasks
+* Alternative spelling for `Rules` and `Checks` files
 
 Changed:
 

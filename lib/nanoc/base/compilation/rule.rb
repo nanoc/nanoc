@@ -49,7 +49,7 @@ module Nanoc
     # @return [Boolean] true if this rule can be applied to the given item
     #   rep, false otherwise
     def applicable_to?(item)
-      item.identifier =~ @identifier_regex
+      item.identifier.to_s =~ @identifier_regex
     end
 
     # Applies this rule to the given item rep.
@@ -64,7 +64,7 @@ module Nanoc
     # @return [void]
     def apply_to(rep, params={})
       compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
-      rep = Nanoc::ItemRepProxy.new(rep, compiler) unless rep.is_proxy?
+      rep = Nanoc::ItemRepRulesProxy.new(rep, compiler) unless rep.is_proxy?
       Nanoc::RuleContext.new(:rep => rep, :compiler => compiler).instance_eval &@block
     end
 
