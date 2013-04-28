@@ -27,6 +27,8 @@ module Nanoc::CLI::Commands
   class AutoCompile < ::Nanoc::CLI::CommandRunner
 
     def run
+      warn 'WARNING: The `autocompile` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
+
       require 'rack'
 
       # Make sure we are in a nanoc site directory

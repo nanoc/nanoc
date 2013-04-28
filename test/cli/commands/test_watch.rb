@@ -18,30 +18,6 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
     end
   end
 
-  def test_change_nanoc_dot_yaml
-    Nanoc::CLI.run %w( create-site bleh )
-    Dir.chdir('bleh') do
-      File.open('Rules', 'w') do |io|
-        io.write("compile '*' do ; filter :erb ; end\n")
-        io.write("route '*' do ; item.identifier + 'index.html' ; end\n")
-      end
-
-      config_contents = File.read('nanoc.yaml')
-
-      watch_thread = Thread.new do
-        Nanoc::CLI.run %w( watch )
-      end
-
-      File.open('content/index.html', 'w') { |io| io.write('<%= @config[:blah].inspect %>!!!') }
-      self.wait_until_content_equals('output/index.html', 'nil!!!')
-
-      File.open('nanoc.yaml', 'w') { |io| io.write(config_contents + "\nblah: 456\n") }
-      self.wait_until_content_equals('output/index.html', '456!!!')
-
-      watch_thread.kill
-    end
-  end
-
   def test_notify
     with_site do |s|
       watch_thread = Thread.new do

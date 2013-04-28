@@ -16,7 +16,7 @@ module Nanoc::Extra
     def freeze
     end
 
-    def respond_to?(meth)
+    def respond_to?(meth, include_all=false)
       file_instance_methods.include?(meth.to_sym)
     end
 

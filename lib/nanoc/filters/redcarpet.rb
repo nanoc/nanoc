@@ -38,26 +38,50 @@ module Nanoc::Filters
     #   @option params [Hash] :renderer_options ({}) A list of options to pass
     #     on to the Redcarpet renderer
     #
+    #   @option params [Boolean] :with_toc (false) A boolean to request a table
+    #     of contents
+
     #   @return [String] The filtered content
     def run(content, params={})
-      if ::Redcarpet::VERSION > '2'
-        options          = params[:options]          || {}
-        renderer_class   = params[:renderer]         || ::Redcarpet::Render::HTML
-        renderer_options = params[:renderer_options] || {}
+      if ::Redcarpet::VERSION <= '2'
+        options = params[:options] || []
+        ::Redcarpet.new(content, *options).to_html
+      else
+        options          = params.fetch(:options,          {})
+        renderer_class   = params.fetch(:renderer,         ::Redcarpet::Render::HTML)
+        renderer_options = params.fetch(:renderer_options, {})
+        with_toc         = params.fetch(:with_toc,         false)
 
         if options.is_a?(Array)
           warn 'WARNING: You are passing an array of options to the :redcarpet filter, but Redcarpet 2.x expects a hash instead. This will likely fail.'
         end
 
+        # Setup TOC
+        if with_toc
+          unless renderer_class <= ::Redcarpet::Render::HTML
+            raise "Unexpected renderer: #{renderer_class}"
+          end
+
+          # `with_toc` implies `with_toc_data` for the HTML renderer
+          renderer_options[:with_toc_data] = true
+        end
+
+        # Create renderer
         if renderer_class == ::Redcarpet::Render::HTML_TOC
           renderer = renderer_class.new
         else
           renderer = renderer_class.new(renderer_options)
         end
-        ::Redcarpet::Markdown.new(renderer, options).render(content)
-      else
-        options = params[:options] || []
-        ::Redcarpet.new(content, *options).to_html
+
+        # Render
+        if with_toc
+          renderer_toc = ::Redcarpet::Render::HTML_TOC.new
+          toc  = ::Redcarpet::Markdown.new(renderer_toc, options).render(content)
+          body = ::Redcarpet::Markdown.new(renderer,     options).render(content)
+          toc + body
+        else
+          ::Redcarpet::Markdown.new(renderer, options).render(content)
+        end
       end
     end
 

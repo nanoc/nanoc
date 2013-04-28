@@ -7,6 +7,7 @@ gem 'bluecloth'
 gem 'builder'
 gem 'coderay'
 gem 'coffee-script'
+gem 'coveralls', :require => false
 gem 'erubis'
 gem 'fog'
 gem 'haml'

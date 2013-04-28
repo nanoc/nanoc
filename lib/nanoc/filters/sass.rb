@@ -5,12 +5,6 @@ module Nanoc::Filters
 
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
-    class << self
-      # The current filter. This is definitely going to bite me if I ever get
-      # to multithreading nanoc.
-      attr_accessor :current
-    end
-
     # Runs the content through [Sass](http://sass-lang.com/).
     # Parameters passed to this filter will be passed on to Sass.
     #
@@ -28,22 +22,22 @@ module Nanoc::Filters
 
       # Find items
       item_dirglob = Pathname.new(sass_filename).dirname.realpath.to_s + '**'
-      clean_items = @items.reject { |i| i[:content_filename].nil? }
+      clean_items = @items.reject { |i| i.raw_filename.nil? }
       @scoped_items, @rest_items = clean_items.partition do |i|
-        i[:content_filename] &&
-          Pathname.new(i[:content_filename]).realpath.fnmatch(item_dirglob)
+        i.raw_filename &&
+          Pathname.new(i.raw_filename).realpath.fnmatch(item_dirglob)
       end
       
       # Render
+      options[:nanoc_current_filter] = self
       engine = ::Sass::Engine.new(content, options)
-      self.class.current = self
       engine.render
     end
 
     def imported_filename_to_item(filename)
       filematch = lambda do |i|
-        i[:content_filename] &&
-          Pathname.new(i[:content_filename]).realpath == Pathname.new(filename).realpath
+        i.raw_filename &&
+          Pathname.new(i.raw_filename).realpath == Pathname.new(filename).realpath
       end
       @scoped_items.find(&filematch) || @rest_items.find(&filematch)
     end
