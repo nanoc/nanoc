@@ -180,10 +180,12 @@ module Nanoc::DataSources
         # Create layout object
         # TODO get rid of :mtime
         # TODO maybe pass a Pathname to signify binary-ness?
-        klass.new(
+        obj = klass.new(
           content_or_filename, attributes, identifier,
           :binary => is_binary, :mtime => mtime
         )
+        obj.raw_filename = content_filename
+        obj
       end
     end
 
