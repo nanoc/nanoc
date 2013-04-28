@@ -72,7 +72,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
           io.write "end\n"
           io.write "\n"
           io.write "route '/a.less' do\n"
-          io.write "  item.identifier.sub(/\.less$/, '.css')\n"
+          io.write "  item.identifier.with_ext('css')\n"
           io.write "end\n"
           io.write "\n"
           io.write "route '/b.less' do\n"

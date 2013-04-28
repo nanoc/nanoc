@@ -56,8 +56,8 @@ class Nanoc::SiteTest < Nanoc::TestCase
       site = Nanoc::Site.new('.')
 
       # Check
-      assert_equal 1,       site.data_sources.size
-      assert_equal '/foo/', site.items[0].identifier.to_s
+      assert_equal 1,      site.data_sources.size
+      assert_equal '/foo', site.items[0].identifier.to_s
     end
   end
 

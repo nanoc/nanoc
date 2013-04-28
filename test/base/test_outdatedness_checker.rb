@@ -36,7 +36,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::NotEnoughData,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -59,7 +59,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::NotWritten,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -83,7 +83,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/new/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/new.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::SourceModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -91,7 +91,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
   def test_outdated_if_dependent_layout_outdated
     # Compile once
-    with_site(:name => 'foo', :compilation_rule_content => 'layout "/default/"', :has_layout => true) do |site|
+    with_site(:name => 'foo', :compilation_rule_content => 'layout "/default.html"', :has_layout => true) do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('layouts/default.html', 'w') { |io| io.write('!!! <%= yield %> !!!') }
 
@@ -109,7 +109,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -119,7 +119,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Compile once
     with_site(:name => 'foo', :compilation_rule_content => 'filter :erb') do |site|
       File.open('content/a.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/b/" }.compiled_content %>')
+        io.write('<%= @items["/b.html"].compiled_content %>')
       end
       File.open('content/b.html', 'w') do |io|
         io.write('stuff')
@@ -141,7 +141,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/a.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -151,10 +151,10 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Compile once
     with_site(:name => 'foo', :compilation_rule_content => 'filter :erb') do |site|
       File.open('content/a.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/b/" }.compiled_content %> aaa')
+        io.write('<%= @items.find { |i| i.identifier == "/b.html" }.compiled_content %> aaa')
       end
       File.open('content/b.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/c/" }.compiled_content %> bbb')
+        io.write('<%= @items.find { |i| i.identifier == "/c.html" }.compiled_content %> bbb')
       end
       File.open('content/c.html', 'w') do |io|
         io.write('stuff')
@@ -176,7 +176,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/a.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -208,7 +208,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/a.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -242,7 +242,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/a.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -266,7 +266,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::CodeSnippetsModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -288,7 +288,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::ConfigurationModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -310,7 +310,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_nil outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -320,11 +320,11 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(:name => 'foo') do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('Rules', 'w') do |io|
-        io.write("compile '/' do\n")
+        io.write("compile '/index.html' do\n")
         io.write("  filter :erb\n")
         io.write("end\n")
         io.write("\n")
-        io.write("route '/' do\n")
+        io.write("route '/index.html' do\n")
         io.write("  '/index.html'\n")
         io.write("end\n")
       end
@@ -339,10 +339,10 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     # Modify rules
     FileUtils.cd('foo') do
       File.open('Rules', 'w') do |io|
-        io.write("compile '/' do\n")
+        io.write("compile '/index.html' do\n")
         io.write("end\n")
         io.write("\n")
-        io.write("route '/' do\n")
+        io.write("route '/index.html' do\n")
         io.write("  '/index.html'\n")
         io.write("end\n")
       end
@@ -352,7 +352,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       site = Nanoc::Site.new('.')
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items.find { |i| i.identifier == '/' }.reps[0]
+      rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
       assert_equal ::Nanoc::OutdatednessReasons::RulesModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -363,11 +363,11 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(:name => 'foo') do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('Rules', 'w') do |io|
-        io.write("compile '/' do\n")
+        io.write("compile '/index.html' do\n")
         io.write("  filter :erb, :stuff => @items\n")
         io.write("end\n")
         io.write("\n")
-        io.write("route '/' do\n")
+        io.write("route '/index.html' do\n")
         io.write("  '/index.html'\n")
         io.write("end\n")
       end
@@ -394,13 +394,13 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(:name => 'foo') do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('Rules', 'w') do |io|
-        io.write("compile '/' do\n")
+        io.write("compile '/index.html' do\n")
         io.write("  c = Class.new {}\n")
         io.write("  def c.inspect ; 'I am so classy' ; end\n")
         io.write("  filter :erb, :stuff => c, :more => 123\n")
         io.write("end\n")
         io.write("\n")
-        io.write("route '/' do\n")
+        io.write("route '/index.html' do\n")
         io.write("  '/index.html'\n")
         io.write("end\n")
       end

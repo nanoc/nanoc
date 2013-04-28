@@ -96,19 +96,6 @@ EOS
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
 #!/usr/bin/env ruby
 
-# A few helpful tips about the Rules file:
-#
-# * The string given to #compile and #route are matching patterns for
-#   identifiers--not for paths. Therefore, you can’t match on extension.
-#
-# * The order of rules is important: for each item, only the first matching
-#   rule is applied.
-#
-# * Item identifiers start and end with a slash (e.g. “/about/” for the file
-#   “content/about.html”). To select all children, grandchildren, … of an
-#   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
-#   because “*” matches zero or more characters.
-
 compile '/stylesheet/' do
   # don’t filter or layout
 end
@@ -128,11 +115,11 @@ end
 
 route '*' do
   if item.binary?
-    # Write item with identifier /foo/ to /foo.ext
-    item.identifier.chop + '.' + item[:extension]
+    # Write item with identifier /foo.ext to /foo.ext
+    item.identifier
   else
-    # Write item with identifier /foo/ to /foo/index.html
-    item.identifier + 'index.html'
+    # Write item with identifier /foo.ext to /foo/index.html
+    item.identifier.without_ext + '/index.html'
   end
 end
 

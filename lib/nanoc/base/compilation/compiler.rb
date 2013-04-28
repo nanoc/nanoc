@@ -254,15 +254,15 @@ module Nanoc
           # Get basic path by applying matching rule
           basic_path = rule.apply_to(rep, :compiler => self)
           next if basic_path.nil?
-          if basic_path !~ %r{^/}
+          unless basic_path.to_s.start_with?('/')
             raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
           end
 
           # Get raw path by prepending output directory
-          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path
+          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path.to_s
 
           # Get normal path by stripping index filename
-          rep.paths[snapshot] = basic_path
+          rep.paths[snapshot] = basic_path.to_s
           @site.config[:index_filenames].each do |index_filename|
             if rep.paths[snapshot][-index_filename.length..-1] == index_filename
               # Strip and stop

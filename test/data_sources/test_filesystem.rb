@@ -2,15 +2,69 @@
 
 class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
-  def new_data_source(params=nil)
-    # Mock site
+  def setup
+    super
     site = Nanoc::Site.new({})
+    @data_source = Nanoc::DataSources::Filesystem.new(site, nil, nil, {})
+  end
 
-    # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(site, nil, nil, params)
+  def test_all_base_filenames_in
+    File.write('index.html',        'x')
+    File.write('reviews.html',      'x')
+    File.write('reviews.html.yaml', 'x')
+    File.write('meta.yaml',         'x')
 
-    # Done
-    data_source
+    expected_filenames = %w( ./index.html ./reviews.html ./meta ).sort
+    actual_filenames   = @data_source.send(:all_base_filenames_in, '.')
+
+    assert_equal(expected_filenames, actual_filenames)
+  end
+
+  def test_max_mtime_for_filenames
+    File.write('foo', 'x')
+    File.write('bar', 'x')
+    File.write('baz', 'x')
+
+    long_ago        = Time.now - 1000
+    longer_ago      = Time.now - 2000
+    much_longer_ago = Time.now - 3000
+
+    File.utime(long_ago,        long_ago,        'foo')
+    File.utime(longer_ago,      longer_ago,      'bar')
+    File.utime(much_longer_ago, much_longer_ago, 'baz')
+
+    expected_mtime = long_ago
+    actual_mtime   = @data_source.send(:max_mtime_for_filenames, [ 'foo', 'bar', 'baz' ])
+
+    diff = (actual_mtime - expected_mtime)
+    assert diff < 1.0
+  end
+
+  def test_binary_extension?
+    assert @data_source.send(:binary_extension?, 'foo')
+    refute @data_source.send(:binary_extension?, 'txt')
+  end
+
+  def test_content_and_attributes_for_data_with_metadata
+    data = "---\nfoo: 123\n---\n\nHello!"
+
+    actual_content, actual_attributes =
+      @data_source.send(:content_and_attributes_for_data, data)
+
+    expected_content, expected_attributes =
+      "Hello!", { "foo" => 123 }
+
+    assert_equal expected_content, actual_content
+    assert_equal expected_attributes, actual_attributes
+  end
+
+
+
+  # OLD STUFF BELOW THIS POINT
+=begin
+  def new_data_source(params=nil)
+    site = Nanoc::Site.new({})
+    Nanoc::DataSources::Filesystem.new(site, nil, nil, params)
   end
 
   def test_create_object_not_at_root
@@ -703,5 +757,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal Encoding.find('utf-8'), data.encoding
     assert_equal 'Hallå!', data
   end
+=end
 
 end
