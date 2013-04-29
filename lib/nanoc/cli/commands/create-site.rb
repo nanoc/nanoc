@@ -105,7 +105,7 @@ compile '*' do
     # don’t filter binary items
   else
     filter :erb
-    layout 'default'
+    layout '/default.html'
   end
 end
 

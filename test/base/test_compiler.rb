@@ -168,7 +168,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[%r{^/blah\.*$}] = [ :erb, {} ]
+    compiler.rules_collection.layout_filter_mapping[%r{^/blah}] = [ :erb, {} ]
     site.stubs(:compiler).returns(compiler)
 
     # Compile
@@ -223,7 +223,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   def test_compile_with_two_dependent_reps
     with_site(:compilation_rule_content => 'filter :erb') do |site|
       File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
+        io.write('<%= @items["/bar.html"].compiled_content %>!!!')
       end
       File.open('content/bar.html', 'w') do |io|
         io.write('manatee')
@@ -242,10 +242,10 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   def test_compile_with_two_mutually_dependent_reps
     with_site(:compilation_rule_content => 'filter :erb') do |site|
       File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
+        io.write('<%= @items.find { |i| i.identifier == "/bar.html" }.compiled_content %>')
       end
       File.open('content/bar.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
+        io.write('<%= @items.find { |i| i.identifier == "/foo.html" }.compiled_content %>')
       end
 
       assert_raises Nanoc::Errors::RecursiveCompilation do
@@ -402,8 +402,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       site.compile
 
       # Check
-      assert_equal '[stuff]', File.read('output/a/index.html')
-      assert_equal 'stuff', File.read('output/z/index.html')
+      assert_equal '[stuff]', File.read('output/a.html')
+      assert_equal 'stuff', File.read('output/z.html')
     end
   end
 

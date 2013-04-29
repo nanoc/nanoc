@@ -68,6 +68,8 @@ end
 route '*' do
   if item.binary?
     item.identifier
+  elsif item.identifier == '/index.html'
+    '/index.html'
   else
     item.identifier.without_ext + '/index.html'
   end
