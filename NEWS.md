@@ -14,6 +14,7 @@ Removed:
 * `update` command
 * All rake tasks
 * Alternative spelling for `Rules` and `Checks` files
+* Child-parent links (for now)
 
 Changed:
 

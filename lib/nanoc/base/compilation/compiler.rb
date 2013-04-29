@@ -118,7 +118,6 @@ module Nanoc
       # Preprocess
       self.load_rules
       preprocess
-      site.setup_child_parent_links
       build_reps
       route_reps
 
@@ -165,7 +164,6 @@ module Nanoc
       @stack = []
 
       items.each { |item| item.reps.clear }
-      site.teardown_child_parent_links
 
       site.unload
 
