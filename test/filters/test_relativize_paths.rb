@@ -6,7 +6,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     @filter = Nanoc::Filters::RelativizePaths.new
     @filter.instance_eval do
       snapshot_store = Nanoc::SnapshotStore::InMemory.new
-      item = Nanoc::Item.new('content', {}, '/foo/bar/baz/')
+      item = Nanoc::Item.new('content', {}, '/foo/bar/baz.html')
       @item_rep = Nanoc::ItemRep.new(item, :blah, :snapshot_store => snapshot_store)
       @item_rep.paths = { :last => path }
     end

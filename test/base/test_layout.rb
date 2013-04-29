@@ -3,14 +3,8 @@
 class Nanoc::LayoutTest < Nanoc::TestCase
 
   def test_initialize
-    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
+    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo')
     assert_equal({ :foo => 'bar' }, layout.attributes)
-  end
-
-  def test_initialize_with_unclean_identifier
-    # Make sure identifier is cleaned
-    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, 'foo')
-    assert_equal('/foo/', layout.identifier.to_s)
   end
 
   def test_frozen_identifier
@@ -27,7 +21,7 @@ class Nanoc::LayoutTest < Nanoc::TestCase
 
   def test_lookup_with_known_attribute
     # Create layout
-    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
+    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo')
 
     # Check attributes
     assert_equal('bar', layout[:foo])
@@ -35,7 +29,7 @@ class Nanoc::LayoutTest < Nanoc::TestCase
 
   def test_lookup_with_unknown_attribute
     # Create layout
-    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo/')
+    layout = Nanoc::Layout.new("content", { 'foo' => 'bar' }, '/foo')
 
     # Check attributes
     assert_equal(nil, layout[:filter])
@@ -45,11 +39,11 @@ class Nanoc::LayoutTest < Nanoc::TestCase
     layout = Nanoc::Layout.new(
       "foobar",
       { :a => { :b => 123 }},
-      '/foo/')
+      '/foo')
 
     layout = Marshal.load(Marshal.dump(layout))
 
-    assert_equal '/foo/', layout.identifier.to_s
+    assert_equal '/foo', layout.identifier.to_s
     assert_equal 'foobar', layout.raw_content
     assert_equal({ :a => { :b => 123 }}, layout.attributes)
   end

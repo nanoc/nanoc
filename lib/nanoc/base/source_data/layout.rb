@@ -11,6 +11,9 @@ module Nanoc
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
+    # TODO document
+    attr_accessor :raw_filename
+
     # @return [Hash] This layout's attributes
     attr_reader :attributes
 

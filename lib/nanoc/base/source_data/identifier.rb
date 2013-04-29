@@ -32,14 +32,17 @@ module Nanoc
       self.class.from_string(prefix + self.to_s)
     end
 
-    # FIXME ugly
-    def +(string)
-      self.to_s + string
+    def extension
+      s = self.to_s
+      s[s.rindex('.')..-1]
     end
 
-    # FIXME ugly
-    def chop
-      self.to_s.chop
+    def with_ext(ext)
+      self.without_ext + '.' + ext
+    end
+
+    def without_ext
+      self.to_s.sub(/\.\w+$/, '')
     end
 
     def hash
@@ -66,7 +69,7 @@ module Nanoc
       if self.components.empty?
         '/'
       else
-        '/' + self.components.join('/') + '/'
+        '/' + self.components.join('/')
       end
     end
 

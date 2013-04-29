@@ -14,12 +14,14 @@ Removed:
 * `update` command
 * All rake tasks
 * Alternative spelling for `Rules` and `Checks` files
+* Child-parent links (for now)
 
 Changed:
 
 * Let nanoc determine encoding only from the configuration file and ignore
   the environment settings (default to utf-8)
 * Renamed `filesystem_unified` to `filesystem`
+* The filesystem data source metadata section must start with three dashes, not five
 
 ## 3.6.3 (???)
 

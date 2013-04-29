@@ -9,14 +9,14 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       @site = site
 
       File.open('Rules', 'w') do |io|
-        io.write("layout '/foo/', :erb\n")
+        io.write("layout '/foo', :erb\n")
       end
 
-      File.open('layouts/foo.xyz', 'w') do |io|
+      File.open('layouts/foo', 'w') do |io|
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
-      assert_equal('This is the /foo/ layout.', render('/foo/'))
+      assert_equal('This is the /foo layout.', render('/foo'))
     end
   end
 
@@ -25,7 +25,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       @site = site
 
       assert_raises(Nanoc::Errors::UnknownLayout) do
-        render '/dsfghjkl/'
+        render '/dsfghjkl'
       end
     end
   end
@@ -35,13 +35,13 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       @site = site
 
       File.open('Rules', 'w') do |io|
-        io.write("layout '/foo/', nil\n")
+        io.write("layout '/foo', nil\n")
       end
 
-      File.open('layouts/foo.xyz', 'w')
+      File.open('layouts/foo', 'w')
 
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
-        render '/foo/'
+        render '/foo'
       end
     end
   end
@@ -51,13 +51,13 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       @site = site
 
       File.open('Rules', 'w') do |io|
-        io.write("layout '/foo/', :asdf\n")
+        io.write("layout '/foo', :asdf\n")
       end
 
-      File.open('layouts/foo.xyz', 'w')
+      File.open('layouts/foo', 'w')
 
       assert_raises(Nanoc::Errors::UnknownFilter) do
-        render '/foo/'
+        render '/foo'
       end
     end
   end
@@ -67,15 +67,15 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       @site = site
 
       File.open('Rules', 'w') do |io|
-        io.write("layout '/foo/', :erb\n")
+        io.write("layout '/foo', :erb\n")
       end
 
-      File.open('layouts/foo.xyz', 'w') do |io|
+      File.open('layouts/foo', 'w') do |io|
         io.write '[partial-before]<%= yield %>[partial-after]'
       end
 
       _erbout = '[erbout-before]'
-      result = render '/foo/' do
+      result = render '/foo' do
         _erbout << "This is some extra content"
       end
 

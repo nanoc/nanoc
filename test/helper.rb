@@ -67,9 +67,11 @@ end
 
 route '*' do
   if item.binary?
-    item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
+    item.identifier
+  elsif item.identifier == '/index.html'
+    '/index.html'
   else
-    item.identifier + 'index.html'
+    item.identifier.without_ext + '/index.html'
   end
 end
 

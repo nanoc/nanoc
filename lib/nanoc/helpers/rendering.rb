@@ -85,7 +85,7 @@ module Nanoc::Helpers
 
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier }
-      raise Nanoc::Errors::UnknownLayout.new(identifier.to_s) if layout.nil?
+      raise Nanoc::Errors::UnknownLayout.new(identifier) if layout.nil?
 
       # Visit
       Nanoc::NotificationCenter.post(:visit_started, layout)

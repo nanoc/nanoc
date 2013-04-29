@@ -34,17 +34,10 @@ module Nanoc
 
     # @return [String] The filename pointing to the file containing this
     #   item’s content
-    attr_reader   :raw_filename
+    attr_accessor :raw_filename
 
     # @return [Nanoc::Site] The site this item belongs to
     attr_accessor :site
-
-    # @return [Nanoc::Item, nil] The parent item of this item. This can be
-    #   nil even for non-root items.
-    attr_accessor :parent
-
-    # @return [Array<Nanoc::Item>] The child items of this item
-    attr_accessor :children
 
     # Creates a new item with the given content or filename, attributes and
     # identifier.
@@ -86,11 +79,9 @@ module Nanoc
       end
 
       # Get rest of params
+      # TODO validate identifier (must start with slash, cannot end with slash)
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier
-
-      @parent       = nil
-      @children     = []
+      @identifier   = identifier.freeze
 
       @reps         = []
     end
@@ -208,7 +199,6 @@ module Nanoc
     # @return [void]
     def freeze
       attributes.freeze_recursively
-      children.freeze
       identifier.freeze
       raw_filename.freeze if raw_filename
       raw_content.freeze  if raw_content

@@ -8,11 +8,11 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
       item = Nanoc::Item.new(
         'content',
         { :title => 'Max Payne', :protagonist => 'Max Payne', :location => 'here' },
-        '/games/max-payne/')
+        '/games/max-payne.txt')
       layout = Nanoc::Layout.new(
         'layout content',
         { :name => 'Max Payne' },
-        '/default/')
+        '/default.txt')
       config = { :animals => 'cats and dogs' }
 
       # Create filter

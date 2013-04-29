@@ -164,42 +164,6 @@ module Nanoc
       @config
     end
 
-    # Fills each item's parent reference and children array with the
-    # appropriate items. It is probably not necessary to call this method
-    # manually; it will be called when appropriate.
-    #
-    # @return [void]
-    def setup_child_parent_links
-      # FIXME this should not be necessary anymore. Don't precalculate child/parent links
-
-      teardown_child_parent_links
-
-      item_map = {}
-      @items.each do |item|
-        item_map[item.identifier] = item
-      end
-
-      @items.each do |item|
-        parent = item_map[item.identifier.parent]
-        if parent
-          item.parent = parent
-          parent.children << item
-        end
-      end
-    end
-
-    # Removes all child-parent links.
-    #
-    # @api private
-    #
-    # @return [void]
-    def teardown_child_parent_links
-      @items.each do |item|
-        item.parent = nil
-        item.children = []
-      end
-    end
-
     # Prevents all further modifications to itself, its items, its layouts etc.
     #
     # @return [void]
@@ -226,7 +190,6 @@ module Nanoc
       load_items
       load_layouts
       data_sources.each { |ds| ds.unuse }
-      setup_child_parent_links
 
       # Load compiler too
       # FIXME this should not be necessary
@@ -295,8 +258,7 @@ module Nanoc
       @code_snippets.each { |cs| cs.load }
     end
 
-    # Loads this site’s items, sets up item child-parent relationships and
-    # builds each item's list of item representations.
+    # Loads this site’s items and builds each item's list of item representations.
     def load_items
       @items_loaded ||= false
       return if @items_loaded

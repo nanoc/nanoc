@@ -28,24 +28,32 @@ class Nanoc::IdentifierTest < Nanoc::TestCase
   end
 
   def test_to_s
-    assert_equal '/foo/bar/', self.new_from_string('/foo/bar/').to_s
-    assert_equal '/foo/',     self.new_from_string('/foo/').to_s
-    assert_equal '/',         self.new_from_string('/').to_s
+    assert_equal '/foo/bar', self.new_from_string('/foo/bar/').to_s
+    assert_equal '/foo',     self.new_from_string('/foo/').to_s
+    assert_equal '/',        self.new_from_string('/').to_s
   end
 
   def test_parent
-    assert_equal '/foo/bar/', self.new_from_string('foo/bar/qux').parent.to_s
-    assert_equal '/foo/',     self.new_from_string('foo/bar').parent.to_s
+    assert_equal '/foo/bar', self.new_from_string('foo/bar/qux').parent.to_s
+    assert_equal '/foo',     self.new_from_string('foo/bar').parent.to_s
     assert_equal '/',         self.new_from_string('foo').parent.to_s
     assert_nil self.new_from_string('/').parent
   end
 
-  def test_plus
-    assert_equal '/foo/xyz', self.new_from_string('/foo/') + 'xyz'
+  def test_with_ext_without_extension
+    assert_equal '/foo.md', self.new_from_string('/foo').with_ext('md').to_s
   end
 
-  def test_chop
-    assert_equal '/foo', self.new_from_string('/foo/').chop
+  def test_with_ext_with_extension
+    assert_equal '/foo.md', self.new_from_string('/foo.txt').with_ext('md').to_s
+  end
+
+  def test_without_ext_without_extension
+    assert_equal '/foo', self.new_from_string('/foo').without_ext
+  end
+
+  def test_without_ext_with_extension
+    assert_equal '/foo', self.new_from_string('/foo.txt').without_ext
   end
 
 end

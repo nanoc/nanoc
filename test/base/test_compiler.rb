@@ -136,7 +136,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compile_rep_should_write_proper_snapshots
     # Mock rep
-    item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
+    item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo.md')
     rep  = Nanoc::ItemRep.new(item, :blah, :snapshot_store => self.new_snapshot_store)
 
     # Set snapshot filenames
@@ -151,13 +151,13 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     rule_block = proc do
       filter :erb
       filter :erb
-      layout '/blah/'
+      layout '/blah.rhtml'
       filter :erb
     end
     rule = Nanoc::Rule.new(/blah/, :meh, rule_block)
 
     # Create layout
-    layout = Nanoc::Layout.new('head <%= yield %> foot', {}, '/blah/')
+    layout = Nanoc::Layout.new('head <%= yield %> foot', {}, '/blah.rhtml')
 
     # Create site
     site = mock
@@ -168,7 +168,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[%r{^/blah/$}] = [ :erb, {} ]
+    compiler.rules_collection.layout_filter_mapping[%r{^/blah}] = [ :erb, {} ]
     site.stubs(:compiler).returns(compiler)
 
     # Compile
@@ -223,7 +223,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   def test_compile_with_two_dependent_reps
     with_site(:compilation_rule_content => 'filter :erb') do |site|
       File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
+        io.write('<%= @items["/bar.html"].compiled_content %>!!!')
       end
       File.open('content/bar.html', 'w') do |io|
         io.write('manatee')
@@ -242,10 +242,10 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   def test_compile_with_two_mutually_dependent_reps
     with_site(:compilation_rule_content => 'filter :erb') do |site|
       File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
+        io.write('<%= @items.find { |i| i.identifier == "/bar.html" }.compiled_content %>')
       end
       File.open('content/bar.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
+        io.write('<%= @items.find { |i| i.identifier == "/foo.html" }.compiled_content %>')
       end
 
       assert_raises Nanoc::Errors::RecursiveCompilation do
@@ -377,7 +377,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     with_site do |site|
       # Create items
       File.open('content/a.html', 'w') do |io|
-        io.write('[<%= @items.find { |i| i.identifier == "/z/" }.compiled_content(:snapshot => :guts) %>]')
+        io.write('[<%= @items["/z.html"].compiled_content(:snapshot => :guts) %>]')
       end
       File.open('content/z.html', 'w') do |io|
         io.write('stuff')
@@ -391,7 +391,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "end\n"
         io.write "\n"
         io.write "route '*' do\n"
-        io.write "  item.identifier + 'index.html'\n"
+        io.write "  item.identifier\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '*', :erb\n"
@@ -402,8 +402,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       site.compile
 
       # Check
-      assert_equal '[stuff]', File.read('output/a/index.html')
-      assert_equal 'stuff', File.read('output/z/index.html')
+      assert_equal '[stuff]', File.read('output/a.html')
+      assert_equal 'stuff', File.read('output/z.html')
     end
   end
 
@@ -451,7 +451,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "compile '*' do\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '/a/' do\n"
+        io.write "route '/a.html' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
@@ -472,7 +472,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "compile '*' do\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '/b/' do\n"
+        io.write "route '/b.html' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
@@ -530,7 +530,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "end\n"
         io.write "\n"
         io.write "route '*' do\n"
-        io.write "  item.identifier.chop + '.' + item[:extension]\n"
+        io.write "  item.identifier\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '*', :erb\n"
