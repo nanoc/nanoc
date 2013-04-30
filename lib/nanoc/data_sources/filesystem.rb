@@ -8,50 +8,31 @@ module Nanoc::DataSources
   # The root directory for items is the `content` directory; for layouts, this
   # is the `layouts` directory.
   #
-  # The attributes for items and layouts can be stored in a separate file with
-  # the same base name but with the `.yaml` extension. If such a file is
-  # found, attributes are read from that file. Alternatively, the content file
-  # itself can start with an attributes section: it can be stored at the top of
-  # the file, between `---` (three dashes) separators. For example:
+  # The attributes for items and layouts can be stored in two ways:
   #
-  #     ---
-  #     title: "Moo!"
-  #     ---
-  #     h1. Hello!
+  # * The attributes can be stored in a separate file with the same filename as
+  #   the content file, followed by '.yaml'. For example, the attributes file
+  #   for a content file called "foo.md" would be "foo.md.yaml".
   #
-  # The attributes section can be omitted. If the file does not start with
-  # three dashes, the entire file will be considered as content.
+  # * The content file itself can start with an attributes section. The
+  #   attributes section can be found at the top of the file, before any
+  #   content, between `---` (three dashes) separators. For example:
   #
-  # The identifier of items and layouts is determined as follows. A file with
-  # an `index.*` filename, such as `index.txt`, will have the filesystem path
-  # with the `index.*` part stripped as a identifier. For example:
+  #       ---
+  #       title: "Moo!"
+  #       ---
+  #       h1. Hello!
   #
-  #     foo/bar/index.html → /foo/bar/
+  # The identifier of items and layouts is the filename itself, relative to the
+  # `content` or `layout` directory and starting with a slash.
   #
-  # In other cases, the identifier is calculated by stripping all extensions.
+  # This data source has the following configuration options:
   #
-  # Note that each item must have an unique identifier. nanoc will display an
-  # error if two items with the same identifier are found.
+  # * `encoding` - the character encoding that should be used when reading
+  #   files. Defaults to UTF-8.
   #
-  # Some more examples:
-  #
-  #     content/index.html          → /
-  #     content/foo.html            → /foo/
-  #     content/foo/index.html      → /foo/
-  #     content/foo/bar.html        → /foo/bar/
-  #     content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
-  #     content/foo/bar/index.html  → /foo/bar/
-  #     content/foo.bar/index.html  → /foo.bar/
-  #
-  # The file extension does not determine the filters to run on items; the
-  # Rules file is used to specify processing instructors for each item.
-  #
-  # It is possible to set an explicit encoding that should be used when reading
-  # files. In the data source configuration, set `encoding` to an encoding
-  # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
-  # UTF-8 will be used.
-  #
-  # TODO update description
+  # * `text_extensions` - a list of filename extensions that should be treated
+  #   as textual items.
   class Filesystem < Nanoc::DataSource
 
     identifier :filesystem
