@@ -2,18 +2,16 @@
 
 module Nanoc::DataSources
 
-  # TODO do not use 'meta' but rather 'attributes' everywhere
-
   # The filesystem data source stores its items and layouts in nested
   # directories. Items and layouts are represented by one or two files; if it
-  # is represented using one file, the metadata can be contained in this file.
+  # is represented using one file, the attributes can be contained in this file.
   # The root directory for items is the `content` directory; for layouts, this
   # is the `layouts` directory.
   #
-  # The metadata for items and layouts can be stored in a separate file with
+  # The attributes for items and layouts can be stored in a separate file with
   # the same base name but with the `.yaml` extension. If such a file is
-  # found, metadata is read from that file. Alternatively, the content file
-  # itself can start with a metadata section: it can be stored at the top of
+  # found, attributes are read from that file. Alternatively, the content file
+  # itself can start with an attributes section: it can be stored at the top of
   # the file, between `---` (three dashes) separators. For example:
   #
   #     ---
@@ -21,8 +19,8 @@ module Nanoc::DataSources
   #     ---
   #     h1. Hello!
   #
-  # The metadata section can be omitted. If the file does not start with
-  # three or five dashes, the entire file will be considered as content.
+  # The attributes section can be omitted. If the file does not start with
+  # three dashes, the entire file will be considered as content.
   #
   # The identifier of items and layouts is determined as follows. A file with
   # an `index.*` filename, such as `index.txt`, will have the filesystem path
@@ -100,12 +98,12 @@ module Nanoc::DataSources
       # Notify
       Nanoc::NotificationCenter.post(:file_created, path)
 
-      # Write item
+      # Write object
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        meta = attributes.stringify_keys_recursively
-        unless meta == {}
-          io.write(YAML.dump(meta).strip + "\n")
+        unless attributes == {}
+          attributes = attributes.stringify_keys_recursively
+          io.write(YAML.dump(attributes).strip + "\n")
           io.write("---\n\n")
         end
         io.write(content)
@@ -123,14 +121,6 @@ module Nanoc::DataSources
     # kind attribute indicates the kind of object that is being loaded and is
     # used solely for debugging purposes.
     #
-    # This particular implementation loads objects from a filesystem-based
-    # data source where content and attributes can be spread over two separate
-    # files. The content and meta-file are optional (but at least one of them
-    # needs to be present, obviously) and the content file can start with a
-    # metadata section.
-    #
-    # @see Nanoc::DataSources::Filesystem#load_objects
-    #
     # @api private
     def load_objects(dir_name, kind, klass)
       self.all_base_filenames_in(dir_name).map do |base_filename|
@@ -142,7 +132,6 @@ module Nanoc::DataSources
         has_content_file    = File.exist?(content_filename)
         has_attributes_file = File.exist?(attributes_filename)
 
-        # FIXME meta and content can be nil at the end of this
         # Read content and filename
         if has_attributes_file
           attributes = YAML.load_file(attributes_filename)
@@ -226,7 +215,7 @@ module Nanoc::DataSources
     #
     # @api private
     def content_and_attributes_for_data(data)
-      # Check presence of metadata section
+      # Check presence of attributes section
       if data !~ /\A---\s*$/
         return [ data, {} ]
       end
@@ -235,7 +224,7 @@ module Nanoc::DataSources
       pieces = data.split(/^---\s*$\n/)
       if pieces.size < 3
         raise RuntimeError.new(
-          "The file '#{base_filename}' appears to start with a metadata " +
+          "The file '#{base_filename}' appears to start with an attributes " +
           "section (three dashes at the top), but it does not seem to be " +
           "in the correct format."
         )
