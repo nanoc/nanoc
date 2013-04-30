@@ -91,7 +91,9 @@ module Nanoc::DataSources
       end
     end
 
-    # TODO document
+    # @param [String] extension The extension to check binary-ness for
+    #
+    # @return [Boolean] true if the given extension is binary, false otherwise
     #
     # @api private
     def binary_extension?(extension)
@@ -159,7 +161,9 @@ module Nanoc::DataSources
       end
     end
 
-    # TODO document
+    # @param [<String>] filenames A collection of filename strings
+    #
+    # @return [Time] The maximum mtime of all given files
     #
     # @api private
     def max_mtime_for_filenames(filenames)
@@ -169,13 +173,12 @@ module Nanoc::DataSources
         max
     end
 
-    # TODO update comment
+    # Finds all base filenames, i.e. all filenames except attribute filenames,
+    # in the given directory.
     #
-    #   [
-    #     'content/foo.html',
-    #     'content/bar',
-    #     'content/qux.html'
-    #   ]
+    # @param [String] dir_name The name of the directory to find all base filenames in
+    #
+    # @return [<String>] A collection of base filenames
     #
     # @api private
     def all_base_filenames_in(dir_name)
@@ -192,7 +195,10 @@ module Nanoc::DataSources
       Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
     end
 
-    # TODO document
+    # @param [String] data Data including an attributes and a content section
+    #
+    # @return [Array] A tuple containing an attributes hash as its first
+    #   element, and a string containing the content as its second element
     #
     # @api private
     def content_and_attributes_for_data(data)
