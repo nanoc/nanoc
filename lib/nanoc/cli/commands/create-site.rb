@@ -119,7 +119,7 @@ route '*' do
     item.identifier
   else
     # Write item with identifier /foo.ext to /foo/index.html
-    item.identifier.without_ext + '/index.html'
+    item.identifier.in_dir.with_ext('html')
   end
 end
 
