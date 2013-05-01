@@ -15,7 +15,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.write('meta.yaml',         'x')
 
     expected_filenames = %w( ./index.html ./reviews.html ./meta ).sort
-    actual_filenames   = @data_source.send(:all_base_filenames_in, '.')
+    actual_filenames   = @data_source.send(:all_base_filenames_in, '.').sort
 
     assert_equal(expected_filenames, actual_filenames)
   end
