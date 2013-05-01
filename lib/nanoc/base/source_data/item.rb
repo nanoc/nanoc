@@ -70,7 +70,7 @@ module Nanoc
 
       # Get rest of params
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.freeze
+      @identifier   = identifier
 
       @reps         = []
     end
