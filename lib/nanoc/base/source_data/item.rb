@@ -69,7 +69,6 @@ module Nanoc
       end
 
       # Get rest of params
-      # TODO validate identifier (must start with slash, cannot end with slash)
       @attributes   = attributes.symbolize_keys_recursively
       @identifier   = identifier.freeze
 
