@@ -7,7 +7,6 @@ gem 'bluecloth'
 gem 'builder'
 gem 'coderay'
 gem 'coffee-script'
-gem 'coveralls', :require => false
 gem 'erubis'
 gem 'fog'
 gem 'haml'
@@ -39,3 +38,6 @@ gem 'typogruby'
 gem 'uglifier'
 gem 'w3c_validators'
 gem 'yuicompressor'
+
+# disabled until colorize/colored issue is fixed
+#gem 'coveralls', :require => false
