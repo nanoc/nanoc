@@ -64,7 +64,7 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      rule = Rule.new(pattern, rep_name, block)
+      rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
@@ -105,7 +105,7 @@ module Nanoc
       snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Rule.new(pattern, rep_name, block, :snapshot_name => snapshot_name)
+      rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, block, :snapshot_name => snapshot_name)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -114,7 +114,7 @@ module Nanoc
     # the filter specified in the second argument. The params hash contains
     # filter arguments that will be passed to the filter.
     #
-    # @param [String] pattern A pattern matching identifiers of layouts
+    # @param [String, Regexp] pattern A pattern matching identifiers of layouts
     #   that should be filtered using this rule
     #
     # @param [Symbol] filter_name The name of the filter that should be run
@@ -133,7 +133,9 @@ module Nanoc
     #
     #     layout '/*.haml',  :haml, :format => :html5
     def layout(pattern, filter_name, params={})
-      @rules_collection.layout_filter_mapping[pattern] = [ filter_name, params ]
+      key = Nanoc::Pattern.from(pattern)
+      value = [ filter_name, params ]
+      @rules_collection.layout_filter_mapping[key] = value
     end
 
     # Creates a pair of compilation and routing rules that indicate that the
@@ -144,8 +146,8 @@ module Nanoc
     # This meta-rule will be applicable to reps with a name equal to
     # `:default`; this can be changed by giving an explicit `:rep` parameter.
     #
-    # @param [String] identifier A pattern matching identifiers of items that
-    #   should be processed using this meta-rule
+    # @param [String, Regexp] pattern A pattern matching identifiers of items
+    #   that should be processed using this meta-rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
     #   that should be routed using this rule
@@ -170,14 +172,14 @@ module Nanoc
 
       # Create compilation rule
       compilation_block = proc { }
-      compilation_rule = Rule.new(pattern, rep_name, compilation_block)
+      compilation_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
       routing_block = proc do
         item.identifier
       end
-      routing_rule = Rule.new(pattern, rep_name, routing_block, :snapshot_name => :last)
+      routing_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, routing_block, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -189,8 +191,8 @@ module Nanoc
     # This meta-rule will be applicable to reps with a name equal to
     # `:default`; this can be changed by giving an explicit `:rep` parameter.
     #
-    # @param [String] identifier A pattern matching identifiers of items that
-    #   should be processed using this meta-rule
+    # @param [String, Regexp] identifier A pattern matching identifiers of
+    #   items that should be processed using this meta-rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
     #   that should be routed using this rule
@@ -205,10 +207,10 @@ module Nanoc
 
       rep_name = params[:rep] || :default
 
-      compilation_rule = Rule.new(pattern, rep_name, proc { })
+      compilation_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, proc { })
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Rule.new(pattern, rep_name, proc { }, :snapshot_name => :last)
+      routing_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, proc { }, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 

@@ -6,134 +6,6 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     Nanoc::SnapshotStore::InMemory.new
   end
 
-  def test_compilation_rule_for
-    # Mock rules
-    rules = [ mock, mock, mock ]
-    rules[0].expects(:applicable_to?).returns(false)
-    rules[1].expects(:applicable_to?).returns(true)
-    rules[1].expects(:rep_name).returns('wrong')
-    rules[2].expects(:applicable_to?).returns(true)
-    rules[2].expects(:rep_name).returns('right')
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(nil)
-    compiler.rules_collection.instance_eval { @item_compilation_rules = rules }
-
-    # Mock rep
-    rep = mock
-    rep.stubs(:name).returns('right')
-    item = mock
-    rep.stubs(:item).returns(item)
-
-    # Test
-    assert_equal rules[2], compiler.rules_collection.compilation_rule_for(rep)
-  end
-
-  def test_routing_rule_for
-    # Mock rules
-    rules = [ mock, mock, mock ]
-    rules[0].expects(:applicable_to?).returns(false)
-    rules[1].expects(:applicable_to?).returns(true)
-    rules[1].expects(:rep_name).returns('wrong')
-    rules[2].expects(:applicable_to?).returns(true)
-    rules[2].expects(:rep_name).returns('right')
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(nil)
-    compiler.rules_collection.instance_eval { @item_routing_rules = rules }
-
-    # Mock rep
-    rep = mock
-    rep.stubs(:name).returns('right')
-    item = mock
-    rep.stubs(:item).returns(item)
-
-    # Test
-    assert_equal rules[2], compiler.rules_collection.routing_rule_for(rep)
-  end
-
-  def test_filter_for_layout_with_existant_layout
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [ :erb, { :foo => 'bar' } ]
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/some_layout/')
-
-    # Check
-    assert_equal([ :erb, { :foo => 'bar' } ], compiler.rules_collection.filter_for_layout(layout))
-  end
-
-  def test_filter_for_layout_with_existant_layout_and_unknown_filter
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [ :some_unknown_filter, { :foo => 'bar' } ]
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/some_layout/')
-
-    # Check
-    assert_equal([ :some_unknown_filter, { :foo => 'bar' } ], compiler.rules_collection.filter_for_layout(layout))
-  end
-
-  def test_filter_for_layout_with_nonexistant_layout
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [ :erb, { :foo => 'bar' } ]
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/bar/')
-
-    # Check
-    assert_equal(nil, compiler.rules_collection.filter_for_layout(layout))
-  end
-
-  def test_filter_for_layout_with_many_layouts
-    # Mock site
-    site = mock
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [ :erb, { :char => 'd' } ]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [ :erb, { :char => 'b' } ]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [ :erb, { :char => 'c' } ] # never used!
-    compiler.rules_collection.layout_filter_mapping[%r{^/.*/$}]       = [ :erb, { :char => 'a' } ]
-
-    # Mock layout
-    layouts = [ mock, mock, mock, mock ]
-    layouts[0].stubs(:identifier).returns('/a/b/c/d/')
-    layouts[1].stubs(:identifier).returns('/a/b/c/')
-    layouts[2].stubs(:identifier).returns('/a/b/')
-    layouts[3].stubs(:identifier).returns('/a/')
-
-    # Get expectations
-    expectations = {
-      0 => 'd',
-      1 => 'b', # never used! not c, because b takes priority
-      2 => 'b',
-      3 => 'a'
-    }
-
-    # Check
-    expectations.each_pair do |num, char|
-      filter_and_args = compiler.rules_collection.filter_for_layout(layouts[num])
-      refute_nil(filter_and_args)
-      assert_equal(char, filter_and_args[1][:char])
-    end
-  end
-
   def test_compile_rep_should_write_proper_snapshots
     # Mock rep
     item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo.md')
@@ -168,7 +40,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[%r{^/blah}] = [ :erb, {} ]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Pattern.from(%r{^/blah})] = [ :erb, {} ]
     site.stubs(:compiler).returns(compiler)
 
     # Compile

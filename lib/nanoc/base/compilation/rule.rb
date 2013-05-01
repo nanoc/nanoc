@@ -5,11 +5,8 @@ module Nanoc
   # Contains the processing information for a item.
   class Rule
 
-    # TODO create an unified Pattern type
-    #
-    # @return [String, Regexp] pattern Either a string containing a glob or a
-    #   regular expression that will be used to determine whether this rule
-    #   is applicable to certain items.
+    # @return [Pattern] pattern A pattern that will be used to determine
+    #   whether this rule is applicable to certain items.
     attr_reader :pattern
 
     # @return [Symbol] The name of the representation that will be compiled
@@ -52,12 +49,7 @@ module Nanoc
     # @return [Boolean] true if this rule can be applied to the given item
     #   rep, false otherwise
     def applicable_to?(item)
-      case self.pattern
-      when String
-        File.fnmatch(self.pattern, item.identifier.to_s)
-      when Regexp
-        item.identifier.to_s =~ self.pattern
-      end
+      self.pattern.match?(item.identifier)
     end
 
     # Applies this rule to the given item rep.
