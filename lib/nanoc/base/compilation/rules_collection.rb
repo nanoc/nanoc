@@ -113,7 +113,14 @@ module Nanoc
     def filter_for_layout(layout)
       @layout_filter_mapping.each_pair do |layout_pattern, filter_name_and_args|
         # FIXME to_s should not be necessary
-        return filter_name_and_args if layout.identifier.to_s =~ layout_pattern
+        # FIXME fix duplication between here and Rule#applicable_to? (create Pattern type)
+        is_match = case layout_pattern
+        when String
+          File.fnmatch(layout_pattern, layout.identifier.to_s)
+        when Regexp
+          layout.identifier.to_s =~ layout_pattern
+        end
+        return filter_name_and_args if is_match
       end
       nil
     end
