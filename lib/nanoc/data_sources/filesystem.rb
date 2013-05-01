@@ -191,8 +191,9 @@ module Nanoc::DataSources
       # Split data
       pieces = data.split(/^---\s*$\n/)
       if pieces.size < 3
+        # TODO re-add filename to this exception
         raise RuntimeError.new(
-          "The file '#{base_filename}' appears to start with an attributes " +
+          "The file appears to start with an attributes " +
           "section (three dashes at the top), but it does not seem to be " +
           "in the correct format."
         )
