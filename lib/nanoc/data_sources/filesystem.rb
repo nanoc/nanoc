@@ -2,58 +2,37 @@
 
 module Nanoc::DataSources
 
-  # TODO do not use 'meta' but rather 'attributes' everywhere
-
   # The filesystem data source stores its items and layouts in nested
   # directories. Items and layouts are represented by one or two files; if it
-  # is represented using one file, the metadata can be contained in this file.
+  # is represented using one file, the attributes can be contained in this file.
   # The root directory for items is the `content` directory; for layouts, this
   # is the `layouts` directory.
   #
-  # The metadata for items and layouts can be stored in a separate file with
-  # the same base name but with the `.yaml` extension. If such a file is
-  # found, metadata is read from that file. Alternatively, the content file
-  # itself can start with a metadata section: it can be stored at the top of
-  # the file, between `---` (three dashes) separators. For example:
+  # The attributes for items and layouts can be stored in two ways:
   #
-  #     ---
-  #     title: "Moo!"
-  #     ---
-  #     h1. Hello!
+  # * The attributes can be stored in a separate file with the same filename as
+  #   the content file, followed by '.yaml'. For example, the attributes file
+  #   for a content file called "foo.md" would be "foo.md.yaml".
   #
-  # The metadata section can be omitted. If the file does not start with
-  # three or five dashes, the entire file will be considered as content.
+  # * The content file itself can start with an attributes section. The
+  #   attributes section can be found at the top of the file, before any
+  #   content, between `---` (three dashes) separators. For example:
   #
-  # The identifier of items and layouts is determined as follows. A file with
-  # an `index.*` filename, such as `index.txt`, will have the filesystem path
-  # with the `index.*` part stripped as a identifier. For example:
+  #       ---
+  #       title: "Moo!"
+  #       ---
+  #       h1. Hello!
   #
-  #     foo/bar/index.html → /foo/bar/
+  # The identifier of items and layouts is the filename itself, relative to the
+  # `content` or `layout` directory and starting with a slash.
   #
-  # In other cases, the identifier is calculated by stripping all extensions.
+  # This data source has the following configuration options:
   #
-  # Note that each item must have an unique identifier. nanoc will display an
-  # error if two items with the same identifier are found.
+  # * `encoding` - the character encoding that should be used when reading
+  #   files. Defaults to UTF-8.
   #
-  # Some more examples:
-  #
-  #     content/index.html          → /
-  #     content/foo.html            → /foo/
-  #     content/foo/index.html      → /foo/
-  #     content/foo/bar.html        → /foo/bar/
-  #     content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
-  #     content/foo/bar/index.html  → /foo/bar/
-  #     content/foo.bar/index.html  → /foo.bar/
-  #
-  # The file extension does not determine the filters to run on items; the
-  # Rules file is used to specify processing instructors for each item.
-  #
-  # It is possible to set an explicit encoding that should be used when reading
-  # files. In the data source configuration, set `encoding` to an encoding
-  # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
-  # UTF-8 will be used.
-  #
-  # TODO update description
+  # * `text_extensions` - a list of filename extensions that should be treated
+  #   as textual items.
   class Filesystem < Nanoc::DataSource
 
     identifier :filesystem
@@ -100,19 +79,21 @@ module Nanoc::DataSources
       # Notify
       Nanoc::NotificationCenter.post(:file_created, path)
 
-      # Write item
+      # Write object
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        meta = attributes.stringify_keys_recursively
-        unless meta == {}
-          io.write(YAML.dump(meta).strip + "\n")
+        unless attributes == {}
+          attributes = attributes.stringify_keys_recursively
+          io.write(YAML.dump(attributes).strip + "\n")
           io.write("---\n\n")
         end
         io.write(content)
       end
     end
 
-    # TODO document
+    # @param [String] extension The extension to check binary-ness for
+    #
+    # @return [Boolean] true if the given extension is binary, false otherwise
     #
     # @api private
     def binary_extension?(extension)
@@ -122,14 +103,6 @@ module Nanoc::DataSources
     # Creates instances of klass corresponding to the files in dir_name. The
     # kind attribute indicates the kind of object that is being loaded and is
     # used solely for debugging purposes.
-    #
-    # This particular implementation loads objects from a filesystem-based
-    # data source where content and attributes can be spread over two separate
-    # files. The content and meta-file are optional (but at least one of them
-    # needs to be present, obviously) and the content file can start with a
-    # metadata section.
-    #
-    # @see Nanoc::DataSources::Filesystem#load_objects
     #
     # @api private
     def load_objects(dir_name, kind, klass)
@@ -142,7 +115,6 @@ module Nanoc::DataSources
         has_content_file    = File.exist?(content_filename)
         has_attributes_file = File.exist?(attributes_filename)
 
-        # FIXME meta and content can be nil at the end of this
         # Read content and filename
         if has_attributes_file
           attributes = YAML.load_file(attributes_filename)
@@ -189,7 +161,9 @@ module Nanoc::DataSources
       end
     end
 
-    # TODO document
+    # @param [<String>] filenames A collection of filename strings
+    #
+    # @return [Time] The maximum mtime of all given files
     #
     # @api private
     def max_mtime_for_filenames(filenames)
@@ -199,13 +173,12 @@ module Nanoc::DataSources
         max
     end
 
-    # TODO update comment
+    # Finds all base filenames, i.e. all filenames except attribute filenames,
+    # in the given directory.
     #
-    #   [
-    #     'content/foo.html',
-    #     'content/bar',
-    #     'content/qux.html'
-    #   ]
+    # @param [String] dir_name The name of the directory to find all base filenames in
+    #
+    # @return [<String>] A collection of base filenames
     #
     # @api private
     def all_base_filenames_in(dir_name)
@@ -222,11 +195,14 @@ module Nanoc::DataSources
       Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
     end
 
-    # TODO document
+    # @param [String] data Data including an attributes and a content section
+    #
+    # @return [Array] A tuple containing an attributes hash as its first
+    #   element, and a string containing the content as its second element
     #
     # @api private
     def content_and_attributes_for_data(data)
-      # Check presence of metadata section
+      # Check presence of attributes section
       if data !~ /\A---\s*$/
         return [ data, {} ]
       end
@@ -235,7 +211,7 @@ module Nanoc::DataSources
       pieces = data.split(/^---\s*$\n/)
       if pieces.size < 3
         raise RuntimeError.new(
-          "The file '#{base_filename}' appears to start with a metadata " +
+          "The file '#{base_filename}' appears to start with an attributes " +
           "section (three dashes at the top), but it does not seem to be " +
           "in the correct format."
         )

@@ -12,16 +12,6 @@ module Nanoc
     # @return [Hash] This item's attributes
     attr_accessor :attributes
 
-    # A string that uniquely identifies an item in a site.
-    #
-    # Identifiers start and end with a slash. They are comparable to paths on
-    # the filesystem, with the difference that file system paths usually do
-    # not have a trailing slash. The item hierarchy (parent and children of
-    # items) is determined by the item identifier.
-    #
-    # The root page (the home page) has the identifier “/”, which means
-    # that it is the ancestor of all other items.
-    #
     # @return [String] This item's identifier
     attr_accessor :identifier
 
@@ -79,9 +69,8 @@ module Nanoc
       end
 
       # Get rest of params
-      # TODO validate identifier (must start with slash, cannot end with slash)
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.freeze
+      @identifier   = identifier
 
       @reps         = []
     end
