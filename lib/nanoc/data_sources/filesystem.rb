@@ -146,31 +146,12 @@ module Nanoc::DataSources
         # TODO make base dir name configurable
         identifier = base_filename.sub(/^(content|layouts)\//, '/')
 
-        # Get modification times
-        mtime = self.max_mtime_for_filenames([ attributes_filename, base_filename ])
-
         # Create layout object
-        # TODO get rid of :mtime
         # TODO maybe pass a Pathname to signify binary-ness?
-        obj = klass.new(
-          content_or_filename, attributes, identifier,
-          :binary => is_binary, :mtime => mtime
-        )
+        obj = klass.new(content_or_filename, attributes, identifier, :binary => is_binary)
         obj.raw_filename = content_filename
         obj
       end
-    end
-
-    # @param [<String>] filenames A collection of filename strings
-    #
-    # @return [Time] The maximum mtime of all given files
-    #
-    # @api private
-    def max_mtime_for_filenames(filenames)
-      filenames.
-        select { |fn| File.exist?(fn) }.
-        map    { |fn| File.stat(fn).mtime }.
-        max
     end
 
     # Finds all base filenames, i.e. all filenames except attribute filenames,

@@ -14,7 +14,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false
     )
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
@@ -29,7 +29,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false
     )
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
@@ -45,7 +45,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false
     )
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
@@ -61,7 +61,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false
     )
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)

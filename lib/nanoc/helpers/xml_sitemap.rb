@@ -65,7 +65,7 @@ module Nanoc::Helpers
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
               xml.loc         @site.config[:base_url] + rep.path
-              xml.lastmod     item[:mtime].to_iso8601_date unless item[:mtime].nil?
+              # TODO add mtime
               xml.changefreq  item[:changefreq] unless item[:changefreq].nil?
               xml.priority    item[:priority] unless item[:priority].nil?
             end

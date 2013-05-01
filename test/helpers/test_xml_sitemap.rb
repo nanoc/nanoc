@@ -30,7 +30,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two/')
 
       # Create item 3
-      attrs = { :mtime => Time.parse('2004-07-12'), :changefreq => 'daily', :priority => 0.5 }
+      attrs = { :changefreq => 'daily', :priority => 0.5 }
       @items << Nanoc::Item.new('some content 3', attrs, '/item-three/')
       self.create_item_rep(@items.last, :three_a, '/item-three/a/')
       self.create_item_rep(@items.last, :three_b, '/item-three/b/')
@@ -66,10 +66,6 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       assert_equal '',                                 urls[1].css('> priority').inner_text
       assert_equal '0.5',                              urls[2].css('> priority').inner_text
       assert_equal '0.5',                              urls[3].css('> priority').inner_text
-      assert_equal '',                                 urls[0].css('> lastmod').inner_text
-      assert_equal '',                                 urls[1].css('> lastmod').inner_text
-      assert_equal '2004-07-12',                       urls[2].css('> lastmod').inner_text
-      assert_equal '2004-07-12',                       urls[3].css('> lastmod').inner_text
     end
   end
 
@@ -104,8 +100,6 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       assert_equal '',                                 urls[1].css('> changefreq').inner_text
       assert_equal '',                                 urls[0].css('> priority').inner_text
       assert_equal '',                                 urls[1].css('> priority').inner_text
-      assert_equal '',                                 urls[0].css('> lastmod').inner_text
-      assert_equal '',                                 urls[1].css('> lastmod').inner_text
     end
   end
 
@@ -134,7 +128,6 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
       assert_equal '',                                 urls[0].css('> changefreq').inner_text
       assert_equal '',                                 urls[0].css('> priority').inner_text
-      assert_equal '',                                 urls[0].css('> lastmod').inner_text
     end
   end
 

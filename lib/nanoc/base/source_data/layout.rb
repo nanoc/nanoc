@@ -28,11 +28,7 @@ module Nanoc
     # @param [Hash] attributes A hash containing this layout's attributes.
     #
     # @param [String] identifier This layout's identifier.
-    #
-    # @param [Time, Hash] params Extra parameters. For backwards
-    #   compatibility, this can be a Time instance indicating the time when
-    #   this layout was last modified (mtime).
-    def initialize(raw_content, attributes, identifier, params=nil)
+    def initialize(raw_content, attributes, identifier, params={})
       if identifier.is_a?(String)
         identifier = Nanoc::Identifier.from_string(identifier)
       end

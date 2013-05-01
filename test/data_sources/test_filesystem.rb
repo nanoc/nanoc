@@ -20,26 +20,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal(expected_filenames, actual_filenames)
   end
 
-  def test_max_mtime_for_filenames
-    File.write('foo', 'x')
-    File.write('bar', 'x')
-    File.write('baz', 'x')
-
-    long_ago        = Time.now - 1000
-    longer_ago      = Time.now - 2000
-    much_longer_ago = Time.now - 3000
-
-    File.utime(long_ago,        long_ago,        'foo')
-    File.utime(longer_ago,      longer_ago,      'bar')
-    File.utime(much_longer_ago, much_longer_ago, 'baz')
-
-    expected_mtime = long_ago
-    actual_mtime   = @data_source.send(:max_mtime_for_filenames, [ 'foo', 'bar', 'baz' ])
-
-    diff = (actual_mtime - expected_mtime)
-    assert diff < 1.0
-  end
-
   def test_binary_extension?
     assert @data_source.send(:binary_extension?, 'foo')
     refute @data_source.send(:binary_extension?, 'txt')

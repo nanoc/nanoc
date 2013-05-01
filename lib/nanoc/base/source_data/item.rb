@@ -40,27 +40,19 @@ module Nanoc
     #
     # @param [String] identifier This item's identifier.
     #
-    # @param [Time, Hash] params Extra parameters. For backwards
-    #   compatibility, this can be a Time instance indicating the time when
-    #   this item was last modified (mtime).
-    #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params={})
       if identifier.is_a?(String)
         identifier = Nanoc::Identifier.from_string(identifier)
       end
-
-      # Parse params
-      params ||= {}
-      params[:binary] = false unless params.has_key?(:binary)
 
       if raw_content_or_raw_filename.nil?
         raise "attempted to create an item with no content/filename (identifier #{identifier})"
       end
 
       # Get type and raw content or raw filename
-      @is_binary = params[:binary]
+      @is_binary = params.fetch(:binary, false)
       if @is_binary
         @raw_filename = raw_content_or_raw_filename
       else
