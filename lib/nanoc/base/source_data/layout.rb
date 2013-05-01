@@ -11,14 +11,14 @@ module Nanoc
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
-    # TODO document
+    # @return [String] The filename pointing to the file containing this
+    #   layout’s content
     attr_accessor :raw_filename
 
     # @return [Hash] This layout's attributes
     attr_reader :attributes
 
-    # @return [String] This layout's identifier, starting and ending with a
-    #   slash
+    # @return [String] This layout's identifier
     attr_accessor :identifier
 
     # Creates a new layout.
