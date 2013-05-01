@@ -65,7 +65,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal expected_attributes, actual_attributes
   end
 
-  def test_content_and_attributes_for_data_with_invalid_metadata
+  def test_content_and_attributes_for_data_with_incorrectly_formatted_metadata_section
     data = "-----\nfoo: 123\n-----\n\nHello!"
 
     actual_content, actual_attributes =
@@ -81,7 +81,15 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   def test_content_and_attributes_for_data_with_not_enough_separators
     data = "---\nfoo: 123\n-----\n\nHello!"
 
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::DataSources::Filesystem::EmbeddedMetadataParseError) do
+      @data_source.send(:content_and_attributes_for_data, data)
+    end
+  end
+
+  def test_content_and_attributes_for_data_with_invalid_yaml
+    data = "---\nfoo : bar : baz\n---\n\nHello!"
+
+    assert_raises(Nanoc::DataSources::Filesystem::CannotParseYAMLError) do
       @data_source.send(:content_and_attributes_for_data, data)
     end
   end

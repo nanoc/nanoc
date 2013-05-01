@@ -35,6 +35,33 @@ module Nanoc::DataSources
   #   as textual items.
   class Filesystem < Nanoc::DataSource
 
+    class EmbeddedMetadataParseError < ::Nanoc::Errors::GenericTrivial
+
+      attr_accessor :filename
+
+      def message
+        "The file #{self.filename} appears to start with an attributes " +
+        "section (three dashes at the top), but it does not seem to be " +
+        "in the correct format."
+      end
+
+    end
+
+    class CannotParseYAMLError < ::Nanoc::Errors::GenericTrivial
+
+      attr_accessor :filename
+      attr_reader   :original_message
+
+      def initialize(original_message)
+        @original_message = original_message
+      end
+
+      def message
+        "Could not parse YAML in #{self.filename}: #{self.original_message}"
+      end
+
+    end
+
     identifier :filesystem
 
     # See {Nanoc::DataSource#setup}.
@@ -137,7 +164,12 @@ module Nanoc::DataSources
             if has_attributes_file
               content_or_filename = self.read(content_filename)
             else
-              content_or_filename, attributes = self.content_and_attributes_for_data(self.read(content_filename))
+              begin
+                content_or_filename, attributes = self.content_and_attributes_for_data(self.read(content_filename))
+              rescue EmbeddedMetadataParseError, CannotParseYAMLError => e
+                e.filename = content_filename
+                raise e
+              end
             end
           end
         end
@@ -191,19 +223,14 @@ module Nanoc::DataSources
       # Split data
       pieces = data.split(/^---\s*$\n/)
       if pieces.size < 3
-        # TODO re-add filename to this exception
-        raise RuntimeError.new(
-          "The file appears to start with an attributes " +
-          "section (three dashes at the top), but it does not seem to be " +
-          "in the correct format."
-        )
+        raise EmbeddedMetadataParseError
       end
 
       # Parse
       begin
         attributes = YAML.load(pieces[1]) || {}
-      rescue Exception => e
-        raise "Could not parse YAML in #{base_filename}: #{e.message}"
+      rescue Psych::SyntaxError => e
+        raise CannotParseYAMLError.new(e.message)
       end
       content = pieces[2..-1].join.strip
 
