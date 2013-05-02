@@ -21,6 +21,8 @@ module Nanoc::Extra::Deployers
   #       options: [ "-glpPrtvz" ]
   class Rsync < ::Nanoc::Extra::Deployer
 
+    identifier :rsync
+
     # Default rsync options
     DEFAULT_OPTIONS = [
       '--group',

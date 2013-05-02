@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class ERB < Nanoc::Filter
 
+    identifier :erb
+
     requires 'erb'
 
     # Runs the content through [ERB](http://ruby-doc.org/stdlib/libdoc/erb/rdoc/classes/ERB.html).

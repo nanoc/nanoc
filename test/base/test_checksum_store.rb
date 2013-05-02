@@ -9,14 +9,14 @@ class Nanoc::ChecksumStoreTest < Nanoc::TestCase
     FileUtils.mkdir_p('tmp')
     pstore = PStore.new('tmp/checksums')
     pstore.transaction do
-      pstore[:data] = { [ :item, '/moo/' ] => 'zomg' }
+      pstore[:data] = { [ :item, Nanoc::Identifier.from_string('/moo.md') ] => 'zomg' }
       pstore[:version] = 1
     end
 
     # Check
     store = Nanoc::ChecksumStore.new
     store.load
-    obj = Nanoc::Item.new('Moo?', {}, '/moo/')
+    obj = Nanoc::Item.new('Moo?', {}, '/moo.md')
     assert_equal 'zomg', store[obj]
   end
 
@@ -25,7 +25,7 @@ class Nanoc::ChecksumStoreTest < Nanoc::TestCase
     store.load
 
     # Check
-    obj = Nanoc::Item.new('Moo?', {}, '/animals/cow/')
+    obj = Nanoc::Item.new('Moo?', {}, '/animals/cow.md')
     assert_equal nil, store[obj]
   end
 

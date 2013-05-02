@@ -1,50 +1,52 @@
 # encoding: utf-8
 
 module Nanoc
-
-  require 'nanoc/base/core_ext'
-  require 'nanoc/base/ordered_hash'
-
-  # Load helper classes
-  autoload 'Context',              'nanoc/base/context'
-  autoload 'DirectedGraph',        'nanoc/base/directed_graph'
-  autoload 'Errors',               'nanoc/base/errors'
-  autoload 'Memoization',          'nanoc/base/memoization'
-  autoload 'NotificationCenter',   'nanoc/base/notification_center'
-  autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
-  autoload 'Store',                'nanoc/base/store'
-
-  # Load source data classes
-  autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
-  autoload 'Configuration',        'nanoc/base/source_data/configuration'
-  autoload 'DataSource',           'nanoc/base/source_data/data_source'
-  autoload 'Item',                 'nanoc/base/source_data/item'
-  autoload 'ItemArray',            'nanoc/base/source_data/item_array'
-  autoload 'Layout',               'nanoc/base/source_data/layout'
-  autoload 'Site',                 'nanoc/base/source_data/site'
-
-  # Load result data classes
-  autoload 'ItemRep',              'nanoc/base/result_data/item_rep'
-
-  # Load compilation classes
-  autoload 'ChecksumStore',        'nanoc/base/compilation/checksum_store'
-  autoload 'CompiledContentCache', 'nanoc/base/compilation/compiled_content_cache'
-  autoload 'Compiler',             'nanoc/base/compilation/compiler'
-  autoload 'CompilerDSL',          'nanoc/base/compilation/compiler_dsl'
-  autoload 'DependencyTracker',    'nanoc/base/compilation/dependency_tracker'
-  autoload 'Filter',               'nanoc/base/compilation/filter'
-  autoload 'ItemRepProxy',         'nanoc/base/compilation/item_rep_proxy'
-  autoload 'ItemRepRecorderProxy', 'nanoc/base/compilation/item_rep_recorder_proxy'
-  autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'
-  autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
-  autoload 'Rule',                 'nanoc/base/compilation/rule'
-  autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
-  autoload 'RuleMemoryCalculator', 'nanoc/base/compilation/rule_memory_calculator'
-  autoload 'RuleMemoryStore',      'nanoc/base/compilation/rule_memory_store'
-  autoload 'RulesCollection',      'nanoc/base/compilation/rules_collection'
-
-  # Deprecated; use PluginRepository instead
-  # TODO [in nanoc 4.0] remove me
-  autoload 'Plugin',               'nanoc/base/plugin_registry'
-
 end
+
+require 'nanoc/base/core_ext'
+
+# Load helper classes
+require 'nanoc/base/context'
+require 'nanoc/base/directed_graph'
+require 'nanoc/base/errors'
+require 'nanoc/base/memoization'
+require 'nanoc/base/notification_center'
+require 'nanoc/base/plugin_registry'
+require 'nanoc/base/store'
+
+# Load source data classes
+require 'nanoc/base/source_data/code_snippet'
+require 'nanoc/base/source_data/configuration'
+require 'nanoc/base/source_data/data_source'
+require 'nanoc/base/source_data/item'
+require 'nanoc/base/source_data/item_array'
+require 'nanoc/base/source_data/layout'
+require 'nanoc/base/source_data/identifier'
+require 'nanoc/base/source_data/site'
+
+# Load result data classes
+require 'nanoc/base/result_data/item_rep'
+require 'nanoc/base/result_data/snapshot_store'
+
+# Load compilation classes
+require 'nanoc/base/compilation/checksum_store'
+require 'nanoc/base/compilation/compiled_content_cache'
+require 'nanoc/base/compilation/compiler'
+require 'nanoc/base/compilation/compiler_dsl'
+require 'nanoc/base/compilation/dependency_tracker'
+require 'nanoc/base/compilation/filter'
+require 'nanoc/base/compilation/item_rep_recorder_proxy'
+require 'nanoc/base/compilation/item_rep_rules_proxy'
+require 'nanoc/base/compilation/item_rep_writer'
+require 'nanoc/base/compilation/outdatedness_checker'
+require 'nanoc/base/compilation/outdatedness_reasons'
+require 'nanoc/base/compilation/pattern'
+require 'nanoc/base/compilation/rule'
+require 'nanoc/base/compilation/rule_context'
+require 'nanoc/base/compilation/rule_memory_calculator'
+require 'nanoc/base/compilation/rule_memory_store'
+require 'nanoc/base/compilation/rules_collection'
+require 'nanoc/base/compilation/rules_store'
+
+# Load stuff that should be loaded elsewhere
+require 'nanoc/base/compilation/filesystem_rules_store'

@@ -21,7 +21,7 @@ module Nanoc
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
     DEFAULT_DATA_SOURCE_CONFIG = {
-      :type         => 'filesystem_unified',
+      :type         => 'filesystem',
       :items_root   => '/',
       :layouts_root => '/',
       :config       => {}
@@ -82,15 +82,6 @@ module Nanoc
           # Get data source class
           data_source_class = Nanoc::DataSource.named(data_source_hash[:type])
           raise Nanoc::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
-
-          # Warn about deprecated data sources
-          # TODO [in nanoc 4.0] remove me
-          case data_source_hash[:type]
-            when 'filesystem'
-              warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
-            when 'filesystem_combined', 'filesystem_compact'
-              warn "Warning: the 'filesystem_combined' and 'filesystem_compact' data source has been merged into the new 'filesystem_unified' data source. Using 'filesystem_combined' and 'filesystem_compact' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem_combined' and 'filesystem_compact with 'filesystem_unified'."
-          end
 
           # Create data source
           data_source_class.new(
@@ -173,44 +164,6 @@ module Nanoc
       @config
     end
 
-    # Fills each item's parent reference and children array with the
-    # appropriate items. It is probably not necessary to call this method
-    # manually; it will be called when appropriate.
-    #
-    # @return [void]
-    def setup_child_parent_links
-      teardown_child_parent_links
-
-      item_map = {}
-      @items.each do |item|
-        item_map[item.identifier] = item
-      end
-
-      @items.each do |item|
-        parent_id_end = item.identifier.rindex('/', -2)
-        if parent_id_end
-          parent_id = item.identifier[0..parent_id_end]
-          parent = item_map[parent_id]
-          if parent
-            item.parent = parent
-            parent.children << item
-          end
-        end
-      end
-    end
-
-    # Removes all child-parent links.
-    #
-    # @api private
-    #
-    # @return [void]
-    def teardown_child_parent_links
-      @items.each do |item|
-        item.parent = nil
-        item.children = []
-      end
-    end
-
     # Prevents all further modifications to itself, its items, its layouts etc.
     #
     # @return [void]
@@ -219,12 +172,6 @@ module Nanoc
       items.each         { |i|  i.freeze  }
       layouts.each       { |l|  l.freeze  }
       code_snippets.each { |cs| cs.freeze }
-    end
-
-    # @deprecated It is no longer necessary to explicitly load site data. It
-    #   is safe to remove all {#load_data} calls.
-    def load_data(force=false)
-      warn 'It is no longer necessary to call Nanoc::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 
     # Loads the site data. It is not necessary to call this method explicitly;
@@ -243,7 +190,6 @@ module Nanoc
       load_items
       load_layouts
       data_sources.each { |ds| ds.unuse }
-      setup_child_parent_links
 
       # Load compiler too
       # FIXME this should not be necessary
@@ -312,8 +258,7 @@ module Nanoc
       @code_snippets.each { |cs| cs.load }
     end
 
-    # Loads this site’s items, sets up item child-parent relationships and
-    # builds each item's list of item representations.
+    # Loads this site’s items and builds each item's list of item representations.
     def load_items
       @items_loaded ||= false
       return if @items_loaded
@@ -324,7 +269,7 @@ module Nanoc
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|
-          i.identifier = File.join(ds.items_root, i.identifier)
+          i.identifier = i.identifier.prefix(ds.items_root)
           i.site = self
         end
         @items.concat(items_in_ds)
@@ -341,7 +286,9 @@ module Nanoc
       @layouts = []
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
-        layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
+        layouts_in_ds.each do |i|
+          i.identifier = i.identifier.prefix(ds.layouts_root)
+        end
         @layouts.concat(layouts_in_ds)
       end
     end

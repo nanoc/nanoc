@@ -5,6 +5,8 @@ module Nanoc::Filters
   # @since 3.2.0
   class Slim < Nanoc::Filter
 
+    identifier :slim
+
     requires 'slim'
 
     # Runs the content through [Slim](http://slim-lang.com/).

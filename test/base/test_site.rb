@@ -33,28 +33,6 @@ class Nanoc::SiteTest < Nanoc::TestCase
     assert_equal({},      site.config[:data_sources][0][:config])
   end
 
-  def test_load_rules_with_existing_rules_file
-    # Mock DSL
-    dsl = mock
-    dsl.expects(:compile).with('*')
-
-    # Create site
-    site = Nanoc::Site.new({})
-    site.compiler.rules_collection.expects(:dsl).returns(dsl)
-
-    # Create rules file
-    File.open('Rules', 'w') do |io|
-      io.write <<-EOF
-compile '*' do
-  # ... do nothing ...
-end
-EOF
-    end
-
-    # Load rules
-    site.compiler.rules_collection.load
-  end
-
   def test_load_data_sources_first
     # Create site
     Nanoc::CLI.run %w( create_site bar)
@@ -76,40 +54,10 @@ EOF
 
       # Create site
       site = Nanoc::Site.new('.')
-      site.load_data
 
       # Check
-      assert_equal 1,       site.data_sources.size
-      assert_equal '/foo/', site.items[0].identifier
-    end
-  end
-
-  def test_setup_child_parent_links
-    Nanoc::CLI.run %w( create_site bar)
-    FileUtils.cd('bar') do
-      Nanoc::CLI.run %w( create_item /parent/ )
-      Nanoc::CLI.run %w( create_item /parent/foo/ )
-      Nanoc::CLI.run %w( create_item /parent/bar/ )
-      Nanoc::CLI.run %w( create_item /parent/bar/qux/ )
-
-      site = Nanoc::Site.new('.')
-
-      root   = site.items.find { |i| i.identifier == '/' }
-      style  = site.items.find { |i| i.identifier == '/stylesheet/' }
-      parent = site.items.find { |i| i.identifier == '/parent/' }
-      foo    = site.items.find { |i| i.identifier == '/parent/foo/' }
-      bar    = site.items.find { |i| i.identifier == '/parent/bar/' }
-      qux    = site.items.find { |i| i.identifier == '/parent/bar/qux/' }
-
-      assert_equal Set.new([ parent, style ]), Set.new(root.children)
-      assert_equal Set.new([ foo, bar ]),      Set.new(parent.children)
-      assert_equal Set.new([ qux ]),           Set.new(bar.children)
-
-      assert_equal nil,    root.parent
-      assert_equal root,   parent.parent
-      assert_equal parent, foo.parent
-      assert_equal parent, bar.parent
-      assert_equal bar,    qux.parent
+      assert_equal 1,      site.data_sources.size
+      assert_equal '/foo', site.items[0].identifier.to_s
     end
   end
 
@@ -177,7 +125,7 @@ describe 'Nanoc::Site#data_sources' do
       File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
         io.write "  -\n"
-        io.write "    type: filesystem_unified\n"
+        io.write "    type: filesystem\n"
         io.write "    aaa: one\n"
         io.write "    config:\n"
         io.write "      bbb: two\n"

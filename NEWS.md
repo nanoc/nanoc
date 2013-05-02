@@ -1,5 +1,30 @@
 # nanoc news
 
+## 4.0.0
+
+Removed:
+
+* Support for Ruby 1.8.x
+* All code that was deprecated in nanoc 3.x
+* Bundler support
+* `filesystem_verbose`
+* VCS interface
+* `create-item` and `create-layout` commands (create the files manually)
+* `watch` and `autocompile` commands (use `guard-nanoc`)
+* `update` command
+* All rake tasks
+* Alternative spelling for `Rules` and `Checks` files
+* Child-parent links (for now)
+* `static` data source
+
+Changed:
+
+* The encoding is now determined only from the configuration file, not from the environment
+* The `filesystem_unified` data source is now named `filesystem`
+* The filesystem data source metadata section now start with three dashes, not five
+* Identifiers are now paths that include the extension
+* The Rules DSL now uses globs (as well as regular expressions, like before)
+
 ## 3.6.3 (???)
 
 Enhancements:

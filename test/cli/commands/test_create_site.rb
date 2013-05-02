@@ -14,40 +14,8 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       site = Nanoc::Site.new('.')
-      site.load_data
       site.compile
     end
-  end
-
-  def test_default_encoding
-    if !defined?(Encoding)
-      skip 'No Encoding class'
-      return
-    end
-
-    original_encoding = Encoding.default_external
-    Encoding.default_external = 'ISO-8859-1' # ew!
-
-    Nanoc::CLI.run %w( create_site foo )
-
-    FileUtils.cd('foo') do
-
-      # Try with encoding = default encoding = utf-8
-      File.open('content/index.html', 'w') { |io| io.write("Hello <\xD6>!\n") }
-      site = Nanoc::Site.new('.')
-      exception = assert_raises(RuntimeError) do
-        site.compile
-      end
-      assert_equal "Could not read content/index.html because the file is not valid UTF-8.", exception.message
-
-      # Try with encoding = specific
-      File.open('nanoc.yaml', 'w') { |io| io.write("meh: true\n") }
-      site = Nanoc::Site.new('.')
-      site.compile
-    end
-    FileUtils
-  ensure
-    Encoding.default_external = original_encoding
   end
 
 end

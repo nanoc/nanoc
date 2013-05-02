@@ -4,7 +4,7 @@ usage       'create-site [options] path'
 aliases     :create_site, :cs
 summary     'create a site'
 description <<-EOS
-Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` commandline option.
+Create a new site at the given path. The site will use the `filesystem` data source by default, but this can be changed using the `--datasource` commandline option.
 EOS
 
 required :d, :datasource, 'specify the data source for the new site'
@@ -63,7 +63,7 @@ prune:
 data_sources:
   -
     # The type is the identifier of the data source. By default, this will be
-    # `filesystem_unified`.
+    # `filesystem`.
     type: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:type]}
 
     # The path where items should be mounted (comparable to mount points in
@@ -77,35 +77,9 @@ data_sources:
     # same as the items root, but applies to layouts rather than items.
     layouts_root: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
 
-    # Whether to allow periods in identifiers. When turned off, everything
-    # past the first period is considered to be the extension, and when
-    # turned on, only the characters past the last period are considered to
-    # be the extension. For example,  a file named “content/about.html.erb”
-    # will have the identifier “/about/” when turned off, but when turned on
-    # it will become “/about.html/” instead.
-    allow_periods_in_identifiers: false
-
     # The encoding to use for input files. If your input files are not in
     # UTF-8 (which they should be!), change this.
     encoding: utf-8
-
-# Configuration for the “watch” command, which watches a site for changes and
-# recompiles if necessary.
-watcher:
-  # A list of directories to watch for changes. When editing this, make sure
-  # that the “output/” and “tmp/” directories are _not_ included in this list,
-  # because recompiling the site will cause these directories to change, which
-  # will cause the site to be recompiled, which will cause these directories
-  # to change, which will cause the site to be recompiled again, and so on.
-  dirs_to_watch: [ 'content', 'layouts', 'lib' ]
-
-  # A list of single files to watch for changes. As mentioned above, don’t put
-  # any files from the “output/” or “tmp/” directories in here.
-  files_to_watch: [ 'nanoc.yaml', 'Rules' ]
-
-  # When to send notifications (using Growl or notify-send).
-  notify_on_compilation_success: true
-  notify_on_compilation_failure: true
 
 # Configuration for the “check” command, which run unit tests on the site.
 checks:
@@ -122,19 +96,6 @@ EOS
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
 #!/usr/bin/env ruby
 
-# A few helpful tips about the Rules file:
-#
-# * The string given to #compile and #route are matching patterns for
-#   identifiers--not for paths. Therefore, you can’t match on extension.
-#
-# * The order of rules is important: for each item, only the first matching
-#   rule is applied.
-#
-# * Item identifiers start and end with a slash (e.g. “/about/” for the file
-#   “content/about.html”). To select all children, grandchildren, … of an
-#   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
-#   because “*” matches zero or more characters.
-
 compile '/stylesheet/' do
   # don’t filter or layout
 end
@@ -144,7 +105,7 @@ compile '*' do
     # don’t filter binary items
   else
     filter :erb
-    layout 'default'
+    layout '/default.html'
   end
 end
 
@@ -154,11 +115,11 @@ end
 
 route '*' do
   if item.binary?
-    # Write item with identifier /foo/ to /foo.ext
-    item.identifier.chop + '.' + item[:extension]
+    # Write item with identifier /foo.ext to /foo.ext
+    item.identifier
   else
-    # Write item with identifier /foo/ to /foo/index.html
-    item.identifier + 'index.html'
+    # Write item with identifier /foo.ext to /foo/index.html
+    item.identifier.in_dir.with_ext('html')
   end
 end
 
@@ -322,7 +283,7 @@ EOS
 
       # Extract arguments and options
       path        = arguments[0]
-      data_source = options[:datasource] || 'filesystem_unified'
+      data_source = options.fetch(:datasource, 'filesystem')
 
       # Check whether site exists
       if File.exist?(path)
@@ -352,8 +313,8 @@ EOS
 
   protected
 
-    # Creates a configuration file and a output directory for this site, as
-    # well as a rakefile that loads the standard nanoc tasks.
+    # Creates a minimal site, i.e. a directory with only the bare
+    # essentials to qualify as a nanoc site.
     def site_create_minimal(data_source)
       # Create output
       FileUtils.mkdir_p('output')

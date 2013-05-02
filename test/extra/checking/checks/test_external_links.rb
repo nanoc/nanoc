@@ -3,21 +3,23 @@
 class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
 
   def test_run
-    with_site do |site|
-      # Create files
-      FileUtils.mkdir_p('output')
-      File.open('output/foo.txt',  'w') { |io| io.write('<a href="http://example.com/404">broken</a>') }
-      File.open('output/bar.html', 'w') { |io| io.write('<a href="http://example.com/">not broken</a>') }
+    if_have 'nokogiri' do
+      with_site do |site|
+        # Create files
+        FileUtils.mkdir_p('output')
+        File.open('output/foo.txt',  'w') { |io| io.write('<a href="http://example.com/404">broken</a>') }
+        File.open('output/bar.html', 'w') { |io| io.write('<a href="http://example.com/">not broken</a>') }
 
-      # Create check
-      check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
-      def check.request_url_once(url)
-        Net::HTTPResponse.new('1.1', url.path == '/' ? '200' : '404', 'okay')
+        # Create check
+        check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
+        def check.request_url_once(url)
+          Net::HTTPResponse.new('1.1', url.path == '/' ? '200' : '404', 'okay')
+        end
+        check.run
+
+        # Test
+        assert check.issues.empty?
       end
-      check.run
-
-      # Test
-      assert check.issues.empty?
     end
   end
 
@@ -52,13 +54,13 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
 
   def test_fallback_to_get_when_head_is_not_allowed
     with_site do |site|
-      #Create check
+      # Create check
       check = Nanoc::Extra::Checking::Checks::ExternalLinks.new(site)
       def check.request_url_once(url, req_method = Net::HTTP::Head)
         Net::HTTPResponse.new('1.1', (req_method == Net::HTTP::Head || url.path == '/405') ? '405' : '200', 'okay')
       end
 
-      #Test
+      # Test
       assert_nil check.validate('http://127.0.0.1:9204')
       refute_nil check.validate('http://127.0.0.1:9204/405')
     end

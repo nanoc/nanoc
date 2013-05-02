@@ -27,13 +27,6 @@ module Nanoc::Helpers
   #     <h3>Summary</h3>
   #     <%= content_for(@item, :summary) || '(no summary)' %>
   #   </div>
-  #
-  # @example Showing captured content in a sidebar the old, deprecated way (do not use or I will become very angry)
-  #
-  #   <div id="sidebar">
-  #     <h3>Summary</h3>
-  #     <%= @item[:content_for_summary] || '(no summary)' %>
-  #   </div>
   module Capturing
 
     # @api private
@@ -76,11 +69,6 @@ module Nanoc::Helpers
     #   referenced later on. The same method, {#content_for}, is used for
     #   getting the captured content as well as setting it. When capturing,
     #   the content of the block itself will not be outputted.
-    #
-    #   For backwards compatibility, it is also possible to fetch the captured
-    #   content by getting the contents of the attribute named `content_for_`
-    #   followed by the given name. This way of accessing captures is
-    #   deprecated.
     #
     #   @param [Symbol, String] name The base name of the attribute into which
     #     the content should be stored

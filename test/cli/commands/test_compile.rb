@@ -4,9 +4,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_profiling_information
     with_site do |site|
-      Nanoc::CLI.run %w( create_item foo )
-      Nanoc::CLI.run %w( create_item bar )
-      Nanoc::CLI.run %w( create_item baz )
+      File.open('content/foo.md', 'w') { |io| io.write('hai') }
+      File.open('content/bar.md', 'w') { |io| io.write('hai') }
+      File.open('content/baz.md', 'w') { |io| io.write('hai') }
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -15,9 +15,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "\n"
         io.write "route '*' do\n"
         io.write "  if item.binary?\n"
-        io.write "    item.identifier.chop + '.' + item[:extension]\n"
+        io.write "    item.identifier\n"
         io.write "  else\n"
-        io.write "    item.identifier + 'index.html'\n"
+        io.write "    item.identifier.with_ext('html')\n"
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"
@@ -30,9 +30,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_auto_prune
     with_site do |site|
-      Nanoc::CLI.run %w( create_item foo )
-      Nanoc::CLI.run %w( create_item bar )
-      Nanoc::CLI.run %w( create_item baz )
+      File.open('content/foo.md', 'w') { |io| io.write('hai') }
+      File.open('content/bar.md', 'w') { |io| io.write('hai') }
+      File.open('content/baz.md', 'w') { |io| io.write('hai') }
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -41,9 +41,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "\n"
         io.write "route '*' do\n"
         io.write "  if item.binary?\n"
-        io.write "    item.identifier.chop + '.' + item[:extension]\n"
+        io.write "    item.identifier\n"
         io.write "  else\n"
-        io.write "    item.identifier + 'index.html'\n"
+        io.write "    item.identifier.with_ext('html')\n"
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"
@@ -71,9 +71,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_auto_prune_with_exclude
     with_site do |site|
-      Nanoc::CLI.run %w( create_item foo )
-      Nanoc::CLI.run %w( create_item bar )
-      Nanoc::CLI.run %w( create_item baz )
+      File.open('content/foo.md', 'w') { |io| io.write('hai') }
+      File.open('content/bar.md', 'w') { |io| io.write('hai') }
+      File.open('content/baz.md', 'w') { |io| io.write('hai') }
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -82,9 +82,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "\n"
         io.write "route '*' do\n"
         io.write "  if item.binary?\n"
-        io.write "    item.identifier.chop + '.' + item[:extension]\n"
+        io.write "    item.identifier\n"
         io.write "  else\n"
-        io.write "    item.identifier + 'index.html'\n"
+        io.write "    item.identifier.with_ext('html')\n"
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"

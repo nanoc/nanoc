@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Sass < Nanoc::Filter
 
+    identifier :sass
+
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
     # Runs the content through [Sass](http://sass-lang.com/).
@@ -14,11 +16,10 @@ module Nanoc::Filters
     def run(content, params={})
       # Build options
       options = params.dup
-      sass_filename = options[:filename] ||
-        (@item && @item[:content_filename])
+      sass_filename = item.raw_filename
+      # TODO check whether item.identifier exists
       options[:filename] ||= sass_filename
-      options[:filesystem_importer] ||=
-        Nanoc::Filters::Sass::SassFilesystemImporter
+      options[:filesystem_importer] ||= Nanoc::Filters::Sass::SassFilesystemImporter
 
       # Find items
       item_dirglob = Pathname.new(sass_filename).dirname.realpath.to_s + '**'

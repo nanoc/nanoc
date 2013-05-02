@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class RDoc < Nanoc::Filter
 
+    identifier :rdoc
+
     requires 'rdoc'
 
     def self.setup

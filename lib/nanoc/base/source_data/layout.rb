@@ -11,11 +11,14 @@ module Nanoc
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
+    # @return [String] The filename pointing to the file containing this
+    #   layout’s content
+    attr_accessor :raw_filename
+
     # @return [Hash] This layout's attributes
     attr_reader :attributes
 
-    # @return [String] This layout's identifier, starting and ending with a
-    #   slash
+    # @return [String] This layout's identifier
     attr_accessor :identifier
 
     # Creates a new layout.
@@ -25,23 +28,14 @@ module Nanoc
     # @param [Hash] attributes A hash containing this layout's attributes.
     #
     # @param [String] identifier This layout's identifier.
-    #
-    # @param [Time, Hash] params Extra parameters. For backwards
-    #   compatibility, this can be a Time instance indicating the time when
-    #   this layout was last modified (mtime).
-    #
-    # @option params [Time, nil] :mtime (nil) The time when this layout was
-    #   last modified. Deprecated; pass the modification time as the `:mtime`
-    #   attribute instead.
-    def initialize(raw_content, attributes, identifier, params=nil)
+    def initialize(raw_content, attributes, identifier, params={})
+      if identifier.is_a?(String)
+        identifier = Nanoc::Identifier.from_string(identifier)
+      end
+
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.cleaned_identifier.freeze
-
-      # Set mtime
-      params ||= {}
-      params = { :mtime => params } if params.is_a?(Time)
-      @attributes.merge(:mtime => params[:mtime]) if params[:mtime]
+      @identifier   = identifier
     end
 
     # Requests the attribute with the given key.
@@ -118,11 +112,6 @@ module Nanoc
       @raw_content,
       @attributes,
       @identifier = *source
-    end
-
-    # @deprecated Access the modification time using `layout[:mtime]` instead.
-    def mtime
-      self[:mtime]
     end
 
   end

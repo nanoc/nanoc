@@ -29,13 +29,6 @@ module Nanoc::CLI
       @site
     end
 
-    # @deprecated use `Cri::CommandDSL#runner`
-    #
-    # @see http://rubydoc.info/gems/cri/Cri/CommandDSL#runner-instance_method
-    def self.call(opts, args, cmd)
-      self.new(opts, args, cmd).call
-    end
-
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def is_in_site_dir?
@@ -71,42 +64,11 @@ module Nanoc::CLI
       Nanoc::CLI.debug?
     end
 
-  protected
-
-    # Sets the data source's VCS to the VCS with the given name. Does nothing
-    # when the site's data source does not support VCSes (i.e. does not
-    # implement #vcs=).
-    #
-    # @param [String] vcs_name The name of the VCS that should be used
-    #
-    # @return [void]
-    def set_vcs(vcs_name)
-      # Skip if not possible
-      return if vcs_name.nil? || site.nil?
-
-      # Find VCS
-      vcs_class = Nanoc::Extra::VCS.named(vcs_name.to_sym)
-      if vcs_class.nil?
-        raise Nanoc::Errors::GenericTrivial, "A VCS named #{vcs_name} was not found"
-      end
-
-      site.data_sources.each do |data_source|
-        # Skip if not possible
-        next if !data_source.respond_to?(:vcs=)
-
-        # Set VCS
-        data_source.vcs = vcs_class.new
-      end
-    end
-
     # @return [Array] The compilation stack.
     def stack
       (self.site && self.site.compiler.stack) || []
     end
 
   end
-
-  # @deprecated Use {Nanoc::CLI::CommandRunner} instead
-  Command = CommandRunner
 
 end

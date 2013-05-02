@@ -14,6 +14,8 @@ Gem::Specification.new do |s|
   s.email   = 'denis.defreyne@stoneship.org'
   s.license = 'MIT'
 
+  s.required_ruby_version = '>= 1.9.3'
+
   s.files              = Dir['[A-Z]*'] +
                          Dir['doc/yardoc_templates/**/*'] +
                          Dir['{bin,lib,tasks,test}/**/*'] +

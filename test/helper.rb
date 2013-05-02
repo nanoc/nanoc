@@ -15,14 +15,14 @@ rescue => e
 end
 
 # Setup coverage
-require 'coveralls'
-Coveralls.wear!
+# (disabled until colorize/colored issue is resolved)
+#require 'coveralls'
+#Coveralls.wear!
 
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'nanoc'
 require 'nanoc/cli'
-require 'nanoc/tasks'
 
 # Load miscellaneous requirements
 require 'stringio'
@@ -68,9 +68,11 @@ end
 
 route '*' do
   if item.binary?
-    item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
+    item.identifier
+  elsif item.identifier == '/index.html'
+    '/index.html'
   else
-    item.identifier + 'index.html'
+    item.identifier.without_ext + '/index.html'
   end
 end
 

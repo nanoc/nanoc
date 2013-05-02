@@ -99,7 +99,7 @@ module Nanoc
     # @return [Nanoc::RulesCollection] The collection of rules to be used
     #   for compiling this site
     def rules_collection
-      Nanoc::RulesCollection.new(self)
+      Nanoc::RulesCollection.new
     end
     memoize :rules_collection
 
@@ -116,9 +116,8 @@ module Nanoc
       site.load
 
       # Preprocess
-      rules_collection.load
+      self.load_rules
       preprocess
-      site.setup_child_parent_links
       build_reps
       route_reps
 
@@ -131,6 +130,24 @@ module Nanoc
       raise e
     ensure
       @loading = false
+    end
+
+    # @return [Class<Nanoc::RulesStore>] The rules store class given in the
+    #   configuration file
+    # TODO document
+    def rules_store_class
+      identifier = @site.config.fetch(:rules_store_identifier, :filesystem)
+      Nanoc::RulesStore.named(identifier)
+    end
+
+    # TODO document
+    def rules_store
+      @_rules_store ||= self.rules_store_class.new(self.rules_collection)
+    end
+
+    # TODO document
+    def load_rules
+      self.rules_store.load_rules
     end
 
     # Undoes the effects of {#load}. Used when {#load} raises an exception.
@@ -147,8 +164,6 @@ module Nanoc
       @stack = []
 
       items.each { |item| item.reps.clear }
-      site.teardown_child_parent_links
-      rules_collection.unload
 
       site.unload
 
@@ -171,6 +186,7 @@ module Nanoc
       self.objects.each do |obj|
         checksum_store[obj] = obj.checksum
       end
+      checksum_store[self.rules_collection] = self.rules_store.rule_data
 
       # Store
       stores.each { |s| s.store }
@@ -202,8 +218,7 @@ module Nanoc
     #
     # @api private
     def objects
-      site.items + site.layouts + site.code_snippets +
-        [ site.config, rules_collection ]
+      site.items + site.layouts + site.code_snippets + [ site.config ]
     end
 
     # Creates the representations of all items as defined by the compilation
@@ -219,7 +234,7 @@ module Nanoc
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
         rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name)
+          item.reps << ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
         end
       end
     end
@@ -237,15 +252,15 @@ module Nanoc
           # Get basic path by applying matching rule
           basic_path = rule.apply_to(rep, :compiler => self)
           next if basic_path.nil?
-          if basic_path !~ %r{^/}
+          unless basic_path.to_s.start_with?('/')
             raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
           end
 
           # Get raw path by prepending output directory
-          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path
+          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path.to_s
 
           # Get normal path by stripping index filename
-          rep.paths[snapshot] = basic_path
+          rep.paths[snapshot] = basic_path.to_s
           @site.config[:index_filenames].each do |index_filename|
             if rep.paths[snapshot][-index_filename.length..-1] == index_filename
               # Strip and stop
@@ -268,7 +283,7 @@ module Nanoc
       if rep.binary?
         content_or_filename_assigns = { :filename => rep.temporary_filenames[:last] }
       else
-        content_or_filename_assigns = { :content => rep.content[:last] }
+        content_or_filename_assigns = { :content => rep.stored_content_at_snapshot(:last) }
       end
 
       content_or_filename_assigns.merge({
@@ -290,6 +305,19 @@ module Nanoc
         :dependency_tracker => dependency_tracker)
     end
     memoize :outdatedness_checker
+
+    # Returns the snapshot store, creating it if it does not exist yet. The
+    # `:store_type` site configuration variable will determine the snapshot
+    # store type.
+    #
+    # @return [Nanoc::SnapshotStore] The snapshot store
+    def snapshot_store
+      @snapshot_store ||= begin
+        name = @site.config.fetch(:store_type, :in_memory)
+        klass = Nanoc::SnapshotStore.named(name)
+        klass.new
+      end
+    end
 
   private
 
@@ -325,7 +353,7 @@ module Nanoc
 
       # Assign snapshots
       reps.each do |rep|
-        rep.snapshots = rules_collection.snapshots_for(rep)
+        rep.snapshots = self.rule_memory_calculator.snapshots_for(rep)
       end
 
       # Attempt to compile all active reps
@@ -370,7 +398,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started,       rep.item)
 
       # Calculate rule memory if we haven’t yet done do
-      rules_collection.new_rule_memory_for_rep(rep)
+      self.rule_memory_calculator.new_rule_memory_for_rep(rep)
 
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
@@ -430,7 +458,7 @@ module Nanoc
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      Nanoc::ChecksumStore.new(:site => @site)
+      Nanoc::ChecksumStore.new
     end
     memoize :checksum_store
 
@@ -442,7 +470,7 @@ module Nanoc
 
     # @return [RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
-      Nanoc::RuleMemoryCalculator.new(:rules_collection => rules_collection)
+      Nanoc::RuleMemoryCalculator.new(:compiler => self, :rules_collection => rules_collection)
     end
     memoize :rule_memory_calculator
 

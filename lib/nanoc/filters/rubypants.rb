@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class RubyPants < Nanoc::Filter
 
+    identifier :rubypants
+
     requires 'rubypants'
 
     # Runs the content through [RubyPants](http://rubydoc.info/gems/rubypants/).

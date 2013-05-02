@@ -3,8 +3,7 @@
 module Nanoc
 
   # The class responsible for keeping track of all loaded plugins, such as
-  # filters ({Nanoc::Filter}), data sources ({Nanoc::DataSource}) and VCSes
-  # ({Nanoc::Extra::VCS}).
+  # filters ({Nanoc::Filter}) and data sources ({Nanoc::DataSource}).
   class PluginRegistry
 
     extend Nanoc::Memoization
@@ -75,7 +74,7 @@ module Nanoc
       # @return [Hash<Symbol, Class>] All plugins of this type, with keys
       #   being the identifiers and values the plugin classes
       def all
-        Nanoc::Plugin.find_all(self)
+        Nanoc::PluginRegistry.instance.find_all(self)
       end
 
       # Returns the plugin with the given name (identifier)
@@ -84,7 +83,7 @@ module Nanoc
       #
       # @return [Class] The plugin class with the given name
       def named(name)
-        Nanoc::Plugin.find(self, name)
+        Nanoc::PluginRegistry.instance.find(self, name)
       end
 
     end
@@ -108,7 +107,7 @@ module Nanoc
     # Registers the given class as a plugin.
     #
     # @param [Class] superclass The superclass of the plugin. For example:
-    #   {Nanoc::Filter}, {Nanoc::Extra::VCS}.
+    #   {Nanoc::Filter}, {Nanoc::DataSource}.
     #
     # @param [Class, String] class_or_name The class to register. This can be
     #   a string, in which case it will be automatically converted to a proper
@@ -130,7 +129,7 @@ module Nanoc
     end
 
     # @param [Class] superclass The superclass of the plugin. For example:
-    #   {Nanoc::Filter}, {Nanoc::Extra::VCS}.
+    #   {Nanoc::Filter}, {Nanoc::DataSource}.
     #
     # @param [Class] klass The class to get the identifiers for.
     #
@@ -197,11 +196,6 @@ module Nanoc
       plugins
     end
 
-    # @deprecated Use {Nanoc::PluginRegistry#find} instead
-    def named(name)
-      find(self, name)
-    end
-
   protected
 
     def resolve(class_or_name, klass)
@@ -220,8 +214,5 @@ module Nanoc
     end
 
   end
-
-  # @deprecated Use {Nanoc::PluginRegistry.instance} instead
-  Plugin = PluginRegistry.instance
 
 end

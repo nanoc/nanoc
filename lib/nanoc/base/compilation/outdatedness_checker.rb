@@ -57,7 +57,7 @@ module Nanoc
     end
     memoize :outdatedness_reason_for
 
-  private
+  protected
 
     # Checks whether the given object is outdated and therefore needs to be
     # recompiled. This method does not take dependencies into account; use
@@ -167,7 +167,7 @@ module Nanoc
     # @return [Boolean] true if the rule memory for the given item
     #   represenation has changed, false otherwise
     def rule_memory_differs_for(obj)
-      rules_collection.rule_memory_differs_for(obj)
+      self.rule_memory_calculator.rule_memory_differs_for(obj)
     end
     memoize :rule_memory_differs_for
 
@@ -201,6 +201,11 @@ module Nanoc
     # @return [Nanoc::ChecksumStore] The checksum store
     def checksum_store
       @checksum_store
+    end
+
+    # TODO document
+    def rule_memory_calculator
+      site.compiler.rule_memory_calculator
     end
 
     # @return [Nanoc::RulesCollection] The rules collection

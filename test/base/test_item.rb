@@ -9,17 +9,15 @@ class Nanoc::ItemTest < Nanoc::TestCase
     assert_equal 'xyz', item.attributes[:abc]
   end
 
-  def test_initialize_with_unclean_identifier
-    item = Nanoc::Item.new("foo", {}, '/foo')
-
-    assert_equal '/foo/', item.identifier
-  end
-
   def test_frozen_identifier
     item = Nanoc::Item.new("foo", {}, '/foo')
 
     assert_raises_frozen_error do
-      item.identifier.chop!
+      item.identifier.components << 'blah'
+    end
+
+    assert_raises_frozen_error do
+      item.identifier.components[0] << 'blah'
     end
   end
 
@@ -28,7 +26,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
     item = Nanoc::Item.new(
       "content",
       { :one => 'one in item' },
-      '/path/'
+      '/path.md'
     )
 
     # Test finding one
@@ -134,7 +132,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
   end
 
   def test_freeze_should_disallow_changes
-    item = Nanoc::Item.new("foo", { :a => { :b => 123 }}, '/foo/')
+    item = Nanoc::Item.new("foo", { :a => { :b => 123 }}, '/foo')
     item.freeze
 
     assert_raises_frozen_error do
@@ -150,11 +148,11 @@ class Nanoc::ItemTest < Nanoc::TestCase
     item = Nanoc::Item.new(
       "foobar",
       { :a => { :b => 123 }},
-      '/foo/')
+      '/foo')
 
     item = Marshal.load(Marshal.dump(item))
 
-    assert_equal '/foo/', item.identifier
+    assert_equal '/foo', item.identifier.to_s
     assert_equal 'foobar', item.raw_content
     assert_equal({ :a => { :b => 123 }}, item.attributes)
   end

@@ -13,11 +13,6 @@ module Nanoc::ArrayExtensions
     end
   end
 
-  # @deprecated Renamed to {#symbolize_keys_recursively}
-  def symbolize_keys
-    symbolize_keys_recursively
-  end
-
   # Returns a new array where all items' keys are recursively converted to
   # strings by calling {Nanoc::ArrayExtensions#stringify_keys_recursively} or
   # {Nanoc::HashExtensions#stringify_keys_recursively}.
@@ -27,11 +22,6 @@ module Nanoc::ArrayExtensions
     inject([]) do |array, element|
       array + [ element.respond_to?(:stringify_keys_recursively) ? element.stringify_keys_recursively : element ]
     end
-  end
-
-  # @deprecated Renamed to {#stringify_keys_recursively}
-  def stringify_keys
-    stringify_keys_recursively
   end
 
   # Freezes the contents of the array, as well as all array elements. The

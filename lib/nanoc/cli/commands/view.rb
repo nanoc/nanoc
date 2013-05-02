@@ -47,7 +47,7 @@ module Nanoc::CLI::Commands
         run Rack::File.new(site.config[:output_dir])
       end.to_app
 
-      # Run autocompiler
+      # Run app
       handler.run(app, options_for_rack)
     end
 

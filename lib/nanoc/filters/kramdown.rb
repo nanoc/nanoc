@@ -3,6 +3,8 @@
 module Nanoc::Filters
   class Kramdown < Nanoc::Filter
 
+    identifier :kramdown
+
     requires 'kramdown'
 
     # Runs the content through [Kramdown](http://kramdown.rubyforge.org/).

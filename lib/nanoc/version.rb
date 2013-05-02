@@ -2,6 +2,6 @@
 
 module Nanoc
 
-  VERSION = '3.6.3'
+  VERSION = '4.0.0a1'
 
 end
