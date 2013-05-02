@@ -28,24 +28,54 @@ class Nanoc::IdentifierTest < Nanoc::TestCase
   end
 
   def test_to_s
-    assert_equal '/foo/bar/', self.new_from_string('/foo/bar/').to_s
-    assert_equal '/foo/',     self.new_from_string('/foo/').to_s
-    assert_equal '/',         self.new_from_string('/').to_s
+    assert_equal '/foo/bar', self.new_from_string('/foo/bar/').to_s
+    assert_equal '/foo',     self.new_from_string('/foo/').to_s
+    assert_equal '/',        self.new_from_string('/').to_s
   end
 
   def test_parent
-    assert_equal '/foo/bar/', self.new_from_string('foo/bar/qux').parent.to_s
-    assert_equal '/foo/',     self.new_from_string('foo/bar').parent.to_s
+    assert_equal '/foo/bar', self.new_from_string('foo/bar/qux').parent.to_s
+    assert_equal '/foo',     self.new_from_string('foo/bar').parent.to_s
     assert_equal '/',         self.new_from_string('foo').parent.to_s
     assert_nil self.new_from_string('/').parent
   end
 
-  def test_plus
-    assert_equal '/foo/xyz', self.new_from_string('/foo/') + 'xyz'
+  def test_with_ext_without_extension
+    assert_equal '/foo.md', self.new_from_string('/foo').with_ext('md').to_s
   end
 
-  def test_chop
-    assert_equal '/foo', self.new_from_string('/foo/').chop
+  def test_with_ext_with_extension
+    assert_equal '/foo.md', self.new_from_string('/foo.txt').with_ext('md').to_s
+  end
+
+  def test_without_ext_without_extension
+    assert_equal '/foo', self.new_from_string('/foo').without_ext.to_s
+  end
+
+  def test_without_ext_with_extension
+    assert_equal '/foo', self.new_from_string('/foo.txt').without_ext.to_s
+  end
+
+  def test_extension_with_extension
+    assert_equal 'md', self.new_from_string('/foo.md').extension
+  end
+
+  def test_extension_without_extension
+    assert_equal nil, self.new_from_string('/foo').extension
+  end
+
+  def test_in_dir
+    assert_equal '/foo/index.md',   self.new_from_string('/foo.md').in_dir.to_s
+    assert_equal '/foo/index.html', self.new_from_string('/foo.md').in_dir.with_ext('html').to_s
+    assert_equal '/foo/index.html', self.new_from_string('/foo.md').with_ext('html').in_dir.to_s
+  end
+
+  def test_add_component
+    assert_equal '/foo/bar', self.new_from_string('/foo').add_component('bar').to_s
+  end
+
+  def test_plus
+    assert_equal '/fooSTUFF', self.new_from_string('/foo') + 'STUFF'
   end
 
 end

@@ -3,6 +3,9 @@
 module Nanoc
 
   # Contains methods that will be executed by the site’s `Rules` file.
+  #
+  # Several methods accept patterns. These patterns can be either globs or
+  # regular expressions.
   class CompilerDSL
 
     # Creates a new compiler DSL for the given collection of rules.
@@ -26,16 +29,12 @@ module Nanoc
     end
 
     # Creates a compilation rule for all items whose identifier match the
-    # given identifier, which may either be a string containing the *
-    # wildcard, or a regular expression.
+    # given pattern.
     #
     # This rule will be applicable to reps with a name equal to `:default`;
     # this can be changed by giving an explicit `:rep` parameter.
     #
-    # An item rep will be compiled by calling the given block and passing the
-    # rep as a block argument.
-    #
-    # @param [String] identifier A pattern matching identifiers of items that
+    # @param [String] pattern A pattern matching identifiers of items that
     #   should be compiled using this rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
@@ -46,18 +45,18 @@ module Nanoc
     #
     # @return [void]
     #
-    # @example Compiling the default rep of the `/foo/` item
+    # @example Compiling the default rep of a bunch of items
     #
-    #     compile '/foo/' do
+    #     compile '/foo.*' do
     #       rep.filter :erb
     #     end
     #
-    # @example Compiling the `:raw` rep of the `/bar/` item
+    # @example Compiling the `:raw` rep of a bunch of items
     #
-    #     compile '/bar/', :rep => :raw do
+    #     compile '/articles/*', :rep => :raw do
     #       # do nothing
     #     end
-    def compile(identifier, params={}, &block)
+    def compile(pattern, params={}, &block)
       # Require block
       raise ArgumentError.new("#compile requires a block") unless block_given?
 
@@ -65,21 +64,17 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
+      rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
     # Creates a routing rule for all items whose identifier match the
-    # given identifier, which may either be a string containing the `*`
-    # wildcard, or a regular expression.
+    # given pattern.
     #
     # This rule will be applicable to reps with a name equal to `:default`;
     # this can be changed by giving an explicit `:rep` parameter.
     #
-    # The path of an item rep will be determined by calling the given block
-    # and passing the rep as a block argument.
-    #
-    # @param [String] identifier A pattern matching identifiers of items that
+    # @param [String] pattern A pattern matching identifiers of items that
     #   should be routed using this rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
@@ -90,18 +85,18 @@ module Nanoc
     #
     # @return [void]
     #
-    # @example Routing the default rep of the `/foo/` item
+    # @example Routing the default rep of an item
     #
-    #     route '/foo/' do
-    #       item.identifier + 'index.html'
+    #     route '/foo.*' do
+    #       item.identifier.in_dir.with_ext('html')
     #     end
     #
-    # @example Routing the `:raw` rep of the `/bar/` item
+    # @example Routing the `:raw` rep of an item
     #
-    #     route '/bar/', :rep => :raw do
-    #       '/raw' + item.identifier + 'index.txt'
+    #     route '/articles/*', :rep => :raw do
+    #       item.identifier.prefix('raw').with_ext('txt')
     #     end
-    def route(identifier, params={}, &block)
+    def route(pattern, params={}, &block)
       # Require block
       raise ArgumentError.new("#route requires a block") unless block_given?
 
@@ -110,17 +105,16 @@ module Nanoc
       snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block, :snapshot_name => snapshot_name)
+      rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, block, :snapshot_name => snapshot_name)
       @rules_collection.add_item_routing_rule(rule)
     end
 
     # Creates a layout rule for all layouts whose identifier match the given
-    # identifier, which may either be a string containing the * wildcard, or a
-    # regular expression. The layouts matching the identifier will be filtered
-    # using the filter specified in the second argument. The params hash
-    # contains filter arguments that will be passed to the filter.
+    # identifier. The layouts matching the identifier will be filtered using
+    # the filter specified in the second argument. The params hash contains
+    # filter arguments that will be passed to the filter.
     #
-    # @param [String] identifier A pattern matching identifiers of layouts
+    # @param [String, Regexp] pattern A pattern matching identifiers of layouts
     #   that should be filtered using this rule
     #
     # @param [Symbol] filter_name The name of the filter that should be run
@@ -133,13 +127,15 @@ module Nanoc
     #
     # @example Specifying the filter to use for a layout
     #
-    #     layout '/default/', :erb
+    #     layout '/default.*', :erb
     #
     # @example Using custom filter arguments for a layout
     #
-    #     layout '/custom/',  :haml, :format => :html5
-    def layout(identifier, filter_name, params={})
-      @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
+    #     layout '/*.haml',  :haml, :format => :html5
+    def layout(pattern, filter_name, params={})
+      key = Nanoc::Pattern.from(pattern)
+      value = [ filter_name, params ]
+      @rules_collection.layout_filter_mapping[key] = value
     end
 
     # Creates a pair of compilation and routing rules that indicate that the
@@ -150,8 +146,8 @@ module Nanoc
     # This meta-rule will be applicable to reps with a name equal to
     # `:default`; this can be changed by giving an explicit `:rep` parameter.
     #
-    # @param [String] identifier A pattern matching identifiers of items that
-    #   should be processed using this meta-rule
+    # @param [String, Regexp] pattern A pattern matching identifiers of items
+    #   that should be processed using this meta-rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
     #   that should be routed using this rule
@@ -160,14 +156,14 @@ module Nanoc
     #
     # @since 3.2.0
     #
-    # @example Copying the `/foo/` item as-is
+    # @example Copying items as-is
     #
-    #     passthrough '/foo/'
+    #     passthrough '/foo.*'
     #
-    # @example Copying the `:raw` rep of the `/bar/` item as-is
+    # @example Copying the `:raw` rep of the `/bar.html` item as-is
     #
-    #     passthrough '/bar/', :rep => :raw
-    def passthrough(identifier, params={})
+    #     passthrough '/bar.html', :rep => :raw
+    def passthrough(pattern, params={})
       # Require no block
       raise ArgumentError.new("#passthrough does not require a block") if block_given?
 
@@ -176,18 +172,14 @@ module Nanoc
 
       # Create compilation rule
       compilation_block = proc { }
-      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
+      compilation_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
       routing_block = proc do
-        # This is a temporary solution until an item can map back to its data
-        # source.
-        # ATM item[:content_filename] is nil for items coming from the static
-        # data source.
-        item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
+        item.identifier
       end
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, :snapshot_name => :last)
+      routing_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, routing_block, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -199,8 +191,8 @@ module Nanoc
     # This meta-rule will be applicable to reps with a name equal to
     # `:default`; this can be changed by giving an explicit `:rep` parameter.
     #
-    # @param [String] identifier A pattern matching identifiers of items that
-    #   should be processed using this meta-rule
+    # @param [String, Regexp] identifier A pattern matching identifiers of
+    #   items that should be processed using this meta-rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation
     #   that should be routed using this rule
@@ -210,15 +202,15 @@ module Nanoc
     # @example Suppressing compilation and output for all all `/foo/*` items.
     #
     #     ignore '/foo/*'
-    def ignore(identifier, params={})
+    def ignore(pattern, params={})
       raise ArgumentError.new("#ignore does not require a block") if block_given?
 
       rep_name = params[:rep] || :default
 
-      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { })
+      compilation_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, proc { })
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { }, :snapshot_name => :last)
+      routing_rule = Rule.new(Nanoc::Pattern.from(pattern), rep_name, proc { }, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -239,25 +231,6 @@ module Nanoc
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
       self.instance_eval(File.read(filename), filename)
-    end
-
-  private
-
-    # Converts the given identifier, which can contain the '*' or '+'
-    # wildcard characters, matching zero or more resp. one or more
-    # characters, to a regex. For example, 'foo/*/bar' is transformed
-    # into /^foo\/(.*?)\/bar$/ and 'foo+' is transformed into /^foo(.+?)/.
-    def identifier_to_regex(identifier)
-      if identifier.is_a? String
-        # Add leading/trailing slashes if necessary
-        new_identifier = identifier.dup
-        new_identifier[/^/] = '/' if identifier[0,1] != '/'
-        new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1,1])
-
-        /^#{new_identifier.gsub('*', '(.*?)').gsub('+', '(.+?)')}$/
-      else
-        identifier
-      end
     end
 
   end

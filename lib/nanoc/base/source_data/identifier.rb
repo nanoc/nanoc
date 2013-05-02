@@ -32,14 +32,43 @@ module Nanoc
       self.class.from_string(prefix + self.to_s)
     end
 
-    # FIXME ugly
-    def +(string)
-      self.to_s + string
+    def add_component(string)
+      self.class.new(self.components + [ string ])
     end
 
-    # FIXME ugly
-    def chop
-      self.to_s.chop
+    def extension
+      c = self.components[-1]
+      idx = c.rindex('.')
+      if idx
+        c[idx+1..-1]
+      else
+        nil
+      end
+    end
+
+    def with_ext(ext)
+      cs = self.without_ext.components.dup
+      cs[-1] = cs[-1] + '.' + ext
+      self.class.new(cs)
+    end
+
+    def without_ext
+      cs = self.components.dup
+      cs[-1] = cs[-1].sub(/\.\w+$/, '')
+      self.class.new(cs)
+    end
+
+    def in_dir
+      base = self.without_ext.add_component('index')
+      if self.extension
+        base.with_ext(self.extension)
+      else
+        base
+      end
+    end
+
+    def +(string)
+      self.to_s + string
     end
 
     def hash
@@ -66,7 +95,7 @@ module Nanoc
       if self.components.empty?
         '/'
       else
-        '/' + self.components.join('/') + '/'
+        '/' + self.components.join('/')
       end
     end
 

@@ -16,11 +16,10 @@ module Nanoc::Filters
     def run(content, params={})
       # Build options
       options = params.dup
-      sass_filename = options[:filename] ||
-        (@item && @item[:content_filename])
+      sass_filename = item.raw_filename
+      # TODO check whether item.identifier exists
       options[:filename] ||= sass_filename
-      options[:filesystem_importer] ||=
-        Nanoc::Filters::Sass::SassFilesystemImporter
+      options[:filesystem_importer] ||= Nanoc::Filters::Sass::SassFilesystemImporter
 
       # Find items
       item_dirglob = Pathname.new(sass_filename).dirname.realpath.to_s + '**'

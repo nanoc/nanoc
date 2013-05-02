@@ -8,7 +8,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       item = Nanoc::Item.new(
         'content',
         { :title => 'Max Payne', :protagonist => 'Max Payne' },
-        '/games/max-payne/'
+        '/games/max-payne.md'
       )
 
       # Create filter
@@ -26,7 +26,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       item = Nanoc::Item.new(
         'content',
         { :title => 'Max Payne', :protagonist => 'Max Payne' },
-        '/games/max-payne/'
+        '/games/max-payne.md'
       )
 
       # Create filter

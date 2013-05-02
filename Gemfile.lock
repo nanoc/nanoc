@@ -47,7 +47,7 @@ GEM
     less (2.3.2)
       commonjs (~> 0.2.6)
     libv8 (3.11.8.17)
-    listen (1.0.2)
+    listen (1.0.3)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)

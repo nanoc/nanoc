@@ -56,38 +56,8 @@ class Nanoc::SiteTest < Nanoc::TestCase
       site = Nanoc::Site.new('.')
 
       # Check
-      assert_equal 1,       site.data_sources.size
-      assert_equal '/foo/', site.items[0].identifier.to_s
-    end
-  end
-
-  def test_setup_child_parent_links
-    Nanoc::CLI.run %w( create_site bar)
-    FileUtils.cd('bar') do
-      FileUtils.mkdir_p('content/parent/bar')
-      File.open('content/parent.md', 'w')         { |io| io.write('hai') }
-      File.open('content/parent/foo.md', 'w')     { |io| io.write('hai') }
-      File.open('content/parent/bar.md', 'w')     { |io| io.write('hai') }
-      File.open('content/parent/bar/qux.md', 'w') { |io| io.write('hai') }
-
-      site = Nanoc::Site.new('.')
-
-      root   = site.items.find { |i| i.identifier == '/' }
-      style  = site.items.find { |i| i.identifier == '/stylesheet/' }
-      parent = site.items.find { |i| i.identifier == '/parent/' }
-      foo    = site.items.find { |i| i.identifier == '/parent/foo/' }
-      bar    = site.items.find { |i| i.identifier == '/parent/bar/' }
-      qux    = site.items.find { |i| i.identifier == '/parent/bar/qux/' }
-
-      assert_equal Set.new([ parent, style ]), Set.new(root.children)
-      assert_equal Set.new([ foo, bar ]),      Set.new(parent.children)
-      assert_equal Set.new([ qux ]),           Set.new(bar.children)
-
-      assert_equal nil,    root.parent
-      assert_equal root,   parent.parent
-      assert_equal parent, foo.parent
-      assert_equal parent, bar.parent
-      assert_equal bar,    qux.parent
+      assert_equal 1,      site.data_sources.size
+      assert_equal '/foo', site.items[0].identifier.to_s
     end
   end
 

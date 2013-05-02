@@ -12,16 +12,6 @@ module Nanoc
     # @return [Hash] This item's attributes
     attr_accessor :attributes
 
-    # A string that uniquely identifies an item in a site.
-    #
-    # Identifiers start and end with a slash. They are comparable to paths on
-    # the filesystem, with the difference that file system paths usually do
-    # not have a trailing slash. The item hierarchy (parent and children of
-    # items) is determined by the item identifier.
-    #
-    # The root page (the home page) has the identifier “/”, which means
-    # that it is the ancestor of all other items.
-    #
     # @return [String] This item's identifier
     attr_accessor :identifier
 
@@ -34,17 +24,10 @@ module Nanoc
 
     # @return [String] The filename pointing to the file containing this
     #   item’s content
-    attr_reader   :raw_filename
+    attr_accessor :raw_filename
 
     # @return [Nanoc::Site] The site this item belongs to
     attr_accessor :site
-
-    # @return [Nanoc::Item, nil] The parent item of this item. This can be
-    #   nil even for non-root items.
-    attr_accessor :parent
-
-    # @return [Array<Nanoc::Item>] The child items of this item
-    attr_accessor :children
 
     # Creates a new item with the given content or filename, attributes and
     # identifier.
@@ -57,27 +40,19 @@ module Nanoc
     #
     # @param [String] identifier This item's identifier.
     #
-    # @param [Time, Hash] params Extra parameters. For backwards
-    #   compatibility, this can be a Time instance indicating the time when
-    #   this item was last modified (mtime).
-    #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params={})
       if identifier.is_a?(String)
         identifier = Nanoc::Identifier.from_string(identifier)
       end
-
-      # Parse params
-      params ||= {}
-      params[:binary] = false unless params.has_key?(:binary)
 
       if raw_content_or_raw_filename.nil?
         raise "attempted to create an item with no content/filename (identifier #{identifier})"
       end
 
       # Get type and raw content or raw filename
-      @is_binary = params[:binary]
+      @is_binary = params.fetch(:binary, false)
       if @is_binary
         @raw_filename = raw_content_or_raw_filename
       else
@@ -88,9 +63,6 @@ module Nanoc
       # Get rest of params
       @attributes   = attributes.symbolize_keys_recursively
       @identifier   = identifier
-
-      @parent       = nil
-      @children     = []
 
       @reps         = []
     end
@@ -208,7 +180,6 @@ module Nanoc
     # @return [void]
     def freeze
       attributes.freeze_recursively
-      children.freeze
       identifier.freeze
       raw_filename.freeze if raw_filename
       raw_content.freeze  if raw_content

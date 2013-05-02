@@ -5,10 +5,9 @@ module Nanoc
   # Contains the processing information for a item.
   class Rule
 
-    # @return [Regexp] The regex that determines which items this rule can be
-    #   applied to. This rule can be applied to items with a identifier
-    #   matching this regex.
-    attr_reader :identifier_regex
+    # @return [Pattern] pattern A pattern that will be used to determine
+    #   whether this rule is applicable to certain items.
+    attr_reader :pattern
 
     # @return [Symbol] The name of the representation that will be compiled
     #   using this rule
@@ -20,12 +19,13 @@ module Nanoc
     # @since 3.2.0
     attr_reader :snapshot_name
 
-    # Creates a new item compilation rule with the given identifier regex,
-    # compiler and block. The block will be called during compilation with the
-    # item rep as its argument.
+    # Creates a new item compilation rule with the given pattern, compiler and
+    # block. The block will be called during compilation with the item rep as
+    # its argument.
     #
-    # @param [Regexp] identifier_regex A regular expression that will be used
-    #   to determine whether this rule is applicable to certain items.
+    # @param [String, Regexp] pattern Either a string containing a glob or a
+    #   regular expression that will be used to determine whether this rule
+    #   is applicable to certain items.
     #
     # @param [String, Symbol] rep_name The name of the item representation
     #   where this rule can be applied to
@@ -36,10 +36,10 @@ module Nanoc
     # @option params [Symbol, nil] :snapshot (nil) The name of the snapshot
     #   this rule will apply to. Ignored for compilation rules, but used for
     #   routing rules.
-    def initialize(identifier_regex, rep_name, block, params={})
-      @identifier_regex = identifier_regex
-      @rep_name         = rep_name.to_sym
-      @snapshot_name    = params[:snapshot_name]
+    def initialize(pattern, rep_name, block, params={})
+      @pattern       = pattern
+      @rep_name      = rep_name.to_sym
+      @snapshot_name = params[:snapshot_name]
 
       @block = block
     end
@@ -49,7 +49,7 @@ module Nanoc
     # @return [Boolean] true if this rule can be applied to the given item
     #   rep, false otherwise
     def applicable_to?(item)
-      item.identifier.to_s =~ @identifier_regex
+      self.pattern.match?(item.identifier)
     end
 
     # Applies this rule to the given item rep.
