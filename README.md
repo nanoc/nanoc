@@ -4,7 +4,7 @@
 
 **Please take a moment and [donate](http://pledgie.com/campaigns/9282) to nanoc. A lot of time has gone into developing nanoc, and I would like to keep the current pace. Your support will ensure that nanoc will continue to improve.**
 
-# nanoc 3
+# nanoc
 
 nanoc is a simple but very flexible static site generator written in Ruby.
 It operates on local files, and therefore does not run on the server. nanoc
