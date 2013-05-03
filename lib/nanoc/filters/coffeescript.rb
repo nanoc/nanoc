@@ -5,7 +5,7 @@ module Nanoc::Filters
 
     identifier :coffeescript
 
-    require 'coffee-script'
+    requires 'coffee-script'
 
     # Runs the content through [CoffeeScript](http://coffeescript.org/).
     # This method takes no options.
