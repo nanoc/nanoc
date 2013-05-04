@@ -8,6 +8,12 @@ describe 'Hash#symbolize_keys_recursively' do
     hash_old.symbolize_keys_recursively.must_equal hash_new
   end
 
+  it 'should not require string keys' do
+    hash_old = { Time.now => 'abc' }
+    hash_new = hash_old
+    hash_old.symbolize_keys_recursively.must_equal hash_new
+  end
+
 end
 
 describe 'Hash#stringify_keys_recursively' do
