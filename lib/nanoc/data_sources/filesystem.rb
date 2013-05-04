@@ -175,14 +175,29 @@ module Nanoc::DataSources
         end
 
         # Get identifier
-        # TODO make base dir name configurable
-        identifier = base_filename.sub(/^(content|layouts)\//, '/')
+        identifier = self.remove_prefix_from_string(dir_name, base_filename)
 
         # Create layout object
-        # TODO maybe pass a Pathname to signify binary-ness?
         obj = klass.new(content_or_filename, attributes, identifier, :binary => is_binary)
         obj.raw_filename = content_filename
         obj
+      end
+    end
+
+    # @param [String] prefix
+    #
+    # @param [String] string
+    #
+    # @return [String] A new string based on `string` but with `prefix` removed
+    #
+    # @raise ArgumentError if the string does not start with the prefix
+    #
+    # @api private
+    def remove_prefix_from_string(prefix, string)
+      if string.start_with?(prefix)
+        string[prefix.length..-1]
+      else
+        raise ArgumentError, "String #{string} does not start with #{prefix}"
       end
     end
 
