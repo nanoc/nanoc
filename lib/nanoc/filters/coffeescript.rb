@@ -3,7 +3,7 @@ module Nanoc::Filters
   # @since 3.3.0
   class CoffeeScript < Nanoc::Filter
 
-    require 'coffee-script'
+    requires 'coffee-script'
 
     # Runs the content through [CoffeeScript](http://coffeescript.org/).
     # This method takes no options.
