@@ -123,7 +123,9 @@ module Nanoc::DataSources
     #
     # @api private
     def binary_extension?(extension)
-      !@site.config[:text_extensions].include?(extension)
+      return true if @config.nil?
+      return true if @config[:text_extensions].nil?
+      !@config[:text_extensions].include?(extension)
     end
 
     # Creates instances of klass corresponding to the files in dir_name. The

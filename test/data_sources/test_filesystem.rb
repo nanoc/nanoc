@@ -5,7 +5,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   def setup
     super
     site = Nanoc::Site.new({})
-    @data_source = Nanoc::DataSources::Filesystem.new(site, nil, nil, {})
+    config = Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG
+    @data_source = Nanoc::DataSources::Filesystem.new(site, nil, nil, config)
   end
 
   def test_all_base_filenames_in

@@ -27,10 +27,9 @@ class Nanoc::SiteTest < Nanoc::TestCase
 
   def test_initialize_with_incomplete_data_source_config
     site = Nanoc::Site.new(:data_sources => [ { :type => 'foo', :items_root => '/bar/' } ])
-    assert_equal('foo',   site.config[:data_sources][0][:type])
-    assert_equal('/bar/', site.config[:data_sources][0][:items_root])
-    assert_equal('/',     site.config[:data_sources][0][:layouts_root])
-    assert_equal({},      site.config[:data_sources][0][:config])
+    assert_equal('foo',          site.config[:data_sources][0][:type])
+    assert_equal('/bar/',        site.config[:data_sources][0][:items_root])
+    assert_equal('/',            site.config[:data_sources][0][:layouts_root])
   end
 
   def test_load_data_sources_first

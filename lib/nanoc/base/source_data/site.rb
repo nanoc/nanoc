@@ -21,10 +21,10 @@ module Nanoc
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
     DEFAULT_DATA_SOURCE_CONFIG = {
-      :type         => 'filesystem',
-      :items_root   => '/',
-      :layouts_root => '/',
-      :config       => {}
+      :type            => 'filesystem',
+      :items_root      => '/',
+      :layouts_root    => '/',
+      :text_extensions => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms ).sort
     }
 
     # The default configuration for a site. A site's configuration overrides
@@ -32,7 +32,6 @@ module Nanoc
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
-      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms ).sort,
       :output_dir         => 'output',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],

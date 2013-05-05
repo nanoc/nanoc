@@ -25,11 +25,6 @@ module Nanoc::CLI::Commands
     end
 
     DEFAULT_CONFIG = <<EOS unless defined? DEFAULT_CONFIG
-# A list of file extensions that nanoc will consider to be textual rather than
-# binary. If an item with an extension not in this list is found,  the file
-# will be considered as binary.
-text_extensions: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:text_extensions])}
-
 # The path to the directory where all generated files will be written to. This
 # can be an absolute path starting with a slash, but it can also be path
 # relative to the site directory.
@@ -80,6 +75,11 @@ data_sources:
     # The encoding to use for input files. If your input files are not in
     # UTF-8 (which they should be!), change this.
     encoding: utf-8
+
+    # A list of file extensions that nanoc will consider to be textual rather
+    # than binary. If an item with an extension not in this list is found,
+    # the file will be considered as binary.
+    text_extensions: #{array_to_yaml(Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:text_extensions])}
 
 # Configuration for the “check” command, which run unit tests on the site.
 checks:
