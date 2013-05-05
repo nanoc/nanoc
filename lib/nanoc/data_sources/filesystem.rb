@@ -83,13 +83,13 @@ module Nanoc::DataSources
     end
 
     # See {Nanoc::DataSource#create_item}.
-    def create_item(content, attributes, identifier, params={})
-      create_object('content', content, attributes, identifier, params)
+    def create_item(content, attributes, identifier)
+      create_object('content', content, attributes, identifier)
     end
 
     # See {Nanoc::DataSource#create_layout}.
-    def create_layout(content, attributes, identifier, params={})
-      create_object('layouts', content, attributes, identifier, params)
+    def create_layout(content, attributes, identifier)
+      create_object('layouts', content, attributes, identifier)
     end
 
     # Creates a new object (item or layout) on disk in dir_name according to
@@ -97,10 +97,9 @@ module Nanoc::DataSources
     # attributes hash argument and its content from the content argument.
     #
     # @api private
-    def create_object(dir_name, content, attributes, identifier, params={})
+    def create_object(dir_name, content, attributes, identifier)
       # Determine path
-      ext = params[:extension] || '.html'
-      path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + ext)
+      path = dir_name + identifier
       parent_path = File.dirname(path)
 
       # Notify

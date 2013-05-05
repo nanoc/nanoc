@@ -353,22 +353,21 @@ EOS
       data_source.create_item(
         DEFAULT_ITEM,
         { :title => "Home" },
-        '/'
+        '/index.html'
       )
 
       # Create stylesheet
       data_source.create_item(
         DEFAULT_STYLESHEET,
         {},
-        '/stylesheet/',
-        :extension => '.css'
+        '/stylesheet.css'
       )
 
       # Create layout
       data_source.create_layout(
         DEFAULT_LAYOUT,
         {},
-        '/default/'
+        '/default.html'
       )
 
       # Create code

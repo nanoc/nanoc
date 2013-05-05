@@ -134,7 +134,7 @@ module Nanoc
     #
     # @return [void]
     def setup
-      not_implemented('setup')
+      raise NotImplementedError, '#setup'
     end
 
     # Updated the content stored in this site to a newer version. A newer
@@ -201,14 +201,9 @@ module Nanoc
     #
     # @param [String] identifier
     #
-    # @param [Hash] params Extra parameters to give to the data source. This
-    #   can be used to influence the way items are stored. For example,
-    #   filesystem data sources could use this to pass the extension of the
-    #   files that should be generated.
-    #
     # @return [void]
-    def create_item(content, attributes, identifier, params={})
-      not_implemented('create_item')
+    def create_item(content, attributes, identifier)
+      raise NotImplementedError, '#create_item'
     end
 
     # Creates a new layout with the given content, attributes and identifier.
@@ -224,23 +219,11 @@ module Nanoc
     #
     # @param [String] identifier
     #
-    # @param [Hash] params Extra parameters to give to the data source. This
-    #   can be used to influence the way items are stored. For example,
-    #   filesystem data sources could use this to pass the extension of the
-    #   files that should be generated.
-    #
     # @return [void]
-    def create_layout(content, attributes, identifier, params={})
-      not_implemented('create_layout')
-    end
-
-  private
-
-    def not_implemented(name)
-      raise NotImplementedError.new(
-        "#{self.class} does not implement ##{name}"
-      )
+    def create_layout(content, attributes, identifier)
+      raise NotImplementedError, '#create_layout'
     end
 
   end
+
 end
