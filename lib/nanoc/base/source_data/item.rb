@@ -12,19 +12,7 @@ module Nanoc
     # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
     attr_reader :reps
 
-    # Creates a new item with the given content or filename, attributes and
-    # identifier.
-    #
-    # @param [String] content_or_filename The uncompiled item content
-    #   (if it is a textual item) or the path to the filename containing the
-    #   content (if it is a binary item).
-    #
-    # @param [Hash] attributes A hash containing this item's attributes.
-    #
-    # @param [String] identifier This item's identifier.
-    #
-    # @option params [Symbol, nil] :binary (true) Whether or not this item is
-    #   binary
+    # @see Nanoc::ContentPiece#initialize
     def initialize(content_or_filename, attributes, identifier, params={})
       super
       @reps = []
