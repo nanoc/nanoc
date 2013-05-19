@@ -117,7 +117,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     items = @data_source.items
     assert_equal 1, items.size
-    assert_equal 'stuff',        items.first.raw_content
+    assert_equal 'stuff',        items.first.content
     assert_equal '/foo.html',    items.first.identifier.to_s
     assert_equal({ ugly: true }, items.first.attributes)
   end

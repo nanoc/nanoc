@@ -6,7 +6,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
     super
 
     @item = Nanoc::Item.new("blah", {}, '/foo/bar.txt')
-    @item.raw_filename = 'content/foo/bar.txt'
+    @item.filename = 'content/foo/bar.txt'
   end
 
   def test_filter

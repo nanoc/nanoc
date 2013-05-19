@@ -105,8 +105,8 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create item rep
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :raw,  item.raw_content)
-    snapshot_store.set('/', :foo, :last, item.raw_content)
+    snapshot_store.set('/', :foo, :raw,  item.content)
+    snapshot_store.set('/', :foo, :last, item.content)
 
     # Filter once
     item_rep.assigns = {}
@@ -132,8 +132,8 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create item rep
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :raw,  item.raw_content)
-    snapshot_store.set('/', :foo, :last, item.raw_content)
+    snapshot_store.set('/', :foo, :raw,  item.content)
+    snapshot_store.set('/', :foo, :last, item.content)
 
     # Layout
     item_rep.assigns = {}
@@ -157,8 +157,8 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create item rep
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :raw,  item.raw_content)
-    snapshot_store.set('/', :foo, :last, item.raw_content)
+    snapshot_store.set('/', :foo, :raw,  item.content)
+    snapshot_store.set('/', :foo, :last, item.content)
 
     # Filter while taking snapshots
     item_rep.assigns = {}

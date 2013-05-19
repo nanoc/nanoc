@@ -161,17 +161,17 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
   def test_collect_bang
     @items.collect! do |i|
-      Nanoc::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
+      Nanoc::Item.new("New #{i.content}", {}, "/new#{i.identifier}")
     end
 
     assert_nil @items['/one.md']
     assert_nil @items['/two.css']
 
-    assert_equal "New Item One", @items[0].raw_content
-    assert_equal "New Item One", @items['/new/one.md'].raw_content
+    assert_equal "New Item One", @items[0].content
+    assert_equal "New Item One", @items['/new/one.md'].content
 
-    assert_equal "New Item Two", @items[1].raw_content
-    assert_equal "New Item Two", @items['/new/two.css'].raw_content
+    assert_equal "New Item Two", @items[1].content
+    assert_equal "New Item Two", @items['/new/two.css'].content
   end
 
   def test_collect_bang_frozen
@@ -179,7 +179,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
     assert_raises_frozen_error do
       @items.collect! do |i|
-        Nanoc::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
+        Nanoc::Item.new("New #{i.content}", {}, "/new#{i.identifier}")
       end
     end
   end
@@ -228,10 +228,10 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items['/one.md']
     assert_nil @items['/two.css']
 
-    assert_equal "Item 0", @items[0].raw_content
-    assert_equal "Item 0", @items['/new/0.md'].raw_content
-    assert_equal "Item 1", @items[1].raw_content
-    assert_equal "Item 1", @items['/new/1.md'].raw_content
+    assert_equal "Item 0", @items[0].content
+    assert_equal "Item 0", @items['/new/0.md'].content
+    assert_equal "Item 1", @items[1].content
+    assert_equal "Item 1", @items['/new/1.md'].content
   end
 
   def test_fill_range
@@ -242,8 +242,8 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
     assert_equal @one, @items[0]
     assert_equal @one, @items['/one.md']
-    assert_equal "Item 1", @items[1].raw_content
-    assert_equal "Item 1", @items['/new/1.md'].raw_content
+    assert_equal "Item 1", @items[1].content
+    assert_equal "Item 1", @items['/new/1.md'].content
   end
 
   if Array.new.respond_to?(:keep_if)

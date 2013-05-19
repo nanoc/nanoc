@@ -5,34 +5,17 @@ module Nanoc
   # Represents a compileable item in a site. It has content and attributes, as
   # well as an identifier (which starts and ends with a slash). It can also
   # store the modification time to speed up compilation.
-  class Item
+  class Item < ContentPiece
 
     extend Nanoc::Memoization
 
-    # @return [Hash] This item's attributes
-    attr_accessor :attributes
-
-    # @return [String] This item's identifier
-    attr_accessor :identifier
-
     # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
-    attr_reader   :reps
-
-    # @return [String] This item's raw, uncompiled content of this item (only
-    #   available for textual items)
-    attr_reader   :raw_content
-
-    # @return [String] The filename pointing to the file containing this
-    #   item’s content
-    attr_accessor :raw_filename
-
-    # @return [Nanoc::Site] The site this item belongs to
-    attr_accessor :site
+    attr_reader :reps
 
     # Creates a new item with the given content or filename, attributes and
     # identifier.
     #
-    # @param [String] raw_content_or_raw_filename The uncompiled item content
+    # @param [String] content_or_filename The uncompiled item content
     #   (if it is a textual item) or the path to the filename containing the
     #   content (if it is a binary item).
     #
@@ -42,29 +25,9 @@ module Nanoc
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params={})
-      if identifier.is_a?(String)
-        identifier = Nanoc::Identifier.from_string(identifier)
-      end
-
-      if raw_content_or_raw_filename.nil?
-        raise "attempted to create an item with no content/filename (identifier #{identifier})"
-      end
-
-      # Get type and raw content or raw filename
-      @is_binary = params.fetch(:binary, false)
-      if @is_binary
-        @raw_filename = raw_content_or_raw_filename
-      else
-        @raw_filename = attributes[:content_filename]
-        @raw_content  = raw_content_or_raw_filename
-      end
-
-      # Get rest of params
-      @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier
-
-      @reps         = []
+    def initialize(content_or_filename, attributes, identifier, params={})
+      super
+      @reps = []
     end
 
     # Returns the rep with the given name.
@@ -130,32 +93,6 @@ module Nanoc
       rep.path
     end
 
-    # Requests the attribute with the given key.
-    #
-    # @param [Symbol] key The name of the attribute to fetch
-    #
-    # @return [Object] The value of the requested attribute
-    def [](key)
-      Nanoc::NotificationCenter.post(:visit_started, self)
-      Nanoc::NotificationCenter.post(:visit_ended,   self)
-
-      @attributes[key]
-    end
-
-    # Sets the attribute with the given key to the given value.
-    #
-    # @param [Symbol] key The name of the attribute to set
-    #
-    # @param [Object] value The value of the attribute to set
-    def []=(key, value)
-      @attributes[key] = value
-    end
-
-    # @return [Boolean] True if the item is binary; false if it is not
-    def binary?
-      !!@is_binary
-    end
-
     # Returns the type of this object. Will always return `:item`, because
     # this is an item. For layouts, this method returns `:layout`.
     #
@@ -166,40 +103,17 @@ module Nanoc
       :item
     end
 
-    # Returns an object that can be used for uniquely identifying objects.
-    #
-    # @api private
-    #
-    # @return [Object] An unique reference to this object
-    def reference
-      [ type, self.identifier ]
-    end
-
-    # Prevents all further modifications to its attributes.
-    #
-    # @return [void]
-    def freeze
-      attributes.freeze_recursively
-      identifier.freeze
-      raw_filename.freeze if raw_filename
-      raw_content.freeze  if raw_content
-    end
-
-    def inspect
-      "<#{self.class} identifier=#{self.identifier.inspect} binary?=#{self.binary?}>"
-    end
-
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
       content_checksum = if binary?
-        if File.exist?(raw_filename)
-          Pathname.new(raw_filename).checksum
+        if File.exist?(filename)
+          Pathname.new(filename).checksum
         else
           ''.checksum
         end
       else
-        @raw_content.checksum
+        @content.checksum
       end
 
       attributes = @attributes.dup
@@ -210,23 +124,11 @@ module Nanoc
     end
     memoize :checksum
 
-    def hash
-      self.class.hash ^ self.identifier.hash
-    end
-
-    def eql?(other)
-      self.class == other.class && self.identifier == other.identifier
-    end
-
-    def ==(other)
-      self.eql?(other)
-    end
-
     def marshal_dump
       [
         @is_binary,
-        @raw_filename,
-        @raw_content,
+        @filename,
+        @content,
         @attributes,
         @identifier
       ]
@@ -234,8 +136,8 @@ module Nanoc
 
     def marshal_load(source)
       @is_binary,
-      @raw_filename,
-      @raw_content,
+      @filename,
+      @content,
       @attributes,
       @identifier = *source
     end

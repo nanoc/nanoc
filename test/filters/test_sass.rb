@@ -213,7 +213,7 @@ private
     File.open('content/blah.sass', 'w') { |io| io.write('p\n  color: green')}
 
     item = Nanoc::Item.new( 'blah', {}, '/blah.sass')
-    item.raw_filename = 'content/blah.sass'
+    item.filename = 'content/blah.sass'
 
     items = [ item ]
     params = { :item => items[0], :items => items }.merge(params)

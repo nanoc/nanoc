@@ -120,8 +120,8 @@ module Nanoc::Helpers
             @site.captures_store_compiled_items << item 
             item.forced_outdated = true
             item.reps.each do |r|
-              raw_content = item.raw_content
-              r.content = { :raw => raw_content, :last => raw_content }
+              content = item.content
+              r.content = { :raw => content, :last => content }
               @site.compiler.send(:compile_rep, r)
             end
           end

@@ -106,7 +106,11 @@ module Nanoc
           # Not outdated
           return nil
         when :item
-          obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
+          obj.reps.each do |rep|
+            r = basic_outdatedness_reason_for(rep)
+            return r unless r.nil?
+          end
+          nil
         when :layout
           # Outdated if rules outdated
           return Nanoc::OutdatednessReasons::RulesModified if

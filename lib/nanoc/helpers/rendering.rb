@@ -122,7 +122,7 @@ module Nanoc::Helpers
         Nanoc::NotificationCenter.post(:processing_started, layout)
 
         # Layout
-        result = filter.setup_and_run(layout.raw_content, filter_args)
+        result = filter.setup_and_run(layout.content, filter_args)
 
         # Append to erbout if we have a block
         if block_given?

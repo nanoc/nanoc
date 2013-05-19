@@ -352,7 +352,7 @@ module Nanoc
         Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
 
         # Layout
-        content = filter.setup_and_run(layout.raw_content, filter_args)
+        content = filter.setup_and_run(layout.content, filter_args)
         self.set_stored_content_at_snapshot(:last, content)
 
         # Create "post" snapshot
@@ -423,11 +423,11 @@ module Nanoc
     def initialize_content
       # Initialize content and filenames
       if self.binary?
-        @temporary_filenames = { :last => @item.raw_filename }
+        @temporary_filenames = { :last => @item.filename }
       else
-        self.snapshot_store.set(@item.identifier, self.name, :last, @item.raw_content)
+        self.snapshot_store.set(@item.identifier, self.name, :last, @item.content)
         # FIXME this needs to happen elsewhere
-        @item.raw_content.freeze
+        @item.content.freeze
         @temporary_filenames = {}
       end
     end

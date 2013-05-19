@@ -180,7 +180,7 @@ module Nanoc::DataSources
 
         # Create layout object
         obj = klass.new(content_or_filename, attributes, identifier, :binary => is_binary)
-        obj.raw_filename = content_filename
+        obj.filename = content_filename
         obj
       end
     end
