@@ -280,7 +280,7 @@ module Nanoc
     #
     # @api private
     def assigns_for(rep)
-      if rep.binary?
+      if rep.snapshot_binary?(:last)
         content_or_filename_assigns = { :filename => rep.temporary_filenames[:last] }
       else
         content_or_filename_assigns = { :content => rep.stored_content_at_snapshot(:last) }

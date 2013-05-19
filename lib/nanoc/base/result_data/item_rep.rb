@@ -113,10 +113,6 @@ module Nanoc
     # @return [Symbol] The representation's unique name
     attr_reader   :name
 
-    # @return [Boolean] true if this rep is currently binary; false otherwise
-    attr_reader   :binary
-    alias_method  :binary?, :binary
-
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
@@ -138,7 +134,7 @@ module Nanoc
       @snapshot_store = params.fetch(:snapshot_store)
 
       # Set binary
-      @binary = @item.binary?
+      @binaryness = { :last => @item.binary? }
 
       # Set default attributes
       @raw_paths  = {}
@@ -151,6 +147,10 @@ module Nanoc
       @compiled = false
     end
 
+    def snapshot_binary?(snapshot)
+      @binaryness[snapshot]
+    end
+
     # Returns the compiled content from a given snapshot.
     #
     # @option params [String] :snapshot The name of the snapshot from which to
@@ -161,11 +161,6 @@ module Nanoc
     # @return [String] The compiled content at the given snapshot (or the
     #   default snapshot if no snapshot is specified)
     def compiled_content(params={})
-      # Make sure we're not binary
-      if self.item.binary?
-        raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
-      end
-
       # Notify
       Nanoc::NotificationCenter.post(:visit_started, self.item)
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)
@@ -173,6 +168,11 @@ module Nanoc
       # Get name of last pre-layout snapshot
       snapshot = params.fetch(:snapshot) { self.has_snapshot?(:pre) ? :pre : :last }
       is_moving = [ :pre, :post, :last ].include?(snapshot)
+
+      # Make sure we're not binary
+      if self.snapshot_binary?(snapshot)
+        raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
+      end
 
       # Check existance of snapshot
       if !is_moving && snapshots.find { |s| s.first == snapshot && s.last == true }.nil?
@@ -267,9 +267,9 @@ module Nanoc
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
 
       # Check whether filter can be applied
-      if klass.from_binary? && !self.binary?
+      if klass.from_binary? && !self.snapshot_binary?(:last)
         raise Nanoc::Errors::CannotUseBinaryFilter.new(self, klass)
-      elsif !klass.from_binary? && self.binary?
+      elsif !klass.from_binary? && self.snapshot_binary?(:last)
         raise Nanoc::Errors::CannotUseTextualFilter.new(self, klass)
       end
 
@@ -282,7 +282,7 @@ module Nanoc
 
         # Run filter
         source =
-          if self.binary?
+          if self.snapshot_binary?(:last)
             temporary_filenames[:last]
           else
             self.stored_content_at_snapshot(:last)
@@ -294,16 +294,18 @@ module Nanoc
           self.set_stored_content_at_snapshot(:last, result)
           result.freeze
         end
-        @binary = klass.to_binary?
+        @binaryness[:last] = klass.to_binary?
 
         # Check whether file was written
-        if self.binary? && !File.file?(filter.output_filename)
+        if self.snapshot_binary?(:last) && !File.file?(filter.output_filename)
           raise RuntimeError,
             "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
         end
 
         # Create snapshot
-        snapshot(self.has_snapshot?(:post) ? :post : :pre, :final => false) unless self.binary?
+        unless self.snapshot_binary?(:last)
+          snapshot(self.has_snapshot?(:post) ? :post : :pre, :final => false)
+        end
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended, self, filter_name)
@@ -330,7 +332,7 @@ module Nanoc
     # @return [void]
     def layout(layout, filter_name, filter_args)
       # Check whether item can be laid out
-      raise Nanoc::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
+      raise Nanoc::Errors::CannotLayoutBinaryItem.new(self) if self.snapshot_binary?(:last)
 
       # Create "pre" snapshot
       if !self.has_snapshot?(:post)
@@ -375,7 +377,7 @@ module Nanoc
     # @return [void]
     def snapshot(snapshot_name, params={})
       is_final = params.fetch(:final) { true }
-      if !self.binary
+      if !self.snapshot_binary?(:last)
         self.set_stored_content_at_snapshot(snapshot_name, self.stored_content_at_snapshot(:last))
       end
       self.write(snapshot_name) if is_final
@@ -415,14 +417,14 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} name=\"#{self.name}\" binary=#{self.binary?} raw_path=\"#{self.raw_path}\" item.identifier=\"#{self.item.identifier}\">"
+      "<#{self.class} name=\"#{self.name}\" raw_path=\"#{self.raw_path}\" item.identifier=\"#{self.item.identifier}\">"
     end
 
   private
 
     def initialize_content
       # Initialize content and filenames
-      if self.binary?
+      if @item.binary?
         @temporary_filenames = { :last => @item.filename }
       else
         self.snapshot_store.set(@item.identifier, self.name, :last, @item.content)

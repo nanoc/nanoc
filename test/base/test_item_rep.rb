@@ -275,7 +275,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep.filter(:foo)
 
     # Check
-    assert rep.binary?
+    assert rep.snapshot_binary?(:last)
   end
 
   def test_filter_with_textual_rep_and_binary_filter
@@ -315,7 +315,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep = create_rep_for(item, :foo)
     create_textual_filter
 
-    assert rep.binary?
+    assert rep.snapshot_binary?(:last)
     assert_raises(Nanoc::Errors::CannotUseTextualFilter) { rep.filter(:text_filter) }
   end
 
@@ -374,7 +374,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep.assigns = {}
     create_textual_filter
 
-    assert rep.binary?
+    assert rep.snapshot_binary?(:last)
 
     def rep.filter_named(name)
       Class.new(::Nanoc::Filter) do
@@ -385,7 +385,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       end
     end
     rep.filter(:binary_to_text)
-    assert !rep.binary?
+    assert !rep.snapshot_binary?(:last)
 
     def rep.filter_named(name)
       Class.new(::Nanoc::Filter) do
@@ -396,7 +396,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       end
     end
     rep.filter(:text_filter)
-    assert !rep.binary?
+    assert !rep.snapshot_binary?(:last)
   end
 
   def test_converted_binary_rep_cannot_be_filtered_with_binary_filters
@@ -411,7 +411,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep.assigns = {}
     create_binary_filter
 
-    assert rep.binary?
+    assert rep.snapshot_binary?(:last)
     def rep.filter_named(name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary => :text
@@ -421,7 +421,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       end
     end
     rep.filter(:binary_to_text)
-    refute rep.binary?
+    refute rep.snapshot_binary?(:last)
     assert_raises(Nanoc::Errors::CannotUseBinaryFilter) { rep.filter(:binary_filter) }
   end
 

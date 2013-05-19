@@ -41,8 +41,8 @@ module Nanoc
       # Notify
       Nanoc::NotificationCenter.post(:will_write_rep, rep, snapshot)
 
-      if rep.binary?
-        temp_path = rep.temporary_filenames[:last]
+      if rep.snapshot_binary?(snapshot)
+        temp_path = rep.temporary_filenames[snapshot]
       else
         temp_path = self.temp_filename
         File.open(temp_path, 'w') do |io|
