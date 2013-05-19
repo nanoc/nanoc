@@ -16,6 +16,7 @@ require 'nanoc/base/store'
 
 # Load source data classes
 require 'nanoc/base/source_data/code_snippet'
+require 'nanoc/base/source_data/content'
 require 'nanoc/base/source_data/content_piece'
 require 'nanoc/base/source_data/configuration'
 require 'nanoc/base/source_data/data_source'

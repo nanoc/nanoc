@@ -59,8 +59,8 @@ module Nanoc
       # @api private
       attr_reader :temporary_filenames
 
-      # @return [Hash<Symbol,String>] A hash containing the content at all
-      #   snapshots. The keys correspond with the snapshot names, and the
+      # @return [Hash<Symbol,Nanoc::Content>] A hash containing the content at
+      #   all snapshots. The keys correspond with the snapshot names, and the
       #   values with the content.
       #
       # @api private
@@ -78,6 +78,7 @@ module Nanoc
       #
       # @return [void]
       def write(snapshot=:last)
+        # FIXME make writer configurable
         writer_class = Nanoc::ItemRepWriter.named(:filesystem)
         writer_class.new.write(self, snapshot)
       end
@@ -134,13 +135,14 @@ module Nanoc
       @snapshot_store = params.fetch(:snapshot_store)
 
       # Set binary
-      @binaryness = { :last => @item.binary? }
+      @binaryness = { :last => @item.content.binary? }
 
       # Set default attributes
       @raw_paths  = {}
       @paths      = {}
       @assigns    = {}
       @snapshots  = []
+      @content    = { :last => @item.content }
       initialize_content
 
       # Reset flags
@@ -354,7 +356,10 @@ module Nanoc
         Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
 
         # Layout
-        content = filter.setup_and_run(layout.content, filter_args)
+        if layout.content.binary?
+          raise "cannot use binary layouts"
+        end
+        content = filter.setup_and_run(layout.content.string, filter_args)
         self.set_stored_content_at_snapshot(:last, content)
 
         # Create "post" snapshot
@@ -423,14 +428,11 @@ module Nanoc
   private
 
     def initialize_content
-      # Initialize content and filenames
-      if @item.binary?
-        @temporary_filenames = { :last => @item.filename }
+      @temporary_filenames = {}
+      if @item.content.binary?
+        @temporary_filenames[:last] = @item.content.filename
       else
-        self.snapshot_store.set(@item.identifier, self.name, :last, @item.content)
-        # FIXME this needs to happen elsewhere
-        @item.content.freeze
-        @temporary_filenames = {}
+        self.snapshot_store.set(@item.identifier, self.name, :last, @item.content.string)
       end
     end
 

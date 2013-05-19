@@ -5,8 +5,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def setup
     super
 
-    @item = Nanoc::Item.new("blah", {}, '/foo/bar.txt')
-    @item.filename = 'content/foo/bar.txt'
+    @item = Nanoc::Item.new(Nanoc::TextualContent.new('blah', 'content/foo/bar.txt'), {}, '/foo/bar.txt')
   end
 
   def test_filter
@@ -91,9 +90,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
         assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css'))
 
         # Update included file
-        File.open('content/b.less', 'w') do |io|
-          io.write("p { color: blue; }")
-        end
+        File.write('content/b.less', 'p { color: blue; }')
 
         # Recompile
         site = Nanoc::Site.new('.')

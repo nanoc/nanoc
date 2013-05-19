@@ -13,7 +13,7 @@ module Nanoc
     attr_reader :reps
 
     # @see Nanoc::ContentPiece#initialize
-    def initialize(content_or_filename, attributes, identifier, params={})
+    def initialize(content_or_filename, attributes, identifier)
       super
       @reps = []
     end
@@ -94,28 +94,12 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      content_checksum = if binary?
-        if File.exist?(filename)
-          Pathname.new(filename).checksum
-        else
-          ''.checksum
-        end
-      else
-        @content.checksum
-      end
-
-      attributes = @attributes.dup
-      attributes.delete(:file)
-      attributes_checksum = attributes.checksum
-
-      content_checksum + ',' + attributes_checksum
+      @content.checksum + ',' + @attributes.checksum
     end
     memoize :checksum
 
     def marshal_dump
       [
-        @is_binary,
-        @filename,
         @content,
         @attributes,
         @identifier
@@ -123,8 +107,6 @@ module Nanoc
     end
 
     def marshal_load(source)
-      @is_binary,
-      @filename,
       @content,
       @attributes,
       @identifier = *source

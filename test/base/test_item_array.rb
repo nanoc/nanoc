@@ -5,8 +5,14 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   def setup
     super
 
-    @one = Nanoc::Item.new('Item One', {}, '/one.md')
-    @two = Nanoc::Item.new('Item Two', {}, '/two.css')
+    @one = Nanoc::Item.new(
+      Nanoc::TextualContent.new('Item One', 'content/one.md'),
+      {},
+      '/one.md')
+    @two = Nanoc::Item.new(
+      Nanoc::TextualContent.new('Item Two', 'content/two.css'),
+      {},
+      '/two.css')
 
     @items = Nanoc::ItemArray.new
     @items << @one
@@ -161,17 +167,17 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
   def test_collect_bang
     @items.collect! do |i|
-      Nanoc::Item.new("New #{i.content}", {}, "/new#{i.identifier}")
+      Nanoc::Item.new("New #{i.content.string}", {}, "/new#{i.identifier}")
     end
 
     assert_nil @items['/one.md']
     assert_nil @items['/two.css']
 
-    assert_equal "New Item One", @items[0].content
-    assert_equal "New Item One", @items['/new/one.md'].content
+    assert_equal "New Item One", @items[0].content.string
+    assert_equal "New Item One", @items['/new/one.md'].content.string
 
-    assert_equal "New Item Two", @items[1].content
-    assert_equal "New Item Two", @items['/new/two.css'].content
+    assert_equal "New Item Two", @items[1].content.string
+    assert_equal "New Item Two", @items['/new/two.css'].content.string
   end
 
   def test_collect_bang_frozen
@@ -179,7 +185,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
     assert_raises_frozen_error do
       @items.collect! do |i|
-        Nanoc::Item.new("New #{i.content}", {}, "/new#{i.identifier}")
+        Nanoc::Item.new("New #{i.content.string}", {}, "/new#{i.identifier}")
       end
     end
   end
@@ -228,10 +234,10 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items['/one.md']
     assert_nil @items['/two.css']
 
-    assert_equal "Item 0", @items[0].content
-    assert_equal "Item 0", @items['/new/0.md'].content
-    assert_equal "Item 1", @items[1].content
-    assert_equal "Item 1", @items['/new/1.md'].content
+    assert_equal "Item 0", @items[0].content.string
+    assert_equal "Item 0", @items['/new/0.md'].content.string
+    assert_equal "Item 1", @items[1].content.string
+    assert_equal "Item 1", @items['/new/1.md'].content.string
   end
 
   def test_fill_range
@@ -242,8 +248,8 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
     assert_equal @one, @items[0]
     assert_equal @one, @items['/one.md']
-    assert_equal "Item 1", @items[1].content
-    assert_equal "Item 1", @items['/new/1.md'].content
+    assert_equal "Item 1", @items[1].content.string
+    assert_equal "Item 1", @items['/new/1.md'].content.string
   end
 
   if Array.new.respond_to?(:keep_if)

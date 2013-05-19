@@ -33,11 +33,11 @@ module Nanoc::Filters
       paths = [ Dir.getwd + '/content' ]
 
       unless imported_filenames.empty?
-        if @item.filename.nil?
+        if @item.content.filename.nil?
           # FIXME get proper exception
           raise 'Can only use less filter with items that appear on disk (less limitation)'
         end
-        current_item_filename = File.join(Dir.getwd, @item.filename)
+        current_item_filename = File.join(Dir.getwd, @item.content.filename)
         current_dir_filename = File.dirname(current_item_filename)
 
         paths << current_dir_filename
@@ -49,10 +49,10 @@ module Nanoc::Filters
 
           # Find matching item
           @items.find do |i|
-            if i.filename.nil?
+            if i.content.filename.nil?
               false
             else
-              this_item_filename = Dir.getwd + i.filename
+              this_item_filename = Dir.getwd + i.content.filename
               this_item_filename == imported_filename_absolute
             end
           end

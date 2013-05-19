@@ -21,7 +21,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN = <<-EOS
+  SAMPLE_XML_IN = Nanoc::TextualContent.new(<<-EOS, 'content/foo.xml')
 <?xml version="1.0" encoding="utf-8"?>
 <report>
   <title>My Report</title>
@@ -57,7 +57,7 @@ EOS
 </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN_WITH_PARAMS = <<-EOS
+  SAMPLE_XML_IN_WITH_PARAMS = Nanoc::TextualContent.new(<<-EOS, 'content/foo.xml')
 <?xml version="1.0" encoding="utf-8"?>
 <report>
   <title>My Report</title>

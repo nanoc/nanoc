@@ -37,7 +37,11 @@ module Nanoc::DataSources
 
     class EmbeddedMetadataParseError < ::Nanoc::Errors::GenericTrivial
 
-      attr_accessor :filename
+      attr_reader :filename
+
+      def initialize(filename)
+        @filename = filename
+      end
 
       def message
         "The file #{self.filename} appears to start with an attributes " +
@@ -49,11 +53,12 @@ module Nanoc::DataSources
 
     class CannotParseYAMLError < ::Nanoc::Errors::GenericTrivial
 
-      attr_accessor :filename
-      attr_reader   :original_message
+      attr_reader :filename
+      attr_reader :original_message
 
-      def initialize(original_message)
+      def initialize(original_message, filename)
         @original_message = original_message
+        @filename         = filename
       end
 
       def message
@@ -160,17 +165,12 @@ module Nanoc::DataSources
           is_binary = extension && self.binary_extension?(extension)
 
           if is_binary
-            content_or_filename = content_filename
+            content = Nanoc::BinaryContent.new(content_filename)
           else
             if has_attributes_file
-              content_or_filename = self.read(content_filename)
+              content = Nanoc::TextualContent.new(self.read(content_filename), content_filename)
             else
-              begin
-                content_or_filename, attributes = self.content_and_attributes_for_data(self.read(content_filename))
-              rescue EmbeddedMetadataParseError, CannotParseYAMLError => e
-                e.filename = content_filename
-                raise e
-              end
+              content, attributes = self.content_and_attributes_for_file(content_filename)
             end
           end
         end
@@ -179,9 +179,7 @@ module Nanoc::DataSources
         identifier = self.remove_prefix_from_string(dir_name, base_filename)
 
         # Create layout object
-        obj = klass.new(content_or_filename, attributes, identifier, :binary => is_binary)
-        obj.filename = content_filename
-        obj
+        klass.new(content, attributes, identifier)
       end
     end
 
@@ -230,28 +228,30 @@ module Nanoc::DataSources
     #   element, and a string containing the content as its second element
     #
     # @api private
-    def content_and_attributes_for_data(data)
+    def content_and_attributes_for_file(filename)
+      data = self.read(filename)
+
       # Check presence of attributes section
       if data !~ /\A---\s*$/
-        return [ data, {} ]
+        return [ Nanoc::TextualContent.new(data, filename), {} ]
       end
 
       # Split data
       pieces = data.split(/^---\s*$\n/)
       if pieces.size < 3
-        raise EmbeddedMetadataParseError
+        raise EmbeddedMetadataParseError.new(filename)
       end
 
       # Parse
       begin
         attributes = YAML.load(pieces[1]) || {}
       rescue Psych::SyntaxError => e
-        raise CannotParseYAMLError.new(e.message)
+        raise CannotParseYAMLError.new(e.message, filename)
       end
       content = pieces[2..-1].join.strip
 
       # Done
-      [ content, attributes ]
+      [ Nanoc::TextualContent.new(content, filename), attributes ]
     end
 
     # Reads the content of the file with the given name and returns a string

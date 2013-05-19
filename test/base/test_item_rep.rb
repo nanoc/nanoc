@@ -2,6 +2,10 @@
 
 class Nanoc::ItemRepTest < Nanoc::TestCase
 
+  def new_item
+    item = Nanoc::Item.new(Nanoc::TextualContent.new('blah blah blah', 'content/somefile.md'), {}, '/')
+  end
+
   def new_snapshot_store
     Nanoc::SnapshotStore::SQLite3.new
   end
@@ -12,10 +16,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_compiled_content_with_only_last_available
     # Create rep
-    item = Nanoc::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false
-    )
+    item = self.new_item
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     snapshot_store.set('/', :foo, :last, 'last content')
@@ -27,10 +28,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_compiled_content_with_pre_and_last_available
     # Create rep
-    item = Nanoc::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false
-    )
+    item = self.new_item
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     snapshot_store.set('/', :foo, :pre,  'pre content')
@@ -43,10 +41,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_compiled_content_with_custom_snapshot
     # Create rep
-    item = Nanoc::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false
-    )
+    item = self.new_item
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     snapshot_store.set('/', :foo, :pre,  'pre content')
@@ -59,10 +54,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_compiled_content_with_invalid_snapshot
     # Create rep
-    item = Nanoc::Item.new(
-      'blah blah blah', {}, '/',
-      :binary => false
-    )
+    item = self.new_item
     snapshot_store = self.new_snapshot_store
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
     snapshot_store.set('/', :foo, :pre,  'pre content')
@@ -76,10 +68,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_compiled_content_with_uncompiled_content
     # Create rep
-    item = Nanoc::Item.new(
-      "blah blah", {}, '/',
-      :binary => false
-    )
+    item = self.new_item
     rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     rep.expects(:compiled?).returns(false)
 
@@ -97,16 +86,13 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     site.expect(:layouts, [])
 
     # Mock item
-    item = Nanoc::Item.new(
-      %[<%= '<%= "blah" %' + '>' %>], {}, '/',
-      :binary => false
-    )
+    item = Nanoc::Item.new(%[<%= '<%= "blah" %' + '>' %>], {}, '/')
 
     # Create item rep
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :raw,  item.content)
-    snapshot_store.set('/', :foo, :last, item.content)
+    snapshot_store.set('/', :foo, :raw,  item.content.string)
+    snapshot_store.set('/', :foo, :last, item.content.string)
 
     # Filter once
     item_rep.assigns = {}
@@ -126,14 +112,13 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       "blah blah", {}, '/',
-      :binary => false
     )
 
     # Create item rep
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :raw,  item.content)
-    snapshot_store.set('/', :foo, :last, item.content)
+    snapshot_store.set('/', :foo, :raw,  item.content.string)
+    snapshot_store.set('/', :foo, :last, item.content.string)
 
     # Layout
     item_rep.assigns = {}
@@ -151,14 +136,13 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
-      :binary => false
     )
 
     # Create item rep
     snapshot_store = self.new_snapshot_store
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :raw,  item.content)
-    snapshot_store.set('/', :foo, :last, item.content)
+    snapshot_store.set('/', :foo, :raw,  item.content.string)
+    snapshot_store.set('/', :foo, :last, item.content.string)
 
     # Filter while taking snapshots
     item_rep.assigns = {}
@@ -178,7 +162,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       "blah blah", {}, '/',
-      :binary => false
     )
 
     # Create rep
@@ -208,7 +191,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       "blah blah", {}, '/',
-      :binary => false
     )
 
     # Create rep
@@ -233,7 +215,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       "blah blah", {}, '/',
-      :binary => false
     )
 
     # Create rep
@@ -254,7 +235,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       "blah blah", {}, '/',
-      :binary => false
     )
 
     # Create rep
@@ -282,7 +262,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       "blah blah", {}, '/',
-      :binary => false
     )
 
     # Create rep
@@ -503,7 +482,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   end
 
   def test_access_compiled_content_of_binary_item
-    item = Nanoc::Item.new("content/somefile.dat", {}, '/somefile/', :binary => true)
+    item = Nanoc::Item.new(Nanoc::BinaryContent.new('content/somefile.dat'), {}, '/somefile/')
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
     assert_raises(Nanoc::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
@@ -514,10 +493,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
-    item = Nanoc::Item.new(
-      "content/meow.dat", {}, '/',
-      :binary => true
-    )
+    item = Nanoc::Item.new(Nanoc::BinaryContent.new('content/meow.dat'), {}, '/')
 
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
@@ -542,10 +518,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
-    item = Nanoc::Item.new(
-      "content/meow.dat", {}, '/',
-      :binary => true
-    )
+    item = Nanoc::Item.new(Nanoc::BinaryContent.new('content/meow.dat'), {}, '/')
 
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
@@ -571,10 +544,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 private
 
   def create_binary_item
-    Nanoc::Item.new(
-      "/a/file/name.dat", {}, '/',
-      :binary => true
-    )
+    Nanoc::Item.new(Nanoc::BinaryContent.new('/a/file/name.dat'), {}, '/')
   end
 
   def mock_and_stub(params)
