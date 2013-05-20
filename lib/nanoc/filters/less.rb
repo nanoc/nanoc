@@ -45,14 +45,15 @@ module Nanoc::Filters
         # Find items for imported filenames
         imported_items = imported_filenames.map do |imported_filename|
           # Find absolute filename for imported item
-          imported_filename_absolute = current_dir_filename + imported_filename
+          imported_filename_absolute = File.join(current_dir_filename, imported_filename)
 
           # Find matching item
           @items.find do |i|
             if i.content.filename.nil?
               false
             else
-              this_item_filename = Dir.getwd + i.content.filename
+              # TODO make content filename absolute (in nanoc in general)
+              this_item_filename = File.join(Dir.getwd, i.content.filename)
               this_item_filename == imported_filename_absolute
             end
           end
