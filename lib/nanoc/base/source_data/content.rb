@@ -60,12 +60,8 @@ module Nanoc
     end
 
     def checksum
-      if File.file?(@filename)
-        stat = File.stat(@filename)
-        stat.size.to_s + '-' + stat.mtime.to_s
-      else
-        "null-checksum-#{@filename}"
-      end
+      stat = File.stat(@filename)
+      stat.size.to_s + '-' + stat.mtime.to_s
     end
 
     def inspect
