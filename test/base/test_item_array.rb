@@ -6,11 +6,11 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     super
 
     @one = Nanoc::Item.new(
-      Nanoc::TextualContent.new('Item One', 'content/one.md'),
+      Nanoc::TextualContent.new('Item One', File.join(Dir.getwd, 'content/one.md')),
       {},
       '/one.md')
     @two = Nanoc::Item.new(
-      Nanoc::TextualContent.new('Item Two', 'content/two.css'),
+      Nanoc::TextualContent.new('Item Two', File.join(Dir.getwd, 'content/two.css')),
       {},
       '/two.css')
 

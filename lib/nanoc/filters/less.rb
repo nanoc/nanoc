@@ -37,7 +37,7 @@ module Nanoc::Filters
           # FIXME get proper exception
           raise 'Can only use less filter with items that appear on disk (less limitation)'
         end
-        current_item_filename = File.join(Dir.getwd, @item.content.filename)
+        current_item_filename = @item.content.filename
         current_dir_filename = File.dirname(current_item_filename)
 
         paths << current_dir_filename
@@ -48,15 +48,7 @@ module Nanoc::Filters
           imported_filename_absolute = File.join(current_dir_filename, imported_filename)
 
           # Find matching item
-          @items.find do |i|
-            if i.content.filename.nil?
-              false
-            else
-              # TODO make content filename absolute (in nanoc in general)
-              this_item_filename = File.join(Dir.getwd, i.content.filename)
-              this_item_filename == imported_filename_absolute
-            end
-          end
+          @items.find { |i| i.content.filename == imported_filename_absolute }
         end.compact
 
         # Create dependencies

@@ -5,7 +5,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def setup
     super
 
-    @item = Nanoc::Item.new(Nanoc::TextualContent.new('blah', 'content/foo/bar.txt'), {}, '/foo/bar.txt')
+    @item = Nanoc::Item.new(Nanoc::TextualContent.new('blah', File.absolute_path('content/foo/bar.txt')), {}, '/foo/bar.txt')
   end
 
   def test_filter

@@ -146,7 +146,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
   def test_dump_and_load
     item = Nanoc::Item.new(
-      Nanoc::TextualContent.new('foobar', 'content/blah.md'),
+      Nanoc::TextualContent.new('foobar', File.absolute_path('content/blah.md')),
       { :a => { :b => 123 }},
       '/foo')
 

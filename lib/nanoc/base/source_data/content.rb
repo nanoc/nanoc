@@ -6,12 +6,24 @@ module Nanoc
 
     attr_reader :filename
 
+    def initialize(filename)
+      self.validate_filename(filename)
+
+      @filename = filename
+    end
+
     def binary?
       raise NotImplementedError
     end
 
     def checksum
       raise NotImplementedError
+    end
+
+    def validate_filename(filename)
+      if filename && !filename.start_with?('/')
+        raise ArgumentError, "Filename should be absolute (got #{filename})"
+      end
     end
 
   end
@@ -21,8 +33,8 @@ module Nanoc
     attr_reader :string
 
     def initialize(string, filename)
-      @string   = string
-      @filename = filename
+      super(filename)
+      @string = string
     end
 
     def binary?
@@ -50,10 +62,6 @@ module Nanoc
   end
 
   class BinaryContent < Content
-
-    def initialize(filename)
-      @filename = filename
-    end
 
     def binary?
       true

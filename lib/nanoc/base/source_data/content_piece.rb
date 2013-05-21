@@ -32,7 +32,7 @@ module Nanoc
       end
       # FIXME get rid of this (check class)
       if content.is_a?(String)
-        @content = Nanoc::TextualContent.new(content, '???')
+        @content = Nanoc::TextualContent.new(content, nil)
       else
         @content = content
       end

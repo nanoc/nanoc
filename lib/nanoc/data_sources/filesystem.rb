@@ -165,10 +165,10 @@ module Nanoc::DataSources
           is_binary = extension && self.binary_extension?(extension)
 
           if is_binary
-            content = Nanoc::BinaryContent.new(content_filename)
+            content = Nanoc::BinaryContent.new(File.absolute_path(content_filename))
           else
             if has_attributes_file
-              content = Nanoc::TextualContent.new(self.read(content_filename), content_filename)
+              content = Nanoc::TextualContent.new(self.read(content_filename), File.absolute_path(content_filename))
             else
               content, attributes = self.content_and_attributes_for_file(content_filename)
             end
@@ -233,7 +233,7 @@ module Nanoc::DataSources
 
       # Check presence of attributes section
       if data !~ /\A---\s*$/
-        return [ Nanoc::TextualContent.new(data, filename), {} ]
+        return [ Nanoc::TextualContent.new(data, File.absolute_path(filename)), {} ]
       end
 
       # Split data
@@ -251,7 +251,7 @@ module Nanoc::DataSources
       content = pieces[2..-1].join.strip
 
       # Done
-      [ Nanoc::TextualContent.new(content, filename), attributes ]
+      [ Nanoc::TextualContent.new(content, File.absolute_path(filename)), attributes ]
     end
 
     # Reads the content of the file with the given name and returns a string
