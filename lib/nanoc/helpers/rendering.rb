@@ -122,7 +122,6 @@ module Nanoc::Helpers
         Nanoc::NotificationCenter.post(:processing_started, layout)
 
         # Layout
-        # TODO pass content, not just the string
         result = filter.setup_and_run(layout.content.string, filter_args)
 
         # Append to erbout if we have a block
