@@ -59,8 +59,8 @@ module Nanoc
       # @api private
       attr_reader :temporary_filenames
 
-      # @return [Hash<Symbol,Nanoc::Content>] A hash containing the content at
-      #   all snapshots. The keys correspond with the snapshot names, and the
+      # @return [Hash<Symbol,String>] A hash containing the content at all
+      #   snapshots. The keys correspond with the snapshot names, and the
       #   values with the content.
       #
       # @api private
