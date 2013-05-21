@@ -25,8 +25,7 @@ module Nanoc::Filters
       item_dirglob = Pathname.new(sass_filename).dirname.realpath.to_s + '**'
       clean_items = @items.reject { |i| i.content.filename.nil? }
       @scoped_items, @rest_items = clean_items.partition do |i|
-        i.content.filename &&
-          Pathname.new(i.content.filename).realpath.fnmatch(item_dirglob)
+        i.content.filename && File.fnmatch(item_dirglob, i.content.filename)
       end
       
       # Render
@@ -37,8 +36,7 @@ module Nanoc::Filters
 
     def imported_filename_to_item(filename)
       filematch = lambda do |i|
-        i.content.filename &&
-          Pathname.new(i.content.filename).realpath == Pathname.new(filename).realpath
+        i.content.filename == File.absolute_path(filename)
       end
       @scoped_items.find(&filematch) || @rest_items.find(&filematch)
     end
