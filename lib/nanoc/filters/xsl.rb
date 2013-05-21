@@ -38,8 +38,8 @@ module Nanoc::Filters
         raise "The XSL filter can only be run as a layout"
       end
 
-      xml = ::Nokogiri::XML(content)
-      xsl = ::Nokogiri::XSLT(assigns[:layout].content)
+      xml = ::Nokogiri::XML(content.string)
+      xsl = ::Nokogiri::XSLT(assigns[:layout].content.string)
 
       xsl.transform(xml, ::Nokogiri::XSLT.quote_params(params)).to_s
     end

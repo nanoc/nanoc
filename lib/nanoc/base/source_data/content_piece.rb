@@ -8,13 +8,8 @@ module Nanoc
     # @return [String]
     attr_accessor :identifier
 
-    # @return [String] This content piece's raw content (only available for
-    #   textual content pieces)
+    # @return [Nanoc::Content] This content piece's raw content
     attr_reader :content
-
-    # @return [String] The filename pointing to the file containing this content
-    #   piece’s content
-    attr_accessor :filename
 
     # @return [Hash]
     attr_accessor :attributes
@@ -22,40 +17,39 @@ module Nanoc
     # @return [Nanoc::Site] The site this content piece belongs to
     attr_accessor :site
 
-    # Creates a new content piece with the given content or filename, attributes
-    # and identifier.
+    # Creates a new content piece with the given content, attributes and
+    # identifier.
     #
-    # @param [String] content_or_filename The uncompiled content (if it is a
-    # textual content piece) or the path to the filename containing the content
-    # (if it is a binary content piece).
+    # @param [Nanoc::Content] content The uncompiled content
     #
     # @param [Hash] attributes
     #
     # @param [String] identifier This content piece's identifier.
-    #
-    # @option params [Symbol, nil] :binary (true) Whether or not this content
-    # piece is binary
-    def initialize(content_or_filename, attributes, identifier, params={})
-      if identifier.is_a?(String)
-        identifier = Nanoc::Identifier.from_string(identifier)
+    def initialize(content, attributes, identifier)
+      # Content
+      if content.nil?
+        raise ArgumentError, "attempted to create a #{self.class} with no content/filename (identifier #{@identifier})"
       end
-
-      if content_or_filename.nil?
-        raise "attempted to create a #{self.class} with no content/filename (identifier #{identifier})"
-      end
-
-      # Get type and raw content or raw filename
-      @is_binary = params.fetch(:binary, false)
-      if @is_binary
-        @filename = content_or_filename
+      # FIXME get rid of this (check class)
+      if content.is_a?(String)
+        @content = Nanoc::TextualContent.new(content, nil)
       else
-        @filename = attributes[:content_filename]
-        @content  = content_or_filename
+        @content = content
       end
 
-      # Get rest of params
-      @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier
+      # Attributes
+      @attributes = attributes.symbolize_keys_recursively
+
+      # Identifier
+      if identifier.is_a?(String)
+        @identifier = Nanoc::Identifier.from_string(identifier)
+      else
+        @identifier = identifier
+      end
+    end
+
+    def binary?
+      self.content.binary?
     end
 
     # Requests the attribute with the given key.
@@ -77,11 +71,6 @@ module Nanoc
     # @param [Object] value The value of the attribute to set
     def []=(key, value)
       @attributes[key] = value
-    end
-
-    # @return [Boolean] True if the content piece is binary; false if it is not
-    def binary?
-      !!@is_binary
     end
 
     # @return [Symbol] the type of this object as a symbol (`:item`, `:layout`, ...)
@@ -106,13 +95,12 @@ module Nanoc
     def freeze
       attributes.freeze_recursively
       identifier.freeze
-      filename.freeze if filename
-      content.freeze  if content
+      content.freeze
     end
 
     # @see Object#inspect
     def inspect
-      "<#{self.class} identifier=#{self.identifier.inspect} binary?=#{self.binary?}>"
+      "<#{self.class} identifier=#{self.identifier.inspect}>"
     end
 
     # @see Object#hash

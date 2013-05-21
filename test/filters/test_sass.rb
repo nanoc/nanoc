@@ -212,8 +212,7 @@ private
     FileUtils.mkdir_p('content')
     File.open('content/blah.sass', 'w') { |io| io.write('p\n  color: green')}
 
-    item = Nanoc::Item.new( 'blah', {}, '/blah.sass')
-    item.filename = 'content/blah.sass'
+    item = Nanoc::Item.new(Nanoc::TextualContent.new('blah', File.absolute_path('content/blah.sass')), {}, '/blah.sass')
 
     items = [ item ]
     params = { :item => items[0], :items => items }.merge(params)
