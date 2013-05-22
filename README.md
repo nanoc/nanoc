@@ -57,56 +57,6 @@ You can get help in the following places:
 * the [discussion group](http://groups.google.com/group/nanoc)
 * the [#nanoc IRC channel on Freenode](irc://chat.freenode.net/#nanoc)
 
-## Contributors
-
-(In alphabetical order)
-
-* Ben Armston
-* Colin Barrett
-* Bil Bas
-* Dmitry Bilunov
-* Fabian Buch
-* Devon Luke Buchanan
-* Stefan Bühler
-* Dan Callahan
-* Brian Candler
-* Jack Chu
-* Michal Cichra
-* Zaiste de Grengolada
-* Vincent Driessen
-* Chris Eppstein
-* Jeff Forcier
-* Riley Goodside
-* Felix Hanley
-* Justin Hileman
-* Starr Horne
-* Daniel Hofstetter
-* Tuomas Kareinen
-* Greg Karékinian
-* Matt Keveney
-* Kevin Lynagh
-* Go Maeda
-* Nikhil Marathe
-* Daniel Mendler
-* Stuart Montgomery
-* Ale Muñoz
-* John Nishinaga
-* Gregory Pakosz
-* Nicky Peeters
-* Christian Plessl
-* Damien Pollet
-* Šime Ramov
-* Xavier Shay
-* Arnau Siches
-* “Soryu”
-* Eric Sunshine
-* Dennis Sutch
-* Takashi Uchibe
-* Matthias Vallentin
-* Ruben Verborgh
-* Scott Vokes
-* Toon Willems
-
 ## Contact
 
 You can reach me at <denis.defreyne@stoneship.org>.
