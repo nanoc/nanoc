@@ -5,13 +5,16 @@ module Nanoc
   class Pattern
 
     def self.from(obj)
-      klass = case obj
+      case obj
+      when Nanoc::StringPattern, Nanoc::RegexpPattern
+        obj
       when String
-        Nanoc::StringPattern
+        Nanoc::StringPattern.new(obj)
       when Regexp
-        Nanoc::RegexpPattern
+        Nanoc::RegexpPattern.new(obj)
+      else
+        raise ArgumentError, "Do not know how to convert #{obj} into a Nanoc::Pattern"
       end
-      klass.new(obj)
     end
 
     def initialize(obj)
@@ -31,6 +34,8 @@ module Nanoc
     end
 
     def match?(identifier)
+      # TODO allow matching /foo.{md,txt}
+      # TODO match like pathnames (File::FNM_PATHNAME)
       File.fnmatch(@string, identifier.to_s)
     end
 
