@@ -28,7 +28,8 @@ module Nanoc
     end
 
     def match?(pattern)
-      File.fnmatch(pattern, self.to_s)
+      # TODO allow matching /foo.{md,txt}
+      File.fnmatch(pattern, self.to_s, File::FNM_PATHNAME)
     end
 
     # FIXME ugly

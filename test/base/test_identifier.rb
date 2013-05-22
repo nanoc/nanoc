@@ -46,6 +46,12 @@ class Nanoc::IdentifierTest < Nanoc::TestCase
 
     assert self.new_from_string('src/file.c').match?('/src/file.[ch]')
     assert !self.new_from_string('src/file.m').match?('/src/file.[ch]')
+
+    assert !self.new_from_string('foo/bar/baz/qux.c').match?('/foo/*.c')
+
+    # { } is not supported (yet)
+    assert !self.new_from_string('src/file.md').match?('/src/file.{md,txt}')
+    assert !self.new_from_string('src/file.bbq').match?('/src/file.{md,txt}')
   end
 
   def test_with_ext_without_extension
