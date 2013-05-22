@@ -9,6 +9,14 @@ class Nanoc::ItemTest < Nanoc::TestCase
     assert_equal 'xyz', item.attributes[:abc]
   end
 
+  def test_initialize_without_content
+    error = assert_raises ArgumentError do
+      Nanoc::Item.new(nil, {}, '/foo.md')
+    end
+
+    assert_equal 'Attempted to create a Nanoc::Item without content (identifier /foo.md)', error.message
+  end
+
   def test_frozen_identifier
     item = Nanoc::Item.new("foo", {}, '/foo')
 

@@ -28,7 +28,7 @@ module Nanoc
     def initialize(content, attributes, identifier)
       # Content
       if content.nil?
-        raise ArgumentError, "attempted to create a #{self.class} with no content/filename (identifier #{@identifier})"
+        raise ArgumentError, "Attempted to create a #{self.class} without content (identifier #{identifier})"
       elsif content.is_a?(Nanoc::TextualContent) || content.is_a?(Nanoc::BinaryContent)
         @content = content
       else
