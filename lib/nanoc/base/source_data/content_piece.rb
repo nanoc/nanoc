@@ -29,7 +29,7 @@ module Nanoc
       # Content
       if content.nil?
         raise ArgumentError, "attempted to create a #{self.class} with no content/filename (identifier #{@identifier})"
-      elsif content.is_a?(Nanoc::TextualContent)
+      elsif content.is_a?(Nanoc::TextualContent) || content.is_a?(Nanoc::BinaryContent)
         @content = content
       else
         @content = Nanoc::TextualContent.new(content.to_s, nil)
