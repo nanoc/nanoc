@@ -29,22 +29,20 @@ module Nanoc
       # Content
       if content.nil?
         raise ArgumentError, "attempted to create a #{self.class} with no content/filename (identifier #{@identifier})"
-      end
-      # FIXME get rid of this (check class)
-      if content.is_a?(String)
-        @content = Nanoc::TextualContent.new(content, nil)
-      else
+      elsif content.is_a?(Nanoc::TextualContent)
         @content = content
+      else
+        @content = Nanoc::TextualContent.new(content.to_s, nil)
       end
 
       # Attributes
       @attributes = attributes.symbolize_keys_recursively
 
       # Identifier
-      if identifier.is_a?(String)
-        @identifier = Nanoc::Identifier.from_string(identifier)
-      else
+      if identifier.is_a?(Nanoc::Identifier)
         @identifier = identifier
+      else
+        @identifier = Nanoc::Identifier.from_string(identifier.to_s)
       end
     end
 
