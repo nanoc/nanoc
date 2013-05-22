@@ -33,6 +33,13 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_equal @one, @items.find { |i| i.identifier == '/one.md' }
   end
 
+  def test_glob
+    assert_equal [],                       @items.glob('/three.*')
+    assert_equal [ @items[0] ],            @items.glob('/one.*')
+    assert_equal [ @items[1] ],            @items.glob('/two.*')
+    assert_equal [ @items[0], @items[1] ], @items.glob('/*o*.*')
+  end
+
   def test_brackets_and_slice_and_at_with_index
     assert_equal @one, @items[0]
     assert_equal @one, @items.slice(0)

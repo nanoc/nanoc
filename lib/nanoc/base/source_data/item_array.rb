@@ -31,6 +31,10 @@ module Nanoc
       super
     end
 
+    def glob(pattern)
+      @items.select { |i| i.identifier.match?(pattern) }
+    end
+
     def [](*args)
       if 1 == args.size && (args.first.is_a?(String) || args.first.is_a?(Nanoc::Identifier))
         self.item_with_identifier(args.first)
