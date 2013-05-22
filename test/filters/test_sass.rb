@@ -110,7 +110,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "compile '*' do\n"
+          io.write "compile '/**/*' do\n"
           io.write "  filter :sass\n"
           io.write "end\n"
           io.write "\n"
@@ -165,7 +165,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "compile '*' do\n"
+          io.write "compile '/**/*' do\n"
           io.write "  filter :sass\n"
           io.write "end\n"
           io.write "\n"

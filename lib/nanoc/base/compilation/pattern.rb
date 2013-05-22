@@ -35,8 +35,7 @@ module Nanoc
 
     def match?(identifier)
       # TODO allow matching /foo.{md,txt}
-      # TODO match like pathnames (File::FNM_PATHNAME)
-      File.fnmatch(@string, identifier.to_s)
+      File.fnmatch(@string, identifier.to_s, File::FNM_PATHNAME)
     end
 
   end

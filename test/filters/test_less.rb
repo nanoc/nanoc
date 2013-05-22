@@ -66,7 +66,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "compile '*' do\n"
+          io.write "compile '/**/*' do\n"
           io.write "  filter :less\n"
           io.write "end\n"
           io.write "\n"

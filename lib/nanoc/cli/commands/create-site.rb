@@ -96,11 +96,11 @@ EOS
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
 #!/usr/bin/env ruby
 
-compile '/stylesheet/' do
+compile '/stylesheet.*' do
   # don’t filter or layout
 end
 
-compile '*' do
+compile '/**/*' do
   if item.binary?
     # don’t filter binary items
   else
@@ -109,11 +109,11 @@ compile '*' do
   end
 end
 
-route '/stylesheet/' do
+route '/stylesheet.*' do
   '/style.css'
 end
 
-route '*' do
+route '/**/*' do
   if item.binary?
     # Write item with identifier /foo.ext to /foo.ext
     item.identifier
@@ -123,7 +123,7 @@ route '*' do
   end
 end
 
-layout '*', :erb
+layout '/**/*', :erb
 EOS
 
     DEFAULT_ITEM = <<EOS unless defined? DEFAULT_ITEM

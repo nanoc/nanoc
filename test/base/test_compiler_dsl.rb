@@ -53,10 +53,10 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
         io.write <<EOS
 passthrough '/robots.*'
 
-compile '*' do
+compile '/**/*' do
 end
 
-route '*' do
+route '/**/*' do
   item.identifier.without_ext + '-xyz.' + item.identifier.extension
 end
 EOS
@@ -101,11 +101,11 @@ EOS
     with_site do
       # Create rules
       File.write('Rules', <<EOS)
-compile '*' do
+compile '/**/*' do
   filter :erb
 end
 
-route '*' do
+route '/**/*' do
   item.identifier.without_ext + '/index.html'
 end
 
@@ -133,7 +133,7 @@ EOS
         io.write <<EOS
 ignore '/lame.*'
 
-passthrough '*'
+passthrough '/**/*'
 EOS
       end
 
@@ -161,11 +161,11 @@ EOS
       # Create rules
       File.open('Rules', 'w') do |io|
         io.write <<EOS
-compile '*' do
+compile '/**/*' do
   filter :erb
 end
 
-route '*' do
+route '/**/*' do
   item.identifier.without_ext + '/index.html'
 end
 

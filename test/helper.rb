@@ -62,11 +62,11 @@ module Nanoc::TestHelpers
 
     # Build rules
     rules_content = <<EOS
-compile '*' do
+compile '/**/*' do
   {{compilation_rule_content}}
 end
 
-route '*' do
+route '/**/*' do
   if item.binary?
     item.identifier
   elsif item.identifier == '/index.html'
@@ -76,7 +76,7 @@ route '*' do
   end
 end
 
-layout '*', :erb
+layout '/**/*', :erb
 EOS
     rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
 

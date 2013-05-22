@@ -8,8 +8,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     require 'erb'
 
     File.open('Rules', 'w') do |io|
-      io.write "compile '*' do ; filter :erb ; end\n"
-      io.write "route '*' do ; item.identifier ; end\n"
+      io.write "compile '/**/*' do ; filter :erb ; end\n"
+      io.write "route '/**/*' do ; item.identifier ; end\n"
     end
 
     # Build content to be evaluated
@@ -52,8 +52,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     require 'erb'
 
     File.open('Rules', 'w') do |io|
-      io.write "compile '*' do ; filter :erb ; end\n"
-      io.write "route '*' do ; item.identifier ; end\n"
+      io.write "compile '/**/*' do ; filter :erb ; end\n"
+      io.write "route '/**/*' do ; item.identifier ; end\n"
     end
 
     content = <<EOS
@@ -82,8 +82,8 @@ EOS
     require 'erb'
 
     File.open('Rules', 'w') do |io|
-      io.write "compile '*' do ; filter :erb ; end\n"
-      io.write "route '*' do ; item.identifier ; end\n"
+      io.write "compile '/**/*' do ; filter :erb ; end\n"
+      io.write "route '/**/*' do ; item.identifier ; end\n"
     end
 
     @site = Nanoc::Site.new({})
@@ -113,8 +113,8 @@ EOS
         io.write '[<%= content_for(@items["/includee.erb"], :blah) %>]'
       end
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do ; filter :erb ; end\n"
-        io.write "route '*' do ; item.identifier.with_ext('html') ; end\n"
+        io.write "compile '/**/*' do ; filter :erb ; end\n"
+        io.write "route '/**/*' do ; item.identifier.with_ext('html') ; end\n"
       end
 
       # Compile once
@@ -147,9 +147,9 @@ EOS
         io.write '[<%= @item.inspect %>-<%= content_for(@items["/includee.erb"], :blah) %>]'
       end
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do ; filter :erb ; end\n"
-        io.write "route '*' do ; item.identifier.with_ext('html') ; end\n"
-        io.write "layout '*', :erb\n"
+        io.write "compile '/**/*' do ; filter :erb ; end\n"
+        io.write "route '/**/*' do ; item.identifier.with_ext('html') ; end\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile once
@@ -180,8 +180,8 @@ EOS
       end
 
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do ; filter :erb ; end\n"
-        io.write "route '*' do ; item.identifier.with_ext('html') ; end\n"
+        io.write "compile '/**/*' do ; filter :erb ; end\n"
+        io.write "route '/**/*' do ; item.identifier.with_ext('html') ; end\n"
       end
 
       Nanoc::CLI.run(%w(compile))
@@ -199,8 +199,8 @@ EOS
         io.write '{<% content_for :blah do %>Content<% end %>}'
       end
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do ; filter :erb ; end\n"
-        io.write "route '*' do ; item.identifier.with_ext('html') ; end\n"
+        io.write "compile '/**/*' do ; filter :erb ; end\n"
+        io.write "route '/**/*' do ; item.identifier.with_ext('html') ; end\n"
       end
 
       # Compile once

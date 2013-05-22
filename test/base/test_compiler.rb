@@ -133,15 +133,15 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  layout 'default'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  'index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Create site
@@ -194,16 +194,16 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  snapshot :aaa\n"
         io.write "  snapshot :aaa\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile
@@ -223,17 +223,17 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  snapshot :aaa\n"
         io.write "  filter :erb\n"
         io.write "  filter :erb\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile
@@ -257,16 +257,16 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  snapshot :guts\n"
         io.write "  filter :erb\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  item.identifier\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile
@@ -288,15 +288,15 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  filter :erb, :locals => { :foo => 123 }\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile
@@ -320,14 +320,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "end\n"
         io.write "\n"
         io.write "route '/a.html' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  nil\n"
         io.write "end\n"
       end
@@ -341,14 +341,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "end\n"
         io.write "\n"
         io.write "route '/b.html' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  nil\n"
         io.write "end\n"
       end
@@ -371,17 +371,17 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  if @rep.name == :default && @item_rep.name == :default\n"
         io.write "    filter :erb\n"
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile
@@ -398,14 +398,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       File.open('content/blah.dat', 'w') { |io| io.write('o hello') }
 
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  item.identifier\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       site = Nanoc::Site.new('.')

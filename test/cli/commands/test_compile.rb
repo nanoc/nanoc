@@ -9,11 +9,11 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       File.open('content/baz.md', 'w') { |io| io.write('hai') }
 
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  filter :erb\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  if item.binary?\n"
         io.write "    item.identifier\n"
         io.write "  else\n"
@@ -21,7 +21,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       Nanoc::CLI.run %w( compile --verbose )
@@ -35,11 +35,11 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       File.open('content/baz.md', 'w') { |io| io.write('hai') }
 
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  filter :erb\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  if item.binary?\n"
         io.write "    item.identifier\n"
         io.write "  else\n"
@@ -47,7 +47,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       File.open('output/stray.html', 'w') do |io|
@@ -76,11 +76,11 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       File.open('content/baz.md', 'w') { |io| io.write('hai') }
 
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  filter :erb\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  if item.binary?\n"
         io.write "    item.identifier\n"
         io.write "  else\n"
@@ -88,7 +88,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "  end\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       Dir.mkdir('output/excluded_dir')

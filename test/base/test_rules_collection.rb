@@ -68,10 +68,10 @@ class Nanoc::RulesCollectionTest < Nanoc::TestCase
     # Create rules
     rules = Nanoc::RulesCollection.new
     dsl = Nanoc::CompilerDSL.new(rules)
-    dsl.layout '/a/b/c/*', :erb, { :char => 'd' }
-    dsl.layout '/a/*',     :erb, { :char => 'b' }
-    dsl.layout '/a/b/*',   :erb, { :char => 'c' } # never used!
-    dsl.layout '/*',       :erb, { :char => 'a' }
+    dsl.layout '/a/b/c/**/*', :erb, { :char => 'd' }
+    dsl.layout '/a/**/*',     :erb, { :char => 'b' }
+    dsl.layout '/a/b/**/*',   :erb, { :char => 'c' } # never used!
+    dsl.layout '/**/*',       :erb, { :char => 'a' }
 
     # Mock layouts
     layouts = [
