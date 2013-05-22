@@ -27,6 +27,10 @@ module Nanoc
       end
     end
 
+    def match?(pattern)
+      File.fnmatch(pattern, self.to_s)
+    end
+
     # FIXME ugly
     def prefix(prefix)
       self.class.from_string(prefix + self.to_s)

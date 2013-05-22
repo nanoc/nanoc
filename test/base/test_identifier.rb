@@ -40,6 +40,14 @@ class Nanoc::IdentifierTest < Nanoc::TestCase
     assert_nil self.new_from_string('/').parent
   end
 
+  def test_match?
+    assert self.new_from_string('foo/bar/qux.md').match?('/foo/*/qux.*')
+    assert !self.new_from_string('foo/bar/qux.md').match?('foo/*/qux.*')
+
+    assert self.new_from_string('src/file.c').match?('/src/file.[ch]')
+    assert !self.new_from_string('src/file.m').match?('/src/file.[ch]')
+  end
+
   def test_with_ext_without_extension
     assert_equal '/foo.md', self.new_from_string('/foo').with_ext('md').to_s
   end
