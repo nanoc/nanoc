@@ -27,15 +27,6 @@ module Nanoc
       [ type, self.identifier ]
     end
 
-    # @return [String] The checksum for this object. If its contents change,
-    #   the checksum will change as well.
-    def checksum
-      attributes = @attributes.dup
-      attributes.delete(:file)
-      @content.checksum + ',' + attributes.checksum
-    end
-    memoize :checksum
-
   end
 
 end

@@ -89,6 +89,13 @@ module Nanoc
       [ type, self.identifier ]
     end
 
+    # @return [String] The checksum for this object. If its contents change,
+    #   the checksum will change as well.
+    def checksum
+      @content.checksum + ',' + @attributes.checksum
+    end
+    memoize :checksum
+
     # @see Object#freeze
     def freeze
       attributes.freeze_recursively
