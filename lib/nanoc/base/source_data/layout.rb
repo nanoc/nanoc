@@ -6,8 +6,6 @@ module Nanoc
   # identifier and a modification time (to speed up compilation).
   class Layout < ::Nanoc::ContentPiece
 
-    extend Nanoc::Memoization
-
     # Returns the type of this object. Will always return `:layout`, because
     # this is a layout. For items, this method returns `:item`.
     #

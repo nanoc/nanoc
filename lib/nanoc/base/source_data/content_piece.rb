@@ -5,6 +5,8 @@ module Nanoc
   # Has content, attributes and an identifier.
   class ContentPiece
 
+    extend Nanoc::Memoization
+
     # @return [String]
     attr_accessor :identifier
 

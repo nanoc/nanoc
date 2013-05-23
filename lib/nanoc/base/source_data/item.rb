@@ -7,8 +7,6 @@ module Nanoc
   # store the modification time to speed up compilation.
   class Item < ContentPiece
 
-    extend Nanoc::Memoization
-
     # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
     attr_reader :reps
 
