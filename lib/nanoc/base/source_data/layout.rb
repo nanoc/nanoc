@@ -16,15 +16,6 @@ module Nanoc
       :layout
     end
 
-    # Returns an object that can be used for uniquely identifying objects.
-    #
-    # @api private
-    #
-    # @return [Object] An unique reference to this object
-    def reference
-      [ type, self.identifier ]
-    end
-
   end
 
 end
