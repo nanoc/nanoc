@@ -32,7 +32,7 @@ module Nanoc
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
-      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms ).sort,
+      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
       :output_dir         => 'output',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],
