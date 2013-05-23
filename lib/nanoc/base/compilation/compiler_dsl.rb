@@ -191,7 +191,7 @@ module Nanoc
     # This meta-rule will be applicable to reps with a name equal to
     # `:default`; this can be changed by giving an explicit `:rep` parameter.
     #
-    # @param [String, Regexp] identifier A pattern matching identifiers of
+    # @param [String, Regexp] pattern A pattern matching identifiers of
     #   items that should be processed using this meta-rule
     #
     # @option params [Symbol] :rep (:default) The name of the representation

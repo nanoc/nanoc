@@ -222,7 +222,8 @@ module Nanoc::DataSources
       Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
     end
 
-    # @param [String] data Data including an attributes and a content section
+    # @param [String] filename The name of the file containing an attributes
+    #   and a content section
     #
     # @return [Array] A tuple containing an attributes hash as its first
     #   element, and a string containing the content as its second element
