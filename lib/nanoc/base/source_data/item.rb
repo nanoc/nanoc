@@ -98,20 +98,6 @@ module Nanoc
     end
     memoize :checksum
 
-    def marshal_dump
-      [
-        @content,
-        @attributes,
-        @identifier
-      ]
-    end
-
-    def marshal_load(source)
-      @content,
-      @attributes,
-      @identifier = *source
-    end
-
     # @api private
     def forced_outdated=(bool)
       @forced_outdated = bool

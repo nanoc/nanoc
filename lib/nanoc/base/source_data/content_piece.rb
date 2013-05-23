@@ -116,6 +116,22 @@ module Nanoc
       self.eql?(other)
     end
 
+    # @see Object#marshal_dump
+    def marshal_dump
+      [
+        @content,
+        @attributes,
+        @identifier
+      ]
+    end
+
+    # @see Object#marshal_load
+    def marshal_load(source)
+      @content,
+      @attributes,
+      @identifier = *source
+    end
+
   end
 
 end
