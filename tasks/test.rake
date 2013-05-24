@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'minitest/unit'
+require 'minitest/autorun'
 
 dirs = [ 'test'] + Dir['test/**/*'].select { |fn| File.directory?(fn) }
 dirs.each do |dir|
@@ -8,6 +8,7 @@ dirs.each do |dir|
   task dir.gsub('/', ':') do |task|
     ENV['QUIET'] ||= 'true'
     $VERBOSE = (ENV['VERBOSE'] == 'true')
+    ARGV << '--verbose' if $VERBOSE
 
     $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
 
@@ -15,7 +16,5 @@ dirs.each do |dir|
 
     test_files = Dir["#{dir}/**/*_spec.rb"] + Dir["#{dir}/**/test_*.rb"]
     test_files.each { |f| require f }
-
-    exit MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
   end
 end

@@ -213,14 +213,14 @@ EOS
 
 end
 
-class Nanoc::TestCase < MiniTest::Unit::TestCase
+class Nanoc::TestCase < Minitest::Test
 
   include Nanoc::TestHelpers
 
 end
 
 # Unexpected system exit is unexpected
-::MiniTest::Unit::TestCase::PASSTHROUGH_EXCEPTIONS.delete(SystemExit)
+::Minitest::Test::PASSTHROUGH_EXCEPTIONS.delete(SystemExit)
 
 # A more precise inspect method for Time improves assert failure messages.
 #
