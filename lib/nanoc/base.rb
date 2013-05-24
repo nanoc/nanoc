@@ -14,21 +14,21 @@ require 'nanoc/base/notification_center'
 require 'nanoc/base/plugin_registry'
 require 'nanoc/base/store'
 
-# Load source data classes
-require 'nanoc/base/source_data/code_snippet'
-require 'nanoc/base/source_data/content'
-require 'nanoc/base/source_data/content_piece'
-require 'nanoc/base/source_data/configuration'
-require 'nanoc/base/source_data/data_source'
-require 'nanoc/base/source_data/item'
-require 'nanoc/base/source_data/item_array'
-require 'nanoc/base/source_data/layout'
-require 'nanoc/base/source_data/identifier'
-require 'nanoc/base/source_data/site'
+# Load entity classes
+require 'nanoc/base/entities/code_snippet'
+require 'nanoc/base/entities/content'
+require 'nanoc/base/entities/content_piece'
+require 'nanoc/base/entities/configuration'
+require 'nanoc/base/entities/data_source'
+require 'nanoc/base/entities/item'
+require 'nanoc/base/entities/item_array'
+require 'nanoc/base/entities/item_rep'
+require 'nanoc/base/entities/layout'
+require 'nanoc/base/entities/identifier'
+require 'nanoc/base/entities/site'
 
-# Load result data classes
-require 'nanoc/base/result_data/item_rep'
-require 'nanoc/base/result_data/snapshot_store'
+# Load store classes
+require 'nanoc/base/stores/snapshot_store'
 
 # Load compilation classes
 require 'nanoc/base/compilation/checksum_store'
