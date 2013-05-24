@@ -56,7 +56,3 @@ You can get help in the following places:
 
 * the [discussion group](http://groups.google.com/group/nanoc)
 * the [#nanoc IRC channel on Freenode](irc://chat.freenode.net/#nanoc)
-
-## Contact
-
-You can reach me at <denis.defreyne@stoneship.org>.
