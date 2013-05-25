@@ -6,6 +6,15 @@ class Nanoc::IdentifierTest < Nanoc::TestCase
     Nanoc::Identifier.from_string(string)
   end
 
+  def test_examples
+    YARD.parse(File.dirname(__FILE__) + '/../../lib/nanoc/base/entities/identifier.rb')
+
+    assert_examples_correct 'Nanoc::Identifier#parent'
+    assert_examples_correct 'Nanoc::Identifier#match?'
+    assert_examples_correct 'Nanoc::Identifier#in_dir'
+    assert_examples_correct 'Nanoc::Identifier#to_s'
+  end
+
   def test_from_string
     assert_equal %w( ), self.new_from_string('').components
     assert_equal %w( ), self.new_from_string('/').components
