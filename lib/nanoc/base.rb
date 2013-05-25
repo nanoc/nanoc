@@ -30,6 +30,8 @@ require 'nanoc/base/entities/site'
 
 # Load store classes
 require 'nanoc/base/stores/snapshot_store'
+require 'nanoc/base/stores/rules_store'
+require 'nanoc/base/stores/filesystem_rules_store'
 
 # Load compilation classes
 require 'nanoc/base/compilation/checksum_store'
@@ -48,7 +50,3 @@ require 'nanoc/base/compilation/rule_context'
 require 'nanoc/base/compilation/rule_memory_calculator'
 require 'nanoc/base/compilation/rule_memory_store'
 require 'nanoc/base/compilation/rules_collection'
-require 'nanoc/base/compilation/rules_store'
-
-# Load stuff that should be loaded elsewhere
-require 'nanoc/base/compilation/filesystem_rules_store'
