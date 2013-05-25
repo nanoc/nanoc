@@ -3,7 +3,7 @@
 module Nanoc
 
   # Has content, attributes and an identifier.
-  class ContentPiece
+  class Document
 
     extend Nanoc::Memoization
 

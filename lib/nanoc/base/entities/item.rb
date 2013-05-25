@@ -5,12 +5,12 @@ module Nanoc
   # Represents a compileable item in a site. It has content and attributes, as
   # well as an identifier (which starts and ends with a slash). It can also
   # store the modification time to speed up compilation.
-  class Item < ContentPiece
+  class Item < Document
 
     # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
     attr_reader :reps
 
-    # @see Nanoc::ContentPiece#initialize
+    # @see Nanoc::Document#initialize
     def initialize(content_or_filename, attributes, identifier)
       super
       @reps = []
