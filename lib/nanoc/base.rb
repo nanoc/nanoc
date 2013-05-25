@@ -4,15 +4,14 @@ module Nanoc
 end
 
 require 'nanoc/base/core_ext'
+require 'nanoc/base/errors'
 
 # Load helper classes
-require 'nanoc/base/context'
-require 'nanoc/base/directed_graph'
-require 'nanoc/base/errors'
-require 'nanoc/base/memoization'
-require 'nanoc/base/notification_center'
-require 'nanoc/base/plugin_registry'
-require 'nanoc/base/store'
+require 'nanoc/base/helper/context'
+require 'nanoc/base/helper/directed_graph'
+require 'nanoc/base/helper/memoization'
+require 'nanoc/base/helper/notification_center'
+require 'nanoc/base/helper/plugin_registry'
 
 # Load entity classes
 require 'nanoc/base/entities/code_snippet'
@@ -29,6 +28,7 @@ require 'nanoc/base/entities/pattern'
 require 'nanoc/base/entities/site'
 
 # Load store classes
+require 'nanoc/base/store'
 require 'nanoc/base/stores/snapshot_store'
 require 'nanoc/base/stores/rules_store'
 require 'nanoc/base/stores/filesystem_rules_store'

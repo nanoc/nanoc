@@ -282,7 +282,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_example
-    YARD.parse('../lib/nanoc/base/directed_graph.rb')
+    YARD.parse('../lib/nanoc/base/helper/directed_graph.rb')
     assert_examples_correct 'Nanoc::DirectedGraph'
   end
 
