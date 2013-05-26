@@ -39,7 +39,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep.expects(:compiled?).returns(true)
 
     # Check
-    assert_equal 'pre content', rep.compiled_content
+    assert_equal 'last content', rep.compiled_content
   end
 
   def test_compiled_content_with_custom_snapshot

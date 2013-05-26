@@ -400,10 +400,7 @@ module Nanoc
         rep.content = compiled_content_cache[rep]
       else
         # Recalculate content
-        rep.snapshot(:raw)
-        rep.snapshot(:pre, :final => false)
         rules_collection.compilation_rule_for(rep).apply_to(rep, :compiler => self)
-        rep.snapshot(:post) if rep.has_snapshot?(:post)
         rep.snapshot(:last)
       end
 

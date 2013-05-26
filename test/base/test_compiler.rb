@@ -13,9 +13,6 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Set snapshot filenames
     rep.raw_paths = {
-      :raw  => 'raw.txt',
-      :pre  => 'pre.txt',
-      :post => 'post.txt',
       :last => 'last.txt'
     }
 
@@ -47,14 +44,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     compiler.send(:compile_rep, rep)
 
     # Test
-    assert File.file?('raw.txt')
-    assert File.file?('pre.txt')
-    assert File.file?('post.txt')
     assert File.file?('last.txt')
-    assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('raw.txt')
-    assert_equal '1 2 <%= 3 %>',                  File.read('pre.txt')
-    assert_equal 'head 1 2 3 foot',               File.read('post.txt')
-    assert_equal 'head 1 2 3 foot',               File.read('last.txt')
+    assert_equal 'head 1 2 3 foot', File.read('last.txt')
   end
 
   def test_compile_with_no_reps

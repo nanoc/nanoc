@@ -168,8 +168,8 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)
 
       # Get name of last pre-layout snapshot
-      snapshot = params.fetch(:snapshot) { self.has_snapshot?(:pre) ? :pre : :last }
-      is_moving = [ :pre, :post, :last ].include?(snapshot)
+      snapshot = params.fetch(:snapshot, :last)
+      is_moving = :last == snapshot
 
       # Make sure we're not binary
       if self.snapshot_binary?(snapshot)
@@ -303,11 +303,6 @@ module Nanoc
           raise RuntimeError,
             "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
         end
-
-        # Create snapshot
-        unless self.snapshot_binary?(:last)
-          snapshot(self.has_snapshot?(:post) ? :post : :pre, :final => false)
-        end
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended, self, filter_name)
@@ -336,11 +331,6 @@ module Nanoc
       # Check whether item can be laid out
       raise Nanoc::Errors::CannotLayoutBinaryItem.new(self) if self.snapshot_binary?(:last)
 
-      # Create "pre" snapshot
-      if !self.has_snapshot?(:post)
-        snapshot(:pre, :final => true)
-      end
-
       # Create filter
       klass = filter_named(filter_name)
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
@@ -361,9 +351,6 @@ module Nanoc
         end
         content = filter.setup_and_run(layout.content.string, filter_args)
         self.set_stored_content_at_snapshot(:last, content)
-
-        # Create "post" snapshot
-        snapshot(:post, :final => false)
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended,  self, filter_name)
@@ -377,7 +364,7 @@ module Nanoc
     #
     # @option params [Boolean] :final (true) True if this is the final time
     #   the snapshot will be updated; false if it is a non-final moving
-    #   snapshot (such as `:pre`, `:post` or `:last`)
+    #   snapshot (i.e. `:last`)
     #
     # @return [void]
     def snapshot(snapshot_name, params={})
