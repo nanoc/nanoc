@@ -12,23 +12,22 @@ module Nanoc
     # @option params [Nanoc::ItemRep] :rep The item representation that will
     #   be processed in this rule context
     #
-    # @option params [Nanoc::Compiler] :compiler The compiler that is being
-    #   used to compile the site
+    # @option params [Nanoc::Site] :site The site
     #
-    # @raise [ArgumentError] if the `:rep` or the `:compiler` option is
+    # @raise [ArgumentError] if the `:rep` or the `:site` option is
     #   missing
     def initialize(params={})
-      rep      = params.fetch(:rep)      { raise ArgumentError, "Required :rep option is missing" }
-      compiler = params.fetch(:compiler) { raise ArgumentError, "Required :compiler option is missing" }
+      rep  = params.fetch(:rep)  { raise ArgumentError, "Required :rep option is missing"  }
+      site = params.fetch(:site) { raise ArgumentError, "Required :site option is missing" }
 
       super({
         :rep      => rep,
         :item_rep => rep,
         :item     => rep.item,
-        :site     => compiler.site,
-        :config   => compiler.site.config,
-        :items    => compiler.site.items,
-        :layouts  => compiler.site.layouts
+        :site     => site,
+        :config   => site.config,
+        :items    => site.items,
+        :layouts  => site.layouts
       })
     end
 

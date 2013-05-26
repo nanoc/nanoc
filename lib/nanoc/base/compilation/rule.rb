@@ -65,7 +65,7 @@ module Nanoc
     def apply_to(rep, params={})
       compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
       rep = Nanoc::ItemRepRulesProxy.new(rep, compiler) unless rep.is_proxy?
-      Nanoc::RuleContext.new(:rep => rep, :compiler => compiler).instance_eval &@block
+      Nanoc::RuleContext.new(:rep => rep, :site => compiler.site).instance_eval &@block
     end
 
   end
