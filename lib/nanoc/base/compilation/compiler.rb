@@ -67,14 +67,7 @@ module Nanoc
 
     # Compiles the site and writes out the compiled item representations.
     #
-    # Previous versions of nanoc (< 3.2) allowed passing items to compile, and
-    # had a “force” option to make the compiler recompile all pages, even
-    # when not outdated. These arguments and options are, as of nanoc 3.2, no
-    # longer used, and will simply be ignored when passed to {#run}.
-    #
-    # @overload run
-    #   @return [void]
-    def run(*args)
+    def run
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
