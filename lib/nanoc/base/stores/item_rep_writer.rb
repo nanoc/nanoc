@@ -6,7 +6,11 @@ module Nanoc
 
     extend Nanoc::PluginRegistry::PluginMethods
 
-    def write(rep, snapshot=:last)
+    def initialize(config)
+      @config = config
+    end
+
+    def write(rep, path)
       raise NotImplementedError
     end
 
@@ -27,22 +31,18 @@ module Nanoc
     # @param [Symbol, nil] snapshot The name of the snapshot to write.
     #
     # @return [void]
-    def write(rep, snapshot=:last)
-      # Get raw path
-      raw_path = rep.raw_path(:snapshot => snapshot)
-      return if raw_path.nil?
-
+    def write(rep, path)
       # Create parent directory
-      FileUtils.mkdir_p(File.dirname(raw_path))
+      FileUtils.mkdir_p(File.dirname(path))
 
       # Check if file will be created
-      is_created = !File.file?(raw_path)
+      is_created = !File.file?(path)
 
       # Notify
-      Nanoc::NotificationCenter.post(:will_write_rep, rep, snapshot)
+      Nanoc::NotificationCenter.post(:will_write_rep, rep, path)
 
-      if rep.snapshot_binary?(snapshot)
-        temp_path = rep.temporary_filenames[snapshot]
+      if rep.snapshot_binary?(:last)
+        temp_path = rep.temporary_filenames[:last]
       else
         temp_path = self.temp_filename
         File.open(temp_path, 'w') do |io|
@@ -51,13 +51,14 @@ module Nanoc
       end
 
       # Check whether content was modified
-      is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
+      is_modified = is_created || !FileUtils.identical?(path, temp_path)
 
       # Write
-      FileUtils.cp(temp_path, raw_path) if is_modified
+      # TODO delete temp_path
+      FileUtils.cp(temp_path, path) if is_modified
 
       # Notify
-      Nanoc::NotificationCenter.post(:rep_written, rep, raw_path, is_created, is_modified)
+      Nanoc::NotificationCenter.post(:rep_written, rep, path, is_created, is_modified)
     end
 
     TMP_TEXT_ITEMS_DIR = 'tmp/text_items'

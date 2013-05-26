@@ -14,7 +14,6 @@ module Nanoc
     extend Forwardable
 
     def_delegators :@item_rep, :item, :name, :binary, :binary?, :compiled_content, :has_snapshot?, :raw_path, :path
-    def_delegator  :@item_rep, :snapshot
 
     # @param [Nanoc::ItemRep] item_rep The item representation that this
     #   proxy should behave like
@@ -67,6 +66,10 @@ module Nanoc
       filter_args = filter_args.merge(extra_filter_args)
 
       @item_rep.layout(layout, filter_name, filter_args)
+    end
+
+    def snapshot(snapshot)
+      @compiler.snapshot_and_write(@item_rep, snapshot)
     end
 
     # Returns true because this item is already a proxy, and therefore doesn’t

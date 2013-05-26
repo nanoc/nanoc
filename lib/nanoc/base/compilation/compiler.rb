@@ -266,6 +266,17 @@ module Nanoc
       end
     end
 
+    def item_rep_writer
+      # TODO pass options the right way
+      # TODO make type customisable (:filesystem)
+      Nanoc::ItemRepWriter.named(:filesystem).new({ :output_dir => @site.config[:output_dir] })
+    end
+    memoize :item_rep_writer
+
+    def write_rep(rep, path)
+      self.item_rep_writer.write(rep, path)
+    end
+
     # @param [Nanoc::ItemRep] rep The item representation for which the
     #   assigns should be fetched
     #
@@ -310,6 +321,16 @@ module Nanoc
         name = @site.config.fetch(:store_type, :in_memory)
         klass = Nanoc::SnapshotStore.named(name)
         klass.new
+      end
+    end
+
+    # TODO remove me - snapshots will never write anything eventually
+    def snapshot_and_write(rep, snapshot, is_final=true)
+      rep.snapshot(snapshot)
+
+      if is_final
+        path = rep.raw_path(:snapshot => snapshot)
+        self.write_rep(rep, path) if path
       end
     end
 
@@ -401,7 +422,7 @@ module Nanoc
       else
         # Recalculate content
         rules_collection.compilation_rule_for(rep).apply_to(rep, :compiler => self)
-        rep.snapshot(:last)
+        self.snapshot_and_write(rep, :last)
       end
 
       rep.compiled = true

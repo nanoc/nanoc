@@ -75,8 +75,7 @@ module Nanoc::CLI::Commands
         require 'tempfile'
         self.setup_diffs
         old_contents = {}
-        Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
-          path = rep.raw_path(:snapshot => snapshot)
+        Nanoc::NotificationCenter.on(:will_write_rep) do |rep, path|
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|

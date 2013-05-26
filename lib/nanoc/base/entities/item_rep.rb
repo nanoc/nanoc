@@ -66,23 +66,6 @@ module Nanoc
       # @api private
       attr_accessor :content
 
-      # Writes the item rep's compiled content to the rep's output file.
-      #
-      # This method will send two notifications: one before writing the item
-      # representation, and one after. These notifications can be used for
-      # generating diffs, for example.
-      #
-      # @api private
-      #
-      # @param [Symbol, nil] snapshot The name of the snapshot to write.
-      #
-      # @return [void]
-      def write(snapshot=:last)
-        # FIXME make writer configurable
-        writer_class = Nanoc::ItemRepWriter.named(:filesystem)
-        writer_class.new.write(self, snapshot)
-      end
-
       # Resets the compilation progress for this item representation. This is
       # necessary when an unmet dependency is detected during compilation.
       #
@@ -367,12 +350,10 @@ module Nanoc
     #   snapshot (i.e. `:last`)
     #
     # @return [void]
-    def snapshot(snapshot_name, params={})
-      is_final = params.fetch(:final) { true }
+    def snapshot(snapshot_name)
       if !self.snapshot_binary?(:last)
         self.set_stored_content_at_snapshot(snapshot_name, self.stored_content_at_snapshot(:last))
       end
-      self.write(snapshot_name) if is_final
     end
 
     # Returns a recording proxy that is used for determining whether the
