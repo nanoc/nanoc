@@ -66,4 +66,16 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     end
   end
 
+  def test_unescape_url
+    with_site do |site|
+      FileUtils.mkdir_p('output/stuff')
+      File.open('output/stuff/right foo', 'w') { |io| io.write('hi') }
+
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+
+      assert check.send(:valid?, 'stuff/right%20foo', 'output/origin')
+      refute check.send(:valid?, 'stuff/wrong%20foo', 'output/origin')
+    end
+  end
+
 end

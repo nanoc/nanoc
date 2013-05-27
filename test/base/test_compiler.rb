@@ -540,4 +540,20 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     end
   end
 
+  def test_tmp_text_items_are_removed_after_compilation
+    with_site do |site|
+      # Create item
+      File.open('content/index.html', 'w') do |io|
+        io.write('stuff')
+      end
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check
+      assert Dir['tmp/text_items/*'].empty?
+    end
+  end
+
 end
