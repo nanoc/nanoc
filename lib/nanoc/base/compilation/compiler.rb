@@ -228,7 +228,7 @@ module Nanoc
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
         rep_names.each do |rep_name|
           rep = ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
-          rep.raw_paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
+          rep.paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
           item.reps << rep
         end
       end
@@ -242,13 +242,7 @@ module Nanoc
     memoize :item_rep_writer
 
     def write_rep(rep, path)
-      self.item_rep_writer.write(rep, path)
-    end
-
-    def write_and_snapshot(rep, raw_path, snapshot)
-      self.write_rep(rep, raw_path)
-
-      rep.snapshot(snapshot, :path => raw_path)
+      self.item_rep_writer.write(rep, path.to_s)
     end
 
     # @param [Nanoc::ItemRep] rep The item representation for which the
@@ -280,8 +274,9 @@ module Nanoc
     def outdatedness_checker
       Nanoc::OutdatednessChecker.new(
         :site => @site,
-        :checksum_store => checksum_store,
-        :dependency_tracker => dependency_tracker)
+        :checksum_store     => self.checksum_store,
+        :dependency_tracker => self.dependency_tracker,
+        :item_rep_writer    => self.item_rep_writer)
     end
     memoize :outdatedness_checker
 
@@ -380,7 +375,7 @@ module Nanoc
       self.rule_memory_calculator.new_rule_memory_for_rep(rep)
 
       # Assign raw paths for non-snapshot rules
-      rep.raw_paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
+      rep.paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
 
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content

@@ -42,7 +42,7 @@ module Nanoc
       attr_accessor :raw_paths
 
       # @return [Array<String>] A list of paths in direct #write calls
-      attr_accessor :raw_paths_without_snapshot
+      attr_accessor :paths_without_snapshot
 
       # @return [Hash<Symbol,String>] A hash containing the paths for all
       #   snapshots. The keys correspond with the snapshot names, and the
@@ -123,7 +123,7 @@ module Nanoc
 
       # Set default attributes
       @raw_paths  = {}
-      @raw_paths_without_snapshot = []
+      @paths_without_snapshot = []
       @paths      = {}
       @assigns    = {}
       @snapshots  = []
@@ -393,7 +393,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} name=\"#{self.name}\" raw_paths=#{self.raw_paths.inspect} raw_paths_without_snapshot=#{self.raw_paths_without_snapshot.inspect} item.identifier=\"#{self.item.identifier}\">"
+      "<#{self.class} name=\"#{self.name}\" raw_paths=#{self.raw_paths.inspect} paths_without_snapshot=#{self.paths_without_snapshot.inspect} item.identifier=\"#{self.item.identifier}\">"
     end
 
   private

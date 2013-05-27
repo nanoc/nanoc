@@ -69,12 +69,9 @@ module Nanoc
     end
 
     def write(path, params={})
-      # TODO make this cleaner (let item rep writer know about the output dir?)
-      raw_path = File.join(@compiler.site.config[:output_dir], path.to_s)
+      @compiler.write_rep(@item_rep, path)
       if params[:snapshot]
-        @compiler.write_and_snapshot(@item_rep, raw_path, snapshot)
-      else
-        @compiler.write_rep(@item_rep, raw_path)
+        @item_rep.snapshot(snapshot, :path => path)
       end
     end
 
