@@ -93,8 +93,9 @@ module Nanoc
           return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
 
           # Outdated if compiled file doesn't exist (yet)
-          return Nanoc::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
-          if obj.raw_paths_without_snapshot.any? { |p| !File.file?(p) }
+          # TODO do not hardcode output!!
+          if (obj.raw_path && !File.file?(obj.raw_path)) || obj.raw_paths_without_snapshot.any? { |p| !File.file?(File.join('output', p)) }
+            STDOUT.puts obj.inspect if $LOUD
             return Nanoc::OutdatednessReasons::NotWritten
           end
 

@@ -97,29 +97,16 @@ EOS
 #!/usr/bin/env ruby
 
 compile '/stylesheet.*' do
-  # don’t filter or layout
+  write '/style.css'
 end
 
 compile '/**/*' do
   if item.binary?
-    # don’t filter binary items
+    write item.identifier
   else
     filter :erb
     layout '/default.html'
-  end
-end
-
-route '/stylesheet.*' do
-  '/style.css'
-end
-
-route '/**/*' do
-  if item.binary?
-    # Write item with identifier /foo.ext to /foo.ext
-    item.identifier
-  else
-    # Write item with identifier /foo.ext to /foo/index.html
-    item.identifier.in_dir.with_ext('html')
+    write item.identifier.in_dir.with_ext('html')
   end
 end
 

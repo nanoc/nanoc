@@ -174,7 +174,6 @@ protected
   def create_item_rep(item, name, path)
     rep = Nanoc::ItemRep.new(item, name, :snapshot_store => @snapshot_store)
     rep.paths     = { :last => path }
-    rep.raw_paths = { :last => path }
     item.reps << rep
     rep
   end

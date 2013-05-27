@@ -52,14 +52,14 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     end
 
     # Delete old item
-    FileUtils.cd('foo') do
-      FileUtils.rm_rf('output/index.html')
-    end
+    FileUtils.rm_rf('foo/output/index.html')
 
     # Check
     with_site(:name => 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/index.html' }.reps[0]
+      # This fails because the new item rep hasn't been compiled yet, and
+      # therefore hasn't any raw paths without snapshot assigned :/
       assert_equal ::Nanoc::OutdatednessReasons::NotWritten,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
@@ -273,6 +273,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
   end
 
   def test_outdated_if_config_outdated
+    $LOUD = true
     # Compile once
     with_site(:name => 'foo') do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
@@ -292,6 +293,8 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       assert_equal ::Nanoc::OutdatednessReasons::ConfigurationModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
+  ensure
+    $LOUD = false
   end
 
   def test_not_outdated_if_irrelevant_rule_modified
@@ -322,10 +325,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       File.open('Rules', 'w') do |io|
         io.write("compile '/index.html' do\n")
         io.write("  filter :erb\n")
-        io.write("end\n")
-        io.write("\n")
-        io.write("route '/index.html' do\n")
-        io.write("  '/index.html'\n")
+        io.write("  write '/index.html'\n")
         io.write("end\n")
       end
     end
@@ -340,10 +340,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       File.open('Rules', 'w') do |io|
         io.write("compile '/index.html' do\n")
-        io.write("end\n")
-        io.write("\n")
-        io.write("route '/index.html' do\n")
-        io.write("  '/index.html'\n")
+        io.write("  write '/index.html'\n")
         io.write("end\n")
       end
     end
@@ -365,10 +362,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       File.open('Rules', 'w') do |io|
         io.write("compile '/index.html' do\n")
         io.write("  filter :erb, :stuff => @items\n")
-        io.write("end\n")
-        io.write("\n")
-        io.write("route '/index.html' do\n")
-        io.write("  '/index.html'\n")
+        io.write("  write '/index.html'\n")
         io.write("end\n")
       end
     end
@@ -398,10 +392,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
         io.write("  c = Class.new {}\n")
         io.write("  def c.inspect ; 'I am so classy' ; end\n")
         io.write("  filter :erb, :stuff => c, :more => 123\n")
-        io.write("end\n")
-        io.write("\n")
-        io.write("route '/index.html' do\n")
-        io.write("  '/index.html'\n")
+        io.write("  write '/index.html'\n")
         io.write("end\n")
       end
     end

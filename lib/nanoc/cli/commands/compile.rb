@@ -306,7 +306,7 @@ module Nanoc::CLI::Commands
 
     end
 
-    # Prints file actions (created, updated, deleted, identical, skipped)
+    # Prints file actions (created, updated, deleted, identical)
     class FileActionPrinter < Listener
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
@@ -319,28 +319,16 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-          @rep_times[rep.raw_path] = Time.now
+          @rep_times[rep] = Time.now
         end
         Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
-          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
+          @rep_times[rep] = Time.now - @rep_times[rep]
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           action = (is_created ? :create : (is_modified ? :update : :identical))
           level  = (is_created ? :high   : (is_modified ? :high   : :low))
-          duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
+          duration = Time.now - @rep_times[rep] if @rep_times[rep]
           Nanoc::CLI::Logger.instance.file(level, action, path, duration)
-        end
-      end
-
-      # @see Listener#stop
-      def stop
-        super
-        @reps.select { |r| !r.compiled? }.each do |rep|
-          rep.raw_paths.each do |snapshot_name, filename|
-            next if filename.nil?
-            duration = @rep_times[filename]
-            Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
-          end
         end
       end
 

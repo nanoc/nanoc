@@ -54,7 +54,6 @@ module Nanoc
       is_modified = is_created || !FileUtils.identical?(path, temp_path)
 
       # Write
-      # TODO delete temp_path
       FileUtils.cp(temp_path, path) if is_modified
 
       # Notify

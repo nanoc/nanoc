@@ -68,14 +68,18 @@ module Nanoc
       @item_rep.layout(layout, filter_name, filter_args)
     end
 
-    def write(path)
+    def write(path, params={})
       # TODO make this cleaner (let item rep writer know about the output dir?)
-      path = File.join(@compiler.site.config[:output_dir], path)
-      @compiler.write_rep(@item_rep, path)
+      raw_path = File.join(@compiler.site.config[:output_dir], path.to_s)
+      if params[:snapshot]
+        @compiler.write_and_snapshot(@item_rep, raw_path, snapshot)
+      else
+        @compiler.write_rep(@item_rep, raw_path)
+      end
     end
 
     def snapshot(snapshot)
-      @compiler.snapshot_and_write(@item_rep, snapshot)
+      @item_rep.snapshot(snapshot)
     end
 
     # Returns true because this item is already a proxy, and therefore doesn’t

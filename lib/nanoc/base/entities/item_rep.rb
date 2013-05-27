@@ -54,10 +54,7 @@ module Nanoc
       # @return [Hash<Symbol,String>] A hash containing the paths to the
       #   temporary _files_ that filters write binary content to. This is only
       #   used when the item representation is binary. The keys correspond
-      #   with the snapshot names, and the values with the filename. When
-      #   writing the item representation, the file corresponding with the
-      #   requested snapshot (usually `:last`) will be copied from
-      #   `filenames[snapshot]` to `raw_paths[snapshot]`.
+      #   with the snapshot names, and the values with the filename.
       #
       # @api private
       attr_reader :temporary_filenames
@@ -103,6 +100,7 @@ module Nanoc
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
+    # TODO simplify
     attr_accessor :snapshots
 
     # Creates a new item representation for the given item.
@@ -355,6 +353,7 @@ module Nanoc
     #
     # @return [void]
     def snapshot(snapshot_name)
+      # TODO make this work with binary ones as well (or explicitly prevent it)
       if !self.snapshot_binary?(:last)
         self.set_stored_content_at_snapshot(snapshot_name, self.stored_content_at_snapshot(:last))
       end
@@ -394,7 +393,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} name=\"#{self.name}\" raw_path=\"#{self.raw_path}\" item.identifier=\"#{self.item.identifier}\">"
+      "<#{self.class} name=\"#{self.name}\" raw_paths=#{self.raw_paths.inspect} raw_paths_without_snapshot=#{self.raw_paths_without_snapshot.inspect} item.identifier=\"#{self.item.identifier}\">"
     end
 
   private

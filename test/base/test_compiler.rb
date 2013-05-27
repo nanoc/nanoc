@@ -6,48 +6,6 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     Nanoc::SnapshotStore::InMemory.new
   end
 
-  def test_compile_rep_should_write_proper_snapshots
-    # Mock rep
-    item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo.md')
-    rep  = Nanoc::ItemRep.new(item, :blah, :snapshot_store => self.new_snapshot_store)
-
-    # Set snapshot filenames
-    rep.raw_paths = {
-      :last => 'last.txt'
-    }
-
-    # Create rule
-    rule_block = proc do
-      filter :erb
-      filter :erb
-      layout '/blah.rhtml'
-      filter :erb
-    end
-    rule = Nanoc::Rule.new(/blah/, :meh, rule_block)
-
-    # Create layout
-    layout = Nanoc::Layout.new('head <%= yield %> foot', {}, '/blah.rhtml')
-
-    # Create site
-    site = mock
-    site.stubs(:config).returns({})
-    site.stubs(:items).returns([])
-    site.stubs(:layouts).returns([ layout ])
-
-    # Create compiler
-    compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Pattern.from(%r{^/blah})] = [ :erb, {} ]
-    site.stubs(:compiler).returns(compiler)
-
-    # Compile
-    compiler.send(:compile_rep, rep)
-
-    # Test
-    assert File.file?('last.txt')
-    assert_equal 'head 1 2 3 foot', File.read('last.txt')
-  end
-
   def test_compile_with_no_reps
     with_site do |site|
       site.compile
@@ -117,33 +75,6 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     end
   end
 
-  def test_disallow_routes_not_starting_with_slash
-    # Create site
-    Nanoc::CLI.run %w( create_site bar)
-
-    FileUtils.cd('bar') do
-      # Create routes
-      File.open('Rules', 'w') do |io|
-        io.write "compile '/**/*' do\n"
-        io.write "  layout 'default'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  'index.html'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "layout '/**/*', :erb\n"
-      end
-
-      # Create site
-      site = Nanoc::Site.new('.')
-      error = assert_raises(RuntimeError) do
-        site.compile
-      end
-      assert_match(/^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message)
-    end
-  end
-
   def test_load_should_be_idempotent
     # Create site
     Nanoc::CLI.run %w( create_site bar)
@@ -152,7 +83,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       site = Nanoc::Site.new('.')
 
       compiler = Nanoc::Compiler.new(site)
-      def compiler.route_reps
+      def compiler.load_rules
         raise 'oh my gosh it is borken'
       end
 
@@ -183,15 +114,12 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site bar )
 
     FileUtils.cd('bar') do
-      # Create routes
+      # Create rules
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
         io.write "  snapshot :aaa\n"
         io.write "  snapshot :aaa\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
+        io.write "  write '/index.html'\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"
@@ -212,16 +140,13 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write('[<%= @item.compiled_content(:snapshot => :aaa) %>]')
       end
 
-      # Create routes
+      # Create rules
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
         io.write "  snapshot :aaa\n"
         io.write "  filter :erb\n"
         io.write "  filter :erb\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
+        io.write "  write '/index.html'\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"
@@ -246,15 +171,12 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write('stuff')
       end
 
-      # Create routes
+      # Create rules
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
         io.write "  snapshot :guts\n"
         io.write "  filter :erb\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  item.identifier\n"
+        io.write "  write item.identifier\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"
@@ -277,14 +199,11 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write('This is <%= @foo %>.')
       end
 
-      # Create routes
+      # Create rules
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
         io.write "  filter :erb, :locals => { :foo => 123 }\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
+        io.write "  write '/index.html'\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"
@@ -309,19 +228,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write('<h1>B</h1>')
       end
 
-      # Create routes
-      File.open('Rules', 'w') do |io|
-        io.write "compile '/**/*' do\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/a.html' do\n"
-        io.write "  '/index.html'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  nil\n"
-        io.write "end\n"
-      end
+      # Create rules
+      File.write('Rules', <<-EOS.gsub(/^ {8}/, ''))
+        compile '/**/*' do
+          if item.identifier == '/a.html'
+            write '/index.html'
+          end
+        end
+      EOS
 
       # Compile
       site = Nanoc::Site.new('.')
@@ -330,19 +244,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       # Check
       assert_equal '<h1>A</h1>', File.read('output/index.html')
 
-      # Create routes
-      File.open('Rules', 'w') do |io|
-        io.write "compile '/**/*' do\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/b.html' do\n"
-        io.write "  '/index.html'\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  nil\n"
-        io.write "end\n"
-      end
+      # Create rules
+      File.write('Rules', <<-EOS.gsub(/^ {8}/, ''))
+        compile '/**/*' do
+          if item.identifier == '/b.html'
+            write '/index.html'
+          end
+        end
+      EOS
 
       # Compile
       site = Nanoc::Site.new('.')
@@ -360,16 +269,13 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write('@rep.name = <%= @rep.name %> - @item_rep.name = <%= @item_rep.name %>')
       end
 
-      # Create routes
+      # Create rules
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
         io.write "  if @rep.name == :default && @item_rep.name == :default\n"
         io.write "    filter :erb\n"
+        io.write "    write '/index.html'\n"
         io.write "  end\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"
@@ -390,10 +296,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  item.identifier\n"
+        io.write "  write item.identifier\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"

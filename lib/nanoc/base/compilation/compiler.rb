@@ -113,7 +113,6 @@ module Nanoc
       self.load_rules
       preprocess
       build_reps
-      route_reps
 
       # Load auxiliary stores
       stores.each { |s| s.load }
@@ -228,40 +227,9 @@ module Nanoc
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
         rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
-        end
-      end
-    end
-
-    # Determines the paths of all item representations.
-    #
-    # @api private
-    def route_reps
-      reps.each do |rep|
-        # Find matching rules
-        rules = rules_collection.routing_rules_for(rep)
-        next if rules[:last].nil?
-
-        rules.each_pair do |snapshot, rule|
-          # Get basic path by applying matching rule
-          basic_path = rule.apply_to(rep, :compiler => self)
-          next if basic_path.nil?
-          unless basic_path.to_s.start_with?('/')
-            raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
-          end
-
-          # Get raw path by prepending output directory
-          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path.to_s
-
-          # Get normal path by stripping index filename
-          rep.paths[snapshot] = basic_path.to_s
-          @site.config[:index_filenames].each do |index_filename|
-            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
-              # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
-              break
-            end
-          end
+          rep = ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
+          rep.raw_paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
+          item.reps << rep
         end
       end
     end
@@ -275,6 +243,12 @@ module Nanoc
 
     def write_rep(rep, path)
       self.item_rep_writer.write(rep, path)
+    end
+
+    def write_and_snapshot(rep, raw_path, snapshot)
+      self.write_rep(rep, raw_path)
+
+      rep.snapshot(snapshot, :path => raw_path)
     end
 
     # @param [Nanoc::ItemRep] rep The item representation for which the
@@ -321,16 +295,6 @@ module Nanoc
         name = @site.config.fetch(:store_type, :in_memory)
         klass = Nanoc::SnapshotStore.named(name)
         klass.new
-      end
-    end
-
-    # TODO remove me - snapshots will never write anything eventually
-    def snapshot_and_write(rep, snapshot, is_final=true)
-      rep.snapshot(snapshot)
-
-      if is_final
-        path = rep.raw_path(:snapshot => snapshot)
-        self.write_rep(rep, path) if path
       end
     end
 
@@ -425,7 +389,7 @@ module Nanoc
       else
         # Recalculate content
         rules_collection.compilation_rule_for(rep).apply_to(rep, :compiler => self)
-        self.snapshot_and_write(rep, :last)
+        rep.snapshot(:last)
       end
 
       rep.compiled = true
