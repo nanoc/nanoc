@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'uri'
+
 module Nanoc::Extra::Checking::Checks
 
   # A check that verifies that all internal links point to a location that exists.
@@ -45,6 +47,9 @@ module Nanoc::Extra::Checking::Checks
       # Remove query string
       path = path.sub(/\?.*$/, '')
       return true if path.empty?
+
+      # Decode URL (e.g. '%20' -> ' ')
+      path = URI.unescape(path)
 
       # Make absolute
       if path[0, 1] == '/'
