@@ -6,6 +6,10 @@ Enhancements:
 
 * Deprecated `watch` and `autocompile` commands in favour of [`guard-nanoc`](https://github.com/nanoc/guard-nanoc)
 
+Fixes:
+
+* Fixed bug which could cause the `tmp/` dir to blow up in size
+
 ## 3.6.3 (2013-04-24)
 
 Fixes:
