@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.6.3 (???)
+## 3.6.4 (???)
 
 Enhancements:
 
@@ -9,6 +9,7 @@ Enhancements:
 Fixes:
 
 * Fixed bug which could cause the `tmp/` dir to blow up in size
+* Unescaped URLs when checking internal links
 
 ## 3.6.3 (2013-04-24)
 
