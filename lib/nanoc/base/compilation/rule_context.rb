@@ -72,6 +72,10 @@ module Nanoc
       rep.snapshot(snapshot_name)
     end
 
+    def write(path)
+      rep.write(path)
+    end
+
   end
 
 end

@@ -81,6 +81,11 @@ module Nanoc
       end
     end
 
+    # TODO document
+    def write(path)
+      @rule_memory << [ :write, path ]
+    end
+
     # @return [{}]
     def content
       {}

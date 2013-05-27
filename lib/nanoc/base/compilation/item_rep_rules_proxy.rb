@@ -68,6 +68,12 @@ module Nanoc
       @item_rep.layout(layout, filter_name, filter_args)
     end
 
+    def write(path)
+      # TODO make this cleaner (let item rep writer know about the output dir?)
+      path = File.join(@compiler.site.config[:output_dir], path)
+      @compiler.write_rep(@item_rep, path)
+    end
+
     def snapshot(snapshot)
       @compiler.snapshot_and_write(@item_rep, snapshot)
     end

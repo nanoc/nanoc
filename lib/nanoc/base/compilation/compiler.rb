@@ -240,7 +240,7 @@ module Nanoc
       reps.each do |rep|
         # Find matching rules
         rules = rules_collection.routing_rules_for(rep)
-        raise Nanoc::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
+        next if rules[:last].nil?
 
         rules.each_pair do |snapshot, rule|
           # Get basic path by applying matching rule
@@ -414,6 +414,9 @@ module Nanoc
 
       # Calculate rule memory if we haven’t yet done do
       self.rule_memory_calculator.new_rule_memory_for_rep(rep)
+
+      # Assign raw paths for non-snapshot rules
+      rep.raw_paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
 
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content

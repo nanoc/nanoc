@@ -42,7 +42,7 @@ module Nanoc
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
       @rules_collection.compilation_rule_for(rep).apply_to(recording_proxy, :compiler => @compiler)
-      recording_proxy.rule_memory << [ :write, rep.path ]
+      recording_proxy.rule_memory << [ :implicit_write, rep.path ]
       make_rule_memory_serializable(recording_proxy.rule_memory)
     end
     memoize :new_rule_memory_for_rep
@@ -82,6 +82,10 @@ module Nanoc
       new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
         [ e[1], e[2].fetch(:final) { true } ]
       end
+    end
+
+    def write_paths_for(rep)
+      new_rule_memory_for_rep(rep).select { |e| e[0] == :write }.map { |e| e[1] }
     end
 
     # @param [Nanoc::Item] obj The object for which to check the rule memory

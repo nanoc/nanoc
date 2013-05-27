@@ -20,6 +20,40 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     # TODO implement
   end
 
+  def test_write
+    with_site do
+      # Create rules
+      File.write('Rules', <<EOS)
+compile '/**/*' do
+  write '/raw.txt'
+  filter :erb
+  write '/filtered.txt'
+  filter :erb
+end
+
+route '/**/*' do
+  '/final.txt'
+end
+EOS
+
+      # Create items
+      assert Dir['content/*'].empty?
+      File.write('content/input.txt', 'A <%%= "X" %> B')
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check paths
+      assert File.file?('output/raw.txt')
+      assert File.file?('output/filtered.txt')
+      assert File.file?('output/final.txt')
+      assert_equal 'A <%%= "X" %> B', File.read('output/raw.txt')
+      assert_equal 'A <%= "X" %> B',  File.read('output/filtered.txt')
+      assert_equal 'A X B',           File.read('output/final.txt')
+    end
+  end
+
   def new_snapshot_store
     Nanoc::SnapshotStore::InMemory.new
   end
