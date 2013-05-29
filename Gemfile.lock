@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanoc (3.6.3)
+    nanoc (3.6.4)
       cri (~> 2.3)
 
 GEM
