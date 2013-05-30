@@ -95,7 +95,8 @@ module Nanoc
           return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
 
           # Outdated if compiled file doesn't exist (yet)
-          if (obj.raw_path && @item_rep_writer.exist?(obj.raw_path))
+          if (obj.raw_path && !@item_rep_writer.exist?(obj.raw_path))
+            # FIXME this is not tested!
             return Nanoc::OutdatednessReasons::NotWritten
           elsif obj.paths_without_snapshot.any? { |p| !@item_rep_writer.exist?(p) }
             return Nanoc::OutdatednessReasons::NotWritten
