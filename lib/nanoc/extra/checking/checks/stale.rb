@@ -7,9 +7,7 @@ module Nanoc::Extra::Checking::Checks
     identifier :stale
 
     def run
-      require 'set'
-
-      item_rep_paths = Set.new(@site.items.collect { |i| i.reps }.flatten.collect { |r| r.raw_path })
+      item_rep_paths = self.item_rep_paths
 
       self.output_filenames.each do |f|
         next if self.pruner.filename_excluded?(f)
@@ -21,7 +19,12 @@ module Nanoc::Extra::Checking::Checks
       end
     end
 
-    protected
+  protected
+
+    def item_rep_paths
+      reps = @site.items.flat_map { |i| i.reps }
+      reps.flat_map { |r| r.paths_without_snapshot }.map { |r| File.join(@site.config[:output_dir], r) }
+    end
 
     def pruner
       exclude_config = @site.config.fetch(:prune, {}).fetch(:exclude, [])
