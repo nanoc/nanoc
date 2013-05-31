@@ -70,11 +70,11 @@ module Nanoc
       File.exist?(self.full_path_for(path))
     end
 
-  protected
-
     def full_path_for(path)
       File.join(@config[:output_dir], path)
     end
+
+  protected
 
     TMP_TEXT_ITEMS_DIR = 'tmp/text_items'
 

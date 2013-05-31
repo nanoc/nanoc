@@ -27,12 +27,8 @@ module Nanoc::Extra::Checking::Checks
     end
 
     def pruner
-      @pruner ||= begin
-        exclude_config = @site.config.fetch(:prune, {}).fetch(:exclude, [])
-        identifier = self.site.compiler.item_rep_writer.class.identifier
-        pruner_class = Nanoc::Extra::Pruner.named(identifier)
-        pruner_class.new(@site, :exclude => exclude_config)
-      end
+      exclude_config = @site.config.fetch(:prune, {}).fetch(:exclude, [])
+      @pruner ||= Nanoc::Extra::Pruner.new(@site, :exclude => exclude_config)
     end
 
   end

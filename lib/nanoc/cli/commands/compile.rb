@@ -359,7 +359,9 @@ module Nanoc::CLI::Commands
 
     def prune  
       if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
+        identifier = self.site.compiler.item_rep_writer.class.identifier
+        pruner_class = Nanoc::Extra::Pruner.named(identifier)
+        pruner_class.new(self.site, :exclude => self.prune_config_exclude).run
       end
     end
 
