@@ -347,15 +347,18 @@ module Nanoc
     #
     # @param [Symbol] snapshot_name The name of the snapshot to create
     #
-    # @option params [Boolean] :final (true) True if this is the final time
-    #   the snapshot will be updated; false if it is a non-final moving
-    #   snapshot (i.e. `:last`)
+    # @option params [String] :path The name of path corresponding to the
+    #   snapshot (only available when the snapshot is written)
     #
     # @return [void]
-    def snapshot(snapshot_name)
-      # TODO make this work with binary ones as well (or explicitly prevent it)
+    def snapshot(snapshot_name, params={})
+      # TODO make this work with binary ones as well
       if !self.snapshot_binary?(:last)
         self.set_stored_content_at_snapshot(snapshot_name, self.stored_content_at_snapshot(:last))
+      end
+
+      if params.has_key?(:path)
+        @raw_paths[snapshot_name] = params[:path]
       end
     end
 

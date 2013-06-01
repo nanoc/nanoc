@@ -78,9 +78,15 @@ module Nanoc
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_for(rep)
-      new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
-        [ e[1], e[2].fetch(:final) { true } ]
-      end
+      mem = new_rule_memory_for_rep(rep)
+
+      names_1 = mem.select { |e| e[0] == :snapshot }.
+        map { |e| [ e[1], e[2].fetch(:final, true) ] }
+
+      names_2 = mem.select { |r| r[0] == :write && r[2].has_key?(:snapshot) }.
+        map { |r| [ r[2][:snapshot], true ] }
+
+      names_1 + names_2
     end
 
     def write_paths_for(rep)

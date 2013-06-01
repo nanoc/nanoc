@@ -2,6 +2,8 @@
 
 module Nanoc
 
+  # TODO rename (it does not just write)
+  # TODO merge pruner into this and make pruner part of base
   class ItemRepWriter
 
     extend Nanoc::PluginRegistry::PluginMethods

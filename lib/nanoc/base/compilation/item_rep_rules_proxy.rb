@@ -70,13 +70,14 @@ module Nanoc
 
     def write(path, params={})
       @compiler.write_rep(@item_rep, path)
-      if params[:snapshot]
-        @item_rep.snapshot(snapshot, :path => path)
+
+      if params.has_key?(:snapshot)
+        @item_rep.snapshot(params[:snapshot], path: path)
       end
     end
 
-    def snapshot(snapshot)
-      @item_rep.snapshot(snapshot)
+    def snapshot(snapshot, params={})
+      @item_rep.snapshot(snapshot, params)
     end
 
     # Returns true because this item is already a proxy, and therefore doesn’t

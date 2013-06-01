@@ -43,6 +43,37 @@ EOS
     end
   end
 
+  def test_write_and_snapshot
+    with_site do
+      # Create rules
+      File.write('Rules', <<EOS)
+compile '/**/*' do
+  write '/foo.txt', :snapshot => :foo
+  filter :erb
+  write '/bar.txt'
+end
+EOS
+
+      # Create items
+      assert Dir['content/*'].empty?
+      File.write('content/input.txt', 'stuff <%= "goes" %> here')
+
+      # Compile
+      site = Nanoc::Site.new('.')
+      site.compile
+
+      # Check paths
+      assert File.file?('output/foo.txt')
+      assert File.file?('output/bar.txt')
+      assert_equal 'stuff <%= "goes" %> here', File.read('output/foo.txt')
+      assert_equal 'stuff goes here',          File.read('output/bar.txt')
+
+      # Check snapshot
+      assert_equal 'stuff <%= "goes" %> here', site.items[0].compiled_content(snapshot: :foo)
+      assert_equal 'stuff goes here',          site.items[0].compiled_content(snapshot: :last)
+    end
+  end
+
   def new_snapshot_store
     Nanoc::SnapshotStore::InMemory.new
   end

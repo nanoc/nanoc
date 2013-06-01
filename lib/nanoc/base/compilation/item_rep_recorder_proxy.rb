@@ -68,21 +68,18 @@ module Nanoc
     #
     # @see Nanoc::ItemRep#snapshot
     def snapshot(snapshot_name, params={})
+      self.ensure_snapshot_unique(snapshot_name)
       @rule_memory << [ :snapshot, snapshot_name, params ]
-
-      # Count
-      existing = Set.new
-      names = @rule_memory.select { |r| r[0] == :snapshot }.map { |r| r[2] }
-      names.each do |n|
-        if existing.include?(n)
-          raise Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, snapshot_name)
-        end
-        existing << n
-      end
     end
 
     # TODO document
     def write(path, params={})
+      if params.has_key?(:snapshot)
+        # TODO test
+        # TODO move the check into a dedicated rule memory
+        self.ensure_snapshot_unique(params[:snapshot])
+      end
+
       @rule_memory << [ :write, path, params ]
     end
 
@@ -100,6 +97,19 @@ module Nanoc
     # @see Nanoc::ItemRepRulesProxy#is_proxy?
     def is_proxy?
       true
+    end
+
+    # TODO document
+    # TODO move this into @rule_memory
+    # TODO test write snapshot names
+    def ensure_snapshot_unique(name)
+      names_1 = Set.new(@rule_memory.select { |r| r[0] == :snapshot }.map { |r| r[1] })
+      names_2 = Set.new(@rule_memory.select { |r| r[0] == :write && r[2].has_key?(:snapshot) }.map { |r| r[2][:snapshot] })
+      names = names_1 + names_2
+
+      if names.include?(name)
+        raise Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, name)
+      end
     end
 
   end

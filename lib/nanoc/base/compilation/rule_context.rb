@@ -72,7 +72,7 @@ module Nanoc
     end
 
     def write(path, params={})
-      rep.write(path, params={})
+      rep.write(path, params)
     end
 
   end
