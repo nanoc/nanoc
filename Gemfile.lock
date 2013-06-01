@@ -18,9 +18,16 @@ GEM
       execjs
     coffee-script-source (1.6.2)
     colored (1.2)
+    columnize (0.3.6)
     commonjs (0.2.6)
     cri (2.3.0)
       colored (>= 1.2)
+    debugger (1.6.0)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.1)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.2)
     erubis (2.7.0)
     excon (0.22.1)
     execjs (1.4.0)
@@ -126,6 +133,7 @@ DEPENDENCIES
   builder
   coderay
   coffee-script
+  debugger
   erubis
   fog
   haml
