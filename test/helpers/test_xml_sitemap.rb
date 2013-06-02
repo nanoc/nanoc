@@ -22,25 +22,25 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = []
 
       # Create item 1
-      @items << Nanoc::Item.new('some content 1', {}, '/item-one/')
-      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
-      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+      @items << Nanoc::Item.new('some content 1', {}, '/item-one.html')
+      self.create_item_rep(@items.last, :one_a, [ '/item-one/a/' ])
+      self.create_item_rep(@items.last, :one_b, [ '/item-one/b/' ])
 
       # Create item 2
-      @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two/')
+      @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two.html')
 
       # Create item 3
       attrs = { :changefreq => 'daily', :priority => 0.5 }
-      @items << Nanoc::Item.new('some content 3', attrs, '/item-three/')
-      self.create_item_rep(@items.last, :three_a, '/item-three/a/')
-      self.create_item_rep(@items.last, :three_b, '/item-three/b/')
+      @items << Nanoc::Item.new('some content 3', attrs, '/item-three.html')
+      self.create_item_rep(@items.last, :three_a, [ '/item-three/a/' ])
+      self.create_item_rep(@items.last, :three_b, [ '/item-three/b/' ])
 
       # Create item 4
-      @items << Nanoc::Item.new('some content 4', {}, '/item-four/')
-      self.create_item_rep(@items.last, :four_a, nil)
+      @items << Nanoc::Item.new('some content 4', {}, '/item-four.html')
+      self.create_item_rep(@items.last, :four_a, [])
 
       # Create sitemap item
-      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap.erb')
 
       # Create site
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
@@ -135,18 +135,15 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     if_have 'builder', 'nokogiri' do
       # Create items
       @items = []
-      @items << Nanoc::Item.new('some content 1', {}, '/george/')
-      self.create_item_rep(@items.last, :a_alice,   '/george/alice/')
-      self.create_item_rep(@items.last, :b_zoey,    '/george/zoey/')
-      @items << Nanoc::Item.new('some content 1', {}, '/walton/')
-      self.create_item_rep(@items.last, :a_eve,     '/walton/eve/')
-      self.create_item_rep(@items.last, :b_bob,     '/walton/bob/')
-      @items << Nanoc::Item.new('some content 1', {}, '/lucas/')
-      self.create_item_rep(@items.last, :a_trudy,   '/lucas/trudy/')
-      self.create_item_rep(@items.last, :b_mallory, '/lucas/mallory/')
+      @items << Nanoc::Item.new('some content 1', {}, '/george.html')
+      self.create_item_rep(@items.last, :default, [ '/george/alice.html', '/george/zoey.html'] )
+      @items << Nanoc::Item.new('some content 1', {}, '/walton.html')
+      self.create_item_rep(@items.last, :default, [ '/walton/eve.html', '/walton/bob.html' ])
+      @items << Nanoc::Item.new('some content 1', {}, '/lucas.html')
+      self.create_item_rep(@items.last, :default, [ '/lucas/trudy.html', '/lucas/mallory.html' ])
 
       # Create sitemap item
-      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap.erb')
 
       # Create site
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
@@ -160,21 +157,20 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       assert_equal 1, urlsets.size
       urls = urlsets.css('> url')
       assert_equal 6, urls.size
-      assert_equal 'http://example.com/george/alice/',  urls[0].css('> loc').inner_text
-      assert_equal 'http://example.com/george/zoey/',   urls[1].css('> loc').inner_text
-      assert_equal 'http://example.com/lucas/trudy/',   urls[2].css('> loc').inner_text
-      assert_equal 'http://example.com/lucas/mallory/', urls[3].css('> loc').inner_text
-      assert_equal 'http://example.com/walton/eve/',    urls[4].css('> loc').inner_text
-      assert_equal 'http://example.com/walton/bob/',    urls[5].css('> loc').inner_text
+      assert_equal 'http://example.com/george/alice.html',  urls[0].css('> loc').inner_text
+      assert_equal 'http://example.com/george/zoey.html',   urls[1].css('> loc').inner_text
+      assert_equal 'http://example.com/lucas/mallory.html', urls[2].css('> loc').inner_text
+      assert_equal 'http://example.com/lucas/trudy.html',   urls[3].css('> loc').inner_text
+      assert_equal 'http://example.com/walton/bob.html',    urls[4].css('> loc').inner_text
+      assert_equal 'http://example.com/walton/eve.html',    urls[5].css('> loc').inner_text
     end
   end
 
 protected
 
-  def create_item_rep(item, name, path)
+  def create_item_rep(item, name, paths)
     rep = Nanoc::ItemRep.new(item, name, :snapshot_store => @snapshot_store)
-    rep.paths     = { :last => path }
-    rep.raw_paths = { :last => path }
+    rep.paths_without_snapshot = paths
     item.reps << rep
     rep
   end

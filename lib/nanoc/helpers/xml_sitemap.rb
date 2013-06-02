@@ -60,14 +60,15 @@ module Nanoc::Helpers
       xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
         items.sort_by { |i| i.identifier }.each do |item|
-          reps = item.reps.reject { |r| r.raw_path.nil? }
+          reps = item.reps
           reps.reject! { |r| !select_proc[r] } if select_proc
-          reps.sort_by { |r| r.name.to_s }.each do |rep|
+          paths = reps.flat_map { |r| r.paths_without_snapshot }.sort
+          paths.each do |path|
             xml.url do
-              xml.loc         @site.config[:base_url] + rep.path
+              xml.loc         @site.config[:base_url] + path
               # TODO add mtime
               xml.changefreq  item[:changefreq] unless item[:changefreq].nil?
-              xml.priority    item[:priority] unless item[:priority].nil?
+              xml.priority    item[:priority]   unless item[:priority].nil?
             end
           end
         end

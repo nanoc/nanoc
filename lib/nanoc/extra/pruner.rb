@@ -6,6 +6,8 @@ module Nanoc::Extra
   # that are not managed by nanoc.
   class Pruner
 
+    extend Nanoc::PluginRegistry::PluginMethods
+
     # @return [Nanoc::Site] The site this pruner belongs to
     attr_reader :site
 
@@ -24,14 +26,24 @@ module Nanoc::Extra
     #
     # @return [void]
     def run
+      raise NotImplementedError
+    end
+
+  end
+
+  class FilesystemPruner < Pruner
+
+    identifier :filesystem
+
+    # @see Nanoc::Pruner#run
+    def run
       require 'find'
 
       # Get compiled files
-      compiled_files = self.site.items.map do |item|
-        item.reps.map do |rep|
-          rep.raw_path
-        end
-      end.flatten.compact.select { |f| File.file?(f) }
+      writer = @site.compiler.item_rep_writer
+      compiled_files = self.site.items.flat_map do |item|
+        item.reps.flat_map { |r| r.paths_without_snapshot }
+      end.select { |f| writer.exist?(f) }.map { |f| writer.full_path_for(f) }
 
       # Get present files and dirs
       present_files = []

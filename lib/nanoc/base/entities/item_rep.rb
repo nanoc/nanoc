@@ -41,6 +41,9 @@ module Nanoc
       # @api private
       attr_accessor :raw_paths
 
+      # @return [Array<String>] A list of paths in direct #write calls
+      attr_accessor :paths_without_snapshot
+
       # @return [Hash<Symbol,String>] A hash containing the paths for all
       #   snapshots. The keys correspond with the snapshot names, and the
       #   values with the path.
@@ -51,10 +54,7 @@ module Nanoc
       # @return [Hash<Symbol,String>] A hash containing the paths to the
       #   temporary _files_ that filters write binary content to. This is only
       #   used when the item representation is binary. The keys correspond
-      #   with the snapshot names, and the values with the filename. When
-      #   writing the item representation, the file corresponding with the
-      #   requested snapshot (usually `:last`) will be copied from
-      #   `filenames[snapshot]` to `raw_paths[snapshot]`.
+      #   with the snapshot names, and the values with the filename.
       #
       # @api private
       attr_reader :temporary_filenames
@@ -65,23 +65,6 @@ module Nanoc
       #
       # @api private
       attr_accessor :content
-
-      # Writes the item rep's compiled content to the rep's output file.
-      #
-      # This method will send two notifications: one before writing the item
-      # representation, and one after. These notifications can be used for
-      # generating diffs, for example.
-      #
-      # @api private
-      #
-      # @param [Symbol, nil] snapshot The name of the snapshot to write.
-      #
-      # @return [void]
-      def write(snapshot=:last)
-        # FIXME make writer configurable
-        writer_class = Nanoc::ItemRepWriter.named(:filesystem)
-        writer_class.new.write(self, snapshot)
-      end
 
       # Resets the compilation progress for this item representation. This is
       # necessary when an unmet dependency is detected during compilation.
@@ -117,6 +100,7 @@ module Nanoc
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
+    # TODO simplify
     attr_accessor :snapshots
 
     # Creates a new item representation for the given item.
@@ -139,6 +123,7 @@ module Nanoc
 
       # Set default attributes
       @raw_paths  = {}
+      @paths_without_snapshot = []
       @paths      = {}
       @assigns    = {}
       @snapshots  = []
@@ -168,8 +153,8 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_ended,   self.item)
 
       # Get name of last pre-layout snapshot
-      snapshot = params.fetch(:snapshot) { self.has_snapshot?(:pre) ? :pre : :last }
-      is_moving = [ :pre, :post, :last ].include?(snapshot)
+      snapshot = params.fetch(:snapshot, :last)
+      is_moving = :last == snapshot
 
       # Make sure we're not binary
       if self.snapshot_binary?(snapshot)
@@ -303,11 +288,6 @@ module Nanoc
           raise RuntimeError,
             "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
         end
-
-        # Create snapshot
-        unless self.snapshot_binary?(:last)
-          snapshot(self.has_snapshot?(:post) ? :post : :pre, :final => false)
-        end
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended, self, filter_name)
@@ -336,11 +316,6 @@ module Nanoc
       # Check whether item can be laid out
       raise Nanoc::Errors::CannotLayoutBinaryItem.new(self) if self.snapshot_binary?(:last)
 
-      # Create "pre" snapshot
-      if !self.has_snapshot?(:post)
-        snapshot(:pre, :final => true)
-      end
-
       # Create filter
       klass = filter_named(filter_name)
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
@@ -361,9 +336,6 @@ module Nanoc
         end
         content = filter.setup_and_run(layout.content.string, filter_args)
         self.set_stored_content_at_snapshot(:last, content)
-
-        # Create "post" snapshot
-        snapshot(:post, :final => false)
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended,  self, filter_name)
@@ -375,17 +347,19 @@ module Nanoc
     #
     # @param [Symbol] snapshot_name The name of the snapshot to create
     #
-    # @option params [Boolean] :final (true) True if this is the final time
-    #   the snapshot will be updated; false if it is a non-final moving
-    #   snapshot (such as `:pre`, `:post` or `:last`)
+    # @option params [String] :path The name of path corresponding to the
+    #   snapshot (only available when the snapshot is written)
     #
     # @return [void]
     def snapshot(snapshot_name, params={})
-      is_final = params.fetch(:final) { true }
+      # TODO make this work with binary ones as well
       if !self.snapshot_binary?(:last)
         self.set_stored_content_at_snapshot(snapshot_name, self.stored_content_at_snapshot(:last))
       end
-      self.write(snapshot_name) if is_final
+
+      if params.has_key?(:path)
+        @raw_paths[snapshot_name] = params[:path]
+      end
     end
 
     # Returns a recording proxy that is used for determining whether the
@@ -422,7 +396,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} name=\"#{self.name}\" raw_path=\"#{self.raw_path}\" item.identifier=\"#{self.item.identifier}\">"
+      "<#{self.class} name=\"#{self.name}\" raw_paths=#{self.raw_paths.inspect} paths_without_snapshot=#{self.paths_without_snapshot.inspect} item.identifier=\"#{self.item.identifier}\">"
     end
 
   private

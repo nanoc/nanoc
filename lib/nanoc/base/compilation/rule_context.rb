@@ -3,8 +3,7 @@
 module Nanoc
 
   # Provides a context in which compilation and routing rules can be executed.
-  # It provides access to the item representation that is being compiled or
-  # routed.
+  # It provides access to the item representation that is being compiled.
   #
   # @api private
   class RuleContext < Context
@@ -70,6 +69,10 @@ module Nanoc
     # @return [void]
     def snapshot(snapshot_name)
       rep.snapshot(snapshot_name)
+    end
+
+    def write(path, params={})
+      rep.write(path, params)
     end
 
   end

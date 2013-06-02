@@ -19,7 +19,7 @@ module Nanoc
 
     # @param [#reference] obj The object to calculate the rule memory for
     #
-    # @return [Array] The caluclated rule memory for the given object
+    # @return [Array] The calculated rule memory for the given object
     def [](obj)
       result = case obj.type
         when :item_rep
@@ -42,7 +42,6 @@ module Nanoc
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
       @rules_collection.compilation_rule_for(rep).apply_to(recording_proxy, :compiler => @compiler)
-      recording_proxy.rule_memory << [ :write, rep.path ]
       make_rule_memory_serializable(recording_proxy.rule_memory)
     end
     memoize :new_rule_memory_for_rep
@@ -79,9 +78,19 @@ module Nanoc
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_for(rep)
-      new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
-        [ e[1], e[2].fetch(:final) { true } ]
-      end
+      mem = new_rule_memory_for_rep(rep)
+
+      names_1 = mem.select { |e| e[0] == :snapshot }.
+        map { |e| [ e[1], e[2].fetch(:final, true) ] }
+
+      names_2 = mem.select { |r| r[0] == :write && r[2].has_key?(:snapshot) }.
+        map { |r| [ r[2][:snapshot], true ] }
+
+      names_1 + names_2
+    end
+
+    def write_paths_for(rep)
+      new_rule_memory_for_rep(rep).select { |e| e[0] == :write }.map { |e| e[1].to_s }
     end
 
     # @param [Nanoc::Item] obj The object for which to check the rule memory

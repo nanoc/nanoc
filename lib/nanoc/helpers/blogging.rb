@@ -252,7 +252,7 @@ module Nanoc::Helpers
     #
     # To construct a feed, create a new item and make sure that it is
     # filtered with `:erb` or `:erubis`; it should not be laid out. Ensure
-    # that it is routed to the proper path, e.g. `/blog.xml`. It may also be
+    # that it is written to the proper path, e.g. `/blog.xml`. It may also be
     # useful to set the `is_hidden` attribute to true, so that helpers such
     # as the sitemap helper will ignore the item. The content of the feed
     # item should be `<%= atom_feed %>`.
@@ -261,10 +261,7 @@ module Nanoc::Helpers
     #
     #   compile '/blog/feed/' do
     #     filter :erb
-    #   end
-    #
-    #   route '/blog/feed/' do
-    #     '/blog.xml'
+    #     write '/blog.xml'
     #   end
     #
     # @example Limiting the number of items in a feed

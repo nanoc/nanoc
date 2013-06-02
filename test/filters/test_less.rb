@@ -66,16 +66,13 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "compile '/**/*' do\n"
+          io.write "compile '/a.less' do\n"
           io.write "  filter :less\n"
+          io.write "  write item.identifier.with_ext('css')\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/a.less' do\n"
-          io.write "  item.identifier.with_ext('css')\n"
-          io.write "end\n"
-          io.write "\n"
-          io.write "route '/b.less' do\n"
-          io.write "  nil\n"
+          io.write "compile '/b.less' do\n"
+          io.write "  filter :less\n"
           io.write "end\n"
         end
 

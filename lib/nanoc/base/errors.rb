@@ -98,18 +98,6 @@ module Nanoc
 
     end
 
-    # Error that is raised when no routing rule that can be applied to the
-    # current item can be found.
-    class NoMatchingRoutingRuleFound < Generic
-
-      # @param [Nanoc::ItemRep] rep The item repiresentation for which no
-      #   routing rule could be found
-      def initialize(rep)
-        super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
-      end
-
-    end
-
     # Error that is raised when an rep cannot be compiled because it depends
     # on other representations.
     class UnmetDependency < Generic

@@ -75,15 +75,15 @@ module Nanoc::CLI::Commands
         require 'tempfile'
         self.setup_diffs
         old_contents = {}
-        Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
-          path = rep.raw_path(:snapshot => snapshot)
+        Nanoc::NotificationCenter.on(:will_write_rep) do |rep, path|
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-          if !rep.binary?
+          # TODO test this
+          if !rep.snapshot_binary?(:last)
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
-              generate_diff_for(rep, old_contents[rep], new_contents)
+              generate_diff_for(path, old_contents[rep], new_contents)
             end
             old_contents.delete(rep)
           end
@@ -108,14 +108,14 @@ module Nanoc::CLI::Commands
         @diff_threads.each { |t| t.join }
       end
 
-      def generate_diff_for(rep, old_content, new_content)
+      def generate_diff_for(path, old_content, new_content)
         return if old_content == new_content
 
         @diff_threads << Thread.new do
           # Generate diff
           diff = diff_strings(old_content, new_content)
-          diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
-          diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
+          diff.sub!(/^--- .*/,    '--- ' + path)
+          diff.sub!(/^\+\+\+ .*/, '+++ ' + path)
 
           # Write diff
           @diff_lock.synchronize do
@@ -307,7 +307,7 @@ module Nanoc::CLI::Commands
 
     end
 
-    # Prints file actions (created, updated, deleted, identical, skipped)
+    # Prints file actions (created, updated, deleted, identical)
     class FileActionPrinter < Listener
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
@@ -320,28 +320,16 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-          @rep_times[rep.raw_path] = Time.now
+          @rep_times[rep] = Time.now
         end
         Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
-          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
+          @rep_times[rep] = Time.now - @rep_times[rep]
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           action = (is_created ? :create : (is_modified ? :update : :identical))
           level  = (is_created ? :high   : (is_modified ? :high   : :low))
-          duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
+          duration = Time.now - @rep_times[rep] if @rep_times[rep]
           Nanoc::CLI::Logger.instance.file(level, action, path, duration)
-        end
-      end
-
-      # @see Listener#stop
-      def stop
-        super
-        @reps.select { |r| !r.compiled? }.each do |rep|
-          rep.raw_paths.each do |snapshot_name, filename|
-            next if filename.nil?
-            duration = @rep_times[filename]
-            Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
-          end
         end
       end
 
@@ -372,7 +360,9 @@ module Nanoc::CLI::Commands
 
     def prune  
       if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
+        identifier = self.site.compiler.item_rep_writer.class.identifier
+        pruner_class = Nanoc::Extra::Pruner.named(identifier)
+        pruner_class.new(self.site, :exclude => self.prune_config_exclude).run
       end
     end
 

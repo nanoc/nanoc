@@ -39,7 +39,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep.expects(:compiled?).returns(true)
 
     # Check
-    assert_equal 'pre content', rep.compiled_content
+    assert_equal 'last content', rep.compiled_content
   end
 
   def test_compiled_content_with_custom_snapshot
@@ -161,79 +161,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     assert_equal(%[blah],                        snapshot_store.query(item.identifier, :foo, :qux))
   end
 
-  def test_snapshot_should_be_written
-    # Mock item
-    item = Nanoc::Item.new(
-      "blah blah", {}, '/',
-    )
-
-    # Create rep
-    snapshot_store = self.new_snapshot_store
-    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
-    item_rep.raw_paths = { :moo => 'foo-moo.txt' }
-
-    # Test non-final
-    refute File.file?(item_rep.raw_path(:snapshot => :moo))
-    item_rep.snapshot(:moo, :final => false)
-    refute File.file?(item_rep.raw_path(:snapshot => :moo))
-
-    # Test final 1
-    item_rep.snapshot(:moo, :final => true)
-    assert File.file?(item_rep.raw_path(:snapshot => :moo))
-    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
-    FileUtils.rm_f(item_rep.raw_path(:snapshot => :moo))
-
-    # Test final 2
-    item_rep.snapshot(:moo)
-    assert File.file?(item_rep.raw_path(:snapshot => :moo))
-    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
-  end
-
-  def test_write_should_not_touch_identical_textual_files
-    # Mock item
-    item = Nanoc::Item.new(
-      "blah blah", {}, '/',
-    )
-
-    # Create rep
-    snapshot_store = self.new_snapshot_store
-    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    def item_rep.generate_diff ; end
-    snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
-    item_rep.raw_paths = { :last => 'foo/bar/baz/quux.txt' }
-
-    # Write once
-    item_rep.write
-    a_long_time_ago = Time.now-1_000_000
-    File.utime(a_long_time_ago, a_long_time_ago, item_rep.raw_path)
-
-    # Write again
-    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
-    item_rep.write
-    assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
-  end
-
-  def test_write
-    # Mock item
-    item = Nanoc::Item.new(
-      "blah blah", {}, '/',
-    )
-
-    # Create rep
-    snapshot_store = self.new_snapshot_store
-    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => snapshot_store)
-    snapshot_store.set('/', :foo, :last, 'Lorem ipsum, etc.')
-    item_rep.raw_paths = { :last =>  'foo/bar/baz/quux.txt' }
-
-    # Write
-    item_rep.write
-
-    # Check
-    assert(File.file?('foo/bar/baz/quux.txt'))
-    assert_equal('Lorem ipsum, etc.', File.read('foo/bar/baz/quux.txt'))
-  end
-
   def test_filter_text_to_binary
     # Mock item
     item = Nanoc::Item.new(
@@ -299,25 +226,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     assert rep.snapshot_binary?(:last)
     assert_raises(Nanoc::Errors::CannotUseTextualFilter) { rep.filter(:text_filter) }
-  end
-
-  def test_writing_binary_reps_uses_content_in_last_filename
-    require 'tempfile'
-
-    in_filename  = 'nanoc-in'
-    out_filename = 'nanoc-out'
-    file_content = 'Some content for this test'
-    File.open(in_filename, 'w') { |io| io.write(file_content) }
-
-    item = create_binary_item
-    rep = create_rep_for(item, :foo)
-    rep.temporary_filenames[:last] = in_filename
-    rep.raw_paths[:last]           = out_filename
-
-    rep.write
-
-    assert(File.exist?(out_filename))
-    assert_equal(file_content, File.read(out_filename))
   end
 
   def test_converted_binary_rep_can_be_layed_out
@@ -490,58 +398,6 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     assert_raises(Nanoc::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
     end
-  end
-
-  def test_write_should_calculate_is_modified_correctly_for_binary_items_new
-    # Mock item
-    FileUtils.mkdir_p('content')
-    File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
-    item = Nanoc::Item.new(Nanoc::BinaryContent.new(File.absolute_path('content/meow.dat')), {}, '/')
-
-    # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
-    FileUtils.mkdir_p('tmp')
-    File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
-    item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
-    item_rep.raw_paths = { :last => 'output/woof.dat' }
-
-    # Write
-    notified = false
-    Nanoc::NotificationCenter.on(:rep_written, self) do |rep, raw_path, is_created, is_modified|
-      notified = true
-      assert is_created
-      assert is_modified
-    end
-    item_rep.write
-    assert notified
-    Nanoc::NotificationCenter.remove(:rep_written, self)
-  end
-
-  def test_write_should_calculate_is_modified_correctly_for_binary_items_existing
-    # Mock item
-    FileUtils.mkdir_p('content')
-    File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
-    item = Nanoc::Item.new(Nanoc::BinaryContent.new(File.absolute_path('content/meow.dat')), {}, '/')
-
-    # Create rep
-    item_rep = Nanoc::ItemRep.new(item, :foo, :snapshot_store => self.new_snapshot_store)
-    FileUtils.mkdir_p('tmp')
-    File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
-    FileUtils.mkdir_p('output')
-    File.open('output/woof.dat', 'w') { |io| io.write('fdsa but different') }
-    item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
-    item_rep.raw_paths = { :last => 'output/woof.dat' }
-
-    # Write
-    notified = false
-    Nanoc::NotificationCenter.on(:rep_written, self) do |rep, raw_path, is_created, is_modified|
-      notified = true
-      refute is_created
-      assert is_modified
-    end
-    item_rep.write
-    assert notified
-    Nanoc::NotificationCenter.remove(:rep_written, self)
   end
 
 private

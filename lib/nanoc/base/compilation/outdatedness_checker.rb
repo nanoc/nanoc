@@ -24,6 +24,8 @@ module Nanoc
         'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
       @dependency_tracker = params[:dependency_tracker] or raise ArgumentError,
         'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
+      @item_rep_writer = params[:item_rep_writer] or raise ArgumentError,
+        'Nanoc::OutdatednessChecker#initialize needs a :item_rep_writer parameter'
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}
@@ -93,7 +95,12 @@ module Nanoc
           return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
 
           # Outdated if compiled file doesn't exist (yet)
-          return Nanoc::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
+          if (obj.raw_path && !@item_rep_writer.exist?(obj.raw_path))
+            # FIXME this is not tested!
+            return Nanoc::OutdatednessReasons::NotWritten
+          elsif obj.paths_without_snapshot.any? { |p| !@item_rep_writer.exist?(p) }
+            return Nanoc::OutdatednessReasons::NotWritten
+          end
 
           # Outdated if code snippets outdated
           return Nanoc::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|

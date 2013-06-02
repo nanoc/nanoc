@@ -13,10 +13,6 @@ module Nanoc
     #   will be used to compile items.
     attr_reader :item_compilation_rules
 
-    # @return [Array<Nanoc::Rule>] The list of routing rules that will be
-    #   used to give all items a path.
-    attr_reader :item_routing_rules
-
     # The hash containing layout-to-filter mapping rules. This hash is
     # ordered: iterating over the hash will happen in insertion order.
     #
@@ -29,7 +25,6 @@ module Nanoc
 
     def initialize
       @item_compilation_rules  = []
-      @item_routing_rules      = []
       @layout_filter_mapping   = {}
     end
 
@@ -40,15 +35,6 @@ module Nanoc
     # @return [void]
     def add_item_compilation_rule(rule)
       @item_compilation_rules << rule
-    end
-
-    # Add the given rule to the list of item routing rules.
-    #
-    # @param [Nanoc::Rule] rule The item routing rule to add
-    #
-    # @return [void]
-    def add_item_routing_rule(rule)
-      @item_routing_rules << rule
     end
 
     # @param [Nanoc::Item] item The item for which the compilation rules
@@ -70,38 +56,6 @@ module Nanoc
       @item_compilation_rules.find do |rule|
         rule.applicable_to?(rep.item) && rule.rep_name == rep.name
       end
-    end
-
-    # Finds the first matching routing rule for the given item representation.
-    #
-    # @param [Nanoc::ItemRep] rep The item rep for which to fetch the rule
-    #
-    # @return [Nanoc::Rule, nil] The routing rule for the given item rep, or
-    #   nil if no rules have been found
-    def routing_rule_for(rep)
-      @item_routing_rules.find do |rule|
-        rule.applicable_to?(rep.item) && rule.rep_name == rep.name
-      end
-    end
-
-    # Returns the list of routing rules that can be applied to the given item
-    # representation. For each snapshot, the first matching rule will be
-    # returned. The result is a hash containing the corresponding rule for
-    # each snapshot.
-    #
-    # @param [Nanoc::ItemRep] rep The item rep for which to fetch the rules
-    #
-    # @return [Hash<Symbol, Nanoc::Rule>] The routing rules for the given rep
-    def routing_rules_for(rep)
-      rules = {}
-      @item_routing_rules.each do |rule|
-        next if !rule.applicable_to?(rep.item)
-        next if rule.rep_name != rep.name
-        next if rules.has_key?(rule.snapshot_name)
-
-        rules[rule.snapshot_name] = rule
-      end
-      rules
     end
 
     # Finds the filter name and arguments to use for the given layout.

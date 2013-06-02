@@ -2,11 +2,21 @@
 
 module Nanoc
 
+  # TODO rename (it does not just write)
+  # TODO merge pruner into this and make pruner part of base
   class ItemRepWriter
 
     extend Nanoc::PluginRegistry::PluginMethods
 
-    def write(rep, snapshot=:last)
+    def initialize(config)
+      @config = config
+    end
+
+    def write(rep, path)
+      raise NotImplementedError
+    end
+
+    def exist?(path)
       raise NotImplementedError
     end
 
@@ -27,10 +37,8 @@ module Nanoc
     # @param [Symbol, nil] snapshot The name of the snapshot to write.
     #
     # @return [void]
-    def write(rep, snapshot=:last)
-      # Get raw path
-      raw_path = rep.raw_path(:snapshot => snapshot)
-      return if raw_path.nil?
+    def write(rep, path)
+      raw_path = self.full_path_for(path)
 
       # Create parent directory
       FileUtils.mkdir_p(File.dirname(raw_path))
@@ -39,10 +47,10 @@ module Nanoc
       is_created = !File.file?(raw_path)
 
       # Notify
-      Nanoc::NotificationCenter.post(:will_write_rep, rep, snapshot)
+      Nanoc::NotificationCenter.post(:will_write_rep, rep, raw_path)
 
-      if rep.snapshot_binary?(snapshot)
-        temp_path = rep.temporary_filenames[snapshot]
+      if rep.snapshot_binary?(:last)
+        temp_path = rep.temporary_filenames[:last]
       else
         temp_path = self.temp_filename
         File.open(temp_path, 'w') do |io|
@@ -59,6 +67,16 @@ module Nanoc
       # Notify
       Nanoc::NotificationCenter.post(:rep_written, rep, raw_path, is_created, is_modified)
     end
+
+    def exist?(path)
+      File.exist?(self.full_path_for(path))
+    end
+
+    def full_path_for(path)
+      File.join(@config[:output_dir], path)
+    end
+
+  protected
 
     TMP_TEXT_ITEMS_DIR = 'tmp/text_items'
 

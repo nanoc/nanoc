@@ -22,22 +22,6 @@ class Nanoc::RulesCollectionTest < Nanoc::TestCase
     assert_equal rules.item_compilation_rules[2], rules.compilation_rule_for(rep)
   end
 
-  def test_routing_rule_for
-    # Create rules
-    rules = Nanoc::RulesCollection.new
-    dsl = Nanoc::CompilerDSL.new(rules)
-    dsl.route '/wrong' do ; end
-    dsl.route '/almost',  :rep => :left  do ; end
-    dsl.route '/correct', :rep => :right do ; end
-
-    # Mock items and reps
-    item = Nanoc::Item.new('stuff', {}, '/correct')
-    rep = Nanoc::ItemRep.new(item, :right, :snapshot_store => self.new_snapshot_store)
-
-    # Test
-    assert_equal rules.item_routing_rules[2], rules.routing_rule_for(rep)
-  end
-
   def test_filter_for_layout_with_existant_layout
     # Create rules
     rules = Nanoc::RulesCollection.new

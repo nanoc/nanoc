@@ -113,7 +113,6 @@ module Nanoc
       self.load_rules
       preprocess
       build_reps
-      route_reps
 
       # Load auxiliary stores
       stores.each { |s| s.load }
@@ -228,42 +227,22 @@ module Nanoc
         # Create reps
         rep_names = matching_rules.map { |r| r.rep_name }.uniq
         rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
+          rep = ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
+          rep.paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
+          item.reps << rep
         end
       end
     end
 
-    # Determines the paths of all item representations.
-    #
-    # @api private
-    def route_reps
-      reps.each do |rep|
-        # Find matching rules
-        rules = rules_collection.routing_rules_for(rep)
-        raise Nanoc::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
+    def item_rep_writer
+      # TODO pass options the right way
+      # TODO make type customisable (:filesystem)
+      Nanoc::ItemRepWriter.named(:filesystem).new({ :output_dir => @site.config[:output_dir] })
+    end
+    memoize :item_rep_writer
 
-        rules.each_pair do |snapshot, rule|
-          # Get basic path by applying matching rule
-          basic_path = rule.apply_to(rep, :compiler => self)
-          next if basic_path.nil?
-          unless basic_path.to_s.start_with?('/')
-            raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
-          end
-
-          # Get raw path by prepending output directory
-          rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path.to_s
-
-          # Get normal path by stripping index filename
-          rep.paths[snapshot] = basic_path.to_s
-          @site.config[:index_filenames].each do |index_filename|
-            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
-              # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
-              break
-            end
-          end
-        end
-      end
+    def write_rep(rep, path)
+      self.item_rep_writer.write(rep, path.to_s)
     end
 
     # @param [Nanoc::ItemRep] rep The item representation for which the
@@ -295,8 +274,9 @@ module Nanoc
     def outdatedness_checker
       Nanoc::OutdatednessChecker.new(
         :site => @site,
-        :checksum_store => checksum_store,
-        :dependency_tracker => dependency_tracker)
+        :checksum_store     => self.checksum_store,
+        :dependency_tracker => self.dependency_tracker,
+        :item_rep_writer    => self.item_rep_writer)
     end
     memoize :outdatedness_checker
 
@@ -394,16 +374,16 @@ module Nanoc
       # Calculate rule memory if we haven’t yet done do
       self.rule_memory_calculator.new_rule_memory_for_rep(rep)
 
+      # Assign raw paths for non-snapshot rules
+      rep.paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
+
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
         Nanoc::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
         # Recalculate content
-        rep.snapshot(:raw)
-        rep.snapshot(:pre, :final => false)
         rules_collection.compilation_rule_for(rep).apply_to(rep, :compiler => self)
-        rep.snapshot(:post) if rep.has_snapshot?(:post)
         rep.snapshot(:last)
       end
 

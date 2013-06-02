@@ -110,16 +110,13 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "compile '/**/*' do\n"
+          io.write "compile '/a.sass' do\n"
           io.write "  filter :sass\n"
+          io.write "  write item.identifier.with_ext('css')\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/a.*' do\n"
-          io.write "  item.identifier.with_ext('css')\n"
-          io.write "end\n"
-          io.write "\n"
-          io.write "route '/b.*' do\n"
-          io.write "  nil\n"
+          io.write "compile '/b.sass' do\n"
+          io.write "  filter :sass\n"
           io.write "end\n"
         end
 
@@ -165,16 +162,13 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "compile '/**/*' do\n"
+          io.write "compile '/a.sass' do\n"
           io.write "  filter :sass\n"
+          io.write "  write item.identifier.with_ext('css')\n"
           io.write "end\n"
           io.write "\n"
-          io.write "route '/a.sass' do\n"
-          io.write "  item.identifier.with_ext('css')\n"
-          io.write "end\n"
-          io.write "\n"
-          io.write "route '/_b.sass' do\n"
-          io.write "  nil\n"
+          io.write "compile '/_b.sass' do\n"
+          io.write "  filter :sass\n"
           io.write "end\n"
         end
 

@@ -64,15 +64,13 @@ module Nanoc::TestHelpers
     rules_content = <<EOS
 compile '/**/*' do
   {{compilation_rule_content}}
-end
 
-route '/**/*' do
   if item.binary?
-    item.identifier
-  elsif item.identifier == '/index.html'
-    '/index.html'
+    write item.identifier, :snapshot => :last
+  elsif item.identifier.match?('/index.*')
+    write '/index.html', :snapshot => :last
   else
-    item.identifier.without_ext + '/index.html'
+    write item.identifier.without_ext + '/index.html', :snapshot => :last
   end
 end
 
