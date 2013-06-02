@@ -79,10 +79,11 @@ module Nanoc::CLI::Commands
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-          if !rep.binary?
+          # TODO test this
+          if !rep.snapshot_binary?(:last)
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
-              generate_diff_for(rep, old_contents[rep], new_contents)
+              generate_diff_for(path, old_contents[rep], new_contents)
             end
             old_contents.delete(rep)
           end
@@ -107,14 +108,14 @@ module Nanoc::CLI::Commands
         @diff_threads.each { |t| t.join }
       end
 
-      def generate_diff_for(rep, old_content, new_content)
+      def generate_diff_for(path, old_content, new_content)
         return if old_content == new_content
 
         @diff_threads << Thread.new do
           # Generate diff
           diff = diff_strings(old_content, new_content)
-          diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
-          diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
+          diff.sub!(/^--- .*/,    '--- ' + path)
+          diff.sub!(/^\+\+\+ .*/, '+++ ' + path)
 
           # Write diff
           @diff_lock.synchronize do
