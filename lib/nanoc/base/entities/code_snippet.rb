@@ -21,10 +21,7 @@ module Nanoc
     #   compilation
     #
     # @param [String] filename The filename corresponding to this code snippet
-    #
-    # @param [Time, Hash] params Extra parameters. Ignored by nanoc; it is
-    #   only included for backwards compatibility.
-    def initialize(data, filename, params=nil)
+    def initialize(data, filename)
       @data     = data
       @filename = filename
     end
