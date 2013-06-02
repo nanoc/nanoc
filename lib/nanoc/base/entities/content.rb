@@ -20,6 +20,8 @@ module Nanoc
       raise NotImplementedError
     end
 
+  protected
+
     def validate_filename(filename)
       if filename && !filename.start_with?('/')
         raise ArgumentError, "Filename should be absolute (got #{filename})"
