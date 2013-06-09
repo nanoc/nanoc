@@ -22,8 +22,10 @@ module Nanoc::Extra::Checking::Checks
   protected
 
     def item_rep_paths
-      reps = @site.items.flat_map { |i| i.reps }
-      reps.flat_map { |r| r.paths_without_snapshot }.map { |r| File.join(@site.config[:output_dir], r) }
+      @site.compiler.build_reps
+      @site.compiler.item_rep_store.reps.
+        flat_map { |r| r.paths_without_snapshot }.
+        map { |r| File.join(@site.config[:output_dir], r) }
     end
 
     def pruner

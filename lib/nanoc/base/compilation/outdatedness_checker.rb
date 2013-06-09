@@ -26,6 +26,8 @@ module Nanoc
         'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
       @item_rep_writer = params[:item_rep_writer] or raise ArgumentError,
         'Nanoc::OutdatednessChecker#initialize needs a :item_rep_writer parameter'
+      @item_rep_store = params[:item_rep_store] or raise ArgumentError,
+        'Nanoc::OutdatednessChecker#initialize needs a :item_rep_store parameter'
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}
@@ -113,7 +115,7 @@ module Nanoc
           # Not outdated
           return nil
         when :item
-          obj.reps.each do |rep|
+          @item_rep_store.reps_for_item(obj).each do |rep|
             r = basic_outdatedness_reason_for(rep)
             return r unless r.nil?
           end

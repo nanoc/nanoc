@@ -26,6 +26,9 @@ require 'nanoc/base/entities/identifier'
 require 'nanoc/base/entities/pattern'
 require 'nanoc/base/entities/site'
 
+# Load proxy classes
+require 'nanoc/base/proxies/item_proxy'
+
 # Load store classes
 require 'nanoc/base/store'
 require 'nanoc/base/stores/data_source'
@@ -36,6 +39,7 @@ require 'nanoc/base/stores/checksum_store'
 require 'nanoc/base/stores/compiled_content_cache'
 require 'nanoc/base/stores/rule_memory_store'
 require 'nanoc/base/stores/item_rep_writer'
+require 'nanoc/base/stores/item_rep_store'
 
 # Load compilation classes
 require 'nanoc/base/compilation/compiler'

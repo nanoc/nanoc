@@ -21,8 +21,10 @@ EOS
 
     # Build site
     @site = Nanoc::Site.new({})
-    @item = Nanoc::Item.new('moo', {}, '/blah')
-    @item.site = @site
+    item_rep_store = Nanoc::ItemRepStore.new([])
+    item = Nanoc::Item.new('moo', {}, '/blah')
+    item.site = @site
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Evaluate content
     result = ::ERB.new(content).result(binding)
@@ -37,7 +39,9 @@ EOS
 
     # Build site
     @site = Nanoc::Site.new({})
-    @item = Nanoc::Item.new('moo', {}, '/blah')
+    item_rep_store = Nanoc::ItemRepStore.new([])
+    item = Nanoc::Item.new('moo', {}, '/blah')
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Capture
     _erbout = 'foo'
@@ -73,7 +77,9 @@ foot
 EOS
 
     @site = Nanoc::Site.new({})
-    @item = Nanoc::Item.new('content', {}, '/index.md')
+    item_rep_store = Nanoc::ItemRepStore.new([])
+    item = Nanoc::Item.new('moo', {}, '/blah')
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     result = ::ERB.new(content).result(binding)
 
@@ -93,7 +99,9 @@ end
 EOS
 
     @site = Nanoc::Site.new({})
-    @item = Nanoc::Item.new('content', {}, '/')
+    item_rep_store = Nanoc::ItemRepStore.new([])
+    item = Nanoc::Item.new('moo', {}, '/blah')
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
     content = "<% content_for :a do %>Content One<% end %>"
     ::ERB.new(content).result(binding)
 
@@ -101,7 +109,9 @@ EOS
     assert_equal nil,           content_for(@item, :b)
 
     @site = Nanoc::Site.new({})
-    @item = Nanoc::Item.new('content', {}, '/')
+    item_rep_store = Nanoc::ItemRepStore.new([])
+    item = Nanoc::Item.new('moo', {}, '/blah')
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
     content = "<% content_for :b do %>Content Two<% end %>"
     ::ERB.new(content).result(binding)
 

@@ -181,8 +181,10 @@ module Nanoc
     #
     # @return [void]
     def depend_on(items)
+      unwrapped_items = items.map { |i| i.item }
+
       # Notify
-      items.each do |item|
+      unwrapped_items.each do |item|
         Nanoc::NotificationCenter.post(:visit_started, item)
         Nanoc::NotificationCenter.post(:visit_ended,   item)
       end

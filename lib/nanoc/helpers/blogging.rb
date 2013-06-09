@@ -90,13 +90,14 @@ module Nanoc::Helpers
     protected
 
       def sorted_relevant_articles
-        relevant_articles.sort_by do |a|
-          attribute_to_time(a[:created_at])
-        end.reverse.first(limit)
+        @_sorted_relevant_articles ||= relevant_articles.
+          sort_by { |a| attribute_to_time(a[:created_at]) }.
+          reverse.
+          first(limit)
       end
 
       def last_article
-        sorted_relevant_articles.first
+        @_last_article ||= sorted_relevant_articles.first
       end
 
       def validate_config
@@ -368,7 +369,7 @@ module Nanoc::Helpers
 
       formatted_date = attribute_to_time(item[:created_at]).to_iso8601_date
 
-      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier.to_s + '/')
+      'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier.to_s)
     end
 
     # Converts the given attribute (which can be a string, a Time or a Date)
