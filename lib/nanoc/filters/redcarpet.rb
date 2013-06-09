@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
 
-  # @since 3.2.0
   class Redcarpet < Nanoc::Filter
 
     identifier :redcarpet
@@ -27,8 +26,6 @@ module Nanoc::Filters
     #
     #   For Redcarpet 2.x
     #
-    #   @since 3.2.4
-    #
     #   @param [String] content The content to filter
     #
     #   @option params [Hash] :options ({}) A list of options to pass on to
@@ -42,7 +39,7 @@ module Nanoc::Filters
     #
     #   @option params [Boolean] :with_toc (false) A boolean to request a table
     #     of contents
-
+    #
     #   @return [String] The filtered content
     def run(content, params={})
       if ::Redcarpet::VERSION <= '2'

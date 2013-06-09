@@ -3,8 +3,6 @@
 module Nanoc
 
   # Adds support for memoizing functions.
-  #
-  # @since 3.2.0
   module Memoization
 
     # Memoizes the method with the given name. The modified method will cache

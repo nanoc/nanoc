@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
 
-  # @since 3.2.0
   class Mustache < Nanoc::Filter
 
     identifier :mustache

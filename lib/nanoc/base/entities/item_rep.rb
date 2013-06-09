@@ -194,8 +194,6 @@ module Nanoc
     #
     # @return [Boolean] True if content exists for the snapshot with the
     #   given name, false otherwise
-    #
-    # @since 3.2.0
     def has_snapshot?(snapshot_name)
       self.snapshot_store.exist?(self.item.identifier, self.name, snapshot_name)
     end

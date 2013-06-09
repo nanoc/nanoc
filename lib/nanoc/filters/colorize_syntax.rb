@@ -238,8 +238,6 @@ module Nanoc::Filters
     #
     # @api private
     #
-    # @since 3.2.0
-    #
     # @param [String] code The code to colorize
     #
     # @param [String] language The language the code is written in
