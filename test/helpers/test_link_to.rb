@@ -35,10 +35,11 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_link_to_with_item
     rep = new_item_rep_with_path('/bar/')
-    rep.item.reps << rep
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    item = Nanoc::ItemProxy.new(rep.item, item_rep_store)
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to('Bar', rep.item)
+      link_to('Bar', item)
     )
   end
 

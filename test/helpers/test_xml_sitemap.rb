@@ -19,28 +19,27 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_xml_sitemap
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = []
-
-      # Create item 1
-      @items << Nanoc::Item.new('some content 1', {}, '/item-one.html')
-      self.create_item_rep(@items.last, :one_a, [ '/item-one/a/' ])
-      self.create_item_rep(@items.last, :one_b, [ '/item-one/b/' ])
-
-      # Create item 2
-      @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two.html')
-
-      # Create item 3
-      attrs = { :changefreq => 'daily', :priority => 0.5 }
-      @items << Nanoc::Item.new('some content 3', attrs, '/item-three.html')
-      self.create_item_rep(@items.last, :three_a, [ '/item-three/a/' ])
-      self.create_item_rep(@items.last, :three_b, [ '/item-three/b/' ])
-
-      # Create item 4
-      @items << Nanoc::Item.new('some content 4', {}, '/item-four.html')
-      self.create_item_rep(@items.last, :four_a, [])
+      items = [
+        Nanoc::Item.new('some content 1', {},                                           '/item-one.html'),
+        Nanoc::Item.new('some content 2', { :is_hidden => true },                       '/item-two.html'),
+        Nanoc::Item.new('some content 3', { :changefreq => 'daily', :priority => 0.5 }, '/item-three.html'),
+        Nanoc::Item.new('some content 4', {},                                           '/item-four.html')
+      ]
+      reps = [
+        self.create_item_rep(items[0], :one_a,   [ '/item-one/a/'   ]),
+        self.create_item_rep(items[0], :one_b,   [ '/item-one/b/'   ]),
+        self.create_item_rep(items[2], :three_a, [ '/item-three/a/' ]),
+        self.create_item_rep(items[2], :three_b, [ '/item-three/b/' ]),
+        self.create_item_rep(items[3], :four_a,  [])
+      ]
+      item_rep_store = Nanoc::ItemRepStore.new(reps)
 
       # Create sitemap item
-      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap.erb')
+      item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+
+      # Create proxies
+      @item = Nanoc::ItemProxy.new(item, item_rep_store)
+      @items = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
@@ -72,21 +71,27 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_sitemap_with_items_as_param
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = []
-      @items << nil
-      @items << Nanoc::Item.new('some content 1', {}, '/item-one/')
-      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
-      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
-      @items << nil
+      items = [
+        Nanoc::Item.new('some content 1', {}, '/item-one/')
+      ]
+      reps = [
+        self.create_item_rep(items[0], :one_a, '/item-one/a/'),
+        self.create_item_rep(items[0], :one_b, '/item-one/b/')
+      ]
+      item_rep_store = Nanoc::ItemRepStore.new(reps)
 
       # Create sitemap item
-      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+      item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+
+      # Create proxies
+      @item = Nanoc::ItemProxy.new(item, item_rep_store)
+      item_proxies = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Build sitemap
-      res = xml_sitemap(:items => [ @items[1] ])
+      res = xml_sitemap(:items => item_proxies)
 
       # Check
       doc = Nokogiri::XML(res)
@@ -106,12 +111,21 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_filter
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = [ Nanoc::Item.new('some content 1', {}, '/item-one/') ]
-      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
-      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+      items = [
+        Nanoc::Item.new('some content 1', {}, '/item-one/')
+      ]
+      reps = [
+        self.create_item_rep(items[0], :one_a, '/item-one/a/'),
+        self.create_item_rep(items[0], :one_b, '/item-one/b/')
+      ]
+      item_rep_store = Nanoc::ItemRepStore.new(reps)
 
       # Create sitemap item
-      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+      item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
+
+      # Create proxies
+      @item = Nanoc::ItemProxy.new(item, item_rep_store)
+      @items = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
@@ -134,16 +148,24 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_sorted
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = []
-      @items << Nanoc::Item.new('some content 1', {}, '/george.html')
-      self.create_item_rep(@items.last, :default, [ '/george/alice.html', '/george/zoey.html'] )
-      @items << Nanoc::Item.new('some content 1', {}, '/walton.html')
-      self.create_item_rep(@items.last, :default, [ '/walton/eve.html', '/walton/bob.html' ])
-      @items << Nanoc::Item.new('some content 1', {}, '/lucas.html')
-      self.create_item_rep(@items.last, :default, [ '/lucas/trudy.html', '/lucas/mallory.html' ])
+      items = [
+        Nanoc::Item.new('some content 1', {}, '/george.html'),
+        Nanoc::Item.new('some content 1', {}, '/walton.html'),
+        Nanoc::Item.new('some content 1', {}, '/lucas.html')
+      ]
+      reps = [
+        self.create_item_rep(items[0], :default, [ '/george/alice.html', '/george/zoey.html'   ]),
+        self.create_item_rep(items[1], :default, [ '/walton/eve.html',   '/walton/bob.html'    ]),
+        self.create_item_rep(items[2], :default, [ '/lucas/trudy.html',  '/lucas/mallory.html' ])
+      ]
+      item_rep_store = Nanoc::ItemRepStore.new(reps)
 
       # Create sitemap item
-      @item = Nanoc::Item.new('sitemap content', {}, '/sitemap.erb')
+      item = Nanoc::Item.new('sitemap content', {}, '/sitemap.erb')
+
+      # Create proxies
+      @item = Nanoc::ItemProxy.new(item, item_rep_store)
+      @items = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
@@ -171,7 +193,6 @@ protected
   def create_item_rep(item, name, paths)
     rep = Nanoc::ItemRep.new(item, name, :snapshot_store => @snapshot_store)
     rep.paths_without_snapshot = paths
-    item.reps << rep
     rep
   end
 

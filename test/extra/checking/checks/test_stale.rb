@@ -8,6 +8,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
 
   def calc_issues
     site = Nanoc::Site.new('.')
+    site.compiler.build_reps
     check = check_class.new(site)
     check.run
     check.issues

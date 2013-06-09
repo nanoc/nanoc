@@ -69,8 +69,9 @@ EOS
       assert_equal 'stuff goes here',          File.read('output/bar.txt')
 
       # Check snapshot
-      assert_equal 'stuff <%= "goes" %> here', site.items[0].compiled_content(snapshot: :foo)
-      assert_equal 'stuff goes here',          site.items[0].compiled_content(snapshot: :last)
+      item = Nanoc::ItemProxy.new(site.items[0], site.compiler.item_rep_store)
+      assert_equal 'stuff <%= "goes" %> here', item.compiled_content(snapshot: :foo)
+      assert_equal 'stuff goes here',          item.compiled_content(snapshot: :last)
     end
   end
 

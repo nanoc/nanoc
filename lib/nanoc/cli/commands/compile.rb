@@ -358,7 +358,8 @@ module Nanoc::CLI::Commands
 
   protected
 
-    def prune  
+    def prune
+      # TODO make this a listener (and eventually move this into Nanoc::Compiler itself)
       if self.site.config[:prune][:auto_prune]
         identifier = self.site.compiler.item_rep_writer.class.identifier
         pruner_class = Nanoc::Extra::Pruner.named(identifier)
@@ -396,13 +397,12 @@ module Nanoc::CLI::Commands
     end
 
     def teardown_listeners
-      @listeners.each { |s| s.stop }
+      @listeners.each { |s| s.stop } if @listeners
     end
 
     def reps
-      self.site.items.map { |i| i.reps }.flatten
+      self.site.compiler.item_rep_store.reps
     end
-    memoize :reps
 
     def prune_config
       self.site.config[:prune] || {}

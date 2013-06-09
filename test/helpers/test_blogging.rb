@@ -10,55 +10,59 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @snapshot_store = Nanoc::SnapshotStore::InMemory.new
   end
 
+  def teardown
+    super
+    @items = nil
+    @item = nil
+    @site = nil
+  end
+
   def mock_article
-    item = mock
-    item.stubs(:[]).with(:updated_at).returns(Time.now - 500)
-    item.stubs(:[]).with(:kind).returns('article')
-    item.stubs(:[]).with(:created_at).returns(Time.now - 1000)
-    item.stubs(:[]).with(:title).returns('An Item')
-    item.stubs(:[]).with(:custom_path_in_feed).returns(nil)
-    item.stubs(:[]).with(:custom_url_in_feed).returns(nil)
-    item.stubs(:[]).with(:excerpt).returns(nil)
-    item.stubs(:path).returns("/item/")
-    item.stubs(:[]).with(:author_name).returns(nil)
-    item.stubs(:[]).with(:author_uri).returns(nil)
-    item.stubs(:compiled_content).returns('item content')
+    attrs = {
+      :updated_at          => Time.now - 500,
+      :kind                => 'article',
+      :created_at          => Time.now - 1000,
+      :title               => 'An Item',
+      :custom_path_in_feed => nil,
+      :custom_url_in_feed  => nil,
+      :excerpt             => nil,
+      :author_name         => nil,
+      :author_uri          => nil,
+    }
+    item = Nanoc::Item.new('item content', attrs, '/article/')
+    item.stubs(:path).returns('/meow.html')
+    item.stubs(:compiled_content).returns('stuff')
     item
   end
 
   def mock_item
-    item = mock
-    item.stubs(:[]).with(:kind).returns('item')
-    item
+    Nanoc::Item.new('item content', { :kind => 'item' }, '/item/')
+  end
+
+  def mock_feed_item
+    attrs = {
+      :title       => 'My Cool Blog',
+      :author_name => 'Denis Defreyne',
+      :author_uri  => 'http://stoneship.org/',
+      :feed_uri    => nil,
+    }
+    @item = Nanoc::Item.new('content stuff', attrs, '/feed.xml')
+    @item.stubs(:path).returns("/journal/feed/")
+    @item
   end
 
   def test_articles
     # Create items
     @items = [
-      Nanoc::Item.new(
-        'blah',
-        { :kind => 'item' },
-        '/0/'
-      ),
-      Nanoc::Item.new(
-        'blah blah',
-        { :kind => 'article' },
-        '/1/'
-      ),
-      Nanoc::Item.new(
-        'blah blah blah',
-        { :kind => 'article' },
-        '/2/'
-      )
+      Nanoc::Item.new('blah',           { :kind => 'item'    }, '/0/'),
+      Nanoc::Item.new('blah blah',      { :kind => 'article' }, '/1/'),
+      Nanoc::Item.new('blah blah blah', { :kind => 'article' }, '/2/')
     ]
 
     # Check
     assert_equal(2, articles.size)
     assert articles.include?(@items[1])
     assert articles.include?(@items[2])
-  ensure
-    # Cleanup
-    @items = nil
   end
 
   def test_sorted_articles
@@ -85,44 +89,23 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     assert_equal(2,         sorted_articles.size)
     assert_equal(@items[2], sorted_articles[0])
     assert_equal(@items[1], sorted_articles[1])
-  ensure
-    # Cleanup
-    @items = nil
   end
 
   def test_atom_feed
     if_have 'builder' do
       # Create items
-      @items = [ mock, mock_article, mock_article ]
+      @items = [ mock_item, mock_article, mock_article ]
 
-      # Create item 0
-      @items[0].stubs(:[]).with(:kind).returns('item')
-
-      # Create item 1
-      @items[1].stubs(:[]).with(:updated_at).returns(Date.today - 1)
-      @items[1].stubs(:[]).with(:kind).returns('article')
-      @items[1].stubs(:[]).with(:created_at).returns((Date.today - 2).to_s)
-      @items[1].stubs(:[]).with(:title).returns('Item One')
-      @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
-      @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
-      @items[1].stubs(:[]).with(:excerpt).returns(nil)
+      # Mock paths and compiled content
       @items[1].stubs(:path).returns("/item1/")
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('item 1 content')
-
-      # Create item 2
       @items[2].expects(:compiled_content).with(:snapshot => :pre).returns('item 2 content')
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Cool Blog')
-      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-      @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item = self.mock_feed_item
 
       # Check
       atom_feed
@@ -135,26 +118,20 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_item, mock_article, mock_article ]
 
       # Create item 1
-      @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
-      @items[1].stubs(:[]).with(:created_at).returns(Time.now - 1000)
-      @items[1].expects(:compiled_content).returns('item 1 content')
+      @items[1][:updated_at] = Time.now - 500
+      @items[1][:created_at] = Time.now - 1000
+      @items[1].stubs(:compiled_content).returns('item 1 content')
 
       # Create item 2
-      @items[2].stubs(:[]).with(:updated_at).returns(Time.now - 250)
-      @items[2].stubs(:[]).with(:created_at).returns(Time.now - 1200)
-      @items[2].expects(:compiled_content).returns('item 2 content')
+      @items[2][:updated_at] = Time.now - 250
+      @items[2][:created_at] = Time.now - 1200
+      @items[2].stubs(:compiled_content).returns('item 2 content')
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Cool Blog')
-      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-      @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item = self.mock_feed_item
 
       # Check
       atom_feed
@@ -167,14 +144,10 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_item, mock_item ]
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item = self.mock_feed_item
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -194,13 +167,10 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
       # Mock site
       @site = mock
-      @site.stubs(:config).returns({:base_url => nil})
+      @site.stubs(:config).returns({ :base_url => nil })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item = self.mock_feed_item
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -223,10 +193,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns(nil)
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item = self.mock_feed_item
+      @item[:title] = nil
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -249,10 +217,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns(nil)
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item = self.mock_feed_item
+      @item[:author_name] = nil
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -271,45 +237,24 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_article ]
 
       # Create item 1
-      @items[0].stubs(:[]).with(:author_name).returns("Don Alias")
-      @items[0].stubs(:[]).with(:author_uri).returns("http://don.example.com/")
-      @items[0].expects(:compiled_content).returns('item 1 content')
+      @items[0][:author_name] = "Don Alias"
+      @items[0][:author_uri] = "http://don.example.com/"
+      @items[0].stubs(:compiled_content).returns('item 1 content')
+      @items[0].stubs(:path).returns('/something')
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com/' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com/' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:kind).returns(nil)
-      @item.stubs(:[]).with(:title).returns('My Cool Blog')
-      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-      @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item = self.mock_feed_item
 
       # Check
       # TODO: Use xpath matchers for more specific test
       result = atom_feed
-      # Still should keep feed level author
-      assert_match(
-        /#{Regexp.escape('<name>Denis Defreyne</name>')}/, #'
-        result
-      )
-      assert_match(
-        /#{Regexp.escape('<uri>http://stoneship.org/</uri>')}/, #'
-        result
-      )
-
-      # Overrides on specific items
-      assert_match(
-        /#{Regexp.escape('<name>Don Alias</name>')}/, #'
-        result
-      )
-      assert_match(
-        /#{Regexp.escape('<uri>http://don.example.com/</uri>')}/, #'
-        result
-      )
+      assert_match(%r{<name>Denis Defreyne</name>},        result)
+      assert_match(%r{<uri>http://stoneship.org/</uri>},   result)
+      assert_match(%r{<name>Don Alias</name>},             result)
+      assert_match(%r{<uri>http://don.example.com/</uri>}, result)
     end
   end
 
@@ -323,10 +268,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns(nil)
+      @item = self.mock_feed_item
+      @item[:author_uri] = nil
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -343,18 +286,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     if_have 'builder' do
       # Create items
       @items = [ mock_item, mock_article, mock_article ]
-      @items[1].stubs(:[]).with(:created_at).returns(Time.now.to_s)
-      @items[2].stubs(:[]).with(:created_at).returns(nil)
+      @items[1][:created_at] = Time.now.to_s
+      @items[2][:created_at] = nil
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item = self.mock_feed_item
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -371,7 +310,6 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     if_have 'builder' do
       # Create items
       @items = [ mock_item, mock_article ]
-      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
       @site = mock
@@ -397,7 +335,6 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     if_have 'builder' do
       # Create items
       @items = [ mock_item, mock_article ]
-      @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
       @config = {
@@ -406,8 +343,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
         :title       => 'My Blog Or Something',
         :base_url    => 'http://example.com'
       }
-      @site = mock
-      @site.stubs(:config).returns(@config)
+      @site = Nanoc::Site.new(@config)
 
       # Create feed item
       @item = mock
@@ -426,20 +362,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Mock items
       @items = [ mock_article, mock_article ]
 
-      @items[0].expects(:compiled_content).never
-      @items[1].stubs(:[]).with(:title).returns('Item One')
+      @items[1][:title] = 'Item One'
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
-      @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+      @item = self.mock_feed_item
 
       # Check
       atom_feed :articles => [ @items[1] ]
@@ -451,31 +381,20 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Mock articles
       @items = [ mock_article, mock_article ]
       @items.each_with_index do |article, i|
-        article.stubs(:[]).with(:title).returns("Article #{i}")
-        article.stubs(:[]).with(:created_at).returns(Time.now - i)
+        article[:title]      = "Article #{i}"
+        article[:created_at] = Time.now - i
       end
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
-      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+      @item = self.mock_feed_item
 
       # Check
       result = atom_feed :limit => 1, :articles => @items
-      assert_match(
-        Regexp.new('Article 0', Regexp::MULTILINE),
-        result
-      )
-      refute_match(
-        Regexp.new('Article 1', Regexp::MULTILINE),
-        result
-      )
+      assert_match(Regexp.new('Article 0', Regexp::MULTILINE), result)
+      refute_match(Regexp.new('Article 1', Regexp::MULTILINE), result)
     end
   end
 
@@ -484,23 +403,20 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Mock articles
       @items = [ mock_article, mock_article ]
       @items.each_with_index do |article, i|
-        article.stubs(:[]).with(:title).returns("Article #{i}")
+        article[:title] = "Article #{i}"
+        article.stubs(:identifier).returns("/article-#{i}.html")
       end
-      @items[0].stubs(:[]).with(:created_at).returns('23-02-2009')
-      @items[1].stubs(:[]).with(:created_at).returns('22-03-2009')
+      @items[0][:created_at] = '22-02-2009'
+      @items[1][:created_at] = '23-02-2009'
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
-      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+      @item = self.mock_feed_item
 
       # Check
+      assert_equal [ @items[1], @items[0] ], sorted_articles
       result = atom_feed
       assert_match(
         Regexp.new('Article 1.*Article 0', Regexp::MULTILINE),
@@ -515,15 +431,10 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_article ]
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
-      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+      @item = self.mock_feed_item
 
       # Check
       result = atom_feed :content_proc => lambda { |a| 'foobar!' }
@@ -541,11 +452,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = mock
-      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
-      @item.stubs(:[]).with(:author_name).returns('J. Doe')
-      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
-      @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+      @item = self.mock_feed_item
 
       # Check
       result = atom_feed :excerpt_proc => lambda { |a| 'foobar!' }
@@ -581,8 +488,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_article ]
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = mock
@@ -604,8 +510,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[0].stubs(:path).returns(nil)
 
       # Mock site
-      @site = mock
-      @site.stubs(:config).returns({ :base_url => 'http://example.com' })
+      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = mock
@@ -627,14 +532,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].paths = { :last => '/foo/bar/' }
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/foo/bar/' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('http://example.com/foo/bar/', url_for(item))
-  ensure
-    # Cleanup
-    @item = nil
+    assert_equal('http://example.com/foo/bar/', url_for(@item))
   end
 
   def test_url_for_with_custom_path_in_feed
@@ -642,15 +546,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new(
-      'content', { :custom_path_in_feed => '/meow/woof/' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    item = Nanoc::Item.new('content', { :custom_path_in_feed => '/meow/woof/' }, '/foo/')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('http://example.com/meow/woof/', url_for(item))
-  ensure
-    # Cleanup
-    @item = nil
+    assert_equal('http://example.com/meow/woof/', url_for(@item))
   end
 
   def test_url_for_with_custom_url_in_feed
@@ -658,15 +560,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new(
-      'content', { :custom_url_in_feed => 'http://example.org/x' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    item = Nanoc::Item.new('content', { :custom_url_in_feed => 'http://example.org/x' }, '/foo/')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('http://example.org/x', url_for(item))
-  ensure
-    # Cleanup
-    @item = nil
+    assert_equal('http://example.org/x', url_for(@item))
   end
 
   def test_url_for_without_base_url
@@ -685,11 +585,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].paths = { :last => nil }
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = {}
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal(nil, url_for(item))
+    assert_equal(nil, url_for(@item))
   end
 
   def test_feed_url_without_custom_feed_url
@@ -697,15 +599,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    @item = Nanoc::Item.new('content', {}, '/foo/')
-    @item.reps << Nanoc::ItemRep.new(@item, :default, :snapshot_store => @snapshot_store)
-    @item.reps[0].paths = { :last => '/foo/bar/' }
+    item = Nanoc::Item.new('content', {}, '/foo/')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/foo/bar/' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
     assert_equal('http://example.com/foo/bar/', feed_url)
-  ensure
-    # Cleanup
-    @item = nil
   end
 
   def test_feed_url_with_custom_feed_url
@@ -713,15 +614,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create feed item
-    @item = Nanoc::Item.new('content', { :feed_url => 'http://example.com/feed/' }, '/foo/')
-    @item.reps << Nanoc::ItemRep.new(@item, :default, :snapshot_store => @snapshot_store)
-    @item.reps[0].paths = { :last => '/foo/bar/' }
+    item = Nanoc::Item.new('content', { :feed_url => 'http://example.com/feed/' }, '/foo/')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/foo/bar/' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
     assert_equal('http://example.com/feed/', feed_url)
-  ensure
-    # Cleanup
-    @item = nil
   end
 
   def test_feed_url_without_base_url
@@ -739,12 +639,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].paths = { :last => '/foo/bar/' }
+    item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/item-identifier.txt')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/rep-path.txt' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
+    assert_equal('tag:example.com,2008-05-19:/rep-path.txt', atom_tag_for(@item))
   end
 
   def test_atom_tag_for_without_path
@@ -752,11 +654,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/baz/qux/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/item-identifier.txt')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('tag:example.com,2008-05-19:/baz/qux/', atom_tag_for(item))
+    assert_equal('tag:example.com,2008-05-19:/item-identifier.txt', atom_tag_for(@item))
   end
 
   def test_atom_tag_for_with_base_url_in_dir
@@ -764,12 +668,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com/somedir' })
 
     # Create article
-    item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].paths = { :last => '/foo/bar/' }
+    item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/item-identifier.txt')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/rep-path.txt' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('tag:example.com,2008-05-19:/somedir/foo/bar/', atom_tag_for(item))
+    assert_equal('tag:example.com,2008-05-19:/somedir/rep-path.txt', atom_tag_for(@item))
   end
 
   def test_atom_tag_for_with_time
@@ -777,12 +683,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { :created_at => Time.parse('2008-05-19') }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].paths = { :last => '/foo/bar/' }
+    item = Nanoc::Item.new('content', { :created_at => Time.parse('2008-05-19') }, '/item-identifier.txt')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/rep-path.txt' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
+    assert_equal('tag:example.com,2008-05-19:/rep-path.txt', atom_tag_for(@item))
   end
 
   def test_atom_tag_for_with_date
@@ -790,12 +698,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { :created_at => Date.parse('2008-05-19') }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
-    item.reps[0].paths = { :last => '/foo/bar/' }
+    item = Nanoc::Item.new('content', { :created_at => Date.parse('2008-05-19') }, '/item-identifier.txt')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => @snapshot_store)
+    rep.paths = { :last => '/rep-path.txt' }
+    item_rep_store = Nanoc::ItemRepStore.new([ rep ])
+    @item = Nanoc::ItemProxy.new(item, item_rep_store)
 
     # Check
-    assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
+    assert_equal('tag:example.com,2008-05-19:/rep-path.txt', atom_tag_for(@item))
   end
 
 end

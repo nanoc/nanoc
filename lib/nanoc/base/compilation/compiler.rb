@@ -54,6 +54,9 @@ module Nanoc
     # @return [Array] The compilation stack
     attr_reader :stack
 
+    # FIXME ugly
+    attr_accessor :item_rep_store
+
     # @group Public instance methods
 
     # Creates a new compiler fo the given site
@@ -156,7 +159,7 @@ module Nanoc
 
       @stack = []
 
-      items.each { |item| item.reps.clear }
+      self.item_rep_store = nil
 
       site.unload
 
@@ -219,6 +222,8 @@ module Nanoc
     #
     # @api private
     def build_reps
+      reps = []
+
       items.each do |item|
         # Find matching rules
         matching_rules = rules_collection.item_compilation_rules_for(item)
@@ -229,9 +234,11 @@ module Nanoc
         rep_names.each do |rep_name|
           rep = ItemRep.new(item, rep_name, :snapshot_store => self.snapshot_store)
           rep.paths_without_snapshot = self.rule_memory_calculator.write_paths_for(rep)
-          item.reps << rep
+          reps << rep
         end
       end
+
+      self.item_rep_store = Nanoc::ItemRepStore.new(reps)
     end
 
     def item_rep_writer
@@ -260,10 +267,10 @@ module Nanoc
       end
 
       content_or_filename_assigns.merge({
-        :item       => rep.item,
+        :item       => Nanoc::ItemProxy.new(rep.item, self.item_rep_store),
         :rep        => rep,
         :item_rep   => rep,
-        :items      => site.items,
+        :items      => Nanoc::ItemArray.new.tap { |a| site.items.each { |i| a << Nanoc::ItemProxy.new(i, self.item_rep_store) }},
         :layouts    => site.layouts,
         :config     => site.config,
         :site       => site
@@ -276,7 +283,8 @@ module Nanoc
         :site => @site,
         :checksum_store     => self.checksum_store,
         :dependency_tracker => self.dependency_tracker,
-        :item_rep_writer    => self.item_rep_writer)
+        :item_rep_writer    => self.item_rep_writer,
+        :item_rep_store     => self.item_rep_store)
     end
     memoize :outdatedness_checker
 
@@ -293,6 +301,11 @@ module Nanoc
       end
     end
 
+    # @return [Array<Nanoc::ItemRep>] The site’s item representations
+    def reps
+      self.item_rep_store.reps
+    end
+
   private
 
     # @return [Array<Nanoc::Item>] The site’s items
@@ -300,12 +313,6 @@ module Nanoc
       @site.items
     end
     memoize :items
-
-    # @return [Array<Nanoc::ItemRep>] The site’s item representations
-    def reps
-      items.map { |i| i.reps }.flatten
-    end
-    memoize :reps
 
     # @return [Array<Nanoc::Layout>] The site’s layouts
     def layouts
@@ -407,7 +414,7 @@ module Nanoc
     # @return [void]
     def forget_dependencies_if_outdated(items)
       items.each do |i|
-        if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
+        if self.item_rep_store.reps_for_item(i).any? { |r| outdatedness_checker.outdated?(r) }
           dependency_tracker.forget_dependencies_for(i)
         end
       end

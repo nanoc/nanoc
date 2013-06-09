@@ -105,7 +105,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
       # At this point, even the already compiled items in the previous pass
       # should have their compiled content assigned, so this should work:
-      site.items[0].reps[0].compiled_content
+      site.compiler.item_rep_store.reps.each { |r| r.compiled_content }
     end
   end
 

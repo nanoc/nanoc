@@ -108,9 +108,10 @@ module Nanoc::Helpers
 
         # Create dependency
         current_item = @site.compiler.dependency_tracker.top
-        if item != current_item
-          Nanoc::NotificationCenter.post(:visit_started, item)
-          Nanoc::NotificationCenter.post(:visit_ended,   item)
+        unwrapped_item = item.item
+        if unwrapped_item != current_item
+          Nanoc::NotificationCenter.post(:visit_started, unwrapped_item)
+          Nanoc::NotificationCenter.post(:visit_ended,   unwrapped_item)
 
           # This is an extremely ugly hack to get the compiler to recompile the
           # item from which we use content. For this, we need to manually edit

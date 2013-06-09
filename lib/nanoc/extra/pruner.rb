@@ -18,8 +18,12 @@ module Nanoc::Extra
     #   should actually be deleted.
     def initialize(site, params={})
       @site    = site
-      @dry_run = params.fetch(:dry_run) { false }
-      @exclude = params.fetch(:exclude) { [] }
+      @dry_run = params.fetch(:dry_run, false)
+      @exclude = params.fetch(:exclude, [])
+
+      if params[:reps]
+        raise 'moo'
+      end
     end
 
     # Prunes all output files not managed by nanoc.
@@ -41,9 +45,10 @@ module Nanoc::Extra
 
       # Get compiled files
       writer = @site.compiler.item_rep_writer
-      compiled_files = self.site.items.flat_map do |item|
-        item.reps.flat_map { |r| r.paths_without_snapshot }
-      end.select { |f| writer.exist?(f) }.map { |f| writer.full_path_for(f) }
+      compiled_files = @site.compiler.item_rep_store.reps.
+        flat_map { |r| r.paths_without_snapshot }.
+        select { |f| writer.exist?(f) }.
+        map { |f| writer.full_path_for(f) }
 
       # Get present files and dirs
       present_files = []
