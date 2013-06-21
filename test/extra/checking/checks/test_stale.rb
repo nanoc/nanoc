@@ -24,8 +24,8 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       assert self.calc_issues.empty?
 
       # One OK file
-      File.open('content/index.html', 'w') { |io| io.write('stuff') }
-      File.open('output/index.html', 'w') { |io| io.write('stuff') }
+      File.write('content/index.html', 'stuff')
+      File.write('output/index.html', 'stuff')
       assert self.calc_issues.empty?
     end
   end
@@ -35,8 +35,8 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
-      File.open('content/index.html', 'w') { |io| io.write('stuff') }
-      File.open('output/WRONG.html', 'w') { |io| io.write('stuff') }
+      File.write('content/index.html', 'stuff')
+      File.write('output/WRONG.html', 'stuff')
       assert_equal 1, self.calc_issues.count
       issue = self.calc_issues.to_a[0]
       assert_equal "file without matching item", issue.description
@@ -50,8 +50,8 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       assert Dir['output/*'].empty?
 
       File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'excluded.html' ]" }
-      File.open('content/index.html', 'w') { |io| io.write('stuff') }
-      File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
+      File.write('content/index.html', 'stuff')
+      File.write('output/excluded.html', 'stuff')
       assert self.calc_issues.empty?
     end
   end
@@ -62,8 +62,8 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       assert Dir['output/*'].empty?
 
       File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  blah: meh" }
-      File.open('content/index.html', 'w') { |io| io.write('stuff') }
-      File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
+      File.write('content/index.html', 'stuff')
+      File.write('output/excluded.html', 'stuff')
       refute self.calc_issues.empty?
     end
   end

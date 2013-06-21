@@ -9,7 +9,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
         FileUtils.mkdir_p('output')
         FileUtils.mkdir_p('output/stuff')
         File.open('output/foo.txt',  'w') { |io| io.write('<a href="/broken">broken</a>') }
-        File.open('output/bar.html', 'w') { |io| io.write('<a href="/foo.txt">not broken</a>') }
+        File.write('output/bar.html', '<a href="/foo.txt">not broken</a>')
 
         # Create check
         check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
@@ -28,7 +28,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       FileUtils.mkdir_p('output/stuff')
       File.open('output/origin',     'w') { |io| io.write('hi') }
       File.open('output/foo',        'w') { |io| io.write('hi') }
-      File.open('output/stuff/blah', 'w') { |io| io.write('hi') }
+      File.write('output/stuff/blah', 'hi')
 
       # Create check
       check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
@@ -46,7 +46,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   def test_remove_query_string
     with_site do |site|
       FileUtils.mkdir_p('output/stuff')
-      File.open('output/stuff/right', 'w') { |io| io.write('hi') }
+      File.write('output/stuff/right', 'hi')
 
       check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
 
@@ -71,7 +71,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   def test_unescape_url
     with_site do |site|
       FileUtils.mkdir_p('output/stuff')
-      File.open('output/stuff/right foo', 'w') { |io| io.write('hi') }
+      File.write('output/stuff/right foo', 'hi')
 
       check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
 

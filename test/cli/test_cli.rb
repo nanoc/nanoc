@@ -10,7 +10,7 @@ summary     'meh'
 description 'longer meh'
 
 run do |opts, args, cmd|
-  File.open('_test.out', 'w') { |io| io.write('It works!') }
+  File.write('_test.out', 'It works!')
 end
 EOS
 
@@ -22,7 +22,7 @@ summary     'meh sub'
 description 'longer meh sub'
 
 run do |opts, args, cmd|
-  File.open('_test_sub.out', 'w') { |io| io.write('It works sub!') }
+  File.write('_test_sub.out', 'It works sub!')
 end
 EOS
 
@@ -32,7 +32,7 @@ EOS
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
-      File.open('commands/_test.rb', 'w') { |io| io.write(COMMAND_CODE) }
+      File.write('commands/_test.rb', COMMAND_CODE)
 
       # Run command
       begin
@@ -81,7 +81,7 @@ EOS
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
-      File.open('commands/_test.rb', 'w') { |io| io.write('raise "meh"') }
+      File.write('commands/_test.rb', 'raise "meh"')
 
       # Run command
       position_before = $stderr.tell

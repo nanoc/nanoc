@@ -239,7 +239,7 @@ EOS
     <link rel="stylesheet" href="/style.css">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
-    <meta name="generator" content="nanoc <%= Nanoc::VERSION %>"> 
+    <meta name="generator" content="nanoc <%= Nanoc::VERSION %>">
   </head>
   <body>
     <div id="main">
@@ -307,7 +307,7 @@ EOS
       FileUtils.mkdir_p('output')
 
       # Create config
-      File.open('nanoc.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
+      File.write('nanoc.yaml', DEFAULT_CONFIG)
       Nanoc::NotificationCenter.post(:file_created, 'nanoc.yaml')
 
       # Create rules

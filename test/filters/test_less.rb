@@ -23,7 +23,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
     if_have 'less' do
       # Create file to import
       FileUtils.mkdir_p('content/foo/qux')
-      File.open('content/foo/qux/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
+      File.write('content/foo/qux/imported_file.less', 'p { color: red; }')
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])

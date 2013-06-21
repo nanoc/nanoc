@@ -4,7 +4,7 @@ class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
 
   def test_run_specific
     with_site do |site|
-      File.open('output/blah', 'w') { |io| io.write('I am stale! Haha!') }
+      File.write('output/blah', 'I am stale! Haha!')
       runner = Nanoc::Extra::Checking::Runner.new(site)
       runner.run_specific(%w( stale ))
     end

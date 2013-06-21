@@ -68,7 +68,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
   def test_safe_level
     # Set up
     filter = ::Nanoc::Filters::ERB.new
-    File.open('moo', 'w') { |io| io.write("one miiillion dollars") }
+    File.write('moo', "one miiillion dollars")
 
     # Without
     res = filter.setup_and_run('<%= File.read("moo") %>', :safe_level => nil)

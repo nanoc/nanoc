@@ -6,7 +6,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     # Write sample files
     (0..15).each do |i|
       FileUtils.mkdir_p("dir#{i}")
-      File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
+      File.write("dir#{i}/foo.md", 'o hai')
     end
     (1..10).each do |i|
       File.symlink("../dir#{i}", "dir#{i-1}/sub")
@@ -36,7 +36,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     # Write sample files
     (0..15).each do |i|
       FileUtils.mkdir_p("dir#{i}")
-      File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
+      File.write("dir#{i}/foo.md", 'o hai')
     end
     (1..15).each do |i|
       File.symlink("../dir#{i}", "dir#{i-1}/sub")
@@ -51,8 +51,8 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     FileUtils.mkdir('foo')
     FileUtils.mkdir('bar')
 
-    File.open('foo/x.md', 'w') { |io| io.write('o hai from foo/x') }
-    File.open('bar/y.md', 'w') { |io| io.write('o hai from bar/y') }
+    File.write('foo/x.md', 'o hai from foo/x')
+    File.write('bar/y.md', 'o hai from bar/y')
 
     File.symlink('../bar', 'foo/barlink')
 
@@ -63,9 +63,9 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
 
   def test_all_files_in_follows_symlinks_to_files
     # Write sample files
-    File.open('bar', 'w') { |io| io.write('o hai from bar') }
+    File.write('bar', 'o hai from bar')
     FileUtils.mkdir_p('dir')
-    File.open('dir/foo', 'w') { |io| io.write('o hai from foo') }
+    File.write('dir/foo', 'o hai from foo')
     File.symlink('../bar', 'dir/bar-link')
 
     # Check
@@ -75,7 +75,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
   end
 
   def test_resolve_symlink
-    File.open('foo', 'w') { |io| io.write('o hai') }
+    File.write('foo', 'o hai')
     File.symlink('foo', 'bar')
     File.symlink('bar', 'baz')
     File.symlink('baz', 'qux')
@@ -86,7 +86,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
   end
 
   def test_resolve_symlink_too_many
-    File.open('foo', 'w') { |io| io.write('o hai') }
+    File.write('foo', 'o hai')
     File.symlink('foo', 'symlin-0')
     (1..7).each do |i|
       File.symlink("symlink-#{i-1}", "symlink-#{i}")

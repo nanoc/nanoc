@@ -9,13 +9,13 @@ class Nanoc::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_dir_with_config_yaml
-    File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
+    File.write('config.yaml', 'output_dir: public_html')
     site = Nanoc::Site.new('.')
     assert_equal 'public_html', site.config[:output_dir]
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
-    File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
+    File.write('nanoc.yaml', 'output_dir: public_html')
     site = Nanoc::Site.new('.')
     assert_equal 'public_html', site.config[:output_dir]
   end

@@ -75,8 +75,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
       # Setup fake local cloud
       FileUtils.mkdir_p('mylocalcloud/mybucket')
       File.open('mylocalcloud/mybucket/etc', 'w')  { |io| io.write('meh-etc')  }
-      File.open('mylocalcloud/mybucket/meow', 'w') { |io| io.write('meh-meow') }
-      File.open('mylocalcloud/mybucket/bark', 'w') { |io| io.write('meh-bark') }
+      File.write('mylocalcloud/mybucket/meow', 'meh-meow')
+      File.write('mylocalcloud/mybucket/bark', 'meh-bark')
 
       # Create site
       FileUtils.mkdir_p('output')

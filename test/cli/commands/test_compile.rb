@@ -4,9 +4,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_profiling_information
     with_site do |site|
-      File.open('content/foo.md', 'w') { |io| io.write('hai') }
-      File.open('content/bar.md', 'w') { |io| io.write('hai') }
-      File.open('content/baz.md', 'w') { |io| io.write('hai') }
+      File.write('content/foo.md', 'hai')
+      File.write('content/bar.md', 'hai')
+      File.write('content/baz.md', 'hai')
 
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
@@ -27,9 +27,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_auto_prune
     with_site do |site|
-      File.open('content/foo.md', 'w') { |io| io.write('hai') }
-      File.open('content/bar.md', 'w') { |io| io.write('hai') }
-      File.open('content/baz.md', 'w') { |io| io.write('hai') }
+      File.write('content/foo.md', 'hai')
+      File.write('content/bar.md', 'hai')
+      File.write('content/baz.md', 'hai')
 
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
@@ -65,9 +65,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_auto_prune_with_exclude
     with_site do |site|
-      File.open('content/foo.md', 'w') { |io| io.write('hai') }
-      File.open('content/bar.md', 'w') { |io| io.write('hai') }
-      File.open('content/baz.md', 'w') { |io| io.write('hai') }
+      File.write('content/foo.md', 'hai')
+      File.write('content/bar.md', 'hai')
+      File.write('content/baz.md', 'hai')
 
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"

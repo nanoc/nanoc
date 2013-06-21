@@ -16,7 +16,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_one_rep
     with_site do |site|
-      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.write('content/index.html', 'o hello')
 
       site.compile
 
@@ -28,8 +28,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_two_independent_reps
     with_site do |site|
-      File.open('content/foo.html', 'w') { |io| io.write('o hai') }
-      File.open('content/bar.html', 'w') { |io| io.write('o bai') }
+      File.write('content/foo.html', 'o hai')
+      File.write('content/bar.html', 'o bai')
 
       site.compile
 
@@ -292,7 +292,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_unfiltered_binary_item_should_not_be_moved_outside_content
     with_site do
-      File.open('content/blah.dat', 'w') { |io| io.write('o hello') }
+      File.write('content/blah.dat', 'o hello')
 
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"

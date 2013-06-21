@@ -93,8 +93,8 @@ EOS
           end
         end
 
-        File.open('nanoc.yaml', 'w') { |io| io.write('stuff: 12345') }
-        File.open('Rules', 'w') { |io| io.write(rules_content) }
+        File.write('nanoc.yaml', 'stuff: 12345')
+        File.write('Rules', rules_content)
       end
     end
 
@@ -185,7 +185,7 @@ EOS
       lines.each_slice(2) do |pair|
         actual_out   = eval(pair.first, b)
         expected_out = eval(pair.last.match(/# ?=>(.*)/)[1], b)
-      
+
         assert_equal expected_out, actual_out,
           "Incorrect example:\n#{pair.first}"
       end

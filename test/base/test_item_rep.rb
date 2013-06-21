@@ -176,7 +176,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       @filter ||= Class.new(::Nanoc::Filter) do
         type :text => :binary
         def run(content, params={})
-          File.open(output_filename, 'w') { |io| io.write(content) }
+          File.write(output_filename, content)
         end
       end
     end
@@ -203,7 +203,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary
         def run(content, params={})
-          File.open(output_filename, 'w') { |io| io.write(content) }
+          File.write(output_filename, content)
         end
       end
     end
@@ -432,7 +432,7 @@ private
     f = create_filter(:binary)
     f.class_eval do
       def run(content, params={})
-        File.open(output_filename, 'w') { |io| io.write(content) }
+        File.write(output_filename, content)
       end
     end
     f

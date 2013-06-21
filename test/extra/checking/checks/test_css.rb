@@ -7,8 +7,8 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
       with_site do |site|
         # Create files
         FileUtils.mkdir_p('output')
-        File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
-        File.open('output/style.css', 'w') { |io| io.write('h1 { color: red; }') }
+        File.write('output/blah.html', '<h1>Hi!</h1>')
+        File.write('output/style.css', 'h1 { color: red; }')
 
         # Run check
         check = Nanoc::Extra::Checking::Checks::CSS.new(site)
@@ -25,8 +25,8 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
       with_site do |site|
         # Create files
         FileUtils.mkdir_p('output')
-        File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
-        File.open('output/style.css', 'w') { |io| io.write('h1 { coxlor: rxed; }') }
+        File.write('output/blah.html', '<h1>Hi!</h1>')
+        File.write('output/style.css', 'h1 { coxlor: rxed; }')
 
         # Run check
         check = Nanoc::Extra::Checking::Checks::CSS.new(site)
