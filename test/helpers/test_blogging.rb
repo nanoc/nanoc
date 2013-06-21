@@ -17,6 +17,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @site = nil
   end
 
+  def mock_site(config)
+    with_site do
+      File.write('nanoc.yaml', YAML.dump(config))
+      return Nanoc::SiteLoader.new.load
+    end
+  end
+
   def mock_article
     attrs = {
       :updated_at          => Time.now - 500,
@@ -75,7 +82,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       ),
       Nanoc::Item.new(
         'blah',
-        { :kind => 'article', :created_at => (Date.today - 1).to_s }, 
+        { :kind => 'article', :created_at => (Date.today - 1).to_s },
         '/1/'
       ),
       Nanoc::Item.new(
@@ -102,7 +109,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].expects(:compiled_content).with(:snapshot => :pre).returns('item 2 content')
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -128,7 +135,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].stubs(:compiled_content).returns('item 2 content')
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -144,7 +151,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_item, mock_item ]
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -243,7 +250,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[0].stubs(:path).returns('/something')
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com/' })
+      @site = mock_site({ :base_url => 'http://example.com/' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -290,7 +297,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2][:created_at] = nil
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -343,7 +350,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
         :title       => 'My Blog Or Something',
         :base_url    => 'http://example.com'
       }
-      @site = Nanoc::Site.new(@config)
+      @site = mock_site(@config)
 
       # Create feed item
       @item = mock
@@ -366,7 +373,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -386,7 +393,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -410,7 +417,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1][:created_at] = '23-02-2009'
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -431,7 +438,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_article ]
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = self.mock_feed_item
@@ -488,7 +495,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_article ]
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = mock
@@ -510,7 +517,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[0].stubs(:path).returns(nil)
 
       # Mock site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Create feed item
       @item = mock
@@ -528,7 +535,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_without_custom_path_in_feed
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
@@ -543,7 +550,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_with_custom_path_in_feed
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', { :custom_path_in_feed => '/meow/woof/' }, '/foo/')
@@ -557,7 +564,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_with_custom_url_in_feed
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', { :custom_url_in_feed => 'http://example.org/x' }, '/foo/')
@@ -571,7 +578,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_without_base_url
     # Create site
-    @site = Nanoc::Site.new({})
+    @site = mock_site({})
 
     # Check
     assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -581,7 +588,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_without_path
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
@@ -596,7 +603,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_feed_url_without_custom_feed_url
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', {}, '/foo/')
@@ -611,7 +618,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_feed_url_with_custom_feed_url
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create feed item
     item = Nanoc::Item.new('content', { :feed_url => 'http://example.com/feed/' }, '/foo/')
@@ -626,7 +633,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_feed_url_without_base_url
     # Create site
-    @site = Nanoc::Site.new({})
+    @site = mock_site({})
 
     # Check
     assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -636,7 +643,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_path
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/item-identifier.txt')
@@ -651,7 +658,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_without_path
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/item-identifier.txt')
@@ -665,7 +672,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_base_url_in_dir
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com/somedir' })
+    @site = mock_site({ :base_url => 'http://example.com/somedir' })
 
     # Create article
     item = Nanoc::Item.new('content', { :created_at => '2008-05-19' }, '/item-identifier.txt')
@@ -680,7 +687,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_time
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', { :created_at => Time.parse('2008-05-19') }, '/item-identifier.txt')
@@ -695,7 +702,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_date
     # Create site
-    @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+    @site = mock_site({ :base_url => 'http://example.com' })
 
     # Create article
     item = Nanoc::Item.new('content', { :created_at => Date.parse('2008-05-19') }, '/item-identifier.txt')

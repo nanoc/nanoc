@@ -16,6 +16,13 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     @site  = nil
   end
 
+  def mock_site(config)
+    with_site do
+      File.write('nanoc.yaml', YAML.dump(config))
+      return Nanoc::SiteLoader.new.load
+    end
+  end
+
   def test_xml_sitemap
     if_have 'builder', 'nokogiri' do
       # Create items
@@ -42,7 +49,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Build sitemap
       res = xml_sitemap
@@ -88,7 +95,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       item_proxies = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Build sitemap
       res = xml_sitemap(:items => item_proxies)
@@ -128,7 +135,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Build sitemap
       res = xml_sitemap(:rep_select => lambda { |rep| rep.name == :one_a } )
@@ -168,7 +175,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = items.map { |i| Nanoc::ItemProxy.new(i, item_rep_store) }
 
       # Create site
-      @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
+      @site = mock_site({ :base_url => 'http://example.com' })
 
       # Build sitemap
       res = xml_sitemap(:items => @items)

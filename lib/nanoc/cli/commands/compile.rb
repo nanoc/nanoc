@@ -310,7 +310,7 @@ module Nanoc::CLI::Commands
     # Prints file actions (created, updated, deleted, identical)
     class FileActionPrinter < Listener
 
-      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
+      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
         @rep_times       = {}
 
@@ -346,6 +346,7 @@ module Nanoc::CLI::Commands
       self.load_site
 
       puts "Compiling site…"
+      self.site.compiler.load
       self.run_listeners_while do
         self.site.compile
         self.prune

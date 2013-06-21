@@ -7,7 +7,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_no_reps
-    with_site do |site|
+    with_site do
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       assert Dir['output/*'].empty?
@@ -15,22 +16,24 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_one_rep
-    with_site do |site|
+    with_site do
       File.write('content/index.html', 'o hello')
 
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
-      assert Dir['output/*'].size == 1
+      assert_equal [ 'output/index.html' ], Dir['output/*']
       assert File.file?('output/index.html')
       assert File.read('output/index.html') == 'o hello'
     end
   end
 
   def test_compile_with_two_independent_reps
-    with_site do |site|
+    with_site do
       File.write('content/foo.html', 'o hai')
       File.write('content/bar.html', 'o bai')
 
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       assert Dir['output/*'].size == 2
@@ -42,14 +45,15 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_dependent_reps
-    with_site(:compilation_rule_content => 'filter :erb') do |site|
-      File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items["/bar.html"].compiled_content %>!!!')
-      end
-      File.open('content/bar.html', 'w') do |io|
-        io.write('manatee')
-      end
+    with_site(:compilation_rule_content => 'filter :erb') do
+      File.write(
+        'content/foo.html',
+        '<%= @items["/bar.html"].compiled_content %>!!!')
+      File.write(
+        'content/bar.html',
+        'manatee')
 
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       assert Dir['output/*'].size == 2
@@ -61,14 +65,15 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_mutually_dependent_reps
-    with_site(:compilation_rule_content => 'filter :erb') do |site|
-      File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar.html" }.compiled_content %>')
-      end
-      File.open('content/bar.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/foo.html" }.compiled_content %>')
-      end
+    with_site(:compilation_rule_content => 'filter :erb') do
+      File.write(
+        'content/foo.html',
+        '<%= @items.find { |i| i.identifier == "/bar.html" }.compiled_content %>')
+      File.write(
+        'content/bar.html',
+        '<%= @items.find { |i| i.identifier == "/foo.html" }.compiled_content %>')
 
+      site = Nanoc::SiteLoader.new.load
       assert_raises Nanoc::Errors::RecursiveCompilation do
         site.compile
       end
@@ -90,10 +95,11 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_should_recompile_all_reps
-    Nanoc::CLI.run %w( create_site bar )
+    with_site do
+      File.write('content/foo.md', 'blah')
 
-    FileUtils.cd('bar') do
-      Nanoc::CLI.run %w( compile )
+      site = Nanoc::SiteLoader.new.load
+      site.compile
 
       site = Nanoc::SiteLoader.new.load
       site.compile
@@ -105,10 +111,10 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_disallow_multiple_snapshots_with_the_same_name
-    # Create site
-    Nanoc::CLI.run %w( create_site bar )
+    with_site do
+      # Create file
+      File.write('content/stuff', 'blah')
 
-    FileUtils.cd('bar') do
       # Create rules
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
@@ -129,11 +135,11 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_include_compiled_content_of_active_item_at_previous_snapshot
-    with_site do |site|
+    with_site do
       # Create item
-      File.open('content/index.html', 'w') do |io|
-        io.write('[<%= @item.compiled_content(:snapshot => :aaa) %>]')
-      end
+      File.write(
+        'content/index.html',
+        '[<%= @item.compiled_content(:snapshot => :aaa) %>]')
 
       # Create rules
       File.open('Rules', 'w') do |io|
@@ -152,12 +158,13 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       site.compile
 
       # Check
-      assert_equal '[[[<%= @item.compiled_content(:snapshot => :aaa) %>]]]', File.read('output/index.html')
+      assert_equal '[[[<%= @item.compiled_content(:snapshot => :aaa) %>]]]',
+        File.read('output/index.html')
     end
   end
 
   def test_mutually_include_compiled_content_at_previous_snapshot
-    with_site do |site|
+    with_site do
       # Create items
       File.open('content/a.html', 'w') do |io|
         io.write('[<%= @items["/z.html"].compiled_content(:snapshot => :guts) %>]')

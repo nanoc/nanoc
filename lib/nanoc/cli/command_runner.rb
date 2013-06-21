@@ -23,7 +23,9 @@ module Nanoc::CLI
       # Load site if possible
       @site ||= nil
       if self.is_in_site_dir? && @site.nil?
+        print "Loading site data… "
         @site = Nanoc::SiteLoader.new.load
+        puts "done"
       end
 
       @site
@@ -32,29 +34,15 @@ module Nanoc::CLI
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def is_in_site_dir?
-      Nanoc::Site.cwd_is_nanoc_site?
+      Nanoc::SiteLoader.cwd_is_nanoc_site?
     end
 
-    # Asserts that the current working directory contains a site
-    # ({Nanoc::Site} instance). If no site is present, prints an error
-    # message and exits.
-    #
-    # @return [void]
     def require_site
-      if site.nil?
-        raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
-      end
+      self.site
     end
 
-    # Asserts that the current working directory contains a site (just like
-    # {#require_site}) and loads the site into memory.
-    #
-    # @return [void]
     def load_site
-      self.require_site
-      print "Loading site data… "
-      self.site.load
-      puts "done"
+      self.site
     end
 
     # @return [Boolean] true if debug output is enabled, false if not

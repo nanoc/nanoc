@@ -5,6 +5,40 @@ module Nanoc
   # @api private
   class SiteLoader
 
+    def load
+      # Load
+      self.config
+      self.code_snippets
+      self.data_sources
+      self.data_sources.each { |ds| ds.use }
+      self.items
+      self.layouts
+      self.data_sources.each { |ds| ds.unuse }
+
+      # Build site
+      Nanoc::Site.new(
+        :data_sources  => self.data_sources,
+        :items         => self.items,
+        :layouts       => self.layouts,
+        :code_snippets => self.code_snippets,
+        :config        => self.config)
+    end
+
+    # @return [Boolean] true if the current working directory is a nanoc site, false otherwise
+    #
+    # @api private
+    def self.cwd_is_nanoc_site?
+      !self.config_filename_for_cwd.nil?
+    end
+
+    # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none
+    #
+    # @api private
+    def self.config_filename_for_cwd
+      filenames = %w( nanoc.yaml config.yaml )
+      filenames.find { |f| File.file?(f) }
+    end
+
     # Returns the data sources for this site. Will create a new data source if
     # none exists yet.
     #
@@ -31,39 +65,6 @@ module Nanoc
       end
     end
 
-    def load
-      self.config
-      self.code_snippets
-      self.data_sources
-
-      self.data_sources.each { |ds| ds.use }
-      self.items
-      self.layouts
-      self.data_sources.each { |ds| ds.unuse }
-
-      Nanoc::Site.new(
-        :data_sources  => self.data_sources,
-        :items         => self.items,
-        :layouts       => self.layouts,
-        :code_snippets => self.code_snippets,
-        :config        => self.config)
-    end
-
-    # @return [Boolean] true if the current working directory is a nanoc site, false otherwise
-    #
-    # @api private
-    def self.cwd_is_nanoc_site?
-      !self.config_filename_for_cwd.nil?
-    end
-
-    # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none
-    #
-    # @api private
-    def self.config_filename_for_cwd
-      filenames = %w( nanoc.yaml config.yaml )
-      filenames.find { |f| File.file?(f) }
-    end
-
     def code_snippets
       @_code_snippets ||= begin
         snippets = Dir['lib/**/*.rb'].sort.map do |filename|
@@ -86,6 +87,7 @@ module Nanoc
           end
           array.concat(items_in_ds)
         end
+        array
       end
     end
 

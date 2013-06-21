@@ -20,18 +20,6 @@ class Nanoc::SiteTest < Nanoc::TestCase
     assert_equal 'public_html', site.config[:output_dir]
   end
 
-  def test_initialize_with_config_hash
-    site = Nanoc::Site.new(:foo => 'bar')
-    assert_equal 'bar', site.config[:foo]
-  end
-
-  def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Site.new(:data_sources => [ { :type => 'foo', :items_root => '/bar/' } ])
-    assert_equal('foo',          site.config[:data_sources][0][:type])
-    assert_equal('/bar/',        site.config[:data_sources][0][:items_root])
-    assert_equal('/',            site.config[:data_sources][0][:layouts_root])
-  end
-
   def test_load_data_sources_first
     # Create site
     Nanoc::CLI.run %w( create_site bar)
@@ -62,60 +50,20 @@ class Nanoc::SiteTest < Nanoc::TestCase
 
 end
 
-describe 'Nanoc::Site#initialize' do
-
-  include Nanoc::TestHelpers
-
-  it 'should merge default config' do
-    site = Nanoc::Site.new(:foo => 'bar')
-    site.config[:foo].must_equal 'bar'
-    site.config[:output_dir].must_equal 'output'
-  end
-
-  it 'should not raise under normal circumstances' do
-    Nanoc::Site.new({})
-  end
-
-  it 'should not raise for non-existant output directory' do
-    Nanoc::Site.new(:output_dir => 'fklsdhailfdjalghlkasdflhagjskajdf')
-  end
-
-  it 'should not raise for unknown data sources' do
-    proc do
-      Nanoc::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
-    end
-  end
-
-end
-
-describe 'Nanoc::Site#compiler' do
-
-  include Nanoc::TestHelpers
-
-  it 'should not raise under normal circumstances' do
-    site = Nanoc::Site.new({})
-    site.compiler
-  end
-
-end
-
 describe 'Nanoc::Site#data_sources' do
 
   include Nanoc::TestHelpers
 
-  it 'should not raise for known data sources' do
-    site = Nanoc::Site.new({})
-    site.data_sources
-  end
-
   it 'should raise for unknown data sources' do
     proc do
-      site = Nanoc::Site.new(
-        :data_sources => [
-          { :type => 'fklsdhailfdjalghlkasdflhagjskajdf' }
-        ]
-      )
-      site.data_sources
+      with_site do
+        File.open('nanoc.yaml', 'w') do |io|
+          io.write "data_sources:\n"
+          io.write "  -\n"
+          io.write "    type: sdjhkgfdsdfghj\n"
+        end
+        Nanoc::SiteLoader.new.load
+      end
     end.must_raise Nanoc::Errors::UnknownDataSource
   end
 

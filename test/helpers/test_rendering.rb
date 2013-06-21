@@ -5,25 +5,23 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   include Nanoc::Helpers::Rendering
 
   def test_render
-    with_site do |site|
-      @site = site
-
+    with_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :erb\n")
       end
-
       File.open('layouts/foo', 'w') do |io|
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
+      @site = site_here
+      @site.compiler.load
       assert_equal('This is the /foo layout.', render('/foo'))
     end
   end
 
   def test_render_with_unknown_layout
-    with_site do |site|
-      @site = site
-
+    with_site do
+      @site = site_here
       assert_raises(Nanoc::Errors::UnknownLayout) do
         render '/dsfghjkl'
       end
@@ -31,15 +29,14 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   end
 
   def test_render_without_filter
-    with_site do |site|
-      @site = site
-
+    with_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', nil\n")
       end
-
       File.open('layouts/foo', 'w')
 
+      @site = site_here
+      @site.compiler.load
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo'
       end
@@ -47,15 +44,14 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   end
 
   def test_render_with_unknown_filter
-    with_site do |site|
-      @site = site
-
+    with_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :asdf\n")
       end
-
       File.open('layouts/foo', 'w')
 
+      @site = site_here
+      @site.compiler.load
       assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo'
       end
@@ -64,15 +60,15 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render_with_block
     with_site do |site|
-      @site = site
-
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :erb\n")
       end
-
       File.open('layouts/foo', 'w') do |io|
         io.write '[partial-before]<%= yield %>[partial-after]'
       end
+
+      @site = site_here
+      @site.compiler.load
 
       _erbout = '[erbout-before]'
       result = render '/foo' do

@@ -4,6 +4,12 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
   include Nanoc::Helpers::Capturing
 
+  def mock_site
+    with_site do
+      return Nanoc::SiteLoader.new.load
+    end
+  end
+
   def test_content_for
     require 'erb'
 
@@ -20,7 +26,7 @@ EOS
               "<% end %> foot"
 
     # Build site
-    @site = Nanoc::Site.new({})
+    @site = mock_site
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     item.site = @site
@@ -38,7 +44,7 @@ EOS
     require 'erb'
 
     # Build site
-    @site = Nanoc::Site.new({})
+    @site = mock_site
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     @item = Nanoc::ItemProxy.new(item, item_rep_store)
@@ -76,7 +82,7 @@ head
 foot
 EOS
 
-    @site = Nanoc::Site.new({})
+    @site = mock_site
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     @item = Nanoc::ItemProxy.new(item, item_rep_store)
@@ -98,7 +104,7 @@ compile '/**/*' do
 end
 EOS
 
-    @site = Nanoc::Site.new({})
+    @site = mock_site
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     @item = Nanoc::ItemProxy.new(item, item_rep_store)
@@ -108,7 +114,7 @@ EOS
     assert_equal 'Content One', content_for(@item, :a)
     assert_equal nil,           content_for(@item, :b)
 
-    @site = Nanoc::Site.new({})
+    @site = mock_site
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     @item = Nanoc::ItemProxy.new(item, item_rep_store)

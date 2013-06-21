@@ -76,7 +76,7 @@ module Nanoc
 
       # Compile reps
       load
-      @site.freeze
+      @site.freeze # FIXME this does not belong here
 
       # Determine which reps need to be recompiled
       forget_dependencies_if_outdated(items)
@@ -108,9 +108,6 @@ module Nanoc
     def load
       return if @loaded || @loading
       @loading = true
-
-      # Load site if necessary
-      site.load
 
       # Preprocess
       self.load_rules
@@ -160,8 +157,6 @@ module Nanoc
       @stack = []
 
       self.item_rep_store = nil
-
-      site.unload
 
       @loaded = false
       @unloading = false

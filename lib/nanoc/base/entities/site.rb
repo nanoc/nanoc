@@ -39,128 +39,29 @@ module Nanoc
       :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
     }
 
-    def initialize(thing)
-      if thing.is_a?(Hash) && thing.has_key?(:items)
-        @items         = thing.fetch(:items)
-        @layouts       = thing.fetch(:layouts)
-        @code_snippets = thing.fetch(:code_snippets)
-        @config        = thing.fetch(:config)
-      else
-        build_config(thing)
-      end
+    attr_reader :config
+    attr_reader :code_snippets
+    attr_reader :data_sources
+    attr_reader :items
+    attr_reader :layouts
+
+    def initialize(data)
+      @config        = data.fetch(:config)
+      @code_snippets = data.fetch(:code_snippets)
+      @data_sources  = data.fetch(:data_sources)
+      @items         = data.fetch(:items)
+      @layouts       = data.fetch(:layouts)
+      # TODO freeze
     end
 
-    # Compiles the site.
-    #
-    # @return [void]
+    # TODO remove
     def compile
       compiler.run
     end
 
-    # Returns the compiler for this site. Will create a new compiler if none
-    # exists yet.
-    #
-    # @return [Nanoc::Compiler] The compiler for this site
+    # TODO remove
     def compiler
       @compiler ||= Compiler.new(self)
-    end
-
-    # Returns the data sources for this site. Will create a new data source if
-    # none exists yet.
-    #
-    # @return [Array<Nanoc::DataSource>] The list of data sources for this
-    #   site
-    #
-    # @raise [Nanoc::Errors::UnknownDataSource] if the site configuration
-    #   specifies an unknown data source
-    def data_sources
-      load_code_snippets
-
-      @data_sources ||= begin
-        @config[:data_sources].map do |data_source_hash|
-          # Get data source class
-          data_source_class = Nanoc::DataSource.named(data_source_hash[:type])
-          raise Nanoc::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
-
-          # Create data source
-          data_source_class.new(
-            self,
-            data_source_hash[:items_root],
-            data_source_hash[:layouts_root],
-            data_source_hash.merge(data_source_hash[:config] || {})
-          )
-        end
-      end
-    end
-
-    # Returns this site’s code snippets.
-    #
-    # @return [Array<Nanoc::CodeSnippet>] The list of code snippets in this
-    #   site
-    def code_snippets
-      load
-      @code_snippets
-    end
-
-    # Returns this site’s items.
-    #
-    # @return [Array<Nanoc::Item>] The list of items in this site
-    def items
-      load
-      @items
-    end
-
-    # Returns this site’s layouts.
-    #
-    # @return [Array<Nanoc::Layouts>] The list of layout in this site
-    def layouts
-      load
-      @layouts
-    end
-
-    # Returns the site configuration. It has the following keys:
-    #
-    # * `text_extensions` (`Array<String>`) - A list of file extensions that
-    #   will cause nanoc to threat the file as textual instead of binary. When
-    #   the data source finds a content file with an extension that is
-    #   included in this list, it will be marked as textual.
-    #
-    # * `output_dir` (`String`) - The directory to which compiled items will
-    #   be written. This path is relative to the current working directory,
-    #   but can also be an absolute path.
-    #
-    # * `data_sources` (`Array<Hash>`) - A list of data sources for this site.
-    #   See below for documentation on the structure of this list. By default,
-    #   there is only one data source of the filesystem  type mounted at `/`.
-    #
-    # * `index_filenames` (`Array<String>`) - A list of filenames that will be
-    #   stripped off full item paths to create cleaner URLs. For example,
-    #   `/about/` will be used instead of `/about/index.html`). The default
-    #   value should be okay in most cases.
-    #
-    # * `enable_output_diff` (`Boolean`) - True when diffs should be generated
-    #   for the compiled content of this site; false otherwise.
-    #
-    # The list of data sources consists of hashes with the following keys:
-    #
-    # * `:type` (`String`) - The type of data source, i.e. its identifier.
-    #
-    # * `:items_root` (`String`) - The prefix that should be given to all
-    #   items returned by the {#items} method (comparable to mount points
-    #   for filesystems in Unix-ish OSes).
-    #
-    # * `:layouts_root` (`String`) - The prefix that should be given to all
-    #   layouts returned by the {#layouts} method (comparable to mount
-    #   points for filesystems in Unix-ish OSes).
-    #
-    # * `:config` (`Hash`) - A hash containing the configuration for this data
-    #   source. nanoc itself does not use this hash. This is especially
-    #   useful for online data sources; for example, a Twitter data source
-    #   would need the username of the account from which to fetch tweets.
-    #
-    # @return [Hash] The site configuration
-    def config
-      @config
     end
 
     # Prevents all further modifications to itself, its items, its layouts etc.
@@ -171,156 +72,6 @@ module Nanoc
       items.each         { |i|  i.freeze  }
       layouts.each       { |l|  l.freeze  }
       code_snippets.each { |cs| cs.freeze }
-    end
-
-    # Loads the site data. It is not necessary to call this method explicitly;
-    # it will be called when it is necessary.
-    #
-    # @api private
-    #
-    # @return [void]
-    def load
-      return if @loaded || @loading
-      @loading = true
-
-      # Load all data
-      load_code_snippets
-      data_sources.each { |ds| ds.use }
-      load_items
-      load_layouts
-      data_sources.each { |ds| ds.unuse }
-
-      # Load compiler too
-      # FIXME this should not be necessary
-      compiler.load
-
-      @loaded = true
-    rescue => e
-      unload
-      raise e
-    ensure
-      @loading = false
-    end
-
-    # Undoes the effects of {#load}. Used when {#load} raises an exception.
-    #
-    # @api private
-    def unload
-      return if @unloading
-      @unloading = true
-
-      @items_loaded = false
-      @items = []
-      @layouts_loaded = false
-      @layouts = []
-      @code_snippets_loaded = false
-      @code_snippets = []
-
-      compiler.unload
-
-      @loaded = false
-      @unloading = false
-    end
-
-    # @return [Boolean] true if the current working directory is a nanoc site, false otherwise
-    #
-    # @api private
-    def self.cwd_is_nanoc_site?
-      !self.config_filename_for_cwd.nil?
-    end
-
-    # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none
-    #
-    # @api private
-    def self.config_filename_for_cwd
-      filenames = %w( nanoc.yaml config.yaml )
-      filenames.find { |f| File.file?(f) }
-    end
-
-  private
-
-    # Loads this site’s code and executes it.
-    def load_code_snippets
-      @code_snippets_loaded ||= false
-      return if @code_snippets_loaded
-      @code_snippets_loaded = true
-
-      # Get code snippets
-      @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
-        Nanoc::CodeSnippet.new(
-          File.read(filename),
-          filename
-        )
-      end
-
-      # Execute code snippets
-      @code_snippets.each { |cs| cs.load }
-    end
-
-    # Loads this site’s items and builds each item's list of item representations.
-    def load_items
-      @items_loaded ||= false
-      return if @items_loaded
-      @items_loaded = true
-
-      # Get items
-      @items = Nanoc::ItemArray.new
-      data_sources.each do |ds|
-        items_in_ds = ds.items
-        items_in_ds.each do |i|
-          i.identifier = i.identifier.prefix(ds.items_root)
-          i.site = self
-        end
-        @items.concat(items_in_ds)
-      end
-    end
-
-    # Loads this site’s layouts.
-    def load_layouts
-      @layouts_loaded ||= false
-      return if @layouts_loaded
-      @layouts_loaded = true
-
-      # Get layouts
-      @layouts = []
-      data_sources.each do |ds|
-        layouts_in_ds = ds.layouts
-        layouts_in_ds.each do |i|
-          i.identifier = i.identifier.prefix(ds.layouts_root)
-        end
-        @layouts.concat(layouts_in_ds)
-      end
-    end
-
-    # Builds the configuration hash based on the given argument. Also see
-    # {#initialize} for details.
-    def build_config(dir_or_config_hash)
-      if dir_or_config_hash.is_a? String
-        # Check whether it is supported
-        if dir_or_config_hash != '.'
-          warn 'WARNING: Calling Nanoc::Site.new with a directory that is not the current working directory is not supported. It is recommended to change the directory before calling Nanoc::Site.new. For example, instead of Nanoc::Site.new(\'abc\'), use Dir.chdir(\'abc\') { Nanoc::Site.new(\'.\') }.'
-        end
-
-        # Read config from nanoc.yaml/config.yaml in given dir
-        config_path = Dir.chdir(dir_or_config_hash) do
-          filename = self.class.config_filename_for_cwd
-          if filename.nil?
-            raise Nanoc::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
-          end
-          File.join(dir_or_config_hash, filename)
-        end
-        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
-        @config[:data_sources] = @config[:data_sources].map { |ds| ds.symbolize_keys_recursively }
-      else
-        # Use passed config hash
-        @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
-      end
-
-      # Merge data sources with default data source config
-      @config[:data_sources] = @config[:data_sources].map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
-
-      # Convert to proper configuration
-      @config = Nanoc::Configuration.new(@config)
     end
 
   end
