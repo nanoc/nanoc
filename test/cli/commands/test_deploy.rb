@@ -4,7 +4,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
@@ -25,7 +25,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_with_dry_run
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
@@ -46,7 +46,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_with_list_without_config
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         FileUtils.mkdir_p('output')
         File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
@@ -64,7 +64,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_with_list
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
@@ -89,7 +89,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_with_list_deployers
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
@@ -114,7 +114,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_without_kind
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
@@ -138,7 +138,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_without_target_without_default
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  public:\n"
@@ -160,7 +160,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_without_target_with_default
     if_have 'systemu' do
-      with_site do |site|
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "deploy:\n"
           io.write "  default:\n"

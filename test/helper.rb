@@ -51,7 +51,7 @@ module Nanoc::TestHelpers
     end
   end
 
-  def with_site(params={})
+  def in_site(params={})
     # Build site name
     site_name = params[:name]
     if site_name.nil?
@@ -70,7 +70,7 @@ module Nanoc::TestHelpers
 
     # Yield site
     FileUtils.cd(site_name) do
-      yield Nanoc::SiteLoader.new.load
+      yield
     end
   end
 

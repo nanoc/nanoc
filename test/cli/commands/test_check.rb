@@ -3,7 +3,7 @@
 class Nanoc::CLI::Commands::CheckTest < Nanoc::TestCase
 
   def test_check_stale
-    with_site do |site|
+    in_site do
       FileUtils.mkdir_p('output')
 
       # Should not raise now

@@ -1,7 +1,7 @@
 class Nanoc::CLI::Commands::SyncTest < Nanoc::TestCase
 
   def test_run
-    with_site do
+    in_site do
       File.open('lib/foo_data_source.rb', 'w') do |io|
         io.write "class FooDataSource < Nanoc::DataSource\n"
         io.write "  identifier :sync_test_foo\n"

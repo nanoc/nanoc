@@ -15,7 +15,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_ok
-    with_site do |site|
+    in_site do
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -31,7 +31,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_error
-    with_site do |site|
+    in_site do
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -45,7 +45,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_excluded
-    with_site do |site|
+    in_site do
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -57,7 +57,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_excluded_with_broken_config
-    with_site do |site|
+    in_site do
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 

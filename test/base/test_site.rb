@@ -56,7 +56,7 @@ describe 'Nanoc::Site#data_sources' do
 
   it 'should raise for unknown data sources' do
     proc do
-      with_site do
+      in_site do
         File.open('nanoc.yaml', 'w') do |io|
           io.write "data_sources:\n"
           io.write "  -\n"
@@ -68,7 +68,7 @@ describe 'Nanoc::Site#data_sources' do
   end
 
   it 'should also use the toplevel config for data sources' do
-    with_site do
+    in_site do
       File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
         io.write "  -\n"

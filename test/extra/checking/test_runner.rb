@@ -3,20 +3,20 @@
 class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
 
   def test_run_specific
-    with_site do |site|
+    in_site do
       File.write('output/blah', 'I am stale! Haha!')
-      runner = Nanoc::Extra::Checking::Runner.new(site)
+      runner = Nanoc::Extra::Checking::Runner.new(site_here)
       runner.run_specific(%w( stale ))
     end
   end
 
   def test_run_specific_custom
-    with_site do |site|
+    in_site do
       File.open('Checks', 'w') do |io|
         io.write('check :my_foo_check do ; puts "I AM FOO!" ; end')
       end
 
-      runner = Nanoc::Extra::Checking::Runner.new(site)
+      runner = Nanoc::Extra::Checking::Runner.new(site_here)
       ios = capturing_stdio do
         runner.run_specific(%w( my_foo_check ))
       end
@@ -26,12 +26,12 @@ class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
   end
 
   def test_list_checks
-    with_site do |site|
+    in_site do
       File.open('Checks', 'w') do |io|
         io.write('check :my_foo_check do ; end')
       end
 
-      runner = Nanoc::Extra::Checking::Runner.new(site)
+      runner = Nanoc::Extra::Checking::Runner.new(site_here)
       ios = capturing_stdio do
         runner.list_checks
       end

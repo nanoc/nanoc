@@ -54,7 +54,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
   def test_recompile_includes
     if_have 'less' do
-      with_site do |site|
+      in_site do
         # Create two less files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         File.open('content/a.less', 'w') do |io|

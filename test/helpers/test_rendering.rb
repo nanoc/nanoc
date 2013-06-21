@@ -5,7 +5,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   include Nanoc::Helpers::Rendering
 
   def test_render
-    with_site do
+    in_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :erb\n")
       end
@@ -20,7 +20,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   end
 
   def test_render_with_unknown_layout
-    with_site do
+    in_site do
       @site = site_here
       assert_raises(Nanoc::Errors::UnknownLayout) do
         render '/dsfghjkl'
@@ -29,7 +29,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   end
 
   def test_render_without_filter
-    with_site do
+    in_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', nil\n")
       end
@@ -44,7 +44,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   end
 
   def test_render_with_unknown_filter
-    with_site do
+    in_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :asdf\n")
       end
@@ -59,7 +59,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   end
 
   def test_render_with_block
-    with_site do |site|
+    in_site do
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :erb\n")
       end

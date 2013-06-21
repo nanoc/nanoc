@@ -4,7 +4,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
 
   def test_run
     if_have 'nokogiri' do
-      with_site do |site|
+      in_site do
         # Create files
         FileUtils.mkdir_p('output')
         FileUtils.mkdir_p('output/stuff')
@@ -12,7 +12,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
         File.write('output/bar.html', '<a href="/foo.txt">not broken</a>')
 
         # Create check
-        check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+        check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site_here)
         check.run
 
         # Test
@@ -22,7 +22,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   end
 
   def test_valid?
-    with_site do |site|
+    in_site do
       # Create files
       FileUtils.mkdir_p('output')
       FileUtils.mkdir_p('output/stuff')
@@ -31,7 +31,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       File.write('output/stuff/blah', 'hi')
 
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site_here)
 
       # Test
       assert check.send(:valid?, 'foo',         'output/origin')
@@ -44,11 +44,11 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   end
 
   def test_remove_query_string
-    with_site do |site|
+    in_site do
       FileUtils.mkdir_p('output/stuff')
       File.write('output/stuff/right', 'hi')
 
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site_here)
 
       assert check.send(:valid?, 'stuff/right?foo=123', 'output/origin')
       refute check.send(:valid?, 'stuff/wrong?foo=123', 'output/origin')
@@ -56,7 +56,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   end
 
   def test_exclude
-    with_site do
+    in_site do
       # Create check
       config = { :checks => { :internal_links => { :exclude => ['^/excluded\d+'] } } }
       File.write('nanoc.yaml', YAML.dump(config))
@@ -70,11 +70,11 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   end
 
   def test_unescape_url
-    with_site do |site|
+    in_site do
       FileUtils.mkdir_p('output/stuff')
       File.write('output/stuff/right foo', 'hi')
 
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site_here)
 
       assert check.send(:valid?, 'stuff/right%20foo', 'output/origin')
       refute check.send(:valid?, 'stuff/wrong%20foo', 'output/origin')

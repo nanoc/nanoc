@@ -3,7 +3,7 @@
 class Nanoc::SiteLoaderTest < Nanoc::TestCase
 
   def test_load
-    with_site do
+    in_site do
       File.write('nanoc.yaml',              'fooness: high')
       File.write('content/foo-item.md',     'Item stuff')
       File.write('layouts/foo-layout.haml', 'Layout stuff')

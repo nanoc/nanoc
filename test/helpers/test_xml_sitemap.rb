@@ -17,7 +17,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   end
 
   def mock_site(config)
-    with_site do
+    in_site do
       File.write('nanoc.yaml', YAML.dump(config))
       return Nanoc::SiteLoader.new.load
     end

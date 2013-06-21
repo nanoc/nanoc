@@ -17,7 +17,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
   end
 
   def test_write
-    with_site do
+    in_site do
       # Create rules
       File.write('Rules', <<EOS)
 compile '/**/*' do
@@ -32,8 +32,7 @@ EOS
       File.write('content/input.txt', 'A <%= "X" %> B')
 
       # Compile
-      site = Nanoc::SiteLoader.new.load
-      site.compile
+      site_here.compile
 
       # Check paths
       assert File.file?('output/raw.txt')
@@ -44,7 +43,7 @@ EOS
   end
 
   def test_write_and_snapshot
-    with_site do
+    in_site do
       # Create rules
       File.write('Rules', <<EOS)
 compile '/**/*' do
@@ -59,7 +58,7 @@ EOS
       File.write('content/input.txt', 'stuff <%= "goes" %> here')
 
       # Compile
-      site = Nanoc::SiteLoader.new.load
+      site = site_here
       site.compile
 
       # Check paths
@@ -80,7 +79,7 @@ EOS
   end
 
   def test_include_rules
-    with_site do
+    in_site do
       # Create rep
       item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo.bar')
       rep  = Nanoc::ItemRep.new(item, :default, :snapshot_store => self.new_snapshot_store)

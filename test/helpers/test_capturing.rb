@@ -5,7 +5,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   include Nanoc::Helpers::Capturing
 
   def mock_site
-    with_site do
+    in_site do
       return Nanoc::SiteLoader.new.load
     end
   end
@@ -126,7 +126,7 @@ EOS
   end
 
   def test_dependencies
-    with_site do |site|
+    in_site do
       # Prepare
       File.open('lib/helpers.rb', 'w') do |io|
         io.write 'include Nanoc::Helpers::Capturing'
@@ -155,7 +155,7 @@ EOS
   end
 
   def test_dependency_without_item_variable
-    with_site do |site|
+    in_site do
       # Prepare
       File.open('lib/helpers.rb', 'w') do |io|
         io.write "include Nanoc::Helpers::Capturing\n"
@@ -189,7 +189,7 @@ EOS
   end
 
   def test_self
-    with_site do |site|
+    in_site do
       File.open('lib/helpers.rb', 'w') do |io|
         io.write 'include Nanoc::Helpers::Capturing'
       end
@@ -209,7 +209,7 @@ EOS
   end
 
   def test_recompile_dependency
-    with_site do |site|
+    in_site do
       # Prepare
       File.open('lib/helpers.rb', 'w') do |io|
         io.write 'include Nanoc::Helpers::Capturing'

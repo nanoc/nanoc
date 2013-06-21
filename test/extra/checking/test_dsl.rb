@@ -3,7 +3,7 @@
 class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
 
   def test_from_file
-    with_site do |site|
+    in_site do
       File.write('Checks', "check :foo do\n\nend\ndeploy_check :bar\n")
       dsl = Nanoc::Extra::Checking::DSL.from_file('Checks')
 

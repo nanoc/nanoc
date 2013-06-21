@@ -3,7 +3,7 @@
 class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_profiling_information
-    with_site do |site|
+    in_site do
       File.write('content/foo.md', 'hai')
       File.write('content/bar.md', 'hai')
       File.write('content/baz.md', 'hai')
@@ -26,7 +26,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   end
 
   def test_auto_prune
-    with_site do |site|
+    in_site do
       File.write('content/foo.md', 'hai')
       File.write('content/bar.md', 'hai')
       File.write('content/baz.md', 'hai')
@@ -64,7 +64,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   end
 
   def test_auto_prune_with_exclude
-    with_site do |site|
+    in_site do
       File.write('content/foo.md', 'hai')
       File.write('content/bar.md', 'hai')
       File.write('content/baz.md', 'hai')
@@ -107,7 +107,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   end
 
   def test_setup_and_teardown_listeners
-    with_site do
+    in_site do
       test_listener_class = Class.new(::Nanoc::CLI::Commands::Compile::Listener) do
         def start ; @started = true ; end
         def stop  ; @stopped = true ; end

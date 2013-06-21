@@ -98,7 +98,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
   def test_recompile_includes
     if_have 'sass' do
-      with_site do |site|
+      in_site do
         # Create two Sass files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         File.open('content/a.sass', 'w') do |io|
@@ -150,7 +150,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
   def test_recompile_includes_with_underscore_without_extension
     if_have 'sass' do
-      with_site do |site|
+      in_site do
         # Create two Sass files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         File.open('content/a.sass', 'w') do |io|

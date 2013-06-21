@@ -3,7 +3,7 @@
 class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
 
   def test_run_without_yes
-    with_site do |site|
+    in_site do
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
       FileUtils.mkdir_p('output2')
@@ -25,7 +25,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_yes
-    with_site do |site|
+    in_site do
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
       FileUtils.mkdir_p('output2')
@@ -45,7 +45,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_dry_run
-    with_site do |site|
+    in_site do
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
       FileUtils.mkdir_p('output2')
@@ -65,7 +65,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_exclude
-     with_site do |site|
+     in_site do
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'good-dir', 'good-file.html' ]" }
       FileUtils.mkdir_p('output')
@@ -93,7 +93,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_symlink_to_output_dir
-    with_site do |site|
+    in_site do
       # Set output dir
       FileUtils.rm_rf('output')
       FileUtils.mkdir_p('output-real')
@@ -116,7 +116,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_nested_empty_dirs
-    with_site do |site|
+    in_site do
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output' }
       FileUtils.mkdir_p('output')

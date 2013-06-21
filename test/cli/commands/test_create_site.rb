@@ -13,8 +13,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site foo )
 
     FileUtils.cd('foo') do
-      site = Nanoc::SiteLoader.new.load
-      site.compile
+      site_here.compile
     end
   end
 
