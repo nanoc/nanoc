@@ -23,7 +23,7 @@ module Nanoc::CLI
       # Load site if possible
       @site ||= nil
       if self.is_in_site_dir? && @site.nil?
-        @site = Nanoc::Site.new('.')
+        @site = Nanoc::SiteLoader.new.load
       end
 
       @site

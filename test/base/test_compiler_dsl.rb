@@ -32,7 +32,7 @@ EOS
       File.write('content/input.txt', 'A <%= "X" %> B')
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check paths
@@ -59,7 +59,7 @@ EOS
       File.write('content/input.txt', 'stuff <%= "goes" %> here')
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check paths
@@ -89,7 +89,7 @@ EOS
       File.write('more_rules.rb', "compile '/foo.*' do end")
 
       # Create other necessary stuff
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.items << item
       dsl = Nanoc::CompilerDSL.new(site.compiler.rules_collection)
 

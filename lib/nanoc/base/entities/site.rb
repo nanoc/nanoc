@@ -39,13 +39,15 @@ module Nanoc
       :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
     }
 
-    # Creates a site object for the site specified by the given
-    # `dir_or_config_hash` argument.
-    #
-    # @param [Hash, String] dir_or_config_hash If a string, contains the path
-    #   to the site directory; if a hash, contains the site configuration.
-    def initialize(dir_or_config_hash)
-      build_config(dir_or_config_hash)
+    def initialize(thing)
+      if thing.is_a?(Hash) && thing.has_key?(:items)
+        @items         = thing.fetch(:items)
+        @layouts       = thing.fetch(:layouts)
+        @code_snippets = thing.fetch(:code_snippets)
+        @config        = thing.fetch(:config)
+      else
+        build_config(thing)
+      end
     end
 
     # Compiles the site.
@@ -308,7 +310,7 @@ module Nanoc
           File.join(dir_or_config_hash, filename)
         end
         @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
-        @config[:data_sources].map! { |ds| ds.symbolize_keys_recursively }
+        @config[:data_sources] = @config[:data_sources].map { |ds| ds.symbolize_keys_recursively }
       else
         # Use passed config hash
         @config = DEFAULT_CONFIG.merge(dir_or_config_hash)

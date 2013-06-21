@@ -321,7 +321,7 @@ EOS
     # this data source to work.
     def site_setup
       # Get site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
 
       # Set up data sources
       site.data_sources.each do |data_source|
@@ -333,7 +333,7 @@ EOS
     # default layout, and so on.
     def site_populate
       # Get site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       data_source = site.data_sources[0]
 
       # Create home page

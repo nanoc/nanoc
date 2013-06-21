@@ -76,12 +76,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_load_should_be_idempotent
-    # Create site
-    Nanoc::CLI.run %w( create_site bar)
-
-    FileUtils.cd('bar') do
-      site = Nanoc::Site.new('.')
-
+    with_site do |site|
       compiler = Nanoc::Compiler.new(site)
       def compiler.load_rules
         raise 'oh my gosh it is borken'
@@ -100,7 +95,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       Nanoc::CLI.run %w( compile )
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # At this point, even the already compiled items in the previous pass
@@ -126,7 +121,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       assert_raises Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName do
         site.compile
       end
@@ -153,7 +148,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check
@@ -183,7 +178,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check
@@ -210,7 +205,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check
@@ -238,7 +233,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       EOS
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check
@@ -254,7 +249,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       EOS
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check
@@ -282,7 +277,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check
@@ -302,7 +297,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "layout '/**/*', :erb\n"
       end
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       assert_equal Set.new(%w( content/blah.dat )), Set.new(Dir['content/*'])
@@ -318,7 +313,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
 
       # Check

@@ -60,6 +60,21 @@ module Nanoc::TestHelpers
       @site_num += 1
     end
 
+    # Create site
+    unless File.directory?(site_name)
+      FileUtils.mkdir_p(site_name)
+      FileUtils.cd(site_name) do
+        create_site_here(params)
+      end
+    end
+
+    # Yield site
+    FileUtils.cd(site_name) do
+      yield Nanoc::SiteLoader.new.load
+    end
+  end
+
+  def create_site_here(params={})
     # Build rules
     rules_content = <<EOS
 compile '/**/*' do
@@ -78,30 +93,19 @@ layout '/**/*', :erb
 EOS
     rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
 
-    # Create site
-    unless File.directory?(site_name)
-      FileUtils.mkdir_p(site_name)
-      FileUtils.cd(site_name) do
-        FileUtils.mkdir_p('content')
-        FileUtils.mkdir_p('layouts')
-        FileUtils.mkdir_p('lib')
-        FileUtils.mkdir_p('output')
+    FileUtils.mkdir_p('content')
+    FileUtils.mkdir_p('layouts')
+    FileUtils.mkdir_p('lib')
+    FileUtils.mkdir_p('output')
 
-        if params[:has_layout]
-          File.open('layouts/default.html', 'w') do |io|
-            io.write('... <%= @yield %> ...')
-          end
-        end
-
-        File.write('nanoc.yaml', 'stuff: 12345')
-        File.write('Rules', rules_content)
+    if params[:has_layout]
+      File.open('layouts/default.html', 'w') do |io|
+        io.write('... <%= @yield %> ...')
       end
     end
 
-    # Yield site
-    FileUtils.cd(site_name) do
-      yield Nanoc::Site.new('.')
-    end
+    File.write('nanoc.yaml', 'stuff: 12345')
+    File.write('Rules', rules_content)
   end
 
   def setup

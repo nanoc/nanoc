@@ -4,9 +4,19 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def setup
     super
-    site = Nanoc::Site.new({})
+
+    @old_pwd = Dir.getwd
+    create_site_here
+    site = Nanoc::SiteLoader.new.load
+    FileUtils.cd('content')
     config = Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG
     @data_source = Nanoc::DataSources::Filesystem.new(site, nil, nil, config)
+  end
+
+  def teardown
+    FileUtils.cd(@old_pwd)
+
+    super
   end
 
   def test_all_base_filenames_in

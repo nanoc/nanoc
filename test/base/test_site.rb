@@ -4,19 +4,19 @@ class Nanoc::SiteTest < Nanoc::TestCase
 
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Errors::GenericTrivial) do
-      Nanoc::Site.new('.')
+      Nanoc::SiteLoader.new.load
     end
   end
 
   def test_initialize_with_dir_with_config_yaml
     File.write('config.yaml', 'output_dir: public_html')
-    site = Nanoc::Site.new('.')
+    site = Nanoc::SiteLoader.new.load
     assert_equal 'public_html', site.config[:output_dir]
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
     File.write('nanoc.yaml', 'output_dir: public_html')
-    site = Nanoc::Site.new('.')
+    site = Nanoc::SiteLoader.new.load
     assert_equal 'public_html', site.config[:output_dir]
   end
 
@@ -52,7 +52,7 @@ class Nanoc::SiteTest < Nanoc::TestCase
       end
 
       # Create site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
 
       # Check
       assert_equal 1,      site.data_sources.size
@@ -130,7 +130,7 @@ describe 'Nanoc::Site#data_sources' do
         io.write "      bbb: two\n"
       end
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       data_sources = site.data_sources
 
       assert data_sources.first.config[:aaa] = 'one'

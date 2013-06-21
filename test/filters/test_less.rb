@@ -77,7 +77,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::SiteLoader.new.load
         site.compile
 
         # Check
@@ -90,7 +90,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
         File.write('content/b.less', 'p { color: blue; }')
 
         # Recompile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::SiteLoader.new.load
         site.compile
 
         # Recheck

@@ -343,7 +343,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile once
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
     end
 
@@ -358,7 +358,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       outdatedness_checker = site.compiler.send :outdatedness_checker
       reps = site.compiler.item_rep_store.reps
       assert_equal 1, reps.size
@@ -381,13 +381,13 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         assert_nil outdatedness_checker.outdatedness_reason_for(item)
@@ -411,13 +411,13 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         refute outdatedness_checker.outdated?(item), "item should not be outdated"
