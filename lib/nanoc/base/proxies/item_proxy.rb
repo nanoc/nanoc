@@ -16,6 +16,10 @@ module Nanoc
       @item_rep_store = item_rep_store
     end
 
+    def inspect
+      "<Nanoc::Item* identifier=#{@item.identifier.to_s.inspect}>"
+    end
+
     # @return [Enumerable<Nanoc::ItemRep>] This item’s collection of item reps
     def reps
       @_reps ||= @item_rep_store.reps_for_item(@item)
