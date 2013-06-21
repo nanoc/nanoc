@@ -9,7 +9,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     create_site_here
     site = Nanoc::SiteLoader.new.load
     FileUtils.cd('content')
-    config = Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG
+    config = Nanoc::SiteLoader::DEFAULT_DATA_SOURCE_CONFIG
     @data_source = Nanoc::DataSources::Filesystem.new(site, nil, nil, config)
   end
 

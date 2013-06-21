@@ -2,9 +2,33 @@
 
 module Nanoc
 
+  # Loads sites.
+  #
   # @api private
   class SiteLoader
 
+    # The default configuration for a data source. A data source's
+    # configuration overrides these options.
+    DEFAULT_DATA_SOURCE_CONFIG = {
+      :type            => 'filesystem',
+      :items_root      => '/',
+      :layouts_root    => '/',
+      :text_extensions => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort
+    }
+
+    # The default configuration for a site. A site's configuration overrides
+    # these options: when a {Nanoc::Site} is created with a configuration
+    # that lacks some options, the default value will be taken from
+    # `DEFAULT_CONFIG`.
+    DEFAULT_CONFIG = {
+      :output_dir         => 'output',
+      :data_sources       => [ {} ],
+      :index_filenames    => [ 'index.html' ],
+      :enable_output_diff => false,
+      :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
+    }
+
+    # @return [Nanoc::Site] A new site based on the current working directory
     def load
       # Load
       self.config
@@ -38,6 +62,8 @@ module Nanoc
       filenames = %w( nanoc.yaml config.yaml )
       filenames.find { |f| File.file?(f) }
     end
+
+  protected
 
     # Returns the data sources for this site. Will create a new data source if
     # none exists yet.
@@ -113,9 +139,9 @@ module Nanoc
 
         # Load
         config = YAML.load_file(filename).symbolize_keys_recursively
-        config = Nanoc::Site::DEFAULT_CONFIG.merge(config)
+        config = DEFAULT_CONFIG.merge(config)
         config[:data_sources] = config[:data_sources].map do |dsc|
-          Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG.merge(dsc)
+          DEFAULT_DATA_SOURCE_CONFIG.merge(dsc)
         end
 
         # Convert to proper configuration

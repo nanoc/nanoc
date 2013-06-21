@@ -18,33 +18,22 @@ module Nanoc
   # etc. The way site data is stored depends on the data source.
   class Site
 
-    # The default configuration for a data source. A data source's
-    # configuration overrides these options.
-    DEFAULT_DATA_SOURCE_CONFIG = {
-      :type            => 'filesystem',
-      :items_root      => '/',
-      :layouts_root    => '/',
-      :text_extensions => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort
-    }
-
-    # The default configuration for a site. A site's configuration overrides
-    # these options: when a {Nanoc::Site} is created with a configuration
-    # that lacks some options, the default value will be taken from
-    # `DEFAULT_CONFIG`.
-    DEFAULT_CONFIG = {
-      :output_dir         => 'output',
-      :data_sources       => [ {} ],
-      :index_filenames    => [ 'index.html' ],
-      :enable_output_diff => false,
-      :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
-    }
-
+    # @return [Nanoc::Configuration]
     attr_reader :config
+
+    # @return [Enumerable<Nanoc::CodeSnippet>]
     attr_reader :code_snippets
+
+    # @return [Enumerable<Nanoc::DataSource>]
     attr_reader :data_sources
+
+    # @return [Enumerable<Nanoc::Item>]
     attr_reader :items
+
+    # @return [Enumerable<Nanoc::Layout>]
     attr_reader :layouts
 
+    # @param [Hash] data A hash containing the `:config`, `:code_snippets`, `:data_sources`, `:items` and `:layouts`.
     def initialize(data)
       @config        = data.fetch(:config)
       @code_snippets = data.fetch(:code_snippets)
