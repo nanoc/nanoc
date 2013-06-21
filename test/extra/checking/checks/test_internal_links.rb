@@ -56,10 +56,11 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   end
 
   def test_exclude
-    with_site do |site|
+    with_site do
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
-      site.config.update({ :checks => { :internal_links => { :exclude => ['^/excluded\d+'] } } })
+      config = { :checks => { :internal_links => { :exclude => ['^/excluded\d+'] } } }
+      File.write('nanoc.yaml', YAML.dump(config))
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site_here)
 
       # Test
       assert check.send(:valid?, '/excluded1', 'output/origin')

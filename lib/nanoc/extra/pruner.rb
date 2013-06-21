@@ -44,6 +44,7 @@ module Nanoc::Extra
       require 'find'
 
       # Get compiled files
+      @site.compiler.load
       writer = @site.compiler.item_rep_writer
       compiled_files = @site.compiler.item_rep_store.reps.
         flat_map { |r| r.paths_without_snapshot }.

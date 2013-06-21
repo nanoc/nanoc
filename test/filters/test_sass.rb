@@ -121,7 +121,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::SiteLoader.new.load
         site.compile
 
         # Check
@@ -136,7 +136,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::SiteLoader.new.load
         site.compile
 
         # Recheck
@@ -173,7 +173,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::SiteLoader.new.load
         site.compile
 
         # Check
@@ -188,7 +188,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::SiteLoader.new.load
         site.compile
 
         # Recheck

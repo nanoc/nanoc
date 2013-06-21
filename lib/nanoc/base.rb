@@ -41,6 +41,9 @@ require 'nanoc/base/stores/rule_memory_store'
 require 'nanoc/base/stores/item_rep_writer'
 require 'nanoc/base/stores/item_rep_store'
 
+# Load interactor classes
+require 'nanoc/base/interactors/site_loader'
+
 # Load compilation classes
 require 'nanoc/base/compilation/compiler'
 require 'nanoc/base/compilation/compiler_dsl'
