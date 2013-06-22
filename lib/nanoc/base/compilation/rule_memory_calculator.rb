@@ -98,18 +98,13 @@ module Nanoc
     # @return [Boolean] true if the rule memory for the given object has
     # changed since the last compilation, false otherwise
     def rule_memory_differs_for(obj)
-      !rule_memory_store[obj].eql?(rule_memory_calculator[obj])
+      !rule_memory_store[obj].eql?(self[obj])
     end
     memoize :rule_memory_differs_for
 
     # @return [Nanoc::RuleMemoryStore] The rule memory store
     def rule_memory_store
       @compiler.rule_memory_store
-    end
-
-    # @return [Nanoc::RuleMemoryCalculator] The rule memory calculator
-    def rule_memory_calculator
-      @compiler.rule_memory_calculator
     end
 
   end
