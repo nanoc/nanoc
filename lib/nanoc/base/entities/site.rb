@@ -2,20 +2,7 @@
 
 module Nanoc
 
-  # The in-memory representation of a nanoc site. It holds references to the
-  # following site data:
-  #
-  # * {#items}         — the list of items         ({Nanoc::Item})
-  # * {#layouts}       — the list of layouts       ({Nanoc::Layout})
-  # * {#code_snippets} — the list of code snippets ({Nanoc::CodeSnippet})
-  # * {#data_sources}  — the list of data sources  ({Nanoc::DataSource})
-  #
-  # In addition, each site has a {#config} hash which stores the site
-  # configuration.
-  #
-  # The physical representation of a {Nanoc::Site} is usually a directory
-  # that contains a configuration file, site data, a rakefile, a rules file,
-  # etc. The way site data is stored depends on the data source.
+  # The in-memory representation of a nanoc site.
   class Site
 
     # @return [Nanoc::Configuration]
