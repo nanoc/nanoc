@@ -77,8 +77,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::SiteLoader.new.load
-        site.compile
+        compile_site_here
 
         # Check
         assert Dir['output/*'].size == 1
@@ -90,8 +89,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
         File.write('content/b.less', 'p { color: blue; }')
 
         # Recompile
-        site = Nanoc::SiteLoader.new.load
-        site.compile
+        compile_site_here
 
         # Recheck
         assert Dir['output/*'].size == 1

@@ -79,7 +79,7 @@ module Nanoc::CLI
     end
 
     # Prints the given error to stderr. Includes message, possible resolution
-    # (see {#resolution_for}), compilation stack, backtrace, etc.
+    # (see {#resolution_for}), backtrace, etc.
     #
     # @param [Error] error The error that should be described
     #
@@ -89,7 +89,7 @@ module Nanoc::CLI
     end
 
     # Prints the given error to stderr. Includes message, possible resolution
-    # (see {#resolution_for}), compilation stack, backtrace, etc.
+    # (see {#resolution_for}), backtrace, etc.
     #
     # @param [Error] error The error that should be described
     #
@@ -121,7 +121,6 @@ module Nanoc::CLI
 
       # Sections
       self.write_error_message(    stream, error)
-      self.write_compilation_stack(stream, error)
       self.write_stack_trace(      stream, error)
 
       # Issue link
@@ -143,7 +142,6 @@ module Nanoc::CLI
 
       # Sections
       self.write_error_message(      stream, error, :verbose => true)
-      self.write_compilation_stack(  stream, error, :verbose => true)
       self.write_stack_trace(        stream, error, :verbose => true)
       self.write_version_information(stream,        :verbose => true)
       self.write_system_information( stream,        :verbose => true)
@@ -165,16 +163,6 @@ module Nanoc::CLI
     # @return [Nanoc::Site] The site that is currently being processed
     def site
       @command && @command.site
-    end
-
-    # @return [Nanoc::Compiler] The compiler for the current site
-    def compiler
-      site && site.compiler
-    end
-
-    # @return [Array] The current compilation stack
-    def stack
-      (compiler && compiler.stack) || []
     end
 
     # @return [Hash<String, Array>] A hash containing the gem names as keys and gem versions as value
@@ -274,22 +262,6 @@ module Nanoc::CLI
       stream.puts "#{error.class}: #{error.message}"
       resolution = self.resolution_for(error)
       stream.puts "#{resolution}" if resolution
-    end
-
-    def write_compilation_stack(stream, error, params={})
-      self.write_section_header(stream, 'Compilation stack', params)
-
-      if self.stack.empty?
-        stream.puts "  (empty)"
-      else
-        self.stack.reverse.each do |obj|
-          if obj.is_a?(Nanoc::ItemRep)
-            stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
-          else # layout
-            stream.puts "  - [layout] #{obj.identifier}"
-          end
-        end
-      end
     end
 
     def write_stack_trace(stream, error, params={})

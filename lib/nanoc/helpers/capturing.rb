@@ -89,7 +89,7 @@ module Nanoc::Helpers
       if block_given? # Set content
         # Get args
         if args.size != 1
-          raise ArgumentError, "expected 1 argument (the name " + 
+          raise ArgumentError, "expected 1 argument (the name " +
             "of the capture) but got #{args.size} instead"
         end
         name = args[0]
@@ -107,7 +107,7 @@ module Nanoc::Helpers
         name = args[1]
 
         # Create dependency
-        current_item = @site.compiler.dependency_tracker.top
+        current_item = @_compiler.dependency_tracker.top
         unwrapped_item = item.item
         if unwrapped_item != current_item
           Nanoc::NotificationCenter.post(:visit_started, unwrapped_item)
@@ -118,12 +118,12 @@ module Nanoc::Helpers
           # the content attribute to reset it. :(
           # FIXME clean this up
           if !@site.captures_store_compiled_items.include? item
-            @site.captures_store_compiled_items << item 
+            @site.captures_store_compiled_items << item
             item.forced_outdated = true
             item.reps.each do |r|
               content = item.content
               r.content = { :raw => content, :last => content }
-              @site.compiler.send(:compile_rep, r)
+              @_compiler.send(:compile_rep, r)
             end
           end
         end

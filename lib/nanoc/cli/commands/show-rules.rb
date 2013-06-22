@@ -15,7 +15,7 @@ module Nanoc::CLI::Commands
       self.require_site
 
       @c    = Nanoc::CLI::ANSIStringColorizer
-      @calc = self.site.compiler.rule_memory_calculator
+      @calc = Nanoc::Compiler.new(self.site).rule_memory_calculator
 
       # TODO explain /foo/
       # TODO explain content/foo.html

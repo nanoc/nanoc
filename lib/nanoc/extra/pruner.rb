@@ -44,9 +44,10 @@ module Nanoc::Extra
       require 'find'
 
       # Get compiled files
-      @site.compiler.load
-      writer = @site.compiler.item_rep_writer
-      compiled_files = @site.compiler.item_rep_store.reps.
+      compiler = Nanoc::Compiler.new(@site)
+      compiler.load
+      writer = compiler.item_rep_writer
+      compiled_files = compiler.item_rep_store.reps.
         flat_map { |r| r.paths_without_snapshot }.
         select { |f| writer.exist?(f) }.
         map { |f| writer.full_path_for(f) }

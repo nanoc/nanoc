@@ -121,8 +121,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::SiteLoader.new.load
-        site.compile
+        compile_site_here
 
         # Check
         assert Dir['output/*'].size == 1
@@ -136,8 +135,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::SiteLoader.new.load
-        site.compile
+        compile_site_here
 
         # Recheck
         assert Dir['output/*'].size == 1
@@ -173,8 +171,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::SiteLoader.new.load
-        site.compile
+        compile_site_here
 
         # Check
         assert Dir['output/*'].size == 1
@@ -188,8 +185,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::SiteLoader.new.load
-        site.compile
+        compile_site_here
 
         # Recheck
         assert Dir['output/*'].size == 1

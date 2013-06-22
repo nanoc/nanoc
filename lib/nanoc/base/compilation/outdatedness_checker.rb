@@ -9,17 +9,9 @@ module Nanoc
 
     extend Nanoc::Memoization
 
-    # @option params [Nanoc::Site] :site (nil) The site this outdatedness
-    #   checker belongs to.
-    #
-    # @option params [Nanoc::ChecksumStore] :checksum_store (nil) The
-    #   checksum store where checksums of items, layouts, … are stored.
-    #
-    # @option params [Nanoc::DependencyTracker] :dependency_tracker (nil) The
-    #   dependency tracker for the given site.
     def initialize(params={})
-      @site = params[:site] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :site parameter'
+      @compiler = params[:compiler] or raise ArgumentError,
+        'Nanoc::OutdatednessChecker#initialize needs a :compiler parameter'
       @checksum_store = params[:checksum_store] or raise ArgumentError,
         'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
       @dependency_tracker = params[:dependency_tracker] or raise ArgumentError,
@@ -105,12 +97,12 @@ module Nanoc
           end
 
           # Outdated if code snippets outdated
-          return Nanoc::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
+          return Nanoc::OutdatednessReasons::CodeSnippetsModified if @compiler.site.code_snippets.any? do |cs|
             object_modified?(cs)
           end
 
           # Outdated if configuration outdated
-          return Nanoc::OutdatednessReasons::ConfigurationModified if object_modified?(site.config)
+          return Nanoc::OutdatednessReasons::ConfigurationModified if object_modified?(@compiler.site.config)
 
           # Not outdated
           return nil
@@ -218,22 +210,17 @@ module Nanoc
 
     # TODO document
     def rule_memory_calculator
-      site.compiler.rule_memory_calculator
+      @compiler.rule_memory_calculator
     end
 
     # @return [Nanoc::RulesCollection] The rules collection
     def rules_collection
-      site.compiler.rules_collection
+      @compiler.rules_collection
     end
 
     # @return [Nanoc::DependencyTracker] The dependency tracker
     def dependency_tracker
       @dependency_tracker
-    end
-
-    # @return [Nanoc::Site] The site
-    def site
-      @site
     end
 
   end

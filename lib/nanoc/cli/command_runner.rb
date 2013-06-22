@@ -37,10 +37,12 @@ module Nanoc::CLI
       Nanoc::SiteLoader.cwd_is_nanoc_site?
     end
 
+    # TODO do not load the site
     def require_site
       self.site
     end
 
+    # TODO move #site logic in here
     def load_site
       self.site
     end
@@ -50,11 +52,6 @@ module Nanoc::CLI
     # @see Nanoc::CLI.debug?
     def debug?
       Nanoc::CLI.debug?
-    end
-
-    # @return [Array] The compilation stack.
-    def stack
-      (self.site && self.site.compiler.stack) || []
     end
 
   end

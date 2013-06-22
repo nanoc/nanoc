@@ -27,6 +27,7 @@ EOS
 
     # Build site
     @site = mock_site
+    @_compiler = Nanoc::Compiler.new(@site)
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     item.site = @site
@@ -83,6 +84,7 @@ foot
 EOS
 
     @site = mock_site
+    @_compiler = Nanoc::Compiler.new(@site)
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     @item = Nanoc::ItemProxy.new(item, item_rep_store)
@@ -105,6 +107,7 @@ end
 EOS
 
     @site = mock_site
+    @_compiler = Nanoc::Compiler.new(@site)
     item_rep_store = Nanoc::ItemRepStore.new([])
     item = Nanoc::Item.new('moo', {}, '/blah')
     @item = Nanoc::ItemProxy.new(item, item_rep_store)

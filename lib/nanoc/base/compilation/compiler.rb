@@ -71,12 +71,8 @@ module Nanoc
     # Compiles the site and writes out the compiled item representations.
     #
     def run
-      # Create output directory if necessary
-      FileUtils.mkdir_p(@site.config[:output_dir])
-
       # Compile reps
       load
-      @site.freeze # FIXME this does not belong here
 
       # Determine which reps need to be recompiled
       forget_dependencies_if_outdated(items)
@@ -268,14 +264,15 @@ module Nanoc
         :items      => Nanoc::ItemArray.new.tap { |a| site.items.each { |i| a << Nanoc::ItemProxy.new(i, self.item_rep_store) }},
         :layouts    => site.layouts,
         :config     => site.config,
-        :site       => site
+        :site       => site,
+        :_compiler  => self
       })
     end
 
     # @return [Nanoc::OutdatednessChecker] The outdatedness checker
     def outdatedness_checker
       Nanoc::OutdatednessChecker.new(
-        :site => @site,
+        :compiler           => self,
         :checksum_store     => self.checksum_store,
         :dependency_tracker => self.dependency_tracker,
         :item_rep_writer    => self.item_rep_writer,

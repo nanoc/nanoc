@@ -32,7 +32,7 @@ EOS
       File.write('content/input.txt', 'A <%= "X" %> B')
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check paths
       assert File.file?('output/raw.txt')
@@ -59,7 +59,8 @@ EOS
 
       # Compile
       site = site_here
-      site.compile
+      compiler = Nanoc::Compiler.new(site)
+      compiler.run
 
       # Check paths
       assert File.file?('output/foo.txt')
@@ -68,7 +69,7 @@ EOS
       assert_equal 'stuff goes here',          File.read('output/bar.txt')
 
       # Check snapshot
-      item = Nanoc::ItemProxy.new(site.items[0], site.compiler.item_rep_store)
+      item = Nanoc::ItemProxy.new(site.items[0], compiler.item_rep_store)
       assert_equal 'stuff <%= "goes" %> here', item.compiled_content(snapshot: :foo)
       assert_equal 'stuff goes here',          item.compiled_content(snapshot: :last)
     end
@@ -90,13 +91,14 @@ EOS
       # Create other necessary stuff
       site = Nanoc::SiteLoader.new.load
       site.items << item
-      dsl = Nanoc::CompilerDSL.new(site.compiler.rules_collection)
+      compiler = Nanoc::Compiler.new(site)
+      dsl = Nanoc::CompilerDSL.new(compiler.rules_collection)
 
       # Include rules
       dsl.include_rules 'more_rules'
 
       # Check that the rule made it into the collection
-      refute_nil site.compiler.rules_collection.compilation_rule_for(rep)
+      refute_nil compiler.rules_collection.compilation_rule_for(rep)
     end
   end
 

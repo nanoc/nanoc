@@ -30,16 +30,6 @@ module Nanoc
       self.freeze
     end
 
-    # TODO remove
-    def compile
-      compiler.run
-    end
-
-    # TODO remove
-    def compiler
-      @compiler ||= Compiler.new(self)
-    end
-
     # Prevents all further modifications to itself, its items, its layouts etc.
     #
     # @return [void]

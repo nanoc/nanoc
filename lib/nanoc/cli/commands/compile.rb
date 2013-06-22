@@ -346,9 +346,10 @@ module Nanoc::CLI::Commands
       self.load_site
 
       puts "Compiling site…"
-      self.site.compiler.load
+      @compiler = Nanoc::Compiler.new(self.site)
+      @compiler.load
       self.run_listeners_while do
-        self.site.compile
+        @compiler.run
         self.prune
       end
 
@@ -362,7 +363,7 @@ module Nanoc::CLI::Commands
     def prune
       # TODO make this a listener (and eventually move this into Nanoc::Compiler itself)
       if self.site.config[:prune][:auto_prune]
-        identifier = self.site.compiler.item_rep_writer.class.identifier
+        identifier = @compiler.item_rep_writer.class.identifier
         pruner_class = Nanoc::Extra::Pruner.named(identifier)
         pruner_class.new(self.site, :exclude => self.prune_config_exclude).run
       end
@@ -402,7 +403,7 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      self.site.compiler.item_rep_store.reps
+      @compiler.item_rep_store.reps
     end
 
     def prune_config

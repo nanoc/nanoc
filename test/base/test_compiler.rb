@@ -8,7 +8,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_no_reps
     in_site do
-      site_here.compile
+      compile_site_here
 
       assert Dir['output/*'].empty?
     end
@@ -18,7 +18,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     in_site do
       File.write('content/index.html', 'o hello')
 
-      site_here.compile
+      compile_site_here
 
       assert_equal [ 'output/index.html' ], Dir['output/*']
       assert File.file?('output/index.html')
@@ -31,7 +31,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       File.write('content/foo.html', 'o hai')
       File.write('content/bar.html', 'o bai')
 
-      site_here.compile
+      compile_site_here
 
       assert Dir['output/*'].size == 2
       assert File.file?('output/foo/index.html')
@@ -50,7 +50,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         'content/bar.html',
         'manatee')
 
-      site_here.compile
+      compile_site_here
 
       assert Dir['output/*'].size == 2
       assert File.file?('output/foo/index.html')
@@ -69,9 +69,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         'content/bar.html',
         '<%= @items.find { |i| i.identifier == "/foo.html" }.compiled_content %>')
 
-      site = site_here
       assert_raises Nanoc::Errors::RecursiveCompilation do
-        site.compile
+        compile_site_here
       end
     end
   end
@@ -96,12 +95,16 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       File.write('content/foo.md', 'blah')
 
       site = site_here
-      site.compile
-      site.compile
+
+      compiler = Nanoc::Compiler.new(site)
+      compiler.run
+
+      compiler = Nanoc::Compiler.new(site)
+      compiler.run
 
       # At this point, even the already compiled items in the previous pass
       # should have their compiled content assigned, so this should work:
-      site.compiler.item_rep_store.reps.each { |r| r.compiled_content }
+      compiler.item_rep_store.reps.each { |r| r.compiled_content }
     end
   end
 
@@ -122,9 +125,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = site_here
       assert_raises Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName do
-        site.compile
+        compile_site_here
       end
     end
   end
@@ -149,7 +151,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert_equal '[[[<%= @item.compiled_content(:snapshot => :aaa) %>]]]',
@@ -179,7 +181,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert_equal '[stuff]', File.read('output/a.html')
@@ -205,7 +207,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert_equal 'This is 123.', File.read('output/index.html')
@@ -232,7 +234,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       EOS
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert_equal '<h1>A</h1>', File.read('output/index.html')
@@ -247,7 +249,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       EOS
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert_equal '<h1>B</h1>', File.read('output/index.html')
@@ -274,7 +276,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert_equal '@rep.name = default - @item_rep.name = default', File.read('output/index.html')
@@ -293,7 +295,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "layout '/**/*', :erb\n"
       end
 
-      site_here.compile
+      compile_site_here
 
       assert_equal Set.new(%w( content/blah.dat )), Set.new(Dir['content/*'])
       assert_equal Set.new(%w( output/blah.dat )), Set.new(Dir['output/*'])
@@ -308,7 +310,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site_here.compile
+      compile_site_here
 
       # Check
       assert Dir['tmp/text_items/*'].empty?

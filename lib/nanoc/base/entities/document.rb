@@ -34,6 +34,7 @@ module Nanoc
       elsif content.is_a?(Nanoc::TextualContent) || content.is_a?(Nanoc::BinaryContent)
         @content = content
       else
+        # FIXME does it make sense to have a nil path?
         @content = Nanoc::TextualContent.new(content.to_s, nil)
       end
 

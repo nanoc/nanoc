@@ -39,7 +39,8 @@ module Nanoc::CLI::Commands
   protected
 
     def pruner_class
-      identifier = self.site.compiler.item_rep_writer.class.identifier
+      compiler = Nanoc::Compiler.new(self.site)
+      identifier = compiler.item_rep_writer.class.identifier
       Nanoc::Extra::Pruner.named(identifier)
     end
 
@@ -50,7 +51,7 @@ module Nanoc::CLI::Commands
     def prune_config_exclude
       self.prune_config.fetch(:exclude, {})
     end
-    
+
   end
 
 end

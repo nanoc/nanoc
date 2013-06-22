@@ -103,11 +103,12 @@ module Nanoc::Helpers
         :layout     => layout,
         :layouts    => @layouts,
         :config     => @config,
-        :site       => @site
+        :site       => @site,
+        :_compiler  => @_compiler
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name, filter_args = @site.compiler.rules_collection.filter_for_layout(layout)
+      filter_name, filter_args = @_compiler.rules_collection.filter_for_layout(layout)
       raise Nanoc::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class

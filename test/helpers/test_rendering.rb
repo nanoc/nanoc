@@ -14,7 +14,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       end
 
       @site = site_here
-      @site.compiler.load
+      @_compiler = Nanoc::Compiler.new(@site)
+      @_compiler.load
       assert_equal('This is the /foo layout.', render('/foo'))
     end
   end
@@ -36,7 +37,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       File.open('layouts/foo', 'w')
 
       @site = site_here
-      @site.compiler.load
+      @_compiler = Nanoc::Compiler.new(@site)
+      @_compiler.load
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo'
       end
@@ -51,7 +53,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       File.open('layouts/foo', 'w')
 
       @site = site_here
-      @site.compiler.load
+      @_compiler = Nanoc::Compiler.new(@site)
+      @_compiler.load
       assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo'
       end
@@ -68,7 +71,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       end
 
       @site = site_here
-      @site.compiler.load
+      @_compiler = Nanoc::Compiler.new(@site)
+      @_compiler.load
 
       _erbout = '[erbout-before]'
       result = render '/foo' do

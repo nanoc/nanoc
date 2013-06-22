@@ -22,8 +22,10 @@ module Nanoc::Extra::Checking::Checks
   protected
 
     def item_rep_paths
-      @site.compiler.build_reps
-      @site.compiler.item_rep_store.reps.
+      compiler = Nanoc::Compiler.new(@site)
+      compiler.load
+      compiler.build_reps
+      compiler.item_rep_store.reps.
         flat_map { |r| r.paths_without_snapshot }.
         map { |r| File.join(@site.config[:output_dir], r) }
     end
@@ -31,7 +33,8 @@ module Nanoc::Extra::Checking::Checks
     def pruner
       @pruner ||= begin
         exclude_config = @site.config.fetch(:prune, {}).fetch(:exclude, [])
-        identifier = self.site.compiler.item_rep_writer.class.identifier
+        compiler = Nanoc::Compiler.new(self.site)
+        identifier = compiler.item_rep_writer.class.identifier
         pruner_class = Nanoc::Extra::Pruner.named(identifier)
         pruner_class.new(@site, :exclude => exclude_config)
       end

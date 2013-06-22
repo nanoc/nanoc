@@ -78,6 +78,10 @@ module Nanoc::TestHelpers
     Nanoc::SiteLoader.new.load
   end
 
+  def compile_site_here
+    Nanoc::Compiler.new(site_here).run
+  end
+
   def create_site_here(params={})
     # Build rules
     rules_content = <<EOS
