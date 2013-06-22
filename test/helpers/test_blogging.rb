@@ -24,7 +24,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     end
   end
 
-  def mock_article
+  def mock_article(custom_attrs={})
     attrs = {
       :updated_at          => Time.now - 500,
       :kind                => 'article',
@@ -35,7 +35,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       :excerpt             => nil,
       :author_name         => nil,
       :author_uri          => nil,
-    }
+    }.merge(custom_attrs)
     item = Nanoc::Item.new('item content', attrs, '/article/')
     item.stubs(:path).returns('/meow.html')
     item.stubs(:compiled_content).returns('stuff')
@@ -46,13 +46,13 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     Nanoc::Item.new('item content', { :kind => 'item' }, '/item/')
   end
 
-  def mock_feed_item
+  def mock_feed_item(custom_attrs={})
     attrs = {
       :title       => 'My Cool Blog',
       :author_name => 'Denis Defreyne',
       :author_uri  => 'http://stoneship.org/',
       :feed_uri    => nil,
-    }
+    }.merge(custom_attrs)
     @item = Nanoc::Item.new('content stuff', attrs, '/feed.xml')
     @item.stubs(:path).returns("/journal/feed/")
     @item
@@ -122,16 +122,18 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_times
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article, mock_article ]
-
-      # Create item 1
-      @items[1][:updated_at] = Time.now - 500
-      @items[1][:created_at] = Time.now - 1000
+      @items = [
+        mock_item,
+        mock_article({
+          :updated_at => Time.now - 500,
+          :created_at => Time.now - 1000,
+          }),
+        mock_article({
+          :updated_at => Time.now - 250,
+          :created_at => Time.now - 1200,
+          })
+      ]
       @items[1].stubs(:compiled_content).returns('item 1 content')
-
-      # Create item 2
-      @items[2][:updated_at] = Time.now - 250
-      @items[2][:created_at] = Time.now - 1200
       @items[2].stubs(:compiled_content).returns('item 2 content')
 
       # Mock site
@@ -200,8 +202,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = self.mock_feed_item
-      @item[:title] = nil
+      @item = self.mock_feed_item(:title => nil)
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -224,8 +225,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = self.mock_feed_item
-      @item[:author_name] = nil
+      @item = self.mock_feed_item(:author_name => nil)
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -241,11 +241,12 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_author_name_and_uri_from_content_item
     if_have 'builder' do
       # Create items
-      @items = [ mock_article ]
-
-      # Create item 1
-      @items[0][:author_name] = "Don Alias"
-      @items[0][:author_uri] = "http://don.example.com/"
+      @items = [
+        mock_article({
+          :author_name => "Don Alias",
+          :author_uri  => "http://don.example.com/"
+        })
+      ]
       @items[0].stubs(:compiled_content).returns('item 1 content')
       @items[0].stubs(:path).returns('/something')
 
@@ -275,8 +276,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @site.stubs(:config).returns({ :base_url => 'http://example.com' })
 
       # Create feed item
-      @item = self.mock_feed_item
-      @item[:author_uri] = nil
+      @item = self.mock_feed_item(:author_uri => nil)
 
       # Check
       error = assert_raises(Nanoc::Errors::GenericTrivial) do
@@ -292,9 +292,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_articles_created_at
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article, mock_article ]
-      @items[1][:created_at] = Time.now.to_s
-      @items[2][:created_at] = nil
+      @items = [
+        mock_item,
+        mock_article({ :created_at => Time.now.to_s }),
+        mock_article({ :created_at => nil }),
+      ]
 
       # Mock site
       @site = mock_site({ :base_url => 'http://example.com' })
@@ -367,9 +369,10 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_articles_param
     if_have 'builder' do
       # Mock items
-      @items = [ mock_article, mock_article ]
-
-      @items[1][:title] = 'Item One'
+      @items = [
+        mock_article,
+        mock_article({ :title => 'Item One' }),
+      ]
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
@@ -386,11 +389,10 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_limit_param
     if_have 'builder' do
       # Mock articles
-      @items = [ mock_article, mock_article ]
-      @items.each_with_index do |article, i|
-        article[:title]      = "Article #{i}"
-        article[:created_at] = Time.now - i
-      end
+      @items = [
+        mock_article({ :title => "Article 0", :created_at => Time.now }),
+        mock_article({ :title => "Article 1", :created_at => Time.now - 1 }),
+      ]
 
       # Mock site
       @site = mock_site({ :base_url => 'http://example.com' })
@@ -408,13 +410,12 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_sorting
     if_have 'builder' do
       # Mock articles
-      @items = [ mock_article, mock_article ]
-      @items.each_with_index do |article, i|
-        article[:title] = "Article #{i}"
-        article.stubs(:identifier).returns("/article-#{i}.html")
-      end
-      @items[0][:created_at] = '22-02-2009'
-      @items[1][:created_at] = '23-02-2009'
+      @items = [
+        mock_article({ :title => "Article 0", :created_at => '22-02-2009' }),
+        mock_article({ :title => "Article 1", :created_at => '22-02-2009' }),
+      ]
+      @items[0].stubs(:identifier).returns("/article-0.html")
+      @items[1].stubs(:identifier).returns("/article-1.html")
 
       # Mock site
       @site = mock_site({ :base_url => 'http://example.com' })

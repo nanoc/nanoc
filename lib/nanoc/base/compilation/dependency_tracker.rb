@@ -19,6 +19,8 @@ module Nanoc
   # Dependency information is stored in the `tmp/dependencies` file.
   #
   # @api private
+  #
+  # TODO split out some stuff into a DependencyGraph class
   class DependencyTracker < ::Nanoc::Store
 
     # @return [Array<Nanoc::Item, Nanoc::Layout>] The list of items and

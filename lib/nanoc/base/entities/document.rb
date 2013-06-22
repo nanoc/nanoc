@@ -65,15 +65,6 @@ module Nanoc
       @attributes[key]
     end
 
-    # Sets the attribute with the given key to the given value.
-    #
-    # @param [Symbol] key The name of the attribute to set
-    #
-    # @param [Object] value The value of the attribute to set
-    def []=(key, value)
-      @attributes[key] = value
-    end
-
     # @return [Symbol] the type of this object as a symbol (`:item`, `:layout`, ...)
     #
     # @api private

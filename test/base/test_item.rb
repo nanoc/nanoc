@@ -44,22 +44,9 @@ class Nanoc::ItemTest < Nanoc::TestCase
     assert_equal(nil, item[:two])
   end
 
-  def test_set_attribute
-    item = Nanoc::Item.new("foo", {}, '/foo')
-    assert_equal nil, item[:motto]
-
-    item[:motto] = 'More human than human'
-    assert_equal 'More human than human', item[:motto]
-  end
-
-
   def test_freeze_should_disallow_changes
     item = Nanoc::Item.new("foo", { :a => { :b => 123 }}, '/foo')
     item.freeze
-
-    assert_raises_frozen_error do
-      item[:abc] = '123'
-    end
 
     assert_raises_frozen_error do
       item[:a][:b] = '456'
