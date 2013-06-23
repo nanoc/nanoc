@@ -80,32 +80,24 @@ module Nanoc
     def basic_outdatedness_reason_for(obj)
       case obj.type
         when :item_rep
-          # Outdated if rules outdated
-          return Nanoc::OutdatednessReasons::RulesModified if
-            rule_memory_differs_for(obj)
-
-          # Outdated if checksums are missing or different
-          return Nanoc::OutdatednessReasons::NotEnoughData if !checksums_available?(obj.item)
-          return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
-
-          # Outdated if compiled file doesn't exist (yet)
-          if (obj.raw_path && !@item_rep_writer.exist?(obj.raw_path))
+          if rule_memory_differs_for(obj)
+            Nanoc::OutdatednessReasons::RulesModified
+          elsif !checksums_available?(obj.item)
+            Nanoc::OutdatednessReasons::NotEnoughData
+          elsif !checksums_identical?(obj.item)
+            Nanoc::OutdatednessReasons::SourceModified
+          elsif (obj.raw_path && !@item_rep_writer.exist?(obj.raw_path))
             # FIXME this is not tested!
-            return Nanoc::OutdatednessReasons::NotWritten
+            Nanoc::OutdatednessReasons::NotWritten
           elsif obj.paths_without_snapshot.any? { |p| !@item_rep_writer.exist?(p) }
-            return Nanoc::OutdatednessReasons::NotWritten
+            Nanoc::OutdatednessReasons::NotWritten
+          elsif @compiler.site.code_snippets.any? { |cs| object_modified?(cs) }
+            Nanoc::OutdatednessReasons::CodeSnippetsModified
+          elsif object_modified?(@compiler.site.config)
+            Nanoc::OutdatednessReasons::ConfigurationModified
+          else
+            nil
           end
-
-          # Outdated if code snippets outdated
-          return Nanoc::OutdatednessReasons::CodeSnippetsModified if @compiler.site.code_snippets.any? do |cs|
-            object_modified?(cs)
-          end
-
-          # Outdated if configuration outdated
-          return Nanoc::OutdatednessReasons::ConfigurationModified if object_modified?(@compiler.site.config)
-
-          # Not outdated
-          return nil
         when :item
           @item_rep_store.reps_for_item(obj).each do |rep|
             r = basic_outdatedness_reason_for(rep)
@@ -113,16 +105,15 @@ module Nanoc
           end
           nil
         when :layout
-          # Outdated if rules outdated
-          return Nanoc::OutdatednessReasons::RulesModified if
-            rule_memory_differs_for(obj)
-
-          # Outdated if checksums are missing or different
-          return Nanoc::OutdatednessReasons::NotEnoughData if !checksums_available?(obj)
-          return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj)
-
-          # Not outdated
-          return nil
+          if rule_memory_differs_for(obj)
+            Nanoc::OutdatednessReasons::RulesModified
+          elsif !checksums_available?(obj)
+            Nanoc::OutdatednessReasons::NotEnoughData
+          elsif !checksums_identical?(obj)
+            Nanoc::OutdatednessReasons::SourceModified
+          else
+            nil
+          end
         else
           raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
       end
