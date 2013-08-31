@@ -556,4 +556,38 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     end
   end
 
+  def test_compiler_dependency_on_unmet_dependency
+    with_site do
+      File.open('content/a.html', 'w') do |io|
+        io.write('<% @items["/b/"].compiled_content %>')
+      end
+      File.open('content/b.html', 'w') do |io|
+        io.write('I am feeling so dependent!')
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do\n"
+        io.write "  filter :erb\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '*' do\n"
+        io.write "  item.identifier.chop + '.' + item[:extension]\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '*', :erb\n"
+      end
+
+      site = Nanoc::Site.new('.')
+      rep = site.items['/a/'].reps[0]
+      dt = site.compiler.dependency_tracker
+      dt.start
+      assert_raises Nanoc::Errors::UnmetDependency do
+        site.compiler.send :compile_rep, rep
+      end
+      dt.stop
+
+      stack = dt.instance_eval { @stack }
+      assert_empty stack
+    end
+  end
+
 end
