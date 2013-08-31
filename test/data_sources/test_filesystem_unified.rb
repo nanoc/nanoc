@@ -238,6 +238,40 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     end
   end
 
+  def test_identifier_for_filename_with_index_filenames_allowing_periods_in_identifier
+    expected = {
+      '/index.html.erb'   => '/index.html/',
+      '/index.html'       => '/',
+      '/index'            => '/',
+    }
+
+    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    expected.each_pair do |input, expected_output|
+      actual_output = data_source.send(:identifier_for_filename, input)
+      assert_equal(
+        expected_output, actual_output,
+        "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
+      )
+    end
+  end
+
+  def test_identifier_for_filename_with_index_filenames_disallowing_periods_in_identifier
+    expected = {
+      '/index.html.erb'   => '/',
+      '/index.html'       => '/',
+      '/index'            => '/',
+    }
+
+    data_source = new_data_source
+    expected.each_pair do |input, expected_output|
+      actual_output = data_source.send(:identifier_for_filename, input)
+      assert_equal(
+        expected_output, actual_output,
+        "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
+      )
+    end
+  end
+
   def test_load_objects_allowing_periods_in_identifiers
     # Create data source
     data_source = new_data_source(:allow_periods_in_identifiers => true)
