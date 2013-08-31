@@ -389,13 +389,14 @@ module Nanoc
       rep.compiled = true
       compiled_content_cache[rep] = rep.content
 
-      Nanoc::NotificationCenter.post(:visit_ended,       rep.item)
       Nanoc::NotificationCenter.post(:processing_ended,  rep)
       Nanoc::NotificationCenter.post(:compilation_ended, rep)
     rescue => e
       rep.forget_progress
       Nanoc::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
+    ensure
+      Nanoc::NotificationCenter.post(:visit_ended,       rep.item)
     end
 
     # Clears the list of dependencies for items that will be recompiled.
