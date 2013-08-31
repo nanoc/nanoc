@@ -240,9 +240,12 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_index_filenames_allowing_periods_in_identifier
     expected = {
-      '/index.html.erb'   => '/index.html/',
-      '/index.html'       => '/',
-      '/index'            => '/',
+      '/index.html.erb'       => '/index.html/',
+      '/index.html'           => '/',
+      '/index'                => '/',
+      '/foo/index.html.erb'   => '/foo/index.html/',
+      '/foo/index.html'       => '/foo/',
+      '/foo/index'            => '/foo/',
     }
 
     data_source = new_data_source(:allow_periods_in_identifiers => true)
@@ -257,9 +260,12 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_index_filenames_disallowing_periods_in_identifier
     expected = {
-      '/index.html.erb'   => '/',
-      '/index.html'       => '/',
-      '/index'            => '/',
+      '/index.html.erb'       => '/',
+      '/index.html'           => '/',
+      '/index'                => '/',
+      '/foo/index.html.erb'   => '/foo/',
+      '/foo/index.html'       => '/foo/',
+      '/foo/index'            => '/foo/',
     }
 
     data_source = new_data_source
