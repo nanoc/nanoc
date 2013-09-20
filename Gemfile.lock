@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nanoc (3.6.4)
+    nanoc (3.6.5)
       cri (~> 2.3)
 
 GEM
@@ -57,7 +57,7 @@ GEM
     metaclass (0.0.1)
     method_source (0.8.2)
     mime-types (1.25)
-    minitest (5.0.6)
+    minitest (4.7.5)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.7.9)
@@ -134,7 +134,7 @@ DEPENDENCIES
   markaby
   maruku
   mime-types
-  minitest
+  minitest (~> 4.0)
   mocha
   mustache
   nanoc!
