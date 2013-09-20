@@ -209,18 +209,17 @@ EOS
         io.write 'Old-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
       end
       Nanoc::CLI.run(%w(compile))
+      assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'Old-Content', File.read('output/includer/index.html')
 
       # Compile again
-      $LOUD = true
       File.open('content/includer.erb', 'w') do |io|
         io.write 'New-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
       end
       Nanoc::CLI.run(%w(compile))
+      assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'New-Content', File.read('output/includer/index.html')
     end
-  ensure
-    $LOUD = false 
   end
 
 end
