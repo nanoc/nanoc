@@ -1,7 +1,9 @@
 # encoding: utf-8
 
-$LOAD_PATH.unshift(File.expand_path('../lib/', __FILE__))
-require 'nanoc/version'
+require 'nanoc/core/version'
+
+min_version_pattern = ">= #{Nanoc::VERSION}"
+max_version_pattern = "< #{Nanoc::VERSION[0].to_i+1}.0.0"
 
 Gem::Specification.new do |s|
   s.name        = 'nanoc'
@@ -17,20 +19,11 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.3'
 
   s.files              = Dir['[A-Z]*'] +
-                         Dir['doc/yardoc_templates/**/*'] +
-                         Dir['{bin,lib,tasks,test}/**/*'] +
                          [ 'nanoc.gemspec' ]
-  s.executables        = [ 'nanoc' ]
-  s.require_paths      = [ 'lib' ]
 
   s.rdoc_options     = [ '--main', 'README.md' ]
-  s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
+  s.extra_rdoc_files = [ 'LICENSE', 'README.md', 'NEWS.md' ]
 
-  s.add_runtime_dependency('cri', '~> 2.3')
-
-  s.add_development_dependency('minitest')
-  s.add_development_dependency('mocha')
-  s.add_development_dependency('rake')
-  s.add_development_dependency('rdiscount')
-  s.add_development_dependency('yard')
+  s.add_runtime_dependency('nanoc-core', min_version_pattern, max_version_pattern)
+  s.add_runtime_dependency('nanoc-cli',  min_version_pattern, max_version_pattern)
 end
