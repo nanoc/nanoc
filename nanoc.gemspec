@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-require 'nanoc/core/version'
+version = "4.0.0a1"
 
-min_version_pattern = ">= #{Nanoc::VERSION}"
-max_version_pattern = "< #{Nanoc::VERSION[0].to_i+1}.0.0"
+min_version_pattern = ">= #{version}"
+max_version_pattern = "< #{version[0].to_i+1}.0.0"
 
 Gem::Specification.new do |s|
   s.name        = 'nanoc'
-  s.version     = Nanoc::VERSION
+  s.version     = version
   s.homepage    = 'http://nanoc.ws/'
   s.summary     = 'a web publishing system written in Ruby for building small to medium-sized websites.'
   s.description = 'nanoc is a simple but very flexible static site generator written in Ruby. It operates on local files, and therefore does not run on the server. nanoc “compiles” the local source files into HTML (usually), by evaluating eRuby, Markdown, etc.'
