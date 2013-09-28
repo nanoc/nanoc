@@ -1,6 +1,13 @@
 # nanoc news
 
-## 3.6.4 (???)
+## 3.6.5 (???)
+
+Fixes:
+
+* Fixed bug which could cause incorrect dependencies to be generated in some cases
+* Fixed handling of index filenames when allowing periods in identifiers
+
+## 3.6.4 (2013-05-29)
 
 Enhancements:
 
@@ -154,7 +161,7 @@ Improvements:
 ## 3.4 (2012-06-09)
 
 * Improved error output and added crash log
-* Renamed `debug` and `info` commands to `show-data` and `show-plugins`, respectively 
+* Renamed `debug` and `info` commands to `show-data` and `show-plugins`, respectively
 * Added `show-rules` command (aka `explain`)
 
 Extensions:

@@ -36,7 +36,7 @@ module Nanoc::DataSources
   #
   #     (`allow_periods_in_identifiers` set to true)
   #     foo.entry.html → /foo.entry/
-  #     
+  #
   #     (`allow_periods_in_identifiers` set to false)
   #     foo.html.erb → /foo/
   #
@@ -108,8 +108,8 @@ module Nanoc::DataSources
     # Returns the identifier derived from the given filename, first stripping
     # the given directory name off the filename.
     def identifier_for_filename(filename)
-      if filename =~ /(^|\/)index\.[^\/]+$/
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\/?index\.[^\/\.]+$/ : /\/?index\.[^\/]+$/)
+      if filename =~ /(^|\/)index(\.[^\/]+)?$/
+        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/)
       else
         regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/         : /\.[^\/]+$/)
       end
