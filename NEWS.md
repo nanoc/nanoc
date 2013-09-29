@@ -4,8 +4,8 @@
 
 Fixes:
 
-* Fixed bug which could cause incorrect dependencies to be generated in some cases
-* Fixed handling of index filenames when allowing periods in identifiers
+* Fixed bug which could cause incorrect dependencies to be generated in some cases (#329)
+* Fixed handling of index filenames when allowing periods in identifiers (#330)
 
 ## 3.6.4 (2013-05-29)
 
