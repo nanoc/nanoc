@@ -101,7 +101,7 @@ module Nanoc::Helpers
       if block_given? # Set content
         # Get args
         if args.size != 1
-          raise ArgumentError, "expected 1 argument (the name " + 
+          raise ArgumentError, "expected 1 argument (the name " +
             "of the capture) but got #{args.size} instead"
         end
         name = args[0]
@@ -129,12 +129,12 @@ module Nanoc::Helpers
           # the content attribute to reset it. :(
           # FIXME clean this up
           if !@site.captures_store_compiled_items.include? item
-            @site.captures_store_compiled_items << item 
+            @site.captures_store_compiled_items << item
             item.forced_outdated = true
             item.reps.each do |r|
               raw_content = item.raw_content
               r.content = { :raw => raw_content, :last => raw_content }
-              @site.compiler.send(:compile_rep, r)
+              raise Nanoc::Errors::UnmetDependency.new(r)
             end
           end
         end
