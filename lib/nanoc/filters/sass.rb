@@ -5,12 +5,6 @@ module Nanoc::Filters
 
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
-    class << self
-      # The current filter. This is definitely going to bite me if I ever get
-      # to multithreading nanoc.
-      attr_accessor :current
-    end
-
     # Runs the content through [Sass](http://sass-lang.com/).
     # Parameters passed to this filter will be passed on to Sass.
     #
@@ -35,8 +29,8 @@ module Nanoc::Filters
       end
       
       # Render
+      options[:nanoc_current_filter] = self
       engine = ::Sass::Engine.new(content, options)
-      self.class.current = self
       engine.render
     end
 
