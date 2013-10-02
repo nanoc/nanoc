@@ -181,7 +181,7 @@ EOS
       lines.each_slice(2) do |pair|
         actual_out   = eval(pair.first, b)
         expected_out = eval(pair.last.match(/# ?=>(.*)/)[1], b)
-      
+
         assert_equal expected_out, actual_out,
           "Incorrect example:\n#{pair.first}"
       end
@@ -203,6 +203,14 @@ EOS
   def assert_raises_frozen_error
     error = assert_raises(RuntimeError, TypeError) { yield }
     assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, error.message)
+  end
+
+  def with_env_vars(hash, &block)
+    orig_env_hash = ENV.to_hash
+    hash.each_pair { |k,v| ENV[k] = v }
+    yield
+  ensure
+    orig_env_hash.each_pair { |k,v| ENV[k] = v }
   end
 
 end
