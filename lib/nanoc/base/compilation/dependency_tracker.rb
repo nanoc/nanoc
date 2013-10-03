@@ -76,6 +76,11 @@ module Nanoc
     #
     # @return [void]
     def stop
+      # Sanity check
+      if !@stack.empty?
+        raise "Internal inconsistency: dependency tracker stack not empty at end of compilation"
+      end
+
       # Unregister
       Nanoc::NotificationCenter.remove(:visit_started, self)
       Nanoc::NotificationCenter.remove(:visit_ended,   self)

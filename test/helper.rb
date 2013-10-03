@@ -221,6 +221,14 @@ EOS
     assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, error.message)
   end
 
+  def with_env_vars(hash, &block)
+    orig_env_hash = ENV.to_hash
+    hash.each_pair { |k,v| ENV[k] = v }
+    yield
+  ensure
+    orig_env_hash.each_pair { |k,v| ENV[k] = v }
+  end
+
 end
 
 class Nanoc::TestCase < Minitest::Test

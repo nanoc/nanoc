@@ -117,13 +117,17 @@ module Nanoc::Helpers
           # item from which we use content. For this, we need to manually edit
           # the content attribute to reset it. :(
           # FIXME clean this up
-          if !@site.captures_store_compiled_items.include? item
-            @site.captures_store_compiled_items << item
-            item.forced_outdated = true
+          i = item.item
+          if !@site.captures_store_compiled_items.include? i
+            @site.captures_store_compiled_items << i
+            i.forced_outdated = true
             item.reps.each do |r|
-              content = item.content
+              content = i.content
               r.content = { :raw => content, :last => content }
-              @_compiler.send(:compile_rep, r)
+              $blah ||= 100
+              $blah -= 1
+              if $blah < 10 then raise 'wtf' end
+              raise Nanoc::Errors::UnmetDependency.new(r)
             end
           end
         end

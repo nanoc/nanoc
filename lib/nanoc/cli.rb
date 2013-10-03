@@ -180,7 +180,7 @@ protected
   def self.enable_utf8?(io)
     return true if !io.tty?
 
-    %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/ }
+    %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/i }
   end
 
   # @return [Boolean] true if color support is present, false if not
@@ -192,7 +192,7 @@ protected
     rescue LoadError
       return false
     end
-    
+
     return true
   end
 

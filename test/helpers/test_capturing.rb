@@ -229,6 +229,7 @@ EOS
         io.write 'Old-<%= content_for(@items["/includee.erb"], :blah) %>'
       end
       Nanoc::CLI.run(%w(compile))
+      assert_equal '{}', File.read('output/includee.html')
       assert_equal 'Old-Content', File.read('output/includer.html')
 
       # Compile again
@@ -236,6 +237,7 @@ EOS
         io.write 'New-<%= content_for(@items["/includee.erb"], :blah) %>'
       end
       Nanoc::CLI.run(%w(compile))
+      assert_equal '{}', File.read('output/includee.html')
       assert_equal 'New-Content', File.read('output/includer.html')
     end
   end
