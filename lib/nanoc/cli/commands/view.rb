@@ -14,6 +14,8 @@ module Nanoc::CLI::Commands
 
   class View < ::Nanoc::CLI::CommandRunner
 
+    DEFAULT_HANDLER_NAME = :thin
+
     def run
       load_adsf
       require 'rack'
@@ -27,11 +29,13 @@ module Nanoc::CLI::Commands
         :Host      => (options[:host] || '0.0.0.0')
       }
 
-      # Guess which handler we should use
-      unless handler = Rack::Handler.get(options[:handler])
+      # Get handler
+      if options.has_key?(:handler)
+        handler = Rack::Handler.get(options[:handler])
+      else
         begin
-          handler = Rack::Handler::Mongrel
-        rescue LoadError => e
+          handler = Rack::Handler.get(DEFAULT_HANDLER_NAME)
+        rescue LoadError
           handler = Rack::Handler::WEBrick
         end
       end
