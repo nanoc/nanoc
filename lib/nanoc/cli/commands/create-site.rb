@@ -84,24 +84,6 @@ data_sources:
     # will have the identifier “/about/” when turned off, but when turned on
     # it will become “/about.html/” instead.
     allow_periods_in_identifiers: false
-
-# Configuration for the “watch” command, which watches a site for changes and
-# recompiles if necessary.
-watcher:
-  # A list of directories to watch for changes. When editing this, make sure
-  # that the “output/” and “tmp/” directories are _not_ included in this list,
-  # because recompiling the site will cause these directories to change, which
-  # will cause the site to be recompiled, which will cause these directories
-  # to change, which will cause the site to be recompiled again, and so on.
-  dirs_to_watch: [ 'content', 'layouts', 'lib' ]
-
-  # A list of single files to watch for changes. As mentioned above, don’t put
-  # any files from the “output/” or “tmp/” directories in here.
-  files_to_watch: [ 'nanoc.yaml', 'Rules' ]
-
-  # When to send notifications (using Growl or notify-send).
-  notify_on_compilation_success: true
-  notify_on_compilation_failure: true
 EOS
 
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
@@ -276,7 +258,7 @@ EOS
     <link rel="stylesheet" href="/style.css">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
-    <meta name="generator" content="nanoc <%= Nanoc::VERSION %>"> 
+    <meta name="generator" content="nanoc <%= Nanoc::VERSION %>">
   </head>
   <body>
     <div id="main">
