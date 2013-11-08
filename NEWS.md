@@ -11,7 +11,7 @@ Enhancements:
 
 Fixes:
 
-* Prevented capturing helper from erroneously compiling items twice (#337)
+* Prevented capturing helper from erroneously compiling items twice (#331, #337)
 
 ## 3.6.5 (2013-09-29)
 
