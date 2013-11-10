@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.6.7 (???)
+
+Fixes:
+
+* Made Handlebars filter usable outside layouts
+
 ## 3.6.6 (2013-11-08)
 
 Enhancements:
