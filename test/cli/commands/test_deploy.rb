@@ -3,6 +3,7 @@
 class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy
+    skip_unless_have_command "rsync"
     if_have 'systemu' do
       with_site do |site|
         File.open('nanoc.yaml', 'w') do |io|
@@ -113,6 +114,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_without_kind
+    skip_unless_have_command "rsync"
     if_have 'systemu' do
       with_site do |site|
         File.open('nanoc.yaml', 'w') do |io|
@@ -159,6 +161,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_without_target_with_default
+    skip_unless_have_command "rsync"
     if_have 'systemu' do
       with_site do |site|
         File.open('nanoc.yaml', 'w') do |io|
