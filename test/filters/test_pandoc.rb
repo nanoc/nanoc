@@ -4,9 +4,7 @@ class Nanoc::Filters::PandocTest < Nanoc::TestCase
 
   def test_filter
     if_have 'pandoc-ruby' do
-      if `which pandoc`.strip.empty?
-        skip "could not find pandoc"
-      end
+      skip_unless_have_command "pandoc"
 
       # Create filter
       filter = ::Nanoc::Filters::Pandoc.new

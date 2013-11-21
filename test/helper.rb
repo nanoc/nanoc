@@ -213,6 +213,17 @@ EOS
     orig_env_hash.each_pair { |k,v| ENV[k] = v }
   end
 
+  def skip_unless_have_command(cmd)
+    unavailable = if RUBY_PLATFORM =~ /mswin|mingw/
+      `where #{cmd} 2> NUL`
+      !$?.success?
+    else
+      `which #{cmd}`.strip.empty?
+    end
+
+    skip "could not find #{cmd}" if unavailable
+  end
+
 end
 
 class Nanoc::TestCase < MiniTest::Unit::TestCase
