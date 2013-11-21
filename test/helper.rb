@@ -224,6 +224,14 @@ EOS
     skip "could not find #{cmd}" if unavailable
   end
 
+  def skip_unless_have_symlink
+    File.symlink nil, nil
+  rescue NotImplementedError => e
+    skip e.message
+  rescue
+    # symlinks available
+  end
+
 end
 
 class Nanoc::TestCase < MiniTest::Unit::TestCase
