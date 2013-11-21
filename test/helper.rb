@@ -214,7 +214,7 @@ EOS
   end
 
   def skip_unless_have_command(cmd)
-    unavailable = if RUBY_PLATFORM =~ /mswin|mingw/
+    unavailable = if Bundler::WINDOWS
       `where #{cmd} 2> NUL`
       !$?.success?
     else
