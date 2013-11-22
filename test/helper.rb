@@ -218,14 +218,8 @@ EOS
   end
 
   def skip_unless_have_command(cmd)
-    unavailable = if on_windows?
-      `where #{cmd} 2> NUL`
-      !$?.success?
-    else
-      `which #{cmd}`.strip.empty?
-    end
-
-    skip "could not find #{cmd}" if unavailable
+    available = system(on_windows? ? "where #{cmd} 2> NUL" : "which #{cmd}")
+    skip "Could not find #{cmd}" unless available
   end
 
   def skip_unless_have_symlink
