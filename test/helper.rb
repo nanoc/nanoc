@@ -230,7 +230,7 @@ EOS
   end
 
   def skip_unless_have_command(cmd)
-    skip "Could not find #{cmd}" unless have_command?(cmd)
+    skip "Could not find external command \"#{cmd}\"" unless have_command?(cmd)
   end
 
   def skip_unless_have_symlink
