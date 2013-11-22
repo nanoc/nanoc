@@ -372,7 +372,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       io.write "content goes here\n"
     end
 
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, :encoding => 'utf-8')
 
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'utf8bomawareness' => 'high' }, result[0])
