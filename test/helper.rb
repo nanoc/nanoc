@@ -217,17 +217,24 @@ EOS
     !!(RUBY_PLATFORM =~ /mswin|mingw/)
   end
 
+  def have_command?(cmd)
+    system(on_windows? ? "where #{cmd} 2> NUL" : "which #{cmd}")
+  end
+
+  def have_symlink?
+    File.symlink nil, nil
+  rescue NotImplementedError
+    return false
+  rescue
+    return true
+  end
+
   def skip_unless_have_command(cmd)
-    available = system(on_windows? ? "where #{cmd} 2> NUL" : "which #{cmd}")
-    skip "Could not find #{cmd}" unless available
+    skip "Could not find #{cmd}" unless have_command?(cmd)
   end
 
   def skip_unless_have_symlink
-    File.symlink nil, nil
-  rescue NotImplementedError => e
-    skip "Symlinks are not supported by Ruby on Windows"
-  rescue
-    # symlinks available
+    skip "Symlinks are not supported by Ruby on Windows" unless have_symlink?
   end
 
 end
