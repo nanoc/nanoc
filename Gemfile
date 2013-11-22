@@ -12,7 +12,7 @@ gem 'fog'
 gem 'haml'
 gem 'handlebars', :platforms => :ruby
 gem 'kramdown'
-gem 'less', '~> 2.0'
+gem 'less', '~> 2.0', :platforms => :ruby
 gem 'listen'
 gem 'markaby'
 gem 'maruku'
