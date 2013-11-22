@@ -227,7 +227,7 @@ EOS
   def skip_unless_have_symlink
     File.symlink nil, nil
   rescue NotImplementedError => e
-    skip e.message
+    skip "Symlinks are not supported by Ruby on Windows"
   rescue
     # symlinks available
   end
