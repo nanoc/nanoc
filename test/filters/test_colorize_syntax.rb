@@ -138,7 +138,7 @@ EOS
   end
 
   def test_pygmentsrb
-    skip "pygments.rb does not support Windows" if Bundler::WINDOWS
+    skip "pygments.rb does not support Windows" if on_windows?
     if_have 'pygments', 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new

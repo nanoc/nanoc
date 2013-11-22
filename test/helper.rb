@@ -213,8 +213,12 @@ EOS
     orig_env_hash.each_pair { |k,v| ENV[k] = v }
   end
 
+  def on_windows?
+    !!(RUBY_PLATFORM =~ /mswin|mingw/)
+  end
+
   def skip_unless_have_command(cmd)
-    unavailable = if Bundler::WINDOWS
+    unavailable = if on_windows?
       `where #{cmd} 2> NUL`
       !$?.success?
     else
