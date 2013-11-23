@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require 'minitest/unit'
-
 def run_tests(dir_glob)
   ENV['QUIET'] ||= 'true'
   $VERBOSE = (ENV['VERBOSE'] == 'true')
@@ -17,7 +15,7 @@ def run_tests(dir_glob)
   exit MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
 end
 
-test = namespace :test do
+namespace :test do
 
   # test:all
   desc 'Run all tests'
