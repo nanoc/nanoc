@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 def run_tests(dir_glob)
+  ENV['ARGS'] ||= ''
   ENV['QUIET'] ||= 'true'
-  $VERBOSE = (ENV['VERBOSE'] == 'true')
 
   $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
 
@@ -12,7 +12,7 @@ def run_tests(dir_glob)
   test_files = Dir["#{dir_glob}*_spec.rb"] + Dir["#{dir_glob}test_*.rb"]
   test_files.each { |f| require f }
 
-  exit MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
+  exit MiniTest::Unit.new.run(ENV['ARGS'].split)
 end
 
 namespace :test do
