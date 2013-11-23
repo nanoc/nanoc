@@ -218,7 +218,8 @@ EOS
   end
 
   def have_command?(cmd)
-    system(on_windows? ? "where #{cmd} 2> NUL" : "which #{cmd}")
+    which, null = on_windows? ? ["where", "NUL"] : ["which", "/dev/null"]
+    system("#{which} #{cmd} > #{null} 2>&1")
   end
 
   def have_symlink?
