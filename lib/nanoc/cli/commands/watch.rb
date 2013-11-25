@@ -169,7 +169,7 @@ module Nanoc::CLI::Commands
       end
 
       def on_windows?
-        !!(RUBY_PLATFORM =~ /(mingw|bccwin|wince|mswin32)/i)
+        Nanoc.on_windows?
       end
 
     end

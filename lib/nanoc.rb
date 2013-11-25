@@ -13,6 +13,11 @@ module Nanoc
     res
   end
 
+  # @return [Boolean] True if the current platform is Windows,
+  def self.on_windows?
+    !!(RUBY_PLATFORM =~ /windows|cygwin|bccwin|cygwin|djgpp|mingw|mswin|wince/i)
+  end
+
 end
 
 Nanoc3 = Nanoc

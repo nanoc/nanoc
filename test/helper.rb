@@ -214,7 +214,7 @@ EOS
   end
 
   def on_windows?
-    !!(RUBY_PLATFORM =~ /mswin|mingw/)
+    Nanoc.on_windows?
   end
 
   def have_command?(cmd)
