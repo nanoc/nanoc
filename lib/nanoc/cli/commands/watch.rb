@@ -2,6 +2,7 @@
 
 usage       'watch [options]'
 summary     'start the watcher'
+be_hidden
 description <<-EOS
 Start the watcher. When a change is detected, the site will be recompiled.
 EOS
