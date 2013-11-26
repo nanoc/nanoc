@@ -175,6 +175,10 @@ module Nanoc::Filters
     # Runs the content through [pygmentize](http://pygments.org/docs/cmdline/),
     # the commandline frontend for [Pygments](http://pygments.org/).
     #
+    # By default the pygmentize highlighter is invoked with the parameters
+    # `:nowrap => 'True'` and `:encoding => 'utf-8'`. Note that using `nowrap`
+    # disables some other options of pygmentize i.e. line numbering.
+    #
     # @api private
     #
     # @param [String] code The code to colorize
@@ -201,7 +205,10 @@ module Nanoc::Filters
 
       # Get result
       stdout.rewind
-      stdout.read
+      result = stdout.read
+
+      # Clean the output if it's wrapped
+      falsy(params[:nowrap]) ? pygments_cleanup(result, params[:encoding]) : result
     end
 
     # Runs the content through [Pygments](http://pygments.org/) via
@@ -299,6 +306,17 @@ module Nanoc::Filters
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)
       s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
+    end
+
+    # Determine if the specified value/parameter is a 'falsy' value
+    def falsy(v)
+        [false, 'false', 'False', '0', 0].include?(v)
+    end
+
+    # Extracts the wrapped pygments highlighter output
+    def pygments_cleanup(s, enc)
+        html = Nokogiri::HTML::fragment(strip(s), enc)
+        html.css('div.highlight > pre').inner_html
     end
 
     def highlight(code, language, params={})
