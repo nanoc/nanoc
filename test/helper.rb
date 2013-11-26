@@ -113,6 +113,9 @@ EOS
 
     # Go quiet
     unless ENV['QUIET'] == 'false'
+      @orig_stdout = $stdout
+      @orig_stderr = $stderr
+
       $stdout = StringIO.new
       $stderr = StringIO.new
     end
@@ -136,8 +139,8 @@ EOS
 
     # Go unquiet
     unless ENV['QUIET'] == 'false'
-      $stdout = STDOUT
-      $stderr = STDERR
+      $stdout = @orig_stdout
+      $stderr = @orig_stderr
     end
   end
 
@@ -214,7 +217,7 @@ EOS
   end
 
   def on_windows?
-    !!(RUBY_PLATFORM =~ /mswin|mingw/)
+    Nanoc.on_windows?
   end
 
   def have_command?(cmd)
