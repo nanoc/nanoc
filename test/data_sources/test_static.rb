@@ -14,6 +14,8 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
   end
 
   def test_items_with_symlinks
+    skip_unless_have_symlink
+
     # Create data source
     data_source = new_data_source(:prefix => 'foo')
 

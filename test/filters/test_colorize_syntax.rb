@@ -122,9 +122,7 @@ EOS
 
   def test_pygmentize
     if_have 'nokogiri', 'systemu' do
-      if `which pygmentize`.strip.empty?
-        skip "could not find pygmentize"
-      end
+      skip_unless_have_command "pygmentize"
 
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -140,6 +138,7 @@ EOS
   end
 
   def test_pygmentsrb
+    skip "pygments.rb does not support Windows" if on_windows?
     if_have 'pygments', 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -156,9 +155,7 @@ EOS
 
   def test_simon_highlight
     if_have 'nokogiri', 'systemu' do
-      if `which highlight`.strip.empty?
-        skip "could not find `highlight`"
-      end
+      skip_unless_have_command "highlight"
 
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -216,10 +213,7 @@ EOS
   end
 
   def test_colorize_syntax_with_default_colorizer
-    if `which pygmentize`.strip.empty?
-      skip 'no pygmentize found, which is required for this test'
-      return
-    end
+    skip_unless_have_command "pygmentize"
 
     if_have 'nokogiri', 'systemu' do
       # Create filter

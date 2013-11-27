@@ -23,10 +23,10 @@ module Nanoc::Extra::Deployers
     def run
       require 'fog'
 
-      # Get params
+      # Get params, unsetting anything we don't want to pass through to fog.
       src      = File.expand_path(self.source_path)
       bucket   = self.config.delete(:bucket) || self.config.delete(:bucket_name)
-      path     = self.config[:path]
+      path     = self.config.delete(:path)
 
       self.config.delete(:kind)
 
@@ -45,7 +45,7 @@ module Nanoc::Extra::Deployers
       # Get bucket
       puts "Getting bucket"
       begin
-        directory = connection.directories.get(bucket)
+        directory = connection.directories.get(bucket, :prefix => path)
       rescue ::Excon::Errors::NotFound
         should_create_bucket = true
       end
@@ -53,7 +53,7 @@ module Nanoc::Extra::Deployers
 
       # Create bucket if necessary
       if should_create_bucket
-        directory = connection.directories.create(:key => bucket)
+        directory = connection.directories.create(:key => bucket, :prefix => path)
       end
 
       # Get list of remote files
@@ -71,7 +71,7 @@ module Nanoc::Extra::Deployers
       FileUtils.cd(src) do
         files = Dir['**/*'].select { |f| File.file?(f) }
         files.each do |file_path|
-          key = "#{path}#{file_path}"
+          key = path ? File.join(path, file_path) : file_path
           directory.files.create(
             :key => key,
             :body => File.open(file_path),

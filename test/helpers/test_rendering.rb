@@ -38,7 +38,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', nil\n")
       end
 
-      File.open('layouts/foo.xyz', 'w')
+      File.open('layouts/foo.xyz', 'w').close()
 
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo/'
@@ -54,7 +54,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', :asdf\n")
       end
 
-      File.open('layouts/foo.xyz', 'w')
+      File.open('layouts/foo.xyz', 'w').close()
 
       assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo/'

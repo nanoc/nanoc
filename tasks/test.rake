@@ -1,21 +1,37 @@
 # encoding: utf-8
 
-require 'minitest/unit'
+def run_tests(dir_glob)
+  ENV['ARGS'] ||= ''
+  ENV['QUIET'] ||= 'true'
 
-dirs = [ 'test'] + Dir['test/**/*'].select { |fn| File.directory?(fn) }
-dirs.each do |dir|
-  desc "Run all #{dir} tests"
-  task dir.gsub('/', ':') do |task|
-    ENV['QUIET'] ||= 'true'
-    $VERBOSE = (ENV['VERBOSE'] == 'true')
+  $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
 
-    $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/..'))
+  # require our test helper so we don't have to in each individual test
+  require 'test/helper'
 
-    require 'test/helper'
+  test_files = Dir["#{dir_glob}*_spec.rb"] + Dir["#{dir_glob}test_*.rb"]
+  test_files.each { |f| require f }
 
-    test_files = Dir["#{dir}/**/*_spec.rb"] + Dir["#{dir}/**/test_*.rb"]
-    test_files.each { |f| require f }
-
-    exit MiniTest::Unit.new.run($VERBOSE ? %w( --verbose ) : %w())
-  end
+  exit MiniTest::Unit.new.run(ENV['ARGS'].split)
 end
+
+namespace :test do
+
+  # test:all
+  desc 'Run all tests'
+  task :all do
+    run_tests "test/**/"
+  end
+
+  # test:...
+  %w( base cli data_sources extra filters helpers tasks ).each do |dir|
+    desc "Run all #{dir} tests"
+    task dir.to_sym do |task|
+      run_tests "test/#{dir}/**/"
+    end
+  end
+
+end
+
+desc 'Alias for test:all'
+task :test => [ :'test:all' ]

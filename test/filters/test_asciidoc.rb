@@ -4,9 +4,7 @@ class Nanoc::Filters::AsciiDocTest < Nanoc::TestCase
 
   def test_filter
     if_have 'systemu' do
-      if `which asciidoc`.strip.empty?
-        skip "could not find asciidoc"
-      end
+      skip_unless_have_command "asciidoc"
 
       # Create filter
       filter = ::Nanoc::Filters::AsciiDoc.new

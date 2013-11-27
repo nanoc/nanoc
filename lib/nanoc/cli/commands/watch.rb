@@ -2,6 +2,7 @@
 
 usage       'watch [options]'
 summary     'start the watcher'
+be_hidden
 description <<-EOS
 Start the watcher. When a change is detected, the site will be recompiled.
 EOS
@@ -71,7 +72,7 @@ module Nanoc::CLI::Commands
       dirs_to_watch  = watcher_config[:dirs_to_watch]  || [ 'content', 'layouts', 'lib' ]
       files_to_watch = watcher_config[:files_to_watch] || [ 'nanoc.yaml', 'config.yaml', 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
       files_to_watch = Regexp.new(files_to_watch.map { |name| Regexp.quote(name) + '$' }.join('|'))
-      ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.dir?(dir) }.compact.join('|'))
+      ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.directory?(dir) }.compact.join('|'))
 
       # Watch
       puts "Watching for changes…"
@@ -169,7 +170,7 @@ module Nanoc::CLI::Commands
       end
 
       def on_windows?
-        !!(RUBY_PLATFORM =~ /(mingw|bccwin|wince|mswin32)/i)
+        Nanoc.on_windows?
       end
 
     end
