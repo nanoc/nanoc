@@ -7,6 +7,7 @@ Fixes:
 * Made Handlebars filter usable outside layouts
 * Fixed ANSI color support on Windows (#352, #356)
 * Made fog deployer handle prefixes properly (#351) [Oliver Byford]
+* Fixed crash in watcher (#358)
 
 Enhancements:
 
