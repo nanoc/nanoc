@@ -5,6 +5,12 @@
 Fixes:
 
 * Made Handlebars filter usable outside layouts
+* Fixed ANSI color support on Windows (#352, #356)
+* Made fog deployer handle prefixes properly (#351) [Oliver Byford]
+
+Enhancements:
+
+* Fixed Windows compatibility issues in test suite (#353) [Raphael von der Grün]
 
 ## 3.6.6 (2013-11-08)
 
