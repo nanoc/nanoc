@@ -2,6 +2,7 @@
 
 usage       'autocompile [options]'
 summary     'start the autocompiler'
+be_hidden
 aliases     :aco
 description <<-EOS
 Start the autocompiler web server. Unless overridden with commandline options
