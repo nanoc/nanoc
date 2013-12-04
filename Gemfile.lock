@@ -14,6 +14,7 @@ GEM
     builder (3.2.2)
     celluloid (0.15.2)
       timers (~> 1.1.0)
+    chunky_png (1.2.9)
     coderay (1.1.0)
     coffee-script (2.2.0)
       coffee-script-source
@@ -21,6 +22,10 @@ GEM
     coffee-script-source (1.6.3)
     colored (1.2)
     commonjs (0.2.7)
+    compass (0.12.2)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
     cri (2.4.0)
       colored (>= 1.2)
     erubis (2.7.0)
@@ -38,6 +43,7 @@ GEM
       nokogiri (~> 1.5)
       ruby-hmac
     formatador (0.2.4)
+    fssm (0.2.10)
     haml (4.0.4)
       tilt
     handlebars (0.5.0)
@@ -125,6 +131,7 @@ DEPENDENCIES
   builder
   coderay
   coffee-script
+  compass
   erubis
   fog
   haml
