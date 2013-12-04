@@ -21,9 +21,12 @@ require 'nanoc/cli'
 require 'nanoc/tasks'
 
 # Load miscellaneous requirements
+require 'tmpdir'
 require 'stringio'
 
 module Nanoc::TestHelpers
+
+  LIB_DIR = File.expand_path(File.dirname(__FILE__) + '/../lib')
 
   def if_have(*libs)
     libs.each do |lib|
@@ -121,9 +124,9 @@ EOS
     end
 
     # Enter tmp
-    FileUtils.mkdir_p('tmp')
+    @tmp_dir = Dir.mktmpdir('nanoc-test')
     @orig_wd = FileUtils.pwd
-    FileUtils.cd('tmp')
+    FileUtils.cd(@tmp_dir)
 
     # Let us get to the raw errors
     Nanoc::CLI::ErrorHandler.disable
@@ -135,7 +138,7 @@ EOS
 
     # Exit tmp
     FileUtils.cd(@orig_wd)
-    FileUtils.rm_rf('tmp')
+    FileUtils.rm_rf(@tmp_dir)
 
     # Go unquiet
     unless ENV['QUIET'] == 'false'
