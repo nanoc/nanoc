@@ -310,26 +310,26 @@ module Nanoc::CLI::Commands
     # Prints file actions (created, updated, deleted, identical, skipped)
     class FileActionPrinter < Listener
 
-      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
+      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
-        @rep_times       = {}
+        @start_times = {}
+        @stop_times  = {}
 
-        @reps            = params.fetch(:reps)
+        @reps = params.fetch(:reps)
       end
 
       # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-          @rep_times[rep.raw_path] = Time.now
+          @start_times[rep.raw_path] = Time.now
         end
         Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
-          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
+          @stop_times[rep.raw_path] = Time.now
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           action = (is_created ? :create : (is_modified ? :update : :identical))
           level  = (is_created ? :high   : (is_modified ? :high   : :low))
-          duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
-          Nanoc::CLI::Logger.instance.file(level, action, path, duration)
+          log(level, action, path, duration_for(rep))
         end
       end
 
@@ -337,12 +337,26 @@ module Nanoc::CLI::Commands
       def stop
         super
         @reps.select { |r| !r.compiled? }.each do |rep|
-          rep.raw_paths.each do |snapshot_name, filename|
-            next if filename.nil?
-            duration = @rep_times[filename]
-            Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
+          rep.raw_paths.each do |snapshot_name, raw_path|
+            log(:low, :skip, raw_path, duration_for(rep))
           end
         end
+      end
+
+      private
+
+      def duration_for(rep)
+        return nil if rep.raw_path.nil?
+
+        start = @start_times[rep.raw_path]
+        stop  = @stop_times[rep.raw_path]
+        return nil if start.nil? || stop.nil?
+
+        stop - start
+      end
+
+      def log(level, action, path, duration)
+        Nanoc::CLI::Logger.instance.file(level, action, path, duration)
       end
 
     end
@@ -371,7 +385,7 @@ module Nanoc::CLI::Commands
 
   protected
 
-    def prune  
+    def prune
       if self.site.config[:prune][:auto_prune]
         Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
       end
