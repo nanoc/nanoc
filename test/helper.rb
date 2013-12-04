@@ -129,6 +129,9 @@ EOS
 
     # Go quiet
     unless ENV['QUIET'] == 'false'
+      @orig_stdout = $stdout
+      @orig_stderr = $stderr
+
       $stdout = StringIO.new
       $stderr = StringIO.new
     end
@@ -152,8 +155,8 @@ EOS
 
     # Go unquiet
     unless ENV['QUIET'] == 'false'
-      $stdout = STDOUT
-      $stderr = STDERR
+      $stdout = @orig_stdout
+      $stderr = @orig_stderr
     end
   end
 
@@ -227,6 +230,31 @@ EOS
     yield
   ensure
     orig_env_hash.each_pair { |k,v| ENV[k] = v }
+  end
+
+  def on_windows?
+    Nanoc.on_windows?
+  end
+
+  def have_command?(cmd)
+    which, null = on_windows? ? ["where", "NUL"] : ["which", "/dev/null"]
+    system("#{which} #{cmd} > #{null} 2>&1")
+  end
+
+  def have_symlink?
+    File.symlink nil, nil
+  rescue NotImplementedError
+    return false
+  rescue
+    return true
+  end
+
+  def skip_unless_have_command(cmd)
+    skip "Could not find external command \"#{cmd}\"" unless have_command?(cmd)
+  end
+
+  def skip_unless_have_symlink
+    skip "Symlinks are not supported by Ruby on Windows" unless have_symlink?
   end
 
 end

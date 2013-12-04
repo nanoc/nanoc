@@ -3,7 +3,7 @@ source "http://rubygems.org"
 gemspec
 
 gem 'adsf'
-gem 'bluecloth'
+gem 'bluecloth', :platforms => :ruby
 gem 'builder'
 gem 'coderay'
 gem 'coffee-script'
@@ -11,9 +11,9 @@ gem 'debugger'
 gem 'erubis'
 gem 'fog'
 gem 'haml'
-gem 'handlebars'
+gem 'handlebars', :platforms => :ruby
 gem 'kramdown'
-gem 'less', '~> 2.0'
+gem 'less', '~> 2.0', :platforms => :ruby
 gem 'listen'
 gem 'markaby'
 gem 'maruku'

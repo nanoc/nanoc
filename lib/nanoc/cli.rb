@@ -8,6 +8,13 @@ rescue LoadError => e
   exit 1
 end
 
+if Nanoc.on_windows?
+  begin
+    require 'Win32/Console/ANSI'
+  rescue LoadError
+  end
+end
+
 module Nanoc::CLI
 
   module Commands
@@ -187,10 +194,8 @@ protected
   def self.enable_ansi_colors?(io)
     return false if !io.tty?
 
-    begin
-      require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /mswin|mingw/
-    rescue LoadError
-      return false
+    if Nanoc.on_windows?
+      return defined?(::Win32::Console::ANSI)
     end
 
     return true

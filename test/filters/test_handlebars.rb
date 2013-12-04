@@ -34,4 +34,25 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
     end
   end
 
+  def test_filter_without_layout
+    if_have 'handlebars' do
+      # Create data
+      item = Nanoc::Item.new(
+        'content',
+        { :title => 'Max Payne', :protagonist => 'Max Payne', :location => 'here' },
+        '/games/max-payne/')
+
+      # Create filter
+      assigns = {
+        :item    => item,
+        :content => 'No Payne No Gayne'
+      }
+      filter = ::Nanoc::Filters::Handlebars.new(assigns)
+
+      # Run filter
+      result = filter.setup_and_run('{{protagonist}} says: {{yield}}.')
+      assert_equal('Max Payne says: No Payne No Gayne.', result)
+    end
+  end
+
 end

@@ -34,11 +34,13 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', nil\n")
       end
-      File.open('layouts/foo', 'w')
+      File.open('layouts/foo', 'w').close
+      File.open('layouts/foo.xyz', 'w').close
 
       @site = site_here
       @_compiler = Nanoc::Compiler.new(@site)
       @_compiler.load
+
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo'
       end
@@ -50,11 +52,13 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo', :asdf\n")
       end
-      File.open('layouts/foo', 'w')
+      File.open('layouts/foo', 'w').close
+      File.open('layouts/foo.xyz', 'w').close
 
       @site = site_here
       @_compiler = Nanoc::Compiler.new(@site)
       @_compiler.load
+
       assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo'
       end

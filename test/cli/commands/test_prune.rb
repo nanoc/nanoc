@@ -93,6 +93,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_symlink_to_output_dir
+    skip_unless_have_symlink
     in_site do
       # Set output dir
       FileUtils.rm_rf('output')

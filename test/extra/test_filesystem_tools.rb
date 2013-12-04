@@ -1,6 +1,10 @@
 # encoding: utf-8
 
 class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
+  def setup
+    super
+    skip_unless_have_symlink
+  end
 
   def test_all_files_in_follows_symlinks_to_dirs
     # Write sample files

@@ -19,9 +19,11 @@ module Nanoc::Filters
     def run(content, params={})
       context = item.attributes.dup
       context[:item]   = assigns[:item].attributes
-      context[:layout] = assigns[:layout].attributes
       context[:config] = assigns[:config]
       context[:yield]  = assigns[:content]
+      if assigns.has_key?(:layout)
+        context[:layout] = assigns[:layout].attributes
+      end
 
       handlebars = ::Handlebars::Context.new
       template = handlebars.compile(content)

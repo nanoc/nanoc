@@ -160,6 +160,22 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal 'Hëllö', @data_source.read('foo.txt')
   end
 
+  def test_parse_utf8_bom
+    File.open('test.html', 'w') do |io|
+      io.write [ 0xEF, 0xBB, 0xBF ].map { |i| i.chr }.join
+      io.write "---\n"
+      io.write "utf8bomawareness: high\n"
+      io.write "---\n"
+      io.write "content goes here\n"
+    end
+
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, :encoding => 'utf-8')
+
+    result = data_source.instance_eval { content_and_attributes_for_file('test.html') }
+    assert_equal('content goes here', result[0].string)
+    assert_equal({ 'utf8bomawareness' => 'high' }, result[1])
+  end
+
   def test_read_other_encoding
     File.write('foo.txt', 'Hëllö'.encode('ISO-8859-1'))
 
