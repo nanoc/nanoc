@@ -14,20 +14,10 @@ module Nanoc::Filters
     def run(content, params={})
       # Build options
       options = params.dup
-      sass_filename = options[:filename] ||
-        (@item && @item[:content_filename])
+      sass_filename = options[:filename] || (@item && @item.raw_filename)
       options[:filename] ||= sass_filename
-      options[:filesystem_importer] ||=
-        Nanoc::Filters::Sass::SassFilesystemImporter
+      options[:filesystem_importer] = Nanoc::Filters::Sass::SassFilesystemImporter
 
-      # Find items
-      item_dirglob = Pathname.new(sass_filename).dirname.realpath.to_s + '**'
-      clean_items = @items.reject { |i| i.raw_filename.nil? }
-      @scoped_items, @rest_items = clean_items.partition do |i|
-        i.raw_filename &&
-          Pathname.new(i.raw_filename).realpath.fnmatch(item_dirglob)
-      end
-      
       # Render
       options[:nanoc_current_filter] = self
       engine = ::Sass::Engine.new(content, options)
@@ -35,11 +25,10 @@ module Nanoc::Filters
     end
 
     def imported_filename_to_item(filename)
-      filematch = lambda do |i|
+      @items.find do |i|
         i.raw_filename &&
           Pathname.new(i.raw_filename).realpath == Pathname.new(filename).realpath
       end
-      @scoped_items.find(&filematch) || @rest_items.find(&filematch)
     end
 
   end
