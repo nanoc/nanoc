@@ -9,7 +9,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     def initialize
       @called_methods = Set.new
     end
-    
+
     def method_missing(symbol, *args)
       @called_methods << symbol
     end
@@ -47,6 +47,14 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     logger = Logger.new(cleaning_stream)
     logger.info("Some info")
     logger.warn("Something could start going wrong!")
+  end
+
+  def test_broken_pipe
+    stream = StringIO.new
+    def stream.write(s) ; raise Errno::EPIPE.new ; end
+
+    cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
+    cleaning_stream.write('lol')
   end
 
 end
