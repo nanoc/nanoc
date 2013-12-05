@@ -162,33 +162,33 @@ module Nanoc::CLI::Commands
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
-        @filter_times = {}
+        @times = {}
 
-        @reps       = params.fetch(:reps)
+        @reps = params.fetch(:reps)
       end
 
       # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-          @filter_times[filter_name] ||= []
-          @filter_times[filter_name] << Time.now
+          @times[filter_name] ||= []
+          @times[filter_name] << { :start => Time.now }
         end
         Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-          @filter_times[filter_name] << Time.now - @filter_times[filter_name].pop
+          @times[filter_name].last[:stop] = Time.now
         end
       end
 
       # @see Listener#stop
       def stop
-        super
         self.print_profiling_feedback
+        super
       end
 
     protected
 
       def print_profiling_feedback
         # Get max filter length
-        max_filter_name_length = @filter_times.keys.map { |k| k.to_s.size }.max
+        max_filter_name_length = durations_per_filter.keys.map { |k| k.to_s.size }.max
         return if max_filter_name_length.nil?
 
         # Print warning if necessary
@@ -203,19 +203,19 @@ module Nanoc::CLI::Commands
         puts ' ' * max_filter_name_length + ' | count    min    avg    max     tot'
         puts '-' * max_filter_name_length + '-+-----------------------------------'
 
-        @filter_times.to_a.sort_by { |r| r[1] }.each do |row|
-          self.print_row(row)
+        durations_per_filter.to_a.sort_by { |r| r[1] }.each do |row|
+          self.print_row(row, max_filter_name_length)
         end
       end
 
-      def print_row(row)
+      def print_row(row, length)
         # Extract data
         filter_name, samples = *row
 
         # Calculate stats
         count = samples.size
         min   = samples.min
-        tot   = samples.inject { |memo, i| memo + i}
+        tot   = samples.inject(0) { |memo, i| memo + i }
         avg   = tot/count
         max   = samples.max
 
@@ -227,8 +227,26 @@ module Nanoc::CLI::Commands
         tot   = format('%5.2f', tot)
 
         # Output stats
-        filter_name = format("%#{max}s", filter_name)
-        puts "#{filter_name} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
+        key = format("%#{length}s", filter_name)
+        puts "#{key} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
+      end
+
+      def durations_per_filter
+        @_durations_per_filter ||= begin
+          @times.keys.each_with_object({}) do |filter_name, result|
+            if durations = durations_for_filter(filter_name)
+              result[filter_name] = durations
+            end
+          end
+        end
+      end
+
+      def durations_for_filter(filter_name)
+        @times[filter_name].each_with_object([]) do |sample, result|
+          if sample[:start] && sample[:stop]
+            result << sample[:stop] - sample[:start]
+          end
+        end
       end
 
     end
@@ -310,26 +328,26 @@ module Nanoc::CLI::Commands
     # Prints file actions (created, updated, deleted, identical, skipped)
     class FileActionPrinter < Listener
 
-      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site 
+      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params={})
-        @rep_times       = {}
+        @start_times = {}
+        @stop_times  = {}
 
-        @reps            = params.fetch(:reps)
+        @reps = params.fetch(:reps)
       end
 
       # @see Listener#start
       def start
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
-          @rep_times[rep.raw_path] = Time.now
+          @start_times[rep.raw_path] = Time.now
         end
         Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
-          @rep_times[rep.raw_path] = Time.now - @rep_times[rep.raw_path]
+          @stop_times[rep.raw_path] = Time.now
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           action = (is_created ? :create : (is_modified ? :update : :identical))
           level  = (is_created ? :high   : (is_modified ? :high   : :low))
-          duration = Time.now - @rep_times[rep.raw_path] if @rep_times[rep.raw_path]
-          Nanoc::CLI::Logger.instance.file(level, action, path, duration)
+          log(level, action, path, duration_for(rep))
         end
       end
 
@@ -337,12 +355,26 @@ module Nanoc::CLI::Commands
       def stop
         super
         @reps.select { |r| !r.compiled? }.each do |rep|
-          rep.raw_paths.each do |snapshot_name, filename|
-            next if filename.nil?
-            duration = @rep_times[filename]
-            Nanoc::CLI::Logger.instance.file(:high, :skip, filename, duration)
+          rep.raw_paths.each do |snapshot_name, raw_path|
+            log(:low, :skip, raw_path, duration_for(rep))
           end
         end
+      end
+
+      private
+
+      def duration_for(rep)
+        return nil if rep.raw_path.nil?
+
+        start = @start_times[rep.raw_path]
+        stop  = @stop_times[rep.raw_path]
+        return nil if start.nil? || stop.nil?
+
+        stop - start
+      end
+
+      def log(level, action, path, duration)
+        Nanoc::CLI::Logger.instance.file(level, action, path, duration)
       end
 
     end
@@ -371,7 +403,7 @@ module Nanoc::CLI::Commands
 
   protected
 
-    def prune  
+    def prune
       if self.site.config[:prune][:auto_prune]
         Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
       end
