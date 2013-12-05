@@ -8,10 +8,13 @@ Fixes:
 * Fixed ANSI color support on Windows (#352, #356)
 * Made fog deployer handle prefixes properly (#351) [Oliver Byford]
 * Fixed crash in watcher (#358)
+* Fixed ridiculously large durations when showing skipped items after compilation (#360, #364)
+* Fixed output of `--verbose` compilation statistics (#359, #365)
 
 Enhancements:
 
 * Fixed Windows compatibility issues in test suite (#353) [Raphael von der Grün]
+* Hid deprecated `autocompile` and `watch` commands in help
 
 ## 3.6.6 (2013-11-08)
 
