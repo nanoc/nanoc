@@ -15,6 +15,7 @@ Enhancements:
 
 * Fixed Windows compatibility issues in test suite (#353) [Raphael von der Grün]
 * Hid deprecated `autocompile` and `watch` commands in help
+* Made CLI swallow broken pipe errors when piping to a process that terminates prematurely (#318, #369)
 
 ## 3.6.6 (2013-11-08)
 
