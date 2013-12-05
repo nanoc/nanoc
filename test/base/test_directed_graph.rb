@@ -63,7 +63,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
 
   def test_add_edge
     graph = Nanoc::DirectedGraph.new([ 1, 2, 3 ])
-    
+
     assert_equal [], graph.successors_of(1)
     assert_equal [], graph.predecessors_of(2)
 
@@ -282,7 +282,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_example
-    YARD.parse('../lib/nanoc/base/helper/directed_graph.rb')
+    YARD.parse(LIB_DIR + '/nanoc/base/helper/directed_graph.rb')
     assert_examples_correct 'Nanoc::DirectedGraph'
   end
 

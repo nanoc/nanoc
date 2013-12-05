@@ -131,4 +131,65 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     end
   end
 
+  def test_file_action_printer_normal
+    # Create data
+    item = Nanoc::Item.new('content', {}, '/')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => Nanoc::SnapshotStore::InMemory.new)
+    rep.raw_paths = { :last => 'output/foo.txt' }
+
+    # Listen
+    listener = new_file_action_printer([ rep ])
+    listener.start
+    Nanoc::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::NotificationCenter.post(:compilation_ended, rep)
+    listener.stop
+
+    # Check
+    assert_equal 1, listener.events.size
+    assert_equal :low,             listener.events[0][:level]
+    assert_equal :skip,            listener.events[0][:action]
+    assert_equal 'output/foo.txt', listener.events[0][:path]
+    assert_in_delta 0.0,           listener.events[0][:duration], 1.0
+  end
+
+  def test_file_action_printer_skip
+    # Create data
+    item = Nanoc::Item.new('content', {}, '/')
+    rep = Nanoc::ItemRep.new(item, :default, :snapshot_store => Nanoc::SnapshotStore::InMemory.new)
+    rep.raw_paths = { :last => 'output/foo.txt' }
+
+    # Listen
+    listener = new_file_action_printer([ rep ])
+    listener.start
+    Nanoc::NotificationCenter.post(:compilation_started, rep)
+    listener.stop
+
+    # Check
+    assert_equal 1, listener.events.size
+    assert_equal :low,             listener.events[0][:level]
+    assert_equal :skip,            listener.events[0][:action]
+    assert_equal 'output/foo.txt', listener.events[0][:path]
+    assert_nil listener.events[0][:duration]
+  end
+
+  def new_file_action_printer(reps)
+    listener = Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => reps)
+
+    def listener.log(level, action, path, duration)
+      @events ||= []
+      @events << {
+        :level    => level,
+        :action   => action,
+        :path     => path,
+        :duration => duration
+      }
+    end
+
+    def listener.events
+      @events
+    end
+
+    listener
+  end
+
 end
