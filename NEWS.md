@@ -8,7 +8,7 @@ Fixes:
 * Fixed ANSI color support on Windows (#352, #356)
 * Made fog deployer handle prefixes properly (#351) [Oliver Byford]
 * Fixed crash in watcher (#358)
-* Fixed ridiculously large durations when showing skipped items after compilation (#360, #364)
+* Fixed huge durations when showing skipped items after compilation (#360, #364)
 * Fixed output of `--verbose` compilation statistics (#359, #365)
 
 Enhancements:
