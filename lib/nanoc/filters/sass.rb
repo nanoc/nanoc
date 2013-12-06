@@ -12,14 +12,10 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params={})
-      # Build options
-      options = params.dup
-      sass_filename = options[:filename] || (@item && @item.raw_filename)
-      options[:filename] ||= sass_filename
-      options[:filesystem_importer] = Nanoc::Filters::Sass::SassFilesystemImporter
-
-      # Render
-      options[:nanoc_current_filter] = self
+      options = params.merge({
+        :nanoc_current_filter => self,
+        :filename => @item && @item.raw_filename
+      })
       engine = ::Sass::Engine.new(content, options)
       engine.render
     end

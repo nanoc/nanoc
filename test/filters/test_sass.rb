@@ -233,7 +233,6 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
           io.write "Compass.add_project_configuration 'compass/config.rb'\n"
           io.write "\n"
           io.write "compile '*' do\n"
-          io.write "  STDOUT.puts Sass.load_paths.inspect\n"
           io.write "  filter :sass, Compass.sass_engine_options\n"
           io.write "end\n"
           io.write "\n"
