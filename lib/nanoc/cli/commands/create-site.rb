@@ -150,7 +150,7 @@ EOS
   margin: 0;
   padding: 0;
 
-  font-family: Georgia, Palatino, Times, 'Times New Roman', sans-serif;
+  font-family: Georgia, Palatino, serif;
 }
 
 body {
