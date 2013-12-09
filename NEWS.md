@@ -10,7 +10,7 @@ Fixes:
 * Fixed crash in watcher (#358)
 * Fixed huge durations when showing skipped items after compilation (#360, #364)
 * Fixed output of `--verbose` compilation statistics (#359, #365)
-* Fixed issue with Sass files not recompiling (#350, 370)
+* Fixed issue with Sass files not recompiling (#350, #370)
 
 Enhancements:
 
