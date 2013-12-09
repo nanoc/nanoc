@@ -6,6 +6,7 @@ gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
 gem 'coderay'
+gem 'compass'
 gem 'coffee-script'
 gem 'erubis'
 gem 'fog'
