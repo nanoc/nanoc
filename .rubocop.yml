@@ -27,18 +27,10 @@ TrailingWhitespace:
 
 
 
-# ----- DISABLED -----
+# ----- DISABLED (hard) -----
 
 # Ruby 1.8 compatibility is required.
 HashSyntax:
-  Enabled: false
-
-# Mostly long hardcoded strings which I’d rather not break up.
-LineLength:
-  Enabled: false
-
-# Parameters are indented one soft tab instead.
-AlignParameters:
   Enabled: false
 
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
@@ -49,6 +41,14 @@ AsciiComments:
 # Hash parameters should not have braces, but this cop is unable to distinguish
 # between has parameters and methods that take a hash as a param.
 BracesAroundHashParameters:
+  Enabled: false
+
+
+
+# ----- DISABLED (opinionated) -----
+
+# Parameters are indented one soft tab instead.
+AlignParameters:
   Enabled: false
 
 # This does not accomodate for code such as
@@ -62,6 +62,10 @@ CaseIndentation:
 
 # Personal convention is to use “memo” and an appropriate name for the element.
 SingleLineBlockParams:
+  Enabled: false
+
+# Mostly long hardcoded strings which I’d rather not break up (yet).
+LineLength:
   Enabled: false
 
 # Other tools exist for checking code quality. This cop is probably good to
