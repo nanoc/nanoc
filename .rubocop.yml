@@ -55,6 +55,9 @@ EmptyLiteral:
 EndAlignment:
   Enabled: true
 
+EvenOdd:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -138,9 +141,6 @@ Eval:
 
 
 # ----- TO ENABLE LATER -----
-
-EvenOdd:
-  Enabled: false
 
 FavorSprintf:
   Enabled: false

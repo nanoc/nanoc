@@ -18,7 +18,7 @@ class OrderedHash < ::Hash
       hsh = OrderedHash.new
       if args[0].is_a?(Hash)
         hsh.replace args[0]
-      elsif (args.size % 2) != 0
+      elsif args.size.odd?
         raise ArgumentError, "odd number of elements for Hash"
       else
         0.step(args.size - 1, 2) do |a|
