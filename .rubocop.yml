@@ -223,12 +223,12 @@ PerlBackrefs:
 RegexpLiteral:
   Enabled: false
 
+RescueException:
+  Enabled: false
+
 
 
 # ----- TO CHECK -----
-
-RescueException:
-  Enabled: false
 
 RescueModifier:
   Enabled: false
