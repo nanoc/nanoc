@@ -103,7 +103,7 @@ class OrderedHash < ::Hash
   end
 
   def invert
-    hsh2 = Hash.new
+    hsh2 = {}
     @order.each { |k| hsh2[self[k]] = k }
     hsh2
   end

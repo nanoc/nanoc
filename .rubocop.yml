@@ -46,6 +46,9 @@ DefWithoutParentheses:
 EmptyLineBetweenDefs:
   Enabled: true
 
+EmptyLiteral:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -134,9 +137,6 @@ EmptyLinesAroundBody:
 
 
 # ----- TO ENABLE LATER -----
-
-EmptyLiteral:
-  Enabled: false
 
 EndAlignment:
   Enabled: false
