@@ -101,7 +101,7 @@ module ::Nanoc::Extra::Checking::Checks
       res = nil
       5.times do |i|
         begin
-          Timeout::timeout(10) do
+          Timeout.timeout(10) do
             res = request_url_once(url)
             if res.code == '405'
               res = request_url_once(url, Net::HTTP::Get)

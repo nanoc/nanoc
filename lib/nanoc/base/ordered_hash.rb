@@ -170,7 +170,7 @@ class OrderedHash < ::Hash
         unless defined? @__yaml_inline_meth
           @__yaml_inline_meth =
             lambda do |opts|
-              YAML::quick_emit(object_id, opts) do |emitter|
+              YAML.quick_emit(object_id, opts) do |emitter|
                 emitter << '{ ' << map{|kv| kv.join ': '}.join(', ') << ' }'
               end
             end

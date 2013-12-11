@@ -34,6 +34,9 @@ TrailingBlankLines:
 TrailingWhitespace:
   Enabled: true
 
+ColonMethodCall:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -97,9 +100,6 @@ ClassVars:
 
 
 # ----- TO ENABLE LATER -----
-
-ColonMethodCall:
-  Enabled: false
 
 CommentAnnotation:
   Enabled: false
