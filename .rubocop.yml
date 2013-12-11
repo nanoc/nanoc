@@ -10,6 +10,9 @@ AccessModifierIndentation:
   Enabled: true
   EnforcedStyle: outdent
 
+Alias:
+  Enabled: true
+
 
 
 # ----- DISABLED -----
@@ -29,9 +32,6 @@ LineLength:
 
 
 # ----- TO ENABLE LATER -----
-
-Alias:
-  Enabled: false
 
 AlignParameters:
   Enabled: false

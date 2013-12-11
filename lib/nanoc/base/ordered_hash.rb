@@ -4,7 +4,7 @@
 #
 # DESCRIPTION
 #    Hash with preserved order and some array-like extensions
-#    Public domain. 
+#    Public domain.
 #
 # THANKS
 #    Andrew Johnson for his suggestions and fixes of Hash[],
@@ -35,12 +35,12 @@ class OrderedHash < ::Hash
     def store_only a,b
         store a,b
     end
-    alias orig_store store    
+    alias_method :orig_store, :store
     def store a,b
         @order.push a unless has_key? a
         super a,b
     end
-    alias []= store
+    alias_method :[]=, :store
     def == hsh2
         return false if @order != hsh2.order
         super hsh2
@@ -65,9 +65,9 @@ class OrderedHash < ::Hash
         @order.each { |k| yield k,self[k] }
         self
     end
-    alias each_pair each    
+    alias_method :each_pair, :each
     def delete_if
-        @order.clone.each { |k| 
+        @order.clone.each { |k|
             delete k if yield(k)
         }
         self
@@ -87,7 +87,7 @@ class OrderedHash < ::Hash
       {@order.last => self[@order.last]}
     end
     def invert
-        hsh2 = Hash.new    
+        hsh2 = Hash.new
         @order.each { |k| hsh2[self[k]] = k }
         hsh2
     end
@@ -99,7 +99,7 @@ class OrderedHash < ::Hash
         self == hsh2 ? nil : hsh2
     end
     def replace hsh2
-        @order = hsh2.keys 
+        @order = hsh2.keys
         super hsh2
     end
     def shift
@@ -145,7 +145,7 @@ class OrderedHash < ::Hash
         hsh2.each { |k,v| self[k] = v }
         self
     end
-    alias :merge! update
+    alias_method :merge!, :update
     def merge hsh2
         self.dup update(hsh2)
     end

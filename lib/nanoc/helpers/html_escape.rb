@@ -48,7 +48,7 @@ module Nanoc::Helpers
       end
     end
 
-    alias h html_escape
+    alias_method :h, :html_escape
 
   end
 
