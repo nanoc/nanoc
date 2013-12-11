@@ -18,12 +18,15 @@ module Nanoc
     # @option params [Nanoc::DependencyTracker] :dependency_tracker (nil) The
     #   dependency tracker for the given site.
     def initialize(params={})
-      @site = params[:site] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :site parameter'
-      @checksum_store = params[:checksum_store] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
-      @dependency_tracker = params[:dependency_tracker] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
+      @site = params.fetch(:site) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :site parameter'
+      end
+      @checksum_store = params.fetch(:checksum_store) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
+      end
+      @dependency_tracker = params.fetch(:dependency_tracker) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
+      end
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}

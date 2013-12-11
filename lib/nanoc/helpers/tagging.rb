@@ -35,7 +35,7 @@ module Nanoc::Helpers
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 
-      if item[:tags].nil? or item[:tags].empty?
+      if item[:tags].nil? || item[:tags].empty?
         none_text
       else
         item[:tags].map { |tag| link_for_tag(tag, base_url) }.join(separator)

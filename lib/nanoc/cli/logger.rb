@@ -67,7 +67,7 @@ module Nanoc::CLI
       return if @level == :off
 
       # Log when level permits it
-      io.puts(message) if (@level == :low or @level == level)
+      io.puts(message) if (@level == :low || @level == level)
     end
 
   end

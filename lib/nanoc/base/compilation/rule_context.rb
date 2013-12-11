@@ -27,8 +27,12 @@ module Nanoc
     # @raise [ArgumentError] if the `:rep` or the `:compiler` option is
     #   missing
     def initialize(params={})
-      rep      = params[:rep]      or raise ArgumentError, "Required :rep option is missing"
-      compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
+      rep = params.fetch(:rep) do
+        raise ArgumentError, "Required :rep option is missing"
+      end
+      compiler = params.fetch(:compiler) do
+        raise ArgumentError, "Required :compiler option is missing"
+      end
 
       super({
         :rep      => rep,

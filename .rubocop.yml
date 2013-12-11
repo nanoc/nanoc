@@ -13,6 +13,9 @@ AccessModifierIndentation:
 Alias:
   Enabled: true
 
+AndOr:
+  Enabled: true
+
 
 
 # ----- DISABLED -----
@@ -36,9 +39,6 @@ AlignParameters:
 
 
 # ----- TO ENABLE LATER -----
-
-AndOr:
-  Enabled: false
 
 AsciiComments:
   Enabled: false
