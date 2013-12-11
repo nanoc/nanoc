@@ -114,12 +114,13 @@ CommentAnnotation:
 CyclomaticComplexity:
   Enabled: false
 
+# It does not make sense to enforce everything to have documentation.
+Documentation:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-Documentation:
-  Enabled: false
 
 DotPosition:
   Enabled: false
