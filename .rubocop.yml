@@ -193,6 +193,11 @@ IndentationWidth:
 MethodLength:
   Enabled: false
 
+# Personal preference is to have decent constructors for exceptions rather than
+# just a class and a message.
+RaiseArgs:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
@@ -206,9 +211,6 @@ PerlBackrefs:
 
 
 # ----- TO CHECK -----
-
-RaiseArgs:
-  Enabled: false
 
 RedundantBegin:
   Enabled: false
