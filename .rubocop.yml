@@ -19,9 +19,12 @@ AndOr:
 AssignmentInCondition:
   Enabled: true
 
+Blocks:
+  Enabled: true
 
 
-# ----- DISABLED (-----
+
+# ----- DISABLED -----
 
 # Ruby 1.8 compatibility is required.
 HashSyntax:
@@ -47,9 +50,6 @@ AsciiComments:
 
 
 # ----- TO ENABLE LATER -----
-
-Blocks:
-  Enabled: false
 
 BracesAroundHashParameters:
   Enabled: false

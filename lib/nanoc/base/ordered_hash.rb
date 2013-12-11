@@ -68,9 +68,9 @@ class OrderedHash < ::Hash
     end
     alias_method :each_pair, :each
     def delete_if
-        @order.clone.each { |k|
+        @order.clone.each do |k|
             delete k if yield(k)
-        }
+        end
         self
     end
     def values
@@ -169,11 +169,11 @@ class OrderedHash < ::Hash
       else
         unless defined? @__yaml_inline_meth
           @__yaml_inline_meth =
-            lambda {|opts|
-              YAML::quick_emit(object_id, opts) {|emitter|
+            lambda do |opts|
+              YAML::quick_emit(object_id, opts) do |emitter|
                 emitter << '{ ' << map{|kv| kv.join ': '}.join(', ') << ' }'
-              }
-            }
+              end
+            end
           class << self
             def to_yaml opts = {}
               begin

@@ -36,11 +36,11 @@ module Nanoc::Extra
       def get(url)
         # Build app
         options = @options
-        @app ||= Rack::Builder.new {
+        @app ||= Rack::Builder.new do
           use Rack::Cache, options[:cache].merge(:verbose => true)
           use Nanoc::Extra::CHiCk::CacheController, options[:cache_controller]
           run Nanoc::Extra::CHiCk::RackClient
-        }
+        end
 
         # Build environment for request
         env = Rack::MockRequest.env_for(url, :method => 'GET')
