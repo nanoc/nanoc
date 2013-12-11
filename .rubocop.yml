@@ -17,7 +17,7 @@ Alias:
 
 # ----- DISABLED -----
 
-# Ruby 1.8 compatibility is required
+# Ruby 1.8 compatibility is required.
 HashSyntax:
   Enabled: false
 
@@ -25,16 +25,17 @@ HashSyntax:
 TrailingWhitespace:
   Enabled: false
 
-# Mostly long hardcoded strings which I’d rather not break up
+# Mostly long hardcoded strings which I’d rather not break up.
 LineLength:
+  Enabled: false
+
+# Parameters are indented one soft tab instead.
+AlignParameters:
   Enabled: false
 
 
 
 # ----- TO ENABLE LATER -----
-
-AlignParameters:
-  Enabled: false
 
 AndOr:
   Enabled: false
