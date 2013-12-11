@@ -49,6 +49,9 @@ EmptyLineBetweenDefs:
 EmptyLiteral:
   Enabled: true
 
+EndAlignment:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -137,9 +140,6 @@ EmptyLinesAroundBody:
 
 
 # ----- TO ENABLE LATER -----
-
-EndAlignment:
-  Enabled: false
 
 Eval:
   Enabled: false

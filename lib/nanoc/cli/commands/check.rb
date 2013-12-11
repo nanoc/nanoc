@@ -25,13 +25,14 @@ module Nanoc::CLI::Commands
         return
       end
 
-      success = if options[:all]
-        runner.run_all
-      elsif options[:deploy]
-        runner.run_for_deploy
-      else
-        runner.run_specific(arguments)
-      end
+      success =
+        if options[:all]
+          runner.run_all
+        elsif options[:deploy]
+          runner.run_for_deploy
+        else
+          runner.run_specific(arguments)
+        end
 
       unless success
         raise Nanoc::Errors::GenericTrivial, 'One or more checks failed'
