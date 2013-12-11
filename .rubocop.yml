@@ -78,6 +78,10 @@ AsciiComments:
 BracesAroundHashParameters:
   Enabled: false
 
+# nanoc relies on eval in several cases (code snippets and some helpers).
+Eval:
+  Enabled: false
+
 
 
 # ----- DISABLED (opinionated) -----
@@ -132,10 +136,6 @@ DotPosition:
 # Personal preference is to have symmetric blank lines inside module and class
 # definitions.
 EmptyLinesAroundBody:
-  Enabled: false
-
-# nanoc relies on eval in several cases (code snippets and some helpers).
-Eval:
   Enabled: false
 
 
