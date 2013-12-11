@@ -73,12 +73,13 @@ LineLength:
 ClassLength:
   Enabled: false
 
+# Only used for deprecated code that is gone in nanoc 4.x anyway.
+ClassVars:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-ClassVars:
-  Enabled: false
 
 CollectionMethods:
   Enabled: false
