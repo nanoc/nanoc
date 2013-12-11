@@ -153,12 +153,13 @@ FavorUnlessOverNegatedIf:
 HandleExceptions:
   Enabled: false
 
+# if/unless at the end of the line makes it too easy to oversee.
+IfUnlessModifier:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-IfUnlessModifier:
-  Enabled: false
 
 IndentationWidth:
   Enabled: false
