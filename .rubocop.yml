@@ -16,9 +16,12 @@ Alias:
 AndOr:
   Enabled: true
 
+AssignmentInCondition:
+  Enabled: true
 
 
-# ----- DISABLED -----
+
+# ----- DISABLED (-----
 
 # Ruby 1.8 compatibility is required.
 HashSyntax:
@@ -44,9 +47,6 @@ AsciiComments:
 
 
 # ----- TO ENABLE LATER -----
-
-AssignmentInCondition:
-  Enabled: false
 
 Blocks:
   Enabled: false

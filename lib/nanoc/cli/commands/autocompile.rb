@@ -44,7 +44,8 @@ module Nanoc::CLI::Commands
 
       # Guess which handler we should use
       handler_option = options[:handler] || autocompile_config[:handler]
-      unless handler = Rack::Handler.get(handler_option)
+      handler = Rack::Handler.get(handler_option)
+      unless handler
         begin
           handler = Rack::Handler::Mongrel
         rescue LoadError => e
