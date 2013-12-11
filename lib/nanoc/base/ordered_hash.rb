@@ -228,7 +228,3 @@ class OrderedHash < ::Hash
     self
   end
 end # class OrderedHash
-
-def OrderedHash(*a, &b)
-  OrderedHash.new(*a, &b)
-end
