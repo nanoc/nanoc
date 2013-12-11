@@ -19,6 +19,15 @@ Blocks:
 CaseEquality:
   Enabled: true
 
+# Inject is omitted here, at least for the time being.
+CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    collect: 'map'
+    collect!: 'map!'
+    detect: 'find'
+    find_all: 'select'
+
 TrailingBlankLines:
   Enabled: true
 
@@ -88,9 +97,6 @@ ClassVars:
 
 
 # ----- TO ENABLE LATER -----
-
-CollectionMethods:
-  Enabled: false
 
 ColonMethodCall:
   Enabled: false
