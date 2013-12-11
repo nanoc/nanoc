@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 usage   'sync'
 summary 'sync data sources'
 description <<-EOS

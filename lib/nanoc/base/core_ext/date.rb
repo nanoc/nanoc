@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'date'
 
 begin
@@ -10,7 +12,7 @@ rescue => e
 end
 
 if needs_patch
- 
+
   class ::Date
 
     [ :amjd, :jd, :day_fraction, :mjd, :ld, :civil, :ordinal, :commercial, :weeknum0, :weeknum1, :time, :wday, :julian?, :gregorian?, :leap? ].each do |m|

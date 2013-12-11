@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'net/http'
 require 'rack'
 require 'rack/cache'
@@ -16,7 +18,7 @@ module Nanoc::Extra
 
       DEFAULT_OPTIONS = {
         :cache => {
-          :metastore   => 'file:tmp/rack/cache.meta', 
+          :metastore   => 'file:tmp/rack/cache.meta',
           :entitystore => 'file:tmp/rack/cache.body'
         },
         :cache_controller => {

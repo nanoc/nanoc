@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc
 
   # Provides a context in which compilation and routing rules can be executed.

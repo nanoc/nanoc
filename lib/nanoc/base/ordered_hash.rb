@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 # AUTHOR
 #    jan molic /mig/at/1984/dot/cz/
