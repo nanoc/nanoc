@@ -67,6 +67,9 @@ MethodName:
 MultilineTernaryOperator:
   Enabled: true
 
+NestedTernaryOperator:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -186,9 +189,6 @@ MethodLength:
 # ----- TO ENABLE LATER -----
 
 MultilineBlockChain:
-  Enabled: false
-
-NestedTernaryOperator:
   Enabled: false
 
 OpMethod:

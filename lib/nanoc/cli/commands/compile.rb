@@ -346,8 +346,18 @@ module Nanoc::CLI::Commands
           @stop_times[rep.raw_path] = Time.now
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-          action = (is_created ? :create : (is_modified ? :update : :identical))
-          level  = (is_created ? :high   : (is_modified ? :high   : :low))
+          action =
+            case
+            when is_created  then :create
+            when is_modified then :update
+            else :identical
+            end
+          level =
+            case
+            when is_created  then :high
+            when is_modified then :high
+            else :low
+            end
           log(level, action, path, duration_for(rep))
         end
       end
