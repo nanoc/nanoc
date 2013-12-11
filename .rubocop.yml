@@ -220,12 +220,12 @@ MultilineBlockChain:
 PerlBackrefs:
   Enabled: false
 
+RegexpLiteral:
+  Enabled: false
+
 
 
 # ----- TO CHECK -----
-
-RegexpLiteral:
-  Enabled: false
 
 RescueException:
   Enabled: false
