@@ -131,12 +131,13 @@ DotPosition:
 EmptyLinesAroundBody:
   Enabled: false
 
+# nanoc relies on eval in several cases (code snippets and some helpers).
+Eval:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-Eval:
-  Enabled: false
 
 EvenOdd:
   Enabled: false
