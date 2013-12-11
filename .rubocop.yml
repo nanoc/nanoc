@@ -97,12 +97,13 @@ ClassLength:
 ClassVars:
   Enabled: false
 
+# Personal convention is to use colon-less annotations.
+CommentAnnotation:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-CommentAnnotation:
-  Enabled: false
 
 ConstantName:
   Enabled: false
