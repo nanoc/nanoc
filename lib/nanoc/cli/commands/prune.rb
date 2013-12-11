@@ -42,7 +42,7 @@ module Nanoc::CLI::Commands
     def prune_config_exclude
       self.prune_config[:exclude] || {}
     end
-    
+
   end
 
 end

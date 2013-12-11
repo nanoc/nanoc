@@ -20,7 +20,7 @@ module Nanoc::Filters
     #     Redcarpet
     #
     #   @return [String] The filtered content
-    #   
+    #
     # @overload run(content, params={})
     #
     #   For Redcarpet 2.x

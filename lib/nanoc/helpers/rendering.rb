@@ -38,7 +38,7 @@ module Nanoc::Helpers
     # @example Rendering a head and a foot partial around some text
     #
     #   <%= render 'head' %> - MIDDLE - <%= render 'foot' %>
-    #   # => "HEAD - MIDDLE - FOOT" 
+    #   # => "HEAD - MIDDLE - FOOT"
     #
     # @example Rendering a head partial with a custom title
     #

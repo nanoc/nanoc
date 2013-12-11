@@ -24,7 +24,7 @@ module Nanoc::Filters
     #   `:xhtml` types.
     #
     # @option params [Hash] :namespaces The pairs `prefix => uri` to define
-    #   any namespace you want to use in the XPath expressions. This param 
+    #   any namespace you want to use in the XPath expressions. This param
     #   is useful only for the `:xml` and `:xhtml` types.
     #
     # @return [String] The filtered content

@@ -1,11 +1,5 @@
 # ----- ENABLED -----
 
-TrailingBlankLines:
-  Enabled: true
-
-TrailingWhitespace:
-  Enabled: true
-
 AccessModifierIndentation:
   Enabled: true
   EnforcedStyle: outdent
@@ -25,16 +19,18 @@ Blocks:
 CaseEquality:
   Enabled: true
 
+TrailingBlankLines:
+  Enabled: true
+
+TrailingWhitespace:
+  Enabled: true
+
 
 
 # ----- DISABLED -----
 
 # Ruby 1.8 compatibility is required.
 HashSyntax:
-  Enabled: false
-
-# No point in fixing these. They will be fixed automatically.
-TrailingWhitespace:
   Enabled: false
 
 # Mostly long hardcoded strings which I’d rather not break up.

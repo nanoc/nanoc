@@ -56,7 +56,7 @@ module Nanoc::DataSources
       dir_path         = dir_name + identifier
       meta_filename    = dir_name + identifier + last_component + '.yaml'
       content_filename = dir_name + identifier + last_component + ext
-                                     
+
       # Notify
       Nanoc::NotificationCenter.post(:file_created, meta_filename)
       Nanoc::NotificationCenter.post(:file_created, content_filename)

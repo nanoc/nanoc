@@ -21,9 +21,9 @@ module Nanoc
     # @example A fast fib function due to memoization
     #
     #     class FibFast
-    # 
+    #
     #       extend Nanoc::Memoization
-    # 
+    #
     #       def run(n)
     #         if n == 0
     #           0
@@ -34,7 +34,7 @@ module Nanoc
     #         end
     #       end
     #       memoize :run
-    # 
+    #
     #     end
     #
     # @param [Symbol, String] method_name The name of the method to memoize

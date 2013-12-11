@@ -62,7 +62,7 @@ module Nanoc::DataSources
             played_at = Time.parse(raw_item['date']['#text'])
             now_playing = false
           end
-          
+
           attributes = {
             :name      => raw_item['name'],
             :artist    => {

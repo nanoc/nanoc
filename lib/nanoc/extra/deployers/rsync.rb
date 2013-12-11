@@ -53,7 +53,7 @@ module Nanoc::Extra::Deployers
 
   private
 
-    # Runs the given shell command. It will raise an error if execution fails 
+    # Runs the given shell command. It will raise an error if execution fails
     # (results in a nonzero exit code).
     def run_shell_cmd(args)
       status = systemu(args, 'stdout' => $stdout, 'stderr' => $stderr)

@@ -9,21 +9,21 @@ module Nanoc
   #
   #   # Create a graph with three vertices
   #   graph = Nanoc::DirectedGraph.new(%w( a b c d ))
-  #   
+  #
   #   # Add edges
   #   graph.add_edge('a', 'b')
   #   graph.add_edge('b', 'c')
   #   graph.add_edge('c', 'd')
-  #   
+  #
   #   # Get (direct) predecessors
   #   graph.direct_predecessors_of('d').sort
   #     # => %w( c )
   #   graph.predecessors_of('d').sort
   #     # => %w( a b c )
-  #   
+  #
   #   # Modify edges
   #   graph.delete_edge('a', 'b')
-  #   
+  #
   #   # Get (direct) predecessors again
   #   graph.direct_predecessors_of('d').sort
   #     # => %w( c )

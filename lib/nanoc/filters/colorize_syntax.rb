@@ -277,7 +277,7 @@ module Nanoc::Filters
     def coderay_postprocess(language, element)
       # Skip if we're a free <code>
       return if element.parent.nil?
-      
+
       # <div class="code">
       div_inner = Nokogiri::XML::Node.new('div', element.document)
       div_inner['class'] = 'code'
