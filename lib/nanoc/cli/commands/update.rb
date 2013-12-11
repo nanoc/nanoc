@@ -26,10 +26,10 @@ module Nanoc::CLI::Commands
       end
 
       # Make sure we are in a nanoc site directory
-      self.require_site
+      require_site
 
       # Set VCS if possible
-      self.set_vcs(options[:vcs])
+      set_vcs(options[:vcs])
 
       # Check for -y switch
       unless options.key?(:yes)
@@ -57,7 +57,7 @@ module Nanoc::CLI::Commands
       end
 
       # Update
-      self.site.data_sources.each do |data_source|
+      site.data_sources.each do |data_source|
         data_source.update
       end
     end

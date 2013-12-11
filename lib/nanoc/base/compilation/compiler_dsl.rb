@@ -241,7 +241,7 @@ module Nanoc
       filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
-      self.instance_eval(File.read(filename), filename)
+      instance_eval(File.read(filename), filename)
     end
 
   private

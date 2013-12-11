@@ -18,10 +18,10 @@ module Nanoc::CLI::Commands
       end
 
       # Make sure we are in a nanoc site directory
-      self.require_site
+      require_site
 
       # Update all syncable data sources
-      self.site.data_sources.each do |data_source|
+      site.data_sources.each do |data_source|
         unless data_source.method(:sync).owner == Nanoc::DataSource
           puts "Syncing #{data_source.config[:type]} data source: #{data_source.items_root}"
           data_source.sync

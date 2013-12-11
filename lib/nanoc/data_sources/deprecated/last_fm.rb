@@ -11,10 +11,10 @@ module Nanoc::DataSources
         require 'uri'
 
         # Check configuration
-        if self.config[:username].nil?
+        if config[:username].nil?
           raise "LastFM data source requires a username in the configuration"
         end
-        if self.config[:api_key].nil?
+        if config[:api_key].nil?
           raise "LastFM data source requires an API key in the configuration"
         end
 
@@ -24,8 +24,8 @@ module Nanoc::DataSources
           'http://ws.audioscrobbler.com/2.0/' +
             '?method=user.getRecentTracks' +
             '&format=json' +
-            '&user=' + URI.escape(self.config[:username]) +
-            '&api_key=' + URI.escape(self.config[:api_key])
+            '&user=' + URI.escape(config[:username]) +
+            '&api_key=' + URI.escape(config[:api_key])
         )
 
         # Parse as JSON
@@ -46,7 +46,7 @@ module Nanoc::DataSources
                   '&mbid=' + URI.escape(raw_item['artist']['mbid'])
                 end
               ) +
-              '&api_key=' + URI.escape(self.config[:api_key])
+              '&api_key=' + URI.escape(config[:api_key])
           )
 
           # Parse as JSON

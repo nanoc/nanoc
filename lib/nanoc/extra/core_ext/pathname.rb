@@ -17,7 +17,7 @@ module Nanoc::Extra
     end
 
     def include_component?(component)
-      self.components.include?(component)
+      components.include?(component)
     end
 
   end

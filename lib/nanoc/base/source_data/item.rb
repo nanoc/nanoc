@@ -226,7 +226,7 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, self.identifier ]
+      [ type, identifier ]
     end
 
     # Prevents all further modifications to its attributes.
@@ -241,7 +241,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} identifier=\"#{self.identifier}\" binary?=#{self.binary?}>"
+      "<#{self.class} identifier=\"#{identifier}\" binary?=#{self.binary?}>"
     end
 
     # @return [String] The checksum for this object. If its contents change,
@@ -267,11 +267,11 @@ module Nanoc
     memoize :checksum
 
     def hash
-      self.class.hash ^ self.identifier.hash
+      self.class.hash ^ identifier.hash
     end
 
     def eql?(other)
-      self.class == other.class && self.identifier == other.identifier
+      self.class == other.class && identifier == other.identifier
     end
 
     def ==(other)

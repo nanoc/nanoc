@@ -55,8 +55,8 @@ module Nanoc::CLI
   # @return [void]
   def self.run(args)
     Nanoc::CLI::ErrorHandler.handle_while do
-      self.setup
-      self.root_command.run(args)
+      setup
+      root_command.run(args)
     end
   end
 
@@ -71,7 +71,7 @@ module Nanoc::CLI
   #
   # @return [void]
   def self.add_command(cmd)
-    self.root_command.add_command(cmd)
+    root_command.add_command(cmd)
   end
 
 protected
@@ -80,9 +80,9 @@ protected
   #
   # @return [void]
   def self.setup
-    self.setup_cleaning_streams
-    self.setup_commands
-    self.load_custom_commands
+    setup_cleaning_streams
+    setup_commands
+    load_custom_commands
   end
 
   # Sets up the root command and base subcommands.
@@ -94,18 +94,18 @@ protected
 
     # Add root command
     filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
-    @root_command = self.load_command_at(filename)
+    @root_command = load_command_at(filename)
 
     # Add help command
     help_cmd = Cri::Command.new_basic_help
-    self.add_command(help_cmd)
+    add_command(help_cmd)
 
     # Add other commands
     cmd_filenames = Dir[File.dirname(__FILE__) + '/cli/commands/*.rb']
     cmd_filenames.each do |filename|
       next if File.basename(filename, '.rb') == 'nanoc'
-      cmd = self.load_command_at(filename)
-      self.add_command(cmd)
+      cmd = load_command_at(filename)
+      add_command(cmd)
     end
   end
 
@@ -113,7 +113,7 @@ protected
   #
   # @return [void]
   def self.load_custom_commands
-    self.recursive_contents_of('commands').each do |filename|
+    recursive_contents_of('commands').each do |filename|
       # Create command
       command = Nanoc::CLI.load_command_at(filename)
 
@@ -155,7 +155,7 @@ protected
   def self.recursive_contents_of(path)
     return [] unless File.directory?(path)
     files, dirs = *Dir[path + '/*'].sort.partition { |e| File.file?(e) }
-    dirs.each { |d| files.concat self.recursive_contents_of(d) }
+    dirs.each { |d| files.concat recursive_contents_of(d) }
     files
   end
 
@@ -183,8 +183,8 @@ protected
   #
   # @return [void]
   def self.setup_cleaning_streams
-    $stdout = self.wrap_in_cleaning_stream($stdout)
-    $stderr = self.wrap_in_cleaning_stream($stderr)
+    $stdout = wrap_in_cleaning_stream($stdout)
+    $stderr = wrap_in_cleaning_stream($stderr)
   end
 
   # @return [Boolean] true if UTF-8 support is present, false if not

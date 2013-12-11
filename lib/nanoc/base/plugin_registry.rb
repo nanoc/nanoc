@@ -28,7 +28,7 @@ module Nanoc
       #   @return [Array<Symbol>] The identifiers for this plugin
       def identifiers(*identifiers)
         if identifiers.empty?
-          Nanoc::PluginRegistry.instance.identifiers_of(self.superclass, self)
+          Nanoc::PluginRegistry.instance.identifiers_of(superclass, self)
         else
           register(self, *identifiers)
         end
@@ -47,9 +47,9 @@ module Nanoc
       #   @return [Symbol] The first identifier for this plugin
       def identifier(identifier=nil)
         if identifier
-          self.identifiers(identifier)
+          identifiers(identifier)
         else
-          Nanoc::PluginRegistry.instance.identifiers_of(self.superclass, self).first
+          Nanoc::PluginRegistry.instance.identifiers_of(superclass, self).first
         end
       end
 
@@ -94,7 +94,7 @@ module Nanoc
     #
     # @return [Nanoc::PluginRegistry] The shared plugin registry
     def self.instance
-      @instance ||= self.new
+      @instance ||= new
     end
 
     # Creates a new plugin registry. This should usually not be necessary; it

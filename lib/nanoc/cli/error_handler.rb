@@ -23,7 +23,7 @@ module Nanoc::CLI
       if @disabled
         yield
       else
-        self.new(params).handle_while(&block)
+        new(params).handle_while(&block)
       end
     end
 
@@ -74,7 +74,7 @@ module Nanoc::CLI
     rescue Interrupt => e
       exit(1)
     rescue StandardError, ScriptError => e
-      self.print_error(e)
+      print_error(e)
       exit(1)
     end
 
@@ -85,7 +85,7 @@ module Nanoc::CLI
     #
     # @return [void]
     def self.print_error(error)
-      self.new.print_error(error)
+      new.print_error(error)
     end
 
     # Prints the given error to stderr. Includes message, possible resolution
@@ -120,12 +120,12 @@ module Nanoc::CLI
       stream.puts "Captain! We’ve been hit!"
 
       # Sections
-      self.write_error_message(    stream, error)
-      self.write_compilation_stack(stream, error)
-      self.write_stack_trace(      stream, error)
+      write_error_message(    stream, error)
+      write_compilation_stack(stream, error)
+      write_stack_trace(      stream, error)
 
       # Issue link
-      self.write_issue_link(stream)
+      write_issue_link(stream)
     end
 
     # Writes a verbose representation of the error on the given stream.
@@ -142,15 +142,15 @@ module Nanoc::CLI
       stream.puts "Crashlog created at #{Time.now}"
 
       # Sections
-      self.write_error_message(      stream, error, :verbose => true)
-      self.write_compilation_stack(  stream, error, :verbose => true)
-      self.write_stack_trace(        stream, error, :verbose => true)
-      self.write_version_information(stream,        :verbose => true)
-      self.write_system_information( stream,        :verbose => true)
-      self.write_installed_gems(     stream,        :verbose => true)
-      self.write_environment(        stream,        :verbose => true)
-      self.write_gemfile_lock(       stream,        :verbose => true)
-      self.write_load_paths(         stream,        :verbose => true)
+      write_error_message(      stream, error, :verbose => true)
+      write_compilation_stack(  stream, error, :verbose => true)
+      write_stack_trace(        stream, error, :verbose => true)
+      write_version_information(stream,        :verbose => true)
+      write_system_information( stream,        :verbose => true)
+      write_installed_gems(     stream,        :verbose => true)
+      write_environment(        stream,        :verbose => true)
+      write_gemfile_lock(       stream,        :verbose => true)
+      write_load_paths(         stream,        :verbose => true)
     end
 
   protected
@@ -269,20 +269,20 @@ module Nanoc::CLI
     end
 
     def write_error_message(stream, error, params={})
-      self.write_section_header(stream, 'Message', params)
+      write_section_header(stream, 'Message', params)
 
       stream.puts "#{error.class}: #{error.message}"
-      resolution = self.resolution_for(error)
+      resolution = resolution_for(error)
       stream.puts "#{resolution}" if resolution
     end
 
     def write_compilation_stack(stream, error, params={})
-      self.write_section_header(stream, 'Compilation stack', params)
+      write_section_header(stream, 'Compilation stack', params)
 
-      if self.stack.empty?
+      if stack.empty?
         stream.puts "  (empty)"
       else
-        self.stack.reverse.each do |obj|
+        stack.reverse.each do |obj|
           if obj.is_a?(Nanoc::ItemRep)
             stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
           else # layout
@@ -293,7 +293,7 @@ module Nanoc::CLI
     end
 
     def write_stack_trace(stream, error, params={})
-      self.write_section_header(stream, 'Stack trace', params)
+      write_section_header(stream, 'Stack trace', params)
 
       count = params[:verbose] ? -1 : 10
       error.backtrace[0...count].each_with_index do |item, index|
@@ -313,26 +313,26 @@ module Nanoc::CLI
     end
 
     def write_version_information(stream, params={})
-      self.write_section_header(stream, 'Version information', params)
+      write_section_header(stream, 'Version information', params)
       stream.puts Nanoc.version_information
     end
 
     def write_system_information(stream, params={})
       uname = `uname -a`
-      self.write_section_header(stream, 'System information', params)
+      write_section_header(stream, 'System information', params)
       stream.puts uname
     rescue Errno::ENOENT
     end
 
     def write_installed_gems(stream, params={})
-      self.write_section_header(stream, 'Installed gems', params)
-      self.gems_and_versions.each do |g|
+      write_section_header(stream, 'Installed gems', params)
+      gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
       end
     end
 
     def write_environment(stream, params={})
-      self.write_section_header(stream, 'Environment', params)
+      write_section_header(stream, 'Environment', params)
       ENV.sort.each do |e|
         stream.puts "#{e.first} => #{e.last.inspect}"
       end
@@ -340,13 +340,13 @@ module Nanoc::CLI
 
     def write_gemfile_lock(stream, params={})
       if File.exist?('Gemfile.lock')
-        self.write_section_header(stream, 'Gemfile.lock', params)
+        write_section_header(stream, 'Gemfile.lock', params)
         stream.puts File.read('Gemfile.lock')
       end
     end
 
     def write_load_paths(stream, params={})
-      self.write_section_header(stream, 'Load paths', params)
+      write_section_header(stream, 'Load paths', params)
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"
       end

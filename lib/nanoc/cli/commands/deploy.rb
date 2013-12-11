@@ -17,7 +17,7 @@ module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
 
     def run
-      self.load_site
+      load_site
 
       # List deployers
       if options[:'list-deployers']

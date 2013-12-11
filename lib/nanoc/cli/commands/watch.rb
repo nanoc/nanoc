@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
       require 'pathname'
 
       require_site
-      watcher_config = self.site.config[:watcher] || {}
+      watcher_config = site.config[:watcher] || {}
 
       @notifier = Notifier.new
 
@@ -108,7 +108,7 @@ module Nanoc::CLI::Commands
       def notify(message)
         return if tool.nil?
         if tool == 'growlnotify' && self.on_windows?
-          self.growlnotify_windows(message)
+          growlnotify_windows(message)
         else
           send(tool.tr('-', '_'), message)
         end
@@ -154,7 +154,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify(message)
-        system(*self.growlnotify_cmd_for(message))
+        system(*growlnotify_cmd_for(message))
       end
 
       def growlnotify_windows_cmd_for(message)
@@ -162,7 +162,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify_windows(message)
-        system(*self.growlnotify_windows_cmd_for(message))
+        system(*growlnotify_windows_cmd_for(message))
       end
 
       def notify_send(message)

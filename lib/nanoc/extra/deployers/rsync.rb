@@ -34,9 +34,9 @@ module Nanoc::Extra::Deployers
       require 'systemu'
 
       # Get params
-      src = self.source_path + '/'
-      dst = self.config[:dst]
-      options = self.config[:options] || DEFAULT_OPTIONS
+      src = source_path + '/'
+      dst = config[:dst]
+      options = config[:options] || DEFAULT_OPTIONS
 
       # Validate
       raise 'No dst found in deployment configuration' if dst.nil?

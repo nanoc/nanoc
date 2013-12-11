@@ -66,7 +66,7 @@ module Nanoc::Extra
           if 0 == recursion_limit
             raise MaxSymlinkDepthExceededError.new(fn)
           else
-            absolute_target = self.resolve_symlink(fn)
+            absolute_target = resolve_symlink(fn)
             if File.file?(absolute_target)
               fn
             else
@@ -109,7 +109,7 @@ module Nanoc::Extra
         if 0 == recursion_limit
           raise MaxSymlinkDepthExceededError.new(absolute_target)
         else
-          self.resolve_symlink(absolute_target, recursion_limit-1)
+          resolve_symlink(absolute_target, recursion_limit-1)
         end
       when 'file', 'directory'
         absolute_target

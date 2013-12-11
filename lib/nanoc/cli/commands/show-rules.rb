@@ -12,17 +12,17 @@ module Nanoc::CLI::Commands
   class ShowRules < ::Nanoc::CLI::CommandRunner
 
     def run
-      self.require_site
+      require_site
 
       @c    = Nanoc::CLI::ANSIStringColorizer
-      @calc = self.site.compiler.rule_memory_calculator
+      @calc = site.compiler.rule_memory_calculator
 
       # TODO explain /foo/
       # TODO explain content/foo.html
       # TODO explain output/foo/index.html
 
-      self.site.items.each   { |i| self.explain_item(i)   }
-      self.site.layouts.each { |l| self.explain_layout(l) }
+      site.items.each   { |i| explain_item(i)   }
+      site.layouts.each { |l| explain_layout(l) }
     end
 
   protected

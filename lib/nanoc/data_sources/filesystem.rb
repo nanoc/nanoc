@@ -144,7 +144,7 @@ module Nanoc::DataSources
     #   }
     def all_split_files_in(dir_name)
       # Get all good file names
-      filenames = self.all_files_in(dir_name)
+      filenames = all_files_in(dir_name)
       filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
 
       # Group by identifier

@@ -67,7 +67,7 @@ module Nanoc
       end
 
       # Check file existance
-      if !File.file?(self.filename)
+      if !File.file?(filename)
         no_data_found
         @loaded = true
         return
@@ -75,7 +75,7 @@ module Nanoc
 
       pstore.transaction do
         # Check version
-        if pstore[:version] != self.version
+        if pstore[:version] != version
           version_mismatch_detected
           @loaded = true
           return
@@ -98,11 +98,11 @@ module Nanoc
     #
     # @return [void]
     def store
-      FileUtils.mkdir_p(File.dirname(self.filename))
+      FileUtils.mkdir_p(File.dirname(filename))
 
       pstore.transaction do
-        pstore[:data]    = self.data
-        pstore[:version] = self.version
+        pstore[:data]    = data
+        pstore[:version] = version
       end
     end
 
@@ -127,7 +127,7 @@ module Nanoc
   private
 
     def pstore
-      @pstore ||= PStore.new(self.filename)
+      @pstore ||= PStore.new(filename)
     end
 
   end

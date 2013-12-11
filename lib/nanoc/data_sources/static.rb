@@ -34,7 +34,7 @@ module Nanoc::DataSources
       prefix = config[:prefix] || 'static'
 
       # Convert filenames to items
-      self.all_files_in(prefix).map do |filename|
+      all_files_in(prefix).map do |filename|
         attributes = {
           :extension => File.extname(filename)[1..-1],
           :filename  => filename,

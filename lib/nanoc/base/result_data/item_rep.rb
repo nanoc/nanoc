@@ -135,7 +135,7 @@ module Nanoc
         if self.binary?
           temp_path = temporary_filenames[:last]
         else
-          temp_path = self.temp_filename
+          temp_path = temp_filename
           File.open(temp_path, 'w') { |io| io.write(@content[:last]) }
         end
 
@@ -237,13 +237,13 @@ module Nanoc
     #   default snapshot if no snapshot is specified)
     def compiled_content(params={})
       # Make sure we're not binary
-      if self.item.binary?
+      if item.binary?
         raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
       # Notify
-      Nanoc::NotificationCenter.post(:visit_started, self.item)
-      Nanoc::NotificationCenter.post(:visit_ended,   self.item)
+      Nanoc::NotificationCenter.post(:visit_started, item)
+      Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       # Get name of last pre-layout snapshot
       snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
@@ -280,8 +280,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def raw_path(params={})
-      Nanoc3::NotificationCenter.post(:visit_started, self.item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
+      Nanoc3::NotificationCenter.post(:visit_started, item)
+      Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @raw_paths[snapshot_name]
@@ -297,8 +297,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def path(params={})
-      Nanoc3::NotificationCenter.post(:visit_started, self.item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
+      Nanoc3::NotificationCenter.post(:visit_started, item)
+      Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]
@@ -428,7 +428,7 @@ module Nanoc
     def snapshot(snapshot_name, params={})
       is_final = params.fetch(:final) { true }
       @content[snapshot_name] = @content[:last] unless self.binary?
-      self.write(snapshot_name) if is_final
+      write(snapshot_name) if is_final
     end
 
     # Returns a recording proxy that is used for determining whether the
@@ -461,11 +461,11 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, self.item.identifier, self.name ]
+      [ type, item.identifier, name ]
     end
 
     def inspect
-      "<#{self.class} name=\"#{self.name}\" binary=#{self.binary?} raw_path=\"#{self.raw_path}\" item.identifier=\"#{self.item.identifier}\">"
+      "<#{self.class} name=\"#{name}\" binary=#{self.binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end
 
   private

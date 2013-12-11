@@ -16,15 +16,15 @@ module ::Nanoc::Extra::Checking::Checks
     def run
       # Find all broken external hrefs
       # TODO de-duplicate this (duplicated in internal links check)
-      filenames = self.output_filenames.select { |f| File.extname(f) == '.html' }
+      filenames = output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :external).filenames_per_href
-      results = self.select_invalid(hrefs_with_filenames.keys)
+      results = select_invalid(hrefs_with_filenames.keys)
 
       # Report them
       results.each do |res|
         filenames = hrefs_with_filenames[res.href]
         filenames.each do |filename|
-          self.add_issue(
+          add_issue(
             "reference to #{res.href}: #{res.explanation}",
             :subject => filename)
         end
@@ -71,7 +71,7 @@ module ::Nanoc::Extra::Checking::Checks
           loop do
             href = enum.next
             break if href.nil?
-            res = self.validate(href)
+            res = validate(href)
             if res
               mutex.synchronize do
                 invalid << res
@@ -151,7 +151,7 @@ module ::Nanoc::Extra::Checking::Checks
     end
 
     def request_url_once(url, req_method = Net::HTTP::Head)
-      req = req_method.new(self.path_for_url(url))
+      req = req_method.new(path_for_url(url))
       http = Net::HTTP.new(url.host, url.port)
       if url.instance_of? URI::HTTPS
         http.use_ssl = true

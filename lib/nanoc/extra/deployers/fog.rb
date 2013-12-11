@@ -24,11 +24,11 @@ module Nanoc::Extra::Deployers
       require 'fog'
 
       # Get params, unsetting anything we don't want to pass through to fog.
-      src      = File.expand_path(self.source_path)
-      bucket   = self.config.delete(:bucket) || self.config.delete(:bucket_name)
-      path     = self.config.delete(:path)
+      src      = File.expand_path(source_path)
+      bucket   = config.delete(:bucket) || config.delete(:bucket_name)
+      path     = config.delete(:path)
 
-      self.config.delete(:kind)
+      config.delete(:kind)
 
       # Validate params
       error 'The path requires no trailing slash' if path && path[-1,1] == '/'
@@ -40,7 +40,7 @@ module Nanoc::Extra::Deployers
 
       # Get connection
       puts "Connecting"
-      connection = ::Fog::Storage.new(self.config)
+      connection = ::Fog::Storage.new(config)
 
       # Get bucket
       puts "Getting bucket"

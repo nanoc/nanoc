@@ -11,7 +11,7 @@ module Nanoc::DataSources
 
         # Get data
         @http_client ||= Nanoc::Extra::CHiCk::Client.new
-        status, headers, data = *@http_client.get("http://feeds.delicious.com/v2/json/#{self.config[:username]}")
+        status, headers, data = *@http_client.get("http://feeds.delicious.com/v2/json/#{config[:username]}")
 
         # Parse as JSON
         raw_items = JSON.parse(data)

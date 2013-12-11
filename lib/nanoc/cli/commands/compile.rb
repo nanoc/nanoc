@@ -73,7 +73,7 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         require 'tempfile'
-        self.setup_diffs
+        setup_diffs
         old_contents = {}
         Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
           path = rep.raw_path(:snapshot => snapshot)
@@ -93,7 +93,7 @@ module Nanoc::CLI::Commands
       # @see Listener#stop
       def stop
         super
-        self.teardown_diffs
+        teardown_diffs
       end
 
     protected
@@ -180,7 +180,7 @@ module Nanoc::CLI::Commands
 
       # @see Listener#stop
       def stop
-        self.print_profiling_feedback
+        print_profiling_feedback
         super
       end
 
@@ -204,7 +204,7 @@ module Nanoc::CLI::Commands
         puts '-' * max_filter_name_length + '-+-----------------------------------'
 
         durations_per_filter.to_a.sort_by { |r| r[1] }.each do |row|
-          self.print_row(row, max_filter_name_length)
+          print_row(row, max_filter_name_length)
         end
       end
 
@@ -392,19 +392,19 @@ module Nanoc::CLI::Commands
 
     def initialize(options, arguments, command, params={})
       super(options, arguments, command)
-      @listener_classes = params.fetch(:listener_classes, self.default_listener_classes)
+      @listener_classes = params.fetch(:listener_classes, default_listener_classes)
     end
 
     def run
       time_before = Time.now
 
-      self.load_site
-      self.check_for_deprecated_usage
+      load_site
+      check_for_deprecated_usage
 
       puts "Compiling site…"
-      self.run_listeners_while do
-        self.site.compile
-        self.prune
+      run_listeners_while do
+        site.compile
+        prune
       end
 
       time_after = Time.now
@@ -415,8 +415,8 @@ module Nanoc::CLI::Commands
   protected
 
     def prune
-      if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
+      if site.config[:prune][:auto_prune]
+        Nanoc::Extra::Pruner.new(site, :exclude => prune_config_exclude).run
       end
     end
 
@@ -433,7 +433,7 @@ module Nanoc::CLI::Commands
     def setup_listeners
       @listeners = @listener_classes.
         select { |klass| klass.enable_for?(self) }.
-        map    { |klass| klass.new(:reps => self.reps) }
+        map    { |klass| klass.new(:reps => reps) }
 
       @listeners.each { |s| s.start }
     end
@@ -443,10 +443,10 @@ module Nanoc::CLI::Commands
     end
 
     def run_listeners_while
-      self.setup_listeners
+      setup_listeners
       yield
     ensure
-      self.teardown_listeners
+      teardown_listeners
     end
 
     def teardown_listeners
@@ -454,7 +454,7 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      self.site.items.map { |i| i.reps }.flatten
+      site.items.map { |i| i.reps }.flatten
     end
     memoize :reps
 
@@ -473,11 +473,11 @@ module Nanoc::CLI::Commands
     end
 
     def prune_config
-      self.site.config[:prune] || {}
+      site.config[:prune] || {}
     end
 
     def prune_config_exclude
-      self.prune_config[:exclude] || {}
+      prune_config[:exclude] || {}
     end
 
   end

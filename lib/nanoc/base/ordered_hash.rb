@@ -109,7 +109,7 @@ class OrderedHash < ::Hash
   end
 
   def reject(&block)
-    self.dup.delete_if &block
+    dup.delete_if &block
   end
 
   def reject!(&block)
@@ -159,7 +159,7 @@ class OrderedHash < ::Hash
   end
 
   def to_s
-    self.to_a.to_s
+    to_a.to_s
   end
 
   def inspect
@@ -175,7 +175,7 @@ class OrderedHash < ::Hash
   alias_method :merge!, :update
 
   def merge(hsh2)
-    self.dup update(hsh2)
+    dup update(hsh2)
   end
 
   def select

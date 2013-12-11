@@ -169,7 +169,7 @@ module Nanoc
       end
 
       # Calculate checksums
-      self.objects.each do |obj|
+      objects.each do |obj|
         checksum_store[obj] = obj.checksum
       end
 

@@ -33,8 +33,8 @@ module Nanoc::CLI::Commands
       require 'rack'
 
       # Make sure we are in a nanoc site directory
-      self.require_site
-      autocompile_config = self.site.config[:autocompile] || {}
+      require_site
+      autocompile_config = site.config[:autocompile] || {}
 
       # Set options
       options_for_rack = {

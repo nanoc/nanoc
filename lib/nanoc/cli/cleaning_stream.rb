@@ -41,15 +41,15 @@ module Nanoc::CLI
 
     # @see IO#write
     def write(s)
-      self._nanoc_swallow_broken_pipe_errors_while do
-        @stream.write(self._nanoc_clean(s))
+      _nanoc_swallow_broken_pipe_errors_while do
+        @stream.write(_nanoc_clean(s))
       end
     end
 
     # @see IO#<<
     def <<(s)
-      self._nanoc_swallow_broken_pipe_errors_while do
-        @stream.<<(self._nanoc_clean(s))
+      _nanoc_swallow_broken_pipe_errors_while do
+        @stream.<<(_nanoc_clean(s))
       end
     end
 
@@ -60,7 +60,7 @@ module Nanoc::CLI
 
     # @see IO#flush
     def flush
-      self._nanoc_swallow_broken_pipe_errors_while do
+      _nanoc_swallow_broken_pipe_errors_while do
         @stream.flush
       end
     end
@@ -72,15 +72,15 @@ module Nanoc::CLI
 
     # @see IO#print
     def print(s)
-      self._nanoc_swallow_broken_pipe_errors_while do
-        @stream.print(self._nanoc_clean(s))
+      _nanoc_swallow_broken_pipe_errors_while do
+        @stream.print(_nanoc_clean(s))
       end
     end
 
     # @see IO#puts
     def puts(*s)
-      self._nanoc_swallow_broken_pipe_errors_while do
-        @stream.puts(*s.map { |ss| self._nanoc_clean(ss) })
+      _nanoc_swallow_broken_pipe_errors_while do
+        @stream.puts(*s.map { |ss| _nanoc_clean(ss) })
       end
     end
 

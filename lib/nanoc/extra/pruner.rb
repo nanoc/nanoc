@@ -27,7 +27,7 @@ module Nanoc::Extra
       require 'find'
 
       # Get compiled files
-      compiled_files = self.site.items.map do |item|
+      compiled_files = site.items.map do |item|
         item.reps.map do |rep|
           rep.raw_path
         end
@@ -36,7 +36,7 @@ module Nanoc::Extra
       # Get present files and dirs
       present_files = []
       present_dirs = []
-      Find.find(self.site.config[:output_dir] + '/') do |f|
+      Find.find(site.config[:output_dir] + '/') do |f|
         present_files << f if File.file?(f)
         present_dirs  << f if File.directory?(f)
       end
@@ -45,14 +45,14 @@ module Nanoc::Extra
       stray_files = (present_files - compiled_files)
       stray_files.each do |f|
         next if filename_excluded?(f)
-        self.delete_file(f)
+        delete_file(f)
       end
 
       # Remove empty directories
       present_dirs.reverse_each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
         next if filename_excluded?(dir)
-        self.delete_dir(dir)
+        delete_dir(dir)
       end
     end
 

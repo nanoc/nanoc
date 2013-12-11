@@ -16,7 +16,7 @@ module Nanoc::CLI::Commands
 
     def run
       validate_options_and_arguments
-      self.require_site
+      require_site
 
       runner = Nanoc::Extra::Checking::Runner.new(site)
 

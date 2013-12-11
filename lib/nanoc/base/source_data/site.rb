@@ -281,7 +281,7 @@ module Nanoc
     #
     # @api private
     def self.cwd_is_nanoc_site?
-      !self.config_filename_for_cwd.nil?
+      !config_filename_for_cwd.nil?
     end
 
     # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none

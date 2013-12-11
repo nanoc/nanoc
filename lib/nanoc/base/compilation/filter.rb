@@ -97,7 +97,7 @@ module Nanoc
       # @return [void]
       def setup
         @setup ||= begin
-          self.requires.each { |r| require r }
+          requires.each { |r| require r }
           true
         end
       end
@@ -119,7 +119,7 @@ module Nanoc
     # @see {#run}
     def setup_and_run(*args)
       self.class.setup
-      self.run(*args)
+      run(*args)
     end
 
     # Runs the filter on the given content or filename.

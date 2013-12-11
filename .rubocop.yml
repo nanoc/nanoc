@@ -88,6 +88,9 @@ RedundantException:
 RedundantReturn:
   Enabled: true
 
+RedundantSelf:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -220,9 +223,6 @@ PerlBackrefs:
 
 
 # ----- TO CHECK -----
-
-RedundantSelf:
-  Enabled: false
 
 RegexpLiteral:
   Enabled: false

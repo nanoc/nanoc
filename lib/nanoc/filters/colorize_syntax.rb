@@ -136,7 +136,7 @@ module Nanoc::Filters
           element['class'] = klass
         end
 
-        self.highlight_postprocess(language, element.parent)
+        highlight_postprocess(language, element.parent)
       end
 
       method = "to_#{syntax}".to_sym
@@ -315,7 +315,7 @@ module Nanoc::Filters
       if KNOWN_COLORIZERS.include?(colorizer)
         sym = (colorizer.to_s + '_postprocess').to_sym
         if self.respond_to?(sym)
-          self.send(sym, language, element)
+          send(sym, language, element)
         end
       else
         raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
