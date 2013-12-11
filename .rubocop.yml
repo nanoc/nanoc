@@ -142,12 +142,13 @@ EmptyLinesAroundBody:
 FavorSprintf:
   Enabled: false
 
+# I prefer negated if because unless is hard to parse mentally.
+FavorUnlessOverNegatedIf:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-FavorUnlessOverNegatedIf:
-  Enabled: false
 
 HandleExceptions:
   Enabled: false
