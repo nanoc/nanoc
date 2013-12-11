@@ -146,12 +146,13 @@ FavorSprintf:
 FavorUnlessOverNegatedIf:
   Enabled: false
 
+# nanoc suppresses exceptions for valid reasons in a few cases.
+HandleExceptions:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-HandleExceptions:
-  Enabled: false
 
 HashMethods:
   Enabled: false
