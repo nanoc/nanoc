@@ -99,4 +99,3 @@ module Nanoc::Filters
 
   end
 end
-

@@ -27,4 +27,3 @@ end
 class ::Pathname
   include ::Nanoc::Extra::PathnameExtensions
 end
-

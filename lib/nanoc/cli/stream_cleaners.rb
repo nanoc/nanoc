@@ -11,4 +11,3 @@ module Nanoc::CLI
   end
 
 end
-

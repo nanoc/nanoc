@@ -21,4 +21,3 @@ module ::Nanoc::Extra::Checking::Checks
   end
 
 end
-
