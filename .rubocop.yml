@@ -6,6 +6,10 @@ TrailingBlankLines:
 TrailingWhitespace:
   Enabled: true
 
+AccessModifierIndentation:
+  Enabled: true
+  EnforcedStyle: outdent
+
 
 
 # ----- DISABLED -----
@@ -25,9 +29,6 @@ LineLength:
 
 
 # ----- TO ENABLE LATER -----
-
-AccessModifierIndentation:
-  Enabled: false
 
 Alias:
   Enabled: false

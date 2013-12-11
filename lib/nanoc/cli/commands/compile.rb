@@ -361,7 +361,7 @@ module Nanoc::CLI::Commands
         end
       end
 
-      private
+    private
 
       def duration_for(rep)
         return nil if rep.raw_path.nil?
