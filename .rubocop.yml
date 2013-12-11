@@ -6,10 +6,6 @@ TrailingBlankLines:
 TrailingWhitespace:
   Enabled: true
 
-LineLength:
-  Max: 120
-  Enabled: false
-
 
 
 # ----- DISABLED -----
@@ -20,6 +16,10 @@ HashSyntax:
 
 # No point in fixing these. They will be fixed automatically.
 TrailingWhitespace:
+  Enabled: false
+
+# Mostly long hardcoded strings which I’d rather not break up
+LineLength:
   Enabled: false
 
 
