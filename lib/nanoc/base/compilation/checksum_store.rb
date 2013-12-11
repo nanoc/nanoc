@@ -13,7 +13,7 @@ module Nanoc
     def initialize(params={})
       super('tmp/checksums', 1)
 
-      @site = params[:site] if params.has_key?(:site)
+      @site = params[:site] if params.key?(:site)
 
       @checksums = {}
     end

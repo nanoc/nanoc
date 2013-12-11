@@ -52,7 +52,7 @@ module Nanoc
         @__memoization_cache[method_name] ||= {}
 
         # Recalculate if necessary
-        if !@__memoization_cache[method_name].has_key?(args)
+        if !@__memoization_cache[method_name].key?(args)
           result = send(original_method_name, *args)
           @__memoization_cache[method_name][args] = result
         end

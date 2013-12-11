@@ -102,7 +102,7 @@ module Nanoc
     #
     # @since 3.2.0
     def add_vertex(v)
-      return if @vertices.has_key?(v)
+      return if @vertices.key?(v)
 
       @vertices[v] = @vertices.size
 

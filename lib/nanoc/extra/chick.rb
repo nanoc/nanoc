@@ -72,7 +72,7 @@ module Nanoc::Extra
 
       def call(env)
         res = @app.call(env)
-        unless res[1].has_key?('Cache-Control') || res[1].has_key?('Expires')
+        unless res[1].key?('Cache-Control') || res[1].key?('Expires')
           res[1]['Cache-Control'] = "max-age=#{@options[:max_age]}"
         end
         res

@@ -6,8 +6,8 @@ module Nanoc::Extra::Validators
   class Links
 
     def initialize(dir, index_filenames, params={})
-      @include_internal = params.has_key?(:internal) && params[:internal]
-      @include_external = params.has_key?(:external) && params[:external]
+      @include_internal = params.key?(:internal) && params[:internal]
+      @include_external = params.key?(:external) && params[:external]
     end
 
     def run

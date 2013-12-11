@@ -41,7 +41,7 @@ class OrderedHash < ::Hash
   alias_method :orig_store, :store
 
   def store(a,b)
-    @order.push a unless has_key? a
+    @order.push a unless key? a
     super a,b
   end
   alias_method :[]=, :store

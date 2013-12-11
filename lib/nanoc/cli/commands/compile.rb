@@ -257,7 +257,7 @@ module Nanoc::CLI::Commands
 
       # @see Listener#enable_for?
       def self.enable_for?(command_runner)
-        ! ENV.has_key?('TRAVIS')
+        ! ENV.key?('TRAVIS')
       end
 
       def initialize(params={})
@@ -450,7 +450,7 @@ module Nanoc::CLI::Commands
 
     def check_for_deprecated_usage
       # Check presence of --all option
-      if options.has_key?(:all) || options.has_key?(:force)
+      if options.key?(:all) || options.key?(:force)
         $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
       end
 

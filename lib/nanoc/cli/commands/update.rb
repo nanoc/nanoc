@@ -32,7 +32,7 @@ module Nanoc::CLI::Commands
       self.set_vcs(options[:vcs])
 
       # Check for -y switch
-      unless options.has_key?(:yes)
+      unless options.key?(:yes)
         $stderr.puts '*************'
         $stderr.puts '** WARNING **'
         $stderr.puts '*************'

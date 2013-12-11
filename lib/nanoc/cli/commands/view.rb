@@ -30,7 +30,7 @@ module Nanoc::CLI::Commands
       }
 
       # Get handler
-      if options.has_key?(:handler)
+      if options.key?(:handler)
         handler = Rack::Handler.get(options[:handler])
       else
         begin

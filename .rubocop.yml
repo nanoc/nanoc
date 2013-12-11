@@ -58,6 +58,9 @@ EndAlignment:
 EvenOdd:
   Enabled: true
 
+HashMethods:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -153,9 +156,6 @@ HandleExceptions:
 
 
 # ----- TO ENABLE LATER -----
-
-HashMethods:
-  Enabled: false
 
 IfUnlessModifier:
   Enabled: false

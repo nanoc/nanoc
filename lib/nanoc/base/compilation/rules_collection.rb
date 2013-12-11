@@ -125,7 +125,7 @@ module Nanoc
       @item_routing_rules.each do |rule|
         next if !rule.applicable_to?(rep.item)
         next if rule.rep_name != rep.name
-        next if rules.has_key?(rule.snapshot_name)
+        next if rules.key?(rule.snapshot_name)
 
         rules[rule.snapshot_name] = rule
       end

@@ -20,7 +20,7 @@ module Nanoc::Filters
       context[:item]   = assigns[:item].attributes
       context[:config] = assigns[:config]
       context[:yield]  = assigns[:content]
-      if assigns.has_key?(:layout)
+      if assigns.key?(:layout)
         context[:layout] = assigns[:layout].attributes
       end
 

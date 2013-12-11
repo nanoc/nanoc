@@ -143,7 +143,7 @@ module Nanoc
       obj = obj.item if obj.type == :item_rep
 
       # Get from cache
-      if @objects_outdated_due_to_dependencies.has_key?(obj)
+      if @objects_outdated_due_to_dependencies.key?(obj)
         return @objects_outdated_due_to_dependencies[obj]
       end
 

@@ -71,7 +71,7 @@ module Nanoc
       # Parse params
       params ||= {}
       params = { :mtime => params } if params.is_a?(Time)
-      params[:binary] = false unless params.has_key?(:binary)
+      params[:binary] = false unless params.key?(:binary)
 
       if raw_content_or_raw_filename.nil?
         raise "attempted to create an item with no content/filename (identifier #{identifier})"
