@@ -46,9 +46,9 @@ class OrderedHash < ::Hash
   end
   alias_method :[]=, :store
 
-  def ==(hsh2)
-    return false if @order != hsh2.order
-    super hsh2
+  def ==(other)
+    return false if @order != other.order
+    super other
   end
 
   def clear
