@@ -118,12 +118,14 @@ CyclomaticComplexity:
 Documentation:
   Enabled: false
 
+# Personal preference is putting the dot at the end of the line, so the reader
+# knows that the expression does not end on this line.
+DotPosition:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-DotPosition:
-  Enabled: false
 
 EmptyLineBetweenDefs:
   Enabled: false
