@@ -22,7 +22,8 @@ module Nanoc
     #
     # @return [Array] The caluclated rule memory for the given object
     def [](obj)
-      result = case obj.type
+      result =
+        case obj.type
         when :item_rep
           @rules_collection.new_rule_memory_for_rep(obj)
         when :layout
@@ -30,7 +31,7 @@ module Nanoc
         else
           raise RuntimeError,
             "Do not know how to calculate the rule memory for #{obj.inspect}"
-      end
+        end
 
       result
     end

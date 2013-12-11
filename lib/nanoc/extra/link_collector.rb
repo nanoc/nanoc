@@ -8,7 +8,8 @@ module ::Nanoc::Extra
 
     def initialize(filenames, mode=nil)
       @filenames = filenames
-      @filter = case mode
+      @filter =
+        case mode
         when nil
           lambda { |h| true }
         when :external
