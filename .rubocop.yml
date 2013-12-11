@@ -37,6 +37,9 @@ TrailingWhitespace:
 ColonMethodCall:
   Enabled: true
 
+ConstantName:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -104,9 +107,6 @@ CommentAnnotation:
 
 
 # ----- TO ENABLE LATER -----
-
-ConstantName:
-  Enabled: false
 
 CyclomaticComplexity:
   Enabled: false
