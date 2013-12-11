@@ -85,6 +85,13 @@ BracesAroundHashParameters:
 Eval:
   Enabled: false
 
+# The new Ruby 1.9 lambda literal syntax cannot be used, because Ruby 1.8
+# compatibility is required.
+#
+# Re-enable in nanoc 4.x.
+Lambda:
+  Enabled: false
+
 
 
 # ----- DISABLED (opinionated) -----
@@ -164,9 +171,6 @@ IndentationWidth:
 
 
 # ----- TO ENABLE LATER -----
-
-Lambda:
-  Enabled: false
 
 MethodLength:
   Enabled: false
