@@ -57,7 +57,7 @@ module Nanoc::Extra::Checking::Checks
       return true if File.directory?(path) && @site.config[:index_filenames].any? { |fn| File.file?(File.join(path, fn)) }
 
       # Nope :(
-      return false
+      false
     end
 
   end

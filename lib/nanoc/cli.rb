@@ -196,13 +196,15 @@ protected
 
   # @return [Boolean] true if color support is present, false if not
   def self.enable_ansi_colors?(io)
-    return false if !io.tty?
+    if !io.tty?
+      return false
+    end
 
     if Nanoc.on_windows?
       return defined?(::Win32::Console::ANSI)
     end
 
-    return true
+    true
   end
 
 end
