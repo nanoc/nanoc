@@ -43,6 +43,9 @@ ConstantName:
 DefWithoutParentheses:
   Enabled: true
 
+EmptyLineBetweenDefs:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -126,9 +129,6 @@ DotPosition:
 
 
 # ----- TO ENABLE LATER -----
-
-EmptyLineBetweenDefs:
-  Enabled: false
 
 EmptyLinesAroundBody:
   Enabled: false
