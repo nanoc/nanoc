@@ -22,6 +22,9 @@ AssignmentInCondition:
 Blocks:
   Enabled: true
 
+CaseEquality:
+  Enabled: true
+
 
 
 # ----- DISABLED -----
@@ -55,9 +58,6 @@ BracesAroundHashParameters:
 
 
 # ----- TO ENABLE LATER -----
-
-CaseEquality:
-  Enabled: false
 
 CaseIndentation:
   Enabled: false

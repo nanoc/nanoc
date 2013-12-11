@@ -16,7 +16,7 @@ class OrderedHash < ::Hash
     class << self
         def [] *args
           hsh = OrderedHash.new
-          if Hash === args[0]
+          if args[0].is_a?(Hash)
             hsh.replace args[0]
           elsif (args.size % 2) != 0
             raise ArgumentError, "odd number of elements for Hash"
