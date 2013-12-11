@@ -138,12 +138,13 @@ DotPosition:
 EmptyLinesAroundBody:
   Enabled: false
 
+# No personal preference over how to format strings.
+FavorSprintf:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-FavorSprintf:
-  Enabled: false
 
 FavorUnlessOverNegatedIf:
   Enabled: false
