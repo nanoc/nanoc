@@ -157,12 +157,13 @@ HandleExceptions:
 IfUnlessModifier:
   Enabled: false
 
+# Inconsistent AccessModifierIndentation:EnforcedStyle set to `outdent`
+IndentationWidth:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-IndentationWidth:
-  Enabled: false
 
 Lambda:
   Enabled: false
