@@ -1,0 +1,237 @@
+# ----- ENABLED -----
+
+TrailingBlankLines:
+  Enabled: true
+
+TrailingWhitespace:
+  Enabled: true
+
+LineLength:
+  Max: 120
+  Enabled: false
+
+
+
+# ----- DISABLED -----
+
+# Ruby 1.8 compatibility is required
+HashSyntax:
+  Enabled: false
+
+# No point in fixing these. They will be fixed automatically.
+TrailingWhitespace:
+  Enabled: false
+
+
+
+# ----- TO ENABLE LATER -----
+
+AccessModifierIndentation:
+  Enabled: false
+
+Alias:
+  Enabled: false
+
+AlignParameters:
+  Enabled: false
+
+AndOr:
+  Enabled: false
+
+AsciiComments:
+  Enabled: false
+
+AssignmentInCondition:
+  Enabled: false
+
+Blocks:
+  Enabled: false
+
+BracesAroundHashParameters:
+  Enabled: false
+
+CaseEquality:
+  Enabled: false
+
+CaseIndentation:
+  Enabled: false
+
+ClassLength:
+  Enabled: false
+
+ClassVars:
+  Enabled: false
+
+CollectionMethods:
+  Enabled: false
+
+ColonMethodCall:
+  Enabled: false
+
+CommentAnnotation:
+  Enabled: false
+
+ConstantName:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+DefWithoutParentheses:
+  Enabled: false
+
+Documentation:
+  Enabled: false
+
+DotPosition:
+  Enabled: false
+
+EmptyLineBetweenDefs:
+  Enabled: false
+
+EmptyLinesAroundBody:
+  Enabled: false
+
+EmptyLiteral:
+  Enabled: false
+
+EndAlignment:
+  Enabled: false
+
+Eval:
+  Enabled: false
+
+EvenOdd:
+  Enabled: false
+
+FavorSprintf:
+  Enabled: false
+
+FavorUnlessOverNegatedIf:
+  Enabled: false
+
+HandleExceptions:
+  Enabled: false
+
+HashMethods:
+  Enabled: false
+
+IfUnlessModifier:
+  Enabled: false
+
+IndentationWidth:
+  Enabled: false
+
+Lambda:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+MethodName:
+  Enabled: false
+
+MultilineBlockChain:
+  Enabled: false
+
+MultilineTernaryOperator:
+  Enabled: false
+
+NestedTernaryOperator:
+  Enabled: false
+
+OpMethod:
+  Enabled: false
+
+ParenthesesAroundCondition:
+  Enabled: false
+
+PerlBackrefs:
+  Enabled: false
+
+Proc:
+  Enabled: false
+
+RaiseArgs:
+  Enabled: false
+
+ReduceArguments:
+  Enabled: false
+
+RedundantBegin:
+  Enabled: false
+
+RedundantException:
+  Enabled: false
+
+RedundantReturn:
+  Enabled: false
+
+RedundantSelf:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false
+
+RescueException:
+  Enabled: false
+
+RescueModifier:
+  Enabled: false
+
+ShadowingOuterLocalVariable:
+  Enabled: false
+
+SignalException:
+  Enabled: false
+
+SingleLineMethods:
+  Enabled: false
+
+SpaceAfterComma:
+  Enabled: false
+
+SpaceAfterNot:
+  Enabled: false
+
+SpaceAroundBlockBraces:
+  Enabled: false
+
+SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+SpaceAroundOperators:
+  Enabled: false
+
+SpaceInsideBrackets:
+  Enabled: false
+
+SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+SpaceInsideParens:
+  Enabled: false
+
+SpecialGlobalVars:
+  Enabled: false
+
+StringLiterals:
+  Enabled: false
+
+SymbolName:
+  Enabled: false
+
+Syntax:
+  Enabled: false
+
+TrivialAccessors:
+  Enabled: false
+
+UnlessElse:
+  Enabled: false
+
+UselessAssignment:
+  Enabled: false
+
+WordArray:
+  Enabled: false
