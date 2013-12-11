@@ -318,12 +318,10 @@ module Nanoc::CLI
     end
 
     def write_system_information(stream, params={})
-      begin
-        uname = `uname -a`
-        self.write_section_header(stream, 'System information', params)
-        stream.puts uname
-      rescue Errno::ENOENT
-      end
+      uname = `uname -a`
+      self.write_section_header(stream, 'System information', params)
+      stream.puts uname
+    rescue Errno::ENOENT
     end
 
     def write_installed_gems(stream, params={})

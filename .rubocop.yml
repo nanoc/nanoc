@@ -79,6 +79,9 @@ ParenthesesAroundCondition:
 Proc:
   Enabled: true
 
+RedundantBegin:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -211,9 +214,6 @@ PerlBackrefs:
 
 
 # ----- TO CHECK -----
-
-RedundantBegin:
-  Enabled: false
 
 RedundantException:
   Enabled: false
