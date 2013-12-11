@@ -168,12 +168,16 @@ IfUnlessModifier:
 IndentationWidth:
   Enabled: false
 
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Possibly re-enable in nanoc 4.x.
+MethodLength:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-MethodLength:
-  Enabled: false
 
 MethodName:
   Enabled: false
