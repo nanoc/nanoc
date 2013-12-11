@@ -352,8 +352,7 @@ module Nanoc
 
         # Check whether file was written
         if self.binary? && !File.file?(filter.output_filename)
-          raise RuntimeError,
-            "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
+          raise "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
         end
 
         # Create snapshot

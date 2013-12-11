@@ -107,7 +107,7 @@ module Nanoc::DataSources
         elsif content_filename
           identifier = identifier_for_filename(content_filename[(dir_name.length+1)..-1])
         else
-          raise RuntimeError, "meta_filename and content_filename are both nil"
+          raise "meta_filename and content_filename are both nil"
         end
 
         # Get modification times
@@ -120,7 +120,7 @@ module Nanoc::DataSources
         elsif content_mtime
           mtime = content_mtime
         else
-          raise RuntimeError, "meta_mtime and content_mtime are both nil"
+          raise "meta_mtime and content_mtime are both nil"
         end
 
         # Create layout object
@@ -158,10 +158,10 @@ module Nanoc::DataSources
 
         # Check number of files per type
         if ![ 0, 1 ].include?(meta_filenames.size)
-          raise RuntimeError, "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
+          raise "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
         end
         if ![ 0, 1 ].include?(content_filenames.size)
-          raise RuntimeError, "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
+          raise "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
         end
 
         # Reorder elements and convert to extnames

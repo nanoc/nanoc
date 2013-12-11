@@ -122,7 +122,7 @@ module Nanoc
         # Not outdated
         return nil
       else
-        raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
+        raise "do not know how to check outdatedness of #{obj.inspect}"
       end
     end
     memoize :basic_outdatedness_reason_for

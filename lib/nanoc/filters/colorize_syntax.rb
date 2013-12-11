@@ -97,7 +97,7 @@ module Nanoc::Filters
       when :xml, :xhtml
         klass = Nokogiri::XML
       else
-        raise RuntimeError, "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
+        raise "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
       end
 
       # Colorize
@@ -306,7 +306,7 @@ module Nanoc::Filters
       if KNOWN_COLORIZERS.include?(colorizer)
         send(colorizer, code, language, params[colorizer] || {})
       else
-        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+        raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end
     end
 
@@ -318,7 +318,7 @@ module Nanoc::Filters
           self.send(sym, language, element)
         end
       else
-        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+        raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end
     end
 

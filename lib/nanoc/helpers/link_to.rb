@@ -51,7 +51,7 @@ module Nanoc::Helpers
         path = target
       else
         path = target.path
-        raise RuntimeError, "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
+        raise "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
       end
 
       # Join attributes

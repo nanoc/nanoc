@@ -26,7 +26,7 @@ module Nanoc::Filters
       # Show errors
       unless status.success?
         $stderr.puts stderr
-        raise RuntimeError, "AsciiDoc filter failed with status #{status}"
+        raise "AsciiDoc filter failed with status #{status}"
       end
 
       # Get result

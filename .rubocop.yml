@@ -82,6 +82,9 @@ Proc:
 RedundantBegin:
   Enabled: true
 
+RedundantException:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -214,9 +217,6 @@ PerlBackrefs:
 
 
 # ----- TO CHECK -----
-
-RedundantException:
-  Enabled: false
 
 RedundantReturn:
   Enabled: false

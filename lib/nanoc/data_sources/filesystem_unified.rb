@@ -70,8 +70,7 @@ module Nanoc::DataSources
     def create_object(dir_name, content, attributes, identifier, params={})
       # Check for periods
       if (@config.nil? || !@config[:allow_periods_in_identifiers]) && identifier.include?('.')
-        raise RuntimeError,
-          "Attempted to create an object in #{dir_name} with identifier #{identifier} containing a period, but allow_periods_in_identifiers is not enabled in the site configuration. (Enabling allow_periods_in_identifiers may cause the site to break, though.)"
+        raise "Attempted to create an object in #{dir_name} with identifier #{identifier} containing a period, but allow_periods_in_identifiers is not enabled in the site configuration. (Enabling allow_periods_in_identifiers may cause the site to break, though.)"
       end
 
       # Determine path

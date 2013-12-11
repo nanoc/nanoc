@@ -29,8 +29,7 @@ module Nanoc
         when :layout
           @rules_collection.new_rule_memory_for_layout(obj)
         else
-          raise RuntimeError,
-            "Do not know how to calculate the rule memory for #{obj.inspect}"
+          raise "Do not know how to calculate the rule memory for #{obj.inspect}"
         end
 
       result
