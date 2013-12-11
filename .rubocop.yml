@@ -76,6 +76,9 @@ OpMethod:
 ParenthesesAroundCondition:
   Enabled: true
 
+Proc:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -200,8 +203,9 @@ MultilineBlockChain:
 PerlBackrefs:
   Enabled: false
 
-Proc:
-  Enabled: false
+
+
+# ----- TO CHECK -----
 
 RaiseArgs:
   Enabled: false

@@ -77,7 +77,7 @@ module Nanoc::CLI::Commands
       # Watch
       puts "Watching for changes…"
 
-      callback = Proc.new do |modified, added, removed|
+      callback = proc do |modified, added, removed|
         rebuilder.call(modified[0]) if modified[0]
         rebuilder.call(added[0]) if added[0]
         rebuilder.call(removed[0]) if removed[0]
