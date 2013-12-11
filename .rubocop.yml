@@ -126,12 +126,14 @@ Documentation:
 DotPosition:
   Enabled: false
 
+# Personal preference is to have symmetric blank lines inside module and class
+# definitions.
+EmptyLinesAroundBody:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-EmptyLinesAroundBody:
-  Enabled: false
 
 EmptyLiteral:
   Enabled: false
