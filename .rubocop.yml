@@ -51,12 +51,22 @@ AsciiComments:
 BracesAroundHashParameters:
   Enabled: false
 
+# This does not accomodate for code such as
+#
+# foo = case blah
+#   when x
+#     …
+#   end
+CaseIndentation:
+  Enabled: false
+
+# Personal convention is to use “memo” and an appropriate name for the element.
+SingleLineBlockParams:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-CaseIndentation:
-  Enabled: false
 
 ClassLength:
   Enabled: false
@@ -155,9 +165,6 @@ Proc:
   Enabled: false
 
 RaiseArgs:
-  Enabled: false
-
-ReduceArguments:
   Enabled: false
 
 RedundantBegin:
