@@ -30,6 +30,8 @@ TrailingWhitespace:
 # ----- DISABLED (hard) -----
 
 # Ruby 1.8 compatibility is required.
+#
+# Re-enable in nanoc 4.x.
 HashSyntax:
   Enabled: false
 
@@ -65,15 +67,21 @@ SingleLineBlockParams:
   Enabled: false
 
 # Mostly long hardcoded strings which I’d rather not break up (yet).
+#
+# Re-enable in nanoc 4.x.
 LineLength:
   Enabled: false
 
 # Other tools exist for checking code quality. This cop is probably good to
 # have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Re-enable in nanoc 4.x.
 ClassLength:
   Enabled: false
 
 # Only used for deprecated code that is gone in nanoc 4.x anyway.
+#
+# Re-enable in nanoc 4.x.
 ClassVars:
   Enabled: false
 
