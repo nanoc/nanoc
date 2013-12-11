@@ -73,6 +73,9 @@ NestedTernaryOperator:
 OpMethod:
   Enabled: true
 
+ParenthesesAroundCondition:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -192,9 +195,6 @@ MethodLength:
 # ----- TO ENABLE LATER -----
 
 MultilineBlockChain:
-  Enabled: false
-
-ParenthesesAroundCondition:
   Enabled: false
 
 PerlBackrefs:

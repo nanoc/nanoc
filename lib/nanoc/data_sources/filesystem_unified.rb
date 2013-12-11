@@ -109,9 +109,9 @@ module Nanoc::DataSources
     # the given directory name off the filename.
     def identifier_for_filename(filename)
       if filename =~ /(^|\/)index(\.[^\/]+)?$/
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/)
+        regex = @config && @config[:allow_periods_in_identifiers] ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/
       else
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/         : /\.[^\/]+$/)
+        regex = @config && @config[:allow_periods_in_identifiers] ? /\.[^\/\.]+$/ : /\.[^\/]+$/
       end
       filename.sub(regex, '').cleaned_identifier
     end
