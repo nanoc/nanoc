@@ -64,12 +64,14 @@ CaseIndentation:
 SingleLineBlockParams:
   Enabled: false
 
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+ClassLength:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
-
-ClassLength:
-  Enabled: false
 
 ClassVars:
   Enabled: false
