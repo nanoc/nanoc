@@ -64,6 +64,9 @@ HashMethods:
 MethodName:
   Enabled: true
 
+MultilineTernaryOperator:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -183,9 +186,6 @@ MethodLength:
 # ----- TO ENABLE LATER -----
 
 MultilineBlockChain:
-  Enabled: false
-
-MultilineTernaryOperator:
   Enabled: false
 
 NestedTernaryOperator:

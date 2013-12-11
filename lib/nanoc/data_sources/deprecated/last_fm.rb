@@ -40,9 +40,11 @@ module Nanoc::DataSources
               '?method=artist.getInfo' +
               '&format=json' +
               (
-                raw_item['artist']['mbid'].empty? ?
-                '&artist=' + URI.escape(raw_item['artist']['#text']) :
-                '&mbid=' + URI.escape(raw_item['artist']['mbid'])
+                if raw_item['artist']['mbid'].empty?
+                  '&artist=' + URI.escape(raw_item['artist']['#text'])
+                else
+                  '&mbid=' + URI.escape(raw_item['artist']['mbid'])
+                end
               ) +
               '&api_key=' + URI.escape(self.config[:api_key])
           )
