@@ -227,9 +227,6 @@ SpecialGlobalVars:
 StringLiterals:
   Enabled: false
 
-SymbolName:
-  Enabled: false
-
 Syntax:
   Enabled: false
 
