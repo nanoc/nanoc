@@ -40,6 +40,9 @@ ColonMethodCall:
 ConstantName:
   Enabled: true
 
+DefWithoutParentheses:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -114,9 +117,6 @@ CyclomaticComplexity:
 
 
 # ----- TO ENABLE LATER -----
-
-DefWithoutParentheses:
-  Enabled: false
 
 Documentation:
   Enabled: false

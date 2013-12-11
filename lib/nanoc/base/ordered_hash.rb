@@ -14,7 +14,7 @@ class OrderedHash < ::Hash
     attr_accessor :order
 
     class << self
-        def [] *args
+        def [](*args)
           hsh = OrderedHash.new
           if args[0].is_a?(Hash)
             hsh.replace args[0]
@@ -33,16 +33,16 @@ class OrderedHash < ::Hash
       super
       @order = []
     end
-    def store_only a,b
+    def store_only(a,b)
         store a,b
     end
     alias_method :orig_store, :store
-    def store a,b
+    def store(a,b)
         @order.push a unless has_key? a
         super a,b
     end
     alias_method :[]=, :store
-    def == hsh2
+    def ==(hsh2)
         return false if @order != hsh2.order
         super hsh2
     end
@@ -50,7 +50,7 @@ class OrderedHash < ::Hash
         @order = []
         super
     end
-    def delete key
+    def delete(key)
         @order.delete key
         super
     end
@@ -92,14 +92,14 @@ class OrderedHash < ::Hash
         @order.each { |k| hsh2[self[k]] = k }
         hsh2
     end
-    def reject &block
+    def reject(&block)
         self.dup.delete_if &block
     end
-    def reject! &block
+    def reject!(&block)
         hsh2 = reject &block
         self == hsh2 ? nil : hsh2
     end
-    def replace hsh2
+    def replace(hsh2)
         @order = hsh2.keys
         super hsh2
     end
@@ -107,7 +107,7 @@ class OrderedHash < ::Hash
         key = @order.first
         key ? [key,delete(key)] : super
     end
-    def unshift k,v
+    def unshift(k,v)
         unless self.include? k
             @order.unshift k
             orig_store(k,v)
@@ -116,7 +116,7 @@ class OrderedHash < ::Hash
             false
         end
     end
-    def push k,v
+    def push(k,v)
         unless self.include? k
             @order.push k
             orig_store(k,v)
@@ -142,12 +142,12 @@ class OrderedHash < ::Hash
         each {|k,v| ary << k.inspect + "=>" + v.inspect}
         '{' + ary.join(", ") + '}'
     end
-    def update hsh2
+    def update(hsh2)
         hsh2.each { |k,v| self[k] = v }
         self
     end
     alias_method :merge!, :update
-    def merge hsh2
+    def merge(hsh2)
         self.dup update(hsh2)
     end
     def select
@@ -163,7 +163,7 @@ class OrderedHash < ::Hash
     end
 
     attr_accessor "to_yaml_style"
-    def yaml_inline= bool
+    def yaml_inline=(bool)
       if respond_to?("to_yaml_style")
         self.to_yaml_style = :inline
       else
@@ -175,7 +175,7 @@ class OrderedHash < ::Hash
               end
             end
           class << self
-            def to_yaml opts = {}
+            def to_yaml(opts = {})
               begin
                 @__yaml_inline ? @__yaml_inline_meth[ opts ] : super
               rescue
