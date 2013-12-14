@@ -91,6 +91,9 @@ RedundantReturn:
 RedundantSelf:
   Enabled: true
 
+RescueModifier:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -229,9 +232,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-RescueModifier:
-  Enabled: false
 
 ShadowingOuterLocalVariable:
   Enabled: false

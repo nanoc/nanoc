@@ -292,8 +292,15 @@ module Nanoc::DataSources
           original_encoding = data.encoding
         end
 
-        data.encode!('UTF-8') rescue raise_encoding_error(filename, original_encoding)
-        raise_encoding_error(filename, original_encoding) if !data.valid_encoding?
+        begin
+          data.encode!('UTF-8')
+        rescue
+          raise_encoding_error(filename, original_encoding)
+        end
+
+        if !data.valid_encoding?
+          raise_encoding_error(filename, original_encoding)
+        end
       end
 
       # Remove UTF-8 BOM (ugly)
