@@ -57,7 +57,7 @@ module Nanoc::Extra::Deployers
     # (results in a nonzero exit code).
     def run_shell_cmd(args)
       status = systemu(args, 'stdout' => $stdout, 'stderr' => $stderr)
-      raise "command exited with a nonzero status code #{$?.exitstatus} (command: #{args.join(' ')})" if !status.success?
+      raise "command exited with a nonzero status code #{$CHILD_STATUS.exitstatus} (command: #{args.join(' ')})" if !status.success?
     end
 
   end

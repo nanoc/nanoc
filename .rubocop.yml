@@ -121,6 +121,9 @@ SpaceInsideHashLiteralBraces:
 SpaceInsideParens:
   Enabled: true
 
+SpecialGlobalVars:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -268,9 +271,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SpecialGlobalVars:
-  Enabled: false
 
 StringLiterals:
   Enabled: false

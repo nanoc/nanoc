@@ -324,7 +324,7 @@ module Nanoc::Filters
 
     def check_availability(*cmd)
       systemu cmd
-      raise "Could not spawn #{cmd.join(' ')}" if $?.exitstatus != 0
+      raise "Could not spawn #{cmd.join(' ')}" if $CHILD_STATUS.exitstatus != 0
     end
 
   end
