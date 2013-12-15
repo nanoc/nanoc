@@ -34,6 +34,7 @@ require 'tempfile'
 require 'thread'
 require 'time'
 require 'yaml'
+require 'English'
 
 # Load nanoc
 require 'nanoc/version'
