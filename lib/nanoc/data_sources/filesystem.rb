@@ -43,12 +43,12 @@ module Nanoc::DataSources
     end
 
     # See {Nanoc::DataSource#create_item}.
-    def create_item(content, attributes, identifier, params={})
+    def create_item(content, attributes, identifier, params = {})
       create_object('content', content, attributes, identifier, params)
     end
 
     # See {Nanoc::DataSource#create_layout}.
-    def create_layout(content, attributes, identifier, params={})
+    def create_layout(content, attributes, identifier, params = {})
       create_object('layouts', content, attributes, identifier, params)
     end
 
@@ -57,7 +57,7 @@ module Nanoc::DataSources
     # Creates a new object (item or layout) on disk in dir_name according to
     # the given identifier. The file will have its attributes taken from the
     # attributes hash argument and its content from the content argument.
-    def create_object(dir_name, content, attributes, identifier, params={})
+    def create_object(dir_name, content, attributes, identifier, params = {})
       raise NotImplementedError.new(
         "#{self.class} does not implement ##{name}"
       )

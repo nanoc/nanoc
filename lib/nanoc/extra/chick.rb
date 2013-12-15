@@ -26,7 +26,7 @@ module Nanoc::Extra
         }
       }
 
-      def initialize(options={})
+      def initialize(options = {})
         # Get options
         @options = DEFAULT_OPTIONS.merge(options)
         @options[:cache] = DEFAULT_OPTIONS[:cache].merge(@options[:cache])
@@ -65,7 +65,7 @@ module Nanoc::Extra
     #   [Curb](http://curb.rubyforge.org/) instead.
     class CacheController
 
-      def initialize(app, options={})
+      def initialize(app, options = {})
         @app = app
         @options = options
       end

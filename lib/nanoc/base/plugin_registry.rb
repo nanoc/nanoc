@@ -45,7 +45,7 @@ module Nanoc
       # @overload identifier
       #
       #   @return [Symbol] The first identifier for this plugin
-      def identifier(identifier=nil)
+      def identifier(identifier = nil)
         if identifier
           identifiers(identifier)
         else

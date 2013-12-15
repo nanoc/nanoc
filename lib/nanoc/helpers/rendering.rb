@@ -77,7 +77,7 @@ module Nanoc::Helpers
     #
     # @return [String, nil] The rendered partial, or nil if this method was
     #   invoked with a block
-    def render(identifier, other_assigns={}, &block)
+    def render(identifier, other_assigns = {}, &block)
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
       raise Nanoc::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?

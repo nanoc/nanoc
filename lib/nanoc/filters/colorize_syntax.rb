@@ -82,7 +82,7 @@ module Nanoc::Filters
     #   such as the doctype, `html`, `head` and `body` elements will be added.
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Take colorizers from parameters
       @colorizers = Hash.new(params[:default_colorizer] || DEFAULT_COLORIZER)
       (params[:colorizers] || {}).each_pair do |language, colorizer|
@@ -154,7 +154,7 @@ module Nanoc::Filters
     # @param [Hash] params Parameters to pass on to CodeRay
     #
     # @return [String] The colorized output
-    def coderay(code, language, params={})
+    def coderay(code, language, params = {})
       require 'coderay'
 
       ::CodeRay.scan(code, language).html(params)
@@ -168,7 +168,7 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output, which is identical to the input
     #   in this case
-    def dummy(code, language, params={})
+    def dummy(code, language, params = {})
       code
     end
 
@@ -184,7 +184,7 @@ module Nanoc::Filters
     # @option params [String, Symbol] :encoding The encoding of the code block
     #
     # @return [String] The colorized output
-    def pygmentize(code, language, params={})
+    def pygmentize(code, language, params = {})
       require 'systemu'
       check_availability('pygmentize', '-V')
 
@@ -214,7 +214,7 @@ module Nanoc::Filters
     # @param [String] language The language the code is written in
     #
     # @return [String] The colorized output
-    def pygmentsrb(code, language, params={})
+    def pygmentsrb(code, language, params = {})
       require 'pygments'
 
       args = params.dup
@@ -245,7 +245,7 @@ module Nanoc::Filters
     # @option params [String] :style The style to use
     #
     # @return [String] The colorized output
-    def simon_highlight(code, language, params={})
+    def simon_highlight(code, language, params = {})
       require 'systemu'
 
       check_availability('highlight', '--version')
@@ -301,7 +301,7 @@ module Nanoc::Filters
       s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
     end
 
-    def highlight(code, language, params={})
+    def highlight(code, language, params = {})
       colorizer = @colorizers[language.to_sym]
       if KNOWN_COLORIZERS.include?(colorizer)
         send(colorizer, code, language, params[colorizer] || {})

@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
 
-      def initialize(params={})
+      def initialize(params = {})
       end
 
       # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
@@ -161,7 +161,7 @@ module Nanoc::CLI::Commands
       end
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
-      def initialize(params={})
+      def initialize(params = {})
         @times = {}
 
         @reps = params.fetch(:reps)
@@ -260,7 +260,7 @@ module Nanoc::CLI::Commands
         !ENV.key?('TRAVIS')
       end
 
-      def initialize(params={})
+      def initialize(params = {})
         @gc_count = 0
       end
 
@@ -330,7 +330,7 @@ module Nanoc::CLI::Commands
     class FileActionPrinter < Listener
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
-      def initialize(params={})
+      def initialize(params = {})
         @start_times = {}
         @stop_times  = {}
 
@@ -390,7 +390,7 @@ module Nanoc::CLI::Commands
 
     end
 
-    def initialize(options, arguments, command, params={})
+    def initialize(options, arguments, command, params = {})
       super(options, arguments, command)
       @listener_classes = params.fetch(:listener_classes, default_listener_classes)
     end

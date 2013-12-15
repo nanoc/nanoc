@@ -6,7 +6,7 @@ module ::Nanoc::Extra
 
   class LinkCollector
 
-    def initialize(filenames, mode=nil)
+    def initialize(filenames, mode = nil)
       @filenames = filenames
       @filter =
         case mode

@@ -60,7 +60,7 @@ module Nanoc
     #     compile '/bar/', :rep => :raw do
     #       # do nothing
     #     end
-    def compile(identifier, params={}, &block)
+    def compile(identifier, params = {}, &block)
       # Require block
       raise ArgumentError.new("#compile requires a block") unless block_given?
 
@@ -104,7 +104,7 @@ module Nanoc
     #     route '/bar/', :rep => :raw do
     #       '/raw' + item.identifier + 'index.txt'
     #     end
-    def route(identifier, params={}, &block)
+    def route(identifier, params = {}, &block)
       # Require block
       raise ArgumentError.new("#route requires a block") unless block_given?
 
@@ -141,7 +141,7 @@ module Nanoc
     # @example Using custom filter arguments for a layout
     #
     #     layout '/custom/',  :haml, :format => :html5
-    def layout(identifier, filter_name, params={})
+    def layout(identifier, filter_name, params = {})
       @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
     end
 
@@ -170,7 +170,7 @@ module Nanoc
     # @example Copying the `:raw` rep of the `/bar/` item as-is
     #
     #     passthrough '/bar/', :rep => :raw
-    def passthrough(identifier, params={})
+    def passthrough(identifier, params = {})
       # Require no block
       raise ArgumentError.new("#passthrough does not require a block") if block_given?
 
@@ -213,7 +213,7 @@ module Nanoc
     # @example Suppressing compilation and output for all all `/foo/*` items.
     #
     #     ignore '/foo/*'
-    def ignore(identifier, params={})
+    def ignore(identifier, params = {})
       raise ArgumentError.new("#ignore does not require a block") if block_given?
 
       rep_name = params[:rep] || :default

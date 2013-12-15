@@ -39,7 +39,7 @@ module Nanoc::Helpers
     #   proc returns true, the rep will be included; otherwise, it will not.
     #
     # @return [String] The XML sitemap
-    def xml_sitemap(params={})
+    def xml_sitemap(params = {})
       require 'builder'
 
       # Extract parameters

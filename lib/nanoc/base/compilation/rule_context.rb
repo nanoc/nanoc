@@ -26,7 +26,7 @@ module Nanoc
     #
     # @raise [ArgumentError] if the `:rep` or the `:compiler` option is
     #   missing
-    def initialize(params={})
+    def initialize(params = {})
       rep = params.fetch(:rep) do
         raise ArgumentError, "Required :rep option is missing"
       end
@@ -57,7 +57,7 @@ module Nanoc
     #   the filter's #run method
     #
     # @return [void]
-    def filter(filter_name, filter_args={})
+    def filter(filter_name, filter_args = {})
       rep.filter(filter_name, filter_args)
     end
 

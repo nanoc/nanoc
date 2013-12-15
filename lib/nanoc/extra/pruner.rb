@@ -14,7 +14,7 @@ module Nanoc::Extra
     # @option params [Boolean] :dry_run (false) true if the files to be deleted
     #   should only be printed instead of actually deleted, false if the files
     #   should actually be deleted.
-    def initialize(site, params={})
+    def initialize(site, params = {})
       @site    = site
       @dry_run = params.fetch(:dry_run) { false }
       @exclude = params.fetch(:exclude) { [] }

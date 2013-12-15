@@ -28,7 +28,7 @@ module Nanoc::Helpers
     # @param [String] string The string to escape
     #
     # @return [String] The escaped string
-    def html_escape(string=nil, &block)
+    def html_escape(string = nil, &block)
       if block_given?
         # Capture and escape block
         data = capture(&block)

@@ -289,7 +289,7 @@ module Nanoc::Helpers
     # @option params [String] :logo The URI of the feed's logo.
     #
     # @return [String] The generated feed content
-    def atom_feed(params={})
+    def atom_feed(params = {})
       require 'builder'
 
       # Create builder

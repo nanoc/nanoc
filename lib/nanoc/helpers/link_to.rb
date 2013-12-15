@@ -45,7 +45,7 @@ module Nanoc::Helpers
     #
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a title="My super cool blog" href="/blog/">Blog</a>'
-    def link_to(text, target, attributes={})
+    def link_to(text, target, attributes = {})
       # Find path
       if target.is_a?(String)
         path = target
@@ -87,7 +87,7 @@ module Nanoc::Helpers
     #
     #   link_to_unless_current('This Item', @item)
     #   # => '<span class="active" title="You\'re here.">This Item</span>'
-    def link_to_unless_current(text, target, attributes={})
+    def link_to_unless_current(text, target, attributes = {})
       # Find path
       path = target.is_a?(String) ? target : target.path
 

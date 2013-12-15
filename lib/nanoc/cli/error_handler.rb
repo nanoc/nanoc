@@ -9,7 +9,7 @@ module Nanoc::CLI
 
     # @option params [Nanoc::CLI::Command, nil] command The command that is
     #   currently being executed, or nil if there is none
-    def initialize(params={})
+    def initialize(params = {})
       @command = params[:command]
     end
 
@@ -19,7 +19,7 @@ module Nanoc::CLI
     #   currently being executed, or nil if there is none
     #
     # @return [void]
-    def self.handle_while(params={}, &block)
+    def self.handle_while(params = {}, &block)
       if @disabled
         yield
       else
@@ -258,7 +258,7 @@ module Nanoc::CLI
       defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
     end
 
-    def write_section_header(stream, title, params={})
+    def write_section_header(stream, title, params = {})
       stream.puts
       if params[:verbose]
         stream.puts '===== ' + title.upcase + ':'
@@ -268,7 +268,7 @@ module Nanoc::CLI
       stream.puts
     end
 
-    def write_error_message(stream, error, params={})
+    def write_error_message(stream, error, params = {})
       write_section_header(stream, 'Message', params)
 
       stream.puts "#{error.class}: #{error.message}"
@@ -276,7 +276,7 @@ module Nanoc::CLI
       stream.puts "#{resolution}" if resolution
     end
 
-    def write_compilation_stack(stream, error, params={})
+    def write_compilation_stack(stream, error, params = {})
       write_section_header(stream, 'Compilation stack', params)
 
       if stack.empty?
@@ -292,7 +292,7 @@ module Nanoc::CLI
       end
     end
 
-    def write_stack_trace(stream, error, params={})
+    def write_stack_trace(stream, error, params = {})
       write_section_header(stream, 'Stack trace', params)
 
       count = params[:verbose] ? -1 : 10
@@ -304,7 +304,7 @@ module Nanoc::CLI
       end
     end
 
-    def write_issue_link(stream, params={})
+    def write_issue_link(stream, params = {})
       stream.puts
       stream.puts "If you believe this is a bug in nanoc, please do report it at"
       stream.puts "-> https://github.com/nanoc/nanoc/issues/new <-"
@@ -312,40 +312,40 @@ module Nanoc::CLI
       stream.puts "A detailed crash log has been written to ./crash.log."
     end
 
-    def write_version_information(stream, params={})
+    def write_version_information(stream, params = {})
       write_section_header(stream, 'Version information', params)
       stream.puts Nanoc.version_information
     end
 
-    def write_system_information(stream, params={})
+    def write_system_information(stream, params = {})
       uname = `uname -a`
       write_section_header(stream, 'System information', params)
       stream.puts uname
     rescue Errno::ENOENT
     end
 
-    def write_installed_gems(stream, params={})
+    def write_installed_gems(stream, params = {})
       write_section_header(stream, 'Installed gems', params)
       gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
       end
     end
 
-    def write_environment(stream, params={})
+    def write_environment(stream, params = {})
       write_section_header(stream, 'Environment', params)
       ENV.sort.each do |e|
         stream.puts "#{e.first} => #{e.last.inspect}"
       end
     end
 
-    def write_gemfile_lock(stream, params={})
+    def write_gemfile_lock(stream, params = {})
       if File.exist?('Gemfile.lock')
         write_section_header(stream, 'Gemfile.lock', params)
         stream.puts File.read('Gemfile.lock')
       end
     end
 
-    def write_load_paths(stream, params={})
+    def write_load_paths(stream, params = {})
       write_section_header(stream, 'Load paths', params)
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"

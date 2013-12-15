@@ -22,7 +22,7 @@ module Nanoc
       end
 
       # @deprecated Use {Nanoc::ItemRep#compiled_content} instead.
-      def content_at_snapshot(snapshot=:pre)
+      def content_at_snapshot(snapshot = :pre)
         compiled_content(:snapshot => snapshot)
       end
 
@@ -118,7 +118,7 @@ module Nanoc
       # @param [Symbol, nil] snapshot The name of the snapshot to write.
       #
       # @return [void]
-      def write(snapshot=:last)
+      def write(snapshot = :last)
         # Get raw path
         raw_path = self.raw_path(:snapshot => snapshot)
         return if raw_path.nil?
@@ -235,7 +235,7 @@ module Nanoc
     #
     # @return [String] The compiled content at the given snapshot (or the
     #   default snapshot if no snapshot is specified)
-    def compiled_content(params={})
+    def compiled_content(params = {})
       # Make sure we're not binary
       if item.binary?
         raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
@@ -279,7 +279,7 @@ module Nanoc
     #   path should be returned
     #
     # @return [String] The item rep’s path
-    def raw_path(params={})
+    def raw_path(params = {})
       Nanoc3::NotificationCenter.post(:visit_started, item)
       Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
@@ -296,7 +296,7 @@ module Nanoc
     #   path should be returned
     #
     # @return [String] The item rep’s path
-    def path(params={})
+    def path(params = {})
       Nanoc3::NotificationCenter.post(:visit_started, item)
       Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
@@ -320,7 +320,7 @@ module Nanoc
     #   the filter's #run method
     #
     # @return [void]
-    def filter(filter_name, filter_args={})
+    def filter(filter_name, filter_args = {})
       # Get filter class
       klass = filter_named(filter_name)
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
@@ -425,7 +425,7 @@ module Nanoc
     #   snapshot (such as `:pre`, `:post` or `:last`)
     #
     # @return [void]
-    def snapshot(snapshot_name, params={})
+    def snapshot(snapshot_name, params = {})
       is_final = params.fetch(:final) { true }
       @content[snapshot_name] = @content[:last] unless self.binary?
       write(snapshot_name) if is_final

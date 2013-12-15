@@ -28,7 +28,7 @@ module Nanoc::Helpers
     # @param [Hash] arguments Arguments to pass to the filter
     #
     # @return [void]
-    def filter(filter_name, arguments={}, &block)
+    def filter(filter_name, arguments = {}, &block)
       # Capture block
       data = capture(&block)
 

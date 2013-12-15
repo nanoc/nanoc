@@ -15,7 +15,7 @@ module Nanoc::Filters
     # @option params [String] trim_mode (nil) The trim mode to use
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Add locals
       assigns.merge!(params[:locals] || {})
 

@@ -40,7 +40,7 @@ module Nanoc::CLI
     # @param [String] name The name of the file the action was performed on
     #
     # @return [void]
-    def file(level, action, name, duration=nil)
+    def file(level, action, name, duration = nil)
       log(
         level,
         '%s%12s%s  %s%s' % [
@@ -62,7 +62,7 @@ module Nanoc::CLI
     # @param [#puts] io The stream to which the message should be written
     #
     # @return [void]
-    def log(level, message, io=$stdout)
+    def log(level, message, io = $stdout)
       # Don't log when logging is disabled
       return if @level == :off
 

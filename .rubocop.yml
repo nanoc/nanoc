@@ -109,6 +109,9 @@ SpaceAfterNot:
 SpaceAroundBlockBraces:
   Enabled: true
 
+SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -252,9 +255,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SpaceAroundEqualsInParameterDefault:
-  Enabled: false
 
 SpaceAroundOperators:
   Enabled: false

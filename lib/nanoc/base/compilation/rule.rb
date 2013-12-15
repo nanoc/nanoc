@@ -36,7 +36,7 @@ module Nanoc
     # @option params [Symbol, nil] :snapshot (nil) The name of the snapshot
     #   this rule will apply to. Ignored for compilation rules, but used for
     #   routing rules.
-    def initialize(identifier_regex, rep_name, block, params={})
+    def initialize(identifier_regex, rep_name, block, params = {})
       @identifier_regex = identifier_regex
       @rep_name         = rep_name.to_sym
       @snapshot_name    = params[:snapshot_name]
@@ -62,7 +62,7 @@ module Nanoc
     # @raise [ArgumentError] if no compiler is passed
     #
     # @return [void]
-    def apply_to(rep, params={})
+    def apply_to(rep, params = {})
       compiler = params.fetch(:compiler) do
         raise ArgumentError, "Required :compiler option is missing"
       end

@@ -28,7 +28,7 @@ module Nanoc::Filters
     #   is useful only for the `:xml` and `:xhtml` types.
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Set assigns so helper function can be used
       @item_rep = assigns[:item_rep] if @item_rep.nil?
 

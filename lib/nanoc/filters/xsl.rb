@@ -31,7 +31,7 @@ module Nanoc::Filters
     #   `xsl:param` elements.
     #
     # @return [String] The transformed content
-    def run(content, params={})
+    def run(content, params = {})
       if assigns[:layout].nil?
         raise "The XSL filter can only be run as a layout"
       end

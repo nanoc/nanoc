@@ -67,7 +67,7 @@ module Nanoc
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params = nil)
       # Parse params
       params ||= {}
       params = { :mtime => params } if params.is_a?(Time)
@@ -126,7 +126,7 @@ module Nanoc
     #   snapshot if no snapshot is specified)
     #
     # @see ItemRep#compiled_content
-    def compiled_content(params={})
+    def compiled_content(params = {})
       # Get rep
       rep_name = params[:rep] || :default
       rep = reps.find { |r| r.name == rep_name }
@@ -148,7 +148,7 @@ module Nanoc
     #
     # @return [String] The path of the given rep ( or the default rep if no
     #   rep is specified)
-    def path(params={})
+    def path(params = {})
       rep_name = params[:rep] || :default
 
       # Get rep

@@ -138,7 +138,7 @@ protected
   # @param [String] filename The name of the file that contains the command
   #
   # @return [Cri::Command] The loaded command
-  def self.load_command_at(filename, command_name=nil)
+  def self.load_command_at(filename, command_name = nil)
     # Load
     code = File.read(filename)
     cmd = Cri::Command.define(code, filename)

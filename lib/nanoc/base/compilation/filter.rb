@@ -108,7 +108,7 @@ module Nanoc
     #
     # @param [Hash] hash A hash containing variables that should be made
     #   available during filtering.
-    def initialize(hash={})
+    def initialize(hash = {})
       @assigns = hash
       super
     end
@@ -136,7 +136,7 @@ module Nanoc
     # @return [String, void] If the filter output binary content, the return
     #   value is undefined; if the filter outputs textual content, the return
     #   value will be the filtered content.
-    def run(content_or_filename, params={})
+    def run(content_or_filename, params = {})
       raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
     end
 

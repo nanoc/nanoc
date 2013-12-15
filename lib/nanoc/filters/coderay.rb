@@ -6,7 +6,7 @@ module Nanoc::Filters
     requires 'coderay'
 
     # @deprecated Use the `:colorize_syntax` filter instead.
-    def run(content, params={})
+    def run(content, params = {})
       # Warn
       warn 'The :coderay filter is deprecated; consider using the :colorize_syntax filter instead.'
 

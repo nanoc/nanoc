@@ -33,7 +33,7 @@ module Nanoc
     # @option params [Time, nil] :mtime (nil) The time when this layout was
     #   last modified. Deprecated; pass the modification time as the `:mtime`
     #   attribute instead.
-    def initialize(raw_content, attributes, identifier, params=nil)
+    def initialize(raw_content, attributes, identifier, params = nil)
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys_recursively
       @identifier   = identifier.cleaned_identifier.freeze
