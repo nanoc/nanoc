@@ -257,7 +257,7 @@ module Nanoc::CLI::Commands
 
       # @see Listener#enable_for?
       def self.enable_for?(command_runner)
-        ! ENV.key?('TRAVIS')
+        !ENV.key?('TRAVIS')
       end
 
       def initialize(params={})

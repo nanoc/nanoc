@@ -103,6 +103,9 @@ SingleLineMethods:
 SpaceAfterComma:
   Enabled: true
 
+SpaceAfterNot:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -246,9 +249,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SpaceAfterNot:
-  Enabled: false
 
 SpaceAroundBlockBraces:
   Enabled: false
