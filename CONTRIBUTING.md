@@ -4,22 +4,18 @@ Contributing
 Reporting bugs
 --------------
 
-If you find a bug in nanoc, you should report it! But before you do, make sure you have the latest version of nanoc (and dependencies) installed, and see if you can still reproduce the bug there. If you can, report it!
+If you find a bug in nanoc, you should report it! Some information that you should include in your bug report is the nanoc version (`nanoc --version`) and, if relevant, the crash log (`crash.log`).
 
-When reporting a bug, please make sure you include as many details as you can about the bug. Some information that you should include:
+For details, check the [*bug reporting* section of the development guide](http://nanoc.ws/development/#reporting-bugs).
 
-* The nanoc version (`nanoc --version`)
-* The `crash.log` file, if relevant
+Contributing code
+-----------------
 
-Submitting Patches
-------------------
+Pull requests are appreciated! When submitting a PR, be sure to submit it onto the right branch:
 
-If you want to submit a pull request, please review the following few guidelines:
+* For bug fixes, use the release branch, e.g. `release-3.6.x`
+* For features, use the `master` branch
 
-* If your pull request is a **bug fix**, submit it on the latest release branch. At the moment of writing, this is `release-3.4.x`. This ensures that the bug fix comes in the next patch release.
+When submitting a PR, make sure that your changes have covering tests, that the documentation remains up-to-date and that you retain backwards compatibility.
 
-* If your pull request is a new **feature** or extends an existing feature,  submit it on the `master` branch.
-
-In both cases, make sure that your changes have **test cases** that cover the bug fix or the new/changed functionality.
-
-Also note that **backwards compatibility** must be retained. This means that you cannot simply modify a feature to work in a different way. What you can do, is add an option to make it work in a different way, but do double-check with me (@ddfreyne) first.
+For details, check the [*contributing code* section of the development guide](http://nanoc.ws/development/#contributing-code).

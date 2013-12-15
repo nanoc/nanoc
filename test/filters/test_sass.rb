@@ -206,6 +206,71 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     end
   end
 
+  def test_recompile_includes_with_relative_path
+    if_have 'sass', 'compass' do
+      with_site do |site|
+        # Write compass config
+        FileUtils.mkdir_p('compass')
+        File.open('compass/config.rb', 'w') do |io|
+          io << "project_path = \".\"\n"
+          io << "sass_path = \"content/style\"\n"
+        end
+
+        # Create two Sass files
+        Dir['content/*'].each { |i| FileUtils.rm(i) }
+        FileUtils.mkdir_p('content/style/super')
+        FileUtils.mkdir_p('content/style/sub')
+        File.open('content/style/super/main.sass', 'w') do |io|
+          io.write('@import sub/include.sass')
+        end
+        File.open('content/style/sub/include.sass', 'w') do |io|
+          io.write("p\n  color: red")
+        end
+
+        # Update rules
+        File.open('Rules', 'w') do |io|
+          io.write "require 'compass'\n"
+          io.write "Compass.add_project_configuration 'compass/config.rb'\n"
+          io.write "\n"
+          io.write "compile '*' do\n"
+          io.write "  filter :sass, Compass.sass_engine_options\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/style/super/main/' do\n"
+          io.write "  item.identifier.chop + '.css'\n"
+          io.write "end\n"
+          io.write "\n"
+          io.write "route '/style/sub/include/' do\n"
+          io.write "  nil\n"
+          io.write "end\n"
+        end
+
+        # Compile
+        site = Nanoc::Site.new('.')
+        site.compile
+
+        # Check
+        output_files = Dir['output/**/*'].select { |f| File.file?(f) }
+        assert_equal [ 'output/style/super/main.css' ], output_files
+        assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/style/super/main.css'))
+
+        # Update included file
+        File.open('content/style/sub/include.sass', 'w') do |io|
+          io.write("p\n  color: blue")
+        end
+
+        # Recompile
+        site = Nanoc::Site.new('.')
+        site.compile
+
+        # Recheck
+        output_files = Dir['output/**/*'].select { |f| File.file?(f) }
+        assert_equal [ 'output/style/super/main.css' ], output_files
+        assert_match(/^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/style/super/main.css'))
+      end
+    end
+  end
+
 private
 
   def create_filter(params={})

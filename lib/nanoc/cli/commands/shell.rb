@@ -3,9 +3,9 @@
 usage       'shell'
 summary     'open a shell on the nanoc environment'
 aliases     'console'
-description <<-EOS
+description "
 Open an IRB shell on a context that contains @items, @layouts, @config and @site.
-EOS
+"
 
 module Nanoc::CLI::Commands
 
@@ -14,7 +14,7 @@ module Nanoc::CLI::Commands
     def run
       require 'pry'
 
-      self.require_site
+      require_site
 
       Nanoc::Context.new(env).pry
     end
@@ -23,10 +23,10 @@ module Nanoc::CLI::Commands
 
     def env
       {
-        :site    => self.site,
-        :items   => self.site.items,
-        :layouts => self.site.layouts,
-        :config  => self.site.config
+        :site    => site,
+        :items   => site.items,
+        :layouts => site.layouts,
+        :config  => site.config
       }
     end
 

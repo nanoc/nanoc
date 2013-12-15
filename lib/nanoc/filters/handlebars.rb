@@ -15,12 +15,12 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       context = item.attributes.dup
       context[:item]   = assigns[:item].attributes
       context[:config] = assigns[:config]
       context[:yield]  = assigns[:content]
-      if assigns.has_key?(:layout)
+      if assigns.key?(:layout)
         context[:layout] = assigns[:layout].attributes
       end
 

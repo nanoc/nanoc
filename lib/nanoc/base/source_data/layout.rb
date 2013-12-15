@@ -33,7 +33,7 @@ module Nanoc
     # @option params [Time, nil] :mtime (nil) The time when this layout was
     #   last modified. Deprecated; pass the modification time as the `:mtime`
     #   attribute instead.
-    def initialize(raw_content, attributes, identifier, params=nil)
+    def initialize(raw_content, attributes, identifier, params = nil)
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys_recursively
       @identifier   = identifier.cleaned_identifier.freeze
@@ -78,11 +78,11 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, self.identifier ]
+      [ type, identifier ]
     end
 
     def inspect
-      "<#{self.class} identifier=\"#{self.identifier}\">"
+      "<#{self.class} identifier=\"#{identifier}\">"
     end
 
     # @return [String] The checksum for this object. If its contents change,
@@ -95,11 +95,11 @@ module Nanoc
     memoize :checksum
 
     def hash
-      self.class.hash ^ self.identifier.hash
+      self.class.hash ^ identifier.hash
     end
 
     def eql?(other)
-      self.class == other.class && self.identifier == other.identifier
+      self.class == other.class && identifier == other.identifier
     end
 
     def ==(other)

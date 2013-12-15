@@ -7,7 +7,7 @@ module Nanoc::Extra::Checking
     attr_reader :deploy_checks
 
     def self.from_file(filename)
-      dsl = self.new
+      dsl = new
       dsl.instance_eval File.read(filename)
       dsl
     end

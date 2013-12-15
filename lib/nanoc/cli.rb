@@ -55,8 +55,8 @@ module Nanoc::CLI
   # @return [void]
   def self.run(args)
     Nanoc::CLI::ErrorHandler.handle_while do
-      self.setup
-      self.root_command.run(args)
+      setup
+      root_command.run(args)
     end
   end
 
@@ -71,7 +71,7 @@ module Nanoc::CLI
   #
   # @return [void]
   def self.add_command(cmd)
-    self.root_command.add_command(cmd)
+    root_command.add_command(cmd)
   end
 
 protected
@@ -80,9 +80,9 @@ protected
   #
   # @return [void]
   def self.setup
-    self.setup_cleaning_streams
-    self.setup_commands
-    self.load_custom_commands
+    setup_cleaning_streams
+    setup_commands
+    load_custom_commands
   end
 
   # Sets up the root command and base subcommands.
@@ -93,19 +93,19 @@ protected
     @root_command = nil
 
     # Add root command
-    filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
-    @root_command = self.load_command_at(filename)
+    filename = File.dirname(__FILE__) + '/cli/commands/nanoc.rb'
+    @root_command = load_command_at(filename)
 
     # Add help command
     help_cmd = Cri::Command.new_basic_help
-    self.add_command(help_cmd)
+    add_command(help_cmd)
 
     # Add other commands
     cmd_filenames = Dir[File.dirname(__FILE__) + '/cli/commands/*.rb']
-    cmd_filenames.each do |filename|
-      next if File.basename(filename, '.rb') == 'nanoc'
-      cmd = self.load_command_at(filename)
-      self.add_command(cmd)
+    cmd_filenames.each do |cmd_filename|
+      next if File.basename(cmd_filename, '.rb') == 'nanoc'
+      cmd = load_command_at(cmd_filename)
+      add_command(cmd)
     end
   end
 
@@ -113,15 +113,15 @@ protected
   #
   # @return [void]
   def self.load_custom_commands
-    self.recursive_contents_of('commands').each do |filename|
+    recursive_contents_of('commands').each do |filename|
       # Create command
       command = Nanoc::CLI.load_command_at(filename)
 
       # Get supercommand
       pieces = filename.gsub(/^commands\/|\.rb$/, '').split('/')
-      pieces = pieces[0, pieces.size-1] || []
+      pieces = pieces[0, pieces.size - 1] || []
       root = Nanoc::CLI.root_command
-      supercommand = pieces.inject(root) do |cmd, piece|
+      supercommand = pieces.reduce(root) do |cmd, piece|
         cmd.nil? ? nil : cmd.command_named(piece)
       end
 
@@ -138,7 +138,7 @@ protected
   # @param [String] filename The name of the file that contains the command
   #
   # @return [Cri::Command] The loaded command
-  def self.load_command_at(filename, command_name=nil)
+  def self.load_command_at(filename, command_name = nil)
     # Load
     code = File.read(filename)
     cmd = Cri::Command.define(code, filename)
@@ -155,7 +155,7 @@ protected
   def self.recursive_contents_of(path)
     return [] unless File.directory?(path)
     files, dirs = *Dir[path + '/*'].sort.partition { |e| File.file?(e) }
-    dirs.each { |d| files.concat self.recursive_contents_of(d) }
+    dirs.each { |d| files.concat recursive_contents_of(d) }
     files
   end
 
@@ -183,8 +183,8 @@ protected
   #
   # @return [void]
   def self.setup_cleaning_streams
-    $stdout = self.wrap_in_cleaning_stream($stdout)
-    $stderr = self.wrap_in_cleaning_stream($stderr)
+    $stdout = wrap_in_cleaning_stream($stdout)
+    $stderr = wrap_in_cleaning_stream($stderr)
   end
 
   # @return [Boolean] true if UTF-8 support is present, false if not
@@ -196,13 +196,15 @@ protected
 
   # @return [Boolean] true if color support is present, false if not
   def self.enable_ansi_colors?(io)
-    return false if !io.tty?
+    if !io.tty?
+      return false
+    end
 
     if Nanoc.on_windows?
       return defined?(::Win32::Console::ANSI)
     end
 
-    return true
+    true
   end
 
 end

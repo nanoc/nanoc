@@ -24,14 +24,14 @@ module Nanoc::Extra::Deployers
       require 'fog'
 
       # Get params, unsetting anything we don't want to pass through to fog.
-      src      = File.expand_path(self.source_path)
-      bucket   = self.config.delete(:bucket) || self.config.delete(:bucket_name)
-      path     = self.config.delete(:path)
+      src      = File.expand_path(source_path)
+      bucket   = config.delete(:bucket) || config.delete(:bucket_name)
+      path     = config.delete(:path)
 
-      self.config.delete(:kind)
+      config.delete(:kind)
 
       # Validate params
-      error 'The path requires no trailing slash' if path && path[-1,1] == '/'
+      error 'The path requires no trailing slash' if path && path[-1, 1] == '/'
 
       # Mock if necessary
       if self.dry_run?
@@ -39,11 +39,11 @@ module Nanoc::Extra::Deployers
       end
 
       # Get connection
-      puts "Connecting"
-      connection = ::Fog::Storage.new(self.config)
+      puts 'Connecting'
+      connection = ::Fog::Storage.new(config)
 
       # Get bucket
-      puts "Getting bucket"
+      puts 'Getting bucket'
       begin
         directory = connection.directories.get(bucket, :prefix => path)
       rescue ::Excon::Errors::NotFound
@@ -64,10 +64,10 @@ module Nanoc::Extra::Deployers
         truncated = set.is_truncated
         files = files + set
       end
-      keys_to_destroy = files.all.map {|file| file.key}
+      keys_to_destroy = files.all.map { |file| file.key }
 
       # Upload all the files in the output folder to the clouds
-      puts "Uploading local files"
+      puts 'Uploading local files'
       FileUtils.cd(src) do
         files = Dir['**/*'].select { |f| File.file?(f) }
         files.each do |file_path|
@@ -81,12 +81,12 @@ module Nanoc::Extra::Deployers
       end
 
       # delete extraneous remote files
-      puts "Removing remote files"
+      puts 'Removing remote files'
       keys_to_destroy.each do |key|
         directory.files.get(key).destroy
       end
 
-      puts "Done!"
+      puts 'Done!'
     end
 
   private

@@ -125,7 +125,7 @@ module Nanoc
       @item_routing_rules.each do |rule|
         next if !rule.applicable_to?(rep.item)
         next if rule.rep_name != rep.name
-        next if rules.has_key?(rule.snapshot_name)
+        next if rules.key?(rule.snapshot_name)
 
         rules[rule.snapshot_name] = rule
       end
@@ -136,7 +136,7 @@ module Nanoc
     #
     # @param [Nanoc::Layout] layout The layout for which to fetch the filter.
     #
-    # @return [Array, nil] A tuple containing the filter name and the filter 
+    # @return [Array, nil] A tuple containing the filter name and the filter
     #   arguments for the given layout.
     def filter_for_layout(layout)
       @layout_filter_mapping.each_pair do |layout_identifier, filter_name_and_args|

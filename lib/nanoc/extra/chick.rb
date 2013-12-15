@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'net/http'
 require 'rack'
 require 'rack/cache'
@@ -16,7 +18,7 @@ module Nanoc::Extra
 
       DEFAULT_OPTIONS = {
         :cache => {
-          :metastore   => 'file:tmp/rack/cache.meta', 
+          :metastore   => 'file:tmp/rack/cache.meta',
           :entitystore => 'file:tmp/rack/cache.body'
         },
         :cache_controller => {
@@ -24,7 +26,7 @@ module Nanoc::Extra
         }
       }
 
-      def initialize(options={})
+      def initialize(options = {})
         # Get options
         @options = DEFAULT_OPTIONS.merge(options)
         @options[:cache] = DEFAULT_OPTIONS[:cache].merge(@options[:cache])
@@ -34,11 +36,11 @@ module Nanoc::Extra
       def get(url)
         # Build app
         options = @options
-        @app ||= Rack::Builder.new {
+        @app ||= Rack::Builder.new do
           use Rack::Cache, options[:cache].merge(:verbose => true)
           use Nanoc::Extra::CHiCk::CacheController, options[:cache_controller]
           run Nanoc::Extra::CHiCk::RackClient
-        }
+        end
 
         # Build environment for request
         env = Rack::MockRequest.env_for(url, :method => 'GET')
@@ -63,14 +65,14 @@ module Nanoc::Extra
     #   [Curb](http://curb.rubyforge.org/) instead.
     class CacheController
 
-      def initialize(app, options={})
+      def initialize(app, options = {})
         @app = app
         @options = options
       end
 
       def call(env)
         res = @app.call(env)
-        unless res[1].has_key?('Cache-Control') || res[1].has_key?('Expires')
+        unless res[1].key?('Cache-Control') || res[1].key?('Expires')
           res[1]['Cache-Control'] = "max-age=#{@options[:max_age]}"
         end
         res
@@ -96,7 +98,7 @@ module Nanoc::Extra
         request = Rack::Request.new(env)
 
         # Build headers and strip HTTP_
-        request_headers = env.inject({}) do |m,(k,v)|
+        request_headers = env.reduce({}) do |m, (k, v)|
           k =~ /^HTTP_(.*)$/ && v ? m.merge($1.gsub(/_/, '-') => v) : m
         end
 
@@ -105,14 +107,14 @@ module Nanoc::Extra
         net_http_request_class = METHOD_TO_CLASS_MAPPING[request.request_method]
         raise ArgumentError, "Unsupported method: #{request.request_method}" if net_http_request_class.nil?
         net_http_request = net_http_request_class.new(request.fullpath, request_headers)
-        net_http_request.body = env['rack.input'].read if [ 'POST', 'PUT' ].include?(request.request_method)
+        net_http_request.body = env['rack.input'].read if %w( POST PUT ).include?(request.request_method)
 
         # Perform request
         http.request(net_http_request) do |response|
           # Build Rack response triplet
           return [
             response.code.to_i,
-            response.to_hash.inject({}) { |m,(k,v)| m.merge(k => v[0]) },
+            response.to_hash.reduce({}) { |m, (k, v)| m.merge(k => v[0]) },
             [ response.body ]
           ]
         end

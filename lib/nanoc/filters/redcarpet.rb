@@ -20,7 +20,7 @@ module Nanoc::Filters
     #     Redcarpet
     #
     #   @return [String] The filtered content
-    #   
+    #
     # @overload run(content, params={})
     #
     #   For Redcarpet 2.x
@@ -42,11 +42,8 @@ module Nanoc::Filters
     #     of contents
 
     #   @return [String] The filtered content
-    def run(content, params={})
-      if ::Redcarpet::VERSION <= '2'
-        options = params[:options] || []
-        ::Redcarpet.new(content, *options).to_html
-      else
+    def run(content, params = {})
+      if ::Redcarpet::VERSION > '2'
         options          = params.fetch(:options,          {})
         renderer_class   = params.fetch(:renderer,         ::Redcarpet::Render::HTML)
         renderer_options = params.fetch(:renderer_options, {})

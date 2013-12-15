@@ -24,7 +24,7 @@ module Nanoc
     #
     # @param [Time, Hash] params Extra parameters. Ignored by nanoc; it is
     #   only included for backwards compatibility.
-    def initialize(data, filename, params=nil)
+    def initialize(data, filename, params = nil)
       @data     = data
       @filename = filename
     end
@@ -44,7 +44,7 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} filename=\"#{self.filename}\">"
+      "<#{self.class} filename=\"#{filename}\">"
     end
 
     # @return [String] The checksum for this object. If its contents change,

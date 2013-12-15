@@ -3,9 +3,9 @@
 usage       'create-site [options] path'
 aliases     :create_site, :cs
 summary     'create a site'
-description <<-EOS
+description "
 Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` commandline option.
-EOS
+"
 
 required :d, :datasource, 'specify the data source for the new site'
 
@@ -165,7 +165,7 @@ EOS
   margin: 0;
   padding: 0;
 
-  font-family: Georgia, Palatino, Times, 'Times New Roman', sans-serif;
+  font-family: Georgia, Palatino, serif;
 }
 
 body {
@@ -373,7 +373,7 @@ EOS
       # Create home page
       data_source.create_item(
         DEFAULT_ITEM,
-        { :title => "Home" },
+        { :title => 'Home' },
         '/'
       )
 

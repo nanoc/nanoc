@@ -75,15 +75,15 @@ module Nanoc::Helpers
       end
 
       def validate
-        self.validate_config
-        self.validate_feed_item
-        self.validate_articles
+        validate_config
+        validate_feed_item
+        validate_articles
       end
 
       def build
         buffer = ''
         xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
-        self.build_for_feed(xml)
+        build_for_feed(xml)
         buffer
       end
 
@@ -154,7 +154,7 @@ module Nanoc::Helpers
 
           # Add articles
           sorted_relevant_articles.each do |a|
-            self.build_for_article(a, xml)
+            build_for_article(a, xml)
           end
         end
       end
@@ -300,7 +300,7 @@ module Nanoc::Helpers
     # @option params [String] :logo The URI of the feed's logo.
     #
     # @return [String] The generated feed content
-    def atom_feed(params={})
+    def atom_feed(params = {})
       require 'builder'
 
       # Create builder

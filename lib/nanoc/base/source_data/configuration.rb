@@ -9,7 +9,7 @@ module Nanoc
     #
     # @param [Hash] hash The actual configuration hash
     def initialize(hash)
-      self.replace(hash)
+      replace(hash)
     end
 
     # Returns an object that can be used for uniquely identifying objects.

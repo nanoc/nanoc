@@ -13,8 +13,8 @@ module Nanoc::CLI
     ACTION_COLORS = {
       :create         => "\e[32m", # green
       :update         => "\e[33m", # yellow
-      :identical      => "",       # (nothing)
-      :skip           => "",       # (nothing)
+      :identical      => '',       # (nothing)
+      :skip           => '',       # (nothing)
       :delete         => "\e[31m"  # red
     }
 
@@ -40,14 +40,14 @@ module Nanoc::CLI
     # @param [String] name The name of the file the action was performed on
     #
     # @return [void]
-    def file(level, action, name, duration=nil)
+    def file(level, action, name, duration = nil)
       log(
         level,
         '%s%12s%s  %s%s' % [
           ACTION_COLORS[action.to_sym],
           action,
           "\e[0m",
-          duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
+          duration.nil? ? '' : '[%2.2fs]  ' % [ duration ],
           name
         ]
       )
@@ -62,12 +62,12 @@ module Nanoc::CLI
     # @param [#puts] io The stream to which the message should be written
     #
     # @return [void]
-    def log(level, message, io=$stdout)
+    def log(level, message, io = $stdout)
       # Don't log when logging is disabled
       return if @level == :off
 
       # Log when level permits it
-      io.puts(message) if (@level == :low or @level == level)
+      io.puts(message) if @level == :low || @level == level
     end
 
   end

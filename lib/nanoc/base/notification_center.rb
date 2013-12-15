@@ -27,7 +27,7 @@ module Nanoc
       # @yield [*args] Will be executed with the arguments passed to {.post}
       #
       # @return [void]
-      def on(name, id=nil, &block)
+      def on(name, id = nil, &block)
         initialize_if_necessary(name)
 
         # Add observer

@@ -9,7 +9,7 @@ module Nanoc::PathnameExtensions
   #
   # @api private
   def checksum
-    stat = File.stat(self.to_s)
+    stat = File.stat(to_s)
     stat.size.to_s + '-' + stat.mtime.to_s
   end
 

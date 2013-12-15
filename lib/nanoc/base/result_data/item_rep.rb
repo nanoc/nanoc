@@ -22,38 +22,38 @@ module Nanoc
       end
 
       # @deprecated Use {Nanoc::ItemRep#compiled_content} instead.
-      def content_at_snapshot(snapshot=:pre)
+      def content_at_snapshot(snapshot = :pre)
         compiled_content(:snapshot => snapshot)
       end
 
       # @deprecated
       def created
-        raise NotImplementedError, "Nanoc::ItemRep#created is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#created is no longer implemented'
       end
 
       # @deprecated
       def created?
-        raise NotImplementedError, "Nanoc::ItemRep#created? is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#created? is no longer implemented'
       end
 
       # @deprecated
       def modified
-        raise NotImplementedError, "Nanoc::ItemRep#modified is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#modified is no longer implemented'
       end
 
       # @deprecated
       def modified?
-        raise NotImplementedError, "Nanoc::ItemRep#modified? is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#modified? is no longer implemented'
       end
 
       # @deprecated
       def written
-        raise NotImplementedError, "Nanoc::ItemRep#written is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#written is no longer implemented'
       end
 
       # @deprecated
       def written?
-        raise NotImplementedError, "Nanoc::ItemRep#written? is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#written? is no longer implemented'
       end
 
     end
@@ -118,7 +118,7 @@ module Nanoc
       # @param [Symbol, nil] snapshot The name of the snapshot to write.
       #
       # @return [void]
-      def write(snapshot=:last)
+      def write(snapshot = :last)
         # Get raw path
         raw_path = self.raw_path(:snapshot => snapshot)
         return if raw_path.nil?
@@ -135,7 +135,7 @@ module Nanoc
         if self.binary?
           temp_path = temporary_filenames[:last]
         else
-          temp_path = self.temp_filename
+          temp_path = temp_filename
           File.open(temp_path, 'w') { |io| io.write(@content[:last]) }
         end
 
@@ -235,15 +235,15 @@ module Nanoc
     #
     # @return [String] The compiled content at the given snapshot (or the
     #   default snapshot if no snapshot is specified)
-    def compiled_content(params={})
+    def compiled_content(params = {})
       # Make sure we're not binary
-      if self.item.binary?
+      if item.binary?
         raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
       # Notify
-      Nanoc::NotificationCenter.post(:visit_started, self.item)
-      Nanoc::NotificationCenter.post(:visit_ended,   self.item)
+      Nanoc::NotificationCenter.post(:visit_started, item)
+      Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       # Get name of last pre-layout snapshot
       snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
@@ -279,9 +279,9 @@ module Nanoc
     #   path should be returned
     #
     # @return [String] The item rep’s path
-    def raw_path(params={})
-      Nanoc3::NotificationCenter.post(:visit_started, self.item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
+    def raw_path(params = {})
+      Nanoc3::NotificationCenter.post(:visit_started, item)
+      Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @raw_paths[snapshot_name]
@@ -296,9 +296,9 @@ module Nanoc
     #   path should be returned
     #
     # @return [String] The item rep’s path
-    def path(params={})
-      Nanoc3::NotificationCenter.post(:visit_started, self.item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   self.item)
+    def path(params = {})
+      Nanoc3::NotificationCenter.post(:visit_started, item)
+      Nanoc3::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]
@@ -320,7 +320,7 @@ module Nanoc
     #   the filter's #run method
     #
     # @return [void]
-    def filter(filter_name, filter_args={})
+    def filter(filter_name, filter_args = {})
       # Get filter class
       klass = filter_named(filter_name)
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
@@ -352,8 +352,7 @@ module Nanoc
 
         # Check whether file was written
         if self.binary? && !File.file?(filter.output_filename)
-          raise RuntimeError,
-            "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
+          raise "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
         end
 
         # Create snapshot
@@ -426,10 +425,10 @@ module Nanoc
     #   snapshot (such as `:pre`, `:post` or `:last`)
     #
     # @return [void]
-    def snapshot(snapshot_name, params={})
+    def snapshot(snapshot_name, params = {})
       is_final = params.fetch(:final) { true }
       @content[snapshot_name] = @content[:last] unless self.binary?
-      self.write(snapshot_name) if is_final
+      write(snapshot_name) if is_final
     end
 
     # Returns a recording proxy that is used for determining whether the
@@ -462,11 +461,11 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, self.item.identifier, self.name ]
+      [ type, item.identifier, name ]
     end
 
     def inspect
-      "<#{self.class} name=\"#{self.name}\" binary=#{self.binary?} raw_path=\"#{self.raw_path}\" item.identifier=\"#{self.item.identifier}\">"
+      "<#{self.class} name=\"#{name}\" binary=#{self.binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end
 
   private

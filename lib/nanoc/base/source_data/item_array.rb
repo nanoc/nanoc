@@ -27,13 +27,13 @@ module Nanoc
 
     def freeze
       @items.freeze
-      self.build_mapping
+      build_mapping
       super
     end
 
     def [](*args)
       if 1 == args.size && args.first.is_a?(String)
-        self.item_with_identifier(args.first)
+        item_with_identifier(args.first)
       else
         @items[*args]
       end
@@ -42,13 +42,13 @@ module Nanoc
 
     def at(arg)
       if arg.is_a?(String)
-        self.item_with_identifier(arg)
+        item_with_identifier(arg)
       else
         @items[arg]
       end
     end
 
-    protected
+  protected
 
     def item_with_identifier(identifier)
       if self.frozen?

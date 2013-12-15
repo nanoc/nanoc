@@ -45,17 +45,17 @@ module Nanoc::Helpers
     #
     #   link_to('Blog', '/blog/', :title => 'My super cool blog')
     #   # => '<a title="My super cool blog" href="/blog/">Blog</a>'
-    def link_to(text, target, attributes={})
+    def link_to(text, target, attributes = {})
       # Find path
       if target.is_a?(String)
         path = target
       else
         path = target.path
-        raise RuntimeError, "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
+        raise "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
       end
 
       # Join attributes
-      attributes = attributes.inject('') do |memo, (key, value)|
+      attributes = attributes.reduce('') do |memo, (key, value)|
         memo + key.to_s + '="' + h(value) + '" '
       end
 
@@ -87,7 +87,7 @@ module Nanoc::Helpers
     #
     #   link_to_unless_current('This Item', @item)
     #   # => '<span class="active" title="You\'re here.">This Item</span>'
-    def link_to_unless_current(text, target, attributes={})
+    def link_to_unless_current(text, target, attributes = {})
       # Find path
       path = target.is_a?(String) ? target : target.path
 
@@ -140,14 +140,14 @@ module Nanoc::Helpers
 
       # Calculate the relative path (method depends on whether destination is
       # a directory or not).
-      if src_path.to_s[-1,1] != '/'
+      if src_path.to_s[-1, 1] != '/'
         relative_path = dst_path.relative_path_from(src_path.dirname).to_s
       else
         relative_path = dst_path.relative_path_from(src_path).to_s
       end
 
       # Add trailing slash if necessary
-      if dst_path.to_s[-1,1] == '/'
+      if dst_path.to_s[-1, 1] == '/'
         relative_path << '/'
       end
 

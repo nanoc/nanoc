@@ -3,26 +3,26 @@
 usage       'show-rules [thing]'
 aliases     :explain
 summary     'describe the rules for each item'
-description <<-EOS
+description "
 Prints the rules used for all items and layouts in the current site.
-EOS
+"
 
 module Nanoc::CLI::Commands
 
   class ShowRules < ::Nanoc::CLI::CommandRunner
 
     def run
-      self.require_site
+      require_site
 
       @c    = Nanoc::CLI::ANSIStringColorizer
-      @calc = self.site.compiler.rule_memory_calculator
+      @calc = site.compiler.rule_memory_calculator
 
       # TODO explain /foo/
       # TODO explain content/foo.html
       # TODO explain output/foo/index.html
 
-      self.site.items.each   { |i| self.explain_item(i)   }
-      self.site.layouts.each { |l| self.explain_layout(l) }
+      site.items.each   { |i| explain_item(i)   }
+      site.layouts.each { |l| explain_layout(l) }
     end
 
   protected
@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
       item.reps.each do |rep|
         puts "  Rep #{rep.name}:"
         if @calc[rep].empty? && rep.raw_path.nil?
-          puts "    (nothing)"
+          puts '    (nothing)'
         else
           @calc[rep].each do |mem|
             puts '    %s %s' % [
@@ -55,7 +55,7 @@ module Nanoc::CLI::Commands
     def explain_layout(layout)
       puts "#{@c.c('Layout ' + layout.identifier, :bold, :yellow)}:"
       puts "  (from #{layout[:filename]})" if layout[:filename]
-      puts "  %s %s" % [
+      puts '  %s %s' % [
         @c.c(format('%-10s', 'filter'), :blue),
         @calc[layout].map { |m| m.inspect }.join(', ')
       ]

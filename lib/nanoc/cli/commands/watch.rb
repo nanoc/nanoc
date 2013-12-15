@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
       require 'pathname'
 
       require_site
-      watcher_config = self.site.config[:watcher] || {}
+      watcher_config = site.config[:watcher] || {}
 
       @notifier = Notifier.new
 
@@ -35,7 +35,7 @@ module Nanoc::CLI::Commands
         if filename
           print "Change detected to #{filename}; recompiling… "
         else
-          print "Watcher started; compiling the entire site… "
+          print 'Watcher started; compiling the entire site… '
         end
 
         # Recompile
@@ -50,7 +50,7 @@ module Nanoc::CLI::Commands
             @notifier.notify('Compilation complete')
           end
 
-          time_spent = ((Time.now - start)*1000.0).round
+          time_spent = ((Time.now - start) * 1000.0).round
           puts "done in #{format '%is %ims', *(time_spent.divmod(1000))}"
         rescue Exception => e
           # TODO include icon (--image misc/error-icon.png)
@@ -69,15 +69,15 @@ module Nanoc::CLI::Commands
       rebuilder.call(nil)
 
       # Get directories to watch
-      dirs_to_watch  = watcher_config[:dirs_to_watch]  || [ 'content', 'layouts', 'lib' ]
-      files_to_watch = watcher_config[:files_to_watch] || [ 'nanoc.yaml', 'config.yaml', 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
+      dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
+      files_to_watch = watcher_config[:files_to_watch] || %w( nanoc.yaml config.yaml Rules rules Rules.rb rules.rb )
       files_to_watch = Regexp.new(files_to_watch.map { |name| Regexp.quote(name) + '$' }.join('|'))
       ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.directory?(dir) }.compact.join('|'))
 
       # Watch
-      puts "Watching for changes…"
+      puts 'Watching for changes…'
 
-      callback = Proc.new do |modified, added, removed|
+      callback = proc do |modified, added, removed|
         rebuilder.call(modified[0]) if modified[0]
         rebuilder.call(added[0]) if added[0]
         rebuilder.call(removed[0]) if removed[0]
@@ -108,13 +108,13 @@ module Nanoc::CLI::Commands
       def notify(message)
         return if tool.nil?
         if tool == 'growlnotify' && self.on_windows?
-          self.growlnotify_windows(message)
+          growlnotify_windows(message)
         else
           send(tool.tr('-', '_'), message)
         end
       end
 
-      protected
+    protected
 
       def have_tool_nix?(tool)
         !`which #{tool}`.empty?
@@ -146,7 +146,7 @@ module Nanoc::CLI::Commands
       end
 
       def terminal_notify(message)
-        TerminalNotifier.notify(message, :title => "nanoc")
+        TerminalNotifier.notify(message, :title => 'nanoc')
       end
 
       def growlnotify_cmd_for(message)
@@ -154,7 +154,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify(message)
-        system(*self.growlnotify_cmd_for(message))
+        system(*growlnotify_cmd_for(message))
       end
 
       def growlnotify_windows_cmd_for(message)
@@ -162,7 +162,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify_windows(message)
-        system(*self.growlnotify_windows_cmd_for(message))
+        system(*growlnotify_windows_cmd_for(message))
       end
 
       def notify_send(message)

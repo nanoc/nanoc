@@ -1,4 +1,4 @@
-# encoding: utf-8   
+# encoding: utf-8
 
 module ::Nanoc::Extra::Checking::Checks
 
@@ -13,7 +13,7 @@ module ::Nanoc::Extra::Checking::Checks
         results = ::W3CValidators::MarkupValidator.new.validate_file(filename)
         results.errors.each do |e|
           desc = e.message.gsub(%r{\s+}, ' ').strip
-          self.add_issue(desc, :subject => filename)
+          add_issue(desc, :subject => filename)
         end
       end
     end
@@ -21,4 +21,3 @@ module ::Nanoc::Extra::Checking::Checks
   end
 
 end
-

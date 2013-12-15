@@ -29,7 +29,7 @@ module Nanoc::Extra
     #
     # @option params [Boolean] :dry_run (false) true if the deployer should
     #   only show what would be deployed instead actually deploying
-    def initialize(source_path, config, params={})
+    def initialize(source_path, config, params = {})
       @source_path  = source_path
       @config       = config
       @dry_run      = params.fetch(:dry_run) { false }
@@ -39,7 +39,7 @@ module Nanoc::Extra
     #
     # @abstract
     def run
-      raise NotImplementedError.new("Nanoc::Extra::Deployer subclasses must implement #run")
+      raise NotImplementedError.new('Nanoc::Extra::Deployer subclasses must implement #run')
     end
 
   end

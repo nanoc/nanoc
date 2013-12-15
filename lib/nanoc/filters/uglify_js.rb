@@ -13,7 +13,7 @@ module Nanoc::Filters
     # @option params [Array] :options ([]) A list of options to pass on to Uglifier
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Add filename to load path
       Uglifier.new(params).compile(content)
     end

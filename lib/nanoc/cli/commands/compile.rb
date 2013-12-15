@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
 
-      def initialize(params={})
+      def initialize(params = {})
       end
 
       # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
@@ -51,7 +51,7 @@ module Nanoc::CLI::Commands
       #
       # @abstract
       def start
-        raise NotImplementedError, "Subclasses of Listener should implement #start"
+        raise NotImplementedError, 'Subclasses of Listener should implement #start'
       end
 
       # Stops the listener. The default implementation removes self from all notification center observers.
@@ -73,7 +73,7 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         require 'tempfile'
-        self.setup_diffs
+        setup_diffs
         old_contents = {}
         Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
           path = rep.raw_path(:snapshot => snapshot)
@@ -93,7 +93,7 @@ module Nanoc::CLI::Commands
       # @see Listener#stop
       def stop
         super
-        self.teardown_diffs
+        teardown_diffs
       end
 
     protected
@@ -161,7 +161,7 @@ module Nanoc::CLI::Commands
       end
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
-      def initialize(params={})
+      def initialize(params = {})
         @times = {}
 
         @reps = params.fetch(:reps)
@@ -180,7 +180,7 @@ module Nanoc::CLI::Commands
 
       # @see Listener#stop
       def stop
-        self.print_profiling_feedback
+        print_profiling_feedback
         super
       end
 
@@ -194,8 +194,8 @@ module Nanoc::CLI::Commands
         # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
-          $stderr.puts "Warning: profiling information may not be accurate because " +
-                       "some items were not compiled."
+          $stderr.puts 'Warning: profiling information may not be accurate because ' +
+                       'some items were not compiled.'
         end
 
         # Print header
@@ -204,7 +204,7 @@ module Nanoc::CLI::Commands
         puts '-' * max_filter_name_length + '-+-----------------------------------'
 
         durations_per_filter.to_a.sort_by { |r| r[1] }.each do |row|
-          self.print_row(row, max_filter_name_length)
+          print_row(row, max_filter_name_length)
         end
       end
 
@@ -215,8 +215,8 @@ module Nanoc::CLI::Commands
         # Calculate stats
         count = samples.size
         min   = samples.min
-        tot   = samples.inject(0) { |memo, i| memo + i }
-        avg   = tot/count
+        tot   = samples.reduce(0) { |memo, i| memo + i }
+        avg   = tot / count
         max   = samples.max
 
         # Format stats
@@ -234,7 +234,8 @@ module Nanoc::CLI::Commands
       def durations_per_filter
         @_durations_per_filter ||= begin
           @times.keys.each_with_object({}) do |filter_name, result|
-            if durations = durations_for_filter(filter_name)
+            durations = durations_for_filter(filter_name)
+            if durations
               result[filter_name] = durations
             end
           end
@@ -256,10 +257,10 @@ module Nanoc::CLI::Commands
 
       # @see Listener#enable_for?
       def self.enable_for?(command_runner)
-        ! ENV.has_key?('TRAVIS')
+        !ENV.key?('TRAVIS')
       end
 
-      def initialize(params={})
+      def initialize(params = {})
         @gc_count = 0
       end
 
@@ -329,7 +330,7 @@ module Nanoc::CLI::Commands
     class FileActionPrinter < Listener
 
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
-      def initialize(params={})
+      def initialize(params = {})
         @start_times = {}
         @stop_times  = {}
 
@@ -345,8 +346,18 @@ module Nanoc::CLI::Commands
           @stop_times[rep.raw_path] = Time.now
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-          action = (is_created ? :create : (is_modified ? :update : :identical))
-          level  = (is_created ? :high   : (is_modified ? :high   : :low))
+          action =
+            case
+            when is_created  then :create
+            when is_modified then :update
+            else :identical
+            end
+          level =
+            case
+            when is_created  then :high
+            when is_modified then :high
+            else :low
+            end
           log(level, action, path, duration_for(rep))
         end
       end
@@ -361,7 +372,7 @@ module Nanoc::CLI::Commands
         end
       end
 
-      private
+    private
 
       def duration_for(rep)
         return nil if rep.raw_path.nil?
@@ -379,21 +390,21 @@ module Nanoc::CLI::Commands
 
     end
 
-    def initialize(options, arguments, command, params={})
+    def initialize(options, arguments, command, params = {})
       super(options, arguments, command)
-      @listener_classes = params.fetch(:listener_classes, self.default_listener_classes)
+      @listener_classes = params.fetch(:listener_classes, default_listener_classes)
     end
 
     def run
       time_before = Time.now
 
-      self.load_site
-      self.check_for_deprecated_usage
+      load_site
+      check_for_deprecated_usage
 
-      puts "Compiling site…"
-      self.run_listeners_while do
-        self.site.compile
-        self.prune
+      puts 'Compiling site…'
+      run_listeners_while do
+        site.compile
+        prune
       end
 
       time_after = Time.now
@@ -404,8 +415,8 @@ module Nanoc::CLI::Commands
   protected
 
     def prune
-      if self.site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(self.site, :exclude => self.prune_config_exclude).run
+      if site.config[:prune][:auto_prune]
+        Nanoc::Extra::Pruner.new(site, :exclude => prune_config_exclude).run
       end
     end
 
@@ -422,7 +433,7 @@ module Nanoc::CLI::Commands
     def setup_listeners
       @listeners = @listener_classes.
         select { |klass| klass.enable_for?(self) }.
-        map    { |klass| klass.new(:reps => self.reps) }
+        map    { |klass| klass.new(:reps => reps) }
 
       @listeners.each { |s| s.start }
     end
@@ -432,10 +443,10 @@ module Nanoc::CLI::Commands
     end
 
     def run_listeners_while
-      self.setup_listeners
+      setup_listeners
       yield
     ensure
-      self.teardown_listeners
+      teardown_listeners
     end
 
     def teardown_listeners
@@ -443,14 +454,14 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      self.site.items.map { |i| i.reps }.flatten
+      site.items.map { |i| i.reps }.flatten
     end
     memoize :reps
 
     def check_for_deprecated_usage
       # Check presence of --all option
-      if options.has_key?(:all) || options.has_key?(:force)
-        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
+      if options.key?(:all) || options.key?(:force)
+        $stderr.puts 'Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect.'
       end
 
       # Warn if trying to compile a single item
@@ -462,11 +473,11 @@ module Nanoc::CLI::Commands
     end
 
     def prune_config
-      self.site.config[:prune] || {}
+      site.config[:prune] || {}
     end
 
     def prune_config_exclude
-      self.prune_config[:exclude] || {}
+      prune_config[:exclude] || {}
     end
 
   end

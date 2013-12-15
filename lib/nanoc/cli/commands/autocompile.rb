@@ -33,8 +33,8 @@ module Nanoc::CLI::Commands
       require 'rack'
 
       # Make sure we are in a nanoc site directory
-      self.require_site
-      autocompile_config = self.site.config[:autocompile] || {}
+      require_site
+      autocompile_config = site.config[:autocompile] || {}
 
       # Set options
       options_for_rack = {
@@ -44,10 +44,11 @@ module Nanoc::CLI::Commands
 
       # Guess which handler we should use
       handler_option = options[:handler] || autocompile_config[:handler]
-      unless handler = Rack::Handler.get(handler_option)
+      handler = Rack::Handler.get(handler_option)
+      unless handler
         begin
           handler = Rack::Handler::Mongrel
-        rescue LoadError => e
+        rescue LoadError
           handler = Rack::Handler::WEBrick
         end
       end

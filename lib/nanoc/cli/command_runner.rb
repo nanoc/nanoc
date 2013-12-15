@@ -11,7 +11,7 @@ module Nanoc::CLI
     # @return [void]
     def call
       Nanoc::CLI::ErrorHandler.handle_while(:command => self) do
-        self.run
+        run
       end
     end
 
@@ -33,7 +33,7 @@ module Nanoc::CLI
     #
     # @see http://rubydoc.info/gems/cri/Cri/CommandDSL#runner-instance_method
     def self.call(opts, args, cmd)
-      self.new(opts, args, cmd).call
+      new(opts, args, cmd).call
     end
 
     # @return [Boolean] true if the current working directory is a nanoc site
@@ -49,7 +49,7 @@ module Nanoc::CLI
     # @return [void]
     def require_site
       if site.nil?
-        raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
+        raise ::Nanoc::Errors::GenericTrivial, 'The current working directory does not seem to be a nanoc site.'
       end
     end
 
@@ -58,10 +58,10 @@ module Nanoc::CLI
     #
     # @return [void]
     def load_site
-      self.require_site
-      print "Loading site data… "
-      self.site.load
-      puts "done"
+      require_site
+      print 'Loading site data… '
+      site.load
+      puts 'done'
     end
 
     # @return [Boolean] true if debug output is enabled, false if not
@@ -101,7 +101,7 @@ module Nanoc::CLI
 
     # @return [Array] The compilation stack.
     def stack
-      (self.site && self.site.compiler.stack) || []
+      (site && site.compiler.stack) || []
     end
 
   end
