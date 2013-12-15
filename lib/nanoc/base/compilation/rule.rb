@@ -34,7 +34,7 @@ module Nanoc
     # @option params [Symbol, nil] :snapshot (nil) The name of the snapshot
     #   this rule will apply to. Ignored for compilation rules, but used for
     #   routing rules.
-    def initialize(pattern, rep_name, block, params={})
+    def initialize(pattern, rep_name, block, params = {})
       @pattern       = pattern
       @rep_name      = rep_name.to_sym
       @snapshot_name = params[:snapshot_name]
@@ -60,10 +60,12 @@ module Nanoc
     # @raise [ArgumentError] if no compiler is passed
     #
     # @return [void]
-    def apply_to(rep, params={})
-      compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
+    def apply_to(rep, params = {})
+      compiler = params.fetch(:compiler) do
+        raise ArgumentError, 'Required :compiler option is missing'
+      end
       rep = Nanoc::ItemRepRulesProxy.new(rep, compiler) unless rep.is_proxy?
-      Nanoc::RuleContext.new(:rep => rep, :site => compiler.site).instance_eval &@block
+      Nanoc::RuleContext.new(:rep => rep, :site => compiler.site).instance_eval(&@block)
     end
 
   end

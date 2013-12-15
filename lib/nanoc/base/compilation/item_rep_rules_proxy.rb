@@ -41,7 +41,7 @@ module Nanoc
     #   filter's #run method
     #
     # @return [void]
-    def filter(name, args={})
+    def filter(name, args = {})
       set_assigns
       @item_rep.filter(name, args)
     end
@@ -58,7 +58,7 @@ module Nanoc
     # @param [String] layout_identifier The identifier of the layout to use
     #
     # @return [void]
-    def layout(layout_identifier, extra_filter_args={})
+    def layout(layout_identifier, extra_filter_args = {})
       set_assigns
 
       layout = layout_with_identifier(layout_identifier)

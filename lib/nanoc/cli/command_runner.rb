@@ -11,7 +11,7 @@ module Nanoc::CLI
     # @return [void]
     def call
       Nanoc::CLI::ErrorHandler.handle_while(:command => self) do
-        self.run
+        run
       end
     end
 

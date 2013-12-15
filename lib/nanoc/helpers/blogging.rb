@@ -31,7 +31,7 @@ module Nanoc::Helpers
       blk = lambda { @items.select { |item| item[:kind] == 'article' } }
       if @items.frozen?
         @article_items ||= blk.call
-      else 
+      else
         blk.call
       end
     end
@@ -42,13 +42,13 @@ module Nanoc::Helpers
     #
     # @return [Array] A sorted array containing all articles
     def sorted_articles
-      blk = lambda do 
+      blk = lambda do
         articles.sort_by { |a| attribute_to_time(a[:created_at]) }.reverse
       end
 
       if @items.frozen?
         @sorted_article_items ||= blk.call
-      else 
+      else
         blk.call
       end
     end
@@ -75,15 +75,15 @@ module Nanoc::Helpers
       end
 
       def validate
-        self.validate_config
-        self.validate_feed_item
-        self.validate_articles
+        validate_config
+        validate_feed_item
+        validate_articles
       end
 
       def build
         buffer = ''
         xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
-        self.build_for_feed(xml)
+        build_for_feed(xml)
         buffer
       end
 
@@ -155,7 +155,7 @@ module Nanoc::Helpers
 
           # Add articles
           sorted_relevant_articles.each do |a|
-            self.build_for_article(a, xml)
+            build_for_article(a, xml)
           end
         end
       end
@@ -298,7 +298,7 @@ module Nanoc::Helpers
     # @option params [String] :logo The URI of the feed's logo.
     #
     # @return [String] The generated feed content
-    def atom_feed(params={})
+    def atom_feed(params = {})
       require 'builder'
 
       # Create builder

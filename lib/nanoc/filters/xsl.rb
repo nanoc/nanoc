@@ -8,7 +8,7 @@ module Nanoc::Filters
 
     requires 'nokogiri'
 
-    # Runs the item content through an [XSLT](http://www.w3.org/TR/xslt) 
+    # Runs the item content through an [XSLT](http://www.w3.org/TR/xslt)
     # stylesheet using  [Nokogiri](http://nokogiri.org/).
     #
     # This filter can only be run for layouts, because it will need both the
@@ -23,7 +23,7 @@ module Nanoc::Filters
     #     compile '/reports/*/' do
     #       layout 'xsl-report'
     #     end
-    #     
+    #
     #     layout 'xsl-report', :xsl, :awesome => 'definitely'
     #
     # @param [String] content The XML content to transform
@@ -32,9 +32,9 @@ module Nanoc::Filters
     #   `xsl:param` elements.
     #
     # @return [String] The transformed content
-    def run(content, params={})
+    def run(content, params = {})
       if assigns[:layout].nil?
-        raise "The XSL filter can only be run as a layout"
+        raise 'The XSL filter can only be run as a layout'
       end
 
       xml = ::Nokogiri::XML(content.string)

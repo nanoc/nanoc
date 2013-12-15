@@ -131,7 +131,7 @@ EOS
   margin: 0;
   padding: 0;
 
-  font-family: Georgia, Palatino, Times, 'Times New Roman', sans-serif;
+  font-family: Georgia, Palatino, serif;
 }
 
 body {
@@ -339,7 +339,7 @@ EOS
       # Create home page
       data_source.create_item(
         DEFAULT_ITEM,
-        { :title => "Home" },
+        { :title => 'Home' },
         '/index.html'
       )
 

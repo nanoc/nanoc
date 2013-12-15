@@ -56,9 +56,9 @@ module Nanoc
     #     compile '/articles/*', :rep => :raw do
     #       # do nothing
     #     end
-    def compile(pattern, params={}, &block)
+    def compile(pattern, params = {}, &block)
       # Require block
-      raise ArgumentError.new("#compile requires a block") unless block_given?
+      raise ArgumentError.new('#compile requires a block') unless block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
@@ -91,7 +91,7 @@ module Nanoc
     # @example Using custom filter arguments for a layout
     #
     #     layout '/*.haml',  :haml, :format => :html5
-    def layout(pattern, filter_name, params={})
+    def layout(pattern, filter_name, params = {})
       key = Nanoc::Pattern.from(pattern)
       value = [ filter_name, params ]
       @rules_collection.layout_filter_mapping[key] = value
@@ -113,7 +113,7 @@ module Nanoc
       filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
-      self.instance_eval(File.read(filename), filename)
+      instance_eval(File.read(filename), filename)
     end
 
   end

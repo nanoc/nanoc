@@ -13,32 +13,18 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
-      # Build options
-      options = params.dup
-      sass_filename = item.content.filename
-      # TODO check whether item.identifier exists
-      options[:filename] ||= sass_filename
-      options[:filesystem_importer] ||= Nanoc::Filters::Sass::SassFilesystemImporter
-
-      # Find items
-      item_dirglob = Pathname.new(sass_filename).dirname.realpath.to_s + '**'
-      clean_items = @items.reject { |i| i.content.filename.nil? }
-      @scoped_items, @rest_items = clean_items.partition do |i|
-        i.content.filename && File.fnmatch(item_dirglob, i.content.filename)
-      end
-      
-      # Render
-      options[:nanoc_current_filter] = self
+    def run(content, params = {})
+      options = params.merge({
+        :nanoc_current_filter => self,
+        :filename => @item && @item.content.filename,
+      })
       engine = ::Sass::Engine.new(content, options)
       engine.render
     end
 
     def imported_filename_to_item(filename)
-      filematch = lambda do |i|
-        i.content.filename == File.absolute_path(filename)
-      end
-      @scoped_items.find(&filematch) || @rest_items.find(&filematch)
+      absolute_path = File.absolute_path(filename)
+      @items.find { |i| i.content.filename == absolute_path }
     end
 
   end

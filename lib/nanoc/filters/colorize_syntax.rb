@@ -84,7 +84,7 @@ module Nanoc::Filters
     #   such as the doctype, `html`, `head` and `body` elements will be added.
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Take colorizers from parameters
       @colorizers = Hash.new(params[:default_colorizer] || DEFAULT_COLORIZER)
       (params[:colorizers] || {}).each_pair do |language, colorizer|
@@ -99,7 +99,7 @@ module Nanoc::Filters
       when :xml, :xhtml
         klass = Nokogiri::XML
       else
-        raise RuntimeError, "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
+        raise "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
       end
 
       # Colorize
@@ -133,12 +133,12 @@ module Nanoc::Filters
         # Add language-something class
         unless has_class
           klass = element['class'] || ''
-          klass << ' ' unless [' ', nil].include?(klass[-1,1])
+          klass << ' ' unless [' ', nil].include?(klass[-1, 1])
           klass << "language-#{language}"
           element['class'] = klass
         end
 
-        self.highlight_postprocess(language, element.parent)
+        highlight_postprocess(language, element.parent)
       end
 
       method = "to_#{syntax}".to_sym
@@ -156,7 +156,7 @@ module Nanoc::Filters
     # @param [Hash] params Parameters to pass on to CodeRay
     #
     # @return [String] The colorized output
-    def coderay(code, language, params={})
+    def coderay(code, language, params = {})
       require 'coderay'
 
       ::CodeRay.scan(code, language).html(params)
@@ -170,7 +170,7 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output, which is identical to the input
     #   in this case
-    def dummy(code, language, params={})
+    def dummy(code, language, params = {})
       code
     end
 
@@ -186,7 +186,7 @@ module Nanoc::Filters
     # @option params [String, Symbol] :encoding The encoding of the code block
     #
     # @return [String] The colorized output
-    def pygmentize(code, language, params={})
+    def pygmentize(code, language, params = {})
       require 'systemu'
       check_availability('pygmentize', '-V')
 
@@ -195,7 +195,7 @@ module Nanoc::Filters
 
       # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
-      cmd << '-O' << params.map { |k,v| "#{k}=#{v}" }.join(',') unless params.empty?
+      cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
       # Run command
       stdout = StringIO.new
@@ -216,7 +216,7 @@ module Nanoc::Filters
     # @param [String] language The language the code is written in
     #
     # @return [String] The colorized output
-    def pygmentsrb(code, language, params={})
+    def pygmentsrb(code, language, params = {})
       require 'pygments'
 
       args = params.dup
@@ -245,7 +245,7 @@ module Nanoc::Filters
     # @option params [String] :style The style to use
     #
     # @return [String] The colorized output
-    def simon_highlight(code, language, params={})
+    def simon_highlight(code, language, params = {})
       require 'systemu'
 
       check_availability('highlight', '--version')
@@ -277,7 +277,7 @@ module Nanoc::Filters
     def coderay_postprocess(language, element)
       # Skip if we're a free <code>
       return if element.parent.nil?
-      
+
       # <div class="code">
       div_inner = Nokogiri::XML::Node.new('div', element.document)
       div_inner['class'] = 'code'
@@ -301,12 +301,12 @@ module Nanoc::Filters
       s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
     end
 
-    def highlight(code, language, params={})
+    def highlight(code, language, params = {})
       colorizer = @colorizers[language.to_sym]
       if KNOWN_COLORIZERS.include?(colorizer)
         send(colorizer, code, language, params[colorizer] || {})
       else
-        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+        raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end
     end
 
@@ -315,16 +315,16 @@ module Nanoc::Filters
       if KNOWN_COLORIZERS.include?(colorizer)
         sym = (colorizer.to_s + '_postprocess').to_sym
         if self.respond_to?(sym)
-          self.send(sym, language, element)
+          send(sym, language, element)
         end
       else
-        raise RuntimeError, "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+        raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end
     end
 
     def check_availability(*cmd)
       systemu cmd
-      raise "Could not spawn #{cmd.join(' ')}" if $?.exitstatus != 0
+      raise "Could not spawn #{cmd.join(' ')}" if $CHILD_STATUS.exitstatus != 0
     end
 
   end

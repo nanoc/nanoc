@@ -9,7 +9,7 @@ module Nanoc::ArrayExtensions
   # @return [Array] The converted array
   def symbolize_keys_recursively
     array = []
-    self.each do |element|
+    each do |element|
       array << (element.respond_to?(:symbolize_keys_recursively) ? element.symbolize_keys_recursively : element)
     end
     array
@@ -21,7 +21,7 @@ module Nanoc::ArrayExtensions
   #
   # @return [Array] The converted array
   def stringify_keys_recursively
-    inject([]) do |array, element|
+    reduce([]) do |array, element|
       array + [ element.respond_to?(:stringify_keys_recursively) ? element.stringify_keys_recursively : element ]
     end
   end

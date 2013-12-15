@@ -15,17 +15,17 @@ module Nanoc::Extra::Checking
     end
 
     def run
-      raise NotImplementedError.new("Nanoc::Extra::Checking::Check subclasses must implement #run")
+      raise NotImplementedError.new('Nanoc::Extra::Checking::Check subclasses must implement #run')
     end
 
-    def add_issue(desc, params={})
+    def add_issue(desc, params = {})
       subject  = params.fetch(:subject, nil)
 
       @issues << Issue.new(desc, subject, self.class)
     end
 
     def output_filenames
-      Dir[@site.config[:output_dir] + '/**/*'].select{ |f| File.file?(f) }
+      Dir[@site.config[:output_dir] + '/**/*'].select { |f| File.file?(f) }
     end
 
   end

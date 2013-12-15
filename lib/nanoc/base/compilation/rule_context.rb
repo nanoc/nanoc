@@ -15,9 +15,13 @@ module Nanoc
     #
     # @raise [ArgumentError] if the `:rep` or the `:site` option is
     #   missing
-    def initialize(params={})
-      rep  = params.fetch(:rep)  { raise ArgumentError, "Required :rep option is missing"  }
-      site = params.fetch(:site) { raise ArgumentError, "Required :site option is missing" }
+    def initialize(params = {})
+      rep = params.fetch(:rep) do
+        raise ArgumentError, 'Required :rep option is missing'
+      end
+      site = params.fetch(:site) do
+        raise ArgumentError, 'Required :site option is missing'
+      end
 
       super({
         :rep      => rep,
@@ -42,7 +46,7 @@ module Nanoc
     #   the filter's #run method
     #
     # @return [void]
-    def filter(filter_name, filter_args={})
+    def filter(filter_name, filter_args = {})
       rep.filter(filter_name, filter_args)
     end
 

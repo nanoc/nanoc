@@ -13,23 +13,22 @@ module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
 
     def run
-      self.load_site
+      load_site
 
       # Get data
-      items     = self.site.items
-      item_reps = items.map { |i| i.reps }.flatten
-      layouts   = self.site.layouts
+      items   = site.items
+      layouts = site.layouts
 
       # Get dependency tracker
-      compiler = Nanoc::Compiler.new(self.site)
+      compiler = Nanoc::Compiler.new(site)
       compiler.load
       dependency_tracker = compiler.dependency_tracker
 
       # Print data
-      self.print_item_dependencies(items, dependency_tracker)
-      self.print_item_rep_paths(items)
-      self.print_item_rep_outdatedness(items, compiler)
-      self.print_layouts(layouts, compiler)
+      print_item_dependencies(items, dependency_tracker)
+      print_item_rep_paths(items)
+      print_item_rep_outdatedness(items, compiler)
+      print_layouts(layouts, compiler)
     end
 
   protected
@@ -54,7 +53,7 @@ module Nanoc::CLI::Commands
 
     def print_header(title)
       header = '=' * 78
-      header[3..(title.length+5)] = " #{title} "
+      header[3..(title.length + 5)] = " #{title} "
 
       puts
       puts header
@@ -62,9 +61,9 @@ module Nanoc::CLI::Commands
     end
 
     def print_item_dependencies(items, dependency_tracker)
-      self.print_header('Item dependencies')
+      print_header('Item dependencies')
 
-      self.sorted_with_prev(items) do |item, prev|
+      sorted_with_prev(items) do |item, prev|
         puts if prev
         puts "item #{item.identifier} depends on:"
         predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
@@ -72,21 +71,21 @@ module Nanoc::CLI::Commands
           if pred
             puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
           else
-            puts "  ( removed item )"
+            puts '  ( removed item )'
           end
         end
-        puts "  (nothing)" if predecessors.empty?
+        puts '  (nothing)' if predecessors.empty?
       end
     end
 
     def print_item_rep_paths(items)
-      self.print_header('Item representation paths')
+      print_header('Item representation paths')
 
-      self.sorted_reps_with_prev(items) do |rep, prev|
+      sorted_reps_with_prev(items) do |rep, prev|
         puts if prev
         puts "item #{rep.item.identifier}, rep #{rep.name}:"
         if rep.raw_paths.empty?
-          puts "  (not written)"
+          puts '  (not written)'
         end
         length = rep.raw_paths.keys.map { |s| s.to_s.length }.max
         rep.raw_paths.each do |snapshot_name, raw_path|
@@ -96,31 +95,31 @@ module Nanoc::CLI::Commands
     end
 
     def print_item_rep_outdatedness(items, compiler)
-      self.print_header('Item representation outdatedness')
+      print_header('Item representation outdatedness')
 
-      self.sorted_reps_with_prev(items) do |rep, prev|
+      sorted_reps_with_prev(items) do |rep, prev|
         puts if prev
         puts "item #{rep.item.identifier}, rep #{rep.name}:"
         outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(rep)
         if outdatedness_reason
           puts "  is outdated: #{outdatedness_reason.message}"
         else
-          puts "  is not outdated"
+          puts '  is not outdated'
         end
       end
     end
 
     def print_layouts(layouts, compiler)
-      self.print_header('Layouts')
+      print_header('Layouts')
 
-      self.sorted_with_prev(layouts) do |layout, prev|
+      sorted_with_prev(layouts) do |layout, prev|
         puts if prev
         puts "layout #{layout.identifier}:"
         outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(layout)
         if outdatedness_reason
           puts "  is outdated: #{outdatedness_reason.message}"
         else
-          puts "  is not outdated"
+          puts '  is not outdated'
         end
         puts
       end

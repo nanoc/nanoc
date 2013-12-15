@@ -18,7 +18,7 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       options = ::RDoc::Options.new
       to_html = ::RDoc::Markup::ToHtml.new(options)
       ::RDoc::Markup.new.convert(content, to_html)

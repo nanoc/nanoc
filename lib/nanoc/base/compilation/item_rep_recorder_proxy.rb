@@ -49,14 +49,14 @@ module Nanoc
     # @return [void]
     #
     # @see Nanoc::ItemRepRulesProxy#filter, Nanoc::ItemRep#filter
-    def filter(name, args={})
+    def filter(name, args = {})
       @rule_memory << [ :filter, name, args ]
     end
 
     # @return [void]
     #
     # @see Nanoc::ItemRepRulesProxy#layout, Nanoc::ItemRep#layout
-    def layout(layout_identifier, extra_filter_args=nil)
+    def layout(layout_identifier, extra_filter_args = nil)
       if extra_filter_args
         @rule_memory << [ :layout, layout_identifier, extra_filter_args ]
       else
@@ -67,7 +67,7 @@ module Nanoc
     # @return [void]
     #
     # @see Nanoc::ItemRep#snapshot
-    def snapshot(snapshot_name, params={})
+    def snapshot(snapshot_name, params = {})
       self.ensure_snapshot_unique(snapshot_name)
       @rule_memory << [ :snapshot, snapshot_name, params ]
     end

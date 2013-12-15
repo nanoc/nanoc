@@ -17,7 +17,7 @@ module Nanoc::Extra
     end
 
     def include_component?(component)
-      self.components.include?(component)
+      components.include?(component)
     end
 
   end
@@ -27,4 +27,3 @@ end
 class ::Pathname
   include ::Nanoc::Extra::PathnameExtensions
 end
-

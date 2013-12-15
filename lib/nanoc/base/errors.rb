@@ -81,7 +81,7 @@ module Nanoc
     class NoRulesFileFound < Generic
 
       def initialize
-        super("This site does not have a rules file, which is required for nanoc sites.")
+        super('This site does not have a rules file, which is required for nanoc sites.')
       end
 
     end

@@ -12,7 +12,7 @@ module Nanoc
 
     # @option params [Nanoc::RulesCollection] rules_collection The rules
     #   collection
-    def initialize(params={})
+    def initialize(params = {})
       @compiler         = params.fetch(:compiler)         { raise ArgumentError, "Required :compiler option is missing" }
       @rules_collection = params.fetch(:rules_collection) { raise ArgumentError, "Required :rules_collection option is missing" }
     end
@@ -21,15 +21,15 @@ module Nanoc
     #
     # @return [Array] The calculated rule memory for the given object
     def [](obj)
-      result = case obj.type
+      result =
+        case obj.type
         when :item_rep
           self.new_rule_memory_for_rep(obj)
         when :layout
           self.new_rule_memory_for_layout(obj)
         else
-          raise RuntimeError,
-            "Do not know how to calculate the rule memory for #{obj.inspect}"
-      end
+          raise "Do not know how to calculate the rule memory for #{obj.inspect}"
+        end
 
       result
     end

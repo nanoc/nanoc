@@ -10,16 +10,21 @@ module Nanoc
     extend Nanoc::Memoization
 
     def initialize(params={})
-      @compiler = params[:compiler] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :compiler parameter'
-      @checksum_store = params[:checksum_store] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
-      @dependency_tracker = params[:dependency_tracker] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
-      @item_rep_writer = params[:item_rep_writer] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :item_rep_writer parameter'
-      @item_rep_store = params[:item_rep_store] or raise ArgumentError,
-        'Nanoc::OutdatednessChecker#initialize needs a :item_rep_store parameter'
+      @compiler = params.fetch(:compiler) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :compiler parameter'
+      end
+      @checksum_store = params.fetch(:checksum_store) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
+      end
+      @dependency_tracker = params.fetch(:dependency_tracker) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
+      end
+      @item_rep_writer = params.fetch(:item_rep_writer) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :item_rep_writer parameter'
+      end
+      @item_rep_store = params.fetch(:item_rep_store) do
+        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :item_rep_store parameter'
+      end
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}
@@ -79,43 +84,43 @@ module Nanoc
     #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
       case obj.type
-        when :item_rep
-          if rule_memory_differs_for(obj)
-            Nanoc::OutdatednessReasons::RulesModified
-          elsif !checksums_available?(obj.item)
-            Nanoc::OutdatednessReasons::NotEnoughData
-          elsif !checksums_identical?(obj.item)
-            Nanoc::OutdatednessReasons::SourceModified
-          elsif (obj.raw_path && !@item_rep_writer.exist?(obj.raw_path))
-            # FIXME this is not tested!
-            Nanoc::OutdatednessReasons::NotWritten
-          elsif obj.paths_without_snapshot.any? { |p| !@item_rep_writer.exist?(p) }
-            Nanoc::OutdatednessReasons::NotWritten
-          elsif @compiler.site.code_snippets.any? { |cs| object_modified?(cs) }
-            Nanoc::OutdatednessReasons::CodeSnippetsModified
-          elsif object_modified?(@compiler.site.config)
-            Nanoc::OutdatednessReasons::ConfigurationModified
-          else
-            nil
-          end
-        when :item
-          @item_rep_store.reps_for_item(obj).each do |rep|
-            r = basic_outdatedness_reason_for(rep)
-            return r unless r.nil?
-          end
-          nil
-        when :layout
-          if rule_memory_differs_for(obj)
-            Nanoc::OutdatednessReasons::RulesModified
-          elsif !checksums_available?(obj)
-            Nanoc::OutdatednessReasons::NotEnoughData
-          elsif !checksums_identical?(obj)
-            Nanoc::OutdatednessReasons::SourceModified
-          else
-            nil
-          end
+      when :item_rep
+        if rule_memory_differs_for(obj)
+          Nanoc::OutdatednessReasons::RulesModified
+        elsif !checksums_available?(obj.item)
+          Nanoc::OutdatednessReasons::NotEnoughData
+        elsif !checksums_identical?(obj.item)
+          Nanoc::OutdatednessReasons::SourceModified
+        elsif (obj.raw_path && !@item_rep_writer.exist?(obj.raw_path))
+          # FIXME this is not tested!
+          Nanoc::OutdatednessReasons::NotWritten
+        elsif obj.paths_without_snapshot.any? { |p| !@item_rep_writer.exist?(p) }
+          Nanoc::OutdatednessReasons::NotWritten
+        elsif @compiler.site.code_snippets.any? { |cs| object_modified?(cs) }
+          Nanoc::OutdatednessReasons::CodeSnippetsModified
+        elsif object_modified?(@compiler.site.config)
+          Nanoc::OutdatednessReasons::ConfigurationModified
         else
-          raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
+          nil
+        end
+      when :item
+        @item_rep_store.reps_for_item(obj).each do |rep|
+          r = basic_outdatedness_reason_for(rep)
+          return r unless r.nil?
+        end
+        nil
+      when :layout
+        if rule_memory_differs_for(obj)
+          Nanoc::OutdatednessReasons::RulesModified
+        elsif !checksums_available?(obj)
+          Nanoc::OutdatednessReasons::NotEnoughData
+        elsif !checksums_identical?(obj)
+          Nanoc::OutdatednessReasons::SourceModified
+        else
+          nil
+        end
+      else
+        raise RuntimeError, "do not know how to check outdatedness of #{obj.inspect}"
       end
     end
     memoize :basic_outdatedness_reason_for
@@ -131,12 +136,12 @@ module Nanoc
     #   indefinitely. It should not be necessary to pass this a custom value.
     #
     # @return [Boolean] true if the object is outdated, false otherwise
-    def outdated_due_to_dependencies?(obj, processed=Set.new)
+    def outdated_due_to_dependencies?(obj, processed = Set.new)
       # Convert from rep to item if necessary
       obj = obj.item if obj.type == :item_rep
 
       # Get from cache
-      if @objects_outdated_due_to_dependencies.has_key?(obj)
+      if @objects_outdated_due_to_dependencies.key?(obj)
         return @objects_outdated_due_to_dependencies[obj]
       end
 

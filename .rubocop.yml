@@ -1,0 +1,151 @@
+# ----- TO ENABLE LATER -----
+# To make merges easier, I’ve decided to enable these at a later point in time.
+
+MultilineBlockChain:
+  Enabled: false
+
+PerlBackrefs:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false
+
+RescueException:
+  Enabled: false
+
+AccessModifierIndentation:
+  Enabled: false
+
+
+
+# ----- DISABLED (hard) -----
+
+# Ruby 1.8 compatibility is required.
+#
+# Re-enable in nanoc 4.x.
+HashSyntax:
+  Enabled: false
+
+# Hash parameters should not have braces, but this cop is unable to distinguish
+# between has parameters and methods that take a hash as a param.
+BracesAroundHashParameters:
+  Enabled: false
+
+# nanoc relies on eval in several cases (code snippets and some helpers).
+Eval:
+  Enabled: false
+
+# The new Ruby 1.9 lambda literal syntax cannot be used, because Ruby 1.8
+# compatibility is required.
+#
+# Re-enable in nanoc 4.x.
+Lambda:
+  Enabled: false
+
+# Only used for deprecated code that is gone in nanoc 4.x anyway.
+#
+# Re-enable in nanoc 4.x.
+ClassVars:
+  Enabled: false
+
+
+
+# ----- DISABLED (opinionated) -----
+
+# Parameters are indented one soft tab instead.
+AlignParameters:
+  Enabled: false
+
+# We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
+# there’s no point in enforcing ASCII comments.
+AsciiComments:
+  Enabled: false
+
+# Personal convention is to use “memo” and an appropriate name for the element.
+SingleLineBlockParams:
+  Enabled: false
+
+# Mostly long hardcoded strings which I’d rather not break up (yet).
+#
+# Re-enable in nanoc 4.x.
+LineLength:
+  Enabled: false
+
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Possibly re-enable in nanoc 4.x.
+ClassLength:
+  Enabled: false
+
+# Personal convention is to use colon-less annotations.
+CommentAnnotation:
+  Enabled: false
+
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Possibly re-enable in nanoc 4.x.
+CyclomaticComplexity:
+  Enabled: false
+
+# It does not make sense to enforce everything to have documentation.
+Documentation:
+  Enabled: false
+
+# Personal preference is putting the dot at the end of the line, so the reader
+# knows that the expression does not end on this line.
+DotPosition:
+  Enabled: false
+
+# Personal preference is to have symmetric blank lines inside module and class
+# definitions.
+EmptyLinesAroundBody:
+  Enabled: false
+
+# No personal preference over how to format strings.
+FavorSprintf:
+  Enabled: false
+
+# I prefer negated if because unless is hard to parse mentally.
+FavorUnlessOverNegatedIf:
+  Enabled: false
+
+# nanoc suppresses exceptions for valid reasons in a few cases.
+HandleExceptions:
+  Enabled: false
+
+# if/unless at the end of the line makes it too easy to oversee.
+IfUnlessModifier:
+  Enabled: false
+
+# Inconsistent AccessModifierIndentation:EnforcedStyle set to `outdent`
+IndentationWidth:
+  Enabled: false
+
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Possibly re-enable in nanoc 4.x.
+MethodLength:
+  Enabled: false
+
+# Personal preference is to have decent constructors for exceptions rather than
+# just a class and a message.
+RaiseArgs:
+  Enabled: false
+
+# Personal preference is to use `raise` to signal exceptions (normal control
+# flow should not use exceptions anyway).
+SignalException:
+  Enabled: false
+
+# Personal preference is to have space inside square brackets.
+SpaceInsideBrackets:
+  Enabled: false
+
+# Some methods that appear to be accessors (return a single value or set a
+# single value) should still not be considered to be accessors. This is a purely
+# semantic difference.
+TrivialAccessors:
+  Enabled: false

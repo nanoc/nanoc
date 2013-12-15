@@ -26,11 +26,11 @@ module Nanoc::Filters
     #   `:xhtml` types.
     #
     # @option params [Hash] :namespaces The pairs `prefix => uri` to define
-    #   any namespace you want to use in the XPath expressions. This param 
+    #   any namespace you want to use in the XPath expressions. This param
     #   is useful only for the `:xml` and `:xhtml` types.
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Set assigns so helper function can be used
       @item_rep = assigns[:item_rep] if @item_rep.nil?
 
@@ -63,9 +63,9 @@ module Nanoc::Filters
         nokogiri_process(content, selectors, namespaces, klass, params[:type])
       else
         raise RuntimeError.new(
-          "The relativize_paths needs to know the type of content to " +
-          "process. Pass a :type to the filter call (:html for HTML, " +
-          ":xhtml for XHTML, :xml for XML, or :css for CSS).")
+          'The relativize_paths needs to know the type of content to ' +
+          'process. Pass a :type to the filter call (:html for HTML, ' +
+          ':xhtml for XHTML, :xml for XML, or :css for CSS).')
       end
     end
 
@@ -73,7 +73,7 @@ module Nanoc::Filters
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings
-      namespaces = namespaces.inject({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
+      namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
       doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
@@ -96,9 +96,8 @@ module Nanoc::Filters
     end
 
     def path_is_relativizable?(s)
-      s[0,1] == '/'
+      s[0, 1] == '/'
     end
 
   end
 end
-

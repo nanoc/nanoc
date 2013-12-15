@@ -9,7 +9,7 @@ module Nanoc::CLI
 
     # @option params [Nanoc::CLI::Command, nil] command The command that is
     #   currently being executed, or nil if there is none
-    def initialize(params={})
+    def initialize(params = {})
       @command = params[:command]
     end
 
@@ -19,11 +19,11 @@ module Nanoc::CLI
     #   currently being executed, or nil if there is none
     #
     # @return [void]
-    def self.handle_while(params={}, &block)
+    def self.handle_while(params = {}, &block)
       if @disabled
         yield
       else
-        self.new(params).handle_while(&block)
+        new(params).handle_while(&block)
       end
     end
 
@@ -52,7 +52,7 @@ module Nanoc::CLI
     # @api private
     def handle_while(&block)
       # Set exit handler
-      [ 'INT', 'TERM' ].each do |signal|
+      %w( INT TERM ).each do |signal|
         Signal.trap(signal) do
           puts
           exit!(0)
@@ -60,7 +60,7 @@ module Nanoc::CLI
       end
       begin
         Signal.trap('USR1') do
-          puts "Caught USR1; dumping a stack trace"
+          puts 'Caught USR1; dumping a stack trace'
           puts caller.map { |i| "  #{i}" }.join("\n")
         end
       rescue ArgumentError
@@ -71,10 +71,10 @@ module Nanoc::CLI
     rescue Nanoc::Errors::GenericTrivial => e
       $stderr.puts "Error: #{e.message}"
       exit(1)
-    rescue Interrupt => e
+    rescue Interrupt
       exit(1)
     rescue StandardError, ScriptError => e
-      self.print_error(e)
+      print_error(e)
       exit(1)
     end
 
@@ -85,7 +85,7 @@ module Nanoc::CLI
     #
     # @return [void]
     def self.print_error(error)
-      self.new.print_error(error)
+      new.print_error(error)
     end
 
     # Prints the given error to stderr. Includes message, possible resolution
@@ -117,14 +117,14 @@ module Nanoc::CLI
     def write_compact_error(error, stream)
       # Header
       stream.puts
-      stream.puts "Captain! We’ve been hit!"
+      stream.puts 'Captain! We’ve been hit!'
 
       # Sections
-      self.write_error_message(    stream, error)
-      self.write_stack_trace(      stream, error)
+      write_error_message(stream, error)
+      write_stack_trace(stream, error)
 
       # Issue link
-      self.write_issue_link(stream)
+      write_issue_link(stream)
     end
 
     # Writes a verbose representation of the error on the given stream.
@@ -141,14 +141,14 @@ module Nanoc::CLI
       stream.puts "Crashlog created at #{Time.now}"
 
       # Sections
-      self.write_error_message(      stream, error, :verbose => true)
-      self.write_stack_trace(        stream, error, :verbose => true)
-      self.write_version_information(stream,        :verbose => true)
-      self.write_system_information( stream,        :verbose => true)
-      self.write_installed_gems(     stream,        :verbose => true)
-      self.write_environment(        stream,        :verbose => true)
-      self.write_gemfile_lock(       stream,        :verbose => true)
-      self.write_load_paths(         stream,        :verbose => true)
+      write_error_message(      stream, error, :verbose => true)
+      write_stack_trace(        stream, error, :verbose => true)
+      write_version_information(stream,        :verbose => true)
+      write_system_information( stream,        :verbose => true)
+      write_installed_gems(     stream,        :verbose => true)
+      write_environment(        stream,        :verbose => true)
+      write_gemfile_lock(       stream,        :verbose => true)
+      write_load_paths(         stream,        :verbose => true)
     end
 
   protected
@@ -226,7 +226,7 @@ module Nanoc::CLI
         # Build message
         if gem_name
           if self.using_bundler?
-            "Make sure the gem is added to Gemfile and run `bundle install`."
+            'Make sure the gem is added to Gemfile and run `bundle install`.'
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
           end
@@ -246,7 +246,7 @@ module Nanoc::CLI
       defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
     end
 
-    def write_section_header(stream, title, params={})
+    def write_section_header(stream, title, params = {})
       stream.puts
       if params[:verbose]
         stream.puts '===== ' + title.upcase + ':'
@@ -256,11 +256,11 @@ module Nanoc::CLI
       stream.puts
     end
 
-    def write_error_message(stream, error, params={})
-      self.write_section_header(stream, 'Message', params)
+    def write_error_message(stream, error, params = {})
+      write_section_header(stream, 'Message', params)
 
       stream.puts "#{error.class}: #{error.message}"
-      resolution = self.resolution_for(error)
+      resolution = resolution_for(error)
       stream.puts "#{resolution}" if resolution
     end
 
@@ -276,51 +276,49 @@ module Nanoc::CLI
       end
     end
 
-    def write_issue_link(stream, params={})
+    def write_issue_link(stream, params = {})
       stream.puts
-      stream.puts "If you believe this is a bug in nanoc, please do report it at"
-      stream.puts "-> https://github.com/nanoc/nanoc/issues/new <-"
+      stream.puts 'If you believe this is a bug in nanoc, please do report it at'
+      stream.puts '-> https://github.com/nanoc/nanoc/issues/new <-'
       stream.puts
-      stream.puts "A detailed crash log has been written to ./crash.log."
+      stream.puts 'A detailed crash log has been written to ./crash.log.'
     end
 
-    def write_version_information(stream, params={})
-      self.write_section_header(stream, 'Version information', params)
+    def write_version_information(stream, params = {})
+      write_section_header(stream, 'Version information', params)
       stream.puts Nanoc.version_information
     end
 
-    def write_system_information(stream, params={})
-      begin
-        uname = `uname -a`
-        self.write_section_header(stream, 'System information', params)
-        stream.puts uname
-      rescue Errno::ENOENT
-      end
+    def write_system_information(stream, params = {})
+      uname = `uname -a`
+      write_section_header(stream, 'System information', params)
+      stream.puts uname
+    rescue Errno::ENOENT
     end
 
-    def write_installed_gems(stream, params={})
-      self.write_section_header(stream, 'Installed gems', params)
-      self.gems_and_versions.each do |g|
+    def write_installed_gems(stream, params = {})
+      write_section_header(stream, 'Installed gems', params)
+      gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
       end
     end
 
-    def write_environment(stream, params={})
-      self.write_section_header(stream, 'Environment', params)
+    def write_environment(stream, params = {})
+      write_section_header(stream, 'Environment', params)
       ENV.sort.each do |e|
         stream.puts "#{e.first} => #{e.last.inspect}"
       end
     end
 
-    def write_gemfile_lock(stream, params={})
+    def write_gemfile_lock(stream, params = {})
       if File.exist?('Gemfile.lock')
-        self.write_section_header(stream, 'Gemfile.lock', params)
+        write_section_header(stream, 'Gemfile.lock', params)
         stream.puts File.read('Gemfile.lock')
       end
     end
 
-    def write_load_paths(stream, params={})
-      self.write_section_header(stream, 'Load paths', params)
+    def write_load_paths(stream, params = {})
+      write_section_header(stream, 'Load paths', params)
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"
       end

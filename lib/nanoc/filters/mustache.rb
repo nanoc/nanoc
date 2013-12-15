@@ -15,7 +15,7 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       context = item.attributes.merge({ :yield => assigns[:content] })
       ::Mustache.render(content, context)
     end

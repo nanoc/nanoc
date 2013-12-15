@@ -27,7 +27,7 @@ module Nanoc
       #   @return [Array<Symbol>] The identifiers for this plugin
       def identifiers(*identifiers)
         if identifiers.empty?
-          Nanoc::PluginRegistry.instance.identifiers_of(self.superclass, self)
+          Nanoc::PluginRegistry.instance.identifiers_of(superclass, self)
         else
           register(self, *identifiers)
         end
@@ -44,11 +44,11 @@ module Nanoc
       # @overload identifier
       #
       #   @return [Symbol] The first identifier for this plugin
-      def identifier(identifier=nil)
+      def identifier(identifier = nil)
         if identifier
-          self.identifiers(identifier)
+          identifiers(identifier)
         else
-          Nanoc::PluginRegistry.instance.identifiers_of(self.superclass, self).first
+          Nanoc::PluginRegistry.instance.identifiers_of(superclass, self).first
         end
       end
 
@@ -93,7 +93,7 @@ module Nanoc
     #
     # @return [Nanoc::PluginRegistry] The shared plugin registry
     def self.instance
-      @instance ||= self.new
+      @instance ||= new
     end
 
     # Creates a new plugin registry. This should usually not be necessary; it
@@ -159,7 +159,7 @@ module Nanoc
     def find_all(klass)
       @identifiers_to_classes[klass] ||= {}
       res = {}
-      @identifiers_to_classes[klass].each_pair { |k,v| res[k] = resolve(v, k) }
+      @identifiers_to_classes[klass].each_pair { |k, v| res[k] = resolve(v, k) }
       res
     end
 
@@ -200,7 +200,7 @@ module Nanoc
 
     def resolve(class_or_name, klass)
       if class_or_name.is_a?(String)
-        class_or_name.scan(/\w+/).inject(Kernel) do |memo, part|
+        class_or_name.scan(/\w+/).reduce(Kernel) do |memo, part|
           memo.const_get(part)
         end
       else

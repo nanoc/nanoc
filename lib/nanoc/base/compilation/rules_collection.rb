@@ -62,7 +62,7 @@ module Nanoc
     #
     # @param [Nanoc::Layout] layout The layout for which to fetch the filter.
     #
-    # @return [Array, nil] A tuple containing the filter name and the filter 
+    # @return [Array, nil] A tuple containing the filter name and the filter
     #   arguments for the given layout.
     def filter_for_layout(layout)
       @layout_filter_mapping.each_pair do |layout_pattern, filter_name_and_args|

@@ -21,7 +21,7 @@ module Nanoc::CLI::Commands
 
       # Get list of plugins (before and after)
       plugins_before = Nanoc::PluginRegistry.instance.all
-      self.site.code_snippets if self.site
+      site.code_snippets if site
       plugins_after  = Nanoc::PluginRegistry.instance.all
 
       # Divide list of plugins into builtin and custom
@@ -29,7 +29,7 @@ module Nanoc::CLI::Commands
       plugins_custom  = plugins_after - plugins_before
 
       # Find max identifiers length
-      plugin_with_longest_identifiers = plugins_after.inject do |longest, current|
+      plugin_with_longest_identifiers = plugins_after.reduce do |longest, current|
         longest[:identifiers].join(', ').size > current[:identifiers].join(', ').size ? longest : current
       end
       max_identifiers_length = plugin_with_longest_identifiers[:identifiers].join(', ').size
@@ -53,7 +53,7 @@ module Nanoc::CLI::Commands
           # Print type
           puts "  #{type}:"
           if relevant_plugins.empty?
-            puts "    (none)"
+            puts '    (none)'
             next
           end
 

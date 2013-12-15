@@ -14,12 +14,12 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Run command
       stdout = ''
       stderr = ''
       status = systemu(
-        [ 'asciidoc', '-o', '-', '-' ],
+        %w( asciidoc -o - - ),
         'stdin'  => content,
         'stdout' => stdout,
         'stderr' => stderr)
@@ -27,7 +27,7 @@ module Nanoc::Filters
       # Show errors
       unless status.success?
         $stderr.puts stderr
-        raise RuntimeError, "AsciiDoc filter failed with status #{status}"
+        raise "AsciiDoc filter failed with status #{status}"
       end
 
       # Get result

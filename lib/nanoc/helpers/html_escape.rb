@@ -28,7 +28,7 @@ module Nanoc::Helpers
     # @param [String] string The string to escape
     #
     # @return [String] The escaped string
-    def html_escape(string=nil, &block)
+    def html_escape(string = nil, &block)
       if block_given?
         # Capture and escape block
         data = capture(&block)
@@ -43,12 +43,12 @@ module Nanoc::Helpers
                gsub('>', '&gt;').
                gsub('"', '&quot;')
       else
-        raise RuntimeError, "The #html_escape or #h function needs either a " \
+        raise "The #html_escape or #h function needs either a " \
           "string or a block to HTML-escape, but neither a string nor a block was given"
       end
     end
 
-    alias h html_escape
+    alias_method :h, :html_escape
 
   end
 

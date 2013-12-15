@@ -59,18 +59,18 @@ module Nanoc::Extra
     #
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
-    def all_files_in(dir_name, recursion_limit=10)
+    def all_files_in(dir_name, recursion_limit = 10)
       Dir[dir_name + '/**/*'].map do |fn|
         case File.ftype(fn)
         when 'link'
           if 0 == recursion_limit
             raise MaxSymlinkDepthExceededError.new(fn)
           else
-            absolute_target = self.resolve_symlink(fn)
+            absolute_target = resolve_symlink(fn)
             if File.file?(absolute_target)
               fn
             else
-              all_files_in(absolute_target, recursion_limit-1).map do |sfn|
+              all_files_in(absolute_target, recursion_limit - 1).map do |sfn|
                 fn + sfn[absolute_target.size..-1]
               end
             end
@@ -100,7 +100,7 @@ module Nanoc::Extra
     #
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
-    def resolve_symlink(filename, recursion_limit=5)
+    def resolve_symlink(filename, recursion_limit = 5)
       target = File.readlink(filename)
       absolute_target = File.expand_path(target, File.dirname(filename))
 
@@ -109,7 +109,7 @@ module Nanoc::Extra
         if 0 == recursion_limit
           raise MaxSymlinkDepthExceededError.new(absolute_target)
         else
-          self.resolve_symlink(absolute_target, recursion_limit-1)
+          resolve_symlink(absolute_target, recursion_limit - 1)
         end
       when 'file', 'directory'
         absolute_target

@@ -25,7 +25,7 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Find imports (hacky)
       imported_filenames = self.imports_in_content(content)
 

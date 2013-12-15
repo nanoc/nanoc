@@ -17,12 +17,12 @@ module Nanoc::Extra::Checking::Checks
     # @return [void]
     def run
       # TODO de-duplicate this (duplicated in external links check)
-      filenames = self.output_filenames.select { |f| File.extname(f) == '.html' }
+      filenames = output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
-      hrefs_with_filenames.each_pair do |href, filenames|
-        filenames.each do |filename|
+      hrefs_with_filenames.each_pair do |href, fns|
+        fns.each do |filename|
           unless valid?(href, filename)
-          self.add_issue(
+          add_issue(
             "reference to #{href}",
             :subject  => filename)
           end
@@ -65,7 +65,7 @@ module Nanoc::Extra::Checking::Checks
       return true if File.directory?(path) && @site.config[:index_filenames].any? { |fn| File.file?(File.join(path, fn)) }
 
       # Nope :(
-      return false
+      false
     end
 
     def excluded?(href)
@@ -76,4 +76,3 @@ module Nanoc::Extra::Checking::Checks
   end
 
 end
-

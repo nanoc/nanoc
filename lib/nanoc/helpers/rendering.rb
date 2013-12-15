@@ -77,7 +77,7 @@ module Nanoc::Helpers
     #
     # @return [String, nil] The rendered partial, or nil if this method was
     #   invoked with a block
-    def render(identifier, other_assigns={}, &block)
+    def render(identifier, other_assigns = {}, &block)
       # FIXME ugly
       if identifier.is_a?(String)
         identifier = Nanoc::Identifier.from_string(identifier)

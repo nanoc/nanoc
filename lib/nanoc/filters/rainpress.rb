@@ -13,7 +13,7 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       ::Rainpress.compress(content, params)
     end
 

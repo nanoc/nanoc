@@ -1,4 +1,4 @@
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 gemspec
 
@@ -6,6 +6,7 @@ gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
 gem 'coderay'
+gem 'compass'
 gem 'coffee-script'
 gem 'debugger'
 gem 'erubis'
@@ -39,6 +40,7 @@ gem 'typogruby'
 gem 'uglifier'
 gem 'w3c_validators'
 gem 'yuicompressor'
+gem 'rubocop', :github => 'bbatsov/rubocop'
 
 # disabled until colorize/colored issue is fixed
 #gem 'coveralls', :require => false
