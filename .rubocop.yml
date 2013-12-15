@@ -28,12 +28,6 @@ CollectionMethods:
     detect: 'find'
     find_all: 'select'
 
-TrailingBlankLines:
-  Enabled: true
-
-TrailingWhitespace:
-  Enabled: true
-
 CaseIndentation:
   Enabled: true
 
@@ -128,6 +122,12 @@ StringLiterals:
   Enabled: true
 
 Syntax:
+  Enabled: true
+
+TrailingBlankLines:
+  Enabled: true
+
+TrailingWhitespace:
   Enabled: true
 
 
