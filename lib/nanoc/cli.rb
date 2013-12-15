@@ -102,9 +102,9 @@ protected
 
     # Add other commands
     cmd_filenames = Dir[File.dirname(__FILE__) + '/cli/commands/*.rb']
-    cmd_filenames.each do |filename|
-      next if File.basename(filename, '.rb') == 'nanoc'
-      cmd = load_command_at(filename)
+    cmd_filenames.each do |cmd_filename|
+      next if File.basename(cmd_filename, '.rb') == 'nanoc'
+      cmd = load_command_at(cmd_filename)
       add_command(cmd)
     end
   end

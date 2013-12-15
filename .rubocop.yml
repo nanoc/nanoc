@@ -94,6 +94,9 @@ RedundantSelf:
 RescueModifier:
   Enabled: true
 
+ShadowingOuterLocalVariable:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -232,9 +235,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-ShadowingOuterLocalVariable:
-  Enabled: false
 
 SignalException:
   Enabled: false

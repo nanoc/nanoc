@@ -14,8 +14,8 @@ module Nanoc::Extra::Checking::Checks
       # TODO de-duplicate this (duplicated in external links check)
       filenames = output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
-      hrefs_with_filenames.each_pair do |href, filenames|
-        filenames.each do |filename|
+      hrefs_with_filenames.each_pair do |href, fns|
+        fns.each do |filename|
           unless valid?(href, filename)
           add_issue(
             "reference to #{href}",

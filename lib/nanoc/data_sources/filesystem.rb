@@ -143,14 +143,10 @@ module Nanoc::DataSources
     #     'content/qux' => [ nil,    'html' ]
     #   }
     def all_split_files_in(dir_name)
-      # Get all good file names
-      filenames = all_files_in(dir_name)
-      filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
+      grouped_filenames = all_files_in(dir_name).
+        reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }.
+        group_by { |fn| basename_of(fn) }
 
-      # Group by identifier
-      grouped_filenames = filenames.group_by { |fn| basename_of(fn) }
-
-      # Convert values into metafile/content file extension tuple
       grouped_filenames.each_pair do |key, filenames|
         # Divide
         meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
@@ -169,7 +165,6 @@ module Nanoc::DataSources
         filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '': nil
       end
 
-      # Done
       grouped_filenames
     end
 
