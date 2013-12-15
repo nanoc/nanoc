@@ -128,22 +128,22 @@ class OrderedHash < ::Hash
   end
 
   def unshift(k, v)
-    unless self.include? k
+    if self.include? k
+      false
+    else
       @order.unshift k
       orig_store(k, v)
       true
-    else
-      false
     end
   end
 
   def push(k, v)
-    unless self.include? k
+    if self.include? k
+      false
+    else
       @order.push k
       orig_store(k, v)
       true
-    else
-      false
     end
   end
 

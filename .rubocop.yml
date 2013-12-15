@@ -130,6 +130,9 @@ TrailingBlankLines:
 TrailingWhitespace:
   Enabled: true
 
+UnlessElse:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -283,9 +286,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-UnlessElse:
-  Enabled: false
 
 UselessAssignment:
   Enabled: false
