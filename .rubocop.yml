@@ -216,6 +216,11 @@ MethodLength:
 RaiseArgs:
   Enabled: false
 
+# Personal preference is to use `raise` to signal exceptions (normal control
+# flow should not use exceptions anyway).
+SignalException:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
@@ -235,9 +240,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SignalException:
-  Enabled: false
 
 SingleLineMethods:
   Enabled: false
