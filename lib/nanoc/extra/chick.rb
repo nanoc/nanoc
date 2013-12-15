@@ -98,7 +98,7 @@ module Nanoc::Extra
         request = Rack::Request.new(env)
 
         # Build headers and strip HTTP_
-        request_headers = env.inject({}) do |m, (k, v)|
+        request_headers = env.reduce({}) do |m, (k, v)|
           k =~ /^HTTP_(.*)$/ && v ? m.merge($1.gsub(/_/, '-') => v) : m
         end
 
@@ -114,7 +114,7 @@ module Nanoc::Extra
           # Build Rack response triplet
           return [
             response.code.to_i,
-            response.to_hash.inject({}) { |m, (k, v)| m.merge(k => v[0]) },
+            response.to_hash.reduce({}) { |m, (k, v)| m.merge(k => v[0]) },
             [ response.body ]
           ]
         end

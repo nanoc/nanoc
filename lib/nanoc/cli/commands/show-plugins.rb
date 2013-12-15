@@ -28,7 +28,7 @@ module Nanoc::CLI::Commands
       plugins_custom  = plugins_after - plugins_before
 
       # Find max identifiers length
-      plugin_with_longest_identifiers = plugins_after.inject do |longest, current|
+      plugin_with_longest_identifiers = plugins_after.reduce do |longest, current|
         longest[:identifiers].join(', ').size > current[:identifiers].join(', ').size ? longest : current
       end
       max_identifiers_length = plugin_with_longest_identifiers[:identifiers].join(', ').size

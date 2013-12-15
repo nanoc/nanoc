@@ -26,7 +26,7 @@ module Nanoc::ArrayExtensions
   #
   # @return [Array] The converted array
   def stringify_keys_recursively
-    inject([]) do |array, element|
+    reduce([]) do |array, element|
       array + [ element.respond_to?(:stringify_keys_recursively) ? element.stringify_keys_recursively : element ]
     end
   end

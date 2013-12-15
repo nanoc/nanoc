@@ -55,7 +55,7 @@ module Nanoc::Helpers
       end
 
       # Join attributes
-      attributes = attributes.inject('') do |memo, (key, value)|
+      attributes = attributes.reduce('') do |memo, (key, value)|
         memo + key.to_s + '="' + h(value) + '" '
       end
 

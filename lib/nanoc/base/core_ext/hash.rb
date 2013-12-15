@@ -28,7 +28,7 @@ module Nanoc::HashExtensions
   #
   # @return [Hash] The converted hash
   def stringify_keys_recursively
-    inject({}) do |hash, (key, value)|
+    reduce({}) do |hash, (key, value)|
       hash.merge(key.to_s => value.respond_to?(:stringify_keys_recursively) ? value.stringify_keys_recursively : value)
     end
   end

@@ -206,7 +206,7 @@ module Nanoc
 
     def resolve(class_or_name, klass)
       if class_or_name.is_a?(String)
-        class_or_name.scan(/\w+/).inject(Kernel) do |memo, part|
+        class_or_name.scan(/\w+/).reduce(Kernel) do |memo, part|
           memo.const_get(part)
         end
       else

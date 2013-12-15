@@ -6,15 +6,6 @@ AccessModifierIndentation:
   Enabled: true
   EnforcedStyle: outdent
 
-# Inject is omitted here, at least for the time being.
-CollectionMethods:
-  Enabled: true
-  PreferredMethods:
-    collect: 'map'
-    collect!: 'map!'
-    detect: 'find'
-    find_all: 'select'
-
 
 
 # ----- DISABLED (hard) -----

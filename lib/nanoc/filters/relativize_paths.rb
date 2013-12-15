@@ -71,7 +71,7 @@ module Nanoc::Filters
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings
-      namespaces = namespaces.inject({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
+      namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
       doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
