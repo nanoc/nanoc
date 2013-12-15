@@ -40,7 +40,7 @@ module Nanoc::DataSources
           :filename  => filename,
         }
         attributes[:is_hidden] = true unless config[:hide_items] == false
-        identifier = filename[(prefix.length+1)..-1] + '/'
+        identifier = filename[(prefix.length + 1)..-1] + '/'
         mtime      = File.mtime(filename)
         checksum   = Pathname.new(filename).checksum
 

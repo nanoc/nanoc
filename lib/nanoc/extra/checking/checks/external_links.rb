@@ -54,7 +54,7 @@ module ::Nanoc::Extra::Checking::Checks
       def next
         @mutex.synchronize do
           @index += 1
-          return @array[@index-1]
+          return @array[@index - 1]
         end
       end
 

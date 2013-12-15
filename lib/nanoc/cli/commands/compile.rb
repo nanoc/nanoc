@@ -216,7 +216,7 @@ module Nanoc::CLI::Commands
         count = samples.size
         min   = samples.min
         tot   = samples.inject(0) { |memo, i| memo + i }
-        avg   = tot/count
+        avg   = tot / count
         max   = samples.max
 
         # Format stats

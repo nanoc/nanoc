@@ -103,9 +103,9 @@ module Nanoc::DataSources
 
         # Get identifier
         if meta_filename
-          identifier = identifier_for_filename(meta_filename[(dir_name.length+1)..-1])
+          identifier = identifier_for_filename(meta_filename[(dir_name.length + 1)..-1])
         elsif content_filename
-          identifier = identifier_for_filename(content_filename[(dir_name.length+1)..-1])
+          identifier = identifier_for_filename(content_filename[(dir_name.length + 1)..-1])
         else
           raise "meta_filename and content_filename are both nil"
         end
@@ -162,7 +162,7 @@ module Nanoc::DataSources
 
         # Reorder elements and convert to extnames
         filenames[0] = meta_filenames[0]    ? 'yaml'                                   : nil
-        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '': nil
+        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '' : nil
       end
 
       grouped_filenames

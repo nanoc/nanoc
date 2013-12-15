@@ -22,7 +22,7 @@ module Nanoc::Helpers
         idx = @item.identifier.index('/', idx_start)
         break if idx.nil?
 
-        idx_start = idx+1
+        idx_start = idx + 1
         identifier = @item.identifier[0..idx]
         trail << @items[identifier]
       end

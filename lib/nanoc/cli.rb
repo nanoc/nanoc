@@ -119,7 +119,7 @@ protected
 
       # Get supercommand
       pieces = filename.gsub(/^commands\/|\.rb$/, '').split('/')
-      pieces = pieces[0, pieces.size-1] || []
+      pieces = pieces[0, pieces.size - 1] || []
       root = Nanoc::CLI.root_command
       supercommand = pieces.inject(root) do |cmd, piece|
         cmd.nil? ? nil : cmd.command_named(piece)

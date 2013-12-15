@@ -112,6 +112,15 @@ SpaceAroundBlockBraces:
 SpaceAroundEqualsInParameterDefault:
   Enabled: true
 
+SpaceAroundOperators:
+  Enabled: true
+
+SpaceInsideHashLiteralBraces:
+  Enabled: true
+
+SpaceInsideParens:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -236,6 +245,10 @@ RaiseArgs:
 SignalException:
   Enabled: false
 
+# Personal preference is to have space inside square brackets.
+SpaceInsideBrackets:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
@@ -255,18 +268,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SpaceAroundOperators:
-  Enabled: false
-
-SpaceInsideBrackets:
-  Enabled: false
-
-SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-SpaceInsideParens:
-  Enabled: false
 
 SpecialGlobalVars:
   Enabled: false

@@ -116,7 +116,7 @@ module Nanoc::CLI
 
     # @see IO.winsize=
     def winsize=(arg)
-      @stream.winsize=(arg)
+      @stream.winsize = (arg)
     end
 
   protected

@@ -95,11 +95,11 @@ class OrderedHash < ::Hash
   end
 
   def first
-    {@order.first => self[@order.first]}
+    { @order.first => self[@order.first] }
   end
 
   def last
-    {@order.last => self[@order.last]}
+    { @order.last => self[@order.last] }
   end
 
   def invert

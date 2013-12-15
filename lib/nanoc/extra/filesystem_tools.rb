@@ -70,7 +70,7 @@ module Nanoc::Extra
             if File.file?(absolute_target)
               fn
             else
-              all_files_in(absolute_target, recursion_limit-1).map do |sfn|
+              all_files_in(absolute_target, recursion_limit - 1).map do |sfn|
                 fn + sfn[absolute_target.size..-1]
               end
             end
@@ -109,7 +109,7 @@ module Nanoc::Extra
         if 0 == recursion_limit
           raise MaxSymlinkDepthExceededError.new(absolute_target)
         else
-          resolve_symlink(absolute_target, recursion_limit-1)
+          resolve_symlink(absolute_target, recursion_limit - 1)
         end
       when 'file', 'directory'
         absolute_target

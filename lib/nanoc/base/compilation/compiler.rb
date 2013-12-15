@@ -250,7 +250,7 @@ module Nanoc
           @site.config[:index_filenames].each do |index_filename|
             if rep.paths[snapshot][-index_filename.length..-1] == index_filename
               # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
+              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length - 1]
               break
             end
           end

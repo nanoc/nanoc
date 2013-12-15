@@ -120,9 +120,9 @@ module Nanoc::CLI
       stream.puts "Captain! We’ve been hit!"
 
       # Sections
-      write_error_message(    stream, error)
+      write_error_message(stream, error)
       write_compilation_stack(stream, error)
-      write_stack_trace(      stream, error)
+      write_stack_trace(stream, error)
 
       # Issue link
       write_issue_link(stream)
@@ -142,15 +142,15 @@ module Nanoc::CLI
       stream.puts "Crashlog created at #{Time.now}"
 
       # Sections
-      write_error_message(      stream, error, :verbose => true)
-      write_compilation_stack(  stream, error, :verbose => true)
-      write_stack_trace(        stream, error, :verbose => true)
+      write_error_message(stream, error, :verbose => true)
+      write_compilation_stack(stream, error, :verbose => true)
+      write_stack_trace(stream, error, :verbose => true)
       write_version_information(stream,        :verbose => true)
-      write_system_information( stream,        :verbose => true)
-      write_installed_gems(     stream,        :verbose => true)
-      write_environment(        stream,        :verbose => true)
-      write_gemfile_lock(       stream,        :verbose => true)
-      write_load_paths(         stream,        :verbose => true)
+      write_system_information(stream,        :verbose => true)
+      write_installed_gems(stream,        :verbose => true)
+      write_environment(stream,        :verbose => true)
+      write_gemfile_lock(stream,        :verbose => true)
+      write_load_paths(stream,        :verbose => true)
     end
 
   protected

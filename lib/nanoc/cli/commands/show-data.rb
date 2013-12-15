@@ -54,7 +54,7 @@ module Nanoc::CLI::Commands
 
     def print_header(title)
       header = '=' * 78
-      header[3..(title.length+5)] = " #{title} "
+      header[3..(title.length + 5)] = " #{title} "
 
       puts
       puts header

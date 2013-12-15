@@ -50,7 +50,7 @@ module Nanoc::CLI::Commands
             @notifier.notify('Compilation complete')
           end
 
-          time_spent = ((Time.now - start)*1000.0).round
+          time_spent = ((Time.now - start) * 1000.0).round
           puts "done in #{format '%is %ims', *(time_spent.divmod(1000))}"
         rescue Exception => e
           # TODO include icon (--image misc/error-icon.png)
