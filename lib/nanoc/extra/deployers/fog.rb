@@ -31,7 +31,7 @@ module Nanoc::Extra::Deployers
       config.delete(:kind)
 
       # Validate params
-      error 'The path requires no trailing slash' if path && path[-1,1] == '/'
+      error 'The path requires no trailing slash' if path && path[-1, 1] == '/'
 
       # Mock if necessary
       if self.dry_run?

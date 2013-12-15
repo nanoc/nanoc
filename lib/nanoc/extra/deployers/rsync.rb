@@ -40,7 +40,7 @@ module Nanoc::Extra::Deployers
 
       # Validate
       raise 'No dst found in deployment configuration' if dst.nil?
-      raise 'dst requires no trailing slash' if dst[-1,1] == '/'
+      raise 'dst requires no trailing slash' if dst[-1, 1] == '/'
 
       # Run
       if dry_run

@@ -35,14 +35,14 @@ class OrderedHash < ::Hash
     @order = []
   end
 
-  def store_only(a,b)
-    store a,b
+  def store_only(a, b)
+    store a, b
   end
   alias_method :orig_store, :store
 
-  def store(a,b)
+  def store(a, b)
     @order.push a unless key? a
-    super a,b
+    super a, b
   end
   alias_method :[]=, :store
 
@@ -72,7 +72,7 @@ class OrderedHash < ::Hash
   end
 
   def each
-    @order.each { |k| yield k,self[k] }
+    @order.each { |k| yield k, self[k] }
     self
   end
   alias_method :each_pair, :each
@@ -124,23 +124,23 @@ class OrderedHash < ::Hash
 
   def shift
     key = @order.first
-    key ? [key,delete(key)] : super
+    key ? [key, delete(key)] : super
   end
 
-  def unshift(k,v)
+  def unshift(k, v)
     unless self.include? k
       @order.unshift k
-      orig_store(k,v)
+      orig_store(k, v)
       true
     else
       false
     end
   end
 
-  def push(k,v)
+  def push(k, v)
     unless self.include? k
       @order.push k
-      orig_store(k,v)
+      orig_store(k, v)
       true
     else
       false
@@ -149,12 +149,12 @@ class OrderedHash < ::Hash
 
   def pop
     key = @order.last
-    key ? [key,delete(key)] : nil
+    key ? [key, delete(key)] : nil
   end
 
   def to_a
     ary = []
-    each { |k,v| ary << [k,v] }
+    each { |k, v| ary << [k, v] }
     ary
   end
 
@@ -164,12 +164,12 @@ class OrderedHash < ::Hash
 
   def inspect
     ary = []
-    each {|k,v| ary << k.inspect + "=>" + v.inspect}
+    each {|k, v| ary << k.inspect + "=>" + v.inspect}
     '{' + ary.join(", ") + '}'
   end
 
   def update(hsh2)
-    hsh2.each { |k,v| self[k] = v }
+    hsh2.each { |k, v| self[k] = v }
     self
   end
   alias_method :merge!, :update
@@ -180,7 +180,7 @@ class OrderedHash < ::Hash
 
   def select
     ary = []
-    each { |k,v| ary << [k,v] if yield k,v }
+    each { |k, v| ary << [k, v] if yield k, v }
     ary
   end
 

@@ -36,7 +36,7 @@ module Nanoc
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = {}
-      vertices.each_with_index do |v,i|
+      vertices.each_with_index do |v, i|
         @vertices[v] = i
       end
 

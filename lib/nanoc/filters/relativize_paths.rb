@@ -94,7 +94,7 @@ module Nanoc::Filters
     end
 
     def path_is_relativizable?(s)
-      s[0,1] == '/'
+      s[0, 1] == '/'
     end
 
   end

@@ -131,7 +131,7 @@ module Nanoc::Filters
         # Add language-something class
         unless has_class
           klass = element['class'] || ''
-          klass << ' ' unless [' ', nil].include?(klass[-1,1])
+          klass << ' ' unless [' ', nil].include?(klass[-1, 1])
           klass << "language-#{language}"
           element['class'] = klass
         end
@@ -193,7 +193,7 @@ module Nanoc::Filters
 
       # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
-      cmd << '-O' << params.map { |k,v| "#{k}=#{v}" }.join(',') unless params.empty?
+      cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
       # Run command
       stdout = StringIO.new

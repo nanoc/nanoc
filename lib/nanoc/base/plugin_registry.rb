@@ -160,7 +160,7 @@ module Nanoc
     def find_all(klass)
       @identifiers_to_classes[klass] ||= {}
       res = {}
-      @identifiers_to_classes[klass].each_pair { |k,v| res[k] = resolve(v, k) }
+      @identifiers_to_classes[klass].each_pair { |k, v| res[k] = resolve(v, k) }
       res
     end
 
