@@ -258,6 +258,12 @@ SignalException:
 SpaceInsideBrackets:
   Enabled: false
 
+# Some methods that appear to be accessors (return a single value or set a
+# single value) should still not be considered to be accessors. This is a purely
+# semantic difference.
+TrivialAccessors:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
@@ -277,9 +283,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-TrivialAccessors:
-  Enabled: false
 
 UnlessElse:
   Enabled: false
