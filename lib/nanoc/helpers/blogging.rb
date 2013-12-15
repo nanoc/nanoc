@@ -31,7 +31,7 @@ module Nanoc::Helpers
       blk = lambda { @items.select { |item| item[:kind] == 'article' } }
       if @items.frozen?
         @article_items ||= blk.call
-      else 
+      else
         blk.call
       end
     end
@@ -42,13 +42,13 @@ module Nanoc::Helpers
     #
     # @return [Array] A sorted array containing all articles
     def sorted_articles
-      blk = lambda do 
+      blk = lambda do
         articles.sort_by { |a| attribute_to_time(a[:created_at]) }.reverse
       end
 
       if @items.frozen?
         @sorted_article_items ||= blk.call
-      else 
+      else
         blk.call
       end
     end
