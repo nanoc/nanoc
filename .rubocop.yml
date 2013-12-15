@@ -42,6 +42,12 @@ Eval:
 Lambda:
   Enabled: false
 
+# Only used for deprecated code that is gone in nanoc 4.x anyway.
+#
+# Re-enable in nanoc 4.x.
+ClassVars:
+  Enabled: false
+
 
 
 # ----- DISABLED (opinionated) -----
@@ -70,12 +76,6 @@ LineLength:
 #
 # Possibly re-enable in nanoc 4.x.
 ClassLength:
-  Enabled: false
-
-# Only used for deprecated code that is gone in nanoc 4.x anyway.
-#
-# Re-enable in nanoc 4.x.
-ClassVars:
   Enabled: false
 
 # Personal convention is to use colon-less annotations.
