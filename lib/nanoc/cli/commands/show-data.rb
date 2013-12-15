@@ -16,9 +16,8 @@ module Nanoc::CLI::Commands
       load_site
 
       # Get data
-      items     = site.items
-      item_reps = items.map { |i| i.reps }.flatten
-      layouts   = site.layouts
+      items   = site.items
+      layouts = site.layouts
 
       # Get dependency tracker
       compiler = site.compiler

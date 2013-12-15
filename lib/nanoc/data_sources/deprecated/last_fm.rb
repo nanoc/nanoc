@@ -20,7 +20,7 @@ module Nanoc::DataSources
 
         # Get data
         @http_client ||= Nanoc::Extra::CHiCk::Client.new
-        status, headers, data = *@http_client.get(
+        _status, _headers, data = *@http_client.get(
           'http://ws.audioscrobbler.com/2.0/' +
             '?method=user.getRecentTracks' +
             '&format=json' +
@@ -35,7 +35,7 @@ module Nanoc::DataSources
         # Convert to items
         raw_items.enum_with_index.map do |raw_item, i|
           # Get artist data
-          artist_status, artist_headers, artist_data = *@http_client.get(
+          _artist_status, _artist_headers, artist_data = *@http_client.get(
             'http://ws.audioscrobbler.com/2.0/' +
               '?method=artist.getInfo' +
               '&format=json' +
@@ -61,7 +61,7 @@ module Nanoc::DataSources
             track_played_at = Time.now
             now_playing = true
           else
-            played_at = Time.parse(raw_item['date']['#text'])
+            track_played_at = Time.parse(raw_item['date']['#text'])
             now_playing = false
           end
 

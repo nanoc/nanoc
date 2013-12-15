@@ -7,7 +7,7 @@ begin
   d.freeze
   d.year
   needs_patch = false
-rescue => e
+rescue
   needs_patch = true
 end
 

@@ -101,7 +101,7 @@ module Nanoc::Extra::Checking
     end
 
     def check_classes_named(n)
-      classes = n.map do |a|
+      n.map do |a|
         klass = Nanoc::Extra::Checking::Check.named(a)
         raise Nanoc::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
         klass

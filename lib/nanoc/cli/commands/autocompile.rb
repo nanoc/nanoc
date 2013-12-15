@@ -48,7 +48,7 @@ module Nanoc::CLI::Commands
       unless handler
         begin
           handler = Rack::Handler::Mongrel
-        rescue LoadError => e
+        rescue LoadError
           handler = Rack::Handler::WEBrick
         end
       end

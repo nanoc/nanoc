@@ -49,7 +49,6 @@ module Nanoc::DataSources
     def create_object(dir_name, content, attributes, identifier, params = {})
       # Determine base path
       last_component = identifier.split('/')[-1] || dir_name
-      base_path = dir_name + identifier + last_component
 
       # Get filenames
       ext = params[:extension] || '.html'

@@ -71,7 +71,7 @@ module Nanoc::CLI
     rescue Nanoc::Errors::GenericTrivial => e
       $stderr.puts "Error: #{e.message}"
       exit(1)
-    rescue Interrupt => e
+    rescue Interrupt
       exit(1)
     rescue StandardError, ScriptError => e
       print_error(e)

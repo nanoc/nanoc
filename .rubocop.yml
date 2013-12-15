@@ -133,6 +133,9 @@ TrailingWhitespace:
 UnlessElse:
   Enabled: true
 
+UselessAssignment:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -286,9 +289,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-UselessAssignment:
-  Enabled: false
 
 WordArray:
   Enabled: false

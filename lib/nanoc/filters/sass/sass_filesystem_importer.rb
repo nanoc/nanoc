@@ -6,7 +6,7 @@ class ::Sass::Importers::Filesystem
 
   def _find(dir, name, options)
     # Find filename
-    full_filename, syntax = ::Sass::Util.destructure(find_real_file(dir, name, options))
+    full_filename, _syntax = ::Sass::Util.destructure(find_real_file(dir, name, options))
     return nil if full_filename.nil?
 
     # Create dependency

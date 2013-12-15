@@ -11,7 +11,7 @@ module Nanoc::DataSources
 
         # Get data
         @http_client ||= Nanoc::Extra::CHiCk::Client.new
-        status, headers, data = *@http_client.get("http://twitter.com/statuses/user_timeline/#{config[:username]}.json")
+        _status, _headers, data = *@http_client.get("http://twitter.com/statuses/user_timeline/#{config[:username]}.json")
 
         # Parse as JSON
         raw_items = JSON.parse(data)
