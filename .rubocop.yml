@@ -26,11 +26,6 @@ AccessModifierIndentation:
 HashSyntax:
   Enabled: false
 
-# We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
-# there’s no point in enforcing ASCII comments.
-AsciiComments:
-  Enabled: false
-
 # Hash parameters should not have braces, but this cop is unable to distinguish
 # between has parameters and methods that take a hash as a param.
 BracesAroundHashParameters:
@@ -53,6 +48,11 @@ Lambda:
 
 # Parameters are indented one soft tab instead.
 AlignParameters:
+  Enabled: false
+
+# We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
+# there’s no point in enforcing ASCII comments.
+AsciiComments:
   Enabled: false
 
 # Personal convention is to use “memo” and an appropriate name for the element.
