@@ -30,9 +30,9 @@ module Nanoc::Extra::Checking
     def list_checks
       load_dsl_if_available
 
-      puts "Available checks:"
+      puts 'Available checks:'
       puts
-      puts all_check_classes.map { |i| "  " + i.identifier.to_s }.sort.join("\n")
+      puts all_check_classes.map { |i| '  ' + i.identifier.to_s }.sort.join("\n")
     end
 
     # Runs all checks.
@@ -134,7 +134,7 @@ module Nanoc::Extra::Checking
       require 'colored'
 
       return if issues.empty?
-      puts "Issues found!"
+      puts 'Issues found!'
       issues.group_by { |i| i.subject }.to_a.sort_by { |p| p.first }.each do |pair|
         subject = pair.first
         issues  = pair.last

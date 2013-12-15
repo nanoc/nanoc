@@ -3,7 +3,9 @@
 usage       'view [options]'
 summary     'start the web server that serves static files'
 description <<-EOS
-Start the static web server. Unless specified, the web server will run on port 3000 and listen on all IP addresses. Running this static web server requires `adsf` (not `asdf`!).
+Start the static web server. Unless specified, the web server will run on port
+3000 and listen on all IP addresses. Running this static web server requires
+`adsf` (not `asdf`!).
 EOS
 
 required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'

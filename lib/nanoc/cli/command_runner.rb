@@ -49,7 +49,7 @@ module Nanoc::CLI
     # @return [void]
     def require_site
       if site.nil?
-        raise ::Nanoc::Errors::GenericTrivial, "The current working directory does not seem to be a nanoc site."
+        raise ::Nanoc::Errors::GenericTrivial, 'The current working directory does not seem to be a nanoc site.'
       end
     end
 
@@ -59,9 +59,9 @@ module Nanoc::CLI
     # @return [void]
     def load_site
       require_site
-      print "Loading site data… "
+      print 'Loading site data… '
       site.load
-      puts "done"
+      puts 'done'
     end
 
     # @return [Boolean] true if debug output is enabled, false if not

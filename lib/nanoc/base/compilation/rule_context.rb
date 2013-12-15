@@ -28,10 +28,10 @@ module Nanoc
     #   missing
     def initialize(params = {})
       rep = params.fetch(:rep) do
-        raise ArgumentError, "Required :rep option is missing"
+        raise ArgumentError, 'Required :rep option is missing'
       end
       compiler = params.fetch(:compiler) do
-        raise ArgumentError, "Required :compiler option is missing"
+        raise ArgumentError, 'Required :compiler option is missing'
       end
 
       super({

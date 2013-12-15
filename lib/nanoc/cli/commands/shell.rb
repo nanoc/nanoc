@@ -3,9 +3,9 @@
 usage       'shell'
 summary     'open a shell on the nanoc environment'
 aliases     'console'
-description <<-EOS
+description "
 Open an IRB shell on a context that contains @items, @layouts, @config and @site.
-EOS
+"
 
 module Nanoc::CLI::Commands
 

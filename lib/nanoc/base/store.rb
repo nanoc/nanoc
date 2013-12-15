@@ -44,7 +44,7 @@ module Nanoc
     #
     # @abstract This method must be implemented by the subclass.
     def data
-      raise NotImplementedError.new("Nanoc::Store subclasses must implement #data and #data=")
+      raise NotImplementedError.new('Nanoc::Store subclasses must implement #data and #data=')
     end
 
     # @param new_data The data that has been loaded from the disk
@@ -53,7 +53,7 @@ module Nanoc
     #
     # @return [void]
     def data=(new_data)
-      raise NotImplementedError.new("Nanoc::Store subclasses must implement #data and #data=")
+      raise NotImplementedError.new('Nanoc::Store subclasses must implement #data and #data=')
     end
 
     # Loads the data from the filesystem into memory. This method will set the

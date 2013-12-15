@@ -2,9 +2,9 @@
 
 usage       'deploy [options]'
 summary     'deploy the compiled site'
-description <<-EOS
+description "
 Deploys the compiled site. The compiled site contents in the output directory will be uploaded to the destination, which is specified using the `--target` option.
-EOS
+"
 
 option :t, :target,           'specify the location to deploy to (default: `default`)', :argument => :required
 flag   :C, :'no-check',       'do not run the issue checks marked for deployment'
@@ -23,7 +23,7 @@ module Nanoc::CLI::Commands
       if options[:'list-deployers']
         deployers      = Nanoc::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
         deployer_names = deployers.keys.sort_by { |k| k.to_s }
-        puts "Available deployers:"
+        puts 'Available deployers:'
         deployer_names.each do |name|
           puts "  #{name}"
         end
@@ -35,9 +35,9 @@ module Nanoc::CLI::Commands
 
       if options[:list]
         if deploy_configs.empty?
-          puts  "No deployment configurations."
+          puts  'No deployment configurations.'
         else
-          puts "Available deployment configurations:"
+          puts 'Available deployment configurations:'
           deploy_configs.keys.each do |name|
             puts "  #{name}"
           end
@@ -47,7 +47,7 @@ module Nanoc::CLI::Commands
 
       # Can't proceed further without a deploy config
       if deploy_configs.empty?
-        raise Nanoc::Errors::GenericTrivial, "The site has no deployment configurations."
+        raise Nanoc::Errors::GenericTrivial, 'The site has no deployment configurations.'
       end
 
       # Get target
@@ -59,7 +59,7 @@ module Nanoc::CLI::Commands
       # Get deployer
       names = Nanoc::Extra::Deployer.all.keys
       name = config.fetch(:kind) do
-        $stderr.puts "Warning: The specified deploy target does not have a kind attribute. Assuming rsync."
+        $stderr.puts 'Warning: The specified deploy target does not have a kind attribute. Assuming rsync.'
         'rsync'
       end
       deployer_class = Nanoc::Extra::Deployer.named(name)
@@ -71,13 +71,13 @@ module Nanoc::CLI::Commands
       unless options[:'no-check']
         runner = Nanoc::Extra::Checking::Runner.new(site)
         if runner.has_dsl?
-          puts "Running issue checks…"
+          puts 'Running issue checks…'
           ok = runner.run_for_deploy
           if !ok
-            puts "Issues found, deploy aborted."
+            puts 'Issues found, deploy aborted.'
             return
           end
-          puts "No issues found. Deploying!"
+          puts 'No issues found. Deploying!'
         end
       end
 

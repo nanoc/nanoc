@@ -33,7 +33,7 @@ module Nanoc::Filters
     # @return [String] The transformed content
     def run(content, params = {})
       if assigns[:layout].nil?
-        raise "The XSL filter can only be run as a layout"
+        raise 'The XSL filter can only be run as a layout'
       end
 
       xml = ::Nokogiri::XML(content)

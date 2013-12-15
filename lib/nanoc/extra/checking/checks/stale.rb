@@ -13,7 +13,7 @@ module Nanoc::Extra::Checking::Checks
         next if pruner.filename_excluded?(f)
         if !item_rep_paths.include?(f)
           add_issue(
-            "file without matching item",
+            'file without matching item',
             :subject  => f)
         end
       end

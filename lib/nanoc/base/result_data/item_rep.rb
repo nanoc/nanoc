@@ -28,32 +28,32 @@ module Nanoc
 
       # @deprecated
       def created
-        raise NotImplementedError, "Nanoc::ItemRep#created is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#created is no longer implemented'
       end
 
       # @deprecated
       def created?
-        raise NotImplementedError, "Nanoc::ItemRep#created? is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#created? is no longer implemented'
       end
 
       # @deprecated
       def modified
-        raise NotImplementedError, "Nanoc::ItemRep#modified is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#modified is no longer implemented'
       end
 
       # @deprecated
       def modified?
-        raise NotImplementedError, "Nanoc::ItemRep#modified? is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#modified? is no longer implemented'
       end
 
       # @deprecated
       def written
-        raise NotImplementedError, "Nanoc::ItemRep#written is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#written is no longer implemented'
       end
 
       # @deprecated
       def written?
-        raise NotImplementedError, "Nanoc::ItemRep#written? is no longer implemented"
+        raise NotImplementedError, 'Nanoc::ItemRep#written? is no longer implemented'
       end
 
     end

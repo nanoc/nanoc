@@ -13,8 +13,8 @@ module Nanoc::CLI
     ACTION_COLORS = {
       :create         => "\e[32m", # green
       :update         => "\e[33m", # yellow
-      :identical      => "",       # (nothing)
-      :skip           => "",       # (nothing)
+      :identical      => '',       # (nothing)
+      :skip           => '',       # (nothing)
       :delete         => "\e[31m"  # red
     }
 
@@ -47,7 +47,7 @@ module Nanoc::CLI
           ACTION_COLORS[action.to_sym],
           action,
           "\e[0m",
-          duration.nil? ? '' : "[%2.2fs]  " % [ duration ],
+          duration.nil? ? '' : '[%2.2fs]  ' % [ duration ],
           name
         ]
       )

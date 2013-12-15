@@ -93,7 +93,7 @@ protected
     @root_command = nil
 
     # Add root command
-    filename = File.dirname(__FILE__) + "/cli/commands/nanoc.rb"
+    filename = File.dirname(__FILE__) + '/cli/commands/nanoc.rb'
     @root_command = load_command_at(filename)
 
     # Add help command

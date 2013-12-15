@@ -124,6 +124,9 @@ SpaceInsideParens:
 SpecialGlobalVars:
   Enabled: true
 
+StringLiterals:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -271,9 +274,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-StringLiterals:
-  Enabled: false
 
 Syntax:
   Enabled: false

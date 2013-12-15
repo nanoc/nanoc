@@ -15,7 +15,7 @@ module Nanoc::Extra::Checking
     end
 
     def run
-      raise NotImplementedError.new("Nanoc::Extra::Checking::Check subclasses must implement #run")
+      raise NotImplementedError.new('Nanoc::Extra::Checking::Check subclasses must implement #run')
     end
 
     def add_issue(desc, params = {})

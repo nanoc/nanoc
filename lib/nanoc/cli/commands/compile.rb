@@ -51,7 +51,7 @@ module Nanoc::CLI::Commands
       #
       # @abstract
       def start
-        raise NotImplementedError, "Subclasses of Listener should implement #start"
+        raise NotImplementedError, 'Subclasses of Listener should implement #start'
       end
 
       # Stops the listener. The default implementation removes self from all notification center observers.
@@ -194,8 +194,8 @@ module Nanoc::CLI::Commands
         # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
-          $stderr.puts "Warning: profiling information may not be accurate because " +
-                       "some items were not compiled."
+          $stderr.puts 'Warning: profiling information may not be accurate because ' +
+                       'some items were not compiled.'
         end
 
         # Print header
@@ -401,7 +401,7 @@ module Nanoc::CLI::Commands
       load_site
       check_for_deprecated_usage
 
-      puts "Compiling site…"
+      puts 'Compiling site…'
       run_listeners_while do
         site.compile
         prune
@@ -461,7 +461,7 @@ module Nanoc::CLI::Commands
     def check_for_deprecated_usage
       # Check presence of --all option
       if options.key?(:all) || options.key?(:force)
-        $stderr.puts "Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect."
+        $stderr.puts 'Warning: the --force option (and its deprecated --all alias) are, as of nanoc 3.2, no longer supported and have no effect.'
       end
 
       # Warn if trying to compile a single item

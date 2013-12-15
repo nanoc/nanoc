@@ -137,7 +137,7 @@ module Nanoc
     #   value is undefined; if the filter outputs textual content, the return
     #   value will be the filtered content.
     def run(content_or_filename, params = {})
-      raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
+      raise NotImplementedError.new('Nanoc::Filter subclasses must implement #run')
     end
 
     # Returns a filename that is used to write data to. This method is only

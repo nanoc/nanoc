@@ -3,9 +3,9 @@
 usage       'show-rules [thing]'
 aliases     :explain
 summary     'describe the rules for each item'
-description <<-EOS
+description "
 Prints the rules used for all items and layouts in the current site.
-EOS
+"
 
 module Nanoc::CLI::Commands
 
@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
       item.reps.each do |rep|
         puts "  Rep #{rep.name}:"
         if @calc[rep].empty? && rep.raw_path.nil?
-          puts "    (nothing)"
+          puts '    (nothing)'
         else
           @calc[rep].each do |mem|
             puts '    %s %s' % [
@@ -55,7 +55,7 @@ module Nanoc::CLI::Commands
     def explain_layout(layout)
       puts "#{@c.c('Layout ' + layout.identifier, :bold, :yellow)}:"
       puts "  (from #{layout[:filename]})" if layout[:filename]
-      puts "  %s %s" % [
+      puts '  %s %s' % [
         @c.c(format('%-10s', 'filter'), :blue),
         @calc[layout].map { |m| m.inspect }.join(', ')
       ]

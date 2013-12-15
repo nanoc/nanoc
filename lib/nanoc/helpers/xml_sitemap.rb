@@ -52,7 +52,7 @@ module Nanoc::Helpers
 
       # Check for required attributes
       if @site.config[:base_url].nil?
-        raise RuntimeError.new("The Nanoc::Helpers::XMLSitemap helper requires the site configuration to specify the base URL for the site.")
+        raise RuntimeError.new('The Nanoc::Helpers::XMLSitemap helper requires the site configuration to specify the base URL for the site.')
       end
 
       # Build sitemap

@@ -107,7 +107,7 @@ module Nanoc::DataSources
         elsif content_filename
           identifier = identifier_for_filename(content_filename[(dir_name.length + 1)..-1])
         else
-          raise "meta_filename and content_filename are both nil"
+          raise 'meta_filename and content_filename are both nil'
         end
 
         # Get modification times
@@ -120,7 +120,7 @@ module Nanoc::DataSources
         elsif content_mtime
           mtime = content_mtime
         else
-          raise "meta_mtime and content_mtime are both nil"
+          raise 'meta_mtime and content_mtime are both nil'
         end
 
         # Create layout object

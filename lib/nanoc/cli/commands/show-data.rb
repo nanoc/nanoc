@@ -72,10 +72,10 @@ module Nanoc::CLI::Commands
           if pred
             puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
           else
-            puts "  ( removed item )"
+            puts '  ( removed item )'
           end
         end
-        puts "  (nothing)" if predecessors.empty?
+        puts '  (nothing)' if predecessors.empty?
       end
     end
 
@@ -86,7 +86,7 @@ module Nanoc::CLI::Commands
         puts if prev
         puts "item #{rep.item.identifier}, rep #{rep.name}:"
         if rep.raw_paths.empty?
-          puts "  (not written)"
+          puts '  (not written)'
         end
         length = rep.raw_paths.keys.map { |s| s.to_s.length }.max
         rep.raw_paths.each do |snapshot_name, raw_path|
@@ -105,7 +105,7 @@ module Nanoc::CLI::Commands
         if outdatedness_reason
           puts "  is outdated: #{outdatedness_reason.message}"
         else
-          puts "  is not outdated"
+          puts '  is not outdated'
         end
       end
     end
@@ -120,7 +120,7 @@ module Nanoc::CLI::Commands
         if outdatedness_reason
           puts "  is outdated: #{outdatedness_reason.message}"
         else
-          puts "  is not outdated"
+          puts '  is not outdated'
         end
         puts
       end

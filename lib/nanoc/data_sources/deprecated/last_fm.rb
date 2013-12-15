@@ -12,10 +12,10 @@ module Nanoc::DataSources
 
         # Check configuration
         if config[:username].nil?
-          raise "LastFM data source requires a username in the configuration"
+          raise 'LastFM data source requires a username in the configuration'
         end
         if config[:api_key].nil?
-          raise "LastFM data source requires an API key in the configuration"
+          raise 'LastFM data source requires an API key in the configuration'
         end
 
         # Get data

@@ -26,9 +26,9 @@ module Nanoc::CLI::Commands
       elsif options.key?(:'dry-run')
         Nanoc::Extra::Pruner.new(site, :exclude => prune_config_exclude, :dry_run => true).run
       else
-        $stderr.puts "WARNING: Since the prune command is a destructive command, it requires an additional --yes flag in order to work."
+        $stderr.puts 'WARNING: Since the prune command is a destructive command, it requires an additional --yes flag in order to work.'
         $stderr.puts
-        $stderr.puts "Please ensure that the output directory does not contain any files (such as images or stylesheets) that are necessary but are not managed by nanoc. If you want to get a list of all files that would be removed, pass --dry-run."
+        $stderr.puts 'Please ensure that the output directory does not contain any files (such as images or stylesheets) that are necessary but are not managed by nanoc. If you want to get a list of all files that would be removed, pass --dry-run.'
         exit 1
       end
     end

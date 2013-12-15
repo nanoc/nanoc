@@ -60,7 +60,7 @@ module Nanoc::CLI
       end
       begin
         Signal.trap('USR1') do
-          puts "Caught USR1; dumping a stack trace"
+          puts 'Caught USR1; dumping a stack trace'
           puts caller.map { |i| "  #{i}" }.join("\n")
         end
       rescue ArgumentError
@@ -117,7 +117,7 @@ module Nanoc::CLI
     def write_compact_error(error, stream)
       # Header
       stream.puts
-      stream.puts "Captain! We’ve been hit!"
+      stream.puts 'Captain! We’ve been hit!'
 
       # Sections
       write_error_message(stream, error)
@@ -238,7 +238,7 @@ module Nanoc::CLI
         # Build message
         if gem_name
           if self.using_bundler?
-            "Make sure the gem is added to Gemfile and run `bundle install`."
+            'Make sure the gem is added to Gemfile and run `bundle install`.'
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
           end
@@ -280,7 +280,7 @@ module Nanoc::CLI
       write_section_header(stream, 'Compilation stack', params)
 
       if stack.empty?
-        stream.puts "  (empty)"
+        stream.puts '  (empty)'
       else
         stack.reverse.each do |obj|
           if obj.is_a?(Nanoc::ItemRep)
@@ -306,10 +306,10 @@ module Nanoc::CLI
 
     def write_issue_link(stream, params = {})
       stream.puts
-      stream.puts "If you believe this is a bug in nanoc, please do report it at"
-      stream.puts "-> https://github.com/nanoc/nanoc/issues/new <-"
+      stream.puts 'If you believe this is a bug in nanoc, please do report it at'
+      stream.puts '-> https://github.com/nanoc/nanoc/issues/new <-'
       stream.puts
-      stream.puts "A detailed crash log has been written to ./crash.log."
+      stream.puts 'A detailed crash log has been written to ./crash.log.'
     end
 
     def write_version_information(stream, params = {})

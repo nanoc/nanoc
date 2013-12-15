@@ -35,7 +35,7 @@ module Nanoc::CLI::Commands
         if filename
           print "Change detected to #{filename}; recompiling… "
         else
-          print "Watcher started; compiling the entire site… "
+          print 'Watcher started; compiling the entire site… '
         end
 
         # Recompile
@@ -75,7 +75,7 @@ module Nanoc::CLI::Commands
       ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.directory?(dir) }.compact.join('|'))
 
       # Watch
-      puts "Watching for changes…"
+      puts 'Watching for changes…'
 
       callback = proc do |modified, added, removed|
         rebuilder.call(modified[0]) if modified[0]
@@ -146,7 +146,7 @@ module Nanoc::CLI::Commands
       end
 
       def terminal_notify(message)
-        TerminalNotifier.notify(message, :title => "nanoc")
+        TerminalNotifier.notify(message, :title => 'nanoc')
       end
 
       def growlnotify_cmd_for(message)

@@ -39,7 +39,7 @@ module Nanoc::Extra
     #
     # @abstract
     def run
-      raise NotImplementedError.new("Nanoc::Extra::Deployer subclasses must implement #run")
+      raise NotImplementedError.new('Nanoc::Extra::Deployer subclasses must implement #run')
     end
 
   end

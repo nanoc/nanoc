@@ -14,7 +14,7 @@ module Nanoc
     #   collection
     def initialize(params = {})
       @rules_collection = params.fetch(:rules_collection) do
-        raise ArgumentError, "Required :rules_collection option is missing"
+        raise ArgumentError, 'Required :rules_collection option is missing'
       end
     end
 

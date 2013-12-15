@@ -52,7 +52,7 @@ module Nanoc::CLI::Commands
           # Print type
           puts "  #{type}:"
           if relevant_plugins.empty?
-            puts "    (none)"
+            puts '    (none)'
             next
           end
 

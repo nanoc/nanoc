@@ -72,7 +72,7 @@ module Nanoc
     def stop
       # Sanity check
       if !@stack.empty?
-        raise "Internal inconsistency: dependency tracker stack not empty at end of compilation"
+        raise 'Internal inconsistency: dependency tracker stack not empty at end of compilation'
       end
 
       # Unregister

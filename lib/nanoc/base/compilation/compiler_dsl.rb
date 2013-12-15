@@ -62,7 +62,7 @@ module Nanoc
     #     end
     def compile(identifier, params = {}, &block)
       # Require block
-      raise ArgumentError.new("#compile requires a block") unless block_given?
+      raise ArgumentError.new('#compile requires a block') unless block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
@@ -106,7 +106,7 @@ module Nanoc
     #     end
     def route(identifier, params = {}, &block)
       # Require block
-      raise ArgumentError.new("#route requires a block") unless block_given?
+      raise ArgumentError.new('#route requires a block') unless block_given?
 
       # Get rep name
       rep_name      = params[:rep] || :default
@@ -172,7 +172,7 @@ module Nanoc
     #     passthrough '/bar/', :rep => :raw
     def passthrough(identifier, params = {})
       # Require no block
-      raise ArgumentError.new("#passthrough does not require a block") if block_given?
+      raise ArgumentError.new('#passthrough does not require a block') if block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
@@ -214,7 +214,7 @@ module Nanoc
     #
     #     ignore '/foo/*'
     def ignore(identifier, params = {})
-      raise ArgumentError.new("#ignore does not require a block") if block_given?
+      raise ArgumentError.new('#ignore does not require a block') if block_given?
 
       rep_name = params[:rep] || :default
 

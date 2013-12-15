@@ -31,14 +31,14 @@ module Nanoc::CLI::Commands
       if !site.layouts.find { |l| l.identifier == identifier }.nil?
         raise Nanoc::Errors::GenericTrivial,
           "A layout already exists at #{identifier}. Please " +
-          "pick a unique name for the layout you are creating."
+          'pick a unique name for the layout you are creating.'
       end
 
       # Check whether layout is not at /
       if identifier == '/'
         raise Nanoc::Errors::GenericTrivial,
           "There cannot be a layout with the identifier '/'; " +
-          "please pick a different identifier for this layout."
+          'please pick a different identifier for this layout.'
       end
 
       # Setup notifications

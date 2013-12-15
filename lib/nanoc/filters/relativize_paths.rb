@@ -61,9 +61,9 @@ module Nanoc::Filters
         nokogiri_process(content, selectors, namespaces, klass, params[:type])
       else
         raise RuntimeError.new(
-          "The relativize_paths needs to know the type of content to " +
-          "process. Pass a :type to the filter call (:html for HTML, " +
-          ":xhtml for XHTML, :xml for XML, or :css for CSS).")
+          'The relativize_paths needs to know the type of content to ' +
+          'process. Pass a :type to the filter call (:html for HTML, ' +
+          ':xhtml for XHTML, :xml for XML, or :css for CSS).')
       end
     end
 
