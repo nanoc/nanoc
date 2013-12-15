@@ -136,6 +136,9 @@ UnlessElse:
 UselessAssignment:
   Enabled: true
 
+WordArray:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -284,11 +287,4 @@ RegexpLiteral:
   Enabled: false
 
 RescueException:
-  Enabled: false
-
-
-
-# ----- TO CHECK -----
-
-WordArray:
   Enabled: false

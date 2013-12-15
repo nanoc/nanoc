@@ -18,7 +18,7 @@ module Nanoc::Filters
       stdout = ''
       stderr = ''
       status = systemu(
-        [ 'asciidoc', '-o', '-', '-' ],
+        %w( asciidoc -o - - ),
         'stdin'  => content,
         'stdout' => stdout,
         'stderr' => stderr)

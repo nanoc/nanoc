@@ -107,7 +107,7 @@ module Nanoc::Extra
         net_http_request_class = METHOD_TO_CLASS_MAPPING[request.request_method]
         raise ArgumentError, "Unsupported method: #{request.request_method}" if net_http_request_class.nil?
         net_http_request = net_http_request_class.new(request.fullpath, request_headers)
-        net_http_request.body = env['rack.input'].read if [ 'POST', 'PUT' ].include?(request.request_method)
+        net_http_request.body = env['rack.input'].read if %w( POST PUT ).include?(request.request_method)
 
         # Perform request
         http.request(net_http_request) do |response|

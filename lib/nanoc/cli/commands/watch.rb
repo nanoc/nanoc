@@ -69,8 +69,8 @@ module Nanoc::CLI::Commands
       rebuilder.call(nil)
 
       # Get directories to watch
-      dirs_to_watch  = watcher_config[:dirs_to_watch]  || [ 'content', 'layouts', 'lib' ]
-      files_to_watch = watcher_config[:files_to_watch] || [ 'nanoc.yaml', 'config.yaml', 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
+      dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
+      files_to_watch = watcher_config[:files_to_watch] || %w( nanoc.yaml config.yaml Rules rules Rules.rb rules.rb )
       files_to_watch = Regexp.new(files_to_watch.map { |name| Regexp.quote(name) + '$' }.join('|'))
       ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.directory?(dir) }.compact.join('|'))
 

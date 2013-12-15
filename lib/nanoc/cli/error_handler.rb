@@ -52,7 +52,7 @@ module Nanoc::CLI
     # @api private
     def handle_while(&block)
       # Set exit handler
-      [ 'INT', 'TERM' ].each do |signal|
+      %w( INT TERM ).each do |signal|
         Signal.trap(signal) do
           puts
           exit!(0)
