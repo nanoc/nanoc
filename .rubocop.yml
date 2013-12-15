@@ -1,10 +1,20 @@
-# ----- MODIFIED -----
+# ----- TO ENABLE LATER -----
+# To make merges easier, I’ve decided to enable these at a later point in time.
 
-# Using outdent here because most of the code uses it, and I’d rather be
-# consistently “wrong” than inconsistent.
+MultilineBlockChain:
+  Enabled: false
+
+PerlBackrefs:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false
+
+RescueException:
+  Enabled: false
+
 AccessModifierIndentation:
-  Enabled: true
-  EnforcedStyle: outdent
+  Enabled: false
 
 
 
@@ -138,20 +148,4 @@ SpaceInsideBrackets:
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
 TrivialAccessors:
-  Enabled: false
-
-
-
-# ----- TO ENABLE LATER -----
-
-MultilineBlockChain:
-  Enabled: false
-
-PerlBackrefs:
-  Enabled: false
-
-RegexpLiteral:
-  Enabled: false
-
-RescueException:
   Enabled: false
