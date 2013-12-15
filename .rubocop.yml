@@ -1,23 +1,10 @@
-# ----- ENABLED -----
+# ----- MODIFIED -----
 
+# Using outdent here because most of the code uses it, and I’d rather be
+# consistently “wrong” than inconsistent.
 AccessModifierIndentation:
   Enabled: true
   EnforcedStyle: outdent
-
-Alias:
-  Enabled: true
-
-AndOr:
-  Enabled: true
-
-AssignmentInCondition:
-  Enabled: true
-
-Blocks:
-  Enabled: true
-
-CaseEquality:
-  Enabled: true
 
 # Inject is omitted here, at least for the time being.
 CollectionMethods:
@@ -27,117 +14,6 @@ CollectionMethods:
     collect!: 'map!'
     detect: 'find'
     find_all: 'select'
-
-CaseIndentation:
-  Enabled: true
-
-ColonMethodCall:
-  Enabled: true
-
-ConstantName:
-  Enabled: true
-
-DefWithoutParentheses:
-  Enabled: true
-
-EmptyLineBetweenDefs:
-  Enabled: true
-
-EmptyLiteral:
-  Enabled: true
-
-EndAlignment:
-  Enabled: true
-
-EvenOdd:
-  Enabled: true
-
-HashMethods:
-  Enabled: true
-
-MethodName:
-  Enabled: true
-
-MultilineTernaryOperator:
-  Enabled: true
-
-NestedTernaryOperator:
-  Enabled: true
-
-OpMethod:
-  Enabled: true
-
-ParenthesesAroundCondition:
-  Enabled: true
-
-Proc:
-  Enabled: true
-
-RedundantBegin:
-  Enabled: true
-
-RedundantException:
-  Enabled: true
-
-RedundantReturn:
-  Enabled: true
-
-RedundantSelf:
-  Enabled: true
-
-RescueModifier:
-  Enabled: true
-
-ShadowingOuterLocalVariable:
-  Enabled: true
-
-SingleLineMethods:
-  Enabled: true
-
-SpaceAfterComma:
-  Enabled: true
-
-SpaceAfterNot:
-  Enabled: true
-
-SpaceAroundBlockBraces:
-  Enabled: true
-
-SpaceAroundEqualsInParameterDefault:
-  Enabled: true
-
-SpaceAroundOperators:
-  Enabled: true
-
-SpaceInsideHashLiteralBraces:
-  Enabled: true
-
-SpaceInsideParens:
-  Enabled: true
-
-SpecialGlobalVars:
-  Enabled: true
-
-StringLiterals:
-  Enabled: true
-
-Syntax:
-  Enabled: true
-
-TrailingBlankLines:
-  Enabled: true
-
-TrailingWhitespace:
-  Enabled: true
-
-UnlessElse:
-  Enabled: true
-
-UselessAssignment:
-  Enabled: true
-
-WordArray:
-  Enabled: true
 
 
 
