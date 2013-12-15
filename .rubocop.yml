@@ -97,6 +97,9 @@ RescueModifier:
 ShadowingOuterLocalVariable:
   Enabled: true
 
+SingleLineMethods:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -240,9 +243,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SingleLineMethods:
-  Enabled: false
 
 SpaceAfterComma:
   Enabled: false
