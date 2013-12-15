@@ -64,7 +64,7 @@ module Nanoc::Extra::Deployers
         truncated = set.is_truncated
         files = files + set
       end
-      keys_to_destroy = files.all.map {|file| file.key}
+      keys_to_destroy = files.all.map { |file| file.key }
 
       # Upload all the files in the output folder to the clouds
       puts "Uploading local files"

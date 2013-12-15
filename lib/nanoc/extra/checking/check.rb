@@ -25,7 +25,7 @@ module Nanoc::Extra::Checking
     end
 
     def output_filenames
-      Dir[@site.config[:output_dir] + '/**/*'].select{ |f| File.file?(f) }
+      Dir[@site.config[:output_dir] + '/**/*'].select { |f| File.file?(f) }
     end
 
   end

@@ -106,6 +106,9 @@ SpaceAfterComma:
 SpaceAfterNot:
   Enabled: true
 
+SpaceAroundBlockBraces:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -249,9 +252,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-SpaceAroundBlockBraces:
-  Enabled: false
 
 SpaceAroundEqualsInParameterDefault:
   Enabled: false

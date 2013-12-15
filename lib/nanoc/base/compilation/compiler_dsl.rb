@@ -178,7 +178,7 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create compilation rule
-      compilation_block = proc { }
+      compilation_block = proc {}
       compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
@@ -218,10 +218,10 @@ module Nanoc
 
       rep_name = params[:rep] || :default
 
-      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { })
+      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { }, :snapshot_name => :last)
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {}, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 

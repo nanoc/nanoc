@@ -164,7 +164,7 @@ class OrderedHash < ::Hash
 
   def inspect
     ary = []
-    each {|k, v| ary << k.inspect + "=>" + v.inspect}
+    each { |k, v| ary << k.inspect + "=>" + v.inspect }
     '{' + ary.join(", ") + '}'
   end
 
@@ -201,7 +201,7 @@ class OrderedHash < ::Hash
         @__yaml_inline_meth =
         lambda do |opts|
           YAML.quick_emit(object_id, opts) do |emitter|
-            emitter << '{ ' << map{|kv| kv.join ': '}.join(', ') << ' }'
+            emitter << '{ ' << map { |kv| kv.join ': ' }.join(', ') << ' }'
           end
         end
         class << self
