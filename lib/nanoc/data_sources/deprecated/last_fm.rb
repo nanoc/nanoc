@@ -11,21 +11,21 @@ module Nanoc::DataSources
         require 'uri'
 
         # Check configuration
-        if self.config[:username].nil?
-          raise RuntimeError, "LastFM data source requires a username in the configuration"
+        if config[:username].nil?
+          raise 'LastFM data source requires a username in the configuration'
         end
-        if self.config[:api_key].nil?
-          raise RuntimeError, "LastFM data source requires an API key in the configuration"
+        if config[:api_key].nil?
+          raise 'LastFM data source requires an API key in the configuration'
         end
 
         # Get data
         @http_client ||= Nanoc::Extra::CHiCk::Client.new
-        status, headers, data = *@http_client.get(
+        _status, _headers, data = *@http_client.get(
           'http://ws.audioscrobbler.com/2.0/' +
             '?method=user.getRecentTracks' +
             '&format=json' +
-            '&user=' + URI.escape(self.config[:username]) +
-            '&api_key=' + URI.escape(self.config[:api_key])
+            '&user=' + URI.escape(config[:username]) +
+            '&api_key=' + URI.escape(config[:api_key])
         )
 
         # Parse as JSON
@@ -35,16 +35,18 @@ module Nanoc::DataSources
         # Convert to items
         raw_items.enum_with_index.map do |raw_item, i|
           # Get artist data
-          artist_status, artist_headers, artist_data = *@http_client.get(
+          _artist_status, _artist_headers, artist_data = *@http_client.get(
             'http://ws.audioscrobbler.com/2.0/' +
               '?method=artist.getInfo' +
               '&format=json' +
               (
-                raw_item['artist']['mbid'].empty? ?
-                '&artist=' + URI.escape(raw_item['artist']['#text']) :
-                '&mbid=' + URI.escape(raw_item['artist']['mbid'])
+                if raw_item['artist']['mbid'].empty?
+                  '&artist=' + URI.escape(raw_item['artist']['#text'])
+                else
+                  '&mbid=' + URI.escape(raw_item['artist']['mbid'])
+                end
               ) +
-              '&api_key=' + URI.escape(self.config[:api_key])
+              '&api_key=' + URI.escape(config[:api_key])
           )
 
           # Parse as JSON
@@ -59,10 +61,10 @@ module Nanoc::DataSources
             track_played_at = Time.now
             now_playing = true
           else
-            played_at = Time.parse(raw_item['date']['#text'])
+            track_played_at = Time.parse(raw_item['date']['#text'])
             now_playing = false
           end
-          
+
           attributes = {
             :name      => raw_item['name'],
             :artist    => {

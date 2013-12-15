@@ -60,9 +60,9 @@ module Nanoc
     #     compile '/bar/', :rep => :raw do
     #       # do nothing
     #     end
-    def compile(identifier, params={}, &block)
+    def compile(identifier, params = {}, &block)
       # Require block
-      raise ArgumentError.new("#compile requires a block") unless block_given?
+      raise ArgumentError.new('#compile requires a block') unless block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
@@ -104,9 +104,9 @@ module Nanoc
     #     route '/bar/', :rep => :raw do
     #       '/raw' + item.identifier + 'index.txt'
     #     end
-    def route(identifier, params={}, &block)
+    def route(identifier, params = {}, &block)
       # Require block
-      raise ArgumentError.new("#route requires a block") unless block_given?
+      raise ArgumentError.new('#route requires a block') unless block_given?
 
       # Get rep name
       rep_name      = params[:rep] || :default
@@ -141,7 +141,7 @@ module Nanoc
     # @example Using custom filter arguments for a layout
     #
     #     layout '/custom/',  :haml, :format => :html5
-    def layout(identifier, filter_name, params={})
+    def layout(identifier, filter_name, params = {})
       @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
     end
 
@@ -170,15 +170,15 @@ module Nanoc
     # @example Copying the `:raw` rep of the `/bar/` item as-is
     #
     #     passthrough '/bar/', :rep => :raw
-    def passthrough(identifier, params={})
+    def passthrough(identifier, params = {})
       # Require no block
-      raise ArgumentError.new("#passthrough does not require a block") if block_given?
+      raise ArgumentError.new('#passthrough does not require a block') if block_given?
 
       # Get rep name
       rep_name = params[:rep] || :default
 
       # Create compilation rule
-      compilation_block = proc { }
+      compilation_block = proc {}
       compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
@@ -213,15 +213,15 @@ module Nanoc
     # @example Suppressing compilation and output for all all `/foo/*` items.
     #
     #     ignore '/foo/*'
-    def ignore(identifier, params={})
-      raise ArgumentError.new("#ignore does not require a block") if block_given?
+    def ignore(identifier, params = {})
+      raise ArgumentError.new('#ignore does not require a block') if block_given?
 
       rep_name = params[:rep] || :default
 
-      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { })
+      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc { }, :snapshot_name => :last)
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {}, :snapshot_name => :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -241,7 +241,7 @@ module Nanoc
       filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
-      self.instance_eval(File.read(filename), filename)
+      instance_eval(File.read(filename), filename)
     end
 
   private
@@ -254,8 +254,8 @@ module Nanoc
       if identifier.is_a? String
         # Add leading/trailing slashes if necessary
         new_identifier = identifier.dup
-        new_identifier[/^/] = '/' if identifier[0,1] != '/'
-        new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1,1])
+        new_identifier[/^/] = '/' if identifier[0, 1] != '/'
+        new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1, 1])
 
         /^#{new_identifier.gsub('*', '(.*?)').gsub('+', '(.+?)')}$/
       else

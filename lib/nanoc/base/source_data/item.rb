@@ -67,11 +67,11 @@ module Nanoc
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params=nil)
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params = nil)
       # Parse params
       params ||= {}
       params = { :mtime => params } if params.is_a?(Time)
-      params[:binary] = false unless params.has_key?(:binary)
+      params[:binary] = false unless params.key?(:binary)
 
       if raw_content_or_raw_filename.nil?
         raise "attempted to create an item with no content/filename (identifier #{identifier})"
@@ -126,7 +126,7 @@ module Nanoc
     #   snapshot if no snapshot is specified)
     #
     # @see ItemRep#compiled_content
-    def compiled_content(params={})
+    def compiled_content(params = {})
       # Get rep
       rep_name = params[:rep] || :default
       rep = reps.find { |r| r.name == rep_name }
@@ -148,7 +148,7 @@ module Nanoc
     #
     # @return [String] The path of the given rep ( or the default rep if no
     #   rep is specified)
-    def path(params={})
+    def path(params = {})
       rep_name = params[:rep] || :default
 
       # Get rep
@@ -226,7 +226,7 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, self.identifier ]
+      [ type, identifier ]
     end
 
     # Prevents all further modifications to its attributes.
@@ -241,21 +241,22 @@ module Nanoc
     end
 
     def inspect
-      "<#{self.class} identifier=\"#{self.identifier}\" binary?=#{self.binary?}>"
+      "<#{self.class} identifier=\"#{identifier}\" binary?=#{self.binary?}>"
     end
 
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      content_checksum = if binary?
-        if File.exist?(raw_filename)
-          Pathname.new(raw_filename).checksum
+      content_checksum =
+        if binary?
+          if File.exist?(raw_filename)
+            Pathname.new(raw_filename).checksum
+          else
+            ''.checksum
+          end
         else
-          ''.checksum
+          @raw_content.checksum
         end
-      else
-        @raw_content.checksum
-      end
 
       attributes = @attributes.dup
       attributes.delete(:file)
@@ -266,11 +267,11 @@ module Nanoc
     memoize :checksum
 
     def hash
-      self.class.hash ^ self.identifier.hash
+      self.class.hash ^ identifier.hash
     end
 
     def eql?(other)
-      self.class == other.class && self.identifier == other.identifier
+      self.class == other.class && identifier == other.identifier
     end
 
     def ==(other)

@@ -9,21 +9,21 @@ module Nanoc
   #
   #   # Create a graph with three vertices
   #   graph = Nanoc::DirectedGraph.new(%w( a b c d ))
-  #   
+  #
   #   # Add edges
   #   graph.add_edge('a', 'b')
   #   graph.add_edge('b', 'c')
   #   graph.add_edge('c', 'd')
-  #   
+  #
   #   # Get (direct) predecessors
   #   graph.direct_predecessors_of('d').sort
   #     # => %w( c )
   #   graph.predecessors_of('d').sort
   #     # => %w( a b c )
-  #   
+  #
   #   # Modify edges
   #   graph.delete_edge('a', 'b')
-  #   
+  #
   #   # Get (direct) predecessors again
   #   graph.direct_predecessors_of('d').sort
   #     # => %w( c )
@@ -36,7 +36,7 @@ module Nanoc
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = {}
-      vertices.each_with_index do |v,i|
+      vertices.each_with_index do |v, i|
         @vertices[v] = i
       end
 
@@ -102,7 +102,7 @@ module Nanoc
     #
     # @since 3.2.0
     def add_vertex(v)
-      return if @vertices.has_key?(v)
+      return if @vertices.key?(v)
 
       @vertices[v] = @vertices.size
 

@@ -97,7 +97,7 @@ module Nanoc
       # @return [void]
       def setup
         @setup ||= begin
-          self.requires.each { |r| require r }
+          requires.each { |r| require r }
           true
         end
       end
@@ -108,7 +108,7 @@ module Nanoc
     #
     # @param [Hash] hash A hash containing variables that should be made
     #   available during filtering.
-    def initialize(hash={})
+    def initialize(hash = {})
       @assigns = hash
       super
     end
@@ -119,7 +119,7 @@ module Nanoc
     # @see {#run}
     def setup_and_run(*args)
       self.class.setup
-      self.run(*args)
+      run(*args)
     end
 
     # Runs the filter on the given content or filename.
@@ -136,8 +136,8 @@ module Nanoc
     # @return [String, void] If the filter output binary content, the return
     #   value is undefined; if the filter outputs textual content, the return
     #   value will be the filtered content.
-    def run(content_or_filename, params={})
-      raise NotImplementedError.new("Nanoc::Filter subclasses must implement #run")
+    def run(content_or_filename, params = {})
+      raise NotImplementedError.new('Nanoc::Filter subclasses must implement #run')
     end
 
     # Returns a filename that is used to write data to. This method is only

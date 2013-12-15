@@ -169,7 +169,7 @@ module Nanoc
       end
 
       # Calculate checksums
-      self.objects.each do |obj|
+      objects.each do |obj|
         checksum_store[obj] = obj.checksum
       end
 
@@ -239,7 +239,7 @@ module Nanoc
           basic_path = rule.apply_to(rep, :compiler => self)
           next if basic_path.nil?
           if basic_path !~ %r{^/}
-            raise RuntimeError, "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
+            raise "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
           end
 
           # Get raw path by prepending output directory
@@ -250,7 +250,7 @@ module Nanoc
           @site.config[:index_filenames].each do |index_filename|
             if rep.paths[snapshot][-index_filename.length..-1] == index_filename
               # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length-1]
+              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length - 1]
               break
             end
           end

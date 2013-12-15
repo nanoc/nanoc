@@ -37,7 +37,7 @@ module Nanoc::Extra
         build_site
 
         # Find rep
-        path = Rack::Utils::unescape(env['PATH_INFO'])
+        path = Rack::Utils.unescape(env['PATH_INFO'])
         reps = site.items.map { |i| i.reps }.flatten
         rep = reps.find do |r|
           r.path == path ||
@@ -87,7 +87,7 @@ module Nanoc::Extra
 
     def mime_type_of(path, fallback)
       mime_type = MIME::Types.of(path).first
-      mime_type = mime_type.nil? ? fallback : mime_type.simplified
+      mime_type.nil? ? fallback : mime_type.simplified
     end
 
     def file_server

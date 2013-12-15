@@ -44,7 +44,7 @@ module Nanoc
     #
     # @abstract This method must be implemented by the subclass.
     def data
-      raise NotImplementedError.new("Nanoc::Store subclasses must implement #data and #data=")
+      raise NotImplementedError.new('Nanoc::Store subclasses must implement #data and #data=')
     end
 
     # @param new_data The data that has been loaded from the disk
@@ -53,7 +53,7 @@ module Nanoc
     #
     # @return [void]
     def data=(new_data)
-      raise NotImplementedError.new("Nanoc::Store subclasses must implement #data and #data=")
+      raise NotImplementedError.new('Nanoc::Store subclasses must implement #data and #data=')
     end
 
     # Loads the data from the filesystem into memory. This method will set the
@@ -67,7 +67,7 @@ module Nanoc
       end
 
       # Check file existance
-      if !File.file?(self.filename)
+      if !File.file?(filename)
         no_data_found
         @loaded = true
         return
@@ -75,7 +75,7 @@ module Nanoc
 
       pstore.transaction do
         # Check version
-        if pstore[:version] != self.version
+        if pstore[:version] != version
           version_mismatch_detected
           @loaded = true
           return
@@ -98,11 +98,11 @@ module Nanoc
     #
     # @return [void]
     def store
-      FileUtils.mkdir_p(File.dirname(self.filename))
+      FileUtils.mkdir_p(File.dirname(filename))
 
       pstore.transaction do
-        pstore[:data]    = self.data
-        pstore[:version] = self.version
+        pstore[:data]    = data
+        pstore[:version] = version
       end
     end
 
@@ -127,7 +127,7 @@ module Nanoc
   private
 
     def pstore
-      @pstore ||= PStore.new(self.filename)
+      @pstore ||= PStore.new(filename)
     end
 
   end

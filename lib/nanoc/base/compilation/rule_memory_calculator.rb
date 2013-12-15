@@ -12,24 +12,25 @@ module Nanoc
 
     # @option params [Nanoc::RulesCollection] rules_collection The rules
     #   collection
-    def initialize(params={})
-      @rules_collection = params[:rules_collection] or
-        raise ArgumentError, "Required :rules_collection option is missing"
+    def initialize(params = {})
+      @rules_collection = params.fetch(:rules_collection) do
+        raise ArgumentError, 'Required :rules_collection option is missing'
+      end
     end
 
     # @param [#reference] obj The object to calculate the rule memory for
     #
     # @return [Array] The caluclated rule memory for the given object
     def [](obj)
-      result = case obj.type
+      result =
+        case obj.type
         when :item_rep
           @rules_collection.new_rule_memory_for_rep(obj)
         when :layout
           @rules_collection.new_rule_memory_for_layout(obj)
         else
-          raise RuntimeError,
-            "Do not know how to calculate the rule memory for #{obj.inspect}"
-      end
+          raise "Do not know how to calculate the rule memory for #{obj.inspect}"
+        end
 
       result
     end

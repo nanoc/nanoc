@@ -43,12 +43,12 @@ module Nanoc::DataSources
     end
 
     # See {Nanoc::DataSource#create_item}.
-    def create_item(content, attributes, identifier, params={})
+    def create_item(content, attributes, identifier, params = {})
       create_object('content', content, attributes, identifier, params)
     end
 
     # See {Nanoc::DataSource#create_layout}.
-    def create_layout(content, attributes, identifier, params={})
+    def create_layout(content, attributes, identifier, params = {})
       create_object('layouts', content, attributes, identifier, params)
     end
 
@@ -57,7 +57,7 @@ module Nanoc::DataSources
     # Creates a new object (item or layout) on disk in dir_name according to
     # the given identifier. The file will have its attributes taken from the
     # attributes hash argument and its content from the content argument.
-    def create_object(dir_name, content, attributes, identifier, params={})
+    def create_object(dir_name, content, attributes, identifier, params = {})
       raise NotImplementedError.new(
         "#{self.class} does not implement ##{name}"
       )
@@ -103,11 +103,11 @@ module Nanoc::DataSources
 
         # Get identifier
         if meta_filename
-          identifier = identifier_for_filename(meta_filename[(dir_name.length+1)..-1])
+          identifier = identifier_for_filename(meta_filename[(dir_name.length + 1)..-1])
         elsif content_filename
-          identifier = identifier_for_filename(content_filename[(dir_name.length+1)..-1])
+          identifier = identifier_for_filename(content_filename[(dir_name.length + 1)..-1])
         else
-          raise RuntimeError, "meta_filename and content_filename are both nil"
+          raise 'meta_filename and content_filename are both nil'
         end
 
         # Get modification times
@@ -120,7 +120,7 @@ module Nanoc::DataSources
         elsif content_mtime
           mtime = content_mtime
         else
-          raise RuntimeError, "meta_mtime and content_mtime are both nil"
+          raise 'meta_mtime and content_mtime are both nil'
         end
 
         # Create layout object
@@ -143,14 +143,10 @@ module Nanoc::DataSources
     #     'content/qux' => [ nil,    'html' ]
     #   }
     def all_split_files_in(dir_name)
-      # Get all good file names
-      filenames = self.all_files_in(dir_name)
-      filenames.reject! { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
+      grouped_filenames = all_files_in(dir_name).
+        reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }.
+        group_by { |fn| basename_of(fn) }
 
-      # Group by identifier
-      grouped_filenames = filenames.group_by { |fn| basename_of(fn) }
-
-      # Convert values into metafile/content file extension tuple
       grouped_filenames.each_pair do |key, filenames|
         # Divide
         meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
@@ -158,18 +154,17 @@ module Nanoc::DataSources
 
         # Check number of files per type
         if ![ 0, 1 ].include?(meta_filenames.size)
-          raise RuntimeError, "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
+          raise "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
         end
         if ![ 0, 1 ].include?(content_filenames.size)
-          raise RuntimeError, "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
+          raise "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
         end
 
         # Reorder elements and convert to extnames
         filenames[0] = meta_filenames[0]    ? 'yaml'                                   : nil
-        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '': nil
+        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '' : nil
       end
 
-      # Done
       grouped_filenames
     end
 
@@ -292,8 +287,15 @@ module Nanoc::DataSources
           original_encoding = data.encoding
         end
 
-        data.encode!('UTF-8') rescue raise_encoding_error(filename, original_encoding)
-        raise_encoding_error(filename, original_encoding) if !data.valid_encoding?
+        begin
+          data.encode!('UTF-8')
+        rescue
+          raise_encoding_error(filename, original_encoding)
+        end
+
+        if !data.valid_encoding?
+          raise_encoding_error(filename, original_encoding)
+        end
       end
 
       # Remove UTF-8 BOM (ugly)

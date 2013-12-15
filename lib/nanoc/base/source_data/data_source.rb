@@ -207,7 +207,7 @@ module Nanoc
     #   files that should be generated.
     #
     # @return [void]
-    def create_item(content, attributes, identifier, params={})
+    def create_item(content, attributes, identifier, params = {})
       not_implemented('create_item')
     end
 
@@ -230,7 +230,7 @@ module Nanoc
     #   files that should be generated.
     #
     # @return [void]
-    def create_layout(content, attributes, identifier, params={})
+    def create_layout(content, attributes, identifier, params = {})
       not_implemented('create_layout')
     end
 

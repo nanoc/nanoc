@@ -34,13 +34,13 @@ module Nanoc::Extra::Deployers
       require 'systemu'
 
       # Get params
-      src = self.source_path + '/'
-      dst = self.config[:dst]
-      options = self.config[:options] || DEFAULT_OPTIONS
+      src = source_path + '/'
+      dst = config[:dst]
+      options = config[:options] || DEFAULT_OPTIONS
 
       # Validate
       raise 'No dst found in deployment configuration' if dst.nil?
-      raise 'dst requires no trailing slash' if dst[-1,1] == '/'
+      raise 'dst requires no trailing slash' if dst[-1, 1] == '/'
 
       # Run
       if dry_run
@@ -53,11 +53,11 @@ module Nanoc::Extra::Deployers
 
   private
 
-    # Runs the given shell command. It will raise an error if execution fails 
+    # Runs the given shell command. It will raise an error if execution fails
     # (results in a nonzero exit code).
     def run_shell_cmd(args)
       status = systemu(args, 'stdout' => $stdout, 'stderr' => $stderr)
-      raise "command exited with a nonzero status code #{$?.exitstatus} (command: #{args.join(' ')})" if !status.success?
+      raise "command exited with a nonzero status code #{$CHILD_STATUS.exitstatus} (command: #{args.join(' ')})" if !status.success?
     end
 
   end

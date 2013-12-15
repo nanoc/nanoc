@@ -30,12 +30,12 @@ module Nanoc::Helpers
     #   tags
     #
     # @return [String] A hyperlinked list of tags for the given item
-    def tags_for(item, params={})
+    def tags_for(item, params = {})
       base_url  = params[:base_url]  || 'http://technorati.com/tag/'
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 
-      if item[:tags].nil? or item[:tags].empty?
+      if item[:tags].nil? || item[:tags].empty?
         none_text
       else
         item[:tags].map { |tag| link_for_tag(tag, base_url) }.join(separator)

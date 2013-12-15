@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Nanoc
 
   # Provides a context in which compilation and routing rules can be executed.
@@ -24,9 +26,13 @@ module Nanoc
     #
     # @raise [ArgumentError] if the `:rep` or the `:compiler` option is
     #   missing
-    def initialize(params={})
-      rep      = params[:rep]      or raise ArgumentError, "Required :rep option is missing"
-      compiler = params[:compiler] or raise ArgumentError, "Required :compiler option is missing"
+    def initialize(params = {})
+      rep = params.fetch(:rep) do
+        raise ArgumentError, 'Required :rep option is missing'
+      end
+      compiler = params.fetch(:compiler) do
+        raise ArgumentError, 'Required :compiler option is missing'
+      end
 
       super({
         :rep      => rep,
@@ -51,7 +57,7 @@ module Nanoc
     #   the filter's #run method
     #
     # @return [void]
-    def filter(filter_name, filter_args={})
+    def filter(filter_name, filter_args = {})
       rep.filter(filter_name, filter_args)
     end
 

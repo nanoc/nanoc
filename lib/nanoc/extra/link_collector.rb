@@ -6,9 +6,10 @@ module ::Nanoc::Extra
 
   class LinkCollector
 
-    def initialize(filenames, mode=nil)
+    def initialize(filenames, mode = nil)
       @filenames = filenames
-      @filter = case mode
+      @filter =
+        case mode
         when nil
           lambda { |h| true }
         when :external
@@ -17,7 +18,7 @@ module ::Nanoc::Extra
           lambda { |h| !external_href?(h) }
         else
           raise ArgumentError, 'Expected mode argument to be :internal, :external or nil'
-        end 
+        end
     end
 
     def filenames_per_href

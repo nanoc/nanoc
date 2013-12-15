@@ -1,4 +1,4 @@
-# encoding: utf-8                                                                                                           
+# encoding: utf-8
 
 module Nanoc::Filters
   class ERB < Nanoc::Filter
@@ -15,7 +15,7 @@ module Nanoc::Filters
     # @option params [String] trim_mode (nil) The trim mode to use
     #
     # @return [String] The filtered content
-    def run(content, params={})
+    def run(content, params = {})
       # Add locals
       assigns.merge!(params[:locals] || {})
 
@@ -23,7 +23,7 @@ module Nanoc::Filters
       context = ::Nanoc::Context.new(assigns)
 
       # Get binding
-      proc = assigns[:content] ? lambda { assigns[:content] } : nil 
+      proc = assigns[:content] ? lambda { assigns[:content] } : nil
       assigns_binding = context.get_binding(&proc)
 
       # Get result
@@ -32,7 +32,7 @@ module Nanoc::Filters
       erb = ::ERB.new(content, safe_level, trim_mode)
       erb.filename = filename
       erb.result(assigns_binding)
-    end 
+    end
 
-  end 
+  end
 end

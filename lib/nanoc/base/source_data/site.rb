@@ -86,10 +86,10 @@ module Nanoc
           # Warn about deprecated data sources
           # TODO [in nanoc 4.0] remove me
           case data_source_hash[:type]
-            when 'filesystem'
-              warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
-            when 'filesystem_combined', 'filesystem_compact'
-              warn "Warning: the 'filesystem_combined' and 'filesystem_compact' data source has been merged into the new 'filesystem_unified' data source. Using 'filesystem_combined' and 'filesystem_compact' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem_combined' and 'filesystem_compact with 'filesystem_unified'."
+          when 'filesystem'
+            warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
+          when 'filesystem_combined', 'filesystem_compact'
+            warn "Warning: the 'filesystem_combined' and 'filesystem_compact' data source has been merged into the new 'filesystem_unified' data source. Using 'filesystem_combined' and 'filesystem_compact' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem_combined' and 'filesystem_compact with 'filesystem_unified'."
           end
 
           # Create data source
@@ -223,7 +223,7 @@ module Nanoc
 
     # @deprecated It is no longer necessary to explicitly load site data. It
     #   is safe to remove all {#load_data} calls.
-    def load_data(force=false)
+    def load_data(force = false)
       warn 'It is no longer necessary to call Nanoc::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 
@@ -281,7 +281,7 @@ module Nanoc
     #
     # @api private
     def self.cwd_is_nanoc_site?
-      !self.config_filename_for_cwd.nil?
+      !config_filename_for_cwd.nil?
     end
 
     # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none

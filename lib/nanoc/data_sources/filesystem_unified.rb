@@ -67,11 +67,10 @@ module Nanoc::DataSources
   private
 
     # See {Nanoc::DataSources::Filesystem#create_object}.
-    def create_object(dir_name, content, attributes, identifier, params={})
+    def create_object(dir_name, content, attributes, identifier, params = {})
       # Check for periods
       if (@config.nil? || !@config[:allow_periods_in_identifiers]) && identifier.include?('.')
-        raise RuntimeError,
-          "Attempted to create an object in #{dir_name} with identifier #{identifier} containing a period, but allow_periods_in_identifiers is not enabled in the site configuration. (Enabling allow_periods_in_identifiers may cause the site to break, though.)"
+        raise "Attempted to create an object in #{dir_name} with identifier #{identifier} containing a period, but allow_periods_in_identifiers is not enabled in the site configuration. (Enabling allow_periods_in_identifiers may cause the site to break, though.)"
       end
 
       # Determine path
@@ -109,9 +108,9 @@ module Nanoc::DataSources
     # the given directory name off the filename.
     def identifier_for_filename(filename)
       if filename =~ /(^|\/)index(\.[^\/]+)?$/
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/)
+        regex = @config && @config[:allow_periods_in_identifiers] ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/
       else
-        regex = ((@config && @config[:allow_periods_in_identifiers]) ? /\.[^\/\.]+$/         : /\.[^\/]+$/)
+        regex = @config && @config[:allow_periods_in_identifiers] ? /\.[^\/\.]+$/ : /\.[^\/]+$/
       end
       filename.sub(regex, '').cleaned_identifier
     end
