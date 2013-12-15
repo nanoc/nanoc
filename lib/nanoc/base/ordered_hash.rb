@@ -109,11 +109,11 @@ class OrderedHash < ::Hash
   end
 
   def reject(&block)
-    dup.delete_if &block
+    dup.delete_if(&block)
   end
 
   def reject!(&block)
-    hsh2 = reject &block
+    hsh2 = reject(&block)
     self == hsh2 ? nil : hsh2
   end
 

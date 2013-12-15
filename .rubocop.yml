@@ -127,6 +127,9 @@ SpecialGlobalVars:
 StringLiterals:
   Enabled: true
 
+Syntax:
+  Enabled: true
+
 
 
 # ----- DISABLED (hard) -----
@@ -274,9 +277,6 @@ RescueException:
 
 
 # ----- TO CHECK -----
-
-Syntax:
-  Enabled: false
 
 TrivialAccessors:
   Enabled: false
