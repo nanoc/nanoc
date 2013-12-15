@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/bbatsov/rubocop.git
+  revision: b713ba0f078ced9662c5257596f20b9980513f6f
+  specs:
+    rubocop (0.15.0)
+      parser (~> 2.0)
+      powerpack (~> 0.0.6)
+      rainbow (>= 1.1.4)
+
 PATH
   remote: .
   specs:
@@ -10,6 +19,7 @@ GEM
     RedCloth (4.2.9)
     adsf (1.1.1)
       rack (>= 1.0.0)
+    ast (1.1.0)
     bluecloth (2.2.0)
     builder (3.2.2)
     celluloid (0.15.2)
@@ -76,7 +86,11 @@ GEM
     net-ssh (2.7.0)
     nokogiri (1.5.10)
     pandoc-ruby (0.7.5)
+    parser (2.0.0)
+      ast (~> 1.1)
+      slop (~> 3.4, >= 3.4.5)
     posix-spawn (0.3.6)
+    powerpack (0.0.9)
     pry (0.9.12.4)
       coderay (~> 1.0)
       method_source (~> 0.8)
@@ -85,6 +99,7 @@ GEM
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
     rack (1.5.2)
+    rainbow (1.1.4)
     rainpress (1.0)
     rake (10.1.0)
     rb-fsevent (0.9.3)
@@ -156,6 +171,7 @@ DEPENDENCIES
   rdiscount
   rdoc
   redcarpet
+  rubocop!
   rubypants
   sass (~> 3.2.2)
   slim
