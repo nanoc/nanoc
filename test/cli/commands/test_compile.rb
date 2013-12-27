@@ -145,18 +145,19 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     item = Nanoc::Item.new('content', {}, '/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.raw_path = 'output/foo.txt'
+    rep.compiled = true
 
     # Listen
     listener = new_file_action_printer([ rep ])
     listener.start
     Nanoc::NotificationCenter.post(:compilation_started, rep)
-    Nanoc::NotificationCenter.post(:compilation_ended, rep)
+    Nanoc::NotificationCenter.post(:rep_written, rep, rep.raw_path, false, true)
     listener.stop
 
     # Check
     assert_equal 1, listener.events.size
-    assert_equal :low,             listener.events[0][:level]
-    assert_equal :skip,            listener.events[0][:action]
+    assert_equal :high,            listener.events[0][:level]
+    assert_equal :update,          listener.events[0][:action]
     assert_equal 'output/foo.txt', listener.events[0][:path]
     assert_in_delta 0.0,           listener.events[0][:duration], 1.0
   end
