@@ -332,7 +332,6 @@ module Nanoc::CLI::Commands
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params = {})
         @start_times = {}
-        @stop_times  = {}
 
         @reps = params.fetch(:reps)
       end
@@ -344,8 +343,6 @@ module Nanoc::CLI::Commands
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
           duration = path && @start_times[path] ? Time.now - @start_times[path] : nil
-
-          @stop_times[path] = Time.now
           action =
             case
             when is_created  then :create
