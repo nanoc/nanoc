@@ -35,6 +35,7 @@ require 'thread'
 require 'time'
 require 'yaml'
 require 'English'
+require 'erb'
 
 # Load nanoc
 require 'nanoc/version'
