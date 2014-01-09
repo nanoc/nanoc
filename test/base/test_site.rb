@@ -25,6 +25,13 @@ class Nanoc::SiteTest < Nanoc::TestCase
     assert_equal 'bar', site.config[:foo]
   end
 
+  def test_initialize_with_erb_inside_config
+    ENV['output_dir'] = 'public_html'
+    File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: <%= ENV["output_dir"] %>') }
+    site = Nanoc::Site.new('.')
+    assert_equal 'public_html', site.config[:output_dir]
+  end
+
   def test_initialize_with_incomplete_data_source_config
     site = Nanoc::Site.new(:data_sources => [ { :type => 'foo', :items_root => '/bar/' } ])
     assert_equal('foo',   site.config[:data_sources][0][:type])
