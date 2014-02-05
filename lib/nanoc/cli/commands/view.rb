@@ -4,8 +4,7 @@ usage       'view [options]'
 summary     'start the web server that serves static files'
 description <<-EOS
 Start the static web server. Unless specified, the web server will run on port
-3000 and listen on all IP addresses. Running this static web server requires
-`adsf` (not `asdf`!).
+3000 and listen on all IP addresses.
 EOS
 
 required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
@@ -19,7 +18,6 @@ module Nanoc::CLI::Commands
     DEFAULT_HANDLER_NAME = :thin
 
     def run
-      load_adsf
       require 'rack'
 
       # Make sure we are in a nanoc site directory
@@ -49,36 +47,12 @@ module Nanoc::CLI::Commands
         use Rack::ShowExceptions
         use Rack::Lint
         use Rack::Head
-        use Adsf::Rack::IndexFileFinder, :root => site.config[:output_dir]
+        use Rack::Static, :urls => [''], :root => site.config[:output_dir], :index => 'index.html'
         run Rack::File.new(site.config[:output_dir])
       end.to_app
 
       # Run autocompiler
       handler.run(app, options_for_rack)
-    end
-
-  protected
-
-    def load_adsf
-      # Load adsf
-      begin
-        require 'adsf'
-        return
-      rescue LoadError
-        $stderr.puts "Could not find the required 'adsf' gem, " \
-          "which is necessary for the view command."
-      end
-
-      # Check asdf
-      begin
-        require 'asdf'
-        $stderr.puts "You appear to have 'asdf' installed, " \
-          "but not 'adsf'. Please install 'adsf' (check the spelling)!"
-      rescue LoadError
-      end
-
-      # Done
-      exit 1
     end
 
   end
