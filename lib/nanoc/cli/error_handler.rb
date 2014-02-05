@@ -190,7 +190,6 @@ module Nanoc::CLI
     # A hash that contains the name of the gem for a given required file. If a
     # `#require` fails, the gem name is looked up in this hash.
     GEM_NAMES = {
-      'adsf'           => 'adsf',
       'bluecloth'      => 'bluecloth',
       'builder'        => 'builder',
       'coderay'        => 'coderay',

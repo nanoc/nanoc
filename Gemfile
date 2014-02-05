@@ -2,7 +2,6 @@ source "https://rubygems.org"
 
 gemspec
 
-gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
 gem 'coderay'
