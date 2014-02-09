@@ -6,7 +6,7 @@ module Nanoc::Extra::Deployers
 
   # A deployer that deploys a site using lftp - http://lftp.yar.ru/.
   #
-  # The configuration has to include a `:dst` value, a string containing
+  # The configuration has to include a `dst` value, a string containing
   # the destination to where lftp should upload its data. It has to be
   # in `scheme://user:password@host:port/path` format. It must not end with a slash. For example,
   # `"sftp://user@example.com/var/www/sites/mysite/html"`.
@@ -30,25 +30,25 @@ module Nanoc::Extra::Deployers
       # Get params
       src = source_path + '/'
       dst = config[:dst]
-      options = config[:options] || DEFAULT_OPTIONS
+      options = config.fetch(:options, DEFAULT_OPTIONS)
 
       # Validate
       raise 'No dst found in deployment configuration' if dst.nil?
-      # don't URI::parse because sftp is unknown - look at URI::parse('ftp://a/b').path vs. URI::parse('sftp://a/b').path
-      uri_regexp = /^((?:(s?ftp):\/\/)?[^\/]+)(.*)$/
+      # separate host (incl. scheme + optional port) and path.
+      # Don't URI::parse because sftp is unknown and yields a different 'path' value than ftp -
+      # look at URI::parse('ftp://a/b').path vs. URI::parse('sftp://a/b').path
+      uri_regexp = /^([^\/]+:\/\/[^\/]+)(.*)$/
       match = uri_regexp.match dst
       raise "dst in deployment configuration must match regexp #{uri_regexp.source}" if match.nil?
-      scheme = match[2]
-      host_port = match[1]
-      path = match[3]
-      raise 'dst in deployment configuration must be either ftp://... or sftp://...' unless ['ftp','sftp'].include?(scheme)
+      scheme_host_port = match[1]
+      path = match[2]
       raise 'dst allows no trailing slash' if path[-1, 1] == '/'
 
       lftp_cmd = "-e 'mirror --reverse #{options.flatten.join(' ')} #{src} #{path} ; quit'"
       # looks like 'systemu' below chokes on arrays for input
       # todo: needs proper escaping.
       # This way we're insecure in terms of shell escaping, but at least it works under friendly conditions.
-      cmd = [ 'lftp', lftp_cmd, host_port ].flatten.join(' ') 
+      cmd = [ 'lftp', lftp_cmd, scheme_host_port ].join(' ')
 
       # Run
       if dry_run
