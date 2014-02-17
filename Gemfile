@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gemspec
 
+gem 'asciidoctor'
 gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'

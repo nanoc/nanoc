@@ -3,6 +3,7 @@
 module Nanoc::Filters
 
   autoload 'AsciiDoc',        'nanoc/filters/asciidoc'
+  autoload 'Asciidoctor',     'nanoc/filters/asciidoctor'
   autoload 'BlueCloth',       'nanoc/filters/bluecloth'
   autoload 'CodeRay',         'nanoc/filters/coderay'
   autoload 'ColorizeSyntax',  'nanoc/filters/colorize_syntax'
@@ -32,6 +33,7 @@ module Nanoc::Filters
   autoload 'YUICompressor',   'nanoc/filters/yui_compressor'
 
   Nanoc::Filter.register '::Nanoc::Filters::AsciiDoc',        :asciidoc
+  Nanoc::Filter.register '::Nanoc::Filters::Asciidoctor',     :asciidoctor
   Nanoc::Filter.register '::Nanoc::Filters::BlueCloth',       :bluecloth
   Nanoc::Filter.register '::Nanoc::Filters::CodeRay',         :coderay
   Nanoc::Filter.register '::Nanoc::Filters::ColorizeSyntax',  :colorize_syntax
