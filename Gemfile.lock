@@ -19,6 +19,7 @@ GEM
     RedCloth (4.2.9)
     adsf (1.2.0)
       rack (>= 1.0.0)
+    asciidoctor (0.1.4)
     ast (1.1.0)
     bluecloth (2.2.0)
     builder (3.2.2)
@@ -160,6 +161,7 @@ PLATFORMS
 DEPENDENCIES
   RedCloth
   adsf
+  asciidoctor
   bluecloth
   builder
   coderay
