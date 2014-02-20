@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gemspec
 
+
 gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
@@ -18,6 +19,8 @@ gem 'listen'
 gem 'markaby'
 gem 'maruku'
 gem 'mime-types'
+gem 'minitest', '~> 4.0'
+gem 'mocha'
 gem 'mustache'
 gem 'nokogiri', '~> 1.5.5'
 gem 'pandoc-ruby'
@@ -38,4 +41,5 @@ gem 'typogruby'
 gem 'uglifier'
 gem 'w3c_validators'
 gem 'yuicompressor'
+gem 'yard'
 gem 'rubocop', :github => 'bbatsov/rubocop'
