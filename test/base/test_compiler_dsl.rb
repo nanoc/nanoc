@@ -18,8 +18,14 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     rules_collection = Nanoc::RulesCollection.new(nil)
     compiler_dsl = Nanoc::CompilerDSL.new(rules_collection, {})
 
-    compiler_dsl.preprocess {}
+    # first time
+    io = capturing_stdio do
+      compiler_dsl.preprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_empty io[:stderr]
 
+    # second time
     io = capturing_stdio do
       compiler_dsl.preprocess {}
     end
