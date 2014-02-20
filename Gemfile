@@ -2,7 +2,6 @@ source "https://rubygems.org"
 
 gemspec
 
-
 gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
@@ -33,6 +32,7 @@ gem 'rdiscount'
 gem 'rdoc'
 gem 'redcarpet'
 gem 'RedCloth'
+gem 'rubocop'
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
 gem 'slim'
@@ -42,4 +42,3 @@ gem 'uglifier'
 gem 'w3c_validators'
 gem 'yuicompressor'
 gem 'yard'
-gem 'rubocop', :github => 'bbatsov/rubocop'
