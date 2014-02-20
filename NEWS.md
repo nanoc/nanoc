@@ -1,5 +1,15 @@
 # nanoc news
 
+## 3.6.8 (???)
+
+Fixes:
+
+* Fixed issue with missing compilation durations (#374, #379)
+
+Enhancements:
+
+* Added warning when multiple preprocessors are defined (#389)
+
 ## 3.6.7 (2013-12-09)
 
 Fixes:
