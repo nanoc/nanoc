@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.files              = Dir['[A-Z]*'] +
-                         Dir['doc/yardoc_templates/**/*'] +
+                         Dir['doc/yardoc_{templates,handlers}/**/*'] +
                          Dir['{bin,lib,tasks,test}/**/*'] +
                          [ 'nanoc.gemspec' ]
   s.executables        = [ 'nanoc' ]
