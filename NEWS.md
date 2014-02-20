@@ -9,6 +9,7 @@ Fixes:
 Enhancements:
 
 * Added warning when multiple preprocessors are defined (#389)
+* Improve stylesheet handling in default site
 
 ## 3.6.7 (2013-12-09)
 
