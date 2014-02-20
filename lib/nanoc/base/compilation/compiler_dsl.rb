@@ -25,6 +25,8 @@ module Nanoc
     #
     # @return [void]
     def preprocess(&block)
+      warn 'WARNING: A preprocess block is already defined. Defining ' \
+        'another preprocess block overrides the previously one.'
       @rules_collection.preprocessor = block
     end
 

@@ -14,6 +14,19 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     # TODO implement
   end
 
+  def test_preprocess_twice
+    rules_collection = Nanoc::RulesCollection.new(nil)
+    compiler_dsl = Nanoc::CompilerDSL.new(rules_collection, {})
+
+    compiler_dsl.preprocess {}
+
+    io = capturing_stdio do
+      compiler_dsl.preprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_match(/WARNING: A preprocess block is already defined./, io[:stderr])
+  end
+
   def test_include_rules
     # Create site
     Nanoc::CLI.run %w( create_site with_bonus_rules )
@@ -44,7 +57,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
       File.open('Rules', 'w') do |io|
         io.write <<EOS
 passthrough "/robots/"
-        
+
 compile '*' do ; end
 route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
 EOS
