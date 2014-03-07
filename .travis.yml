@@ -13,3 +13,11 @@ matrix:
     - rvm: jruby-19mode
     - rvm: rbx-2.2.1
     - rvm: 1.8.7
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#nanoc"
+    template:
+      - "%{repository}/%{branch} %{commit} %{author}: %{message}"
+    use_notice: true
+    skip_join: true
