@@ -115,7 +115,7 @@ module Nanoc::Extra::Checking
       issues = Set.new
       length = classes.map { |c| c.identifier.to_s.length }.max + 18
       classes.each do |klass|
-        print format("  %-#{length}s", "Running #{klass.identifier} check… ")
+        print format("  %-#{length}s", "Running check #{klass.identifier}… ")
 
         check = klass.new(@site)
         check.run

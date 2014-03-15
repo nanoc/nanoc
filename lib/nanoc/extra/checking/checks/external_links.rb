@@ -25,7 +25,7 @@ module ::Nanoc::Extra::Checking::Checks
         filenames = hrefs_with_filenames[res.href]
         filenames.each do |filename|
           add_issue(
-            "reference to #{res.href}: #{res.explanation}",
+            "broken reference to #{res.href}: #{res.explanation}",
             :subject => filename)
         end
       end

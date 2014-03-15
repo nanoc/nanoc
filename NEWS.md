@@ -1,5 +1,17 @@
 # nanoc news
 
+## 3.6.8 (???)
+
+Fixes:
+
+* Fixed issue with missing compilation durations (#374, #379)
+* Made XSL filter transform item rather than layout (#399, #401) [Simon South]
+
+Enhancements:
+
+* Added warning when multiple preprocessors are defined (#389)
+* Improve stylesheet handling in default site (#339, #395)
+
 ## 3.6.7 (2013-12-09)
 
 Fixes:

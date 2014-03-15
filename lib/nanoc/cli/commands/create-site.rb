@@ -117,12 +117,10 @@ EOS
 #   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
 #   because “*” matches zero or more characters.
 
-compile '/stylesheet/' do
-  # don’t filter or layout
-end
-
 compile '*' do
-  if item.binary?
+  if item[:extension] == 'css'
+    # don’t filter stylesheets
+  elsif item.binary?
     # don’t filter binary items
   else
     filter :erb
@@ -130,12 +128,11 @@ compile '*' do
   end
 end
 
-route '/stylesheet/' do
-  '/style.css'
-end
-
 route '*' do
-  if item.binary?
+  if item[:extension] == 'css'
+    # Write item with identifier /foo/ to /foo.css
+    item.identifier.chop + '.css'
+  elsif item.binary?
     # Write item with identifier /foo/ to /foo.ext
     item.identifier.chop + '.' + item[:extension]
   else

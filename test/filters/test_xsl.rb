@@ -47,7 +47,7 @@ EOS
   <xsl:template match="/">
     <html>
       <head>
-        <title><xsl:value-of select="$foo"/></title>
+        <title><xsl:value-of select="report/title"/></title>
       </head>
       <body>
         <h1><xsl:value-of select="$foo"/></h1>
@@ -68,7 +68,7 @@ EOS
 <?xml version="1.0" encoding="utf-8"?>
 <html>
   <head>
-    <title>bar</title>
+    <title>My Report</title>
   </head>
   <body>
     <h1>bar</h1>
@@ -78,22 +78,49 @@ EOS
 
   def test_filter_as_layout
     if_have 'nokogiri' do
-      layout = Nanoc::Layout.new(SAMPLE_XSL, {}, '/layout/')
+      # Create our data objects
+      item = Nanoc::Item.new(SAMPLE_XML_IN,
+                             { },
+                             '/content/')
+      layout = Nanoc::Layout.new(SAMPLE_XSL,
+                                 { },
+                                 '/layout/')
 
-      filter = ::Nanoc::Filters::XSL.new(:layout => layout)
-      result = filter.setup_and_run(SAMPLE_XML_IN)
+      # Create an instance of the filter
+      assigns = {
+        :item => item,
+        :layout => layout,
+        :content => item.raw_content
+      }
+      filter = ::Nanoc::Filters::XSL.new(assigns)
 
+      # Run the filter and validate the results
+      result = filter.setup_and_run(layout.raw_content)
       assert_equal SAMPLE_XML_OUT, result
     end
   end
 
   def test_filter_with_params
     if_have 'nokogiri' do
-      layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout/')
+      # Create our data objects
+      item = Nanoc::Item.new(SAMPLE_XML_IN_WITH_PARAMS,
+                             { },
+                             '/content/')
+      layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_PARAMS,
+                                 { },
+                                 '/layout/')
 
-      filter = ::Nanoc::Filters::XSL.new(:layout => layout)
-      result = filter.setup_and_run(SAMPLE_XML_IN_WITH_PARAMS, :foo => 'bar')
+      # Create an instance of the filter
+      assigns = {
+        :item => item,
+        :layout => layout,
+        :content => item.raw_content
+      }
+      filter = ::Nanoc::Filters::XSL.new(assigns)
 
+      # Run the filter and validate the results
+      result = filter.setup_and_run(layout.raw_content,
+                                    :foo => 'bar')
       assert_equal SAMPLE_XML_OUT_WITH_PARAMS, result
     end
   end

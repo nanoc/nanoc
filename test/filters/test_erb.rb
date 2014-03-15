@@ -76,7 +76,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
     # With
     assert_raises(SecurityError) do
-      res = filter.setup_and_run('<%= File.read("moo") %>', :safe_level => 4)
+      res = filter.setup_and_run('<%= File.read("moo") %>', :safe_level => 3)
     end
   end
 

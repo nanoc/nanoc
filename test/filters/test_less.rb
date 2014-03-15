@@ -118,7 +118,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
       # Run filter with compress option
       result = filter.setup_and_run('.foo { bar: a; } .bar { foo: b; }', :compress => true)
-      assert_match(/^\.foo\{bar:a\}\n\.bar\{foo:b\}/, result)
+      assert_match(/^\.foo\{bar:a\}\n?\.bar\{foo:b\}/, result)
     end
   end
 
