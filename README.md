@@ -3,6 +3,8 @@
 [![Coverage Status](https://coveralls.io/repos/nanoc/nanoc/badge.png?branch=master)](https://coveralls.io/r/nanoc/nanoc)
 [![Gem Version](https://badge.fury.io/rb/nanoc.png)](http://badge.fury.io/rb/nanoc)
 
+![nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
+
 # nanoc
 
 nanoc is a flexible static site generator written in Ruby. See the [nanoc web site](http://nanoc.ws) for more information.
