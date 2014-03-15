@@ -4,13 +4,13 @@
 
 # nanoc
 
-nanoc is a flexible static site generator written in Ruby. For more information, go to the [nanoc web site](http://nanoc.ws).
+nanoc is a flexible static site generator written in Ruby. See the [nanoc web site](http://nanoc.ws) for more information.
 
 **Please take a moment and [donate](http://pledgie.com/campaigns/9282) to nanoc. A lot of time has gone into developing nanoc, and I would like to keep it going. Your support will ensure that nanoc will continue to improve.**
 
 ## Contributing
 
-Contributions are greatly appreciated! Consult the [Development page on nanoc.ws](http://nanoc.ws/development/) for information on how you can contribute.
+Contributions are greatly appreciated! Consult the [Development guidelines](http://nanoc.ws/development/) for information on how you can contribute.
 
 ### Contributors
 
