@@ -82,7 +82,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       output_actual = filter.run(input, :renderer => Redcarpet::Render::HTML_TOC)
 
       # Test
-      output_expected = %r{<ul>\n<li>\n<a href=\"#toc_0\">Heading 1</a>\n<ul>\n<li>\n<a href=\"#toc_1\">Heading 2</a>\n</li>\n</ul>\n</li>\n</ul>}
+      output_expected = %r{<ul>\n<li>\n<a href=\"#heading-1\">Heading 1</a>\n<ul>\n<li>\n<a href=\"#heading-2\">Heading 2</a>\n</li>\n</ul>\n</li>\n</ul>}
       assert_match(output_expected, output_actual)
     end
   end
@@ -95,7 +95,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       # Run filter
       input = "A Title\n======"
       if ::Redcarpet::VERSION > '2'
-        output_expected = %r{<ul>\n<li>\n<a href="#toc_0">A Title</a>\n</li>\n</ul>\n<h1 id="toc_0">A Title</h1>\n}
+        output_expected = %r{<ul>\n<li>\n<a href="#a-title">A Title</a>\n</li>\n</ul>\n<h1 id="a-title">A Title</h1>\n}
         output_actual   = filter.setup_and_run(input, :with_toc => true)
       else
         output_expected = %r{<h1>A Title</h1>\n}
