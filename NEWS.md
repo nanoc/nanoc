@@ -1,5 +1,16 @@
 # nanoc news
 
+## 3.7.0 (???)
+
+New features:
+
+* Allowed excluding links from the internal links check (`@config[:checks][:internal_links][:exclude]`) (#242) [Remko Tronçon]
+* Added Rouge syntax coloring filter (#398) [Guilherme Garnier]
+
+Enhancements:
+
+* Added `:with_toc` support to RedCarpet (#222, #232)
+
 ## 3.6.8 (???)
 
 Fixes:
