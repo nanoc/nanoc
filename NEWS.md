@@ -5,6 +5,7 @@
 Fixes:
 
 * Fixed issue with missing compilation durations (#374, #379)
+* Made XSL filter transform item rather than layout (#399, #401) [Simon South]
 
 Enhancements:
 
