@@ -77,53 +77,9 @@ may be interested in the development dependencies:
 
 ## Contributors
 
-(In alphabetical order)
+Many thanks to everyone who has contributed to nanoc in one way or another:
 
-* Ben Armston
-* Colin Barrett
-* Bil Bas
-* Dmitry Bilunov
-* Fabian Buch
-* Devon Luke Buchanan
-* Stefan Bühler
-* Dan Callahan
-* Brian Candler
-* Jack Chu
-* Michal Cichra
-* Zaiste de Grengolada
-* Vincent Driessen
-* Chris Eppstein
-* Jeff Forcier
-* Riley Goodside
-* Felix Hanley
-* Justin Hileman
-* Starr Horne
-* Daniel Hofstetter
-* Tuomas Kareinen
-* Greg Karékinian
-* Matt Keveney
-* Kevin Lynagh
-* Go Maeda
-* Nikhil Marathe
-* Daniel Mendler
-* Stuart Montgomery
-* Ale Muñoz
-* John Nishinaga
-* Gregory Pakosz
-* Nicky Peeters
-* Christian Plessl
-* Damien Pollet
-* Šime Ramov
-* Xavier Shay
-* Arnau Siches
-* “Soryu”
-* Eric Sunshine
-* Dennis Sutch
-* Takashi Uchibe
-* Matthias Vallentin
-* Ruben Verborgh
-* Scott Vokes
-* Toon Willems
+Ale Muñoz, Alexander Mankuta, Arnau Siches, Ben Armston, Bil Bas, Brian Candler, Bruno Dufour, Chris Eppstein, Christian Plessl, Colin Barrett, Damien Pollet, Dan Callahan, Daniel Hofstetter, Daniel Mendler, Daniel Wollschlaeger, David Everitt, Dennis Sutch, Devon Luke Buchanan, Dmitry Bilunov, Eric Sunshine, Erik Hollensbe, Fabian Buch, Felix Hanley, Go Maeda, Greg Karékinian, Gregory Pakosz, Grégory Karékinian, Guilherme Garnier, Jack Chu, Jake Benilov, Jeff Forcier, John Nishinaga, Justin Hileman, Kevin Lynagh, Louis T., Mathias Bynens, Matt Keveney, Matthew Frazier, Matthias Beyer, Matthias Reitinger, Matthias Vallentin, Michal Cichra, Nelson Chen, Nicky Peeters, Nikhil Marathe, Oliver Byford, Peter Aronoff, Raphael von der Grün, Remko Tronçon, Riley Goodside, Ruben Verborgh, Scott Vokes, Simon South, Spencer Whitt, Stanley Rost, Starr Horne, Stefan Bühler, Stuart Montgomery, Takashi Uchibe, Toon Willems, Tuomas Kareinen, Vincent Driessen, Xavier Shay, Zaiste de Grengolada, Šime Ramov
 
 ## Contact
 
