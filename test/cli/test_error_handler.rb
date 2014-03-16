@@ -29,4 +29,36 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
     assert_nil @handler.send(:resolution_for, error)
   end
 
+  def test_write_stack_trace_verbose
+    error = new_error(20)
+
+    stream = StringIO.new
+    @handler.send(:write_stack_trace, stream, error, :verbose => false)
+    assert_match(/See full crash log for details./, stream.string)
+
+    stream = StringIO.new
+    @handler.send(:write_stack_trace, stream, error, :verbose => false)
+    assert_match(/See full crash log for details./, stream.string)
+
+    stream = StringIO.new
+    @handler.send(:write_stack_trace, stream, error, :verbose => true)
+    refute_match(/See full crash log for details./, stream.string)
+  end
+
+  def new_error(amount_factor)
+    backtrace_generator = lambda do |af|
+      if af == 0
+        raise "finally!"
+      else
+        backtrace_generator.call(af - 1)
+      end
+    end
+
+    begin
+      backtrace_generator.call(amount_factor)
+    rescue => e
+      return e
+    end
+  end
+
 end
