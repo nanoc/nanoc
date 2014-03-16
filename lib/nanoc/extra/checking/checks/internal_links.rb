@@ -23,7 +23,7 @@ module Nanoc::Extra::Checking::Checks
         fns.each do |filename|
           unless valid?(href, filename)
           add_issue(
-            "reference to #{href}",
+            "broken reference to #{href}",
             :subject  => filename)
           end
         end

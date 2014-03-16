@@ -25,6 +25,29 @@ Changed:
 * Identifiers are now paths that include the extension
 * The Rules DSL now uses globs (as well as regular expressions, like before)
 
+## 3.7.0 (???)
+
+New features:
+
+* Allowed excluding links from the internal links check (`@config[:checks][:internal_links][:exclude]`) (#242) [Remko Tronçon]
+* Added Rouge syntax coloring filter (#398) [Guilherme Garnier]
+
+Enhancements:
+
+* Added `:with_toc` support to RedCarpet (#222, #232)
+
+## 3.6.8 (???)
+
+Fixes:
+
+* Fixed issue with missing compilation durations (#374, #379)
+* Made XSL filter transform item rather than layout (#399, #401) [Simon South]
+
+Enhancements:
+
+* Added warning when multiple preprocessors are defined (#389)
+* Improve stylesheet handling in default site (#339, #395)
+
 ## 3.6.7 (2013-12-09)
 
 Fixes:

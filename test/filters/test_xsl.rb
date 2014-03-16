@@ -54,7 +54,7 @@ EOS
   <xsl:template match="/">
     <html>
       <head>
-        <title><xsl:value-of select="$foo"/></title>
+        <title><xsl:value-of select="report/title"/></title>
       </head>
       <body>
         <h1><xsl:value-of select="$foo"/></h1>
@@ -79,7 +79,7 @@ EOS
 <?xml version="1.0" encoding="utf-8"?>
 <html>
   <head>
-    <title>bar</title>
+    <title>My Report</title>
   </head>
   <body>
     <h1>bar</h1>
@@ -90,23 +90,41 @@ EOS
 
   def test_filter_as_layout
     if_have 'nokogiri' do
-      layout = Nanoc::Layout.new(self.sample_xsl, {}, '/layout/')
+      # Create our data objects
+      item = Nanoc::Item.new(sample_xml_in, {}, '/content.xml')
+      layout = Nanoc::Layout.new(sample_xsl, {}, '/layout.xsl')
 
-      filter = ::Nanoc::Filters::XSL.new(:layout => layout)
-      result = filter.setup_and_run(self.sample_xml_in)
+      # Create an instance of the filter
+      assigns = {
+        :item => item,
+        :layout => layout,
+        :content => item.content,
+      }
+      filter = ::Nanoc::Filters::XSL.new(assigns)
 
-      assert_equal self.sample_xml_out, result
+      # Run the filter and validate the results
+      result = filter.setup_and_run(layout.content)
+      assert_equal sample_xml_out, result
     end
   end
 
   def test_filter_with_params
     if_have 'nokogiri' do
-      layout = Nanoc::Layout.new(self.sample_xsl_with_params, {}, '/layout/')
+      # Create our data objects
+      item = Nanoc::Item.new(sample_xml_in_with_params, {}, '/content.xml')
+      layout = Nanoc::Layout.new(sample_xsl_with_params, {}, '/layout.xsl')
 
-      filter = ::Nanoc::Filters::XSL.new(:layout => layout)
-      result = filter.setup_and_run(self.sample_xml_in_with_params, :foo => 'bar')
+      # Create an instance of the filter
+      assigns = {
+        :item => item,
+        :layout => layout,
+        :content => item.content,
+      }
+      filter = ::Nanoc::Filters::XSL.new(assigns)
 
-      assert_equal self.sample_xml_out_with_params, result
+      # Run the filter and validate the results
+      result = filter.setup_and_run(layout.content, :foo => 'bar')
+      assert_equal sample_xml_out_with_params, result
     end
   end
 

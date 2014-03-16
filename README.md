@@ -1,58 +1,22 @@
 [![Build Status](https://travis-ci.org/nanoc/nanoc.png)](https://travis-ci.org/nanoc/nanoc)
 [![Code Climate](https://codeclimate.com/github/nanoc/nanoc.png)](https://codeclimate.com/github/nanoc/nanoc)
 [![Coverage Status](https://coveralls.io/repos/nanoc/nanoc/badge.png?branch=master)](https://coveralls.io/r/nanoc/nanoc)
+[![Gem Version](https://badge.fury.io/rb/nanoc.png)](http://badge.fury.io/rb/nanoc)
 
-**Please take a moment and [donate](http://pledgie.com/campaigns/9282) to nanoc. A lot of time has gone into developing nanoc, and I would like to keep the current pace. Your support will ensure that nanoc will continue to improve.**
+![nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
 
 # nanoc
 
-nanoc is a simple but very flexible static site generator written in Ruby.
-It operates on local files, and therefore does not run on the server. nanoc
-“compiles” the local source files into HTML (usually), by evaluating eRuby,
-Markdown, etc.
+nanoc is a flexible static site generator written in Ruby. See the [nanoc web site](http://nanoc.ws) for more information.
 
-Note: This documentation looks best with Yardoc, not RDoc.
+**Please take a moment and [donate](http://pledgie.com/campaigns/9282) to nanoc. A lot of time has gone into developing nanoc, and I would like to keep it going. Your support will ensure that nanoc will continue to improve.**
 
-## Requirements
+## Contributing
 
-Ruby 1.9.x and up.
+Contributions are greatly appreciated! Consult the [Development guidelines](http://nanoc.ws/development/) for information on how you can contribute.
 
-nanoc has few dependencies. It is possible to use nanoc programmatically
-without any dependencies at all, but if you want to use nanoc in a proper way,
-you’ll likely need some dependencies:
+### Contributors
 
-* The **commandline frontend** depends on `cri`.
-* Filters and helpers likely have dependencies on their own too.
+Many thanks to everyone who has contributed to nanoc in one way or another:
 
-If you’re developing for nanoc, such as writing custom filters or helpers, you
-may be interested in the development dependencies:
-
-* For **documentation generation** you’ll need `yard`.
-* For **testing** you’ll need `mocha` and `minitest`.
-
-## Installation
-
-`gem install nanoc` or take a look at the [installation page](http://nanoc.ws/install/).
-
-## Tests
-
-Running `rake` will run all the tests. To run a subset, use specific tasks, e.g. `rake test:filters` for running filter tests only.
-
-## Versioning
-
-nanoc uses [Semantic Versioning](http://semver.org/).
-
-## Documentation
-
-Check out the [nanoc web site](http://nanoc.ws)!
-
-## License
-
-nanoc is licensed under the MIT license. For details, check out the LICENSE file.
-
-## Support
-
-You can get help in the following places:
-
-* the [discussion group](http://groups.google.com/group/nanoc)
-* the [#nanoc IRC channel on Freenode](irc://chat.freenode.net/#nanoc)
+Ale Muñoz, Alexander Mankuta, Arnau Siches, Ben Armston, Bil Bas, Brian Candler, Bruno Dufour, Chris Eppstein, Christian Plessl, Colin Barrett, Damien Pollet, Dan Callahan, Daniel Hofstetter, Daniel Mendler, Daniel Wollschlaeger, David Everitt, Dennis Sutch, Devon Luke Buchanan, Dmitry Bilunov, Eric Sunshine, Erik Hollensbe, Fabian Buch, Felix Hanley, Go Maeda, Gregory Pakosz, Grégory Karékinian, Guilherme Garnier, Jack Chu, Jake Benilov, Jasper Van der Jeugt, Jeff Forcier, John Nishinaga, Justin Clift, Justin Hileman, Kevin Lynagh, Louis T., Mathias Bynens, Matt Keveney, Matthew Frazier, Matthias Beyer, Matthias Reitinger, Matthias Vallentin, Michal Cichra, Nelson Chen, Nicky Peeters, Nikhil Marathe, Oliver Byford, Peter Aronoff, Raphael von der Grün, Remko Tronçon, Riley Goodside, Ruben Verborgh, Scott Vokes, Simon South, Spencer Whitt, Stanley Rost, Starr Horne, Stefan Bühler, Stuart Montgomery, Takashi Uchibe, Toon Willems, Tuomas Kareinen, Ursula Kallio, Vincent Driessen, Xavier Shay, Zaiste de Grengolada, Šime Ramov

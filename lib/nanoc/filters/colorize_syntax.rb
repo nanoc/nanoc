@@ -36,6 +36,7 @@ module Nanoc::Filters
     # * `:pygmentsrb` for [pygments.rb](https://github.com/tmm1/pygments.rb),
     #   a Ruby interface for [Pygments](http://pygments.org/)
     # * `:simon_highlight` for [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html)
+    # * `:rouge` for [Rouge](https://github.com/jayferd/rouge/)
     #
     # Additional colorizer implementations are welcome!
     #
@@ -292,9 +293,26 @@ module Nanoc::Filters
       element.swap div_outer
     end
 
+    # Runs the content through [Rouge](https://github.com/jayferd/rouge/.
+    #
+    # @api private
+    #
+    # @param [String] code The code to colorize
+    #
+    # @param [String] language The language the code is written in
+    #
+    # @return [String] The colorized output
+    def rouge(code, language, params = {})
+      require 'rouge'
+
+      formatter = Rouge::Formatters::HTML.new(:css_class => params[:css_class] || "highlight")
+      lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
+      formatter.format(lexer.lex(code))
+    end
+
   protected
 
-    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight ]
+    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge ]
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)

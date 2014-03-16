@@ -103,6 +103,8 @@ end
 compile '/**/*' do
   if item.binary?
     write item.identifier
+  elsif item.identifier.extension == 'css'
+    write item.identifier.with_ext('css')
   else
     filter :erb
     layout '/default.html'

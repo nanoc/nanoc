@@ -42,6 +42,49 @@ EOS
     end
   end
 
+  def test_preprocess_twice
+    rules_collection = Nanoc::RulesCollection.new
+    compiler_dsl = Nanoc::CompilerDSL.new(rules_collection)
+
+    # first time
+    io = capturing_stdio do
+      compiler_dsl.preprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_empty io[:stderr]
+
+    # second time
+    io = capturing_stdio do
+      compiler_dsl.preprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_match(/WARNING: A preprocess block is already defined./, io[:stderr])
+  end
+
+  def test_include_rules
+    # Create site
+    Nanoc::CLI.run %w( create_site with_bonus_rules )
+    FileUtils.cd('with_bonus_rules') do
+      # Create rep
+      item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
+      rep  = Nanoc::ItemRep.new(item, :default)
+
+      # Create a bonus rules file
+      File.open('more_rules.rb', 'w') { |io| io.write "passthrough '/foo/'" }
+
+      # Create other necessary stuff
+      site = Nanoc::Site.new('.')
+      site.items << item
+      dsl = site.compiler.rules_collection.dsl
+
+      # Include rules
+      dsl.include_rules 'more_rules'
+
+      # Check that the rule made it into the collection
+      refute_nil site.compiler.rules_collection.routing_rule_for(rep)
+    end
+  end
+
   def test_write_and_snapshot
     in_site do
       # Create rules
