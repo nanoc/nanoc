@@ -293,13 +293,15 @@ module Nanoc::CLI
     end
 
     def write_stack_trace(stream, error, params = {})
+      is_verbose = params.fetch(:verbose, false)
+
       write_section_header(stream, 'Stack trace', params)
 
-      count = params[:verbose] ? -1 : 10
+      count = is_verbose ? -1 : 10
       error.backtrace[0...count].each_with_index do |item, index|
         stream.puts "  #{index}. #{item}"
       end
-      if error.backtrace.size > count
+      if !is_verbose && error.backtrace.size > count
         stream.puts "  ... #{error.backtrace.size - count} more lines omitted. See full crash log for details."
       end
     end

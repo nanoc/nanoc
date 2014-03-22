@@ -41,7 +41,7 @@ module Nanoc::Filters
       xml = ::Nokogiri::XML(assigns[:content])
       xsl = ::Nokogiri::XSLT(assigns[:layout].raw_content)
 
-      xsl.transform(xml, ::Nokogiri::XSLT.quote_params(params)).to_s
+      xsl.apply_to(xml, ::Nokogiri::XSLT.quote_params(params))
     end
 
   end

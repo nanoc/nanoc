@@ -17,6 +17,8 @@ Fixes:
 
 * Fixed issue with missing compilation durations (#374, #379)
 * Made XSL filter transform item rather than layout (#399, #401) [Simon South]
+* Made XSL filter honor omit-xml-declaration (#403, #404) [Simon South]
+* Removed "see full crash log" line from crash log (#397, #402)
 
 Enhancements:
 
