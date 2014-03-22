@@ -11,7 +11,7 @@ Enhancements:
 
 * Added `:with_toc` support to RedCarpet (#222, #232)
 
-## 3.6.8 (???)
+## 3.6.8 (2014-03-22)
 
 Fixes:
 
