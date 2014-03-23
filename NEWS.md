@@ -36,12 +36,14 @@ Enhancements:
 
 * Added `:with_toc` support to RedCarpet (#222, #232)
 
-## 3.6.8 (???)
+## 3.6.8 (2014-03-22)
 
 Fixes:
 
 * Fixed issue with missing compilation durations (#374, #379)
 * Made XSL filter transform item rather than layout (#399, #401) [Simon South]
+* Made XSL filter honor omit-xml-declaration (#403, #404) [Simon South]
+* Removed "see full crash log" line from crash log (#397, #402)
 
 Enhancements:
 

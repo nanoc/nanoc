@@ -1,1 +1,6 @@
 doc/yardoc
+.DS_Store
+*.gem
+/coverage/
+/.yardoc
+*~
