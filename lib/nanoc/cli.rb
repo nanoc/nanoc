@@ -74,15 +74,24 @@ module Nanoc::CLI
     root_command.add_command(cmd)
   end
 
+  # Schedules the given block to be executed after the CLI has been set up.
+  #
+  # @return [void]
+  def self.after_setup(&block)
+    # TODO decide what should happen if the CLI is already set up
+    self.add_after_setup_proc(block)
+  end
+
 protected
 
   # Makes the commandline interface ready for use.
   #
   # @return [void]
   def self.setup
-    setup_cleaning_streams
-    setup_commands
-    load_custom_commands
+    self.setup_cleaning_streams
+    self.setup_commands
+    self.load_custom_commands
+    self.after_setup_procs.each { |b| b.call }
   end
 
   # Sets up the root command and base subcommands.
@@ -205,6 +214,15 @@ protected
     end
 
     true
+  end
+
+  def self.after_setup_procs
+    @after_setup_procs || []
+  end
+
+  def self.add_after_setup_proc(proc)
+    @after_setup_procs ||= []
+    @after_setup_procs << proc
   end
 
 end
