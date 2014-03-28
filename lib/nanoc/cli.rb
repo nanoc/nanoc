@@ -88,10 +88,10 @@ protected
   #
   # @return [void]
   def self.setup
-    self.setup_cleaning_streams
-    self.setup_commands
-    self.load_custom_commands
-    self.after_setup_procs.each { |b| b.call }
+    setup_cleaning_streams
+    setup_commands
+    load_custom_commands
+    after_setup_procs.each { |b| b.call }
   end
 
   # Sets up the root command and base subcommands.
