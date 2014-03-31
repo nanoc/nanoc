@@ -4,6 +4,7 @@
 # Try loading bundler if it's possible
 begin
   require 'bundler/setup'
+  Bundler.require(:default)
 rescue LoadError
   # no problem
 end

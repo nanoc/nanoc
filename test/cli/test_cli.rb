@@ -102,6 +102,15 @@ EOS
     end
   end
 
+  def test_after_setup
+    $after_setup_success = false
+    Nanoc::CLI.after_setup do
+      $after_setup_success = true
+    end
+    Nanoc::CLI.setup
+    assert $after_setup_success
+  end
+
   def test_enable_utf8_only_on_tty
     new_env_diff = {
       'LC_ALL'   => 'en_US.ISO-8859-1',
