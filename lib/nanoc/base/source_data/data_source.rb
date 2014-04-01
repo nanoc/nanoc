@@ -58,7 +58,7 @@ module Nanoc
       @site         = site
       @items_root   = items_root
       @layouts_root = layouts_root
-      @config       = config
+      @config       = config || {}
 
       @references = 0
     end

@@ -5,8 +5,15 @@ module Nanoc::DataSources
   # The filesystem_unified data source stores its items and layouts in nested
   # directories. Items and layouts are represented by one or two files; if it
   # is represented using one file, the metadata can be contained in this file.
-  # The root directory for items is the `content` directory; for layouts, this
-  # is the `layouts` directory.
+  #
+  # The default root directory for items is the `content` directory; for
+  # layouts, this is the `layouts` directory. This can be overridden
+  # in the data source configuration:
+  #
+  #     data_sources:
+  #       - type:         filesystem_unified
+  #         content_dir:  items
+  #         layouts_dir:  layouts
   #
   # The metadata for items and layouts can be stored in a separate file with
   # the same base name but with the `.yaml` extension. If such a file is
