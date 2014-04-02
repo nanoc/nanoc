@@ -25,7 +25,7 @@ module Nanoc
 
     # @return [Proc] The code block that will be executed after all data is
     #   loaded but before the site is compiled
-    attr_accessor :preprocessor
+    attr_accessor :preprocessor_stack
 
     # @param [Nanoc::Compiler] compiler The site’s compiler
     def initialize(compiler)
@@ -34,6 +34,8 @@ module Nanoc
       @item_compilation_rules  = []
       @item_routing_rules      = []
       @layout_filter_mapping   = OrderedHash.new
+
+      @preprocessor_stack = [ nil ]
     end
 
     # Add the given rule to the list of item compilation rules.
