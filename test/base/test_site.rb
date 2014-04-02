@@ -36,11 +36,13 @@ class Nanoc::SiteTest < Nanoc::TestCase
   def test_load_rules_with_existing_rules_file
     # Mock DSL
     dsl = mock
+    dsl.stubs(:rules_filename)
+    dsl.stubs(:rules_filename=)
     dsl.expects(:compile).with('*')
 
     # Create site
     site = Nanoc::Site.new({})
-    site.compiler.rules_collection.expects(:dsl).returns(dsl)
+    site.compiler.rules_collection.stubs(:dsl).returns(dsl)
 
     # Create rules file
     File.open('Rules', 'w') do |io|
