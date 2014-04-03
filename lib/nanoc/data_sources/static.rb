@@ -17,9 +17,9 @@ module Nanoc::DataSources
   # The default data source directory is `static/`, but this can be overridden
   # in the data source configuration:
   #
-  #    data_sources:
-  #      - type:   static
-  #        prefix: assets
+  #     data_sources:
+  #       - type:   static
+  #         prefix: assets
   #
   # Unless the `hide_items` configuration attribute is false, items from static
   # data sources will have the :is_hidden attribute set by default, which will
