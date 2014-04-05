@@ -363,7 +363,8 @@ module Nanoc
           end
           File.join(dir_or_config_hash, filename)
         end
-        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
+        require 'erb'
+        @config = DEFAULT_CONFIG.merge(YAML.load(ERB.new(IO.read(config_path, :encoding => 'UTF-8')).result).symbolize_keys_recursively)
         @config[:data_sources].map! { |ds| ds.symbolize_keys_recursively }
       else
         # Use passed config hash
