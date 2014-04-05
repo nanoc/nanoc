@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/nanoc/nanoc.png)](https://travis-ci.org/nanoc/nanoc)
 [![Code Climate](https://codeclimate.com/github/nanoc/nanoc.png)](https://codeclimate.com/github/nanoc/nanoc)
 [![Coverage Status](https://coveralls.io/repos/nanoc/nanoc/badge.png?branch=master)](https://coveralls.io/r/nanoc/nanoc)
+[![Inline docs](http://inch-pages.github.io/github/nanoc/nanoc.png)](http://inch-pages.github.io/github/nanoc/nanoc)
 [![Gem Version](https://badge.fury.io/rb/nanoc.png)](http://badge.fury.io/rb/nanoc)
 
 ![nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
