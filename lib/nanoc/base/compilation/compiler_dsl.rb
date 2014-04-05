@@ -25,12 +25,11 @@ module Nanoc
     #
     # @return [void]
     def preprocess(&block)
-      if @rules_collection.preprocessor
+      if @rules_collection.preprocessor_stack.last
         warn 'WARNING: A preprocess block is already defined. Defining ' \
           'another preprocess block overrides the previously one.'
       end
-
-      @rules_collection.preprocessor = block
+      @rules_collection.preprocessor_stack[-1] = block
     end
 
     # Creates a compilation rule for all items whose identifier match the
@@ -246,6 +245,7 @@ module Nanoc
       filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
+      @rules_collection.preprocessor_stack << nil
       instance_eval(File.read(filename), filename)
     end
 

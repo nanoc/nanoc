@@ -190,12 +190,15 @@ module Nanoc
     end
     memoize :dependency_tracker
 
-    # Runs the preprocessor.
+    # Runs the preprocessors.
     #
     # @api private
     def preprocess
-      return if rules_collection.preprocessor.nil?
-      preprocessor_context.instance_eval(&rules_collection.preprocessor)
+      rules_collection.preprocessor_stack.each do |preprocessor|
+        if !preprocessor.nil?
+          preprocessor_context.instance_eval(&preprocessor)
+        end
+      end
     end
 
     # Returns all objects managed by the site (items, layouts, code snippets,
