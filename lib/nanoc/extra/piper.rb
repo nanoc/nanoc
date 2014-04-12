@@ -6,6 +6,19 @@ module Nanoc::Extra
 
   class Piper
 
+    class Error < ::Nanoc::Errors::Generic
+
+      def initialize(command, exit_code)
+        @command   = command
+        @exit_code = exit_code
+      end
+
+      def message
+        "command exited with a nonzero status code #{@exit_code} (command: #{@command.join(' ')})"
+      end
+
+    end
+
     # @option [IO] :stdout ($stdout)
     # @option [IO] :stderr ($stderr)
     def initialize(params={})
@@ -31,8 +44,7 @@ module Nanoc::Extra
 
         exit_status = wait_thr.value
         if !exit_status.success?
-          raise Nanoc::Errors::Generic,
-            "command exited with a nonzero status code #{exit_status.to_i} (command: #{cmd.join(' ')})"
+          raise Error.new(exit_status.to_i, cmd)
         end
       end
     end
