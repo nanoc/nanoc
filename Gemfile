@@ -24,13 +24,13 @@ gem 'mustache'
 gem 'nokogiri', '~> 1.5.5'
 gem 'pandoc-ruby'
 gem 'pry'
-gem 'pygments.rb'
+gem 'pygments.rb', :platforms => [:ruby, :mswin]
 gem 'rack'
 gem 'rake'
 gem 'rainpress'
-gem 'rdiscount'
+gem 'rdiscount', :platforms => [:ruby, :mswin]
 gem 'rdoc'
-gem 'redcarpet'
+gem 'redcarpet', :platforms => [:ruby, :mswin]
 gem 'RedCloth'
 gem 'rubocop'
 gem 'rubypants'
