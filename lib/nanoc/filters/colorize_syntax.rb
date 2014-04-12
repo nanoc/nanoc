@@ -158,7 +158,7 @@ module Nanoc::Filters
     def parse(content, klass, is_fullpage)
       begin
         if is_fullpage
-          doc = klass.parse(content, nil, 'UTF-8')
+          klass.parse(content, nil, 'UTF-8')
         else
           klass.fragment(content)
         end
