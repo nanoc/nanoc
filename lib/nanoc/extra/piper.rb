@@ -18,7 +18,9 @@ module Nanoc::Extra
     # @param [String, nil] input
     def run(cmd, input)
       Open3.popen3(*cmd) do |stdin, stdout, stderr, wait_thr|
-        # TODO write to stdin
+        if input
+          stdin << input
+        end
         stdin.close
 
         Thread.new { @stdout << stdout.read }
