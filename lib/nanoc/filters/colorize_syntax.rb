@@ -142,6 +142,19 @@ module Nanoc::Filters
       doc.send(method, :encoding => 'UTF-8')
     end
 
+    # Parses the given content using the given class. This method also handles
+    # an issue with Nokogiri on JRuby causing “cannot modify frozen string”
+    # errors.
+    #
+    # @param [String] content The content to parse
+    #
+    # @param [Class] klass The Nokogiri parser class (either Nokogiri::HTML
+    #   or Nokogiri::XML)
+    #
+    # @param [Boolean] is_fullpage true if the given content is a full page,
+    #   false if it is a fragment
+    #
+    # @api private
     def parse(content, klass, is_fullpage)
       begin
         if is_fullpage
