@@ -243,8 +243,6 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output
     def simon_highlight(code, language, params = {})
-      require 'systemu'
-
       check_availability('highlight', '--version')
 
       cmd = [ 'highlight', '--syntax', language, '--fragment' ]

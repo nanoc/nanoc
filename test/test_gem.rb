@@ -8,8 +8,6 @@ class Nanoc::GemTest < Nanoc::TestCase
   end
 
   def test_build
-    require 'systemu'
-
     # Require clean environment
     Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
 
