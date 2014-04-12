@@ -18,13 +18,16 @@ module Nanoc::Extra
     # @param [String, nil] input
     def run(cmd, input)
       Open3.popen3(*cmd) do |stdin, stdout, stderr, wait_thr|
+        stdout_thread = Thread.new { @stdout << stdout.read }
+        stderr_thread = Thread.new { @stderr << stderr.read }
+
         if input
           stdin << input
         end
         stdin.close
 
-        Thread.new { @stdout << stdout.read }
-        Thread.new { @stderr << stderr.read }
+        stdout_thread.value
+        stderr_thread.value
 
         exit_status = wait_thr.value
         if !exit_status.success?
