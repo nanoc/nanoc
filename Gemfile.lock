@@ -125,7 +125,6 @@ GEM
       temple (~> 0.6.6)
       tilt (>= 1.3.3, < 2.1)
     slop (3.5.0)
-    systemu (2.6.4)
     temple (0.6.7)
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
@@ -184,7 +183,6 @@ DEPENDENCIES
   rubypants
   sass (~> 3.2.2)
   slim
-  systemu
   typogruby
   uglifier
   w3c_validators

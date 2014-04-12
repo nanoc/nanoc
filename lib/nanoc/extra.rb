@@ -9,6 +9,7 @@ module Nanoc::Extra
   autoload 'LinkCollector',     'nanoc/extra/link_collector.rb'
   autoload 'Pruner',            'nanoc/extra/pruner'
   autoload 'Validators',        'nanoc/extra/validators'
+  autoload 'Piper',             'nanoc/extra/piper'
 
   # Deprecated; use {Nanoc::Context} instead
   # TODO [in nanoc 4.0] remove me
