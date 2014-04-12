@@ -26,9 +26,6 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     input = 'Hello World!'
     cmd = %w( cat )
 
-    File.open('foo.txt', 'w') { |io| io.write('hi') }
-    File.open('bar.txt', 'w') { |io| io.write('ho') }
-
     piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
     piper.run(cmd, input)
 
