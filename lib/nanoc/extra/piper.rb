@@ -26,8 +26,8 @@ module Nanoc::Extra
         end
         stdin.close
 
-        stdout_thread.value
-        stderr_thread.value
+        stdout_thread.join
+        stderr_thread.join
 
         exit_status = wait_thr.value
         if !exit_status.success?
