@@ -39,8 +39,6 @@ module Nanoc::Extra::Deployers
 
     # @see Nanoc::Extra::Deployer#run
     def run
-      require 'systemu'
-
       # Get params
       src = source_path + '/'
       dst = config[:dst]
@@ -61,11 +59,9 @@ module Nanoc::Extra::Deployers
 
   private
 
-    # Runs the given shell command. It will raise an error if execution fails
-    # (results in a nonzero exit code).
-    def run_shell_cmd(args)
-      status = systemu(args, 'stdout' => $stdout, 'stderr' => $stderr)
-      raise "command exited with a nonzero status code #{$CHILD_STATUS.exitstatus} (command: #{args.join(' ')})" if !status.success?
+    def run_shell_cmd(cmd)
+      piper = Nanoc::Extra::Piper.new(:stdout => $stdout, :stderr => $stderr)
+      piper.run(cmd, nil)
     end
 
   end

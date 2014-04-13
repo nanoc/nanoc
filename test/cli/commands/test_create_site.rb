@@ -50,4 +50,14 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Encoding.default_external = original_encoding
   end
 
+  def test_new_site_has_correct_stylesheets
+    Nanoc::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
+      Nanoc::CLI.run %w( compile )
+
+      assert File.file?('content/stylesheet.css')
+      assert_match(/\/stylesheet.css/, File.read('output/index.html'))
+    end
+  end
+
 end
