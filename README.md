@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/nanoc/nanoc.png)](https://travis-ci.org/nanoc/nanoc)
-[![Code Climate](https://codeclimate.com/github/nanoc/nanoc.png)](https://codeclimate.com/github/nanoc/nanoc)
-[![Coverage Status](https://coveralls.io/repos/nanoc/nanoc/badge.png?branch=master)](https://coveralls.io/r/nanoc/nanoc)
-[![Inline docs](http://inch-pages.github.io/github/nanoc/nanoc.png)](http://inch-pages.github.io/github/nanoc/nanoc)
-[![Gem Version](https://badge.fury.io/rb/nanoc.png)](http://badge.fury.io/rb/nanoc)
+[![Gem version](http://img.shields.io/gem/v/nanoc.svg)](http://rubygems.org/gems/nanoc)
+[![Build status](http://img.shields.io/travis/nanoc/nanoc.svg)](https://travis-ci.org/nanoc/nanoc)
+[![Code Climate](http://img.shields.io/codeclimate/github/nanoc/nanoc.svg)](https://codeclimate.com/github/nanoc/nanoc)
+[![Code Coverage](http://img.shields.io/coveralls/nanoc/nanoc.svg)](https://coveralls.io/r/nanoc/nanoc)
+[![Documentation Coverage](http://inch-pages.github.io/github/nanoc/nanoc.svg)](http://inch-pages.github.io/github/nanoc/nanoc/)
 
 ![nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
 
