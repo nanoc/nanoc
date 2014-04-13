@@ -213,23 +213,20 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output
     def pygmentize(code, language, params = {})
-      require 'systemu'
       check_availability('pygmentize', '-V')
 
       params[:encoding] ||= 'utf-8'
       params[:nowrap]   ||= 'True'
 
-      # Build command
       cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
-      # Run command
       stdout = StringIO.new
-      systemu cmd, 'stdin' => code, 'stdout' => stdout
+      stderr = $stderr
+      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper.run(cmd, code)
 
-      # Get result
-      stdout.rewind
-      stdout.read
+      stdout.string
     end
 
     # Runs the content through [Pygments](http://pygments.org/) via
@@ -274,11 +271,8 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output
     def simon_highlight(code, language, params = {})
-      require 'systemu'
-
       check_availability('highlight', '--version')
 
-      # Build command
       cmd = [ 'highlight', '--syntax', language, '--fragment' ]
       params.each do |key, value|
         if SIMON_HIGHLIGHT_OPT_MAP[key]
@@ -292,13 +286,12 @@ module Nanoc::Filters
         end
       end
 
-      # Run command
       stdout = StringIO.new
-      systemu cmd, 'stdin' => code, 'stdout' => stdout
+      stderr = $stderr
+      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper.run(cmd, code)
 
-      # Get result
-      stdout.rewind
-      stdout.read
+      stdout.string
     end
 
     # Wraps the element in <div class="CodeRay"><div class="code">
@@ -351,8 +344,8 @@ module Nanoc::Filters
     end
 
     def check_availability(*cmd)
-      systemu cmd
-      raise "Could not spawn #{cmd.join(' ')}" if $CHILD_STATUS.exitstatus != 0
+      piper = Nanoc::Extra::Piper.new(:stdout => StringIO.new, :stderr => StringIO.new)
+      piper.run(cmd, nil)
     end
 
   end

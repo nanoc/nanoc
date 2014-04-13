@@ -131,7 +131,7 @@ EOS
   end
 
   def test_pygmentize
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       skip_unless_have_command "pygmentize"
 
       # Create filter
@@ -164,7 +164,7 @@ EOS
   end
 
   def test_simon_highlight
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       skip_unless_have_command "highlight"
 
       # Create filter
@@ -225,7 +225,7 @@ EOS
   def test_colorize_syntax_with_default_colorizer
     skip_unless_have_command "pygmentize"
 
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -240,7 +240,7 @@ EOS
   end
 
   def test_colorize_syntax_with_missing_executables
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       begin
         original_path = ENV['PATH']
         ENV['PATH'] = './blooblooblah'

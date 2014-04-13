@@ -5,8 +5,6 @@ module Nanoc::Filters
   # @since 3.2.0
   class AsciiDoc < Nanoc::Filter
 
-    requires 'systemu'
-
     # Runs the content through [AsciiDoc](http://www.methods.co.nz/asciidoc/).
     # This method takes no options.
     #
@@ -14,23 +12,11 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
-      # Run command
-      stdout = ''
-      stderr = ''
-      status = systemu(
-        %w( asciidoc -o - - ),
-        'stdin'  => content,
-        'stdout' => stdout,
-        'stderr' => stderr)
-
-      # Show errors
-      unless status.success?
-        $stderr.puts stderr
-        raise "AsciiDoc filter failed with status #{status}"
-      end
-
-      # Get result
-      stdout
+      stdout = StringIO.new
+      stderr = $stderr
+      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper.run(%w( asciidoc -o - - ), content)
+      stdout.string
     end
 
   end

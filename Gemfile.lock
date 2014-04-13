@@ -137,7 +137,6 @@ GEM
     slop (3.5.0)
     spoon (0.0.4)
       ffi
-    systemu (2.6.4)
     temple (0.6.7)
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
@@ -197,7 +196,6 @@ DEPENDENCIES
   rubypants
   sass (~> 3.2.2)
   slim
-  systemu
   typogruby
   uglifier
   w3c_validators
