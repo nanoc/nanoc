@@ -35,6 +35,16 @@ class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
     end
   end
 
+  def test_with_frozen_input
+    if_have 'nokogiri' do
+      input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'.freeze
+      input.freeze
+
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
+      filter.setup_and_run(input, :default_colorizer => :dummy)
+    end
+  end
+
   def test_full_page
     if_have 'nokogiri' do
       # Create filter

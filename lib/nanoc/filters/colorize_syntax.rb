@@ -101,8 +101,7 @@ module Nanoc::Filters
       end
 
       # Colorize
-      is_fullpage = params.fetch(:is_fullpage) { false }
-      doc = is_fullpage ? klass.parse(content, nil, 'UTF-8') : klass.fragment(content)
+      doc = parse(content, klass, params.fetch(:is_fullpage, false))
       selector = params[:outside_pre] ? 'code' : 'pre > code'
       doc.css(selector).each do |element|
         # Get language
@@ -141,6 +140,35 @@ module Nanoc::Filters
 
       method = "to_#{syntax}".to_sym
       doc.send(method, :encoding => 'UTF-8')
+    end
+
+    # Parses the given content using the given class. This method also handles
+    # an issue with Nokogiri on JRuby causing “cannot modify frozen string”
+    # errors.
+    #
+    # @param [String] content The content to parse
+    #
+    # @param [Class] klass The Nokogiri parser class (either Nokogiri::HTML
+    #   or Nokogiri::XML)
+    #
+    # @param [Boolean] is_fullpage true if the given content is a full page,
+    #   false if it is a fragment
+    #
+    # @api private
+    def parse(content, klass, is_fullpage)
+      begin
+        if is_fullpage
+          klass.parse(content, nil, 'UTF-8')
+        else
+          klass.fragment(content)
+        end
+      rescue => e
+        if e.message =~ /can't modify frozen string/
+          parse(content.dup, klass, is_fullpage)
+        else
+          raise e
+        end
+      end
     end
 
     # Runs the code through [CodeRay](http://coderay.rubychan.de/).
