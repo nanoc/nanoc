@@ -1,5 +1,13 @@
 # nanoc news
 
+## 3.6.9 (???)
+
+Fixes:
+
+* Fixed path to default stylesheet
+* Improved reliability of piping from/to external processes in JRuby
+* Added workaround for “cannot modify” errors when using Nokogiri on JRuby
+
 ## 3.6.8 (2014-03-22)
 
 Fixes:
