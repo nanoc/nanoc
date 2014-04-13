@@ -87,7 +87,7 @@ module Nanoc
           @loaded = true
         end
       rescue
-        File.file?(filename)
+        FileUtils.rm_f(filename)
         load
       end
     end
