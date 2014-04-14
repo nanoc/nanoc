@@ -6,10 +6,13 @@ New features:
 
 * Allowed excluding links from the internal links check (`@config[:checks][:internal_links][:exclude]`) (#242) [Remko Tronçon]
 * Added Rouge syntax coloring filter (#398) [Guilherme Garnier]
+* Backported `after_setup` from nanoc 4 to make it easier to create CLI plugins (#407) [Rémi Barraquand]
 
 Enhancements:
 
 * Added `:with_toc` support to RedCarpet (#222, #232)
+* Added `slim` to the list of text extensions (#316)
+* Made `content/` and `layouts/` dirs configurable (#412) [Gregory Pakosz]
 
 ## 3.6.9 (???)
 
