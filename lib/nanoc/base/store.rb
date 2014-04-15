@@ -73,17 +73,22 @@ module Nanoc
         return
       end
 
-      pstore.transaction do
-        # Check version
-        if pstore[:version] != version
-          version_mismatch_detected
-          @loaded = true
-          return
-        end
+      begin
+        pstore.transaction do
+          # Check version
+          if pstore[:version] != version
+            version_mismatch_detected
+            @loaded = true
+            return
+          end
 
-        # Load
-        self.data = pstore[:data]
-        @loaded = true
+          # Load
+          self.data = pstore[:data]
+          @loaded = true
+        end
+      rescue
+        FileUtils.rm_f(filename)
+        load
       end
     end
 

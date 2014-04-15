@@ -14,13 +14,14 @@ Enhancements:
 * Added `slim` to the list of text extensions (#316)
 * Made `content/` and `layouts/` dirs configurable (#412) [Gregory Pakosz]
 
-## 3.6.9 (???)
+## 3.6.9 (2014-04-15)
 
 Fixes:
 
-* Fixed path to default stylesheet
-* Improved reliability of piping from/to external processes in JRuby
-* Added workaround for “cannot modify” errors when using Nokogiri on JRuby
+* Fixed path to default stylesheet (#410, #411)
+* Improved reliability of piping from/to external processes in JRuby (#417)
+* Added workaround for “cannot modify” errors when using Nokogiri on JRuby (#416)
+* Made corrupted cached data auto-repair itself if possible (#409, #418)
 
 ## 3.6.8 (2014-03-22)
 
