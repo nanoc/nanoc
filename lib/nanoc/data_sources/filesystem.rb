@@ -69,32 +69,40 @@ module Nanoc::DataSources
 
     identifier :filesystem
 
+    def content_dir_name
+      config.fetch(:content_dir, 'content')
+    end
+
+    def layouts_dir_name
+      config.fetch(:layouts_dir, 'layouts')
+    end
+
     # See {Nanoc::DataSource#setup}.
     def setup
       # Create directories
-      %w( content layouts ).each do |dir|
+      [ content_dir_name, layouts_dir_name ].each do |dir|
         FileUtils.mkdir_p(dir)
       end
     end
 
     # See {Nanoc::DataSource#items}.
     def items
-      load_objects('content', 'item', Nanoc::Item)
+      load_objects(content_dir_name, 'item', Nanoc::Item)
     end
 
     # See {Nanoc::DataSource#layouts}.
     def layouts
-      load_objects('layouts', 'layout', Nanoc::Layout)
+      load_objects(layouts_dir_name, 'layout', Nanoc::Layout)
     end
 
     # See {Nanoc::DataSource#create_item}.
     def create_item(content, attributes, identifier)
-      create_object('content', content, attributes, identifier)
+      create_object(content_dir_name, content, attributes, identifier)
     end
 
     # See {Nanoc::DataSource#create_layout}.
     def create_layout(content, attributes, identifier)
-      create_object('layouts', content, attributes, identifier)
+      create_object(layouts_dir_name, content, attributes, identifier)
     end
 
     # Creates a new object (item or layout) on disk in dir_name according to

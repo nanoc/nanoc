@@ -178,12 +178,12 @@ EOS
       assigns = {
         :item => item,
         :layout => layout,
-        :content => item.raw_content
+        :content => item.content
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 
       # Run the filter and validate the results
-      result = filter.setup_and_run(layout.raw_content)
+      result = filter.setup_and_run(layout.content)
       assert_equal SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
     end
   end

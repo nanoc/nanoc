@@ -35,6 +35,16 @@ class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
     end
   end
 
+  def test_with_frozen_input
+    if_have 'nokogiri' do
+      input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'.freeze
+      input.freeze
+
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
+      filter.setup_and_run(input, :default_colorizer => :dummy)
+    end
+  end
+
   def test_full_page
     if_have 'nokogiri' do
       # Create filter
@@ -121,7 +131,7 @@ EOS
   end
 
   def test_pygmentize
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       skip_unless_have_command "pygmentize"
 
       # Create filter
@@ -154,7 +164,7 @@ EOS
   end
 
   def test_simon_highlight
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       skip_unless_have_command "highlight"
 
       # Create filter
@@ -215,7 +225,7 @@ EOS
   def test_colorize_syntax_with_default_colorizer
     skip_unless_have_command "pygmentize"
 
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -230,7 +240,7 @@ EOS
   end
 
   def test_colorize_syntax_with_missing_executables
-    if_have 'nokogiri', 'systemu' do
+    if_have 'nokogiri' do
       begin
         original_path = ENV['PATH']
         ENV['PATH'] = './blooblooblah'

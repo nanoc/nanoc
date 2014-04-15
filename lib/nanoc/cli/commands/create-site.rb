@@ -96,8 +96,9 @@ EOS
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
 #!/usr/bin/env ruby
 
-compile '/stylesheet.*' do
-  write '/style.css'
+compile '/index.*' do
+  layout '/default.html'
+  write '/index.html'
 end
 
 compile '/**/*' do
@@ -238,7 +239,7 @@ EOS
   <head>
     <meta charset="utf-8">
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/stylesheet.css">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
     <meta name="generator" content="nanoc <%= Nanoc::VERSION %>">

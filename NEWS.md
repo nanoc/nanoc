@@ -31,10 +31,22 @@ New features:
 
 * Allowed excluding links from the internal links check (`@config[:checks][:internal_links][:exclude]`) (#242) [Remko Tronçon]
 * Added Rouge syntax coloring filter (#398) [Guilherme Garnier]
+* Backported `after_setup` from nanoc 4 to make it easier to create CLI plugins (#407) [Rémi Barraquand]
 
 Enhancements:
 
 * Added `:with_toc` support to RedCarpet (#222, #232)
+* Added `slim` to the list of text extensions (#316)
+* Made `content/` and `layouts/` dirs configurable (#412) [Gregory Pakosz]
+
+## 3.6.9 (2014-04-15)
+
+Fixes:
+
+* Fixed path to default stylesheet (#410, #411)
+* Improved reliability of piping from/to external processes in JRuby (#417)
+* Added workaround for “cannot modify” errors when using Nokogiri on JRuby (#416)
+* Made corrupted cached data auto-repair itself if possible (#409, #418)
 
 ## 3.6.8 (2014-03-22)
 
