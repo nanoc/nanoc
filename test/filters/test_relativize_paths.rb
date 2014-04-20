@@ -103,7 +103,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 </html>
 EOS
     expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
-    expected_match_1 = %r{\A\s*<!DOCTYPE html>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
+    expected_match_1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -500,6 +500,7 @@ EOS
       end
 
       # Set content
+      expected = /<bar boo="\/foo">baz<\/bar>/
       raw_content = <<-XML
 <?xml version="1.0" encoding="utf-8"?>
 <foo>
@@ -509,7 +510,7 @@ XML
 
       actual_content = filter.setup_and_run(raw_content, :type => :xml, :select => ['*/@boo'])
 
-      assert_equal(expected_content, actual_content)
+      assert_match(expected, actual_content)
     end
   end
 
