@@ -30,6 +30,11 @@ module Nanoc::TestHelpers
 
   def if_have(*libs)
     libs.each do |lib|
+      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri'
+        skip "nokogiri on JRuby is severely buggy (see https://github.com/nanoc/nanoc/pull/422)"
+        return
+      end
+
       begin
         require lib
       rescue LoadError
