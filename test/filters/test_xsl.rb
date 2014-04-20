@@ -28,7 +28,7 @@ EOS
 </report>
 EOS
 
-  SAMPLE_XML_OUT = %r{\A<?xml version="1.0" encoding="utf-8"?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
+  SAMPLE_XML_OUT = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
   SAMPLE_XSL_WITH_PARAMS = <<-EOS
 <?xml version="1.0" encoding="utf-8"?>
@@ -54,7 +54,7 @@ EOS
 </report>
 EOS
 
-  SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<?xml version="1.0" encoding="utf-8"?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
+  SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
 
   SAMPLE_XSL_WITH_OMIT_XML_DECL = <<-EOS
 <?xml version="1.0" encoding="utf-8"?>
