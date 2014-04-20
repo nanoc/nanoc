@@ -611,7 +611,7 @@ XML
       actual_content = filter.setup_and_run(raw_content, :type => :xhtml)
 
       assert_match(/<link[^>]*href="..\/..\/..\/css"[^>]*\/>/, actual_content)
-      assert_match(/<script src="..\/..\/..\/js"[^>]*\/>/,     actual_content)
+      assert_match(/<script src="..\/..\/..\/js">/,            actual_content)
       assert_match(/<img src="..\/..\/..\/img"[^>]*\/>/,       actual_content)
       assert_match(/<a href="..\/..">bar<\/a>/,                actual_content)
     end
