@@ -59,7 +59,7 @@ describe 'Array#checksum' do
 
   it 'should work' do
     expectation = '1f51cbc7f3d22aef9e1792ec0e278b8a19fa3d5c'
-    [ [ :foo, 123 ]].checksum.must_equal expectation
+    [ [ :foo, 123 ] ].checksum.must_equal expectation
   end
 
 end

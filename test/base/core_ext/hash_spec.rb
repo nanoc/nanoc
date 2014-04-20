@@ -84,7 +84,6 @@ describe 'Hash#checksum' do
   it 'should work' do
     expectation = '471315565f9a750cf375eeb32e0ac0a8d42fe062'
     { :foo => 123 }.checksum.must_equal expectation
-    [ [ :foo, 123 ]].checksum.must_equal expectation
   end
 
   it 'should not sort keys' do
