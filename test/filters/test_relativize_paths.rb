@@ -500,7 +500,7 @@ EOS
       end
 
       # Set content
-      expected = /<bar boo="\/foo">baz<\/bar>/
+      expected = /<bar boo="\.\.\/\.\.">baz<\/bar>/
       raw_content = <<-XML
 <?xml version="1.0" encoding="utf-8"?>
 <foo>
