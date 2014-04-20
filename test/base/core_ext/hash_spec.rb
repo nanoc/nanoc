@@ -82,15 +82,15 @@ end
 describe 'Hash#checksum' do
 
   it 'should work' do
-    expectation = '78468f950645150238a26f5b8f2dde39a75a7028'
+    expectation = '471315565f9a750cf375eeb32e0ac0a8d42fe062'
     { :foo => 123 }.checksum.must_equal expectation
     [ [ :foo, 123 ]].checksum.must_equal expectation
   end
 
-  it 'should sort keys' do
+  it 'should not sort keys' do
     a = { :a => 1, :c => 2, :b => 3 }.checksum
     b = { :a => 1, :b => 3, :c => 2 }.checksum
-    a.must_equal b
+    a.wont_equal b
   end
 
 end
