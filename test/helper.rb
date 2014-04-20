@@ -28,10 +28,14 @@ module Nanoc::TestHelpers
 
   LIB_DIR = File.expand_path(File.dirname(__FILE__) + '/../lib')
 
+  def disable_nokogiri?
+    ENV.key?('DISABLE_NOKOGIRI')
+  end
+
   def if_have(*libs)
     libs.each do |lib|
-      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri'
-        skip "nokogiri on JRuby is severely buggy (see https://github.com/nanoc/nanoc/pull/422)"
+      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?
+        skip "nokogiri on JRuby is severely buggy (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests"
         return
       end
 

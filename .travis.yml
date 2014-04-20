@@ -8,6 +8,9 @@ rvm:
   - jruby-1.7.11
   - rbx-2.2.6
 matrix:
+  include:
+    - rvm: jruby-1.7.11
+      env: DISABLE_NOKOGIRI=1
   allow_failures:
     - rvm: jruby-18mode
     - rvm: jruby-1.7.11
