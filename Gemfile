@@ -2,6 +2,9 @@ source "https://rubygems.org"
 
 gemspec
 
+all_rubies = Bundler::Dependency::PLATFORM_MAP.keys
+rubies_19_and_up = [:ruby_19, :ruby_20, :ruby_21] & all_rubies
+
 gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
@@ -14,7 +17,7 @@ gem 'haml'
 gem 'handlebars', :platforms => :ruby
 gem 'kramdown'
 gem 'less', '~> 2.0', :platforms => :ruby
-gem 'listen'
+gem 'listen', :platforms => rubies_19_and_up
 gem 'markaby'
 gem 'maruku'
 gem 'mime-types'
