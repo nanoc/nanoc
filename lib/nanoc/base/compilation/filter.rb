@@ -28,8 +28,7 @@ module Nanoc
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Context
 
-    # The path to the directory where temporary binary items are stored
-    TMP_BINARY_ITEMS_DIR = 'tmp/binary_items'
+    TMP_BINARY_ITEMS_DIR = 'binary_items'
 
     # A hash containing variables that will be made available during
     # filtering.
@@ -150,12 +149,7 @@ module Nanoc
     # @return [String] The output filename
     def output_filename
       @output_filename ||= begin
-        FileUtils.mkdir_p(TMP_BINARY_ITEMS_DIR)
-        tempfile = Tempfile.new('', TMP_BINARY_ITEMS_DIR)
-        new_filename = tempfile.path
-        tempfile.close!
-
-        File.expand_path(new_filename)
+        Nanoc::TempPathRegistry.new_path(TMP_BINARY_ITEMS_DIR)
       end
     end
 

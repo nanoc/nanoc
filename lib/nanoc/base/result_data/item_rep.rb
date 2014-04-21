@@ -149,15 +149,10 @@ module Nanoc
         Nanoc::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
       end
 
-      TMP_TEXT_ITEMS_DIR = 'tmp/text_items'
+      TMP_TEXT_ITEMS_DIR = 'text_items'
 
       def temp_filename
-        FileUtils.mkdir_p(TMP_TEXT_ITEMS_DIR)
-        tempfile = Tempfile.new('', TMP_TEXT_ITEMS_DIR)
-        new_filename = tempfile.path
-        tempfile.close!
-
-        File.expand_path(new_filename)
+        Nanoc::TempPathRegistry.new_path(TMP_TEXT_ITEMS_DIR)
       end
 
       # Resets the compilation progress for this item representation. This is
