@@ -42,5 +42,5 @@ gem 'slim'
 gem 'typogruby'
 gem 'uglifier'
 gem 'w3c_validators'
-gem 'yuicompressor'
+gem 'yuicompressor', :platforms => rubies_19_and_up
 gem 'yard'
