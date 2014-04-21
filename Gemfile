@@ -12,9 +12,9 @@ gem 'coderay'
 gem 'compass'
 gem 'coffee-script'
 gem 'erubis'
-gem 'fog'
+gem 'fog', :platforms => rubies_19_and_up
 gem 'haml'
-gem 'handlebars', :platforms => :ruby
+gem 'handlebars', :platforms => rubies_19_and_up
 gem 'kramdown'
 gem 'less', '~> 2.0', :platforms => :ruby
 gem 'listen', :platforms => rubies_19_and_up
@@ -33,9 +33,9 @@ gem 'rake'
 gem 'rainpress'
 gem 'rdiscount', :platforms => [:ruby, :mswin]
 gem 'rdoc'
-gem 'redcarpet', :platforms => [:ruby, :mswin]
+gem 'redcarpet', :platforms => rubies_19_and_up + [:mswin]
 gem 'RedCloth'
-gem 'rubocop'
+gem 'rubocop', :platforms => rubies_19_and_up
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
 gem 'slim'
