@@ -20,7 +20,7 @@ gem 'less', '~> 2.0', :platforms => :ruby
 gem 'listen', :platforms => rubies_19_and_up
 gem 'markaby'
 gem 'maruku'
-gem 'mime-types'
+gem 'mime-types', :platforms => rubies_19_and_up
 gem 'minitest', '~> 4.0'
 gem 'mocha'
 gem 'mustache'
