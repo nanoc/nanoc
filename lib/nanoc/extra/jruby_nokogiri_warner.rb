@@ -10,20 +10,19 @@ module Nanoc::Extra
 
     TEXT = <<EOS
 --------------------------------------------------------------------------------
-Caution:
+Note:
 
-Nokogiri on JRuby has severe bugs that prevent it from producing correct results
-in many cases. For example, the nanoc test cases revealed the following bugs:
+The behavior of Pure Java Nokogiri differs from the Nokogiri used on the
+standard Ruby interpreter (MRI) due to differences in underlying libraries.
 
-- http://github.com/sparklemotion/nokogiri/issues/1077
-- http://github.com/sparklemotion/nokogiri/issues/1078
-- http://github.com/sparklemotion/nokogiri/issues/1079
-- http://github.com/sparklemotion/nokogiri/issues/1080
-- http://github.com/sparklemotion/nokogiri/issues/1081
-- http://github.com/sparklemotion/nokogiri/issues/1084
+These sometimes problematic behavioral differences can cause nanoc filters not
+to function properly, if at all. If you need reliable (X)HTML and XML handling
+functionality, consider not using Nokogiri on JRuby for the time being.
 
-Because of these issues, we advise against using Nokogiri on JRuby. If you need
-XML parsing functionality, consider not using JRuby for the time being.
+These issues are being worked on both from the Nokogiri and the nanoc side. Keep
+your Nokogiri and nanoc versions up to date!
+
+For details, see https://github.com/nanoc/nanoc/pull/422.
 --------------------------------------------------------------------------------
 EOS
 
