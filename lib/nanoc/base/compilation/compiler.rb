@@ -90,8 +90,10 @@ module Nanoc
       dependency_tracker.stop
       store
     ensure
-      Nanoc::TempPathRegistry.cleanup(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
-      Nanoc::TempPathRegistry.cleanup(Nanoc::ItemRep::TMP_TEXT_ITEMS_DIR)
+      Nanoc::TempFilenameFactory.instance.cleanup(
+        Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+      Nanoc::TempFilenameFactory.instance.cleanup(
+        Nanoc::ItemRep::TMP_TEXT_ITEMS_DIR)
     end
 
     # @group Private instance methods

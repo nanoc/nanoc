@@ -148,9 +148,8 @@ module Nanoc
     #
     # @return [String] The output filename
     def output_filename
-      @output_filename ||= begin
-        Nanoc::TempPathRegistry.new_path(TMP_BINARY_ITEMS_DIR)
-      end
+      @output_filename ||=
+        Nanoc::TempFilenameFactory.instance.create(TMP_BINARY_ITEMS_DIR)
     end
 
     # Returns the filename associated with the item that is being filtered.

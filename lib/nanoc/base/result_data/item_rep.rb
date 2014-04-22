@@ -152,7 +152,7 @@ module Nanoc
       TMP_TEXT_ITEMS_DIR = 'text_items'
 
       def temp_filename
-        Nanoc::TempPathRegistry.new_path(TMP_TEXT_ITEMS_DIR)
+        Nanoc::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
       end
 
       # Resets the compilation progress for this item representation. This is

@@ -13,7 +13,7 @@ module Nanoc
   autoload 'NotificationCenter',   'nanoc/base/notification_center'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
   autoload 'Store',                'nanoc/base/store'
-  autoload 'TempPathRegistry',     'nanoc/base/temp_path_registry'
+  autoload 'TempFilenameFactory',  'nanoc/base/temp_filename_factory'
 
   # Load source data classes
   autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
