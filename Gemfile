@@ -26,7 +26,7 @@ gem 'mime-types', :platforms => ruby_19_plus
 gem 'minitest', '~> 4.0'
 gem 'mocha'
 gem 'mustache'
-gem 'nokogiri', '~> 1.5.5'
+gem 'nokogiri', '~> 1.6'
 gem 'pandoc-ruby'
 gem 'pry'
 gem 'pygments.rb', :platforms => [:ruby, :mswin]
