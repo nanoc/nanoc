@@ -84,6 +84,9 @@ data_sources:
     # will have the identifier “/about/” when turned off, but when turned on
     # it will become “/about.html/” instead.
     allow_periods_in_identifiers: false
+
+    # The default encoding for all files in `content/` and `layouts/`.
+    encoding: utf-8
 EOS
 
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
