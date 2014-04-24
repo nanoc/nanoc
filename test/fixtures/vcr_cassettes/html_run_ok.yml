@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://validator.w3.org/check
+    body:
+      encoding: UTF-8
+      string: "--349832898984244898448024464570528145\r\nContent-Disposition: form-data;
+        name=\"output\"\r\n\r\nsoap12\r\n--349832898984244898448024464570528145\r\nContent-Disposition:
+        form-data; name=\"uploaded_file\"; filename=\"output/blah.html\"\r\nContent-Type:
+        text/html\r\n\r\n<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Hello</title></head><body><h1>Hi!</h1></body>\r\n--349832898984244898448024464570528145--\r\n"
+    headers:
+      Content-Type:
+      - multipart/form-data; boundary=349832898984244898448024464570528145
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 24 Apr 2014 07:25:21 GMT
+      Server:
+      - Apache/2.2.16 (Debian)
+      X-W3c-Validator-Recursion:
+      - '1'
+      X-W3c-Validator-Status:
+      - Valid
+      X-W3c-Validator-Errors:
+      - '0'
+      X-W3c-Validator-Warnings:
+      - '1'
+      Content-Type:
+      - application/soap+xml; charset=UTF-8
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\">\n<env:Body>\n<m:markupvalidationresponse
+        env:encodingStyle=\"http://www.w3.org/2003/05/soap-encoding\" xmlns:m=\"http://www.w3.org/2005/10/markup-validator\">\n
+        \   \n    <m:uri>output/blah.html</m:uri>\n    <m:checkedby>http://validator.w3.org/</m:checkedby>\n
+        \   <m:doctype>HTML5</m:doctype>\n    <m:charset>utf-8</m:charset>\n    <m:validity>true</m:validity>\n
+        \   <m:errors>\n        <m:errorcount>0</m:errorcount>\n        <m:errorlist>\n
+        \         \n        </m:errorlist>\n    </m:errors>\n    <m:warnings>\n        <m:warningcount>1</m:warningcount>\n
+        \       <m:warninglist>\n        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
+        \       \n        </m:warninglist>\n    </m:warnings>\n</m:markupvalidationresponse>\n</env:Body>\n</env:Envelope>\n"
+    http_version: 
+  recorded_at: Thu, 24 Apr 2014 07:25:21 GMT
+recorded_with: VCR 2.9.0
