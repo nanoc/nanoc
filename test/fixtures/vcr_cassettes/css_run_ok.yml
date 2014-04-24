@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://jigsaw.w3.org/css-validator/validator?output=soap12&profile=css3&text=h1%20%7B%20color:%20red%3B%20%7D
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache
+      Date:
+      - Thu, 24 Apr 2014 07:25:20 GMT
+      Pragma:
+      - no-cache
+      Transfer-Encoding:
+      - chunked
+      Content-Language:
+      - en
+      Content-Type:
+      - application/soap+xml;charset=utf-8
+      Server:
+      - Jigsaw/2.3.0-beta3
+      Vary:
+      - Accept-Language
+      X-W3c-Validator-Errors:
+      - '0'
+      X-W3c-Validator-Status:
+      - Valid
+    body:
+      encoding: UTF-8
+      string: "<?xml version='1.0' encoding=\"utf-8\"?>\n<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\">\n
+        \   <env:Body>\n        <m:cssvalidationresponse\n            env:encodingStyle=\"http://www.w3.org/2003/05/soap-encoding\"\n
+        \           xmlns:m=\"http://www.w3.org/2005/07/css-validator\">\n            <m:uri>file://localhost/TextArea</m:uri>\n
+        \           <m:checkedby>http://jigsaw.w3.org/css-validator/</m:checkedby>\n
+        \           <m:csslevel>css3</m:csslevel>\n            <m:date>2014-04-24T07:25:20Z</m:date>\n
+        \           <m:validity>true</m:validity>\n            <m:result>\n                <m:errors
+        xml:lang=\"en\">\n                    <m:errorcount>0</m:errorcount>\n    \n
+        \               </m:errors>\n                <m:warnings xml:lang=\"en\">\n
+        \                   <m:warningcount>0</m:warningcount>\n                </m:warnings>\n
+        \           </m:result>\n        </m:cssvalidationresponse>\n    </env:Body>\n</env:Envelope>\n\n"
+    http_version: 
+  recorded_at: Thu, 24 Apr 2014 07:25:20 GMT
+recorded_with: VCR 2.9.0
