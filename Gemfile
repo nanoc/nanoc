@@ -43,6 +43,8 @@ gem 'sass', '~> 3.2.2'
 gem 'slim'
 gem 'typogruby'
 gem 'uglifier'
+gem 'vcr'
 gem 'w3c_validators'
+gem 'webmock'
 gem 'yuicompressor', :platforms => ruby_19_plus
 gem 'yard'
