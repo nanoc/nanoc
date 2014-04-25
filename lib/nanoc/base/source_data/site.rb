@@ -33,6 +33,7 @@ module Nanoc
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
       :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
+      :lib_dirs           => %w( lib ),
       :output_dir         => 'output',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],
@@ -301,11 +302,15 @@ module Nanoc
       @code_snippets_loaded = true
 
       # Get code snippets
-      @code_snippets = Dir['lib/**/*.rb'].sort.map do |filename|
-        Nanoc::CodeSnippet.new(
-          File.read(filename),
-          filename
-        )
+      @code_snippets = []
+      config[:lib_dirs].each do |lib|
+        code_snippets = Dir["#{lib}/**/*.rb"].sort.map do |filename|
+          Nanoc::CodeSnippet.new(
+            File.read(filename),
+            filename
+          )
+        end
+        @code_snippets.concat(code_snippets)
       end
 
       # Execute code snippets
