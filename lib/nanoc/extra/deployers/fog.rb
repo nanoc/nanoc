@@ -9,6 +9,10 @@ module Nanoc::Extra::Deployers
   #   deploy:
   #     public:
   #       kind:       fog
+  #       bucket:     nanoc-site
+  #       cdn_id:     XXXXXX
+  #     preprod:
+  #       kind:       fog
   #       provider:   local
   #       local_root: ~/myCloud
   #       bucket:     nanoc-site
