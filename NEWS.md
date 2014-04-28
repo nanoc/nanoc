@@ -7,6 +7,8 @@ New features:
 * Allowed excluding links from the internal links check (`@config[:checks][:internal_links][:exclude]`) (#242) [Remko Tronçon]
 * Added Rouge syntax coloring filter (#398) [Guilherme Garnier]
 * Backported `after_setup` from nanoc 4 to make it easier to create CLI plugins (#407) [Rémi Barraquand]
+* Make lib dirs configurable using `lib_dirs` config attribute (#424) [Gregory Pakosz]
+* Added support for setting parent config dir using `parent_config_file` config attribute (#419) [Gregory Pakosz]
 
 Enhancements:
 
