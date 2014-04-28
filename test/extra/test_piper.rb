@@ -33,4 +33,16 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     assert_equal('', stderr.string)
   end
 
+  def test_no_such_command
+    stdout = StringIO.new
+    stderr = StringIO.new
+
+    cmd = %w( cat kafhawilgoiwaejagoualjdsfilofiewaguihaifeowuiga )
+
+    piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+    assert_raises(Nanoc::Extra::Piper::Error) do
+      piper.run(cmd, nil)
+    end
+  end
+
 end

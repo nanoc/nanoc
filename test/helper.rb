@@ -4,15 +4,11 @@
 require File.dirname(__FILE__) + '/gem_loader.rb'
 
 # Load unit testing stuff
-begin
-  require 'minitest/unit'
-  require 'minitest/spec'
-  require 'minitest/mock'
-  require 'mocha/setup'
-rescue => e
-  $stderr.puts "To run the nanoc unit tests, you need minitest and mocha."
-  raise e
-end
+require 'minitest/unit'
+require 'minitest/spec'
+require 'minitest/mock'
+require 'mocha/setup'
+require 'vcr'
 
 # Setup coverage
 require 'coveralls'
@@ -27,6 +23,11 @@ require 'nanoc/tasks'
 # Load miscellaneous requirements
 require 'tmpdir'
 require 'stringio'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'test/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+end
 
 module Nanoc::TestHelpers
 
