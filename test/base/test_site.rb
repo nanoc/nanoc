@@ -33,6 +33,79 @@ class Nanoc::SiteTest < Nanoc::TestCase
     assert_equal({},      site.config[:data_sources][0][:config])
   end
 
+  def test_initialize_with_existing_parent_config_file
+    File.open('nanoc.yaml', 'w') do |io|
+      io.write <<-EOF
+output_dir: public_html
+parent_config_file: foo/foo.yaml
+EOF
+    end
+    FileUtils.mkdir_p('foo')
+    FileUtils.cd('foo') do
+      File.open('foo.yaml', 'w') do |io|
+        io.write <<-EOF
+parent_config_file: ../bar/bar.yaml
+EOF
+      end
+    end
+    FileUtils.mkdir_p('bar')
+    FileUtils.cd('bar') do
+      File.open('bar.yaml', 'w') do |io|
+        io.write <<-EOF
+enable_output_diff: true
+foo: bar
+output_dir: output
+EOF
+      end
+    end
+
+    site = Nanoc::Site.new('.')
+    assert_nil site.config[:parent_config_file]
+    assert site.config[:enable_output_diff]
+    assert_equal 'bar', site.config[:foo]
+    assert_equal 'public_html', site.config[:output_dir]
+  end
+
+  def test_initialize_with_missing_parent_config_file
+    File.open('nanoc.yaml', 'w') do |io|
+      io.write <<-EOF
+parent_config_file: foo/foo.yaml
+EOF
+    end
+
+    error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      site = Nanoc::Site.new('.')
+    end
+    assert_equal(
+      "Could not find parent configuration file 'foo/foo.yaml'",
+      error.message
+    )
+  end
+
+  def test_initialize_with_parent_config_file_cycle
+    File.open('nanoc.yaml', 'w') do |io|
+      io.write <<-EOF
+parent_config_file: foo/foo.yaml
+EOF
+    end
+    FileUtils.mkdir_p('foo')
+    FileUtils.cd('foo') do
+      File.open('foo.yaml', 'w') do |io|
+        io.write <<-EOF
+parent_config_file: ../nanoc.yaml
+EOF
+      end
+    end
+
+    error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      site = Nanoc::Site.new('.')
+    end
+    assert_equal(
+      "Cycle detected. Could not use parent configuration file '../nanoc.yaml'",
+      error.message
+    )
+  end
+
   def test_load_rules_with_existing_rules_file
     # Mock DSL
     dsl = mock

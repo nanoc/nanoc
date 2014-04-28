@@ -351,6 +351,29 @@ module Nanoc
       end
     end
 
+    # Loads a configuration file.
+    def load_config(config_path)
+      YAML.load_file(config_path).symbolize_keys_recursively
+    end
+
+    def apply_parent_config(config, config_paths = [])
+      parent_config_file = config[:parent_config_file]
+      if parent_config_file
+        config.delete(:parent_config_file)
+        config_path = File.absolute_path(parent_config_file, File.dirname(config_paths.last))
+        if !File.file?(config_path)
+          raise Nanoc::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
+        end
+        if config_paths.include?(config_path)
+          raise Nanoc::Errors::GenericTrivial, "Cycle detected. Could not use parent configuration file '#{parent_config_file}'"
+        end
+        parent_config = load_config(config_path)
+        apply_parent_config(parent_config, config_paths + [config_path]).merge(config)
+      else
+        config
+      end
+    end
+
     # Builds the configuration hash based on the given argument. Also see
     # {#initialize} for details.
     def build_config(dir_or_config_hash)
@@ -366,14 +389,17 @@ module Nanoc
           if filename.nil?
             raise Nanoc::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
           end
-          File.join(dir_or_config_hash, filename)
+          File.absolute_path(filename, dir_or_config_hash)
         end
-        @config = DEFAULT_CONFIG.merge(YAML.load_file(config_path).symbolize_keys_recursively)
-        @config[:data_sources].map! { |ds| ds.symbolize_keys_recursively }
+
+        @config = apply_parent_config(load_config(config_path), [config_path])
       else
         # Use passed config hash
-        @config = DEFAULT_CONFIG.merge(dir_or_config_hash)
+        @config = apply_parent_config(dir_or_config_hash.symbolize_keys_recursively)
       end
+
+      # Merge config with default config
+      @config = DEFAULT_CONFIG.merge(@config)
 
       # Merge data sources with default data source config
       @config[:data_sources] = @config[:data_sources].map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
@@ -381,7 +407,6 @@ module Nanoc
       # Convert to proper configuration
       @config = Nanoc::Configuration.new(@config)
     end
-
   end
 
 end
