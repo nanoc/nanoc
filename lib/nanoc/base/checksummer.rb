@@ -10,20 +10,6 @@ module Nanoc
   # A checksummer is stateless.
   class Checksummer
 
-    # Error that is raised when attempting to create a checksum for an object
-    # that is not supported by the checksummer.
-    class UnchecksummableError < Nanoc::Errors::Generic
-
-      def initialize(obj)
-        @obj = obj
-      end
-
-      def message
-        "Don’t know how to create checksum for a #{@obj.class}"
-      end
-
-    end
-
     # @return [Nanoc::Checksummer] A global stateless checksummer
     def self.instance
       @_instance ||= self.new
@@ -50,14 +36,14 @@ module Nanoc
       when Array
         obj.each do |el|
           digest.update('elem')
-          calc(dump_or_inspect(el), digest)
+          calc(el, digest)
         end
       when Hash
         obj.each do |key, value|
           digest.update('key')
-          calc(dump_or_inspect(key), digest)
+          calc(key, digest)
           digest.update('value')
-          calc(dump_or_inspect(value), digest)
+          calc(value, digest)
         end
       when Pathname
         filename = obj.to_s
@@ -84,18 +70,16 @@ module Nanoc
         attributes.delete(:file)
         calc(attributes, digest)
       else
-        raise UnchecksummableError.new(obj)
+        data = begin
+          Marshal.dump(obj)
+        rescue
+          obj.inspect
+        end
+
+        digest.update(data)
       end
 
       digest.base64digest
-    end
-
-    private
-
-    def dump_or_inspect(obj)
-      Marshal.dump(obj)
-    rescue
-      obj.inspect
     end
 
   end

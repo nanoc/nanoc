@@ -19,7 +19,7 @@ describe Nanoc::Checksummer do
   describe 'for Array' do
 
     it 'should checksum arrays' do
-      subject.calc([1, 'a', :a]).must_equal 'mL+TaqNsEeiPkWloPgCtAofT1yg='
+      subject.calc([1, 'a', :a]).must_equal 'YtWOEFUAMQritkY38KXHFZM/n2E='
     end
 
     it 'should take order into account when checksumming arrays' do
@@ -35,7 +35,7 @@ describe Nanoc::Checksummer do
   describe 'for Hash' do
 
     it 'should checksum hashes' do
-      subject.calc({ a: 1, b: 2 }).must_equal '/EIzOmUWA3gelZoTknMfY0VZH+4='
+      subject.calc({ a: 1, b: 2 }).must_equal 'qY8fW6gWK7F1XQ9MLrx3Gru/RTY='
     end
 
     it 'should take order into account when checksumming hashes' do
@@ -168,7 +168,7 @@ describe Nanoc::Checksummer do
     let(:configuration) { Nanoc::Configuration.new(wrapped) }
 
     it 'should checksum the hash' do
-      subject.calc(configuration).must_equal('B7i1PFYxma/WSSJuGHdavqQQ4qA=')
+      subject.calc(configuration).must_equal('eYYQ74x29njbtXMtuKZX/ogD8JA=')
     end
 
   end
@@ -180,7 +180,7 @@ describe Nanoc::Checksummer do
     let(:attributes)      { { a: 1, b: 2 } }
     let(:identifier)      { '/foo/' }
     let(:item)            { Nanoc::Item.new(content, attributes, identifier) }
-    let(:normal_checksum) { 'J2uklJiGcOuv/j2u9mXf7a3rXzU=' }
+    let(:normal_checksum) { 'eTPdmaG7UAuPzH210HM1JvJaWDo=' }
 
     it 'should checksum item' do
       subject.calc(item).must_equal(normal_checksum)
@@ -210,14 +210,22 @@ describe Nanoc::Checksummer do
 
   end
 
-  describe 'for any other classes' do
+  describe 'for other marshal-able classes' do
 
-    let(:unchecksumable_object) { Object.new }
+    let(:obj) { :foobar }
 
-    it 'should raise an exception' do
-      assert_raises(Nanoc::Checksummer::UnchecksummableError) do
-        subject.calc(unchecksumable_object)
-      end
+    it 'should checksum' do
+      subject.calc(obj).must_match(CHECKSUM_REGEX)
+    end
+
+  end
+
+  describe 'for other non-marshal-able classes' do
+
+    let(:obj) { proc {} }
+
+    it 'should checksum' do
+      subject.calc(obj).must_match(CHECKSUM_REGEX)
     end
 
   end
