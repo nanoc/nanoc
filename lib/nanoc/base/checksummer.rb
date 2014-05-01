@@ -2,10 +2,16 @@
 
 module Nanoc
 
-  # TODO document
+  # Creates checksums for given objects.
+  #
+  # A checksum is a string, such as “mL+TaqNsEeiPkWloPgCtAofT1yg=”, that is used
+  # to determine whether a piece of data has changed.
+  #
+  # A checksummer is stateless.
   class Checksummer
 
-    # TODO document
+    # Error that is raised when attempting to create a checksum for an object
+    # that is not supported by the checksummer.
     class UnchecksummableError < Nanoc::Errors::Generic
 
       def initialize(obj)
@@ -18,17 +24,23 @@ module Nanoc
 
     end
 
-    # TODO document
+    # @return [Nanoc::Checksummer] A global stateless checksummer
     def self.instance
       @_instance ||= self.new
     end
 
-    # TODO document
+    # @param obj The object to create a checksum for
+    #
+    # @return [String] The digest
     def self.calc(obj)
       instance.calc(obj)
     end
 
-    # TODO document
+    # @param obj The object to create a checksum for
+    #
+    # @param [Digest::Base] digest An existing digest to append to
+    #
+    # @return [String] The digest
     def calc(obj, digest = Digest::SHA1.new)
       digest.update(obj.class.to_s)
 
