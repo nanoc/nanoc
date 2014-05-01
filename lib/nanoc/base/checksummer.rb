@@ -10,24 +10,23 @@ module Nanoc
   # A checksummer is stateless.
   class Checksummer
 
-    # @return [Nanoc::Checksummer] A global stateless checksummer
-    def self.instance
-      @_instance ||= self.new
-    end
-
     # @param obj The object to create a checksum for
     #
     # @return [String] The digest
     def self.calc(obj)
-      instance.calc(obj)
+      digest = Digest::SHA1.new
+      update(obj, digest)
+      digest.base64digest
     end
 
     # @param obj The object to create a checksum for
     #
-    # @param [Digest::Base] digest An existing digest to append to
+    # @param [Digest::Base] digest The digest to append to
     #
     # @return [String] The digest
-    def calc(obj, digest = Digest::SHA1.new)
+    #
+    # @api private
+    def self.update(obj, digest)
       digest.update(obj.class.to_s)
 
       case obj
@@ -36,14 +35,14 @@ module Nanoc
       when Array
         obj.each do |el|
           digest.update('elem')
-          calc(el, digest)
+          update(el, digest)
         end
       when Hash
         obj.each do |key, value|
           digest.update('key')
-          calc(key, digest)
+          update(key, digest)
           digest.update('value')
-          calc(value, digest)
+          update(value, digest)
         end
       when Pathname
         filename = obj.to_s
@@ -54,21 +53,21 @@ module Nanoc
           digest.update('???')
         end
       when Nanoc::RulesCollection
-        calc(obj.data, digest)
+        update(obj.data, digest)
       when Nanoc::CodeSnippet
-        calc(obj.data, digest)
+        update(obj.data, digest)
       when Nanoc::Item, Nanoc::Layout
         digest.update('content')
         if obj.respond_to?(:binary?) && obj.binary?
-          calc(Pathname.new(obj.raw_filename), digest)
+          update(Pathname.new(obj.raw_filename), digest)
         else
-          calc(obj.raw_content, digest)
+          update(obj.raw_content, digest)
         end
 
         digest.update('attributes')
         attributes = obj.attributes.dup
         attributes.delete(:file)
-        calc(attributes, digest)
+        update(attributes, digest)
       else
         data = begin
           Marshal.dump(obj)
@@ -78,8 +77,6 @@ module Nanoc
 
         digest.update(data)
       end
-
-      digest.base64digest
     end
 
   end

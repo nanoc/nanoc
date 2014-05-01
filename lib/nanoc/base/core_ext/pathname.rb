@@ -9,7 +9,7 @@ module Nanoc::PathnameExtensions
   #
   # @api private
   def checksum
-    Nanoc::Checksummer.instance.calc(self)
+    Nanoc::Checksummer.calc(self)
   end
 
 end

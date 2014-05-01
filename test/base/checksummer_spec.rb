@@ -4,7 +4,7 @@ require 'tempfile'
 
 describe Nanoc::Checksummer do
 
-  subject { Nanoc::Checksummer.new }
+  subject { Nanoc::Checksummer }
 
   CHECKSUM_REGEX = /\A[0-9a-zA-Z\/+]+=*\Z/
 
