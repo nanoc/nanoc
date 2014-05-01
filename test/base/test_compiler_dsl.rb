@@ -33,6 +33,40 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     assert_match(/WARNING: A preprocess block is already defined./, io[:stderr])
   end
 
+  def test_per_rules_file_preprocessor
+    # Create site
+    Nanoc::CLI.run %w( create_site per-rules-file-preprocessor )
+    FileUtils.cd('per-rules-file-preprocessor') do
+      # Create rep
+      item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
+
+      # Create a bonus rules file
+      File.open('more_rules.rb', 'w') { |io| io.write "preprocess { @items['/foo/'][:preprocessed] = true }" }
+
+      # Create other necessary stuff
+      site = Nanoc::Site.new('.')
+      site.items << item
+      dsl = site.compiler.rules_collection.dsl
+      io = capturing_stdio do
+        dsl.preprocess {}
+      end
+      assert_empty io[:stdout]
+      assert_empty io[:stderr]
+
+      # Include rules
+      dsl.include_rules 'more_rules'
+
+      # Check that the two preprocess blocks have been added
+      assert_equal 2, site.compiler.rules_collection.preprocessors.size
+      refute_nil site.compiler.rules_collection.preprocessors.first
+      refute_nil site.compiler.rules_collection.preprocessors.last
+
+      # Apply preprocess blocks
+      site.compiler.preprocess
+      assert item[:preprocessed]
+    end
+  end
+
   def test_include_rules
     # Create site
     Nanoc::CLI.run %w( create_site with_bonus_rules )

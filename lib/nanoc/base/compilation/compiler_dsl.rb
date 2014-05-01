@@ -5,6 +5,11 @@ module Nanoc
   # Contains methods that will be executed by the site’s `Rules` file.
   class CompilerDSL
 
+    # The current rules filename.
+    #
+    # @return [String] The current rules filename.
+    attr_accessor :rules_filename
+
     # Creates a new compiler DSL for the given collection of rules.
     #
     # @api private
@@ -25,12 +30,11 @@ module Nanoc
     #
     # @return [void]
     def preprocess(&block)
-      if @rules_collection.preprocessor
+      if @rules_collection.preprocessors[rules_filename]
         warn 'WARNING: A preprocess block is already defined. Defining ' \
           'another preprocess block overrides the previously one.'
       end
-
-      @rules_collection.preprocessor = block
+      @rules_collection.preprocessors[rules_filename] = block
     end
 
     # Creates a compilation rule for all items whose identifier match the
@@ -246,7 +250,7 @@ module Nanoc
       filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
-      instance_eval(File.read(filename), filename)
+      @rules_collection.parse(filename)
     end
 
   private
