@@ -75,8 +75,7 @@ module Nanoc
         raise UnchecksummableError.new(obj)
       end
 
-      # TODO don’t need hexdigest per se
-      digest.hexdigest
+      digest.base64digest
     end
 
     private

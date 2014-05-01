@@ -82,7 +82,7 @@ end
 describe 'Hash#checksum' do
 
   it 'should work' do
-    expectation = '70ecb8beab25be5344d9b57bab595a74de6b246e'
+    expectation = 'cOy4vqslvlNE2bV7q1ladN5rJG4='
     { :foo => 123 }.checksum.must_equal expectation
   end
 

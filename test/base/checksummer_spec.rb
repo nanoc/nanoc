@@ -6,12 +6,12 @@ describe Nanoc::Checksummer do
 
   subject { Nanoc::Checksummer.new }
 
-  CHECKSUM_REGEX = /\A[0-9a-f]{40}\Z/
+  CHECKSUM_REGEX = /\A[0-9a-zA-Z\/+]+=*\Z/
 
   describe 'for String' do
 
     it 'should checksum strings' do
-      subject.calc('foo').must_equal('fb993f056be461ce93d6a846692c9fdfceb50b21')
+      subject.calc('foo').must_equal('+5k/BWvkYc6T1qhGaSyf3861CyE=')
     end
 
   end
@@ -19,7 +19,7 @@ describe Nanoc::Checksummer do
   describe 'for Array' do
 
     it 'should checksum arrays' do
-      subject.calc([1, 'a', :a]).must_equal '98bf936aa36c11e88f9169683e00ad0287d3d728'
+      subject.calc([1, 'a', :a]).must_equal 'mL+TaqNsEeiPkWloPgCtAofT1yg='
     end
 
     it 'should take order into account when checksumming arrays' do
@@ -35,7 +35,7 @@ describe Nanoc::Checksummer do
   describe 'for Hash' do
 
     it 'should checksum hashes' do
-      subject.calc({ a: 1, b: 2 }).must_equal 'fc42333a651603781e959a1392731f6345591fee'
+      subject.calc({ a: 1, b: 2 }).must_equal '/EIzOmUWA3gelZoTknMfY0VZH+4='
     end
 
     it 'should take order into account when checksumming hashes' do
@@ -56,7 +56,7 @@ describe Nanoc::Checksummer do
     let(:atime)           { 1234567890 }
     let(:mtime)           { 1234567890 }
     let(:data)            { 'stuffs' }
-    let(:normal_checksum) { '4c7cbb636f28ae8a2ffcabcfc53eb070c9d7affb' }
+    let(:normal_checksum) { 'THy7Y28oroov/KvPxT6wcMnXr/s=' }
 
     before do
       file.write(data)
@@ -74,7 +74,7 @@ describe Nanoc::Checksummer do
       let(:pathname)              { Pathname.new(filename) }
 
       it 'should still checksum' do
-        subject.calc(pathname).must_equal('4c7cbb636f28ae8a2ffcabcfc53eb070c9d7affb')
+        subject.calc(pathname).must_equal(normal_checksum)
       end
 
     end
@@ -145,7 +145,7 @@ describe Nanoc::Checksummer do
     end
 
     it 'should calculate' do
-      subject.calc(rules_collection).must_equal('af84b00e90a9e6c6813de664da040e25c8a94d95')
+      subject.calc(rules_collection).must_equal('r4SwDpCp5saBPeZk2gQOJcipTZU=')
     end
 
   end
@@ -157,7 +157,7 @@ describe Nanoc::Checksummer do
     let(:code_snippet) { Nanoc::CodeSnippet.new(data, filename) }
 
     it 'should checksum the data' do
-      subject.calc(code_snippet).must_equal('652a39e8216805c360883b1639f2cbaae1f6b05d')
+      subject.calc(code_snippet).must_equal('ZSo56CFoBcNgiDsWOfLLquH2sF0=')
     end
 
   end
@@ -168,7 +168,7 @@ describe Nanoc::Checksummer do
     let(:configuration) { Nanoc::Configuration.new(wrapped) }
 
     it 'should checksum the hash' do
-      subject.calc(configuration).must_equal('07b8b53c563199afd649226e18775abea410e2a0')
+      subject.calc(configuration).must_equal('B7i1PFYxma/WSSJuGHdavqQQ4qA=')
     end
 
   end
@@ -180,7 +180,7 @@ describe Nanoc::Checksummer do
     let(:attributes)      { { a: 1, b: 2 } }
     let(:identifier)      { '/foo/' }
     let(:item)            { Nanoc::Item.new(content, attributes, identifier) }
-    let(:normal_checksum) { '276ba494988670ebaffe3daef665dfedadeb5f35' }
+    let(:normal_checksum) { 'J2uklJiGcOuv/j2u9mXf7a3rXzU=' }
 
     it 'should checksum item' do
       subject.calc(item).must_equal(normal_checksum)

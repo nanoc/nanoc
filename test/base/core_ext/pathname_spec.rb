@@ -12,7 +12,7 @@ describe 'Pathname#checksum' do
 
       # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal 'a14fb47d88069b81034e5fae12b06ff2b07d6215'
+      pathname.checksum.must_equal 'oU+0fYgGm4EDTl+uErBv8rB9YhU='
     ensure
       FileUtils.rm_rf('tmp')
     end
@@ -28,7 +28,7 @@ describe 'Pathname#checksum' do
 
       # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal '200a2a617bdc0e17908da62667cc1a3ed10ef335'
+      pathname.checksum.must_equal 'IAoqYXvcDheQjaYmZ8waPtEO8zU='
     ensure
       FileUtils.rm_rf('tmp')
     end
