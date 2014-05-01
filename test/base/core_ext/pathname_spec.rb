@@ -7,12 +7,12 @@ describe 'Pathname#checksum' do
       # Create file
       FileUtils.mkdir_p('tmp')
       File.open('tmp/myfile', 'w') { |io| io.write('') }
-      now = Time.now
-      File.utime(now, now, 'tmp/myfile')
+      timestamp = Time.at(1234569)
+      File.utime(timestamp, timestamp, 'tmp/myfile')
 
       # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal '0-' + now.to_s
+      pathname.checksum.must_equal 'a14fb47d88069b81034e5fae12b06ff2b07d6215'
     ensure
       FileUtils.rm_rf('tmp')
     end
@@ -23,12 +23,12 @@ describe 'Pathname#checksum' do
       # Create file
       FileUtils.mkdir_p('tmp')
       File.open('tmp/myfile', 'w') { |io| io.write('abc') }
-      now = Time.now
-      File.utime(now, now, 'tmp/myfile')
+      timestamp = Time.at(1234569)
+      File.utime(timestamp, timestamp, 'tmp/myfile')
 
       # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal '3-' + now.to_s
+      pathname.checksum.must_equal '200a2a617bdc0e17908da62667cc1a3ed10ef335'
     ensure
       FileUtils.rm_rf('tmp')
     end

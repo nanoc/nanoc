@@ -247,22 +247,7 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      content_checksum =
-        if binary?
-          if File.exist?(raw_filename)
-            Pathname.new(raw_filename).checksum
-          else
-            ''.checksum
-          end
-        else
-          @raw_content.checksum
-        end
-
-      attributes = @attributes.dup
-      attributes.delete(:file)
-      attributes_checksum = attributes.checksum
-
-      content_checksum + ',' + attributes_checksum
+      Nanoc::Checksummer.instance.calc(self)
     end
     memoize :checksum
 

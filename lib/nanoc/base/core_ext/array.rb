@@ -64,17 +64,7 @@ module Nanoc::ArrayExtensions
   #
   # @api private
   def checksum
-    digest = Digest::SHA1.new
-    digest.update('array')
-    each do |e|
-      digest.update('elem')
-      if e.respond_to?(:checksum)
-        digest.update(e.checksum)
-      else
-        digest.update(Marshal.dump(e).checksum)
-      end
-    end
-    digest.hexdigest
+    Nanoc::Checksummer.instance.calc(self)
   end
 
 end

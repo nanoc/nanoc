@@ -27,11 +27,11 @@ end
 describe 'String#checksum' do
 
   it 'should work on empty strings' do
-    ''.checksum.must_equal 'da39a3ee5e6b4b0d3255bfef95601890afd80709'
+    ''.checksum.must_equal '3df63b7acb0522da685dad5fe84b81fdd7b25264'
   end
 
   it 'should work on all strings' do
-    'abc'.checksum.must_equal 'a9993e364706816aba3e25717850c26c9cd0d89d'
+    'abc'.checksum.must_equal '36491844efb6e5fea9b0d49e098ca45ca0a0dc2d'
   end
 
 end
