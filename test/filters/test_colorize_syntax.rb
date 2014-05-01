@@ -282,7 +282,7 @@ puts 'hi!'
 </code></pre>
 after
 EOS
-      expected_output = <<EOS
+      expected_output = <<EOS.sub(/\s*\Z/m, '')
 before
 <pre><code>
 #!/usr/bin/env ruby
@@ -292,7 +292,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.setup_and_run(input)
+      actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
       assert_equal(expected_output, actual_output)
     end
   end
@@ -312,7 +312,7 @@ puts 'hi!'
 </code></pre>
 after
 EOS
-      expected_output = <<EOS
+      expected_output = <<EOS.sub(/\s*\Z/m, '')
 before
 #{CODERAY_PRE}<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
 puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>#{CODERAY_POST}
@@ -320,7 +320,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.setup_and_run(input)
+      actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
       assert_equal(expected_output, actual_output)
     end
   end
@@ -372,7 +372,7 @@ before
 </code></pre>
 after
 EOS
-      expected_output = <<EOS
+      expected_output = <<EOS.sub(/\s*\Z/m, '')
 before
 #{CODERAY_PRE}<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
   <span class=\"keyword\">end</span></code></pre>#{CODERAY_POST}
@@ -380,7 +380,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.setup_and_run(input)
+      actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
       assert_equal(expected_output, actual_output)
     end
   end

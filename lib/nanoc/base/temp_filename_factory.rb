@@ -1,0 +1,53 @@
+# encoding: utf-8
+
+require 'tmpdir'
+
+module Nanoc
+
+  class TempFilenameFactory
+
+    # @return [String] The root directory for all temporary filenames
+    attr_reader :root_dir
+
+    # @return [Nanoc::TempFilenameFactory] A common instance
+    def self.instance
+      @instance ||= new
+    end
+
+    def initialize
+      @counts = {}
+      @root_dir = Dir.mktmpdir('nanoc')
+    end
+
+    # @param [String] prefix A string prefix to include in the temporary
+    #   filename, often the type of filename being provided.
+    #
+    # @return [String] A new unused filename
+    def create(prefix)
+      count = @counts.fetch(prefix, 0)
+      @counts[prefix] = count + 1
+
+      dirname  = File.join(@root_dir, prefix)
+      filename = File.join(@root_dir, prefix, count.to_s)
+
+      FileUtils.mkdir_p(dirname)
+
+      filename
+    end
+
+    # @param [String] prefix A string prefix that indicates which temporary
+    #   filenames should be deleted.
+    #
+    # @return [void]
+    def cleanup(prefix)
+      path = File.join(@root_dir, prefix)
+      if File.exist?(path)
+        FileUtils.remove_entry_secure(path)
+      end
+
+      @counts.delete(prefix)
+    end
+
+  end
+
+end

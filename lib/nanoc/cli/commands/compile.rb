@@ -233,21 +233,25 @@ module Nanoc::CLI::Commands
 
       def durations_per_filter
         @_durations_per_filter ||= begin
-          @times.keys.each_with_object({}) do |filter_name, result|
+          result = {}
+          @times.keys.each do |filter_name|
             durations = durations_for_filter(filter_name)
             if durations
               result[filter_name] = durations
             end
           end
+          result
         end
       end
 
       def durations_for_filter(filter_name)
-        @times[filter_name].each_with_object([]) do |sample, result|
+        result = []
+        @times[filter_name].each do |sample|
           if sample[:start] && sample[:stop]
             result << sample[:stop] - sample[:start]
           end
         end
+        result
       end
 
     end

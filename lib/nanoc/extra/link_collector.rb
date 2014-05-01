@@ -7,6 +7,8 @@ module ::Nanoc::Extra
   class LinkCollector
 
     def initialize(filenames, mode = nil)
+      Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
+
       @filenames = filenames
       @filter =
         case mode
