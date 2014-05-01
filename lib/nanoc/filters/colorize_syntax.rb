@@ -84,6 +84,8 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
+      Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
+
       # Take colorizers from parameters
       @colorizers = Hash.new(params[:default_colorizer] || DEFAULT_COLORIZER)
       (params[:colorizers] || {}).each_pair do |language, colorizer|
