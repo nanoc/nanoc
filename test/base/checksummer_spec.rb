@@ -159,23 +159,57 @@ describe Nanoc::Checksummer do
 
   describe 'for Nanoc::CodeSnippet' do
 
-    let(:data)         { 'asdf' }
-    let(:filename)     { File.expand_path('bob.txt') }
-    let(:code_snippet) { Nanoc::CodeSnippet.new(data, filename) }
+    let(:data)            { 'asdf' }
+    let(:filename)        { File.expand_path('bob.txt') }
+    let(:code_snippet)    { Nanoc::CodeSnippet.new(data, filename) }
+    let(:normal_checksum) { 'ZSo56CFoBcNgiDsWOfLLquH2sF0=' }
 
     it 'should checksum the data' do
-      subject.calc(code_snippet).must_equal('ZSo56CFoBcNgiDsWOfLLquH2sF0=')
+      subject.calc(code_snippet).must_equal(normal_checksum)
+    end
+
+    describe 'if the filename changes' do
+
+      let(:filename) { File.expand_path('george.txt') }
+
+      it 'should have the same checksum' do
+        subject.calc(code_snippet).must_equal(normal_checksum)
+      end
+
+    end
+
+    describe 'if the content changes' do
+
+      let(:data) { 'Other stuff!' }
+
+      it 'should have a different checksum' do
+        subject.calc(code_snippet).must_match(CHECKSUM_REGEX)
+        subject.calc(code_snippet).wont_equal(normal_checksum)
+      end
+
     end
 
   end
 
   describe 'for Nanoc::Configuration' do
 
-    let(:wrapped)       { { a: 1, b: 2 } }
-    let(:configuration) { Nanoc::Configuration.new(wrapped) }
+    let(:wrapped)         { { a: 1, b: 2 } }
+    let(:configuration)   { Nanoc::Configuration.new(wrapped) }
+    let(:normal_checksum) { 'eYYQ74x29njbtXMtuKZX/ogD8JA=' }
 
     it 'should checksum the hash' do
       subject.calc(configuration).must_equal('eYYQ74x29njbtXMtuKZX/ogD8JA=')
+    end
+
+    describe 'if the content changes' do
+
+      let(:wrapped) { { a: 666, b: 2 } }
+
+      it 'should have a different checksum' do
+        subject.calc(configuration).must_match(CHECKSUM_REGEX)
+        subject.calc(configuration).wont_equal(normal_checksum)
+      end
+
     end
 
   end
