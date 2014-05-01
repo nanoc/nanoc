@@ -131,12 +131,7 @@ describe Nanoc::Checksummer do
 
   describe 'for Nanoc::RulesCollection' do
 
-    let(:filename) { 'Rules' }
-    let(:data)     { 'STUFF!' }
-
-    before do
-      File.open(filename, 'w') { |io| io << data }
-    end
+    let(:data) { 'STUFF!' }
 
     let(:rules_collection) do
       coll = Nanoc::RulesCollection.new(nil)
