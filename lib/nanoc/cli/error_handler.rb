@@ -58,12 +58,16 @@ module Nanoc::CLI
           exit!(0)
         end
       end
-      begin
-        Signal.trap('USR1') do
-          puts 'Caught USR1; dumping a stack trace'
-          puts caller.map { |i| "  #{i}" }.join("\n")
+
+      # Set stack trace dump handler
+      if !defined?(RUBY_ENGINE) || RUBY_ENGINE != 'jruby'
+        begin
+          Signal.trap('USR1') do
+            puts 'Caught USR1; dumping a stack trace'
+            puts caller.map { |i| "  #{i}" }.join("\n")
+          end
+        rescue ArgumentError
         end
-      rescue ArgumentError
       end
 
       # Run
