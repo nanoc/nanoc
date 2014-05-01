@@ -131,7 +131,8 @@ describe Nanoc::Checksummer do
 
   describe 'for Nanoc::RulesCollection' do
 
-    let(:data) { 'STUFF!' }
+    let(:data)            { 'STUFF!' }
+    let(:normal_checksum) { 'r4SwDpCp5saBPeZk2gQOJcipTZU=' }
 
     let(:rules_collection) do
       coll = Nanoc::RulesCollection.new(nil)
@@ -140,7 +141,18 @@ describe Nanoc::Checksummer do
     end
 
     it 'should calculate' do
-      subject.calc(rules_collection).must_equal('r4SwDpCp5saBPeZk2gQOJcipTZU=')
+      subject.calc(rules_collection).must_equal(normal_checksum)
+    end
+
+    describe 'if the content changes' do
+
+      let(:data) { 'Other stuff!' }
+
+      it 'should have a different checksum' do
+        subject.calc(rules_collection).must_match(CHECKSUM_REGEX)
+        subject.calc(rules_collection).wont_equal(normal_checksum)
+      end
+
     end
 
   end
