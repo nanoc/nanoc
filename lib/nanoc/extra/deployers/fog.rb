@@ -9,6 +9,10 @@ module Nanoc::Extra::Deployers
   #   deploy:
   #     public:
   #       kind:       fog
+  #       bucket:     nanoc-site
+  #       cdn_id:     XXXXXX
+  #     preprod:
+  #       kind:       fog
   #       provider:   local
   #       local_root: ~/myCloud
   #       bucket:     nanoc-site
@@ -27,6 +31,7 @@ module Nanoc::Extra::Deployers
       src      = File.expand_path(source_path)
       bucket   = config.delete(:bucket) || config.delete(:bucket_name)
       path     = config.delete(:path)
+      cdn_id   = config.delete(:cdn_id)
 
       config.delete(:kind)
 
@@ -35,6 +40,7 @@ module Nanoc::Extra::Deployers
 
       # Mock if necessary
       if self.dry_run?
+        puts 'Dry run - simulation'
         ::Fog.mock!
       end
 
@@ -53,6 +59,7 @@ module Nanoc::Extra::Deployers
 
       # Create bucket if necessary
       if should_create_bucket
+        puts 'Creating bucket'
         directory = connection.directories.create(:key => bucket, :prefix => path)
       end
 
@@ -77,6 +84,7 @@ module Nanoc::Extra::Deployers
             :body => File.open(file_path),
             :public => true)
           keys_to_destroy.delete(key)
+          keys_to_invalidate.push(key)
         end
       end
 
@@ -84,6 +92,18 @@ module Nanoc::Extra::Deployers
       puts 'Removing remote files'
       keys_to_destroy.each do |key|
         directory.files.get(key).destroy
+      end
+
+      # invalidate CDN objects
+      if cdn_id then
+        puts 'Invalidating CDN distribution'
+        keys_to_invalidate.concat keys_to_destroy
+        cdn = Fog::CDN.new(config)
+        distribution = cdn.get_distribution cdn_id
+        # usual limit per invalidation: 1000 objects
+        keys_to_invalidate.each_slice(1000).to_a.each do |paths|
+          resp = cdn.post_invalidation distribution, paths
+        end
       end
 
       puts 'Done!'
