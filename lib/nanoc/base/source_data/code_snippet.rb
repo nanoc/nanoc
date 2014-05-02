@@ -50,7 +50,7 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      @data.checksum
+      Nanoc::Checksummer.calc(self)
     end
 
   end

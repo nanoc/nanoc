@@ -66,20 +66,7 @@ module Nanoc::HashExtensions
   #
   # @api private
   def checksum
-    digest = Digest::SHA1.new
-    digest.update('hash')
-    each_pair do |k,v|
-      digest.update('pair')
-      [k,v].each do |e|
-        digest.update('pair-elem')
-        if e.respond_to?(:checksum)
-          digest.update(e.checksum)
-        else
-          digest.update(Marshal.dump(e).checksum)
-        end
-      end
-    end
-    digest.hexdigest
+    Nanoc::Checksummer.calc(self)
   end
 
 end

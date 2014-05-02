@@ -7,6 +7,11 @@ module Nanoc
   # @api private
   class RulesCollection
 
+    # @return [String] the contents of the Rules file
+    #
+    # @api private
+    attr_accessor :data
+
     extend Nanoc::Memoization
 
     # @return [Array<Nanoc::Rule>] The list of item compilation rules that
@@ -161,7 +166,7 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      @data.checksum
+      Nanoc::Checksummer.calc(self)
     end
 
     def inspect
