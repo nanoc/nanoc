@@ -15,6 +15,7 @@ Enhancements:
 * Added `:with_toc` support to RedCarpet (#222, #232)
 * Added `slim` to the list of text extensions (#316)
 * Made `content/` and `layouts/` dirs configurable (#412) [Gregory Pakosz]
+* Allowed included rules files to have their own preprocess block (#420) [Gregory Pakosz]
 
 ## 3.6.9 (2014-04-15)
 
