@@ -1,5 +1,17 @@
 # nanoc news
 
+## 3.6.10 (???)
+
+Fixes:
+
+* Fixed occasional "no such file" error on JRuby (#422)
+
+Enhancements:
+
+* Improved checksummer to reduce number of unnecessary recompiles (#310, #431)
+* Disabled USR1 on JRuby in order to suppress warning (#425, #426)
+* Made pandoc filter argument passing more generic (#210, #433)
+
 ## 3.6.9 (2014-04-15)
 
 Fixes:
