@@ -353,9 +353,6 @@ module Nanoc
     def ensure_identifier_uniqueness(objects, type)
       seen = Set.new
       objects.each do |obj|
-        if $LOUD
-          STDOUT.puts obj.identifier
-        end
         if seen.include?(obj.identifier)
           raise Nanoc::Errors::DuplicateIdentifier.new(obj.identifier, type)
         end
