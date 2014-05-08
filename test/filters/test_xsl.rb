@@ -33,17 +33,7 @@ EOS
   end
 
   def sample_xml_out
-    <<-EOS
-<?xml version="1.0" encoding="utf-8"?>
-<html>
-  <head>
-    <title>My Report</title>
-  </head>
-  <body>
-    <h1>My Report</h1>
-  </body>
-</html>
-EOS
+    %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
   end
 
   def sample_xsl_with_params
@@ -51,6 +41,7 @@ EOS
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
+  <xsl:param name="foo"/>
   <xsl:template match="/">
     <html>
       <head>
@@ -75,17 +66,7 @@ EOS
   end
 
   def sample_xml_out_with_params
-    <<-EOS
-<?xml version="1.0" encoding="utf-8"?>
-<html>
-  <head>
-    <title>My Report</title>
-  </head>
-  <body>
-    <h1>bar</h1>
-  </body>
-</html>
-EOS
+    %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
   end
 
   SAMPLE_XSL_WITH_OMIT_XML_DECL = <<-EOS
@@ -113,16 +94,7 @@ EOS
 </report>
 EOS
 
-  SAMPLE_XML_OUT_WITH_OMIT_XML_DECL = <<-EOS
-<html>
-  <head>
-    <title>My Report</title>
-  </head>
-  <body>
-    <h1>My Report</h1>
-  </body>
-</html>
-EOS
+  SAMPLE_XML_OUT_WITH_OMIT_XML_DECL = %r{\A<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
   def test_filter_as_layout
     if_have 'nokogiri' do
@@ -140,7 +112,7 @@ EOS
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.content)
-      assert_equal sample_xml_out, result
+      assert_match sample_xml_out, result
     end
   end
 
@@ -160,7 +132,7 @@ EOS
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.content, :foo => 'bar')
-      assert_equal sample_xml_out_with_params, result
+      assert_match sample_xml_out_with_params, result
     end
   end
 
@@ -184,7 +156,7 @@ EOS
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.content)
-      assert_equal SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
+      assert_match SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
     end
   end
 

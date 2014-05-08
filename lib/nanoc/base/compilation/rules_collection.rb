@@ -7,6 +7,11 @@ module Nanoc
   # @api private
   class RulesCollection
 
+    # @return [String] the contents of the Rules file
+    #
+    # @api private
+    attr_accessor :data
+
     extend Nanoc::Memoization
 
     # @return [Array<Nanoc::Rule>] The list of item compilation rules that
@@ -19,13 +24,18 @@ module Nanoc
     # @return [Hash] The layout-to-filter mapping rules
     attr_reader :layout_filter_mapping
 
-    # @return [Proc] The code block that will be executed after all data is
-    #   loaded but before the site is compiled
-    attr_accessor :preprocessor
+    # The hash containing preprocessor code blocks that will be executed after
+    #   all data is loaded but before the site is compiled.
+    #
+    # @return [Hash] The hash containing the preprocessor code blocks that will
+    #   be executed after all data is loaded but before the site is compiled
+    attr_accessor :preprocessors
 
     def initialize
-      @item_compilation_rules  = []
-      @layout_filter_mapping   = {}
+      @item_compilation_rules = []
+      @item_routing_rules     = []
+      @layout_filter_mapping  = {}
+      @preprocessors          = {}
     end
 
     # Add the given rule to the list of item compilation rules.
@@ -43,6 +53,40 @@ module Nanoc
     # @return [Array] The list of item compilation rules for the given item
     def item_compilation_rules_for(item)
       @item_compilation_rules.select { |r| r.applicable_to?(item) }
+    end
+
+    # Loads this site’s rules.
+    #
+    # @return [void]
+    def load
+      # Find rules file
+      rules_filenames = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
+      rules_filename = rules_filenames.find { |f| File.file?(f) }
+      raise Nanoc::Errors::NoRulesFileFound.new if rules_filename.nil?
+
+      parse(rules_filename)
+    end
+
+    def parse(rules_filename)
+      rules_filename = File.absolute_path(rules_filename)
+
+      # Get rule data
+      @data = File.read(rules_filename)
+
+      old_rules_filename = dsl.rules_filename
+      dsl.rules_filename = rules_filename
+      dsl.instance_eval(@data, rules_filename)
+      dsl.rules_filename = old_rules_filename
+    end
+
+    # Unloads this site’s rules.
+    #
+    # @return [void]
+    def unload
+      @item_compilation_rules = []
+      @item_routing_rules     = []
+      @layout_filter_mapping  = {}
+      @preprocessors          = {}
     end
 
     # Finds the first matching compilation rule for the given item
@@ -78,6 +122,12 @@ module Nanoc
     # @return [Object] An unique reference to this object
     def reference
       :rules
+    end
+
+    # @return [String] The checksum for this object. If its contents change,
+    #   the checksum will change as well.
+    def checksum
+      Nanoc::Checksummer.calc(self)
     end
 
     def inspect

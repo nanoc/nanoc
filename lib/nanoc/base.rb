@@ -12,6 +12,8 @@ require 'nanoc/base/helper/directed_graph'
 require 'nanoc/base/helper/memoization'
 require 'nanoc/base/helper/notification_center'
 require 'nanoc/base/helper/plugin_registry'
+require 'nanoc/base/helper/checksummer'
+require 'nanoc/base/helper/temp_filename_factory'
 
 # Load entity classes
 require 'nanoc/base/entities/code_snippet'

@@ -2,6 +2,11 @@ source "https://rubygems.org"
 
 gemspec
 
+# FIXME we may be missing some mswin dependencies here
+all_rubies = Bundler::Dependency::PLATFORM_MAP.keys
+ruby_19_plus               = [:ruby_19, :ruby_20, :ruby_21, :jruby] & all_rubies
+ruby_19_plus_without_jruby = [:ruby_19, :ruby_20, :ruby_21]         & all_rubies
+
 gem 'adsf'
 gem 'bluecloth', :platforms => :ruby
 gem 'builder'
@@ -10,19 +15,19 @@ gem 'compass'
 gem 'coffee-script'
 gem 'debugger'
 gem 'erubis'
-gem 'fog'
+gem 'fog', :platforms => ruby_19_plus
 gem 'haml'
-gem 'handlebars', :platforms => :ruby
+gem 'handlebars', :platforms => ruby_19_plus_without_jruby
 gem 'kramdown'
 gem 'less', '~> 2.0', :platforms => :ruby
-gem 'listen'
+gem 'listen', :platforms => ruby_19_plus
 gem 'markaby'
 gem 'maruku'
-gem 'mime-types'
+gem 'mime-types', :platforms => ruby_19_plus
 gem 'minitest', '~> 5.0'
 gem 'mocha'
 gem 'mustache'
-gem 'nokogiri', '~> 1.5.5'
+gem 'nokogiri', '~> 1.6'
 gem 'pandoc-ruby'
 gem 'pry'
 gem 'pygments.rb', :platforms => [:ruby, :mswin]
@@ -31,18 +36,20 @@ gem 'rake'
 gem 'rainpress'
 gem 'rdiscount', :platforms => [:ruby, :mswin]
 gem 'rdoc'
-gem 'redcarpet', :platforms => [:ruby, :mswin]
+gem 'redcarpet', :platforms => ruby_19_plus_without_jruby + [:mswin]
 gem 'RedCloth'
 gem 'rouge'
-gem 'rubocop'
+gem 'rubocop', :platforms => ruby_19_plus
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
 gem 'slim'
 gem 'sqlite3'
 gem 'typogruby'
 gem 'uglifier'
+gem 'vcr'
 gem 'w3c_validators'
-gem 'yuicompressor'
+gem 'webmock'
+gem 'yuicompressor', :platforms => ruby_19_plus
 gem 'yard'
 
 # disabled until colorize/colored issue is fixed

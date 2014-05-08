@@ -9,9 +9,7 @@ module Nanoc::StringExtensions
   #
   # @api private
   def checksum
-    digest = Digest::SHA1.new
-    digest.update(self)
-    digest.hexdigest
+    Nanoc::Checksummer.calc(self)
   end
 
 end

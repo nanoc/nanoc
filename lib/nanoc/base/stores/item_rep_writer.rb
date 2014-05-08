@@ -81,12 +81,7 @@ module Nanoc
     TMP_TEXT_ITEMS_DIR = 'tmp/text_items'
 
     def temp_filename
-      FileUtils.mkdir_p(TMP_TEXT_ITEMS_DIR)
-      tempfile = Tempfile.new('', TMP_TEXT_ITEMS_DIR)
-      new_filename = tempfile.path
-      tempfile.close!
-
-      File.expand_path(new_filename)
+      Nanoc::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
     end
 
   end

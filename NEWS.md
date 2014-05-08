@@ -32,12 +32,28 @@ New features:
 * Allowed excluding links from the internal links check (`@config[:checks][:internal_links][:exclude]`) (#242) [Remko Tronçon]
 * Added Rouge syntax coloring filter (#398) [Guilherme Garnier]
 * Backported `after_setup` from nanoc 4 to make it easier to create CLI plugins (#407) [Rémi Barraquand]
+* Make lib dirs configurable using `lib_dirs` config attribute (#424) [Gregory Pakosz]
+* Added support for setting parent config dir using `parent_config_file` config attribute (#419) [Gregory Pakosz]
 
 Enhancements:
 
 * Added `:with_toc` support to RedCarpet (#222, #232)
 * Added `slim` to the list of text extensions (#316)
 * Made `content/` and `layouts/` dirs configurable (#412) [Gregory Pakosz]
+* Allowed included rules files to have their own preprocess block (#420) [Gregory Pakosz]
+
+## 3.6.10 (???)
+
+Fixes:
+
+* Fixed occasional "no such file" error on JRuby (#422)
+
+Enhancements:
+
+* Set default encoding to UTF-8 (#428)
+* Improved checksummer to reduce number of unnecessary recompiles (#310, #431)
+* Disabled USR1 on JRuby in order to suppress warning (#425, #426)
+* Made pandoc filter argument passing more generic (#210, #433)
 
 ## 3.6.9 (2014-04-15)
 

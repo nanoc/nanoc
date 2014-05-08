@@ -54,8 +54,7 @@ module Nanoc::HashExtensions
   #
   # @api private
   def checksum
-    array = to_a.sort_by { |kv| kv[0].to_s }
-    array.checksum
+    Nanoc::Checksummer.calc(self)
   end
 
 end

@@ -66,6 +66,10 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
   end
 
   def test_safe_level
+    if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
+      skip 'JRuby does not implement safe levels'
+    end
+
     # Set up
     filter = ::Nanoc::Filters::ERB.new
     File.write('moo', "one miiillion dollars")

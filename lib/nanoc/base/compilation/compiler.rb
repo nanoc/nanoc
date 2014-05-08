@@ -82,9 +82,10 @@ module Nanoc
       dependency_tracker.stop
       store
     ensure
-      # Cleanup
-      FileUtils.rm_rf(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
-      FileUtils.rm_rf(Nanoc::FilesystemItemRepWriter::TMP_TEXT_ITEMS_DIR)
+      Nanoc::TempFilenameFactory.instance.cleanup(
+        Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+      Nanoc::TempFilenameFactory.instance.cleanup(
+        Nanoc::FilesystemItemRepWriter::TMP_TEXT_ITEMS_DIR)
     end
 
     # @group Private instance methods
@@ -192,12 +193,13 @@ module Nanoc
     end
     memoize :dependency_tracker
 
-    # Runs the preprocessor.
+    # Runs the preprocessors.
     #
     # @api private
     def preprocess
-      return if rules_collection.preprocessor.nil?
-      preprocessor_context.instance_eval(&rules_collection.preprocessor)
+      rules_collection.preprocessors.each_value do |preprocessor|
+        preprocessor_context.instance_eval(&preprocessor)
+      end
     end
 
     # Returns all objects managed by the site (items, layouts, code snippets,

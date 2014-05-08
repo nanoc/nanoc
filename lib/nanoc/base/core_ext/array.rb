@@ -52,7 +52,7 @@ module Nanoc::ArrayExtensions
   #
   # @api private
   def checksum
-    Marshal.dump(self).checksum
+    Nanoc::Checksummer.calc(self)
   end
 
 end
