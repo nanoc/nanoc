@@ -245,6 +245,10 @@ module Nanoc
       data_sources.each { |ds| ds.unuse }
       setup_child_parent_links
 
+      # Ensure unique
+      ensure_identifier_uniqueness(@items, 'item')
+      ensure_identifier_uniqueness(@layouts, 'layout')
+
       # Load compiler too
       # FIXME this should not be necessary
       compiler.load
@@ -343,6 +347,16 @@ module Nanoc
         layouts_in_ds = ds.layouts
         layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier) }
         @layouts.concat(layouts_in_ds)
+      end
+    end
+
+    def ensure_identifier_uniqueness(objects, type)
+      seen = Set.new
+      objects.each do |obj|
+        if seen.include?(obj.identifier)
+          raise Nanoc::Errors::DuplicateIdentifier.new(obj.identifier, type)
+        end
+        seen << obj.identifier
       end
     end
 
