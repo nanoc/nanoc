@@ -188,6 +188,32 @@ EOF
     end
   end
 
+  def test_multiple_items_with_same_identifier
+    with_site do
+      File.open('content/sam.html', 'w') { |io| io.write('I am Sam!') }
+      FileUtils.mkdir_p('content/sam')
+      File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+
+      assert_raises(Nanoc::Errors::DuplicateIdentifier) do
+        site = Nanoc::Site.new('.')
+        site.load
+      end
+    end
+  end
+
+  def test_multiple_layouts_with_same_identifier
+    with_site do
+      File.open('layouts/sam.html', 'w') { |io| io.write('I am Sam!') }
+      FileUtils.mkdir_p('layouts/sam')
+      File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+
+      assert_raises(Nanoc::Errors::DuplicateIdentifier) do
+        site = Nanoc::Site.new('.')
+        site.load
+      end
+    end
+  end
+
 end
 
 describe 'Nanoc::Site#initialize' do

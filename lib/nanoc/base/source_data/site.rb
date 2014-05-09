@@ -246,6 +246,10 @@ module Nanoc
       data_sources.each { |ds| ds.unuse }
       setup_child_parent_links
 
+      # Ensure unique
+      ensure_identifier_uniqueness(@items, 'item')
+      ensure_identifier_uniqueness(@layouts, 'layout')
+
       # Load compiler too
       # FIXME this should not be necessary
       compiler.load
@@ -371,6 +375,16 @@ module Nanoc
         apply_parent_config(parent_config, config_paths + [config_path]).merge(config)
       else
         config
+      end
+    end
+
+    def ensure_identifier_uniqueness(objects, type)
+      seen = Set.new
+      objects.each do |obj|
+        if seen.include?(obj.identifier)
+          raise Nanoc::Errors::DuplicateIdentifier.new(obj.identifier, type)
+        end
+        seen << obj.identifier
       end
     end
 
