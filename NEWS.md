@@ -5,6 +5,7 @@
 Fixes:
 
 * Fixed occasional "no such file" error on JRuby (#422)
+* Prevented multiple items and layouts from having the same identifier (#434, #435)
 
 Enhancements:
 
