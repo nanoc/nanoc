@@ -1,5 +1,9 @@
 # nanoc news
 
+## 3.6.10.1 (2014-05-09)
+
+Identical to 3.6.10 but published with corrected release notes.
+
 ## 3.6.10 (2014-05-09)
 
 Fixes:
