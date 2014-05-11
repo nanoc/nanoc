@@ -153,8 +153,89 @@ EOF
       site = Nanoc::SiteLoader.new.load
 
       # Check
-      assert_equal 1,      site.data_sources.size
-      assert_equal '/foo', site.items[0].identifier.to_s
+      assert_equal 1,       site.data_sources.size
+      assert_equal '/foo/', site.items[0].identifier
+    end
+  end
+
+  def test_setup_child_parent_links
+    Nanoc::CLI.run %w( create_site bar)
+    FileUtils.cd('bar') do
+      Nanoc::CLI.run %w( create_item /parent/ )
+      Nanoc::CLI.run %w( create_item /parent/foo/ )
+      Nanoc::CLI.run %w( create_item /parent/bar/ )
+      Nanoc::CLI.run %w( create_item /parent/bar/qux/ )
+
+      site = Nanoc::Site.new('.')
+
+      root   = site.items.find { |i| i.identifier == '/' }
+      style  = site.items.find { |i| i.identifier == '/stylesheet/' }
+      parent = site.items.find { |i| i.identifier == '/parent/' }
+      foo    = site.items.find { |i| i.identifier == '/parent/foo/' }
+      bar    = site.items.find { |i| i.identifier == '/parent/bar/' }
+      qux    = site.items.find { |i| i.identifier == '/parent/bar/qux/' }
+
+      assert_equal Set.new([ parent, style ]), Set.new(root.children)
+      assert_equal Set.new([ foo, bar ]),      Set.new(parent.children)
+      assert_equal Set.new([ qux ]),           Set.new(bar.children)
+
+      assert_equal nil,    root.parent
+      assert_equal root,   parent.parent
+      assert_equal parent, foo.parent
+      assert_equal parent, bar.parent
+      assert_equal bar,    qux.parent
+    end
+  end
+
+  def test_multiple_items_with_same_identifier
+    with_site do
+      File.open('content/sam.html', 'w') { |io| io.write('I am Sam!') }
+      FileUtils.mkdir_p('content/sam')
+      File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+
+      assert_raises(Nanoc::Errors::DuplicateIdentifier) do
+        site = Nanoc::Site.new('.')
+        site.load
+      end
+    end
+  end
+
+  def test_multiple_layouts_with_same_identifier
+    with_site do
+      File.open('layouts/sam.html', 'w') { |io| io.write('I am Sam!') }
+      FileUtils.mkdir_p('layouts/sam')
+      File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+
+      assert_raises(Nanoc::Errors::DuplicateIdentifier) do
+        site = Nanoc::Site.new('.')
+        site.load
+      end
+    end
+  end
+
+end
+
+describe 'Nanoc::Site#initialize' do
+
+  include Nanoc::TestHelpers
+
+  it 'should merge default config' do
+    site = Nanoc::Site.new(:foo => 'bar')
+    site.config[:foo].must_equal 'bar'
+    site.config[:output_dir].must_equal 'output'
+  end
+
+  it 'should not raise under normal circumstances' do
+    Nanoc::Site.new({})
+  end
+
+  it 'should not raise for non-existant output directory' do
+    Nanoc::Site.new(:output_dir => 'fklsdhailfdjalghlkasdflhagjskajdf')
+  end
+
+  it 'should not raise for unknown data sources' do
+    proc do
+      Nanoc::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
     end
   end
 
