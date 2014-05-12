@@ -56,7 +56,7 @@ module Nanoc
           if obj.respond_to?(:binary?) && obj.binary?
             update(Pathname.new(obj.raw_filename), digest)
           else
-            update(obj.raw_content, digest)
+            update(obj.content, digest)
           end
 
           digest.update('attributes')

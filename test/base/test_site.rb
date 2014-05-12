@@ -20,17 +20,14 @@ class Nanoc::SiteTest < Nanoc::TestCase
     assert_equal 'public_html', site.config[:output_dir]
   end
 
-  def test_initialize_with_config_hash
-    site = Nanoc::Site.new(:foo => 'bar')
-    assert_equal 'bar', site.config[:foo]
-  end
-
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Site.new(:data_sources => [ { :type => 'foo', :items_root => '/bar/' } ])
-    assert_equal('foo',   site.config[:data_sources][0][:type])
-    assert_equal('/bar/', site.config[:data_sources][0][:items_root])
-    assert_equal('/',     site.config[:data_sources][0][:layouts_root])
-    assert_equal({},      site.config[:data_sources][0][:config])
+    yaml = YAML.dump(:data_sources => [ { :type => 'filesystem', :items_root => '/bar/' } ])
+    File.write('nanoc.yaml', yaml)
+    site = Nanoc::SiteLoader.new.load
+    assert_equal('filesystem', site.config[:data_sources][0][:type])
+    assert_equal('/bar/',      site.config[:data_sources][0][:items_root])
+    assert_equal('/',          site.config[:data_sources][0][:layouts_root])
+    assert_equal({},           site.config[:data_sources][0][:config])
   end
 
   def test_initialize_with_existing_parent_config_file
@@ -59,7 +56,7 @@ EOF
       end
     end
 
-    site = Nanoc::Site.new('.')
+    site = Nanoc::SiteLoader.new.load
     assert_nil site.config[:parent_config_file]
     assert site.config[:enable_output_diff]
     assert_equal 'bar', site.config[:foo]
@@ -67,14 +64,10 @@ EOF
   end
 
   def test_initialize_with_missing_parent_config_file
-    File.open('nanoc.yaml', 'w') do |io|
-      io.write <<-EOF
-parent_config_file: foo/foo.yaml
-EOF
-    end
+    File.write('nanoc.yaml', 'parent_config_file: foo/foo.yaml')
 
     error = assert_raises(Nanoc::Errors::GenericTrivial) do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
     end
     assert_equal(
       "Could not find parent configuration file 'foo/foo.yaml'",
@@ -83,22 +76,12 @@ EOF
   end
 
   def test_initialize_with_parent_config_file_cycle
-    File.open('nanoc.yaml', 'w') do |io|
-      io.write <<-EOF
-parent_config_file: foo/foo.yaml
-EOF
-    end
+    File.write('nanoc.yaml', 'parent_config_file: foo/foo.yaml')
     FileUtils.mkdir_p('foo')
-    FileUtils.cd('foo') do
-      File.open('foo.yaml', 'w') do |io|
-        io.write <<-EOF
-parent_config_file: ../nanoc.yaml
-EOF
-      end
-    end
+    File.write('foo/foo.yaml', 'parent_config_file: ../nanoc.yaml')
 
     error = assert_raises(Nanoc::Errors::GenericTrivial) do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::SiteLoader.new.load
     end
     assert_equal(
       "Cycle detected. Could not use parent configuration file '../nanoc.yaml'",
@@ -153,20 +136,23 @@ EOF
       site = Nanoc::SiteLoader.new.load
 
       # Check
-      assert_equal 1,       site.data_sources.size
-      assert_equal '/foo/', site.items[0].identifier
+      assert_equal 1,      site.data_sources.size
+      assert_equal '/foo', site.items[0].identifier.to_s
     end
   end
 
   def test_setup_child_parent_links
     Nanoc::CLI.run %w( create_site bar)
     FileUtils.cd('bar') do
-      Nanoc::CLI.run %w( create_item /parent/ )
-      Nanoc::CLI.run %w( create_item /parent/foo/ )
-      Nanoc::CLI.run %w( create_item /parent/bar/ )
-      Nanoc::CLI.run %w( create_item /parent/bar/qux/ )
+      FileUtils.mkdir_p('content/parent')
+      FileUtils.mkdir_p('content/parent/bar')
 
-      site = Nanoc::Site.new('.')
+      File.write('content/parent.md', 'Hi!')
+      File.write('content/parent/foo.md', 'Hi!')
+      File.write('content/parent/bar.md', 'Hi!')
+      File.write('content/parent/bar/qux.md', 'Hi!')
+
+      site = Nanoc::SiteLoader.new.load
 
       root   = site.items.find { |i| i.identifier == '/' }
       style  = site.items.find { |i| i.identifier == '/stylesheet/' }
@@ -188,27 +174,25 @@ EOF
   end
 
   def test_multiple_items_with_same_identifier
-    with_site do
-      File.open('content/sam.html', 'w') { |io| io.write('I am Sam!') }
+    in_site do
+      File.write('content/sam.html', 'I am Sam!')
       FileUtils.mkdir_p('content/sam')
-      File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+      File.write('content/sam/index.html', 'I am Sam, too!')
 
       assert_raises(Nanoc::Errors::DuplicateIdentifier) do
-        site = Nanoc::Site.new('.')
-        site.load
+        Nanoc::SiteLoader.new.load
       end
     end
   end
 
   def test_multiple_layouts_with_same_identifier
-    with_site do
-      File.open('layouts/sam.html', 'w') { |io| io.write('I am Sam!') }
+    in_site do
+      File.write('layouts/sam.html', 'I am Sam!')
       FileUtils.mkdir_p('layouts/sam')
-      File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+      File.write('layouts/sam/index.html', 'I am Sam, too!')
 
       assert_raises(Nanoc::Errors::DuplicateIdentifier) do
-        site = Nanoc::Site.new('.')
-        site.load
+        Nanoc::SiteLoader.new.load
       end
     end
   end
@@ -219,24 +203,58 @@ describe 'Nanoc::Site#initialize' do
 
   include Nanoc::TestHelpers
 
-  it 'should merge default config' do
-    site = Nanoc::Site.new(:foo => 'bar')
-    site.config[:foo].must_equal 'bar'
-    site.config[:output_dir].must_equal 'output'
-  end
+  let(:config)    { {} }
+  let(:site_name) { 'site-initialize-test' }
 
-  it 'should not raise under normal circumstances' do
-    Nanoc::Site.new({})
-  end
-
-  it 'should not raise for non-existant output directory' do
-    Nanoc::Site.new(:output_dir => 'fklsdhailfdjalghlkasdflhagjskajdf')
-  end
-
-  it 'should not raise for unknown data sources' do
-    proc do
-      Nanoc::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
+  before do
+    in_site(name: site_name) do
+      File.write('nanoc.yaml', YAML.dump(config))
     end
+  end
+
+  describe 'with customized config' do
+
+    let(:config) do
+      { foo: 'bar' }
+    end
+
+    it 'should merge default config' do
+      in_site(name: site_name) do
+        site = Nanoc::SiteLoader.new.load
+        site.config[:foo].must_equal 'bar'
+        site.config[:output_dir].must_equal 'output'
+      end
+    end
+
+  end
+
+  describe 'with non-existant output directory' do
+
+    let(:config) do
+      { output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf' }
+    end
+
+    it 'should not raise' do
+      in_site(name: site_name) do
+        Nanoc::SiteLoader.new.load
+      end
+    end
+
+  end
+
+  describe 'with unknown data sources' do
+
+    let(:config) do
+      # FIXME this test makes no sense
+      { data_source: 'fklsdhailfdjalghlkasdflhagjskajdf' }
+    end
+
+    it 'should not raise' do
+      in_site(name: site_name) do
+        Nanoc::SiteLoader.new.load
+      end
+    end
+
   end
 
 end

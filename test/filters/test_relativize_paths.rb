@@ -321,7 +321,7 @@ EOS
 </foo>
 XML
 
-      actual_content = @filter.setup_and_run(raw_content, :type => :xml, :select => ['*/@boo'])
+      actual_content = @filter.setup_and_run(content, :type => :xml, :select => ['*/@boo'])
 
       assert_match(expected, actual_content)
     end
@@ -337,7 +337,7 @@ XML
   <bar><far href="/foo">baz</far></bar>
 </foo>
 XML
-      actual_content = @filter.setup_and_run(content    , :type => :xml, :select => ['far/@href'])
+      actual_content = @filter.setup_and_run(content, :type => :xml, :select => ['far/@href'])
       assert_match(/<foo>/, actual_content)
       assert_match(/<bar><far href="..\/..">baz<\/far><\/bar>/, actual_content)
     end
