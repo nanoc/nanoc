@@ -200,7 +200,13 @@ module Nanoc
 
     # @return [Array] The list of all vertices in this graph.
     def vertices
-      @vertices.keys.sort_by { |v| @vertices[v] }
+      vertex_list = []
+
+      @vertices.each_pair do |v, i|
+        vertex_list[i] = v
+      end
+
+      vertex_list
     end
 
     # Returns an array of tuples representing the edges. The result of this

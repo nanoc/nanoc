@@ -190,6 +190,12 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
     assert_equal [ 1 ], graph.direct_predecessors_of(3).sort
     assert_equal [ 1 ], graph.direct_successors_of(3).sort
     assert_equal Set.new([]), graph.roots
+    edges = graph.edges
+    vertices = graph.vertices
+    assert_equal 1, vertices[edges[0][0]]
+    assert_equal 3, vertices[edges[0][1]]
+    assert_equal 3, vertices[edges[1][0]]
+    assert_equal 1, vertices[edges[1][1]]
   end
 
   def test_delete_vertex_resulting_roots
