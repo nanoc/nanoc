@@ -6,13 +6,18 @@ module Nanoc::CLI
   # attributes, it returns a colorized string.
   module ANSIStringColorizer
 
-    # TODO complete mapping
+    # check https://en.wikipedia.org/wiki/ANSI_escape_code
+    # TODO complete font face like bold, italic, etc.
     MAPPING = {
-      :bold   => "\e[1m",
-      :red    => "\e[31m",
-      :green  => "\e[32m",
-      :yellow => "\e[33m",
-      :blue   => "\e[34m"
+      :bold    => "\e[1m",
+      :black   => "\e[30m",
+      :red     => "\e[31m",
+      :green   => "\e[32m",
+      :yellow  => "\e[33m",
+      :blue    => "\e[34m",
+      :magenta => "\e[35m",
+      :cyan    => "\e[36m",
+      :white   => "\e[37m"
     }
 
     # @param [String] s The string to colorize
