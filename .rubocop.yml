@@ -104,11 +104,11 @@ EmptyLinesAroundBody:
   Enabled: false
 
 # No personal preference over how to format strings.
-FavorSprintf:
+FormatString:
   Enabled: false
 
 # I prefer negated if because unless is hard to parse mentally.
-FavorUnlessOverNegatedIf:
+NegatedIf:
   Enabled: false
 
 # nanoc suppresses exceptions for valid reasons in a few cases.
@@ -144,8 +144,16 @@ SignalException:
 SpaceInsideBrackets:
   Enabled: false
 
+# Disable single space check due to code alignment.
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+
 # Some methods that appear to be accessors (return a single value or set a
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
 TrivialAccessors:
+  Enabled: false
+
+# Disable nested module check
+ClassAndModuleChildren:
   Enabled: false
