@@ -53,6 +53,14 @@ describe Nanoc::TempFilenameFactory do
       File.file?(path_a).wont_equal(true)
     end
 
+    it 'should eventually delete the root directory' do
+      subject.create(prefix)
+      File.directory?(subject.root_dir).must_equal(true)
+
+      subject.cleanup(prefix)
+      File.directory?(subject.root_dir).wont_equal(true)
+    end
+
   end
 
   describe 'other instance' do
