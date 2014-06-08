@@ -336,7 +336,15 @@ module Nanoc::Filters
       formatter.format(lexer.lex(code))
     end
 
-    # Removes the double wrapping
+    # Removes the double wrapping.
+    #
+    # Before:
+    #
+    #   <pre><code class="language-ruby"><pre><code class="highlight">
+    #
+    # After:
+    #
+    #   <pre><code class="language-ruby highlight">
     def rouge_postprocess(language, element)
       return if element.name != 'pre'
 
