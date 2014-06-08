@@ -328,9 +328,33 @@ module Nanoc::Filters
     def rouge(code, language, params = {})
       require 'rouge'
 
-      formatter = Rouge::Formatters::HTML.new(:css_class => params[:css_class] || "highlight")
+      formatter_options = {
+        :css_class => params.fetch(:css_class, 'highlight'),
+      }
+      formatter = Rouge::Formatters::HTML.new(formatter_options)
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
       formatter.format(lexer.lex(code))
+    end
+
+    # Removes the double wrapping.
+    #
+    # Before:
+    #
+    #   <pre><code class="language-ruby"><pre><code class="highlight">
+    #
+    # After:
+    #
+    #   <pre><code class="language-ruby highlight">
+    def rouge_postprocess(language, element)
+      return if element.name != 'pre'
+
+      code1 = element.xpath('code').first
+      return if code1.nil?
+      code2 = code1.xpath('pre/code').first
+      return if code2.nil?
+
+      code1.inner_html = code2.inner_html
+      code1['class'] = [ code1['class'], code2['class'] ].compact.join(' ')
     end
 
   protected

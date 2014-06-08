@@ -401,8 +401,8 @@ after
 EOS
       expected_output = <<EOS
 before
-<pre><code class=\"language-ruby\"><pre class=\"highlight\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
-  <span class=\"k\">end</span></pre></code></pre>
+<pre><code class=\"language-ruby highlight\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
+  <span class=\"k\">end</span></code></pre>
 after
 EOS
 
@@ -428,8 +428,8 @@ after
 EOS
       expected_output = <<EOS
 before
-<pre><code class=\"language-ruby\"><pre class=\"my-class\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
-  <span class=\"k\">end</span></pre></code></pre>
+<pre><code class=\"language-ruby my-class\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
+  <span class=\"k\">end</span></code></pre>
 after
 EOS
 
