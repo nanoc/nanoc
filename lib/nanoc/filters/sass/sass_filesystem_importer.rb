@@ -11,8 +11,10 @@ class ::Sass::Importers::Filesystem
 
     # Create dependency
     filter = options[:nanoc_current_filter]
-    item = filter.imported_filename_to_item(full_filename)
-    filter.depend_on([ item ]) unless item.nil?
+    if filter
+      item = filter.imported_filename_to_item(full_filename)
+      filter.depend_on([ item ]) unless item.nil?
+    end
 
     # Call original _find
     _orig_find(dir, name, options)
