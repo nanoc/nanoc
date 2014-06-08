@@ -17,9 +17,11 @@ Enhancements:
 * Made `content/` and `layouts/` dirs configurable (#412) [Gregory Pakosz]
 * Allowed included rules files to have their own preprocess block (#420) [Gregory Pakosz]
 
-## 3.6.10.1 (2014-05-09)
+## 3.6.11 (2014-05-09)
 
 Identical to 3.6.10 but published with corrected release notes.
+
+This release was previously known as 3.6.10.1, but was renamed due to incompatibilities with the Semantic Versioning specification.
 
 ## 3.6.10 (2014-05-09)
 
