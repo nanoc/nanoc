@@ -106,7 +106,6 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
-    psych (2.0.5)
     pygments.rb (0.5.4)
       posix-spawn (~> 0.3.6)
       yajl-ruby (~> 1.1.0)
@@ -200,7 +199,6 @@ DEPENDENCIES
   nokogiri (~> 1.6)
   pandoc-ruby
   pry
-  psych
   pygments.rb
   rack
   rainpress

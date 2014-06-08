@@ -30,7 +30,6 @@ gem 'mustache'
 gem 'nokogiri', '~> 1.6'
 gem 'pandoc-ruby'
 gem 'pry'
-gem 'psych'
 gem 'pygments.rb', :platforms => [:ruby, :mswin]
 gem 'rack'
 gem 'rake'
