@@ -46,6 +46,10 @@ module Nanoc
       end
 
       @counts.delete(prefix)
+
+      if @counts.empty? && File.directory?(@root_dir)
+        FileUtils.remove_entry_secure(@root_dir)
+      end
     end
 
   end
