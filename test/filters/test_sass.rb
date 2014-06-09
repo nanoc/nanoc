@@ -271,6 +271,17 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     end
   end
 
+  def test_sass_without_filter
+    if_have 'sass' do
+      File.open('_morestuff.sass', 'w') do |io|
+        io.write("p\n  color: blue")
+      end
+
+      options = { :filename => File.join(Dir.getwd, 'test.sass') }
+      ::Sass::Engine.new('@import "morestuff"', options).render
+    end
+  end
+
 private
 
   def create_filter(params={})
