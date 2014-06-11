@@ -7,7 +7,7 @@ begin
   Bundler.require(:default)
 rescue LoadError
   # no problem
-end
+end if File.file?('Gemfile')
 
 # Add lib to load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
