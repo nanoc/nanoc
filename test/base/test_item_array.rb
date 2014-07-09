@@ -97,6 +97,14 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items.at('/tenthousand/')
   end
 
+  def test_regex
+    foo = Nanoc::Item.new('Item Foo', {}, '/foo/')
+    @items << foo
+
+    assert_equal [@one], @items[/n/]
+    assert_equal [@two, foo], @items[%r{o/}]
+  end
+
   def test_less_than_less_than
     assert_nil @items[2]
     assert_nil @items['/foo/']
