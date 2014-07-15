@@ -4,7 +4,11 @@
 # Try loading bundler if it's possible
 begin
   require 'bundler/setup'
-  Bundler.require(:default)
+  begin
+    Bundler.require(:default)
+  rescue Bundler::GemfileNotFound
+    # no problem
+  end
 rescue LoadError
   # no problem
 end if File.file?('Gemfile')

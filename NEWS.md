@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.7.1 (2014-06-16)
+
+Fixes:
+
+* Fixed bug which would cause nanoc to crash if no Gemfile is present (#447, #449)
+
 ## 3.7.0 (2014-06-08)
 
 New features:
