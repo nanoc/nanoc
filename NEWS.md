@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.7.2 (2014-07-20)
+
+Fixes:
+
+* Fixed issue which could cause items to be unnecessarily marked as outdated (#461) [Gregory Pakosz]
+
 ## 3.7.1 (2014-06-16)
 
 Fixes:
