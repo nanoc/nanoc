@@ -3,6 +3,7 @@
 
 # Try loading bundler if it's possible
 begin
+  require 'bundler'
   require 'bundler/setup'
   begin
     Bundler.require(:default)
