@@ -34,6 +34,7 @@ module Nanoc
     DEFAULT_CONFIG = {
       :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
       :lib_dirs           => %w( lib ),
+      :commands_dirs      => %w( commands ),
       :output_dir         => 'output',
       :data_sources       => [ {} ],
       :index_filenames    => [ 'index.html' ],
