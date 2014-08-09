@@ -5,7 +5,7 @@ module Nanoc::Filters
 
     requires 'markaby'
 
-    # Runs the content through [Markaby](http://markaby.rubyforge.org/).
+    # Runs the content through [Markaby](http://markaby.github.io/).
     # This method takes no options.
     #
     # @param [String] content The content to filter

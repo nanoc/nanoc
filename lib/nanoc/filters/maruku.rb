@@ -5,7 +5,7 @@ module Nanoc::Filters
 
     requires 'maruku'
 
-    # Runs the content through [Maruku](http://maruku.rubyforge.org/).
+    # Runs the content through [Maruku](https://github.com/bhollis/maruku/).
     # Parameters passed to this filter will be passed on to Maruku.
     #
     # @param [String] content The content to filter
