@@ -465,7 +465,7 @@ New:
 * A new “+” wildcard in rule patterns that matches one or more characters
 * A `view` command that starts a web server in the output directory
 * A `debug` command that shows information about the items, reps and layouts
-* A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
+* A `kramdown` filter ([kramdown site](http://kramdown.gettalong.org/))
 * A diff between the previously compiled content and the last compiled content is now written to `output.diff` if the `enable_output_diff` site configuration attribute is true
 * Assigns, such as `@items`, `@layouts`, `@item`, … are accessible without `@`
 * Support for binary items
@@ -653,7 +653,7 @@ updated manual will be useful.
 New:
 
 * New `rdiscount` filter ([RDiscount site](http://github.com/rtomayko/rdiscount))
-* New `maruku` filter ([Maruku site](http://maruku.rubyforge.org/))
+* New `maruku` filter ([Maruku site](https://github.com/bhollis/maruku/))
 * New `erubis` filter ([Erubis site](http://www.kuwata-lab.com/erubis/))
 * A better commandline frontend
 * A new filesystem data source named `filesystem_combined`
