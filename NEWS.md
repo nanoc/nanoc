@@ -5,6 +5,7 @@
 Fixes:
 
 * Fixed issue which could cause items to be unnecessarily marked as outdated (#461) [Gregory Pakosz]
+* Fixed broken links to the now defunct RubyForge
 
 ## 3.7.1 (2014-06-16)
 
