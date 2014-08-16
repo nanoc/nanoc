@@ -25,7 +25,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     assert File.file?('foobar/asdf.html')
 
     # Check file content
-    expected = /^--- ?\nfoo: bar\n---\n\ncontent here$/
+    expected = /^--- ?\nfoo: bar\n---\ncontent here$/
     assert_match expected, File.read('foobar/asdf.html')
   end
 
@@ -41,7 +41,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     assert File.file?('foobar/index.html')
 
     # Check file content
-    expected = /^--- ?\nfoo: bar\n---\n\ncontent here$/
+    expected = /^--- ?\nfoo: bar\n---\ncontent here$/
     assert_match expected, File.read('foobar/index.html')
   end
 
