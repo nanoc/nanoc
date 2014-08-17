@@ -12,7 +12,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', :erb\n")
       end
 
-      File.open('layouts/foo.xyz', 'w') do |io|
+      File.open('layouts/foo.erb', 'w') do |io|
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
@@ -38,7 +38,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', nil\n")
       end
 
-      File.open('layouts/foo.xyz', 'w').close()
+      File.open('layouts/foo.erb', 'w').close()
 
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo/'
@@ -54,7 +54,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', :asdf\n")
       end
 
-      File.open('layouts/foo.xyz', 'w').close()
+      File.open('layouts/foo.erb', 'w').close()
 
       assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo/'
@@ -70,7 +70,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', :erb\n")
       end
 
-      File.open('layouts/foo.xyz', 'w') do |io|
+      File.open('layouts/foo.erb', 'w') do |io|
         io.write '[partial-before]<%= yield %>[partial-after]'
       end
 

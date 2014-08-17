@@ -93,6 +93,8 @@ module Nanoc::DataSources
         if is_binary && klass == Nanoc::Item
           meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
           content_or_filename = content_filename
+        elsif is_binary && klass == Nanoc::Layout
+          raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
         else
           meta, content_or_filename = parse(content_filename, meta_filename, kind)
         end
