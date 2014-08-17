@@ -25,7 +25,7 @@ module Nanoc::Extra
     end
 
     # Calls the autocompiler. The behaviour of this method is defined by the
-    # [Rack specification](http://rack.rubyforge.org/doc/SPEC.html).
+    # [Rack specification](http://rubydoc.info/github/rack/rack/master/file/SPEC).
     #
     # @param [Hash] env The environment, as defined by the Rack specification
     #

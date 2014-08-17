@@ -10,7 +10,7 @@ module Nanoc::Filters
       super
     end
 
-    # Runs the content through [RDoc::Markup](http://rdoc.rubyforge.org/RDoc/Markup.html).
+    # Runs the content through [RDoc::Markup](http://docs.seattlerb.org/rdoc/RDoc/Markup.html).
     # This method takes no options.
     #
     # @param [String] content The content to filter

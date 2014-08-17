@@ -138,7 +138,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
       io.write("---\n")
       io.write("filter: erb\n")
     end
-    File.open('layouts/foo/foo.rhtml', 'w') do |io|
+    File.open('layouts/foo/foo.html', 'w') do |io|
       io.write('Lorem ipsum dolor sit amet...')
     end
 
@@ -148,8 +148,8 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     # Check layouts
     assert_equal(1,                       layouts.size)
     assert_equal('erb',                   layouts[0][:filter])
-    assert_equal('rhtml',                 layouts[0][:extension])
-    assert_equal('layouts/foo/foo.rhtml', layouts[0][:content_filename])
+    assert_equal('html',                  layouts[0][:extension])
+    assert_equal('layouts/foo/foo.html',  layouts[0][:content_filename])
     assert_equal('layouts/foo/foo.yaml',  layouts[0][:meta_filename])
   end
 

@@ -8,12 +8,12 @@ module Nanoc::Extra
 
   # @deprecated Use a HTTP library such as
   #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-  #   [Curb](http://curb.rubyforge.org/) instead.
+  #   [Curb](https://github.com/taf2/curb) instead.
   module CHiCk
 
     # @deprecated Use a HTTP library such as
     #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-    #   [Curb](http://curb.rubyforge.org/) instead.
+    #   [Curb](https://github.com/taf2/curb) instead.
     class Client
 
       DEFAULT_OPTIONS = {
@@ -62,7 +62,7 @@ module Nanoc::Extra
 
     # @deprecated Use a HTTP library such as
     #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-    #   [Curb](http://curb.rubyforge.org/) instead.
+    #   [Curb](https://github.com/taf2/curb) instead.
     class CacheController
 
       def initialize(app, options = {})
@@ -82,7 +82,7 @@ module Nanoc::Extra
 
     # @deprecated Use a HTTP library such as
     #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
-    #   [Curb](http://curb.rubyforge.org/) instead.
+    #   [Curb](https://github.com/taf2/curb) instead.
     class RackClient
 
       METHOD_TO_CLASS_MAPPING = {

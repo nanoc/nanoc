@@ -1,5 +1,24 @@
 # nanoc news
 
+## 3.7.2 (2014-08-17)
+
+Fixes:
+
+* Fixed broken links to the now defunct RubyForge (#454, #467)
+* Fixed crash when Gemfile is missing but Bundler is installed (#464)
+* Made filesystem data source strip only leading newlines, not all whitespace (#463) [Gregory Pakosz]
+
+Enhancements:
+
+* Fixed issue which could cause items to be unnecessarily marked as outdated (#461) [Gregory Pakosz]
+* Prevented binary layouts from being generated (#468) [Gregory Pakosz]
+
+## 3.7.1 (2014-06-16)
+
+Fixes:
+
+* Fixed bug which would cause nanoc to crash if no Gemfile is present (#447, #449)
+
 ## 3.7.0 (2014-06-08)
 
 New features:
@@ -453,7 +472,7 @@ New:
 * A new “+” wildcard in rule patterns that matches one or more characters
 * A `view` command that starts a web server in the output directory
 * A `debug` command that shows information about the items, reps and layouts
-* A `kramdown` filter ([kramdown site](http://kramdown.rubyforge.org/))
+* A `kramdown` filter ([kramdown site](http://kramdown.gettalong.org/))
 * A diff between the previously compiled content and the last compiled content is now written to `output.diff` if the `enable_output_diff` site configuration attribute is true
 * Assigns, such as `@items`, `@layouts`, `@item`, … are accessible without `@`
 * Support for binary items
@@ -641,7 +660,7 @@ updated manual will be useful.
 New:
 
 * New `rdiscount` filter ([RDiscount site](http://github.com/rtomayko/rdiscount))
-* New `maruku` filter ([Maruku site](http://maruku.rubyforge.org/))
+* New `maruku` filter ([Maruku site](https://github.com/bhollis/maruku/))
 * New `erubis` filter ([Erubis site](http://www.kuwata-lab.com/erubis/))
 * A better commandline frontend
 * A new filesystem data source named `filesystem_combined`

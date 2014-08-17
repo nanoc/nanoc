@@ -198,9 +198,9 @@ module Nanoc
     end
     memoize :new_rule_memory_for_rep
 
-    # Makes the given rule memory serializable by calling `#inspect` on the
-    # filter arguments, so that objects such as classes and filenames can be
-    # serialized.
+    # Makes the given rule memory serializable by calling
+    # `Nanoc::Checksummer#calc` on the filter arguments, so that objects such as
+    # classes and filenames can be serialized.
     #
     # @param [Array] rs The rule memory for a certain item rep
     #
@@ -208,7 +208,7 @@ module Nanoc
     def make_rule_memory_serializable(rs)
       rs.map do |r|
         if r[0] == :filter
-          [ r[0], r[1], r[2].to_a.map { |a| a.inspect }  ]
+          [ r[0], r[1], r[2].to_a.map { |a| Nanoc::Checksummer.calc(a) }  ]
         else
           r
         end

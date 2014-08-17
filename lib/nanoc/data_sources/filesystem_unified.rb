@@ -94,7 +94,7 @@ module Nanoc::DataSources
         meta = attributes.stringify_keys_recursively
         unless meta == {}
           io.write(YAML.dump(meta).strip + "\n")
-          io.write("---\n\n")
+          io.write("---\n")
         end
         io.write(content)
       end

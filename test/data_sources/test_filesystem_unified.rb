@@ -25,7 +25,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     assert File.file?('foobar/asdf.html')
 
     # Check file content
-    expected = /^--- ?\nfoo: bar\n---\n\ncontent here$/
+    expected = /^--- ?\nfoo: bar\n---\ncontent here$/
     assert_match expected, File.read('foobar/asdf.html')
   end
 
@@ -41,7 +41,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     assert File.file?('foobar/index.html')
 
     # Check file content
-    expected = /^--- ?\nfoo: bar\n---\n\ncontent here$/
+    expected = /^--- ?\nfoo: bar\n---\ncontent here$/
     assert_match expected, File.read('foobar/index.html')
   end
 
@@ -135,11 +135,9 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     File.open('foo/stuff.dat', 'w') { |io| io.write("random binary data") }
 
     # Load
-    items = data_source.send(:load_objects, 'foo', 'item', Nanoc::Layout)
-
-    # Check
-    assert_equal 1, items.size
-    assert_equal 'random binary data', items[0].raw_content
+    assert_raises(RuntimeError) do
+      data_source.send(:load_objects, 'foo', 'item', Nanoc::Layout)
+    end
   end
 
   def test_identifier_for_filename_allowing_periods_in_identifiers
