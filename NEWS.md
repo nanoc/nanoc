@@ -4,8 +4,14 @@
 
 Fixes:
 
+* Fixed broken links to the now defunct RubyForge (#454, #467)
+* Fixed crash when Gemfile is missing but Bundler is installed (#464)
+* Made filesystem data source strip only leading newlines, not all whitespace (#463) [Gregory Pakosz]
+
+Enhancements:
+
 * Fixed issue which could cause items to be unnecessarily marked as outdated (#461) [Gregory Pakosz]
-* Fixed broken links to the now defunct RubyForge
+* Prevented binary layouts from being generated (#468) [Gregory Pakosz]
 
 ## 3.7.1 (2014-06-16)
 
