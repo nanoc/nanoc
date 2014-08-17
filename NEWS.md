@@ -6,7 +6,7 @@ Fixes:
 
 * Fixed broken links to the now defunct RubyForge (#454, #467)
 * Fixed crash when Gemfile is missing but Bundler is installed (#464)
-* Made filesystem data source strip only leading newlines, not all whitespace (#463) [Gregory Pakosz]
+* Made filesystem data source not strip any whitespace (#463) [Gregory Pakosz]
 
 Enhancements:
 
