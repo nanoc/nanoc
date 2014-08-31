@@ -1,5 +1,11 @@
 # nanoc news
 
+## 3.7.3 (2014-08-31)
+
+Fixes:
+
+* Fixed issue which caused metadata sections not be recognised in files that use CRLF line endings (#470, #471) [Gregory Pakosz]
+
 ## 3.7.2 (2014-08-17)
 
 Fixes:
