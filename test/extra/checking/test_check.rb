@@ -11,4 +11,14 @@ class Nanoc::Extra::Checking::CheckTest < Nanoc::TestCase
     end
   end
 
+  def test_no_output_dir
+    with_site do |site|
+      site.config[:output_dir] = 'non-existent'
+      check = Nanoc::Extra::Checking::Check.new(site)
+      assert_raises Nanoc::Extra::Checking::OutputDirNotFoundError do
+        check.output_filenames
+      end
+    end
+  end
+
 end
