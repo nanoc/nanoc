@@ -27,11 +27,12 @@ module Nanoc::Extra
       require 'find'
 
       # Get compiled files
-      compiled_files = site.items.map do |item|
+      all_raw_paths = site.items.map do |item|
         item.reps.map do |rep|
           rep.raw_path
         end
-      end.flatten.compact.select { |f| File.file?(f) }
+      end
+      compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs
       present_files = []

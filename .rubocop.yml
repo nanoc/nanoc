@@ -1,9 +1,6 @@
 # ----- TO ENABLE LATER -----
 # To make merges easier, I’ve decided to enable these at a later point in time.
 
-MultilineBlockChain:
-  Enabled: false
-
 PerlBackrefs:
   Enabled: false
 
@@ -61,6 +58,8 @@ FileName:
 # We use get_binding to extract the binding
 AccessorMethodName:
   Enabled: false
+
+
 
 # ----- DISABLED (opinionated) -----
 
