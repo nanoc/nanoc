@@ -118,16 +118,25 @@ protected
     end
   end
 
-  # Loads site-specific commands in `commands/`.
+  # Loads site-specific commands.
   #
   # @return [void]
   def self.load_custom_commands
-    recursive_contents_of('commands').each do |filename|
+    if Nanoc::Site.cwd_is_nanoc_site?
+      site = Nanoc::Site.new('.')
+      site.config[:commands_dirs].each do |path|
+        load_commands_at(path)
+      end
+    end
+  end
+
+  def self.load_commands_at(path)
+    recursive_contents_of(path).each do |filename|
       # Create command
       command = Nanoc::CLI.load_command_at(filename)
 
       # Get supercommand
-      pieces = filename.gsub(/^commands\/|\.rb$/, '').split('/')
+      pieces = filename.gsub(/^#{path}\/|\.rb$/, '').split('/')
       pieces = pieces[0, pieces.size - 1] || []
       root = Nanoc::CLI.root_command
       supercommand = pieces.reduce(root) do |cmd, piece|

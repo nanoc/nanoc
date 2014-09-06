@@ -75,6 +75,36 @@ EOS
     end
   end
 
+  def test_load_custom_commands_non_default_commands_dirs
+    Nanoc::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
+      File.open('nanoc.yaml', 'w') { |io| io.write('commands_dirs: [commands, commands_alt]') }
+
+      # Create command
+      FileUtils.mkdir_p('commands_alt')
+      File.open('commands_alt/_test.rb', 'w') do |io|
+        io.write(COMMAND_CODE)
+      end
+
+      # Create subcommand
+      FileUtils.mkdir_p('commands_alt/_test')
+      File.open('commands_alt/_test/_sub.rb', 'w') do |io|
+        io.write(SUBCOMMAND_CODE)
+      end
+
+      # Run command
+      begin
+        Nanoc::CLI.run %w( _test _sub )
+      rescue SystemExit
+        assert false, 'Running _test sub should not cause system exit'
+      end
+
+      # Check
+      assert File.file?('_test_sub.out')
+      assert_equal 'It works sub!', File.read('_test_sub.out')
+    end
+  end
+
   def test_load_custom_commands_broken
     Nanoc::CLI.run %w( create_site foo )
 
