@@ -43,7 +43,7 @@ module Nanoc::Extra
         stderr_thread.join
 
         exit_status = wait_thr.value
-        if !exit_status.success?
+        unless exit_status.success?
           raise Error.new(cmd, exit_status.to_i)
         end
       end

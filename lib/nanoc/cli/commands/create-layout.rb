@@ -28,7 +28,7 @@ module Nanoc::CLI::Commands
       set_vcs(options[:vcs])
 
       # Check whether layout is unique
-      if !site.layouts.find { |l| l.identifier == identifier }.nil?
+      unless site.layouts.find { |l| l.identifier == identifier }.nil?
         raise Nanoc::Errors::GenericTrivial,
           "A layout already exists at #{identifier}. Please " \
           'pick a unique name for the layout you are creating.'

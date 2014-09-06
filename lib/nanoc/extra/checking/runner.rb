@@ -70,7 +70,7 @@ module Nanoc::Extra::Checking
 
     def load_dsl_if_available
       @dsl_loaded ||= false
-      if !@dsl_loaded
+      unless @dsl_loaded
         if self.dsl_present?
           @dsl = Nanoc::Extra::Checking::DSL.from_file(checks_filename)
         else

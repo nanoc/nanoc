@@ -126,10 +126,6 @@ EmptyLinesAroundBody:
 FormatString:
   Enabled: false
 
-# I prefer negated if because unless is hard to parse mentally.
-NegatedIf:
-  Enabled: false
-
 # nanoc suppresses exceptions for valid reasons in a few cases.
 HandleExceptions:
   Enabled: false

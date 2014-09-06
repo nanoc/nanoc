@@ -128,7 +128,7 @@ module Nanoc::Helpers
           # item from which we use content. For this, we need to manually edit
           # the content attribute to reset it. :(
           # FIXME clean this up
-          if !@site.captures_store_compiled_items.include? item
+          unless @site.captures_store_compiled_items.include? item
             @site.captures_store_compiled_items << item
             item.forced_outdated = true
             item.reps.each do |r|

@@ -53,7 +53,7 @@ module Nanoc
 
       # Register start of visits
       Nanoc::NotificationCenter.on(:visit_started, self) do |obj|
-        if !@stack.empty?
+        unless @stack.empty?
           Nanoc::NotificationCenter.post(:dependency_created, @stack.last, obj)
           record_dependency(@stack.last, obj)
         end
@@ -71,7 +71,7 @@ module Nanoc
     # @return [void]
     def stop
       # Sanity check
-      if !@stack.empty?
+      unless @stack.empty?
         raise 'Internal inconsistency: dependency tracker stack not empty at end of compilation'
       end
 

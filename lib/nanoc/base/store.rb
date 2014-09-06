@@ -67,7 +67,7 @@ module Nanoc
       end
 
       # Check file existance
-      if !File.file?(filename)
+      unless File.file?(filename)
         no_data_found
         @loaded = true
         return

@@ -30,7 +30,7 @@ module Nanoc::Filters
         if imported_pathname.relative?
           imported_pathname = current_dir_pathname + imported_pathname
         end
-        next if !imported_pathname.exist?
+        next unless imported_pathname.exist?
         imported_filename = imported_pathname.realpath
 
         # Find matching item

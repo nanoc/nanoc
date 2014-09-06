@@ -80,7 +80,7 @@ module Nanoc::CLI::Commands
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, _is_created, _is_modified|
-          if !rep.binary?
+          unless rep.binary?
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
               generate_diff_for(rep, old_contents[rep], new_contents)

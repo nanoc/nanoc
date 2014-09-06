@@ -49,7 +49,7 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
       break if File.file?(filename)
       sleep 0.5
     end
-    if !File.file?(filename)
+    unless File.file?(filename)
       raise RuntimeError, "Expected #{filename} to appear but it didn't :("
     end
   end

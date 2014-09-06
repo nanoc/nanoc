@@ -351,7 +351,7 @@ module Nanoc
       end
 
       # Check whether everything was compiled
-      if !content_dependency_graph.vertices.empty?
+      unless content_dependency_graph.vertices.empty?
         raise Nanoc::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
     ensure

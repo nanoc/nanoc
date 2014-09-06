@@ -141,7 +141,7 @@ module Nanoc
     def routing_rules_for(rep)
       rules = {}
       @item_routing_rules.each do |rule|
-        next if !rule.applicable_to?(rep.item)
+        next unless rule.applicable_to?(rep.item)
         next if rule.rep_name != rep.name
         next if rules.key?(rule.snapshot_name)
 

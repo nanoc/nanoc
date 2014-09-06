@@ -73,7 +73,7 @@ module Nanoc::CLI::Commands
         if runner.dsl_present?
           puts 'Running issue checks…'
           ok = runner.run_for_deploy
-          if !ok
+          unless ok
             puts 'Issues found, deploy aborted.'
             return
           end

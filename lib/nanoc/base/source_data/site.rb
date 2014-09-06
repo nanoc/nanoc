@@ -365,7 +365,7 @@ module Nanoc
       if parent_config_file
         config.delete(:parent_config_file)
         config_path = File.absolute_path(parent_config_file, File.dirname(config_paths.last))
-        if !File.file?(config_path)
+        unless File.file?(config_path)
           raise Nanoc::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
         end
         if config_paths.include?(config_path)

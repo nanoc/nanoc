@@ -20,7 +20,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   end
 
   def test_default_encoding
-    if !defined?(Encoding)
+    unless defined?(Encoding)
       skip 'No Encoding class'
       return
     end

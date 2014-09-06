@@ -93,7 +93,7 @@ module Nanoc::CLI
 
       site.data_sources.each do |data_source|
         # Skip if not possible
-        next if !data_source.respond_to?(:vcs=)
+        next unless data_source.respond_to?(:vcs=)
 
         # Set VCS
         data_source.vcs = vcs_class.new

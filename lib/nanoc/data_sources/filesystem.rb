@@ -163,10 +163,10 @@ module Nanoc::DataSources
         content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
 
         # Check number of files per type
-        if ![ 0, 1 ].include?(meta_filenames.size)
+        unless [ 0, 1 ].include?(meta_filenames.size)
           raise "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
         end
-        if ![ 0, 1 ].include?(content_filenames.size)
+        unless [ 0, 1 ].include?(content_filenames.size)
           raise "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
         end
 
@@ -303,7 +303,7 @@ module Nanoc::DataSources
           raise_encoding_error(filename, original_encoding)
         end
 
-        if !data.valid_encoding?
+        unless data.valid_encoding?
           raise_encoding_error(filename, original_encoding)
         end
       end

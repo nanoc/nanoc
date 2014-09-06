@@ -517,7 +517,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_compile_iso_8859_1_site
     # Check encoding
-    if !''.respond_to?(:encode)
+    unless ''.respond_to?(:encode)
       skip 'Test only works on 1.9.x'
       return
     end
@@ -544,7 +544,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_compile_iso_8859_1_site_with_explicit_encoding
     # Check encoding
-    if !''.respond_to?(:encode)
+    unless ''.respond_to?(:encode)
       skip 'Test only works on 1.9.x'
       return
     end

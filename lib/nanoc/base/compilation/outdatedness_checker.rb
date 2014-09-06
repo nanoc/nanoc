@@ -92,8 +92,8 @@ module Nanoc
           rule_memory_differs_for(obj)
 
         # Outdated if checksums are missing or different
-        return Nanoc::OutdatednessReasons::NotEnoughData if !checksums_available?(obj.item)
-        return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj.item)
+        return Nanoc::OutdatednessReasons::NotEnoughData unless checksums_available?(obj.item)
+        return Nanoc::OutdatednessReasons::SourceModified unless checksums_identical?(obj.item)
 
         # Outdated if compiled file doesn't exist (yet)
         return Nanoc::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
@@ -116,8 +116,8 @@ module Nanoc
           rule_memory_differs_for(obj)
 
         # Outdated if checksums are missing or different
-        return Nanoc::OutdatednessReasons::NotEnoughData if !checksums_available?(obj)
-        return Nanoc::OutdatednessReasons::SourceModified if !checksums_identical?(obj)
+        return Nanoc::OutdatednessReasons::NotEnoughData unless checksums_available?(obj)
+        return Nanoc::OutdatednessReasons::SourceModified unless checksums_identical?(obj)
 
         # Not outdated
         return nil
