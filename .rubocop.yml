@@ -54,7 +54,13 @@ ClassVars:
 SymbolProc:
   Enabled: false
 
+# We use filenames such as “create-site.rb” that translate to method names.
+FileName:
+  Enabled: false
 
+# We use get_binding to extract the binding
+AccessorMethodName:
+  Enabled: false
 
 # ----- DISABLED (opinionated) -----
 
@@ -117,11 +123,11 @@ EmptyLinesAroundBody:
   Enabled: false
 
 # No personal preference over how to format strings.
-FavorSprintf:
+FormatString:
   Enabled: false
 
 # I prefer negated if because unless is hard to parse mentally.
-FavorUnlessOverNegatedIf:
+NegatedIf:
   Enabled: false
 
 # nanoc suppresses exceptions for valid reasons in a few cases.
@@ -169,4 +175,13 @@ TrivialAccessors:
 
 # Used to be personal preference. Can remove soon.
 ClassAndModuleChildren:
+  Enabled: false
+
+# Trailing commas improve diffs. One could argue that diff algorithms should be
+# able to handle this, but they cannot, so this is disabled.
+TrailingComma:
+  Enabled: false
+
+# This does not always semantically make sense.
+GuardClause:
   Enabled: false
