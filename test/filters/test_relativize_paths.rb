@@ -332,7 +332,7 @@ EOS
 
     # Test
     assert_raises(RuntimeError) do
-      filter.setup_and_run("moo")
+      filter.setup_and_run('moo')
     end
   end
 

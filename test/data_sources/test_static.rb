@@ -23,9 +23,9 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo-outside-1')
     FileUtils.mkdir_p('foo-outside-2')
-    File.open('foo/a.png',           'w') { |io| io.write("random binary data") }
-    File.open('foo-outside-1/b.png', 'w') { |io| io.write("more binary data") }
-    File.open('foo-outside-2/c.png', 'w') { |io| io.write("yet more binary data") }
+    File.open('foo/a.png',           'w') { |io| io.write('random binary data') }
+    File.open('foo-outside-1/b.png', 'w') { |io| io.write('more binary data') }
+    File.open('foo-outside-2/c.png', 'w') { |io| io.write('yet more binary data') }
 
     # Create symlinks
     File.symlink('../foo-outside-1', 'foo/1')
@@ -50,9 +50,9 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     # Create sample files
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/bar.png',   'w') { |io| io.write("random binary data") }
-    File.open('foo/b.c.css',   'w') { |io| io.write("more binary data") }
-    File.open('foo/a/b/c.gif', 'w') { |io| io.write("yet more binary data") }
+    File.open('foo/bar.png',   'w') { |io| io.write('random binary data') }
+    File.open('foo/b.c.css',   'w') { |io| io.write('more binary data') }
+    File.open('foo/a/b/c.gif', 'w') { |io| io.write('yet more binary data') }
 
     # Get expected and actual output
     expected_out = [

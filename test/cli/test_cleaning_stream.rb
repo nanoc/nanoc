@@ -45,8 +45,8 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     stream = StringIO.new
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     logger = Logger.new(cleaning_stream)
-    logger.info("Some info")
-    logger.warn("Something could start going wrong!")
+    logger.info('Some info')
+    logger.warn('Something could start going wrong!')
   end
 
   def test_broken_pipe

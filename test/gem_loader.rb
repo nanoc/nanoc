@@ -3,7 +3,7 @@
 begin
   require 'rubygems'
 
-  gemspec = File.expand_path("nanoc.gemspec", Dir.pwd)
+  gemspec = File.expand_path('nanoc.gemspec', Dir.pwd)
   Gem::Specification.load(gemspec).dependencies.each do |dep|
     gem dep.name, *dep.requirement.as_list
   end

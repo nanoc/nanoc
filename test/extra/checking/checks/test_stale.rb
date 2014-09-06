@@ -38,8 +38,8 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       File.open('output/WRONG.html', 'w') { |io| io.write('stuff') }
       assert_equal 1, self.calc_issues.count
       issue = self.calc_issues.to_a[0]
-      assert_equal "file without matching item", issue.description
-      assert_equal "output/WRONG.html", issue.subject
+      assert_equal 'file without matching item', issue.description
+      assert_equal 'output/WRONG.html', issue.subject
     end
   end
 

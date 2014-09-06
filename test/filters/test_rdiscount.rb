@@ -8,7 +8,7 @@ class Nanoc::Filters::RDiscountTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::RDiscount.new
 
       # Run filter
-      result = filter.setup_and_run("> Quote")
+      result = filter.setup_and_run('> Quote')
       assert_match(/<blockquote>\s*<p>Quote<\/p>\s*<\/blockquote>/, result)
     end
   end

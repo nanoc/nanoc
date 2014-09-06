@@ -43,8 +43,8 @@ module Nanoc::Helpers
                gsub('>', '&gt;').
                gsub('"', '&quot;')
       else
-        raise "The #html_escape or #h function needs either a " \
-          "string or a block to HTML-escape, but neither a string nor a block was given"
+        raise 'The #html_escape or #h function needs either a ' \
+          'string or a block to HTML-escape, but neither a string nor a block was given'
       end
     end
 

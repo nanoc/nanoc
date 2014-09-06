@@ -40,7 +40,7 @@ module Nanoc::TestHelpers
   def if_have(*libs)
     libs.each do |lib|
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?
-        skip "Pure Java Nokogiri has issues that cause problems with nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests"
+        skip 'Pure Java Nokogiri has issues that cause problems with nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests'
         return
       end
 
@@ -238,7 +238,7 @@ EOS
   end
 
   def have_command?(cmd)
-    which, null = on_windows? ? ["where", "NUL"] : ["which", "/dev/null"]
+    which, null = on_windows? ? ['where', 'NUL'] : ['which', '/dev/null']
     system("#{which} #{cmd} > #{null} 2>&1")
   end
 
@@ -255,7 +255,7 @@ EOS
   end
 
   def skip_unless_have_symlink
-    skip "Symlinks are not supported by Ruby on Windows" unless have_symlink?
+    skip 'Symlinks are not supported by Ruby on Windows' unless have_symlink?
   end
 
 end
@@ -273,6 +273,6 @@ end
 #
 class Time
   def inspect
-    strftime("%a %b %d %H:%M:%S.#{"%06d" % usec} %Z %Y")
+    strftime("%a %b %d %H:%M:%S.#{'%06d' % usec} %Z %Y")
   end
 end

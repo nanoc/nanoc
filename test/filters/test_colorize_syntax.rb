@@ -132,7 +132,7 @@ EOS
 
   def test_pygmentize
     if_have 'nokogiri' do
-      skip_unless_have_command "pygmentize"
+      skip_unless_have_command 'pygmentize'
 
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -148,7 +148,7 @@ EOS
   end
 
   def test_pygmentsrb
-    skip "pygments.rb does not support Windows" if on_windows?
+    skip 'pygments.rb does not support Windows' if on_windows?
     if_have 'pygments', 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -165,7 +165,7 @@ EOS
 
   def test_simon_highlight
     if_have 'nokogiri' do
-      skip_unless_have_command "highlight"
+      skip_unless_have_command 'highlight'
 
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -223,7 +223,7 @@ EOS
   end
 
   def test_colorize_syntax_with_default_colorizer
-    skip_unless_have_command "pygmentize"
+    skip_unless_have_command 'pygmentize'
 
     if_have 'nokogiri' do
       # Create filter
@@ -258,7 +258,7 @@ EOS
             filter.setup_and_run(
               input,
               :colorizers => { :ruby => colorizer })
-            flunk "expected colorizer to raise if no executable is available"
+            flunk 'expected colorizer to raise if no executable is available'
           rescue
           end
         end
@@ -361,7 +361,7 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Simple test
-      assert_equal "  bar", filter.send(:strip, "\n  bar")
+      assert_equal '  bar', filter.send(:strip, "\n  bar")
 
       # Get input and expected output
       input = <<EOS

@@ -11,13 +11,13 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         # Create item
         FileUtils.mkdir_p('content/foo')
         File.open('content/foo/index.html', 'w') do |io|
-          io.write "Moo!"
+          io.write 'Moo!'
         end
 
         # Create output file
         FileUtils.mkdir_p('output/foo')
         File.open('output/foo/index.html', 'w') do |io|
-          io.write "Compiled moo!"
+          io.write 'Compiled moo!'
         end
 
         # Create site
@@ -36,7 +36,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         assert_equal(200, status)
         assert_equal('text/html', headers['Content-Type'])
         body.each do |b|
-          assert_equal "Compiled moo!", b
+          assert_equal 'Compiled moo!', b
         end
       end
     end
@@ -294,12 +294,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       FileUtils.cd('bar') do
         # Create item
         File.open('content/index.html', 'w') do |io|
-          io.write "Moo!"
+          io.write 'Moo!'
         end
 
         # Create output file
         File.open('output/index.html', 'w') do |io|
-          io.write "Compiled moo!"
+          io.write 'Compiled moo!'
         end
 
         # Create site
@@ -318,7 +318,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         assert_equal(200, status)
         assert_equal('text/html', headers['Content-Type'])
         body.each do |b|
-          assert_equal "Compiled moo!", b
+          assert_equal 'Compiled moo!', b
         end
       end
     end
@@ -332,7 +332,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       FileUtils.cd('bar') do
         # Create item
         File.open('content/whatever.html', 'w') do |io|
-          io.write "Whatever!"
+          io.write 'Whatever!'
         end
 
         # Create site
@@ -360,7 +360,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       FileUtils.cd('foo') do
         # Create item that outputs config elements
         File.open('content/index.html', 'w') do |io|
-          io.write "The Grand Value of Configuration is <%= @config[:value] %>!"
+          io.write 'The Grand Value of Configuration is <%= @config[:value] %>!'
         end
 
         # Create autocompiler
@@ -368,7 +368,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
 
         # Set config to 1st value
         File.open('nanoc.yaml', 'w') do |io|
-          io.write "value: Foo"
+          io.write 'value: Foo'
         end
         File.utime(Time.now+5, Time.now+5, 'nanoc.yaml')
 
@@ -380,7 +380,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
 
         # Set config to 2nd value
         File.open('nanoc.yaml', 'w') do |io|
-          io.write "value: Bar"
+          io.write 'value: Bar'
         end
         File.utime(Time.now+5, Time.now+5, 'nanoc.yaml')
 

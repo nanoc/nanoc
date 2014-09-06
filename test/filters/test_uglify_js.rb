@@ -8,7 +8,7 @@ class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::UglifyJS.new
 
       # Run filter
-      input = "foo = 1; (function(bar) { if (true) alert(bar); })(foo)"
+      input = 'foo = 1; (function(bar) { if (true) alert(bar); })(foo)'
       result = filter.setup_and_run(input)
       assert_match(/foo=1,function\((.)\)\{alert\(\1\)\}\(foo\);/, result)
     end

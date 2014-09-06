@@ -66,7 +66,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_uncompiled_content
     # Create rep
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
     rep = Nanoc::ItemRep.new(item, nil)
@@ -115,7 +115,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
 
@@ -169,7 +169,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_snapshot_should_be_written
     # Mock item
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
 
@@ -198,7 +198,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_write_should_not_touch_identical_textual_files
     # Mock item
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
 
@@ -222,7 +222,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_write
     # Mock item
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
 
@@ -242,7 +242,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_filter_text_to_binary
     # Mock item
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
 
@@ -270,7 +270,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_filter_with_textual_rep_and_binary_filter
     # Mock item
     item = Nanoc::Item.new(
-      "blah blah", {}, '/',
+      'blah blah', {}, '/',
       :binary => false
     )
 
@@ -368,7 +368,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       Class.new(::Nanoc::Filter) do
         type :binary => :text
         def run(content, params={})
-          "Some textual content"
+          'Some textual content'
         end
       end
     end
@@ -379,7 +379,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       Class.new(::Nanoc::Filter) do
         type :text
         def run(content, params={})
-          "Some textual content"
+          'Some textual content'
         end
       end
     end
@@ -404,7 +404,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary => :text
         def run(content, params={})
-          "Some textual content"
+          'Some textual content'
         end
       end
     end
@@ -421,7 +421,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       end
     end
 
-    item = Nanoc::Item.new("foo bar", {}, '/foo/')
+    item = Nanoc::Item.new('foo bar', {}, '/foo/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.instance_eval { @filter_class = filter_class }
     def rep.filter_named(name) ; @filter_class ; end
@@ -439,7 +439,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
       end
     end
 
-    item = Nanoc::Item.new("foo bar", {}, '/foo/')
+    item = Nanoc::Item.new('foo bar', {}, '/foo/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.instance_eval { @filter_class = filter_class }
     def rep.filter_named(name) ; @filter_class ; end
@@ -452,8 +452,8 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_raw_path_should_generate_dependency
     items = [
-      Nanoc3::Item.new("foo", {}, '/foo/'),
-      Nanoc3::Item.new("bar", {}, '/bar/')
+      Nanoc3::Item.new('foo', {}, '/foo/'),
+      Nanoc3::Item.new('bar', {}, '/bar/')
     ]
     item_reps = [
       Nanoc3::ItemRep.new(items[0], :default),
@@ -472,8 +472,8 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_path_should_generate_dependency
     items = [
-      Nanoc3::Item.new("foo", {}, '/foo/'),
-      Nanoc3::Item.new("bar", {}, '/bar/')
+      Nanoc3::Item.new('foo', {}, '/foo/'),
+      Nanoc3::Item.new('bar', {}, '/bar/')
     ]
     item_reps = [
       Nanoc3::ItemRep.new(items[0], :default),
@@ -491,7 +491,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   end
 
   def test_access_compiled_content_of_binary_item
-    item = Nanoc::Item.new("content/somefile.dat", {}, '/somefile/', :binary => true)
+    item = Nanoc::Item.new('content/somefile.dat', {}, '/somefile/', :binary => true)
     item_rep = Nanoc::ItemRep.new(item, :foo)
     assert_raises(Nanoc::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
@@ -503,7 +503,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Item.new(
-      "content/meow.dat", {}, '/',
+      'content/meow.dat', {}, '/',
       :binary => true
     )
 
@@ -531,7 +531,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Item.new(
-      "content/meow.dat", {}, '/',
+      'content/meow.dat', {}, '/',
       :binary => true
     )
 
@@ -560,7 +560,7 @@ private
 
   def create_binary_item
     Nanoc::Item.new(
-      "/a/file/name.dat", {}, '/',
+      '/a/file/name.dat', {}, '/',
       :binary => true
     )
   end
@@ -581,7 +581,7 @@ private
     f = create_filter(:text)
     f.class_eval do
       def run(content, params={})
-        ""
+        ''
       end
     end
     f

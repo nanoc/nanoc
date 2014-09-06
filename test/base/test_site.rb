@@ -146,7 +146,7 @@ EOF
       # Update configuration
       File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
-        io.write "  - type: site_test_foo"
+        io.write '  - type: site_test_foo'
       end
 
       # Create site

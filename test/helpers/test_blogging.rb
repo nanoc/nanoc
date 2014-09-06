@@ -14,7 +14,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     item.stubs(:[]).with(:custom_path_in_feed).returns(nil)
     item.stubs(:[]).with(:custom_url_in_feed).returns(nil)
     item.stubs(:[]).with(:excerpt).returns(nil)
-    item.stubs(:path).returns("/item/")
+    item.stubs(:path).returns('/item/')
     item.stubs(:[]).with(:author_name).returns(nil)
     item.stubs(:[]).with(:author_uri).returns(nil)
     item.stubs(:compiled_content).returns('item content')
@@ -101,7 +101,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].stubs(:[]).with(:custom_path_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:custom_url_in_feed).returns(nil)
       @items[1].stubs(:[]).with(:excerpt).returns(nil)
-      @items[1].stubs(:path).returns("/item1/")
+      @items[1].stubs(:path).returns('/item1/')
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('item 1 content')
 
       # Create item 2
@@ -117,7 +117,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item.stubs(:path).returns('/journal/feed/')
 
       # Check
       atom_feed
@@ -149,7 +149,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item.stubs(:path).returns('/journal/feed/')
 
       # Check
       atom_feed
@@ -266,8 +266,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [ mock_article ]
 
       # Create item 1
-      @items[0].stubs(:[]).with(:author_name).returns("Don Alias")
-      @items[0].stubs(:[]).with(:author_uri).returns("http://don.example.com/")
+      @items[0].stubs(:[]).with(:author_name).returns('Don Alias')
+      @items[0].stubs(:[]).with(:author_uri).returns('http://don.example.com/')
       @items[0].expects(:compiled_content).returns('item 1 content')
 
       # Mock site
@@ -281,7 +281,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item.stubs(:path).returns('/journal/feed/')
 
       # Check
       # TODO: Use xpath matchers for more specific test
@@ -609,7 +609,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
       @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
       @item.stubs(:[]).with(:feed_url).returns(nil)
-      @item.stubs(:path).returns("/journal/feed/")
+      @item.stubs(:path).returns('/journal/feed/')
 
       # Check
       atom_feed

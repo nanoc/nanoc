@@ -106,7 +106,7 @@ EOS
       # Create items
       assert Dir['content/*'].empty?
       File.open('content/robots.txt', 'w') do |io|
-        io.write "Hello I am robots"
+        io.write 'Hello I am robots'
       end
 
       # Compile
@@ -130,7 +130,7 @@ EOS
       # Create items
       assert Dir['content/*'].empty?
       File.open('content/foo', 'w') do |io|
-        io.write "Hello I am foo"
+        io.write 'Hello I am foo'
       end
 
       # Compile
@@ -160,7 +160,7 @@ EOS
       # Create items
       FileUtils.mkdir_p('static')
       File.open('static/foo.txt', 'w') do |io|
-        io.write "Hello I am foo"
+        io.write 'Hello I am foo'
       end
 
       # Compile
@@ -219,11 +219,11 @@ EOS
       # Create items
       assert Dir['content/*'].empty?
       File.open('content/lame.txt', 'w') do |io|
-        io.write "Hello I am lame"
+        io.write 'Hello I am lame'
       end
 
       File.open('content/notlame.txt', 'w') do |io|
-        io.write "Hello I am not lame"
+        io.write 'Hello I am not lame'
       end
 
       # Compile

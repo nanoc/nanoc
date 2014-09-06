@@ -57,7 +57,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     def obj.path ; nil ; end
 
     assert_raises RuntimeError do
-      link_to("Some Text", obj)
+      link_to('Some Text', obj)
     end
   end
 

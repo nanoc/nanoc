@@ -150,11 +150,11 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items['/one/']
     assert_nil @items['/two/']
 
-    assert_equal "New Item One", @items[0].raw_content
-    assert_equal "New Item One", @items['/new/one/'].raw_content
+    assert_equal 'New Item One', @items[0].raw_content
+    assert_equal 'New Item One', @items['/new/one/'].raw_content
 
-    assert_equal "New Item Two", @items[1].raw_content
-    assert_equal "New Item Two", @items['/new/two/'].raw_content
+    assert_equal 'New Item Two', @items[1].raw_content
+    assert_equal 'New Item Two', @items['/new/two/'].raw_content
   end
 
   def test_collect_bang_frozen
@@ -211,10 +211,10 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items['/one/']
     assert_nil @items['/two/']
 
-    assert_equal "Item 0", @items[0].raw_content
-    assert_equal "Item 0", @items['/new/0/'].raw_content
-    assert_equal "Item 1", @items[1].raw_content
-    assert_equal "Item 1", @items['/new/1/'].raw_content
+    assert_equal 'Item 0', @items[0].raw_content
+    assert_equal 'Item 0', @items['/new/0/'].raw_content
+    assert_equal 'Item 1', @items[1].raw_content
+    assert_equal 'Item 1', @items['/new/1/'].raw_content
   end
 
   def test_fill_range
@@ -225,8 +225,8 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
     assert_equal @one, @items[0]
     assert_equal @one, @items['/one/']
-    assert_equal "Item 1", @items[1].raw_content
-    assert_equal "Item 1", @items['/new/1/'].raw_content
+    assert_equal 'Item 1', @items[1].raw_content
+    assert_equal 'Item 1', @items['/new/1/'].raw_content
   end
 
   if Array.new.respond_to?(:keep_if)
@@ -253,7 +253,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_push
-    pushy = Nanoc::Item.new("Pushy", {}, '/pushy/')
+    pushy = Nanoc::Item.new('Pushy', {}, '/pushy/')
     @items.push(pushy)
 
     assert_equal @one, @items[0]
@@ -275,7 +275,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_replace
-    max  = Nanoc::Item.new("Max", {}, '/max/')
+    max  = Nanoc::Item.new('Max', {}, '/max/')
     mona = Nanoc::Item.new('Mona', {}, '/mona/')
 
     @items.replace([ max, mona ])
@@ -320,7 +320,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_unshift
-    unshifty = Nanoc::Item.new("Unshifty", {}, '/unshifty/')
+    unshifty = Nanoc::Item.new('Unshifty', {}, '/unshifty/')
     @items.unshift(unshifty)
 
     assert_equal unshifty, @items[0]

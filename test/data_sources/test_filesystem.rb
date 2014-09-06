@@ -291,7 +291,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("", result[1])
+    assert_equal('', result[1])
   end
 
   def test_parse_embedded_meta_only_2
@@ -308,7 +308,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("", result[1])
+    assert_equal('', result[1])
   end
 
   def test_parse_embedded_meta_only_3
@@ -316,7 +316,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('test.html', 'w') do |io|
       io.write "-----\r\n"
       io.write "foo: bar\n"
-      io.write "-----"
+      io.write '-----'
     end
 
     # Create data source
@@ -325,7 +325,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("", result[1])
+    assert_equal('', result[1])
   end
 
   def test_parse_embedded_invalid_2
@@ -403,7 +403,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       io.write "-----\n"
       io.write "-----\n"
       io.write "\nblah blah\n"
-      io.write "-----"
+      io.write '-----'
     end
 
     # Create data source
@@ -468,16 +468,16 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_parse_external
     # Create a file
-    File.open('test.html', 'w') { |io| io.write("blah blah") }
-    File.open('test.yaml', 'w') { |io| io.write("foo: bar") }
+    File.open('test.html', 'w') { |io| io.write('blah blah') }
+    File.open('test.yaml', 'w') { |io| io.write('foo: bar') }
 
     # Create data source
     data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
-    assert_equal({ "foo" => "bar"}, result[0])
-    assert_equal("blah blah",       result[1])
+    assert_equal({ 'foo' => 'bar'}, result[0])
+    assert_equal('blah blah',       result[1])
   end
 
 end

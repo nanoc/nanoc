@@ -384,7 +384,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site = Nanoc::Site.new('.')
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
-        refute outdatedness_checker.outdated?(item), "item should not be outdated"
+        refute outdatedness_checker.outdated?(item), 'item should not be outdated'
       end
     end
   end
@@ -417,7 +417,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       site = Nanoc::Site.new('.')
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
-        refute outdatedness_checker.outdated?(item), "item should not be outdated"
+        refute outdatedness_checker.outdated?(item), 'item should not be outdated'
       end
     end
   end

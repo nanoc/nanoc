@@ -34,7 +34,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
       io.write("title: Bar\n")
     end
     File.open('content/bar/bar.xml', 'w') do |io|
-      io.write("Lorem ipsum dolor sit amet...")
+      io.write('Lorem ipsum dolor sit amet...')
     end
 
     # Load items
@@ -268,7 +268,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
 
     # Create sample files
     FileUtils.mkdir_p('foo')
-    File.open('foo/stuff.dat', 'w') { |io| io.write("random binary data") }
+    File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
     items = data_source.send(:load_objects, 'foo', 'item', Nanoc::Item)

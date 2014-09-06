@@ -65,7 +65,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
       # Create sample file
       File.open('moo.sass', 'w') { |io| io.write %Q{@import subdir/relative} }
-      FileUtils.mkdir_p("subdir")
+      FileUtils.mkdir_p('subdir')
       File.open('subdir/relative.sass', 'w') { |io| io.write "body\n  color: red" }
 
       # Run filter

@@ -8,7 +8,7 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
         # Create some sample files
         %w{ foo bar baz }.each do |filename|
           %w{ xxx yyy }.each do |extension|
-            File.open("output/#{filename}.#{extension}", 'w') { |io| io.write("hello") }
+            File.open("output/#{filename}.#{extension}", 'w') { |io| io.write('hello') }
           end
         end
 
