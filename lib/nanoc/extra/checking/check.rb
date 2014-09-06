@@ -2,6 +2,12 @@
 
 module Nanoc::Extra::Checking
 
+  class OutputDirNotFoundError < Nanoc::Errors::Generic
+    def initialize(directory_path)
+      super("Unable to run check against output directory at “#{directory_path}”: directory does not exist.")
+    end
+  end
+
   class Check
 
     extend Nanoc::PluginRegistry::PluginMethods
@@ -25,7 +31,11 @@ module Nanoc::Extra::Checking
     end
 
     def output_filenames
-      Dir[@site.config[:output_dir] + '/**/*'].select { |f| File.file?(f) }
+      output_dir = @site.config[:output_dir]
+      unless File.exist?(output_dir)
+        raise Nanoc::Extra::Checking::OutputDirNotFoundError.new(output_dir)
+      end
+      Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
     end
 
   end

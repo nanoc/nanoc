@@ -257,7 +257,7 @@ module Nanoc::DataSources
       end
 
       # Split data
-      pieces = data.split(/^(-{5}|-{3})[ \t]*\n/)
+      pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
       if pieces.size < 4
         raise RuntimeError.new(
           "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format."
@@ -270,7 +270,7 @@ module Nanoc::DataSources
       rescue Exception => e
         raise "Could not parse YAML for #{content_filename}: #{e.message}"
       end
-      content = pieces[4..-1].join
+      content = pieces[4]
 
       # Done
       [ meta, content ]
