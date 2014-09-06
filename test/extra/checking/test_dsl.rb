@@ -11,7 +11,7 @@ class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
       refute Nanoc::Extra::Checking::Check.named(:foo).nil?
 
       # One check marked for deployment
-      assert_equal [ :bar ], dsl.deploy_checks
+      assert_equal [:bar], dsl.deploy_checks
     end
   end
 

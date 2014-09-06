@@ -59,7 +59,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     # Check args
     opts = Nanoc::Extra::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
-      [ 'rsync', opts, 'output/', 'asdf' ].flatten,
+      ['rsync', opts, 'output/', 'asdf'].flatten,
       rsync.instance_eval { @shell_cms_args }
     )
   end
@@ -82,7 +82,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     # Check args
     opts = Nanoc::Extra::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
-      [ 'echo', 'rsync', opts, 'output/', 'asdf' ].flatten,
+      ['echo', 'rsync', opts, 'output/', 'asdf'].flatten,
       rsync.instance_eval { @shell_cms_args }
     )
   end

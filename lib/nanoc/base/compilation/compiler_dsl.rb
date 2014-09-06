@@ -151,7 +151,7 @@ module Nanoc
     #
     #     layout '/custom/',  :haml, :format => :html5
     def layout(identifier, filter_name, params = {})
-      @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [ filter_name, params ]
+      @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [filter_name, params]
     end
 
     # Creates a pair of compilation and routing rules that indicate that the
@@ -247,7 +247,7 @@ module Nanoc
     #     include_rules 'rules/assets'
     #     include_rules 'rules/content'
     def include_rules(name)
-      filename = [ "#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb" ].find { |f| File.file?(f) }
+      filename = ["#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
 
       @rules_collection.parse(filename)
@@ -264,7 +264,7 @@ module Nanoc
         # Add leading/trailing slashes if necessary
         new_identifier = identifier.dup
         new_identifier[/^/] = '/' if identifier[0, 1] != '/'
-        new_identifier[/$/] = '/' unless [ '*', '/' ].include?(identifier[-1, 1])
+        new_identifier[/$/] = '/' unless ['*', '/'].include?(identifier[-1, 1])
 
         /^#{new_identifier.gsub('*', '(.*?)').gsub('+', '(.+?)')}$/
       else

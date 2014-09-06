@@ -32,7 +32,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     File.symlink('../foo-outside-2/c.png', 'foo/c.png')
 
     # Check all files
-    expected_filenames = [ 'foo/a.png', 'foo/1/b.png', 'foo/c.png' ].sort
+    expected_filenames = ['foo/a.png', 'foo/1/b.png', 'foo/c.png'].sort
     actual_filenames   = Nanoc::Extra::FilesystemTools.all_files_in('foo').sort
     assert_equal expected_filenames, actual_filenames
 

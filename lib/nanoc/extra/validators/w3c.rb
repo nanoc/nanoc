@@ -19,7 +19,7 @@ module Nanoc::Extra::Validators
         raise Nanoc::Errors::GenericTrivial, "unknown type(s) specified: #{types.join(', ')}"
       end
 
-      Nanoc::CLI.run([ 'check', args ].flatten)
+      Nanoc::CLI.run(['check', args].flatten)
     end
 
   end

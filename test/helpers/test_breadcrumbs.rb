@@ -9,7 +9,7 @@ class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
     @items << Nanoc::Item.new('root', {}, '/')
     @item = @items.last
 
-    assert_equal [ @items[0] ], breadcrumbs_trail
+    assert_equal [@items[0]], breadcrumbs_trail
   end
 
   def test_breadcrumbs_trail_with_1_parent
@@ -18,7 +18,7 @@ class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
     @items << Nanoc::Item.new('child',  {}, '/foo/')
     @item = @items.last
 
-    assert_equal [ @items[0], @items[1] ], breadcrumbs_trail
+    assert_equal [@items[0], @items[1]], breadcrumbs_trail
   end
 
   def test_breadcrumbs_trail_with_many_parents
@@ -28,7 +28,7 @@ class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
     @items << Nanoc::Item.new('child',       {}, '/foo/bar/')
     @item = @items.last
 
-    assert_equal [ @items[0], @items[1], @items[2] ], breadcrumbs_trail
+    assert_equal [@items[0], @items[1], @items[2]], breadcrumbs_trail
   end
 
   def test_breadcrumbs_trail_with_nils
@@ -37,7 +37,7 @@ class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
     @items << Nanoc::Item.new('child',       {}, '/foo/bar/')
     @item = @items.last
 
-    assert_equal [ @items[0], nil, @items[1] ], breadcrumbs_trail
+    assert_equal [@items[0], nil, @items[1]], breadcrumbs_trail
   end
 
 end

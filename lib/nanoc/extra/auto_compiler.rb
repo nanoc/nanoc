@@ -51,7 +51,7 @@ module Nanoc::Extra
         if path =~ /\/$/
           possible_paths = site.config[:index_filenames].map { |f| path + f }
         else
-          possible_paths = [ path ]
+          possible_paths = [path]
         end
 
         # Find matching file

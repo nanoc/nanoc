@@ -46,11 +46,11 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_brackets_and_slice_with_range
-    assert_equal [ @one, @two ], @items[0..1]
-    assert_equal [ @one, @two ], @items[0, 2]
+    assert_equal [@one, @two], @items[0..1]
+    assert_equal [@one, @two], @items[0, 2]
 
-    assert_equal [ @one, @two ], @items.slice(0..1)
-    assert_equal [ @one, @two ], @items.slice(0, 2)
+    assert_equal [@one, @two], @items.slice(0..1)
+    assert_equal [@one, @two], @items.slice(0, 2)
   end
 
   def test_brackets_and_slice_and_at_with_identifier
@@ -169,7 +169,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
   def test_concat
     new_item = Nanoc::Item.new('New item', {}, '/new/')
-    @items.concat([ new_item ])
+    @items.concat([new_item])
 
     assert_equal new_item, @items[2]
     assert_equal new_item, @items['/new/']
@@ -278,7 +278,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     max  = Nanoc::Item.new('Max', {}, '/max/')
     mona = Nanoc::Item.new('Mona', {}, '/mona/')
 
-    @items.replace([ max, mona ])
+    @items.replace([max, mona])
 
     assert_nil @items['/one/']
     assert_nil @items['/two/']

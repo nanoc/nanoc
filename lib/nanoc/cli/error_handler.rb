@@ -184,7 +184,7 @@ module Nanoc::CLI
     # @return [Hash<String, Array>] A hash containing the gem names as keys and gem versions as value
     def gems_and_versions
       gems = {}
-      Gem::Specification.find_all.sort_by { |s| [ s.name, s.version ] }.each do |spec|
+      Gem::Specification.find_all.sort_by { |s| [s.name, s.version] }.each do |spec|
         gems[spec.name] ||= []
         gems[spec.name] << spec.version.to_s
       end

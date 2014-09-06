@@ -159,10 +159,6 @@ RaiseArgs:
 SignalException:
   Enabled: false
 
-# Personal preference is to have space inside square brackets.
-SpaceInsideBrackets:
-  Enabled: false
-
 # Some methods that appear to be accessors (return a single value or set a
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.

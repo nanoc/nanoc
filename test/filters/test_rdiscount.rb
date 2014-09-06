@@ -21,7 +21,7 @@ class Nanoc::Filters::RDiscountTest < Nanoc::TestCase
       # Run filter
       input           = "The quotation 'marks' sure make this look sarcastic!"
       output_expected = /The quotation &lsquo;marks&rsquo; sure make this look sarcastic!/
-      output_actual   = filter.setup_and_run(input, :extensions => [ :smart ])
+      output_actual   = filter.setup_and_run(input, :extensions => [:smart])
       assert_match(output_expected, output_actual)
     end
   end

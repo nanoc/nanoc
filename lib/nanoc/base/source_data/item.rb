@@ -226,7 +226,7 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, identifier ]
+      [type, identifier]
     end
 
     # Prevents all further modifications to its attributes.

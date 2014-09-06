@@ -35,13 +35,13 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
   def test_growlnotify_cmd
     Nanoc::CLI.setup
     notifier = Nanoc::CLI::Commands::Watch::Notifier.new
-    assert_equal [ 'growlnotify', '-m', 'foo' ], notifier.send(:growlnotify_cmd_for, 'foo')
+    assert_equal ['growlnotify', '-m', 'foo'], notifier.send(:growlnotify_cmd_for, 'foo')
   end
 
   def test_growlnotify_windows_cmd
     Nanoc::CLI.setup
     notifier = Nanoc::CLI::Commands::Watch::Notifier.new
-    assert_equal [ 'growlnotify', '/t:nanoc', 'foo' ], notifier.send(:growlnotify_windows_cmd_for, 'foo')
+    assert_equal ['growlnotify', '/t:nanoc', 'foo'], notifier.send(:growlnotify_windows_cmd_for, 'foo')
   end
 
   def wait_until_exists(filename)

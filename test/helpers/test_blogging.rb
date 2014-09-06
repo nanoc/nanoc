@@ -88,7 +88,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed
     if_have 'builder' do
       # Create items
-      @items = [ mock, mock_article, mock_article ]
+      @items = [mock, mock_article, mock_article]
 
       # Create item 0
       @items[0].stubs(:[]).with(:kind).returns('item')
@@ -127,7 +127,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_times
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article, mock_article ]
+      @items = [mock_item, mock_article, mock_article]
 
       # Create item 1
       @items[1].stubs(:[]).with(:updated_at).returns(Time.now - 500)
@@ -159,7 +159,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_articles
     if_have 'builder' do
       # Mock items
-      @items = [ mock_item, mock_item ]
+      @items = [mock_item, mock_item]
 
       # Mock site
       @site = mock
@@ -185,7 +185,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_base_url
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article ]
+      @items = [mock_item, mock_article]
 
       # Mock site
       @site = mock
@@ -211,7 +211,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_title
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article ]
+      @items = [mock_item, mock_article]
 
       # Mock site
       @site = mock
@@ -237,7 +237,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_author_name
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article ]
+      @items = [mock_item, mock_article]
 
       # Mock site
       @site = mock
@@ -263,7 +263,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_author_name_and_uri_from_content_item
     if_have 'builder' do
       # Create items
-      @items = [ mock_article ]
+      @items = [mock_article]
 
       # Create item 1
       @items[0].stubs(:[]).with(:author_name).returns('Don Alias')
@@ -311,7 +311,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_author_uri
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article ]
+      @items = [mock_item, mock_article]
 
       # Mock site
       @site = mock
@@ -337,7 +337,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_without_articles_created_at
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article, mock_article ]
+      @items = [mock_item, mock_article, mock_article]
       @items[1].stubs(:[]).with(:created_at).returns(Time.now.to_s)
       @items[2].stubs(:[]).with(:created_at).returns(nil)
 
@@ -365,7 +365,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_title_author_name_and_uri_as_params
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article ]
+      @items = [mock_item, mock_article]
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
@@ -391,7 +391,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_title_author_name_and_uri_from_config
     if_have 'builder' do
       # Create items
-      @items = [ mock_item, mock_article ]
+      @items = [mock_item, mock_article]
       @items[1].expects(:compiled_content).with(:snapshot => :pre).returns('asdf')
 
       # Mock site
@@ -419,7 +419,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_articles_param
     if_have 'builder' do
       # Mock items
-      @items = [ mock_article, mock_article ]
+      @items = [mock_article, mock_article]
 
       @items[0].expects(:compiled_content).never
       @items[1].stubs(:[]).with(:title).returns('Item One')
@@ -437,14 +437,14 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
 
       # Check
-      atom_feed :articles => [ @items[1] ]
+      atom_feed :articles => [@items[1]]
     end
   end
 
   def test_atom_feed_with_limit_param
     if_have 'builder' do
       # Mock articles
-      @items = [ mock_article, mock_article ]
+      @items = [mock_article, mock_article]
       @items.each_with_index do |article, i|
         article.stubs(:[]).with(:title).returns("Article #{i}")
         article.stubs(:[]).with(:created_at).returns(Time.now - i)
@@ -477,7 +477,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_sorting
     if_have 'builder' do
       # Mock articles
-      @items = [ mock_article, mock_article ]
+      @items = [mock_article, mock_article]
       @items.each_with_index do |article, i|
         article.stubs(:[]).with(:title).returns("Article #{i}")
       end
@@ -507,7 +507,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_content_proc_param
     if_have 'builder' do
       # Mock article
-      @items = [ mock_article ]
+      @items = [mock_article]
 
       # Mock site
       @site = mock
@@ -529,7 +529,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_excerpt_proc_param
     if_have 'builder' do
       # Mock article
-      @items = [ mock_article ]
+      @items = [mock_article]
 
       # Mock site
       @site = mock
@@ -551,7 +551,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_icon_param
     if_have 'builder' do
       # Mock article
-      @items = [ mock_article ]
+      @items = [mock_article]
 
       # Mock site
       @site = mock
@@ -573,7 +573,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_logo_param
     if_have 'builder' do
       # Mock article
-      @items = [ mock_article ]
+      @items = [mock_article]
 
       # Mock site
       @site = mock
@@ -595,7 +595,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_atom_feed_with_item_without_path
     if_have 'builder' do
       # Create items
-      @items = [ mock_article ]
+      @items = [mock_article]
       @items[0].stubs(:path).returns(nil)
 
       # Mock site

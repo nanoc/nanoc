@@ -17,9 +17,9 @@ class Nanoc::ExtraCoreExtEnumerableTest < Nanoc::TestCase
   end
 
   def test_group_by
-    input = MyCollection.new([ 'foo', 'bar', 'baz' ])
+    input = MyCollection.new(['foo', 'bar', 'baz'])
 
-    output_expected = { ?f => [ 'foo' ], ?b => [ 'bar', 'baz' ] }
+    output_expected = { ?f => ['foo'], ?b => ['bar', 'baz'] }
     output_actual   = input.group_by { |i| i[0] }
 
     assert_equal output_expected, output_actual

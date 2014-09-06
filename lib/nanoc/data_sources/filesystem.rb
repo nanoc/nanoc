@@ -34,7 +34,7 @@ module Nanoc::DataSources
     # See {Nanoc::DataSource#setup}.
     def setup
       # Create directories
-      [ content_dir_name, layouts_dir_name ].each do |dir|
+      [content_dir_name, layouts_dir_name].each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
@@ -163,10 +163,10 @@ module Nanoc::DataSources
         content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
 
         # Check number of files per type
-        unless [ 0, 1 ].include?(meta_filenames.size)
+        unless [0, 1].include?(meta_filenames.size)
           raise "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
         end
-        unless [ 0, 1 ].include?(content_filenames.size)
+        unless [0, 1].include?(content_filenames.size)
           raise "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
         end
 
@@ -245,7 +245,7 @@ module Nanoc::DataSources
         rescue Exception => e
           raise "Could not parse YAML for #{meta_filename}: #{e.message}"
         end
-        return [ meta, content ]
+        return [meta, content]
       end
 
       # Read data
@@ -253,7 +253,7 @@ module Nanoc::DataSources
 
       # Check presence of metadata section
       if data !~ /\A-{3,5}\s*$/
-        return [ {}, data ]
+        return [{}, data]
       end
 
       # Split data
@@ -273,7 +273,7 @@ module Nanoc::DataSources
       content = pieces[4]
 
       # Done
-      [ meta, content ]
+      [meta, content]
     end
 
     # Reads the content of the file with the given name and returns a string

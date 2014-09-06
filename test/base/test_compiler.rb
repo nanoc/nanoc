@@ -4,7 +4,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compilation_rule_for
     # Mock rules
-    rules = [ mock, mock, mock ]
+    rules = [mock, mock, mock]
     rules[0].expects(:applicable_to?).returns(false)
     rules[1].expects(:applicable_to?).returns(true)
     rules[1].expects(:rep_name).returns('wrong')
@@ -27,7 +27,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_routing_rule_for
     # Mock rules
-    rules = [ mock, mock, mock ]
+    rules = [mock, mock, mock]
     rules[0].expects(:applicable_to?).returns(false)
     rules[1].expects(:applicable_to?).returns(true)
     rules[1].expects(:rep_name).returns('wrong')
@@ -54,14 +54,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [ :erb, { :foo => 'bar' } ]
+    compiler.rules_collection.layout_filter_mapping[/.*/] = [:erb, { :foo => 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
     layout.expect(:identifier, '/some_layout/')
 
     # Check
-    assert_equal([ :erb, { :foo => 'bar' } ], compiler.rules_collection.filter_for_layout(layout))
+    assert_equal([:erb, { :foo => 'bar' }], compiler.rules_collection.filter_for_layout(layout))
   end
 
   def test_filter_for_layout_with_existant_layout_and_unknown_filter
@@ -70,14 +70,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [ :some_unknown_filter, { :foo => 'bar' } ]
+    compiler.rules_collection.layout_filter_mapping[/.*/] = [:some_unknown_filter, { :foo => 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
     layout.expect(:identifier, '/some_layout/')
 
     # Check
-    assert_equal([ :some_unknown_filter, { :foo => 'bar' } ], compiler.rules_collection.filter_for_layout(layout))
+    assert_equal([:some_unknown_filter, { :foo => 'bar' }], compiler.rules_collection.filter_for_layout(layout))
   end
 
   def test_filter_for_layout_with_nonexistant_layout
@@ -86,7 +86,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [ :erb, { :foo => 'bar' } ]
+    compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [:erb, { :foo => 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
@@ -102,13 +102,13 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [ :erb, { :char => 'd' } ]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [ :erb, { :char => 'b' } ]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [ :erb, { :char => 'c' } ] # never used!
-    compiler.rules_collection.layout_filter_mapping[%r{^/.*/$}]       = [ :erb, { :char => 'a' } ]
+    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [:erb, { :char => 'd' }]
+    compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [:erb, { :char => 'b' }]
+    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [:erb, { :char => 'c' }] # never used!
+    compiler.rules_collection.layout_filter_mapping[%r{^/.*/$}]       = [:erb, { :char => 'a' }]
 
     # Mock layout
-    layouts = [ mock, mock, mock, mock ]
+    layouts = [mock, mock, mock, mock]
     layouts[0].stubs(:identifier).returns('/a/b/c/d/')
     layouts[1].stubs(:identifier).returns('/a/b/c/')
     layouts[2].stubs(:identifier).returns('/a/b/')
@@ -159,12 +159,12 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     site = mock
     site.stubs(:config).returns({})
     site.stubs(:items).returns([])
-    site.stubs(:layouts).returns([ layout ])
+    site.stubs(:layouts).returns([layout])
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[%r{^/blah/$}] = [ :erb, {} ]
+    compiler.rules_collection.layout_filter_mapping[%r{^/blah/$}] = [:erb, {}]
     site.stubs(:compiler).returns(compiler)
 
     # Compile

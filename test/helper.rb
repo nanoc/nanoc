@@ -180,7 +180,7 @@ EOS
     P(object).tags(:example).each do |example|
       # Classify
       lines = example.text.lines.map do |line|
-        [ line =~ /^\s*# ?=>/ ? :result : :code, line ]
+        [line =~ /^\s*# ?=>/ ? :result : :code, line]
       end
 
       # Join

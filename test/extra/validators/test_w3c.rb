@@ -13,7 +13,7 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
         end
 
         # Create validator
-        w3c = Nanoc::Extra::Validators::W3C.new('.', [ :html ])
+        w3c = Nanoc::Extra::Validators::W3C.new('.', [:html])
 
         # Run
         w3c.run
@@ -25,7 +25,7 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
     if_have 'w3c_validators' do
       with_site do |site|
         # Create validator
-        w3c = Nanoc::Extra::Validators::W3C.new('.', [ :foo ])
+        w3c = Nanoc::Extra::Validators::W3C.new('.', [:foo])
 
         # Test
         exception = assert_raises Nanoc::Errors::GenericTrivial do

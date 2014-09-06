@@ -219,7 +219,7 @@ module Nanoc::Filters
       params[:encoding] ||= 'utf-8'
       params[:nowrap]   ||= 'True'
 
-      cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
+      cmd = ['pygmentize', '-l', language, '-f', 'html']
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
       stdout = StringIO.new
@@ -274,7 +274,7 @@ module Nanoc::Filters
     def simon_highlight(code, language, params = {})
       check_availability('highlight', '--version')
 
-      cmd = [ 'highlight', '--syntax', language, '--fragment' ]
+      cmd = ['highlight', '--syntax', language, '--fragment']
       params.each do |key, _value|
         if SIMON_HIGHLIGHT_OPT_MAP[key]
           cmd << SIMON_HIGHLIGHT_OPT_MAP[key]
@@ -352,12 +352,12 @@ module Nanoc::Filters
       return if code2.nil?
 
       code1.inner_html = code2.inner_html
-      code1['class'] = [ code1['class'], code2['class'] ].compact.join(' ')
+      code1['class'] = [code1['class'], code2['class']].compact.join(' ')
     end
 
   protected
 
-    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge ]
+    KNOWN_COLORIZERS = [:coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge]
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)

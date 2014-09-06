@@ -210,7 +210,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     YARD.parse(LIB_DIR + '/nanoc/helpers/link_to.rb')
 
     # Mock
-    @items = [ mock, mock, mock ]
+    @items = [mock, mock, mock]
     @items[0].stubs(:identifier).returns('/about/')
     @items[0].stubs(:path).returns('/about.html')
     @items[1].stubs(:identifier).returns('/software/')

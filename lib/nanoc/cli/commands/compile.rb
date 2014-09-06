@@ -137,7 +137,7 @@ module Nanoc::CLI::Commands
             new_file.flush
 
             # Diff
-            cmd = [ 'diff', '-u', old_file.path, new_file.path ]
+            cmd = ['diff', '-u', old_file.path, new_file.path]
             Open3.popen3(*cmd) do |_stdin, stdout, _stderr|
               result = stdout.read
               return (result == '' ? nil : result)

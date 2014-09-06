@@ -8,7 +8,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter
       result = filter.setup_and_run('.foo { bar: 1 + 1 }')
@@ -26,7 +26,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter
       result = filter.setup_and_run('@import "content/foo/bar/imported_file.less";')
@@ -45,7 +45,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter
       result = filter.setup_and_run('@import "bar/imported_file.less";')
@@ -114,7 +114,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter with compress option
       result = filter.setup_and_run('.foo { bar: a; } .bar { foo: b; }', :compress => true)

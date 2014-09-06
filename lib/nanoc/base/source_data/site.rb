@@ -35,10 +35,10 @@ module Nanoc
       :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
       :lib_dirs           => %w( lib ),
       :output_dir         => 'output',
-      :data_sources       => [ {} ],
-      :index_filenames    => [ 'index.html' ],
+      :data_sources       => [{}],
+      :index_filenames    => ['index.html'],
       :enable_output_diff => false,
-      :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
+      :prune              => { :auto_prune => false, :exclude => ['.git', '.hg', '.svn', 'CVS'] }
     }
 
     # Creates a site object for the site specified by the given

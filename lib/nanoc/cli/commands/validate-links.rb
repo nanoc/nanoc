@@ -21,7 +21,7 @@ module Nanoc::CLI::Commands
       checks = []
       checks << 'ilinks' if options[:internal]
       checks << 'elinks' if options[:external]
-      Nanoc::CLI.run [ 'check', checks ].flatten
+      Nanoc::CLI.run ['check', checks].flatten
     end
 
   end

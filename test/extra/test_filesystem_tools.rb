@@ -60,7 +60,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
 
     File.symlink('../bar', 'foo/barlink')
 
-    expected_files = [ 'foo/barlink/y.md', 'foo/x.md' ]
+    expected_files = ['foo/barlink/y.md', 'foo/x.md']
     actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('foo').sort
     assert_equal expected_files, actual_files
   end
@@ -73,7 +73,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.symlink('../bar', 'dir/bar-link')
 
     # Check
-    expected_files = [ 'dir/bar-link', 'dir/foo' ]
+    expected_files = ['dir/bar-link', 'dir/foo']
     actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('dir').sort
     assert_equal expected_files, actual_files
   end

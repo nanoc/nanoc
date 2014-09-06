@@ -242,7 +242,7 @@ module Nanoc
 
       # Get name of last pre-layout snapshot
       snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
-      is_moving = [ :pre, :post, :last ].include?(snapshot)
+      is_moving = [:pre, :post, :last].include?(snapshot)
 
       # Check existance of snapshot
       if !is_moving && snapshots.find { |s| s.first == snapshot && s.last == true }.nil?
@@ -458,7 +458,7 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, item.identifier, name ]
+      [type, item.identifier, name]
     end
 
     def inspect

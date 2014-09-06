@@ -5,14 +5,14 @@ class Nanoc::Tasks::CleanTest < Nanoc::TestCase
   def test_simple
     if_have 'w3c_validators' do
       # Stub items
-      items = [ mock, mock ]
-      reps  = [ [ mock, mock ], [ mock, mock ] ]
+      items = [mock, mock]
+      reps  = [[mock, mock], [mock, mock]]
       items[0].expects(:reps).returns(reps[0])
       items[1].expects(:reps).returns(reps[1])
 
       # Create sample files
-      [ 0, 1 ].each do |item_id|
-        [ 0, 1 ].each do |rep_id|
+      [0, 1].each do |item_id|
+        [0, 1].each do |rep_id|
           filename = "item-#{item_id}-rep-#{rep_id}.txt"
           reps[item_id][rep_id].expects(:raw_path).returns(filename)
           File.open(filename, 'w') { |io| io.write('hello') }
@@ -31,8 +31,8 @@ class Nanoc::Tasks::CleanTest < Nanoc::TestCase
       clean.run
 
       # Check
-      [ 0, 1 ].each do |item_id|
-        [ 0, 1 ].each do |rep_id|
+      [0, 1].each do |item_id|
+        [0, 1].each do |rep_id|
           filename = "item-#{item_id}-rep-#{rep_id}.txt"
           assert !File.file?(filename)
         end
@@ -45,14 +45,14 @@ class Nanoc::Tasks::CleanTest < Nanoc::TestCase
       # Stub items
       item = mock
       rep = mock
-      item.expects(:reps).returns([ rep ])
+      item.expects(:reps).returns([rep])
 
       # Create sample file
       rep.expects(:raw_path).returns(nil)
 
       # Stub site
       site = mock
-      site.expects(:items).returns([ item ])
+      site.expects(:items).returns([item])
 
       # Create clean task
       clean = ::Nanoc::Tasks::Clean.new(site)

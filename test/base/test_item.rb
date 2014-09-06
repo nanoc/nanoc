@@ -56,7 +56,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new('foo', {}, '/foo')
-    item.expects(:reps).returns([ rep ])
+    item.expects(:reps).returns([rep])
 
     # Check
     assert_equal 'content at nil', item.compiled_content
@@ -72,7 +72,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new('foo', {}, '/foo')
-    item.expects(:reps).returns([ rep ])
+    item.expects(:reps).returns([rep])
 
     # Check
     assert_equal 'content at nil', item.compiled_content(:rep => :foo)
@@ -88,7 +88,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new('foo', {}, '/foo')
-    item.expects(:reps).returns([ rep ])
+    item.expects(:reps).returns([rep])
 
     # Check
     assert_equal 'content at :blah', item.compiled_content(:snapshot => :blah)
@@ -113,7 +113,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new('foo', {}, '/foo')
-    item.expects(:reps).returns([ rep ])
+    item.expects(:reps).returns([rep])
 
     # Check
     assert_equal 'the correct path', item.path
@@ -127,7 +127,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new('foo', {}, '/foo')
-    item.expects(:reps).returns([ rep ])
+    item.expects(:reps).returns([rep])
 
     # Check
     assert_equal 'the correct path', item.path(:rep => :moo)

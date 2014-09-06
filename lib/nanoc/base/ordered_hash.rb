@@ -206,7 +206,7 @@ class OrderedHash < ::Hash
         end
         class << self
           def to_yaml(opts = {})
-            @__yaml_inline ? @__yaml_inline_meth[ opts ] : super
+            @__yaml_inline ? @__yaml_inline_meth[opts] : super
           rescue
             @to_yaml_style = :inline
             super

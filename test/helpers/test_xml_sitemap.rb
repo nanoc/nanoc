@@ -86,7 +86,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Build sitemap
-      res = xml_sitemap(:items => [ @items[1] ])
+      res = xml_sitemap(:items => [@items[1]])
 
       # Check
       doc = Nokogiri::XML(res)
@@ -108,7 +108,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_filter
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = [ Nanoc::Item.new('some content 1', {}, '/item-one/') ]
+      @items = [Nanoc::Item.new('some content 1', {}, '/item-one/')]
       create_item_rep(@items.last, :one_a, '/item-one/a/')
       create_item_rep(@items.last, :one_b, '/item-one/b/')
 

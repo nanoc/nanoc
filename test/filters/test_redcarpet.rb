@@ -32,7 +32,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       else
         input           = "The quotation 'marks' sure make this look sarcastic!"
         output_expected = /The quotation &lsquo;marks&rsquo; sure make this look sarcastic!/
-        output_actual   = filter.setup_and_run(input, :options => [ :smart ])
+        output_actual   = filter.setup_and_run(input, :options => [:smart])
       end
       assert_match(output_expected, output_actual)
     end
@@ -62,7 +62,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       if ::Redcarpet::VERSION > '2'
         output_actual   = filter.setup_and_run(input, :renderer_options => { :xhtml => true })
       else
-        output_actual   = filter.setup_and_run(input, :options => [ :xhtml ])
+        output_actual   = filter.setup_and_run(input, :options => [:xhtml])
       end
       assert_match(output_expected, output_actual)
     end

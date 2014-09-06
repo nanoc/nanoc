@@ -206,7 +206,7 @@ module Nanoc
     # @api private
     def objects
       site.items + site.layouts + site.code_snippets +
-        [ site.config, rules_collection ]
+        [site.config, rules_collection]
     end
 
     # Creates the representations of all items as defined by the compilation

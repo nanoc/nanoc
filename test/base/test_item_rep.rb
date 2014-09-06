@@ -467,7 +467,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     Nanoc3::NotificationCenter.post(:visit_ended,   items[0])
     dt.stop
 
-    assert_equal [ items[1] ], dt.objects_causing_outdatedness_of(items[0])
+    assert_equal [items[1]], dt.objects_causing_outdatedness_of(items[0])
   end
 
   def test_path_should_generate_dependency
@@ -487,7 +487,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     Nanoc3::NotificationCenter.post(:visit_ended,   items[0])
     dt.stop
 
-    assert_equal [ items[1] ], dt.objects_causing_outdatedness_of(items[0])
+    assert_equal [items[1]], dt.objects_causing_outdatedness_of(items[0])
   end
 
   def test_access_compiled_content_of_binary_item

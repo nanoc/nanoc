@@ -50,7 +50,7 @@ module Nanoc
     #
     # @see Nanoc::ItemRepProxy#filter, Nanoc::ItemRep#filter
     def filter(name, args = {})
-      @rule_memory << [ :filter, name, args ]
+      @rule_memory << [:filter, name, args]
     end
 
     # @return [void]
@@ -58,9 +58,9 @@ module Nanoc
     # @see Nanoc::ItemRepProxy#layout, Nanoc::ItemRep#layout
     def layout(layout_identifier, extra_filter_args = nil)
       if extra_filter_args
-        @rule_memory << [ :layout, layout_identifier, extra_filter_args ]
+        @rule_memory << [:layout, layout_identifier, extra_filter_args]
       else
-        @rule_memory << [ :layout, layout_identifier ]
+        @rule_memory << [:layout, layout_identifier]
       end
     end
 
@@ -68,7 +68,7 @@ module Nanoc
     #
     # @see Nanoc::ItemRep#snapshot
     def snapshot(snapshot_name, params = {})
-      @rule_memory << [ :snapshot, snapshot_name, params ]
+      @rule_memory << [:snapshot, snapshot_name, params]
 
       # Count
       existing = Set.new

@@ -114,7 +114,7 @@ EOS
       site.compile
 
       # Check paths
-      assert_equal [ 'output/robots.txt' ], Dir['output/*']
+      assert_equal ['output/robots.txt'], Dir['output/*']
     end
   end
 
@@ -138,7 +138,7 @@ EOS
       site.compile
 
       # Check paths
-      assert_equal [ 'output/foo' ], Dir['output/*']
+      assert_equal ['output/foo'], Dir['output/*']
     end
   end
 
@@ -168,7 +168,7 @@ EOS
       site.compile
 
       # Check paths
-      assert_equal [ 'output/foo.txt' ], Dir['output/*']
+      assert_equal ['output/foo.txt'], Dir['output/*']
     end
   end
 
@@ -200,8 +200,8 @@ EOS
       site.compile
 
       # Check paths
-      assert_equal [ 'output/foo' ],            Dir['output/*']
-      assert_equal [ 'output/foo/index.html' ], Dir['output/foo/*']
+      assert_equal ['output/foo'],            Dir['output/*']
+      assert_equal ['output/foo/index.html'], Dir['output/foo/*']
     end
   end
 
@@ -231,7 +231,7 @@ EOS
       site.compile
 
       # Check paths
-      assert_equal [ 'output/notlame.txt'], Dir['output/*']
+      assert_equal ['output/notlame.txt'], Dir['output/*']
     end
   end
 
@@ -263,8 +263,8 @@ EOS
       site.compile
 
       # Check paths
-      assert_equal [ 'output/foo' ],            Dir['output/*']
-      assert_equal [ 'output/foo/index.html' ], Dir['output/foo/*']
+      assert_equal ['output/foo'],            Dir['output/*']
+      assert_equal ['output/foo/index.html'], Dir['output/foo/*']
     end
   end
 

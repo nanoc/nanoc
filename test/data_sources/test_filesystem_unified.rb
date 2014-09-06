@@ -102,7 +102,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
       expected_out[i].stuff[1][:file].close;
       actual_out[i].stuff[1][:file].close
-      [ 'num', :filename, :extension ].each do |key|
+      ['num', :filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -201,7 +201,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source(:allow_periods_in_identifiers => true)
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
-      [ meta_filename, content_filename ].each do |filename|
+      [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
           data_source.instance_eval { identifier_for_filename(filename) }
@@ -227,7 +227,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
-      [ meta_filename, content_filename ].each do |filename|
+      [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
           data_source.instance_eval { identifier_for_filename(filename) }
@@ -358,7 +358,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       actual_file.close unless actual_file.nil?
       expected_file.close unless expected_file.nil?
 
-      [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
+      ['num', :content_filename, :meta_filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -446,7 +446,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       actual_file.close unless actual_file.nil?
       expected_file.close unless expected_file.nil?
 
-      [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
+      ['num', :content_filename, :meta_filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
