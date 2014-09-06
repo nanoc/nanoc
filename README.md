@@ -2,7 +2,7 @@
 [![Build status](http://img.shields.io/travis/nanoc/nanoc.svg)](https://travis-ci.org/nanoc/nanoc)
 [![Code Climate](http://img.shields.io/codeclimate/github/nanoc/nanoc.svg)](https://codeclimate.com/github/nanoc/nanoc)
 [![Code Coverage](http://img.shields.io/coveralls/nanoc/nanoc.svg)](https://coveralls.io/r/nanoc/nanoc)
-[![Documentation Coverage](http://inch-pages.github.io/github/nanoc/nanoc.svg)](http://inch-pages.github.io/github/nanoc/nanoc/)
+[![Documentation Coverage](http://inch-ci.org/github/nanoc/nanoc.svg)](http://inch-ci.org/github/nanoc/nanoc/)
 
 ![nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
 

@@ -34,6 +34,8 @@ module Nanoc
     def [](*args)
       if 1 == args.size && args.first.is_a?(String)
         item_with_identifier(args.first)
+      elsif 1 == args.size && args.first.is_a?(Regexp)
+        @items.select { |i| i.identifier =~ args.first }
       else
         @items[*args]
       end
