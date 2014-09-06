@@ -254,7 +254,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     def rep.filter_named(name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :text => :binary
-        def run(content, params={})
+        def run(content, params = {})
           File.open(output_filename, 'w') { |io| io.write(content) }
         end
       end
@@ -282,7 +282,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     def rep.filter_named(name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary
-        def run(content, params={})
+        def run(content, params = {})
           File.open(output_filename, 'w') { |io| io.write(content) }
         end
       end
@@ -340,7 +340,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     Class.new(::Nanoc::Filter) do
       type :binary => :text
       identifier :binary_to_text
-      def run(content, params={})
+      def run(content, params = {})
         content + ' textified'
       end
     end
@@ -367,7 +367,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     def rep.filter_named(name)
       Class.new(::Nanoc::Filter) do
         type :binary => :text
-        def run(content, params={})
+        def run(content, params = {})
           'Some textual content'
         end
       end
@@ -378,7 +378,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     def rep.filter_named(name)
       Class.new(::Nanoc::Filter) do
         type :text
-        def run(content, params={})
+        def run(content, params = {})
           'Some textual content'
         end
       end
@@ -403,7 +403,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     def rep.filter_named(name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary => :text
-        def run(content, params={})
+        def run(content, params = {})
           'Some textual content'
         end
       end
@@ -415,7 +415,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_new_content_should_be_frozen
     filter_class = Class.new(::Nanoc::Filter) do
-      def run(content, params={})
+      def run(content, params = {})
         content.gsub!('foo', 'moo')
         content
       end
@@ -433,7 +433,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_filter_should_freeze_content
     filter_class = Class.new(::Nanoc::Filter) do
-      def run(content, params={})
+      def run(content, params = {})
         content.gsub!('foo', 'moo')
         content
       end
@@ -580,7 +580,7 @@ private
   def create_textual_filter
     f = create_filter(:text)
     f.class_eval do
-      def run(content, params={})
+      def run(content, params = {})
         ''
       end
     end
@@ -590,7 +590,7 @@ private
   def create_binary_filter
     f = create_filter(:binary)
     f.class_eval do
-      def run(content, params={})
+      def run(content, params = {})
         File.open(output_filename, 'w') { |io| io.write(content) }
       end
     end

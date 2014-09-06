@@ -21,7 +21,7 @@ module Nanoc::Extra
 
     # @option [IO] :stdout ($stdout)
     # @option [IO] :stderr ($stderr)
-    def initialize(params={})
+    def initialize(params = {})
       @stdout = params.fetch(:stdout, $stdout)
       @stderr = params.fetch(:stderr, $stderr)
     end

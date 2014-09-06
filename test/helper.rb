@@ -64,7 +64,7 @@ module Nanoc::TestHelpers
     end
   end
 
-  def with_site(params={})
+  def with_site(params = {})
     # Build site name
     site_name = params[:name]
     if site_name.nil?

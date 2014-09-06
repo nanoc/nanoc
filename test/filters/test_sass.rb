@@ -273,7 +273,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
 private
 
-  def create_filter(params={})
+  def create_filter(params = {})
     FileUtils.mkdir_p('content')
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green')}
 

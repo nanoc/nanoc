@@ -2,7 +2,7 @@
 
 class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
-  def new_data_source(params=nil)
+  def new_data_source(params = nil)
     # Mock site
     site = Nanoc::Site.new({})
 
