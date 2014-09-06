@@ -54,7 +54,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_link_to_to_nil_item_or_item_rep
     obj = Object.new
-    def obj.path ; nil ; end
+    def obj.path; nil; end
 
     assert_raises RuntimeError do
       link_to('Some Text', obj)

@@ -31,7 +31,7 @@ module Nanoc
         instance_variable_set('@' + key.to_s, value)
 
         # Define method
-        metaclass = (class << self ; self ; end)
+        metaclass = (class << self; self; end)
         metaclass.send(:define_method, key) { value }
       end
     end

@@ -204,7 +204,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, :foo)
-    def item_rep.generate_diff ; end
+    def item_rep.generate_diff; end
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
     item_rep.raw_path = 'foo/bar/baz/quux.txt'
 
@@ -248,7 +248,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, :foo)
-    def rep.assigns ; {} ; end
+    def rep.assigns; {}; end
 
     # Create fake filter
     def rep.filter_named(name)
@@ -276,7 +276,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, :foo)
-    def rep.assigns ; {} ; end
+    def rep.assigns; {}; end
 
     # Create fake filter
     def rep.filter_named(name)
@@ -424,7 +424,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Item.new('foo bar', {}, '/foo/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.instance_eval { @filter_class = filter_class }
-    def rep.filter_named(name) ; @filter_class ; end
+    def rep.filter_named(name); @filter_class; end
 
     assert_raises_frozen_error do
       rep.filter(:whatever)
@@ -442,7 +442,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Item.new('foo bar', {}, '/foo/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.instance_eval { @filter_class = filter_class }
-    def rep.filter_named(name) ; @filter_class ; end
+    def rep.filter_named(name); @filter_class; end
 
     assert_raises_frozen_error do
       rep.filter(:erb)

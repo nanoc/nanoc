@@ -49,7 +49,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_compiled_content_with_default_rep_and_default_snapshot
     # Mock rep
     rep = Object.new
-    def rep.name ; :default ; end
+    def rep.name; :default; end
     def rep.compiled_content(params)
       "content at #{params[:snapshot].inspect}"
     end
@@ -65,7 +65,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_compiled_content_with_custom_rep_and_default_snapshot
     # Mock reps
     rep = Object.new
-    def rep.name ; :foo ; end
+    def rep.name; :foo; end
     def rep.compiled_content(params)
       "content at #{params[:snapshot].inspect}"
     end
@@ -81,7 +81,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_compiled_content_with_default_rep_and_custom_snapshot
     # Mock reps
     rep = Object.new
-    def rep.name ; :default ; end
+    def rep.name; :default; end
     def rep.compiled_content(params)
       "content at #{params[:snapshot].inspect}"
     end

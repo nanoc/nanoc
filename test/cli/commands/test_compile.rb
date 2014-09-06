@@ -118,10 +118,10 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   def test_setup_and_teardown_listeners
     with_site do
       test_listener_class = Class.new(::Nanoc::CLI::Commands::Compile::Listener) do
-        def start ; @started = true ; end
-        def stop  ; @stopped = true ; end
-        def started? ; @started ; end
-        def stopped? ; @stopped ; end
+        def start; @started = true; end
+        def stop; @stopped = true; end
+        def started?; @started; end
+        def stopped?; @stopped; end
       end
 
       options = {}
