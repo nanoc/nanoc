@@ -65,7 +65,7 @@ module Nanoc::DataSources
     # Creates a new object (item or layout) on disk in dir_name according to
     # the given identifier. The file will have its attributes taken from the
     # attributes hash argument and its content from the content argument.
-    def create_object(dir_name, content, attributes, identifier, params = {})
+    def create_object(_dir_name, _content, _attributes, _identifier, _params = {})
       raise NotImplementedError.new(
         "#{self.class} does not implement ##{name}"
       )
@@ -193,7 +193,7 @@ module Nanoc::DataSources
     # data sources may prefer to implement this differently (for example,
     # {Nanoc::DataSources::FilesystemVerbose} doubles the last part of the
     # basename before concatenating it with a period and the extension).
-    def filename_for(base_filename, ext)
+    def filename_for(_base_filename, _ext)
       raise NotImplementedError.new(
         "#{self.class} does not implement #filename_for"
       )
@@ -201,7 +201,7 @@ module Nanoc::DataSources
 
     # Returns the identifier that corresponds with the given filename, which
     # can be the content filename or the meta filename.
-    def identifier_for_filename(filename)
+    def identifier_for_filename(_filename)
       raise NotImplementedError.new(
         "#{self.class} does not implement #identifier_for_filename"
       )
@@ -235,7 +235,7 @@ module Nanoc::DataSources
     # Parses the file named `filename` and returns an array with its first
     # element a hash with the file's metadata, and with its second element the
     # file content itself.
-    def parse(content_filename, meta_filename, kind)
+    def parse(content_filename, meta_filename, _kind)
       # Read content and metadata from separate files
       if meta_filename
         content = content_filename ? read(content_filename) : ''

@@ -6,7 +6,7 @@ module Nanoc::Extra::VCSes
   class Dummy < Nanoc::Extra::VCS
 
     # @see Nanoc::Extra::VCS#add
-    def add(filename)
+    def add(_filename)
     end
 
     # @see Nanoc::Extra::VCS#remove

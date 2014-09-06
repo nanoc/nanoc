@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
 
-      def initialize(params = {})
+      def initialize(_params = {})
       end
 
       # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
@@ -41,7 +41,7 @@ module Nanoc::CLI::Commands
       # @return [Boolean] true if this listener should be enabled for the given command runner, false otherwise
       #
       # @abstract Returns `true` by default, but subclasses may override this.
-      def self.enable_for?(command_runner)
+      def self.enable_for?(_command_runner)
         true
       end
 
@@ -260,11 +260,11 @@ module Nanoc::CLI::Commands
     class GCController < Listener
 
       # @see Listener#enable_for?
-      def self.enable_for?(command_runner)
+      def self.enable_for?(_command_runner)
         !ENV.key?('TRAVIS')
       end
 
-      def initialize(params = {})
+      def initialize(_params = {})
         @gc_count = 0
       end
 

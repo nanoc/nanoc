@@ -333,7 +333,7 @@ EOS
 
     # Creates a configuration file and a output directory for this site, as
     # well as a rakefile that loads the standard nanoc tasks.
-    def site_create_minimal(data_source)
+    def site_create_minimal(_data_source)
       # Create output
       FileUtils.mkdir_p('output')
 

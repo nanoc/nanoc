@@ -199,7 +199,7 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output, which is identical to the input
     #   in this case
-    def dummy(code, language, params = {})
+    def dummy(code, _language, _params = {})
       code
     end
 
@@ -298,7 +298,7 @@ module Nanoc::Filters
     end
 
     # Wraps the element in <div class="CodeRay"><div class="code">
-    def coderay_postprocess(language, element)
+    def coderay_postprocess(_language, element)
       # Skip if we're a free <code>
       return if element.parent.nil?
 
@@ -345,7 +345,7 @@ module Nanoc::Filters
     # After:
     #
     #   <pre><code class="language-ruby highlight">
-    def rouge_postprocess(language, element)
+    def rouge_postprocess(_language, element)
       return if element.name != 'pre'
 
       code1 = element.xpath('code').first

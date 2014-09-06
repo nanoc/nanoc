@@ -224,7 +224,7 @@ module Nanoc
 
     # @deprecated It is no longer necessary to explicitly load site data. It
     #   is safe to remove all {#load_data} calls.
-    def load_data(force = false)
+    def load_data(_force = false)
       warn 'It is no longer necessary to call Nanoc::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 

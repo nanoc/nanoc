@@ -13,7 +13,7 @@ module Nanoc::Filters
     # @param [String] content The CoffeeScript content to turn into JavaScript
     #
     # @return [String] The resulting JavaScript
-    def run(content, params = {})
+    def run(content, _params = {})
       ::CoffeeScript.compile(content)
     end
 

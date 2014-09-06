@@ -74,7 +74,7 @@ module Nanoc
     #
     # @overload run
     #   @return [void]
-    def run(*args)
+    def run(*_args)
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 

@@ -14,7 +14,7 @@ module Nanoc::CLI::StreamCleaners
     # @param [String] s The string to clean
     #
     # @return [String] The cleaned string
-    def clean(s)
+    def clean(_s)
       raise NotImplementedError, 'Subclasses of Nanoc::CLI::StreamCleaners::Abstract must implement #clean'
     end
 

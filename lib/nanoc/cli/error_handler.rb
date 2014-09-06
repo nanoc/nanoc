@@ -50,7 +50,7 @@ module Nanoc::CLI
     # @return [void]
     #
     # @api private
-    def handle_while(&block)
+    def handle_while(&_block)
       # Set exit handler
       %w( INT TERM ).each do |signal|
         Signal.trap(signal) do
@@ -279,7 +279,7 @@ module Nanoc::CLI
       stream.puts "#{resolution}" if resolution
     end
 
-    def write_compilation_stack(stream, error, params = {})
+    def write_compilation_stack(stream, _error, params = {})
       write_section_header(stream, 'Compilation stack', params)
 
       if stack.empty?
@@ -309,7 +309,7 @@ module Nanoc::CLI
       end
     end
 
-    def write_issue_link(stream, params = {})
+    def write_issue_link(stream, _params = {})
       stream.puts
       stream.puts 'If you believe this is a bug in nanoc, please do report it at'
       stream.puts '-> https://github.com/nanoc/nanoc/issues/new <-'
