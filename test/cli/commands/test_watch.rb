@@ -9,10 +9,10 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
       end
 
       File.open('content/index.html', 'w') { |io| io.write('Hello there!') }
-      self.wait_until_content_equals('content/index.html', 'Hello there!')
+      wait_until_content_equals('content/index.html', 'Hello there!')
 
       File.open('content/index.html', 'w') { |io| io.write('Hello there again!') }
-      self.wait_until_content_equals('content/index.html', 'Hello there again!')
+      wait_until_content_equals('content/index.html', 'Hello there again!')
 
       watch_thread.kill
     end
@@ -25,7 +25,7 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
       end
 
       File.open('content/index.html', 'w') { |io| io.write('Hello there!') }
-      self.wait_until_exists('output/index.html')
+      wait_until_exists('output/index.html')
       assert_equal 'Hello there!', File.read('output/index.html')
 
       watch_thread.kill
@@ -55,7 +55,7 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
   end
 
   def wait_until_content_equals(filename, expected_content)
-    self.wait_until_exists(filename)
+    wait_until_exists(filename)
 
     20.times do
       break if File.read(filename) == expected_content

@@ -79,7 +79,7 @@ module Nanoc::CLI
   # @return [void]
   def self.after_setup(&block)
     # TODO decide what should happen if the CLI is already set up
-    self.add_after_setup_proc(block)
+    add_after_setup_proc(block)
   end
 
 protected
