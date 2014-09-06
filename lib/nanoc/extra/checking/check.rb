@@ -32,7 +32,7 @@ module Nanoc::Extra::Checking
 
     def output_filenames
       output_dir = @site.config[:output_dir]
-      unless File.exist(output_dir)
+      unless File.exist?(output_dir)
         raise Nanoc::Extra::Checking::OutputDirNotFoundError.new(output_dir)
       end
       Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
