@@ -79,7 +79,7 @@ module Nanoc::Extra
       raise e
     end
 
-  private
+    private
 
     def build_site
       @site = Nanoc::Site.new(@site_path)

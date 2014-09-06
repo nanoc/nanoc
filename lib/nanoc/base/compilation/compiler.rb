@@ -295,7 +295,7 @@ module Nanoc
     end
     memoize :outdatedness_checker
 
-  private
+    private
 
     # @return [Array<Nanoc::Item>] The site’s items
     def items

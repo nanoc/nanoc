@@ -297,7 +297,7 @@ module Nanoc
       filenames.find { |f| File.file?(f) }
     end
 
-  private
+    private
 
     # Loads this site’s code and executes it.
     def load_code_snippets

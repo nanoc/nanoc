@@ -71,7 +71,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-  private
+    private
 
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,

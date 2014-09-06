@@ -65,7 +65,7 @@ module Nanoc::Extra
       @exclude.any? { |e| pathname.include_component?(e) }
     end
 
-  protected
+    protected
 
     def delete_file(file)
       if @dry_run

@@ -233,7 +233,7 @@ module Nanoc
       delete_edge(from, to)
     end
 
-  private
+    private
 
     # Invalidates cached data. This method should be called when the internal
     # graph representation is changed.

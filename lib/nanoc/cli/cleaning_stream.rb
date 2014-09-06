@@ -119,7 +119,7 @@ module Nanoc::CLI
       @stream.winsize = (arg)
     end
 
-  protected
+    protected
 
     def _nanoc_clean(s)
       @stream_cleaners.reduce(s) { |m, c| c.clean(m) }

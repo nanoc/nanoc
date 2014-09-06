@@ -19,7 +19,7 @@ module Nanoc
         digest.base64digest
       end
 
-    private
+      private
 
       def update(obj, digest)
         digest.update(obj.class.to_s)

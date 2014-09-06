@@ -96,7 +96,7 @@ module Nanoc::CLI::Commands
         teardown_diffs
       end
 
-    protected
+      protected
 
       def setup_diffs
         @diff_lock    = Mutex.new
@@ -184,7 +184,7 @@ module Nanoc::CLI::Commands
         super
       end
 
-    protected
+      protected
 
       def print_profiling_feedback
         # Get max filter length
@@ -373,7 +373,7 @@ module Nanoc::CLI::Commands
         end
       end
 
-    private
+      private
 
       def log(level, action, path, duration)
         Nanoc::CLI::Logger.instance.file(level, action, path, duration)
@@ -403,7 +403,7 @@ module Nanoc::CLI::Commands
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
     end
 
-  protected
+    protected
 
     def prune
       if site.config[:prune][:auto_prune]

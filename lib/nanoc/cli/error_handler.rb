@@ -157,7 +157,7 @@ module Nanoc::CLI
       write_load_paths(stream,        :verbose => true)
     end
 
-  protected
+    protected
 
     # @return [Boolean] true if debug output is enabled, false if not
     #

@@ -72,7 +72,7 @@ module Nanoc::CLI
       Nanoc::CLI.debug?
     end
 
-  protected
+    protected
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing
     # when the site's data source does not support VCSes (i.e. does not

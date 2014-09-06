@@ -19,7 +19,7 @@ module Nanoc::CLI::Commands
       Nanoc::Context.new(env).pry
     end
 
-  protected
+    protected
 
     def env
       {

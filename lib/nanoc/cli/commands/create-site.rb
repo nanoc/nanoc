@@ -15,7 +15,7 @@ module Nanoc::CLI::Commands
 
     class << self
 
-    protected
+      protected
 
       # Converts the given array to YAML format
       def array_to_yaml(array)
@@ -329,7 +329,7 @@ EOS
       puts "Created a blank nanoc site at '#{path}'. Enjoy!"
     end
 
-  protected
+    protected
 
     # Creates a configuration file and a output directory for this site, as
     # well as a rakefile that loads the standard nanoc tasks.

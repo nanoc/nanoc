@@ -89,7 +89,7 @@ module Nanoc::Extra::Deployers
       puts 'Done!'
     end
 
-  private
+    private
 
     # Prints the given message on stderr and exits.
     def error(msg)

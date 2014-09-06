@@ -465,7 +465,7 @@ module Nanoc
       "<#{self.class} name=\"#{name}\" binary=#{self.binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end
 
-  private
+    private
 
     def initialize_content
       # Initialize content and filenames

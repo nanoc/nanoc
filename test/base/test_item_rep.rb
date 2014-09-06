@@ -556,7 +556,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     Nanoc::NotificationCenter.remove(:rep_written, self)
   end
 
-private
+  private
 
   def create_binary_item
     Nanoc::Item.new(

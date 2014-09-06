@@ -66,7 +66,7 @@ module Nanoc::Extra::Checking
       run_check_classes(check_classes_named(check_class_names))
     end
 
-  protected
+    protected
 
     def load_dsl_if_available
       @dsl_loaded ||= false

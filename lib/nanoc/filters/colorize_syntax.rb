@@ -355,7 +355,7 @@ module Nanoc::Filters
       code1['class'] = [code1['class'], code2['class']].compact.join(' ')
     end
 
-  protected
+    protected
 
     KNOWN_COLORIZERS = [:coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge]
 

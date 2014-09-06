@@ -31,7 +31,7 @@ module Nanoc::CLI::Commands
       print_layouts(layouts, compiler)
     end
 
-  protected
+    protected
 
     def sorted_with_prev(objects)
       prev = nil

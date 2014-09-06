@@ -52,7 +52,7 @@ module Nanoc::Extra
       not_implemented('move')
     end
 
-  private
+    private
 
     def not_implemented(name)
       raise NotImplementedError.new(

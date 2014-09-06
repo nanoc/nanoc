@@ -69,7 +69,7 @@ module Nanoc::Filters
       end
     end
 
-  protected
+    protected
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings

@@ -82,7 +82,7 @@ module Nanoc::CLI
     add_after_setup_proc(block)
   end
 
-protected
+  protected
 
   # Makes the commandline interface ready for use.
   #

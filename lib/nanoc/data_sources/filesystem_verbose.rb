@@ -43,7 +43,7 @@ module Nanoc::DataSources
 
     include Nanoc::DataSources::Filesystem
 
-  private
+    private
 
     # See {Nanoc::DataSources::Filesystem#create_object}.
     def create_object(dir_name, content, attributes, identifier, params = {})

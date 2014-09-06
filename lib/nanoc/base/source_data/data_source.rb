@@ -234,7 +234,7 @@ module Nanoc
       not_implemented('create_layout')
     end
 
-  private
+    private
 
     def not_implemented(name)
       raise NotImplementedError.new(

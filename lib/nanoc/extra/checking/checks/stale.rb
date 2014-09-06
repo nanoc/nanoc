@@ -19,7 +19,7 @@ module Nanoc::Extra::Checking::Checks
       end
     end
 
-  protected
+    protected
 
     def pruner
       exclude_config = @site.config.fetch(:prune, {}).fetch(:exclude, [])

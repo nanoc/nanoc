@@ -39,7 +39,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-  protected
+    protected
 
     def validate_options_and_arguments
       if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]

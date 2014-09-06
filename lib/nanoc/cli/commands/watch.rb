@@ -114,7 +114,7 @@ module Nanoc::CLI::Commands
         end
       end
 
-    protected
+      protected
 
       def nix_tool_present?(tool)
         !`which #{tool}`.empty?

@@ -29,7 +29,7 @@ module Nanoc::Extra
       File.open(@path, 'r') { |io| io.__send__(sym, *args, &block) }
     end
 
-  private
+    private
 
     def file_instance_methods
       @@file_instance_methods ||= Set.new(File.instance_methods.map { |m| m.to_sym })

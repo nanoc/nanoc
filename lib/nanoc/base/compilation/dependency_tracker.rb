@@ -172,7 +172,7 @@ module Nanoc
       @graph = Nanoc::DirectedGraph.new([nil] + @objects)
     end
 
-  protected
+    protected
 
     def data
       {

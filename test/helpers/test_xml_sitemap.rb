@@ -172,7 +172,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     end
   end
 
-protected
+  protected
 
   def create_item_rep(item, name, path)
     rep = Nanoc::ItemRep.new(item, name)

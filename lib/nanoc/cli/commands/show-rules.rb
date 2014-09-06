@@ -25,7 +25,7 @@ module Nanoc::CLI::Commands
       site.layouts.each { |l| explain_layout(l) }
     end
 
-  protected
+    protected
 
     def explain_item(item)
       puts "#{@c.c('Item ' + item.identifier, :bold, :yellow)}:"

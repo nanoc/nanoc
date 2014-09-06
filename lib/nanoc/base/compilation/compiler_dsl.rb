@@ -253,7 +253,7 @@ module Nanoc
       @rules_collection.parse(filename)
     end
 
-  private
+    private
 
     # Converts the given identifier, which can contain the '*' or '+'
     # wildcard characters, matching zero or more resp. one or more

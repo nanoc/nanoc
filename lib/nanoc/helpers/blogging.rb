@@ -87,7 +87,7 @@ module Nanoc::Helpers
         buffer
       end
 
-    protected
+      protected
 
       def sorted_relevant_articles
         relevant_articles.sort_by do |a|

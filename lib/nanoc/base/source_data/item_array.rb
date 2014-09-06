@@ -48,7 +48,7 @@ module Nanoc
       end
     end
 
-  protected
+    protected
 
     def item_with_identifier(identifier)
       if self.frozen?

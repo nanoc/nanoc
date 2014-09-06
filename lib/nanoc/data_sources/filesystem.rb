@@ -60,7 +60,7 @@ module Nanoc::DataSources
       create_object(layouts_dir_name, content, attributes, identifier, params)
     end
 
-  protected
+    protected
 
     # Creates a new object (item or layout) on disk in dir_name according to
     # the given identifier. The file will have its attributes taken from the

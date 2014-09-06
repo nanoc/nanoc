@@ -202,7 +202,7 @@ module Nanoc
       find(self, name)
     end
 
-  protected
+    protected
 
     def resolve(class_or_name, _klass)
       if class_or_name.is_a?(String)

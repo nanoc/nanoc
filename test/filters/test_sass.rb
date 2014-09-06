@@ -271,7 +271,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     end
   end
 
-private
+  private
 
   def create_filter(params = {})
     FileUtils.mkdir_p('content')

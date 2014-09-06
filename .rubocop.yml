@@ -10,9 +10,6 @@ RegexpLiteral:
 RescueException:
   Enabled: false
 
-AccessModifierIndentation:
-  Enabled: false
-
 
 
 # ----- DISABLED (hard) -----

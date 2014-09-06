@@ -83,7 +83,7 @@ module Nanoc
     end
     alias_method :is_proxy?, :proxy?
 
-  private
+    private
 
     def set_assigns
       @item_rep.assigns = @compiler.assigns_for(@item_rep)

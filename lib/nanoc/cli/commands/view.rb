@@ -57,7 +57,7 @@ module Nanoc::CLI::Commands
       handler.run(app, options_for_rack)
     end
 
-  protected
+    protected
 
     def load_adsf
       # Load adsf

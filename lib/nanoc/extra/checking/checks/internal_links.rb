@@ -28,7 +28,7 @@ module Nanoc::Extra::Checking::Checks
       end
     end
 
-  protected
+    protected
 
     def valid?(href, origin)
       # Skip hrefs that point to self

@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-  protected
+    protected
 
     def prune_config
       site.config[:prune] || {}
