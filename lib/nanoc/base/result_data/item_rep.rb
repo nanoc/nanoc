@@ -263,9 +263,10 @@ module Nanoc
     #   given name, false otherwise
     #
     # @since 3.2.0
-    def has_snapshot?(snapshot_name)
+    def snapshot?(snapshot_name)
       !@content[snapshot_name].nil?
     end
+    alias_method :has_snapshot?, :snapshot?
 
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
@@ -444,11 +445,12 @@ module Nanoc
     #
     # @return [false]
     #
-    # @see Nanoc::ItemRepRecorderProxy#is_proxy?
-    # @see Nanoc::ItemRepProxy#is_proxy?
-    def is_proxy?
+    # @see Nanoc::ItemRepRecorderProxy#proxy?
+    # @see Nanoc::ItemRepProxy#proxy?
+    def proxy?
       false
     end
+    alias_method :is_proxy?, :proxy?
 
     # Returns an object that can be used for uniquely identifying objects.
     #

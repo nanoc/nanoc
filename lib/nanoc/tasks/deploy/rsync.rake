@@ -6,7 +6,7 @@ namespace :deploy do
 
   desc 'Upload the compiled site using rsync'
   task :rsync do
-    dry_run     = !!ENV['dry_run']
+    dry_run     = ENV['dry_run']
     config_name = ENV['config'] || :default
 
     cmd = [ 'deploy', '-t', config_name ]

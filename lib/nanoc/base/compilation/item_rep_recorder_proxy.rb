@@ -91,11 +91,12 @@ module Nanoc
     #
     # @return [true]
     #
-    # @see Nanoc::ItemRep#is_proxy?
-    # @see Nanoc::ItemRepProxy#is_proxy?
-    def is_proxy?
+    # @see Nanoc::ItemRep#proxy?
+    # @see Nanoc::ItemRepProxy#proxy?
+    def proxy?
       true
     end
+    alias_method :is_proxy?, :proxy?
 
   end
 

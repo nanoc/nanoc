@@ -237,12 +237,12 @@ EOS
     Nanoc.on_windows?
   end
 
-  def have_command?(cmd)
+  def command?(cmd)
     which, null = on_windows? ? ['where', 'NUL'] : ['which', '/dev/null']
     system("#{which} #{cmd} > #{null} 2>&1")
   end
 
-  def have_symlink?
+  def symlinks_supported?
     File.symlink nil, nil
   rescue NotImplementedError
     return false
@@ -251,11 +251,11 @@ EOS
   end
 
   def skip_unless_have_command(cmd)
-    skip "Could not find external command \"#{cmd}\"" unless have_command?(cmd)
+    skip "Could not find external command \"#{cmd}\"" unless command?(cmd)
   end
 
-  def skip_unless_have_symlink
-    skip 'Symlinks are not supported by Ruby on Windows' unless have_symlink?
+  def skip_unless_symlinks_supported
+    skip 'Symlinks are not supported by Ruby on Windows' unless symlinks_supported?
   end
 
 end

@@ -207,7 +207,7 @@ module Nanoc
 
     # @return [Boolean] True if the item is binary; false if it is not
     def binary?
-      !!@is_binary
+      @is_binary
     end
 
     # Returns the type of this object. Will always return `:item`, because

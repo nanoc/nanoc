@@ -15,7 +15,7 @@ module Nanoc
 
   # @return [Boolean] True if the current platform is Windows,
   def self.on_windows?
-    !!(RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i)
+    RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
   end
 
 end

@@ -38,9 +38,10 @@ module Nanoc::CLI
 
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
-    def is_in_site_dir?
+    def in_site_dir?
       Nanoc::Site.cwd_is_nanoc_site?
     end
+    alias_method :is_in_site_dir?, :in_site_dir?
 
     # Asserts that the current working directory contains a site
     # ({Nanoc::Site} instance). If no site is present, prints an error

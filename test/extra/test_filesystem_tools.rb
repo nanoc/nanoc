@@ -3,7 +3,7 @@
 class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
   def setup
     super
-    skip_unless_have_symlink
+    skip_unless_symlinks_supported
   end
 
   def test_all_files_in_follows_symlinks_to_dirs

@@ -70,7 +70,7 @@ module Nanoc::CLI::Commands
       # Check
       unless options[:'no-check']
         runner = Nanoc::Extra::Checking::Runner.new(site)
-        if runner.has_dsl?
+        if runner.dsl_present?
           puts 'Running issue checks…'
           ok = runner.run_for_deploy
           if !ok

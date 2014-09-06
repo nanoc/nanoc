@@ -179,7 +179,7 @@ module Nanoc
     # @return [Boolean] false if either the new or the old checksum for the
     #   given object is not available, true if both checksums are available
     def checksums_available?(obj)
-      !!checksum_store[obj] && obj.checksum
+      checksum_store[obj] && obj.checksum
     end
     memoize :checksums_available?
 

@@ -36,7 +36,7 @@ module ::Nanoc::Extra
     end
 
     def external_href?(href)
-      !!(href =~ %r{^(\/\/|[a-z\-]+:)})
+      href =~ %r{^(\/\/|[a-z\-]+:)}
     end
 
     def hrefs_in_file(filename)
