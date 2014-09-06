@@ -48,6 +48,12 @@ Lambda:
 ClassVars:
   Enabled: false
 
+# This is only possible in Ruby 1.9.x and up.
+#
+# Re-enable in nanoc 4.x.
+SymbolProc:
+  Enabled: false
+
 
 
 # ----- DISABLED (opinionated) -----
@@ -76,6 +82,13 @@ LineLength:
 #
 # Possibly re-enable in nanoc 4.x.
 ClassLength:
+  Enabled: false
+
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Possibly re-enable in nanoc 4.x.
+PerceivedComplexity:
   Enabled: false
 
 # Personal convention is to use colon-less annotations.
@@ -123,6 +136,10 @@ IfUnlessModifier:
 IndentationWidth:
   Enabled: false
 
+# This causes the hashes to be ridiculously indented.
+IndentHash:
+  Enabled: false
+
 # Other tools exist for checking code quality. This cop is probably good to
 # have, but nanoc 3.x will not get any major refactorings anymore anyway.
 #
@@ -148,4 +165,8 @@ SpaceInsideBrackets:
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
 TrivialAccessors:
+  Enabled: false
+
+# Used to be personal preference. Can remove soon.
+ClassAndModuleChildren:
   Enabled: false
