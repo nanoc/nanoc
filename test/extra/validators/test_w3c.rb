@@ -6,8 +6,8 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
     if_have 'w3c_validators' do
       with_site do |site|
         # Create some sample files
-        %w{ foo bar baz }.each do |filename|
-          %w{ xxx yyy }.each do |extension|
+        %w(foo bar baz).each do |filename|
+          %w(xxx yyy).each do |extension|
             File.open("output/#{filename}.#{extension}", 'w') { |io| io.write('hello') }
           end
         end

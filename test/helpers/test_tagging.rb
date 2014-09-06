@@ -70,14 +70,14 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_link_for_tag
     assert_equal(
-      %[<a href="http://stoneship.org/tags/foobar" rel="tag">foobar</a>],
+      %(<a href="http://stoneship.org/tags/foobar" rel="tag">foobar</a>),
       link_for_tag('foobar', 'http://stoneship.org/tags/')
     )
   end
 
   def test_link_for_tag_escape
     assert_equal(
-      %[<a href="http://stoneship.org/tags&amp;stuff/foo&amp;bar" rel="tag">foo&amp;bar</a>],
+      %(<a href="http://stoneship.org/tags&amp;stuff/foo&amp;bar" rel="tag">foo&amp;bar</a>),
       link_for_tag('foo&bar', 'http://stoneship.org/tags&stuff/')
     )
   end

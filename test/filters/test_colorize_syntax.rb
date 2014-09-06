@@ -62,7 +62,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
   </body>
 </html>
 EOS
-      expected_output_regex = %r[^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>]
+      expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
 
       # Run filter
       actual_output = filter.setup_and_run(input, :default_colorizer => :dummy, :is_fullpage => true)
@@ -76,7 +76,8 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %[<pre title="moo"><code>#!ruby\n# comment</code></pre>]
+      input = %(<pre title="moo"><code>#!ruby
+# comment</code></pre>)
       expected_output = CODERAY_PRE + '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
@@ -91,7 +92,9 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %[<pre title="moo"><code>def moo ; end\n#!ruby\n# comment</code></pre>]
+      input = %(<pre title="moo"><code>def moo ; end
+#!ruby
+# comment</code></pre>)
       expected_output = "<pre title=\"moo\"><code>def moo ; end\n#!ruby\n# comment</code></pre>"
 
       # Run filter
@@ -106,8 +109,10 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %[<pre title="moo"><code class="language-ruby">#!ruby\n# comment</code></pre>]
-      expected_output = CODERAY_PRE + %[<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>\n<span class="comment"># comment</span></code></pre>] + CODERAY_POST
+      input = %(<pre title="moo"><code class="language-ruby">#!ruby
+# comment</code></pre>)
+      expected_output = CODERAY_PRE + %(<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>
+<span class="comment"># comment</span></code></pre>) + CODERAY_POST
 
       # Run filter
       actual_output = filter.setup_and_run(input)
@@ -171,7 +176,9 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %Q[<pre title="moo"><code class="language-ruby">\n# comment\n</code></pre>]
+      input = %Q(<pre title="moo"><code class="language-ruby">
+# comment
+</code></pre>)
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="hl slc"># comment</span></code></pre>'
 
       # Run filter

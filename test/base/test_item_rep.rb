@@ -87,7 +87,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new(
-      %[<%= '<%= "blah" %' + '>' %>], {}, '/',
+      %(<%= '<%= "blah" %' + '>' %>), {}, '/',
       :binary => false
     )
 
@@ -101,17 +101,17 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Filter once
     item_rep.assigns = {}
     item_rep.filter(:erb)
-    assert_equal(%[<%= "blah" %>], item_rep.instance_eval { @content[:last] })
+    assert_equal(%(<%= "blah" %>), item_rep.instance_eval { @content[:last] })
 
     # Filter twice
     item_rep.assigns = {}
     item_rep.filter(:erb)
-    assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
+    assert_equal(%(blah), item_rep.instance_eval { @content[:last] })
   end
 
   def test_layout
     # Mock layout
-    layout = Nanoc::Layout.new(%[<%= "blah" %>], {}, '/somelayout/')
+    layout = Nanoc::Layout.new(%(<%= "blah" %>), {}, '/somelayout/')
 
     # Mock item
     item = Nanoc::Item.new(
@@ -129,7 +129,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Layout
     item_rep.assigns = {}
     item_rep.layout(layout, :erb, {})
-    assert_equal(%[blah], item_rep.instance_eval { @content[:last] })
+    assert_equal(%(blah), item_rep.instance_eval { @content[:last] })
   end
 
   def test_snapshot
@@ -141,7 +141,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Mock item
     item = Nanoc::Item.new(
-      %[<%= '<%= "blah" %' + '>' %>], {}, '/foobar/',
+      %(<%= '<%= "blah" %' + '>' %>), {}, '/foobar/',
       :binary => false
     )
 
@@ -161,9 +161,9 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item_rep.snapshot(:qux)
 
     # Check snapshots
-    assert_equal(%[<%= '<%= "blah" %' + '>' %>], item_rep.instance_eval { @content[:foo] })
-    assert_equal(%[<%= "blah" %>],               item_rep.instance_eval { @content[:bar] })
-    assert_equal(%[blah],                        item_rep.instance_eval { @content[:qux] })
+    assert_equal(%(<%= '<%= "blah" %' + '>' %>), item_rep.instance_eval { @content[:foo] })
+    assert_equal(%(<%= "blah" %>),               item_rep.instance_eval { @content[:bar] })
+    assert_equal(%(blah),                        item_rep.instance_eval { @content[:qux] })
   end
 
   def test_snapshot_should_be_written
@@ -329,7 +329,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_converted_binary_rep_can_be_layed_out
     # Mock layout
-    layout = Nanoc::Layout.new(%[<%= "blah" %> <%= yield %>], {}, '/somelayout/')
+    layout = Nanoc::Layout.new(%(<%= "blah" %> <%= yield %>), {}, '/somelayout/')
 
     # Create item and item rep
     item = create_binary_item
