@@ -324,7 +324,7 @@ module Nanoc
 
       # Listen to processing start/stop
       Nanoc::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::NotificationCenter.on(:processing_ended,   self) { |obj| @stack.pop       }
+      Nanoc::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
 
       # Assign snapshots
       reps.each do |rep|

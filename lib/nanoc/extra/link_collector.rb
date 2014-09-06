@@ -13,7 +13,7 @@ module ::Nanoc::Extra
       @filter =
         case mode
         when nil
-          lambda { |h| true }
+          lambda { |_h| true }
         when :external
           lambda { |h| external_href?(h) }
         when :internal

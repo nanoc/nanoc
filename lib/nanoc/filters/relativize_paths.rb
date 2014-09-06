@@ -80,7 +80,7 @@ module Nanoc::Filters
         doc.xpath(selector, namespaces).each do |node|
           if node.name == 'comment'
             content = node.content.dup
-            content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |m|
+            content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
               fragment = nokogiri_process($2, selectors, namespaces, klass, type)
               $1 + fragment + $3
             end

@@ -79,7 +79,7 @@ module Nanoc::CLI::Commands
           path = rep.raw_path(:snapshot => snapshot)
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
-        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, _is_created, _is_modified|
           if !rep.binary?
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
@@ -138,7 +138,7 @@ module Nanoc::CLI::Commands
 
             # Diff
             cmd = [ 'diff', '-u', old_file.path, new_file.path ]
-            Open3.popen3(*cmd) do |stdin, stdout, stderr|
+            Open3.popen3(*cmd) do |_stdin, stdout, _stderr|
               result = stdout.read
               return (result == '' ? nil : result)
             end
@@ -169,11 +169,11 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+        Nanoc::NotificationCenter.on(:filtering_started) do |_rep, filter_name|
           @times[filter_name] ||= []
           @times[filter_name] << { :start => Time.now }
         end
-        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+        Nanoc::NotificationCenter.on(:filtering_ended) do |_rep, filter_name|
           @times[filter_name].last[:stop] = Time.now
         end
       end
@@ -270,7 +270,7 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+        Nanoc::NotificationCenter.on(:compilation_started) do |_rep|
           if @gc_count % 20 == 0
             GC.enable
             GC.start
@@ -345,7 +345,7 @@ module Nanoc::CLI::Commands
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           @start_times[rep.raw_path] = Time.now
         end
-        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        Nanoc::NotificationCenter.on(:rep_written) do |_rep, path, is_created, is_modified|
           duration = path && @start_times[path] ? Time.now - @start_times[path] : nil
           action =
             case
@@ -367,7 +367,7 @@ module Nanoc::CLI::Commands
       def stop
         super
         @reps.select { |r| !r.compiled? }.each do |rep|
-          rep.raw_paths.each do |snapshot_name, raw_path|
+          rep.raw_paths.each do |_snapshot_name, raw_path|
             log(:low, :skip, raw_path, nil)
           end
         end

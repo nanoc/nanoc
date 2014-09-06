@@ -12,7 +12,7 @@ opt :d, :debug, 'enable debugging' do
   Nanoc::CLI.debug = true
 end
 
-opt :h, :help, 'show the help message and quit' do |value, cmd|
+opt :h, :help, 'show the help message and quit' do |_value, cmd|
   puts cmd.help
   exit 0
 end
@@ -35,6 +35,6 @@ opt :w, :warn, 'enable warnings' do
   $-w = true
 end
 
-run do |opts, args, cmd|
+run do |_opts, _args, cmd|
   cmd.command_named('compile').run([])
 end

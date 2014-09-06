@@ -277,7 +277,7 @@ module Nanoc::Filters
       check_availability('highlight', '--version')
 
       cmd = [ 'highlight', '--syntax', language, '--fragment' ]
-      params.each do |key, value|
+      params.each do |key, _value|
         if SIMON_HIGHLIGHT_OPT_MAP[key]
           cmd << SIMON_HIGHLIGHT_OPT_MAP[key]
         else

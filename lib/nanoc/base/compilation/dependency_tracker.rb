@@ -61,7 +61,7 @@ module Nanoc
       end
 
       # Register end of visits
-      Nanoc::NotificationCenter.on(:visit_ended, self) do |obj|
+      Nanoc::NotificationCenter.on(:visit_ended, self) do |_obj|
         @stack.pop
       end
     end
