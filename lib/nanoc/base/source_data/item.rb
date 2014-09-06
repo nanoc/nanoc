@@ -175,7 +175,7 @@ module Nanoc
       # TODO [in nanoc 4.0] remove me
       if key.to_s =~ /^content_for_(.*)$/
         @@_content_for_warning_issued ||= false
-        @@_Nanoc_Helpers_Capturing_included ||= false
+        @@_capturing_helper_included ||= false
 
         # Warn
         unless @@_content_for_warning_issued
@@ -184,9 +184,9 @@ module Nanoc
         end
 
         # Include capturing helper if necessary
-        unless @@_Nanoc_Helpers_Capturing_included
+        unless @@_capturing_helper_included
           self.class.send(:include, ::Nanoc::Helpers::Capturing)
-          @@_Nanoc_Helpers_Capturing_included = true
+          @@_capturing_helper_included = true
         end
 
         # Get content
