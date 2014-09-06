@@ -159,18 +159,16 @@ module Nanoc::Filters
     #
     # @api private
     def parse(content, klass, is_fullpage)
-      begin
-        if is_fullpage
-          klass.parse(content, nil, 'UTF-8')
-        else
-          klass.fragment(content)
-        end
-      rescue => e
-        if e.message =~ /can't modify frozen string/
-          parse(content.dup, klass, is_fullpage)
-        else
-          raise e
-        end
+      if is_fullpage
+        klass.parse(content, nil, 'UTF-8')
+      else
+        klass.fragment(content)
+      end
+    rescue => e
+      if e.message =~ /can't modify frozen string/
+        parse(content.dup, klass, is_fullpage)
+      else
+        raise e
       end
     end
 

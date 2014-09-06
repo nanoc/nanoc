@@ -56,12 +56,10 @@ module Nanoc::TestHelpers
   end
 
   def if_implemented
-    begin
-      yield
-    rescue NotImplementedError, NameError
-      skip $!
-      return
-    end
+    yield
+  rescue NotImplementedError, NameError
+    skip $!
+    return
   end
 
   def with_site(params = {})
