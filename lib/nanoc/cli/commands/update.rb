@@ -37,21 +37,21 @@ module Nanoc::CLI::Commands
         $stderr.puts '** WARNING **'
         $stderr.puts '*************'
         $stderr.puts
-        $stderr.puts 'Are you absolutely sure you want to update the ' +
-                     'content for this site? Updating the site content ' +
-                     'will change the structure of existing data. This ' +
-                     'operation is destructive and cannot be reverted. ' +
-                     'Please do not interrupt this operation; doing so can ' +
-                     'result in data loss. As always, consider making a ' +
+        $stderr.puts 'Are you absolutely sure you want to update the ' \
+                     'content for this site? Updating the site content ' \
+                     'will change the structure of existing data. This ' \
+                     'operation is destructive and cannot be reverted. ' \
+                     'Please do not interrupt this operation; doing so can ' \
+                     'result in data loss. As always, consider making a ' \
                      'backup copy.'
         $stderr.puts
-        $stderr.puts 'If this nanoc site is versioned using a VCS ' +
-                     'supported by nanoc, consider using the --vcs option ' +
-                     'to have nanoc perform add/delete/move operations ' +
-                     'using the specified VCS. To get a list of VCSes ' +
+        $stderr.puts 'If this nanoc site is versioned using a VCS ' \
+                     'supported by nanoc, consider using the --vcs option ' \
+                     'to have nanoc perform add/delete/move operations ' \
+                     'using the specified VCS. To get a list of VCSes ' \
                      'supported by nanoc, issue the "info" command.'
         $stderr.puts
-        $stderr.puts 'To continue, use the -y/--yes option, like "nanoc ' +
+        $stderr.puts 'To continue, use the -y/--yes option, like "nanoc ' \
                      'update -y".'
         exit 1
       end

@@ -101,7 +101,7 @@ module Nanoc::Helpers
       if block_given? # Set content
         # Get args
         if args.size != 1
-          raise ArgumentError, 'expected 1 argument (the name ' +
+          raise ArgumentError, 'expected 1 argument (the name ' \
             "of the capture) but got #{args.size} instead"
         end
         name = args[0]
@@ -112,7 +112,7 @@ module Nanoc::Helpers
       else # Get content
         # Get args
         if args.size != 2
-          raise ArgumentError, 'expected 2 arguments (the item ' +
+          raise ArgumentError, 'expected 2 arguments (the item ' \
             "and the name of the capture) but got #{args.size} instead"
         end
         item = args[0]

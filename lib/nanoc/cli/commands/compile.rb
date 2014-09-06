@@ -194,7 +194,7 @@ module Nanoc::CLI::Commands
         # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
-          $stderr.puts 'Warning: profiling information may not be accurate because ' +
+          $stderr.puts 'Warning: profiling information may not be accurate because ' \
                        'some items were not compiled.'
         end
 

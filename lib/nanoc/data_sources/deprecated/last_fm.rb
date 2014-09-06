@@ -21,9 +21,9 @@ module Nanoc::DataSources
         # Get data
         @http_client ||= Nanoc::Extra::CHiCk::Client.new
         _status, _headers, data = *@http_client.get(
-          'http://ws.audioscrobbler.com/2.0/' +
-            '?method=user.getRecentTracks' +
-            '&format=json' +
+          'http://ws.audioscrobbler.com/2.0/' \
+            '?method=user.getRecentTracks' \
+            '&format=json' \
             '&user=' + URI.escape(config[:username]) +
             '&api_key=' + URI.escape(config[:api_key])
         )
@@ -36,8 +36,8 @@ module Nanoc::DataSources
         raw_items.enum_with_index.map do |raw_item, i|
           # Get artist data
           _artist_status, _artist_headers, artist_data = *@http_client.get(
-            'http://ws.audioscrobbler.com/2.0/' +
-              '?method=artist.getInfo' +
+            'http://ws.audioscrobbler.com/2.0/' \
+              '?method=artist.getInfo' \
               '&format=json' +
               (
                 if raw_item['artist']['mbid'].empty?

@@ -56,7 +56,7 @@ module Nanoc::Extra
 
     def not_implemented(name)
       raise NotImplementedError.new(
-        "#{self.class} does not override ##{name}, which is required for " +
+        "#{self.class} does not override ##{name}, which is required for " \
         'this data source to be used.'
       )
     end

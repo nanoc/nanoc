@@ -13,8 +13,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     end
 
     # Build content to be evaluated
-    content = "head <% content_for :sidebar do %>\n" +
-              "  <%= 1+2 %>\n" +
+    content = "head <% content_for :sidebar do %>\n" \
+              "  <%= 1+2 %>\n" \
               "<% end %> foot"
 
     # Build site

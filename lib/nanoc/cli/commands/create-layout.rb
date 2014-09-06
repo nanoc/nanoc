@@ -30,14 +30,14 @@ module Nanoc::CLI::Commands
       # Check whether layout is unique
       if !site.layouts.find { |l| l.identifier == identifier }.nil?
         raise Nanoc::Errors::GenericTrivial,
-          "A layout already exists at #{identifier}. Please " +
+          "A layout already exists at #{identifier}. Please " \
           'pick a unique name for the layout you are creating.'
       end
 
       # Check whether layout is not at /
       if identifier == '/'
         raise Nanoc::Errors::GenericTrivial,
-          "There cannot be a layout with the identifier '/'; " +
+          "There cannot be a layout with the identifier '/'; " \
           'please pick a different identifier for this layout.'
       end
 
@@ -49,14 +49,14 @@ module Nanoc::CLI::Commands
       # Create layout
       data_source = site.data_sources[0]
       data_source.create_layout(
-        "<html>\n" +
-        "  <head>\n" +
-        "    <title><%= @item[:title] %></title>\n" +
-        "  </head>\n" +
-        "  <body>\n" +
-        "    <p>Hi, I'm a new layout. Please customize me!</p>\n" +
-        "<%= yield %>\n" +
-        "  </body>\n" +
+        "<html>\n" \
+        "  <head>\n" \
+        "    <title><%= @item[:title] %></title>\n" \
+        "  </head>\n" \
+        "  <body>\n" \
+        "    <p>Hi, I'm a new layout. Please customize me!</p>\n" \
+        "<%= yield %>\n" \
+        "  </body>\n" \
         "</html>\n",
         {},
         identifier

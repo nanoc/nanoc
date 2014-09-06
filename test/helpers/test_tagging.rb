@@ -21,7 +21,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
     # Check
     assert_equal(
-      "#{link_for_tag('foo', 'http://stoneship.org/tag/')}, " +
+      "#{link_for_tag('foo', 'http://stoneship.org/tag/')}, " \
       "#{link_for_tag('bar', 'http://stoneship.org/tag/')}",
       tags_for(item, :base_url => 'http://stoneship.org/tag/')
     )
@@ -44,7 +44,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
     # Check
     assert_equal(
-      "#{link_for_tag('foo', 'http://technorati.com/tag/')} ++ " +
+      "#{link_for_tag('foo', 'http://technorati.com/tag/')} ++ " \
       "#{link_for_tag('bar', 'http://technorati.com/tag/')}",
       tags_for(item, :separator => ' ++ ')
     )

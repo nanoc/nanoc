@@ -32,7 +32,7 @@ module Nanoc::CLI::Commands
       # Check whether item is unique
       if !site.items.find { |i| i.identifier == identifier }.nil?
         raise Nanoc::Errors::GenericTrivial,
-          "An item already exists at #{identifier}. Please " +
+          "An item already exists at #{identifier}. Please " \
           'pick a unique name for the item you are creating.'
       end
 
