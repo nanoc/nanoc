@@ -138,11 +138,11 @@ module Nanoc::Extra::Checking
       issues.group_by { |i| i.subject }.to_a.sort_by { |p| p.first }.each do |pair|
         subject = pair.first
         issues  = pair.last
-        unless issues.empty?
-          puts "  #{subject}:"
-          issues.each do |i|
-            puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
-          end
+        next if issues.empty?
+
+        puts "  #{subject}:"
+        issues.each do |i|
+          puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
         end
       end
     end

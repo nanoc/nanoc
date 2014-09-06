@@ -250,11 +250,12 @@ module Nanoc
           # Get normal path by stripping index filename
           rep.paths[snapshot] = basic_path
           @site.config[:index_filenames].each do |index_filename|
-            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
-              # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length - 1]
-              break
-            end
+            rep_path_ending = rep.paths[snapshot][-index_filename.length..-1]
+            next unless rep_path_ending == index_filename
+
+            # Strip and stop
+            rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length - 1]
+            break
           end
         end
       end

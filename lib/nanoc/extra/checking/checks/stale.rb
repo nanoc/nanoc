@@ -11,11 +11,11 @@ module Nanoc::Extra::Checking::Checks
 
       output_filenames.each do |f|
         next if pruner.filename_excluded?(f)
-        if !item_rep_paths.include?(f)
-          add_issue(
-            'file without matching item',
-            :subject  => f)
-        end
+        next if item_rep_paths.include?(f)
+
+        add_issue(
+          'file without matching item',
+          :subject  => f)
       end
     end
 

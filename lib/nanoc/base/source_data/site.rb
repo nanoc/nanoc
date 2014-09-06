@@ -189,14 +189,14 @@ module Nanoc
 
       @items.each do |item|
         parent_id_end = item.identifier.rindex('/', -2)
-        if parent_id_end
-          parent_id = item.identifier[0..parent_id_end]
-          parent = item_map[parent_id]
-          if parent
-            item.parent = parent
-            parent.children << item
-          end
-        end
+        next unless parent_id_end
+
+        parent_id = item.identifier[0..parent_id_end]
+        parent = item_map[parent_id]
+        next unless parent
+
+        item.parent = parent
+        parent.children << item
       end
     end
 
