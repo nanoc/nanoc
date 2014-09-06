@@ -1,15 +1,15 @@
 # encoding: utf-8
 
-usage       'validate-links [options]'
-aliases     :validate_links, :vlink
-summary     'validate links in site'
+usage 'validate-links [options]'
+aliases :validate_links, :vlink
+summary 'validate links in site'
 be_hidden
 description "
 Validates the site’s links. By default, both internal and external links will be checked.
 "
 
-flag   :i, :internal, 'validate internal links only'
-flag   :e, :external, 'validate external links only'
+flag :i, :internal, 'validate internal links only'
+flag :e, :external, 'validate external links only'
 
 module Nanoc::CLI::Commands
 

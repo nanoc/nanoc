@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'prune'
-summary     'remove files not managed by nanoc from the output directory'
+usage 'prune'
+summary 'remove files not managed by nanoc from the output directory'
 description <<-EOS
 Find all files in the output directory that do not correspond to an item
 managed by nanoc and remove them. Since this is a hazardous operation, an

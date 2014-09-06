@@ -14,7 +14,7 @@ module Nanoc
     extend Forwardable
 
     def_delegators :@item_rep, :item, :name, :binary, :binary?, :compiled_content, :has_snapshot?, :raw_path, :path
-    def_delegator  :@item_rep, :snapshot
+    def_delegator :@item_rep, :snapshot
 
     # @param [Nanoc::ItemRep] item_rep The item representation that this
     #   proxy should behave like

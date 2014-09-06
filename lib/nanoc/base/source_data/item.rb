@@ -26,15 +26,15 @@ module Nanoc
     attr_accessor :identifier
 
     # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
-    attr_reader   :reps
+    attr_reader :reps
 
     # @return [String] This item's raw, uncompiled content of this item (only
     #   available for textual items)
-    attr_reader   :raw_content
+    attr_reader :raw_content
 
     # @return [String] The filename pointing to the file containing this
     #   item’s content
-    attr_reader   :raw_filename
+    attr_reader :raw_filename
 
     # @return [Nanoc::Site] The site this item belongs to
     attr_accessor :site

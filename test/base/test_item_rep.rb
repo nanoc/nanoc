@@ -338,7 +338,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Create filter
     Class.new(::Nanoc::Filter) do
-      type       :binary => :text
+      type :binary => :text
       identifier :binary_to_text
       def run(content, params={})
         content + ' textified'

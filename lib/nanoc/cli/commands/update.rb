@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-usage   'update [options]'
+usage 'update [options]'
 summary 'update the data stored by the data source to a newer version'
 description <<-EOS
 Update the data stored by the data source to a newer format. The format in
@@ -13,7 +13,7 @@ backup in case something goes wrong.
 EOS
 
 required :c, :vcs, 'select the VCS to use'
-flag     :y, :yes, 'update the data without warning'
+flag :y, :yes, 'update the data without warning'
 
 module Nanoc::CLI::Commands
 

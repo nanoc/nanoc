@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'view [options]'
-summary     'start the web server that serves static files'
+usage 'view [options]'
+summary 'start the web server that serves static files'
 description <<-EOS
 Start the static web server. Unless specified, the web server will run on port
 3000 and listen on all IP addresses. Running this static web server requires

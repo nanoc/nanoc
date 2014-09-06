@@ -182,14 +182,14 @@ module Nanoc
     include Private
 
     # @return [Nanoc::Item] The item to which this rep belongs
-    attr_reader   :item
+    attr_reader :item
 
     # @return [Symbol] The representation's unique name
-    attr_reader   :name
+    attr_reader :name
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
-    attr_reader   :binary
-    alias_method  :binary?, :binary
+    attr_reader :binary
+    alias_method :binary?, :binary
 
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is

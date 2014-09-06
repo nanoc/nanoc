@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'create-item [options] identifier'
-aliases     :create_item, :ci
-summary     'create an item'
+usage 'create-item [options] identifier'
+aliases :create_item, :ci
+summary 'create an item'
 description <<-EOS
 Create a new item in the current site. The first data source in the site
 configuration will be used.

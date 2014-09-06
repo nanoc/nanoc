@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-summary     'show all available plugins'
-aliases     :info
-usage       'show-plugins [options]'
+summary 'show all available plugins'
+aliases :info
+usage 'show-plugins [options]'
 description <<-EOS
 Show a list of available plugins, including filters, data sources and VCSes.
 If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.

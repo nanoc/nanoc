@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'show-data'
-aliases     :debug
-summary     'show data in this site'
+usage 'show-data'
+aliases :debug
+summary 'show data in this site'
 description <<-EOS
 Show information about all items, item representations and layouts in the
 current site, along with dependency information.

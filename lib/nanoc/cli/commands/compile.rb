@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'compile [options]'
-summary     'compile items of this site'
+usage 'compile [options]'
+summary 'compile items of this site'
 description <<-EOS
 Compile all items of the current site.
 

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'shell'
-summary     'open a shell on the nanoc environment'
-aliases     'console'
+usage 'shell'
+summary 'open a shell on the nanoc environment'
+aliases 'console'
 description "
 Open an IRB shell on a context that contains @items, @layouts, @config and @site.
 "

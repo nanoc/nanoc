@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-usage   'sync'
+usage 'sync'
 summary 'sync data sources'
 description <<-EOS
 Sync data source data. This command is useful for updating local item caches
