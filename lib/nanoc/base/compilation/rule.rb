@@ -67,7 +67,26 @@ module Nanoc
         raise ArgumentError, 'Required :compiler option is missing'
       end
       rep = Nanoc::ItemRepProxy.new(rep, compiler) unless rep.proxy?
-      Nanoc::RuleContext.new(:rep => rep, :compiler => compiler).instance_eval(&@block)
+      Nanoc::RuleContext.new(
+        :rep      => rep,
+        :compiler => compiler
+      ).instance_exec(
+        matches(rep.item.identifier),
+        &@block
+      )
+    end
+
+  protected
+
+    # Matches the rule regexp against items identifier and gives back group
+    # captures if any
+    #
+    # @param String items identifier to check
+    #
+    # @return [nil, Array] array of group captures if any
+    def matches(identifier)
+      matches = @identifier_regex.match(identifier)
+      matches && matches.captures
     end
 
   end
