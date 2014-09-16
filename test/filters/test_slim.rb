@@ -13,11 +13,11 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
 
       # Run filter (assigns without @)
       result = filter.setup_and_run('p = rabbit')
-      assert_equal("<p>The rabbit is on the branch.</p>", result)
+      assert_equal('<p>The rabbit is on the branch.</p>', result)
 
       # Run filter (assigns with @)
       result = filter.setup_and_run('p = @rabbit')
-      assert_equal("<p>The rabbit is on the branch.</p>", result)
+      assert_equal('<p>The rabbit is on the branch.</p>', result)
     end
   end
 
@@ -26,7 +26,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::Slim.new({ :content => 'The rabbit is on the branch.' })
 
       result = filter.setup_and_run('p = yield')
-      assert_equal("<p>The rabbit is on the branch.</p>", result)
+      assert_equal('<p>The rabbit is on the branch.</p>', result)
     end
   end
 

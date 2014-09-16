@@ -19,8 +19,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     end
 
     # Set content
-    raw_content      = %[<a href="/foo">foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
+    raw_content      = %(<a href="/foo">foo</a>)
+    expected_content = %(<a href="../..">foo</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -43,8 +43,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     end
 
     # Set content
-    raw_content      = %[<a href='/foo'>foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
+    raw_content      = %(<a href='/foo'>foo</a>)
+    expected_content = %(<a href="../..">foo</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -67,8 +67,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     end
 
     # Set content
-    raw_content      = %[<a href=/foo>foo</a>]
-    expected_content = %[<a href="../..">foo</a>]
+    raw_content      = %(<a href=/foo>foo</a>)
+    expected_content = %(<a href="../..">foo</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -127,8 +127,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="/foo">foo</a> <a href="/bar">bar</a>]
-    expected_content = %[<a href="../..">foo</a> <a href="../../../bar">bar</a>]
+    raw_content      = %(<a href="/foo">foo</a> <a href="/bar">bar</a>)
+    expected_content = %(<a href="../..">foo</a> <a href="../../../bar">bar</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -151,8 +151,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="/"><img src="/bar.png" /></a>]
-    expected_content = %[<a href="../../../"><img src="../../../bar.png"></a>]
+    raw_content      = %(<a href="/"><img src="/bar.png" /></a>)
+    expected_content = %(<a href="../../../"><img src="../../../bar.png"></a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -175,8 +175,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[stuff href="/foo" more stuff]
-    expected_content = %[stuff href="/foo" more stuff]
+    raw_content      = %(stuff href="/foo" more stuff)
+    expected_content = %(stuff href="/foo" more stuff)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -199,8 +199,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="/">foo</a>]
-    expected_content = %[<a href="../../">foo</a>]
+    raw_content      = %(<a href="/">foo</a>)
+    expected_content = %(<a href="../../">foo</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -223,8 +223,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="//example.com/">example.com</a>]
-    expected_content = %[<a href="//example.com/">example.com</a>]
+    raw_content      = %(<a href="//example.com/">example.com</a>)
+    expected_content = %(<a href="//example.com/">example.com</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -247,8 +247,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="#max-payne">Max Payne</a>]
-    expected_content = %[<a href="#max-payne">Max Payne</a>]
+    raw_content      = %(<a href="#max-payne">Max Payne</a>)
+    expected_content = %(<a href="#max-payne">Max Payne</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -271,8 +271,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="http://example.com/">Example</a>]
-    expected_content = %[<a href="http://example.com/">Example</a>]
+    raw_content      = %(<a href="http://example.com/">Example</a>)
+    expected_content = %(<a href="http://example.com/">Example</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -295,8 +295,8 @@ EOS
     end
 
     # Set content
-    raw_content      = %[<a href="example">Example</a>]
-    expected_content = %[<a href="example">Example</a>]
+    raw_content      = %(<a href="example">Example</a>)
+    expected_content = %(<a href="example">Example</a>)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)
@@ -318,7 +318,7 @@ EOS
       @item_rep.path = '/woof/meow/'
     end
 
-    raw_content    = %[<object data="/example"><param name="movie" content="/example"></object>]
+    raw_content    = %(<object data="/example"><param name="movie" content="/example"></object>)
     actual_content = filter.setup_and_run(raw_content, :type => :html)
 
     assert_match(/<object data="..\/..\/example">/, actual_content)
@@ -332,7 +332,7 @@ EOS
 
     # Test
     assert_raises(RuntimeError) do
-      filter.setup_and_run("moo")
+      filter.setup_and_run('moo')
     end
   end
 
@@ -668,12 +668,13 @@ XML
       end
 
       # Set content
-      raw_content = %[
+      raw_content = %(
 <link rel="stylesheet" href="/foo.css" />
 <!--[if lt IE 9]>
     <script src="/js/lib/html5shiv.js"></script>
 <![endif]-->
-]
+
+)
 
       actual_content = filter.setup_and_run(raw_content.freeze, :type => :xhtml)
 
@@ -700,15 +701,16 @@ XML
       end
 
       # Set content
-      raw_content = %[
+      raw_content = %(
 <!--[if lt IE 9]>
     <script src="/js/lib/html5shiv.js"></script>
 <![endif]-->
-]
+
+)
 
       # Test
       actual_content = filter.setup_and_run(raw_content.freeze, :type => :html)
-      assert actual_content.include? %[<script src="../../js/lib/html5shiv.js">]
+      assert actual_content.include? %(<script src="../../js/lib/html5shiv.js">)
     end
   end
 
@@ -728,8 +730,8 @@ XML
     end
 
     # Set content
-    raw_content      = %[&lt;!DOCTYPE html>]
-    expected_content = %[&lt;!DOCTYPE html&gt;]
+    raw_content      = %(&lt;!DOCTYPE html>)
+    expected_content = %(&lt;!DOCTYPE html&gt;)
 
     # Test
     actual_content = filter.setup_and_run(raw_content, :type => :html)

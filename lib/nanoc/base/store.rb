@@ -52,7 +52,7 @@ module Nanoc
     # @abstract This method must be implemented by the subclass.
     #
     # @return [void]
-    def data=(new_data)
+    def data=(_new_data)
       raise NotImplementedError.new('Nanoc::Store subclasses must implement #data and #data=')
     end
 
@@ -67,7 +67,7 @@ module Nanoc
       end
 
       # Check file existance
-      if !File.file?(filename)
+      unless File.file?(filename)
         no_data_found
         @loaded = true
         return
@@ -129,7 +129,7 @@ module Nanoc
     def version_mismatch_detected
     end
 
-  private
+    private
 
     def pstore
       @pstore ||= PStore.new(filename)

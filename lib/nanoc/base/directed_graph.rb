@@ -211,7 +211,7 @@ module Nanoc
       result = []
       @vertices.each_pair do |v1, i1|
         direct_successors_of(v1).map { |v2| @vertices[v2] }.each do |i2|
-          result << [ i1, i2 ]
+          result << [i1, i2]
         end
       end
       result
@@ -233,7 +233,7 @@ module Nanoc
       delete_edge(from, to)
     end
 
-  private
+    private
 
     # Invalidates cached data. This method should be called when the internal
     # graph representation is changed.
@@ -249,7 +249,7 @@ module Nanoc
       all_vertices = Set.new
 
       processed_vertices   = Set.new
-      unprocessed_vertices = [ start ]
+      unprocessed_vertices = [start]
 
       until unprocessed_vertices.empty?
         # Get next unprocessed vertex

@@ -1,9 +1,6 @@
 # ----- TO ENABLE LATER -----
 # To make merges easier, I’ve decided to enable these at a later point in time.
 
-MultilineBlockChain:
-  Enabled: false
-
 PerlBackrefs:
   Enabled: false
 
@@ -11,9 +8,6 @@ RegexpLiteral:
   Enabled: false
 
 RescueException:
-  Enabled: false
-
-AccessModifierIndentation:
   Enabled: false
 
 
@@ -48,6 +42,20 @@ Lambda:
 ClassVars:
   Enabled: false
 
+# This is only possible in Ruby 1.9.x and up.
+#
+# Re-enable in nanoc 4.x.
+SymbolProc:
+  Enabled: false
+
+# We use filenames such as “create-site.rb” that translate to method names.
+FileName:
+  Enabled: false
+
+# We use get_binding to extract the binding
+AccessorMethodName:
+  Enabled: false
+
 
 
 # ----- DISABLED (opinionated) -----
@@ -78,6 +86,13 @@ LineLength:
 ClassLength:
   Enabled: false
 
+# Other tools exist for checking code quality. This cop is probably good to
+# have, but nanoc 3.x will not get any major refactorings anymore anyway.
+#
+# Possibly re-enable in nanoc 4.x.
+PerceivedComplexity:
+  Enabled: false
+
 # Personal convention is to use colon-less annotations.
 CommentAnnotation:
   Enabled: false
@@ -93,22 +108,13 @@ CyclomaticComplexity:
 Documentation:
   Enabled: false
 
-# Personal preference is putting the dot at the end of the line, so the reader
-# knows that the expression does not end on this line.
-DotPosition:
-  Enabled: false
-
 # Personal preference is to have symmetric blank lines inside module and class
 # definitions.
 EmptyLinesAroundBody:
   Enabled: false
 
 # No personal preference over how to format strings.
-FavorSprintf:
-  Enabled: false
-
-# I prefer negated if because unless is hard to parse mentally.
-FavorUnlessOverNegatedIf:
+FormatString:
   Enabled: false
 
 # nanoc suppresses exceptions for valid reasons in a few cases.
@@ -121,6 +127,10 @@ IfUnlessModifier:
 
 # Inconsistent AccessModifierIndentation:EnforcedStyle set to `outdent`
 IndentationWidth:
+  Enabled: false
+
+# This causes the hashes to be ridiculously indented.
+IndentHash:
   Enabled: false
 
 # Other tools exist for checking code quality. This cop is probably good to
@@ -140,12 +150,21 @@ RaiseArgs:
 SignalException:
   Enabled: false
 
-# Personal preference is to have space inside square brackets.
-SpaceInsideBrackets:
-  Enabled: false
-
 # Some methods that appear to be accessors (return a single value or set a
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
 TrivialAccessors:
+  Enabled: false
+
+# Used to be personal preference. Can remove soon.
+ClassAndModuleChildren:
+  Enabled: false
+
+# Trailing commas improve diffs. One could argue that diff algorithms should be
+# able to handle this, but they cannot, so this is disabled.
+TrailingComma:
+  Enabled: false
+
+# This does not always semantically make sense.
+GuardClause:
   Enabled: false

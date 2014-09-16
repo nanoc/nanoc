@@ -79,10 +79,10 @@ module Nanoc::CLI
   # @return [void]
   def self.after_setup(&block)
     # TODO decide what should happen if the CLI is already set up
-    self.add_after_setup_proc(block)
+    add_after_setup_proc(block)
   end
 
-protected
+  protected
 
   # Makes the commandline interface ready for use.
   #
@@ -177,11 +177,11 @@ protected
   def self.wrap_in_cleaning_stream(io)
     cio = ::Nanoc::CLI::CleaningStream.new(io)
 
-    if !self.enable_utf8?(io)
+    unless self.enable_utf8?(io)
       cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
     end
 
-    if !self.enable_ansi_colors?(io)
+    unless self.enable_ansi_colors?(io)
       cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
     end
 
@@ -198,14 +198,14 @@ protected
 
   # @return [Boolean] true if UTF-8 support is present, false if not
   def self.enable_utf8?(io)
-    return true if !io.tty?
+    return true unless io.tty?
 
     %w( LC_ALL LC_CTYPE LANG ).any? { |e| ENV[e] =~ /UTF/i }
   end
 
   # @return [Boolean] true if color support is present, false if not
   def self.enable_ansi_colors?(io)
-    if !io.tty?
+    unless io.tty?
       return false
     end
 

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'create-site [options] path'
-aliases     :create_site, :cs
-summary     'create a site'
+usage 'create-site [options] path'
+aliases :create_site, :cs
+summary 'create a site'
 description "
 Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` commandline option.
 "
@@ -15,7 +15,7 @@ module Nanoc::CLI::Commands
 
     class << self
 
-    protected
+      protected
 
       # Converts the given array to YAML format
       def array_to_yaml(array)
@@ -329,11 +329,11 @@ EOS
       puts "Created a blank nanoc site at '#{path}'. Enjoy!"
     end
 
-  protected
+    protected
 
     # Creates a configuration file and a output directory for this site, as
     # well as a rakefile that loads the standard nanoc tasks.
-    def site_create_minimal(data_source)
+    def site_create_minimal(_data_source)
       # Create output
       FileUtils.mkdir_p('output')
 

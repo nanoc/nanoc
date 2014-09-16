@@ -64,8 +64,8 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
       filter = create_filter
 
       # Create sample file
-      File.open('moo.sass', 'w') { |io| io.write %Q{@import subdir/relative} }
-      FileUtils.mkdir_p("subdir")
+      File.open('moo.sass', 'w') { |io| io.write %Q(@import subdir/relative) }
+      FileUtils.mkdir_p('subdir')
       File.open('subdir/relative.sass', 'w') { |io| io.write "body\n  color: red" }
 
       # Run filter
@@ -251,7 +251,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Check
         output_files = Dir['output/**/*'].select { |f| File.file?(f) }
-        assert_equal [ 'output/style/super/main.css' ], output_files
+        assert_equal ['output/style/super/main.css'], output_files
         assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/style/super/main.css'))
 
         # Update included file
@@ -265,22 +265,22 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Recheck
         output_files = Dir['output/**/*'].select { |f| File.file?(f) }
-        assert_equal [ 'output/style/super/main.css' ], output_files
+        assert_equal ['output/style/super/main.css'], output_files
         assert_match(/^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/style/super/main.css'))
       end
     end
   end
 
-private
+  private
 
-  def create_filter(params={})
+  def create_filter(params = {})
     FileUtils.mkdir_p('content')
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green')}
 
-    items = [ Nanoc::Item.new(
+    items = [Nanoc::Item.new(
       'blah',
       { :content_filename => 'content/xyzzy.sass' },
-      '/blah/') ]
+      '/blah/')]
     params = { :item => items[0], :items => items }.merge(params)
     ::Nanoc::Filters::Sass.new(params)
   end

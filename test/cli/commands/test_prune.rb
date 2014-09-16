@@ -93,9 +93,9 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_symlink_to_output_dir
-    skip_unless_have_symlink
+    skip_unless_symlinks_supported
     if defined?(JRUBY_VERSION) && JRUBY_VERSION == '1.7.11'
-      skip "JRuby 1.7.11 has buggy File.find behavior (see https://github.com/jruby/jruby/issues/1647)"
+      skip 'JRuby 1.7.11 has buggy File.find behavior (see https://github.com/jruby/jruby/issues/1647)'
     end
 
     with_site do |site|

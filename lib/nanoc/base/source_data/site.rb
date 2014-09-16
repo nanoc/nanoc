@@ -35,10 +35,10 @@ module Nanoc
       :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
       :lib_dirs           => %w( lib ),
       :output_dir         => 'output',
-      :data_sources       => [ {} ],
-      :index_filenames    => [ 'index.html' ],
+      :data_sources       => [{}],
+      :index_filenames    => ['index.html'],
       :enable_output_diff => false,
-      :prune              => { :auto_prune => false, :exclude => [ '.git', '.hg', '.svn', 'CVS' ] }
+      :prune              => { :auto_prune => false, :exclude => ['.git', '.hg', '.svn', 'CVS'] }
     }
 
     # Creates a site object for the site specified by the given
@@ -189,14 +189,14 @@ module Nanoc
 
       @items.each do |item|
         parent_id_end = item.identifier.rindex('/', -2)
-        if parent_id_end
-          parent_id = item.identifier[0..parent_id_end]
-          parent = item_map[parent_id]
-          if parent
-            item.parent = parent
-            parent.children << item
-          end
-        end
+        next unless parent_id_end
+
+        parent_id = item.identifier[0..parent_id_end]
+        parent = item_map[parent_id]
+        next unless parent
+
+        item.parent = parent
+        parent.children << item
       end
     end
 
@@ -224,7 +224,7 @@ module Nanoc
 
     # @deprecated It is no longer necessary to explicitly load site data. It
     #   is safe to remove all {#load_data} calls.
-    def load_data(force = false)
+    def load_data(_force = false)
       warn 'It is no longer necessary to call Nanoc::Site#load_data. This method no longer has any effect. All calls to this method can be safely removed.'
     end
 
@@ -297,7 +297,7 @@ module Nanoc
       filenames.find { |f| File.file?(f) }
     end
 
-  private
+    private
 
     # Loads this site’s code and executes it.
     def load_code_snippets
@@ -365,7 +365,7 @@ module Nanoc
       if parent_config_file
         config.delete(:parent_config_file)
         config_path = File.absolute_path(parent_config_file, File.dirname(config_paths.last))
-        if !File.file?(config_path)
+        unless File.file?(config_path)
           raise Nanoc::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
         end
         if config_paths.include?(config_path)

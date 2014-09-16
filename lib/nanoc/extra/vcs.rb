@@ -20,7 +20,7 @@ module Nanoc::Extra
     # @return [void]
     #
     # @abstract
-    def add(filename)
+    def add(_filename)
       not_implemented('add')
     end
 
@@ -33,7 +33,7 @@ module Nanoc::Extra
     # @return [void]
     #
     # @abstract
-    def remove(filename)
+    def remove(_filename)
       not_implemented('remove')
     end
 
@@ -48,15 +48,15 @@ module Nanoc::Extra
     # @return [void]
     #
     # @abstract
-    def move(src, dst)
+    def move(_src, _dst)
       not_implemented('move')
     end
 
-  private
+    private
 
     def not_implemented(name)
       raise NotImplementedError.new(
-        "#{self.class} does not override ##{name}, which is required for " +
+        "#{self.class} does not override ##{name}, which is required for " \
         'this data source to be used.'
       )
     end

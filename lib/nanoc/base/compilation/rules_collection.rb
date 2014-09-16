@@ -76,7 +76,7 @@ module Nanoc
     # @return [void]
     def load
       # Find rules file
-      rules_filenames = [ 'Rules', 'rules', 'Rules.rb', 'rules.rb' ]
+      rules_filenames = ['Rules', 'rules', 'Rules.rb', 'rules.rb']
       rules_filename = rules_filenames.find { |f| File.file?(f) }
       raise Nanoc::Errors::NoRulesFileFound.new if rules_filename.nil?
 
@@ -141,7 +141,7 @@ module Nanoc
     def routing_rules_for(rep)
       rules = {}
       @item_routing_rules.each do |rule|
-        next if !rule.applicable_to?(rep.item)
+        next unless rule.applicable_to?(rep.item)
         next if rule.rep_name != rep.name
         next if rules.key?(rule.snapshot_name)
 
@@ -193,7 +193,7 @@ module Nanoc
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
       compilation_rule_for(rep).apply_to(recording_proxy, :compiler => @compiler)
-      recording_proxy.rule_memory << [ :write, rep.path ]
+      recording_proxy.rule_memory << [:write, rep.path]
       make_rule_memory_serializable(recording_proxy.rule_memory)
     end
     memoize :new_rule_memory_for_rep
@@ -208,7 +208,7 @@ module Nanoc
     def make_rule_memory_serializable(rs)
       rs.map do |r|
         if r[0] == :filter
-          [ r[0], r[1], r[2].to_a.map { |a| Nanoc::Checksummer.calc(a) }  ]
+          [r[0], r[1], r[2].to_a.map { |a| Nanoc::Checksummer.calc(a) }]
         else
           r
         end
@@ -231,7 +231,7 @@ module Nanoc
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_for(rep)
       new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
-        [ e[1], e[2].fetch(:final) { true } ]
+        [e[1], e[2].fetch(:final) { true }]
       end
     end
 

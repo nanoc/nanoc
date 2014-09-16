@@ -47,7 +47,7 @@ module Nanoc::CLI
           ACTION_COLORS[action.to_sym],
           action,
           "\e[0m",
-          duration.nil? ? '' : '[%2.2fs]  ' % [ duration ],
+          duration.nil? ? '' : '[%2.2fs]  ' % [duration],
           name
         ]
       )

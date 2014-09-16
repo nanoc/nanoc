@@ -63,7 +63,7 @@ module Nanoc::Helpers
     #
     # @return [String] A link for the given tag and the given base URL
     def link_for_tag(tag, base_url)
-      %[<a href="#{h base_url}#{h tag}" rel="tag">#{h tag}</a>]
+      %(<a href="#{h base_url}#{h tag}" rel="tag">#{h tag}</a>)
     end
 
   end

@@ -19,16 +19,16 @@ module Nanoc::Extra::Checking::Checks
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
       hrefs_with_filenames.each_pair do |href, fns|
         fns.each do |filename|
-          unless valid?(href, filename)
+          next if valid?(href, filename)
+
           add_issue(
             "broken reference to #{href}",
             :subject  => filename)
-          end
         end
       end
     end
 
-  protected
+    protected
 
     def valid?(href, origin)
       # Skip hrefs that point to self

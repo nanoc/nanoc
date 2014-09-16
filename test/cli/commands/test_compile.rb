@@ -118,16 +118,16 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   def test_setup_and_teardown_listeners
     with_site do
       test_listener_class = Class.new(::Nanoc::CLI::Commands::Compile::Listener) do
-        def start ; @started = true ; end
-        def stop  ; @stopped = true ; end
-        def started? ; @started ; end
-        def stopped? ; @stopped ; end
+        def start; @started = true; end
+        def stop; @stopped = true; end
+        def started?; @started; end
+        def stopped?; @stopped; end
       end
 
       options = {}
       arguments = []
       cmd = nil
-      listener_classes = [ test_listener_class ]
+      listener_classes = [test_listener_class]
       cmd_runner = Nanoc::CLI::Commands::Compile.new(
         options, arguments, cmd, :listener_classes => listener_classes)
 
@@ -148,7 +148,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     rep.compiled = true
 
     # Listen
-    listener = new_file_action_printer([ rep ])
+    listener = new_file_action_printer([rep])
     listener.start
     Nanoc::NotificationCenter.post(:compilation_started, rep)
     Nanoc::NotificationCenter.post(:rep_written, rep, rep.raw_path, false, true)
@@ -169,7 +169,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     rep.raw_path = 'output/foo.txt'
 
     # Listen
-    listener = new_file_action_printer([ rep ])
+    listener = new_file_action_printer([rep])
     listener.start
     Nanoc::NotificationCenter.post(:compilation_started, rep)
     listener.stop

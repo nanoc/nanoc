@@ -62,7 +62,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
   </body>
 </html>
 EOS
-      expected_output_regex = %r[^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>]
+      expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
 
       # Run filter
       actual_output = filter.setup_and_run(input, :default_colorizer => :dummy, :is_fullpage => true)
@@ -76,7 +76,8 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %[<pre title="moo"><code>#!ruby\n# comment</code></pre>]
+      input = %(<pre title="moo"><code>#!ruby
+# comment</code></pre>)
       expected_output = CODERAY_PRE + '<pre title="moo"><code class="language-ruby"><span class="comment"># comment</span></code></pre>' + CODERAY_POST
 
       # Run filter
@@ -91,7 +92,9 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %[<pre title="moo"><code>def moo ; end\n#!ruby\n# comment</code></pre>]
+      input = %(<pre title="moo"><code>def moo ; end
+#!ruby
+# comment</code></pre>)
       expected_output = "<pre title=\"moo\"><code>def moo ; end\n#!ruby\n# comment</code></pre>"
 
       # Run filter
@@ -106,8 +109,10 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %[<pre title="moo"><code class="language-ruby">#!ruby\n# comment</code></pre>]
-      expected_output = CODERAY_PRE + %[<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>\n<span class="comment"># comment</span></code></pre>] + CODERAY_POST
+      input = %(<pre title="moo"><code class="language-ruby">#!ruby
+# comment</code></pre>)
+      expected_output = CODERAY_PRE + %(<pre title="moo"><code class="language-ruby"><span class="doctype">#!ruby</span>
+<span class="comment"># comment</span></code></pre>) + CODERAY_POST
 
       # Run filter
       actual_output = filter.setup_and_run(input)
@@ -132,7 +137,7 @@ EOS
 
   def test_pygmentize
     if_have 'nokogiri' do
-      skip_unless_have_command "pygmentize"
+      skip_unless_have_command 'pygmentize'
 
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -148,7 +153,7 @@ EOS
   end
 
   def test_pygmentsrb
-    skip "pygments.rb does not support Windows" if on_windows?
+    skip 'pygments.rb does not support Windows' if on_windows?
     if_have 'pygments', 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -165,13 +170,15 @@ EOS
 
   def test_simon_highlight
     if_have 'nokogiri' do
-      skip_unless_have_command "highlight"
+      skip_unless_have_command 'highlight'
 
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %Q[<pre title="moo"><code class="language-ruby">\n# comment\n</code></pre>]
+      input = %Q(<pre title="moo"><code class="language-ruby">
+# comment
+</code></pre>)
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="hl slc"># comment</span></code></pre>'
 
       # Run filter
@@ -223,7 +230,7 @@ EOS
   end
 
   def test_colorize_syntax_with_default_colorizer
-    skip_unless_have_command "pygmentize"
+    skip_unless_have_command 'pygmentize'
 
     if_have 'nokogiri' do
       # Create filter
@@ -252,13 +259,13 @@ EOS
         input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
 
         # Run filter
-        [ :albino, :pygmentize, :simon_highlight ].each do |colorizer|
+        [:albino, :pygmentize, :simon_highlight].each do |colorizer|
           begin
             input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
             filter.setup_and_run(
               input,
               :colorizers => { :ruby => colorizer })
-            flunk "expected colorizer to raise if no executable is available"
+            flunk 'expected colorizer to raise if no executable is available'
           rescue
           end
         end
@@ -361,7 +368,7 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Simple test
-      assert_equal "  bar", filter.send(:strip, "\n  bar")
+      assert_equal '  bar', filter.send(:strip, "\n  bar")
 
       # Get input and expected output
       input = <<EOS

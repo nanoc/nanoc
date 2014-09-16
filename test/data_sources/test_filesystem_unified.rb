@@ -2,7 +2,7 @@
 
 class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
-  def new_data_source(params=nil)
+  def new_data_source(params = nil)
     # Mock site
     site = Nanoc::Site.new({})
 
@@ -102,7 +102,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
       expected_out[i].stuff[1][:file].close;
       actual_out[i].stuff[1][:file].close
-      [ 'num', :filename, :extension ].each do |key|
+      ['num', :filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -114,7 +114,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Create sample files
     FileUtils.mkdir_p('foo')
-    File.open('foo/stuff.dat', 'w') { |io| io.write("random binary data") }
+    File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
     items = data_source.send(:load_objects, 'foo', 'item', Nanoc::Item)
@@ -132,7 +132,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Create sample files
     FileUtils.mkdir_p('foo')
-    File.open('foo/stuff.dat', 'w') { |io| io.write("random binary data") }
+    File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
     assert_raises(RuntimeError) do
@@ -201,7 +201,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source(:allow_periods_in_identifiers => true)
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
-      [ meta_filename, content_filename ].each do |filename|
+      [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
           data_source.instance_eval { identifier_for_filename(filename) }
@@ -227,7 +227,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
-      [ meta_filename, content_filename ].each do |filename|
+      [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
           data_source.instance_eval { identifier_for_filename(filename) }
@@ -296,13 +296,13 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     FileUtils.mkdir_p('foo/a/b')
     File.open('foo/a/b/c.yaml',     'w') { |io| io.write("---\nnum: 1\n") }
     File.open('foo/b.c.yaml',       'w') { |io| io.write("---\nnum: 2\n") }
-    File.open('foo/b.c.html',       'w') { |io| io.write("test 2")        }
-    File.open('foo/car.html',       'w') { |io| io.write("test 3")        }
-    File.open('foo/ugly.yaml~',     'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html~',     'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write("blah")          }
+    File.open('foo/b.c.html',       'w') { |io| io.write('test 2')        }
+    File.open('foo/car.html',       'w') { |io| io.write('test 3')        }
+    File.open('foo/ugly.yaml~',     'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html~',     'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html.orig', 'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html.rej',  'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html.bak',  'w') { |io| io.write('blah')          }
 
     # Get expected output
     expected_out = [
@@ -358,7 +358,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       actual_file.close unless actual_file.nil?
       expected_file.close unless expected_file.nil?
 
-      [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
+      ['num', :content_filename, :meta_filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -384,13 +384,13 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     FileUtils.mkdir_p('foo/a/b')
     File.open('foo/a/b/c.yaml',     'w') { |io| io.write("---\nnum: 1\n") }
     File.open('foo/b.yaml',         'w') { |io| io.write("---\nnum: 2\n") }
-    File.open('foo/b.html.erb',     'w') { |io| io.write("test 2")        }
-    File.open('foo/car.html',       'w') { |io| io.write("test 3")        }
-    File.open('foo/ugly.yaml~',     'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html~',     'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write("blah")          }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write("blah")          }
+    File.open('foo/b.html.erb',     'w') { |io| io.write('test 2')        }
+    File.open('foo/car.html',       'w') { |io| io.write('test 3')        }
+    File.open('foo/ugly.yaml~',     'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html~',     'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html.orig', 'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html.rej',  'w') { |io| io.write('blah')          }
+    File.open('foo/ugly.html.bak',  'w') { |io| io.write('blah')          }
 
     # Get expected output
     expected_out = [
@@ -446,7 +446,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       actual_file.close unless actual_file.nil?
       expected_file.close unless expected_file.nil?
 
-      [ 'num', :content_filename, :meta_filename, :extension ].each do |key|
+      ['num', :content_filename, :meta_filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -517,8 +517,8 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_compile_iso_8859_1_site
     # Check encoding
-    if !''.respond_to?(:encode)
-      skip "Test only works on 1.9.x"
+    unless ''.respond_to?(:encode)
+      skip 'Test only works on 1.9.x'
       return
     end
 
@@ -526,7 +526,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source
 
     # Create item
-    data_source.create_item("Hëllö", {}, '/foo/')
+    data_source.create_item('Hëllö', {}, '/foo/')
 
     # Parse
     begin
@@ -536,7 +536,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       items = data_source.items
 
       assert_equal 1, items.size
-      assert_equal Encoding.find("UTF-8"), items[0].raw_content.encoding
+      assert_equal Encoding.find('UTF-8'), items[0].raw_content.encoding
     ensure
       Encoding.default_external = original_default_external_encoding
     end
@@ -544,8 +544,8 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_compile_iso_8859_1_site_with_explicit_encoding
     # Check encoding
-    if !''.respond_to?(:encode)
-      skip "Test only works on 1.9.x"
+    unless ''.respond_to?(:encode)
+      skip 'Test only works on 1.9.x'
       return
     end
 
@@ -558,7 +558,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       original_default_external_encoding = Encoding.default_external
       Encoding.default_external = 'ISO-8859-1'
 
-      data_source.create_item("Hëllö", {}, '/foo/')
+      data_source.create_item('Hëllö', {}, '/foo/')
     ensure
       Encoding.default_external = original_default_external_encoding
     end
@@ -566,7 +566,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     # Parse
     items = data_source.items
     assert_equal 1, items.size
-    assert_equal Encoding.find("UTF-8"), items[0].raw_content.encoding
+    assert_equal Encoding.find('UTF-8'), items[0].raw_content.encoding
   end
 
 end

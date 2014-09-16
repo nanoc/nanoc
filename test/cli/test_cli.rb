@@ -119,18 +119,18 @@ EOS
     }
     with_env_vars(new_env_diff) do
       io = StringIO.new
-      def io.tty? ; true ; end
+      def io.tty?; true; end
       refute Nanoc::CLI.enable_utf8?(io)
 
       io = StringIO.new
-      def io.tty? ; false ; end
+      def io.tty?; false; end
       assert Nanoc::CLI.enable_utf8?(io)
     end
   end
 
   def test_enable_utf8
     io = StringIO.new
-    def io.tty? ; true ; end
+    def io.tty?; true; end
 
     new_env_diff = {
       'LC_ALL'   => 'en_US.ISO-8859-1',

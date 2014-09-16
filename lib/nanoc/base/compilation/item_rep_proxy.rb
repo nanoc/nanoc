@@ -14,7 +14,7 @@ module Nanoc
     extend Forwardable
 
     def_delegators :@item_rep, :item, :name, :binary, :binary?, :compiled_content, :has_snapshot?, :raw_path, :path
-    def_delegator  :@item_rep, :snapshot
+    def_delegator :@item_rep, :snapshot
 
     # @param [Nanoc::ItemRep] item_rep The item representation that this
     #   proxy should behave like
@@ -76,13 +76,14 @@ module Nanoc
     #
     # @return [true]
     #
-    # @see Nanoc::ItemRep#is_proxy?
-    # @see Nanoc::ItemRepRecorderProxy#is_proxy?
-    def is_proxy?
+    # @see Nanoc::ItemRep#proxy?
+    # @see Nanoc::ItemRepRecorderProxy#proxy?
+    def proxy?
       true
     end
+    alias_method :is_proxy?, :proxy?
 
-  private
+    private
 
     def set_assigns
       @item_rep.assigns = @compiler.assigns_for(@item_rep)

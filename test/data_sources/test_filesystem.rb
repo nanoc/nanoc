@@ -86,9 +86,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => [ 'yaml', 'html' ],
-      './bar.entry' => [ nil,    'html' ],
-      './foo/qux'   => [ 'yaml', nil    ]
+      './foo'       => ['yaml', 'html'],
+      './bar.entry' => [nil,    'html'],
+      './foo/qux'   => ['yaml', nil]
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -113,9 +113,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => [ 'yaml', 'html'     ],
-      './bar'       => [ nil,    'html.erb' ],
-      './foo/qux'   => [ 'yaml', nil        ]
+      './foo'       => ['yaml', 'html'],
+      './bar'       => [nil,    'html.erb'],
+      './foo/qux'   => ['yaml', nil]
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -135,9 +135,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check
     expected = {
-      './aaa/foo' => [ nil, 'html' ],
-      './bbb/foo' => [ nil, 'html' ],
-      './ccc/foo' => [ nil, 'html' ]
+      './aaa/foo' => [nil, 'html'],
+      './bbb/foo' => [nil, 'html'],
+      './ccc/foo' => [nil, 'html']
     }
     assert_equal expected, data_source.send(:all_split_files_in, '.')
   end
@@ -291,7 +291,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("", result[1])
+    assert_equal('', result[1])
   end
 
   def test_parse_embedded_meta_only_2
@@ -308,7 +308,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("", result[1])
+    assert_equal('', result[1])
   end
 
   def test_parse_embedded_meta_only_3
@@ -316,7 +316,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('test.html', 'w') do |io|
       io.write "-----\r\n"
       io.write "foo: bar\n"
-      io.write "-----"
+      io.write '-----'
     end
 
     # Create data source
@@ -325,7 +325,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("", result[1])
+    assert_equal('', result[1])
   end
 
   def test_parse_embedded_invalid_2
@@ -403,7 +403,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       io.write "-----\n"
       io.write "-----\n"
       io.write "\nblah blah\n"
-      io.write "-----"
+      io.write '-----'
     end
 
     # Create data source
@@ -417,7 +417,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_parse_utf8_bom
     File.open('test.html', 'w') do |io|
-      io.write [ 0xEF, 0xBB, 0xBF ].map { |i| i.chr }.join
+      io.write [0xEF, 0xBB, 0xBF].map { |i| i.chr }.join
       io.write "-----\n"
       io.write "utf8bomawareness: high\n"
       io.write "-----\n"
@@ -468,16 +468,16 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_parse_external
     # Create a file
-    File.open('test.html', 'w') { |io| io.write("blah blah") }
-    File.open('test.yaml', 'w') { |io| io.write("foo: bar") }
+    File.open('test.html', 'w') { |io| io.write('blah blah') }
+    File.open('test.yaml', 'w') { |io| io.write('foo: bar') }
 
     # Create data source
     data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, nil)
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
-    assert_equal({ "foo" => "bar"}, result[0])
-    assert_equal("blah blah",       result[1])
+    assert_equal({ 'foo' => 'bar'}, result[0])
+    assert_equal('blah blah',       result[1])
   end
 
 end

@@ -5,16 +5,23 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_all
     # Create dummy data
     File.open('file-a.html', 'w') do |io|
-      io << %[<a href="http://example.com/">A 1</a>\n]
-      io << %[<a href="https://example.com/">A 2</a>\n]
-      io << %[<a href="stuff/"A 3></a>\n]
-      io << %[<a name="href-less-anchor">A 4</a>]
-      io << %[<a href="https://example.com/with-fragment#moo">A 5</a>\n]
+      io << %(<a href="http://example.com/">A 1</a>
+)
+      io << %(<a href="https://example.com/">A 2</a>
+)
+      io << %(<a href="stuff/"A 3></a>
+)
+      io << %(<a name="href-less-anchor">A 4</a>)
+      io << %(<a href="https://example.com/with-fragment#moo">A 5</a>
+)
     end
     File.open('file-b.html', 'w') do |io|
-      io << %[<a href="mailto:bob@example.com">B 1</a>\n]
-      io << %[<a href="../stuff">B 2</a>\n]
-      io << %[<a href="/stuff">B 3</a>\n]
+      io << %(<a href="mailto:bob@example.com">B 1</a>
+)
+      io << %(<a href="../stuff">B 2</a>
+)
+      io << %(<a href="/stuff">B 3</a>
+)
     end
 
     # Create validator
@@ -37,14 +44,20 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_external
     # Create dummy data
     File.open('file-a.html', 'w') do |io|
-      io << %[<a href="http://example.com/">A 1</a>\n]
-      io << %[<a href="https://example.com/">A 2</a>\n]
-      io << %[<a href="stuff/"A 3></a>\n]
+      io << %(<a href="http://example.com/">A 1</a>
+)
+      io << %(<a href="https://example.com/">A 2</a>
+)
+      io << %(<a href="stuff/"A 3></a>
+)
     end
     File.open('file-b.html', 'w') do |io|
-      io << %[<a href="mailto:bob@example.com">B 1</a>\n]
-      io << %[<a href="../stuff">B 2</a>\n]
-      io << %[<a href="/stuff">B 3</a>\n]
+      io << %(<a href="mailto:bob@example.com">B 1</a>
+)
+      io << %(<a href="../stuff">B 2</a>
+)
+      io << %(<a href="/stuff">B 3</a>
+)
     end
 
     # Create validator
@@ -64,14 +77,20 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_internal
     # Create dummy data
     File.open('file-a.html', 'w') do |io|
-      io << %[<a href="http://example.com/">A 1</a>\n]
-      io << %[<a href="https://example.com/">A 2</a>\n]
-      io << %[<a href="stuff/"A 3></a>\n]
+      io << %(<a href="http://example.com/">A 1</a>
+)
+      io << %(<a href="https://example.com/">A 2</a>
+)
+      io << %(<a href="stuff/"A 3></a>
+)
     end
     File.open('file-b.html', 'w') do |io|
-      io << %[<a href="mailto:bob@example.com">B 1</a>\n]
-      io << %[<a href="../stuff">B 2</a>\n]
-      io << %[<a href="/stuff">B 3</a>\n]
+      io << %(<a href="mailto:bob@example.com">B 1</a>
+)
+      io << %(<a href="../stuff">B 2</a>
+)
+      io << %(<a href="/stuff">B 3</a>
+)
     end
 
     # Create validator

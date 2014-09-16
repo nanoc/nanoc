@@ -34,7 +34,7 @@ module Nanoc::DataSources
     # See {Nanoc::DataSource#setup}.
     def setup
       # Create directories
-      [ content_dir_name, layouts_dir_name ].each do |dir|
+      [content_dir_name, layouts_dir_name].each do |dir|
         FileUtils.mkdir_p(dir)
         vcs.add(dir)
       end
@@ -60,12 +60,12 @@ module Nanoc::DataSources
       create_object(layouts_dir_name, content, attributes, identifier, params)
     end
 
-  protected
+    protected
 
     # Creates a new object (item or layout) on disk in dir_name according to
     # the given identifier. The file will have its attributes taken from the
     # attributes hash argument and its content from the content argument.
-    def create_object(dir_name, content, attributes, identifier, params = {})
+    def create_object(_dir_name, _content, _attributes, _identifier, _params = {})
       raise NotImplementedError.new(
         "#{self.class} does not implement ##{name}"
       )
@@ -89,7 +89,7 @@ module Nanoc::DataSources
         content_filename = filename_for(base_filename, content_ext)
 
         # Read content and metadata
-        is_binary = !!(content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1]))
+        is_binary = content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1])
         if is_binary && klass == Nanoc::Item
           meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
           content_or_filename = content_filename
@@ -153,9 +153,9 @@ module Nanoc::DataSources
     #     'content/qux' => [ nil,    'html' ]
     #   }
     def all_split_files_in(dir_name)
-      grouped_filenames = all_files_in(dir_name).
-        reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }.
-        group_by { |fn| basename_of(fn) }
+      grouped_filenames = all_files_in(dir_name)
+        .reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
+        .group_by { |fn| basename_of(fn) }
 
       grouped_filenames.each_pair do |key, filenames|
         # Divide
@@ -163,10 +163,10 @@ module Nanoc::DataSources
         content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
 
         # Check number of files per type
-        if ![ 0, 1 ].include?(meta_filenames.size)
+        unless [0, 1].include?(meta_filenames.size)
           raise "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
         end
-        if ![ 0, 1 ].include?(content_filenames.size)
+        unless [0, 1].include?(content_filenames.size)
           raise "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
         end
 
@@ -193,7 +193,7 @@ module Nanoc::DataSources
     # data sources may prefer to implement this differently (for example,
     # {Nanoc::DataSources::FilesystemVerbose} doubles the last part of the
     # basename before concatenating it with a period and the extension).
-    def filename_for(base_filename, ext)
+    def filename_for(_base_filename, _ext)
       raise NotImplementedError.new(
         "#{self.class} does not implement #filename_for"
       )
@@ -201,7 +201,7 @@ module Nanoc::DataSources
 
     # Returns the identifier that corresponds with the given filename, which
     # can be the content filename or the meta filename.
-    def identifier_for_filename(filename)
+    def identifier_for_filename(_filename)
       raise NotImplementedError.new(
         "#{self.class} does not implement #identifier_for_filename"
       )
@@ -235,7 +235,7 @@ module Nanoc::DataSources
     # Parses the file named `filename` and returns an array with its first
     # element a hash with the file's metadata, and with its second element the
     # file content itself.
-    def parse(content_filename, meta_filename, kind)
+    def parse(content_filename, meta_filename, _kind)
       # Read content and metadata from separate files
       if meta_filename
         content = content_filename ? read(content_filename) : ''
@@ -245,7 +245,7 @@ module Nanoc::DataSources
         rescue Exception => e
           raise "Could not parse YAML for #{meta_filename}: #{e.message}"
         end
-        return [ meta, content ]
+        return [meta, content]
       end
 
       # Read data
@@ -253,7 +253,7 @@ module Nanoc::DataSources
 
       # Check presence of metadata section
       if data !~ /\A-{3,5}\s*$/
-        return [ {}, data ]
+        return [{}, data]
       end
 
       # Split data
@@ -273,7 +273,7 @@ module Nanoc::DataSources
       content = pieces[4]
 
       # Done
-      [ meta, content ]
+      [meta, content]
     end
 
     # Reads the content of the file with the given name and returns a string
@@ -303,7 +303,7 @@ module Nanoc::DataSources
           raise_encoding_error(filename, original_encoding)
         end
 
-        if !data.valid_encoding?
+        unless data.valid_encoding?
           raise_encoding_error(filename, original_encoding)
         end
       end

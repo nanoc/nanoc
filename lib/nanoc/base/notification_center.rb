@@ -70,7 +70,7 @@ module Nanoc
         @notifications[name].reject! { |i| i[:id] == id }
       end
 
-    private
+      private
 
       def initialize_if_necessary(name)
         @notifications ||= {}       # name => observers dictionary

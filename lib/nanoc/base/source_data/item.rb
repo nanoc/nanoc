@@ -26,15 +26,15 @@ module Nanoc
     attr_accessor :identifier
 
     # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
-    attr_reader   :reps
+    attr_reader :reps
 
     # @return [String] This item's raw, uncompiled content of this item (only
     #   available for textual items)
-    attr_reader   :raw_content
+    attr_reader :raw_content
 
     # @return [String] The filename pointing to the file containing this
     #   item’s content
-    attr_reader   :raw_filename
+    attr_reader :raw_filename
 
     # @return [Nanoc::Site] The site this item belongs to
     attr_accessor :site
@@ -175,7 +175,7 @@ module Nanoc
       # TODO [in nanoc 4.0] remove me
       if key.to_s =~ /^content_for_(.*)$/
         @@_content_for_warning_issued ||= false
-        @@_Nanoc_Helpers_Capturing_included ||= false
+        @@_capturing_helper_included ||= false
 
         # Warn
         unless @@_content_for_warning_issued
@@ -184,9 +184,9 @@ module Nanoc
         end
 
         # Include capturing helper if necessary
-        unless @@_Nanoc_Helpers_Capturing_included
+        unless @@_capturing_helper_included
           self.class.send(:include, ::Nanoc::Helpers::Capturing)
-          @@_Nanoc_Helpers_Capturing_included = true
+          @@_capturing_helper_included = true
         end
 
         # Get content
@@ -207,7 +207,7 @@ module Nanoc
 
     # @return [Boolean] True if the item is binary; false if it is not
     def binary?
-      !!@is_binary
+      @is_binary
     end
 
     # Returns the type of this object. Will always return `:item`, because
@@ -226,7 +226,7 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, identifier ]
+      [type, identifier]
     end
 
     # Prevents all further modifications to its attributes.

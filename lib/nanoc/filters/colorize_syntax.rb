@@ -159,18 +159,16 @@ module Nanoc::Filters
     #
     # @api private
     def parse(content, klass, is_fullpage)
-      begin
-        if is_fullpage
-          klass.parse(content, nil, 'UTF-8')
-        else
-          klass.fragment(content)
-        end
-      rescue => e
-        if e.message =~ /can't modify frozen string/
-          parse(content.dup, klass, is_fullpage)
-        else
-          raise e
-        end
+      if is_fullpage
+        klass.parse(content, nil, 'UTF-8')
+      else
+        klass.fragment(content)
+      end
+    rescue => e
+      if e.message =~ /can't modify frozen string/
+        parse(content.dup, klass, is_fullpage)
+      else
+        raise e
       end
     end
 
@@ -199,7 +197,7 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output, which is identical to the input
     #   in this case
-    def dummy(code, language, params = {})
+    def dummy(code, _language, _params = {})
       code
     end
 
@@ -221,7 +219,7 @@ module Nanoc::Filters
       params[:encoding] ||= 'utf-8'
       params[:nowrap]   ||= 'True'
 
-      cmd = [ 'pygmentize', '-l', language, '-f', 'html' ]
+      cmd = ['pygmentize', '-l', language, '-f', 'html']
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
       stdout = StringIO.new
@@ -276,8 +274,8 @@ module Nanoc::Filters
     def simon_highlight(code, language, params = {})
       check_availability('highlight', '--version')
 
-      cmd = [ 'highlight', '--syntax', language, '--fragment' ]
-      params.each do |key, value|
+      cmd = ['highlight', '--syntax', language, '--fragment']
+      params.each do |key, _value|
         if SIMON_HIGHLIGHT_OPT_MAP[key]
           cmd << SIMON_HIGHLIGHT_OPT_MAP[key]
         else
@@ -298,7 +296,7 @@ module Nanoc::Filters
     end
 
     # Wraps the element in <div class="CodeRay"><div class="code">
-    def coderay_postprocess(language, element)
+    def coderay_postprocess(_language, element)
       # Skip if we're a free <code>
       return if element.parent.nil?
 
@@ -345,7 +343,7 @@ module Nanoc::Filters
     # After:
     #
     #   <pre><code class="language-ruby highlight">
-    def rouge_postprocess(language, element)
+    def rouge_postprocess(_language, element)
       return if element.name != 'pre'
 
       code1 = element.xpath('code').first
@@ -354,12 +352,12 @@ module Nanoc::Filters
       return if code2.nil?
 
       code1.inner_html = code2.inner_html
-      code1['class'] = [ code1['class'], code2['class'] ].compact.join(' ')
+      code1['class'] = [code1['class'], code2['class']].compact.join(' ')
     end
 
-  protected
+    protected
 
-    KNOWN_COLORIZERS = [ :coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge ]
+    KNOWN_COLORIZERS = [:coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge]
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)

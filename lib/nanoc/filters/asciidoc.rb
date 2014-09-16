@@ -11,7 +11,7 @@ module Nanoc::Filters
     # @param [String] content The content to filter
     #
     # @return [String] The filtered content
-    def run(content, params = {})
+    def run(content, _params = {})
       stdout = StringIO.new
       stderr = $stderr
       piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)

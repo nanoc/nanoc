@@ -26,7 +26,7 @@ class Nanoc::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Site.new(:data_sources => [ { :type => 'foo', :items_root => '/bar/' } ])
+    site = Nanoc::Site.new(:data_sources => [{ :type => 'foo', :items_root => '/bar/' }])
     assert_equal('foo',   site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
@@ -146,7 +146,7 @@ EOF
       # Update configuration
       File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
-        io.write "  - type: site_test_foo"
+        io.write '  - type: site_test_foo'
       end
 
       # Create site
@@ -176,9 +176,9 @@ EOF
       bar    = site.items.find { |i| i.identifier == '/parent/bar/' }
       qux    = site.items.find { |i| i.identifier == '/parent/bar/qux/' }
 
-      assert_equal Set.new([ parent, style ]), Set.new(root.children)
-      assert_equal Set.new([ foo, bar ]),      Set.new(parent.children)
-      assert_equal Set.new([ qux ]),           Set.new(bar.children)
+      assert_equal Set.new([parent, style]), Set.new(root.children)
+      assert_equal Set.new([foo, bar]),      Set.new(parent.children)
+      assert_equal Set.new([qux]),           Set.new(bar.children)
 
       assert_equal nil,    root.parent
       assert_equal root,   parent.parent

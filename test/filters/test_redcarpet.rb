@@ -14,7 +14,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::Redcarpet.new
 
       # Run filter
-      result = filter.setup_and_run("> Quote")
+      result = filter.setup_and_run('> Quote')
       assert_match(/<blockquote>\s*<p>Quote<\/p>\s*<\/blockquote>/, result)
     end
   end
@@ -26,13 +26,13 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
 
       # Run filter
       if ::Redcarpet::VERSION > '2'
-        input           = "this is ~~good~~ bad"
+        input           = 'this is ~~good~~ bad'
         output_expected = /this is <del>good<\/del> bad/
         output_actual   = filter.setup_and_run(input, :options => { :strikethrough => true })
       else
         input           = "The quotation 'marks' sure make this look sarcastic!"
         output_expected = /The quotation &lsquo;marks&rsquo; sure make this look sarcastic!/
-        output_actual   = filter.setup_and_run(input, :options => [ :smart ])
+        output_actual   = filter.setup_and_run(input, :options => [:smart])
       end
       assert_match(output_expected, output_actual)
     end
@@ -62,7 +62,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       if ::Redcarpet::VERSION > '2'
         output_actual   = filter.setup_and_run(input, :renderer_options => { :xhtml => true })
       else
-        output_actual   = filter.setup_and_run(input, :options => [ :xhtml ])
+        output_actual   = filter.setup_and_run(input, :options => [:xhtml])
       end
       assert_match(output_expected, output_actual)
     end
@@ -71,7 +71,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
   def test_html_toc
     if_have 'redcarpet' do
       unless ::Redcarpet::VERSION > '2'
-        skip "Requires Redcarpet >= 2"
+        skip 'Requires Redcarpet >= 2'
       end
 
       # Create filter

@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'view [options]'
-summary     'start the web server that serves static files'
+usage 'view [options]'
+summary 'start the web server that serves static files'
 description <<-EOS
 Start the static web server. Unless specified, the web server will run on port
 3000 and listen on all IP addresses. Running this static web server requires
@@ -57,7 +57,7 @@ module Nanoc::CLI::Commands
       handler.run(app, options_for_rack)
     end
 
-  protected
+    protected
 
     def load_adsf
       # Load adsf
@@ -66,7 +66,7 @@ module Nanoc::CLI::Commands
         return
       rescue LoadError
         $stderr.puts "Could not find the required 'adsf' gem, " \
-          "which is necessary for the view command."
+          'which is necessary for the view command.'
       end
 
       # Check asdf

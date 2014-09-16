@@ -36,7 +36,7 @@ module Nanoc
       @rule_memories[obj.reference] = rule_memory
     end
 
-  protected
+    protected
 
     # @see Nanoc::Store#data
     def data

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-summary     'show all available plugins'
-aliases     :info
-usage       'show-plugins [options]'
+summary 'show all available plugins'
+aliases :info
+usage 'show-plugins [options]'
 description <<-EOS
 Show a list of available plugins, including filters, data sources and VCSes.
 If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
@@ -45,7 +45,7 @@ module Nanoc::CLI::Commands
         puts
 
         # Print plugins organised by subtype
-        [ :builtin, :custom ].each do |type|
+        [:builtin, :custom].each do |type|
           # Find relevant plugins
           relevant_plugins = plugins_with_this_superclass[type]
 
@@ -71,7 +71,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-  private
+    private
 
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,

@@ -47,7 +47,7 @@ module Nanoc
       @cache = {}
     end
 
-  protected
+    protected
 
     def data
       @cache

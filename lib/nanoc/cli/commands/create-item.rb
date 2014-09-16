@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'create-item [options] identifier'
-aliases     :create_item, :ci
-summary     'create an item'
+usage 'create-item [options] identifier'
+aliases :create_item, :ci
+summary 'create an item'
 description <<-EOS
 Create a new item in the current site. The first data source in the site
 configuration will be used.
@@ -30,9 +30,9 @@ module Nanoc::CLI::Commands
       set_vcs(options[:vcs])
 
       # Check whether item is unique
-      if !site.items.find { |i| i.identifier == identifier }.nil?
+      unless site.items.find { |i| i.identifier == identifier }.nil?
         raise Nanoc::Errors::GenericTrivial,
-          "An item already exists at #{identifier}. Please " +
+          "An item already exists at #{identifier}. Please " \
           'pick a unique name for the item you are creating.'
       end
 

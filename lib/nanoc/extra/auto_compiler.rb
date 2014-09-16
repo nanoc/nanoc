@@ -51,7 +51,7 @@ module Nanoc::Extra
         if path =~ /\/$/
           possible_paths = site.config[:index_filenames].map { |f| path + f }
         else
-          possible_paths = [ path ]
+          possible_paths = [path]
         end
 
         # Find matching file
@@ -79,7 +79,7 @@ module Nanoc::Extra
       raise e
     end
 
-  private
+    private
 
     def build_site
       @site = Nanoc::Site.new(@site_path)

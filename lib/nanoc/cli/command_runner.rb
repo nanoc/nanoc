@@ -38,9 +38,10 @@ module Nanoc::CLI
 
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
-    def is_in_site_dir?
+    def in_site_dir?
       Nanoc::Site.cwd_is_nanoc_site?
     end
+    alias_method :is_in_site_dir?, :in_site_dir?
 
     # Asserts that the current working directory contains a site
     # ({Nanoc::Site} instance). If no site is present, prints an error
@@ -71,7 +72,7 @@ module Nanoc::CLI
       Nanoc::CLI.debug?
     end
 
-  protected
+    protected
 
     # Sets the data source's VCS to the VCS with the given name. Does nothing
     # when the site's data source does not support VCSes (i.e. does not
@@ -92,7 +93,7 @@ module Nanoc::CLI
 
       site.data_sources.each do |data_source|
         # Skip if not possible
-        next if !data_source.respond_to?(:vcs=)
+        next unless data_source.respond_to?(:vcs=)
 
         # Set VCS
         data_source.vcs = vcs_class.new

@@ -71,11 +71,12 @@ module ::Nanoc::Extra::Checking::Checks
           loop do
             href = enum.next
             break if href.nil?
+
             res = validate(href)
-            if res
-              mutex.synchronize do
-                invalid << res
-              end
+            next unless res
+
+            mutex.synchronize do
+              invalid << res
             end
           end
         end
