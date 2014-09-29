@@ -241,10 +241,10 @@ module Nanoc
 
       # Load all data
       load_code_snippets
-      data_sources.each { |ds| ds.use }
-      load_items
-      load_layouts
-      data_sources.each { |ds| ds.unuse }
+      with_datasources do
+        load_items
+        load_layouts
+      end
       setup_child_parent_links
 
       # Ensure unique
@@ -261,6 +261,17 @@ module Nanoc
       raise e
     ensure
       @loading = false
+    end
+
+    # Reloads the site items data. It is not necessary to call this method explicitly;
+    # it will be called after preprocessing.
+    #
+    # @api private
+    #
+    # @return [void]
+    def reload_items
+      @items_loaded = false
+      with_datasources { load_items }
     end
 
     # Undoes the effects of {#load}. Used when {#load} raises an exception.
@@ -299,6 +310,14 @@ module Nanoc
     end
 
   private
+
+    # make sure datasources are unloaded properly even on trouble
+    def with_datasources(&block)
+      data_sources.each { |ds| ds.use }
+      yield
+    ensure
+      data_sources.each { |ds| ds.unuse }
+    end
 
     # Loads this site’s code and executes it.
     def load_code_snippets
