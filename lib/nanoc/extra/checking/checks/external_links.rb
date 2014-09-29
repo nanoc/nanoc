@@ -100,16 +100,19 @@ module ::Nanoc::Extra::Checking::Checks
 
       # Get status
       res = nil
+      last_err = nil
+      timeouts = [3, 5, 10, 30, 60]
       5.times do |i|
         begin
-          Timeout.timeout(10) do
+          Timeout.timeout(timeouts[i]) do
             res = request_url_once(url)
             if res.code == '405'
               res = request_url_once(url, Net::HTTP::Get)
             end
           end
         rescue => e
-          return Result.new(href, e.message)
+          last_err = e
+          next # can not allow
         end
 
         if res.code =~ /^3..$/
@@ -134,7 +137,11 @@ module ::Nanoc::Extra::Checking::Checks
           return Result.new(href, res.code)
         end
       end
-      raise 'should not have gotten here'
+      if last_err
+        return Result.new(href, last_err.message)
+      else
+        raise 'should not have gotten here'
+      end
     end
 
     def path_for_url(url)
