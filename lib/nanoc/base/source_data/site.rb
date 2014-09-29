@@ -240,10 +240,10 @@ module Nanoc
 
       # Load all data
       load_code_snippets
-      data_sources.each { |ds| ds.use }
-      load_items
-      load_layouts
-      data_sources.each { |ds| ds.unuse }
+      with_datasources do
+        load_items
+        load_layouts
+      end
       setup_child_parent_links
 
       # Ensure unique
@@ -298,6 +298,15 @@ module Nanoc
     end
 
     private
+
+    # Executes the given block, making sure that the datasources are
+    # available for the duration of the block
+    def with_datasources(&block)
+      data_sources.each { |ds| ds.use }
+      yield
+    ensure
+      data_sources.each { |ds| ds.unuse }
+    end
 
     # Loads this site’s code and executes it.
     def load_code_snippets
