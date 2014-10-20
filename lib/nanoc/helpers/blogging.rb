@@ -87,7 +87,7 @@ module Nanoc::Helpers
         buffer
       end
 
-    protected
+      protected
 
       def sorted_relevant_articles
         relevant_articles.sort_by do |a|
@@ -132,8 +132,8 @@ module Nanoc::Helpers
           root_url = @site.config[:base_url] + '/'
 
           # Add primary attributes
-          xml.id      root_url
-          xml.title   title
+          xml.id root_url
+          xml.title title
 
           # Add date
           xml.updated(attribute_to_time(last_article[:created_at]).to_iso8601_time)
@@ -144,8 +144,8 @@ module Nanoc::Helpers
 
           # Add author information
           xml.author do
-            xml.name  author_name
-            xml.uri   author_uri
+            xml.name author_name
+            xml.uri author_uri
           end
 
           # Add icon and logo
@@ -166,18 +166,18 @@ module Nanoc::Helpers
 
         xml.entry do
           # Add primary attributes
-          xml.id        atom_tag_for(a)
-          xml.title     a[:title], :type => 'html'
+          xml.id atom_tag_for(a)
+          xml.title a[:title], :type => 'html'
 
           # Add dates
           xml.published attribute_to_time(a[:created_at]).to_iso8601_time
-          xml.updated   attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
+          xml.updated attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
 
           # Add specific author information
           if a[:author_name] || a[:author_uri]
             xml.author do
-              xml.name  a[:author_name] || author_name
-              xml.uri   a[:author_uri]  || author_uri
+              xml.name a[:author_name] || author_name
+              xml.uri a[:author_uri]  || author_uri
             end
           end
 
@@ -186,8 +186,8 @@ module Nanoc::Helpers
 
           # Add content
           summary = excerpt_proc.call(a)
-          xml.content   content_proc.call(a), :type => 'html'
-          xml.summary   summary, :type => 'html' unless summary.nil?
+          xml.content content_proc.call(a), :type => 'html'
+          xml.summary summary, :type => 'html' unless summary.nil?
         end
       end
 

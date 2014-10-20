@@ -14,7 +14,7 @@ module Nanoc::Tasks
       end
     end
 
-  private
+    private
 
     def filenames
       @site.items.map do |item|

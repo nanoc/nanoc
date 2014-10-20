@@ -6,14 +6,14 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
     if_have 'w3c_validators' do
       with_site do |site|
         # Create some sample files
-        %w{ foo bar baz }.each do |filename|
-          %w{ xxx yyy }.each do |extension|
-            File.open("output/#{filename}.#{extension}", 'w') { |io| io.write("hello") }
+        %w(foo bar baz).each do |filename|
+          %w(xxx yyy).each do |extension|
+            File.open("output/#{filename}.#{extension}", 'w') { |io| io.write('hello') }
           end
         end
 
         # Create validator
-        w3c = Nanoc::Extra::Validators::W3C.new('.', [ :html ])
+        w3c = Nanoc::Extra::Validators::W3C.new('.', [:html])
 
         # Run
         w3c.run
@@ -25,7 +25,7 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
     if_have 'w3c_validators' do
       with_site do |site|
         # Create validator
-        w3c = Nanoc::Extra::Validators::W3C.new('.', [ :foo ])
+        w3c = Nanoc::Extra::Validators::W3C.new('.', [:foo])
 
         # Test
         exception = assert_raises Nanoc::Errors::GenericTrivial do

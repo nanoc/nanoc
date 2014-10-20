@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-usage       'autocompile [options]'
-summary     'start the autocompiler'
+usage 'autocompile [options]'
+summary 'start the autocompiler'
 be_hidden
-aliases     :aco
+aliases :aco
 description <<-EOS
 Start the autocompiler web server. Unless overridden with commandline options
 or configuration entries, the web server will run on port 3000 and listen on all

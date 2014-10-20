@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'check [options] [names]'
-summary     'run issue checks'
+usage 'check [options] [names]'
+summary 'run issue checks'
 description "
 Run issue checks on the current site. If the `--all` option is passed, all available issue checks will be run. If the `--deploy` option is passed, the issue checks marked for deployment will be run.
 "
@@ -39,7 +39,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-  protected
+    protected
 
     def validate_options_and_arguments
       if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]

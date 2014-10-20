@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'validate-html [options]'
-aliases     :validate_html, :vhtml
-summary     'validate the site’s HTML'
+usage 'validate-html [options]'
+aliases :validate_html, :vhtml
+summary 'validate the site’s HTML'
 be_hidden
 description "
 Validates the site’s HTML files.

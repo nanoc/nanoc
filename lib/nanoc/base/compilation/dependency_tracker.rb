@@ -37,7 +37,7 @@ module Nanoc
       super('tmp/dependencies', 4)
 
       @objects = objects
-      @graph   = Nanoc::DirectedGraph.new([ nil ] + @objects)
+      @graph   = Nanoc::DirectedGraph.new([nil] + @objects)
       @stack   = []
     end
 
@@ -53,7 +53,7 @@ module Nanoc
 
       # Register start of visits
       Nanoc::NotificationCenter.on(:visit_started, self) do |obj|
-        if !@stack.empty?
+        unless @stack.empty?
           Nanoc::NotificationCenter.post(:dependency_created, @stack.last, obj)
           record_dependency(@stack.last, obj)
         end
@@ -61,7 +61,7 @@ module Nanoc
       end
 
       # Register end of visits
-      Nanoc::NotificationCenter.on(:visit_ended, self) do |obj|
+      Nanoc::NotificationCenter.on(:visit_ended, self) do |_obj|
         @stack.pop
       end
     end
@@ -71,7 +71,7 @@ module Nanoc
     # @return [void]
     def stop
       # Sanity check
-      if !@stack.empty?
+      unless @stack.empty?
         raise 'Internal inconsistency: dependency tracker stack not empty at end of compilation'
       end
 
@@ -169,10 +169,10 @@ module Nanoc
 
     # @see Nanoc::Store#unload
     def unload
-      @graph = Nanoc::DirectedGraph.new([ nil ] + @objects)
+      @graph = Nanoc::DirectedGraph.new([nil] + @objects)
     end
 
-  protected
+    protected
 
     def data
       {
@@ -183,7 +183,7 @@ module Nanoc
 
     def data=(new_data)
       # Create new graph
-      @graph = Nanoc::DirectedGraph.new([ nil ] + @objects)
+      @graph = Nanoc::DirectedGraph.new([nil] + @objects)
 
       # Load vertices
       previous_objects = new_data[:vertices].map do |reference|

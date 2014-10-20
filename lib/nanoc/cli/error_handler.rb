@@ -50,7 +50,7 @@ module Nanoc::CLI
     # @return [void]
     #
     # @api private
-    def handle_while(&block)
+    def handle_while(&_block)
       # Set exit handler
       %w( INT TERM ).each do |signal|
         Signal.trap(signal) do
@@ -157,7 +157,7 @@ module Nanoc::CLI
       write_load_paths(stream,        :verbose => true)
     end
 
-  protected
+    protected
 
     # @return [Boolean] true if debug output is enabled, false if not
     #
@@ -184,7 +184,7 @@ module Nanoc::CLI
     # @return [Hash<String, Array>] A hash containing the gem names as keys and gem versions as value
     def gems_and_versions
       gems = {}
-      Gem::Specification.find_all.sort_by { |s| [ s.name, s.version ] }.each do |spec|
+      Gem::Specification.find_all.sort_by { |s| [s.name, s.version] }.each do |spec|
         gems[spec.name] ||= []
         gems[spec.name] << spec.version.to_s
       end
@@ -248,11 +248,11 @@ module Nanoc::CLI
         end
       when RuntimeError
         if error.message =~ /^can't modify frozen/
-          "You attempted to modify immutable data. Some data, such as " \
-          "item/layout attributes and raw item/layout content, can not " \
-          "be modified once compilation has started. (This was " \
-          "unintentionally possible in 3.1.x and before, but has been " \
-          "disabled in 3.2.x in order to allow compiler optimisations.)"
+          'You attempted to modify immutable data. Some data, such as ' \
+          'item/layout attributes and raw item/layout content, can not ' \
+          'be modified once compilation has started. (This was ' \
+          'unintentionally possible in 3.1.x and before, but has been ' \
+          'disabled in 3.2.x in order to allow compiler optimisations.)'
         end
       end
     end
@@ -279,7 +279,7 @@ module Nanoc::CLI
       stream.puts "#{resolution}" if resolution
     end
 
-    def write_compilation_stack(stream, error, params = {})
+    def write_compilation_stack(stream, _error, params = {})
       write_section_header(stream, 'Compilation stack', params)
 
       if stack.empty?
@@ -309,7 +309,7 @@ module Nanoc::CLI
       end
     end
 
-    def write_issue_link(stream, params = {})
+    def write_issue_link(stream, _params = {})
       stream.puts
       stream.puts 'If you believe this is a bug in nanoc, please do report it at'
       stream.puts '-> https://github.com/nanoc/nanoc/issues/new <-'

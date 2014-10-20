@@ -64,10 +64,10 @@ module Nanoc::Helpers
           reps.reject! { |r| !select_proc[r] } if select_proc
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
-              xml.loc         @site.config[:base_url] + rep.path
-              xml.lastmod     item[:mtime].to_iso8601_date unless item[:mtime].nil?
-              xml.changefreq  item[:changefreq] unless item[:changefreq].nil?
-              xml.priority    item[:priority] unless item[:priority].nil?
+              xml.loc @site.config[:base_url] + rep.path
+              xml.lastmod item[:mtime].to_iso8601_date unless item[:mtime].nil?
+              xml.changefreq item[:changefreq] unless item[:changefreq].nil?
+              xml.priority item[:priority] unless item[:priority].nil?
             end
           end
         end

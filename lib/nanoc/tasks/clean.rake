@@ -5,7 +5,7 @@ task :clean do
   # Load site
   site = Nanoc::Site.new('.')
   if site.nil?
-    $stderr.puts 'The current working directory does not seem to be a ' +
+    $stderr.puts 'The current working directory does not seem to be a ' \
                  'valid/complete nanoc site directory; aborting.'
     exit 1
   end

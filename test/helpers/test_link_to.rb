@@ -54,10 +54,10 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_link_to_to_nil_item_or_item_rep
     obj = Object.new
-    def obj.path ; nil ; end
+    def obj.path; nil; end
 
     assert_raises RuntimeError do
-      link_to("Some Text", obj)
+      link_to('Some Text', obj)
     end
   end
 
@@ -210,7 +210,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     YARD.parse(LIB_DIR + '/nanoc/helpers/link_to.rb')
 
     # Mock
-    @items = [ mock, mock, mock ]
+    @items = [mock, mock, mock]
     @items[0].stubs(:identifier).returns('/about/')
     @items[0].stubs(:path).returns('/about.html')
     @items[1].stubs(:identifier).returns('/software/')

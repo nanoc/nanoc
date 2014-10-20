@@ -2,7 +2,7 @@
 
 class Nanoc::DataSources::StaticTest < Nanoc::TestCase
 
-  def new_data_source(params=nil)
+  def new_data_source(params = nil)
     # Mock site
     site = Nanoc::Site.new({})
 
@@ -14,7 +14,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
   end
 
   def test_items_with_symlinks
-    skip_unless_have_symlink
+    skip_unless_symlinks_supported
 
     # Create data source
     data_source = new_data_source(:prefix => 'foo')
@@ -23,16 +23,16 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo-outside-1')
     FileUtils.mkdir_p('foo-outside-2')
-    File.open('foo/a.png',           'w') { |io| io.write("random binary data") }
-    File.open('foo-outside-1/b.png', 'w') { |io| io.write("more binary data") }
-    File.open('foo-outside-2/c.png', 'w') { |io| io.write("yet more binary data") }
+    File.open('foo/a.png',           'w') { |io| io.write('random binary data') }
+    File.open('foo-outside-1/b.png', 'w') { |io| io.write('more binary data') }
+    File.open('foo-outside-2/c.png', 'w') { |io| io.write('yet more binary data') }
 
     # Create symlinks
     File.symlink('../foo-outside-1', 'foo/1')
     File.symlink('../foo-outside-2/c.png', 'foo/c.png')
 
     # Check all files
-    expected_filenames = [ 'foo/a.png', 'foo/1/b.png', 'foo/c.png' ].sort
+    expected_filenames = ['foo/a.png', 'foo/1/b.png', 'foo/c.png'].sort
     actual_filenames   = Nanoc::Extra::FilesystemTools.all_files_in('foo').sort
     assert_equal expected_filenames, actual_filenames
 
@@ -50,9 +50,9 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     # Create sample files
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/bar.png',   'w') { |io| io.write("random binary data") }
-    File.open('foo/b.c.css',   'w') { |io| io.write("more binary data") }
-    File.open('foo/a/b/c.gif', 'w') { |io| io.write("yet more binary data") }
+    File.open('foo/bar.png',   'w') { |io| io.write('random binary data') }
+    File.open('foo/b.c.css',   'w') { |io| io.write('more binary data') }
+    File.open('foo/a/b/c.gif', 'w') { |io| io.write('yet more binary data') }
 
     # Get expected and actual output
     expected_out = [

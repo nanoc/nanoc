@@ -6,7 +6,7 @@ module Nanoc::Filters
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
-    SELECTORS = [ '*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'comment()' ]
+    SELECTORS = ['*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'comment()']
 
     # Relativizes all paths in the given content, which can be HTML, XHTML, XML
     # or CSS. This filter is quite useful if a site needs to be hosted in a
@@ -63,13 +63,13 @@ module Nanoc::Filters
         nokogiri_process(content, selectors, namespaces, klass, params[:type])
       else
         raise RuntimeError.new(
-          'The relativize_paths needs to know the type of content to ' +
-          'process. Pass a :type to the filter call (:html for HTML, ' +
+          'The relativize_paths needs to know the type of content to ' \
+          'process. Pass a :type to the filter call (:html for HTML, ' \
           ':xhtml for XHTML, :xml for XML, or :css for CSS).')
       end
     end
 
-  protected
+    protected
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings
@@ -80,7 +80,7 @@ module Nanoc::Filters
         doc.xpath(selector, namespaces).each do |node|
           if node.name == 'comment'
             content = node.content.dup
-            content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |m|
+            content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
               fragment = nokogiri_process($2, selectors, namespaces, klass, type)
               $1 + fragment + $3
             end

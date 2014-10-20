@@ -135,7 +135,7 @@ module Nanoc
     # @return [String, void] If the filter output binary content, the return
     #   value is undefined; if the filter outputs textual content, the return
     #   value will be the filtered content.
-    def run(content_or_filename, params = {})
+    def run(_content_or_filename, _params = {})
       raise NotImplementedError.new('Nanoc::Filter subclasses must implement #run')
     end
 

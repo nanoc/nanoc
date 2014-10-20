@@ -17,11 +17,11 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc::Item.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => ['foo', 'bar']}, '/path/')
 
     # Check
     assert_equal(
-      "#{link_for_tag('foo', 'http://stoneship.org/tag/')}, " +
+      "#{link_for_tag('foo', 'http://stoneship.org/tag/')}, " \
       "#{link_for_tag('bar', 'http://stoneship.org/tag/')}",
       tags_for(item, :base_url => 'http://stoneship.org/tag/')
     )
@@ -29,7 +29,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc::Item.new('content', { :tags => [ ]}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => []}, '/path/')
 
     # Check
     assert_equal(
@@ -40,11 +40,11 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc::Item.new('content', { :tags => [ 'foo', 'bar' ]}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => ['foo', 'bar']}, '/path/')
 
     # Check
     assert_equal(
-      "#{link_for_tag('foo', 'http://technorati.com/tag/')} ++ " +
+      "#{link_for_tag('foo', 'http://technorati.com/tag/')} ++ " \
       "#{link_for_tag('bar', 'http://technorati.com/tag/')}",
       tags_for(item, :separator => ' ++ ')
     )
@@ -53,9 +53,9 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
   def test_items_with_tag
     # Create items
     @items = [
-      Nanoc::Item.new('item 1', { :tags => [ :foo ]       }, '/item1/'),
-      Nanoc::Item.new('item 2', { :tags => [ :bar ]       }, '/item2/'),
-      Nanoc::Item.new('item 3', { :tags => [ :foo, :bar ] }, '/item3/')
+      Nanoc::Item.new('item 1', { :tags => [:foo]       }, '/item1/'),
+      Nanoc::Item.new('item 2', { :tags => [:bar]       }, '/item2/'),
+      Nanoc::Item.new('item 3', { :tags => [:foo, :bar] }, '/item3/')
     ]
 
     # Find items
@@ -63,21 +63,21 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
     # Check
     assert_equal(
-      [ @items[0], @items[2] ],
+      [@items[0], @items[2]],
       items_with_foo_tag
     )
   end
 
   def test_link_for_tag
     assert_equal(
-      %[<a href="http://stoneship.org/tags/foobar" rel="tag">foobar</a>],
+      %(<a href="http://stoneship.org/tags/foobar" rel="tag">foobar</a>),
       link_for_tag('foobar', 'http://stoneship.org/tags/')
     )
   end
 
   def test_link_for_tag_escape
     assert_equal(
-      %[<a href="http://stoneship.org/tags&amp;stuff/foo&amp;bar" rel="tag">foo&amp;bar</a>],
+      %(<a href="http://stoneship.org/tags&amp;stuff/foo&amp;bar" rel="tag">foo&amp;bar</a>),
       link_for_tag('foo&bar', 'http://stoneship.org/tags&stuff/')
     )
   end

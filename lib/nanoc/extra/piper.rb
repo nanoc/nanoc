@@ -21,7 +21,7 @@ module Nanoc::Extra
 
     # @option [IO] :stdout ($stdout)
     # @option [IO] :stderr ($stderr)
-    def initialize(params={})
+    def initialize(params = {})
       @stdout = params.fetch(:stdout, $stdout)
       @stderr = params.fetch(:stderr, $stderr)
     end
@@ -43,7 +43,7 @@ module Nanoc::Extra
         stderr_thread.join
 
         exit_status = wait_thr.value
-        if !exit_status.success?
+        unless exit_status.success?
           raise Error.new(cmd, exit_status.to_i)
         end
       end

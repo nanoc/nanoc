@@ -2,7 +2,7 @@
 
 module Enumerable
 
-  if !Enumerable.instance_methods.include?('group_by')
+  unless Enumerable.instance_methods.include?('group_by')
 
     # Returns a hash, which keys are evaluated result from the block, and
     # values are arrays of elements in enum corresponding to the key. This

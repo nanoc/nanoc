@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'compile [options]'
-summary     'compile items of this site'
+usage 'compile [options]'
+summary 'compile items of this site'
 description <<-EOS
 Compile all items of the current site.
 
@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
 
-      def initialize(params = {})
+      def initialize(_params = {})
       end
 
       # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
@@ -41,7 +41,7 @@ module Nanoc::CLI::Commands
       # @return [Boolean] true if this listener should be enabled for the given command runner, false otherwise
       #
       # @abstract Returns `true` by default, but subclasses may override this.
-      def self.enable_for?(command_runner)
+      def self.enable_for?(_command_runner)
         true
       end
 
@@ -79,8 +79,8 @@ module Nanoc::CLI::Commands
           path = rep.raw_path(:snapshot => snapshot)
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
-        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
-          if !rep.binary?
+        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, _is_created, _is_modified|
+          unless rep.binary?
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
               generate_diff_for(rep, old_contents[rep], new_contents)
@@ -96,7 +96,7 @@ module Nanoc::CLI::Commands
         teardown_diffs
       end
 
-    protected
+      protected
 
       def setup_diffs
         @diff_lock    = Mutex.new
@@ -137,8 +137,8 @@ module Nanoc::CLI::Commands
             new_file.flush
 
             # Diff
-            cmd = [ 'diff', '-u', old_file.path, new_file.path ]
-            Open3.popen3(*cmd) do |stdin, stdout, stderr|
+            cmd = ['diff', '-u', old_file.path, new_file.path]
+            Open3.popen3(*cmd) do |_stdin, stdout, _stderr|
               result = stdout.read
               return (result == '' ? nil : result)
             end
@@ -169,11 +169,11 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+        Nanoc::NotificationCenter.on(:filtering_started) do |_rep, filter_name|
           @times[filter_name] ||= []
           @times[filter_name] << { :start => Time.now }
         end
-        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+        Nanoc::NotificationCenter.on(:filtering_ended) do |_rep, filter_name|
           @times[filter_name].last[:stop] = Time.now
         end
       end
@@ -184,7 +184,7 @@ module Nanoc::CLI::Commands
         super
       end
 
-    protected
+      protected
 
       def print_profiling_feedback
         # Get max filter length
@@ -194,7 +194,7 @@ module Nanoc::CLI::Commands
         # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
-          $stderr.puts 'Warning: profiling information may not be accurate because ' +
+          $stderr.puts 'Warning: profiling information may not be accurate because ' \
                        'some items were not compiled.'
         end
 
@@ -260,17 +260,17 @@ module Nanoc::CLI::Commands
     class GCController < Listener
 
       # @see Listener#enable_for?
-      def self.enable_for?(command_runner)
+      def self.enable_for?(_command_runner)
         !ENV.key?('TRAVIS')
       end
 
-      def initialize(params = {})
+      def initialize(_params = {})
         @gc_count = 0
       end
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+        Nanoc::NotificationCenter.on(:compilation_started) do |_rep|
           if @gc_count % 20 == 0
             GC.enable
             GC.start
@@ -345,7 +345,7 @@ module Nanoc::CLI::Commands
         Nanoc::NotificationCenter.on(:compilation_started) do |rep|
           @start_times[rep.raw_path] = Time.now
         end
-        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        Nanoc::NotificationCenter.on(:rep_written) do |_rep, path, is_created, is_modified|
           duration = path && @start_times[path] ? Time.now - @start_times[path] : nil
           action =
             case
@@ -367,13 +367,13 @@ module Nanoc::CLI::Commands
       def stop
         super
         @reps.select { |r| !r.compiled? }.each do |rep|
-          rep.raw_paths.each do |snapshot_name, raw_path|
+          rep.raw_paths.each do |_snapshot_name, raw_path|
             log(:low, :skip, raw_path, nil)
           end
         end
       end
 
-    private
+      private
 
       def log(level, action, path, duration)
         Nanoc::CLI::Logger.instance.file(level, action, path, duration)
@@ -403,7 +403,7 @@ module Nanoc::CLI::Commands
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
     end
 
-  protected
+    protected
 
     def prune
       if site.config[:prune][:auto_prune]
@@ -422,9 +422,9 @@ module Nanoc::CLI::Commands
     end
 
     def setup_listeners
-      @listeners = @listener_classes.
-        select { |klass| klass.enable_for?(self) }.
-        map    { |klass| klass.new(:reps => reps) }
+      @listeners = @listener_classes
+        .select { |klass| klass.enable_for?(self) }
+        .map    { |klass| klass.new(:reps => reps) }
 
       @listeners.each { |s| s.start }
     end

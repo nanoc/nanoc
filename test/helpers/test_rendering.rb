@@ -76,7 +76,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       _erbout = '[erbout-before]'
       result = render '/foo/' do
-        _erbout << "This is some extra content"
+        _erbout << 'This is some extra content'
       end
 
       assert_equal('[erbout-before][partial-before]This is some extra content[partial-after]', _erbout)

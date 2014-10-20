@@ -182,14 +182,14 @@ module Nanoc
     include Private
 
     # @return [Nanoc::Item] The item to which this rep belongs
-    attr_reader   :item
+    attr_reader :item
 
     # @return [Symbol] The representation's unique name
-    attr_reader   :name
+    attr_reader :name
 
     # @return [Boolean] true if this rep is currently binary; false otherwise
-    attr_reader   :binary
-    alias_method  :binary?, :binary
+    attr_reader :binary
+    alias_method :binary?, :binary
 
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is
@@ -242,7 +242,7 @@ module Nanoc
 
       # Get name of last pre-layout snapshot
       snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
-      is_moving = [ :pre, :post, :last ].include?(snapshot)
+      is_moving = [:pre, :post, :last].include?(snapshot)
 
       # Check existance of snapshot
       if !is_moving && snapshots.find { |s| s.first == snapshot && s.last == true }.nil?
@@ -263,9 +263,10 @@ module Nanoc
     #   given name, false otherwise
     #
     # @since 3.2.0
-    def has_snapshot?(snapshot_name)
+    def snapshot?(snapshot_name)
       !@content[snapshot_name].nil?
     end
+    alias_method :has_snapshot?, :snapshot?
 
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
@@ -444,11 +445,12 @@ module Nanoc
     #
     # @return [false]
     #
-    # @see Nanoc::ItemRepRecorderProxy#is_proxy?
-    # @see Nanoc::ItemRepProxy#is_proxy?
-    def is_proxy?
+    # @see Nanoc::ItemRepRecorderProxy#proxy?
+    # @see Nanoc::ItemRepProxy#proxy?
+    def proxy?
       false
     end
+    alias_method :is_proxy?, :proxy?
 
     # Returns an object that can be used for uniquely identifying objects.
     #
@@ -456,14 +458,14 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, item.identifier, name ]
+      [type, item.identifier, name]
     end
 
     def inspect
       "<#{self.class} name=\"#{name}\" binary=#{self.binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end
 
-  private
+    private
 
     def initialize_content
       # Initialize content and filenames

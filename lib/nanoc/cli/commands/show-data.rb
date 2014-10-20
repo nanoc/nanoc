@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'show-data'
-aliases     :debug
-summary     'show data in this site'
+usage 'show-data'
+aliases :debug
+summary 'show data in this site'
 description <<-EOS
 Show information about all items, item representations and layouts in the
 current site, along with dependency information.
@@ -31,7 +31,7 @@ module Nanoc::CLI::Commands
       print_layouts(layouts, compiler)
     end
 
-  protected
+    protected
 
     def sorted_with_prev(objects)
       prev = nil
@@ -89,7 +89,7 @@ module Nanoc::CLI::Commands
         end
         length = rep.raw_paths.keys.map { |s| s.to_s.length }.max
         rep.raw_paths.each do |snapshot_name, raw_path|
-          puts "  [ %-#{length}s ] %s" % [ snapshot_name, raw_path ]
+          puts "  [ %-#{length}s ] %s" % [snapshot_name, raw_path]
         end
       end
     end

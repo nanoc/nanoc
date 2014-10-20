@@ -7,9 +7,9 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   def test_filter_simple
     if_have 'rubypants' do
       # Build content to be evaluated
-      content = "<p>Foo...</p>\n" +
-                "<% filter :rubypants do %>\n" +
-                " <p>Bar...</p>\n" +
+      content = "<p>Foo...</p>\n" \
+                "<% filter :rubypants do %>\n" \
+                " <p>Bar...</p>\n" \
                 "<% end %>\n"
 
       # Mock item and rep
@@ -28,9 +28,9 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   def test_filter_with_assigns
     if_have 'rubypants' do
       # Build content to be evaluated
-      content = "<p>Foo...</p>\n" +
-                "<% filter :erb do %>\n" +
-                " <p><%%= @item[:title] %></p>\n" +
+      content = "<p>Foo...</p>\n" \
+                "<% filter :erb do %>\n" \
+                " <p><%%= @item[:title] %></p>\n" \
                 "<% end %>\n"
 
       # Mock item and rep
@@ -55,9 +55,9 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
   def test_filter_with_unknown_filter_name
     # Build content to be evaluated
-    content = "<p>Foo...</p>\n" +
-              "<% filter :askjdflkawgjlkwaheflnvz do %>\n" +
-              " <p>Blah blah blah.</p>\n" +
+    content = "<p>Foo...</p>\n" \
+              "<% filter :askjdflkawgjlkwaheflnvz do %>\n" \
+              " <p>Blah blah blah.</p>\n" \
               "<% end %>\n"
 
     # Evaluate content
@@ -69,8 +69,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   def test_filter_with_arguments
     if_have 'coderay' do
       # Build content to be evaluated
-      content = "<% filter :coderay, :language => 'ruby' do %>\n" +
-                "   def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end\n" +
+      content = "<% filter :coderay, :language => 'ruby' do %>\n" \
+                "   def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end\n" \
                 "<% end %>\n"
 
       # Mock item and rep
@@ -86,9 +86,9 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   def test_with_haml
     if_have 'haml' do
       # Build content to be evaluated
-      content = "%p Foo.\n" +
-                "- filter(:erb) do\n" +
-                "  <%= 'abc' + 'xyz' %>\n" +
+      content = "%p Foo.\n" \
+                "- filter(:erb) do\n" \
+                "  <%= 'abc' + 'xyz' %>\n" \
                 "%p Bar.\n"
 
       # Mock item and rep
@@ -107,8 +107,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
     Nanoc::NotificationCenter.on(:filtering_ended)   { notifications << :filtering_ended   }
 
     # Build content to be evaluated
-    content = "<% filter :erb do %>\n" +
-              "   ... stuff ...\n" +
+    content = "<% filter :erb do %>\n" \
+              "   ... stuff ...\n" \
               "<% end %>\n"
 
     # Mock item and rep

@@ -5,10 +5,10 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_filter
     if_have 'less' do
       # Create item
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+      @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter
       result = filter.setup_and_run('.foo { bar: 1 + 1 }')
@@ -23,10 +23,10 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       File.open('content/foo/bar/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
 
       # Create item
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+      @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter
       result = filter.setup_and_run('@import "content/foo/bar/imported_file.less";')
@@ -42,10 +42,10 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
       # Create item
       File.open('content/foo/bar.txt', 'w') { |io| io.write('meh') }
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+      @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter
       result = filter.setup_and_run('@import "bar/imported_file.less";')
@@ -62,7 +62,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
           io.write('@import "b.less";')
         end
         File.open('content/b.less', 'w') do |io|
-          io.write("p { color: red; }")
+          io.write('p { color: red; }')
         end
 
         # Update rules
@@ -92,7 +92,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
         # Update included file
         File.open('content/b.less', 'w') do |io|
-          io.write("p { color: blue; }")
+          io.write('p { color: blue; }')
         end
 
         # Recompile
@@ -111,10 +111,10 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_compression
     if_have 'less' do
       # Create item
-      @item = Nanoc::Item.new("blah", { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
+      @item = Nanoc::Item.new('blah', { :content_filename => 'content/foo/bar.txt' }, '/foo/bar/')
 
       # Create filter
-      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [ @item ])
+      filter = ::Nanoc::Filters::Less.new(:item => @item, :items => [@item])
 
       # Run filter with compress option
       result = filter.setup_and_run('.foo { bar: a; } .bar { foo: b; }', :compress => true)

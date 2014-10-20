@@ -33,7 +33,7 @@ module Nanoc::Filters
     #   `xsl:param` elements.
     #
     # @return [String] The transformed content
-    def run(content, params = {})
+    def run(_content, params = {})
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
 
       if assigns[:layout].nil?

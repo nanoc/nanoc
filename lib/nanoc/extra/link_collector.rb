@@ -13,7 +13,7 @@ module ::Nanoc::Extra
       @filter =
         case mode
         when nil
-          lambda { |h| true }
+          lambda { |_h| true }
         when :external
           lambda { |h| external_href?(h) }
         when :internal
@@ -36,7 +36,7 @@ module ::Nanoc::Extra
     end
 
     def external_href?(href)
-      !!(href =~ %r{^(\/\/|[a-z\-]+:)})
+      href =~ %r{^(\/\/|[a-z\-]+:)}
     end
 
     def hrefs_in_file(filename)
@@ -47,7 +47,7 @@ module ::Nanoc::Extra
 
       # Convert protocol-relative urls
       # e.g. //example.com => http://example.com
-      hrefs_in_file.map! { |href| href.gsub /^\/\//, 'http://' }
+      hrefs_in_file.map! { |href| href.gsub(/^\/\//, 'http://') }
 
       # Strip fragment
       hrefs_in_file.map! { |href| href.gsub(/#.*$/, '') }

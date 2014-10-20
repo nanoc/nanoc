@@ -8,7 +8,7 @@ class Nanoc::Filters::BlueClothTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::BlueCloth.new
 
       # Run filter
-      result = filter.setup_and_run("> Quote")
+      result = filter.setup_and_run('> Quote')
       assert_match %r{<blockquote>\s*<p>Quote</p>\s*</blockquote>}, result
     end
   end

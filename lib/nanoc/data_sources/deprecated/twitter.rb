@@ -17,7 +17,7 @@ module Nanoc::DataSources
         raw_items = JSON.parse(data)
 
         # Convert to items
-        raw_items.enum_with_index.map do |raw_item, i|
+        raw_items.enum_with_index.map do |raw_item, _i|
           # Get data
           content = raw_item['text']
           attributes = {

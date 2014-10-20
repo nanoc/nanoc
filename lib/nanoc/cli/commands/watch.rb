@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-usage       'watch [options]'
-summary     'start the watcher'
+usage 'watch [options]'
+summary 'start the watcher'
 be_hidden
 description <<-EOS
 Start the watcher. When a change is detected, the site will be recompiled.
@@ -114,25 +114,25 @@ module Nanoc::CLI::Commands
         end
       end
 
-    protected
+      protected
 
-      def have_tool_nix?(tool)
+      def nix_tool_present?(tool)
         !`which #{tool}`.empty?
       rescue Errno::ENOENT
         false
       end
 
-      def have_tool_windows?(tool)
+      def windows_tool_present?(tool)
         !`where #{tool} 2> nul`.empty?
       rescue Errno::ENOENT
         false
       end
 
-      def have_tool?(tool)
+      def tool_present?(tool)
         if self.on_windows?
-          self.have_tool_windows?(tool)
+          self.windows_tool_present?(tool)
         else
-          self.have_tool_nix?(tool)
+          self.nix_tool_present?(tool)
         end
       end
 
@@ -141,7 +141,7 @@ module Nanoc::CLI::Commands
           require 'terminal-notifier'
           'terminal-notify'
         rescue LoadError
-          TOOLS.find { |t| have_tool?(t) }
+          TOOLS.find { |t| tool_present?(t) }
         end
       end
 
@@ -150,7 +150,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify_cmd_for(message)
-        [ 'growlnotify', '-m', message ]
+        ['growlnotify', '-m', message]
       end
 
       def growlnotify(message)
@@ -158,7 +158,7 @@ module Nanoc::CLI::Commands
       end
 
       def growlnotify_windows_cmd_for(message)
-        [ 'growlnotify', '/t:nanoc', message ]
+        ['growlnotify', '/t:nanoc', message]
       end
 
       def growlnotify_windows(message)

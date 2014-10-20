@@ -20,7 +20,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   end
 
   def test_default_encoding
-    if !defined?(Encoding)
+    unless defined?(Encoding)
       skip 'No Encoding class'
       return
     end
@@ -38,7 +38,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       exception = assert_raises(RuntimeError) do
         site.compile
       end
-      assert_equal "Could not read content/index.html because the file is not valid UTF-8.", exception.message
+      assert_equal 'Could not read content/index.html because the file is not valid UTF-8.', exception.message
 
       # Try with encoding = specific
       File.open('nanoc.yaml', 'w') { |io| io.write("meh: true\n") }

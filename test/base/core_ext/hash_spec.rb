@@ -88,7 +88,7 @@ describe 'Hash#checksum' do
 
   it 'should not sort keys' do
     if RUBY_VERSION =~ /\A1\.8./
-      skip "Ruby 1.8.x does not have ordered hashes"
+      skip 'Ruby 1.8.x does not have ordered hashes'
     end
 
     a = { :a => 1, :c => 2, :b => 3 }.checksum

@@ -69,7 +69,7 @@ module Nanoc::Extra::Deployers
       while truncated
         set = directory.files.all(:marker => files.last.key)
         truncated = set.is_truncated
-        files = files + set
+        files += set
       end
       keys_to_destroy = files.all.map { |file| file.key }
       keys_to_invalidate = []
@@ -113,7 +113,7 @@ module Nanoc::Extra::Deployers
       puts 'Done!'
     end
 
-  private
+    private
 
     # Prints the given message on stderr and exits.
     def error(msg)

@@ -13,9 +13,9 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     end
 
     # Build content to be evaluated
-    content = "head <% content_for :sidebar do %>\n" +
-              "  <%= 1+2 %>\n" +
-              "<% end %> foot"
+    content = "head <% content_for :sidebar do %>\n" \
+              "  <%= 1+2 %>\n" \
+              '<% end %> foot'
 
     # Build site
     @site = Nanoc3::Site.new({})
@@ -89,7 +89,7 @@ EOS
 
     @site = Nanoc3::Site.new({})
     @item = Nanoc::Item.new('content', {}, '/')
-    content = "<% content_for :a do %>Content One<% end %>"
+    content = '<% content_for :a do %>Content One<% end %>'
     ::ERB.new(content).result(binding)
 
     assert_equal 'Content One', content_for(@item, :a)
@@ -97,7 +97,7 @@ EOS
 
     @site = Nanoc3::Site.new({})
     @item = Nanoc::Item.new('content', {}, '/')
-    content = "<% content_for :b do %>Content Two<% end %>"
+    content = '<% content_for :b do %>Content Two<% end %>'
     ::ERB.new(content).result(binding)
 
     assert_equal nil,           content_for(@item, :a)
@@ -176,8 +176,8 @@ EOS
       end
 
       File.open('content/self.erb', 'w') do |io|
-        io.write "<% content_for :foo do %>Foo!<% end %>"
-        io.write "<%= content_for(@item, :foo) %>"
+        io.write '<% content_for :foo do %>Foo!<% end %>'
+        io.write '<%= content_for(@item, :foo) %>'
       end
 
       File.open('Rules', 'w') do |io|

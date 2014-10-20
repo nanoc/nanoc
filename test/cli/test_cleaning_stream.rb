@@ -17,7 +17,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
   end
 
   def test_forward
-    methods = [ :write, :<<, :tty?, :flush, :tell, :print, :puts, :string, :reopen, :exist?, :exists?, :close ]
+    methods = [:write, :<<, :tty?, :flush, :tell, :print, :puts, :string, :reopen, :exist?, :exists?, :close]
 
     s = Stream.new
     cs = Nanoc::CLI::CleaningStream.new(s)
@@ -45,13 +45,13 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     stream = StringIO.new
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     logger = Logger.new(cleaning_stream)
-    logger.info("Some info")
-    logger.warn("Something could start going wrong!")
+    logger.info('Some info')
+    logger.warn('Something could start going wrong!')
   end
 
   def test_broken_pipe
     stream = StringIO.new
-    def stream.write(s) ; raise Errno::EPIPE.new ; end
+    def stream.write(s); raise Errno::EPIPE.new; end
 
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     cleaning_stream.write('lol')

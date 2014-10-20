@@ -14,8 +14,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
       # Create site
       FileUtils.mkdir_p('output')
-      File.open('output/meow', 'w') { |io| io.write "I am a cat!" }
-      File.open('output/bark', 'w') { |io| io.write "I am a dog!" }
+      File.open('output/meow', 'w') { |io| io.write 'I am a cat!' }
+      File.open('output/bark', 'w') { |io| io.write 'I am a dog!' }
 
       # Create local cloud (but not bucket)
       FileUtils.mkdir_p('mylocalcloud')
@@ -26,8 +26,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
       # Check
       assert File.file?('mylocalcloud/mybucket/meow')
       assert File.file?('mylocalcloud/mybucket/bark')
-      assert_equal "I am a cat!", File.read('mylocalcloud/mybucket/meow')
-      assert_equal "I am a dog!", File.read('mylocalcloud/mybucket/bark')
+      assert_equal 'I am a cat!', File.read('mylocalcloud/mybucket/meow')
+      assert_equal 'I am a dog!', File.read('mylocalcloud/mybucket/bark')
     end
   end
 
@@ -47,8 +47,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
         # Create site
         FileUtils.mkdir_p('output')
-        File.open('output/meow', 'w') { |io| io.write "I am a cat!" }
-        File.open('output/bark', 'w') { |io| io.write "I am a dog!" }
+        File.open('output/meow', 'w') { |io| io.write 'I am a cat!' }
+        File.open('output/bark', 'w') { |io| io.write 'I am a dog!' }
 
         # Create local cloud (but not bucket)
         FileUtils.mkdir_p('mylocalcloud')
@@ -112,8 +112,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
       # Create site
       FileUtils.mkdir_p('output')
-      File.open('output/meow', 'w') { |io| io.write "I am a cat!" }
-      File.open('output/bark', 'w') { |io| io.write "I am a dog!" }
+      File.open('output/meow', 'w') { |io| io.write 'I am a cat!' }
+      File.open('output/bark', 'w') { |io| io.write 'I am a dog!' }
 
       # Create local cloud (but not bucket)
       FileUtils.mkdir_p('mylocalcloud')
@@ -125,8 +125,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
       refute File.file?('mylocalcloud/mybucket/etc')
       assert File.file?('mylocalcloud/mybucket/meow')
       assert File.file?('mylocalcloud/mybucket/bark')
-      assert_equal "I am a cat!", File.read('mylocalcloud/mybucket/meow')
-      assert_equal "I am a dog!", File.read('mylocalcloud/mybucket/bark')
+      assert_equal 'I am a cat!', File.read('mylocalcloud/mybucket/meow')
+      assert_equal 'I am a dog!', File.read('mylocalcloud/mybucket/bark')
     end
   end
 

@@ -3,13 +3,13 @@
 class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy
-    skip_unless_have_command "rsync"
+    skip_unless_have_command 'rsync'
     with_site do |site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
         io.write "    kind: rsync\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')
@@ -28,7 +28,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
         io.write "deploy:\n"
         io.write "  public:\n"
         io.write "    kind: rsync\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')
@@ -63,7 +63,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
         io.write "deploy:\n"
         io.write "  public:\n"
         io.write "    kind: rsync\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')
@@ -86,7 +86,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
         io.write "deploy:\n"
         io.write "  public:\n"
         io.write "    kind: rsync\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')
@@ -104,12 +104,12 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_without_kind
-    skip_unless_have_command "rsync"
+    skip_unless_have_command 'rsync'
     with_site do |site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')
@@ -131,7 +131,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')
@@ -147,12 +147,12 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_without_target_with_default
-    skip_unless_have_command "rsync"
+    skip_unless_have_command 'rsync'
     with_site do |site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  default:\n"
-        io.write "    dst: mydestination"
+        io.write '    dst: mydestination'
       end
 
       FileUtils.mkdir_p('output')

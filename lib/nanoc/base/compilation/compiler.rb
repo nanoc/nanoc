@@ -74,7 +74,7 @@ module Nanoc
     #
     # @overload run
     #   @return [void]
-    def run(*args)
+    def run(*_args)
       # Create output directory if necessary
       FileUtils.mkdir_p(@site.config[:output_dir])
 
@@ -206,7 +206,7 @@ module Nanoc
     # @api private
     def objects
       site.items + site.layouts + site.code_snippets +
-        [ site.config, rules_collection ]
+        [site.config, rules_collection]
     end
 
     # Creates the representations of all items as defined by the compilation
@@ -250,11 +250,12 @@ module Nanoc
           # Get normal path by stripping index filename
           rep.paths[snapshot] = basic_path
           @site.config[:index_filenames].each do |index_filename|
-            if rep.paths[snapshot][-index_filename.length..-1] == index_filename
-              # Strip and stop
-              rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length - 1]
-              break
-            end
+            rep_path_ending = rep.paths[snapshot][-index_filename.length..-1]
+            next unless rep_path_ending == index_filename
+
+            # Strip and stop
+            rep.paths[snapshot] = rep.paths[snapshot][0..-index_filename.length - 1]
+            break
           end
         end
       end
@@ -294,7 +295,7 @@ module Nanoc
     end
     memoize :outdatedness_checker
 
-  private
+    private
 
     # @return [Array<Nanoc::Item>] The site’s items
     def items
@@ -324,7 +325,7 @@ module Nanoc
 
       # Listen to processing start/stop
       Nanoc::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::NotificationCenter.on(:processing_ended,   self) { |obj| @stack.pop       }
+      Nanoc::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
 
       # Assign snapshots
       reps.each do |rep|
@@ -350,7 +351,7 @@ module Nanoc
       end
 
       # Check whether everything was compiled
-      if !content_dependency_graph.vertices.empty?
+      unless content_dependency_graph.vertices.empty?
         raise Nanoc::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
     ensure

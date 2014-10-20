@@ -50,7 +50,7 @@ module Nanoc::HashExtensions
   def freeze_recursively
     return if self.frozen?
     freeze
-    each_pair do |key, value|
+    each_pair do |_key, value|
       if value.respond_to?(:freeze_recursively)
         value.freeze_recursively
       else

@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-usage       'validate-css [options]'
-aliases     :validate_css, :vcss
-summary     'validate the site’s CSS'
+usage 'validate-css [options]'
+aliases :validate_css, :vcss
+summary 'validate the site’s CSS'
 be_hidden
 description "
 Validates the site’s CSS files.

@@ -40,7 +40,7 @@ module Nanoc::TestHelpers
   def if_have(*libs)
     libs.each do |lib|
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?
-        skip "Pure Java Nokogiri has issues that cause problems with nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests"
+        skip 'Pure Java Nokogiri has issues that cause problems with nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests'
         return
       end
 
@@ -56,15 +56,13 @@ module Nanoc::TestHelpers
   end
 
   def if_implemented
-    begin
-      yield
-    rescue NotImplementedError, NameError
-      skip $!
-      return
-    end
+    yield
+  rescue NotImplementedError, NameError
+    skip $!
+    return
   end
 
-  def with_site(params={})
+  def with_site(params = {})
     # Build site name
     site_name = params[:name]
     if site_name.nil?
@@ -182,7 +180,7 @@ EOS
     P(object).tags(:example).each do |example|
       # Classify
       lines = example.text.lines.map do |line|
-        [ line =~ /^\s*# ?=>/ ? :result : :code, line ]
+        [line =~ /^\s*# ?=>/ ? :result : :code, line]
       end
 
       # Join
@@ -237,12 +235,12 @@ EOS
     Nanoc.on_windows?
   end
 
-  def have_command?(cmd)
-    which, null = on_windows? ? ["where", "NUL"] : ["which", "/dev/null"]
+  def command?(cmd)
+    which, null = on_windows? ? ['where', 'NUL'] : ['which', '/dev/null']
     system("#{which} #{cmd} > #{null} 2>&1")
   end
 
-  def have_symlink?
+  def symlinks_supported?
     File.symlink nil, nil
   rescue NotImplementedError
     return false
@@ -251,11 +249,11 @@ EOS
   end
 
   def skip_unless_have_command(cmd)
-    skip "Could not find external command \"#{cmd}\"" unless have_command?(cmd)
+    skip "Could not find external command \"#{cmd}\"" unless command?(cmd)
   end
 
-  def skip_unless_have_symlink
-    skip "Symlinks are not supported by Ruby on Windows" unless have_symlink?
+  def skip_unless_symlinks_supported
+    skip 'Symlinks are not supported by Ruby on Windows' unless symlinks_supported?
   end
 
 end
@@ -273,6 +271,6 @@ end
 #
 class Time
   def inspect
-    strftime("%a %b %d %H:%M:%S.#{"%06d" % usec} %Z %Y")
+    strftime("%a %b %d %H:%M:%S.#{'%06d' % usec} %Z %Y")
   end
 end

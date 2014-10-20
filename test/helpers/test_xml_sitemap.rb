@@ -19,8 +19,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
       # Create item 1
       @items << Nanoc::Item.new('some content 1', {}, '/item-one/')
-      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
-      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+      create_item_rep(@items.last, :one_a, '/item-one/a/')
+      create_item_rep(@items.last, :one_b, '/item-one/b/')
 
       # Create item 2
       @items << Nanoc::Item.new('some content 2', { :is_hidden => true }, '/item-two/')
@@ -28,12 +28,12 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create item 3
       attrs = { :mtime => Time.parse('2004-07-12'), :changefreq => 'daily', :priority => 0.5 }
       @items << Nanoc::Item.new('some content 3', attrs, '/item-three/')
-      self.create_item_rep(@items.last, :three_a, '/item-three/a/')
-      self.create_item_rep(@items.last, :three_b, '/item-three/b/')
+      create_item_rep(@items.last, :three_a, '/item-three/a/')
+      create_item_rep(@items.last, :three_b, '/item-three/b/')
 
       # Create item 4
       @items << Nanoc::Item.new('some content 4', {}, '/item-four/')
-      self.create_item_rep(@items.last, :four_a, nil)
+      create_item_rep(@items.last, :four_a, nil)
 
       # Create sitemap item
       @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
@@ -75,8 +75,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = []
       @items << nil
       @items << Nanoc::Item.new('some content 1', {}, '/item-one/')
-      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
-      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+      create_item_rep(@items.last, :one_a, '/item-one/a/')
+      create_item_rep(@items.last, :one_b, '/item-one/b/')
       @items << nil
 
       # Create sitemap item
@@ -86,7 +86,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Build sitemap
-      res = xml_sitemap(:items => [ @items[1] ])
+      res = xml_sitemap(:items => [@items[1]])
 
       # Check
       doc = Nokogiri::XML(res)
@@ -108,9 +108,9 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_filter
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = [ Nanoc::Item.new('some content 1', {}, '/item-one/') ]
-      self.create_item_rep(@items.last, :one_a, '/item-one/a/')
-      self.create_item_rep(@items.last, :one_b, '/item-one/b/')
+      @items = [Nanoc::Item.new('some content 1', {}, '/item-one/')]
+      create_item_rep(@items.last, :one_a, '/item-one/a/')
+      create_item_rep(@items.last, :one_b, '/item-one/b/')
 
       # Create sitemap item
       @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
@@ -139,14 +139,14 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create items
       @items = []
       @items << Nanoc::Item.new('some content 1', {}, '/george/')
-      self.create_item_rep(@items.last, :a_alice,   '/george/alice/')
-      self.create_item_rep(@items.last, :b_zoey,    '/george/zoey/')
+      create_item_rep(@items.last, :a_alice,   '/george/alice/')
+      create_item_rep(@items.last, :b_zoey,    '/george/zoey/')
       @items << Nanoc::Item.new('some content 1', {}, '/walton/')
-      self.create_item_rep(@items.last, :a_eve,     '/walton/eve/')
-      self.create_item_rep(@items.last, :b_bob,     '/walton/bob/')
+      create_item_rep(@items.last, :a_eve,     '/walton/eve/')
+      create_item_rep(@items.last, :b_bob,     '/walton/bob/')
       @items << Nanoc::Item.new('some content 1', {}, '/lucas/')
-      self.create_item_rep(@items.last, :a_trudy,   '/lucas/trudy/')
-      self.create_item_rep(@items.last, :b_mallory, '/lucas/mallory/')
+      create_item_rep(@items.last, :a_trudy,   '/lucas/trudy/')
+      create_item_rep(@items.last, :b_mallory, '/lucas/mallory/')
 
       # Create sitemap item
       @item = Nanoc::Item.new('sitemap content', {}, '/sitemap/')
@@ -172,7 +172,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     end
   end
 
-protected
+  protected
 
   def create_item_rep(item, name, path)
     rep = Nanoc::ItemRep.new(item, name)

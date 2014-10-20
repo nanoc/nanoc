@@ -55,7 +55,7 @@ module Nanoc::Extra
         body_parts.each { |part| body << part }
 
         # Done
-        [ status, headers, body ]
+        [status, headers, body]
       end
 
     end
@@ -115,7 +115,7 @@ module Nanoc::Extra
           return [
             response.code.to_i,
             response.to_hash.reduce({}) { |m, (k, v)| m.merge(k => v[0]) },
-            [ response.body ]
+            [response.body]
           ]
         end
       end

@@ -35,7 +35,7 @@ EOS
     end
 
     def check_and_warn
-      return if !defined?(RUBY_ENGINE)
+      return unless defined?(RUBY_ENGINE)
       return if RUBY_ENGINE != 'jruby'
       return if @warned
 

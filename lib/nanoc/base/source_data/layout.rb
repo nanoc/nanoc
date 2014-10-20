@@ -78,7 +78,7 @@ module Nanoc
     #
     # @return [Object] An unique reference to this object
     def reference
-      [ type, identifier ]
+      [type, identifier]
     end
 
     def inspect
