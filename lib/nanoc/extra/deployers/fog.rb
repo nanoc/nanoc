@@ -96,7 +96,7 @@ module Nanoc::Extra::Deployers
       end
 
       # invalidate CDN objects
-      if cdn_id 
+      if cdn_id
         puts 'Invalidating CDN distribution'
         keys_to_invalidate.concat(keys_to_destroy)
         cdn = ::Fog::CDN.new(config)
@@ -105,7 +105,7 @@ module Nanoc::Extra::Deployers
           distribution = cdn.get_distribution(cdn_id)
           # usual limit per invalidation: 1000 objects
           keys_to_invalidate.each_slice(1000) do |paths|
-            resp = cdn.post_invalidation(distribution, paths)
+            cdn.post_invalidation(distribution, paths)
           end
         end
       end
