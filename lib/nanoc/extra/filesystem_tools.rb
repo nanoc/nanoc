@@ -60,7 +60,7 @@ module Nanoc::Extra
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
     def all_files_in(dir_name, recursion_limit = 10)
-      Dir[dir_name + '/**/*'].map do |fn|
+      Dir.glob(dir_name + '/**/*', File::FNM_DOTMATCH).map do |fn|
         case File.ftype(fn)
         when 'link'
           if 0 == recursion_limit
