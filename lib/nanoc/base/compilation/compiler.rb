@@ -120,6 +120,7 @@ module Nanoc
       # Preprocess
       rules_collection.load
       preprocess
+      site.reload_items
       site.setup_child_parent_links
       build_reps
       route_reps
