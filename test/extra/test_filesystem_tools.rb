@@ -101,4 +101,13 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     end
   end
 
+  def test_dotfiles_are_valid_items
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.open('dir/.htaccess', 'w') { |io| io.write('o hai') }
+    
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir').sort
+    assert_equal ['dir/.htaccess'], actual_files
+  end
+
 end
