@@ -42,13 +42,13 @@ module Nanoc
     def cleanup(prefix)
       path = File.join(@root_dir, prefix)
       if File.exist?(path)
-        FileUtils.remove_entry_secure(path)
+        FileUtils.rm_rf(path)
       end
 
       @counts.delete(prefix)
 
       if @counts.empty? && File.directory?(@root_dir)
-        FileUtils.remove_entry_secure(@root_dir)
+        FileUtils.rm_rf(@root_dir)
       end
     end
 
