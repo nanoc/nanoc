@@ -54,7 +54,7 @@ module Nanoc::Extra
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
     def all_files_in(dir_name, extra_files, recursion_limit = 10)
-      all_files_and_dirs_in(dir_name, recursion_limit).map do |fn|
+      all_files_and_dirs_in(dir_name, extra_files).map do |fn|
         case File.ftype(fn)
         when 'link'
           if 0 == recursion_limit
@@ -64,7 +64,7 @@ module Nanoc::Extra
             if File.file?(absolute_target)
               fn
             else
-              all_files_in(absolute_target, recursion_limit - 1).map do |sfn|
+              all_files_in(absolute_target, extra_files, recursion_limit - 1).map do |sfn|
                 fn + sfn[absolute_target.size..-1]
               end
             end
@@ -81,7 +81,7 @@ module Nanoc::Extra
     module_function :all_files_in
 
     def all_files_and_dirs_in(dir_name, extra_files)
-      patterns = [dir_name + '/**/*']
+      patterns = [ "#{dir_name}/**/*" ]
       case extra_files
       when nil
         patterns << "#{dir_name}/**/.{htaccess,htpasswd}"
@@ -92,8 +92,9 @@ module Nanoc::Extra
       else
         raise "Do not know how to handle extra_files: #{extra_files.inspect}"
       end
-      Dir.glob(*patterns)
+      Dir.glob(patterns)
     end
+    module_function :all_files_and_dirs_in
 
     # Resolves the given symlink into an absolute path.
     #

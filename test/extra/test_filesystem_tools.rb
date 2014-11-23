@@ -32,7 +32,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md'
     ]
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir0').sort
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir0', nil).sort
     assert_equal expected_files, actual_files
   end
 
@@ -47,7 +47,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     end
 
     assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
-      Nanoc::Extra::FilesystemTools.all_files_in('dir0')
+      Nanoc::Extra::FilesystemTools.all_files_in('dir0', nil)
     end
   end
 
@@ -61,7 +61,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.symlink('../bar', 'foo/barlink')
 
     expected_files = ['foo/barlink/y.md', 'foo/x.md']
-    actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('foo').sort
+    actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('foo', nil).sort
     assert_equal expected_files, actual_files
   end
 
@@ -74,7 +74,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
 
     # Check
     expected_files = ['dir/bar-link', 'dir/foo']
-    actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('dir').sort
+    actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
     assert_equal expected_files, actual_files
   end
 
@@ -106,7 +106,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     FileUtils.mkdir_p('dir')
     File.open('dir/.htaccess', 'w') { |io| io.write('o hai') }
 
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir').sort
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
     assert_equal ['dir/.htaccess'], actual_files
   end
 
