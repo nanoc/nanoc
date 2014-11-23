@@ -12,7 +12,6 @@ Fixes:
 * Fixed potential “parent directory is world writable” error (#465, #474)
 * Fixed retrying requests in the external link checker (#483) [Michal Papis]
 * Fixed issue with data sources not being unloaded (#491) [Michal Papis]
-* Fixed issue with dotfiles not being loaded (#492) [Andy Drop]
 
 ## 3.7.3 (2014-08-31)
 
