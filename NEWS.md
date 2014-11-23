@@ -6,6 +6,7 @@ Enhancements:
 
 * Made `check` command fail when output directory is missing (#472) [Mike Pennisi]
 * Made external links check timeouts start small and grow (#483) [Michal Papis]
+* Made code and API adhere much more closely to the Ruby style guide (#476)
 
 Fixes:
 
