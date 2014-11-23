@@ -101,6 +101,15 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     end
   end
 
+  def test_unwanted_dotfiles_not_found
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
+
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
+    assert_equal [], actual_files
+  end
+
   def test_dotfiles_are_valid_items
     # Write sample files
     FileUtils.mkdir_p('dir')
@@ -108,6 +117,37 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
 
     actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
     assert_equal ['dir/.htaccess'], actual_files
+  end
+
+  def test_user_dotfiles_are_valid_items
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.open('dir/.other', 'w') { |io| io.write('o hai') }
+
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', "**/.other").sort
+    assert_equal ['dir/.other'], actual_files
+  end
+
+  def test_multiple_user_dotfiles_are_valid_items
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.open('dir/.other', 'w') { |io| io.write('o hai') }
+    File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
+
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', ["**/.other", "**/.DS_Store"]).sort
+    assert_equal ['dir/.other', 'dir/.DS_Store'].sort, actual_files.sort
+  end
+
+  def test_unknown_pattern
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.open('dir/.other', 'w') { |io| io.write('o hai') }
+
+    pattern = {:dotfiles => "**/.other"}
+
+    assert_raises Nanoc::Errors::GenericTrivial, "Do not know how to handle extra_files: #{pattern.inspect}" do
+      Nanoc::Extra::FilesystemTools.all_files_in('dir0', pattern)
+    end
   end
 
 end
