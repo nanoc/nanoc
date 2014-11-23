@@ -54,7 +54,7 @@ module Nanoc::DataSources
     protected
 
     def all_files_in(dir_name)
-      Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
+      Nanoc::Extra::FilesystemTools.all_files_in(dir_name, config[:extra_files])
     end
   end
 end
