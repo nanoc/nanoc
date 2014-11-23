@@ -43,10 +43,14 @@ module Nanoc::Extra
     # @param [String] dir_name The name of the directory whose contents to
     #   fetch
     #
+    # @param [String, Array, nil] extra_files The list of extra patterns
+    #   to extend the file search for files not found by default, example
+    #   "**/.{htaccess,htpasswd}" which is also the default for `nil`
+    #
     # @param [Integer] recursion_limit The maximum number of times to
     #   recurse into a symlink to a directory
     #
-    # @return [Array<String>] A list of filenames
+    # @return [Array<String>] A list of file names
     #
     # @raise [MaxSymlinkDepthExceededError] if too many indirections are
     #   encountered while resolving symlinks
@@ -80,6 +84,19 @@ module Nanoc::Extra
     end
     module_function :all_files_in
 
+    # Returns all files and directories in the given directory and
+    # directories below it.
+    #
+    # @param [String] dir_name The name of the directory whose contents to
+    #   fetch
+    #
+    # @param [String, Array, nil] extra_files The list of extra patterns
+    #   to extend the file search for files not found by default, example
+    #   "**/.{htaccess,htpasswd}" which is also the default for `nil`
+    #
+    # @return [Array<String>] A list of files and directories
+    #
+    # @raise [GenericTrivial] when pattern can not be handled
     def all_files_and_dirs_in(dir_name, extra_files)
       patterns = [ "#{dir_name}/**/*" ]
       case extra_files
@@ -90,7 +107,8 @@ module Nanoc::Extra
       when Array
         patterns += extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" }
       else
-        raise "Do not know how to handle extra_files: #{extra_files.inspect}"
+        raise Nanoc::Errors::GenericTrivial,
+          "Do not know how to handle extra_files: #{extra_files.inspect}"
       end
       Dir.glob(patterns)
     end
