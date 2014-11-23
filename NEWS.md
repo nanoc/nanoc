@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.7.4 (INSERT DATE HERE)
+## 3.7.4 (2014-11-23)
 
 Enhancements:
 
