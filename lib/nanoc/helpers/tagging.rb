@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Provides support for managing tags added to items.
   #
   # To add tags to items, set the `tags` attribute to an array of tags that
@@ -11,7 +10,6 @@ module Nanoc::Helpers
   #
   #   tags: [ 'foo', 'bar', 'baz' ]
   module Tagging
-
     require 'nanoc/helpers/html_escape'
     include Nanoc::Helpers::HTMLEscape
 
@@ -65,7 +63,5 @@ module Nanoc::Helpers
     def link_for_tag(tag, base_url)
       %(<a href="#{h base_url}#{h tag}" rel="tag">#{h tag}</a>)
     end
-
   end
-
 end

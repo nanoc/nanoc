@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Provides functionality for building blogs, such as finding articles and
   # constructing feeds.
   #
@@ -22,7 +21,6 @@ module Nanoc::Helpers
   #
   # The two main functions are {#sorted_articles} and {#atom_feed}.
   module Blogging
-
     # Returns an unsorted list of articles, i.e. items where the `kind`
     # attribute is set to `"article"`.
     #
@@ -54,7 +52,6 @@ module Nanoc::Helpers
     end
 
     class AtomFeedBuilder
-
       include Nanoc::Helpers::Blogging
 
       attr_accessor :site
@@ -190,7 +187,6 @@ module Nanoc::Helpers
           xml.summary summary, :type => 'html' unless summary.nil?
         end
       end
-
     end
 
     # Returns a string representing the atom feed containing recent articles,
@@ -386,7 +382,5 @@ module Nanoc::Helpers
       time = Time.parse(time) if time.is_a?(String)
       time
     end
-
   end
-
 end

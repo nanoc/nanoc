@@ -1,13 +1,11 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Stores rule memories for objects that can be run through a rule (item
   # representations and layouts).
   #
   # @api private
   class RuleMemoryStore < ::Nanoc::Store
-
     # @option params [Nanoc::Site] site The site where this rule memory store
     #   belongs to
     def initialize(params = {})
@@ -47,7 +45,5 @@ module Nanoc
     def data=(new_data)
       @rule_memories = new_data
     end
-
   end
-
 end

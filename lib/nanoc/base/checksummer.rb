@@ -1,15 +1,12 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Creates checksums for given objects.
   #
   # A checksum is a string, such as “mL+TaqNsEeiPkWloPgCtAofT1yg=”, that is used
   # to determine whether a piece of data has changed.
   class Checksummer
-
     class << self
-
       # @param obj The object to create a checksum for
       #
       # @return [String] The digest
@@ -72,11 +69,7 @@ module Nanoc
 
           digest.update(data)
         end
-
       end
-
     end
-
   end
-
 end

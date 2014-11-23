@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Contains several useful text-related helper functions.
   module Text
-
     # Returns an excerpt for the given string. HTML tags are ignored, so if
     # you don't want them to turn up, they should be stripped from the string
     # before passing it to the excerpt function.
@@ -35,10 +33,8 @@ module Nanoc::Helpers
     #
     # @return [String] The given string with all HTML stripped
     def strip_html(string)
-      # FIXME will need something more sophisticated than this, because it sucks
+      # FIXME: will need something more sophisticated than this, because it sucks
       string.gsub(/<[^>]*(>+|\s*\z)/m, '').strip
     end
-
   end
-
 end

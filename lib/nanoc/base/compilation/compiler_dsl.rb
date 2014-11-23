@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Contains methods that will be executed by the site’s `Rules` file.
   class CompilerDSL
-
     # The current rules filename.
     #
     # @return [String] The current rules filename.
@@ -271,7 +269,5 @@ module Nanoc
         identifier
       end
     end
-
   end
-
 end

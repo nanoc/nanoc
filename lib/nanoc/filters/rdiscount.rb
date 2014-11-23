@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class RDiscount < Nanoc::Filter
-
     requires 'rdiscount'
 
     # Runs the content through [RDiscount](http://github.com/rtomayko/rdiscount).
@@ -17,6 +16,5 @@ module Nanoc::Filters
 
       ::RDiscount.new(content, *extensions).to_html
     end
-
   end
 end

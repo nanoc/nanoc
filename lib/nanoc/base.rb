@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   require 'nanoc/base/core_ext'
   require 'nanoc/base/ordered_hash'
 
@@ -46,7 +45,6 @@ module Nanoc
   autoload 'RulesCollection',      'nanoc/base/compilation/rules_collection'
 
   # Deprecated; use PluginRepository instead
-  # TODO [in nanoc 4.0] remove me
+  # TODO: [in nanoc 4.0] remove me
   autoload 'Plugin',               'nanoc/base/plugin_registry'
-
 end

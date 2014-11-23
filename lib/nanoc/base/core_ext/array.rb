@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::ArrayExtensions
-
   # Returns a new array where all items' keys are recursively converted to
   # symbols by calling {Nanoc::ArrayExtensions#symbolize_keys_recursively} or
   # {Nanoc::HashExtensions#symbolize_keys_recursively}.
@@ -66,7 +65,6 @@ module Nanoc::ArrayExtensions
   def checksum
     Nanoc::Checksummer.calc(self)
   end
-
 end
 
 class Array

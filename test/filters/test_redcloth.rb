@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::RedClothTest < Nanoc::TestCase
-
   def test_filter
     if_have 'redcloth' do
       # Get filter
@@ -27,5 +26,4 @@ class Nanoc::Filters::RedClothTest < Nanoc::TestCase
       assert_equal('<p>I am a member of SPECTRE.</p>', result)
     end
   end
-
 end

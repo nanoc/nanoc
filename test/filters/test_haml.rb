@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::HamlTest < Nanoc::TestCase
-
   def test_filter
     if_have 'haml' do
       # Create filter
@@ -90,5 +89,4 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
       assert_match(/Max Payne&#x000A;Mona Sax/, result)
     end
   end
-
 end

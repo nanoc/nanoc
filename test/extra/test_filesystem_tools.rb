@@ -13,7 +13,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
     end
     (1..10).each do |i|
-      File.symlink("../dir#{i}", "dir#{i-1}/sub")
+      File.symlink("../dir#{i}", "dir#{i - 1}/sub")
     end
 
     # Check
@@ -43,7 +43,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       File.open("dir#{i}/foo.md", 'w') { |io| io.write('o hai') }
     end
     (1..15).each do |i|
-      File.symlink("../dir#{i}", "dir#{i-1}/sub")
+      File.symlink("../dir#{i}", "dir#{i - 1}/sub")
     end
 
     assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
@@ -93,12 +93,11 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('foo', 'w') { |io| io.write('o hai') }
     File.symlink('foo', 'symlin-0')
     (1..7).each do |i|
-      File.symlink("symlink-#{i-1}", "symlink-#{i}")
+      File.symlink("symlink-#{i - 1}", "symlink-#{i}")
     end
 
     assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
       Nanoc::Extra::FilesystemTools.resolve_symlink('symlink-7')
     end
   end
-
 end

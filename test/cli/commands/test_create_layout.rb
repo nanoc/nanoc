@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::CLI::Commands::CreateLayoutTest < Nanoc::TestCase
-
   def test_can_compile_new_layout
     require 'nanoc/cli'
 
@@ -22,5 +21,4 @@ class Nanoc::CLI::Commands::CreateLayoutTest < Nanoc::TestCase
       site.compile
     end
   end
-
 end

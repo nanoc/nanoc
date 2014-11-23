@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::ChecksumStoreTest < Nanoc::TestCase
-
   def test_get_with_existing_object
     require 'pstore'
 
@@ -28,5 +27,4 @@ class Nanoc::ChecksumStoreTest < Nanoc::TestCase
     obj = Nanoc::Item.new('Moo?', {}, '/animals/cow/')
     assert_equal nil, store[obj]
   end
-
 end

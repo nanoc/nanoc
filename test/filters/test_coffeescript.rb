@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::CoffeeScriptTest < Nanoc::TestCase
-
   def test_filter
     if_have 'coffee-script' do
       # Create filter
@@ -12,5 +11,4 @@ class Nanoc::Filters::CoffeeScriptTest < Nanoc::TestCase
       assert_equal('(function() { alert(42); }).call(this); ', result.gsub(/\s+/, ' '))
     end
   end
-
 end

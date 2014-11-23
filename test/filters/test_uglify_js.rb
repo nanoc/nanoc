@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
-
   def test_filter
     if_have 'uglifier' do
       # Create filter
@@ -26,5 +25,4 @@ class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
       assert_equal 'donkey && alert("It is a donkey!");', result
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
-
   def new_data_source(params = nil)
     # Mock site
     site = Nanoc::Site.new({})
@@ -55,6 +54,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       def initialize(*stuff)
         @stuff = stuff
       end
+
       def ==(other)
         @stuff == other.stuff
       end
@@ -95,12 +95,12 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0] }
 
     # Check
-    (0..expected_out.size-1).each do |i|
+    (0..expected_out.size - 1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
       assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
       assert_equal expected_out[i].stuff[1][:file].path, actual_out[i].stuff[1][:file].path, 'file paths must match'
-      expected_out[i].stuff[1][:file].close;
+      expected_out[i].stuff[1][:file].close
       actual_out[i].stuff[1][:file].close
       ['num', :filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
@@ -286,6 +286,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       def initialize(*stuff)
         @stuff = stuff
       end
+
       def ==(other)
         @stuff == other.stuff
       end
@@ -347,7 +348,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[2] }
 
     # Check
-    (0..expected_out.size-1).each do |i|
+    (0..expected_out.size - 1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
       assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
@@ -374,6 +375,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       def initialize(*stuff)
         @stuff = stuff
       end
+
       def ==(other)
         @stuff == other.stuff
       end
@@ -435,7 +437,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[2] }
 
     # Check
-    (0..expected_out.size-1).each do |i|
+    (0..expected_out.size - 1).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
       assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
@@ -568,5 +570,4 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     assert_equal 1, items.size
     assert_equal Encoding.find('UTF-8'), items[0].raw_content.encoding
   end
-
 end

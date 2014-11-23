@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
-
   def test_profiling_information
-    with_site do |site|
+    with_site do |_site|
       Nanoc::CLI.run %w( create_item foo )
       Nanoc::CLI.run %w( create_item bar )
       Nanoc::CLI.run %w( create_item baz )
@@ -29,7 +28,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   end
 
   def test_auto_prune
-    with_site do |site|
+    with_site do |_site|
       Nanoc::CLI.run %w( create_item foo )
       Nanoc::CLI.run %w( create_item bar )
       Nanoc::CLI.run %w( create_item baz )
@@ -70,7 +69,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   end
 
   def test_auto_prune_with_exclude
-    with_site do |site|
+    with_site do |_site|
       Nanoc::CLI.run %w( create_item foo )
       Nanoc::CLI.run %w( create_item bar )
       Nanoc::CLI.run %w( create_item baz )
@@ -118,10 +117,21 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   def test_setup_and_teardown_listeners
     with_site do
       test_listener_class = Class.new(::Nanoc::CLI::Commands::Compile::Listener) do
-        def start; @started = true; end
-        def stop; @stopped = true; end
-        def started?; @started; end
-        def stopped?; @stopped; end
+        def start
+          @started = true
+        end
+
+        def stop
+          @stopped = true
+        end
+
+        def started?
+          @started
+        end
+
+        def stopped?
+          @stopped
+        end
       end
 
       options = {}
@@ -201,5 +211,4 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
     listener
   end
-
 end

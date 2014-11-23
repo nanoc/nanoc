@@ -1,10 +1,9 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
-
   def test_simple
     if_have 'w3c_validators' do
-      with_site do |site|
+      with_site do |_site|
         # Create some sample files
         %w(foo bar baz).each do |filename|
           %w(xxx yyy).each do |extension|
@@ -23,7 +22,7 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
 
   def test_with_unknown_types
     if_have 'w3c_validators' do
-      with_site do |site|
+      with_site do |_site|
         # Create validator
         w3c = Nanoc::Extra::Validators::W3C.new('.', [:foo])
 
@@ -35,5 +34,4 @@ class Nanoc::Extra::Validators::W3CTest < Nanoc::TestCase
       end
     end
   end
-
 end

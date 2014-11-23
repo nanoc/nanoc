@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
-
   class OutputDirNotFoundError < Nanoc::Errors::Generic
     def initialize(directory_path)
       super("Unable to run check against output directory at “#{directory_path}”: directory does not exist.")
@@ -9,7 +8,6 @@ module Nanoc::Extra::Checking
   end
 
   class Check
-
     extend Nanoc::PluginRegistry::PluginMethods
 
     attr_reader :site
@@ -37,7 +35,5 @@ module Nanoc::Extra::Checking
       end
       Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
     end
-
   end
-
 end

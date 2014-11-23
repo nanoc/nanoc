@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
-
   class SampleFilesystemDataSource < Nanoc::DataSource
     include Nanoc::DataSources::Filesystem
   end
@@ -86,7 +85,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => ['yaml', 'html'],
+      './foo'       => %w(yaml html),
       './bar.entry' => [nil,    'html'],
       './foo/qux'   => ['yaml', nil]
     }
@@ -113,7 +112,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => ['yaml', 'html'],
+      './foo'       => %w(yaml html),
       './bar'       => [nil,    'html.erb'],
       './foo/qux'   => ['yaml', nil]
     }
@@ -476,8 +475,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
-    assert_equal({ 'foo' => 'bar'}, result[0])
+    assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('blah blah',       result[1])
   end
-
 end

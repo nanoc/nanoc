@@ -3,9 +3,7 @@
 require 'tmpdir'
 
 module Nanoc
-
   class TempFilenameFactory
-
     # @return [String] The root directory for all temporary filenames
     attr_reader :root_dir
 
@@ -51,7 +49,5 @@ module Nanoc
         FileUtils.rm_rf(@root_dir)
       end
     end
-
   end
-
 end

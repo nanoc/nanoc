@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class RedCloth < Nanoc::Filter
-
     requires 'redcloth'
 
     # Runs the content through [RedCloth](http://redcloth.org/). This method
@@ -42,6 +41,5 @@ module Nanoc::Filters
       # Get result
       r.to_html
     end
-
   end
 end

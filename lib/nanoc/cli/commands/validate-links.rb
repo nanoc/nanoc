@@ -12,9 +12,7 @@ flag :i, :internal, 'validate internal links only'
 flag :e, :external, 'validate external links only'
 
 module Nanoc::CLI::Commands
-
   class ValidateLinks < ::Nanoc::CLI::CommandRunner
-
     def run
       warn 'The `validate-links` command is deprecated. Please use the new `check` command instead.'
 
@@ -23,9 +21,7 @@ module Nanoc::CLI::Commands
       checks << 'elinks' if options[:external]
       Nanoc::CLI.run ['check', checks].flatten
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::ValidateLinks

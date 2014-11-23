@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc::CLI
-
   # A simple ANSI colorizer for strings. When given a string and a list of
   # attributes, it returns a colorized string.
   module ANSIStringColorizer
-
-    # TODO complete mapping
+    # TODO: complete mapping
     MAPPING = {
       :bold   => "\e[1m",
       :red    => "\e[31m",
@@ -24,7 +22,5 @@ module Nanoc::CLI
     def self.c(s, *as)
       as.map { |a| MAPPING[a] }.join('') + s + "\e[0m"
     end
-
   end
-
 end

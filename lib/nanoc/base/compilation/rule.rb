@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Contains the processing information for a item.
   class Rule
-
     # @return [Regexp] The regex that determines which items this rule can be
     #   applied to. This rule can be applied to items with a identifier
     #   matching this regex.
@@ -69,7 +67,5 @@ module Nanoc
       rep = Nanoc::ItemRepProxy.new(rep, compiler) unless rep.proxy?
       Nanoc::RuleContext.new(:rep => rep, :compiler => compiler).instance_eval(&@block)
     end
-
   end
-
 end

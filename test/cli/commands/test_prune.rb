@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
-
   def test_run_without_yes
-    with_site do |site|
+    with_site do |_site|
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
       FileUtils.mkdir_p('output2')
@@ -25,7 +24,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_yes
-    with_site do |site|
+    with_site do |_site|
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
       FileUtils.mkdir_p('output2')
@@ -45,7 +44,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_dry_run
-    with_site do |site|
+    with_site do |_site|
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
       FileUtils.mkdir_p('output2')
@@ -65,7 +64,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_exclude
-     with_site do |site|
+    with_site do |_site|
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'good-dir', 'good-file.html' ]" }
       FileUtils.mkdir_p('output')
@@ -98,7 +97,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       skip 'JRuby 1.7.11 has buggy File.find behavior (see https://github.com/jruby/jruby/issues/1647)'
     end
 
-    with_site do |site|
+    with_site do |_site|
       # Set output dir
       FileUtils.rm_rf('output')
       FileUtils.mkdir_p('output-real')
@@ -121,7 +120,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   end
 
   def test_run_with_nested_empty_dirs
-    with_site do |site|
+    with_site do |_site|
       # Set output dir
       File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output' }
       FileUtils.mkdir_p('output')
@@ -138,5 +137,4 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       assert !File.directory?('output/a')
     end
   end
-
 end

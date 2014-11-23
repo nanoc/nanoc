@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Provides support for breadcrumbs, which allow the user to go up in the
   # page hierarchy.
   module Breadcrumbs
-
     # Creates a breadcrumb trail leading from the current item to its parent,
     # to its parent’s parent, etc, until the root item is reached. This
     # function does not require that each intermediate item exist; for
@@ -29,7 +27,5 @@ module Nanoc::Helpers
 
       trail
     end
-
   end
-
 end

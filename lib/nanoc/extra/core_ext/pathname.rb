@@ -1,9 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   module PathnameExtensions
-
     def components
       components = []
       tmp = self
@@ -19,9 +17,7 @@ module Nanoc::Extra
     def include_component?(component)
       components.include?(component)
     end
-
   end
-
 end
 
 class ::Pathname

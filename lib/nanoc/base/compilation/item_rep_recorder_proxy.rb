@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Represents a fake iem representation that does not actually perform any
   # actual filtering, layouting or snapshotting, but instead keeps track of
   # what would happen if a real item representation would have been used
@@ -15,7 +14,6 @@ module Nanoc
   #
   # @api private
   class ItemRepRecorderProxy
-
     extend Forwardable
 
     def_delegators :@item_rep, :item, :name, :binary, :binary?, :compiled_content, :has_snapshot?, :raw_path, :path, :assigns, :assigns=
@@ -97,7 +95,5 @@ module Nanoc
       true
     end
     alias_method :is_proxy?, :proxy?
-
   end
-
 end

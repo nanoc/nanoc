@@ -3,11 +3,8 @@
 require 'open3'
 
 module Nanoc::Extra
-
   class Piper
-
     class Error < ::Nanoc::Errors::Generic
-
       def initialize(command, exit_code)
         @command   = command
         @exit_code = exit_code
@@ -16,7 +13,6 @@ module Nanoc::Extra
       def message
         "command exited with a nonzero status code #{@exit_code} (command: #{@command.join(' ')})"
       end
-
     end
 
     # @option [IO] :stdout ($stdout)
@@ -48,7 +44,5 @@ module Nanoc::Extra
         end
       end
     end
-
   end
-
 end

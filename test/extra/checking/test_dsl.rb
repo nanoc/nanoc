@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
-
   def test_from_file
-    with_site do |site|
+    with_site do |_site|
       File.open('Checks', 'w') { |io| io.write("check :foo do\n\nend\ndeploy_check :bar\n") }
       dsl = Nanoc::Extra::Checking::DSL.from_file('Checks')
 
@@ -14,5 +13,4 @@ class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
       assert_equal [:bar], dsl.deploy_checks
     end
   end
-
 end

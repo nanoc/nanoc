@@ -1,13 +1,11 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Stores checksums for objects in order to be able to detect whether a file
   # has changed since the last site compilation.
   #
   # @api private
   class ChecksumStore < ::Nanoc::Store
-
     # @option params [Nanoc::Site] site The site where this checksum store
     #   belongs to
     def initialize(params = {})
@@ -51,7 +49,5 @@ module Nanoc
     def data=(new_data)
       @checksums = new_data
     end
-
   end
-
 end

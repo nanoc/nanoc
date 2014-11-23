@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
-
   include Nanoc::Helpers::Tagging
 
   def test_tags_for_without_tags
@@ -17,7 +16,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc::Item.new('content', { :tags => ['foo', 'bar']}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => %w(foo bar) }, '/path/')
 
     # Check
     assert_equal(
@@ -29,7 +28,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc::Item.new('content', { :tags => []}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => [] }, '/path/')
 
     # Check
     assert_equal(
@@ -40,7 +39,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc::Item.new('content', { :tags => ['foo', 'bar']}, '/path/')
+    item = Nanoc::Item.new('content', { :tags => %w(foo bar) }, '/path/')
 
     # Check
     assert_equal(
@@ -81,5 +80,4 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
       link_for_tag('foo&bar', 'http://stoneship.org/tags&stuff/')
     )
   end
-
 end

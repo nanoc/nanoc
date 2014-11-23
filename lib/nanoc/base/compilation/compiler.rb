@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Responsible for compiling a site’s item representations.
   #
   # The compilation process makes use of notifications (see
@@ -39,7 +38,6 @@ module Nanoc
   # * `processing_ended` — indicates that the compiler has finished processing
   #   the specified object.
   class Compiler
-
     extend Nanoc::Memoization
 
     # @group Accessors
@@ -461,7 +459,5 @@ module Nanoc
         rule_memory_store
       ]
     end
-
   end
-
 end

@@ -8,9 +8,7 @@ Open an IRB shell on a context that contains @items, @layouts, @config and @site
 "
 
 module Nanoc::CLI::Commands
-
   class Shell < ::Nanoc::CLI::CommandRunner
-
     def run
       require 'pry'
 
@@ -29,9 +27,7 @@ module Nanoc::CLI::Commands
         :config  => site.config
       }
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::Shell

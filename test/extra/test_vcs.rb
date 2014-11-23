@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::VCSTest < Nanoc::TestCase
-
   def test_named
     assert_nil(Nanoc::Extra::VCS.named(:lkasjdlkfjlkasdfkj))
 
@@ -16,5 +15,4 @@ class Nanoc::Extra::VCSTest < Nanoc::TestCase
     assert_raises(NotImplementedError) { vcs.remove('x')    }
     assert_raises(NotImplementedError) { vcs.move('x', 'y') }
   end
-
 end

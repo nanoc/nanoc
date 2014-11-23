@@ -3,10 +3,8 @@
 require 'uri'
 
 module Nanoc::Extra::Checking::Checks
-
   # A check that verifies that all internal links point to a location that exists.
   class InternalLinks < ::Nanoc::Extra::Checking::Check
-
     # Starts the validator. The results will be printed to stdout.
     #
     # Internal links that match a regexp pattern in `@config[:checks][:internal_links][:exclude]` will
@@ -14,7 +12,7 @@ module Nanoc::Extra::Checking::Checks
     #
     # @return [void]
     def run
-      # TODO de-duplicate this (duplicated in external links check)
+      # TODO: de-duplicate this (duplicated in external links check)
       filenames = output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
       hrefs_with_filenames.each_pair do |href, fns|
@@ -32,7 +30,7 @@ module Nanoc::Extra::Checking::Checks
 
     def valid?(href, origin)
       # Skip hrefs that point to self
-      # FIXME this is ugly and won’t always be correct
+      # FIXME: this is ugly and won’t always be correct
       return true if href == '.'
 
       # Skip hrefs that are specified in the exclude configuration
@@ -70,7 +68,5 @@ module Nanoc::Extra::Checking::Checks
       excludes =  @site.config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(href) }
     end
-
   end
-
 end

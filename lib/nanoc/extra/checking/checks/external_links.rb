@@ -7,15 +7,13 @@ require 'timeout'
 require 'uri'
 
 module ::Nanoc::Extra::Checking::Checks
-
   # A validator that verifies that all external links point to a location that exists.
   class ExternalLinks < ::Nanoc::Extra::Checking::Check
-
     identifiers :external_links, :elinks
 
     def run
       # Find all broken external hrefs
-      # TODO de-duplicate this (duplicated in internal links check)
+      # TODO: de-duplicate this (duplicated in internal links check)
       filenames = output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :external).filenames_per_href
       results = select_invalid(hrefs_with_filenames.keys)
@@ -32,7 +30,6 @@ module ::Nanoc::Extra::Checking::Checks
     end
 
     class Result
-
       attr_reader :href
       attr_reader :explanation
 
@@ -40,11 +37,9 @@ module ::Nanoc::Extra::Checking::Checks
         @href        = href
         @explanation = explanation
       end
-
     end
 
     class ArrayEnumerator
-
       def initialize(array)
         @array = array
         @index = 0
@@ -57,7 +52,6 @@ module ::Nanoc::Extra::Checking::Checks
           return @array[@index - 1]
         end
       end
-
     end
 
     def select_invalid(hrefs)
@@ -167,7 +161,5 @@ module ::Nanoc::Extra::Checking::Checks
       end
       http.request(req)
     end
-
   end
-
 end

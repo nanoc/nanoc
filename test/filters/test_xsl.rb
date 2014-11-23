@@ -3,7 +3,6 @@
 require 'tempfile'
 
 class Nanoc::Filters::XSLTest < Nanoc::TestCase
-
   SAMPLE_XSL = <<-EOS
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -88,10 +87,10 @@ EOS
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Item.new(SAMPLE_XML_IN,
-                             { },
+                             {},
                              '/content/')
       layout = Nanoc::Layout.new(SAMPLE_XSL,
-                                 { },
+                                 {},
                                  '/layout/')
 
       # Create an instance of the filter
@@ -112,10 +111,10 @@ EOS
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Item.new(SAMPLE_XML_IN_WITH_PARAMS,
-                             { },
+                             {},
                              '/content/')
       layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_PARAMS,
-                                 { },
+                                 {},
                                  '/layout/')
 
       # Create an instance of the filter
@@ -137,10 +136,10 @@ EOS
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL,
-                             { },
+                             {},
                              '/content/')
       layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL,
-                                 { },
+                                 {},
                                  '/layout/')
 
       # Create an instance of the filter
@@ -156,5 +155,4 @@ EOS
       assert_match SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
     end
   end
-
 end

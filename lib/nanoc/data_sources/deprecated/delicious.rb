@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::DataSources
-
   # @deprecated Fetch data from online data sources manually instead
   class Delicious < Nanoc::DataSource
-
     def items
       @items ||= begin
         require 'json'
@@ -36,7 +34,5 @@ module Nanoc::DataSources
         end
       end
     end
-
   end
-
 end

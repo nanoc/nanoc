@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class CodeRay < Nanoc::Filter
-
     requires 'coderay'
 
     # @deprecated Use the `:colorize_syntax` filter instead.
@@ -16,6 +15,5 @@ module Nanoc::Filters
       # Get result
       ::CodeRay.scan(content, params[:language]).html
     end
-
   end
 end

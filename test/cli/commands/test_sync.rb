@@ -1,5 +1,4 @@
 class Nanoc::CLI::Commands::SyncTest < Nanoc::TestCase
-
   def test_run
     with_site do
       File.open('lib/foo_data_source.rb', 'w') do |io|
@@ -25,5 +24,4 @@ class Nanoc::CLI::Commands::SyncTest < Nanoc::TestCase
       assert_equal File.read('foo_source_data.yaml'), 'sync: true'
     end
   end
-
 end

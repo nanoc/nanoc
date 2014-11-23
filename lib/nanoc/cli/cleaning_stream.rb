@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc::CLI
-
   # An output stream that passes output through stream cleaners. This can be
   # used to strip ANSI color sequences, for instance.
   class CleaningStream
-
     # @param [IO, StringIO] stream The stream to wrap
     def initialize(stream)
       @stream = stream
@@ -122,14 +120,12 @@ module Nanoc::CLI
     protected
 
     def _nanoc_clean(s)
-      @stream_cleaners.reduce(s) { |m, c| c.clean(m) }
+      @stream_cleaners.reduce(s) { |a, e| e.clean(a) }
     end
 
     def _nanoc_swallow_broken_pipe_errors_while
       yield
     rescue Errno::EPIPE
     end
-
   end
-
 end

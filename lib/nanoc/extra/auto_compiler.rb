@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   # A web server that will automatically compile items as they are requested.
   # It also serves static files such as stylesheets and images.
   class AutoCompiler
-
     # @return [Nanoc::Site] The site this autocompiler belongs to
     attr_reader :site
 
@@ -41,7 +39,7 @@ module Nanoc::Extra
         reps = site.items.map { |i| i.reps }.flatten
         rep = reps.find do |r|
           r.path == path ||
-            r.raw_path == site.config[:output_dir] + path
+          r.raw_path == site.config[:output_dir] + path
         end
 
         # Recompile
@@ -97,7 +95,5 @@ module Nanoc::Extra
     def stack
       site.compiler.stack
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
-
   def test_run
     with_site do |site|
       # Create files
@@ -77,5 +76,4 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       refute check.send(:valid?, 'stuff/wrong%20foo', 'output/origin')
     end
   end
-
 end

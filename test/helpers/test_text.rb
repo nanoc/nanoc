@@ -1,14 +1,13 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::TextTest < Nanoc::TestCase
-
   include Nanoc::Helpers::Text
 
   def test_excerpt_length
     assert_equal('...',                         excerptize('Foo bar baz quux meow woof', :length => 3))
     assert_equal('Foo ...',                     excerptize('Foo bar baz quux meow woof', :length => 7))
     assert_equal('Foo bar baz quux meow woof',  excerptize('Foo bar baz quux meow woof', :length => 26))
-    assert_equal('Foo bar baz quux meow woof',  excerptize('Foo bar baz quux meow woof', :length => 8623785))
+    assert_equal('Foo bar baz quux meow woof',  excerptize('Foo bar baz quux meow woof', :length => 8_623_785))
   end
 
   def test_excerpt_omission
@@ -16,7 +15,6 @@ class Nanoc::Helpers::TextTest < Nanoc::TestCase
   end
 
   def test_strip_html
-    # TODO implement
+    # TODO: implement
   end
-
 end

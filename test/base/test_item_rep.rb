@@ -1,16 +1,15 @@
 # encoding: utf-8
 
 class Nanoc::ItemRepTest < Nanoc::TestCase
-
   def test_created_modified_compiled
-    # TODO implement
+    # TODO: implement
   end
 
   def test_compiled_content_with_only_last_available
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :last => 'last content' } }
@@ -24,7 +23,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
@@ -38,7 +37,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
@@ -52,7 +51,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now-500
+      :binary => false, :mtime => Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
@@ -210,7 +209,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Write once
     item_rep.write
-    a_long_time_ago = Time.now-1_000_000
+    a_long_time_ago = Time.now - 1_000_000
     File.utime(a_long_time_ago, a_long_time_ago, item_rep.raw_path)
 
     # Write again
@@ -248,13 +247,15 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, :foo)
-    def rep.assigns; {}; end
+    def rep.assigns
+      {}
+    end
 
     # Create fake filter
-    def rep.filter_named(name)
+    def rep.filter_named(_name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :text => :binary
-        def run(content, params = {})
+        def run(content, _params = {})
           File.open(output_filename, 'w') { |io| io.write(content) }
         end
       end
@@ -276,13 +277,15 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Create rep
     rep = Nanoc::ItemRep.new(item, :foo)
-    def rep.assigns; {}; end
+    def rep.assigns
+      {}
+    end
 
     # Create fake filter
-    def rep.filter_named(name)
+    def rep.filter_named(_name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary
-        def run(content, params = {})
+        def run(content, _params = {})
           File.open(output_filename, 'w') { |io| io.write(content) }
         end
       end
@@ -340,7 +343,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     Class.new(::Nanoc::Filter) do
       type :binary => :text
       identifier :binary_to_text
-      def run(content, params = {})
+      def run(content, _params = {})
         content + ' textified'
       end
     end
@@ -364,10 +367,10 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     assert rep.binary?
 
-    def rep.filter_named(name)
+    def rep.filter_named(_name)
       Class.new(::Nanoc::Filter) do
         type :binary => :text
-        def run(content, params = {})
+        def run(_content, _params = {})
           'Some textual content'
         end
       end
@@ -375,10 +378,10 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     rep.filter(:binary_to_text)
     assert !rep.binary?
 
-    def rep.filter_named(name)
+    def rep.filter_named(_name)
       Class.new(::Nanoc::Filter) do
         type :text
-        def run(content, params = {})
+        def run(_content, _params = {})
           'Some textual content'
         end
       end
@@ -400,10 +403,10 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     create_binary_filter
 
     assert rep.binary?
-    def rep.filter_named(name)
+    def rep.filter_named(_name)
       @filter ||= Class.new(::Nanoc::Filter) do
         type :binary => :text
-        def run(content, params = {})
+        def run(_content, _params = {})
           'Some textual content'
         end
       end
@@ -415,7 +418,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_new_content_should_be_frozen
     filter_class = Class.new(::Nanoc::Filter) do
-      def run(content, params = {})
+      def run(content, _params = {})
         content.gsub!('foo', 'moo')
         content
       end
@@ -424,7 +427,9 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Item.new('foo bar', {}, '/foo/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.instance_eval { @filter_class = filter_class }
-    def rep.filter_named(name); @filter_class; end
+    def rep.filter_named(_name)
+      @filter_class
+    end
 
     assert_raises_frozen_error do
       rep.filter(:whatever)
@@ -433,7 +438,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_filter_should_freeze_content
     filter_class = Class.new(::Nanoc::Filter) do
-      def run(content, params = {})
+      def run(content, _params = {})
         content.gsub!('foo', 'moo')
         content
       end
@@ -442,7 +447,9 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Item.new('foo bar', {}, '/foo/')
     rep = Nanoc::ItemRep.new(item, :default)
     rep.instance_eval { @filter_class = filter_class }
-    def rep.filter_named(name); @filter_class; end
+    def rep.filter_named(_name)
+      @filter_class
+    end
 
     assert_raises_frozen_error do
       rep.filter(:erb)
@@ -516,7 +523,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Write
     notified = false
-    Nanoc::NotificationCenter.on(:rep_written, self) do |rep, raw_path, is_created, is_modified|
+    Nanoc::NotificationCenter.on(:rep_written, self) do |_rep, _raw_path, is_created, is_modified|
       notified = true
       assert is_created
       assert is_modified
@@ -546,7 +553,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     # Write
     notified = false
-    Nanoc::NotificationCenter.on(:rep_written, self) do |rep, raw_path, is_created, is_modified|
+    Nanoc::NotificationCenter.on(:rep_written, self) do |_rep, _raw_path, is_created, is_modified|
       notified = true
       refute is_created
       assert is_modified
@@ -568,7 +575,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def mock_and_stub(params)
     m = mock
     params.each do |method, return_value|
-      m.stubs(method.to_sym).returns( return_value )
+      m.stubs(method.to_sym).returns(return_value)
     end
     m
   end
@@ -580,7 +587,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def create_textual_filter
     f = create_filter(:text)
     f.class_eval do
-      def run(content, params = {})
+      def run(_content, _params = {})
         ''
       end
     end
@@ -590,7 +597,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def create_binary_filter
     f = create_filter(:binary)
     f.class_eval do
-      def run(content, params = {})
+      def run(content, _params = {})
         File.open(output_filename, 'w') { |io| io.write(content) }
       end
     end
@@ -603,5 +610,4 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     Nanoc::Filter.register filter_klass, "#{type}_filter".to_sym
     filter_klass
   end
-
 end

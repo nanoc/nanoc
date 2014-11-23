@@ -8,9 +8,7 @@ Start the watcher. When a change is detected, the site will be recompiled.
 EOS
 
 module Nanoc::CLI::Commands
-
   class Watch < ::Nanoc::CLI::CommandRunner
-
     def run
       warn 'WARNING: The `watch` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
 
@@ -44,7 +42,7 @@ module Nanoc::CLI::Commands
         begin
           site.compile
 
-          # TODO include icon (--image misc/success-icon.png)
+          # TODO: include icon (--image misc/success-icon.png)
           notify_on_compilation_success = watcher_config.fetch(:notify_on_compilation_success) { true }
           if notify_on_compilation_success
             @notifier.notify('Compilation complete')
@@ -53,7 +51,7 @@ module Nanoc::CLI::Commands
           time_spent = ((Time.now - start) * 1000.0).round
           puts "done in #{format '%is %ims', *(time_spent.divmod(1000))}"
         rescue Exception => e
-          # TODO include icon (--image misc/error-icon.png)
+          # TODO: include icon (--image misc/error-icon.png)
           notify_on_compilation_failure = watcher_config.fetch(:notify_on_compilation_failure) { true }
           if notify_on_compilation_failure
             @notifier.notify('Compilation failed')
@@ -97,7 +95,6 @@ module Nanoc::CLI::Commands
 
     # Allows sending user notifications in a cross-platform way.
     class Notifier
-
       # A list of commandline tool names that can be used to send notifications
       TOOLS = %w( growlnotify notify-send ) unless defined? TOOLS
 
@@ -172,11 +169,8 @@ module Nanoc::CLI::Commands
       def on_windows?
         Nanoc.on_windows?
       end
-
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::Watch

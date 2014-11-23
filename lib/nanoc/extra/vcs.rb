@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   # A very simple representation of a version control system (VCS) that
   # abstracts the add, remove and move operations. It does not commit. This
   # class is primarily used by data sources that store data as flat files on
@@ -10,7 +9,6 @@ module Nanoc::Extra
   # @abstract Subclass and override {#add}, {#remove} and {#move} to implement
   #   a custom VCS.
   class VCS
-
     extend Nanoc::PluginRegistry::PluginMethods
 
     # Adds the file with the given filename to the working copy.
@@ -60,7 +58,5 @@ module Nanoc::Extra
         'this data source to be used.'
       )
     end
-
   end
-
 end

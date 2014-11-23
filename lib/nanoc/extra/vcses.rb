@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra::VCSes
-
   autoload 'Bazaar',     'nanoc/extra/vcses/bazaar'
   autoload 'Dummy',      'nanoc/extra/vcses/dummy'
   autoload 'Git',        'nanoc/extra/vcses/git'
@@ -13,5 +12,4 @@ module Nanoc::Extra::VCSes
   Nanoc::Extra::VCS.register '::Nanoc::Extra::VCSes::Git',        :git
   Nanoc::Extra::VCS.register '::Nanoc::Extra::VCSes::Mercurial',  :mercurial, :hg
   Nanoc::Extra::VCS.register '::Nanoc::Extra::VCSes::Subversion', :subversion, :svn
-
 end

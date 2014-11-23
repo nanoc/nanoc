@@ -3,9 +3,7 @@
 require 'singleton'
 
 module Nanoc::Extra
-
   class JRubyNokogiriWarner
-
     include Singleton
 
     TEXT = <<EOS
@@ -42,7 +40,5 @@ EOS
       $stderr.puts TEXT
       @warned = true
     end
-
   end
-
 end

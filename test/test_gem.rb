@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::GemTest < Nanoc::TestCase
-
   def setup
     super
     FileUtils.cd(@orig_wd)
@@ -30,5 +29,4 @@ class Nanoc::GemTest < Nanoc::TestCase
   ensure
     Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
   end
-
 end

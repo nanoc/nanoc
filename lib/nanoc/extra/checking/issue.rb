@@ -1,9 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
-
   class Issue
-
     attr_reader :description
     attr_reader :subject
     attr_reader :check_class
@@ -13,7 +11,5 @@ module Nanoc::Extra::Checking
       @subject       = subject
       @check_class = check_class
     end
-
   end
-
 end

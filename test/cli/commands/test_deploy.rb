@@ -1,10 +1,9 @@
 # encoding: utf-8
 
 class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
-
   def test_deploy
     skip_unless_have_command 'rsync'
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
@@ -23,7 +22,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_with_dry_run
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
@@ -42,7 +41,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_with_list_without_config
-    with_site do |site|
+    with_site do |_site|
       FileUtils.mkdir_p('output')
       File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
@@ -58,7 +57,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_with_list
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
@@ -81,7 +80,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_with_list_deployers
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
@@ -105,7 +104,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_without_kind
     skip_unless_have_command 'rsync'
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
@@ -127,7 +126,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   end
 
   def test_deploy_without_target_without_default
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  public:\n"
@@ -137,7 +136,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
       FileUtils.mkdir_p('output')
       File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
-       capturing_stdio do
+      capturing_stdio do
         err = assert_raises Nanoc::Errors::GenericTrivial do
           Nanoc::CLI.run %w( deploy )
         end
@@ -148,7 +147,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
 
   def test_deploy_without_target_with_default
     skip_unless_have_command 'rsync'
-    with_site do |site|
+    with_site do |_site|
       File.open('nanoc.yaml', 'w') do |io|
         io.write "deploy:\n"
         io.write "  default:\n"
@@ -166,5 +165,4 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
       assert File.file?('mydestination/blah.html')
     end
   end
-
 end

@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Rainpress < Nanoc::Filter
-
     requires 'rainpress'
 
     # Runs the content through [Rainpress](http://code.google.com/p/rainpress/).
@@ -14,6 +13,5 @@ module Nanoc::Filters
     def run(content, params = {})
       ::Rainpress.compress(content, params)
     end
-
   end
 end

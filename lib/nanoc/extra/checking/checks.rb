@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking::Checks
-
   autoload 'CSS',           'nanoc/extra/checking/checks/css'
   autoload 'ExternalLinks', 'nanoc/extra/checking/checks/external_links'
   autoload 'HTML',          'nanoc/extra/checking/checks/html'
@@ -15,5 +14,4 @@ module Nanoc::Extra::Checking::Checks
   Nanoc::Extra::Checking::Check.register '::Nanoc::Extra::Checking::Checks::InternalLinks', :internal_links
   Nanoc::Extra::Checking::Check.register '::Nanoc::Extra::Checking::Checks::InternalLinks', :ilinks
   Nanoc::Extra::Checking::Check.register '::Nanoc::Extra::Checking::Checks::Stale',         :stale
-
 end

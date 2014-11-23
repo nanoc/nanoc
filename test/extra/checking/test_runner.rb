@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
-
   def test_run_specific
     with_site do |site|
       File.open('output/blah', 'w') { |io| io.write('I am stale! Haha!') }
@@ -41,5 +40,4 @@ class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
       assert ios[:stderr].empty?
     end
   end
-
 end

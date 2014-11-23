@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DataSourceTest < Nanoc::TestCase
-
   def test_loading
     # Create data source
     data_source = Nanoc::DataSource.new(nil, nil, nil, nil)
@@ -40,5 +39,4 @@ class Nanoc::DataSourceTest < Nanoc::TestCase
     assert_raises(NotImplementedError) { data_source.create_item(nil, nil, nil) }
     assert_raises(NotImplementedError) { data_source.create_layout(nil, nil, nil) }
   end
-
 end

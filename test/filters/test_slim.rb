@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::SlimTest < Nanoc::TestCase
-
   def test_filter
     if_have 'slim' do
       # Create filter
@@ -29,5 +28,4 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
       assert_equal('<p>The rabbit is on the branch.</p>', result)
     end
   end
-
 end

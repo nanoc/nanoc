@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::LessTest < Nanoc::TestCase
-
   def test_filter
     if_have 'less' do
       # Create item
@@ -121,5 +120,4 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       assert_match(/^\.foo\{bar:a\}\n?\.bar\{foo:b\}/, result)
     end
   end
-
 end

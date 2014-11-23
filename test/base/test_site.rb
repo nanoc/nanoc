@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::SiteTest < Nanoc::TestCase
-
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Errors::GenericTrivial) do
       Nanoc::Site.new('.')
@@ -74,7 +73,7 @@ EOF
     end
 
     error = assert_raises(Nanoc::Errors::GenericTrivial) do
-      site = Nanoc::Site.new('.')
+      Nanoc::Site.new('.')
     end
     assert_equal(
       "Could not find parent configuration file 'foo/foo.yaml'",
@@ -98,7 +97,7 @@ EOF
     end
 
     error = assert_raises(Nanoc::Errors::GenericTrivial) do
-      site = Nanoc::Site.new('.')
+      Nanoc::Site.new('.')
     end
     assert_equal(
       "Cycle detected. Could not use parent configuration file '../nanoc.yaml'",
@@ -213,7 +212,6 @@ EOF
       end
     end
   end
-
 end
 
 describe 'Nanoc::Site#initialize' do

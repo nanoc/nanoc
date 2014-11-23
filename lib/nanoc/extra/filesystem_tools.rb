@@ -1,17 +1,14 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   # Contains useful functions for managing the filesystem.
   #
   # @api private
   module FilesystemTools
-
     # Error that is raised when too many symlink indirections are encountered.
     #
     # @api private
     class MaxSymlinkDepthExceededError < ::Nanoc::Errors::GenericTrivial
-
       # @return [String] The last filename that was attempted to be
       #   resolved before giving up
       attr_reader :filename
@@ -22,7 +19,6 @@ module Nanoc::Extra
         @filename = filename
         super("Too many indirections while resolving symlinks. I gave up after finding out #{filename} was yet another symlink. Sorry!")
       end
-
     end
 
     # Error that is raised when a file of an unknown type is encountered
@@ -30,7 +26,6 @@ module Nanoc::Extra
     #
     # @api private
     class UnsupportedFileTypeError < ::Nanoc::Errors::GenericTrivial
-
       # @return [String] The filename of the file whose type is not supported
       attr_reader :filename
 
@@ -40,7 +35,6 @@ module Nanoc::Extra
         @filename = filename
         super("The file at #{filename} is of an unsupported type (expected file, directory or link, but it is #{File.ftype(filename)}")
       end
-
     end
 
     # Returns all files in the given directory and directories below it,
@@ -118,7 +112,5 @@ module Nanoc::Extra
       end
     end
     module_function :resolve_symlink
-
   end
-
 end

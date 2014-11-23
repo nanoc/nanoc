@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   # @since 3.2.0
   class Redcarpet < Nanoc::Filter
-
     requires 'redcarpet'
 
     # Runs the content through [Redcarpet](https://github.com/vmg/redcarpet).
@@ -81,7 +79,5 @@ module Nanoc::Filters
         end
       end
     end
-
   end
-
 end

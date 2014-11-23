@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::RuleContextTest < Nanoc::TestCase
-
   def test_objects
     # Mock everything
     config = mock
@@ -59,5 +58,4 @@ class Nanoc::RuleContextTest < Nanoc::TestCase
     rep.layout 'foo'
     rep.snapshot 'awesome'
   end
-
 end
