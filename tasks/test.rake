@@ -12,11 +12,11 @@ def run_tests(dir_glob)
   test_files = Dir["#{dir_glob}*_spec.rb"] + Dir["#{dir_glob}test_*.rb"]
   test_files.each { |f| require f }
 
-  exit MiniTest::Unit.new.run(ENV['ARGS'].split)
+  res = MiniTest::Unit.new.run(ENV['ARGS'].split)
+  exit(res) if res != 0
 end
 
 namespace :test do
-
   # test:all
   desc 'Run all tests'
   task :all do
@@ -30,8 +30,7 @@ namespace :test do
       run_tests "test/#{dir}/**/"
     end
   end
-
 end
 
-desc 'Alias for test:all'
-task :test => [:'test:all']
+desc 'Alias for test:all + rubocop'
+task :test => [:'test:all', :rubocop]
