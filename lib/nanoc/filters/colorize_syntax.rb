@@ -337,7 +337,7 @@ module Nanoc::Filters
     #
     # Before:
     #
-    #   <pre><code class="language-ruby"><pre><code class="highlight">
+    #   <pre><code class="language-ruby"><pre class="highlight"><code>
     #
     # After:
     #
@@ -347,11 +347,15 @@ module Nanoc::Filters
 
       code1 = element.xpath('code').first
       return if code1.nil?
-      code2 = code1.xpath('pre/code').first
+
+      pre = code1.xpath('pre').first
+      return if pre.nil?
+
+      code2 = pre.xpath('code').first
       return if code2.nil?
 
       code1.inner_html = code2.inner_html
-      code1['class'] = [code1['class'], code2['class']].compact.join(' ')
+      code1['class'] = [code1['class'], pre['class']].compact.join(' ')
     end
 
     protected
