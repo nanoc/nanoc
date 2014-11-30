@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class ColorizeSyntax < Nanoc::Filter
-
     requires 'nokogiri', 'stringio', 'open3'
 
     # The default colorizer to use for a language if the colorizer for that
@@ -279,7 +278,7 @@ module Nanoc::Filters
         if SIMON_HIGHLIGHT_OPT_MAP[key]
           cmd << SIMON_HIGHLIGHT_OPT_MAP[key]
         else
-          # TODO allow passing other options
+          # TODO: allow passing other options
           case key
           when :style
             cmd << '--style' << params[:style]
@@ -389,6 +388,5 @@ module Nanoc::Filters
       piper = Nanoc::Extra::Piper.new(:stdout => StringIO.new, :stderr => StringIO.new)
       piper.run(cmd, nil)
     end
-
   end
 end

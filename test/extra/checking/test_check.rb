@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Checking::CheckTest < Nanoc::TestCase
-
   def test_output_filenames
     with_site do |site|
       check = Nanoc::Extra::Checking::Check.new(site)
@@ -20,5 +19,4 @@ class Nanoc::Extra::Checking::CheckTest < Nanoc::TestCase
       end
     end
   end
-
 end

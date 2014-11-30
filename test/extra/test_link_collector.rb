@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
-
   def test_all
     # Create dummy data
     File.open('file-a.html', 'w') do |io|
@@ -106,5 +105,4 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     assert_includes hrefs, '../stuff'
     assert_includes hrefs, '/stuff'
   end
-
 end

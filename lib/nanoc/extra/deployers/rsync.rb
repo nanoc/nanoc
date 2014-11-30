@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Deployers
-
   # A deployer that deploys a site using rsync.
   #
   # The configuration has should include a `:dst` value, a string containing
@@ -20,7 +19,6 @@ module Nanoc::Extra::Deployers
   #       dst: "ectype:sites/stoneship-staging/public"
   #       options: [ "-glpPrtvz" ]
   class Rsync < ::Nanoc::Extra::Deployer
-
     # Default rsync options
     DEFAULT_OPTIONS = [
       '--group',
@@ -63,7 +61,5 @@ module Nanoc::Extra::Deployers
       piper = Nanoc::Extra::Piper.new(:stdout => $stdout, :stderr => $stderr)
       piper.run(cmd, nil)
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
-
   def test_find
     if_have 'redcarpet' do
       refute Nanoc::Filter.named(:redcarpet).nil?
@@ -106,5 +105,4 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       assert_match(output_expected, output_actual)
     end
   end
-
 end

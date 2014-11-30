@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Represents the site configuration.
   class Configuration < ::Hash
-
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
@@ -18,7 +16,5 @@ module Nanoc
     def reference
       :config
     end
-
   end
-
 end

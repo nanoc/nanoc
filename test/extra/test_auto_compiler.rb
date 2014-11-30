@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
-
   def test_handle_request_with_item_rep_with_index_filename
     if_have 'mime/types', 'rack' do
       # Create site
@@ -77,8 +76,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         @expected_path_info = 'somefile.txt'
         @actual_path_info   = env['PATH_INFO']
       end
-      def file_server.expected_path_info; @expected_path_info; end
-      def file_server.actual_path_info; @actual_path_info; end
+      def file_server.expected_path_info
+        @expected_path_info
+      end
+      def file_server.actual_path_info
+        @actual_path_info
+      end
 
       # Create site
       site = mock
@@ -111,8 +114,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         @expected_path_info = '/foo/bar/index.html'
         @actual_path_info   = env['PATH_INFO']
       end
-      def file_server.expected_path_info; @expected_path_info; end
-      def file_server.actual_path_info; @actual_path_info; end
+      def file_server.expected_path_info
+        @expected_path_info
+      end
+      def file_server.actual_path_info
+        @actual_path_info
+      end
 
       # Create site
       site = mock
@@ -145,8 +152,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         @expected_path_info = 'foo/bar/'
         @actual_path_info   = env['PATH_INFO']
       end
-      def file_server.expected_path_info; @expected_path_info; end
-      def file_server.actual_path_info; @actual_path_info; end
+      def file_server.expected_path_info
+        @expected_path_info
+      end
+      def file_server.actual_path_info
+        @actual_path_info
+      end
 
       # Create site
       site = mock
@@ -179,8 +190,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         @expected_path_info = 'foo/bar'
         @actual_path_info   = env['PATH_INFO']
       end
-      def file_server.expected_path_info; @expected_path_info; end
-      def file_server.actual_path_info; @actual_path_info; end
+      def file_server.expected_path_info
+        @expected_path_info
+      end
+      def file_server.actual_path_info
+        @actual_path_info
+      end
 
       # Create site
       site = mock
@@ -213,8 +228,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         @expected_path_info = 'foo/bar'
         @actual_path_info   = env['PATH_INFO']
       end
-      def file_server.expected_path_info; @expected_path_info; end
-      def file_server.actual_path_info; @actual_path_info; end
+      def file_server.expected_path_info
+        @expected_path_info
+      end
+      def file_server.actual_path_info
+        @actual_path_info
+      end
 
       # Create site
       site = mock
@@ -243,8 +262,12 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         @expected_path_info = 'four-oh-four.txt'
         @actual_path_info   = env['PATH_INFO']
       end
-      def file_server.expected_path_info; @expected_path_info; end
-      def file_server.actual_path_info; @actual_path_info; end
+      def file_server.expected_path_info
+        @expected_path_info
+      end
+      def file_server.actual_path_info
+        @actual_path_info
+      end
 
       # Create site
       site = mock
@@ -370,10 +393,10 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         File.open('nanoc.yaml', 'w') do |io|
           io.write 'value: Foo'
         end
-        File.utime(Time.now+5, Time.now+5, 'nanoc.yaml')
+        File.utime(Time.now + 5, Time.now + 5, 'nanoc.yaml')
 
         # Check
-        status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
+        _status, _headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
         body.each do |b|
           assert_match(/The Grand Value of Configuration is Foo!/, b)
         end
@@ -382,10 +405,10 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
         File.open('nanoc.yaml', 'w') do |io|
           io.write 'value: Bar'
         end
-        File.utime(Time.now+5, Time.now+5, 'nanoc.yaml')
+        File.utime(Time.now + 5, Time.now + 5, 'nanoc.yaml')
 
         # Check
-        status, headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
+        _status, _headers, body = autocompiler.call('REQUEST_METHOD' => 'GET', 'PATH_INFO' => '/')
         body.each do |b|
           assert_match(/The Grand Value of Configuration is Bar!/, b)
         end
@@ -411,5 +434,4 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       assert_match("File not found: /software\n", result[2][0])
     end
   end
-
 end

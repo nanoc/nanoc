@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::KramdownTest < Nanoc::TestCase
-
   def test_filter
     if_have 'kramdown' do
       # Create filter
@@ -12,5 +11,4 @@ class Nanoc::Filters::KramdownTest < Nanoc::TestCase
       assert_equal("<p>This is <em>so</em> <strong>cool</strong>!</p>\n", result)
     end
   end
-
 end

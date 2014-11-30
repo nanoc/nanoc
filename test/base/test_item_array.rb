@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::ItemArrayTest < Nanoc::TestCase
-
   def setup
     super
 
@@ -237,7 +236,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_equal 'Item 1', @items['/new/1/'].raw_content
   end
 
-  if Array.new.respond_to?(:keep_if)
+  if [].respond_to?(:keep_if)
     def test_keep_if
       assert_equal @two, @items[1]
       assert_equal @two, @items['/two/']
@@ -297,7 +296,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_equal mona, @items['/mona/']
   end
 
-  if Array.new.respond_to?(:select!)
+  if [].respond_to?(:select!)
     def test_select_bang
       assert_equal @two, @items[1]
       assert_equal @two, @items['/two/']
@@ -338,5 +337,4 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_equal @two, @items[2]
     assert_equal @two, @items['/two/']
   end
-
 end

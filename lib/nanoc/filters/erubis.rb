@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Erubis < Nanoc::Filter
-
     requires 'erubis'
 
     # The same as `::Erubis::Eruby` but adds `_erbout` as an alias for the
@@ -29,6 +28,5 @@ module Nanoc::Filters
       # Get result
       ErubisWithErbout.new(content, :filename => filename).result(assigns_binding)
     end
-
   end
 end

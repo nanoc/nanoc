@@ -12,4 +12,3 @@ describe 'Date' do
   end
 
 end
-

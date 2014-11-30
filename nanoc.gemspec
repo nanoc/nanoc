@@ -14,15 +14,16 @@ Gem::Specification.new do |s|
   s.email   = 'denis.defreyne@stoneship.org'
   s.license = 'MIT'
 
-  s.files              = Dir['[A-Z]*'] +
-                         Dir['doc/yardoc_{templates,handlers}/**/*'] +
-                         Dir['{bin,lib,tasks,test}/**/*'] +
-                         [ 'nanoc.gemspec' ]
-  s.executables        = [ 'nanoc' ]
-  s.require_paths      = [ 'lib' ]
+  s.files =
+    Dir['[A-Z]*'] +
+    Dir['doc/yardoc_{templates,handlers}/**/*'] +
+    Dir['{bin,lib,tasks,test}/**/*'] +
+    ['nanoc.gemspec']
+  s.executables        = ['nanoc']
+  s.require_paths      = ['lib']
 
-  s.rdoc_options     = [ '--main', 'README.md' ]
-  s.extra_rdoc_files = [ 'ChangeLog', 'LICENSE', 'README.md', 'NEWS.md' ]
+  s.rdoc_options     = ['--main', 'README.md']
+  s.extra_rdoc_files = ['ChangeLog', 'LICENSE', 'README.md', 'NEWS.md']
 
   s.add_runtime_dependency('cri', '~> 2.3')
 

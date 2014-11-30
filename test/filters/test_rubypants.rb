@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::RubyPantsTest < Nanoc::TestCase
-
   def test_filter
     if_have 'rubypants' do
       # Get filter
@@ -12,5 +11,4 @@ class Nanoc::Filters::RubyPantsTest < Nanoc::TestCase
       assert_equal('Wait&#8212;what?', result)
     end
   end
-
 end

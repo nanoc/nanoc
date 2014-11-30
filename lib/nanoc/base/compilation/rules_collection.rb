@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Keeps track of the rules in a site.
   #
   # @api private
   class RulesCollection
-
     # @return [String] the contents of the Rules file
     #
     # @api private
@@ -253,7 +251,5 @@ module Nanoc
     def rule_memory_calculator
       @compiler.rule_memory_calculator
     end
-
   end
-
 end

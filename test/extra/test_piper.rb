@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::PiperTest < Nanoc::TestCase
-
   def test_basic
     stdout = StringIO.new
     stderr = StringIO.new
@@ -44,5 +43,4 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
       piper.run(cmd, nil)
     end
   end
-
 end

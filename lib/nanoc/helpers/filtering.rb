@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Provides functionality for filtering parts of an item or a layout.
   module Filtering
-
     require 'nanoc/helpers/capturing'
     include Nanoc::Helpers::Capturing
 
@@ -46,7 +44,5 @@ module Nanoc::Helpers
       buffer = eval('_erbout', block.binding)
       buffer << filtered_data
     end
-
   end
-
 end

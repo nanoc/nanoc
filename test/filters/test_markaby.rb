@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::MarkabyTest < Nanoc::TestCase
-
   def test_filter
     # Don’t run this test on 1.9.x, because it breaks and it annoys me
     if RUBY_VERSION >= '1.9'
@@ -18,5 +17,4 @@ class Nanoc::Filters::MarkabyTest < Nanoc::TestCase
       assert_equal('<html></html>', result)
     end
   end
-
 end

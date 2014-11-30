@@ -1,13 +1,11 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   # Represents a deployer, an object that allows uploading the compiled site
   # to a specific (remote) location.
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Deployer
-
     extend Nanoc::PluginRegistry::PluginMethods
 
     # @return [String] The path to the directory that contains the files to
@@ -41,7 +39,5 @@ module Nanoc::Extra
     def run
       raise NotImplementedError.new('Nanoc::Extra::Deployer subclasses must implement #run')
     end
-
   end
-
 end

@@ -11,9 +11,7 @@ flag :L, :list,   'list all checks'
 flag :d, :deploy, 'run checks for deployment'
 
 module Nanoc::CLI::Commands
-
   class Check < ::Nanoc::CLI::CommandRunner
-
     def run
       validate_options_and_arguments
       require_site
@@ -47,9 +45,7 @@ module Nanoc::CLI::Commands
           'nothing to do (pass either --all, --deploy or --list or a list of checks)'
       end
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::Check

@@ -1,8 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
-
-
   def test_filter_html_with_double_quotes
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
@@ -325,7 +323,6 @@ EOS
     assert_match(/<param (name="movie" )?content="..\/..\/example"/, actual_content)
   end
 
-
   def test_filter_implicit
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
@@ -569,7 +566,7 @@ XML
 
       actual_content = filter.setup_and_run(raw_content, {
         :type => :xml,
-        :namespaces => {:ex => 'http://example.org'},
+        :namespaces => { :ex => 'http://example.org' },
         :select => ['ex:a/@href']
       })
 
@@ -683,7 +680,6 @@ XML
     end
   end
 
-
   def test_filter_fragment_html_with_comments
     if_have 'nokogiri' do
       # Create filter with mock item
@@ -737,5 +733,4 @@ XML
     actual_content = filter.setup_and_run(raw_content, :type => :html)
     assert_equal(expected_content, actual_content)
   end
-
 end

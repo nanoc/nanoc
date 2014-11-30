@@ -1,9 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Tasks
-
   class Clean
-
     def initialize(site)
       @site = site
     end
@@ -23,7 +21,5 @@ module Nanoc::Tasks
         end
       end.flatten
     end
-
   end
-
 end

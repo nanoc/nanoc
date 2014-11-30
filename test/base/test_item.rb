@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::ItemTest < Nanoc::TestCase
-
   def test_initialize_with_attributes_with_string_keys
     item = Nanoc::Item.new('foo', { 'abc' => 'xyz' }, '/foo/')
 
@@ -49,7 +48,9 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_compiled_content_with_default_rep_and_default_snapshot
     # Mock rep
     rep = Object.new
-    def rep.name; :default; end
+    def rep.name
+      :default
+    end
     def rep.compiled_content(params)
       "content at #{params[:snapshot].inspect}"
     end
@@ -65,7 +66,9 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_compiled_content_with_custom_rep_and_default_snapshot
     # Mock reps
     rep = Object.new
-    def rep.name; :foo; end
+    def rep.name
+      :foo
+    end
     def rep.compiled_content(params)
       "content at #{params[:snapshot].inspect}"
     end
@@ -81,7 +84,9 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_compiled_content_with_default_rep_and_custom_snapshot
     # Mock reps
     rep = Object.new
-    def rep.name; :default; end
+    def rep.name
+      :default
+    end
     def rep.compiled_content(params)
       "content at #{params[:snapshot].inspect}"
     end
@@ -134,7 +139,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
   end
 
   def test_freeze_should_disallow_changes
-    item = Nanoc::Item.new('foo', { :a => { :b => 123 }}, '/foo/')
+    item = Nanoc::Item.new('foo', { :a => { :b => 123 } }, '/foo/')
     item.freeze
 
     assert_raises_frozen_error do
@@ -149,14 +154,13 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_dump_and_load
     item = Nanoc::Item.new(
       'foobar',
-      { :a => { :b => 123 }},
+      { :a => { :b => 123 } },
       '/foo/')
 
     item = Marshal.load(Marshal.dump(item))
 
     assert_equal '/foo/', item.identifier
     assert_equal 'foobar', item.raw_content
-    assert_equal({ :a => { :b => 123 }}, item.attributes)
+    assert_equal({ :a => { :b => 123 } }, item.attributes)
   end
-
 end

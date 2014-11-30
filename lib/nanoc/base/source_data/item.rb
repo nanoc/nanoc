@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Represents a compileable item in a site. It has content and attributes, as
   # well as an identifier (which starts and ends with a slash). It can also
   # store the modification time to speed up compilation.
   class Item
-
     extend Nanoc::Memoization
 
     # @return [Hash] This item's attributes
@@ -172,7 +170,7 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
       # Get captured content (hax)
-      # TODO [in nanoc 4.0] remove me
+      # TODO: [in nanoc 4.0] remove me
       if key.to_s =~ /^content_for_(.*)$/
         @@_content_for_warning_issued ||= false
         @@_capturing_helper_included ||= false
@@ -295,7 +293,5 @@ module Nanoc
     def mtime
       self[:mtime]
     end
-
   end
-
 end

@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Contains functions for linking to items and item representations.
   module LinkTo
-
     require 'nanoc/helpers/html_escape'
     include Nanoc::Helpers::HTMLEscape
 
@@ -154,7 +152,5 @@ module Nanoc::Helpers
       # Done
       relative_path
     end
-
   end
-
 end

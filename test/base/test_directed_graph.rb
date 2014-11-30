@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DirectedGraphTest < Nanoc::TestCase
-
   def test_direct_predecessors
     graph = Nanoc::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
@@ -63,7 +62,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
 
   def test_add_edge
     graph = Nanoc::DirectedGraph.new([1, 2, 3])
-    
+
     assert_equal [], graph.successors_of(1)
     assert_equal [], graph.predecessors_of(2)
 
@@ -84,7 +83,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
 
   def test_delete_edge
     graph = Nanoc::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1,2)
+    graph.add_edge(1, 2)
 
     assert_equal [2], graph.successors_of(1)
     assert_equal [1], graph.predecessors_of(2)
@@ -285,5 +284,4 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
     YARD.parse(LIB_DIR + '/nanoc/base/directed_graph.rb')
     assert_examples_correct 'Nanoc::DirectedGraph'
   end
-
 end

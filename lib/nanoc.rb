@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # @return [String] A string containing information about this nanoc version
   #   and its environment (Ruby engine and version, Rubygems version if any).
   def self.version_information
@@ -17,7 +16,6 @@ module Nanoc
   def self.on_windows?
     RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
   end
-
 end
 
 Nanoc3 = Nanoc

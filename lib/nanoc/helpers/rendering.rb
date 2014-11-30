@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Provides functionality for rendering layouts as partials.
   module Rendering
-
     include Nanoc::Helpers::Capturing
 
     # Renders the given layout. The given layout will be run through the first
@@ -134,7 +132,5 @@ module Nanoc::Helpers
         Nanoc::NotificationCenter.post(:processing_ended, layout)
       end
     end
-
   end
-
 end

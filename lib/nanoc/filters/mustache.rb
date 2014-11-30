@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   # @since 3.2.0
   class Mustache < Nanoc::Filter
-
     requires 'mustache'
 
     # Runs the content through
@@ -18,7 +16,5 @@ module Nanoc::Filters
       context = item.attributes.merge({ :yield => assigns[:content] })
       ::Mustache.render(content, context)
     end
-
   end
-
 end

@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Less < Nanoc::Filter
-
     requires 'less'
 
     # Runs the content through [LESS](http://lesscss.org/).
@@ -48,6 +47,5 @@ module Nanoc::Filters
       parser = ::Less::Parser.new(:paths => paths)
       parser.parse(content).to_css params
     end
-
   end
 end

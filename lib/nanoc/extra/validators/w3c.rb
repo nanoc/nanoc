@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Validators
-
   # @deprecated Use the Checking API or the `check` command instead
   class W3C
-
     def initialize(dir, types)
       @dir   = dir
       @types = types
@@ -21,7 +19,5 @@ module Nanoc::Extra::Validators
 
       Nanoc::CLI.run(['check', args].flatten)
     end
-
   end
-
 end

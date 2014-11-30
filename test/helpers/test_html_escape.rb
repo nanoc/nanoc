@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::HTMLEscapeTest < Nanoc::TestCase
-
   include Nanoc::Helpers::HTMLEscape
 
   def test_html_escape_with_string
@@ -26,5 +25,4 @@ class Nanoc::Helpers::HTMLEscapeTest < Nanoc::TestCase
       h
     end
   end
-
 end

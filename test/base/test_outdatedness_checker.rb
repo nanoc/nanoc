@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
-
   def test_not_outdated
     # Compile once
     with_site(:name => 'foo') do |site|
@@ -29,7 +28,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     end
 
     # Delete checksums
-    with_site(:name => 'foo') do |site|
+    with_site(:name => 'foo') do |_site|
       FileUtils.rm('tmp/checksums')
     end
 
@@ -105,7 +104,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     with_site(:name => 'foo') do |site|
-      # FIXME ugly fugly hack
+      # FIXME: ugly fugly hack
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
@@ -137,7 +136,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     with_site(:name => 'foo') do |site|
-      # FIXME ugly fugly hack
+      # FIXME: ugly fugly hack
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
@@ -172,7 +171,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     with_site(:name => 'foo') do |site|
-      # FIXME ugly fugly hack
+      # FIXME: ugly fugly hack
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
@@ -204,7 +203,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     with_site(:name => 'foo') do |site|
-      # FIXME ugly fugly hack
+      # FIXME: ugly fugly hack
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
@@ -238,7 +237,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     with_site(:name => 'foo') do |site|
-      # FIXME ugly fugly hack
+      # FIXME: ugly fugly hack
       site.compiler.load
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
@@ -248,7 +247,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     end
   end
 
-  # TODO make sure outdatedness of non-outdated items is correct
+  # TODO: make sure outdatedness of non-outdated items is correct
 
   def test_outdated_if_code_snippets_outdated
     # Compile once
@@ -317,7 +316,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
   def test_outdated_if_relevant_rule_modified
     # Create site
-    with_site(:name => 'foo') do |site|
+    with_site(:name => 'foo') do |_site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('Rules', 'w') do |io|
         io.write("compile '/' do\n")
@@ -360,7 +359,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
   def test_items_in_rules_should_not_cause_outdatedness
     # Create site
-    with_site(:name => 'foo') do |site|
+    with_site(:name => 'foo') do |_site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('Rules', 'w') do |io|
         io.write("compile '/' do\n")
@@ -391,7 +390,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
   def test_non_serializable_parameters_in_rules_should_be_allowed
     # Create site
-    with_site(:name => 'foo') do |site|
+    with_site(:name => 'foo') do |_site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
       File.open('Rules', 'w') do |io|
         io.write("compile '/' do\n")
@@ -421,5 +420,4 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
       end
     end
   end
-
 end

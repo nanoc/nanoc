@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
-
   include Nanoc::Helpers::XMLSitemap
 
   def teardown
@@ -119,7 +118,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @site = Nanoc::Site.new({ :base_url => 'http://example.com' })
 
       # Build sitemap
-      res = xml_sitemap(:rep_select => lambda { |rep| rep.name == :one_a } )
+      res = xml_sitemap(:rep_select => lambda { |rep| rep.name == :one_a })
 
       # Check
       doc = Nokogiri::XML(res)
@@ -181,5 +180,4 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     item.reps << rep
     rep
   end
-
 end

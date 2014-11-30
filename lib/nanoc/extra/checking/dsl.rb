@@ -1,9 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
-
   class DSL
-
     attr_reader :deploy_checks
 
     def self.from_file(filename)
@@ -25,7 +23,5 @@ module Nanoc::Extra::Checking
     def deploy_check(*identifiers)
       identifiers.each { |i| @deploy_checks << i }
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class ::Sass::Importers::Filesystem
-
   alias_method :_orig_find, :_find
 
   def _find(dir, name, options)
@@ -19,5 +18,4 @@ class ::Sass::Importers::Filesystem
     # Call original _find
     _orig_find(dir, name, options)
   end
-
 end

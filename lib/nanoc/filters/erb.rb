@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class ERB < Nanoc::Filter
-
     requires 'erb'
 
     # Runs the content through [ERB](http://ruby-doc.org/stdlib/libdoc/erb/rdoc/classes/ERB.html).
@@ -33,6 +32,5 @@ module Nanoc::Filters
       erb.filename = filename
       erb.result(assigns_binding)
     end
-
   end
 end

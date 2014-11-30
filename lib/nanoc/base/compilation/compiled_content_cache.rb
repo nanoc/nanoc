@@ -1,13 +1,11 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Represents a cache than can be used to store already compiled content,
   # to prevent it from being needlessly recompiled.
   #
   # @api private
   class CompiledContentCache < ::Nanoc::Store
-
     def initialize
       super('tmp/compiled_content', 1)
 
@@ -56,7 +54,5 @@ module Nanoc
     def data=(new_data)
       @cache = new_data
     end
-
   end
-
 end

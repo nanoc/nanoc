@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Markaby < Nanoc::Filter
-
     requires 'markaby'
 
     # Runs the content through [Markaby](http://markaby.github.io/).
@@ -15,6 +14,5 @@ module Nanoc::Filters
       # Get result
       ::Markaby::Builder.new(assigns).instance_eval(content).to_s
     end
-
   end
 end

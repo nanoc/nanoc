@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
-
   def test_filter_javascript
     if_have 'yuicompressor' do
       filter = ::Nanoc::Filters::YUICompressor.new
@@ -38,5 +37,4 @@ class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
       assert_match '*{margin:0}', result
     end
   end
-
 end

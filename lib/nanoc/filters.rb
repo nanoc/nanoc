@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   autoload 'AsciiDoc',        'nanoc/filters/asciidoc'
   autoload 'BlueCloth',       'nanoc/filters/bluecloth'
   autoload 'CodeRay',         'nanoc/filters/coderay'
@@ -59,5 +58,4 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::UglifyJS',        :uglify_js
   Nanoc::Filter.register '::Nanoc::Filters::XSL',             :xsl
   Nanoc::Filter.register '::Nanoc::Filters::YUICompressor',   :yui_compressor
-
 end

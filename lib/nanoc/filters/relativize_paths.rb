@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class RelativizePaths < Nanoc::Filter
-
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
@@ -37,7 +36,7 @@ module Nanoc::Filters
       # Filter
       case params[:type]
       when :css
-        # FIXME parse CSS the proper way using csspool or something
+        # FIXME: parse CSS the proper way using csspool or something
         content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
           'url(' + $1 + relative_path_to($2) + $1 + ')'
         end
@@ -53,7 +52,7 @@ module Nanoc::Filters
           klass = ::Nokogiri::XML
         when :xhtml
           klass = ::Nokogiri::XML
-          # FIXME cleanup because it is ugly
+          # FIXME: cleanup because it is ugly
           # this cleans the XHTML namespace to process fragments and full
           # documents in the same way. At least, Nokogiri adds this namespace
           # if detects the `html` element.
@@ -98,6 +97,5 @@ module Nanoc::Filters
     def path_is_relativizable?(s)
       s[0, 1] == '/'
     end
-
   end
 end

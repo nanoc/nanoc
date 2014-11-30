@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   # @since 3.2.0
   class Slim < Nanoc::Filter
-
     requires 'slim'
 
     # Runs the content through [Slim](http://slim-lang.com/).
@@ -24,7 +22,5 @@ module Nanoc::Filters
 
       ::Slim::Template.new(params) { content }.render(context) { assigns[:content] }
     end
-
   end
-
 end

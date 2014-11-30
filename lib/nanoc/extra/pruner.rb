@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   # Responsible for finding and deleting files in the site’s output directory
   # that are not managed by nanoc.
   class Pruner
-
     # @return [Nanoc::Site] The site this pruner belongs to
     attr_reader :site
 
@@ -84,7 +82,5 @@ module Nanoc::Extra
         Dir.rmdir(dir)
       end
     end
-
   end
-
 end

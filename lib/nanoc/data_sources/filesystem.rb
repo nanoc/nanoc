@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::DataSources
-
   # Provides functionality common across all filesystem data sources.
   module Filesystem
-
     # The VCS that will be called when adding, deleting and moving files. If
     # no VCS has been set, or if the VCS has been set to `nil`, a dummy VCS
     # will be returned.
@@ -107,7 +105,7 @@ module Nanoc::DataSources
           :extension        => content_filename ? ext_of(content_filename)[1..-1] : nil,
           # WARNING :file is deprecated; please create a File object manually
           # using the :content_filename or :meta_filename attributes.
-          # TODO [in nanoc 4.0] remove me
+          # TODO: [in nanoc 4.0] remove me
           :file             => content_filename ? Nanoc::Extra::FileProxy.new(content_filename) : nil
         }.merge(meta)
 
@@ -153,7 +151,8 @@ module Nanoc::DataSources
     #     'content/qux' => [ nil,    'html' ]
     #   }
     def all_split_files_in(dir_name)
-      grouped_filenames = all_files_in(dir_name)
+      grouped_filenames =
+        all_files_in(dir_name)
         .reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
         .group_by { |fn| basename_of(fn) }
 
@@ -318,7 +317,5 @@ module Nanoc::DataSources
     def raise_encoding_error(filename, encoding)
       raise RuntimeError.new("Could not read #{filename} because the file is not valid #{encoding}.")
     end
-
   end
-
 end

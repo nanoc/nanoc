@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::TypogrubyTest < Nanoc::TestCase
-
   def test_filter
     if_have 'typogruby' do
       # Get filter
@@ -14,6 +13,4 @@ class Nanoc::Filters::TypogrubyTest < Nanoc::TestCase
       assert_equal(b, result)
     end
   end
-
 end
-

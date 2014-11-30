@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class BlueCloth < Nanoc::Filter
-
     requires 'bluecloth'
 
     # Runs the content through [BlueCloth](http://deveiate.org/projects/BlueCloth).
@@ -14,6 +13,5 @@ module Nanoc::Filters
     def run(content, _params = {})
       ::BlueCloth.new(content).to_html
     end
-
   end
 end

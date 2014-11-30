@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Provides a context and a binding for use in filters such as the ERB and
   # Haml ones.
   class Context
-
     # Creates a new context based off the contents of the hash.
     #
     # Each pair in the hash will be converted to an instance variable and an
@@ -42,6 +40,5 @@ module Nanoc
     def get_binding
       binding
     end
-
   end
 end

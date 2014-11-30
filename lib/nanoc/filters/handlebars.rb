@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   # @since 3.4.0
   class Handlebars < Nanoc::Filter
-
     requires 'handlebars'
 
     # Runs the content through
@@ -28,7 +26,5 @@ module Nanoc::Filters
       template = handlebars.compile(content)
       template.call(context)
     end
-
   end
-
 end

@@ -1,9 +1,7 @@
 # encoding: utf-8
 
 module ::Nanoc::Extra::Checking::Checks
-
   class HTML < ::Nanoc::Extra::Checking::Check
-
     identifier :html
 
     def run
@@ -17,7 +15,5 @@ module ::Nanoc::Extra::Checking::Checks
         end
       end
     end
-
   end
-
 end

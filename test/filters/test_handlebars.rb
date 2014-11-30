@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
-
   def test_filter
     if_have 'handlebars' do
       # Create data
@@ -54,5 +53,4 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
       assert_equal('Max Payne says: No Payne No Gayne.', result)
     end
   end
-
 end

@@ -7,7 +7,7 @@ describe 'Pathname#checksum' do
       # Create file
       FileUtils.mkdir_p('tmp')
       File.open('tmp/myfile', 'w') { |io| io.write('') }
-      timestamp = Time.at(1234569)
+      timestamp = Time.at(1_234_569)
       File.utime(timestamp, timestamp, 'tmp/myfile')
 
       # Create checksum
@@ -23,7 +23,7 @@ describe 'Pathname#checksum' do
       # Create file
       FileUtils.mkdir_p('tmp')
       File.open('tmp/myfile', 'w') { |io| io.write('abc') }
-      timestamp = Time.at(1234569)
+      timestamp = Time.at(1_234_569)
       File.utime(timestamp, timestamp, 'tmp/myfile')
 
       # Create checksum

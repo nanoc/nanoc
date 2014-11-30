@@ -9,9 +9,7 @@ configuration will be used.
 EOS
 
 module Nanoc::CLI::Commands
-
   class CreateLayout < ::Nanoc::CLI::CommandRunner
-
     def run
       # Check arguments
       if arguments.length != 1
@@ -64,9 +62,7 @@ module Nanoc::CLI::Commands
 
       puts "A layout has been created at #{identifier}."
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::CreateLayout

@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Maruku < Nanoc::Filter
-
     requires 'maruku'
 
     # Runs the content through [Maruku](https://github.com/bhollis/maruku/).
@@ -15,6 +14,5 @@ module Nanoc::Filters
       # Get result
       ::Maruku.new(content, params).to_html
     end
-
   end
 end

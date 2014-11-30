@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc::CLI
-
   # A command runner subclass for nanoc commands that adds nanoc-specific
   # convenience methods and error handling.
   class CommandRunner < ::Cri::CommandRunner
-
     # @see http://rubydoc.info/gems/cri/Cri/CommandRunner#call-instance_method
     #
     # @return [void]
@@ -104,10 +102,8 @@ module Nanoc::CLI
     def stack
       (site && site.compiler.stack) || []
     end
-
   end
 
   # @deprecated Use {Nanoc::CLI::CommandRunner} instead
   Command = CommandRunner
-
 end

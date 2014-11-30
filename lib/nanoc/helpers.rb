@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   autoload 'Blogging',    'nanoc/helpers/blogging'
   autoload 'Breadcrumbs', 'nanoc/helpers/breadcrumbs'
   autoload 'Capturing',   'nanoc/helpers/capturing'
@@ -12,5 +11,4 @@ module Nanoc::Helpers
   autoload 'Tagging',     'nanoc/helpers/tagging'
   autoload 'Text',        'nanoc/helpers/text'
   autoload 'XMLSitemap',  'nanoc/helpers/xml_sitemap'
-
 end

@@ -1,11 +1,9 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Represents a layout in a nanoc site. It has content, attributes, an
   # identifier and a modification time (to speed up compilation).
   class Layout
-
     extend Nanoc::Memoization
 
     # @return [String] The raw content of this layout
@@ -122,7 +120,5 @@ module Nanoc
     def mtime
       self[:mtime]
     end
-
   end
-
 end

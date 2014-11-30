@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::PathnameExtensions
-
   # Calculates the checksum for the file referenced to by this pathname. Any
   # change to the file contents will result in a different checksum.
   #
@@ -11,7 +10,6 @@ module Nanoc::PathnameExtensions
   def checksum
     Nanoc::Checksummer.calc(self)
   end
-
 end
 
 class Pathname

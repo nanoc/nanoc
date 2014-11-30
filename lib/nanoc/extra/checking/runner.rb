@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
-
   # Runner is reponsible for running issue checks.
   #
   # @api private
   class Runner
-
     CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb']
 
     # @param [Nanoc::Site] site The nanoc site this runner is for
@@ -124,7 +122,7 @@ module Nanoc::Extra::Checking
         checks << check
         issues.merge(check.issues)
 
-        # TODO report progress
+        # TODO: report progress
 
         puts check.issues.empty? ? 'ok'.green : 'error'.red
       end
@@ -148,5 +146,4 @@ module Nanoc::Extra::Checking
       end
     end
   end
-
 end

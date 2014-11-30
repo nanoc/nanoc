@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class UglifyJS < Nanoc::Filter
-
     requires 'uglifier'
 
     # Runs the content through [UglifyJS](https://github.com/mishoo/UglifyJS2/).
@@ -17,6 +16,5 @@ module Nanoc::Filters
       # Add filename to load path
       Uglifier.new(params).compile(content)
     end
-
   end
 end

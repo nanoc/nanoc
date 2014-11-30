@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   # @since 3.2.0
   class AsciiDoc < Nanoc::Filter
-
     # Runs the content through [AsciiDoc](http://www.methods.co.nz/asciidoc/).
     # This method takes no options.
     #
@@ -18,7 +16,5 @@ module Nanoc::Filters
       piper.run(%w( asciidoc -o - - ), content)
       stdout.string
     end
-
   end
-
 end

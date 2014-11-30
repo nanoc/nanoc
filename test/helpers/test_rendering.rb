@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
-
   include Nanoc::Helpers::Rendering
 
   def test_render
@@ -38,7 +37,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', nil\n")
       end
 
-      File.open('layouts/foo.erb', 'w').close()
+      File.open('layouts/foo.erb', 'w').close
 
       assert_raises(Nanoc::Errors::CannotDetermineFilter) do
         render '/foo/'
@@ -54,7 +53,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write("layout '/foo/', :asdf\n")
       end
 
-      File.open('layouts/foo.erb', 'w').close()
+      File.open('layouts/foo.erb', 'w').close
 
       assert_raises(Nanoc::Errors::UnknownFilter) do
         render '/foo/'
@@ -83,5 +82,4 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       assert_equal '', result
     end
   end
-
 end

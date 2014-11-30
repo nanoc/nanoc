@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Haml < Nanoc::Filter
-
     requires 'haml'
 
     # Runs the content through [Haml](http://haml-lang.com/).
@@ -22,6 +21,5 @@ module Nanoc::Filters
       proc = assigns[:content] ? lambda { assigns[:content] } : nil
       ::Haml::Engine.new(content, options).render(context, assigns, &proc)
     end
-
   end
 end

@@ -10,6 +10,13 @@ RegexpLiteral:
 RescueException:
   Enabled: false
 
+# This is used in tests, to verify the effect of state-changing functions.
+Style/GlobalVars:
+  Enabled: false
+
+ClassAndModuleChildren:
+  Enabled: false
+
 
 
 # ----- DISABLED (hard) -----
@@ -56,9 +63,25 @@ FileName:
 AccessorMethodName:
   Enabled: false
 
+# This trips up on a piece of code that handles URI fragments.
+LeadingCommentSpace:
+  Enabled: false
+
+# We use _erbout.
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false
+
 
 
 # ----- DISABLED (opinionated) -----
+
+# This can lead to massive indentation.
+Style/AlignHash:
+  Enabled: false
+
+# It’s difficult to rework existing code to handle this well.
+Metrics/AbcSize:
+  Enabled: false
 
 # Parameters are indented one soft tab instead.
 AlignParameters:
@@ -67,10 +90,6 @@ AlignParameters:
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
 # there’s no point in enforcing ASCII comments.
 AsciiComments:
-  Enabled: false
-
-# Personal convention is to use “memo” and an appropriate name for the element.
-SingleLineBlockParams:
   Enabled: false
 
 # Mostly long hardcoded strings which I’d rather not break up (yet).
@@ -93,10 +112,6 @@ ClassLength:
 PerceivedComplexity:
   Enabled: false
 
-# Personal convention is to use colon-less annotations.
-CommentAnnotation:
-  Enabled: false
-
 # Other tools exist for checking code quality. This cop is probably good to
 # have, but nanoc 3.x will not get any major refactorings anymore anyway.
 #
@@ -108,25 +123,12 @@ CyclomaticComplexity:
 Documentation:
   Enabled: false
 
-# Personal preference is to have symmetric blank lines inside module and class
-# definitions.
-EmptyLinesAroundBody:
-  Enabled: false
-
-# No personal preference over how to format strings.
-FormatString:
-  Enabled: false
-
 # nanoc suppresses exceptions for valid reasons in a few cases.
 HandleExceptions:
   Enabled: false
 
 # if/unless at the end of the line makes it too easy to oversee.
 IfUnlessModifier:
-  Enabled: false
-
-# Inconsistent AccessModifierIndentation:EnforcedStyle set to `outdent`
-IndentationWidth:
   Enabled: false
 
 # This causes the hashes to be ridiculously indented.
@@ -154,10 +156,6 @@ SignalException:
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
 TrivialAccessors:
-  Enabled: false
-
-# Used to be personal preference. Can remove soon.
-ClassAndModuleChildren:
   Enabled: false
 
 # Trailing commas improve diffs. One could argue that diff algorithms should be

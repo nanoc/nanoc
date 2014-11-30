@@ -1,5 +1,19 @@
 # nanoc news
 
+## 3.7.4 (2014-11-23)
+
+Enhancements:
+
+* Made `check` command fail when output directory is missing (#472) [Mike Pennisi]
+* Made external links check timeouts start small and grow (#483) [Michal Papis]
+* Made code and API adhere much more closely to the Ruby style guide (#476)
+
+Fixes:
+
+* Fixed potential “parent directory is world writable” error (#465, #474)
+* Fixed retrying requests in the external link checker (#483) [Michal Papis]
+* Fixed issue with data sources not being unloaded (#491) [Michal Papis]
+
 ## 3.7.3 (2014-08-31)
 
 Fixes:
