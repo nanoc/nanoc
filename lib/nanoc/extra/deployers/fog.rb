@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Deployers
-
   # A deployer that deploys a site using [fog](https://github.com/geemus/fog).
   #
   # @example A deployment configuration with public and staging configurations
@@ -18,7 +17,6 @@ module Nanoc::Extra::Deployers
   #       local_root: ~/myCloud
   #       bucket:     nanoc-site-staging
   class Fog < ::Nanoc::Extra::Deployer
-
     # @see Nanoc::Extra::Deployer#run
     def run
       require 'fog'
@@ -95,7 +93,5 @@ module Nanoc::Extra::Deployers
     def error(msg)
       raise RuntimeError.new(msg)
     end
-
   end
-
 end

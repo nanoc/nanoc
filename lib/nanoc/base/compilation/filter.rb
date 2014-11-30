@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Nanoc::Filter is responsible for filtering items. It is the superclass
   # for all textual filters.
   #
@@ -27,7 +26,6 @@ module Nanoc
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Context
-
     TMP_BINARY_ITEMS_DIR = 'binary_items'
 
     # A hash containing variables that will be made available during
@@ -39,7 +37,6 @@ module Nanoc
     extend Nanoc::PluginRegistry::PluginMethods
 
     class << self
-
       # Sets the new type for the filter. The type can be `:binary` (default)
       # or `:text`. The given argument can either be a symbol indicating both
       # “from” and “to” types, or a hash where the only key is the “from” type
@@ -100,7 +97,6 @@ module Nanoc
           true
         end
       end
-
     end
 
     # Creates a new filter that has access to the given assigns.
@@ -186,7 +182,5 @@ module Nanoc
         raise Nanoc::Errors::UnmetDependency.new(rep) if rep
       end
     end
-
   end
-
 end

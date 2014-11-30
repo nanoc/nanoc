@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Contains functionality for building XML sitemaps that will be crawled by
   # search engines. See the [Sitemaps protocol site](http://www.sitemaps.org)
   # for details.
   module XMLSitemap
-
     # Builds an XML sitemap and returns it.
     #
     # The following attributes can optionally be set on items to change the
@@ -76,7 +74,5 @@ module Nanoc::Helpers
       # Return sitemap
       buffer
     end
-
   end
-
 end

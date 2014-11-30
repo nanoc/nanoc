@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
-
   include Nanoc::Helpers::LinkTo
 
   def test_link_to_with_path
@@ -54,7 +53,9 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
   def test_link_to_to_nil_item_or_item_rep
     obj = Object.new
-    def obj.path; nil; end
+    def obj.path
+      nil
+    end
 
     assert_raises RuntimeError do
       link_to('Some Text', obj)
@@ -150,7 +151,6 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
       relative_path_to(other_item_rep)
     )
   end
-
 
   def test_relative_path_to_item
     # Mock self
@@ -250,5 +250,4 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Run
     assert_examples_correct 'Nanoc::Helpers::LinkTo#relative_path_to'
   end
-
 end

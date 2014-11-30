@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::MarukuTest < Nanoc::TestCase
-
   def test_filter
     if_have 'maruku' do
       # Create filter
@@ -12,5 +11,4 @@ class Nanoc::Filters::MarukuTest < Nanoc::TestCase
       assert_equal('<p>This is <em>so</em> <em>cool</em>!</p>', result.strip)
     end
   end
-
 end

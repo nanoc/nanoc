@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Sass < Nanoc::Filter
-
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
     # Runs the content through [Sass](http://sass-lang.com/).
@@ -26,6 +25,5 @@ module Nanoc::Filters
           Pathname.new(i.raw_filename).realpath == Pathname.new(filename).realpath
       end
     end
-
   end
 end

@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Pandoc < Nanoc::Filter
-
     requires 'pandoc-ruby'
 
     # Runs the content through [Pandoc](http://johnmacfarlane.net/pandoc/)
@@ -15,6 +14,5 @@ module Nanoc::Filters
     def run(content, *params)
       PandocRuby.convert(content, *params)
     end
-
   end
 end

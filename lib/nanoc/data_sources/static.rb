@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::DataSources
-
   # The static data source provides items from a single directory. Unlike the
   # filesystem data sources, static provides no additional item metadata. In
   # addition, all items are treated as 'binary', regardless of their extension
@@ -26,7 +25,6 @@ module Nanoc::DataSources
   # exclude them from the Blogging helper's atom feed generator, among other
   # things.
   class Static < Nanoc::DataSource
-
     identifier :static
 
     def items
@@ -58,7 +56,5 @@ module Nanoc::DataSources
     def all_files_in(dir_name)
       Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
     end
-
   end
-
 end

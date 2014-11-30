@@ -1,17 +1,16 @@
 # encoding: utf-8
 
 class Nanoc::CompilerDSLTest < Nanoc::TestCase
-
   def test_compile
-    # TODO implement
+    # TODO: implement
   end
 
   def test_route
-    # TODO implement
+    # TODO: implement
   end
 
   def test_layout
-    # TODO implement
+    # TODO: implement
   end
 
   def test_preprocess_twice
@@ -381,5 +380,4 @@ EOS
     compiler_dsl.instance_eval { $venetian = @config[:venetian] }
     assert_equal 'snares', $venetian
   end
-
 end

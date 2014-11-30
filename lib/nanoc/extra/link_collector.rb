@@ -3,9 +3,7 @@
 require 'set'
 
 module ::Nanoc::Extra
-
   class LinkCollector
-
     def initialize(filenames, mode = nil)
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
 
@@ -54,7 +52,5 @@ module ::Nanoc::Extra
 
       hrefs_in_file.select(&@filter)
     end
-
   end
-
 end

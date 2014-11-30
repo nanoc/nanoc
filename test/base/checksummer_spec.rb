@@ -43,7 +43,7 @@ describe Nanoc::Checksummer do
     end
 
     it 'should checksum non-serializable hashes' do
-      subject.calc({ a: ->{} }).must_match(CHECKSUM_REGEX)
+      subject.calc({ a: -> {} }).must_match(CHECKSUM_REGEX)
     end
 
   end
@@ -53,8 +53,8 @@ describe Nanoc::Checksummer do
     let(:file)            { Tempfile.new('foo') }
     let(:filename)        { file.path }
     let(:pathname)        { Pathname.new(filename) }
-    let(:atime)           { 1234567890 }
-    let(:mtime)           { 1234567890 }
+    let(:atime)           { 1_234_567_890 }
+    let(:mtime)           { 1_234_567_890 }
     let(:data)            { 'stuffs' }
     let(:normal_checksum) { 'THy7Y28oroov/KvPxT6wcMnXr/s=' }
 
@@ -95,7 +95,7 @@ describe Nanoc::Checksummer do
 
     describe 'if the mtime changes' do
 
-      let(:mtime) { 1333333333 }
+      let(:mtime) { 1_333_333_333 }
 
       it 'should have a different checksum' do
         subject.calc(pathname).must_match(CHECKSUM_REGEX)

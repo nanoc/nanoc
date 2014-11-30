@@ -16,7 +16,6 @@ if Nanoc.on_windows?
 end
 
 module Nanoc::CLI
-
   module Commands
   end
 
@@ -28,7 +27,7 @@ module Nanoc::CLI
   autoload 'ErrorHandler',        'nanoc/cli/error_handler'
 
   # Deprecated; use CommandRunner instead
-  # TODO [in nanoc 4.0] remove me
+  # TODO: [in nanoc 4.0] remove me
   autoload 'Command',             'nanoc/cli/command_runner'
 
   # @return [Boolean] true if debug output is enabled, false if not
@@ -78,7 +77,7 @@ module Nanoc::CLI
   #
   # @return [void]
   def self.after_setup(&block)
-    # TODO decide what should happen if the CLI is already set up
+    # TODO: decide what should happen if the CLI is already set up
     add_after_setup_proc(block)
   end
 
@@ -224,5 +223,4 @@ module Nanoc::CLI
     @after_setup_procs ||= []
     @after_setup_procs << proc
   end
-
 end

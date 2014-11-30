@@ -9,9 +9,7 @@ current site, along with dependency information.
 EOS
 
 module Nanoc::CLI::Commands
-
   class ShowData < ::Nanoc::CLI::CommandRunner
-
     def run
       load_site
 
@@ -89,7 +87,7 @@ module Nanoc::CLI::Commands
         end
         length = rep.raw_paths.keys.map { |s| s.to_s.length }.max
         rep.raw_paths.each do |snapshot_name, raw_path|
-          puts "  [ %-#{length}s ] %s" % [snapshot_name, raw_path]
+          puts format("  [ %-#{length}s ] %s", snapshot_name, raw_path)
         end
       end
     end
@@ -124,9 +122,7 @@ module Nanoc::CLI::Commands
         puts
       end
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::ShowData

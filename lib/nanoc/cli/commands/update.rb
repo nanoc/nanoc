@@ -16,9 +16,7 @@ required :c, :vcs, 'select the VCS to use'
 flag :y, :yes, 'update the data without warning'
 
 module Nanoc::CLI::Commands
-
   class Update < ::Nanoc::CLI::CommandRunner
-
     def run
       # Check arguments
       if arguments.size != 0
@@ -61,9 +59,7 @@ module Nanoc::CLI::Commands
         data_source.update
       end
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::Update

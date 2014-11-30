@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::CodeRayTest < Nanoc::TestCase
-
   def test_filter_without_language
     if_have 'coderay' do
       # Get filter
@@ -38,5 +37,4 @@ class Nanoc::Filters::CodeRayTest < Nanoc::TestCase
       assert_equal code, result
     end
   end
-
 end

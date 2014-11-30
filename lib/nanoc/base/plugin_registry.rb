@@ -1,19 +1,16 @@
 # encoding: utf-8
 
 module Nanoc
-
   # The class responsible for keeping track of all loaded plugins, such as
   # filters ({Nanoc::Filter}), data sources ({Nanoc::DataSource}) and VCSes
   # ({Nanoc::Extra::VCS}).
   class PluginRegistry
-
     extend Nanoc::Memoization
 
     # A module that contains class methods for plugins. It provides functions
     # for setting identifiers, registering plugins and finding plugins. Plugin
     # classes should extend this module.
     module PluginMethods
-
       # @overload identifiers(*identifiers)
       #
       #   Sets the identifiers for this plugin.
@@ -86,7 +83,6 @@ module Nanoc
       def named(name)
         Nanoc::Plugin.find(self, name)
       end
-
     end
 
     # Returns the shared {PluginRegistry} instance, creating it if none exists
@@ -218,10 +214,8 @@ module Nanoc
     def name_for_class(klass)
       klass.to_s.sub(/^(::)?/, '::')
     end
-
   end
 
   # @deprecated Use {Nanoc::PluginRegistry.instance} instead
   Plugin = PluginRegistry.instance
-
 end

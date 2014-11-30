@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Acts as an array, but allows fetching items using identifiers, e.g. `@items['/blah/']`.
   class ItemArray
-
     include Enumerable
 
     extend Forwardable
@@ -65,7 +63,5 @@ module Nanoc
       end
       @mapping.freeze
     end
-
   end
-
 end

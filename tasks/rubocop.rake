@@ -6,5 +6,5 @@ begin
     task.patterns = ['lib/**/*.rb']
   end
 rescue LoadError
-  warn "Could not load RuboCop. RuboCop rake tasks will be unavailable."
+  warn 'Could not load RuboCop. RuboCop rake tasks will be unavailable.'
 end

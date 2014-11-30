@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Tasks::CleanTest < Nanoc::TestCase
-
   def test_simple
     if_have 'w3c_validators' do
       # Stub items
@@ -61,5 +60,4 @@ class Nanoc::Tasks::CleanTest < Nanoc::TestCase
       clean.run
     end
   end
-
 end

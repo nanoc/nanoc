@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Provides functionality for “capturing” content in one place and reusing
   # this content elsewhere.
   #
@@ -35,10 +34,8 @@ module Nanoc::Helpers
   #     <%= @item[:content_for_summary] || '(no summary)' %>
   #   </div>
   module Capturing
-
     # @api private
     class CapturesStore
-
       def initialize
         @store = {}
       end
@@ -52,11 +49,9 @@ module Nanoc::Helpers
         @store[item.identifier] ||= {}
         @store[item.identifier][name]
       end
-
     end
 
     class ::Nanoc::Site
-
       # @api private
       def captures_store
         @captures_store ||= CapturesStore.new
@@ -67,7 +62,6 @@ module Nanoc::Helpers
         require 'set'
         @captures_store_compiled_items ||= Set.new
       end
-
     end
 
     # @overload content_for(name, &block)
@@ -127,7 +121,7 @@ module Nanoc::Helpers
           # This is an extremely ugly hack to get the compiler to recompile the
           # item from which we use content. For this, we need to manually edit
           # the content attribute to reset it. :(
-          # FIXME clean this up
+          # FIXME: clean this up
           unless @site.captures_store_compiled_items.include? item
             @site.captures_store_compiled_items << item
             item.forced_outdated = true
@@ -169,7 +163,5 @@ module Nanoc::Helpers
       # Done.
       erbout_addition
     end
-
   end
-
 end

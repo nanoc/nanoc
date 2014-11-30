@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Extra::VCSes
-
   # @see Nanoc::Extra::VCS
   class Subversion < Nanoc::Extra::VCS
-
     # @see Nanoc::Extra::VCS#add
     def add(filename)
       system('svn', 'add', filename)
@@ -19,7 +17,5 @@ module Nanoc::Extra::VCSes
     def move(src, dst)
       system('svn', 'mv', src, dst)
     end
-
   end
-
 end

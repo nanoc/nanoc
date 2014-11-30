@@ -3,11 +3,9 @@
 require 'singleton'
 
 module Nanoc::CLI
-
   # Nanoc::CLI::Logger is a singleton class responsible for generating
   # feedback in the terminal.
   class Logger
-
     # Maps actions (`:create`, `:update`, `:identical`, `:skip` and `:delete`)
     # onto their ANSI color codes.
     ACTION_COLORS = {
@@ -43,13 +41,13 @@ module Nanoc::CLI
     def file(level, action, name, duration = nil)
       log(
         level,
-        '%s%12s%s  %s%s' % [
+        format('%s%12s%s  %s%s',
           ACTION_COLORS[action.to_sym],
           action,
           "\e[0m",
-          duration.nil? ? '' : '[%2.2fs]  ' % [duration],
+          duration.nil? ? '' : format('[%2.2fs]  ', duration),
           name
-        ]
+        )
       )
     end
 
@@ -69,7 +67,5 @@ module Nanoc::CLI
       # Log when level permits it
       io.puts(message) if @level == :low || @level == level
     end
-
   end
-
 end

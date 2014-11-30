@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
-
   def test_run
     if_have 'fog' do
       # Create deployer
@@ -10,7 +9,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
         {
           :bucket     => 'mybucket',
           :provider   => 'local',
-          :local_root => 'mylocalcloud'})
+          :local_root => 'mylocalcloud' })
 
       # Create site
       FileUtils.mkdir_p('output')
@@ -39,10 +38,10 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
           'output/',
           {
             :provider              => 'aws',
-            # FIXME bucket is necessary for deployer but fog doesn't like it
+            # FIXME: bucket is necessary for deployer but fog doesn't like it
             :bucket_name           => 'doesntmatter',
             :aws_access_key_id     => 'meh',
-            :aws_secret_access_key => 'dontcare'},
+            :aws_secret_access_key => 'dontcare' },
           :dry_run => true)
 
         # Create site
@@ -56,7 +55,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
         # Run
         fog.run
       ensure
-        # Hack :(
+        # FIXME: ugly hack
         ::Fog.instance_eval { @mocking = false }
       end
     end
@@ -70,7 +69,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
         {
           :bucket     => 'mybucket',
           :provider   => 'local',
-          :local_root => 'mylocalcloud'})
+          :local_root => 'mylocalcloud' })
 
       # Setup fake local cloud
       FileUtils.mkdir_p('mylocalcloud/mybucket')
@@ -97,5 +96,4 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
       assert_equal 'I am a dog!', File.read('mylocalcloud/mybucket/bark')
     end
   end
-
 end

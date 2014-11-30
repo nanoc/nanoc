@@ -1,13 +1,11 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Calculates rule memories for objects that can be run through a rule (item
   # representations and layouts).
   #
   # @api private
   class RuleMemoryCalculator
-
     extend Nanoc::Memoization
 
     # @option params [Nanoc::RulesCollection] rules_collection The rules
@@ -35,7 +33,5 @@ module Nanoc
       result
     end
     memoize :[]
-
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # The in-memory representation of a nanoc site. It holds references to the
   # following site data:
   #
@@ -17,7 +16,6 @@ module Nanoc
   # that contains a configuration file, site data, a rakefile, a rules file,
   # etc. The way site data is stored depends on the data source.
   class Site
-
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
     DEFAULT_DATA_SOURCE_CONFIG = {
@@ -85,7 +83,7 @@ module Nanoc
           raise Nanoc::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
 
           # Warn about deprecated data sources
-          # TODO [in nanoc 4.0] remove me
+          # TODO: [in nanoc 4.0] remove me
           case data_source_hash[:type]
           when 'filesystem'
             warn "Warning: the 'filesystem' data source has been renamed to 'filesystem_verbose'. Using 'filesystem' will work in nanoc 3.1.x, but it will likely not work anymore in a future release of nanoc. Please update your data source configuration and replace 'filesystem' with 'filesystem_verbose'."
@@ -251,7 +249,7 @@ module Nanoc
       ensure_identifier_uniqueness(@layouts, 'layout')
 
       # Load compiler too
-      # FIXME this should not be necessary
+      # FIXME: this should not be necessary
       compiler.load
 
       @loaded = true
@@ -301,7 +299,7 @@ module Nanoc
 
     # Executes the given block, making sure that the datasources are
     # available for the duration of the block
-    def with_datasources(&block)
+    def with_datasources(&_block)
       data_sources.each { |ds| ds.use }
       yield
     ensure
@@ -431,5 +429,4 @@ module Nanoc
       @config = Nanoc::Configuration.new(@config)
     end
   end
-
 end

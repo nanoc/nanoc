@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
-
   CODERAY_PRE  = '<div class="CodeRay"><div class="code">'
   CODERAY_POST = '</div></div>'
 
@@ -176,7 +175,7 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = %Q(<pre title="moo"><code class="language-ruby">
+      input = %(<pre title="moo"><code class="language-ruby">
 # comment
 </code></pre>)
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="hl slc"># comment</span></code></pre>'
@@ -445,5 +444,4 @@ EOS
       assert_equal(expected_output, actual_output)
     end
   end
-
 end

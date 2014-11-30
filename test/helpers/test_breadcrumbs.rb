@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
-
   include Nanoc::Helpers::Breadcrumbs
 
   def test_breadcrumbs_trail_at_root
@@ -39,5 +38,4 @@ class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
 
     assert_equal [@items[0], nil, @items[1]], breadcrumbs_trail
   end
-
 end

@@ -24,9 +24,7 @@ required :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
 
 module Nanoc::CLI::Commands
-
   class AutoCompile < ::Nanoc::CLI::CommandRunner
-
     def run
       warn 'WARNING: The `autocompile` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
 
@@ -65,9 +63,7 @@ module Nanoc::CLI::Commands
       puts "Running on http://#{options_for_rack[:Host]}:#{options_for_rack[:Port]}/"
       handler.run(app, options_for_rack)
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::AutoCompile

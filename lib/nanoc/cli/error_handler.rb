@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc::CLI
-
   # Catches errors and prints nice diagnostic messages, then exits.
   #
   # @api private
   class ErrorHandler
-
     # @option params [Nanoc::CLI::Command, nil] command The command that is
     #   currently being executed, or nil if there is none
     def initialize(params = {})
@@ -356,7 +354,5 @@ module Nanoc::CLI
         stream.puts "  #{index}. #{i}"
       end
     end
-
   end
-
 end

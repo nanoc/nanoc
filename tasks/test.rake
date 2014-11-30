@@ -20,13 +20,13 @@ namespace :test do
   # test:all
   desc 'Run all tests'
   task :all do
-    run_tests "test/**/"
+    run_tests 'test/**/'
   end
 
   # test:...
   %w( base cli data_sources extra filters helpers tasks ).each do |dir|
     desc "Run all #{dir} tests"
-    task dir.to_sym do |task|
+    task dir.to_sym do |_task|
       run_tests "test/#{dir}/**/"
     end
   end
@@ -34,4 +34,4 @@ namespace :test do
 end
 
 desc 'Alias for test:all'
-task :test => [ :'test:all' ]
+task :test => [:'test:all']

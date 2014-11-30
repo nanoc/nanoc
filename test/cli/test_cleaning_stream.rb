@@ -1,19 +1,16 @@
 # encoding: utf-8
 
 class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
-
   class Stream
-
     attr_accessor :called_methods
 
     def initialize
       @called_methods = Set.new
     end
 
-    def method_missing(symbol, *args)
+    def method_missing(symbol, *_args)
       @called_methods << symbol
     end
-
   end
 
   def test_forward
@@ -51,10 +48,11 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
 
   def test_broken_pipe
     stream = StringIO.new
-    def stream.write(s); raise Errno::EPIPE.new; end
+    def stream.write(_s)
+      raise Errno::EPIPE.new
+    end
 
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     cleaning_stream.write('lol')
   end
-
 end

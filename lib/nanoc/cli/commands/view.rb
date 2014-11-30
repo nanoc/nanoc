@@ -13,9 +13,7 @@ required :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
 
 module Nanoc::CLI::Commands
-
   class View < ::Nanoc::CLI::CommandRunner
-
     DEFAULT_HANDLER_NAME = :thin
 
     def run
@@ -80,9 +78,7 @@ module Nanoc::CLI::Commands
       # Done
       exit 1
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::View

@@ -30,7 +30,6 @@ VCR.configure do |c|
 end
 
 module Nanoc::TestHelpers
-
   LIB_DIR = File.expand_path(File.dirname(__FILE__) + '/../lib')
 
   def disable_nokogiri?
@@ -58,7 +57,7 @@ module Nanoc::TestHelpers
   def if_implemented
     yield
   rescue NotImplementedError, NameError
-    skip $!
+    skip $ERROR_INFO
     return
   end
 
@@ -159,7 +158,7 @@ EOS
     end
   end
 
-  def capturing_stdio(&block)
+  def capturing_stdio(&_block)
     # Store
     orig_stdout = $stdout
     orig_stderr = $stderr
@@ -208,14 +207,14 @@ EOS
 
   def assert_contains_exactly(expected, actual)
     assert_equal expected.size, actual.size,
-      'Expected %s to be of same size as %s' % [actual.inspect, expected.inspect]
+      format('Expected %s to be of same size as %s', actual.inspect, expected.inspect)
     remaining = actual.dup.to_a
     expected.each do |e|
       index = remaining.index(e)
       remaining.delete_at(index) if index
     end
     assert remaining.empty?,
-      'Expected %s to contain all the elements of %s' % [actual.inspect, expected.inspect]
+      format('Expected %s to contain all the elements of %s',actual.inspect, expected.inspect)
   end
 
   def assert_raises_frozen_error
@@ -223,12 +222,12 @@ EOS
     assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, error.message)
   end
 
-  def with_env_vars(hash, &block)
+  def with_env_vars(hash, &_block)
     orig_env_hash = ENV.to_hash
-    hash.each_pair { |k,v| ENV[k] = v }
+    hash.each_pair { |k, v| ENV[k] = v }
     yield
   ensure
-    orig_env_hash.each_pair { |k,v| ENV[k] = v }
+    orig_env_hash.each_pair { |k, v| ENV[k] = v }
   end
 
   def on_windows?
@@ -236,7 +235,7 @@ EOS
   end
 
   def command?(cmd)
-    which, null = on_windows? ? ['where', 'NUL'] : ['which', '/dev/null']
+    which, null = on_windows? ? %w(where NUL) : ['which', '/dev/null']
     system("#{which} #{cmd} > #{null} 2>&1")
   end
 
@@ -255,13 +254,10 @@ EOS
   def skip_unless_symlinks_supported
     skip 'Symlinks are not supported by Ruby on Windows' unless symlinks_supported?
   end
-
 end
 
 class Nanoc::TestCase < MiniTest::Unit::TestCase
-
   include Nanoc::TestHelpers
-
 end
 
 # Unexpected system exit is unexpected
@@ -271,6 +267,6 @@ end
 #
 class Time
   def inspect
-    strftime("%a %b %d %H:%M:%S.#{'%06d' % usec} %Z %Y")
+    strftime("%a %b %d %H:%M:%S.#{format('%06d', usec)} %Z %Y")
   end
 end

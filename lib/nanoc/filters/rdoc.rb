@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class RDoc < Nanoc::Filter
-
     requires 'rdoc'
 
     def self.setup
@@ -21,6 +20,5 @@ module Nanoc::Filters
       to_html = ::RDoc::Markup::ToHtml.new(options)
       ::RDoc::Markup.new.convert(content, to_html)
     end
-
   end
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::RDiscountTest < Nanoc::TestCase
-
   def test_filter
     if_have 'rdiscount' do
       # Create filter
@@ -25,5 +24,4 @@ class Nanoc::Filters::RDiscountTest < Nanoc::TestCase
       assert_match(output_expected, output_actual)
     end
   end
-
 end

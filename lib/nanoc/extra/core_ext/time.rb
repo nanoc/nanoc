@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::Extra::TimeExtensions
-
   # @return [String] The time in an ISO-8601 date format.
   def to_iso8601_date
     strftime('%Y-%m-%d')
@@ -11,7 +10,6 @@ module Nanoc::Extra::TimeExtensions
   def to_iso8601_time
     getutc.strftime('%Y-%m-%dT%H:%M:%SZ')
   end
-
 end
 
 class Time

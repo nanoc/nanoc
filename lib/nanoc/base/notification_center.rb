@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Provides a way to send notifications between objects. It allows blocks
   # associated with a certain notification name to be registered; these blocks
   # will be called when the notification with the given name is posted.
@@ -10,9 +9,7 @@ module Nanoc
   # table of subscribers is not stored in the observable object itself, but in
   # the notification center.
   class NotificationCenter
-
     class << self
-
       # Adds the given block to the list of blocks that should be called when
       # the notification with the given name is received.
       #
@@ -76,9 +73,6 @@ module Nanoc
         @notifications ||= {}       # name => observers dictionary
         @notifications[name] ||= [] # list of observers
       end
-
     end
-
   end
-
 end

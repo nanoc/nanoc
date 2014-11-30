@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::StringExtensions
-
   # Transforms string into an actual identifier
   #
   # @return [String] The identifier generated from the receiver
@@ -18,7 +17,6 @@ module Nanoc::StringExtensions
   def checksum
     Nanoc::Checksummer.calc(self)
   end
-
 end
 
 class String

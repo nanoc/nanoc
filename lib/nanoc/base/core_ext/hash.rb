@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::HashExtensions
-
   # Returns a new hash where all keys are recursively converted to symbols by
   # calling {Nanoc::ArrayExtensions#symbolize_keys_recursively} or
   # {Nanoc::HashExtensions#symbolize_keys_recursively}.
@@ -68,7 +67,6 @@ module Nanoc::HashExtensions
   def checksum
     Nanoc::Checksummer.calc(self)
   end
-
 end
 
 class Hash

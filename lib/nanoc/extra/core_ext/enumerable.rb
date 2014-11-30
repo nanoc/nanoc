@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Enumerable
-
   unless Enumerable.instance_methods.include?('group_by')
 
     # Returns a hash, which keys are evaluated result from the block, and
@@ -29,5 +28,4 @@ module Enumerable
     end
 
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
-
   def new_data_source(params = nil)
     # Mock site
     site = Nanoc::Site.new({})
@@ -42,18 +41,18 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
 
     # Check items
     assert_equal(2, items.size)
-    assert(items.any? { |a|
+    assert(items.any? do |a|
       a[:title]            == 'Foo' &&
       a[:extension]        == 'html' &&
       a[:content_filename] == 'content/foo/foo.html' &&
       a[:meta_filename]    == 'content/foo/foo.yaml'
-    })
-    assert(items.any? { |a|
+    end)
+    assert(items.any? do |a|
       a[:title]            == 'Bar' &&
       a[:extension]        == 'xml' &&
       a[:content_filename] == 'content/bar/bar.xml' &&
       a[:meta_filename]    == 'content/bar/bar.yaml'
-    })
+    end)
   end
 
   def test_items_with_period_in_name
@@ -67,7 +66,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     File.open('content/foo/foo.css', 'w') do |io|
       io.write('body.foo {}')
     end
-    
+
     # Create foo.bar.css
     FileUtils.mkdir_p('content/foo.bar')
     File.open('content/foo.bar/foo.bar.yaml', 'w') do |io|
@@ -76,10 +75,10 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     File.open('content/foo.bar/foo.bar.css', 'w') do |io|
       io.write('body.foobar {}')
     end
-    
+
     # Load
     items = data_source.items.sort_by { |i| i[:title] }
-    
+
     # Check
     assert_equal 2, items.size
     assert_equal '/foo/',                        items[0].identifier
@@ -114,18 +113,18 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
 
     # Check items
     assert_equal(2, items.size)
-    assert(items.any? { |a|
-      a[:title]            == nil &&
-      a[:extension]        == 'html' &&
+    assert(items.any? do |a|
+      a[:title].nil? &&
+      a[:extension] == 'html' &&
       a[:content_filename] == 'content/foo/foo.html' &&
-      a[:meta_filename]    == nil
-    })
-    assert(items.any? { |a|
-      a[:title]            == 'Bar' &&
-      a[:extension]        == nil &&
-      a[:content_filename] == nil &&
-      a[:meta_filename]    == 'content/bar/bar.yaml'
-    })
+      a[:meta_filename].nil?
+    end)
+    assert(items.any? do |a|
+      a[:title] == 'Bar' &&
+      a[:extension].nil? &&
+      a[:content_filename].nil? &&
+      a[:meta_filename] == 'content/bar/bar.yaml'
+    end)
   end
 
   def test_layouts
@@ -164,7 +163,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     File.open('layouts/foo/foo.html', 'w') do |io|
       io.write('body.foo {}')
     end
-    
+
     # Create bar.html.erb
     FileUtils.mkdir_p('layouts/bar')
     File.open('layouts/bar/bar.yaml', 'w') do |io|
@@ -173,10 +172,10 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     File.open('layouts/bar/bar.html.erb', 'w') do |io|
       io.write('body.foobar {}')
     end
-    
+
     # Load
     layouts = data_source.layouts.sort_by { |i| i.identifier }
-    
+
     # Check
     assert_equal 2, layouts.size
     assert_equal '/bar/', layouts[0].identifier
@@ -196,7 +195,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     File.open('layouts/foo/foo.html', 'w') do |io|
       io.write('body.foo {}')
     end
-    
+
     # Create bar.html.erb
     FileUtils.mkdir_p('layouts/bar.xyz')
     File.open('layouts/bar.xyz/bar.xyz.yaml', 'w') do |io|
@@ -205,10 +204,10 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     File.open('layouts/bar.xyz/bar.xyz.html', 'w') do |io|
       io.write('body.foobar {}')
     end
-    
+
     # Load
     layouts = data_source.layouts.sort_by { |i| i.identifier }
-    
+
     # Check
     assert_equal 2, layouts.size
     assert_equal '/bar.xyz/', layouts[0].identifier
@@ -351,5 +350,4 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
       data_source.items
     end
   end
-
 end

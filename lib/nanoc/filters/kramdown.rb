@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class Kramdown < Nanoc::Filter
-
     requires 'kramdown'
 
     # Runs the content through [Kramdown](http://kramdown.gettalong.org/).
@@ -15,6 +14,5 @@ module Nanoc::Filters
       # Get result
       ::Kramdown::Document.new(content, params).to_html
     end
-
   end
 end

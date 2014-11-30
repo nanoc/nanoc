@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Extra
-
   # @deprecated Create a File instance directly and use that instead.
   class FileProxy
-
     instance_methods.each { |m| undef_method m unless m =~ /^__/ || m.to_s == 'object_id' }
 
     @@deprecation_warning_shown = false
@@ -34,7 +32,5 @@ module Nanoc::Extra
     def file_instance_methods
       @@file_instance_methods ||= Set.new(File.instance_methods.map { |m| m.to_sym })
     end
-
   end
-
 end

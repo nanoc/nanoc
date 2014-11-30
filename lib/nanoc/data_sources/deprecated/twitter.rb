@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::DataSources
-
   # @deprecated Fetch data from online data sources manually instead
   class Twitter < Nanoc::DataSource
-
     def items
       @item ||= begin
         require 'json'
@@ -32,7 +30,5 @@ module Nanoc::DataSources
         end
       end
     end
-
   end
-
 end

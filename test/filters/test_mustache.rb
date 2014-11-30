@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::MustacheTest < Nanoc::TestCase
-
   def test_filter
     if_have 'mustache' do
       # Create item
@@ -38,5 +37,4 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       assert_equal('Max says: No Payne No Gayne.', result)
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
-
   include Nanoc::Helpers::Filtering
 
   def test_filter_simple
@@ -120,5 +119,4 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
     assert notifications.include?(:filtering_started)
     assert notifications.include?(:filtering_ended)
   end
-
 end

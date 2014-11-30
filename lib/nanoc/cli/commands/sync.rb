@@ -8,9 +8,7 @@ for data sources which rely on slow external APIs.
 EOS
 
 module Nanoc::CLI::Commands
-
   class Sync < ::Nanoc::CLI::CommandRunner
-
     def run
       # Check arguments
       if arguments.size != 0
@@ -28,9 +26,7 @@ module Nanoc::CLI::Commands
         end
       end
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::Sync

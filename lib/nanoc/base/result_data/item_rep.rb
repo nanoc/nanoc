@@ -1,16 +1,13 @@
 # encoding: utf-8
 
 module Nanoc
-
   # A single representation (rep) of an item ({Nanoc::Item}). An item can
   # have multiple representations. A representation has its own output file.
   # A single item can therefore have multiple output files, each run through
   # a different set of filters with a different layout.
   class ItemRep
-
     # Contains all deprecated methods. Mixed into {Nanoc::ItemRep}.
     module Deprecated
-
       # @deprecated Modify the {#raw_paths} attribute instead
       def raw_path=(raw_path)
         raw_paths[:last] = raw_path
@@ -55,12 +52,10 @@ module Nanoc
       def written?
         raise NotImplementedError, 'Nanoc::ItemRep#written? is no longer implemented'
       end
-
     end
 
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
     module Private
-
       # @return [Hash] A hash containing the assigns that will be used in the
       #   next filter or layout operation. The keys (symbols) will be made
       #   available during the next operation.
@@ -175,7 +170,6 @@ module Nanoc
       def type
         :item_rep
       end
-
     end
 
     include Deprecated
@@ -482,7 +476,5 @@ module Nanoc
     def filter_named(name)
       Nanoc::Filter.named(name)
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::DataSources
-
   # The filesystem_verbose data source is the old data source for a new nanoc
   # site. It stores all data as files on the hard disk.
   #
@@ -40,7 +39,6 @@ module Nanoc::DataSources
   # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
   # one will be inferred from the environment.
   class FilesystemVerbose < Nanoc::DataSource
-
     include Nanoc::DataSources::Filesystem
 
     private
@@ -84,7 +82,5 @@ module Nanoc::DataSources
     def identifier_for_filename(filename)
       filename.sub(/[^\/]+\.yaml$/, '')
     end
-
   end
-
 end

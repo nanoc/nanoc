@@ -11,9 +11,7 @@ EOS
 required :c, :vcs, 'specify the VCS to use'
 
 module Nanoc::CLI::Commands
-
   class CreateItem < ::Nanoc::CLI::CommandRunner
-
     def run
       # Check arguments
       if arguments.length != 1
@@ -51,9 +49,7 @@ module Nanoc::CLI::Commands
 
       puts "An item has been created at #{identifier}."
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::CreateItem

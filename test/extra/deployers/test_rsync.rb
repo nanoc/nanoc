@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
-
   def test_run_without_dst
     # Create deployer
     rsync = Nanoc::Extra::Deployers::Rsync.new(
@@ -86,5 +85,4 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
       rsync.instance_eval { @shell_cms_args }
     )
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::SassTest < Nanoc::TestCase
-
   def test_filter
     if_have 'sass' do
       # Get filter
@@ -64,7 +63,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
       filter = create_filter
 
       # Create sample file
-      File.open('moo.sass', 'w') { |io| io.write %Q(@import subdir/relative) }
+      File.open('moo.sass', 'w') { |io| io.write %(@import subdir/relative) }
       FileUtils.mkdir_p('subdir')
       File.open('subdir/relative.sass', 'w') { |io| io.write "body\n  color: red" }
 
@@ -275,7 +274,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
   def create_filter(params = {})
     FileUtils.mkdir_p('content')
-    File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green')}
+    File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green') }
 
     items = [Nanoc::Item.new(
       'blah',
@@ -284,5 +283,4 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     params = { :item => items[0], :items => items }.merge(params)
     ::Nanoc::Filters::Sass.new(params)
   end
-
 end

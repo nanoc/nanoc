@@ -1,12 +1,10 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Responsible for determining whether an item or a layout is outdated.
   #
   # @api private
   class OutdatednessChecker
-
     extend Nanoc::Memoization
 
     # @option params [Nanoc::Site] :site (nil) The site this outdatedness
@@ -220,7 +218,5 @@ module Nanoc
     def site
       @site
     end
-
   end
-
 end

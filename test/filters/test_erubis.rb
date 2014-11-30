@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::ErubisTest < Nanoc::TestCase
-
   def test_filter_with_instance_variable
     if_have 'erubis' do
       # Create filter
@@ -72,5 +71,4 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
       assert_equal 'stuffstuff', result
     end
   end
-
 end

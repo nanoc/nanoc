@@ -1,14 +1,11 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Module that contains all outdatedness reasons.
   module OutdatednessReasons
-
     # A generic outdatedness reason. An outdatedness reason is basically a
     # descriptive message that explains why a given object is outdated.
     class Generic
-
       # @return [String] A descriptive message for this outdatedness reason
       attr_reader :message
 
@@ -17,7 +14,6 @@ module Nanoc
       def initialize(message)
         @message = message
       end
-
     end
 
     CodeSnippetsModified = Generic.new(
@@ -40,7 +36,5 @@ module Nanoc
 
     SourceModified = Generic.new(
       'The source file of this item has been modified since the last time the site was compiled.')
-
   end
-
 end

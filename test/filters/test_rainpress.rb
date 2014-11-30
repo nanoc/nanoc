@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Filters::RainpressTest < Nanoc::TestCase
-
   def test_filter
     if_have 'rainpress' do
       # Create filter
@@ -23,5 +22,4 @@ class Nanoc::Filters::RainpressTest < Nanoc::TestCase
       assert_equal('body{color:#aabbcc}', result)
     end
   end
-
 end

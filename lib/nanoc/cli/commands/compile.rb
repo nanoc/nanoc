@@ -21,9 +21,7 @@ option :a, :all,   '(ignored)'
 option :f, :force, '(ignored)'
 
 module Nanoc::CLI::Commands
-
   class Compile < ::Nanoc::CLI::CommandRunner
-
     extend Nanoc::Memoization
 
     # Listens to compilation events and reacts to them. This abstract class
@@ -32,7 +30,6 @@ module Nanoc::CLI::Commands
     #
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
-
       def initialize(_params = {})
       end
 
@@ -59,12 +56,10 @@ module Nanoc::CLI::Commands
       # @return [void]
       def stop
       end
-
     end
 
     # Generates diffs for every output file written
     class DiffGenerator < Listener
-
       # @see Listener#enable_for?
       def self.enable_for?(command_runner)
         command_runner.site.config[:enable_output_diff]
@@ -149,12 +144,10 @@ module Nanoc::CLI::Commands
              'content will be available.'
         nil
       end
-
     end
 
     # Records the time spent per filter and per item representation
     class TimingRecorder < Listener
-
       # @see Listener#enable_for?
       def self.enable_for?(command_runner)
         command_runner.options.fetch(:verbose, false)
@@ -215,7 +208,7 @@ module Nanoc::CLI::Commands
         # Calculate stats
         count = samples.size
         min   = samples.min
-        tot   = samples.reduce(0) { |memo, i| memo + i }
+        tot   = samples.reduce(0) { |a, e| a + e }
         avg   = tot / count
         max   = samples.max
 
@@ -253,12 +246,10 @@ module Nanoc::CLI::Commands
         end
         result
       end
-
     end
 
     # Controls garbage collection so that it only occurs once every 20 items
     class GCController < Listener
-
       # @see Listener#enable_for?
       def self.enable_for?(_command_runner)
         !ENV.key?('TRAVIS')
@@ -285,12 +276,10 @@ module Nanoc::CLI::Commands
         super
         GC.enable
       end
-
     end
 
     # Prints debug information (compilation started/ended, filtering started/ended, …)
     class DebugPrinter < Listener
-
       # @see Listener#enable_for?
       def self.enable_for?(command_runner)
         command_runner.debug?
@@ -327,12 +316,10 @@ module Nanoc::CLI::Commands
           puts "*** Dependency created from #{src.inspect} onto #{dst.inspect}"
         end
       end
-
     end
 
     # Prints file actions (created, updated, deleted, identical, skipped)
     class FileActionPrinter < Listener
-
       # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
       def initialize(params = {})
         @start_times = {}
@@ -378,7 +365,6 @@ module Nanoc::CLI::Commands
       def log(level, action, path, duration)
         Nanoc::CLI::Logger.instance.file(level, action, path, duration)
       end
-
     end
 
     def initialize(options, arguments, command, params = {})
@@ -422,7 +408,8 @@ module Nanoc::CLI::Commands
     end
 
     def setup_listeners
-      @listeners = @listener_classes
+      @listeners =
+        @listener_classes
         .select { |klass| klass.enable_for?(self) }
         .map    { |klass| klass.new(:reps => reps) }
 
@@ -470,9 +457,7 @@ module Nanoc::CLI::Commands
     def prune_config_exclude
       prune_config[:exclude] || {}
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::Compile

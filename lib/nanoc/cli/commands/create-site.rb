@@ -10,18 +10,14 @@ Create a new site at the given path. The site will use the `filesystem_unified` 
 required :d, :datasource, 'specify the data source for the new site'
 
 module Nanoc::CLI::Commands
-
   class CreateSite < ::Nanoc::CLI::CommandRunner
-
     class << self
-
       protected
 
       # Converts the given array to YAML format
       def array_to_yaml(array)
         '[ ' + array.map { |s| "'" + s + "'" }.join(', ') + ' ]'
       end
-
     end
 
     DEFAULT_CONFIG = <<EOS unless defined? DEFAULT_CONFIG
@@ -396,9 +392,7 @@ EOS
         io.write "\# before nanoc starts compiling.\n"
       end
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::CreateSite

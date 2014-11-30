@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
-
   def test_run
-    with_site do |s|
+    with_site do |_s|
       watch_thread = Thread.new do
         Nanoc::CLI.run %w( watch )
       end
@@ -19,7 +18,7 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
   end
 
   def test_notify
-    with_site do |s|
+    with_site do |_s|
       watch_thread = Thread.new do
         Nanoc::CLI.run %w( watch )
       end
@@ -50,7 +49,7 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
       sleep 0.5
     end
     unless File.file?(filename)
-      raise RuntimeError, "Expected #{filename} to appear but it didn't :("
+      raise "Expected #{filename} to appear but it didn't :("
     end
   end
 
@@ -64,7 +63,7 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
 
     actual_content = File.read(filename)
     if actual_content != expected_content
-      raise RuntimeError, "Expected #{filename} to have " \
+      raise "Expected #{filename} to have " \
         "content #{expected_content.inspect} but it had " \
         "content #{actual_content.inspect} instead :("
     end
@@ -72,5 +71,4 @@ class Nanoc::CLI::Commands::WatchTest < Nanoc::TestCase
     # Ugly, but seems to be necessary or changes are not picked up. :(
     sleep 0.5
   end
-
 end

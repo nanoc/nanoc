@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::NotificationCenterTest < Nanoc::TestCase
-
   def test_post
     # Set up notification
     Nanoc::NotificationCenter.on :ping_received, :test do
@@ -28,5 +27,4 @@ class Nanoc::NotificationCenterTest < Nanoc::TestCase
     Nanoc::NotificationCenter.post :ping_received
     assert(!@ping_received)
   end
-
 end

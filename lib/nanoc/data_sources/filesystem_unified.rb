@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc::DataSources
-
   # The filesystem_unified data source stores its items and layouts in nested
   # directories. Items and layouts are represented by one or two files; if it
   # is represented using one file, the metadata can be contained in this file.
@@ -68,7 +67,6 @@ module Nanoc::DataSources
   # understood by Ruby’s `Encoding`. If no encoding is set in the configuration,
   # one will be inferred from the environment.
   class FilesystemUnified < Nanoc::DataSource
-
     include Nanoc::DataSources::Filesystem
 
     private
@@ -121,7 +119,5 @@ module Nanoc::DataSources
       end
       filename.sub(regex, '').cleaned_identifier
     end
-
   end
-
 end

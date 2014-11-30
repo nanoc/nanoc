@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Extra::VCSes
-
   # @see Nanoc::Extra::VCS
   class Mercurial < Nanoc::Extra::VCS
-
     # @see Nanoc::Extra::VCS#add
     def add(filename)
       system('hg', 'add', filename)
@@ -19,7 +17,5 @@ module Nanoc::Extra::VCSes
     def move(src, dst)
       system('hg', 'mv', src, dst)
     end
-
   end
-
 end

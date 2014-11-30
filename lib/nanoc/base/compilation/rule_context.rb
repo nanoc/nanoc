@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Provides a context in which compilation and routing rules can be executed.
   # It provides access to the item representation that is being compiled or
   # routed.
@@ -17,7 +16,6 @@ module Nanoc
   #
   # @api private
   class RuleContext < Context
-
     # @option params [Nanoc::ItemRep] :rep The item representation that will
     #   be processed in this rule context
     #
@@ -85,7 +83,5 @@ module Nanoc
     def snapshot(snapshot_name)
       rep.snapshot(snapshot_name)
     end
-
   end
-
 end

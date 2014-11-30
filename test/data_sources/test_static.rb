@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DataSources::StaticTest < Nanoc::TestCase
-
   def new_data_source(params = nil)
     # Mock site
     site = Nanoc::Site.new({})
@@ -84,7 +83,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
 
     actual_out = data_source.send(:items).sort_by { |i| i.identifier }
 
-    (0..expected_out.size-1).each do |i|
+    (0..expected_out.size - 1).each do |i|
       assert_equal expected_out[i].raw_content, actual_out[i].raw_content, 'content must match'
       assert_equal expected_out[i].identifier, actual_out[i].identifier, 'identifier must match'
       assert_equal expected_out[i].mtime, actual_out[i].mtime, 'mtime must match'

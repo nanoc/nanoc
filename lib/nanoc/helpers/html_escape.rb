@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Helpers
-
   # Contains functionality for HTML-escaping strings.
   module HTMLEscape
-
     require 'nanoc/helpers/capturing'
     include Nanoc::Helpers::Capturing
 
@@ -39,9 +37,9 @@ module Nanoc::Helpers
         buffer << escaped_data
       elsif string
         string.gsub('&', '&amp;')
-               .gsub('<', '&lt;')
-               .gsub('>', '&gt;')
-               .gsub('"', '&quot;')
+          .gsub('<', '&lt;')
+          .gsub('>', '&gt;')
+          .gsub('"', '&quot;')
       else
         raise 'The #html_escape or #h function needs either a ' \
           'string or a block to HTML-escape, but neither a string nor a block was given'
@@ -49,7 +47,5 @@ module Nanoc::Helpers
     end
 
     alias_method :h, :html_escape
-
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::FilterTest < Nanoc::TestCase
-
   def test_initialize
     # Create filter
     filter = Nanoc::Filter.new
@@ -77,5 +76,4 @@ class Nanoc::FilterTest < Nanoc::TestCase
     # Check filename
     assert_equal('?', filter.filename)
   end
-
 end

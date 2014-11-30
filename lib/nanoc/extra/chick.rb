@@ -5,17 +5,14 @@ require 'rack'
 require 'rack/cache'
 
 module Nanoc::Extra
-
   # @deprecated Use a HTTP library such as
   #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
   #   [Curb](https://github.com/taf2/curb) instead.
   module CHiCk
-
     # @deprecated Use a HTTP library such as
     #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
     #   [Curb](https://github.com/taf2/curb) instead.
     class Client
-
       DEFAULT_OPTIONS = {
         :cache => {
           :metastore   => 'file:tmp/rack/cache.meta',
@@ -57,14 +54,12 @@ module Nanoc::Extra
         # Done
         [status, headers, body]
       end
-
     end
 
     # @deprecated Use a HTTP library such as
     #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
     #   [Curb](https://github.com/taf2/curb) instead.
     class CacheController
-
       def initialize(app, options = {})
         @app = app
         @options = options
@@ -77,14 +72,12 @@ module Nanoc::Extra
         end
         res
       end
-
     end
 
     # @deprecated Use a HTTP library such as
     #   [Net::HTTP](http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/) or
     #   [Curb](https://github.com/taf2/curb) instead.
     class RackClient
-
       METHOD_TO_CLASS_MAPPING = {
         'DELETE'  => Net::HTTP::Delete,
         'GET'     => Net::HTTP::Get,
@@ -119,9 +112,6 @@ module Nanoc::Extra
           ]
         end
       end
-
     end
-
   end
-
 end

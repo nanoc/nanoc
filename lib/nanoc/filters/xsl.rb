@@ -1,10 +1,8 @@
 # encoding: utf-8
 
 module Nanoc::Filters
-
   # @since 3.3.0
   class XSL < Nanoc::Filter
-
     requires 'nokogiri'
 
     # Runs the item content through an [XSLT](http://www.w3.org/TR/xslt)
@@ -45,7 +43,5 @@ module Nanoc::Filters
 
       xsl.apply_to(xml, ::Nokogiri::XSLT.quote_params(params))
     end
-
   end
-
 end

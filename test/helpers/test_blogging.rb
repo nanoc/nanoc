@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
-
   include Nanoc::Helpers::Blogging
   include Nanoc::Helpers::Text
 
@@ -66,7 +65,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       ),
       Nanoc::Item.new(
         'blah',
-        { :kind => 'article', :created_at => (Date.today - 1).to_s }, 
+        { :kind => 'article', :created_at => (Date.today - 1).to_s },
         '/1/'
       ),
       Nanoc::Item.new(
@@ -189,7 +188,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
       # Mock site
       @site = mock
-      @site.stubs(:config).returns({:base_url => nil})
+      @site.stubs(:config).returns({ :base_url => nil })
 
       # Create feed item
       @item = mock
@@ -521,7 +520,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
 
       # Check
-      result = atom_feed :content_proc => lambda { |a| 'foobar!' }
+      result = atom_feed :content_proc => lambda { |_a| 'foobar!' }
       assert_match 'foobar!</content>', result
     end
   end
@@ -543,7 +542,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
 
       # Check
-      result = atom_feed :excerpt_proc => lambda { |a| 'foobar!' }
+      result = atom_feed :excerpt_proc => lambda { |_a| 'foobar!' }
       assert_match 'foobar!</summary>', result
     end
   end
@@ -792,5 +791,4 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     # Check
     assert_equal('tag:example.com,2008-05-19:/foo/bar/', atom_tag_for(item))
   end
-
 end

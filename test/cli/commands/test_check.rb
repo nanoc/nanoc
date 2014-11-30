@@ -1,9 +1,8 @@
 # encoding: utf-8
 
 class Nanoc::CLI::Commands::CheckTest < Nanoc::TestCase
-
   def test_check_stale
-    with_site do |site|
+    with_site do |_site|
       FileUtils.mkdir_p('output')
 
       # Should not raise now
@@ -16,5 +15,4 @@ class Nanoc::CLI::Commands::CheckTest < Nanoc::TestCase
       end
     end
   end
-
 end

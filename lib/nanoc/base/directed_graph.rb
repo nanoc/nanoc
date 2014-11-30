@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Represents a directed graph. It is used by the dependency tracker for
   # storing and querying dependencies between items.
   #
@@ -30,7 +29,6 @@ module Nanoc
   #   graph.predecessors_of('d').sort
   #     # => %w( b c )
   class DirectedGraph
-
     # @group Creating a graph
 
     # Creates a new directed graph with the given vertices.
@@ -266,7 +264,5 @@ module Nanoc
 
       all_vertices.to_a
     end
-
   end
-
 end

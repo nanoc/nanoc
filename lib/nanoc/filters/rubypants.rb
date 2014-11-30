@@ -2,7 +2,6 @@
 
 module Nanoc::Filters
   class RubyPants < Nanoc::Filter
-
     requires 'rubypants'
 
     # Runs the content through [RubyPants](http://rubydoc.info/gems/rubypants/).
@@ -15,6 +14,5 @@ module Nanoc::Filters
       # Get result
       ::RubyPants.new(content).to_html
     end
-
   end
 end

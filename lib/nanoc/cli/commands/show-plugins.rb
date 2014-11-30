@@ -9,9 +9,7 @@ If the current directory contains a nanoc web site, the plugins defined in this 
 EOS
 
 module Nanoc::CLI::Commands
-
   class ShowPlugins < ::Nanoc::CLI::CommandRunner
-
     def run
       # Check arguments
       if arguments.size != 0
@@ -59,7 +57,7 @@ module Nanoc::CLI::Commands
           # Print plugins
           relevant_plugins.sort_by { |k| k[:identifiers].join(', ') }.each do |plugin|
             # Display
-            puts sprintf(
+            puts format(
               "    %-#{max_identifiers_length}s (%s)",
               plugin[:identifiers].join(', '),
               plugin[:class].to_s.sub(/^::/, '')
@@ -90,9 +88,7 @@ module Nanoc::CLI::Commands
     def name_for_plugin_class(klass)
       PLUGIN_CLASSES[klass]
     end
-
   end
-
 end
 
 runner Nanoc::CLI::Commands::ShowPlugins

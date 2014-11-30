@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::DependencyTrackerTest < Nanoc::TestCase
-
   def test_initialize
     # Mock items
     items = [mock, mock]
@@ -256,5 +255,4 @@ class Nanoc::DependencyTrackerTest < Nanoc::TestCase
     tracker.forget_dependencies_for(items[0])
     assert_empty tracker.objects_causing_outdatedness_of(items[0])
   end
-
 end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 module Nanoc
-
   # Responsible for remembering dependencies between items and layouts. It is
   # used to speed up compilation by only letting an item be recompiled when it
   # is outdated or any of its dependencies (or dependencies’ dependencies,
@@ -20,7 +19,6 @@ module Nanoc
   #
   # @api private
   class DependencyTracker < ::Nanoc::Store
-
     # @return [Array<Nanoc::Item, Nanoc::Layout>] The list of items and
     #   layouts that are being tracked by the dependency tracker
     attr_reader :objects
@@ -207,7 +205,5 @@ module Nanoc
         end
       end
     end
-
   end
-
 end

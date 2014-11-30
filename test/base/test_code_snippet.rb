@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::CodeSnippetTest < Nanoc::TestCase
-
   def test_load
     # Initialize
     $complete_insane_parrot = 'meow'
@@ -25,5 +24,4 @@ class Nanoc::CodeSnippetTest < Nanoc::TestCase
     # Ensure binding is correct
     assert_equal('meow', @foo)
   end
-
 end

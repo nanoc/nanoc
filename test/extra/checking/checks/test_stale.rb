@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
-
   def check_class
     Nanoc::Extra::Checking::Checks::Stale
   end
@@ -14,7 +13,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_ok
-    with_site do |site|
+    with_site do |_site|
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -30,7 +29,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_error
-    with_site do |site|
+    with_site do |_site|
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -44,7 +43,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_excluded
-    with_site do |site|
+    with_site do |_site|
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -56,7 +55,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def test_run_excluded_with_broken_config
-    with_site do |site|
+    with_site do |_site|
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
@@ -66,5 +65,4 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       refute calc_issues.empty?
     end
   end
-
 end
