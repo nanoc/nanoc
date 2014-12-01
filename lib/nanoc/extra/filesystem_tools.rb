@@ -45,7 +45,7 @@ module Nanoc::Extra
     #
     # @param [String, Array, nil] extra_files The list of extra patterns
     #   to extend the file search for files not found by default, example
-    #   "**/.{htaccess,htpasswd}" which is also the default for `nil`
+    #   "**/.{htaccess,htpasswd}"
     #
     # @param [Integer] recursion_limit The maximum number of times to
     #   recurse into a symlink to a directory
@@ -92,7 +92,7 @@ module Nanoc::Extra
     #
     # @param [String, Array, nil] extra_files The list of extra patterns
     #   to extend the file search for files not found by default, example
-    #   "**/.{htaccess,htpasswd}" which is also the default for `nil`
+    #   "**/.{htaccess,htpasswd}"
     #
     # @return [Array<String>] A list of files and directories
     #
@@ -101,7 +101,6 @@ module Nanoc::Extra
       patterns = [ "#{dir_name}/**/*" ]
       case extra_files
       when nil
-        patterns << "#{dir_name}/**/.{htaccess,htpasswd}"
       when String
         patterns << "#{dir_name}/#{extra_files}"
       when Array
