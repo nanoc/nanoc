@@ -105,18 +105,10 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     # Write sample files
     FileUtils.mkdir_p('dir')
     File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
-
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
-    assert_equal [], actual_files
-  end
-
-  def test_dotfiles_are_valid_items
-    # Write sample files
-    FileUtils.mkdir_p('dir')
     File.open('dir/.htaccess', 'w') { |io| io.write('o hai') }
 
     actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
-    assert_equal ['dir/.htaccess'], actual_files
+    assert_equal [], actual_files
   end
 
   def test_user_dotfiles_are_valid_items

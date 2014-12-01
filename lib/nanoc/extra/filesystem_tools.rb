@@ -98,7 +98,7 @@ module Nanoc::Extra
     #
     # @raise [GenericTrivial] when pattern can not be handled
     def all_files_and_dirs_in(dir_name, extra_files)
-      patterns = [ "#{dir_name}/**/*" ]
+      patterns = ["#{dir_name}/**/*"]
       case extra_files
       when nil
       when String
