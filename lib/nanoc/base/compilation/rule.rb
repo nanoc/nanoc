@@ -74,7 +74,7 @@ module Nanoc
       )
     end
 
-  protected
+    protected
 
     # Matches the rule regexp against items identifier and gives back group
     # captures if any
