@@ -12,7 +12,7 @@ module Nanoc::CLI::StreamCleaners
     # @param [String] s The string to clean
     #
     # @return [String] The cleaned string
-    def clean(_s)
+    def clean(s) # rubocop:disable Lint/UnusedMethodArgument
       raise NotImplementedError, 'Subclasses of Nanoc::CLI::StreamCleaners::Abstract must implement #clean'
     end
   end

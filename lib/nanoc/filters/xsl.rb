@@ -23,7 +23,7 @@ module Nanoc::Filters
     #
     #     layout 'xsl-report', :xsl, :awesome => 'definitely'
     #
-    # @param [String] content Ignored. As the filter can be run only as a
+    # @param [String] _content Ignored. As the filter can be run only as a
     #   layout, the value of the `:content` parameter passed to the class at
     #   initialization is used as the content to transform.
     #
