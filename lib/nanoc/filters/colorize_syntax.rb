@@ -196,7 +196,7 @@ module Nanoc::Filters
     #
     # @return [String] The colorized output, which is identical to the input
     #   in this case
-    def dummy(code, _language, _params = {})
+    def dummy(code, language, params = {}) # rubocop:disable Lint/UnusedMethodArgument
       code
     end
 

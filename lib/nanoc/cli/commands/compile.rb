@@ -38,7 +38,7 @@ module Nanoc::CLI::Commands
       # @return [Boolean] true if this listener should be enabled for the given command runner, false otherwise
       #
       # @abstract Returns `true` by default, but subclasses may override this.
-      def self.enable_for?(_command_runner)
+      def self.enable_for?(command_runner) # rubocop:disable Lint/UnusedMethodArgument
         true
       end
 

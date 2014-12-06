@@ -18,7 +18,7 @@ module Nanoc::Extra
     # @return [void]
     #
     # @abstract
-    def add(_filename)
+    def add(filename) # rubocop:disable Lint/UnusedMethodArgument
       not_implemented('add')
     end
 
@@ -31,7 +31,7 @@ module Nanoc::Extra
     # @return [void]
     #
     # @abstract
-    def remove(_filename)
+    def remove(filename) # rubocop:disable Lint/UnusedMethodArgument
       not_implemented('remove')
     end
 
@@ -46,7 +46,7 @@ module Nanoc::Extra
     # @return [void]
     #
     # @abstract
-    def move(_src, _dst)
+    def move(src, dst) # rubocop:disable Lint/UnusedMethodArgument
       not_implemented('move')
     end
 
