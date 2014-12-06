@@ -104,7 +104,7 @@ module Nanoc::Extra
       when String
         patterns << "#{dir_name}/#{extra_files}"
       when Array
-        patterns += extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" }
+        patterns.concat(extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" })
       else
         raise Nanoc::Errors::GenericTrivial,
           "Do not know how to handle extra_files: #{extra_files.inspect}"
