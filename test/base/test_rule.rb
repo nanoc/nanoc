@@ -12,4 +12,14 @@ class Nanoc::RuleTest < Nanoc::TestCase
   def test_apply_to
     # TODO: implement
   end
+
+  def test_matches
+    regexp     = %r</(.*)/(.*)/>
+    identifier = '/anything/else/'
+    expected   = ['anything', 'else']
+
+    rule = Nanoc::Rule.new(regexp, :string, Proc.new {})
+
+    assert_equal expected, rule.send(:matches, identifier)
+  end
 end
