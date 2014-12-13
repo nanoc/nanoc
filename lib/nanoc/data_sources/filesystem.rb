@@ -179,7 +179,7 @@ module Nanoc::DataSources
 
     # Returns all files in the given directory and directories below it.
     def all_files_in(dir_name)
-      Nanoc::Extra::FilesystemTools.all_files_in(dir_name)
+      Nanoc::Extra::FilesystemTools.all_files_in(dir_name, config[:extra_files])
     end
 
     # Returns the filename for the given base filename and the extension.

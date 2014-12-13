@@ -43,18 +43,22 @@ module Nanoc::Extra
     # @param [String] dir_name The name of the directory whose contents to
     #   fetch
     #
+    # @param [String, Array, nil] extra_files The list of extra patterns
+    #   to extend the file search for files not found by default, example
+    #   "**/.{htaccess,htpasswd}"
+    #
     # @param [Integer] recursion_limit The maximum number of times to
     #   recurse into a symlink to a directory
     #
-    # @return [Array<String>] A list of filenames
+    # @return [Array<String>] A list of file names
     #
     # @raise [MaxSymlinkDepthExceededError] if too many indirections are
     #   encountered while resolving symlinks
     #
     # @raise [UnsupportedFileTypeError] if a file of an unsupported type is
     #   detected (something other than file, directory or link)
-    def all_files_in(dir_name, recursion_limit = 10)
-      Dir[dir_name + '/**/*'].map do |fn|
+    def all_files_in(dir_name, extra_files, recursion_limit = 10)
+      all_files_and_dirs_in(dir_name, extra_files).map do |fn|
         case File.ftype(fn)
         when 'link'
           if 0 == recursion_limit
@@ -64,7 +68,7 @@ module Nanoc::Extra
             if File.file?(absolute_target)
               fn
             else
-              all_files_in(absolute_target, recursion_limit - 1).map do |sfn|
+              all_files_in(absolute_target, extra_files, recursion_limit - 1).map do |sfn|
                 fn + sfn[absolute_target.size..-1]
               end
             end
@@ -79,6 +83,35 @@ module Nanoc::Extra
       end.compact.flatten
     end
     module_function :all_files_in
+
+    # Returns all files and directories in the given directory and
+    # directories below it.
+    #
+    # @param [String] dir_name The name of the directory whose contents to
+    #   fetch
+    #
+    # @param [String, Array, nil] extra_files The list of extra patterns
+    #   to extend the file search for files not found by default, example
+    #   "**/.{htaccess,htpasswd}"
+    #
+    # @return [Array<String>] A list of files and directories
+    #
+    # @raise [GenericTrivial] when pattern can not be handled
+    def all_files_and_dirs_in(dir_name, extra_files)
+      patterns = ["#{dir_name}/**/*"]
+      case extra_files
+      when nil
+      when String
+        patterns << "#{dir_name}/#{extra_files}"
+      when Array
+        patterns.concat(extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" })
+      else
+        raise Nanoc::Errors::GenericTrivial,
+          "Do not know how to handle extra_files: #{extra_files.inspect}"
+      end
+      Dir.glob(patterns)
+    end
+    module_function :all_files_and_dirs_in
 
     # Resolves the given symlink into an absolute path.
     #
