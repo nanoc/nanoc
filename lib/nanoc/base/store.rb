@@ -50,7 +50,7 @@ module Nanoc
     # @abstract This method must be implemented by the subclass.
     #
     # @return [void]
-    def data=(_new_data)
+    def data=(new_data) # rubocop:disable Lint/UnusedMethodArgument
       raise NotImplementedError.new('Nanoc::Store subclasses must implement #data and #data=')
     end
 

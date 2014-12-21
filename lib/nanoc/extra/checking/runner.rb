@@ -12,7 +12,7 @@ module Nanoc::Extra::Checking
       @site = site
     end
 
-    # @param [String] The name of the Checks file
+    # @return [String] The name of the Checks file
     def checks_filename
       @_checks_filename ||= CHECKS_FILENAMES.find { |f| File.file?(f) }
     end
