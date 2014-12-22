@@ -71,19 +71,27 @@ module Nanoc::Extra::Deployers
       end
       keys_to_destroy = files.all.map { |file| file.key }
       keys_to_invalidate = []
+      md5_by_key = {}
+      if config[:provider] == "aws"
+        files.each {|file| md5_by_key[file.key] = file.etag}
+      else # should support other providers here, as possible
+      end
 
-      # Upload all the files in the output folder to the clouds
+      # Upload files in the output folder to the clouds
       puts 'Uploading local files'
       FileUtils.cd(src) do
         files = Dir['**/*'].select { |f| File.file?(f) }
         files.each do |file_path|
           key = path ? File.join(path, file_path) : file_path
-          directory.files.create(
-            :key => key,
-            :body => File.open(file_path),
-            :public => true)
+          if (config[:provider] != "aws") || (Digest::MD5.file(file_path).hexdigest != md5_by_key[key])
+            puts "Uploading #{file_path}"
+            directory.files.create(
+              :key => key,
+              :body => File.open(file_path),
+              :public => true)
+            keys_to_invalidate.push(key)
+          end
           keys_to_destroy.delete(key)
-          keys_to_invalidate.push(key)
         end
       end
 
