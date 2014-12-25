@@ -204,6 +204,22 @@ describe Nanoc::Checksummer do
       end
     end
 
+    describe 'with attributes containing items' do
+      let(:attributes) { { item: Nanoc::Item.new('asdf', {}, '/asdf/') } }
+
+      it 'should error' do
+        proc { subject.calc(item) }.must_raise(RuntimeError)
+      end
+    end
+
+    describe 'with attributes containing layouts' do
+      let(:attributes) { { layout: Nanoc::Layout.new('asdf', {}, '/asdf/') } }
+
+      it 'should error' do
+        proc { subject.calc(item) }.must_raise(RuntimeError)
+      end
+    end
+
     describe 'with changed content' do
       let(:content) { 'something drastically different' }
 
