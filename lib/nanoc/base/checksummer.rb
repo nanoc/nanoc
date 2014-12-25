@@ -60,7 +60,7 @@ module Nanoc
           attributes = obj.attributes.dup
           attributes.delete(:file)
           if attributes.any? { |_k, v| v.is_a?(Nanoc::Item) || v.is_a?(Nanoc::Layout) }
-            raise 'cannot have items or layouts in attributes'
+            raise Nanoc::Errors::ItemOrLayoutAttribute.new(obj)
           end
           update(attributes, digest)
         else

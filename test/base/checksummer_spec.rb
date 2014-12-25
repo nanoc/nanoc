@@ -208,7 +208,7 @@ describe Nanoc::Checksummer do
       let(:attributes) { { item: Nanoc::Item.new('asdf', {}, '/asdf/') } }
 
       it 'should error' do
-        proc { subject.calc(item) }.must_raise(RuntimeError)
+        proc { subject.calc(item) }.must_raise(Nanoc::Errors::ItemOrLayoutAttribute)
       end
     end
 
@@ -216,7 +216,7 @@ describe Nanoc::Checksummer do
       let(:attributes) { { layout: Nanoc::Layout.new('asdf', {}, '/asdf/') } }
 
       it 'should error' do
-        proc { subject.calc(item) }.must_raise(RuntimeError)
+        proc { subject.calc(item) }.must_raise(Nanoc::Errors::ItemOrLayoutAttribute)
       end
     end
 
