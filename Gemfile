@@ -13,7 +13,7 @@ gem 'builder'
 gem 'coderay'
 gem 'compass'
 gem 'coffee-script'
-gem 'coveralls', :require => false
+gem 'coveralls', :require => false, :platforms => ruby_19_plus
 gem 'erubis'
 gem 'fog', :platforms => ruby_19_plus
 gem 'haml'
@@ -26,8 +26,8 @@ gem 'maruku'
 gem 'mime-types', :platforms => ruby_19_plus
 gem 'minitest', '~> 4.0'
 gem 'mocha'
-gem 'mustache'
-gem 'nokogiri', '~> 1.6'
+gem 'mustache', :platforms => ruby_19_plus
+gem 'nokogiri', '~> 1.6', :platforms => ruby_19_plus
 gem 'pandoc-ruby'
 gem 'pry'
 gem 'pygments.rb', :platforms => [:ruby, :mswin]
@@ -42,11 +42,11 @@ gem 'rouge'
 gem 'rubocop', :platforms => ruby_19_plus
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
-gem 'slim'
+gem 'slim', :platforms => ruby_19_plus
 gem 'typogruby'
 gem 'uglifier'
 gem 'vcr'
-gem 'w3c_validators'
+gem 'w3c_validators', :platforms => ruby_19_plus
 gem 'webmock'
 gem 'yuicompressor', :platforms => ruby_19_plus
 gem 'yard'
