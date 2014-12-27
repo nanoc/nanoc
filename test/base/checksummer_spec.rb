@@ -27,7 +27,7 @@ describe Nanoc::Checksummer do
     end
 
     it 'should checksum non-serializable arrays' do
-      subject.calc([-> {}]).must_match(CHECKSUM_REGEX)
+      subject.calc([Proc.new{}]).must_match(CHECKSUM_REGEX)
     end
 
   end
@@ -35,15 +35,15 @@ describe Nanoc::Checksummer do
   describe 'for Hash' do
 
     it 'should checksum hashes' do
-      subject.calc({ a: 1, b: 2 }).must_equal 'qY8fW6gWK7F1XQ9MLrx3Gru/RTY='
+      subject.calc({ :a => 1, :b => 2 }).must_equal 'qY8fW6gWK7F1XQ9MLrx3Gru/RTY='
     end
 
     it 'should take order into account when checksumming hashes' do
-      subject.calc({ a: 1, b: 2 }).wont_equal(subject.calc({ b: 2, a: 1 }))
+      subject.calc({ :a => 1, :b => 2 }).wont_equal(subject.calc({ :b => 2, :a => 1 }))
     end
 
     it 'should checksum non-serializable hashes' do
-      subject.calc({ a: -> {} }).must_match(CHECKSUM_REGEX)
+      subject.calc({ :a => Proc.new{} }).must_match(CHECKSUM_REGEX)
     end
 
   end
@@ -193,7 +193,7 @@ describe Nanoc::Checksummer do
 
   describe 'for Nanoc::Configuration' do
 
-    let(:wrapped)         { { a: 1, b: 2 } }
+    let(:wrapped)         { { :a => 1, :b => 2 } }
     let(:configuration)   { Nanoc::Configuration.new(wrapped) }
     let(:normal_checksum) { 'eYYQ74x29njbtXMtuKZX/ogD8JA=' }
 
@@ -203,7 +203,7 @@ describe Nanoc::Checksummer do
 
     describe 'if the content changes' do
 
-      let(:wrapped) { { a: 666, b: 2 } }
+      let(:wrapped) { { :a => 666, :b => 2 } }
 
       it 'should have a different checksum' do
         subject.calc(configuration).must_match(CHECKSUM_REGEX)
@@ -218,7 +218,7 @@ describe Nanoc::Checksummer do
 
     let(:content)         { 'asdf' }
     let(:filename)        { File.expand_path('bob.txt') }
-    let(:attributes)      { { a: 1, b: 2 } }
+    let(:attributes)      { { :a => 1, :b => 2 } }
     let(:identifier)      { '/foo/' }
     let(:item)            { Nanoc::Item.new(content, attributes, identifier) }
     let(:normal_checksum) { 'eTPdmaG7UAuPzH210HM1JvJaWDo=' }
@@ -229,7 +229,7 @@ describe Nanoc::Checksummer do
 
     describe 'with changed attributes' do
 
-      let(:attributes) { { x: 4, y: 5 } }
+      let(:attributes) { { :x => 4, :y => 5 } }
 
       it 'should have a different checksum' do
         subject.calc(item).must_match(CHECKSUM_REGEX)
