@@ -2,19 +2,21 @@
 
 class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   def test_run
-    with_site do |site|
-      # Create files
-      FileUtils.mkdir_p('output')
-      FileUtils.mkdir_p('output/stuff')
-      File.open('output/foo.txt',  'w') { |io| io.write('<a href="/broken">broken</a>') }
-      File.open('output/bar.html', 'w') { |io| io.write('<a href="/foo.txt">not broken</a>') }
+    if_have 'nokogiri' do
+      with_site do |site|
+        # Create files
+        FileUtils.mkdir_p('output')
+        FileUtils.mkdir_p('output/stuff')
+        File.open('output/foo.txt',  'w') { |io| io.write('<a href="/broken">broken</a>') }
+        File.open('output/bar.html', 'w') { |io| io.write('<a href="/foo.txt">not broken</a>') }
 
-      # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
-      check.run
+        # Create check
+        check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+        check.run
 
-      # Test
-      assert check.issues.empty?
+        # Test
+        assert check.issues.empty?
+      end
     end
   end
 

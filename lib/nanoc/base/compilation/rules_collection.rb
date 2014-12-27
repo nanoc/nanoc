@@ -82,7 +82,7 @@ module Nanoc
     end
 
     def parse(rules_filename)
-      rules_filename = File.absolute_path(rules_filename)
+      rules_filename = File.expand_path(rules_filename)
 
       # Get rule data
       @data = File.read(rules_filename)

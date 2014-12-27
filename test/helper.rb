@@ -10,9 +10,11 @@ require 'minitest/mock'
 require 'mocha/setup'
 require 'vcr'
 
-# Setup coverage
-require 'coveralls'
-Coveralls.wear!
+if Gem.ruby_version >= Gem::Version.new("1.9.3")
+  # Setup coverage
+  require 'coveralls'
+  Coveralls.wear!
+end
 
 # Load nanoc
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))

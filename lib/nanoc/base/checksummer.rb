@@ -13,7 +13,7 @@ module Nanoc
       def calc(obj)
         digest = Digest::SHA1.new
         update(obj, digest)
-        digest.base64digest
+        [digest.digest].pack("m0").strip # TODO: ruby 1.9.3+ => digest.base64digest
       end
 
       private

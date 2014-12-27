@@ -33,4 +33,8 @@ namespace :test do
 end
 
 desc 'Alias for test:all + rubocop'
-task :test => [:'test:all', :rubocop]
+if Gem.ruby_version >= Gem::Version.new("1.9.3")
+  task :test => [:'test:all', :rubocop]
+else
+  task :test => [:'test:all']
+end

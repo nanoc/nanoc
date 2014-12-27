@@ -2,94 +2,101 @@
 
 class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   def test_filter_html_with_double_quotes
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="/foo">foo</a>)
+      expected_content = %(<a href="../..">foo</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="/foo">foo</a>)
-    expected_content = %(<a href="../..">foo</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_with_single_quotes
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(<a href='/foo'>foo</a>)
+      expected_content = %(<a href="../..">foo</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href='/foo'>foo</a>)
-    expected_content = %(<a href="../..">foo</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_without_quotes
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(<a href=/foo>foo</a>)
+      expected_content = %(<a href="../..">foo</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href=/foo>foo</a>)
-    expected_content = %(<a href="../..">foo</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_with_boilerplate
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
-    end
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
 
-    # Set content
-    raw_content = <<EOS
+      # Set content
+      raw_content = <<EOS
 <!DOCTYPE html>
 <html>
   <head>
@@ -100,227 +107,246 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   </body>
 </html>
 EOS
-    expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
-    expected_match_1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
+      expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
+      expected_match_1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
 
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_match(expected_match_0, actual_content)
-    assert_match(expected_match_1, actual_content)
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_match(expected_match_0, actual_content)
+      assert_match(expected_match_1, actual_content)
+    end
   end
 
   def test_filter_html_multiple
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="/foo">foo</a> <a href="/bar">bar</a>)
+      expected_content = %(<a href="../..">foo</a> <a href="../../../bar">bar</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="/foo">foo</a> <a href="/bar">bar</a>)
-    expected_content = %(<a href="../..">foo</a> <a href="../../../bar">bar</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_nested
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="/"><img src="/bar.png" /></a>)
+      expected_content = %(<a href="../../../"><img src="../../../bar.png"></a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="/"><img src="/bar.png" /></a>)
-    expected_content = %(<a href="../../../"><img src="../../../bar.png"></a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_outside_tag
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(stuff href="/foo" more stuff)
+      expected_content = %(stuff href="/foo" more stuff)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(stuff href="/foo" more stuff)
-    expected_content = %(stuff href="/foo" more stuff)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_root
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/woof/meow/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/woof/meow/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="/">foo</a>)
+      expected_content = %(<a href="../../">foo</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="/">foo</a>)
-    expected_content = %(<a href="../../">foo</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_network_path
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/woof/meow/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/woof/meow/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="//example.com/">example.com</a>)
+      expected_content = %(<a href="//example.com/">example.com</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="//example.com/">example.com</a>)
-    expected_content = %(<a href="//example.com/">example.com</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_with_anchor
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/woof/meow/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/woof/meow/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="#max-payne">Max Payne</a>)
+      expected_content = %(<a href="#max-payne">Max Payne</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="#max-payne">Max Payne</a>)
-    expected_content = %(<a href="#max-payne">Max Payne</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_with_url
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/woof/meow/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/woof/meow/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="http://example.com/">Example</a>)
+      expected_content = %(<a href="http://example.com/">Example</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="http://example.com/">Example</a>)
-    expected_content = %(<a href="http://example.com/">Example</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_with_relative_path
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/woof/meow/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/woof/meow/'
+      end
+
+      # Set content
+      raw_content      = %(<a href="example">Example</a>)
+      expected_content = %(<a href="example">Example</a>)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(<a href="example">Example</a>)
-    expected_content = %(<a href="example">Example</a>)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 
   def test_filter_html_object_with_relative_path
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/woof/meow/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/woof/meow/'
+      end
+
+      raw_content    = %(<object data="/example"><param name="movie" content="/example"></object>)
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+
+      assert_match(/<object data="..\/..\/example">/, actual_content)
+      assert_match(/<param (name="movie" )?content="..\/..\/example"/, actual_content)
     end
-
-    raw_content    = %(<object data="/example"><param name="movie" content="/example"></object>)
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-
-    assert_match(/<object data="..\/..\/example">/, actual_content)
-    assert_match(/<param (name="movie" )?content="..\/..\/example"/, actual_content)
   end
 
   def test_filter_implicit
@@ -711,26 +737,28 @@ XML
   end
 
   def test_filter_html_doctype
-    # Create filter with mock item
-    filter = Nanoc::Filters::RelativizePaths.new
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
 
-    # Mock item
-    filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
-          'content',
-          {},
-          '/foo/bar/baz/'),
-        :blah)
-      @item_rep.path = '/foo/bar/baz/'
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::ItemRep.new(
+          Nanoc::Item.new(
+            'content',
+            {},
+            '/foo/bar/baz/'),
+          :blah)
+        @item_rep.path = '/foo/bar/baz/'
+      end
+
+      # Set content
+      raw_content      = %(&lt;!DOCTYPE html>)
+      expected_content = %(&lt;!DOCTYPE html&gt;)
+
+      # Test
+      actual_content = filter.setup_and_run(raw_content, :type => :html)
+      assert_equal(expected_content, actual_content)
     end
-
-    # Set content
-    raw_content      = %(&lt;!DOCTYPE html>)
-    expected_content = %(&lt;!DOCTYPE html&gt;)
-
-    # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
-    assert_equal(expected_content, actual_content)
   end
 end
