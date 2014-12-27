@@ -25,19 +25,21 @@ class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
   end
 
   def test_list_checks
-    with_site do |site|
-      File.open('Checks', 'w') do |io|
-        io.write('check :my_foo_check do ; end')
-      end
+    if_have 'nokogiri' do
+      with_site do |site|
+        File.open('Checks', 'w') do |io|
+          io.write('check :my_foo_check do ; end')
+        end
 
-      runner = Nanoc::Extra::Checking::Runner.new(site)
-      ios = capturing_stdio do
-        runner.list_checks
-      end
+        runner = Nanoc::Extra::Checking::Runner.new(site)
+        ios = capturing_stdio do
+          runner.list_checks
+        end
 
-      assert ios[:stdout].include?('my_foo_check')
-      assert ios[:stdout].include?('internal_links')
-      assert ios[:stderr].empty?
+        assert ios[:stdout].include?('my_foo_check')
+        assert ios[:stdout].include?('internal_links')
+        assert ios[:stderr].empty?
+      end
     end
   end
 end
