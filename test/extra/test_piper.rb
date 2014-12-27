@@ -28,7 +28,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
     piper.run(cmd, input)
 
-    assert_equal(input, stdout.string)
+    assert_equal(input, stdout.string.strip)
     assert_equal('', stderr.string)
   end
 
