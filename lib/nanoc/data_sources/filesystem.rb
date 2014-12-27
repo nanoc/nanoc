@@ -153,8 +153,8 @@ module Nanoc::DataSources
     def all_split_files_in(dir_name)
       grouped_filenames =
         all_files_in(dir_name).
-        reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }.
-        group_by { |fn| basename_of(fn) }
+          reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }.
+          group_by { |fn| basename_of(fn) }
 
       grouped_filenames.each_pair do |key, filenames|
         # Divide
