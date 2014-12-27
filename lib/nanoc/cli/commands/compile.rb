@@ -408,10 +408,9 @@ module Nanoc::CLI::Commands
     end
 
     def setup_listeners
-      @listeners =
-        @listener_classes
-        .select { |klass| klass.enable_for?(self) }
-        .map    { |klass| klass.new(:reps => reps) }
+      @listeners = @listener_classes.
+        select { |klass| klass.enable_for?(self) }.
+        map    { |klass| klass.new(:reps => reps) }
 
       @listeners.each { |s| s.start }
     end

@@ -371,7 +371,7 @@ module Nanoc
       parent_config_file = config[:parent_config_file]
       if parent_config_file
         config.delete(:parent_config_file)
-        config_path = File.absolute_path(parent_config_file, File.dirname(config_paths.last))
+        config_path = File.expand_path(parent_config_file, File.dirname(config_paths.last))
         unless File.file?(config_path)
           raise Nanoc::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
         end
@@ -410,7 +410,7 @@ module Nanoc
           if filename.nil?
             raise Nanoc::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
           end
-          File.absolute_path(filename, dir_or_config_hash)
+          File.expand_path(filename, dir_or_config_hash)
         end
 
         @config = apply_parent_config(load_config(config_path), [config_path])
