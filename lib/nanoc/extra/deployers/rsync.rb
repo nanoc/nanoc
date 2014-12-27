@@ -58,7 +58,7 @@ module Nanoc::Extra::Deployers
     private
 
     def run_shell_cmd(cmd)
-      piper = Nanoc::Extra::Piper.new(:stdout => $stdout, :stderr => $stderr)
+      piper = Nanoc::Extra::Piper.new(:stdout => $stdout)
       piper.run(cmd, nil)
     end
   end

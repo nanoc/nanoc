@@ -222,8 +222,7 @@ module Nanoc::Filters
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
       stdout = StringIO.new
-      stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper = Nanoc::Extra::Piper.new(:stdout => stdout)
       piper.run(cmd, code)
 
       stdout.string
@@ -287,8 +286,7 @@ module Nanoc::Filters
       end
 
       stdout = StringIO.new
-      stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper = Nanoc::Extra::Piper.new(:stdout => stdout)
       piper.run(cmd, code)
 
       stdout.string
@@ -389,7 +387,7 @@ module Nanoc::Filters
     end
 
     def check_availability(*cmd)
-      piper = Nanoc::Extra::Piper.new(:stdout => StringIO.new, :stderr => StringIO.new)
+      piper = Nanoc::Extra::Piper.new(:stdout => StringIO.new)
       piper.run(cmd, nil)
     end
   end

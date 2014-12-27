@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'tempfile'
+
 class Nanoc::GemTest < Nanoc::TestCase
   def setup
     super
@@ -13,9 +15,12 @@ class Nanoc::GemTest < Nanoc::TestCase
     # Build
     files_before = Set.new Dir['**/*']
     stdout = StringIO.new
-    stderr = StringIO.new
-    piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
-    piper.run(%w( gem build nanoc.gemspec ), nil)
+    stderr = ""
+    piper = Nanoc::Extra::Piper.new(:stdout => stdout)
+    Tempfile.open('stderr') do |temp_file|
+      piper.run(["gem build nanoc.gemspec 2>#{temp_file.path.inspect}"], nil)
+      stderr = File.open(temp_file.path){|file| file.readlines }
+    end
     files_after = Set.new Dir['**/*']
 
     # Check new files
@@ -25,7 +30,7 @@ class Nanoc::GemTest < Nanoc::TestCase
 
     # Check output
     assert_match(/Successfully built RubyGem\s+Name: nanoc\s+Version: .*\s+File: nanoc-.*\.gem\s+/, stdout.string)
-    assert_equal '', stderr.string
+    assert_equal [], stderr
   ensure
     Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
   end

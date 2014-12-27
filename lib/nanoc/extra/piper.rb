@@ -16,32 +16,27 @@ module Nanoc::Extra
     end
 
     # @option [IO] :stdout ($stdout)
-    # @option [IO] :stderr ($stderr)
     def initialize(params = {})
       @stdout = params.fetch(:stdout, $stdout)
-      @stderr = params.fetch(:stderr, $stderr)
     end
 
     # @param [Array<String>] cmd
     #
     # @param [String, nil] input
+    #
+    # @raises Nanoc::Extra::Piper::Error when the command fails
     def run(cmd, input)
-      Open3.popen3(*cmd) do |stdin, stdout, stderr, wait_thr|
-        stdout_thread = Thread.new { @stdout << stdout.read }
-        stderr_thread = Thread.new { @stderr << stderr.read }
-
+      IO.popen(cmd.join(' '), 'r+') do |io|
         if input
-          stdin << input
+          io.puts input
         end
-        stdin.close
-
-        stdout_thread.join
-        stderr_thread.join
-
-        exit_status = wait_thr.value
-        unless exit_status.success?
-          raise Error.new(cmd, exit_status.to_i)
+        io.close_write
+        while stdout = io.gets
+          @stdout << stdout
         end
+      end
+      unless $?.success?
+        raise Error.new(cmd, $?.to_i)
       end
     end
   end
