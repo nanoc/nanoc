@@ -27,5 +27,5 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('cri', '~> 2.3')
 
-  s.add_development_dependency('bundler', '~> 1.5')
+  s.add_development_dependency('bundler', '>= 1.7.10', '< 2.0')
 end
