@@ -6,11 +6,11 @@ module Nanoc::CLI
   module ANSIStringColorizer
     # TODO: complete mapping
     MAPPING = {
-      :bold   => "\e[1m",
-      :red    => "\e[31m",
-      :green  => "\e[32m",
-      :yellow => "\e[33m",
-      :blue   => "\e[34m"
+      bold: "\e[1m",
+      red: "\e[31m",
+      green: "\e[32m",
+      yellow: "\e[33m",
+      blue: "\e[34m"
     }
 
     # @param [String] s The string to colorize

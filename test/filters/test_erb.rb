@@ -3,7 +3,7 @@
 class Nanoc::Filters::ERBTest < Nanoc::TestCase
   def test_filter_with_instance_variable
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ :location => 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>')
@@ -12,7 +12,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_instance_method
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ :location => 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{location}." %>')
@@ -28,9 +28,9 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
     # Create filter
     filter = ::Nanoc::Filters::ERB.new({
-      :item     => item,
-      :item_rep => item_rep,
-      :location => 'a cheap motel'
+      item: item,
+      item_rep: item_rep,
+      location: 'a cheap motel'
     })
 
     # Run filter
@@ -47,7 +47,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_yield
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ :content => 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new({ content: 'a cheap motel' })
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
@@ -56,7 +56,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_yield_without_content
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ :location => 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
 
     # Run filter
     assert_raises LocalJumpError do
@@ -74,18 +74,18 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
     File.open('moo', 'w') { |io| io.write('one miiillion dollars') }
 
     # Without
-    res = filter.setup_and_run('<%= File.read("moo") %>', :safe_level => nil)
+    res = filter.setup_and_run('<%= File.read("moo") %>', safe_level: nil)
     assert_equal 'one miiillion dollars', res
 
     # With
     assert_raises(SecurityError) do
-      res = filter.setup_and_run('<%= File.read("moo") %>', :safe_level => 3)
+      res = filter.setup_and_run('<%= File.read("moo") %>', safe_level: 3)
     end
   end
 
   def test_trim_mode
     # Set up
-    filter = ::Nanoc::Filters::ERB.new({ :location => 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
     $trim_mode_works = false
 
     # Without
@@ -93,13 +93,13 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
     refute $trim_mode_works
 
     # With
-    filter.setup_and_run('% $trim_mode_works = true', :trim_mode => '%')
+    filter.setup_and_run('% $trim_mode_works = true', trim_mode: '%')
     assert $trim_mode_works
   end
 
   def test_locals
     filter = ::Nanoc::Filters::ERB.new
-    result = filter.setup_and_run('<%= @local %>', :locals => { :local => 123 })
+    result = filter.setup_and_run('<%= @local %>', locals: { local: 123 })
     assert_equal '123', result
   end
 end

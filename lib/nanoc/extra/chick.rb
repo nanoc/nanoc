@@ -14,12 +14,12 @@ module Nanoc::Extra
     #   [Curb](https://github.com/taf2/curb) instead.
     class Client
       DEFAULT_OPTIONS = {
-        :cache => {
-          :metastore   => 'file:tmp/rack/cache.meta',
-          :entitystore => 'file:tmp/rack/cache.body'
+        cache: {
+          metastore: 'file:tmp/rack/cache.meta',
+          entitystore: 'file:tmp/rack/cache.body'
         },
-        :cache_controller => {
-          :max_age => 60
+        cache_controller: {
+          max_age: 60
         }
       }
 
@@ -34,13 +34,13 @@ module Nanoc::Extra
         # Build app
         options = @options
         @app ||= Rack::Builder.new do
-          use Rack::Cache, options[:cache].merge(:verbose => true)
+          use Rack::Cache, options[:cache].merge(verbose: true)
           use Nanoc::Extra::CHiCk::CacheController, options[:cache_controller]
           run Nanoc::Extra::CHiCk::RackClient
         end
 
         # Build environment for request
-        env = Rack::MockRequest.env_for(url, :method => 'GET')
+        env = Rack::MockRequest.env_for(url, method: 'GET')
 
         # Fetch
         puts "[CHiCk] Fetching #{url}..." if $DEBUG

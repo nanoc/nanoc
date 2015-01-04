@@ -11,7 +11,7 @@ class Nanoc::FilterTest < Nanoc::TestCase
 
   def test_assigns
     # Create filter
-    filter = Nanoc::Filter.new({ :foo => 'bar' })
+    filter = Nanoc::Filter.new({ foo: 'bar' })
 
     # Check assigns
     assert_equal('bar', filter.assigns[:foo])
@@ -19,7 +19,7 @@ class Nanoc::FilterTest < Nanoc::TestCase
 
   def test_assigns_with_instance_variables
     # Create filter
-    filter = Nanoc::Filter.new({ :foo => 'bar' })
+    filter = Nanoc::Filter.new({ foo: 'bar' })
 
     # Check assigns
     assert_equal('bar', filter.instance_eval { @foo })
@@ -27,7 +27,7 @@ class Nanoc::FilterTest < Nanoc::TestCase
 
   def test_assigns_with_instance_methods
     # Create filter
-    filter = Nanoc::Filter.new({ :foo => 'bar' })
+    filter = Nanoc::Filter.new({ foo: 'bar' })
 
     # Check assigns
     assert_equal('bar', filter.instance_eval { foo })
@@ -51,7 +51,7 @@ class Nanoc::FilterTest < Nanoc::TestCase
     item_rep.expects(:name).returns(:quux)
 
     # Create filter
-    filter = Nanoc::Filter.new({ :item => item, :item_rep => item_rep })
+    filter = Nanoc::Filter.new({ item: item, item_rep: item_rep })
 
     # Check filename
     assert_equal('item /foo/bar/baz/ (rep quux)', filter.filename)
@@ -63,7 +63,7 @@ class Nanoc::FilterTest < Nanoc::TestCase
     layout.expects(:identifier).returns('/wohba/')
 
     # Create filter
-    filter = Nanoc::Filter.new({ :item => mock, :item_rep => mock, :layout => layout })
+    filter = Nanoc::Filter.new({ item: mock, item_rep: mock, layout: layout })
 
     # Check filename
     assert_equal('layout /wohba/', filter.filename)

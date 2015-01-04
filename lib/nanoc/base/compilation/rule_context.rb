@@ -33,13 +33,13 @@ module Nanoc
       end
 
       super({
-        :rep      => rep,
-        :item_rep => rep,
-        :item     => rep.item,
-        :site     => compiler.site,
-        :config   => compiler.site.config,
-        :items    => compiler.site.items,
-        :layouts  => compiler.site.layouts
+        rep: rep,
+        item_rep: rep,
+        item: rep.item,
+        site: compiler.site,
+        config: compiler.site.config,
+        items: compiler.site.items,
+        layouts: compiler.site.layouts
       })
     end
 

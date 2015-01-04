@@ -28,7 +28,7 @@ module Nanoc
         initialize_if_necessary(name)
 
         # Add observer
-        @notifications[name] << { :id => id, :block => block }
+        @notifications[name] << { id: id, block: block }
       end
 
       # Posts a notification with the given name and the given arguments.

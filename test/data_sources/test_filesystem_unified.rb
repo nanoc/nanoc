@@ -15,7 +15,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
   def test_create_object_not_at_root
     # Create item
     data_source = new_data_source
-    data_source.send(:create_object, 'foobar', 'content here', { :foo => 'bar' }, '/asdf/')
+    data_source.send(:create_object, 'foobar', 'content here', { foo: 'bar' }, '/asdf/')
 
     # Check file existance
     assert File.directory?('foobar')
@@ -31,7 +31,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
   def test_create_object_at_root
     # Create item
     data_source = new_data_source
-    data_source.send(:create_object, 'foobar', 'content here', { :foo => 'bar' }, '/')
+    data_source.send(:create_object, 'foobar', 'content here', { foo: 'bar' }, '/')
 
     # Check file existance
     assert File.directory?('foobar')
@@ -77,19 +77,19 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
         'test 1',
         { 'num' => 1, :filename => 'foo/bar.html',   :extension => 'html', :file => File.open('foo/bar.html') },
         '/bar/',
-        :binary => false, :mtime => File.mtime('foo/bar.html')
+        binary: false, mtime: File.mtime('foo/bar.html')
       ),
       klass.new(
         'test 2',
         { 'num' => 2, :filename => 'foo/b.c.html',   :extension => 'c.html', :file => File.open('foo/b.c.html') },
         '/b/',
-        :binary => false, :mtime => File.mtime('foo/b.c.html')
+        binary: false, mtime: File.mtime('foo/b.c.html')
       ),
       klass.new(
         'test 3',
         { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html', :file => File.open('foo/a/b/c.html') },
         '/a/b/c/',
-        :binary => false, :mtime => File.mtime('foo/a/b/c.html')
+        binary: false, mtime: File.mtime('foo/a/b/c.html')
       )
     ]
     actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0] }
@@ -142,7 +142,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_identifier_for_filename_allowing_periods_in_identifiers
     # Create data source
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
 
     # Get input and expected output
     expected = {
@@ -198,7 +198,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       'foo/blah_index.yaml'  => '/foo/blah_index/'
     }
 
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
       [meta_filename, content_filename].each do |filename|
@@ -246,7 +246,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       '/foo/index'            => '/foo/',
     }
 
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:identifier_for_filename, input)
       assert_equal(
@@ -278,7 +278,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_load_objects_allowing_periods_in_identifiers
     # Create data source
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
 
     # Create a fake class
     klass = Class.new do
@@ -317,7 +317,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :file             => nil
         },
         '/a/b/c/',
-        :binary => false, :mtime => File.mtime('foo/a/b/c.yaml')
+        binary: false, mtime: File.mtime('foo/a/b/c.yaml')
       ),
       klass.new(
         'test 2',
@@ -329,18 +329,18 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :file             => File.open('foo/b.c.html')
         },
         '/b.c/',
-        :binary => false, :mtime => File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
+        binary: false, mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
       ),
       klass.new(
         'test 3',
         {
-          :content_filename => 'foo/car.html',
-          :meta_filename    => nil,
-          :extension        => 'html',
-          :file             => File.open('foo/car.html')
+          content_filename: 'foo/car.html',
+          meta_filename: nil,
+          extension: 'html',
+          file: File.open('foo/car.html')
         },
         '/car/',
-        :binary => false, :mtime => File.mtime('foo/car.html')
+        binary: false, mtime: File.mtime('foo/car.html')
       )
     ]
 
@@ -406,7 +406,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :file             => nil
         },
         '/a/b/c/',
-        :binary => false, :mtime => File.mtime('foo/a/b/c.yaml')
+        binary: false, mtime: File.mtime('foo/a/b/c.yaml')
       ),
       klass.new(
         'test 2',
@@ -418,18 +418,18 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :file             => File.open('foo/b.html.erb')
         },
         '/b/',
-        :binary => false, :mtime => File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
+        binary: false, mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
       ),
       klass.new(
         'test 3',
         {
-          :content_filename => 'foo/car.html',
-          :meta_filename    => nil,
-          :extension        => 'html',
-          :file             => File.open('foo/car.html')
+          content_filename: 'foo/car.html',
+          meta_filename: nil,
+          extension: 'html',
+          file: File.open('foo/car.html')
         },
         '/car/',
-        :binary => false, :mtime => File.mtime('foo/car.html')
+        binary: false, mtime: File.mtime('foo/car.html')
       )
     ]
 
@@ -456,17 +456,17 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_create_object_allowing_periods_in_identifiers
     # Create data source
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
 
     # Create object without period
-    data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/asdf/')
+    data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/asdf/')
     assert File.file?('foo/asdf.html')
     data = data_source.send(:parse, 'foo/asdf.html', nil, 'moo')
     assert_equal({ 'some' => 'attributes' }, data[0])
     assert_equal('some content',             data[1])
 
     # Create object with period
-    data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/as.df/')
+    data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/as.df/')
     assert File.file?('foo/as.df.html')
     data = data_source.send(:parse, 'foo/as.df.html', nil, 'moo')
     assert_equal({ 'some' => 'attributes' }, data[0])
@@ -478,7 +478,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source
 
     # Create object without period
-    data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/asdf/')
+    data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/asdf/')
     assert File.file?('foo/asdf.html')
     data = data_source.send(:parse, 'foo/asdf.html', nil, 'moo')
     assert_equal({ 'some' => 'attributes' }, data[0])
@@ -486,7 +486,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Create object with period
     assert_raises(RuntimeError) do
-      data_source.send(:create_object, 'foo', 'some content', { :some => 'attributes' }, '/as.df/')
+      data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/as.df/')
     end
   end
 

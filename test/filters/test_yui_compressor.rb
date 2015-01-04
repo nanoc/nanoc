@@ -15,10 +15,10 @@ class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
         }
       JAVASCRIPT
 
-      result = filter.setup_and_run(sample_js, { :type => 'js', :munge => true })
+      result = filter.setup_and_run(sample_js, { type: 'js', munge: true })
       assert_match 'function factorial(c){var a=1;for(var b=2;b<=c;b++){a*=b}return a};', result
 
-      result = filter.setup_and_run(sample_js, { :type => 'js', :munge => false })
+      result = filter.setup_and_run(sample_js, { type: 'js', munge: false })
       assert_match 'function factorial(n){var result=1;for(var i=2;i<=n;i++){result*=i}return result};', result
     end
   end
@@ -33,7 +33,7 @@ class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
         }
       CSS
 
-      result = filter.setup_and_run(sample_css, { :type => 'css' })
+      result = filter.setup_and_run(sample_css, { type: 'css' })
       assert_match '*{margin:0}', result
     end
   end

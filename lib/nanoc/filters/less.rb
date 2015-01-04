@@ -44,7 +44,7 @@ module Nanoc::Filters
 
       # Add filename to load path
       paths = [File.dirname(@item[:content_filename])]
-      parser = ::Less::Parser.new(:paths => paths)
+      parser = ::Less::Parser.new(paths: paths)
       parser.parse(content).to_css params
     end
   end

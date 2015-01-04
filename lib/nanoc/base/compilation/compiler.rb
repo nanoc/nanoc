@@ -123,7 +123,7 @@ module Nanoc
       route_reps
 
       # Load auxiliary stores
-      stores.each { |s| s.load }
+      stores.each(&:load)
 
       @loaded = true
     rescue => e
@@ -142,7 +142,7 @@ module Nanoc
       return if @unloading
       @unloading = true
 
-      stores.each { |s| s.unload }
+      stores.each(&:unload)
 
       @stack = []
 
@@ -173,7 +173,7 @@ module Nanoc
       end
 
       # Store
-      stores.each { |s| s.store }
+      stores.each(&:store)
     end
 
     # Returns the dependency tracker for this site, creating it first if it
@@ -218,7 +218,7 @@ module Nanoc
         raise Nanoc::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
 
         # Create reps
-        rep_names = matching_rules.map { |r| r.rep_name }.uniq
+        rep_names = matching_rules.map(&:rep_name).uniq
         rep_names.each do |rep_name|
           item.reps << ItemRep.new(item, rep_name)
         end
@@ -236,7 +236,7 @@ module Nanoc
 
         rules.each_pair do |snapshot, rule|
           # Get basic path by applying matching rule
-          basic_path = rule.apply_to(rep, :compiler => self)
+          basic_path = rule.apply_to(rep, compiler: self)
           next if basic_path.nil?
           if basic_path !~ %r{^/}
             raise "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
@@ -268,28 +268,28 @@ module Nanoc
     # @api private
     def assigns_for(rep)
       if rep.binary?
-        content_or_filename_assigns = { :filename => rep.temporary_filenames[:last] }
+        content_or_filename_assigns = { filename: rep.temporary_filenames[:last] }
       else
-        content_or_filename_assigns = { :content => rep.content[:last] }
+        content_or_filename_assigns = { content: rep.content[:last] }
       end
 
       content_or_filename_assigns.merge({
-        :item       => rep.item,
-        :rep        => rep,
-        :item_rep   => rep,
-        :items      => site.items,
-        :layouts    => site.layouts,
-        :config     => site.config,
-        :site       => site
+        item: rep.item,
+        rep: rep,
+        item_rep: rep,
+        items: site.items,
+        layouts: site.layouts,
+        config: site.config,
+        site: site
       })
     end
 
     # @return [Nanoc::OutdatednessChecker] The outdatedness checker
     def outdatedness_checker
       Nanoc::OutdatednessChecker.new(
-        :site => @site,
-        :checksum_store => checksum_store,
-        :dependency_tracker => dependency_tracker)
+        site: @site,
+        checksum_store: checksum_store,
+        dependency_tracker: dependency_tracker)
     end
     memoize :outdatedness_checker
 
@@ -303,7 +303,7 @@ module Nanoc
 
     # @return [Array<Nanoc::ItemRep>] The site’s item representations
     def reps
-      items.map { |i| i.reps }.flatten
+      items.map(&:reps).flatten
     end
     memoize :reps
 
@@ -381,8 +381,8 @@ module Nanoc
       else
         # Recalculate content
         rep.snapshot(:raw)
-        rep.snapshot(:pre, :final => false)
-        rules_collection.compilation_rule_for(rep).apply_to(rep, :compiler => self)
+        rep.snapshot(:pre, final: false)
+        rules_collection.compilation_rule_for(rep).apply_to(rep, compiler: self)
         rep.snapshot(:post) if rep.has_snapshot?(:post)
         rep.snapshot(:last)
       end
@@ -417,10 +417,10 @@ module Nanoc
     # Returns a preprocessor context, creating one if none exists yet.
     def preprocessor_context
       Nanoc::Context.new({
-        :site    => @site,
-        :config  => @site.config,
-        :items   => @site.items,
-        :layouts => @site.layouts
+        site: @site,
+        config: @site.config,
+        items: @site.items,
+        layouts: @site.layouts
       })
     end
     memoize :preprocessor_context
@@ -433,19 +433,19 @@ module Nanoc
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      Nanoc::ChecksumStore.new(:site => @site)
+      Nanoc::ChecksumStore.new(site: @site)
     end
     memoize :checksum_store
 
     # @return [RuleMemoryStore] The rule memory store
     def rule_memory_store
-      Nanoc::RuleMemoryStore.new(:site => @site)
+      Nanoc::RuleMemoryStore.new(site: @site)
     end
     memoize :rule_memory_store
 
     # @return [RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
-      Nanoc::RuleMemoryCalculator.new(:rules_collection => rules_collection)
+      Nanoc::RuleMemoryCalculator.new(rules_collection: rules_collection)
     end
     memoize :rule_memory_calculator
 

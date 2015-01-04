@@ -96,7 +96,7 @@ module Nanoc::Extra::Checking
     end
 
     def all_check_classes
-      Nanoc::Extra::Checking::Check.all.map { |p| p.last }.uniq
+      Nanoc::Extra::Checking::Check.all.map(&:last).uniq
     end
 
     def check_classes_named(n)
@@ -134,7 +134,7 @@ module Nanoc::Extra::Checking
 
       return if issues.empty?
       puts 'Issues found!'
-      issues.group_by { |i| i.subject }.to_a.sort_by { |p| p.first }.each do |pair|
+      issues.group_by(&:subject).to_a.sort_by(&:first).each do |pair|
         subject = pair.first
         issues  = pair.last
         next if issues.empty?

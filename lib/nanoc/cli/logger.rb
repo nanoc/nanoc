@@ -9,11 +9,11 @@ module Nanoc::CLI
     # Maps actions (`:create`, `:update`, `:identical`, `:skip` and `:delete`)
     # onto their ANSI color codes.
     ACTION_COLORS = {
-      :create         => "\e[32m", # green
-      :update         => "\e[33m", # yellow
-      :identical      => '',       # (nothing)
-      :skip           => '',       # (nothing)
-      :delete         => "\e[31m"  # red
+      create: "\e[32m", # green
+      update: "\e[33m", # yellow
+      identical: '',       # (nothing)
+      skip: '',       # (nothing)
+      delete: "\e[31m"  # red
     }
 
     include Singleton

@@ -64,14 +64,14 @@ module Nanoc::DataSources
           end
 
           attributes = {
-            :name      => raw_item['name'],
-            :artist    => {
-              :name      => raw_artist_info['name'],
-              :url       => raw_artist_info['url']
+            name: raw_item['name'],
+            artist: {
+              name: raw_artist_info['name'],
+              url: raw_artist_info['url']
             },
-            :url       => raw_item['url'],
-            :played_at => track_played_at,
-            :now_playing => now_playing
+            url: raw_item['url'],
+            played_at: track_played_at,
+            now_playing: now_playing
           }
           identifier = "/#{i}/"
           mtime = nil

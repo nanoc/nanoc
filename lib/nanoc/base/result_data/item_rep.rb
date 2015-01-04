@@ -20,7 +20,7 @@ module Nanoc
 
       # @deprecated Use {Nanoc::ItemRep#compiled_content} instead.
       def content_at_snapshot(snapshot = :pre)
-        compiled_content(:snapshot => snapshot)
+        compiled_content(snapshot: snapshot)
       end
 
       # @deprecated
@@ -115,7 +115,7 @@ module Nanoc
       # @return [void]
       def write(snapshot = :last)
         # Get raw path
-        raw_path = self.raw_path(:snapshot => snapshot)
+        raw_path = self.raw_path(snapshot: snapshot)
         return if raw_path.nil?
 
         # Create parent directory
@@ -346,7 +346,7 @@ module Nanoc
         end
 
         # Create snapshot
-        snapshot(@content[:post] ? :post : :pre, :final => false) unless self.binary?
+        snapshot(@content[:post] ? :post : :pre, final: false) unless self.binary?
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended, self, filter_name)
@@ -377,13 +377,13 @@ module Nanoc
 
       # Create "pre" snapshot
       if @content[:post].nil?
-        snapshot(:pre, :final => true)
+        snapshot(:pre, final: true)
       end
 
       # Create filter
       klass = filter_named(filter_name)
       raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
-      filter = klass.new(assigns.merge({ :layout => layout }))
+      filter = klass.new(assigns.merge({ layout: layout }))
 
       # Visit
       Nanoc::NotificationCenter.post(:visit_started, layout)
@@ -398,7 +398,7 @@ module Nanoc
         @content[:last] = filter.setup_and_run(layout.raw_content, filter_args)
 
         # Create "post" snapshot
-        snapshot(:post, :final => false)
+        snapshot(:post, final: false)
       ensure
         # Notify end
         Nanoc::NotificationCenter.post(:filtering_ended,  self, filter_name)
@@ -464,10 +464,10 @@ module Nanoc
     def initialize_content
       # Initialize content and filenames
       if self.binary?
-        @temporary_filenames = { :last => @item.raw_filename }
+        @temporary_filenames = { last: @item.raw_filename }
         @content             = {}
       else
-        @content             = { :last => @item.raw_content }
+        @content             = { last: @item.raw_content }
         @content[:last].freeze
         @temporary_filenames = {}
       end

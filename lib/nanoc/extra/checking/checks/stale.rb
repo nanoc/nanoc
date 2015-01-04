@@ -5,7 +5,7 @@ module Nanoc::Extra::Checking::Checks
     def run
       require 'set'
 
-      item_rep_paths = Set.new(@site.items.map { |i| i.reps }.flatten.map { |r| r.raw_path })
+      item_rep_paths = Set.new(@site.items.map(&:reps).flatten.map(&:raw_path))
 
       output_filenames.each do |f|
         next if pruner.filename_excluded?(f)
@@ -13,7 +13,7 @@ module Nanoc::Extra::Checking::Checks
 
         add_issue(
           'file without matching item',
-          :subject  => f)
+          subject: f)
       end
     end
 
@@ -21,7 +21,7 @@ module Nanoc::Extra::Checking::Checks
 
     def pruner
       exclude_config = @site.config.fetch(:prune, {}).fetch(:exclude, [])
-      @pruner ||= Nanoc::Extra::Pruner.new(@site, :exclude => exclude_config)
+      @pruner ||= Nanoc::Extra::Pruner.new(@site, exclude: exclude_config)
     end
   end
 end

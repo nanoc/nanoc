@@ -14,7 +14,7 @@ class Nanoc::GemTest < Nanoc::TestCase
     files_before = Set.new Dir['**/*']
     stdout = StringIO.new
     stderr = StringIO.new
-    piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     piper.run(%w( gem build nanoc.gemspec ), nil)
     files_after = Set.new Dir['**/*']
 

@@ -33,8 +33,8 @@ module Nanoc::CLI::Commands
 
       PLUGIN_CLASS_ORDER.each do |superclass|
         plugins_with_this_superclass = {
-          :builtin => plugins_builtin.select { |p| p[:superclass] == superclass },
-          :custom  => plugins_custom.select  { |p| p[:superclass] == superclass }
+          builtin: plugins_builtin.select { |p| p[:superclass] == superclass },
+          custom: plugins_custom.select  { |p| p[:superclass] == superclass }
         }
 
         # Print kind

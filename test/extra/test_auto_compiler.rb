@@ -86,7 +86,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).returns({ :output_dir => 'out', :index_filenames => ['index.html'] })
+      site.expects(:config).returns({ output_dir: 'out', index_filenames: ['index.html'] })
 
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
@@ -124,7 +124,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => ['index.html'] })
+      site.expects(:config).at_least_once.returns({ output_dir: 'out', index_filenames: ['index.html'] })
 
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
@@ -162,7 +162,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => ['index.html'] })
+      site.expects(:config).at_least_once.returns({ output_dir: 'out', index_filenames: ['index.html'] })
 
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
@@ -200,7 +200,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => ['index.html'] })
+      site.expects(:config).at_least_once.returns({ output_dir: 'out', index_filenames: ['index.html'] })
 
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
@@ -238,7 +238,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => ['index.html'] })
+      site.expects(:config).at_least_once.returns({ output_dir: 'out', index_filenames: ['index.html'] })
 
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
@@ -272,7 +272,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
       # Create site
       site = mock
       site.expects(:items).returns([])
-      site.expects(:config).at_least_once.returns({ :output_dir => 'out', :index_filenames => ['index.html'] })
+      site.expects(:config).at_least_once.returns({ output_dir: 'out', index_filenames: ['index.html'] })
 
       # Create autocompiler
       autocompiler = Nanoc::Extra::AutoCompiler.new('.')
@@ -423,7 +423,7 @@ class Nanoc::Extra::AutoCompilerTest < Nanoc::TestCase
 
       # Mock dependencies
       site = mock
-      site.stubs(:config).returns({ :output_dir => 'output/' })
+      site.stubs(:config).returns({ output_dir: 'output/' })
       site.stubs(:items).returns([])
       autocompiler.stubs(:build_site)
       autocompiler.stubs(:site).returns(site)

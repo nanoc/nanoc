@@ -7,9 +7,9 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
       fog = Nanoc::Extra::Deployers::Fog.new(
         'output/',
         {
-          :bucket     => 'mybucket',
-          :provider   => 'local',
-          :local_root => 'mylocalcloud' })
+          bucket: 'mybucket',
+          provider: 'local',
+          local_root: 'mylocalcloud' })
 
       # Create site
       FileUtils.mkdir_p('output')
@@ -37,12 +37,12 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
         fog = Nanoc::Extra::Deployers::Fog.new(
           'output/',
           {
-            :provider              => 'aws',
+            provider: 'aws',
             # FIXME: bucket is necessary for deployer but fog doesn't like it
-            :bucket_name           => 'doesntmatter',
-            :aws_access_key_id     => 'meh',
-            :aws_secret_access_key => 'dontcare' },
-          :dry_run => true)
+            bucket_name: 'doesntmatter',
+            aws_access_key_id: 'meh',
+            aws_secret_access_key: 'dontcare' },
+          dry_run: true)
 
         # Create site
         FileUtils.mkdir_p('output')
@@ -67,9 +67,9 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
       fog = Nanoc::Extra::Deployers::Fog.new(
         'output/',
         {
-          :bucket     => 'mybucket',
-          :provider   => 'local',
-          :local_root => 'mylocalcloud' })
+          bucket: 'mybucket',
+          provider: 'local',
+          local_root: 'mylocalcloud' })
 
       # Setup fake local cloud
       FileUtils.mkdir_p('mylocalcloud/mybucket')

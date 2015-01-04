@@ -29,7 +29,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
       expected_output = input # because we are using a dummy
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :default_colorizer => :dummy)
+      actual_output = filter.setup_and_run(input, default_colorizer: :dummy)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -40,7 +40,7 @@ class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
       input.freeze
 
       filter = ::Nanoc::Filters::ColorizeSyntax.new
-      filter.setup_and_run(input, :default_colorizer => :dummy)
+      filter.setup_and_run(input, default_colorizer: :dummy)
     end
   end
 
@@ -64,7 +64,7 @@ EOS
       expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :default_colorizer => :dummy, :is_fullpage => true)
+      actual_output = filter.setup_and_run(input, default_colorizer: :dummy, is_fullpage: true)
       assert_match expected_output_regex, actual_output
     end
   end
@@ -146,7 +146,7 @@ EOS
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment</span></code></pre>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :colorizers => { :ruby => :pygmentize })
+      actual_output = filter.setup_and_run(input, colorizers: { ruby: :pygmentize })
       assert_equal(expected_output, actual_output)
     end
   end
@@ -162,7 +162,7 @@ EOS
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="c1"># comment…</span></code></pre>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :colorizers => { :ruby => :pygmentsrb })
+      actual_output = filter.setup_and_run(input, colorizers: { ruby: :pygmentsrb })
       assert_equal(expected_output, actual_output)
     end
   end
@@ -181,7 +181,7 @@ EOS
       expected_output = '<pre title="moo"><code class="language-ruby"><span class="hl slc"># comment</span></code></pre>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :default_colorizer => :simon_highlight)
+      actual_output = filter.setup_and_run(input, default_colorizer: :simon_highlight)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -193,7 +193,7 @@ EOS
 
       # Run filter
       assert_raises RuntimeError do
-        filter.setup_and_run('<p>whatever</p>', :syntax => :kasflwafhaweoineurl)
+        filter.setup_and_run('<p>whatever</p>', syntax: :kasflwafhaweoineurl)
       end
     end
   end
@@ -208,7 +208,7 @@ EOS
       expected_output = '<p>foo<br/>bar</p>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :syntax => :xml)
+      actual_output = filter.setup_and_run(input, syntax: :xml)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -223,7 +223,7 @@ EOS
       expected_output = '<p>foo<br />bar</p>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :syntax => :xhtml)
+      actual_output = filter.setup_and_run(input, syntax: :xhtml)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -240,7 +240,7 @@ EOS
       expected_output = '<pre><code class="language-ruby"><span class="nb">puts</span> <span class="s2">"foo"</span></code></pre>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :default_colorizer => :pygmentize)
+      actual_output = filter.setup_and_run(input, default_colorizer: :pygmentize)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -263,7 +263,7 @@ EOS
             input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
             filter.setup_and_run(
               input,
-              :colorizers => { :ruby => colorizer })
+              colorizers: { ruby: colorizer })
             flunk 'expected colorizer to raise if no executable is available'
           rescue
           end
@@ -341,7 +341,7 @@ EOS
       expected_output = '<code class="language-ruby"># comment</code>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :outside_pre => false)
+      actual_output = filter.setup_and_run(input, outside_pre: false)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -356,7 +356,7 @@ EOS
       expected_output = '<code class="language-ruby"><span class="comment"># comment</span></code>'
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :outside_pre => true)
+      actual_output = filter.setup_and_run(input, outside_pre: true)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -413,7 +413,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :default_colorizer => :rouge)
+      actual_output = filter.setup_and_run(input, default_colorizer: :rouge)
       assert_equal(expected_output, actual_output)
     end
   end
@@ -440,7 +440,7 @@ after
 EOS
 
       # Run filter
-      actual_output = filter.setup_and_run(input, :default_colorizer => :rouge, :rouge => { :css_class => 'my-class' })
+      actual_output = filter.setup_and_run(input, default_colorizer: :rouge, rouge: { css_class: 'my-class' })
       assert_equal(expected_output, actual_output)
     end
   end

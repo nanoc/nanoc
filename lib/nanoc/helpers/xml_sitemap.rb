@@ -46,7 +46,7 @@ module Nanoc::Helpers
 
       # Create builder
       buffer = ''
-      xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
+      xml = Builder::XmlMarkup.new(target: buffer, indent: 2)
 
       # Check for required attributes
       if @site.config[:base_url].nil?
@@ -55,9 +55,9 @@ module Nanoc::Helpers
 
       # Build sitemap
       xml.instruct!
-      xml.urlset(:xmlns => 'http://www.sitemaps.org/schemas/sitemap/0.9') do
+      xml.urlset(xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
-        items.sort_by { |i| i.identifier }.each do |item|
+        items.sort_by(&:identifier).each do |item|
           reps = item.reps.reject { |r| r.raw_path.nil? }
           reps.reject! { |r| !select_proc[r] } if select_proc
           reps.sort_by { |r| r.name.to_s }.each do |rep|

@@ -71,7 +71,7 @@ module Nanoc::CLI::Commands
         setup_diffs
         old_contents = {}
         Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
-          path = rep.raw_path(:snapshot => snapshot)
+          path = rep.raw_path(snapshot: snapshot)
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
         Nanoc::NotificationCenter.on(:rep_written) do |rep, path, _is_created, _is_modified|
@@ -100,7 +100,7 @@ module Nanoc::CLI::Commands
       end
 
       def teardown_diffs
-        @diff_threads.each { |t| t.join }
+        @diff_threads.each(&:join)
       end
 
       def generate_diff_for(rep, old_content, new_content)
@@ -164,7 +164,7 @@ module Nanoc::CLI::Commands
       def start
         Nanoc::NotificationCenter.on(:filtering_started) do |_rep, filter_name|
           @times[filter_name] ||= []
-          @times[filter_name] << { :start => Time.now }
+          @times[filter_name] << { start: Time.now }
         end
         Nanoc::NotificationCenter.on(:filtering_ended) do |_rep, filter_name|
           @times[filter_name].last[:stop] = Time.now
@@ -393,7 +393,7 @@ module Nanoc::CLI::Commands
 
     def prune
       if site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(site, :exclude => prune_config_exclude).run
+        Nanoc::Extra::Pruner.new(site, exclude: prune_config_exclude).run
       end
     end
 
@@ -411,9 +411,9 @@ module Nanoc::CLI::Commands
       @listeners =
         @listener_classes
         .select { |klass| klass.enable_for?(self) }
-        .map    { |klass| klass.new(:reps => reps) }
+        .map    { |klass| klass.new(reps: reps) }
 
-      @listeners.each { |s| s.start }
+      @listeners.each(&:start)
     end
 
     def listeners
@@ -428,11 +428,11 @@ module Nanoc::CLI::Commands
     end
 
     def teardown_listeners
-      @listeners.each { |s| s.stop }
+      @listeners.each(&:stop)
     end
 
     def reps
-      site.items.map { |i| i.reps }.flatten
+      site.items.map(&:reps).flatten
     end
     memoize :reps
 

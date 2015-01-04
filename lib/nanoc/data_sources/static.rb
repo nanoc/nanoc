@@ -34,8 +34,8 @@ module Nanoc::DataSources
       # Convert filenames to items
       all_files_in(prefix).map do |filename|
         attributes = {
-          :extension => File.extname(filename)[1..-1],
-          :filename  => filename,
+          extension: File.extname(filename)[1..-1],
+          filename: filename,
         }
         attributes[:is_hidden] = true unless config[:hide_items] == false
         identifier = filename[(prefix.length + 1)..-1] + '/'
@@ -46,7 +46,7 @@ module Nanoc::DataSources
           filename,
           attributes,
           identifier,
-          :binary => true, :mtime => mtime, :checksum => checksum
+          binary: true, mtime: mtime, checksum: checksum
         )
       end
     end

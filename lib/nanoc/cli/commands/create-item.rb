@@ -43,7 +43,7 @@ module Nanoc::CLI::Commands
       data_source = site.data_sources[0]
       data_source.create_item(
         "Hi, I'm a new item!\n",
-        { :title => 'A New Item' },
+        { title: 'A New Item' },
         identifier
       )
 

@@ -59,7 +59,7 @@ module Nanoc
       # @param [Array<Nanoc::ItemRep>] reps A list of item representations
       #   that mutually depend on each other
       def initialize(reps)
-        list = reps.map { |r| r.inspect }.join("\n")
+        list = reps.map(&:inspect).join("\n")
         super("The site cannot be compiled because the following items mutually depend on each other:\n#{list}.")
       end
     end

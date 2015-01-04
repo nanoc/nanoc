@@ -38,8 +38,8 @@ module Nanoc
 
       # Set mtime
       params ||= {}
-      params = { :mtime => params } if params.is_a?(Time)
-      @attributes.merge(:mtime => params[:mtime]) if params[:mtime]
+      params = { mtime: params } if params.is_a?(Time)
+      @attributes.merge(mtime: params[:mtime]) if params[:mtime]
     end
 
     # Requests the attribute with the given key.

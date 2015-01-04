@@ -18,7 +18,7 @@ module Nanoc::CLI
     #
     # @return [void]
     def add_stream_cleaner(klass)
-      unless @stream_cleaners.map { |c| c.class }.include?(klass)
+      unless @stream_cleaners.map(&:class).include?(klass)
         @stream_cleaners << klass.new
       end
     end

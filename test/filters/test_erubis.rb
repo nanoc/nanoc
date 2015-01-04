@@ -4,7 +4,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
   def test_filter_with_instance_variable
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ location: 'a cheap motel' })
 
       # Run filter
       result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>')
@@ -15,7 +15,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
   def test_filter_with_instance_method
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ location: 'a cheap motel' })
 
       # Run filter
       result = filter.setup_and_run('<%= "I was hiding in #{location}." %>')
@@ -44,7 +44,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
   def test_filter_with_yield
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc::Filters::Erubis.new({ :content => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ content: 'a cheap motel' })
 
       # Run filter
       result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
@@ -55,7 +55,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
   def test_filter_with_yield_without_content
     if_have 'erubis' do
       # Create filter
-      filter = ::Nanoc::Filters::Erubis.new({ :location => 'a cheap motel' })
+      filter = ::Nanoc::Filters::Erubis.new({ location: 'a cheap motel' })
 
       # Run filter
       assert_raises LocalJumpError do

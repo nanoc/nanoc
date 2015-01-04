@@ -174,8 +174,8 @@ module Nanoc
 
     def data
       {
-        :edges    => @graph.edges,
-        :vertices => @graph.vertices.map { |obj| obj && obj.reference }
+        edges: @graph.edges,
+        vertices: @graph.vertices.map { |obj| obj && obj.reference }
       }
     end
 

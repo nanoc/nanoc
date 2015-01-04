@@ -36,8 +36,8 @@ module Nanoc::CLI::Commands
 
       # Set options
       options_for_rack = {
-        :Port      => (options[:port] || autocompile_config[:port] || 3000).to_i,
-        :Host      => (options[:host] || autocompile_config[:host] || '0.0.0.0')
+        Port: (options[:port] || autocompile_config[:port] || 3000).to_i,
+        Host: (options[:host] || autocompile_config[:host] || '0.0.0.0')
       }
 
       # Guess which handler we should use

@@ -39,8 +39,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       @item_rep = mock
       @item_rep.expects(:name).returns('default')
       @item_rep.expects(:assigns).returns({
-        :item     => @item,
-        :item_rep => @item_rep
+        item: @item,
+        item_rep: @item_rep
       })
 
       # Evaluate content

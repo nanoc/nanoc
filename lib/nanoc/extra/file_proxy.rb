@@ -30,7 +30,7 @@ module Nanoc::Extra
     private
 
     def file_instance_methods
-      @@file_instance_methods ||= Set.new(File.instance_methods.map { |m| m.to_sym })
+      @@file_instance_methods ||= Set.new(File.instance_methods.map(&:to_sym))
     end
   end
 end

@@ -26,7 +26,7 @@ module Nanoc::Helpers
     #
     # @return [Array] An array containing all articles
     def articles
-      blk = lambda { @items.select { |item| item[:kind] == 'article' } }
+      blk = -> { @items.select { |item| item[:kind] == 'article' } }
       if @items.frozen?
         @article_items ||= blk.call
       else
@@ -40,9 +40,7 @@ module Nanoc::Helpers
     #
     # @return [Array] A sorted array containing all articles
     def sorted_articles
-      blk = lambda do
-        articles.sort_by { |a| attribute_to_time(a[:created_at]) }.reverse
-      end
+      blk = -> { articles.sort_by { |a| attribute_to_time(a[:created_at]) }.reverse }
 
       if @items.frozen?
         @sorted_article_items ||= blk.call
@@ -79,7 +77,7 @@ module Nanoc::Helpers
 
       def build
         buffer = ''
-        xml = Builder::XmlMarkup.new(:target => buffer, :indent => 2)
+        xml = Builder::XmlMarkup.new(target: buffer, indent: 2)
         build_for_feed(xml)
         buffer
       end
@@ -125,7 +123,7 @@ module Nanoc::Helpers
 
       def build_for_feed(xml)
         xml.instruct!
-        xml.feed(:xmlns => 'http://www.w3.org/2005/Atom') do
+        xml.feed(xmlns: 'http://www.w3.org/2005/Atom') do
           root_url = @site.config[:base_url] + '/'
 
           # Add primary attributes
@@ -136,8 +134,8 @@ module Nanoc::Helpers
           xml.updated(attribute_to_time(last_article[:created_at]).to_iso8601_time)
 
           # Add links
-          xml.link(:rel => 'alternate', :href => root_url)
-          xml.link(:rel => 'self',      :href => feed_url)
+          xml.link(rel: 'alternate', href: root_url)
+          xml.link(rel: 'self',      href: feed_url)
 
           # Add author information
           xml.author do
@@ -164,7 +162,7 @@ module Nanoc::Helpers
         xml.entry do
           # Add primary attributes
           xml.id atom_tag_for(a)
-          xml.title a[:title], :type => 'html'
+          xml.title a[:title], type: 'html'
 
           # Add dates
           xml.published attribute_to_time(a[:created_at]).to_iso8601_time
@@ -179,12 +177,12 @@ module Nanoc::Helpers
           end
 
           # Add link
-          xml.link(:rel => 'alternate', :href => url)
+          xml.link(rel: 'alternate', href: url)
 
           # Add content
           summary = excerpt_proc.call(a)
-          xml.content content_proc.call(a), :type => 'html'
-          xml.summary summary, :type => 'html' unless summary.nil?
+          xml.content content_proc.call(a), type: 'html'
+          xml.summary summary, type: 'html' unless summary.nil?
         end
       end
     end
@@ -305,8 +303,8 @@ module Nanoc::Helpers
       # Fill builder
       builder.limit             = params[:limit] || 5
       builder.relevant_articles = params[:articles] || articles || []
-      builder.content_proc      = params[:content_proc] || lambda { |a| a.compiled_content(:snapshot => :pre) }
-      builder.excerpt_proc      = params[:excerpt_proc] || lambda { |a| a[:excerpt] }
+      builder.content_proc      = params[:content_proc] || ->(a) { a.compiled_content(snapshot: :pre) }
+      builder.excerpt_proc      = params[:excerpt_proc] || ->(a) { a[:excerpt] }
       builder.title             = params[:title] || @item[:title] || @site.config[:title]
       builder.author_name       = params[:author_name] || @item[:author_name] || @site.config[:author_name]
       builder.author_uri        = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]

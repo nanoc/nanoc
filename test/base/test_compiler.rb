@@ -53,14 +53,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [:erb, { :foo => 'bar' }]
+    compiler.rules_collection.layout_filter_mapping[/.*/] = [:erb, { foo: 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
     layout.expect(:identifier, '/some_layout/')
 
     # Check
-    assert_equal([:erb, { :foo => 'bar' }], compiler.rules_collection.filter_for_layout(layout))
+    assert_equal([:erb, { foo: 'bar' }], compiler.rules_collection.filter_for_layout(layout))
   end
 
   def test_filter_for_layout_with_existant_layout_and_unknown_filter
@@ -69,14 +69,14 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [:some_unknown_filter, { :foo => 'bar' }]
+    compiler.rules_collection.layout_filter_mapping[/.*/] = [:some_unknown_filter, { foo: 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
     layout.expect(:identifier, '/some_layout/')
 
     # Check
-    assert_equal([:some_unknown_filter, { :foo => 'bar' }], compiler.rules_collection.filter_for_layout(layout))
+    assert_equal([:some_unknown_filter, { foo: 'bar' }], compiler.rules_collection.filter_for_layout(layout))
   end
 
   def test_filter_for_layout_with_nonexistant_layout
@@ -85,7 +85,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [:erb, { :foo => 'bar' }]
+    compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [:erb, { foo: 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
@@ -101,10 +101,10 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [:erb, { :char => 'd' }]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [:erb, { :char => 'b' }]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [:erb, { :char => 'c' }] # never used!
-    compiler.rules_collection.layout_filter_mapping[%r{^/.*/$}]       = [:erb, { :char => 'a' }]
+    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [:erb, { char: 'd' }]
+    compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [:erb, { char: 'b' }]
+    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [:erb, { char: 'c' }] # never used!
+    compiler.rules_collection.layout_filter_mapping[%r{^/.*/$}]       = [:erb, { char: 'a' }]
 
     # Mock layout
     layouts = [mock, mock, mock, mock]
@@ -136,10 +136,10 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
     # Set snapshot filenames
     rep.raw_paths = {
-      :raw  => 'raw.txt',
-      :pre  => 'pre.txt',
-      :post => 'post.txt',
-      :last => 'last.txt'
+      raw: 'raw.txt',
+      pre: 'pre.txt',
+      post: 'post.txt',
+      last: 'last.txt'
     }
 
     # Create rule
@@ -216,7 +216,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_dependent_reps
-    with_site(:compilation_rule_content => 'filter :erb') do |site|
+    with_site(compilation_rule_content: 'filter :erb') do |site|
       File.open('content/foo.html', 'w') do |io|
         io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
       end
@@ -235,7 +235,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_mutually_dependent_reps
-    with_site(:compilation_rule_content => 'filter :erb') do |site|
+    with_site(compilation_rule_content: 'filter :erb') do |site|
       File.open('content/foo.html', 'w') do |io|
         io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
       end

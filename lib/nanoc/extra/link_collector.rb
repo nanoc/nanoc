@@ -11,11 +11,11 @@ module ::Nanoc::Extra
       @filter =
         case mode
         when nil
-          lambda { |_h| true }
+          ->(_h) { true }
         when :external
-          lambda { |h| external_href?(h) }
+          ->(h) { external_href?(h) }
         when :internal
-          lambda { |h| !external_href?(h) }
+          ->(h) { !external_href?(h) }
         else
           raise ArgumentError, 'Expected mode argument to be :internal, :external or nil'
         end

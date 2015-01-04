@@ -16,45 +16,45 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc::Item.new('content', { :tags => %w(foo bar) }, '/path/')
+    item = Nanoc::Item.new('content', { tags: %w(foo bar) }, '/path/')
 
     # Check
     assert_equal(
       "#{link_for_tag('foo', 'http://stoneship.org/tag/')}, " \
       "#{link_for_tag('bar', 'http://stoneship.org/tag/')}",
-      tags_for(item, :base_url => 'http://stoneship.org/tag/')
+      tags_for(item, base_url: 'http://stoneship.org/tag/')
     )
   end
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc::Item.new('content', { :tags => [] }, '/path/')
+    item = Nanoc::Item.new('content', { tags: [] }, '/path/')
 
     # Check
     assert_equal(
       'no tags for you, fool',
-      tags_for(item, :none_text => 'no tags for you, fool')
+      tags_for(item, none_text: 'no tags for you, fool')
     )
   end
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc::Item.new('content', { :tags => %w(foo bar) }, '/path/')
+    item = Nanoc::Item.new('content', { tags: %w(foo bar) }, '/path/')
 
     # Check
     assert_equal(
       "#{link_for_tag('foo', 'http://technorati.com/tag/')} ++ " \
       "#{link_for_tag('bar', 'http://technorati.com/tag/')}",
-      tags_for(item, :separator => ' ++ ')
+      tags_for(item, separator: ' ++ ')
     )
   end
 
   def test_items_with_tag
     # Create items
     @items = [
-      Nanoc::Item.new('item 1', { :tags => [:foo]       }, '/item1/'),
-      Nanoc::Item.new('item 2', { :tags => [:bar]       }, '/item2/'),
-      Nanoc::Item.new('item 3', { :tags => [:foo, :bar] }, '/item3/')
+      Nanoc::Item.new('item 1', { tags: [:foo]       }, '/item1/'),
+      Nanoc::Item.new('item 2', { tags: [:bar]       }, '/item2/'),
+      Nanoc::Item.new('item 3', { tags: [:foo, :bar] }, '/item3/')
     ]
 
     # Find items

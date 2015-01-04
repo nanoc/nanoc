@@ -10,7 +10,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     File.open('foo.txt', 'w') { |io| io.write('hi') }
     File.open('bar.txt', 'w') { |io| io.write('ho') }
 
-    piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     piper.run(cmd, nil)
 
     assert_match(/foo\.txt/, stdout.string)
@@ -25,7 +25,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     input = 'Hello World!'
     cmd = %w( cat )
 
-    piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     piper.run(cmd, input)
 
     assert_equal(input, stdout.string)
@@ -38,7 +38,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
 
     cmd = %w( cat kafhawilgoiwaejagoualjdsfilofiewaguihaifeowuiga )
 
-    piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     assert_raises(Nanoc::Extra::Piper::Error) do
       piper.run(cmd, nil)
     end

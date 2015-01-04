@@ -19,12 +19,12 @@ module Nanoc::DataSources
           # Get data
           content = raw_item['n']
           attributes = {
-            :url         => raw_item['u'],
-            :description => raw_item['d'],
-            :tags        => raw_item['t'],
-            :date        => Time.parse(raw_item['dt']),
-            :note        => raw_item['n'],
-            :author      => raw_item['a']
+            url: raw_item['u'],
+            description: raw_item['d'],
+            tags: raw_item['t'],
+            date: Time.parse(raw_item['dt']),
+            note: raw_item['n'],
+            author: raw_item['a']
           }
           identifier = "/#{i}/"
           mtime = nil

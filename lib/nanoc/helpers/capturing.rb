@@ -127,7 +127,7 @@ module Nanoc::Helpers
             item.forced_outdated = true
             item.reps.each do |r|
               raw_content = item.raw_content
-              r.content = { :raw => raw_content, :last => raw_content }
+              r.content = { raw: raw_content, last: raw_content }
               raise Nanoc::Errors::UnmetDependency.new(r)
             end
           end

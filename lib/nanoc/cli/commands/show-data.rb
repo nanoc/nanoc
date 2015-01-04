@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
 
     def sorted_with_prev(objects)
       prev = nil
-      objects.sort_by { |o| o.identifier }.each do |object|
+      objects.sort_by(&:identifier).each do |object|
         yield(object, prev)
         prev = object
       end
@@ -41,7 +41,7 @@ module Nanoc::CLI::Commands
 
     def sorted_reps_with_prev(items)
       prev = nil
-      items.sort_by { |i| i.identifier }.each do |item|
+      items.sort_by(&:identifier).each do |item|
         item.reps.sort_by { |r| r.name.to_s }.each do |rep|
           yield(rep, prev)
           prev = rep

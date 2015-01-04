@@ -70,7 +70,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { allow_periods_in_identifiers: true })
 
     # Write sample files
     FileUtils.mkdir_p('foo')
@@ -158,7 +158,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_basename_of_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { allow_periods_in_identifiers: true })
 
     # Get input and expected output
     expected = {
@@ -218,7 +218,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_ext_of_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { :allow_periods_in_identifiers => true })
+    data_source = Nanoc::DataSources::FilesystemCompact.new(nil, nil, nil, { allow_periods_in_identifiers: true })
 
     # Get input and expected output
     expected = {
@@ -416,14 +416,14 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_parse_utf8_bom
     File.open('test.html', 'w') do |io|
-      io.write [0xEF, 0xBB, 0xBF].map { |i| i.chr }.join
+      io.write [0xEF, 0xBB, 0xBF].map(&:chr).join
       io.write "-----\n"
       io.write "utf8bomawareness: high\n"
       io.write "-----\n"
       io.write "content goes here\n"
     end
 
-    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, :encoding => 'utf-8')
+    data_source = Nanoc::DataSources::FilesystemCombined.new(nil, nil, nil, encoding: 'utf-8')
 
     result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
     assert_equal({ 'utf8bomawareness' => 'high' }, result[0])

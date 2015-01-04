@@ -141,7 +141,7 @@ module Nanoc::Filters
       end
 
       method = "to_#{syntax}".to_sym
-      doc.send(method, :encoding => 'UTF-8')
+      doc.send(method, encoding: 'UTF-8')
     end
 
     # Parses the given content using the given class. This method also handles
@@ -223,7 +223,7 @@ module Nanoc::Filters
 
       stdout = StringIO.new
       stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
       piper.run(cmd, code)
 
       stdout.string
@@ -252,9 +252,9 @@ module Nanoc::Filters
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
-        :wrap => '-W',
-        :include_style => '-I',
-        :line_numbers  => '-l',
+        wrap: '-W',
+        include_style: '-I',
+        line_numbers: '-l',
     }
 
     # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).
@@ -288,7 +288,7 @@ module Nanoc::Filters
 
       stdout = StringIO.new
       stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(:stdout => stdout, :stderr => stderr)
+      piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
       piper.run(cmd, code)
 
       stdout.string
@@ -326,7 +326,7 @@ module Nanoc::Filters
       require 'rouge'
 
       formatter_options = {
-        :css_class => params.fetch(:css_class, 'highlight'),
+        css_class: params.fetch(:css_class, 'highlight'),
       }
       formatter = Rouge::Formatters::HTML.new(formatter_options)
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
@@ -389,7 +389,7 @@ module Nanoc::Filters
     end
 
     def check_availability(*cmd)
-      piper = Nanoc::Extra::Piper.new(:stdout => StringIO.new, :stderr => StringIO.new)
+      piper = Nanoc::Extra::Piper.new(stdout: StringIO.new, stderr: StringIO.new)
       piper.run(cmd, nil)
     end
   end

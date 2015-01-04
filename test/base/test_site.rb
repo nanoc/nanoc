@@ -20,12 +20,12 @@ class Nanoc::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_config_hash
-    site = Nanoc::Site.new(:foo => 'bar')
+    site = Nanoc::Site.new(foo: 'bar')
     assert_equal 'bar', site.config[:foo]
   end
 
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Site.new(:data_sources => [{ :type => 'foo', :items_root => '/bar/' }])
+    site = Nanoc::Site.new(data_sources: [{ type: 'foo', items_root: '/bar/' }])
     assert_equal('foo',   site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
@@ -215,11 +215,10 @@ EOF
 end
 
 describe 'Nanoc::Site#initialize' do
-
   include Nanoc::TestHelpers
 
   it 'should merge default config' do
-    site = Nanoc::Site.new(:foo => 'bar')
+    site = Nanoc::Site.new(foo: 'bar')
     site.config[:foo].must_equal 'bar'
     site.config[:output_dir].must_equal 'output'
   end
@@ -229,30 +228,26 @@ describe 'Nanoc::Site#initialize' do
   end
 
   it 'should not raise for non-existant output directory' do
-    Nanoc::Site.new(:output_dir => 'fklsdhailfdjalghlkasdflhagjskajdf')
+    Nanoc::Site.new(output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf')
   end
 
   it 'should not raise for unknown data sources' do
     proc do
-      Nanoc::Site.new(:data_source => 'fklsdhailfdjalghlkasdflhagjskajdf')
+      Nanoc::Site.new(data_source: 'fklsdhailfdjalghlkasdflhagjskajdf')
     end
   end
-
 end
 
 describe 'Nanoc::Site#compiler' do
-
   include Nanoc::TestHelpers
 
   it 'should not raise under normal circumstances' do
     site = Nanoc::Site.new({})
     site.compiler
   end
-
 end
 
 describe 'Nanoc::Site#data_sources' do
-
   include Nanoc::TestHelpers
 
   it 'should not raise for known data sources' do
@@ -263,8 +258,8 @@ describe 'Nanoc::Site#data_sources' do
   it 'should raise for unknown data sources' do
     proc do
       site = Nanoc::Site.new(
-        :data_sources => [
-          { :type => 'fklsdhailfdjalghlkasdflhagjskajdf' }
+        data_sources: [
+          { type: 'fklsdhailfdjalghlkasdflhagjskajdf' }
         ]
       )
       site.data_sources
@@ -289,5 +284,4 @@ describe 'Nanoc::Site#data_sources' do
       assert data_sources.first.config[:bbb] = 'two'
     end
   end
-
 end

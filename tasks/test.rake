@@ -33,4 +33,4 @@ namespace :test do
 end
 
 desc 'Alias for test:all + rubocop'
-task :test => [:'test:all', :rubocop]
+task test: [:'test:all', :rubocop]
