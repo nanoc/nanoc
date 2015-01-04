@@ -3,9 +3,6 @@ source 'https://rubygems.org'
 gemspec
 
 # FIXME: we may be missing some mswin dependencies here
-all_rubies = Bundler::Dependency::PLATFORM_MAP.keys
-ruby_19_plus               = [:ruby_19, :ruby_20, :ruby_21, :ruby_22, :jruby] & all_rubies
-ruby_19_plus_without_jruby = [:ruby_19, :ruby_20, :ruby_21, :ruby_22]         & all_rubies
 
 gem 'adsf'
 gem 'bluecloth', platforms: :ruby
@@ -15,15 +12,15 @@ gem 'compass'
 gem 'coffee-script'
 gem 'coveralls', require: false
 gem 'erubis'
-gem 'fog', platforms: ruby_19_plus
+gem 'fog'
 gem 'haml'
-gem 'handlebars', platforms: ruby_19_plus_without_jruby
+gem 'handlebars', platforms: :ruby
 gem 'kramdown'
 gem 'less', '~> 2.0', platforms: :ruby
-gem 'listen', platforms: ruby_19_plus
+gem 'listen'
 gem 'markaby'
 gem 'maruku'
-gem 'mime-types', platforms: ruby_19_plus
+gem 'mime-types'
 gem 'minitest', '~> 4.0'
 gem 'mocha'
 gem 'mustache'
@@ -36,10 +33,10 @@ gem 'rake'
 gem 'rainpress'
 gem 'rdiscount', platforms: [:ruby, :mswin]
 gem 'rdoc'
-gem 'redcarpet', platforms: ruby_19_plus_without_jruby + [:mswin]
+gem 'redcarpet', platforms: [:ruby, :mswin]
 gem 'RedCloth'
 gem 'rouge'
-gem 'rubocop', platforms: ruby_19_plus
+gem 'rubocop'
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
 gem 'slim'
@@ -48,5 +45,5 @@ gem 'uglifier'
 gem 'vcr'
 gem 'w3c_validators'
 gem 'webmock'
-gem 'yuicompressor', platforms: ruby_19_plus
+gem 'yuicompressor'
 gem 'yard'
