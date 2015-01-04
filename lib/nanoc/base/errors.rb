@@ -193,5 +193,12 @@ module Nanoc
         super("There are multiple #{type}s with the #{identifier} identifier.")
       end
     end
+
+    # Error that is raised when an item or a layout is found as an attribute value.
+    class ItemOrLayoutAttribute < Generic
+      def initialize(subject)
+        super("Found an item or a layout in the attributes of #{subject.inspect}.")
+      end
+    end
   end
 end
