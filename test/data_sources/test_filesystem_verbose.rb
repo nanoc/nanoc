@@ -56,7 +56,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
   end
 
   def test_items_with_period_in_name
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
 
     # Create foo.css
     FileUtils.mkdir_p('content/foo')
@@ -174,7 +174,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     end
 
     # Load
-    layouts = data_source.layouts.sort_by { |i| i.identifier }
+    layouts = data_source.layouts.sort_by(&:identifier)
 
     # Check
     assert_equal 2, layouts.size
@@ -185,7 +185,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
   end
 
   def test_layouts_with_period_in_name_allowing_periods_in_identifiers
-    data_source = new_data_source(:allow_periods_in_identifiers => true)
+    data_source = new_data_source(allow_periods_in_identifiers: true)
 
     # Create foo.html
     FileUtils.mkdir_p('layouts/foo')
@@ -206,7 +206,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     end
 
     # Load
-    layouts = data_source.layouts.sort_by { |i| i.identifier }
+    layouts = data_source.layouts.sort_by(&:identifier)
 
     # Check
     assert_equal 2, layouts.size
@@ -219,7 +219,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
   def test_create_item_at_root
     # Create item
     data_source = new_data_source
-    data_source.create_item('content here', { :foo => 'bar' }, '/')
+    data_source.create_item('content here', { foo: 'bar' }, '/')
 
     # Check file existance
     assert File.directory?('content')
@@ -234,7 +234,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
   def test_create_item_not_at_root
     # Create item
     data_source = new_data_source
-    data_source.create_item('content here', { :foo => 'bar' }, '/moo/')
+    data_source.create_item('content here', { foo: 'bar' }, '/moo/')
 
     # Check file existance
     assert File.directory?('content/moo')
@@ -249,7 +249,7 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
   def test_create_layout
     # Create layout
     data_source = new_data_source
-    data_source.create_layout('content here', { :foo => 'bar' }, '/moo/')
+    data_source.create_layout('content here', { foo: 'bar' }, '/moo/')
 
     # Check file existance
     assert File.directory?('layouts/moo')

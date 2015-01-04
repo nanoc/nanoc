@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 namespace :validate do
-
   desc 'Validate the site’s HTML files'
   task :html do
     Nanoc::CLI.run %w( validate_html )
@@ -13,7 +12,6 @@ namespace :validate do
   end
 
   namespace :links do
-
     desc 'Validate the site’s internal links'
     task :internal do
       Nanoc::CLI.run %w( validate_links --internal )
@@ -23,12 +21,10 @@ namespace :validate do
     task :external do
       Nanoc::CLI.run %w( validate_links --external )
     end
-
   end
 
   desc 'Validate the site’s internal and external links'
   task :links do
     Nanoc::CLI.run %w( validate_links )
   end
-
 end

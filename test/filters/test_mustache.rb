@@ -6,12 +6,12 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       # Create item
       item = Nanoc::Item.new(
         'content',
-        { :title => 'Max Payne', :protagonist => 'Max Payne' },
+        { title: 'Max Payne', protagonist: 'Max Payne' },
         '/games/max-payne/'
       )
 
       # Create filter
-      filter = ::Nanoc::Filters::Mustache.new({ :item => item })
+      filter = ::Nanoc::Filters::Mustache.new({ item: item })
 
       # Run filter
       result = filter.setup_and_run('The protagonist of {{title}} is {{protagonist}}.')
@@ -24,13 +24,13 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       # Create item
       item = Nanoc::Item.new(
         'content',
-        { :title => 'Max Payne', :protagonist => 'Max Payne' },
+        { title: 'Max Payne', protagonist: 'Max Payne' },
         '/games/max-payne/'
       )
 
       # Create filter
       filter = ::Nanoc::Filters::Mustache.new(
-        { :content => 'No Payne No Gayne', :item => item })
+        { content: 'No Payne No Gayne', item: item })
 
       # Run filter
       result = filter.setup_and_run('Max says: {{yield}}.')

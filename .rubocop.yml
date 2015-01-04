@@ -21,12 +21,6 @@ ClassAndModuleChildren:
 
 # ----- DISABLED (hard) -----
 
-# Ruby 1.8 compatibility is required.
-#
-# Re-enable in nanoc 4.x.
-HashSyntax:
-  Enabled: false
-
 # Hash parameters should not have braces, but this cop is unable to distinguish
 # between has parameters and methods that take a hash as a param.
 BracesAroundHashParameters:
@@ -36,23 +30,10 @@ BracesAroundHashParameters:
 Eval:
   Enabled: false
 
-# The new Ruby 1.9 lambda literal syntax cannot be used, because Ruby 1.8
-# compatibility is required.
-#
-# Re-enable in nanoc 4.x.
-Lambda:
-  Enabled: false
-
 # Only used for deprecated code that is gone in nanoc 4.x anyway.
 #
 # Re-enable in nanoc 4.x.
 ClassVars:
-  Enabled: false
-
-# This is only possible in Ruby 1.9.x and up.
-#
-# Re-enable in nanoc 4.x.
-SymbolProc:
   Enabled: false
 
 # We use filenames such as “create-site.rb” that translate to method names.

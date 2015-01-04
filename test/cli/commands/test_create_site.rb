@@ -30,7 +30,6 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site foo )
 
     FileUtils.cd('foo') do
-
       # Try with encoding = default encoding = utf-8
       File.open('content/index.html', 'w') { |io| io.write("Hello <\xD6>!\n") }
       site = Nanoc::Site.new('.')

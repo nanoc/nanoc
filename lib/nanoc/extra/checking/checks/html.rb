@@ -11,7 +11,7 @@ module ::Nanoc::Extra::Checking::Checks
         results = ::W3CValidators::MarkupValidator.new.validate_file(filename)
         results.errors.each do |e|
           desc = e.message.gsub(%r{\s+}, ' ').strip
-          add_issue(desc, :subject => filename)
+          add_issue(desc, subject: filename)
         end
       end
     end

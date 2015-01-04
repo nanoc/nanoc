@@ -366,7 +366,7 @@ EOS
       # Create home page
       data_source.create_item(
         DEFAULT_ITEM,
-        { :title => 'Home' },
+        { title: 'Home' },
         '/'
       )
 
@@ -375,7 +375,7 @@ EOS
         DEFAULT_STYLESHEET,
         {},
         '/stylesheet/',
-        :extension => '.css'
+        extension: '.css'
       )
 
       # Create layout

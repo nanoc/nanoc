@@ -1,10 +1,9 @@
 # encoding: utf-8
 
 describe 'Hash#symbolize_keys_recursively' do
-
   it 'should convert keys to symbols' do
     hash_old = { 'foo' => 'bar' }
-    hash_new = { :foo  => 'bar' }
+    hash_new = { foo: 'bar' }
     hash_old.symbolize_keys_recursively.must_equal hash_new
   end
 
@@ -13,11 +12,9 @@ describe 'Hash#symbolize_keys_recursively' do
     hash_new = hash_old
     hash_old.symbolize_keys_recursively.must_equal hash_new
   end
-
 end
 
 describe 'Hash#stringify_keys_recursively' do
-
   it 'should leave strings as strings' do
     hash_old = { 'foo' => 'bar' }
     hash_new = { 'foo' => 'bar' }
@@ -25,7 +22,7 @@ describe 'Hash#stringify_keys_recursively' do
   end
 
   it 'should convert symbols to strings' do
-    hash_old = { :foo  => 'bar' }
+    hash_old = { foo: 'bar' }
     hash_new = { 'foo' => 'bar' }
     hash_old.stringify_keys_recursively.must_equal hash_new
   end
@@ -41,15 +38,13 @@ describe 'Hash#stringify_keys_recursively' do
     hash_new = { ''  => 'bar' }
     hash_old.stringify_keys_recursively.must_equal hash_new
   end
-
 end
 
 describe 'Hash#freeze_recursively' do
-
   include Nanoc::TestHelpers
 
   it 'should prevent first-level elements from being modified' do
-    hash = { :a => { :b => :c } }
+    hash = { a: { b: :c } }
     hash.freeze_recursively
 
     assert_raises_frozen_error do
@@ -58,7 +53,7 @@ describe 'Hash#freeze_recursively' do
   end
 
   it 'should prevent second-level elements from being modified' do
-    hash = { :a => { :b => :c } }
+    hash = { a: { b: :c } }
     hash.freeze_recursively
 
     assert_raises_frozen_error do
@@ -76,20 +71,17 @@ describe 'Hash#freeze_recursively' do
     assert a[:x].frozen?
     assert_equal a, a[:x]
   end
-
 end
 
 describe 'Hash#checksum' do
-
   it 'should work' do
     expectation = 'wy7gHokc700tqJ/BmJ+EK6/F0bc='
-    { :foo => 123 }.checksum.must_equal expectation
+    { foo: 123 }.checksum.must_equal expectation
   end
 
   it 'should not sort keys' do
-    a = { :a => 1, :c => 2, :b => 3 }.checksum
-    b = { :a => 1, :b => 3, :c => 2 }.checksum
+    a = { a: 1, c: 2, b: 3 }.checksum
+    b = { a: 1, b: 3, c: 2 }.checksum
     a.wont_equal b
   end
-
 end

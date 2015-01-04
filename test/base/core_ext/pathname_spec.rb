@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 describe 'Pathname#checksum' do
-
   it 'should work on empty files' do
     begin
       # Create file
@@ -33,5 +32,4 @@ describe 'Pathname#checksum' do
       FileUtils.rm_rf('tmp')
     end
   end
-
 end

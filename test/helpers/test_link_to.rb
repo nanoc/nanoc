@@ -39,7 +39,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a title="Dis mai foo!" href="/foo/">Foo</a>',
-      link_to('Foo', '/foo/', :title => 'Dis mai foo!')
+      link_to('Foo', '/foo/', title: 'Dis mai foo!')
     )
   end
 
@@ -47,7 +47,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a title="Foo &amp; Bar" href="/foo&amp;bar/">Foo &amp; Bar</a>',
-      link_to('Foo &amp; Bar', '/foo&bar/', :title => 'Foo & Bar')
+      link_to('Foo &amp; Bar', '/foo&bar/', title: 'Foo & Bar')
     )
   end
 

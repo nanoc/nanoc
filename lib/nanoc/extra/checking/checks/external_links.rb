@@ -24,7 +24,7 @@ module ::Nanoc::Extra::Checking::Checks
         filenames.each do |filename|
           add_issue(
             "broken reference to #{res.href}: #{res.explanation}",
-            :subject => filename)
+            subject: filename)
         end
       end
     end
@@ -75,7 +75,7 @@ module ::Nanoc::Extra::Checking::Checks
           end
         end
       end
-      threads.each { |t| t.join }
+      threads.each(&:join)
 
       invalid
     end

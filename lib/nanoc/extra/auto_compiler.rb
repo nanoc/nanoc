@@ -36,7 +36,7 @@ module Nanoc::Extra
 
         # Find rep
         path = Rack::Utils.unescape(env['PATH_INFO'])
-        reps = site.items.map { |i| i.reps }.flatten
+        reps = site.items.map(&:reps).flatten
         rep = reps.find do |r|
           r.path == path ||
           r.raw_path == site.config[:output_dir] + path

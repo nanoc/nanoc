@@ -19,8 +19,8 @@ module Nanoc::DataSources
           # Get data
           content = raw_item['text']
           attributes = {
-            :created_at  => raw_item['created_at'],
-            :source      => raw_item['source']
+            created_at: raw_item['created_at'],
+            source: raw_item['source']
           }
           identifier = "/#{raw_item['id']}/"
           mtime = Time.parse(raw_item['created_at'])

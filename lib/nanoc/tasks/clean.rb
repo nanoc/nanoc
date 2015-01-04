@@ -16,9 +16,7 @@ module Nanoc::Tasks
 
     def filenames
       @site.items.map do |item|
-        item.reps.map do |rep|
-          rep.raw_path
-        end
+        item.reps.map(&:raw_path)
       end.flatten
     end
   end

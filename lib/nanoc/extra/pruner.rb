@@ -26,9 +26,7 @@ module Nanoc::Extra
 
       # Get compiled files
       all_raw_paths = site.items.map do |item|
-        item.reps.map do |rep|
-          rep.raw_path
-        end
+        item.reps.map(&:raw_path)
       end
       compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
 

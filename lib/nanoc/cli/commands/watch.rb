@@ -82,7 +82,7 @@ module Nanoc::CLI::Commands
       end
 
       listener = Listen::Listener.new(*dirs_to_watch).change(&callback)
-      listener_root = Listen::Listener.new('.', :filter => files_to_watch, :ignore => ignore_dir).change(&callback)
+      listener_root = Listen::Listener.new('.', filter: files_to_watch, ignore: ignore_dir).change(&callback)
 
       begin
         listener_root.start
@@ -143,7 +143,7 @@ module Nanoc::CLI::Commands
       end
 
       def terminal_notify(message)
-        TerminalNotifier.notify(message, :title => 'nanoc')
+        TerminalNotifier.notify(message, title: 'nanoc')
       end
 
       def growlnotify_cmd_for(message)

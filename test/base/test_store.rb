@@ -16,13 +16,13 @@ class Nanoc::StoreTest < Nanoc::TestCase
 
     # Create
     store.load
-    store.data = { :fun => 'sure' }
+    store.data = { fun: 'sure' }
     store.store
 
     # Test stored values
     store = TestStore.new('test.db', 1)
     store.load
-    assert_equal({ :fun => 'sure' }, store.data)
+    assert_equal({ fun: 'sure' }, store.data)
 
     # Mess up
     File.open('test.db', 'w') do |io|

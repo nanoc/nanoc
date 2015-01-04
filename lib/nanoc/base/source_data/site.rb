@@ -19,10 +19,10 @@ module Nanoc
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
     DEFAULT_DATA_SOURCE_CONFIG = {
-      :type         => 'filesystem_unified',
-      :items_root   => '/',
-      :layouts_root => '/',
-      :config       => {}
+      type: 'filesystem_unified',
+      items_root: '/',
+      layouts_root: '/',
+      config: {}
     }
 
     # The default configuration for a site. A site's configuration overrides
@@ -30,13 +30,13 @@ module Nanoc
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
-      :text_extensions    => %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
-      :lib_dirs           => %w( lib ),
-      :output_dir         => 'output',
-      :data_sources       => [{}],
-      :index_filenames    => ['index.html'],
-      :enable_output_diff => false,
-      :prune              => { :auto_prune => false, :exclude => ['.git', '.hg', '.svn', 'CVS'] }
+      text_extensions: %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim ).sort,
+      lib_dirs: %w( lib ),
+      output_dir: 'output',
+      data_sources: [{}],
+      index_filenames: ['index.html'],
+      enable_output_diff: false,
+      prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] }
     }
 
     # Creates a site object for the site specified by the given
@@ -215,9 +215,9 @@ module Nanoc
     # @return [void]
     def freeze
       config.freeze_recursively
-      items.each         { |i|  i.freeze  }
-      layouts.each       { |l|  l.freeze  }
-      code_snippets.each { |cs| cs.freeze }
+      items.each(&:freeze)
+      layouts.each(&:freeze)
+      code_snippets.each(&:freeze)
     end
 
     # @deprecated It is no longer necessary to explicitly load site data. It
@@ -300,10 +300,10 @@ module Nanoc
     # Executes the given block, making sure that the datasources are
     # available for the duration of the block
     def with_datasources(&_block)
-      data_sources.each { |ds| ds.use }
+      data_sources.each(&:use)
       yield
     ensure
-      data_sources.each { |ds| ds.unuse }
+      data_sources.each(&:unuse)
     end
 
     # Loads this site’s code and executes it.
@@ -325,7 +325,7 @@ module Nanoc
       end
 
       # Execute code snippets
-      @code_snippets.each { |cs| cs.load }
+      @code_snippets.each(&:load)
     end
 
     # Loads this site’s items, sets up item child-parent relationships and

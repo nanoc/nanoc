@@ -6,20 +6,20 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
       # Create data
       item = Nanoc::Item.new(
         'content',
-        { :title => 'Max Payne', :protagonist => 'Max Payne', :location => 'here' },
+        { title: 'Max Payne', protagonist: 'Max Payne', location: 'here' },
         '/games/max-payne/')
       layout = Nanoc::Layout.new(
         'layout content',
-        { :name => 'Max Payne' },
+        { name: 'Max Payne' },
         '/default/')
-      config = { :animals => 'cats and dogs' }
+      config = { animals: 'cats and dogs' }
 
       # Create filter
       assigns = {
-        :item    => item,
-        :layout  => layout,
-        :config  => config,
-        :content => 'No Payne No Gayne'
+        item: item,
+        layout: layout,
+        config: config,
+        content: 'No Payne No Gayne'
       }
       filter = ::Nanoc::Filters::Handlebars.new(assigns)
 
@@ -38,13 +38,13 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
       # Create data
       item = Nanoc::Item.new(
         'content',
-        { :title => 'Max Payne', :protagonist => 'Max Payne', :location => 'here' },
+        { title: 'Max Payne', protagonist: 'Max Payne', location: 'here' },
         '/games/max-payne/')
 
       # Create filter
       assigns = {
-        :item    => item,
-        :content => 'No Payne No Gayne'
+        item: item,
+        content: 'No Payne No Gayne'
       }
       filter = ::Nanoc::Filters::Handlebars.new(assigns)
 

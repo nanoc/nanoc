@@ -36,15 +36,15 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
     error = new_error(20)
 
     stream = StringIO.new
-    @handler.send(:write_stack_trace, stream, error, :verbose => false)
+    @handler.send(:write_stack_trace, stream, error, verbose: false)
     assert_match(/See full crash log for details./, stream.string)
 
     stream = StringIO.new
-    @handler.send(:write_stack_trace, stream, error, :verbose => false)
+    @handler.send(:write_stack_trace, stream, error, verbose: false)
     assert_match(/See full crash log for details./, stream.string)
 
     stream = StringIO.new
-    @handler.send(:write_stack_trace, stream, error, :verbose => true)
+    @handler.send(:write_stack_trace, stream, error, verbose: true)
     refute_match(/See full crash log for details./, stream.string)
   end
 

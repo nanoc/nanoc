@@ -4,7 +4,7 @@ class Nanoc::LayoutTest < Nanoc::TestCase
   def test_initialize
     # Make sure attributes are cleaned
     layout = Nanoc::Layout.new('content', { 'foo' => 'bar' }, '/foo/')
-    assert_equal({ :foo => 'bar' }, layout.attributes)
+    assert_equal({ foo: 'bar' }, layout.attributes)
 
     # Make sure identifier is cleaned
     layout = Nanoc::Layout.new('content', { 'foo' => 'bar' }, 'foo')
@@ -38,13 +38,13 @@ class Nanoc::LayoutTest < Nanoc::TestCase
   def test_dump_and_load
     layout = Nanoc::Layout.new(
       'foobar',
-      { :a => { :b => 123 } },
+      { a: { b: 123 } },
       '/foo/')
 
     layout = Marshal.load(Marshal.dump(layout))
 
     assert_equal '/foo/', layout.identifier
     assert_equal 'foobar', layout.raw_content
-    assert_equal({ :a => { :b => 123 } }, layout.attributes)
+    assert_equal({ a: { b: 123 } }, layout.attributes)
   end
 end
