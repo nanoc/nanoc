@@ -3,7 +3,6 @@
 require 'nanoc/cli'
 
 namespace :deploy do
-
   desc 'Upload the compiled site using rsync'
   task :rsync do
     dry_run     = ENV['dry_run']
@@ -14,5 +13,4 @@ namespace :deploy do
 
     Nanoc::CLI.run cmd
   end
-
 end

@@ -12,13 +12,13 @@ module Nanoc::Filters
     # @return [String] The filtered content
     def run(content, params = {})
       # Get options
-      options = params.merge(:filename => filename)
+      options = params.merge(filename: filename)
 
       # Create context
       context = ::Nanoc::Context.new(assigns)
 
       # Get result
-      proc = assigns[:content] ? lambda { assigns[:content] } : nil
+      proc = assigns[:content] ? -> { assigns[:content] } : nil
       ::Haml::Engine.new(content, options).render(context, assigns, &proc)
     end
   end

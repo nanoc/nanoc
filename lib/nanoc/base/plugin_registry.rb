@@ -178,13 +178,13 @@ module Nanoc
           if existing_plugin
             # Add identifier to existing plugin
             existing_plugin[:identifiers] << identifier
-            existing_plugin[:identifiers] = existing_plugin[:identifiers].sort_by { |s| s.to_s }
+            existing_plugin[:identifiers] = existing_plugin[:identifiers].sort_by(&:to_s)
           else
             # Create new plugin
             plugins << {
-              :class       => klass,
-              :superclass  => superclass,
-              :identifiers => [identifier]
+              class: klass,
+              superclass: superclass,
+              identifiers: [identifier]
             }
           end
         end

@@ -167,7 +167,7 @@ EOS
     $stdout = StringIO.new
     $stderr = StringIO.new
     yield
-    { :stdout => $stdout.string, :stderr => $stderr.string }
+    { stdout: $stdout.string, stderr: $stderr.string }
   ensure
     # Restore
     $stdout = orig_stdout
@@ -191,7 +191,7 @@ EOS
           pieces << line
         end
       end
-      lines = pieces.map { |p| p.last }
+      lines = pieces.map(&:last)
 
       # Test
       b = binding
@@ -214,7 +214,7 @@ EOS
       remaining.delete_at(index) if index
     end
     assert remaining.empty?,
-      format('Expected %s to contain all the elements of %s',actual.inspect, expected.inspect)
+      format('Expected %s to contain all the elements of %s', actual.inspect, expected.inspect)
   end
 
   def assert_raises_frozen_error

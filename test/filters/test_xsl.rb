@@ -95,9 +95,9 @@ EOS
 
       # Create an instance of the filter
       assigns = {
-        :item => item,
-        :layout => layout,
-        :content => item.raw_content
+        item: item,
+        layout: layout,
+        content: item.raw_content
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 
@@ -119,15 +119,15 @@ EOS
 
       # Create an instance of the filter
       assigns = {
-        :item => item,
-        :layout => layout,
-        :content => item.raw_content
+        item: item,
+        layout: layout,
+        content: item.raw_content
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.raw_content,
-                                    :foo => 'bar')
+                                    foo: 'bar')
       assert_match SAMPLE_XML_OUT_WITH_PARAMS, result
     end
   end
@@ -144,9 +144,9 @@ EOS
 
       # Create an instance of the filter
       assigns = {
-        :item => item,
-        :layout => layout,
-        :content => item.raw_content
+        item: item,
+        layout: layout,
+        content: item.raw_content
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 

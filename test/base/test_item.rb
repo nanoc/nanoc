@@ -26,7 +26,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
     # Create item
     item = Nanoc::Item.new(
       'content',
-      { :one => 'one in item' },
+      { one: 'one in item' },
       '/path/'
     )
 
@@ -78,7 +78,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
     item.expects(:reps).returns([rep])
 
     # Check
-    assert_equal 'content at nil', item.compiled_content(:rep => :foo)
+    assert_equal 'content at nil', item.compiled_content(rep: :foo)
   end
 
   def test_compiled_content_with_default_rep_and_custom_snapshot
@@ -96,7 +96,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
     item.expects(:reps).returns([rep])
 
     # Check
-    assert_equal 'content at :blah', item.compiled_content(:snapshot => :blah)
+    assert_equal 'content at :blah', item.compiled_content(snapshot: :blah)
   end
 
   def test_compiled_content_with_custom_nonexistant_rep
@@ -106,7 +106,7 @@ class Nanoc::ItemTest < Nanoc::TestCase
 
     # Check
     assert_raises(Nanoc::Errors::Generic) do
-      item.compiled_content(:rep => :lkasdhflahgwfe)
+      item.compiled_content(rep: :lkasdhflahgwfe)
     end
   end
 
@@ -135,11 +135,11 @@ class Nanoc::ItemTest < Nanoc::TestCase
     item.expects(:reps).returns([rep])
 
     # Check
-    assert_equal 'the correct path', item.path(:rep => :moo)
+    assert_equal 'the correct path', item.path(rep: :moo)
   end
 
   def test_freeze_should_disallow_changes
-    item = Nanoc::Item.new('foo', { :a => { :b => 123 } }, '/foo/')
+    item = Nanoc::Item.new('foo', { a: { b: 123 } }, '/foo/')
     item.freeze
 
     assert_raises_frozen_error do
@@ -154,13 +154,13 @@ class Nanoc::ItemTest < Nanoc::TestCase
   def test_dump_and_load
     item = Nanoc::Item.new(
       'foobar',
-      { :a => { :b => 123 } },
+      { a: { b: 123 } },
       '/foo/')
 
     item = Marshal.load(Marshal.dump(item))
 
     assert_equal '/foo/', item.identifier
     assert_equal 'foobar', item.raw_content
-    assert_equal({ :a => { :b => 123 } }, item.attributes)
+    assert_equal({ a: { b: 123 } }, item.attributes)
   end
 end

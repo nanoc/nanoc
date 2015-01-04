@@ -25,8 +25,8 @@ module Nanoc::CLI::Commands
 
       # Set options
       options_for_rack = {
-        :Port      => (options[:port] || 3000).to_i,
-        :Host      => (options[:host] || '0.0.0.0')
+        Port: (options[:port] || 3000).to_i,
+        Host: (options[:host] || '0.0.0.0')
       }
 
       # Get handler
@@ -47,7 +47,7 @@ module Nanoc::CLI::Commands
         use Rack::ShowExceptions
         use Rack::Lint
         use Rack::Head
-        use Adsf::Rack::IndexFileFinder, :root => site.config[:output_dir]
+        use Adsf::Rack::IndexFileFinder, root: site.config[:output_dir]
         run Rack::File.new(site.config[:output_dir])
       end.to_app
 

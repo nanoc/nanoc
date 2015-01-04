@@ -39,8 +39,8 @@ module Nanoc
 
       @item_compilation_rules = []
       @item_routing_rules     = []
-      @layout_filter_mapping  = OrderedHash.new
-      @preprocessors          = OrderedHash.new
+      @layout_filter_mapping  = {}
+      @preprocessors          = {}
     end
 
     # Add the given rule to the list of item compilation rules.
@@ -99,8 +99,8 @@ module Nanoc
     def unload
       @item_compilation_rules = []
       @item_routing_rules     = []
-      @layout_filter_mapping  = OrderedHash.new
-      @preprocessors          = OrderedHash.new
+      @layout_filter_mapping  = {}
+      @preprocessors          = {}
     end
 
     # Finds the first matching compilation rule for the given item
@@ -190,7 +190,7 @@ module Nanoc
     # @return [Array] The rule memory for the given item representation
     def new_rule_memory_for_rep(rep)
       recording_proxy = rep.to_recording_proxy
-      compilation_rule_for(rep).apply_to(recording_proxy, :compiler => @compiler)
+      compilation_rule_for(rep).apply_to(recording_proxy, compiler: @compiler)
       recording_proxy.rule_memory << [:write, rep.path]
       make_rule_memory_serializable(recording_proxy.rule_memory)
     end

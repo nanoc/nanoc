@@ -139,7 +139,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       cmd = nil
       listener_classes = [test_listener_class]
       cmd_runner = Nanoc::CLI::Commands::Compile.new(
-        options, arguments, cmd, :listener_classes => listener_classes)
+        options, arguments, cmd, listener_classes: listener_classes)
 
       cmd_runner.run
 
@@ -193,15 +193,15 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   end
 
   def new_file_action_printer(reps)
-    listener = Nanoc::CLI::Commands::Compile::FileActionPrinter.new(:reps => reps)
+    listener = Nanoc::CLI::Commands::Compile::FileActionPrinter.new(reps: reps)
 
     def listener.log(level, action, path, duration)
       @events ||= []
       @events << {
-        :level    => level,
-        :action   => action,
-        :path     => path,
-        :duration => duration
+        level: level,
+        action: action,
+        path: path,
+        duration: duration
       }
     end
 

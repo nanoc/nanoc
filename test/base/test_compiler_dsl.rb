@@ -37,7 +37,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site per-rules-file-preprocessor )
     FileUtils.cd('per-rules-file-preprocessor') do
       # Create rep
-      item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
+      item = Nanoc::Item.new('foo', { extension: 'bar' }, '/foo/')
 
       # Create a bonus rules file
       File.open('more_rules.rb', 'w') { |io| io.write "preprocess { @items['/foo/'][:preprocessed] = true }" }
@@ -58,7 +58,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
       # Check that the two preprocess blocks have been added
       assert_equal 2, site.compiler.rules_collection.preprocessors.size
       refute_nil site.compiler.rules_collection.preprocessors.first
-      refute_nil site.compiler.rules_collection.preprocessors.last
+      refute_nil site.compiler.rules_collection.preprocessors.to_a.last
 
       # Apply preprocess blocks
       site.compiler.preprocess
@@ -71,7 +71,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site with_bonus_rules )
     FileUtils.cd('with_bonus_rules') do
       # Create rep
-      item = Nanoc::Item.new('foo', { :extension => 'bar' }, '/foo/')
+      item = Nanoc::Item.new('foo', { extension: 'bar' }, '/foo/')
       rep  = Nanoc::ItemRep.new(item, :default)
 
       # Create a bonus rules file
@@ -376,7 +376,7 @@ EOS
 
   def test_config
     $venetian = 'unsnares'
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, { :venetian => 'snares' })
+    compiler_dsl = Nanoc::CompilerDSL.new(nil, { venetian: 'snares' })
     compiler_dsl.instance_eval { $venetian = @config[:venetian] }
     assert_equal 'snares', $venetian
   end

@@ -9,10 +9,10 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now - 500
+      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :last => 'last content' } }
+    rep.instance_eval { @content = { last: 'last content' } }
     rep.expects(:compiled?).returns(true)
 
     # Check
@@ -23,10 +23,10 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now - 500
+      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.instance_eval { @content = { pre: 'pre content', last: 'last content' } }
     rep.expects(:compiled?).returns(true)
 
     # Check
@@ -37,28 +37,28 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now - 500
+      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.instance_eval { @content = { pre: 'pre content', last: 'last content' } }
     rep.expects(:compiled?).returns(true)
 
     # Check
-    assert_equal 'last content', rep.compiled_content(:snapshot => :last)
+    assert_equal 'last content', rep.compiled_content(snapshot: :last)
   end
 
   def test_compiled_content_with_invalid_snapshot
     # Create rep
     item = Nanoc::Item.new(
       'blah blah blah', {}, '/',
-      :binary => false, :mtime => Time.now - 500
+      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::ItemRep.new(item, nil)
-    rep.instance_eval { @content = { :pre => 'pre content', :last => 'last content' } }
+    rep.instance_eval { @content = { pre: 'pre content', last: 'last content' } }
 
     # Check
     assert_raises Nanoc::Errors::NoSuchSnapshot do
-      rep.compiled_content(:snapshot => :klsjflkasdfl)
+      rep.compiled_content(snapshot: :klsjflkasdfl)
     end
   end
 
@@ -66,7 +66,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -87,7 +87,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       %(<%= '<%= "blah" %' + '>' %>), {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create item rep
@@ -115,7 +115,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create item rep
@@ -141,7 +141,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       %(<%= '<%= "blah" %' + '>' %>), {}, '/foobar/',
-      :binary => false
+      binary: false
     )
 
     # Create item rep
@@ -169,36 +169,36 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, :foo)
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
-    item_rep.raw_paths = { :moo => 'foo-moo.txt' }
+    item_rep.raw_paths = { moo: 'foo-moo.txt' }
 
     # Test non-final
-    refute File.file?(item_rep.raw_path(:snapshot => :moo))
-    item_rep.snapshot(:moo, :final => false)
-    refute File.file?(item_rep.raw_path(:snapshot => :moo))
+    refute File.file?(item_rep.raw_path(snapshot: :moo))
+    item_rep.snapshot(:moo, final: false)
+    refute File.file?(item_rep.raw_path(snapshot: :moo))
 
     # Test final 1
-    item_rep.snapshot(:moo, :final => true)
-    assert File.file?(item_rep.raw_path(:snapshot => :moo))
-    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
-    FileUtils.rm_f(item_rep.raw_path(:snapshot => :moo))
+    item_rep.snapshot(:moo, final: true)
+    assert File.file?(item_rep.raw_path(snapshot: :moo))
+    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(snapshot: :moo))
+    FileUtils.rm_f(item_rep.raw_path(snapshot: :moo))
 
     # Test final 2
     item_rep.snapshot(:moo)
-    assert File.file?(item_rep.raw_path(:snapshot => :moo))
-    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(:snapshot => :moo))
+    assert File.file?(item_rep.raw_path(snapshot: :moo))
+    assert_equal 'Lorem ipsum, etc.', File.read(item_rep.raw_path(snapshot: :moo))
   end
 
   def test_write_should_not_touch_identical_textual_files
     # Mock item
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create rep
@@ -222,7 +222,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create rep
@@ -242,7 +242,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create rep
@@ -254,7 +254,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create fake filter
     def rep.filter_named(_name)
       @filter ||= Class.new(::Nanoc::Filter) do
-        type :text => :binary
+        type text: :binary
         def run(content, _params = {})
           File.open(output_filename, 'w') { |io| io.write(content) }
         end
@@ -272,7 +272,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Item.new(
       'blah blah', {}, '/',
-      :binary => false
+      binary: false
     )
 
     # Create rep
@@ -299,9 +299,9 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_using_textual_filters_on_binary_reps_raises
     item = create_binary_item
-    site = mock_and_stub(:items => [item],
-      :layouts => [],
-      :config  => []
+    site = mock_and_stub(items: [item],
+      layouts: [],
+      config: []
     )
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, :foo)
@@ -337,11 +337,11 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create item and item rep
     item = create_binary_item
     rep = create_rep_for(item, :foo)
-    rep.assigns = { :content => 'meh' }
+    rep.assigns = { content: 'meh' }
 
     # Create filter
     Class.new(::Nanoc::Filter) do
-      type :binary => :text
+      type binary: :text
       identifier :binary_to_text
       def run(content, _params = {})
         content + ' textified'
@@ -356,9 +356,9 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_converted_binary_rep_can_be_filtered_with_textual_filters
     item = create_binary_item
-    site = mock_and_stub(:items => [item],
-      :layouts => [],
-      :config  => []
+    site = mock_and_stub(items: [item],
+      layouts: [],
+      config: []
     )
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, :foo)
@@ -369,7 +369,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
     def rep.filter_named(_name)
       Class.new(::Nanoc::Filter) do
-        type :binary => :text
+        type binary: :text
         def run(_content, _params = {})
           'Some textual content'
         end
@@ -393,9 +393,9 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def test_converted_binary_rep_cannot_be_filtered_with_binary_filters
     item = create_binary_item
     site = mock_and_stub(
-      :items   => [item],
-      :layouts => [],
-      :config  => []
+      items: [item],
+      layouts: [],
+      config: []
     )
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, :foo)
@@ -405,7 +405,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     assert rep.binary?
     def rep.filter_named(_name)
       @filter ||= Class.new(::Nanoc::Filter) do
-        type :binary => :text
+        type binary: :text
         def run(_content, _params = {})
           'Some textual content'
         end
@@ -498,7 +498,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   end
 
   def test_access_compiled_content_of_binary_item
-    item = Nanoc::Item.new('content/somefile.dat', {}, '/somefile/', :binary => true)
+    item = Nanoc::Item.new('content/somefile.dat', {}, '/somefile/', binary: true)
     item_rep = Nanoc::ItemRep.new(item, :foo)
     assert_raises(Nanoc::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
@@ -511,7 +511,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Item.new(
       'content/meow.dat', {}, '/',
-      :binary => true
+      binary: true
     )
 
     # Create rep
@@ -539,7 +539,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Item.new(
       'content/meow.dat', {}, '/',
-      :binary => true
+      binary: true
     )
 
     # Create rep
@@ -568,7 +568,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
   def create_binary_item
     Nanoc::Item.new(
       '/a/file/name.dat', {}, '/',
-      :binary => true
+      binary: true
     )
   end
 

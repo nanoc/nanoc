@@ -49,7 +49,7 @@ module Nanoc::Extra::Deployers
       # Get bucket
       puts 'Getting bucket'
       begin
-        directory = connection.directories.get(bucket, :prefix => path)
+        directory = connection.directories.get(bucket, prefix: path)
       rescue ::Excon::Errors::NotFound
         should_create_bucket = true
       end
@@ -58,18 +58,18 @@ module Nanoc::Extra::Deployers
       # Create bucket if necessary
       if should_create_bucket
         puts 'Creating bucket'
-        directory = connection.directories.create(:key => bucket, :prefix => path)
+        directory = connection.directories.create(key: bucket, prefix: path)
       end
 
       # Get list of remote files
       files = directory.files
       truncated = files.respond_to?(:is_truncated) && files.is_truncated
       while truncated
-        set = directory.files.all(:marker => files.last.key)
+        set = directory.files.all(marker: files.last.key)
         truncated = set.is_truncated
         files += set
       end
-      keys_to_destroy = files.all.map { |file| file.key }
+      keys_to_destroy = files.all.map(&:key)
       keys_to_invalidate = []
 
       # Upload all the files in the output folder to the clouds
@@ -79,9 +79,9 @@ module Nanoc::Extra::Deployers
         files.each do |file_path|
           key = path ? File.join(path, file_path) : file_path
           directory.files.create(
-            :key => key,
-            :body => File.open(file_path),
-            :public => true)
+            key: key,
+            body: File.open(file_path),
+            public: true)
           keys_to_destroy.delete(key)
           keys_to_invalidate.push(key)
         end

@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 describe Nanoc::TempFilenameFactory do
-
   subject do
     Nanoc::TempFilenameFactory.instance
   end
@@ -13,7 +12,6 @@ describe Nanoc::TempFilenameFactory do
   end
 
   describe '#create' do
-
     it 'should create unique paths' do
       path_a = subject.create(prefix)
       path_b = subject.create(prefix)
@@ -37,11 +35,9 @@ describe Nanoc::TempFilenameFactory do
       path_b = subject.create(prefix)
       path_a.must_equal(path_b)
     end
-
   end
 
   describe '#cleanup' do
-
     it 'should remove generated files' do
       path_a = subject.create(prefix)
       File.file?(path_a).wont_equal(true) # not yet used
@@ -60,11 +56,9 @@ describe Nanoc::TempFilenameFactory do
       subject.cleanup(prefix)
       File.directory?(subject.root_dir).wont_equal(true)
     end
-
   end
 
   describe 'other instance' do
-
     let(:other_instance) do
       Nanoc::TempFilenameFactory.new
     end
@@ -74,7 +68,5 @@ describe Nanoc::TempFilenameFactory do
       path_b = other_instance.create(prefix)
       path_a.wont_equal(path_b)
     end
-
   end
-
 end

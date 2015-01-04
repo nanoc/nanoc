@@ -2,7 +2,6 @@
 
 module Nanoc
   require 'nanoc/base/core_ext'
-  require 'nanoc/base/ordered_hash'
 
   # Load helper classes
   autoload 'Context',              'nanoc/base/context'

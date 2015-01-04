@@ -90,7 +90,7 @@ module Nanoc::CLI
     setup_cleaning_streams
     setup_commands
     load_custom_commands
-    after_setup_procs.each { |b| b.call }
+    after_setup_procs.each(&:call)
   end
 
   # Sets up the root command and base subcommands.

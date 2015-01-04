@@ -55,9 +55,7 @@ module Nanoc::CLI::Commands
       end
 
       # Update
-      site.data_sources.each do |data_source|
-        data_source.update
-      end
+      site.data_sources.each(&:update)
     end
   end
 end

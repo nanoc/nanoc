@@ -21,7 +21,7 @@ class Nanoc::Filters::CodeRayTest < Nanoc::TestCase
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
-      result = filter.setup_and_run(code, :language => 'ruby')
+      result = filter.setup_and_run(code, language: 'ruby')
       assert_match %r{^<span class="keyword">def</span> <span class="function">some_function</span>}, result
     end
   end
@@ -33,7 +33,7 @@ class Nanoc::Filters::CodeRayTest < Nanoc::TestCase
 
       # Run filter
       code = "def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end"
-      result = filter.setup_and_run(code, :language => 'skldfhjsdhfjszfnocmluhfixfmersumulh')
+      result = filter.setup_and_run(code, language: 'skldfhjsdhfjszfnocmluhfixfmersumulh')
       assert_equal code, result
     end
   end

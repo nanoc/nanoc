@@ -4,7 +4,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
   def test_filter
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :question => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ question: 'Is this the Payne residence?' })
 
       # Run filter (no assigns)
       result = filter.setup_and_run('%html')
@@ -23,14 +23,14 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
   def test_filter_with_params
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
+      filter = ::Nanoc::Filters::Haml.new({ foo: 'bar' })
 
       # Check with HTML5
-      result = filter.setup_and_run('%img', :format => :html5)
+      result = filter.setup_and_run('%img', format: :html5)
       assert_match(/<img>/, result)
 
       # Check with XHTML
-      result = filter.setup_and_run('%img', :format => :xhtml)
+      result = filter.setup_and_run('%img', format: :xhtml)
       assert_match(/<img\s*\/>/, result)
     end
   end
@@ -38,7 +38,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
   def test_filter_error
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :foo => 'bar' })
+      filter = ::Nanoc::Filters::Haml.new({ foo: 'bar' })
 
       # Run filter
       raised = false
@@ -56,7 +56,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
   def test_filter_with_yield
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :content => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ content: 'Is this the Payne residence?' })
 
       # Run filter
       result = filter.setup_and_run('%p= yield')
@@ -67,7 +67,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
   def test_filter_with_yield_without_content
     if_have 'haml' do
       # Create filter
-      filter = ::Nanoc::Filters::Haml.new({ :location => 'Is this the Payne residence?' })
+      filter = ::Nanoc::Filters::Haml.new({ location: 'Is this the Payne residence?' })
 
       # Run filter
       assert_raises LocalJumpError do

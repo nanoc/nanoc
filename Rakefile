@@ -11,4 +11,4 @@ require 'nanoc'
 Dir.glob('tasks/**/*.rake').each { |r| Rake.application.add_import r }
 
 # Set default task
-task :default => :test
+task default: :test

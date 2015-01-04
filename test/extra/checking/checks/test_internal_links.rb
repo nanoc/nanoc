@@ -56,7 +56,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
-      site.config.update({ :checks => { :internal_links => { :exclude => ['^/excluded\d+'] } } })
+      site.config.update({ checks: { internal_links: { exclude: ['^/excluded\d+'] } } })
 
       # Test
       assert check.send(:valid?, '/excluded1', 'output/origin')

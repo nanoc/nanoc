@@ -21,7 +21,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     expected_content = %(<a href="../..">foo</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -45,7 +45,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     expected_content = %(<a href="../..">foo</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -69,7 +69,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     expected_content = %(<a href="../..">foo</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -104,7 +104,7 @@ EOS
     expected_match_1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_match(expected_match_0, actual_content)
     assert_match(expected_match_1, actual_content)
   end
@@ -129,7 +129,7 @@ EOS
     expected_content = %(<a href="../..">foo</a> <a href="../../../bar">bar</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -153,7 +153,7 @@ EOS
     expected_content = %(<a href="../../../"><img src="../../../bar.png"></a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -177,7 +177,7 @@ EOS
     expected_content = %(stuff href="/foo" more stuff)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -201,7 +201,7 @@ EOS
     expected_content = %(<a href="../../">foo</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -225,7 +225,7 @@ EOS
     expected_content = %(<a href="//example.com/">example.com</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -249,7 +249,7 @@ EOS
     expected_content = %(<a href="#max-payne">Max Payne</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -273,7 +273,7 @@ EOS
     expected_content = %(<a href="http://example.com/">Example</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -297,7 +297,7 @@ EOS
     expected_content = %(<a href="example">Example</a>)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 
@@ -317,7 +317,7 @@ EOS
     end
 
     raw_content    = %(<object data="/example"><param name="movie" content="/example"></object>)
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
 
     assert_match(/<object data="..\/..\/example">/, actual_content)
     assert_match(/<param (name="movie" )?content="..\/..\/example"/, actual_content)
@@ -353,7 +353,7 @@ EOS
     expected_content = %[background: url("../background.png");]
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :css)
+    actual_content = filter.setup_and_run(raw_content, type: :css)
     assert_equal(expected_content, actual_content)
   end
 
@@ -377,7 +377,7 @@ EOS
     expected_content = %[background: url('../background.png');]
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :css)
+    actual_content = filter.setup_and_run(raw_content, type: :css)
     assert_equal(expected_content, actual_content)
   end
 
@@ -401,7 +401,7 @@ EOS
     expected_content = %[background: url(../background.png);]
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :css)
+    actual_content = filter.setup_and_run(raw_content, type: :css)
     assert_equal(expected_content, actual_content)
   end
 
@@ -425,7 +425,7 @@ EOS
     expected_content = %[background: url(../a.png) url(../b.png);]
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :css)
+    actual_content = filter.setup_and_run(raw_content, type: :css)
     assert_equal(expected_content, actual_content)
   end
 
@@ -452,7 +452,7 @@ EOS
     expected_content = %[background: url(../../);]
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :css)
+    actual_content = filter.setup_and_run(raw_content, type: :css)
     assert_equal(expected_content, actual_content)
   end
 
@@ -476,7 +476,7 @@ EOS
     expected_content = %[background: url(//example.com);]
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :css)
+    actual_content = filter.setup_and_run(raw_content, type: :css)
     assert_equal(expected_content, actual_content)
   end
 
@@ -505,7 +505,7 @@ EOS
 </foo>
 XML
 
-      actual_content = filter.setup_and_run(raw_content, :type => :xml, :select => ['*/@boo'])
+      actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['*/@boo'])
 
       assert_match(expected, actual_content)
     end
@@ -534,7 +534,7 @@ XML
 </foo>
 XML
 
-      actual_content = filter.setup_and_run(raw_content, :type => :xml, :select => ['far/@href'])
+      actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['far/@href'])
 
       assert_match(/<foo>/, actual_content)
       assert_match(/<bar><far href="..\/..">baz<\/far><\/bar>/, actual_content)
@@ -565,9 +565,9 @@ XML
 XML
 
       actual_content = filter.setup_and_run(raw_content, {
-        :type => :xml,
-        :namespaces => { :ex => 'http://example.org' },
-        :select => ['ex:a/@href']
+        type: :xml,
+        namespaces: { ex: 'http://example.org' },
+        select: ['ex:a/@href']
       })
 
       assert_match(/<foo xmlns="http:\/\/example.org">/,    actual_content)
@@ -606,7 +606,7 @@ XML
 </html>
 XML
 
-      actual_content = filter.setup_and_run(raw_content, :type => :xhtml)
+      actual_content = filter.setup_and_run(raw_content, type: :xhtml)
 
       assert_match(/<link[^>]*href="..\/..\/..\/css"[^>]*\/>/, actual_content)
       assert_match(/<script src="..\/..\/..\/js">/,            actual_content)
@@ -643,7 +643,7 @@ XML
         %r{\A\s*<a href="../..">bar</a>\s*<p>\s*<img src="../../../img" />\s*</p>\s*\Z}m
 
       # Test
-      actual_content = filter.setup_and_run(raw_content.freeze, :type => :xhtml)
+      actual_content = filter.setup_and_run(raw_content.freeze, type: :xhtml)
       assert_match(expected_content, actual_content)
     end
   end
@@ -673,7 +673,7 @@ XML
 
 )
 
-      actual_content = filter.setup_and_run(raw_content.freeze, :type => :xhtml)
+      actual_content = filter.setup_and_run(raw_content.freeze, type: :xhtml)
 
       assert_match(/<link (rel="stylesheet" )?href="..\/..\/foo.css" /,      actual_content)
       assert_match(/<script src="..\/..\/js\/lib\/html5shiv.js"><\/script>/, actual_content)
@@ -705,7 +705,7 @@ XML
 )
 
       # Test
-      actual_content = filter.setup_and_run(raw_content.freeze, :type => :html)
+      actual_content = filter.setup_and_run(raw_content.freeze, type: :html)
       assert actual_content.include? %(<script src="../../js/lib/html5shiv.js">)
     end
   end
@@ -730,7 +730,7 @@ XML
     expected_content = %(&lt;!DOCTYPE html&gt;)
 
     # Test
-    actual_content = filter.setup_and_run(raw_content, :type => :html)
+    actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
 end

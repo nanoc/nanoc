@@ -116,7 +116,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     FileUtils.mkdir_p('dir')
     File.open('dir/.other', 'w') { |io| io.write('o hai') }
 
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', "**/.other").sort
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', '**/.other').sort
     assert_equal ['dir/.other'], actual_files
   end
 
@@ -126,7 +126,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('dir/.other', 'w') { |io| io.write('o hai') }
     File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
 
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', ["**/.other", "**/.DS_Store"]).sort
+    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', ['**/.other', '**/.DS_Store']).sort
     assert_equal ['dir/.other', 'dir/.DS_Store'].sort, actual_files.sort
   end
 
@@ -135,11 +135,10 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     FileUtils.mkdir_p('dir')
     File.open('dir/.other', 'w') { |io| io.write('o hai') }
 
-    pattern = {:dotfiles => "**/.other"}
+    pattern = { dotfiles: '**/.other' }
 
     assert_raises Nanoc::Errors::GenericTrivial, "Do not know how to handle extra_files: #{pattern.inspect}" do
       Nanoc::Extra::FilesystemTools.all_files_in('dir0', pattern)
     end
   end
-
 end

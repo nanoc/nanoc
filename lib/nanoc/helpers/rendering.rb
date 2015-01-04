@@ -89,14 +89,14 @@ module Nanoc::Helpers
 
       # Get assigns
       assigns = {
-        :content    => captured_content,
-        :item       => @item,
-        :item_rep   => @item_rep,
-        :items      => @items,
-        :layout     => layout,
-        :layouts    => @layouts,
-        :config     => @config,
-        :site       => @site
+        content: captured_content,
+        item: @item,
+        item_rep: @item_rep,
+        items: @items,
+        layout: layout,
+        layouts: @layouts,
+        config: @config,
+        site: @site
       }.merge(other_assigns)
 
       # Get filter name

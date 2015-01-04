@@ -4,7 +4,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
   def test_filter
     if_have 'sass' do
       # Get filter
-      filter = create_filter({ :foo => 'bar' })
+      filter = create_filter({ foo: 'bar' })
 
       # Run filter
       result = filter.setup_and_run(".foo #bar\n  color: #f00")
@@ -15,14 +15,14 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
   def test_filter_with_params
     if_have 'sass' do
       # Create filter
-      filter = create_filter({ :foo => 'bar' })
+      filter = create_filter({ foo: 'bar' })
 
       # Check with compact
-      result = filter.setup_and_run(".foo #bar\n  color: #f00", :style => 'compact')
+      result = filter.setup_and_run(".foo #bar\n  color: #f00", style: 'compact')
       assert_match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m, result)
 
       # Check with compressed
-      result = filter.setup_and_run(".foo #bar\n  color: #f00", :style => 'compressed')
+      result = filter.setup_and_run(".foo #bar\n  color: #f00", style: 'compressed')
       assert_match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m, result)
     end
   end
@@ -289,9 +289,9 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
     items = [Nanoc::Item.new(
       'blah',
-      { :content_filename => 'content/xyzzy.sass' },
+      { content_filename: 'content/xyzzy.sass' },
       '/blah/')]
-    params = { :item => items[0], :items => items }.merge(params)
+    params = { item: items[0], items: items }.merge(params)
     ::Nanoc::Filters::Sass.new(params)
   end
 end

@@ -120,7 +120,7 @@ module Nanoc
       snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block, :snapshot_name => snapshot_name)
+      rule = Rule.new(identifier_to_regex(identifier), rep_name, block, snapshot_name: snapshot_name)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -197,7 +197,7 @@ module Nanoc
         # data source.
         item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
       end
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, :snapshot_name => :last)
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -228,7 +228,7 @@ module Nanoc
       compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {}, :snapshot_name => :last)
+      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {}, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 

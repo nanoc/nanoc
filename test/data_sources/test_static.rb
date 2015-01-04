@@ -16,7 +16,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     skip_unless_symlinks_supported
 
     # Create data source
-    data_source = new_data_source(:prefix => 'foo')
+    data_source = new_data_source(prefix: 'foo')
 
     # Create sample files
     FileUtils.mkdir_p('foo')
@@ -36,15 +36,15 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     assert_equal expected_filenames, actual_filenames
 
     # Check items
-    items = data_source.send(:items).sort_by { |i| i.identifier }
-    actual_item_identifiers   = items.map { |i| i.identifier }.sort
+    items = data_source.send(:items).sort_by(&:identifier)
+    actual_item_identifiers   = items.map(&:identifier).sort
     expected_item_identifiers = %w( /a.png/ /1/b.png/ /c.png/ ).sort
     assert_equal expected_item_identifiers, actual_item_identifiers
   end
 
   def test_items
     # Create data source
-    data_source = new_data_source(:prefix => 'foo')
+    data_source = new_data_source(prefix: 'foo')
 
     # Create sample files
     FileUtils.mkdir_p('foo')
@@ -57,31 +57,31 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     expected_out = [
       Nanoc::Item.new(
         'foo/bar.png',
-        { :extension => 'png', :filename => 'foo/bar.png' },
+        { extension: 'png', filename: 'foo/bar.png' },
         '/bar.png/',
-        :binary => true,
-        :mtime => File.mtime('foo/bar.png'),
-        :checksum => Pathname.new('foo/bar.png').checksum
+        binary: true,
+        mtime: File.mtime('foo/bar.png'),
+        checksum: Pathname.new('foo/bar.png').checksum
       ),
       Nanoc::Item.new(
         'foo/b.c.css',
-        { :extension => 'css', :filename => 'foo/b.c.css' },
+        { extension: 'css', filename: 'foo/b.c.css' },
         '/b.c.css/',
-        :binary => true,
-        :mtime => File.mtime('foo/b.c.css'),
-        :checksum => Pathname.new('foo/b.c.css').checksum
+        binary: true,
+        mtime: File.mtime('foo/b.c.css'),
+        checksum: Pathname.new('foo/b.c.css').checksum
       ),
       Nanoc::Item.new(
         'foo/a/b/c.gif',
-        { :extension => 'gif', :filename => 'foo/a/b/c.gif' },
+        { extension: 'gif', filename: 'foo/a/b/c.gif' },
         '/a/b/c.gif/',
-        :binary => true,
-        :mtime => File.mtime('foo/a/b/c.gif'),
-        :checksum => Pathname.new('foo/a/b/c.gif').checksum
+        binary: true,
+        mtime: File.mtime('foo/a/b/c.gif'),
+        checksum: Pathname.new('foo/a/b/c.gif').checksum
       )
-    ].sort_by { |i| i.identifier }
+    ].sort_by(&:identifier)
 
-    actual_out = data_source.send(:items).sort_by { |i| i.identifier }
+    actual_out = data_source.send(:items).sort_by(&:identifier)
 
     (0..expected_out.size - 1).each do |i|
       assert_equal expected_out[i].raw_content, actual_out[i].raw_content, 'content must match'

@@ -65,13 +65,8 @@ module Nanoc
         raise ArgumentError, 'Required :compiler option is missing'
       end
       rep = Nanoc::ItemRepProxy.new(rep, compiler) unless rep.proxy?
-      Nanoc::RuleContext.new(
-        :rep      => rep,
-        :compiler => compiler
-      ).instance_exec(
-        matches(rep.item.identifier),
-        &@block
-      )
+      context = Nanoc::RuleContext.new(rep: rep, compiler: compiler)
+      context.instance_exec(matches(rep.item.identifier), &@block)
     end
 
     protected
