@@ -39,8 +39,8 @@ module Nanoc
 
       @item_compilation_rules = []
       @item_routing_rules     = []
-      @layout_filter_mapping  = OrderedHash.new
-      @preprocessors          = OrderedHash.new
+      @layout_filter_mapping  = {}
+      @preprocessors          = {}
     end
 
     # Add the given rule to the list of item compilation rules.
@@ -99,8 +99,8 @@ module Nanoc
     def unload
       @item_compilation_rules = []
       @item_routing_rules     = []
-      @layout_filter_mapping  = OrderedHash.new
-      @preprocessors          = OrderedHash.new
+      @layout_filter_mapping  = {}
+      @preprocessors          = {}
     end
 
     # Finds the first matching compilation rule for the given item

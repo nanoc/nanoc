@@ -58,7 +58,7 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
       # Check that the two preprocess blocks have been added
       assert_equal 2, site.compiler.rules_collection.preprocessors.size
       refute_nil site.compiler.rules_collection.preprocessors.first
-      refute_nil site.compiler.rules_collection.preprocessors.last
+      refute_nil site.compiler.rules_collection.preprocessors.to_a.last
 
       # Apply preprocess blocks
       site.compiler.preprocess
