@@ -33,6 +33,30 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
 
         # Check
         refute check.issues.empty?
+        assert_equal 1, check.issues.size
+        assert_equal 'line 1: Property coxlor doesn\'t exist: h1 { coxlor: rxed; }',
+          check.issues.to_a[0].description
+      end
+    end
+  end
+
+  def test_run_parse_error
+    VCR.use_cassette('css_run_parse_error') do
+      with_site do |site|
+        # Create files
+        FileUtils.mkdir_p('output')
+        File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
+        File.open('output/style.css', 'w') { |io| io.write('h1 { ; {') }
+
+        # Run check
+        check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check.run
+
+        # Check
+        refute check.issues.empty?
+        assert_equal 1, check.issues.size
+        assert_equal 'line 1: Parse Error: h1 { ; {',
+          check.issues.to_a[0].description
       end
     end
   end

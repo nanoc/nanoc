@@ -33,6 +33,10 @@ class Nanoc::Extra::Checking::Checks::HTMLTest < Nanoc::TestCase
 
         # Check
         refute check.issues.empty?
+        assert_equal 2, check.issues.size
+        assert_equal 'line 1: no document type declaration; will parse without validation: <h2>Hi!</h1>', check.issues.to_a[0].description
+        assert_equal 'line 1: end tag for element "H1" which is not open: <h2>Hi!</h1>', check.issues.to_a[1].description
+          check.issues.to_a[0].description
       end
     end
   end
