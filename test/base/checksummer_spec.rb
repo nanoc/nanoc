@@ -25,6 +25,12 @@ describe Nanoc::Checksummer do
     it 'should checksum non-serializable arrays' do
       subject.calc([-> {}]).must_match(CHECKSUM_REGEX)
     end
+
+    it 'should checksum recursive arrays' do
+      array = [:a]
+      array << array
+      subject.calc(array).must_equal('mR3c98xA5ecazxx+M3h0Ss4/J20=')
+    end
   end
 
   describe 'for Hash' do
@@ -38,6 +44,18 @@ describe Nanoc::Checksummer do
 
     it 'should checksum non-serializable hashes' do
       subject.calc({ a: -> {} }).must_match(CHECKSUM_REGEX)
+    end
+
+    it 'should checksum recursive hash keys' do
+      hash = {}
+      hash[hash] = 123
+      subject.calc(hash).must_equal('mKucWMhRtR/FHWNqR/EErF4qgTk=')
+    end
+
+    it 'should checksum recursive hash values' do
+      hash = {}
+      hash[123] = hash
+      subject.calc(hash).must_equal('PBiDX0nWnV+DAYB+w+xM0Kf21ZM=')
     end
   end
 
@@ -193,6 +211,14 @@ describe Nanoc::Checksummer do
 
     it 'should checksum item' do
       subject.calc(item).must_equal(normal_checksum)
+    end
+
+    describe 'with recursive attributes' do
+      it 'should checksum' do
+        item.attributes[:a] = item
+        subject.calc(item).must_match(CHECKSUM_REGEX)
+        subject.calc(item).wont_equal(normal_checksum)
+      end
     end
 
     describe 'with changed attributes' do
