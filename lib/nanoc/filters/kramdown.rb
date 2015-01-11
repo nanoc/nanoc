@@ -11,8 +11,13 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
-      # Get result
-      ::Kramdown::Document.new(content, params).to_html
+      document = ::Kramdown::Document.new(content, params)
+
+      document.warnings.each do |warning|
+        $stderr.puts "kramdown warning: #{warning}"
+      end
+
+      document.to_html
     end
   end
 end
