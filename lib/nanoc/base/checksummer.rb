@@ -18,8 +18,13 @@ module Nanoc
 
       private
 
-      def update(obj, digest)
+      def update(obj, digest, visited = Set.new)
         digest.update(obj.class.to_s)
+
+        if visited.include?(obj)
+          digest.update('recur')
+          return
+        end
 
         case obj
         when String
@@ -27,14 +32,14 @@ module Nanoc
         when Array
           obj.each do |el|
             digest.update('elem')
-            update(el, digest)
+            update(el, digest, visited + [obj])
           end
         when Hash
           obj.each do |key, value|
             digest.update('key')
-            update(key, digest)
+            update(key, digest, visited + [obj])
             digest.update('value')
-            update(value, digest)
+            update(value, digest, visited + [obj])
           end
         when Pathname
           filename = obj.to_s
@@ -59,7 +64,7 @@ module Nanoc
           digest.update('attributes')
           attributes = obj.attributes.dup
           attributes.delete(:file)
-          update(attributes, digest)
+          update(attributes, digest, visited + [obj])
         else
           data = begin
             Marshal.dump(obj)
