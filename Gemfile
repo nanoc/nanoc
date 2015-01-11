@@ -26,7 +26,11 @@ gem 'maruku'
 gem 'mime-types', :platforms => ruby_19_plus
 gem 'minitest', '~> 4.0'
 gem 'mocha'
-gem 'mustache'
+if RUBY_VERSION >= '2.0.0'
+  gem 'mustache', '~> 1.0'
+else
+  gem 'mustache', '~> 0.99'
+end
 gem 'nokogiri', '~> 1.6'
 gem 'pandoc-ruby'
 gem 'pry'
