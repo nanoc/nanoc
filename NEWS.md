@@ -1,5 +1,19 @@
 # nanoc news
 
+## 3.7.5 (???)
+
+Enhancements:
+
+* Allowed extra patterns to be specified in the data source configuration, so that dotfiles are no longer necessary ignored (e.g. `extra_files: ['.htaccess']`) (#492, #498) [Andy Drop, Michal Papis]
+* Removed Ruby 1.8.x support ([details](https://groups.google.com/forum/#!topic/nanoc/pSL1i15EFz8)) (#517)
+* Improved CSS and HTML error messages (#484, #504)
+* Let kramdown filter print warnings (#459, #519)
+
+Fixes:
+
+* Fixed HTML class names for recent Rouge versions (#502)
+* Fixed crash when using items or layouts in attributes (#469, #518)
+
 ## 3.7.4 (2014-11-23)
 
 Enhancements:
