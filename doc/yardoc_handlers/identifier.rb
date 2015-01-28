@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class NanocIdentifierHandler < ::YARD::Handlers::Ruby::AttributeHandler
   # e.g. identifier :foo, :bar
 

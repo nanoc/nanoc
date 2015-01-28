@@ -270,8 +270,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def raw_path(params = {})
-      Nanoc3::NotificationCenter.post(:visit_started, item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::NotificationCenter.post(:visit_started, item)
+      Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @raw_paths[snapshot_name]
@@ -287,8 +287,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def path(params = {})
-      Nanoc3::NotificationCenter.post(:visit_started, item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::NotificationCenter.post(:visit_started, item)
+      Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]

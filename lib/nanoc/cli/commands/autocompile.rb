@@ -2,7 +2,6 @@
 
 usage 'autocompile [options]'
 summary 'start the autocompiler'
-be_hidden
 aliases :aco
 description <<-EOS
 Start the autocompiler web server. Unless overridden with commandline options
@@ -26,8 +25,6 @@ required :p, :port,    'specify the port to listen on (default: 3000)'
 module Nanoc::CLI::Commands
   class AutoCompile < ::Nanoc::CLI::CommandRunner
     def run
-      warn 'WARNING: The `autocompile` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
-
       require 'rack'
 
       # Make sure we are in a nanoc site directory

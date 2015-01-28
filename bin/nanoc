@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
+# Set encoding (UTF_8), globally
+Encoding.default_internal = Encoding::UTF_8
+Encoding.default_external = Encoding::UTF_8
+
 # Try loading bundler if it's possible
 begin
   require 'bundler'
@@ -8,13 +12,13 @@ begin
   begin
     Bundler.require(:default)
   rescue Bundler::GemfileNotFound
-    # no problem
+    # no problem (case 1)
   end
 rescue LoadError
-  # no problem
+  # no problem (case 2)
 end if File.file?('Gemfile')
 
-# Add lib to load path
+# Add lib/ directory to load path
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 
 # Load nanoc

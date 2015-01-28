@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 usage 'watch [options]'
-summary 'start the watcher'
-be_hidden
+summary 'auto-regeneration of the site when files are modified'
 description <<-EOS
 Start the watcher. When a change is detected, the site will be recompiled.
 EOS
@@ -10,8 +9,6 @@ EOS
 module Nanoc::CLI::Commands
   class Watch < ::Nanoc::CLI::CommandRunner
     def run
-      warn 'WARNING: The `watch` command is deprecated. Please consider using `guard-nanoc` instead (see https://github.com/nanoc/guard-nanoc).'
-
       require 'listen'
       require 'pathname'
 
@@ -81,12 +78,13 @@ module Nanoc::CLI::Commands
         rebuilder.call(removed[0]) if removed[0]
       end
 
-      listener = Listen::Listener.new(*dirs_to_watch).change(&callback)
-      listener_root = Listen::Listener.new('.', filter: files_to_watch, ignore: ignore_dir).change(&callback)
+      listener = Listen.to(*dirs_to_watch, &callback)
+      listener_root = Listen.to('.', filter: files_to_watch, ignore: ignore_dir, &callback)
 
       begin
         listener_root.start
-        listener.start!
+        listener.start
+        sleep
       rescue Interrupt
         listener.stop
         listener_root.stop
