@@ -1,5 +1,5 @@
-coverage/
-doc/yardoc
+/coverage/
+/doc/yardoc
 .DS_Store
 .yardoc
 Gemfile.lock
