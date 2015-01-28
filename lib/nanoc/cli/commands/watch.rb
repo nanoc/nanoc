@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 usage 'watch [options]'
-summary 'start the watcher'
+summary 'auto-regeneration of the site when files are modified'
 description <<-EOS
 Start the watcher. When a change is detected, the site will be recompiled.
 EOS

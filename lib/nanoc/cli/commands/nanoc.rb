@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 usage 'nanoc command [options] [arguments]'
-summary 'nanoc, a static site compiler written in Ruby'
+summary 'a static site compiler written in Ruby'
 
 opt :l, :color, 'enable color' do
   $stdout.remove_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)

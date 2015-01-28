@@ -13,7 +13,7 @@ Contributing code
 
 Pull requests are appreciated! When submitting a PR, be sure to submit it onto the right branch:
 
-* For bug fixes, use the release branch, e.g. `release-3.6.x`
+* For bug fixes, use the release branch, e.g. `release-3.7.x`
 * For features, use the `master` branch
 
 When submitting a PR, make sure that your changes have covering tests, that the documentation remains up-to-date and that you retain backwards compatibility.

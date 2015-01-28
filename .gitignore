@@ -1,7 +1,7 @@
+coverage/
 doc/yardoc
 .DS_Store
+.yardoc
+Gemfile.lock
 *.gem
-/coverage/
-/.yardoc
 *~
-/Gemfile.lock
