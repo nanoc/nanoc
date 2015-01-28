@@ -16,11 +16,16 @@ Gem::Specification.new do |s|
   s.email         = 'denis.defreyne@stoneship.org'
   s.license       = 'MIT'
 
-  # Files & Directories
-  s.files         = Dir['[A-Z]*'] +
-                    Dir['doc/yardoc_{templates,handlers}/**/*'] +
-                    Dir['{bin,lib,tasks,test}/**/*'] + ['nanoc.gemspec']
-  s.executables   = ['nanoc']
+  # Files
+  s.files = Dir[
+    '[A-Z]*',
+    'doc/yardoc_{templates,handlers}/**/*',
+    '{bin,lib,tasks,test}/**/*',
+    'nanoc.gemspec',
+  ]
+
+  # Directories
+  s.executables = ['nanoc']
   s.require_paths = ['lib']
 
   # Documentation files
