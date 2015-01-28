@@ -24,16 +24,32 @@
 
 # nanoc
 
-__nanoc__ is a flexible static site generator written in Ruby. See the [web site](http://nanoc.ws) for more information.
+See the [web site](http://nanoc.ws) for more information.
 
 **Please take a moment and [donate](http://pledgie.com/campaigns/9282). A lot of time has gone into developing nanoc, and I would like to keep it going. Your support will ensure that nanoc will continue to improve.**
 
+## Installation
+
+Binary installers for the latest released version are available at the [RubyGems.](https://rubygems.org/gems/nanoc)
+
+```bash
+$ gem install nanoc
+```
+
+Now you can start working! Exemplary quickstart.
+
+```bash
+$ nanoc create-site my_new_site
+$ cd my_new_site
+$ nanoc autocompile
+```
+
+_Browse to http://localhost:3000_
+
 ## Contributing
 
-Contributions are greatly appreciated! Consult the [Development guidelines](http://nanoc.ws/development/) for information on how you can contribute.
+Contributions are greatly appreciated! Consult the [development guidelines](http://nanoc.ws/development/) for information on how you can contribute.
 
-### Contributors
-
-Many thanks to everyone who has contributed to nanoc in one way or another!
+> Many thanks to everyone who has contributed to nanoc in one way or another! -- __Denis Defreyne__
 
 Ale Muñoz, Alexander Mankuta, Arnau Siches, Ben Armston, Bil Bas, Brian Candler, Bruno Dufour, Chris Eppstein, Christian Plessl, Colin Barrett, Damien Pollet, Dan Callahan, Daniel Hofstetter, Daniel Mendler, Daniel Wollschlaeger, David Everitt, Dennis Sutch, Devon Luke Buchanan, Dmitry Bilunov, Eric Sunshine, Erik Hollensbe, Fabian Buch, Felix Hanley, Go Maeda, Gregory Pakosz, Grégory Karékinian, Guilherme Garnier, Jack Chu, Jake Benilov, Jasper Van der Jeugt, Jeff Forcier, John Nishinaga, Justin Clift, Justin Hileman, Kevin Lynagh, Louis T., Mathias Bynens, Matt Keveney, Matthew Frazier, Matthias Beyer, Matthias Reitinger, Matthias Vallentin, Michal Cichra, Nelson Chen, Nicky Peeters, Nikhil Marathe, Oliver Byford, Peter Aronoff, Raphael von der Grün, Remko Tronçon, Riley Goodside, Ruben Verborgh, Scott Vokes, Simon South, Spencer Whitt, Stanley Rost, Starr Horne, Stefan Bühler, Stuart Montgomery, Takashi Uchibe, Toon Willems, Tuomas Kareinen, Ursula Kallio, Vincent Driessen, Xavier Shay, Zaiste de Grengolada, Šime Ramov
