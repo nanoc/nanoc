@@ -84,14 +84,12 @@ module Nanoc::Helpers
 
       protected
 
-      def sorted_relevant_articles
-        relevant_articles.sort_by do |a|
-          attribute_to_time(a[:created_at])
-        end.reverse.first(limit)
+      def limited_relevant_articles
+        relevant_articles.first(limit)
       end
 
       def last_article
-        sorted_relevant_articles.first
+        limited_relevant_articles.first
       end
 
       def validate_config
@@ -148,7 +146,7 @@ module Nanoc::Helpers
           xml.logo logo if logo
 
           # Add articles
-          sorted_relevant_articles.each do |a|
+          limited_relevant_articles.each do |a|
             build_for_article(a, xml)
           end
         end
@@ -302,7 +300,7 @@ module Nanoc::Helpers
 
       # Fill builder
       builder.limit             = params[:limit] || 5
-      builder.relevant_articles = params[:articles] || articles || []
+      builder.relevant_articles = params[:articles] || sorted_articles || []
       builder.content_proc      = params[:content_proc] || ->(a) { a.compiled_content(snapshot: :pre) }
       builder.excerpt_proc      = params[:excerpt_proc] || ->(a) { a[:excerpt] }
       builder.title             = params[:title] || @item[:title] || @site.config[:title]
