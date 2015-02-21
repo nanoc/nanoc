@@ -273,8 +273,8 @@ module Nanoc::Helpers
     # @option params [Number] :limit (5) The maximum number of articles to
     #   show
     #
-    # @option params [Array] :articles (sorted_articles) A list of articles to
-    #   include in the feed
+    # @option params [Array] :articles (articles) A list of articles to include
+    #   in the feed
     #
     # @option params [Boolean] :preserve_order (false) Whether or not the
     #   ordering of the list of articles should be preserved. If false, the
