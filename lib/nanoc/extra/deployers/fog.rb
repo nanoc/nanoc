@@ -63,6 +63,7 @@ module Nanoc::Extra::Deployers
         files += set
       end
       keys_to_destroy = files.all.map(&:key)
+      etags = read_etags(files)
 
       # Upload all the files in the output folder to the clouds
       puts 'Uploading local files'
@@ -70,11 +71,17 @@ module Nanoc::Extra::Deployers
         files = Dir['**/*'].select { |f| File.file?(f) }
         files.each do |file_path|
           key = path ? File.join(path, file_path) : file_path
+
+          keys_to_destroy.delete(key)
+
+          local_etag = calc_local_etag(file_path)
+          remote_etag = etags[key]
+          next if remote_etag && remote_etag == local_etag
+
           directory.files.create(
             key: key,
             body: File.open(file_path),
             public: true)
-          keys_to_destroy.delete(key)
         end
       end
 
@@ -88,6 +95,24 @@ module Nanoc::Extra::Deployers
     end
 
     private
+
+    def read_etags(files)
+      case config[:provider]
+      when 'aws'
+        files.each_with_object({}) do |file, etags|
+          etags[file.key] = file.etag
+        end
+      else
+        {}
+      end
+    end
+
+    def calc_local_etag(file_path)
+      case config[:provider]
+      when 'aws'
+        Digest::MD5.file(file_path).hexdigest
+      end
+    end
 
     # Prints the given message on stderr and exits.
     def error(msg)
