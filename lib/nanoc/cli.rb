@@ -47,9 +47,9 @@ module Nanoc::CLI
     @debug = boolean
   end
 
-  # Invokes the nanoc commandline tool with the given arguments.
+  # Invokes the nanoc command-line tool with the given arguments.
   #
-  # @param [Array<String>] args An array of commandline arguments
+  # @param [Array<String>] args An array of command-line arguments
   #
   # @return [void]
   def self.run(args)
@@ -59,7 +59,7 @@ module Nanoc::CLI
     end
   end
 
-  # @return [Cri::Command] The root command, i.e. the commandline tool itself
+  # @return [Cri::Command] The root command, i.e. the command-line tool itself
   def self.root_command
     @root_command
   end
@@ -83,7 +83,7 @@ module Nanoc::CLI
 
   protected
 
-  # Makes the commandline interface ready for use.
+  # Makes the command-line interface ready for use.
   #
   # @return [void]
   def self.setup

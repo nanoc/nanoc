@@ -631,7 +631,7 @@ Removed:
 New:
 
 * `--pages` and `--assets` compiler options
-* `--no-color` commandline option
+* `--no-color` command-line option
 * `Filtering` helper
 * `#relative_path_to` function in `LinkTo` helper
 * `rainpress` filter ([Rainpress site](http://code.google.com/p/rainpress/))
@@ -641,7 +641,7 @@ New:
 
 Changed:
 
-* The commandline option parser is now a lot more reliable
+* The command-line option parser is now a lot more reliable
 * `#atom_feed` now takes optional `:content_proc`, `:excerpt_proc` and `:articles` parameters
 * The compile command show non-written items (those with `skip_output: true`)
 * The compile command compiles everything by default
@@ -696,7 +696,7 @@ New:
 * New `rdiscount` filter ([RDiscount site](http://github.com/rtomayko/rdiscount))
 * New `maruku` filter ([Maruku site](https://github.com/bhollis/maruku/))
 * New `erubis` filter ([Erubis site](http://www.kuwata-lab.com/erubis/))
-* A better commandline frontend
+* A better command-line frontend
 * A new filesystem data source named `filesystem_combined`
 * Routers, which decide where compiled pages should be written to
 * Page/layout mtimes can now be retrieved through `page.mtime`/`layout.mtime`

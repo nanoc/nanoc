@@ -95,7 +95,7 @@ module Nanoc::CLI::Commands
 
     # Allows sending user notifications in a cross-platform way.
     class Notifier
-      # A list of commandline tool names that can be used to send notifications
+      # A list of command-line tool names that can be used to send notifications
       TOOLS = %w( growlnotify notify-send ) unless defined? TOOLS
 
       # Send a notification. If no notifier is found, no notification will be
