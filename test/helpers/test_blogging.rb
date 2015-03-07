@@ -503,6 +503,36 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     end
   end
 
+  def test_atom_feed_preserve_order
+    if_have 'builder' do
+      # Mock articles
+      @items = [mock_article, mock_article]
+      @items.each_with_index do |article, i|
+        article.stubs(:[]).with(:title).returns("Article #{i}")
+      end
+      @items[0].stubs(:[]).with(:created_at).returns('01-01-2015')
+      @items[1].stubs(:[]).with(:created_at).returns('01-01-2014')
+
+      # Mock site
+      @site = mock
+      @site.stubs(:config).returns({ base_url: 'http://example.com' })
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
+      @item.stubs(:[]).with(:author_name).returns('J. Doe')
+      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      result = atom_feed(preserve_order: true)
+      assert_match(
+        Regexp.new('Article 1.*Article 0', Regexp::MULTILINE),
+        result
+      )
+    end
+  end
+
   def test_atom_feed_with_content_proc_param
     if_have 'builder' do
       # Mock article

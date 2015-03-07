@@ -18,6 +18,19 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     end
   end
 
+  def test_can_compile_new_site_with_binary_items
+    Nanoc::CLI.run %w( create_site foo )
+
+    FileUtils.cd('foo') do
+      File.open('content/blah', 'w') { |io| io << 'asdf' }
+      site = Nanoc::Site.new('.')
+      site.load_data
+      site.compile
+
+      assert File.file?('output/blah')
+    end
+  end
+
   def test_default_encoding
     unless defined?(Encoding)
       skip 'No Encoding class'

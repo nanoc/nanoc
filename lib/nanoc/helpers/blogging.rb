@@ -56,6 +56,7 @@ module Nanoc::Helpers
 
       attr_accessor :limit
       attr_accessor :relevant_articles
+      attr_accessor :preserve_order
       attr_accessor :content_proc
       attr_accessor :excerpt_proc
       attr_accessor :title
@@ -85,9 +86,13 @@ module Nanoc::Helpers
       protected
 
       def sorted_relevant_articles
-        relevant_articles.sort_by do |a|
-          attribute_to_time(a[:created_at])
-        end.reverse.first(limit)
+        all = relevant_articles
+
+        unless @preserve_order
+          all = all.sort_by { |a| attribute_to_time(a[:created_at]) }
+        end
+
+        all.reverse.first(limit)
       end
 
       def last_article
@@ -268,8 +273,13 @@ module Nanoc::Helpers
     # @option params [Number] :limit (5) The maximum number of articles to
     #   show
     #
-    # @option params [Array] :articles (sorted_articles) A list of articles to
-    #   include in the feed
+    # @option params [Array] :articles (articles) A list of articles to include
+    #   in the feed
+    #
+    # @option params [Boolean] :preserve_order (false) Whether or not the
+    #   ordering of the list of articles should be preserved. If false, the
+    #   articles will be sorted by `created_at`. If true, the list of articles
+    #   will be used as-is, and should have the most recent articles last.
     #
     # @option params [Proc] :content_proc (->{ |article|
     #   article.compiled_content(:snapshot => :pre) }) A proc that returns the
@@ -303,6 +313,7 @@ module Nanoc::Helpers
       # Fill builder
       builder.limit             = params[:limit] || 5
       builder.relevant_articles = params[:articles] || articles || []
+      builder.preserve_order    = params.fetch(:preserve_order, false)
       builder.content_proc      = params[:content_proc] || ->(a) { a.compiled_content(snapshot: :pre) }
       builder.excerpt_proc      = params[:excerpt_proc] || ->(a) { a[:excerpt] }
       builder.title             = params[:title] || @item[:title] || @site.config[:title]
