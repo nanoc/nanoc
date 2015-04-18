@@ -216,7 +216,7 @@ module Nanoc::Filters
       check_availability('pygmentize', '-V')
 
       params[:encoding] ||= 'utf-8'
-      params[:nowrap]   ||= 'True'
+      params[:nowrap] ||= 'True'
 
       cmd = ['pygmentize', '-l', language, '-f', 'html']
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
@@ -246,7 +246,7 @@ module Nanoc::Filters
       args[:lexer] ||= language
       args[:options] ||= {}
       args[:options][:encoding] ||= 'utf-8'
-      args[:options][:nowrap]   ||= 'True'
+      args[:options][:nowrap] ||= 'True'
 
       Pygments.highlight(code, args)
     end

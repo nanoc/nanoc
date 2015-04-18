@@ -119,7 +119,7 @@ module Nanoc::DataSources
         end
 
         # Get modification times
-        meta_mtime    = meta_filename    ? File.stat(meta_filename).mtime    : nil
+        meta_mtime = meta_filename ? File.stat(meta_filename).mtime : nil
         content_mtime = content_filename ? File.stat(content_filename).mtime : nil
         if meta_mtime && content_mtime
           mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
@@ -170,7 +170,7 @@ module Nanoc::DataSources
         end
 
         # Reorder elements and convert to extnames
-        filenames[0] = meta_filenames[0]    ? 'yaml'                                   : nil
+        filenames[0] = meta_filenames[0] ? 'yaml' : nil
         filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '' : nil
       end
 

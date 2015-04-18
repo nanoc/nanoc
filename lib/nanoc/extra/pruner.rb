@@ -35,7 +35,7 @@ module Nanoc::Extra
       present_dirs = []
       Find.find(site.config[:output_dir] + '/') do |f|
         present_files << f if File.file?(f)
-        present_dirs  << f if File.directory?(f)
+        present_dirs << f if File.directory?(f)
       end
 
       # Remove stray files
