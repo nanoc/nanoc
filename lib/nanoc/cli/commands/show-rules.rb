@@ -36,14 +36,12 @@ module Nanoc::CLI::Commands
           @calc[rep].each do |mem|
             puts format('    %s %s',
               @c.c(format('%-10s', mem[0].to_s), :blue),
-              mem[1..-1].map(&:inspect).join(', ')
-            )
+              mem[1..-1].map(&:inspect).join(', '))
           end
           if rep.raw_path
             puts format('    %s %s',
               @c.c(format('%-10s', 'write to'), :blue),
-              rep.raw_path
-            )
+              rep.raw_path)
           end
         end
       end
@@ -55,8 +53,7 @@ module Nanoc::CLI::Commands
       puts "  (from #{layout[:filename]})" if layout[:filename]
       puts format('  %s %s',
         @c.c(format('%-10s', 'filter'), :blue),
-        @calc[layout].map(&:inspect).join(', ')
-      )
+        @calc[layout].map(&:inspect).join(', '))
       puts
     end
   end

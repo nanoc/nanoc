@@ -65,7 +65,7 @@ module Nanoc::Extra
     rescue StandardError, ScriptError => e
       # Add compilation stack to env
       env['nanoc.stack'] = []
-      stack.reverse.each do |obj|
+      stack.reverse_each do |obj|
         if obj.is_a?(Nanoc::ItemRep) # item rep
           env['nanoc.stack'] << "[item] #{obj.item.identifier} (rep #{obj.name})"
         else # layout

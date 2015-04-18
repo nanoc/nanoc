@@ -192,7 +192,7 @@ module Nanoc
       new_data[:edges].each do |edge|
         from_index, to_index = *edge
         from = from_index && previous_objects[from_index]
-        to   = to_index   && previous_objects[to_index]
+        to   = to_index && previous_objects[to_index]
         @graph.add_edge(from, to)
       end
 

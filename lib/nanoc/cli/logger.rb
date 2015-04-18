@@ -11,8 +11,8 @@ module Nanoc::CLI
     ACTION_COLORS = {
       create: "\e[32m", # green
       update: "\e[33m", # yellow
-      identical: '',       # (nothing)
-      skip: '',       # (nothing)
+      identical: '',    # (nothing)
+      skip: '',         # (nothing)
       delete: "\e[31m"  # red
     }
 
@@ -46,9 +46,7 @@ module Nanoc::CLI
           action,
           "\e[0m",
           duration.nil? ? '' : format('[%2.2fs]  ', duration),
-          name
-        )
-      )
+          name))
     end
 
     # Logs a message.

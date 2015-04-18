@@ -18,7 +18,7 @@ module Nanoc::Helpers
     # @return [String] The excerpt of the given string
     def excerptize(string, params = {})
       # Initialize params
-      params[:length]   ||= 25
+      params[:length] ||= 25
       params[:omission] ||= '...'
 
       # Get excerpt

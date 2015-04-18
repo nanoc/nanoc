@@ -29,7 +29,7 @@ module Nanoc::Helpers
     #
     # @return [String] A hyperlinked list of tags for the given item
     def tags_for(item, params = {})
-      base_url  = params[:base_url]  || 'http://technorati.com/tag/'
+      base_url  = params[:base_url] || 'http://technorati.com/tag/'
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 

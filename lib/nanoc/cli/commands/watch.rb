@@ -67,8 +67,8 @@ module Nanoc::CLI::Commands
       rebuilder.call(nil)
 
       # Get directories to watch
-      dirs_to_watch  = watcher_config[:dirs_to_watch]  || %w( content layouts lib )
-      files_to_watch = watcher_config[:files_to_watch] || %w( nanoc.yaml config.yaml Rules rules Rules.rb rules.rb )
+      dirs_to_watch  = watcher_config.fetch(:dirs_to_watch, %w( content layouts lib ))
+      files_to_watch = watcher_config.fetch(:files_to_watch, %w( nanoc.yaml config.yaml Rules rules Rules.rb rules.rb ))
       files_to_watch = Regexp.new(files_to_watch.map { |name| Regexp.quote(name) + '$' }.join('|'))
       ignore_dir = Regexp.new(Dir.glob('*').map { |dir| dir if File.directory?(dir) }.compact.join('|'))
 
@@ -95,7 +95,7 @@ module Nanoc::CLI::Commands
 
     # Allows sending user notifications in a cross-platform way.
     class Notifier
-      # A list of commandline tool names that can be used to send notifications
+      # A list of command-line tool names that can be used to send notifications
       TOOLS = %w( growlnotify notify-send ) unless defined? TOOLS
 
       # Send a notification. If no notifier is found, no notification will be

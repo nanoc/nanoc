@@ -177,7 +177,7 @@ module Nanoc::Helpers
           if a[:author_name] || a[:author_uri]
             xml.author do
               xml.name a[:author_name] || author_name
-              xml.uri a[:author_uri]  || author_uri
+              xml.uri a[:author_uri] || author_uri
             end
           end
 

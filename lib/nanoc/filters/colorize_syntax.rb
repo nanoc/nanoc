@@ -29,7 +29,7 @@ module Nanoc::Filters
     #
     # * `:coderay` for [Coderay](http://coderay.rubychan.de/)
     # * `:pygmentize` for [pygmentize](http://pygments.org/docs/cmdline/), the
-    #   commandline frontend for [Pygments](http://pygments.org/)
+    #   command-line frontend for [Pygments](http://pygments.org/)
     # * `:pygmentsrb` for [pygments.rb](https://github.com/tmm1/pygments.rb),
     #   a Ruby interface for [Pygments](http://pygments.org/)
     # * `:simon_highlight` for [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html)
@@ -201,7 +201,7 @@ module Nanoc::Filters
     end
 
     # Runs the content through [pygmentize](http://pygments.org/docs/cmdline/),
-    # the commandline frontend for [Pygments](http://pygments.org/).
+    # the command-line frontend for [Pygments](http://pygments.org/).
     #
     # @api private
     #
@@ -216,7 +216,7 @@ module Nanoc::Filters
       check_availability('pygmentize', '-V')
 
       params[:encoding] ||= 'utf-8'
-      params[:nowrap]   ||= 'True'
+      params[:nowrap] ||= 'True'
 
       cmd = ['pygmentize', '-l', language, '-f', 'html']
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
@@ -246,7 +246,7 @@ module Nanoc::Filters
       args[:lexer] ||= language
       args[:options] ||= {}
       args[:options][:encoding] ||= 'utf-8'
-      args[:options][:nowrap]   ||= 'True'
+      args[:options][:nowrap] ||= 'True'
 
       Pygments.highlight(code, args)
     end

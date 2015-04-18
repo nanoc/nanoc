@@ -283,7 +283,7 @@ module Nanoc::CLI
       if stack.empty?
         stream.puts '  (empty)'
       else
-        stack.reverse.each do |obj|
+        stack.reverse_each do |obj|
           if obj.is_a?(Nanoc::ItemRep)
             stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
           else # layout

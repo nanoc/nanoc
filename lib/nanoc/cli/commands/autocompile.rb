@@ -5,7 +5,7 @@ summary 'start the autocompiler'
 be_hidden
 aliases :aco
 description <<-EOS
-Start the autocompiler web server. Unless overridden with commandline options
+Start the autocompiler web server. Unless overridden with command-line options
 or configuration entries, the web server will run on port 3000 and listen on all
 IP addresses. Running the autocompiler requires the `mime/types` and `rack` gems.
 
