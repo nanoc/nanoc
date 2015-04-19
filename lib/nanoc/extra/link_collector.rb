@@ -4,6 +4,17 @@ require 'set'
 
 module ::Nanoc::Extra
   class LinkCollector
+    URI_ATTRS = {
+      'a' => :href,
+      'audio' => :src,
+      'form' => :action,
+      'iframe' => :src,
+      'img' => :src,
+      'link' => :href,
+      'script' => :src,
+      'video' => :src
+    }
+
     def initialize(filenames, mode = nil)
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
 
@@ -33,24 +44,46 @@ module ::Nanoc::Extra
       filenames_per_href
     end
 
+    def filenames_per_resource_uri
+      require 'nokogiri'
+      filenames_per_resource_uri = {}
+      @filenames.each do |filename|
+        resource_uris_in_file(filename).each do |resouce_uri|
+          filenames_per_resource_uri[resouce_uri] ||= Set.new
+          filenames_per_resource_uri[resouce_uri] << filename
+        end
+      end
+      filenames_per_resource_uri
+    end
+
     def external_href?(href)
       href =~ %r{^(\/\/|[a-z\-]+:)}
     end
 
     def hrefs_in_file(filename)
-      hrefs_in_file = Set.new
-      doc = Nokogiri::HTML(::File.read(filename))
-      doc.css('a').each { |e| hrefs_in_file << e[:href] unless e[:href].nil? }
-      doc.css('img').each { |e| hrefs_in_file << e[:src]  }
+      uris_in_file filename, %w(a img)
+    end
 
-      # Convert protocol-relative urls
-      # e.g. //example.com => http://example.com
-      hrefs_in_file.map! { |href| href.gsub(/^\/\//, 'http://') }
+    def resource_uris_in_file(filename)
+      uris_in_file filename, %w(audio form img iframe link script video)
+    end
+
+    private
+
+    def uris_in_file(filename, tag_names)
+      uris = Set.new
+      doc = Nokogiri::HTML(::File.read(filename))
+      tag_names.each do |tag_name|
+        attr = URI_ATTRS[tag_name]
+        doc.css(tag_name).each do |e|
+          uris << e[attr] unless e[attr].nil?
+        end
+      end
 
       # Strip fragment
-      hrefs_in_file.map! { |href| href.gsub(/#.*$/, '') }
+      uris.map! { |href| href.gsub(/#.*$/, '') }
 
-      hrefs_in_file.select(&@filter)
+      uris.select(&@filter)
     end
   end
 end
