@@ -1,6 +1,6 @@
 # nanoc news
 
-## 3.7.6 (2015-04-19)
+## 3.7.6 (???)
 
 Enhancements:
 
