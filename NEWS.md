@@ -1,5 +1,16 @@
 # nanoc news
 
+## 3.7.6 (2015-04-19)
+
+Enhancements:
+
+* Added `:preserve_order` option to preserve order in Atom feed (#533, #534)
+
+Fixes:
+
+* Allowed passing generic Pandoc options with :args (#526, #535)
+* Fix crash when compiling extensionless binary items (#524, #525)
+
 ## 3.7.5 (2015-01-12)
 
 Enhancements:
