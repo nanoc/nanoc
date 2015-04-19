@@ -1,6 +1,14 @@
 # nanoc news
 
-## 3.7.6 (???)
+## 3.8.0 (???)
+
+Features:
+
+* Added `mixed_content` check (#542, #543) [Mike Pennisi]
+* Added `commands_dirs` configuration option for specifying directories to read commands from (#475) [Gregory Pakosz]
+* Added `:cdn_id` option to fog deployer for invalidating CDN objects (#451) [Vlatko Kosturjak]
+* Add access to regular expressions group matches in rules (#478) [Michal Papis]
+* Allow filtering the items array by regex (#458) [Mike Pennisi]
 
 Enhancements:
 
