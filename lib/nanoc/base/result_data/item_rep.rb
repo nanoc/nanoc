@@ -243,12 +243,20 @@ module Nanoc
         raise Nanoc::Errors::NoSuchSnapshot.new(self, snapshot)
       end
 
-      # Require compilation
-      if @content[snapshot].nil? || (!self.compiled? && is_moving)
+      # Verify snapshot is usable
+      is_still_moving =
+        case snapshot
+        when :post, :last
+          true
+        when :pre
+          !@content.key?(:post)
+        end
+      is_usable_snapshot = @content[snapshot] && (self.compiled? || !is_still_moving)
+      unless is_usable_snapshot
         raise Nanoc::Errors::UnmetDependency.new(self)
-      else
-        @content[snapshot]
       end
+
+      @content[snapshot]
     end
 
     # Checks whether content exists at a given snapshot.
