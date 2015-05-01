@@ -239,7 +239,8 @@ module Nanoc
       is_moving = [:pre, :post, :last].include?(snapshot)
 
       # Check existance of snapshot
-      if !is_moving && snapshots.find { |s| s.first == snapshot && s.last == true }.nil?
+      real_snapshot = snapshots.find { |s| s.first == snapshot }
+      if !is_moving && (real_snapshot.nil? || real_snapshot[-1] == false)
         raise Nanoc::Errors::NoSuchSnapshot.new(self, snapshot)
       end
 
@@ -249,7 +250,7 @@ module Nanoc
         when :post, :last
           true
         when :pre
-          !@content.key?(:post)
+          real_snapshot.nil? || !real_snapshot[-1]
         end
       is_usable_snapshot = @content[snapshot] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot
@@ -426,6 +427,9 @@ module Nanoc
     def snapshot(snapshot_name, params = {})
       is_final = params.fetch(:final) { true }
       @content[snapshot_name] = @content[:last] unless self.binary?
+      if snapshot_name == :pre && is_final
+        snapshots << [:pre, true]
+      end
       write(snapshot_name) if is_final
     end
 

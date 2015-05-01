@@ -101,10 +101,31 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     )
     rep = Nanoc::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
+    rep.snapshots = [[:pre, true]]
     rep.instance_eval { @content = { pre: 'pre!', post: 'post!', last: 'last!' } }
 
     # Check
     assert_equal 'pre!', rep.compiled_content(snapshot: :pre)
+  end
+
+  def test_compiled_content_with_final_pre_snapshot_in_layout
+    # Mock layout
+    layout = Nanoc::Layout.new(
+      %(BEFORE <%= @item_rep.compiled_content(snapshot: :pre) %> AFTER),
+      {},
+      '/somelayout/')
+
+    # Create item and item rep
+    item = Nanoc::Item.new(
+      'blah blah', {}, '/',
+      binary: false
+    )
+    rep = create_rep_for(item, :foo)
+    rep.assigns = { item_rep: rep }
+
+    # Run and check
+    rep.layout(layout, :erb, {})
+    assert_equal('BEFORE blah blah AFTER', rep.instance_eval { @content[:last] })
   end
 
   def test_filter
