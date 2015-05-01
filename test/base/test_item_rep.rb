@@ -77,6 +77,36 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     end
   end
 
+  def test_compiled_content_with_moving_pre_snapshot
+    # Create rep
+    item = Nanoc::Item.new(
+      'blah blah', {}, '/',
+      binary: false
+    )
+    rep = Nanoc::ItemRep.new(item, nil)
+    rep.expects(:compiled?).returns(false)
+    rep.instance_eval { @content = { pre: 'pre!', last: 'last!' } }
+
+    # Check
+    assert_raises(Nanoc::Errors::UnmetDependency) do
+      rep.compiled_content(snapshot: :pre)
+    end
+  end
+
+  def test_compiled_content_with_non_moving_pre_snapshot
+    # Create rep
+    item = Nanoc::Item.new(
+      'blah blah', {}, '/',
+      binary: false
+    )
+    rep = Nanoc::ItemRep.new(item, nil)
+    rep.expects(:compiled?).returns(false)
+    rep.instance_eval { @content = { pre: 'pre!', post: 'post!', last: 'last!' } }
+
+    # Check
+    assert_equal 'pre!', rep.compiled_content(snapshot: :pre)
+  end
+
   def test_filter
     # Mock site
     site = MiniTest::Mock.new
