@@ -235,29 +235,29 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       # Get name of last pre-layout snapshot
-      snapshot = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
-      is_moving = [:pre, :post, :last].include?(snapshot)
+      snapshot_name = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
+      is_moving = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
-      real_snapshot = snapshots.find { |s| s.first == snapshot }
-      if !is_moving && (real_snapshot.nil? || real_snapshot[-1] == false)
-        raise Nanoc::Errors::NoSuchSnapshot.new(self, snapshot)
+      snapshot = snapshots.find { |s| s.first == snapshot_name }
+      if !is_moving && (snapshot.nil? || snapshot[-1] == false)
+        raise Nanoc::Errors::NoSuchSnapshot.new(self, snapshot_name)
       end
 
       # Verify snapshot is usable
       is_still_moving =
-        case snapshot
+        case snapshot_name
         when :post, :last
           true
         when :pre
-          real_snapshot.nil? || !real_snapshot[-1]
+          snapshot.nil? || !snapshot[-1]
         end
-      is_usable_snapshot = @content[snapshot] && (self.compiled? || !is_still_moving)
+      is_usable_snapshot = @content[snapshot_name] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot
         raise Nanoc::Errors::UnmetDependency.new(self)
       end
 
-      @content[snapshot]
+      @content[snapshot_name]
     end
 
     # Checks whether content exists at a given snapshot.
@@ -425,11 +425,16 @@ module Nanoc
     #
     # @return [void]
     def snapshot(snapshot_name, params = {})
-      is_final = params.fetch(:final) { true }
-      @content[snapshot_name] = @content[:last] unless self.binary?
+      is_final = params.fetch(:final, true)
+
+      unless self.binary?
+        @content[snapshot_name] = @content[:last]
+      end
+
       if snapshot_name == :pre && is_final
         snapshots << [:pre, true]
       end
+
       write(snapshot_name) if is_final
     end
 
