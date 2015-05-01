@@ -13,7 +13,7 @@ Features:
 Enhancements:
 
 * Added `:preserve_order` option to preserve order in Atom feed (#533, #534)
-* Allowed accessing `:pre` snapshot from within item itself if a `:post` snapshot exists (#537, #538)
+* Allowed accessing `:pre` snapshot from within item itself if a `:post` snapshot exists (#538)
 
 Fixes:
 
