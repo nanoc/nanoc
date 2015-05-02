@@ -70,7 +70,7 @@ module Nanoc
 
       # Count
       existing = Set.new
-      names = @rule_memory.select { |r| r[0] == :snapshot }.map { |r| r[2] }
+      names = @rule_memory.select { |r| r[0] == :snapshot }.map { |r| r[1] }
       names.each do |n|
         if existing.include?(n)
           raise Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, snapshot_name)
