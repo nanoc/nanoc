@@ -12,7 +12,7 @@ def run_tests(dir_glob)
   test_files = Dir["#{dir_glob}*_spec.rb"] + Dir["#{dir_glob}test_*.rb"]
   test_files.each { |f| require f }
 
-  res = MiniTest::Unit.new.run(ENV['ARGS'].split)
+  res = Minitest.run(ENV['ARGS'].split)
   exit(res) if res != 0
 end
 
