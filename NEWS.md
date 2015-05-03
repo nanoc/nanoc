@@ -19,6 +19,7 @@ Fixes:
 
 * Allowed passing generic Pandoc options with :args (#526, #535)
 * Fix crash when compiling extensionless binary items (#524, #525)
+* Fix double snapshot creation error (#547)
 
 ## 3.7.5 (2015-01-12)
 
