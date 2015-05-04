@@ -74,9 +74,9 @@ module Nanoc
     # Matches the rule regexp against items identifier and gives back group
     # captures if any
     #
-    # @param String items identifier to check
+    # @param [String] identifier Identifier to capture groups for
     #
-    # @return [nil, Array] array of group captures if any
+    # @return [nil, Array] Captured groups, if any
     def matches(identifier)
       matches = @identifier_regex.match(identifier)
       matches && matches.captures
