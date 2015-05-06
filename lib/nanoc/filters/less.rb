@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Filters
+  # @api private
   class Less < Nanoc::Filter
     requires 'less'
 

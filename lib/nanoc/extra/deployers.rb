@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra
+  # @api private
   module Deployers
     autoload 'Fog',   'nanoc/extra/deployers/fog'
     autoload 'Rsync', 'nanoc/extra/deployers/rsync'

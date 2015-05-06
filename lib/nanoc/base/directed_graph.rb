@@ -28,6 +28,8 @@ module Nanoc
   #     # => %w( c )
   #   graph.predecessors_of('d').sort
   #     # => %w( b c )
+  #
+  # @api private
   class DirectedGraph
     # @group Creating a graph
 
@@ -222,13 +224,6 @@ module Nanoc
     # @since 3.2.0
     def roots
       @roots
-    end
-
-    # @group Deprecated methods
-
-    # @deprecated Use {#delete_edge} instead
-    def remove_edge(from, to)
-      delete_edge(from, to)
     end
 
     private

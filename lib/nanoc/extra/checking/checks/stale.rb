@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking::Checks
+  # @api private
   class Stale < ::Nanoc::Extra::Checking::Check
     def run
       require 'set'

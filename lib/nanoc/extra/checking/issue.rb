@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
+  # @api private
   class Issue
     attr_reader :description
     attr_reader :subject

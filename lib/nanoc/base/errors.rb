@@ -2,6 +2,8 @@
 
 module Nanoc
   # Module that contains all nanoc-specific errors.
+  #
+  # @api private
   module Errors
     # Generic error. Superclass for all nanoc-specific errors.
     class Generic < ::StandardError
@@ -177,13 +179,6 @@ module Nanoc
       # @param [Nanoc::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
       def initialize(rep)
         super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep.inspect}.")
-      end
-    end
-
-    # @deprecated No longer necessary, but kept for backwards compatibility.
-    class DataNotYetAvailable < Generic
-      def initialize(type, plural)
-        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.")
       end
     end
 

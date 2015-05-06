@@ -42,8 +42,4 @@ module Nanoc
   autoload 'RuleMemoryCalculator', 'nanoc/base/compilation/rule_memory_calculator'
   autoload 'RuleMemoryStore',      'nanoc/base/compilation/rule_memory_store'
   autoload 'RulesCollection',      'nanoc/base/compilation/rules_collection'
-
-  # Deprecated; use PluginRepository instead
-  # TODO: [in nanoc 4.0] remove me
-  autoload 'Plugin',               'nanoc/base/plugin_registry'
 end

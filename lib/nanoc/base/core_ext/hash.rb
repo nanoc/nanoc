@@ -16,11 +16,6 @@ module Nanoc::HashExtensions
     hash
   end
 
-  # @deprecated Renamed to {#symbolize_keys_recursively}
-  def symbolize_keys
-    symbolize_keys_recursively
-  end
-
   # Returns a new hash where all keys are recursively converted to strings by
   # calling {Nanoc::ArrayExtensions#stringify_keys_recursively} or
   # {Nanoc::HashExtensions#stringify_keys_recursively}.
@@ -30,11 +25,6 @@ module Nanoc::HashExtensions
     reduce({}) do |hash, (key, value)|
       hash.merge(key.to_s => value.respond_to?(:stringify_keys_recursively) ? value.stringify_keys_recursively : value)
     end
-  end
-
-  # @deprecated Renamed to {#stringify_keys_recursively}
-  def stringify_keys
-    stringify_keys_recursively
   end
 
   # Freezes the contents of the hash, as well as all hash values. The hash

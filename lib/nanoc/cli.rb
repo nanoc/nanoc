@@ -15,6 +15,7 @@ if Nanoc.on_windows?
   end
 end
 
+# @api private
 module Nanoc::CLI
   module Commands
   end
@@ -25,10 +26,6 @@ module Nanoc::CLI
   autoload 'CleaningStream',      'nanoc/cli/cleaning_stream'
   autoload 'StreamCleaners',      'nanoc/cli/stream_cleaners'
   autoload 'ErrorHandler',        'nanoc/cli/error_handler'
-
-  # Deprecated; use CommandRunner instead
-  # TODO: [in nanoc 4.0] remove me
-  autoload 'Command',             'nanoc/cli/command_runner'
 
   # @return [Boolean] true if debug output is enabled, false if not
   #

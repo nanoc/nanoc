@@ -2,6 +2,8 @@
 
 module Nanoc::Extra::VCSes
   # @see Nanoc::Extra::VCS
+  #
+  # @api private
   class Dummy < Nanoc::Extra::VCS
     # @see Nanoc::Extra::VCS#add
     def add(_filename)

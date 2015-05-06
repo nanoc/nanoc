@@ -37,6 +37,8 @@ module Nanoc
   #
   # * `processing_ended` — indicates that the compiler has finished processing
   #   the specified object.
+  #
+  # @api private
   class Compiler
     extend Nanoc::Memoization
 
@@ -105,8 +107,6 @@ module Nanoc
 
     # Load the helper data that is used for compiling the site.
     #
-    # @api private
-    #
     # @return [void]
     def load
       return if @loaded || @loading
@@ -135,8 +135,6 @@ module Nanoc
 
     # Undoes the effects of {#load}. Used when {#load} raises an exception.
     #
-    # @api private
-    #
     # @return [void]
     def unload
       return if @unloading
@@ -158,8 +156,6 @@ module Nanoc
 
     # Store the modified helper data used for compiling the site.
     #
-    # @api private
-    #
     # @return [void]
     def store
       # Calculate rule memory
@@ -178,8 +174,6 @@ module Nanoc
 
     # Returns the dependency tracker for this site, creating it first if it
     # does not yet exist.
-    #
-    # @api private
     #
     # @return [Nanoc::DependencyTracker] The dependency tracker for this site
     def dependency_tracker

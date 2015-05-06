@@ -8,6 +8,8 @@ module Nanoc
   # It is a slightly different implementation of the Observer pattern; the
   # table of subscribers is not stored in the observable object itself, but in
   # the notification center.
+  #
+  # @api private
   class NotificationCenter
     class << self
       # Adds the given block to the list of blocks that should be called when

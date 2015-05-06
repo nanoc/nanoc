@@ -86,7 +86,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
     (0..expected_out.size - 1).each do |i|
       assert_equal expected_out[i].raw_content, actual_out[i].raw_content, 'content must match'
       assert_equal expected_out[i].identifier, actual_out[i].identifier, 'identifier must match'
-      assert_equal expected_out[i].mtime, actual_out[i].mtime, 'mtime must match'
+      assert_equal expected_out[i].attributes[:mtime], actual_out[i].attributes[:mtime], 'mtime must match'
       assert_equal expected_out[i].raw_filename, actual_out[i].raw_filename, 'file paths must match'
     end
   end

@@ -24,6 +24,8 @@ module Nanoc::DataSources
   # data sources will have the :is_hidden attribute set by default, which will
   # exclude them from the Blogging helper's atom feed generator, among other
   # things.
+  #
+  # @api private
   class Static < Nanoc::DataSource
     identifier :static
 

@@ -80,8 +80,6 @@ module Nanoc
 
     # @return The topmost item on the stack, i.e. the one currently being
     #   compiled
-    #
-    # @api private
     def top
       @stack.last
     end
@@ -145,24 +143,12 @@ module Nanoc
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
     #
-    # @api private
-    #
     # @param [Nanoc::Item, Nanoc::Layout] object The object for which to
     #   forget all dependencies
     #
     # @return [void]
     def forget_dependencies_for(object)
       @graph.delete_edges_to(object)
-    end
-
-    # @deprecated Use {#store} instead
-    def store_graph
-      store
-    end
-
-    # @deprecated Use {#load} instead
-    def load_graph
-      load
     end
 
     # @see Nanoc::Store#unload

@@ -6,6 +6,8 @@ module Nanoc
     # The current rules filename.
     #
     # @return [String] The current rules filename.
+    #
+    # @api private
     attr_accessor :rules_filename
 
     # Creates a new compiler DSL for the given collection of rules.

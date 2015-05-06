@@ -2,6 +2,8 @@
 
 module Nanoc::Filters
   # @since 3.4.0
+  #
+  # @api private
   class Handlebars < Nanoc::Filter
     requires 'handlebars'
 

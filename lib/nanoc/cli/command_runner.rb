@@ -3,6 +3,8 @@
 module Nanoc::CLI
   # A command runner subclass for nanoc commands that adds nanoc-specific
   # convenience methods and error handling.
+  #
+  # @api private
   class CommandRunner < ::Cri::CommandRunner
     # @see http://rubydoc.info/gems/cri/Cri/CommandRunner#call-instance_method
     #
@@ -25,13 +27,6 @@ module Nanoc::CLI
       end
 
       @site
-    end
-
-    # @deprecated use `Cri::CommandDSL#runner`
-    #
-    # @see http://rubydoc.info/gems/cri/Cri/CommandDSL#runner-instance_method
-    def self.call(opts, args, cmd)
-      new(opts, args, cmd).call
     end
 
     # @return [Boolean] true if the current working directory is a nanoc site
@@ -103,7 +98,4 @@ module Nanoc::CLI
       (site && site.compiler.stack) || []
     end
   end
-
-  # @deprecated Use {Nanoc::CLI::CommandRunner} instead
-  Command = CommandRunner
 end

@@ -3,6 +3,8 @@
 module Nanoc::CLI
   # A simple ANSI colorizer for strings. When given a string and a list of
   # attributes, it returns a colorized string.
+  #
+  # @api private
   module ANSIStringColorizer
     # TODO: complete mapping
     MAPPING = {
