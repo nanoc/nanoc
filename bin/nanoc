@@ -1,25 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# Try loading bundler if it's possible
-begin
-  require 'bundler'
-  require 'bundler/setup'
-  begin
-    Bundler.require(:default)
-  rescue Bundler::GemfileNotFound
-    # no problem
-  end
-rescue LoadError
-  # no problem
-end if File.file?('Gemfile')
-
-# Add lib to load path
-$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
-
-# Load nanoc
 require 'nanoc'
 require 'nanoc/cli'
 
-# Run base
 Nanoc::CLI.run(ARGV)
