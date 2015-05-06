@@ -2,6 +2,8 @@
 
 module Nanoc
   # Module that contains all outdatedness reasons.
+  #
+  # @api private
   module OutdatednessReasons
     # A generic outdatedness reason. An outdatedness reason is basically a
     # descriptive message that explains why a given object is outdated.

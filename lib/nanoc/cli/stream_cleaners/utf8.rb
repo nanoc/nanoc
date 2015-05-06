@@ -2,6 +2,8 @@
 
 module Nanoc::CLI::StreamCleaners
   # Simplifies output by replacing UTF-8 characters with their ASCII decompositions.
+  #
+  # @api private
   class UTF8 < Abstract
     # @see Nanoc::CLI::StreamCleaners::Abstract#clean
     def clean(s)

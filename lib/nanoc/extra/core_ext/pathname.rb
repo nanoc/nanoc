@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra
+  # @api private
   module PathnameExtensions
     def components
       components = []

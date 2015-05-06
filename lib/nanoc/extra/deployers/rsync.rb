@@ -18,6 +18,8 @@ module Nanoc::Extra::Deployers
   #       kind: rsync
   #       dst: "ectype:sites/stoneship-staging/public"
   #       options: [ "-glpPrtvz" ]
+  #
+  # @api private
   class Rsync < ::Nanoc::Extra::Deployer
     # Default rsync options
     DEFAULT_OPTIONS = [

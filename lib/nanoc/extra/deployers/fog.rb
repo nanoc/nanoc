@@ -20,6 +20,8 @@ module Nanoc::Extra::Deployers
   #       provider:   local
   #       local_root: ~/myCloud
   #       bucket:     nanoc-site-staging
+  #
+  # @api private
   class Fog < ::Nanoc::Extra::Deployer
     # @see Nanoc::Extra::Deployer#run
     def run

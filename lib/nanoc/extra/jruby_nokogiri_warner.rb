@@ -3,6 +3,7 @@
 require 'singleton'
 
 module Nanoc::Extra
+  # @api private
   class JRubyNokogiriWarner
     include Singleton
 

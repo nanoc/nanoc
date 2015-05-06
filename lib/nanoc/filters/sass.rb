@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Filters
+  # @api private
   class Sass < Nanoc::Filter
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 

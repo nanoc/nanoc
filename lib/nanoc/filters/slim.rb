@@ -2,6 +2,8 @@
 
 module Nanoc::Filters
   # @since 3.2.0
+  #
+  # @api private
   class Slim < Nanoc::Filter
     requires 'slim'
 

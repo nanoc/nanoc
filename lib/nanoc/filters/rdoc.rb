@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Filters
+  # @api private
   class RDoc < Nanoc::Filter
     requires 'rdoc'
 

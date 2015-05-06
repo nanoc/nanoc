@@ -2,6 +2,8 @@
 
 module Nanoc
   # Module that contains all nanoc-specific errors.
+  #
+  # @api private
   module Errors
     # Generic error. Superclass for all nanoc-specific errors.
     class Generic < ::StandardError

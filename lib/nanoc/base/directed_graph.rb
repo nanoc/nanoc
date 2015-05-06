@@ -28,6 +28,8 @@ module Nanoc
   #     # => %w( c )
   #   graph.predecessors_of('d').sort
   #     # => %w( b c )
+  #
+  # @api private
   class DirectedGraph
     # @group Creating a graph
 
