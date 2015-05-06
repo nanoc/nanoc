@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Filters
+  # @api private
   class RelativizePaths < Nanoc::Filter
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo

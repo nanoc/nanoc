@@ -3,6 +3,7 @@
 require 'nanoc'
 require 'rake'
 
+# @api private
 module Nanoc::Tasks
 end
 

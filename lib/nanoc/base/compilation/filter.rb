@@ -26,12 +26,15 @@ module Nanoc
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Context
+    # @api private
     TMP_BINARY_ITEMS_DIR = 'binary_items'
 
     # A hash containing variables that will be made available during
     # filtering.
     #
     # @return [Hash]
+    #
+    # @api private
     attr_reader :assigns
 
     extend Nanoc::PluginRegistry::PluginMethods
@@ -63,12 +66,16 @@ module Nanoc
 
       # @return [Boolean] True if this filter can be applied to binary item
       #   representations, false otherwise
+      #
+      # @api private
       def from_binary?
         (@from || :text) == :binary
       end
 
       # @return [Boolean] True if this filter results in a binary item
       #   representation, false otherwise
+      #
+      # @api private
       def to_binary?
         (@to || :text) == :binary
       end
@@ -91,6 +98,8 @@ module Nanoc
       # Requires the filter’s required library if necessary.
       #
       # @return [void]
+      #
+      # @api private
       def setup
         @setup ||= begin
           requires.each { |r| require r }
@@ -103,6 +112,8 @@ module Nanoc
     #
     # @param [Hash] hash A hash containing variables that should be made
     #   available during filtering.
+    #
+    # @api private
     def initialize(hash = {})
       @assigns = hash
       super
@@ -112,6 +123,8 @@ module Nanoc
     # to {#run} unchanged and returns the return value from {#run}.
     #
     # @see {#run}
+    #
+    # @api private
     def setup_and_run(*args)
       self.class.setup
       run(*args)
@@ -152,6 +165,8 @@ module Nanoc
     #   It is in the format `item <identifier> (rep <name>)`.
     #
     # @return [String] The filename
+    #
+    # @api private
     def filename
       if assigns[:layout]
         "layout #{assigns[:layout].identifier}"

@@ -3,6 +3,7 @@
 require 'set'
 
 module ::Nanoc::Extra
+  # @api private
   class LinkCollector
     URI_ATTRS = {
       'a' => :href,

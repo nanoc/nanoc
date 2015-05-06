@@ -15,6 +15,7 @@ if Nanoc.on_windows?
   end
 end
 
+# @api private
 module Nanoc::CLI
   module Commands
   end

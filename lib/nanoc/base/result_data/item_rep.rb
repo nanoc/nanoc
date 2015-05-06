@@ -7,6 +7,8 @@ module Nanoc
   # a different set of filters with a different layout.
   class ItemRep
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
+    #
+    # @api private
     module Private
       # @return [Hash] A hash containing the assigns that will be used in the
       #   next filter or layout operation. The keys (symbols) will be made

@@ -3,6 +3,8 @@
 module Nanoc::CLI
   # An output stream that passes output through stream cleaners. This can be
   # used to strip ANSI color sequences, for instance.
+  #
+  # @api private
   class CleaningStream
     # @param [IO, StringIO] stream The stream to wrap
     def initialize(stream)

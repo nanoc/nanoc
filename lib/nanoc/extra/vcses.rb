@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::Extra::VCSes
   autoload 'Bazaar',     'nanoc/extra/vcses/bazaar'
   autoload 'Dummy',      'nanoc/extra/vcses/dummy'

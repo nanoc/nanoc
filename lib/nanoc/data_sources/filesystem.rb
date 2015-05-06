@@ -2,6 +2,8 @@
 
 module Nanoc::DataSources
   # Provides functionality common across all filesystem data sources.
+  #
+  # @api private
   module Filesystem
     # The VCS that will be called when adding, deleting and moving files. If
     # no VCS has been set, or if the VCS has been set to `nil`, a dummy VCS

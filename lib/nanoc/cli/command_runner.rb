@@ -3,6 +3,8 @@
 module Nanoc::CLI
   # A command runner subclass for nanoc commands that adds nanoc-specific
   # convenience methods and error handling.
+  #
+  # @api private
   class CommandRunner < ::Cri::CommandRunner
     # @see http://rubydoc.info/gems/cri/Cri/CommandRunner#call-instance_method
     #

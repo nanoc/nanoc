@@ -27,8 +27,6 @@ module Nanoc::CLI
 
     # Disables error handling. This is used by the test cases to prevent error
     # from being handled by the CLI while tests are running.
-    #
-    # @api private
     def self.disable
       @disabled = true
     end
@@ -36,8 +34,6 @@ module Nanoc::CLI
     # Re-enables error handling after it was disabled. This is used by the test
     # cases to prevent error from being handled by the CLI while tests are
     # running.
-    #
-    # @api private
     def self.enable
       @disabled = false
     end
@@ -46,8 +42,6 @@ module Nanoc::CLI
     # called directly; use {Nanoc::CLI::ErrorHandler.handle_while} instead.
     #
     # @return [void]
-    #
-    # @api private
     def handle_while(&_block)
       # Set exit handler
       %w( INT TERM ).each do |signal|
@@ -113,8 +107,6 @@ module Nanoc::CLI
     #
     # @param [IO] stream The stream to write the description too
     #
-    # @api private
-    #
     # @return [void]
     def write_compact_error(error, stream)
       # Header
@@ -135,8 +127,6 @@ module Nanoc::CLI
     # @param [Error] error The error that should be described
     #
     # @param [IO] stream The stream to write the description too
-    #
-    # @api private
     #
     # @return [void]
     def write_verbose_error(error, stream)

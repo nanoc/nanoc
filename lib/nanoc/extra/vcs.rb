@@ -8,6 +8,8 @@ module Nanoc::Extra
   #
   # @abstract Subclass and override {#add}, {#remove} and {#move} to implement
   #   a custom VCS.
+  #
+  # @api private
   class VCS
     extend Nanoc::PluginRegistry::PluginMethods
 

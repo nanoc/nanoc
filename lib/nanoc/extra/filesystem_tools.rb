@@ -6,8 +6,6 @@ module Nanoc::Extra
   # @api private
   module FilesystemTools
     # Error that is raised when too many symlink indirections are encountered.
-    #
-    # @api private
     class MaxSymlinkDepthExceededError < ::Nanoc::Errors::GenericTrivial
       # @return [String] The last filename that was attempted to be
       #   resolved before giving up
@@ -23,8 +21,6 @@ module Nanoc::Extra
 
     # Error that is raised when a file of an unknown type is encountered
     # (something other than file, directory or link).
-    #
-    # @api private
     class UnsupportedFileTypeError < ::Nanoc::Errors::GenericTrivial
       # @return [String] The filename of the file whose type is not supported
       attr_reader :filename

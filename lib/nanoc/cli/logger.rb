@@ -5,6 +5,8 @@ require 'singleton'
 module Nanoc::CLI
   # Nanoc::CLI::Logger is a singleton class responsible for generating
   # feedback in the terminal.
+  #
+  # @api private
   class Logger
     # Maps actions (`:create`, `:update`, `:identical`, `:skip` and `:delete`)
     # onto their ANSI color codes.

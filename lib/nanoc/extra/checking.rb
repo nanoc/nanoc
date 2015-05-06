@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra
+  # @api private
   module Checking
     autoload 'Check',  'nanoc/extra/checking/check'
     autoload 'DSL',    'nanoc/extra/checking/dsl'

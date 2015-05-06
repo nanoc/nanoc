@@ -4,6 +4,8 @@ module Nanoc
   # The class responsible for keeping track of all loaded plugins, such as
   # filters ({Nanoc::Filter}), data sources ({Nanoc::DataSource}) and VCSes
   # ({Nanoc::Extra::VCS}).
+  #
+  # @api private
   class PluginRegistry
     extend Nanoc::Memoization
 

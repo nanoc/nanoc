@@ -5,6 +5,8 @@ module Nanoc::Extra
   # to a specific (remote) location.
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
+  #
+  # @api private
   class Deployer
     extend Nanoc::PluginRegistry::PluginMethods
 

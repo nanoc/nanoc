@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::Extra::Checking::Checks
   autoload 'CSS',           'nanoc/extra/checking/checks/css'
   autoload 'ExternalLinks', 'nanoc/extra/checking/checks/external_links'

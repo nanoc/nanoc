@@ -2,6 +2,8 @@
 
 module Nanoc
   # Contains the processing information for a item.
+  #
+  # @api private
   class Rule
     # @return [Regexp] The regex that determines which items this rule can be
     #   applied to. This rule can be applied to items with a identifier

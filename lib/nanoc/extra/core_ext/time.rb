@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::Extra::TimeExtensions
   # @return [String] The time in an ISO-8601 date format.
   def to_iso8601_date

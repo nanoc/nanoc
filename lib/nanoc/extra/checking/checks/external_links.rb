@@ -8,6 +8,8 @@ require 'uri'
 
 module ::Nanoc::Extra::Checking::Checks
   # A validator that verifies that all external links point to a location that exists.
+  #
+  # @api private
   class ExternalLinks < ::Nanoc::Extra::Checking::Check
     identifiers :external_links, :elinks
 

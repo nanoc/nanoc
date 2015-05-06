@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
+  # @api private
   class DSL
     attr_reader :deploy_checks
 
