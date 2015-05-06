@@ -3,6 +3,8 @@
 module Nanoc::Extra
   # Responsible for finding and deleting files in the site’s output directory
   # that are not managed by nanoc.
+  #
+  # @api private
   class Pruner
     # @return [Nanoc::Site] The site this pruner belongs to
     attr_reader :site

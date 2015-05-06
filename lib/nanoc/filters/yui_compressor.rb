@@ -2,6 +2,8 @@
 
 module Nanoc::Filters
   # @since 3.3.0
+  #
+  # @api private
   class YUICompressor < Nanoc::Filter
     requires 'yuicompressor'
 

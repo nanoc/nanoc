@@ -6,6 +6,8 @@ module Nanoc::CLI::StreamCleaners
   # can have state, so they can act as a FSM.
   #
   # @abstract Subclasses must implement {#clean}
+  #
+  # @api private
   class Abstract
     # Returns a cleaned version of the given string.
     #

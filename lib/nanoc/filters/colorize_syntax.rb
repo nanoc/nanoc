@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module Nanoc::Filters
+  # @api private
   class ColorizeSyntax < Nanoc::Filter
     requires 'nokogiri', 'stringio', 'open3'
 
@@ -155,8 +156,6 @@ module Nanoc::Filters
     #
     # @param [Boolean] is_fullpage true if the given content is a full page,
     #   false if it is a fragment
-    #
-    # @api private
     def parse(content, klass, is_fullpage)
       if is_fullpage
         klass.parse(content, nil, 'UTF-8')
@@ -172,8 +171,6 @@ module Nanoc::Filters
     end
 
     # Runs the code through [CodeRay](http://coderay.rubychan.de/).
-    #
-    # @api private
     #
     # @param [String] code The code to colorize
     #
@@ -203,8 +200,6 @@ module Nanoc::Filters
     # Runs the content through [pygmentize](http://pygments.org/docs/cmdline/),
     # the command-line frontend for [Pygments](http://pygments.org/).
     #
-    # @api private
-    #
     # @param [String] code The code to colorize
     #
     # @param [String] language The language the code is written in
@@ -232,8 +227,6 @@ module Nanoc::Filters
     # Runs the content through [Pygments](http://pygments.org/) via
     # [pygments.rb](https://github.com/tmm1/pygments.rb).
     #
-    # @api private
-    #
     # @param [String] code The code to colorize
     #
     # @param [String] language The language the code is written in
@@ -258,8 +251,6 @@ module Nanoc::Filters
     }
 
     # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).
-    #
-    # @api private
     #
     # @since 3.2.0
     #
@@ -314,8 +305,6 @@ module Nanoc::Filters
     end
 
     # Runs the content through [Rouge](https://github.com/jayferd/rouge/.
-    #
-    # @api private
     #
     # @param [String] code The code to colorize
     #

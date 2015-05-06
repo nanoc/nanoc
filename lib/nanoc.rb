@@ -3,6 +3,8 @@
 module Nanoc
   # @return [String] A string containing information about this nanoc version
   #   and its environment (Ruby engine and version, Rubygems version if any).
+  #
+  # @api private
   def self.version_information
     gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : 'without RubyGems'
     engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
@@ -12,7 +14,9 @@ module Nanoc
     res
   end
 
-  # @return [Boolean] True if the current platform is Windows,
+  # @return [Boolean] True if the current platform is Windows, false otherwise.
+  #
+  # @api private
   def self.on_windows?
     RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
   end

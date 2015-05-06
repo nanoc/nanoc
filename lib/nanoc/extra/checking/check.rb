@@ -1,12 +1,14 @@
 # encoding: utf-8
 
 module Nanoc::Extra::Checking
+  # @api private
   class OutputDirNotFoundError < Nanoc::Errors::Generic
     def initialize(directory_path)
       super("Unable to run check against output directory at “#{directory_path}”: directory does not exist.")
     end
   end
 
+  # @api private
   class Check
     extend Nanoc::PluginRegistry::PluginMethods
 

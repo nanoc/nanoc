@@ -80,8 +80,6 @@ module Nanoc
 
     # @return The topmost item on the stack, i.e. the one currently being
     #   compiled
-    #
-    # @api private
     def top
       @stack.last
     end
@@ -144,8 +142,6 @@ module Nanoc
     # before recompiling the given object, because otherwise old dependencies
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
-    #
-    # @api private
     #
     # @param [Nanoc::Item, Nanoc::Layout] object The object for which to
     #   forget all dependencies

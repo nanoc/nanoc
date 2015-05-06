@@ -2,6 +2,8 @@
 
 module Nanoc
   # Nanoc::CodeSnippet represent a piece of custom code of a nanoc site.
+  #
+  # @api private
   class CodeSnippet
     # A string containing the actual code in this code snippet.
     #

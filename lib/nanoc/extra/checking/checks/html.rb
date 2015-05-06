@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 module ::Nanoc::Extra::Checking::Checks
+  # @api private
   class HTML < ::Nanoc::Extra::Checking::Check
     identifier :html
 

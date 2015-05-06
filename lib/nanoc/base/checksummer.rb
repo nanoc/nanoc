@@ -5,6 +5,8 @@ module Nanoc
   #
   # A checksum is a string, such as “mL+TaqNsEeiPkWloPgCtAofT1yg=”, that is used
   # to determine whether a piece of data has changed.
+  #
+  # @api private
   class Checksummer
     class << self
       # @param obj The object to create a checksum for

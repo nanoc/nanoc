@@ -4,6 +4,8 @@ require 'uri'
 
 module Nanoc::Extra::Checking::Checks
   # A check that verifies that all internal links point to a location that exists.
+  #
+  # @api private
   class InternalLinks < ::Nanoc::Extra::Checking::Check
     # Starts the validator. The results will be printed to stdout.
     #

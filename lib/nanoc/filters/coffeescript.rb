@@ -2,6 +2,8 @@
 
 module Nanoc::Filters
   # @since 3.3.0
+  #
+  # @api private
   class CoffeeScript < Nanoc::Filter
     requires 'coffee-script'
 

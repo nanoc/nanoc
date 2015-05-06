@@ -6,8 +6,6 @@ module Nanoc
   # @api private
   class RulesCollection
     # @return [String] the contents of the Rules file
-    #
-    # @api private
     attr_accessor :data
 
     extend Nanoc::Memoization
