@@ -2,6 +2,8 @@
 
 module Nanoc
   # Acts as an array, but allows fetching items using identifiers, e.g. `@items['/blah/']`.
+  #
+  # @api private
   class ItemArray
     include Enumerable
 

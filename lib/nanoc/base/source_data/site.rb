@@ -15,6 +15,8 @@ module Nanoc
   # The physical representation of a {Nanoc::Site} is usually a directory
   # that contains a configuration file, site data, a rakefile, a rules file,
   # etc. The way site data is stored depends on the data source.
+  #
+  # @api private
   class Site
     # The default configuration for a data source. A data source's
     # configuration overrides these options.

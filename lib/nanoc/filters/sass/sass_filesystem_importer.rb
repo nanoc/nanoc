@@ -13,6 +13,7 @@ class ::Sass::Importers::Filesystem
     filter = options[:nanoc_current_filter]
     if filter
       item = filter.imported_filename_to_item(full_filename)
+      item = item.unwrap if item.respond_to?(:unwrap)
       filter.depend_on([item]) unless item.nil?
     end
 

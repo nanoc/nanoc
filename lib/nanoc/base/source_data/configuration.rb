@@ -2,6 +2,8 @@
 
 module Nanoc
   # Represents the site configuration.
+  #
+  # @api private
   class Configuration < ::Hash
     # Creates a new configuration with the given hash.
     #

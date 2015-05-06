@@ -4,6 +4,8 @@ module Nanoc
   # Represents a compileable item in a site. It has content and attributes, as
   # well as an identifier (which starts and ends with a slash). It can also
   # store the modification time to speed up compilation.
+  #
+  # @api private
   class Item
     extend Nanoc::Memoization
 

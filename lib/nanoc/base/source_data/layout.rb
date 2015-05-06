@@ -3,6 +3,8 @@
 module Nanoc
   # Represents a layout in a nanoc site. It has content, attributes, an
   # identifier and a modification time (to speed up compilation).
+  #
+  # @api private
   class Layout
     extend Nanoc::Memoization
 

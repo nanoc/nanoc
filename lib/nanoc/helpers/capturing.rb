@@ -98,6 +98,7 @@ module Nanoc::Helpers
             "and the name of the capture) but got #{args.size} instead"
         end
         item = args[0]
+        item = item.unwrap if item.respond_to?(:unwrap)
         name = args[1]
 
         # Create dependency
