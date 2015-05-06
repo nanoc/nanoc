@@ -126,14 +126,14 @@ class Nanoc::DependencyTrackerTest < Nanoc::TestCase
     tracker.record_dependency(items[1], items[3])
 
     # Store
-    tracker.store_graph
+    tracker.store
     assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc::DependencyTracker.new(items)
 
     # Load
-    tracker.load_graph
+    tracker.load
 
     # Check loaded graph
     assert_contains_exactly [items[1]],           tracker.objects_causing_outdatedness_of(items[0])
@@ -164,14 +164,14 @@ class Nanoc::DependencyTrackerTest < Nanoc::TestCase
     tracker.record_dependency(old_items[1], old_items[3])
 
     # Store
-    tracker.store_graph
+    tracker.store
     assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc::DependencyTracker.new(new_items)
 
     # Load
-    tracker.load_graph
+    tracker.load
 
     # Check loaded graph
     assert_contains_exactly [items[1]],       tracker.objects_causing_outdatedness_of(items[0])
@@ -195,14 +195,14 @@ class Nanoc::DependencyTrackerTest < Nanoc::TestCase
     tracker.record_dependency(items[1], nil)
 
     # Store
-    tracker.store_graph
+    tracker.store
     assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc::DependencyTracker.new(items)
 
     # Load
-    tracker.load_graph
+    tracker.load
 
     # Check loaded graph
     assert_contains_exactly [items[1]], tracker.objects_causing_outdatedness_of(items[0])
@@ -225,14 +225,14 @@ class Nanoc::DependencyTrackerTest < Nanoc::TestCase
     tracker.record_dependency(nil,      items[2])
 
     # Store
-    tracker.store_graph
+    tracker.store
     assert File.file?(tracker.filename)
 
     # Re-create
     tracker = Nanoc::DependencyTracker.new(items)
 
     # Load
-    tracker.load_graph
+    tracker.load
 
     # Check loaded graph
     assert_contains_exactly [items[1]], tracker.objects_causing_outdatedness_of(items[0])

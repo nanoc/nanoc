@@ -27,13 +27,6 @@ module Nanoc::CLI
       @site
     end
 
-    # @deprecated use `Cri::CommandDSL#runner`
-    #
-    # @see http://rubydoc.info/gems/cri/Cri/CommandDSL#runner-instance_method
-    def self.call(opts, args, cmd)
-      new(opts, args, cmd).call
-    end
-
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def in_site_dir?
@@ -103,7 +96,4 @@ module Nanoc::CLI
       (site && site.compiler.stack) || []
     end
   end
-
-  # @deprecated Use {Nanoc::CLI::CommandRunner} instead
-  Command = CommandRunner
 end

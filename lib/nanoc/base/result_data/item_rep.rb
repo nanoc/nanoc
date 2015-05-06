@@ -6,54 +6,6 @@ module Nanoc
   # A single item can therefore have multiple output files, each run through
   # a different set of filters with a different layout.
   class ItemRep
-    # Contains all deprecated methods. Mixed into {Nanoc::ItemRep}.
-    module Deprecated
-      # @deprecated Modify the {#raw_paths} attribute instead
-      def raw_path=(raw_path)
-        raw_paths[:last] = raw_path
-      end
-
-      # @deprecated Modify the {#paths} attribute instead
-      def path=(path)
-        paths[:last] = path
-      end
-
-      # @deprecated Use {Nanoc::ItemRep#compiled_content} instead.
-      def content_at_snapshot(snapshot = :pre)
-        compiled_content(snapshot: snapshot)
-      end
-
-      # @deprecated
-      def created
-        raise NotImplementedError, 'Nanoc::ItemRep#created is no longer implemented'
-      end
-
-      # @deprecated
-      def created?
-        raise NotImplementedError, 'Nanoc::ItemRep#created? is no longer implemented'
-      end
-
-      # @deprecated
-      def modified
-        raise NotImplementedError, 'Nanoc::ItemRep#modified is no longer implemented'
-      end
-
-      # @deprecated
-      def modified?
-        raise NotImplementedError, 'Nanoc::ItemRep#modified? is no longer implemented'
-      end
-
-      # @deprecated
-      def written
-        raise NotImplementedError, 'Nanoc::ItemRep#written is no longer implemented'
-      end
-
-      # @deprecated
-      def written?
-        raise NotImplementedError, 'Nanoc::ItemRep#written? is no longer implemented'
-      end
-    end
-
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
     module Private
       # @return [Hash] A hash containing the assigns that will be used in the
@@ -172,7 +124,6 @@ module Nanoc
       end
     end
 
-    include Deprecated
     include Private
 
     # @return [Nanoc::Item] The item to which this rep belongs
@@ -279,8 +230,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def raw_path(params = {})
-      Nanoc3::NotificationCenter.post(:visit_started, item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::NotificationCenter.post(:visit_started, item)
+      Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @raw_paths[snapshot_name]
@@ -296,8 +247,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def path(params = {})
-      Nanoc3::NotificationCenter.post(:visit_started, item)
-      Nanoc3::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::NotificationCenter.post(:visit_started, item)
+      Nanoc::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]

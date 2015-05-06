@@ -3,7 +3,6 @@
 module Nanoc::Filters
   autoload 'AsciiDoc',        'nanoc/filters/asciidoc'
   autoload 'BlueCloth',       'nanoc/filters/bluecloth'
-  autoload 'CodeRay',         'nanoc/filters/coderay'
   autoload 'ColorizeSyntax',  'nanoc/filters/colorize_syntax'
   autoload 'CoffeeScript',    'nanoc/filters/coffeescript'
   autoload 'ERB',             'nanoc/filters/erb'
@@ -32,7 +31,6 @@ module Nanoc::Filters
 
   Nanoc::Filter.register '::Nanoc::Filters::AsciiDoc',        :asciidoc
   Nanoc::Filter.register '::Nanoc::Filters::BlueCloth',       :bluecloth
-  Nanoc::Filter.register '::Nanoc::Filters::CodeRay',         :coderay
   Nanoc::Filter.register '::Nanoc::Filters::ColorizeSyntax',  :colorize_syntax
   Nanoc::Filter.register '::Nanoc::Filters::CoffeeScript',    :coffeescript
   Nanoc::Filter.register '::Nanoc::Filters::ERB',             :erb
