@@ -17,7 +17,6 @@ class Nanoc::CLI::Commands::CreateLayoutTest < Nanoc::TestCase
       end
 
       site = Nanoc::Site.new('.')
-      site.load_data
       site.compile
     end
   end

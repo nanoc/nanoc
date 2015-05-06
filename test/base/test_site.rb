@@ -150,7 +150,7 @@ EOF
 
       # Create site
       site = Nanoc::Site.new('.')
-      site.load_data
+      site.load
 
       # Check
       assert_equal 1,       site.data_sources.size

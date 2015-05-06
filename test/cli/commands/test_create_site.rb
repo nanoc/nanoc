@@ -13,7 +13,6 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       site = Nanoc::Site.new('.')
-      site.load_data
       site.compile
     end
   end
@@ -24,7 +23,6 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       File.open('content/blah', 'w') { |io| io << 'asdf' }
       site = Nanoc::Site.new('.')
-      site.load_data
       site.compile
 
       assert File.file?('output/blah')

@@ -155,16 +155,6 @@ module Nanoc
       @graph.delete_edges_to(object)
     end
 
-    # @deprecated Use {#store} instead
-    def store_graph
-      store
-    end
-
-    # @deprecated Use {#load} instead
-    def load_graph
-      load
-    end
-
     # @see Nanoc::Store#unload
     def unload
       @graph = Nanoc::DirectedGraph.new([nil] + @objects)

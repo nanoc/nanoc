@@ -180,13 +180,6 @@ module Nanoc
       end
     end
 
-    # @deprecated No longer necessary, but kept for backwards compatibility.
-    class DataNotYetAvailable < Generic
-      def initialize(type, plural)
-        super("#{type} #{plural ? 'are' : 'is'} not available yet. You may be missing a Nanoc::Site#load_data call.")
-      end
-    end
-
     # Error that is raised when multiple items or layouts with the same identifier exist.
     class DuplicateIdentifier < Generic
       def initialize(identifier, type)

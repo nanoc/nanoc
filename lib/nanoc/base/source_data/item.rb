@@ -55,21 +55,13 @@ module Nanoc
     #
     # @param [String] identifier This item's identifier.
     #
-    # @param [Time, Hash] params Extra parameters. For backwards
-    #   compatibility, this can be a Time instance indicating the time when
-    #   this item was last modified (mtime).
-    #
-    # @option params [Time, nil] :mtime (nil) The time when this item was last
-    #   modified. Deprecated; pass the modification time as the `:mtime`
-    #   attribute instead.
+    # @param [Hash] params Extra parameters.
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params = nil)
+    def initialize(raw_content_or_raw_filename, attributes, identifier, params = {})
       # Parse params
-      params ||= {}
-      params = { mtime: params } if params.is_a?(Time)
-      params[:binary] = false unless params.key?(:binary)
+      params = params.merge(binary: false) unless params.key?(:binary)
 
       if raw_content_or_raw_filename.nil?
         raise "attempted to create an item with no content/filename (identifier #{identifier})"
@@ -169,28 +161,6 @@ module Nanoc
       Nanoc::NotificationCenter.post(:visit_started, self)
       Nanoc::NotificationCenter.post(:visit_ended,   self)
 
-      # Get captured content (hax)
-      # TODO: [in nanoc 4.0] remove me
-      if key.to_s =~ /^content_for_(.*)$/
-        @@_content_for_warning_issued ||= false
-        @@_capturing_helper_included ||= false
-
-        # Warn
-        unless @@_content_for_warning_issued
-          warn 'WARNING: Accessing captured content should happen using the #content_for method defined in the Capturing helper instead of using item[:content_for_something]. The latter way of accessing captured content will be removed in nanoc 4.0.'
-          @@_content_for_warning_issued = true
-        end
-
-        # Include capturing helper if necessary
-        unless @@_capturing_helper_included
-          self.class.send(:include, ::Nanoc::Helpers::Capturing)
-          @@_capturing_helper_included = true
-        end
-
-        # Get content
-        return content_for(self, $1.to_sym)
-      end
-
       @attributes[key]
     end
 
@@ -287,11 +257,6 @@ module Nanoc
     # @api private
     def forced_outdated?
       @forced_outdated || false
-    end
-
-    # @deprecated Access the modification time using `item[:mtime]` instead.
-    def mtime
-      self[:mtime]
     end
   end
 end

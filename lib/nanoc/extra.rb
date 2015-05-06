@@ -7,17 +7,8 @@ module Nanoc::Extra
   autoload 'FilesystemTools',     'nanoc/extra/filesystem_tools'
   autoload 'LinkCollector',       'nanoc/extra/link_collector.rb'
   autoload 'Pruner',              'nanoc/extra/pruner'
-  autoload 'Validators',          'nanoc/extra/validators'
   autoload 'Piper',               'nanoc/extra/piper'
   autoload 'JRubyNokogiriWarner', 'nanoc/extra/jruby_nokogiri_warner'
-
-  # Deprecated; use {Nanoc::Context} instead
-  # TODO: [in nanoc 4.0] remove me
-  Context = ::Nanoc::Context
-
-  # Deprecated
-  # TODO: [in nanoc 4.0] remove me
-  autoload 'FileProxy',         'nanoc/extra/file_proxy'
 end
 
 require 'nanoc/extra/core_ext'

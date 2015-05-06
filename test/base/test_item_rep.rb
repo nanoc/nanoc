@@ -256,7 +256,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     item_rep = Nanoc::ItemRep.new(item, :foo)
     def item_rep.generate_diff; end
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
-    item_rep.raw_path = 'foo/bar/baz/quux.txt'
+    item_rep.raw_paths[:last] = 'foo/bar/baz/quux.txt'
 
     # Write once
     item_rep.write
@@ -279,7 +279,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     # Create rep
     item_rep = Nanoc::ItemRep.new(item, :foo)
     item_rep.instance_eval { @content[:last] = 'Lorem ipsum, etc.' }
-    item_rep.raw_path = 'foo/bar/baz/quux.txt'
+    item_rep.raw_paths[:last] = 'foo/bar/baz/quux.txt'
 
     # Write
     item_rep.write
@@ -510,19 +510,19 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_raw_path_should_generate_dependency
     items = [
-      Nanoc3::Item.new('foo', {}, '/foo/'),
-      Nanoc3::Item.new('bar', {}, '/bar/')
+      Nanoc::Item.new('foo', {}, '/foo/'),
+      Nanoc::Item.new('bar', {}, '/bar/')
     ]
     item_reps = [
-      Nanoc3::ItemRep.new(items[0], :default),
-      Nanoc3::ItemRep.new(items[1], :default)
+      Nanoc::ItemRep.new(items[0], :default),
+      Nanoc::ItemRep.new(items[1], :default)
     ]
 
-    dt = Nanoc3::DependencyTracker.new(items)
+    dt = Nanoc::DependencyTracker.new(items)
     dt.start
-    Nanoc3::NotificationCenter.post(:visit_started, items[0])
+    Nanoc::NotificationCenter.post(:visit_started, items[0])
     item_reps[1].raw_path
-    Nanoc3::NotificationCenter.post(:visit_ended,   items[0])
+    Nanoc::NotificationCenter.post(:visit_ended,   items[0])
     dt.stop
 
     assert_equal [items[1]], dt.objects_causing_outdatedness_of(items[0])
@@ -530,19 +530,19 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
 
   def test_path_should_generate_dependency
     items = [
-      Nanoc3::Item.new('foo', {}, '/foo/'),
-      Nanoc3::Item.new('bar', {}, '/bar/')
+      Nanoc::Item.new('foo', {}, '/foo/'),
+      Nanoc::Item.new('bar', {}, '/bar/')
     ]
     item_reps = [
-      Nanoc3::ItemRep.new(items[0], :default),
-      Nanoc3::ItemRep.new(items[1], :default)
+      Nanoc::ItemRep.new(items[0], :default),
+      Nanoc::ItemRep.new(items[1], :default)
     ]
 
-    dt = Nanoc3::DependencyTracker.new(items)
+    dt = Nanoc::DependencyTracker.new(items)
     dt.start
-    Nanoc3::NotificationCenter.post(:visit_started, items[0])
+    Nanoc::NotificationCenter.post(:visit_started, items[0])
     item_reps[1].path
-    Nanoc3::NotificationCenter.post(:visit_ended,   items[0])
+    Nanoc::NotificationCenter.post(:visit_ended,   items[0])
     dt.stop
 
     assert_equal [items[1]], dt.objects_causing_outdatedness_of(items[0])
@@ -570,7 +570,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('tmp')
     File.open('tmp/woof.dat', 'w') { |io| io.write('fdsa') }
     item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
-    item_rep.raw_path = 'output/woof.dat'
+    item_rep.raw_paths[:last] = 'output/woof.dat'
 
     # Write
     notified = false
@@ -600,7 +600,7 @@ class Nanoc::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('output')
     File.open('output/woof.dat', 'w') { |io| io.write('fdsa but different') }
     item_rep.instance_eval { @temporary_filenames[:last] = 'tmp/woof.dat' }
-    item_rep.raw_path = 'output/woof.dat'
+    item_rep.raw_paths[:last] = 'output/woof.dat'
 
     # Write
     notified = false

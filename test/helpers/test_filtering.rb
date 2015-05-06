@@ -68,8 +68,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   def test_filter_with_arguments
     if_have 'coderay' do
       # Build content to be evaluated
-      content = "<% filter :coderay, :language => 'ruby' do %>\n" \
-                "   def some_function ; x = blah.foo ; x.bar 'xyzzy' ; end\n" \
+      content = "<% filter :erb, locals: { sheep: 'baah' } do %>\n" \
+                "   Sheep says <%%= @sheep %>!\n" \
                 "<% end %>\n"
 
       # Mock item and rep
@@ -78,7 +78,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
-      assert_match(%r{<span class="keyword">def</span> <span class="function">some_function</span>}, result)
+      assert_match(%r{Sheep says baah!}, result)
     end
   end
 

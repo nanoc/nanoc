@@ -26,10 +26,6 @@ module Nanoc::CLI
   autoload 'StreamCleaners',      'nanoc/cli/stream_cleaners'
   autoload 'ErrorHandler',        'nanoc/cli/error_handler'
 
-  # Deprecated; use CommandRunner instead
-  # TODO: [in nanoc 4.0] remove me
-  autoload 'Command',             'nanoc/cli/command_runner'
-
   # @return [Boolean] true if debug output is enabled, false if not
   #
   # @since 3.2.0
