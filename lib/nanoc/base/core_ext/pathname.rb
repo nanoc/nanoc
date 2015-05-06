@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::PathnameExtensions
   # Calculates the checksum for the file referenced to by this pathname. Any
   # change to the file contents will result in a different checksum.

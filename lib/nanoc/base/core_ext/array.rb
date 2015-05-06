@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::ArrayExtensions
   # Returns a new array where all items' keys are recursively converted to
   # symbols by calling {Nanoc::ArrayExtensions#symbolize_keys_recursively} or
