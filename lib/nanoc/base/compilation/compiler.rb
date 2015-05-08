@@ -267,6 +267,7 @@ module Nanoc::Int
         content_or_filename_assigns = { content: rep.content[:last] }
       end
 
+      # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge({
         item: Nanoc::ItemView.new(rep.item),
         rep: Nanoc::ItemRepView.new(rep),

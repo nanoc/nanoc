@@ -49,7 +49,7 @@ module Nanoc::Helpers
       xml = Builder::XmlMarkup.new(target: buffer, indent: 2)
 
       # Check for required attributes
-      if @site.config[:base_url].nil?
+      if @config[:base_url].nil?
         raise RuntimeError.new('The Nanoc::Helpers::XMLSitemap helper requires the site configuration to specify the base URL for the site.')
       end
 
@@ -62,7 +62,7 @@ module Nanoc::Helpers
           reps.reject! { |r| !select_proc[r] } if select_proc
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
-              xml.loc @site.config[:base_url] + rep.path
+              xml.loc @config[:base_url] + rep.path
               xml.lastmod item[:mtime].to_iso8601_date unless item[:mtime].nil?
               xml.changefreq item[:changefreq] unless item[:changefreq].nil?
               xml.priority item[:priority] unless item[:priority].nil?

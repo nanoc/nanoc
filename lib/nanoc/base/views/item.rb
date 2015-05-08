@@ -28,6 +28,14 @@ module Nanoc
       @item.path(params)
     end
 
+    def children
+      @item.children.map { |i| Nanoc::ItemView.new(i) }
+    end
+
+    def binary?
+      @item.binary?
+    end
+
     # @api private
     def reference
       @item.reference
