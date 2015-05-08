@@ -2,14 +2,10 @@
 
 describe Nanoc::TempFilenameFactory do
   subject do
-    Nanoc::TempFilenameFactory.instance
+    Nanoc::TempFilenameFactory.new
   end
 
   let(:prefix) { 'foo' }
-
-  before do
-    subject.cleanup(prefix)
-  end
 
   describe '#create' do
     it 'should create unique paths' do
