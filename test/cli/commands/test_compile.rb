@@ -3,9 +3,9 @@
 class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   def test_profiling_information
     with_site do |_site|
-      Nanoc::CLI.run %w( create_item foo )
-      Nanoc::CLI.run %w( create_item bar )
-      Nanoc::CLI.run %w( create_item baz )
+      File.open('content/foo.md', 'w') { |io| io << 'asdf' }
+      File.open('content/bar.md', 'w') { |io| io << 'asdf' }
+      File.open('content/baz.md', 'w') { |io| io << 'asdf' }
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -29,9 +29,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_auto_prune
     with_site do |_site|
-      Nanoc::CLI.run %w( create_item foo )
-      Nanoc::CLI.run %w( create_item bar )
-      Nanoc::CLI.run %w( create_item baz )
+      File.open('content/foo.md', 'w') { |io| io << 'asdf' }
+      File.open('content/bar.md', 'w') { |io| io << 'asdf' }
+      File.open('content/baz.md', 'w') { |io| io << 'asdf' }
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"
@@ -70,9 +70,9 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_auto_prune_with_exclude
     with_site do |_site|
-      Nanoc::CLI.run %w( create_item foo )
-      Nanoc::CLI.run %w( create_item bar )
-      Nanoc::CLI.run %w( create_item baz )
+      File.open('content/foo.md', 'w') { |io| io << 'asdf' }
+      File.open('content/bar.md', 'w') { |io| io << 'asdf' }
+      File.open('content/baz.md', 'w') { |io| io << 'asdf' }
 
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do\n"

@@ -161,10 +161,13 @@ EOF
   def test_setup_child_parent_links
     Nanoc::CLI.run %w( create_site bar)
     FileUtils.cd('bar') do
-      Nanoc::CLI.run %w( create_item /parent/ )
-      Nanoc::CLI.run %w( create_item /parent/foo/ )
-      Nanoc::CLI.run %w( create_item /parent/bar/ )
-      Nanoc::CLI.run %w( create_item /parent/bar/qux/ )
+      FileUtils.mkdir_p('content/parent')
+      FileUtils.mkdir_p('content/parent/bar')
+
+      File.open('content/parent.md', 'w') { |io| io << 'asdf' }
+      File.open('content/parent/foo.md', 'w') { |io| io << 'asdf' }
+      File.open('content/parent/bar.md', 'w') { |io| io << 'asdf' }
+      File.open('content/parent/bar/qux.md', 'w') { |io| io << 'asdf' }
 
       site = Nanoc::Int::Site.new('.')
 

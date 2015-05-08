@@ -5,33 +5,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     include Nanoc::DataSources::Filesystem
   end
 
-  def test_setup
-    # Create data source
-    data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
-
-    # Remove files to make sure they are recreated
-    FileUtils.rm_rf('content')
-    FileUtils.rm_rf('layouts/default')
-    FileUtils.rm_rf('lib')
-
-    # Mock VCS
-    vcs = mock
-    vcs.expects(:add).times(2) # One time for each directory
-    data_source.vcs = vcs
-
-    # Recreate files
-    data_source.setup
-
-    # Ensure essential files have been recreated
-    assert(File.directory?('content/'))
-    assert(File.directory?('layouts/'))
-
-    # Ensure no non-essential files have been recreated
-    assert(!File.file?('content/index.html'))
-    assert(!File.file?('layouts/default.html'))
-    refute(File.directory?('lib/'))
-  end
-
   def test_items
     # Create data source
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
@@ -48,24 +21,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     data_source.expects(:load_objects).with('layouts', 'layout', Nanoc::Int::Layout)
     data_source.layouts
-  end
-
-  def test_create_item
-    # Create data source
-    data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
-
-    # Check
-    data_source.expects(:create_object).with('content', 'the content', 'the attributes', 'the identifier', {})
-    data_source.create_item('the content', 'the attributes', 'the identifier')
-  end
-
-  def test_create_layout
-    # Create data source
-    data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
-
-    # Check
-    data_source.expects(:create_object).with('layouts', 'the content', 'the attributes', 'the identifier', {})
-    data_source.create_layout('the content', 'the attributes', 'the identifier')
   end
 
   def test_all_split_files_in_allowing_periods_in_identifiers
