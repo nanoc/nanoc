@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Adds support for memoizing functions.
   #
   # @api private
@@ -22,7 +22,7 @@ module Nanoc
     #
     #     class FibFast
     #
-    #       extend Nanoc::Memoization
+    #       extend Nanoc::Int::Memoization
     #
     #       def run(n)
     #         if n == 0

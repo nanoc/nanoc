@@ -42,12 +42,12 @@ module Nanoc::DataSources
 
     # See {Nanoc::DataSource#items}.
     def items
-      load_objects(content_dir_name, 'item', Nanoc::Item)
+      load_objects(content_dir_name, 'item', Nanoc::Int::Item)
     end
 
     # See {Nanoc::DataSource#layouts}.
     def layouts
-      load_objects(layouts_dir_name, 'layout', Nanoc::Layout)
+      load_objects(layouts_dir_name, 'layout', Nanoc::Int::Layout)
     end
 
     # See {Nanoc::DataSource#create_item}.
@@ -90,10 +90,10 @@ module Nanoc::DataSources
 
         # Read content and metadata
         is_binary = content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1])
-        if is_binary && klass == Nanoc::Item
+        if is_binary && klass == Nanoc::Int::Item
           meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
           content_or_filename = content_filename
-        elsif is_binary && klass == Nanoc::Layout
+        elsif is_binary && klass == Nanoc::Int::Layout
           raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
         else
           meta, content_or_filename = parse(content_filename, meta_filename, kind)

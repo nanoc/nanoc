@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::ChecksumStoreTest < Nanoc::TestCase
+class Nanoc::Int::ChecksumStoreTest < Nanoc::TestCase
   def test_get_with_existing_object
     require 'pstore'
 
@@ -13,18 +13,18 @@ class Nanoc::ChecksumStoreTest < Nanoc::TestCase
     end
 
     # Check
-    store = Nanoc::ChecksumStore.new
+    store = Nanoc::Int::ChecksumStore.new
     store.load
-    obj = Nanoc::Item.new('Moo?', {}, '/moo/')
+    obj = Nanoc::Int::Item.new('Moo?', {}, '/moo/')
     assert_equal 'zomg', store[obj]
   end
 
   def test_get_with_nonexistant_object
-    store = Nanoc::ChecksumStore.new
+    store = Nanoc::Int::ChecksumStore.new
     store.load
 
     # Check
-    obj = Nanoc::Item.new('Moo?', {}, '/animals/cow/')
+    obj = Nanoc::Int::Item.new('Moo?', {}, '/animals/cow/')
     assert_equal nil, store[obj]
   end
 end

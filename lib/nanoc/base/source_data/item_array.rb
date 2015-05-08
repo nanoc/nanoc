@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Acts as an array, but allows fetching items using identifiers, e.g. `@items['/blah/']`.
   #
   # @api private

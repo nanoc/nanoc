@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-module Nanoc
-  # A single representation (rep) of an item ({Nanoc::Item}). An item can
+module Nanoc::Int
+  # A single representation (rep) of an item ({Nanoc::Int::Item}). An item can
   # have multiple representations. A representation has its own output file.
   # A single item can therefore have multiple output files, each run through
   # a different set of filters with a different layout.
   #
   # @api private
   class ItemRep
-    # Contains all private methods. Mixed into {Nanoc::ItemRep}.
+    # Contains all private methods. Mixed into {Nanoc::Int::ItemRep}.
     #
     # @api private
     module Private
@@ -81,7 +81,7 @@ module Nanoc
         is_created = !File.file?(raw_path)
 
         # Notify
-        Nanoc::NotificationCenter.post(:will_write_rep, self, snapshot)
+        Nanoc::Int::NotificationCenter.post(:will_write_rep, self, snapshot)
 
         if self.binary?
           temp_path = temporary_filenames[:last]
@@ -97,13 +97,13 @@ module Nanoc
         FileUtils.cp(temp_path, raw_path) if is_modified
 
         # Notify
-        Nanoc::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
+        Nanoc::Int::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
       end
 
       TMP_TEXT_ITEMS_DIR = 'text_items'
 
       def temp_filename
-        Nanoc::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
+        Nanoc::Int::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
       end
 
       # Resets the compilation progress for this item representation. This is
@@ -130,7 +130,7 @@ module Nanoc
 
     include Private
 
-    # @return [Nanoc::Item] The item to which this rep belongs
+    # @return [Nanoc::Int::Item] The item to which this rep belongs
     attr_reader :item
 
     # @return [Symbol] The representation's unique name
@@ -147,7 +147,7 @@ module Nanoc
 
     # Creates a new item representation for the given item.
     #
-    # @param [Nanoc::Item] item The item to which the new representation will
+    # @param [Nanoc::Int::Item] item The item to which the new representation will
     #   belong.
     #
     # @param [Symbol] name The unique name for the new item representation.
@@ -182,12 +182,12 @@ module Nanoc
     def compiled_content(params = {})
       # Make sure we're not binary
       if item.binary?
-        raise Nanoc::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
+        raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
       # Notify
-      Nanoc::NotificationCenter.post(:visit_started, item)
-      Nanoc::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::Int::NotificationCenter.post(:visit_started, item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
 
       # Get name of last pre-layout snapshot
       snapshot_name = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
@@ -196,7 +196,7 @@ module Nanoc
       # Check existance of snapshot
       snapshot = snapshots.find { |s| s.first == snapshot_name }
       if !is_moving && (snapshot.nil? || snapshot[-1] == false)
-        raise Nanoc::Errors::NoSuchSnapshot.new(self, snapshot_name)
+        raise Nanoc::Int::Errors::NoSuchSnapshot.new(self, snapshot_name)
       end
 
       # Verify snapshot is usable
@@ -209,7 +209,7 @@ module Nanoc
         end
       is_usable_snapshot = @content[snapshot_name] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot
-        raise Nanoc::Errors::UnmetDependency.new(self)
+        raise Nanoc::Int::Errors::UnmetDependency.new(self)
       end
 
       @content[snapshot_name]
@@ -234,8 +234,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def raw_path(params = {})
-      Nanoc::NotificationCenter.post(:visit_started, item)
-      Nanoc::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::Int::NotificationCenter.post(:visit_started, item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @raw_paths[snapshot_name]
@@ -251,8 +251,8 @@ module Nanoc
     #
     # @return [String] The item rep’s path
     def path(params = {})
-      Nanoc::NotificationCenter.post(:visit_started, item)
-      Nanoc::NotificationCenter.post(:visit_ended,   item)
+      Nanoc::Int::NotificationCenter.post(:visit_started, item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
 
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]
@@ -263,9 +263,9 @@ module Nanoc
     # filtered content of the last snapshot.
     #
     # This method is supposed to be called only in a compilation rule block
-    # (see {Nanoc::CompilerDSL#compile}).
+    # (see {Nanoc::Int::CompilerDSL#compile}).
     #
-    # @see Nanoc::ItemRepProxy#filter
+    # @see Nanoc::Int::ItemRepProxy#filter
     #
     # @param [Symbol] filter_name The name of the filter to run the item
     #   representations' content through
@@ -277,18 +277,18 @@ module Nanoc
     def filter(filter_name, filter_args = {})
       # Get filter class
       klass = filter_named(filter_name)
-      raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
+      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
 
       # Check whether filter can be applied
       if klass.from_binary? && !self.binary?
-        raise Nanoc::Errors::CannotUseBinaryFilter.new(self, klass)
+        raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(self, klass)
       elsif !klass.from_binary? && self.binary?
-        raise Nanoc::Errors::CannotUseTextualFilter.new(self, klass)
+        raise Nanoc::Int::Errors::CannotUseTextualFilter.new(self, klass)
       end
 
       begin
         # Notify start
-        Nanoc::NotificationCenter.post(:filtering_started, self, filter_name)
+        Nanoc::Int::NotificationCenter.post(:filtering_started, self, filter_name)
 
         # Create filter
         filter = klass.new(assigns)
@@ -313,7 +313,7 @@ module Nanoc
         snapshot(@content[:post] ? :post : :pre, final: false) unless self.binary?
       ensure
         # Notify end
-        Nanoc::NotificationCenter.post(:filtering_ended, self, filter_name)
+        Nanoc::Int::NotificationCenter.post(:filtering_ended, self, filter_name)
       end
     end
 
@@ -322,11 +322,11 @@ module Nanoc
     # snapshot.
     #
     # This method is supposed to be called only in a compilation rule block
-    # (see {Nanoc::CompilerDSL#compile}).
+    # (see {Nanoc::Int::CompilerDSL#compile}).
     #
-    # @see Nanoc::ItemRepProxy#layout
+    # @see Nanoc::Int::ItemRepProxy#layout
     #
-    # @param [Nanoc::Layout] layout The layout to use
+    # @param [Nanoc::Int::Layout] layout The layout to use
     #
     # @param [Symbol] filter_name The name of the filter to layout the item
     #   representations' content with
@@ -337,7 +337,7 @@ module Nanoc
     # @return [void]
     def layout(layout, filter_name, filter_args)
       # Check whether item can be laid out
-      raise Nanoc::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
+      raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
 
       # Create "pre" snapshot
       if @content[:post].nil?
@@ -346,17 +346,17 @@ module Nanoc
 
       # Create filter
       klass = filter_named(filter_name)
-      raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
+      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(assigns.merge({ layout: layout }))
 
       # Visit
-      Nanoc::NotificationCenter.post(:visit_started, layout)
-      Nanoc::NotificationCenter.post(:visit_ended,   layout)
+      Nanoc::Int::NotificationCenter.post(:visit_started, layout)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   layout)
 
       begin
         # Notify start
-        Nanoc::NotificationCenter.post(:processing_started, layout)
-        Nanoc::NotificationCenter.post(:filtering_started,  self, filter_name)
+        Nanoc::Int::NotificationCenter.post(:processing_started, layout)
+        Nanoc::Int::NotificationCenter.post(:filtering_started,  self, filter_name)
 
         # Layout
         @content[:last] = filter.setup_and_run(layout.raw_content, filter_args)
@@ -365,8 +365,8 @@ module Nanoc
         snapshot(:post, final: false)
       ensure
         # Notify end
-        Nanoc::NotificationCenter.post(:filtering_ended,  self, filter_name)
-        Nanoc::NotificationCenter.post(:processing_ended, layout)
+        Nanoc::Int::NotificationCenter.post(:filtering_ended,  self, filter_name)
+        Nanoc::Int::NotificationCenter.post(:processing_ended, layout)
       end
     end
 
@@ -399,9 +399,9 @@ module Nanoc
     #
     # @api private
     #
-    # @return [Nanoc::ItemRepRecorderProxy] The recording proxy
+    # @return [Nanoc::Int::ItemRepRecorderProxy] The recording proxy
     def to_recording_proxy
-      Nanoc::ItemRepRecorderProxy.new(self)
+      Nanoc::Int::ItemRepRecorderProxy.new(self)
     end
 
     # Returns false because this item is not yet a proxy, and therefore does
@@ -411,8 +411,8 @@ module Nanoc
     #
     # @return [false]
     #
-    # @see Nanoc::ItemRepRecorderProxy#proxy?
-    # @see Nanoc::ItemRepProxy#proxy?
+    # @see Nanoc::Int::ItemRepRecorderProxy#proxy?
+    # @see Nanoc::Int::ItemRepProxy#proxy?
     def proxy?
       false
     end

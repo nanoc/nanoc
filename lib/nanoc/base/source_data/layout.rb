@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Represents a layout in a nanoc site. It has content, attributes, an
   # identifier and a modification time (to speed up compilation).
   #
   # @api private
   class Layout
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
     # @return [String] The raw content of this layout
     attr_reader :raw_content
@@ -77,7 +77,7 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      Nanoc::Checksummer.calc(self)
+      Nanoc::Int::Checksummer.calc(self)
     end
     memoize :checksum
 

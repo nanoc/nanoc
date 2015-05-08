@@ -86,10 +86,10 @@ EOS
   def test_filter_as_layout
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Item.new(SAMPLE_XML_IN,
+      item = Nanoc::Int::Item.new(SAMPLE_XML_IN,
                              {},
                              '/content/')
-      layout = Nanoc::Layout.new(SAMPLE_XSL,
+      layout = Nanoc::Int::Layout.new(SAMPLE_XSL,
                                  {},
                                  '/layout/')
 
@@ -110,10 +110,10 @@ EOS
   def test_filter_with_params
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Item.new(SAMPLE_XML_IN_WITH_PARAMS,
+      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_PARAMS,
                              {},
                              '/content/')
-      layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_PARAMS,
+      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_PARAMS,
                                  {},
                                  '/layout/')
 
@@ -135,10 +135,10 @@ EOS
   def test_filter_with_omit_xml_decl
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL,
+      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL,
                              {},
                              '/content/')
-      layout = Nanoc::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL,
+      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL,
                                  {},
                                  '/layout/')
 

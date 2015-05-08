@@ -37,7 +37,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
 
     # Check
-    data_source.expects(:load_objects).with('content', 'item', Nanoc::Item)
+    data_source.expects(:load_objects).with('content', 'item', Nanoc::Int::Item)
     data_source.items
   end
 
@@ -46,7 +46,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
 
     # Check
-    data_source.expects(:load_objects).with('layouts', 'layout', Nanoc::Layout)
+    data_source.expects(:load_objects).with('layouts', 'layout', Nanoc::Int::Layout)
     data_source.layouts
   end
 

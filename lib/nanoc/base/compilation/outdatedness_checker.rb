@@ -1,29 +1,29 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Responsible for determining whether an item or a layout is outdated.
   #
   # @api private
   class OutdatednessChecker
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
-    # @option params [Nanoc::Site] :site (nil) The site this outdatedness
+    # @option params [Nanoc::Int::Site] :site (nil) The site this outdatedness
     #   checker belongs to.
     #
-    # @option params [Nanoc::ChecksumStore] :checksum_store (nil) The
+    # @option params [Nanoc::Int::ChecksumStore] :checksum_store (nil) The
     #   checksum store where checksums of items, layouts, … are stored.
     #
-    # @option params [Nanoc::DependencyTracker] :dependency_tracker (nil) The
+    # @option params [Nanoc::Int::DependencyTracker] :dependency_tracker (nil) The
     #   dependency tracker for the given site.
     def initialize(params = {})
       @site = params.fetch(:site) do
-        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :site parameter'
+        raise ArgumentError, 'Nanoc::Int::OutdatednessChecker#initialize needs a :site parameter'
       end
       @checksum_store = params.fetch(:checksum_store) do
-        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :checksum_store parameter'
+        raise ArgumentError, 'Nanoc::Int::OutdatednessChecker#initialize needs a :checksum_store parameter'
       end
       @dependency_tracker = params.fetch(:dependency_tracker) do
-        raise ArgumentError, 'Nanoc::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
+        raise ArgumentError, 'Nanoc::Int::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
       end
 
       @basic_outdatedness_reasons = {}
@@ -34,7 +34,7 @@ module Nanoc
     # Checks whether the given object is outdated and therefore needs to be
     # recompiled.
     #
-    # @param [Nanoc::Item, Nanoc::ItemRep, Nanoc::Layout] obj The object
+    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness should be checked.
     #
     # @return [Boolean] true if the object is outdated, false otherwise
@@ -44,15 +44,15 @@ module Nanoc
 
     # Calculates the reason why the given object is outdated.
     #
-    # @param [Nanoc::Item, Nanoc::ItemRep, Nanoc::Layout] obj The object
+    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness reason should be calculated.
     #
-    # @return [Nanoc::OutdatednessReasons::Generic, nil] The reason why the
+    # @return [Nanoc::Int::OutdatednessReasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def outdatedness_reason_for(obj)
       reason = basic_outdatedness_reason_for(obj)
       if reason.nil? && outdated_due_to_dependencies?(obj)
-        reason = Nanoc::OutdatednessReasons::DependenciesOutdated
+        reason = Nanoc::Int::OutdatednessReasons::DependenciesOutdated
       end
       reason
     end
@@ -65,7 +65,7 @@ module Nanoc
     # {#outdated?} if you want to include dependencies in the outdatedness
     # check.
     #
-    # @param [Nanoc::Item, Nanoc::ItemRep, Nanoc::Layout] obj The object
+    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness should be checked.
     #
     # @return [Boolean] true if the object is outdated, false otherwise
@@ -77,32 +77,32 @@ module Nanoc
     # not take dependencies into account; use {#outdatedness_reason_for?} if
     # you want to include dependencies in the outdatedness check.
     #
-    # @param [Nanoc::Item, Nanoc::ItemRep, Nanoc::Layout] obj The object
+    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness reason should be calculated.
     #
-    # @return [Nanoc::OutdatednessReasons::Generic, nil] The reason why the
+    # @return [Nanoc::Int::OutdatednessReasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
       case obj.type
       when :item_rep
         # Outdated if rules outdated
-        return Nanoc::OutdatednessReasons::RulesModified if
+        return Nanoc::Int::OutdatednessReasons::RulesModified if
           rule_memory_differs_for(obj)
 
         # Outdated if checksums are missing or different
-        return Nanoc::OutdatednessReasons::NotEnoughData unless checksums_available?(obj.item)
-        return Nanoc::OutdatednessReasons::SourceModified unless checksums_identical?(obj.item)
+        return Nanoc::Int::OutdatednessReasons::NotEnoughData unless checksums_available?(obj.item)
+        return Nanoc::Int::OutdatednessReasons::SourceModified unless checksums_identical?(obj.item)
 
         # Outdated if compiled file doesn't exist (yet)
-        return Nanoc::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
+        return Nanoc::Int::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
 
         # Outdated if code snippets outdated
-        return Nanoc::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
+        return Nanoc::Int::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
           object_modified?(cs)
         end
 
         # Outdated if configuration outdated
-        return Nanoc::OutdatednessReasons::ConfigurationModified if object_modified?(site.config)
+        return Nanoc::Int::OutdatednessReasons::ConfigurationModified if object_modified?(site.config)
 
         # Not outdated
         return nil
@@ -110,12 +110,12 @@ module Nanoc
         obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
       when :layout
         # Outdated if rules outdated
-        return Nanoc::OutdatednessReasons::RulesModified if
+        return Nanoc::Int::OutdatednessReasons::RulesModified if
           rule_memory_differs_for(obj)
 
         # Outdated if checksums are missing or different
-        return Nanoc::OutdatednessReasons::NotEnoughData unless checksums_available?(obj)
-        return Nanoc::OutdatednessReasons::SourceModified unless checksums_identical?(obj)
+        return Nanoc::Int::OutdatednessReasons::NotEnoughData unless checksums_available?(obj)
+        return Nanoc::Int::OutdatednessReasons::SourceModified unless checksums_identical?(obj)
 
         # Not outdated
         return nil
@@ -127,7 +127,7 @@ module Nanoc
 
     # Checks whether the given object is outdated due to dependencies.
     #
-    # @param [Nanoc::Item, Nanoc::ItemRep, Nanoc::Layout] obj The object
+    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness should be checked.
     #
     # @param [Set] processed The collection of items that has been visited
@@ -162,7 +162,7 @@ module Nanoc
       is_outdated
     end
 
-    # @param [Nanoc::ItemRep, Nanoc::Layout] obj The layout or item
+    # @param [Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The layout or item
     #   representation to check the rule memory for
     #
     # @return [Boolean] true if the rule memory for the given item
@@ -199,22 +199,22 @@ module Nanoc
     end
     memoize :object_modified?
 
-    # @return [Nanoc::ChecksumStore] The checksum store
+    # @return [Nanoc::Int::ChecksumStore] The checksum store
     def checksum_store
       @checksum_store
     end
 
-    # @return [Nanoc::RulesCollection] The rules collection
+    # @return [Nanoc::Int::RulesCollection] The rules collection
     def rules_collection
       site.compiler.rules_collection
     end
 
-    # @return [Nanoc::DependencyTracker] The dependency tracker
+    # @return [Nanoc::Int::DependencyTracker] The dependency tracker
     def dependency_tracker
       @dependency_tracker
     end
 
-    # @return [Nanoc::Site] The site
+    # @return [Nanoc::Int::Site] The site
     def site
       @site
     end

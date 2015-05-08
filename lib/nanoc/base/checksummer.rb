@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Creates checksums for given objects.
   #
   # A checksum is a string, such as “mL+TaqNsEeiPkWloPgCtAofT1yg=”, that is used
@@ -51,11 +51,11 @@ module Nanoc
           else
             digest.update('???')
           end
-        when Nanoc::RulesCollection
+        when Nanoc::Int::RulesCollection
           update(obj.data, digest)
-        when Nanoc::CodeSnippet
+        when Nanoc::Int::CodeSnippet
           update(obj.data, digest)
-        when Nanoc::Item, Nanoc::Layout
+        when Nanoc::Int::Item, Nanoc::Int::Layout
           digest.update('content')
           if obj.respond_to?(:binary?) && obj.binary?
             update(Pathname.new(obj.raw_filename), digest)

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Keeps track of the rules in a site.
   #
   # @api private
@@ -8,13 +8,13 @@ module Nanoc
     # @return [String] the contents of the Rules file
     attr_accessor :data
 
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
-    # @return [Array<Nanoc::Rule>] The list of item compilation rules that
+    # @return [Array<Nanoc::Int::Rule>] The list of item compilation rules that
     #   will be used to compile items.
     attr_reader :item_compilation_rules
 
-    # @return [Array<Nanoc::Rule>] The list of routing rules that will be
+    # @return [Array<Nanoc::Int::Rule>] The list of routing rules that will be
     #   used to give all items a path.
     attr_reader :item_routing_rules
 
@@ -31,7 +31,7 @@ module Nanoc
     #   be executed after all data is loaded but before the site is compiled
     attr_accessor :preprocessors
 
-    # @param [Nanoc::Compiler] compiler The site’s compiler
+    # @param [Nanoc::Int::Compiler] compiler The site’s compiler
     def initialize(compiler)
       @compiler = compiler
 
@@ -43,7 +43,7 @@ module Nanoc
 
     # Add the given rule to the list of item compilation rules.
     #
-    # @param [Nanoc::Rule] rule The item compilation rule to add
+    # @param [Nanoc::Int::Rule] rule The item compilation rule to add
     #
     # @return [void]
     def add_item_compilation_rule(rule)
@@ -52,14 +52,14 @@ module Nanoc
 
     # Add the given rule to the list of item routing rules.
     #
-    # @param [Nanoc::Rule] rule The item routing rule to add
+    # @param [Nanoc::Int::Rule] rule The item routing rule to add
     #
     # @return [void]
     def add_item_routing_rule(rule)
       @item_routing_rules << rule
     end
 
-    # @param [Nanoc::Item] item The item for which the compilation rules
+    # @param [Nanoc::Int::Item] item The item for which the compilation rules
     #   should be retrieved
     #
     # @return [Array] The list of item compilation rules for the given item
@@ -74,7 +74,7 @@ module Nanoc
       # Find rules file
       rules_filenames = ['Rules', 'rules', 'Rules.rb', 'rules.rb']
       rules_filename = rules_filenames.find { |f| File.file?(f) }
-      raise Nanoc::Errors::NoRulesFileFound.new if rules_filename.nil?
+      raise Nanoc::Int::Errors::NoRulesFileFound.new if rules_filename.nil?
 
       parse(rules_filename)
     end
@@ -104,9 +104,9 @@ module Nanoc
     # Finds the first matching compilation rule for the given item
     # representation.
     #
-    # @param [Nanoc::ItemRep] rep The item rep for which to fetch the rule
+    # @param [Nanoc::Int::ItemRep] rep The item rep for which to fetch the rule
     #
-    # @return [Nanoc::Rule, nil] The compilation rule for the given item rep,
+    # @return [Nanoc::Int::Rule, nil] The compilation rule for the given item rep,
     #   or nil if no rules have been found
     def compilation_rule_for(rep)
       @item_compilation_rules.find do |rule|
@@ -116,9 +116,9 @@ module Nanoc
 
     # Finds the first matching routing rule for the given item representation.
     #
-    # @param [Nanoc::ItemRep] rep The item rep for which to fetch the rule
+    # @param [Nanoc::Int::ItemRep] rep The item rep for which to fetch the rule
     #
-    # @return [Nanoc::Rule, nil] The routing rule for the given item rep, or
+    # @return [Nanoc::Int::Rule, nil] The routing rule for the given item rep, or
     #   nil if no rules have been found
     def routing_rule_for(rep)
       @item_routing_rules.find do |rule|
@@ -131,9 +131,9 @@ module Nanoc
     # returned. The result is a hash containing the corresponding rule for
     # each snapshot.
     #
-    # @param [Nanoc::ItemRep] rep The item rep for which to fetch the rules
+    # @param [Nanoc::Int::ItemRep] rep The item rep for which to fetch the rules
     #
-    # @return [Hash<Symbol, Nanoc::Rule>] The routing rules for the given rep
+    # @return [Hash<Symbol, Nanoc::Int::Rule>] The routing rules for the given rep
     def routing_rules_for(rep)
       rules = {}
       @item_routing_rules.each do |rule|
@@ -148,7 +148,7 @@ module Nanoc
 
     # Finds the filter name and arguments to use for the given layout.
     #
-    # @param [Nanoc::Layout] layout The layout for which to fetch the filter.
+    # @param [Nanoc::Int::Layout] layout The layout for which to fetch the filter.
     #
     # @return [Array, nil] A tuple containing the filter name and the filter
     #   arguments for the given layout.
@@ -159,9 +159,9 @@ module Nanoc
       nil
     end
 
-    # Returns the Nanoc::CompilerDSL that should be used for this site.
+    # Returns the Nanoc::Int::CompilerDSL that should be used for this site.
     def dsl
-      Nanoc::CompilerDSL.new(self, @compiler.site.config)
+      Nanoc::Int::CompilerDSL.new(self, @compiler.site.config)
     end
     memoize :dsl
 
@@ -175,14 +175,14 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      Nanoc::Checksummer.calc(self)
+      Nanoc::Int::Checksummer.calc(self)
     end
 
     def inspect
       "<#{self.class}>"
     end
 
-    # @param [Nanoc::ItemRep] rep The item representation to get the rule
+    # @param [Nanoc::Int::ItemRep] rep The item representation to get the rule
     #   memory for
     #
     # @return [Array] The rule memory for the given item representation
@@ -195,7 +195,7 @@ module Nanoc
     memoize :new_rule_memory_for_rep
 
     # Makes the given rule memory serializable by calling
-    # `Nanoc::Checksummer#calc` on the filter arguments, so that objects such as
+    # `Nanoc::Int::Checksummer#calc` on the filter arguments, so that objects such as
     # classes and filenames can be serialized.
     #
     # @param [Array] rs The rule memory for a certain item rep
@@ -204,14 +204,14 @@ module Nanoc
     def make_rule_memory_serializable(rs)
       rs.map do |r|
         if r[0] == :filter
-          [r[0], r[1], r[2].to_a.map { |a| Nanoc::Checksummer.calc(a) }]
+          [r[0], r[1], r[2].to_a.map { |a| Nanoc::Int::Checksummer.calc(a) }]
         else
           r
         end
       end
     end
 
-    # @param [Nanoc::Layout] layout The layout to get the rule memory for
+    # @param [Nanoc::Int::Layout] layout The layout to get the rule memory for
     #
     # @return [Array] The rule memory for the given layout
     def new_rule_memory_for_layout(layout)
@@ -219,7 +219,7 @@ module Nanoc
     end
     memoize :new_rule_memory_for_layout
 
-    # @param [Nanoc::ItemRep] rep The item representation for which to fetch
+    # @param [Nanoc::Int::ItemRep] rep The item representation for which to fetch
     #   the list of snapshots
     #
     # @return [Array] A list of snapshots, represented as arrays where the
@@ -231,7 +231,7 @@ module Nanoc
       end
     end
 
-    # @param [Nanoc::Item] obj The object for which to check the rule memory
+    # @param [Nanoc::Int::Item] obj The object for which to check the rule memory
     #
     # @return [Boolean] true if the rule memory for the given object has
     # changed since the last compilation, false otherwise
@@ -240,12 +240,12 @@ module Nanoc
     end
     memoize :rule_memory_differs_for
 
-    # @return [Nanoc::RuleMemoryStore] The rule memory store
+    # @return [Nanoc::Int::RuleMemoryStore] The rule memory store
     def rule_memory_store
       @compiler.rule_memory_store
     end
 
-    # @return [Nanoc::RuleMemoryCalculator] The rule memory calculator
+    # @return [Nanoc::Int::RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
       @compiler.rule_memory_calculator
     end

@@ -1,10 +1,10 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Responsible for compiling a site’s item representations.
   #
   # The compilation process makes use of notifications (see
-  # {Nanoc::NotificationCenter}) to track dependencies between items,
+  # {Nanoc::Int::NotificationCenter}) to track dependencies between items,
   # layouts, etc. The following notifications are used:
   #
   # * `compilation_started` — indicates that the compiler has started
@@ -40,11 +40,11 @@ module Nanoc
   #
   # @api private
   class Compiler
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
     # @group Accessors
 
-    # @return [Nanoc::Site] The site this compiler belongs to
+    # @return [Nanoc::Int::Site] The site this compiler belongs to
     attr_reader :site
 
     # The compilation stack. When the compiler begins compiling a rep or a
@@ -58,7 +58,7 @@ module Nanoc
 
     # Creates a new compiler fo the given site
     #
-    # @param [Nanoc::Site] site The site this compiler belongs to
+    # @param [Nanoc::Int::Site] site The site this compiler belongs to
     def initialize(site)
       @site = site
 
@@ -90,18 +90,18 @@ module Nanoc
       dependency_tracker.stop
       store
     ensure
-      Nanoc::TempFilenameFactory.instance.cleanup(
+      Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
-      Nanoc::TempFilenameFactory.instance.cleanup(
-        Nanoc::ItemRep::TMP_TEXT_ITEMS_DIR)
+      Nanoc::Int::TempFilenameFactory.instance.cleanup(
+        Nanoc::Int::ItemRep::TMP_TEXT_ITEMS_DIR)
     end
 
     # @group Private instance methods
 
-    # @return [Nanoc::RulesCollection] The collection of rules to be used
+    # @return [Nanoc::Int::RulesCollection] The collection of rules to be used
     #   for compiling this site
     def rules_collection
-      Nanoc::RulesCollection.new(self)
+      Nanoc::Int::RulesCollection.new(self)
     end
     memoize :rules_collection
 
@@ -175,9 +175,9 @@ module Nanoc
     # Returns the dependency tracker for this site, creating it first if it
     # does not yet exist.
     #
-    # @return [Nanoc::DependencyTracker] The dependency tracker for this site
+    # @return [Nanoc::Int::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
-      dt = Nanoc::DependencyTracker.new(@site.items + @site.layouts)
+      dt = Nanoc::Int::DependencyTracker.new(@site.items + @site.layouts)
       dt.compiler = self
       dt
     end
@@ -209,12 +209,12 @@ module Nanoc
       items.each do |item|
         # Find matching rules
         matching_rules = rules_collection.item_compilation_rules_for(item)
-        raise Nanoc::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
+        raise Nanoc::Int::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
 
         # Create reps
         rep_names = matching_rules.map(&:rep_name).uniq
         rep_names.each do |rep_name|
-          item.reps << ItemRep.new(item, rep_name)
+          item.reps << Nanoc::Int::ItemRep.new(item, rep_name)
         end
       end
     end
@@ -226,7 +226,7 @@ module Nanoc
       reps.each do |rep|
         # Find matching rules
         rules = rules_collection.routing_rules_for(rep)
-        raise Nanoc::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
+        raise Nanoc::Int::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
 
         rules.each_pair do |snapshot, rule|
           # Get basic path by applying matching rule
@@ -253,7 +253,7 @@ module Nanoc
       end
     end
 
-    # @param [Nanoc::ItemRep] rep The item representation for which the
+    # @param [Nanoc::Int::ItemRep] rep The item representation for which the
     #   assigns should be fetched
     #
     # @return [Hash] The assigns that should be used in the next filter/layout
@@ -278,9 +278,9 @@ module Nanoc
       })
     end
 
-    # @return [Nanoc::OutdatednessChecker] The outdatedness checker
+    # @return [Nanoc::Int::OutdatednessChecker] The outdatedness checker
     def outdatedness_checker
-      Nanoc::OutdatednessChecker.new(
+      Nanoc::Int::OutdatednessChecker.new(
         site: @site,
         checksum_store: checksum_store,
         dependency_tracker: dependency_tracker)
@@ -289,19 +289,19 @@ module Nanoc
 
     private
 
-    # @return [Array<Nanoc::Item>] The site’s items
+    # @return [Array<Nanoc::Int::Item>] The site’s items
     def items
       @site.items
     end
     memoize :items
 
-    # @return [Array<Nanoc::ItemRep>] The site’s item representations
+    # @return [Array<Nanoc::Int::ItemRep>] The site’s item representations
     def reps
       items.map(&:reps).flatten
     end
     memoize :reps
 
-    # @return [Array<Nanoc::Layout>] The site’s layouts
+    # @return [Array<Nanoc::Int::Layout>] The site’s layouts
     def layouts
       @site.layouts
     end
@@ -313,11 +313,11 @@ module Nanoc
     #
     # @return [void]
     def compile_reps(reps)
-      content_dependency_graph = Nanoc::DirectedGraph.new(reps)
+      content_dependency_graph = Nanoc::Int::DirectedGraph.new(reps)
 
       # Listen to processing start/stop
-      Nanoc::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
+      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
+      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
 
       # Assign snapshots
       reps.each do |rep|
@@ -334,7 +334,7 @@ module Nanoc
         begin
           compile_rep(rep)
           content_dependency_graph.delete_vertex(rep)
-        rescue Nanoc::Errors::UnmetDependency => e
+        rescue Nanoc::Int::Errors::UnmetDependency => e
           content_dependency_graph.add_edge(e.rep, rep)
           unless content_dependency_graph.vertices.include?(e.rep)
             content_dependency_graph.add_vertex(e.rep)
@@ -344,33 +344,33 @@ module Nanoc
 
       # Check whether everything was compiled
       unless content_dependency_graph.vertices.empty?
-        raise Nanoc::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
+        raise Nanoc::Int::Errors::RecursiveCompilation.new(content_dependency_graph.vertices)
       end
     ensure
-      Nanoc::NotificationCenter.remove(:processing_started, self)
-      Nanoc::NotificationCenter.remove(:processing_ended,   self)
+      Nanoc::Int::NotificationCenter.remove(:processing_started, self)
+      Nanoc::Int::NotificationCenter.remove(:processing_ended,   self)
     end
 
     # Compiles the given item representation.
     #
     # This method should not be called directly; please use
-    # {Nanoc::Compiler#run} instead, and pass this item representation's item
+    # {Nanoc::Int::Compiler#run} instead, and pass this item representation's item
     # as its first argument.
     #
-    # @param [Nanoc::ItemRep] rep The rep that is to be compiled
+    # @param [Nanoc::Int::ItemRep] rep The rep that is to be compiled
     #
     # @return [void]
     def compile_rep(rep)
-      Nanoc::NotificationCenter.post(:compilation_started, rep)
-      Nanoc::NotificationCenter.post(:processing_started,  rep)
-      Nanoc::NotificationCenter.post(:visit_started,       rep.item)
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Int::NotificationCenter.post(:processing_started,  rep)
+      Nanoc::Int::NotificationCenter.post(:visit_started,       rep.item)
 
       # Calculate rule memory if we haven’t yet done do
       rules_collection.new_rule_memory_for_rep(rep)
 
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
-        Nanoc::NotificationCenter.post(:cached_content_used, rep)
+        Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
         rep.content = compiled_content_cache[rep]
       else
         # Recalculate content
@@ -384,19 +384,19 @@ module Nanoc
       rep.compiled = true
       compiled_content_cache[rep] = rep.content
 
-      Nanoc::NotificationCenter.post(:processing_ended,  rep)
-      Nanoc::NotificationCenter.post(:compilation_ended, rep)
+      Nanoc::Int::NotificationCenter.post(:processing_ended,  rep)
+      Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
     rescue => e
       rep.forget_progress
-      Nanoc::NotificationCenter.post(:compilation_failed, rep, e)
+      Nanoc::Int::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
     ensure
-      Nanoc::NotificationCenter.post(:visit_ended,       rep.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,       rep.item)
     end
 
     # Clears the list of dependencies for items that will be recompiled.
     #
-    # @param [Array<Nanoc::Item>] items The list of items for which to forget
+    # @param [Array<Nanoc::Int::Item>] items The list of items for which to forget
     #   the dependencies
     #
     # @return [void]
@@ -410,7 +410,7 @@ module Nanoc
 
     # Returns a preprocessor context, creating one if none exists yet.
     def preprocessor_context
-      Nanoc::Context.new({
+      Nanoc::Int::Context.new({
         site: @site,
         config: @site.config,
         items: @site.items,
@@ -419,27 +419,27 @@ module Nanoc
     end
     memoize :preprocessor_context
 
-    # @return [CompiledContentCache] The compiled content cache
+    # @return [Nanoc:Int::CompiledContentCache] The compiled content cache
     def compiled_content_cache
-      Nanoc::CompiledContentCache.new
+      Nanoc::Int::CompiledContentCache.new
     end
     memoize :compiled_content_cache
 
     # @return [ChecksumStore] The checksum store
     def checksum_store
-      Nanoc::ChecksumStore.new(site: @site)
+      Nanoc::Int::ChecksumStore.new(site: @site)
     end
     memoize :checksum_store
 
     # @return [RuleMemoryStore] The rule memory store
     def rule_memory_store
-      Nanoc::RuleMemoryStore.new(site: @site)
+      Nanoc::Int::RuleMemoryStore.new(site: @site)
     end
     memoize :rule_memory_store
 
     # @return [RuleMemoryCalculator] The rule memory calculator
     def rule_memory_calculator
-      Nanoc::RuleMemoryCalculator.new(rules_collection: rules_collection)
+      Nanoc::Int::RuleMemoryCalculator.new(rules_collection: rules_collection)
     end
     memoize :rule_memory_calculator
 

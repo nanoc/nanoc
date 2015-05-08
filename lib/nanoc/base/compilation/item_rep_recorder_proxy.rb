@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Represents a fake iem representation that does not actually perform any
   # actual filtering, layouting or snapshotting, but instead keeps track of
   # what would happen if a real item representation would have been used
@@ -37,7 +37,7 @@ module Nanoc
     # @return [Array] The list of recorded actions (“rule memory”)
     attr_reader :rule_memory
 
-    # @param [Nanoc::ItemRep] item_rep The item representation that this
+    # @param [Nanoc::Int::ItemRep] item_rep The item representation that this
     #   proxy should behave like
     def initialize(item_rep)
       @item_rep = item_rep
@@ -46,14 +46,14 @@ module Nanoc
 
     # @return [void]
     #
-    # @see Nanoc::ItemRepProxy#filter, Nanoc::ItemRep#filter
+    # @see Nanoc::Int::ItemRepProxy#filter, Nanoc::Int::ItemRep#filter
     def filter(name, args = {})
       @rule_memory << [:filter, name, args]
     end
 
     # @return [void]
     #
-    # @see Nanoc::ItemRepProxy#layout, Nanoc::ItemRep#layout
+    # @see Nanoc::Int::ItemRepProxy#layout, Nanoc::Int::ItemRep#layout
     def layout(layout_identifier, extra_filter_args = nil)
       if extra_filter_args
         @rule_memory << [:layout, layout_identifier, extra_filter_args]
@@ -64,7 +64,7 @@ module Nanoc
 
     # @return [void]
     #
-    # @see Nanoc::ItemRep#snapshot
+    # @see Nanoc::Int::ItemRep#snapshot
     def snapshot(snapshot_name, params = {})
       @rule_memory << [:snapshot, snapshot_name, params]
 
@@ -73,7 +73,7 @@ module Nanoc
       names = @rule_memory.select { |r| r[0] == :snapshot }.map { |r| r[1] }
       names.each do |n|
         if existing.include?(n)
-          raise Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, snapshot_name)
+          raise Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, snapshot_name)
         end
         existing << n
       end
@@ -89,8 +89,8 @@ module Nanoc
     #
     # @return [true]
     #
-    # @see Nanoc::ItemRep#proxy?
-    # @see Nanoc::ItemRepProxy#proxy?
+    # @see Nanoc::Int::ItemRep#proxy?
+    # @see Nanoc::Int::ItemRepProxy#proxy?
     def proxy?
       true
     end

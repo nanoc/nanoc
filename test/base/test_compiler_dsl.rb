@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CompilerDSLTest < Nanoc::TestCase
+class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
   def test_compile
     # TODO: implement
   end
@@ -14,8 +14,8 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
   end
 
   def test_preprocess_twice
-    rules_collection = Nanoc::RulesCollection.new(nil)
-    compiler_dsl = Nanoc::CompilerDSL.new(rules_collection, {})
+    rules_collection = Nanoc::Int::RulesCollection.new(nil)
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(rules_collection, {})
 
     # first time
     io = capturing_stdio do
@@ -37,13 +37,13 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site per-rules-file-preprocessor )
     FileUtils.cd('per-rules-file-preprocessor') do
       # Create rep
-      item = Nanoc::Item.new('foo', { extension: 'bar' }, '/foo/')
+      item = Nanoc::Int::Item.new('foo', { extension: 'bar' }, '/foo/')
 
       # Create a bonus rules file
       File.open('more_rules.rb', 'w') { |io| io.write "preprocess { @items['/foo/'][:preprocessed] = true }" }
 
       # Create other necessary stuff
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.items << item
       dsl = site.compiler.rules_collection.dsl
       io = capturing_stdio do
@@ -71,14 +71,14 @@ class Nanoc::CompilerDSLTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site with_bonus_rules )
     FileUtils.cd('with_bonus_rules') do
       # Create rep
-      item = Nanoc::Item.new('foo', { extension: 'bar' }, '/foo/')
-      rep  = Nanoc::ItemRep.new(item, :default)
+      item = Nanoc::Int::Item.new('foo', { extension: 'bar' }, '/foo/')
+      rep  = Nanoc::Int::ItemRep.new(item, :default)
 
       # Create a bonus rules file
       File.open('more_rules.rb', 'w') { |io| io.write "passthrough '/foo/'" }
 
       # Create other necessary stuff
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.items << item
       dsl = site.compiler.rules_collection.dsl
 
@@ -109,7 +109,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check paths
@@ -133,7 +133,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check paths
@@ -163,7 +163,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check paths
@@ -195,7 +195,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check paths
@@ -226,7 +226,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check paths
@@ -258,7 +258,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check paths
@@ -269,7 +269,7 @@ EOS
 
   def test_identifier_to_regex_without_wildcards
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo') }
     expected = %r{^/foo/$}
@@ -283,7 +283,7 @@ EOS
 
   def test_identifier_to_regex_with_one_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar') }
     expected = %r{^/foo/(.*?)/bar/$}
@@ -297,7 +297,7 @@ EOS
 
   def test_identifier_to_regex_with_two_wildcards
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
     expected = %r{^/foo/(.*?)/bar/(.*?)/qux/$}
@@ -311,7 +311,7 @@ EOS
 
   def test_identifier_to_regex_with_just_one_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('*') }
     expected = %r{^/(.*?)$}
@@ -325,7 +325,7 @@ EOS
 
   def test_identifier_to_regex_with_root
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/') }
     expected = %r{^/$}
@@ -339,7 +339,7 @@ EOS
 
   def test_identifier_to_regex_with_only_children
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/*/') }
     expected = %r{^/foo/(.*?)/$}
@@ -353,7 +353,7 @@ EOS
 
   def test_identifier_to_regex_with_plus_wildcard
     # Create compiler DSL
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/+') }
     expected = %r{^/foo/(.+?)/$}
@@ -368,7 +368,7 @@ EOS
   end
 
   def test_dsl_has_no_access_to_compiler
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
     assert_raises(NameError) do
       compiler_dsl.instance_eval { compiler }
     end
@@ -376,7 +376,7 @@ EOS
 
   def test_config
     $venetian = 'unsnares'
-    compiler_dsl = Nanoc::CompilerDSL.new(nil, { venetian: 'snares' })
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { venetian: 'snares' })
     compiler_dsl.instance_eval { $venetian = @config[:venetian] }
     assert_equal 'snares', $venetian
   end

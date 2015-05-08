@@ -64,13 +64,13 @@ module Nanoc::Helpers
     #     I'm boxy! Luvz!
     #   </div>
     #
-    # @raise [Nanoc::Errors::UnknownLayout] if the given layout does not
+    # @raise [Nanoc::Int::Errors::UnknownLayout] if the given layout does not
     #   exist
     #
-    # @raise [Nanoc::Errors::CannotDetermineFilter] if there is no layout
+    # @raise [Nanoc::Int::Errors::CannotDetermineFilter] if there is no layout
     #   rule for the given layout
     #
-    # @raise [Nanoc::Errors::UnknownFilter] if the layout rule for the given
+    # @raise [Nanoc::Int::Errors::UnknownFilter] if the layout rule for the given
     #   layout specifies an unknown filter
     #
     # @return [String, nil] The rendered partial, or nil if this method was
@@ -78,11 +78,11 @@ module Nanoc::Helpers
     def render(identifier, other_assigns = {}, &block)
       # Find layout
       layout = @site.layouts.find { |l| l.identifier == identifier.cleaned_identifier }
-      raise Nanoc::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?
+      raise Nanoc::Int::Errors::UnknownLayout.new(identifier.cleaned_identifier) if layout.nil?
 
       # Visit
-      Nanoc::NotificationCenter.post(:visit_started, layout)
-      Nanoc::NotificationCenter.post(:visit_ended,   layout)
+      Nanoc::Int::NotificationCenter.post(:visit_started, layout)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   layout)
 
       # Capture content, if any
       captured_content = block_given? ? capture(&block) : nil
@@ -101,18 +101,18 @@ module Nanoc::Helpers
 
       # Get filter name
       filter_name, filter_args = @site.compiler.rules_collection.filter_for_layout(layout)
-      raise Nanoc::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
+      raise Nanoc::Int::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
       filter_class = Nanoc::Filter.named(filter_name)
-      raise Nanoc::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
+      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
 
       # Create filter
       filter = filter_class.new(assigns)
 
       begin
         # Notify start
-        Nanoc::NotificationCenter.post(:processing_started, layout)
+        Nanoc::Int::NotificationCenter.post(:processing_started, layout)
 
         # Layout
         result = filter.setup_and_run(layout.raw_content, filter_args)
@@ -129,7 +129,7 @@ module Nanoc::Helpers
         end
       ensure
         # Notify end
-        Nanoc::NotificationCenter.post(:processing_ended, layout)
+        Nanoc::Int::NotificationCenter.post(:processing_ended, layout)
       end
     end
   end

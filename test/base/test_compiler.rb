@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::CompilerTest < Nanoc::TestCase
+class Nanoc::Int::CompilerTest < Nanoc::TestCase
   def test_compilation_rule_for
     # Mock rules
     rules = [mock, mock, mock]
@@ -11,7 +11,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     rules[2].expects(:rep_name).returns('right')
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(nil)
+    compiler = Nanoc::Int::Compiler.new(nil)
     compiler.rules_collection.instance_eval { @item_compilation_rules = rules }
 
     # Mock rep
@@ -34,7 +34,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     rules[2].expects(:rep_name).returns('right')
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(nil)
+    compiler = Nanoc::Int::Compiler.new(nil)
     compiler.rules_collection.instance_eval { @item_routing_rules = rules }
 
     # Mock rep
@@ -52,7 +52,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[/.*/] = [:erb, { foo: 'bar' }]
 
     # Mock layout
@@ -68,7 +68,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[/.*/] = [:some_unknown_filter, { foo: 'bar' }]
 
     # Mock layout
@@ -84,7 +84,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [:erb, { foo: 'bar' }]
 
     # Mock layout
@@ -100,7 +100,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     site = mock
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
     compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [:erb, { char: 'd' }]
     compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [:erb, { char: 'b' }]
     compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [:erb, { char: 'c' }] # never used!
@@ -131,8 +131,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
 
   def test_compile_rep_should_write_proper_snapshots
     # Mock rep
-    item = Nanoc::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
-    rep  = Nanoc::ItemRep.new(item, :blah)
+    item = Nanoc::Int::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
+    rep  = Nanoc::Int::ItemRep.new(item, :blah)
 
     # Set snapshot filenames
     rep.raw_paths = {
@@ -149,10 +149,10 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       layout '/blah/'
       filter :erb
     end
-    rule = Nanoc::Rule.new(/blah/, :meh, rule_block)
+    rule = Nanoc::Int::Rule.new(/blah/, :meh, rule_block)
 
     # Create layout
-    layout = Nanoc::Layout.new('head <%= yield %> foot', {}, '/blah/')
+    layout = Nanoc::Int::Layout.new('head <%= yield %> foot', {}, '/blah/')
 
     # Create site
     site = mock
@@ -161,7 +161,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     site.stubs(:layouts).returns([layout])
 
     # Create compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
     compiler.rules_collection.layout_filter_mapping[%r{^/blah/$}] = [:erb, {}]
     site.stubs(:compiler).returns(compiler)
@@ -243,7 +243,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
       end
 
-      assert_raises Nanoc::Errors::RecursiveCompilation do
+      assert_raises Nanoc::Int::Errors::RecursiveCompilation do
         site.compile
       end
     end
@@ -268,7 +268,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Create site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       error = assert_raises(RuntimeError) do
         site.compile
       end
@@ -281,9 +281,9 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
 
-      compiler = Nanoc::Compiler.new(site)
+      compiler = Nanoc::Int::Compiler.new(site)
       def compiler.route_reps
         raise 'oh my gosh it is borken'
       end
@@ -301,7 +301,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       Nanoc::CLI.run %w( compile )
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # At this point, even the already compiled items in the previous pass
@@ -330,8 +330,8 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
-      assert_raises Nanoc::Errors::CannotCreateMultipleSnapshotsWithSameName do
+      site = Nanoc::Int::Site.new('.')
+      assert_raises Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName do
         site.compile
       end
     end
@@ -360,7 +360,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -393,7 +393,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -423,7 +423,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -456,7 +456,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -477,7 +477,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -508,7 +508,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -531,7 +531,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       assert_equal Set.new(%w( content/blah.dat )), Set.new(Dir['content/*'])
@@ -547,7 +547,7 @@ class Nanoc::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
 
       # Check
@@ -575,11 +575,11 @@ class Nanoc::CompilerTest < Nanoc::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       rep = site.items['/a/'].reps[0]
       dt = site.compiler.dependency_tracker
       dt.start
-      assert_raises Nanoc::Errors::UnmetDependency do
+      assert_raises Nanoc::Int::Errors::UnmetDependency do
         site.compiler.send :compile_rep, rep
       end
       dt.stop

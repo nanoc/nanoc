@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Calculates rule memories for objects that can be run through a rule (item
   # representations and layouts).
   #
   # @api private
   class RuleMemoryCalculator
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
-    # @option params [Nanoc::RulesCollection] rules_collection The rules
+    # @option params [Nanoc::Int::RulesCollection] rules_collection The rules
     #   collection
     def initialize(params = {})
       @rules_collection = params.fetch(:rules_collection) do

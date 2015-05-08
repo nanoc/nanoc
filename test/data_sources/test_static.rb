@@ -3,7 +3,7 @@
 class Nanoc::DataSources::StaticTest < Nanoc::TestCase
   def new_data_source(params = nil)
     # Mock site
-    site = Nanoc::Site.new({})
+    site = Nanoc::Int::Site.new({})
 
     # Create data source
     data_source = Nanoc::DataSources::Static.new(site, nil, nil, params)
@@ -55,7 +55,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
 
     # Get expected and actual output
     expected_out = [
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'foo/bar.png',
         { extension: 'png', filename: 'foo/bar.png' },
         '/bar.png/',
@@ -63,7 +63,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
         mtime: File.mtime('foo/bar.png'),
         checksum: Pathname.new('foo/bar.png').checksum
       ),
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'foo/b.c.css',
         { extension: 'css', filename: 'foo/b.c.css' },
         '/b.c.css/',
@@ -71,7 +71,7 @@ class Nanoc::DataSources::StaticTest < Nanoc::TestCase
         mtime: File.mtime('foo/b.c.css'),
         checksum: Pathname.new('foo/b.c.css').checksum
       ),
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'foo/a/b/c.gif',
         { extension: 'gif', filename: 'foo/a/b/c.gif' },
         '/a/b/c.gif/',

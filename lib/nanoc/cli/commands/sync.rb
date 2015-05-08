@@ -12,7 +12,7 @@ module Nanoc::CLI::Commands
     def run
       # Check arguments
       if arguments.size != 0
-        raise Nanoc::Errors::GenericTrivial, "usage: #{command.usage}"
+        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 
       # Make sure we are in a nanoc site directory

@@ -2,13 +2,13 @@
 
 require 'tmpdir'
 
-module Nanoc
+module Nanoc::Int
   # @api private
   class TempFilenameFactory
     # @return [String] The root directory for all temporary filenames
     attr_reader :root_dir
 
-    # @return [Nanoc::TempFilenameFactory] A common instance
+    # @return [Nanoc::Int::TempFilenameFactory] A common instance
     def self.instance
       @instance ||= new
     end

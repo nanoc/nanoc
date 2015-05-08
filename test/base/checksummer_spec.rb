@@ -2,8 +2,8 @@
 
 require 'tempfile'
 
-describe Nanoc::Checksummer do
-  subject { Nanoc::Checksummer }
+describe Nanoc::Int::Checksummer do
+  subject { Nanoc::Int::Checksummer }
 
   CHECKSUM_REGEX = /\A[0-9a-zA-Z\/+]+=*\Z/
 
@@ -130,12 +130,12 @@ describe Nanoc::Checksummer do
 
   it 'should not have the same checksum for same content but different class'
 
-  describe 'for Nanoc::RulesCollection' do
+  describe 'for Nanoc::Int::RulesCollection' do
     let(:data)            { 'STUFF!' }
-    let(:normal_checksum) { 'r4SwDpCp5saBPeZk2gQOJcipTZU=' }
+    let(:normal_checksum) { 'Y6mX13i8ZEd4a11xRPc2yNQSRDs=' }
 
     let(:rules_collection) do
-      coll = Nanoc::RulesCollection.new(nil)
+      coll = Nanoc::Int::RulesCollection.new(nil)
       coll.data = data
       coll
     end
@@ -154,11 +154,11 @@ describe Nanoc::Checksummer do
     end
   end
 
-  describe 'for Nanoc::CodeSnippet' do
+  describe 'for Nanoc::Int::CodeSnippet' do
     let(:data)            { 'asdf' }
     let(:filename)        { File.expand_path('bob.txt') }
-    let(:code_snippet)    { Nanoc::CodeSnippet.new(data, filename) }
-    let(:normal_checksum) { 'ZSo56CFoBcNgiDsWOfLLquH2sF0=' }
+    let(:code_snippet)    { Nanoc::Int::CodeSnippet.new(data, filename) }
+    let(:normal_checksum) { 's6oZ1xLVekKDVhYrXsJuHChFjek=' }
 
     it 'should checksum the data' do
       subject.calc(code_snippet).must_equal(normal_checksum)
@@ -182,13 +182,13 @@ describe Nanoc::Checksummer do
     end
   end
 
-  describe 'for Nanoc::Configuration' do
+  describe 'for Nanoc::Int::Configuration' do
     let(:wrapped)         { { a: 1, b: 2 } }
-    let(:configuration)   { Nanoc::Configuration.new(wrapped) }
-    let(:normal_checksum) { 'eYYQ74x29njbtXMtuKZX/ogD8JA=' }
+    let(:configuration)   { Nanoc::Int::Configuration.new(wrapped) }
+    let(:normal_checksum) { 'xwbPeftLbSXYx0OJbKCqrPHctPU=' }
 
     it 'should checksum the hash' do
-      subject.calc(configuration).must_equal('eYYQ74x29njbtXMtuKZX/ogD8JA=')
+      subject.calc(configuration).must_equal(normal_checksum)
     end
 
     describe 'if the content changes' do
@@ -201,13 +201,13 @@ describe Nanoc::Checksummer do
     end
   end
 
-  describe 'for Nanoc::Item' do
+  describe 'for Nanoc::Int::Item' do
     let(:content)         { 'asdf' }
     let(:filename)        { File.expand_path('bob.txt') }
     let(:attributes)      { { a: 1, b: 2 } }
     let(:identifier)      { '/foo/' }
-    let(:item)            { Nanoc::Item.new(content, attributes, identifier) }
-    let(:normal_checksum) { 'eTPdmaG7UAuPzH210HM1JvJaWDo=' }
+    let(:item)            { Nanoc::Int::Item.new(content, attributes, identifier) }
+    let(:normal_checksum) { '6VtlVLx1JE69erzfDczZW7HSWeY=' }
 
     it 'should checksum item' do
       subject.calc(item).must_equal(normal_checksum)

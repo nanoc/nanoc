@@ -14,7 +14,7 @@ module Nanoc::CLI::Commands
 
       require_site
 
-      Nanoc::Context.new(env).pry
+      Nanoc::Int::Context.new(env).pry
     end
 
     protected

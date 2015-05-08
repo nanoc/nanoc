@@ -1,18 +1,18 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # The in-memory representation of a nanoc site. It holds references to the
   # following site data:
   #
-  # * {#items}         — the list of items         ({Nanoc::Item})
-  # * {#layouts}       — the list of layouts       ({Nanoc::Layout})
-  # * {#code_snippets} — the list of code snippets ({Nanoc::CodeSnippet})
+  # * {#items}         — the list of items         ({Nanoc::Int::Item})
+  # * {#layouts}       — the list of layouts       ({Nanoc::Int::Layout})
+  # * {#code_snippets} — the list of code snippets ({Nanoc::Int::CodeSnippet})
   # * {#data_sources}  — the list of data sources  ({Nanoc::DataSource})
   #
   # In addition, each site has a {#config} hash which stores the site
   # configuration.
   #
-  # The physical representation of a {Nanoc::Site} is usually a directory
+  # The physical representation of a {Nanoc::Int::Site} is usually a directory
   # that contains a configuration file, site data, a rakefile, a rules file,
   # etc. The way site data is stored depends on the data source.
   #
@@ -28,7 +28,7 @@ module Nanoc
     }
 
     # The default configuration for a site. A site's configuration overrides
-    # these options: when a {Nanoc::Site} is created with a configuration
+    # these options: when a {Nanoc::Int::Site} is created with a configuration
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
     DEFAULT_CONFIG = {
@@ -63,9 +63,9 @@ module Nanoc
     # Returns the compiler for this site. Will create a new compiler if none
     # exists yet.
     #
-    # @return [Nanoc::Compiler] The compiler for this site
+    # @return [Nanoc::Int::Compiler] The compiler for this site
     def compiler
-      @compiler ||= Compiler.new(self)
+      @compiler ||= Nanoc::Int::Compiler.new(self)
     end
 
     # Returns the data sources for this site. Will create a new data source if
@@ -74,7 +74,7 @@ module Nanoc
     # @return [Array<Nanoc::DataSource>] The list of data sources for this
     #   site
     #
-    # @raise [Nanoc::Errors::UnknownDataSource] if the site configuration
+    # @raise [Nanoc::Int::Errors::UnknownDataSource] if the site configuration
     #   specifies an unknown data source
     def data_sources
       load_code_snippets
@@ -83,7 +83,7 @@ module Nanoc
         @config[:data_sources].map do |data_source_hash|
           # Get data source class
           data_source_class = Nanoc::DataSource.named(data_source_hash[:type])
-          raise Nanoc::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
+          raise Nanoc::Int::Errors::UnknownDataSource.new(data_source_hash[:type]) if data_source_class.nil?
 
           # Create data source
           data_source_class.new(
@@ -98,7 +98,7 @@ module Nanoc
 
     # Returns this site’s code snippets.
     #
-    # @return [Array<Nanoc::CodeSnippet>] The list of code snippets in this
+    # @return [Array<Nanoc::Int::CodeSnippet>] The list of code snippets in this
     #   site
     def code_snippets
       load
@@ -107,7 +107,7 @@ module Nanoc
 
     # Returns this site’s items.
     #
-    # @return [Array<Nanoc::Item>] The list of items in this site
+    # @return [Array<Nanoc::Int::Item>] The list of items in this site
     def items
       load
       @items
@@ -115,7 +115,7 @@ module Nanoc
 
     # Returns this site’s layouts.
     #
-    # @return [Array<Nanoc::Layouts>] The list of layout in this site
+    # @return [Array<Nanoc::Int::Layouts>] The list of layout in this site
     def layouts
       load
       @layouts
@@ -304,7 +304,7 @@ module Nanoc
       @code_snippets = []
       config[:lib_dirs].each do |lib|
         code_snippets = Dir["#{lib}/**/*.rb"].sort.map do |filename|
-          Nanoc::CodeSnippet.new(
+          Nanoc::Int::CodeSnippet.new(
             File.read(filename),
             filename
           )
@@ -324,7 +324,7 @@ module Nanoc
       @items_loaded = true
 
       # Get items
-      @items = Nanoc::ItemArray.new
+      @items = Nanoc::Int::ItemArray.new
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|
@@ -361,10 +361,10 @@ module Nanoc
         config.delete(:parent_config_file)
         config_path = File.absolute_path(parent_config_file, File.dirname(config_paths.last))
         unless File.file?(config_path)
-          raise Nanoc::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
+          raise Nanoc::Int::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
         end
         if config_paths.include?(config_path)
-          raise Nanoc::Errors::GenericTrivial, "Cycle detected. Could not use parent configuration file '#{parent_config_file}'"
+          raise Nanoc::Int::Errors::GenericTrivial, "Cycle detected. Could not use parent configuration file '#{parent_config_file}'"
         end
         parent_config = load_config(config_path)
         apply_parent_config(parent_config, config_paths + [config_path]).merge(config)
@@ -377,7 +377,7 @@ module Nanoc
       seen = Set.new
       objects.each do |obj|
         if seen.include?(obj.identifier)
-          raise Nanoc::Errors::DuplicateIdentifier.new(obj.identifier, type)
+          raise Nanoc::Int::Errors::DuplicateIdentifier.new(obj.identifier, type)
         end
         seen << obj.identifier
       end
@@ -389,14 +389,14 @@ module Nanoc
       if dir_or_config_hash.is_a? String
         # Check whether it is supported
         if dir_or_config_hash != '.'
-          warn 'WARNING: Calling Nanoc::Site.new with a directory that is not the current working directory is not supported. It is recommended to change the directory before calling Nanoc::Site.new. For example, instead of Nanoc::Site.new(\'abc\'), use Dir.chdir(\'abc\') { Nanoc::Site.new(\'.\') }.'
+          warn 'WARNING: Calling Nanoc::Int::Site.new with a directory that is not the current working directory is not supported. It is recommended to change the directory before calling Nanoc::Int::Site.new. For example, instead of Nanoc::Int::Site.new(\'abc\'), use Dir.chdir(\'abc\') { Nanoc::Int::Site.new(\'.\') }.'
         end
 
         # Read config from nanoc.yaml/config.yaml in given dir
         config_path = Dir.chdir(dir_or_config_hash) do
           filename = self.class.config_filename_for_cwd
           if filename.nil?
-            raise Nanoc::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
+            raise Nanoc::Int::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
           end
           File.absolute_path(filename, dir_or_config_hash)
         end
@@ -414,7 +414,7 @@ module Nanoc
       @config[:data_sources] = @config[:data_sources].map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
 
       # Convert to proper configuration
-      @config = Nanoc::Configuration.new(@config)
+      @config = Nanoc::Int::Configuration.new(@config)
     end
   end
 end

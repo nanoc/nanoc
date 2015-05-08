@@ -23,7 +23,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
     with_site do |site|
       @site = site
 
-      assert_raises(Nanoc::Errors::UnknownLayout) do
+      assert_raises(Nanoc::Int::Errors::UnknownLayout) do
         render '/dsfghjkl/'
       end
     end
@@ -39,7 +39,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       File.open('layouts/foo.erb', 'w').close
 
-      assert_raises(Nanoc::Errors::CannotDetermineFilter) do
+      assert_raises(Nanoc::Int::Errors::CannotDetermineFilter) do
         render '/foo/'
       end
     end
@@ -55,7 +55,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       File.open('layouts/foo.erb', 'w').close
 
-      assert_raises(Nanoc::Errors::UnknownFilter) do
+      assert_raises(Nanoc::Int::Errors::UnknownFilter) do
         render '/foo/'
       end
     end

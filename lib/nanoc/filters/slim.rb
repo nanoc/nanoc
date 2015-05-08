@@ -20,7 +20,7 @@ module Nanoc::Filters
       }.merge params
 
       # Create context
-      context = ::Nanoc::Context.new(assigns)
+      context = ::Nanoc::Int::Context.new(assigns)
 
       ::Slim::Template.new(params) { content }.render(context) { assigns[:content] }
     end

@@ -16,7 +16,7 @@ module Nanoc::StringExtensions
   #
   # @api private
   def checksum
-    Nanoc::Checksummer.calc(self)
+    Nanoc::Int::Checksummer.calc(self)
   end
 end
 

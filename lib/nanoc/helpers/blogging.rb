@@ -101,28 +101,28 @@ module Nanoc::Helpers
 
       def validate_config
         if @site.config[:base_url].nil?
-          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
+          raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
         end
       end
 
       def validate_feed_item
         if title.nil?
-          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no title in params, item or site config')
+          raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: no title in params, item or site config')
         end
         if author_name.nil?
-          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no author_name in params, item or site config')
+          raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: no author_name in params, item or site config')
         end
         if author_uri.nil?
-          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no author_uri in params, item or site config')
+          raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: no author_uri in params, item or site config')
         end
       end
 
       def validate_articles
         if relevant_articles.empty?
-          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: no articles')
+          raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: no articles')
         end
         if relevant_articles.any? { |a| a[:created_at].nil? }
-          raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: one or more articles lack created_at')
+          raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: one or more articles lack created_at')
         end
       end
 
@@ -330,13 +330,13 @@ module Nanoc::Helpers
     # Returns the URL for the given item. It will return the URL containing
     # the custom path in the feed if possible, otherwise the normal path.
     #
-    # @param [Nanoc::Item] item The item for which to fetch the URL.
+    # @param [Nanoc::Int::Item] item The item for which to fetch the URL.
     #
     # @return [String] The URL of the given item
     def url_for(item)
       # Check attributes
       if @site.config[:base_url].nil?
-        raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
+        raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
       # Build URL
@@ -356,7 +356,7 @@ module Nanoc::Helpers
     def feed_url
       # Check attributes
       if @site.config[:base_url].nil?
-        raise Nanoc::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
+        raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
       @item[:feed_url] || @site.config[:base_url] + @item.path
@@ -368,7 +368,7 @@ module Nanoc::Helpers
     # ["How to make a good ID in Atom" blog post]
     # (http://web.archive.org/web/20110915110202/http://diveintomark.org/archives/2004/05/28/howto-atom-id).
     #
-    # @param [Nanoc::Item] item The item for which to create an atom tag
+    # @param [Nanoc::Int::Item] item The item for which to create an atom tag
     #
     # @return [String] The atom tag for the given item
     def atom_tag_for(item)

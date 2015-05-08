@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::RuleContextTest < Nanoc::TestCase
+class Nanoc::Int::RuleContextTest < Nanoc::TestCase
   def test_objects
     # Mock everything
     config = mock
@@ -14,10 +14,10 @@ class Nanoc::RuleContextTest < Nanoc::TestCase
     item.stubs(:site).returns(site)
     rep = mock
     rep.stubs(:item).returns(item)
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
 
     # Create context
-    @rule_context = Nanoc::RuleContext.new(rep: rep, compiler: compiler)
+    @rule_context = Nanoc::Int::RuleContext.new(rep: rep, compiler: compiler)
 
     # Check
     assert_equal rep,     @rule_context.rep
@@ -48,10 +48,10 @@ class Nanoc::RuleContextTest < Nanoc::TestCase
     rep.expects(:snapshot).with('awesome')
 
     # Mock compiler
-    compiler = Nanoc::Compiler.new(site)
+    compiler = Nanoc::Int::Compiler.new(site)
 
     # Create context
-    @rule_context = Nanoc::RuleContext.new(rep: rep, compiler: compiler)
+    @rule_context = Nanoc::Int::RuleContext.new(rep: rep, compiler: compiler)
 
     # Check
     rep.filter :foo, bar: 'baz'

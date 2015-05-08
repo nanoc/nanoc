@@ -3,6 +3,21 @@
 module Nanoc
   require 'nanoc/base/core_ext'
 
+  autoload 'DataSource',           'nanoc/base/source_data/data_source'
+
+  autoload 'ConfigView',           'nanoc/base/views/config'
+  autoload 'ItemView',             'nanoc/base/views/item'
+  autoload 'ItemRepView',          'nanoc/base/views/item_rep'
+  autoload 'ItemCollectionView',   'nanoc/base/views/item_collection'
+  autoload 'LayoutView',           'nanoc/base/views/layout'
+  autoload 'LayoutCollectionView', 'nanoc/base/views/layout_collection'
+  autoload 'SiteView',             'nanoc/base/views/site'
+
+  autoload 'Filter',               'nanoc/base/compilation/filter'
+end
+
+# @api private
+module Nanoc::Int
   # Load helper classes
   autoload 'Context',              'nanoc/base/context'
   autoload 'Checksummer',          'nanoc/base/checksummer'
@@ -17,20 +32,10 @@ module Nanoc
   # Load source data classes
   autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
   autoload 'Configuration',        'nanoc/base/source_data/configuration'
-  autoload 'DataSource',           'nanoc/base/source_data/data_source'
   autoload 'Item',                 'nanoc/base/source_data/item'
   autoload 'ItemArray',            'nanoc/base/source_data/item_array'
   autoload 'Layout',               'nanoc/base/source_data/layout'
   autoload 'Site',                 'nanoc/base/source_data/site'
-
-  # Load view classes
-  autoload 'ConfigView',           'nanoc/base/views/config'
-  autoload 'ItemView',             'nanoc/base/views/item'
-  autoload 'ItemRepView',          'nanoc/base/views/item_rep'
-  autoload 'ItemCollectionView',   'nanoc/base/views/item_collection'
-  autoload 'LayoutView',           'nanoc/base/views/layout'
-  autoload 'LayoutCollectionView', 'nanoc/base/views/layout_collection'
-  autoload 'SiteView',             'nanoc/base/views/site'
 
   # Load result data classes
   autoload 'ItemRep',              'nanoc/base/result_data/item_rep'
@@ -41,7 +46,6 @@ module Nanoc
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
   autoload 'CompilerDSL',          'nanoc/base/compilation/compiler_dsl'
   autoload 'DependencyTracker',    'nanoc/base/compilation/dependency_tracker'
-  autoload 'Filter',               'nanoc/base/compilation/filter'
   autoload 'ItemRepProxy',         'nanoc/base/compilation/item_rep_proxy'
   autoload 'ItemRepRecorderProxy', 'nanoc/base/compilation/item_rep_recorder_proxy'
   autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'

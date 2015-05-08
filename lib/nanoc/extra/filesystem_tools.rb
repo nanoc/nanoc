@@ -6,7 +6,7 @@ module Nanoc::Extra
   # @api private
   module FilesystemTools
     # Error that is raised when too many symlink indirections are encountered.
-    class MaxSymlinkDepthExceededError < ::Nanoc::Errors::GenericTrivial
+    class MaxSymlinkDepthExceededError < ::Nanoc::Int::Errors::GenericTrivial
       # @return [String] The last filename that was attempted to be
       #   resolved before giving up
       attr_reader :filename
@@ -21,7 +21,7 @@ module Nanoc::Extra
 
     # Error that is raised when a file of an unknown type is encountered
     # (something other than file, directory or link).
-    class UnsupportedFileTypeError < ::Nanoc::Errors::GenericTrivial
+    class UnsupportedFileTypeError < ::Nanoc::Int::Errors::GenericTrivial
       # @return [String] The filename of the file whose type is not supported
       attr_reader :filename
 
@@ -102,7 +102,7 @@ module Nanoc::Extra
       when Array
         patterns.concat(extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" })
       else
-        raise Nanoc::Errors::GenericTrivial,
+        raise Nanoc::Int::Errors::GenericTrivial,
           "Do not know how to handle extra_files: #{extra_files.inspect}"
       end
       Dir.glob(patterns)

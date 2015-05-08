@@ -22,7 +22,7 @@ option :f, :force, '(ignored)'
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
     # Listens to compilation events and reacts to them. This abstract class
     # does not have a real implementation; subclasses should override {#start}
@@ -70,11 +70,11 @@ module Nanoc::CLI::Commands
         require 'tempfile'
         setup_diffs
         old_contents = {}
-        Nanoc::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
+        Nanoc::Int::NotificationCenter.on(:will_write_rep) do |rep, snapshot|
           path = rep.raw_path(snapshot: snapshot)
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
-        Nanoc::NotificationCenter.on(:rep_written) do |rep, path, _is_created, _is_modified|
+        Nanoc::Int::NotificationCenter.on(:rep_written) do |rep, path, _is_created, _is_modified|
           unless rep.binary?
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
@@ -153,7 +153,7 @@ module Nanoc::CLI::Commands
         command_runner.options.fetch(:verbose, false)
       end
 
-      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
+      # @option params [Array<Nanoc::Int::ItemRep>] :reps The list of item representations in the site
       def initialize(params = {})
         @times = {}
 
@@ -162,11 +162,11 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:filtering_started) do |_rep, filter_name|
+        Nanoc::Int::NotificationCenter.on(:filtering_started) do |_rep, filter_name|
           @times[filter_name] ||= []
           @times[filter_name] << { start: Time.now }
         end
-        Nanoc::NotificationCenter.on(:filtering_ended) do |_rep, filter_name|
+        Nanoc::Int::NotificationCenter.on(:filtering_ended) do |_rep, filter_name|
           @times[filter_name].last[:stop] = Time.now
         end
       end
@@ -261,7 +261,7 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:compilation_started) do |_rep|
+        Nanoc::Int::NotificationCenter.on(:compilation_started) do |_rep|
           if @gc_count % 20 == 0
             GC.enable
             GC.start
@@ -287,32 +287,32 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+        Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
           puts "*** Started compilation of #{rep.inspect}"
         end
-        Nanoc::NotificationCenter.on(:compilation_ended) do |rep|
+        Nanoc::Int::NotificationCenter.on(:compilation_ended) do |rep|
           puts "*** Ended compilation of #{rep.inspect}"
           puts
         end
-        Nanoc::NotificationCenter.on(:compilation_failed) do |rep, e|
+        Nanoc::Int::NotificationCenter.on(:compilation_failed) do |rep, e|
           puts "*** Suspended compilation of #{rep.inspect}: #{e.message}"
         end
-        Nanoc::NotificationCenter.on(:cached_content_used) do |rep|
+        Nanoc::Int::NotificationCenter.on(:cached_content_used) do |rep|
           puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling"
         end
-        Nanoc::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+        Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, filter_name|
           puts "*** Started filtering #{rep.inspect} with #{filter_name}"
         end
-        Nanoc::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+        Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
           puts "*** Ended filtering #{rep.inspect} with #{filter_name}"
         end
-        Nanoc::NotificationCenter.on(:visit_started) do |item|
+        Nanoc::Int::NotificationCenter.on(:visit_started) do |item|
           puts "*** Started visiting #{item.inspect}"
         end
-        Nanoc::NotificationCenter.on(:visit_ended) do |item|
+        Nanoc::Int::NotificationCenter.on(:visit_ended) do |item|
           puts "*** Ended visiting #{item.inspect}"
         end
-        Nanoc::NotificationCenter.on(:dependency_created) do |src, dst|
+        Nanoc::Int::NotificationCenter.on(:dependency_created) do |src, dst|
           puts "*** Dependency created from #{src.inspect} onto #{dst.inspect}"
         end
       end
@@ -320,7 +320,7 @@ module Nanoc::CLI::Commands
 
     # Prints file actions (created, updated, deleted, identical, skipped)
     class FileActionPrinter < Listener
-      # @option params [Array<Nanoc::ItemRep>] :reps The list of item representations in the site
+      # @option params [Array<Nanoc::Int::ItemRep>] :reps The list of item representations in the site
       def initialize(params = {})
         @start_times = {}
 
@@ -329,10 +329,10 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::NotificationCenter.on(:compilation_started) do |rep|
+        Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
           @start_times[rep.raw_path] = Time.now
         end
-        Nanoc::NotificationCenter.on(:rep_written) do |_rep, path, is_created, is_modified|
+        Nanoc::Int::NotificationCenter.on(:rep_written) do |_rep, path, is_created, is_modified|
           duration = path && @start_times[path] ? Time.now - @start_times[path] : nil
           action =
             case

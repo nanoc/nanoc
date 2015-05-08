@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Provides a context and a binding for use in filters such as the ERB and
   # Haml ones.
   class Context
@@ -15,7 +15,7 @@ module Nanoc
     #
     # @example Defining a context and accessing values
     #
-    #     context = Nanoc::Context.new(
+    #     context = Nanoc::Int::Context.new(
     #       :name     => 'Max Payne',
     #       :location => 'in a cheap motel'
     #     )

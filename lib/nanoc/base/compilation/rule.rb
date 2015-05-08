@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Contains the processing information for a item.
   #
   # @api private
@@ -44,7 +44,7 @@ module Nanoc
       @block = block
     end
 
-    # @param [Nanoc::Item] item The item to check
+    # @param [Nanoc::Int::Item] item The item to check
     #
     # @return [Boolean] true if this rule can be applied to the given item
     #   rep, false otherwise
@@ -54,10 +54,10 @@ module Nanoc
 
     # Applies this rule to the given item rep.
     #
-    # @param [Nanoc::ItemRep] rep The item representation where this rule
+    # @param [Nanoc::Int::ItemRep] rep The item representation where this rule
     #   should be applied to
     #
-    # @option params [Nanoc::Compiler] :compiler The compiler
+    # @option params [Nanoc::Int::Compiler] :compiler The compiler
     #
     # @raise [ArgumentError] if no compiler is passed
     #
@@ -66,8 +66,8 @@ module Nanoc
       compiler = params.fetch(:compiler) do
         raise ArgumentError, 'Required :compiler option is missing'
       end
-      rep = Nanoc::ItemRepProxy.new(rep, compiler) unless rep.proxy?
-      context = Nanoc::RuleContext.new(rep: rep, compiler: compiler)
+      rep = Nanoc::Int::ItemRepProxy.new(rep, compiler) unless rep.proxy?
+      context = Nanoc::Int::RuleContext.new(rep: rep, compiler: compiler)
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 

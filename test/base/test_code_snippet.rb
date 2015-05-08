@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-class Nanoc::CodeSnippetTest < Nanoc::TestCase
+class Nanoc::Int::CodeSnippetTest < Nanoc::TestCase
   def test_load
     # Initialize
     $complete_insane_parrot = 'meow'
 
     # Create code and load it
-    code_snippet = Nanoc::CodeSnippet.new("$complete_insane_parrot = 'woof'", 'parrot.rb')
+    code_snippet = Nanoc::Int::CodeSnippet.new("$complete_insane_parrot = 'woof'", 'parrot.rb')
     code_snippet.load
 
     # Ensure code is loaded
@@ -18,7 +18,7 @@ class Nanoc::CodeSnippetTest < Nanoc::TestCase
     @foo = 'meow'
 
     # Create code and load it
-    code_snippet = Nanoc::CodeSnippet.new("@foo = 'woof'", 'dog.rb')
+    code_snippet = Nanoc::Int::CodeSnippet.new("@foo = 'woof'", 'dog.rb')
     code_snippet.load
 
     # Ensure binding is correct

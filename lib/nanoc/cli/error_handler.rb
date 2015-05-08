@@ -64,7 +64,7 @@ module Nanoc::CLI
 
       # Run
       yield
-    rescue Nanoc::Errors::GenericTrivial => e
+    rescue Nanoc::Int::Errors::GenericTrivial => e
       $stderr.puts "Error: #{e.message}"
       exit(1)
     rescue Interrupt
@@ -154,12 +154,12 @@ module Nanoc::CLI
       Nanoc::CLI.debug?
     end
 
-    # @return [Nanoc::Site] The site that is currently being processed
+    # @return [Nanoc::Int::Site] The site that is currently being processed
     def site
       @command && @command.site
     end
 
-    # @return [Nanoc::Compiler] The compiler for the current site
+    # @return [Nanoc::Int::Compiler] The compiler for the current site
     def compiler
       site && site.compiler
     end
@@ -274,7 +274,7 @@ module Nanoc::CLI
         stream.puts '  (empty)'
       else
         stack.reverse_each do |obj|
-          if obj.is_a?(Nanoc::ItemRep)
+          if obj.is_a?(Nanoc::Int::ItemRep)
             stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
           else # layout
             stream.puts "  - [layout] #{obj.identifier}"

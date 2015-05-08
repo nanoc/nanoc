@@ -5,7 +5,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_without_tags
     # Create item
-    item = Nanoc::Item.new('content', {}, '/path/')
+    item = Nanoc::Int::Item.new('content', {}, '/path/')
 
     # Check
     assert_equal(
@@ -16,7 +16,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc::Item.new('content', { tags: %w(foo bar) }, '/path/')
+    item = Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/')
 
     # Check
     assert_equal(
@@ -28,7 +28,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc::Item.new('content', { tags: [] }, '/path/')
+    item = Nanoc::Int::Item.new('content', { tags: [] }, '/path/')
 
     # Check
     assert_equal(
@@ -39,7 +39,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc::Item.new('content', { tags: %w(foo bar) }, '/path/')
+    item = Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/')
 
     # Check
     assert_equal(
@@ -52,9 +52,9 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
   def test_items_with_tag
     # Create items
     @items = [
-      Nanoc::Item.new('item 1', { tags: [:foo]       }, '/item1/'),
-      Nanoc::Item.new('item 2', { tags: [:bar]       }, '/item2/'),
-      Nanoc::Item.new('item 3', { tags: [:foo, :bar] }, '/item3/')
+      Nanoc::Int::Item.new('item 1', { tags: [:foo]       }, '/item1/'),
+      Nanoc::Int::Item.new('item 2', { tags: [:bar]       }, '/item2/'),
+      Nanoc::Int::Item.new('item 3', { tags: [:foo, :bar] }, '/item3/')
     ]
 
     # Find items

@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Represents a directed graph. It is used by the dependency tracker for
   # storing and querying dependencies between items.
   #
   # @example Creating and using a directed graph
   #
   #   # Create a graph with three vertices
-  #   graph = Nanoc::DirectedGraph.new(%w( a b c d ))
+  #   graph = Nanoc::Int::DirectedGraph.new(%w( a b c d ))
   #
   #   # Add edges
   #   graph.add_edge('a', 'b')

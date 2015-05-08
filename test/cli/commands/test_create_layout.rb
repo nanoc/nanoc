@@ -16,7 +16,7 @@ class Nanoc::CLI::Commands::CreateLayoutTest < Nanoc::TestCase
         io.write rules_raw.sub("layout 'default'", "layout 'moo'")
       end
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
     end
   end

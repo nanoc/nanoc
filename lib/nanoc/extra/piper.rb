@@ -5,7 +5,7 @@ require 'open3'
 module Nanoc::Extra
   # @api private
   class Piper
-    class Error < ::Nanoc::Errors::Generic
+    class Error < ::Nanoc::Int::Errors::Generic
       def initialize(command, exit_code)
         @command   = command
         @exit_code = exit_code
