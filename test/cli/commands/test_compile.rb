@@ -152,16 +152,16 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_file_action_printer_normal
     # Create data
-    item = Nanoc::Item.new('content', {}, '/')
-    rep = Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', {}, '/')
+    rep = Nanoc::Int::ItemRep.new(item, :default)
     rep.raw_paths[:last] = 'output/foo.txt'
     rep.compiled = true
 
     # Listen
     listener = new_file_action_printer([rep])
     listener.start
-    Nanoc::NotificationCenter.post(:compilation_started, rep)
-    Nanoc::NotificationCenter.post(:rep_written, rep, rep.raw_path, false, true)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:rep_written, rep, rep.raw_path, false, true)
     listener.stop
 
     # Check
@@ -174,14 +174,14 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_file_action_printer_skip
     # Create data
-    item = Nanoc::Item.new('content', {}, '/')
-    rep = Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', {}, '/')
+    rep = Nanoc::Int::ItemRep.new(item, :default)
     rep.raw_paths[:last] = 'output/foo.txt'
 
     # Listen
     listener = new_file_action_printer([rep])
     listener.start
-    Nanoc::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
     listener.stop
 
     # Check

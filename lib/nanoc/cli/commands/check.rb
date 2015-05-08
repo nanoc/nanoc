@@ -33,7 +33,7 @@ module Nanoc::CLI::Commands
         end
 
       unless success
-        raise Nanoc::Errors::GenericTrivial, 'One or more checks failed'
+        raise Nanoc::Int::Errors::GenericTrivial, 'One or more checks failed'
       end
     end
 
@@ -41,7 +41,7 @@ module Nanoc::CLI::Commands
 
     def validate_options_and_arguments
       if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
-        raise Nanoc::Errors::GenericTrivial,
+        raise Nanoc::Int::Errors::GenericTrivial,
           'nothing to do (pass either --all, --deploy or --list or a list of checks)'
       end
     end

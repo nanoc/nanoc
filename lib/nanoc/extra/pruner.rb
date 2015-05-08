@@ -6,10 +6,10 @@ module Nanoc::Extra
   #
   # @api private
   class Pruner
-    # @return [Nanoc::Site] The site this pruner belongs to
+    # @return [Nanoc::Int::Site] The site this pruner belongs to
     attr_reader :site
 
-    # @param [Nanoc::Site] site The site for which a pruner is created
+    # @param [Nanoc::Int::Site] site The site for which a pruner is created
     #
     # @option params [Boolean] :dry_run (false) true if the files to be deleted
     #   should only be printed instead of actually deleted, false if the files

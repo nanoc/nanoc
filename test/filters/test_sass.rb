@@ -123,7 +123,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::Int::Site.new('.')
         site.compile
 
         # Check
@@ -138,7 +138,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::Int::Site.new('.')
         site.compile
 
         # Recheck
@@ -178,7 +178,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::Int::Site.new('.')
         site.compile
 
         # Check
@@ -193,7 +193,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::Int::Site.new('.')
         site.compile
 
         # Recheck
@@ -245,7 +245,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Compile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::Int::Site.new('.')
         site.compile
 
         # Check
@@ -259,7 +259,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         end
 
         # Recompile
-        site = Nanoc::Site.new('.')
+        site = Nanoc::Int::Site.new('.')
         site.compile
 
         # Recheck
@@ -287,7 +287,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green') }
 
-    items = [Nanoc::Item.new(
+    items = [Nanoc::Int::Item.new(
       'blah',
       { content_filename: 'content/xyzzy.sass' },
       '/blah/')]

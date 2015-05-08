@@ -32,13 +32,13 @@ module Nanoc::Helpers
 
       # Find filter
       klass = Nanoc::Filter.named(filter_name)
-      raise Nanoc::Errors::UnknownFilter.new(filter_name) if klass.nil?
+      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
       filter = klass.new(@item_rep.assigns)
 
       # Filter captured data
-      Nanoc::NotificationCenter.post(:filtering_started, @item_rep, filter_name)
+      Nanoc::Int::NotificationCenter.post(:filtering_started, @item_rep, filter_name)
       filtered_data = filter.setup_and_run(data, arguments)
-      Nanoc::NotificationCenter.post(:filtering_ended, @item_rep, filter_name)
+      Nanoc::Int::NotificationCenter.post(:filtering_ended, @item_rep, filter_name)
 
       # Append filtered data to buffer
       buffer = eval('_erbout', block.binding)

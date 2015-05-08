@@ -7,7 +7,7 @@ module Nanoc::Extra::Checking
   class Runner
     CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb']
 
-    # @param [Nanoc::Site] site The nanoc site this runner is for
+    # @param [Nanoc::Int::Site] site The nanoc site this runner is for
     def initialize(site)
       @site = site
     end
@@ -81,7 +81,7 @@ module Nanoc::Extra::Checking
     def require_dsl
       load_dsl_if_available
       if dsl.nil?
-        raise Nanoc::Errors::GenericTrivial, "No checks defined (no #{CHECKS_FILENAMES.first} file present)"
+        raise Nanoc::Int::Errors::GenericTrivial, "No checks defined (no #{CHECKS_FILENAMES.first} file present)"
       end
     end
 
@@ -102,7 +102,7 @@ module Nanoc::Extra::Checking
     def check_classes_named(n)
       n.map do |a|
         klass = Nanoc::Extra::Checking::Check.named(a)
-        raise Nanoc::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
+        raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
         klass
       end
     end

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Represents the site configuration.
   #
   # @api private

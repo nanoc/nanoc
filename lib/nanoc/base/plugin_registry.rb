@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # The class responsible for keeping track of all loaded plugins, such as
   # filters ({Nanoc::Filter}), data sources ({Nanoc::DataSource}) and VCSes
   # ({Nanoc::Extra::VCS}).
   #
   # @api private
   class PluginRegistry
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
     # A module that contains class methods for plugins. It provides functions
     # for setting identifiers, registering plugins and finding plugins. Plugin
@@ -27,7 +27,7 @@ module Nanoc
       #   @return [Array<Symbol>] The identifiers for this plugin
       def identifiers(*identifiers)
         if identifiers.empty?
-          Nanoc::PluginRegistry.instance.identifiers_of(superclass, self)
+          Nanoc::Int::PluginRegistry.instance.identifiers_of(superclass, self)
         else
           register(self, *identifiers)
         end
@@ -48,7 +48,7 @@ module Nanoc
         if identifier
           identifiers(identifier)
         else
-          Nanoc::PluginRegistry.instance.identifiers_of(superclass, self).first
+          Nanoc::Int::PluginRegistry.instance.identifiers_of(superclass, self).first
         end
       end
 
@@ -67,14 +67,14 @@ module Nanoc
         klass = klass.superclass while klass.superclass.respond_to?(:register)
 
         # Register
-        registry = Nanoc::PluginRegistry.instance
+        registry = Nanoc::Int::PluginRegistry.instance
         registry.register(klass, class_or_name, *identifiers)
       end
 
       # @return [Hash<Symbol, Class>] All plugins of this type, with keys
       #   being the identifiers and values the plugin classes
       def all
-        Nanoc::PluginRegistry.instance.find_all(self)
+        Nanoc::Int::PluginRegistry.instance.find_all(self)
       end
 
       # Returns the plugin with the given name (identifier)
@@ -83,21 +83,21 @@ module Nanoc
       #
       # @return [Class] The plugin class with the given name
       def named(name)
-        Nanoc::PluginRegistry.instance.find(self, name)
+        Nanoc::Int::PluginRegistry.instance.find(self, name)
       end
     end
 
     # Returns the shared {PluginRegistry} instance, creating it if none exists
     # yet.
     #
-    # @return [Nanoc::PluginRegistry] The shared plugin registry
+    # @return [Nanoc::Int::PluginRegistry] The shared plugin registry
     def self.instance
       @instance ||= new
     end
 
     # Creates a new plugin registry. This should usually not be necessary; it
     # is recommended to use the shared instance (obtained from
-    # {Nanoc::PluginRegistry.instance}).
+    # {Nanoc::Int::PluginRegistry.instance}).
     def initialize
       @identifiers_to_classes = {}
       @classes_to_identifiers = {}

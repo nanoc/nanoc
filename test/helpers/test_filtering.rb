@@ -60,7 +60,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
               "<% end %>\n"
 
     # Evaluate content
-    assert_raises(Nanoc::Errors::UnknownFilter) do
+    assert_raises(Nanoc::Int::Errors::UnknownFilter) do
       ::ERB.new(content).result(binding)
     end
   end
@@ -102,8 +102,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
   def test_notifications
     notifications = Set.new
-    Nanoc::NotificationCenter.on(:filtering_started) { notifications << :filtering_started }
-    Nanoc::NotificationCenter.on(:filtering_ended)   { notifications << :filtering_ended   }
+    Nanoc::Int::NotificationCenter.on(:filtering_started) { notifications << :filtering_started }
+    Nanoc::Int::NotificationCenter.on(:filtering_ended)   { notifications << :filtering_ended   }
 
     # Build content to be evaluated
     content = "<% filter :erb do %>\n" \

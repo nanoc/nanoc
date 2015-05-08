@@ -14,7 +14,7 @@ module Nanoc::Helpers
     #
     # @param [String] text The visible link text
     #
-    # @param [String, Nanoc::Item, Nanoc::ItemRep] target The path/URL,
+    # @param [String, Nanoc::Int::Item, Nanoc::Int::ItemRep] target The path/URL,
     #   item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
@@ -68,7 +68,7 @@ module Nanoc::Helpers
     #
     # @param [String] text The visible link text
     #
-    # @param [String, Nanoc::Item, Nanoc::ItemRep] target The path/URL,
+    # @param [String, Nanoc::Int::Item, Nanoc::Int::ItemRep] target The path/URL,
     #   item or item representation that should be linked to
     #
     # @param [Hash] attributes A hash containing HTML attributes (e.g.
@@ -100,7 +100,7 @@ module Nanoc::Helpers
     # Returns the relative path from the current item to the given path or
     # item representation. The returned path will not be HTML-escaped.
     #
-    # @param [String, Nanoc::Item, Nanoc::ItemRep] target The path/URL,
+    # @param [String, Nanoc::Int::Item, Nanoc::Int::ItemRep] target The path/URL,
     #   item or item representation to which the relative path should be
     #   generated
     #

@@ -44,7 +44,7 @@ module Nanoc::DataSources
         mtime      = File.mtime(filename)
         checksum   = Pathname.new(filename).checksum
 
-        Nanoc::Item.new(
+        Nanoc::Int::Item.new(
           filename,
           attributes,
           identifier,

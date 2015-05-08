@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-class Nanoc::StoreTest < Nanoc::TestCase
-  class TestStore < Nanoc::Store
+class Nanoc::Int::StoreTest < Nanoc::TestCase
+  class TestStore < Nanoc::Int::Store
     def data
       @data
     end

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
+class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
   def test_not_outdated
     # Compile once
     with_site(name: 'foo') do |site|
@@ -36,7 +36,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(name: 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::NotEnoughData,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::NotEnoughData,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -59,7 +59,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(name: 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::NotWritten,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::NotWritten,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -83,7 +83,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(name: 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/new/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::SourceModified,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::SourceModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -109,7 +109,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -141,7 +141,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -176,7 +176,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -208,7 +208,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -242,7 +242,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/a/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::DependenciesOutdated,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -266,7 +266,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(name: 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::CodeSnippetsModified,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::CodeSnippetsModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -288,7 +288,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
     with_site(name: 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::ConfigurationModified,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::ConfigurationModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -331,7 +331,7 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile once
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
     end
 
@@ -349,10 +349,10 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
-      assert_equal ::Nanoc::OutdatednessReasons::RulesModified,
+      assert_equal ::Nanoc::Int::OutdatednessReasons::RulesModified,
         outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
@@ -374,13 +374,13 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         refute outdatedness_checker.outdated?(item), 'item should not be outdated'
@@ -407,13 +407,13 @@ class Nanoc::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         refute outdatedness_checker.outdated?(item), 'item should not be outdated'

@@ -7,8 +7,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -31,8 +31,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -55,8 +55,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -79,8 +79,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -115,8 +115,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -139,8 +139,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -163,8 +163,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -187,8 +187,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -211,8 +211,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -235,8 +235,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -259,8 +259,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -283,8 +283,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -307,8 +307,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -339,8 +339,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -363,8 +363,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -387,8 +387,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -411,8 +411,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -438,8 +438,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -462,8 +462,8 @@ EOS
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),
@@ -487,8 +487,8 @@ EOS
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/bar/baz/'),
@@ -518,8 +518,8 @@ XML
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/bar/baz/'),
@@ -548,8 +548,8 @@ XML
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/bar/baz/'),
@@ -582,8 +582,8 @@ XML
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/bar/baz/'),
@@ -622,8 +622,8 @@ XML
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/bar/baz/'),
@@ -655,8 +655,8 @@ XML
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/baz/'),
@@ -687,8 +687,8 @@ XML
 
       # Mock item
       filter.instance_eval do
-        @item_rep = Nanoc::ItemRep.new(
-          Nanoc::Item.new(
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
             'content',
             {},
             '/foo/baz/'),
@@ -716,8 +716,8 @@ XML
 
     # Mock item
     filter.instance_eval do
-      @item_rep = Nanoc::ItemRep.new(
-        Nanoc::Item.new(
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
           'content',
           {},
           '/foo/bar/baz/'),

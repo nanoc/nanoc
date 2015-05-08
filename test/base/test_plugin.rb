@@ -18,7 +18,7 @@ class Nanoc::PluginTest < Nanoc::TestCase
   def test_register
     SampleFilter.send(:identifier, :_plugin_test_sample_filter)
 
-    registry = Nanoc::PluginRegistry.instance
+    registry = Nanoc::Int::PluginRegistry.instance
     filter = registry.find(Nanoc::Filter, :_plugin_test_sample_filter)
 
     refute_nil filter

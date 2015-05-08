@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-module Nanoc
-  # Nanoc::CodeSnippet represent a piece of custom code of a nanoc site.
+module Nanoc::Int
+  # Nanoc::Int::CodeSnippet represent a piece of custom code of a nanoc site.
   #
   # @api private
   class CodeSnippet
@@ -50,7 +50,7 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      Nanoc::Checksummer.calc(self)
+      Nanoc::Int::Checksummer.calc(self)
     end
   end
 end

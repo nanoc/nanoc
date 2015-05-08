@@ -24,18 +24,18 @@ module Nanoc::CLI::Commands
 # A list of file extensions that nanoc will consider to be textual rather than
 # binary. If an item with an extension not in this list is found,  the file
 # will be considered as binary.
-text_extensions: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:text_extensions])}
+text_extensions: #{array_to_yaml(Nanoc::Int::Site::DEFAULT_CONFIG[:text_extensions])}
 
 # The path to the directory where all generated files will be written to. This
 # can be an absolute path starting with a slash, but it can also be path
 # relative to the site directory.
-output_dir: #{Nanoc::Site::DEFAULT_CONFIG[:output_dir]}
+output_dir: #{Nanoc::Int::Site::DEFAULT_CONFIG[:output_dir]}
 
 # A list of index filenames, i.e. names of files that will be served by a web
 # server when a directory is requested. Usually, index files are named
 # “index.html”, but depending on the web server, this may be something else,
 # such as “default.htm”. This list is used by nanoc to generate pretty URLs.
-index_filenames: #{array_to_yaml(Nanoc::Site::DEFAULT_CONFIG[:index_filenames])}
+index_filenames: #{array_to_yaml(Nanoc::Int::Site::DEFAULT_CONFIG[:index_filenames])}
 
 # Whether or not to generate a diff of the compiled content when compiling a
 # site. The diff will contain the differences between the compiled content
@@ -60,18 +60,18 @@ data_sources:
   -
     # The type is the identifier of the data source. By default, this will be
     # `filesystem_unified`.
-    type: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:type]}
+    type: #{Nanoc::Int::Site::DEFAULT_DATA_SOURCE_CONFIG[:type]}
 
     # The path where items should be mounted (comparable to mount points in
     # Unix-like systems). This is “/” by default, meaning that items will have
     # “/” prefixed to their identifiers. If the items root were “/en/”
     # instead, an item at content/about.html would have an identifier of
     # “/en/about/” instead of just “/about/”.
-    items_root: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:items_root]}
+    items_root: #{Nanoc::Int::Site::DEFAULT_DATA_SOURCE_CONFIG[:items_root]}
 
     # The path where layouts should be mounted. The layouts root behaves the
     # same as the items root, but applies to layouts rather than items.
-    layouts_root: #{Nanoc::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
+    layouts_root: #{Nanoc::Int::Site::DEFAULT_DATA_SOURCE_CONFIG[:layouts_root]}
 
     # Whether to allow periods in identifiers. When turned off, everything
     # past the first period is considered to be the extension, and when
@@ -292,7 +292,7 @@ EOS
     def run
       # Check arguments
       if arguments.length != 1
-        raise Nanoc::Errors::GenericTrivial, "usage: #{command.usage}"
+        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 
       # Extract arguments and options
@@ -301,16 +301,16 @@ EOS
 
       # Check whether site exists
       if File.exist?(path)
-        raise Nanoc::Errors::GenericTrivial, "A site at '#{path}' already exists."
+        raise Nanoc::Int::Errors::GenericTrivial, "A site at '#{path}' already exists."
       end
 
       # Check whether data source exists
       if Nanoc::DataSource.named(data_source).nil?
-        raise Nanoc::Errors::GenericTrivial, "Unrecognised data source: #{data_source}"
+        raise Nanoc::Int::Errors::GenericTrivial, "Unrecognised data source: #{data_source}"
       end
 
       # Setup notifications
-      Nanoc::NotificationCenter.on(:file_created) do |file_path|
+      Nanoc::Int::NotificationCenter.on(:file_created) do |file_path|
         Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
       end
 
@@ -335,20 +335,20 @@ EOS
 
       # Create config
       File.open('nanoc.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
-      Nanoc::NotificationCenter.post(:file_created, 'nanoc.yaml')
+      Nanoc::Int::NotificationCenter.post(:file_created, 'nanoc.yaml')
 
       # Create rules
       File.open('Rules', 'w') do |io|
         io.write DEFAULT_RULES
       end
-      Nanoc::NotificationCenter.post(:file_created, 'Rules')
+      Nanoc::Int::NotificationCenter.post(:file_created, 'Rules')
     end
 
     # Sets up the site's data source, i.e. creates the bare essentials for
     # this data source to work.
     def site_setup
       # Get site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
 
       # Set up data sources
       site.data_sources.each do |data_source|
@@ -360,7 +360,7 @@ EOS
     # default layout, and so on.
     def site_populate
       # Get site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       data_source = site.data_sources[0]
 
       # Create home page

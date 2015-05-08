@@ -3,7 +3,7 @@
 class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
   def new_data_source(params = nil)
     # Mock site
-    site = Nanoc::Site.new({})
+    site = Nanoc::Int::Site.new({})
 
     # Create data source
     data_source = Nanoc::DataSources::FilesystemUnified.new(site, nil, nil, params)
@@ -114,7 +114,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
-    items = data_source.send(:load_objects, 'foo', 'item', Nanoc::Item)
+    items = data_source.send(:load_objects, 'foo', 'item', Nanoc::Int::Item)
 
     # Check
     assert_equal 1, items.size
@@ -133,7 +133,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Load
     assert_raises(RuntimeError) do
-      data_source.send(:load_objects, 'foo', 'item', Nanoc::Layout)
+      data_source.send(:load_objects, 'foo', 'item', Nanoc::Int::Layout)
     end
   end
 

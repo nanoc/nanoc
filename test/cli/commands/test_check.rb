@@ -10,7 +10,7 @@ class Nanoc::CLI::Commands::CheckTest < Nanoc::TestCase
 
       # Should raise now
       File.open('output/blah.html', 'w') { |io| io.write 'moo' }
-      assert_raises Nanoc::Errors::GenericTrivial do
+      assert_raises Nanoc::Int::Errors::GenericTrivial do
         Nanoc::CLI.run %w( check stale )
       end
     end

@@ -57,8 +57,8 @@ module Nanoc::DataSources
       content_filename = dir_name + identifier + last_component + ext
 
       # Notify
-      Nanoc::NotificationCenter.post(:file_created, meta_filename)
-      Nanoc::NotificationCenter.post(:file_created, content_filename)
+      Nanoc::Int::NotificationCenter.post(:file_created, meta_filename)
+      Nanoc::Int::NotificationCenter.post(:file_created, content_filename)
 
       # Create files
       FileUtils.mkdir_p(dir_path)

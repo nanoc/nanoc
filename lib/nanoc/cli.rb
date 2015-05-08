@@ -118,8 +118,8 @@ module Nanoc::CLI
   #
   # @return [void]
   def self.load_custom_commands
-    if Nanoc::Site.cwd_is_nanoc_site?
-      site = Nanoc::Site.new('.')
+    if Nanoc::Int::Site.cwd_is_nanoc_site?
+      site = Nanoc::Int::Site.new('.')
       site.config[:commands_dirs].each do |path|
         load_commands_at(path)
       end

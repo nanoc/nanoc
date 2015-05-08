@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-class Nanoc::DirectedGraphTest < Nanoc::TestCase
+class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
   def test_direct_predecessors
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
 
@@ -12,7 +12,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_predecessors
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
 
@@ -22,7 +22,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_direct_successors
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
 
@@ -32,7 +32,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_successors
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
 
@@ -42,7 +42,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_edges
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
 
@@ -50,7 +50,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_edges_with_new_vertices
-    graph = Nanoc::DirectedGraph.new([1])
+    graph = Nanoc::Int::DirectedGraph.new([1])
     assert_equal [1], graph.vertices
     graph.add_edge(1, 2)
     assert_equal [1, 2], graph.vertices
@@ -61,7 +61,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_add_edge
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
     assert_equal [], graph.successors_of(1)
     assert_equal [], graph.predecessors_of(2)
@@ -73,7 +73,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_add_edge_with_new_vertices
-    graph = Nanoc::DirectedGraph.new([1])
+    graph = Nanoc::Int::DirectedGraph.new([1])
     graph.add_edge(1, 2)
     graph.add_edge(3, 2)
 
@@ -82,7 +82,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_delete_edge
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
 
     assert_equal [2], graph.successors_of(1)
@@ -95,7 +95,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_delete_edges_from
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
     graph.add_edge(1, 2)
     graph.add_edge(2, 1)
@@ -134,7 +134,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_delete_edges_to
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
     graph.add_edge(1, 2)
     graph.add_edge(2, 1)
@@ -173,7 +173,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_delete_vertex
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
     graph.add_edge(1, 2)
     graph.add_edge(2, 1)
@@ -192,7 +192,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_delete_vertex_resulting_roots
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     assert_equal Set.new([1, 2, 3]), graph.roots
 
     graph.add_edge(1, 2)
@@ -204,7 +204,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_should_return_empty_array_for_nonexistant_vertices
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
     assert_equal [], graph.direct_predecessors_of(4)
     assert_equal [], graph.predecessors_of(4)
@@ -213,30 +213,30 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_roots_after_init
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
     assert_equal Set.new([1, 2, 3]), graph.roots
   end
 
   def test_roots_after_adding_edge
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     assert_equal Set.new([1, 3]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 3)
     assert_equal Set.new([1, 2]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(2, 1)
     assert_equal Set.new([2, 3]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
     assert_equal Set.new([1]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
     graph.add_edge(3, 1)
@@ -244,23 +244,23 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
   end
 
   def test_roots_after_removing_edge
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.delete_edge(1, 2)
     assert_equal Set.new([1, 2, 3]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 3)
     assert_equal Set.new([1, 2]), graph.roots
     graph.delete_edge(1, 2) # no such edge
     assert_equal Set.new([1, 2]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(2, 1)
     graph.delete_edge(2, 1)
     assert_equal Set.new([1, 2, 3]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
     graph.delete_edge(1, 2)
@@ -268,7 +268,7 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
     graph.delete_edge(2, 3)
     assert_equal Set.new([1, 2, 3]), graph.roots
 
-    graph = Nanoc::DirectedGraph.new([1, 2, 3])
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
     graph.add_edge(3, 1)
@@ -282,6 +282,6 @@ class Nanoc::DirectedGraphTest < Nanoc::TestCase
 
   def test_example
     YARD.parse(LIB_DIR + '/nanoc/base/directed_graph.rb')
-    assert_examples_correct 'Nanoc::DirectedGraph'
+    assert_examples_correct 'Nanoc::Int::DirectedGraph'
   end
 end

@@ -86,7 +86,7 @@ module Nanoc::DataSources
       parent_path = File.dirname(path)
 
       # Notify
-      Nanoc::NotificationCenter.post(:file_created, path)
+      Nanoc::Int::NotificationCenter.post(:file_created, path)
 
       # Write item
       FileUtils.mkdir_p(parent_path)

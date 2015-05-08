@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class Nanoc::RuleTest < Nanoc::TestCase
+class Nanoc::Int::RuleTest < Nanoc::TestCase
   def test_initialize
     # TODO: implement
   end
@@ -18,7 +18,7 @@ class Nanoc::RuleTest < Nanoc::TestCase
     identifier = '/anything/else/'
     expected   = ['anything', 'else']
 
-    rule = Nanoc::Rule.new(regexp, :string, Proc.new {})
+    rule = Nanoc::Int::Rule.new(regexp, :string, Proc.new {})
 
     assert_equal expected, rule.send(:matches, identifier)
   end

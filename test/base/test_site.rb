@@ -1,31 +1,31 @@
 # encoding: utf-8
 
-class Nanoc::SiteTest < Nanoc::TestCase
+class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
-    assert_raises(Nanoc::Errors::GenericTrivial) do
-      Nanoc::Site.new('.')
+    assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+      Nanoc::Int::Site.new('.')
     end
   end
 
   def test_initialize_with_dir_with_config_yaml
     File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
-    site = Nanoc::Site.new('.')
+    site = Nanoc::Int::Site.new('.')
     assert_equal 'public_html', site.config[:output_dir]
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
     File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
-    site = Nanoc::Site.new('.')
+    site = Nanoc::Int::Site.new('.')
     assert_equal 'public_html', site.config[:output_dir]
   end
 
   def test_initialize_with_config_hash
-    site = Nanoc::Site.new(foo: 'bar')
+    site = Nanoc::Int::Site.new(foo: 'bar')
     assert_equal 'bar', site.config[:foo]
   end
 
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Site.new(data_sources: [{ type: 'foo', items_root: '/bar/' }])
+    site = Nanoc::Int::Site.new(data_sources: [{ type: 'foo', items_root: '/bar/' }])
     assert_equal('foo',   site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
@@ -58,7 +58,7 @@ EOF
       end
     end
 
-    site = Nanoc::Site.new('.')
+    site = Nanoc::Int::Site.new('.')
     assert_nil site.config[:parent_config_file]
     assert site.config[:enable_output_diff]
     assert_equal 'bar', site.config[:foo]
@@ -72,8 +72,8 @@ parent_config_file: foo/foo.yaml
 EOF
     end
 
-    error = assert_raises(Nanoc::Errors::GenericTrivial) do
-      Nanoc::Site.new('.')
+    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+      Nanoc::Int::Site.new('.')
     end
     assert_equal(
       "Could not find parent configuration file 'foo/foo.yaml'",
@@ -96,8 +96,8 @@ EOF
       end
     end
 
-    error = assert_raises(Nanoc::Errors::GenericTrivial) do
-      Nanoc::Site.new('.')
+    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+      Nanoc::Int::Site.new('.')
     end
     assert_equal(
       "Cycle detected. Could not use parent configuration file '../nanoc.yaml'",
@@ -113,7 +113,7 @@ EOF
     dsl.expects(:compile).with('*')
 
     # Create site
-    site = Nanoc::Site.new({})
+    site = Nanoc::Int::Site.new({})
     site.compiler.rules_collection.stubs(:dsl).returns(dsl)
 
     # Create rules file
@@ -138,7 +138,7 @@ EOF
       File.open('lib/some_data_source.rb', 'w') do |io|
         io.write "class FooDataSource < Nanoc::DataSource\n"
         io.write "  identifier :site_test_foo\n"
-        io.write "  def items ; [ Nanoc::Item.new('content', {}, '/foo/') ] ; end\n"
+        io.write "  def items ; [ Nanoc::Int::Item.new('content', {}, '/foo/') ] ; end\n"
         io.write "end\n"
       end
 
@@ -149,7 +149,7 @@ EOF
       end
 
       # Create site
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       site.load
 
       # Check
@@ -166,7 +166,7 @@ EOF
       Nanoc::CLI.run %w( create_item /parent/bar/ )
       Nanoc::CLI.run %w( create_item /parent/bar/qux/ )
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
 
       root   = site.items.find { |i| i.identifier == '/' }
       style  = site.items.find { |i| i.identifier == '/stylesheet/' }
@@ -193,8 +193,8 @@ EOF
       FileUtils.mkdir_p('content/sam')
       File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
-      assert_raises(Nanoc::Errors::DuplicateIdentifier) do
-        site = Nanoc::Site.new('.')
+      assert_raises(Nanoc::Int::Errors::DuplicateIdentifier) do
+        site = Nanoc::Int::Site.new('.')
         site.load
       end
     end
@@ -206,64 +206,64 @@ EOF
       FileUtils.mkdir_p('layouts/sam')
       File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
-      assert_raises(Nanoc::Errors::DuplicateIdentifier) do
-        site = Nanoc::Site.new('.')
+      assert_raises(Nanoc::Int::Errors::DuplicateIdentifier) do
+        site = Nanoc::Int::Site.new('.')
         site.load
       end
     end
   end
 end
 
-describe 'Nanoc::Site#initialize' do
+describe 'Nanoc::Int::Site#initialize' do
   include Nanoc::TestHelpers
 
   it 'should merge default config' do
-    site = Nanoc::Site.new(foo: 'bar')
+    site = Nanoc::Int::Site.new(foo: 'bar')
     site.config[:foo].must_equal 'bar'
     site.config[:output_dir].must_equal 'output'
   end
 
   it 'should not raise under normal circumstances' do
-    Nanoc::Site.new({})
+    Nanoc::Int::Site.new({})
   end
 
   it 'should not raise for non-existant output directory' do
-    Nanoc::Site.new(output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf')
+    Nanoc::Int::Site.new(output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf')
   end
 
   it 'should not raise for unknown data sources' do
     proc do
-      Nanoc::Site.new(data_source: 'fklsdhailfdjalghlkasdflhagjskajdf')
+      Nanoc::Int::Site.new(data_source: 'fklsdhailfdjalghlkasdflhagjskajdf')
     end
   end
 end
 
-describe 'Nanoc::Site#compiler' do
+describe 'Nanoc::Int::Site#compiler' do
   include Nanoc::TestHelpers
 
   it 'should not raise under normal circumstances' do
-    site = Nanoc::Site.new({})
+    site = Nanoc::Int::Site.new({})
     site.compiler
   end
 end
 
-describe 'Nanoc::Site#data_sources' do
+describe 'Nanoc::Int::Site#data_sources' do
   include Nanoc::TestHelpers
 
   it 'should not raise for known data sources' do
-    site = Nanoc::Site.new({})
+    site = Nanoc::Int::Site.new({})
     site.data_sources
   end
 
   it 'should raise for unknown data sources' do
     proc do
-      site = Nanoc::Site.new(
+      site = Nanoc::Int::Site.new(
         data_sources: [
           { type: 'fklsdhailfdjalghlkasdflhagjskajdf' }
         ]
       )
       site.data_sources
-    end.must_raise Nanoc::Errors::UnknownDataSource
+    end.must_raise Nanoc::Int::Errors::UnknownDataSource
   end
 
   it 'should also use the toplevel config for data sources' do
@@ -277,7 +277,7 @@ describe 'Nanoc::Site#data_sources' do
         io.write "      bbb: two\n"
       end
 
-      site = Nanoc::Site.new('.')
+      site = Nanoc::Int::Site.new('.')
       data_sources = site.data_sources
 
       assert data_sources.first.config[:aaa] = 'one'

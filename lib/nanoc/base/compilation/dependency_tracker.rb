@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Responsible for remembering dependencies between items and layouts. It is
   # used to speed up compilation by only letting an item be recompiled when it
   # is outdated or any of its dependencies (or dependencies’ dependencies,
@@ -10,32 +10,32 @@ module Nanoc
   # based on an item’s or a layout’s content. When one object uses an
   # attribute of another object, then this is also treated as a dependency.
   # While dependencies based on an item’s or layout’s content (handled in
-  # {Nanoc::Compiler}) cannot be mutually recursive, the more general
-  # dependencies in Nanoc::DependencyTracker can (e.g. item A can use an
+  # {Nanoc::Int::Compiler}) cannot be mutually recursive, the more general
+  # dependencies in Nanoc::Int::DependencyTracker can (e.g. item A can use an
   # attribute of item B and vice versa without problems).
   #
   # The dependency tracker remembers the dependency information between runs.
   # Dependency information is stored in the `tmp/dependencies` file.
   #
   # @api private
-  class DependencyTracker < ::Nanoc::Store
-    # @return [Array<Nanoc::Item, Nanoc::Layout>] The list of items and
+  class DependencyTracker < ::Nanoc::Int::Store
+    # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] The list of items and
     #   layouts that are being tracked by the dependency tracker
     attr_reader :objects
 
-    # @return [Nanoc::Compiler] The compiler that corresponds to this
+    # @return [Nanoc::Int::Compiler] The compiler that corresponds to this
     #   dependency tracker
     attr_accessor :compiler
 
     # Creates a new dependency tracker for the given items and layouts.
     #
-    # @param [Array<Nanoc::Item, Nanoc::Layout>] objects The list of items
+    # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects The list of items
     #   and layouts whose dependencies should be managed
     def initialize(objects)
       super('tmp/dependencies', 4)
 
       @objects = objects
-      @graph   = Nanoc::DirectedGraph.new([nil] + @objects)
+      @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
       @stack   = []
     end
 
@@ -50,16 +50,16 @@ module Nanoc
       @stack = []
 
       # Register start of visits
-      Nanoc::NotificationCenter.on(:visit_started, self) do |obj|
+      Nanoc::Int::NotificationCenter.on(:visit_started, self) do |obj|
         unless @stack.empty?
-          Nanoc::NotificationCenter.post(:dependency_created, @stack.last, obj)
+          Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
           record_dependency(@stack.last, obj)
         end
         @stack.push(obj)
       end
 
       # Register end of visits
-      Nanoc::NotificationCenter.on(:visit_ended, self) do |_obj|
+      Nanoc::Int::NotificationCenter.on(:visit_ended, self) do |_obj|
         @stack.pop
       end
     end
@@ -74,8 +74,8 @@ module Nanoc
       end
 
       # Unregister
-      Nanoc::NotificationCenter.remove(:visit_started, self)
-      Nanoc::NotificationCenter.remove(:visit_ended,   self)
+      Nanoc::Int::NotificationCenter.remove(:visit_started, self)
+      Nanoc::Int::NotificationCenter.remove(:visit_ended,   self)
     end
 
     # @return The topmost item on the stack, i.e. the one currently being
@@ -95,10 +95,10 @@ module Nanoc
     # The direct predecessors can include nil, which indicates an item that is
     # no longer present in the site.
     #
-    # @param [Nanoc::Item, Nanoc::Layout] object The object for
+    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] object The object for
     #   which to fetch the direct predecessors
     #
-    # @return [Array<Nanoc::Item, Nanoc::Layout, nil>] The direct
+    # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout, nil>] The direct
     # predecessors of
     #   the given object
     def objects_causing_outdatedness_of(object)
@@ -113,10 +113,10 @@ module Nanoc
     # depends on C, then the direct inverse dependencies of C do not include
     # A).
     #
-    # @param [Nanoc::Item, Nanoc::Layout] object The object for which to
+    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] object The object for which to
     #   fetch the direct successors
     #
-    # @return [Array<Nanoc::Item, Nanoc::Layout>] The direct successors of
+    # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] The direct successors of
     #   the given object
     def objects_outdated_due_to(object)
       @graph.direct_successors_of(object).compact
@@ -125,10 +125,10 @@ module Nanoc
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #
-    # @param [Nanoc::Item, Nanoc::Layout] src The source of the dependency,
+    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] src The source of the dependency,
     #   i.e. the object that will become outdated if dst is outdated
     #
-    # @param [Nanoc::Item, Nanoc::Layout] dst The destination of the
+    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] dst The destination of the
     #   dependency, i.e. the object that will cause the source to become
     #   outdated if the destination is outdated
     #
@@ -143,7 +143,7 @@ module Nanoc
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
     #
-    # @param [Nanoc::Item, Nanoc::Layout] object The object for which to
+    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] object The object for which to
     #   forget all dependencies
     #
     # @return [void]
@@ -151,9 +151,9 @@ module Nanoc
       @graph.delete_edges_to(object)
     end
 
-    # @see Nanoc::Store#unload
+    # @see Nanoc::Int::Store#unload
     def unload
-      @graph = Nanoc::DirectedGraph.new([nil] + @objects)
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
     protected
@@ -167,7 +167,7 @@ module Nanoc
 
     def data=(new_data)
       # Create new graph
-      @graph = Nanoc::DirectedGraph.new([nil] + @objects)
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
 
       # Load vertices
       previous_objects = new_data[:vertices].map do |reference|
@@ -186,7 +186,7 @@ module Nanoc
       new_objects = (@objects - previous_objects)
       new_objects.each do |new_obj|
         @objects.each do |obj|
-          next unless obj.is_a?(Nanoc::Item)
+          next unless obj.is_a?(Nanoc::Int::Item)
           @graph.add_edge(new_obj, obj)
         end
       end

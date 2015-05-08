@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Contains methods that will be executed by the site’s `Rules` file.
   class CompilerDSL
     # The current rules filename.
@@ -14,7 +14,7 @@ module Nanoc
     #
     # @api private
     #
-    # @param [Nanoc::RulesCollection] rules_collection The collection of
+    # @param [Nanoc::Int::RulesCollection] rules_collection The collection of
     #   rules to modify when loading this DSL
     #
     # @param [Hash] config The site configuration
@@ -77,7 +77,7 @@ module Nanoc
       rep_name = params[:rep] || :default
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block)
+      rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
@@ -122,7 +122,7 @@ module Nanoc
       snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Rule.new(identifier_to_regex(identifier), rep_name, block, snapshot_name: snapshot_name)
+      rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, block, snapshot_name: snapshot_name)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -188,7 +188,7 @@ module Nanoc
 
       # Create compilation rule
       compilation_block = proc {}
-      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
+      compilation_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
@@ -199,7 +199,7 @@ module Nanoc
         # data source.
         item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
       end
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, routing_block, snapshot_name: :last)
+      routing_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -227,10 +227,10 @@ module Nanoc
 
       rep_name = params[:rep] || :default
 
-      compilation_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {})
+      compilation_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Rule.new(identifier_to_regex(identifier), rep_name, proc {}, snapshot_name: :last)
+      routing_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, proc {}, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -248,7 +248,7 @@ module Nanoc
     #     include_rules 'rules/content'
     def include_rules(name)
       filename = ["#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
-      raise Nanoc::Errors::NoRulesFileFound.new if filename.nil?
+      raise Nanoc::Int::Errors::NoRulesFileFound.new if filename.nil?
 
       @rules_collection.parse(filename)
     end

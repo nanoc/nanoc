@@ -1,12 +1,12 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Stores checksums for objects in order to be able to detect whether a file
   # has changed since the last site compilation.
   #
   # @api private
-  class ChecksumStore < ::Nanoc::Store
-    # @option params [Nanoc::Site] site The site where this checksum store
+  class ChecksumStore < ::Nanoc::Int::Store
+    # @option params [Nanoc::Int::Site] site The site where this checksum store
     #   belongs to
     def initialize(params = {})
       super('tmp/checksums', 1)
@@ -35,7 +35,7 @@ module Nanoc
       @checksums[obj.reference] = checksum
     end
 
-    # @see Nanoc::Store#unload
+    # @see Nanoc::Int::Store#unload
     def unload
       @checksums = {}
     end

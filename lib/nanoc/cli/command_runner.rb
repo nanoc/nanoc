@@ -15,15 +15,15 @@ module Nanoc::CLI
       end
     end
 
-    # Gets the site ({Nanoc::Site} instance) in the current directory and
+    # Gets the site ({Nanoc::Int::Site} instance) in the current directory and
     # loads its data.
     #
-    # @return [Nanoc::Site] The site in the current working directory
+    # @return [Nanoc::Int::Site] The site in the current working directory
     def site
       # Load site if possible
       @site ||= nil
       if self.is_in_site_dir? && @site.nil?
-        @site = Nanoc::Site.new('.')
+        @site = Nanoc::Int::Site.new('.')
       end
 
       @site
@@ -32,18 +32,18 @@ module Nanoc::CLI
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def in_site_dir?
-      Nanoc::Site.cwd_is_nanoc_site?
+      Nanoc::Int::Site.cwd_is_nanoc_site?
     end
     alias_method :is_in_site_dir?, :in_site_dir?
 
     # Asserts that the current working directory contains a site
-    # ({Nanoc::Site} instance). If no site is present, prints an error
+    # ({Nanoc::Int::Site} instance). If no site is present, prints an error
     # message and exits.
     #
     # @return [void]
     def require_site
       if site.nil?
-        raise ::Nanoc::Errors::GenericTrivial, 'The current working directory does not seem to be a nanoc site.'
+        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a nanoc site.'
       end
     end
 
@@ -81,7 +81,7 @@ module Nanoc::CLI
       # Find VCS
       vcs_class = Nanoc::Extra::VCS.named(vcs_name.to_sym)
       if vcs_class.nil?
-        raise Nanoc::Errors::GenericTrivial, "A VCS named #{vcs_name} was not found"
+        raise Nanoc::Int::Errors::GenericTrivial, "A VCS named #{vcs_name} was not found"
       end
 
       site.data_sources.each do |data_source|

@@ -110,7 +110,7 @@ EOS
 
     # Yield site
     FileUtils.cd(site_name) do
-      yield Nanoc::Site.new('.')
+      yield Nanoc::Int::Site.new('.')
     end
   end
 

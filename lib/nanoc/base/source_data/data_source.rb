@@ -37,11 +37,11 @@ module Nanoc
     #   online data sources could contain authentication details.
     attr_reader :config
 
-    extend Nanoc::PluginRegistry::PluginMethods
+    extend Nanoc::Int::PluginRegistry::PluginMethods
 
     # Creates a new data source for the given site.
     #
-    # @param [Nanoc::Site] site The site this data source belongs to.
+    # @param [Nanoc::Int::Site] site The site this data source belongs to.
     #
     # @param [String] items_root The prefix that should be given to all items
     #   returned by the #items method (comparable to mount points for
@@ -158,7 +158,7 @@ module Nanoc
     def sync
     end
 
-    # Returns the list of items (represented by {Nanoc::Item}) in this site.
+    # Returns the list of items (represented by {Nanoc::Int::Item}) in this site.
     # The default implementation simply returns an empty array.
     #
     # Subclasses should not prepend `items_root` to the item's identifiers, as
@@ -167,12 +167,12 @@ module Nanoc
     # Subclasses may override this method, but are not required to do so; the
     # default implementation simply does nothing.
     #
-    # @return [Array<Nanoc::Item>] A list of items
+    # @return [Array<Nanoc::Int::Item>] A list of items
     def items
       []
     end
 
-    # Returns the list of layouts (represented by {Nanoc::Layout}) in this
+    # Returns the list of layouts (represented by {Nanoc::Int::Layout}) in this
     # site. The default implementation simply returns an empty array.
     #
     # Subclasses should prepend `layout_root` to the layout's identifiers,
@@ -181,15 +181,15 @@ module Nanoc
     # Subclasses may override this method, but are not required to do so; the
     # default implementation simply does nothing.
     #
-    # @return [Array<Nanoc::Layout>] A list of layouts
+    # @return [Array<Nanoc::Int::Layout>] A list of layouts
     def layouts
       []
     end
 
     # Creates a new item with the given content, attributes and identifier. No
-    # instance of {Nanoc::Item} will be created; this method creates the item
+    # instance of {Nanoc::Int::Item} will be created; this method creates the item
     # in the data source so that it can be loaded and turned into a
-    # {Nanoc::Item} instance by the {#items} method.
+    # {Nanoc::Int::Item} instance by the {#items} method.
     #
     # @abstract
     #
@@ -210,9 +210,9 @@ module Nanoc
     end
 
     # Creates a new layout with the given content, attributes and identifier.
-    # No instance of {Nanoc::Layout} will be created; this method creates the
+    # No instance of {Nanoc::Int::Layout} will be created; this method creates the
     # layout in the data source so that it can be loaded and turned into a
-    # {Nanoc::Layout} instance by the {#layouts} method.
+    # {Nanoc::Int::Layout} instance by the {#layouts} method.
     #
     # @abstract
     #

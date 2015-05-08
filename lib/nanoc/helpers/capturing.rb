@@ -44,7 +44,7 @@ module Nanoc::Helpers
       end
     end
 
-    class ::Nanoc::Site
+    class ::Nanoc::Int::Site
       # @api private
       def captures_store
         @captures_store ||= CapturesStore.new
@@ -74,7 +74,7 @@ module Nanoc::Helpers
     #   Fetches the capture with the given name from the given item and
     #   returns it.
     #
-    #   @param [Nanoc::Item] item The item for which to get the capture
+    #   @param [Nanoc::Int::Item] item The item for which to get the capture
     #
     #   @param [Symbol, String] name The name of the capture to fetch
     #
@@ -104,8 +104,8 @@ module Nanoc::Helpers
         # Create dependency
         current_item = @site.compiler.dependency_tracker.top
         if item != current_item
-          Nanoc::NotificationCenter.post(:visit_started, item)
-          Nanoc::NotificationCenter.post(:visit_ended,   item)
+          Nanoc::Int::NotificationCenter.post(:visit_started, item)
+          Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
 
           # This is an extremely ugly hack to get the compiler to recompile the
           # item from which we use content. For this, we need to manually edit
@@ -117,7 +117,7 @@ module Nanoc::Helpers
             item.reps.each do |r|
               raw_content = item.raw_content
               r.content = { raw: raw_content, last: raw_content }
-              raise Nanoc::Errors::UnmetDependency.new(r)
+              raise Nanoc::Int::Errors::UnmetDependency.new(r)
             end
           end
         end

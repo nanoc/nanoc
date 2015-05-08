@@ -25,7 +25,7 @@ module Nanoc
   #     # => 'bar'
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
-  class Filter < Context
+  class Filter < Nanoc::Int::Context
     # @api private
     TMP_BINARY_ITEMS_DIR = 'binary_items'
 
@@ -37,7 +37,7 @@ module Nanoc
     # @api private
     attr_reader :assigns
 
-    extend Nanoc::PluginRegistry::PluginMethods
+    extend Nanoc::Int::PluginRegistry::PluginMethods
 
     class << self
       # Sets the new type for the filter. The type can be `:binary` (default)
@@ -158,7 +158,7 @@ module Nanoc
     # @return [String] The output filename
     def output_filename
       @output_filename ||=
-        Nanoc::TempFilenameFactory.instance.create(TMP_BINARY_ITEMS_DIR)
+        Nanoc::Int::TempFilenameFactory.instance.create(TMP_BINARY_ITEMS_DIR)
     end
 
     # Returns the filename associated with the item that is being filtered.
@@ -181,20 +181,20 @@ module Nanoc
     # the given collection of items. In other words, require the given items
     # to be compiled first before this items is processed.
     #
-    # @param [Array<Nanoc::Item>] items The items that are depended on.
+    # @param [Array<Nanoc::Int::Item>] items The items that are depended on.
     #
     # @return [void]
     def depend_on(items)
       # Notify
       items.each do |item|
-        Nanoc::NotificationCenter.post(:visit_started, item)
-        Nanoc::NotificationCenter.post(:visit_ended,   item)
+        Nanoc::Int::NotificationCenter.post(:visit_started, item)
+        Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
       end
 
       # Raise unmet dependency error if necessary
       items.each do |item|
         rep = item.reps.find { |r| !r.compiled? }
-        raise Nanoc::Errors::UnmetDependency.new(rep) if rep
+        raise Nanoc::Int::Errors::UnmetDependency.new(rep) if rep
       end
     end
   end

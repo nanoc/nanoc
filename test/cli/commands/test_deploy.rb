@@ -137,7 +137,7 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
       File.open('output/blah.html', 'w') { |io| io.write 'moo' }
 
       capturing_stdio do
-        err = assert_raises Nanoc::Errors::GenericTrivial do
+        err = assert_raises Nanoc::Int::Errors::GenericTrivial do
           Nanoc::CLI.run %w( deploy )
         end
         assert_equal 'The site has no deployment configuration for default.', err.message

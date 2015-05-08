@@ -4,7 +4,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
   def test_filter
     if_have 'mustache' do
       # Create item
-      item = Nanoc::Item.new(
+      item = Nanoc::Int::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne' },
         '/games/max-payne/'
@@ -22,7 +22,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
   def test_filter_with_yield
     if_have 'mustache' do
       # Create item
-      item = Nanoc::Item.new(
+      item = Nanoc::Int::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne' },
         '/games/max-payne/'

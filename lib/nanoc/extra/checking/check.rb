@@ -2,7 +2,7 @@
 
 module Nanoc::Extra::Checking
   # @api private
-  class OutputDirNotFoundError < Nanoc::Errors::Generic
+  class OutputDirNotFoundError < Nanoc::Int::Errors::Generic
     def initialize(directory_path)
       super("Unable to run check against output directory at “#{directory_path}”: directory does not exist.")
     end
@@ -10,7 +10,7 @@ module Nanoc::Extra::Checking
 
   # @api private
   class Check
-    extend Nanoc::PluginRegistry::PluginMethods
+    extend Nanoc::Int::PluginRegistry::PluginMethods
 
     attr_reader :site
     attr_reader :issues

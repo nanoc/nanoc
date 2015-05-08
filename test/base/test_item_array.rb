@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc::ItemArrayTest < Nanoc::TestCase
+class Nanoc::Int::ItemArrayTest < Nanoc::TestCase
   def setup
     super
 
-    @one = Nanoc::Item.new('Item One', {}, '/one/')
-    @two = Nanoc::Item.new('Item Two', {}, '/two/')
+    @one = Nanoc::Int::Item.new('Item One', {}, '/one/')
+    @two = Nanoc::Int::Item.new('Item Two', {}, '/two/')
 
-    @items = Nanoc::ItemArray.new
+    @items = Nanoc::Int::ItemArray.new
     @items << @one
     @items << @two
   end
@@ -97,7 +97,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_regex
-    foo = Nanoc::Item.new('Item Foo', {}, '/foo/')
+    foo = Nanoc::Int::Item.new('Item Foo', {}, '/foo/')
     @items << foo
 
     assert_equal [@one], @items[/n/]
@@ -108,7 +108,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
     assert_nil @items[2]
     assert_nil @items['/foo/']
 
-    foo = Nanoc::Item.new('Item Foo', {}, '/foo/')
+    foo = Nanoc::Int::Item.new('Item Foo', {}, '/foo/')
     @items << foo
 
     assert_equal foo, @items[2]
@@ -117,10 +117,10 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
   def test_assign
     assert_raises(TypeError) do
-      @items['/blah/'] = Nanoc::Item.new('Item blah', {}, '/blah/')
+      @items['/blah/'] = Nanoc::Int::Item.new('Item blah', {}, '/blah/')
     end
 
-    new_item =  Nanoc::Item.new('New Item One', {}, '/one-new/')
+    new_item =  Nanoc::Int::Item.new('New Item One', {}, '/one-new/')
     @items[0] = new_item
 
     assert_equal new_item, @items[0]
@@ -131,7 +131,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   def test_assign_frozen
     @items.freeze
 
-    new_item = Nanoc::Item.new('New Item One', {}, '/one-new/')
+    new_item = Nanoc::Int::Item.new('New Item One', {}, '/one-new/')
 
     assert_raises_frozen_error do
       @items[0] = new_item
@@ -151,7 +151,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
   def test_collect_bang
     @items.collect! do |i|
-      Nanoc::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
+      Nanoc::Int::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
     end
 
     assert_nil @items['/one/']
@@ -169,13 +169,13 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
 
     assert_raises_frozen_error do
       @items.collect! do |i|
-        Nanoc::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
+        Nanoc::Int::Item.new("New #{i.raw_content}", {}, "/new#{i.identifier}")
       end
     end
   end
 
   def test_concat
-    new_item = Nanoc::Item.new('New item', {}, '/new/')
+    new_item = Nanoc::Int::Item.new('New item', {}, '/new/')
     @items.concat([new_item])
 
     assert_equal new_item, @items[2]
@@ -213,7 +213,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_fill_all
-    @items.fill { |i| Nanoc::Item.new("Item #{i}", {}, "/new/#{i}/") }
+    @items.fill { |i| Nanoc::Int::Item.new("Item #{i}", {}, "/new/#{i}/") }
 
     assert_nil @items['/one/']
     assert_nil @items['/two/']
@@ -225,7 +225,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_fill_range
-    @items.fill(1..-1) { |i| Nanoc::Item.new("Item #{i}", {}, "/new/#{i}/") }
+    @items.fill(1..-1) { |i| Nanoc::Int::Item.new("Item #{i}", {}, "/new/#{i}/") }
 
     assert_equal @one, @items['/one/']
     assert_nil @items['/two/']
@@ -260,7 +260,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_push
-    pushy = Nanoc::Item.new('Pushy', {}, '/pushy/')
+    pushy = Nanoc::Int::Item.new('Pushy', {}, '/pushy/')
     @items.push(pushy)
 
     assert_equal @one, @items[0]
@@ -282,8 +282,8 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_replace
-    max  = Nanoc::Item.new('Max', {}, '/max/')
-    mona = Nanoc::Item.new('Mona', {}, '/mona/')
+    max  = Nanoc::Int::Item.new('Max', {}, '/max/')
+    mona = Nanoc::Int::Item.new('Mona', {}, '/mona/')
 
     @items.replace([max, mona])
 
@@ -327,7 +327,7 @@ class Nanoc::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_unshift
-    unshifty = Nanoc::Item.new('Unshifty', {}, '/unshifty/')
+    unshifty = Nanoc::Int::Item.new('Unshifty', {}, '/unshifty/')
     @items.unshift(unshifty)
 
     assert_equal unshifty, @items[0]

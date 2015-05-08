@@ -1,25 +1,25 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Provides a context in which compilation and routing rules can be executed.
   # It provides access to the item representation that is being compiled or
   # routed.
   #
   # The following variables will be available in this rules context:
   #
-  # * `rep`     ({Nanoc::ItemRep})         - The current item rep
-  # * `item`    ({Nanoc::Item})            - The current item
-  # * `site`    ({Nanoc::Site})            - The site
+  # * `rep`     ({Nanoc::Int::ItemRep})         - The current item rep
+  # * `item`    ({Nanoc::Int::Item})            - The current item
+  # * `site`    ({Nanoc::Int::Site})            - The site
   # * `config`  ({Hash})                    - The site configuration
-  # * `items`   ({Array}<{Nanoc::Item}>)   - A list of all items
-  # * `layouts` ({Array}<{Nanoc::Layout}>) - A list of all layouts
+  # * `items`   ({Array}<{Nanoc::Int::Item}>)   - A list of all items
+  # * `layouts` ({Array}<{Nanoc::Int::Layout}>) - A list of all layouts
   #
   # @api private
-  class RuleContext < Context
-    # @option params [Nanoc::ItemRep] :rep The item representation that will
+  class RuleContext < Nanoc::Int::Context
+    # @option params [Nanoc::Int::ItemRep] :rep The item representation that will
     #   be processed in this rule context
     #
-    # @option params [Nanoc::Compiler] :compiler The compiler that is being
+    # @option params [Nanoc::Int::Compiler] :compiler The compiler that is being
     #   used to compile the site
     #
     # @raise [ArgumentError] if the `:rep` or the `:compiler` option is
@@ -43,10 +43,10 @@ module Nanoc
       })
     end
 
-    # Filters the current representation (calls {Nanoc::ItemRep#filter} with
+    # Filters the current representation (calls {Nanoc::Int::ItemRep#filter} with
     # the given arguments on the rep).
     #
-    # @see Nanoc::ItemRep#filter
+    # @see Nanoc::Int::ItemRep#filter
     #
     # @param [Symbol] filter_name The name of the filter to run the item
     #   representations' content through
@@ -59,10 +59,10 @@ module Nanoc
       rep.filter(filter_name, filter_args)
     end
 
-    # Layouts the current representation (calls {Nanoc::ItemRep#layout} with
+    # Layouts the current representation (calls {Nanoc::Int::ItemRep#layout} with
     # the given arguments on the rep).
     #
-    # @see Nanoc::ItemRep#layout
+    # @see Nanoc::Int::ItemRep#layout
     #
     # @param [String] layout_identifier The identifier of the layout the item
     #   should be laid out with
@@ -73,9 +73,9 @@ module Nanoc
     end
 
     # Creates a snapshot of the current compiled item content. Calls
-    # {Nanoc::ItemRep#snapshot} with the given arguments on the rep.
+    # {Nanoc::Int::ItemRep#snapshot} with the given arguments on the rep.
     #
-    # @see Nanoc::ItemRep#snapshot
+    # @see Nanoc::Int::ItemRep#snapshot
     #
     # @param [Symbol] snapshot_name The name of the snapshot to create
     #

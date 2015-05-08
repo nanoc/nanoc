@@ -11,7 +11,7 @@ module Nanoc::Extra
   #
   # @api private
   class VCS
-    extend Nanoc::PluginRegistry::PluginMethods
+    extend Nanoc::Int::PluginRegistry::PluginMethods
 
     # Adds the file with the given filename to the working copy.
     #

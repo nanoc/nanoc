@@ -13,13 +13,13 @@ module Nanoc::CLI::Commands
     def run
       # Check arguments
       if arguments.size != 0
-        raise Nanoc::Errors::GenericTrivial, "usage: #{command.usage}"
+        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 
       # Get list of plugins (before and after)
-      plugins_before = Nanoc::PluginRegistry.instance.all
+      plugins_before = Nanoc::Int::PluginRegistry.instance.all
       site.code_snippets if site
-      plugins_after  = Nanoc::PluginRegistry.instance.all
+      plugins_after  = Nanoc::Int::PluginRegistry.instance.all
 
       # Divide list of plugins into builtin and custom
       plugins_builtin = plugins_before

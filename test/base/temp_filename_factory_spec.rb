@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-describe Nanoc::TempFilenameFactory do
+describe Nanoc::Int::TempFilenameFactory do
   subject do
-    Nanoc::TempFilenameFactory.new
+    Nanoc::Int::TempFilenameFactory.new
   end
 
   let(:prefix) { 'foo' }
@@ -56,7 +56,7 @@ describe Nanoc::TempFilenameFactory do
 
   describe 'other instance' do
     let(:other_instance) do
-      Nanoc::TempFilenameFactory.new
+      Nanoc::Int::TempFilenameFactory.new
     end
 
     it 'should create unique paths across instances' do

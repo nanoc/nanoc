@@ -29,17 +29,17 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_articles
     # Create items
     @items = [
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'blah',
         { kind: 'item' },
         '/0/'
       ),
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'blah blah',
         { kind: 'article' },
         '/1/'
       ),
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'blah blah blah',
         { kind: 'article' },
         '/2/'
@@ -58,17 +58,17 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   def test_sorted_articles
     # Create items
     @items = [
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'blah',
         { kind: 'item' },
         '/0/'
       ),
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'blah',
         { kind: 'article', created_at: (Date.today - 1).to_s },
         '/1/'
       ),
-      Nanoc::Item.new(
+      Nanoc::Int::Item.new(
         'blah',
         { kind: 'article', created_at: (Time.now - 500).to_s },
         '/2/'
@@ -171,7 +171,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -197,7 +197,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -223,7 +223,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -249,7 +249,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -323,7 +323,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_uri).returns(nil)
 
       # Check
-      error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -351,7 +351,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
       # Check
-      error = assert_raises(Nanoc::Errors::GenericTrivial) do
+      error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
         atom_feed
       end
       assert_equal(
@@ -647,11 +647,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_without_custom_path_in_feed
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', {}, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', {}, '/foo/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
     item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check
@@ -663,12 +663,12 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_with_custom_path_in_feed
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new(
+    item = Nanoc::Int::Item.new(
       'content', { custom_path_in_feed: '/meow/woof/' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
 
     # Check
     assert_equal('http://example.com/meow/woof/', url_for(item))
@@ -679,12 +679,12 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_with_custom_url_in_feed
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new(
+    item = Nanoc::Int::Item.new(
       'content', { custom_url_in_feed: 'http://example.org/x' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
 
     # Check
     assert_equal('http://example.org/x', url_for(item))
@@ -695,21 +695,21 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_url_for_without_base_url
     # Create site
-    @site = Nanoc::Site.new({})
+    @site = Nanoc::Int::Site.new({})
 
     # Check
-    assert_raises(Nanoc::Errors::GenericTrivial) do
+    assert_raises(Nanoc::Int::Errors::GenericTrivial) do
       url_for(nil)
     end
   end
 
   def test_url_for_without_path
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', {}, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', {}, '/foo/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
     item.reps[0].paths[:last] = nil
 
     # Check
@@ -718,11 +718,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_feed_url_without_custom_feed_url
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    @item = Nanoc::Item.new('content', {}, '/foo/')
-    @item.reps << Nanoc::ItemRep.new(@item, :default)
+    @item = Nanoc::Int::Item.new('content', {}, '/foo/')
+    @item.reps << Nanoc::Int::ItemRep.new(@item, :default)
     @item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check
@@ -734,11 +734,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_feed_url_with_custom_feed_url
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create feed item
-    @item = Nanoc::Item.new('content', { feed_url: 'http://example.com/feed/' }, '/foo/')
-    @item.reps << Nanoc::ItemRep.new(@item, :default)
+    @item = Nanoc::Int::Item.new('content', { feed_url: 'http://example.com/feed/' }, '/foo/')
+    @item.reps << Nanoc::Int::ItemRep.new(@item, :default)
     @item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check
@@ -750,21 +750,21 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_feed_url_without_base_url
     # Create site
-    @site = Nanoc::Site.new({})
+    @site = Nanoc::Int::Site.new({})
 
     # Check
-    assert_raises(Nanoc::Errors::GenericTrivial) do
+    assert_raises(Nanoc::Int::Errors::GenericTrivial) do
       feed_url
     end
   end
 
   def test_atom_tag_for_with_path
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { created_at: '2008-05-19' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', { created_at: '2008-05-19' }, '/foo/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
     item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check
@@ -773,11 +773,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_without_path
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { created_at: '2008-05-19' }, '/baz/qux/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', { created_at: '2008-05-19' }, '/baz/qux/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
 
     # Check
     assert_equal('tag:example.com,2008-05-19:/baz/qux/', atom_tag_for(item))
@@ -785,11 +785,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_base_url_in_dir
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com/somedir' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com/somedir' })
 
     # Create article
-    item = Nanoc::Item.new('content', { created_at: '2008-05-19' }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', { created_at: '2008-05-19' }, '/foo/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
     item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check
@@ -798,11 +798,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_time
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { created_at: Time.parse('2008-05-19') }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', { created_at: Time.parse('2008-05-19') }, '/foo/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
     item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check
@@ -811,11 +811,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
   def test_atom_tag_for_with_date
     # Create site
-    @site = Nanoc::Site.new({ base_url: 'http://example.com' })
+    @site = Nanoc::Int::Site.new({ base_url: 'http://example.com' })
 
     # Create article
-    item = Nanoc::Item.new('content', { created_at: Date.parse('2008-05-19') }, '/foo/')
-    item.reps << Nanoc::ItemRep.new(item, :default)
+    item = Nanoc::Int::Item.new('content', { created_at: Date.parse('2008-05-19') }, '/foo/')
+    item.reps << Nanoc::Int::ItemRep.new(item, :default)
     item.reps[0].paths[:last] = '/foo/bar/'
 
     # Check

@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Module that contains all outdatedness reasons.
   #
   # @api private

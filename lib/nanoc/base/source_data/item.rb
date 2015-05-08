@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-module Nanoc
+module Nanoc::Int
   # Represents a compileable item in a site. It has content and attributes, as
   # well as an identifier (which starts and ends with a slash). It can also
   # store the modification time to speed up compilation.
   #
   # @api private
   class Item
-    extend Nanoc::Memoization
+    extend Nanoc::Int::Memoization
 
     # @return [Hash] This item's attributes
     attr_accessor :attributes
@@ -25,7 +25,7 @@ module Nanoc
     # @return [String] This item's identifier
     attr_accessor :identifier
 
-    # @return [Array<Nanoc::ItemRep>] This item’s list of item reps
+    # @return [Array<Nanoc::Int::ItemRep>] This item’s list of item reps
     attr_reader :reps
 
     # @return [String] This item's raw, uncompiled content of this item (only
@@ -36,14 +36,14 @@ module Nanoc
     #   item’s content
     attr_reader :raw_filename
 
-    # @return [Nanoc::Site] The site this item belongs to
+    # @return [Nanoc::Int::Site] The site this item belongs to
     attr_accessor :site
 
-    # @return [Nanoc::Item, nil] The parent item of this item. This can be
+    # @return [Nanoc::Int::Item, nil] The parent item of this item. This can be
     #   nil even for non-root items.
     attr_accessor :parent
 
-    # @return [Array<Nanoc::Item>] The child items of this item
+    # @return [Array<Nanoc::Int::Item>] The child items of this item
     attr_accessor :children
 
     # Creates a new item with the given content or filename, attributes and
@@ -95,7 +95,7 @@ module Nanoc
     #
     # @param [Symbol] rep_name The name of the representation to return
     #
-    # @return [Nanoc::ItemRep] The representation with the given name
+    # @return [Nanoc::Int::ItemRep] The representation with the given name
     def rep_named(rep_name)
       @reps.find { |r| r.name == rep_name }
     end
@@ -123,7 +123,7 @@ module Nanoc
       rep_name = params[:rep] || :default
       rep = reps.find { |r| r.name == rep_name }
       if rep.nil?
-        raise Nanoc::Errors::Generic,
+        raise Nanoc::Int::Errors::Generic,
           "No rep named #{rep_name.inspect} was found."
       end
 
@@ -146,7 +146,7 @@ module Nanoc
       # Get rep
       rep = reps.find { |r| r.name == rep_name }
       if rep.nil?
-        raise Nanoc::Errors::Generic,
+        raise Nanoc::Int::Errors::Generic,
           "No rep named #{rep_name.inspect} was found."
       end
 
@@ -160,8 +160,8 @@ module Nanoc
     #
     # @return [Object] The value of the requested attribute
     def [](key)
-      Nanoc::NotificationCenter.post(:visit_started, self)
-      Nanoc::NotificationCenter.post(:visit_ended,   self)
+      Nanoc::Int::NotificationCenter.post(:visit_started, self)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   self)
 
       @attributes[key]
     end
@@ -217,7 +217,7 @@ module Nanoc
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
     def checksum
-      Nanoc::Checksummer.calc(self)
+      Nanoc::Int::Checksummer.calc(self)
     end
     memoize :checksum
 
