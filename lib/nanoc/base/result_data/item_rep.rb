@@ -5,6 +5,8 @@ module Nanoc
   # have multiple representations. A representation has its own output file.
   # A single item can therefore have multiple output files, each run through
   # a different set of filters with a different layout.
+  #
+  # @api private
   class ItemRep
     # Contains all private methods. Mixed into {Nanoc::ItemRep}.
     #

@@ -23,6 +23,15 @@ module Nanoc
   autoload 'Layout',               'nanoc/base/source_data/layout'
   autoload 'Site',                 'nanoc/base/source_data/site'
 
+  # Load view classes
+  autoload 'ConfigView',           'nanoc/base/views/config'
+  autoload 'ItemView',             'nanoc/base/views/item'
+  autoload 'ItemRepView',          'nanoc/base/views/item_rep'
+  autoload 'ItemCollectionView',   'nanoc/base/views/item_collection'
+  autoload 'LayoutView',           'nanoc/base/views/layout'
+  autoload 'LayoutCollectionView', 'nanoc/base/views/layout_collection'
+  autoload 'SiteView',             'nanoc/base/views/site'
+
   # Load result data classes
   autoload 'ItemRep',              'nanoc/base/result_data/item_rep'
 

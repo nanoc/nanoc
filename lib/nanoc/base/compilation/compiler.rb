@@ -268,13 +268,13 @@ module Nanoc
       end
 
       content_or_filename_assigns.merge({
-        item: rep.item,
-        rep: rep,
-        item_rep: rep,
-        items: site.items,
-        layouts: site.layouts,
-        config: site.config,
-        site: site
+        item: Nanoc::ItemView.new(rep.item),
+        rep: Nanoc::ItemRepView.new(rep),
+        item_rep: Nanoc::ItemRepView.new(rep),
+        items: Nanoc::ItemCollectionView.new(site.items),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        config: Nanoc::ConfigView.new(site.config),
+        site: Nanoc::SiteView.new(site),
       })
     end
 
