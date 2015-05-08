@@ -7,8 +7,6 @@ description "
 Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` command-line option.
 "
 
-required :d, :datasource, 'specify the data source for the new site'
-
 module Nanoc::CLI::Commands
   class CreateSite < ::Nanoc::CLI::CommandRunner
     class << self
@@ -317,80 +315,45 @@ EOS
       # Build entire site
       FileUtils.mkdir_p(path)
       FileUtils.cd(File.join(path)) do
-        site_create_minimal(data_source)
-        site_setup
-        site_populate
+        FileUtils.mkdir_p('content')
+        FileUtils.mkdir_p('layouts')
+        FileUtils.mkdir_p('lib')
+        FileUtils.mkdir_p('output')
+
+        # Config
+        File.open('nanoc.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
+        Nanoc::Int::NotificationCenter.post(:file_created, 'nanoc.yaml')
+
+        # Rules
+        File.open('Rules', 'w') do |io|
+          io.write DEFAULT_RULES
+        end
+        Nanoc::Int::NotificationCenter.post(:file_created, 'Rules')
+
+        # Home page
+        File.open('content/index.html', 'w') do |io|
+          io << '---' << "\n"
+          io << 'title: Home' << "\n"
+          io << '---' << "\n"
+          io << "\n"
+          io << DEFAULT_ITEM
+        end
+        Nanoc::Int::NotificationCenter.post(:file_created, 'content/index.html')
+
+        # Style sheet
+        File.open('content/stylesheet.css', 'w') do |io|
+          io << DEFAULT_STYLESHEET
+        end
+        Nanoc::Int::NotificationCenter.post(:file_created, 'content/stylesheet.css')
+
+        # Layout
+        File.open('layouts/default.html', 'w') do |io|
+          io << DEFAULT_LAYOUT
+        end
+        Nanoc::Int::NotificationCenter.post(:file_created, 'layouts/default.html')
       end
 
       puts "Created a blank nanoc site at '#{path}'. Enjoy!"
-    end
-
-    protected
-
-    # Creates a configuration file and a output directory for this site, as
-    # well as a rakefile that loads the standard nanoc tasks.
-    def site_create_minimal(_data_source)
-      # Create output
-      FileUtils.mkdir_p('output')
-
-      # Create config
-      File.open('nanoc.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
-      Nanoc::Int::NotificationCenter.post(:file_created, 'nanoc.yaml')
-
-      # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write DEFAULT_RULES
-      end
-      Nanoc::Int::NotificationCenter.post(:file_created, 'Rules')
-    end
-
-    # Sets up the site's data source, i.e. creates the bare essentials for
-    # this data source to work.
-    def site_setup
-      # Get site
-      site = Nanoc::Int::Site.new('.')
-
-      # Set up data sources
-      site.data_sources.each do |data_source|
-        data_source.loading { data_source.setup }
-      end
-    end
-
-    # Populates the site with some initial data, such as a root item, a
-    # default layout, and so on.
-    def site_populate
-      # Get site
-      site = Nanoc::Int::Site.new('.')
-      data_source = site.data_sources[0]
-
-      # Create home page
-      data_source.create_item(
-        DEFAULT_ITEM,
-        { title: 'Home' },
-        '/'
-      )
-
-      # Create stylesheet
-      data_source.create_item(
-        DEFAULT_STYLESHEET,
-        {},
-        '/stylesheet/',
-        extension: '.css'
-      )
-
-      # Create layout
-      data_source.create_layout(
-        DEFAULT_LAYOUT,
-        {},
-        '/default/'
-      )
-
-      # Create code
-      FileUtils.mkdir_p('lib')
-      File.open('lib/default.rb', 'w') do |io|
-        io.write "\# All files in the 'lib' directory will be loaded\n"
-        io.write "\# before nanoc starts compiling.\n"
-      end
     end
   end
 end

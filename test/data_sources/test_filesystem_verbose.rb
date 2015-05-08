@@ -216,51 +216,6 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
     assert_equal 'woof',      layouts[1][:dog]
   end
 
-  def test_create_item_at_root
-    # Create item
-    data_source = new_data_source
-    data_source.create_item('content here', { foo: 'bar' }, '/')
-
-    # Check file existance
-    assert File.directory?('content')
-    assert File.file?('content/content.html')
-    assert File.file?('content/content.yaml')
-
-    # Check file content
-    assert_equal 'content here', File.read('content/content.html')
-    assert_match 'foo: bar',     File.read('content/content.yaml')
-  end
-
-  def test_create_item_not_at_root
-    # Create item
-    data_source = new_data_source
-    data_source.create_item('content here', { foo: 'bar' }, '/moo/')
-
-    # Check file existance
-    assert File.directory?('content/moo')
-    assert File.file?('content/moo/moo.html')
-    assert File.file?('content/moo/moo.yaml')
-
-    # Check file content
-    assert_equal 'content here', File.read('content/moo/moo.html')
-    assert_match 'foo: bar',     File.read('content/moo/moo.yaml')
-  end
-
-  def test_create_layout
-    # Create layout
-    data_source = new_data_source
-    data_source.create_layout('content here', { foo: 'bar' }, '/moo/')
-
-    # Check file existance
-    assert File.directory?('layouts/moo')
-    assert File.file?('layouts/moo/moo.html')
-    assert File.file?('layouts/moo/moo.yaml')
-
-    # Check file content
-    assert_equal 'content here', File.read('layouts/moo/moo.html')
-    assert_match 'foo: bar',     File.read('layouts/moo/moo.yaml')
-  end
-
   def test_load_binary_objects
     # Create data source
     data_source = new_data_source

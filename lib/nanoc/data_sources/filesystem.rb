@@ -31,15 +31,6 @@ module Nanoc::DataSources
       config.fetch(:layouts_dir, 'layouts')
     end
 
-    # See {Nanoc::DataSource#setup}.
-    def setup
-      # Create directories
-      [content_dir_name, layouts_dir_name].each do |dir|
-        FileUtils.mkdir_p(dir)
-        vcs.add(dir)
-      end
-    end
-
     # See {Nanoc::DataSource#items}.
     def items
       load_objects(content_dir_name, 'item', Nanoc::Int::Item)
@@ -48,16 +39,6 @@ module Nanoc::DataSources
     # See {Nanoc::DataSource#layouts}.
     def layouts
       load_objects(layouts_dir_name, 'layout', Nanoc::Int::Layout)
-    end
-
-    # See {Nanoc::DataSource#create_item}.
-    def create_item(content, attributes, identifier, params = {})
-      create_object(content_dir_name, content, attributes, identifier, params)
-    end
-
-    # See {Nanoc::DataSource#create_layout}.
-    def create_layout(content, attributes, identifier, params = {})
-      create_object(layouts_dir_name, content, attributes, identifier, params)
     end
 
     protected

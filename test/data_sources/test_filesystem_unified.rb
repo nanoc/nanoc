@@ -513,7 +513,8 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source = new_data_source
 
     # Create item
-    data_source.create_item('Hëllö', {}, '/foo/')
+    FileUtils.mkdir_p('content')
+    File.open('content/foo.md', 'w') { |io| io << 'Hëllö' }
 
     # Parse
     begin
@@ -545,7 +546,8 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       original_default_external_encoding = Encoding.default_external
       Encoding.default_external = 'ISO-8859-1'
 
-      data_source.create_item('Hëllö', {}, '/foo/')
+      FileUtils.mkdir_p('content')
+      File.open('content/foo.md', 'w') { |io| io << 'Hëllö' }
     ensure
       Encoding.default_external = original_default_external_encoding
     end
