@@ -40,6 +40,7 @@ gem 'rdoc'
 gem 'redcarpet', platforms: [:ruby, :mswin]
 gem 'RedCloth'
 gem 'rouge'
+gem 'rspec'
 gem 'rubocop'
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'

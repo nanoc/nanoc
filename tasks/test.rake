@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'rspec/core/rake_task'
+
 def run_tests(dir_glob)
   ENV['ARGS'] ||= ''
   ENV['QUIET'] ||= 'true'
@@ -32,5 +34,9 @@ namespace :test do
   end
 end
 
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = '-r ./spec/spec_helper.rb --color'
+end
+
 desc 'Alias for test:all + rubocop'
-task test: [:'test:all', :rubocop]
+task test: [:spec, :'test:all', :rubocop]
