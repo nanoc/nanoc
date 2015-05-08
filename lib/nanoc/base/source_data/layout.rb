@@ -14,8 +14,7 @@ module Nanoc::Int
     # @return [Hash] This layout's attributes
     attr_reader :attributes
 
-    # @return [String] This layout's identifier, starting and ending with a
-    #   slash
+    # @return [Nanoc::Identifier] This layout's identifier
     attr_accessor :identifier
 
     # Creates a new layout.
@@ -30,7 +29,7 @@ module Nanoc::Int
     def initialize(raw_content, attributes, identifier, params = {})
       @raw_content  = raw_content
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.cleaned_identifier.freeze
+      @identifier   = Nanoc::Identifier.new(identifier)
     end
 
     # Requests the attribute with the given key.

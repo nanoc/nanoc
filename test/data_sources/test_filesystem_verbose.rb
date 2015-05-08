@@ -81,11 +81,11 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
 
     # Check
     assert_equal 2, items.size
-    assert_equal '/foo/',                        items[0].identifier
+    assert_equal '/foo/',                        items[0].identifier.to_s
     assert_equal 'Foo',                          items[0][:title]
     assert_equal 'content/foo/foo.css',          items[0][:content_filename]
     assert_equal 'content/foo/foo.yaml',         items[0][:meta_filename]
-    assert_equal '/foo.bar/',                    items[1].identifier
+    assert_equal '/foo.bar/',                    items[1].identifier.to_s
     assert_equal 'Foo Bar',                      items[1][:title]
     assert_equal 'content/foo.bar/foo.bar.css',  items[1][:content_filename]
     assert_equal 'content/foo.bar/foo.bar.yaml', items[1][:meta_filename]
@@ -178,9 +178,9 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
 
     # Check
     assert_equal 2, layouts.size
-    assert_equal '/bar/', layouts[0].identifier
+    assert_equal '/bar/', layouts[0].identifier.to_s
     assert_equal 'meow',  layouts[0][:cat]
-    assert_equal '/foo/', layouts[1].identifier
+    assert_equal '/foo/', layouts[1].identifier.to_s
     assert_equal 'woof',  layouts[1][:dog]
   end
 
@@ -210,9 +210,9 @@ class Nanoc::DataSources::FilesystemVerboseTest < Nanoc::TestCase
 
     # Check
     assert_equal 2, layouts.size
-    assert_equal '/bar.xyz/', layouts[0].identifier
+    assert_equal '/bar.xyz/', layouts[0].identifier.to_s
     assert_equal 'meow',      layouts[0][:cat]
-    assert_equal '/foo/',     layouts[1].identifier
+    assert_equal '/foo/',     layouts[1].identifier.to_s
     assert_equal 'woof',      layouts[1][:dog]
   end
 

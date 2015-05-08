@@ -11,15 +11,17 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
   def test_initialize_with_unclean_identifier
     item = Nanoc::Int::Item.new('foo', {}, '/foo')
 
-    assert_equal '/foo/', item.identifier
+    assert_equal '/foo/', item.identifier.to_s
   end
 
-  def test_frozen_identifier
-    item = Nanoc::Int::Item.new('foo', {}, '/foo')
+  def test_reference
+    item = Nanoc::Int::Item.new(
+      'content',
+      { one: 'one in item' },
+      '/path/'
+    )
 
-    assert_raises_frozen_error do
-      item.identifier.chop!
-    end
+    assert_equal([:item, '/path/'], item.reference)
   end
 
   def test_lookup
@@ -159,7 +161,7 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
 
     item = Marshal.load(Marshal.dump(item))
 
-    assert_equal '/foo/', item.identifier
+    assert_equal Nanoc::Identifier.new('/foo/'), item.identifier
     assert_equal 'foobar', item.raw_content
     assert_equal({ a: { b: 123 } }, item.attributes)
   end

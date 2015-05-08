@@ -12,17 +12,7 @@ module Nanoc::Int
     # @return [Hash] This item's attributes
     attr_accessor :attributes
 
-    # A string that uniquely identifies an item in a site.
-    #
-    # Identifiers start and end with a slash. They are comparable to paths on
-    # the filesystem, with the difference that file system paths usually do
-    # not have a trailing slash. The item hierarchy (parent and children of
-    # items) is determined by the item identifier.
-    #
-    # The root page (the home page) has the identifier “/”, which means
-    # that it is the ancestor of all other items.
-    #
-    # @return [String] This item's identifier
+    # @return [Nanoc::Identifier] This item's identifier
     attr_accessor :identifier
 
     # @return [Array<Nanoc::Int::ItemRep>] This item’s list of item reps
@@ -80,7 +70,7 @@ module Nanoc::Int
 
       # Get rest of params
       @attributes   = attributes.symbolize_keys_recursively
-      @identifier   = identifier.cleaned_identifier.freeze
+      @identifier   = Nanoc::Identifier.new(identifier)
 
       # Set mtime
       @attributes.merge!(mtime: params[:mtime]) if params[:mtime]
@@ -196,7 +186,7 @@ module Nanoc::Int
     #
     # @return [Object] An unique reference to this object
     def reference
-      [type, identifier]
+      [type, identifier.to_s]
     end
 
     # Prevents all further modifications to its attributes.

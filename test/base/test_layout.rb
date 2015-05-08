@@ -8,15 +8,7 @@ class Nanoc::Int::LayoutTest < Nanoc::TestCase
 
     # Make sure identifier is cleaned
     layout = Nanoc::Int::Layout.new('content', { 'foo' => 'bar' }, 'foo')
-    assert_equal('/foo/', layout.identifier)
-  end
-
-  def test_frozen_identifier
-    layout = Nanoc::Int::Layout.new('foo', {}, '/foo')
-
-    assert_raises_frozen_error do
-      layout.identifier.chop!
-    end
+    assert_equal(Nanoc::Identifier.new('/foo/'), layout.identifier)
   end
 
   def test_lookup_with_known_attribute
@@ -43,7 +35,7 @@ class Nanoc::Int::LayoutTest < Nanoc::TestCase
 
     layout = Marshal.load(Marshal.dump(layout))
 
-    assert_equal '/foo/', layout.identifier
+    assert_equal Nanoc::Identifier.new('/foo/'), layout.identifier
     assert_equal 'foobar', layout.raw_content
     assert_equal({ a: { b: 123 } }, layout.attributes)
   end

@@ -17,11 +17,11 @@ module Nanoc::Helpers
       idx_start  = 0
 
       loop do
-        idx = @item.identifier.index('/', idx_start)
+        idx = @item.identifier.to_s.index('/', idx_start)
         break if idx.nil?
 
         idx_start = idx + 1
-        identifier = @item.identifier[0..idx]
+        identifier = @item.identifier.to_s[0..idx]
         trail << @items[identifier]
       end
 

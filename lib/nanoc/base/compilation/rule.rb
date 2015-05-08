@@ -80,7 +80,7 @@ module Nanoc::Int
     #
     # @return [nil, Array] Captured groups, if any
     def matches(identifier)
-      matches = @identifier_regex.match(identifier)
+      matches = @identifier_regex.match(identifier.to_s)
       matches && matches.captures
     end
   end

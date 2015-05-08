@@ -35,7 +35,7 @@ module Nanoc::Int
       if 1 == args.size && args.first.is_a?(String)
         item_with_identifier(args.first)
       elsif 1 == args.size && args.first.is_a?(Regexp)
-        @items.select { |i| i.identifier =~ args.first }
+        @items.select { |i| i.identifier.to_s =~ args.first }
       else
         @items[*args]
       end
@@ -54,7 +54,7 @@ module Nanoc::Int
 
     def item_with_identifier(identifier)
       if self.frozen?
-        @mapping[identifier]
+        @mapping[identifier.to_s]
       else
         @items.find { |i| i.identifier == identifier }
       end
@@ -63,7 +63,7 @@ module Nanoc::Int
     def build_mapping
       @mapping = {}
       @items.each do |item|
-        @mapping[item.identifier] = item
+        @mapping[item.identifier.to_s] = item
       end
       @mapping.freeze
     end
