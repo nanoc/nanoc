@@ -11,7 +11,7 @@ module Nanoc
 
     # @api private
     def unwrap
-      @item
+      @items
     end
 
     def each
@@ -19,14 +19,17 @@ module Nanoc
     end
 
     def at(arg)
-      Nanoc::ItemView.new(@items.at(arg))
+      item = @items.at(arg)
+      item && Nanoc::ItemView.new(item)
     end
 
     def [](*args)
       res = @items[*args]
       case res
       when Array
-        res.map { Nanoc::ItemView.new(res) }
+        res.map { |r| Nanoc::ItemView.new(r) }
+      when nil
+        nil
       else
         Nanoc::ItemView.new(res)
       end
