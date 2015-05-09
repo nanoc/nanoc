@@ -142,6 +142,14 @@ module Nanoc
       []
     end
 
+    def new_item(content, attributes, identifier, params = {})
+      Nanoc::Int::Item.new(content, attributes, identifier, params)
+    end
+
+    def new_layout(content, attributes, identifier)
+      Nanoc::Int::Layout.new(content, attributes, identifier)
+    end
+
     private
 
     def not_implemented(name)
