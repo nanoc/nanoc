@@ -1,18 +1,10 @@
 # nanoc news
 
-## 4.0.0 (2099-12-31)
+## 4.0.0a1 (2015-05-09)
 
-Removed:
+This is a major upgrade. For details on upgrading, see the [nanoc 4 upgrade guide](http://nanoc.ws/docs/nanoc-4-upgrade-guide/).
 
-* Deprecated components
-* Many parts of the public API
-* Bundler integration
-
-Added:
-
-* View classes (`Nanoc::ItemView` etc)
-* `DataSource#new_item`
-* In preprocessor, `items.create`
+This release provides no new features, but streamlines the API and functionality, in order to easen future development, both for features and for optimisations.
 
 ## 3.8.0 (2015-05-04)
 
