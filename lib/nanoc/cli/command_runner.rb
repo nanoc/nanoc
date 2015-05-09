@@ -67,32 +67,6 @@ module Nanoc::CLI
 
     protected
 
-    # Sets the data source's VCS to the VCS with the given name. Does nothing
-    # when the site's data source does not support VCSes (i.e. does not
-    # implement #vcs=).
-    #
-    # @param [String] vcs_name The name of the VCS that should be used
-    #
-    # @return [void]
-    def set_vcs(vcs_name)
-      # Skip if not possible
-      return if vcs_name.nil? || site.nil?
-
-      # Find VCS
-      vcs_class = Nanoc::Extra::VCS.named(vcs_name.to_sym)
-      if vcs_class.nil?
-        raise Nanoc::Int::Errors::GenericTrivial, "A VCS named #{vcs_name} was not found"
-      end
-
-      site.data_sources.each do |data_source|
-        # Skip if not possible
-        next unless data_source.respond_to?(:vcs=)
-
-        # Set VCS
-        data_source.vcs = vcs_class.new
-      end
-    end
-
     # @return [Array] The compilation stack.
     def stack
       (site && site.compiler.stack) || []

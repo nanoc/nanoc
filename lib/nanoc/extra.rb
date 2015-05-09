@@ -12,5 +12,3 @@ end
 require 'nanoc/extra/core_ext'
 require 'nanoc/extra/deployer'
 require 'nanoc/extra/deployers'
-require 'nanoc/extra/vcs'
-require 'nanoc/extra/vcses'

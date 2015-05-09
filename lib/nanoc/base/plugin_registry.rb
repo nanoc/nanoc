@@ -2,8 +2,7 @@
 
 module Nanoc::Int
   # The class responsible for keeping track of all loaded plugins, such as
-  # filters ({Nanoc::Filter}), data sources ({Nanoc::DataSource}) and VCSes
-  # ({Nanoc::Extra::VCS}).
+  # filters ({Nanoc::Filter}) and data sources ({Nanoc::DataSource}).
   #
   # @api private
   class PluginRegistry
@@ -106,7 +105,7 @@ module Nanoc::Int
     # Registers the given class as a plugin.
     #
     # @param [Class] superclass The superclass of the plugin. For example:
-    #   {Nanoc::Filter}, {Nanoc::Extra::VCS}.
+    #   {Nanoc::Filter}.
     #
     # @param [Class, String] class_or_name The class to register. This can be
     #   a string, in which case it will be automatically converted to a proper
@@ -128,7 +127,7 @@ module Nanoc::Int
     end
 
     # @param [Class] superclass The superclass of the plugin. For example:
-    #   {Nanoc::Filter}, {Nanoc::Extra::VCS}.
+    #   {Nanoc::Filter}.
     #
     # @param [Class] klass The class to get the identifiers for.
     #

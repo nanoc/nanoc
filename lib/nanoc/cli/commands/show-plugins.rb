@@ -4,7 +4,7 @@ summary 'show all available plugins'
 aliases :info
 usage 'show-plugins [options]'
 description <<-EOS
-Show a list of available plugins, including filters, data sources and VCSes.
+Show a list of available plugins, including filters and data sources.
 If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
 EOS
 
@@ -73,7 +73,6 @@ module Nanoc::CLI::Commands
 
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,
-      Nanoc::Extra::VCS,
       Nanoc::DataSource,
       Nanoc::Extra::Deployer
     ] unless defined? PLUGIN_CLASS_ORDER
@@ -81,7 +80,6 @@ module Nanoc::CLI::Commands
     PLUGIN_CLASSES = {
       Nanoc::Filter          => 'Filters',
       Nanoc::DataSource      => 'Data Sources',
-      Nanoc::Extra::VCS      => 'VCSes',
       Nanoc::Extra::Deployer => 'Deployers'
     } unless defined? PLUGIN_CLASSES
 
