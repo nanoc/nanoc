@@ -136,7 +136,7 @@ module Nanoc::Helpers
           xml.title title
 
           # Add date
-          xml.updated(attribute_to_time(last_article[:created_at]).to_iso8601_time)
+          xml.updated(attribute_to_time(last_article[:created_at]).__nanoc_to_iso8601_time)
 
           # Add links
           xml.link(rel: 'alternate', href: root_url)
@@ -170,8 +170,8 @@ module Nanoc::Helpers
           xml.title a[:title], type: 'html'
 
           # Add dates
-          xml.published attribute_to_time(a[:created_at]).to_iso8601_time
-          xml.updated attribute_to_time(a[:updated_at] || a[:created_at]).to_iso8601_time
+          xml.published attribute_to_time(a[:created_at]).__nanoc_to_iso8601_time
+          xml.updated attribute_to_time(a[:updated_at] || a[:created_at]).__nanoc_to_iso8601_time
 
           # Add specific author information
           if a[:author_name] || a[:author_uri]
@@ -374,7 +374,7 @@ module Nanoc::Helpers
     def atom_tag_for(item)
       hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@config[:base_url])[1..2]
 
-      formatted_date = attribute_to_time(item[:created_at]).to_iso8601_date
+      formatted_date = attribute_to_time(item[:created_at]).__nanoc_to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier.to_s)
     end
