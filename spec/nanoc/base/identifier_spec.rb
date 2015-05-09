@@ -29,6 +29,12 @@ describe Nanoc::Identifier do
     end
   end
 
+  describe '#to_str' do
+    it 'returns immutable string' do
+      expect { described_class.new('foo/bar/').to_str << 'lols' }.to raise_error
+    end
+  end
+
   describe '#inspect' do
     let(:identifier) { described_class.new('foo/bar/') }
 

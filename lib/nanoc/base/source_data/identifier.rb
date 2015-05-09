@@ -37,6 +37,10 @@ module Nanoc
       @string
     end
 
+    def to_str
+      @string
+    end
+
     def inspect
       "<Nanoc::Identifier #{to_s.inspect}>"
     end
