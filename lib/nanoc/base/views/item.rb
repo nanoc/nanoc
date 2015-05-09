@@ -15,6 +15,7 @@ module Nanoc
     def ==(other)
       identifier == other.identifier
     end
+    alias_method :eql?, :==
 
     def hash
       self.class.hash ^ identifier.hash

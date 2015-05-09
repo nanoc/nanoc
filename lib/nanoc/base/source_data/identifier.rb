@@ -9,6 +9,11 @@ module Nanoc
     def ==(other)
       to_s == other.to_s
     end
+    alias_method :eql?, :==
+
+    def hash
+      self.class.hash ^ to_s.hash
+    end
 
     def =~(pat)
       to_s =~ pat
@@ -16,6 +21,16 @@ module Nanoc
 
     def <=>(other)
       to_s <=> other.to_s
+    end
+
+    # @return [String]
+    def chop
+      to_s.chop
+    end
+
+    # @return [String]
+    def +(string)
+      to_s + string
     end
 
     def to_s
