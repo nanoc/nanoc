@@ -412,10 +412,10 @@ module Nanoc::Int
     # Returns a preprocessor context, creating one if none exists yet.
     def preprocessor_context
       Nanoc::Int::Context.new({
-        site: @site,
-        config: @site.config,
-        items: @site.items,
-        layouts: @site.layouts
+        site: Nanoc::SiteView.new(@site), # TODO: remove me
+        config: Nanoc::MutableConfigView.new(@site.config),
+        items: Nanoc::MutableItemCollectionView.new(@site.items),
+        layouts: Nanoc::MutableLayoutCollectionView.new(@site.layouts),
       })
     end
     memoize :preprocessor_context

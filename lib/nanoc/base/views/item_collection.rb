@@ -14,24 +14,29 @@ module Nanoc
       @items
     end
 
+    # @api private
+    def view_class
+      Nanoc::ItemView
+    end
+
     def each
-      @items.each { |i| yield Nanoc::ItemView.new(i) }
+      @items.each { |i| yield view_class.new(i) }
     end
 
     def at(arg)
       item = @items.at(arg)
-      item && Nanoc::ItemView.new(item)
+      item && view_class.new(item)
     end
 
     def [](*args)
       res = @items[*args]
       case res
       when Array
-        res.map { |r| Nanoc::ItemView.new(r) }
+        res.map { |r| view_class.new(r) }
       when nil
         nil
       else
-        Nanoc::ItemView.new(res)
+        view_class.new(res)
       end
     end
   end

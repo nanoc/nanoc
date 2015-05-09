@@ -14,6 +14,12 @@ module Nanoc
   autoload 'LayoutCollectionView', 'nanoc/base/views/layout_collection'
   autoload 'SiteView',             'nanoc/base/views/site'
 
+  autoload 'MutableConfigView',           'nanoc/base/views/mutable_config'
+  autoload 'MutableItemView',             'nanoc/base/views/mutable_item'
+  autoload 'MutableItemCollectionView',   'nanoc/base/views/mutable_item_collection'
+  autoload 'MutableLayoutView',           'nanoc/base/views/mutable_layout'
+  autoload 'MutableLayoutCollectionView', 'nanoc/base/views/mutable_layout_collection'
+
   autoload 'Filter',               'nanoc/base/compilation/filter'
 end
 
