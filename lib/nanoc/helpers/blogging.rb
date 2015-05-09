@@ -52,7 +52,7 @@ module Nanoc::Helpers
     class AtomFeedBuilder
       include Nanoc::Helpers::Blogging
 
-      attr_accessor :site
+      attr_accessor :config
 
       attr_accessor :limit
       attr_accessor :relevant_articles
@@ -65,8 +65,8 @@ module Nanoc::Helpers
       attr_accessor :icon
       attr_accessor :logo
 
-      def initialize(site, item)
-        @site = site
+      def initialize(config, item)
+        @config = config
         @item = item
       end
 
@@ -100,7 +100,7 @@ module Nanoc::Helpers
       end
 
       def validate_config
-        if @site.config[:base_url].nil?
+        if @config[:base_url].nil?
           raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
         end
       end
@@ -129,7 +129,7 @@ module Nanoc::Helpers
       def build_for_feed(xml)
         xml.instruct!
         xml.feed(xmlns: 'http://www.w3.org/2005/Atom') do
-          root_url = @site.config[:base_url] + '/'
+          root_url = @config[:base_url] + '/'
 
           # Add primary attributes
           xml.id root_url
@@ -308,7 +308,7 @@ module Nanoc::Helpers
       require 'builder'
 
       # Create builder
-      builder = AtomFeedBuilder.new(@site, @item)
+      builder = AtomFeedBuilder.new(@config, @item)
 
       # Fill builder
       builder.limit             = params[:limit] || 5
@@ -316,9 +316,9 @@ module Nanoc::Helpers
       builder.preserve_order    = params.fetch(:preserve_order, false)
       builder.content_proc      = params[:content_proc] || ->(a) { a.compiled_content(snapshot: :pre) }
       builder.excerpt_proc      = params[:excerpt_proc] || ->(a) { a[:excerpt] }
-      builder.title             = params[:title] || @item[:title] || @site.config[:title]
-      builder.author_name       = params[:author_name] || @item[:author_name] || @site.config[:author_name]
-      builder.author_uri        = params[:author_uri] || @item[:author_uri] || @site.config[:author_uri]
+      builder.title             = params[:title] || @item[:title] || @config[:title]
+      builder.author_name       = params[:author_name] || @item[:author_name] || @config[:author_name]
+      builder.author_uri        = params[:author_uri] || @item[:author_uri] || @config[:author_uri]
       builder.icon              = params[:icon]
       builder.logo              = params[:logo]
 
@@ -335,7 +335,7 @@ module Nanoc::Helpers
     # @return [String] The URL of the given item
     def url_for(item)
       # Check attributes
-      if @site.config[:base_url].nil?
+      if @config[:base_url].nil?
         raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
@@ -343,9 +343,9 @@ module Nanoc::Helpers
       if item[:custom_url_in_feed]
         item[:custom_url_in_feed]
       elsif item[:custom_path_in_feed]
-        @site.config[:base_url] + item[:custom_path_in_feed]
+        @config[:base_url] + item[:custom_path_in_feed]
       elsif item.path
-        @site.config[:base_url] + item.path
+        @config[:base_url] + item.path
       end
     end
 
@@ -355,11 +355,11 @@ module Nanoc::Helpers
     # @return [String] The URL of the feed
     def feed_url
       # Check attributes
-      if @site.config[:base_url].nil?
+      if @config[:base_url].nil?
         raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @item[:feed_url] || @site.config[:base_url] + @item.path
+      @item[:feed_url] || @config[:base_url] + @item.path
     end
 
     # Returns an URI containing an unique ID for the given item. This will be
@@ -372,7 +372,7 @@ module Nanoc::Helpers
     #
     # @return [String] The atom tag for the given item
     def atom_tag_for(item)
-      hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@site.config[:base_url])[1..2]
+      hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@config[:base_url])[1..2]
 
       formatted_date = attribute_to_time(item[:created_at]).to_iso8601_date
 
