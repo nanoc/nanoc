@@ -44,6 +44,10 @@ module Nanoc
       @item.binary?
     end
 
+    def raw_content
+      @item.raw_content
+    end
+
     # @api private
     def reference
       @item.reference

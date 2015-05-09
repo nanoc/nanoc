@@ -28,6 +28,15 @@ describe Nanoc::ItemView do
     end
   end
 
+  describe '#raw_content' do
+    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
+    let(:view) { described_class.new(item) }
+
+    subject { view.raw_content }
+
+    it { should eq('content') }
+  end
+
   describe '#hash' do
     let(:item) { double(:item, identifier: '/foo/') }
     let(:view) { described_class.new(item) }
