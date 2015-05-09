@@ -5,7 +5,7 @@ module Nanoc::StringExtensions
   # Transforms string into an actual identifier
   #
   # @return [String] The identifier generated from the receiver
-  def cleaned_identifier
+  def __nanoc_cleaned_identifier
     "/#{self}/".gsub(/^\/+|\/+$/, '/')
   end
 
@@ -15,7 +15,7 @@ module Nanoc::StringExtensions
   # @return [String] The checksum for this string
   #
   # @api private
-  def checksum
+  def __nanoc_checksum
     Nanoc::Int::Checksummer.calc(self)
   end
 end

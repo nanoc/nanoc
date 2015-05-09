@@ -3,46 +3,46 @@
 # @api private
 module Nanoc::HashExtensions
   # Returns a new hash where all keys are recursively converted to symbols by
-  # calling {Nanoc::ArrayExtensions#symbolize_keys_recursively} or
-  # {Nanoc::HashExtensions#symbolize_keys_recursively}.
+  # calling {Nanoc::ArrayExtensions#__nanoc_symbolize_keys_recursively} or
+  # {Nanoc::HashExtensions#__nanoc_symbolize_keys_recursively}.
   #
   # @return [Hash] The converted hash
-  def symbolize_keys_recursively
+  def __nanoc_symbolize_keys_recursively
     hash = {}
     each_pair do |key, value|
       new_key   = key.respond_to?(:to_sym) ? key.to_sym : key
-      new_value = value.respond_to?(:symbolize_keys_recursively) ? value.symbolize_keys_recursively : value
+      new_value = value.respond_to?(:__nanoc_symbolize_keys_recursively) ? value.__nanoc_symbolize_keys_recursively : value
       hash[new_key] = new_value
     end
     hash
   end
 
   # Returns a new hash where all keys are recursively converted to strings by
-  # calling {Nanoc::ArrayExtensions#stringify_keys_recursively} or
-  # {Nanoc::HashExtensions#stringify_keys_recursively}.
+  # calling {Nanoc::ArrayExtensions#__nanoc_stringify_keys_recursively} or
+  # {Nanoc::HashExtensions#__nanoc_stringify_keys_recursively}.
   #
   # @return [Hash] The converted hash
-  def stringify_keys_recursively
+  def __nanoc_stringify_keys_recursively
     reduce({}) do |hash, (key, value)|
-      hash.merge(key.to_s => value.respond_to?(:stringify_keys_recursively) ? value.stringify_keys_recursively : value)
+      hash.merge(key.to_s => value.respond_to?(:__nanoc_stringify_keys_recursively) ? value.__nanoc_stringify_keys_recursively : value)
     end
   end
 
   # Freezes the contents of the hash, as well as all hash values. The hash
-  # values will be frozen using {#freeze_recursively} if they respond to
+  # values will be frozen using {#__nanoc_freeze_recursively} if they respond to
   # that message, or #freeze if they do not.
   #
-  # @see Array#freeze_recursively
+  # @see Array#__nanoc_freeze_recursively
   #
   # @return [void]
   #
   # @since 3.2.0
-  def freeze_recursively
+  def __nanoc_freeze_recursively
     return if self.frozen?
     freeze
     each_pair do |_key, value|
-      if value.respond_to?(:freeze_recursively)
-        value.freeze_recursively
+      if value.respond_to?(:__nanoc_freeze_recursively)
+        value.__nanoc_freeze_recursively
       else
         value.freeze
       end
@@ -55,7 +55,7 @@ module Nanoc::HashExtensions
   # @return [String] The checksum for this hash
   #
   # @api private
-  def checksum
+  def __nanoc_checksum
     Nanoc::Int::Checksummer.calc(self)
   end
 end

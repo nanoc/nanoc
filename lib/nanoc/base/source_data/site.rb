@@ -208,7 +208,7 @@ module Nanoc::Int
     #
     # @return [void]
     def freeze
-      config.freeze_recursively
+      config.__nanoc_freeze_recursively
       items.each(&:freeze)
       layouts.each(&:freeze)
       code_snippets.each(&:freeze)
@@ -352,7 +352,7 @@ module Nanoc::Int
 
     # Loads a configuration file.
     def load_config(config_path)
-      YAML.load_file(config_path).symbolize_keys_recursively
+      YAML.load_file(config_path).__nanoc_symbolize_keys_recursively
     end
 
     def apply_parent_config(config, config_paths = [])
@@ -404,7 +404,7 @@ module Nanoc::Int
         @config = apply_parent_config(load_config(config_path), [config_path])
       else
         # Use passed config hash
-        @config = apply_parent_config(dir_or_config_hash.symbolize_keys_recursively)
+        @config = apply_parent_config(dir_or_config_hash.__nanoc_symbolize_keys_recursively)
       end
 
       # Merge config with default config

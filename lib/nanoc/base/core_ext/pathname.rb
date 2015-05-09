@@ -8,7 +8,7 @@ module Nanoc::PathnameExtensions
   # @return [String] The checksum for this file
   #
   # @api private
-  def checksum
+  def __nanoc_checksum
     Nanoc::Int::Checksummer.calc(self)
   end
 end

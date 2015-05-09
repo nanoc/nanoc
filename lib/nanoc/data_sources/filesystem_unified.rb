@@ -91,7 +91,7 @@ module Nanoc::DataSources
       # Write item
       FileUtils.mkdir_p(parent_path)
       File.open(path, 'w') do |io|
-        meta = attributes.stringify_keys_recursively
+        meta = attributes.__nanoc_stringify_keys_recursively
         unless meta == {}
           io.write(YAML.dump(meta).strip + "\n")
           io.write("---\n")
@@ -119,7 +119,7 @@ module Nanoc::DataSources
       else
         regex = @config && @config[:allow_periods_in_identifiers] ? /\.[^\/\.]+$/ : /\.[^\/]+$/
       end
-      filename.sub(regex, '').cleaned_identifier
+      filename.sub(regex, '').__nanoc_cleaned_identifier
     end
   end
 end
