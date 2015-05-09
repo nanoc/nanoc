@@ -12,6 +12,7 @@ Added:
 
 * View classes (`Nanoc::ItemView` etc)
 * `DataSource#new_item`
+* In preprocessor, `items.create`
 
 ## 3.8.0 (2015-05-04)
 

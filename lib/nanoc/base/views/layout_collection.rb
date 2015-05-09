@@ -14,8 +14,13 @@ module Nanoc
       @item
     end
 
+    # @api private
+    def view_class
+      Nanoc::LayoutView
+    end
+
     def each
-      @layouts.each { |l| yield Nanoc::LayoutView.new(l) }
+      @layouts.each { |l| yield view_class.new(l) }
     end
   end
 end

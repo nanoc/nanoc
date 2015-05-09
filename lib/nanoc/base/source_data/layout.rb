@@ -41,6 +41,10 @@ module Nanoc::Int
       @attributes[key]
     end
 
+    def []=(key, value)
+      @attributes[key] = value
+    end
+
     # Returns the type of this object. Will always return `:layout`, because
     # this is a layout. For items, this method returns `:item`.
     #
