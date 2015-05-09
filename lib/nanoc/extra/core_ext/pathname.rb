@@ -3,7 +3,7 @@
 module Nanoc::Extra
   # @api private
   module PathnameExtensions
-    def components
+    def __nanoc_components
       components = []
       tmp = self
       loop do
@@ -15,12 +15,13 @@ module Nanoc::Extra
       components.reverse
     end
 
-    def include_component?(component)
-      components.include?(component)
+    def __nanoc_include_component?(component)
+      __nanoc_components.include?(component)
     end
   end
 end
 
+# @api private
 class ::Pathname
   include ::Nanoc::Extra::PathnameExtensions
 end

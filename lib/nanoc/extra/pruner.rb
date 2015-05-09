@@ -60,7 +60,7 @@ module Nanoc::Extra
     # @return [Boolean] true if the given file is excluded, false otherwise
     def filename_excluded?(filename)
       pathname = Pathname.new(filename)
-      @exclude.any? { |e| pathname.include_component?(e) }
+      @exclude.any? { |e| pathname.__nanoc_include_component?(e) }
     end
 
     protected
