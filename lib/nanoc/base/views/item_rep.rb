@@ -12,6 +12,14 @@ module Nanoc
       @item_rep
     end
 
+    def ==(other)
+      item.identifier == other.item.identifier && name == other.name
+    end
+
+    def hash
+      self.class.hash ^ item.identifier.hash ^ name.hash
+    end
+
     def name
       @item_rep.name
     end

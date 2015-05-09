@@ -12,6 +12,14 @@ module Nanoc
       @item
     end
 
+    def ==(other)
+      identifier == other.identifier
+    end
+
+    def hash
+      self.class.hash ^ identifier.hash
+    end
+
     def identifier
       @item.identifier
     end
