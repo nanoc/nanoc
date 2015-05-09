@@ -174,7 +174,7 @@ module Nanoc::Int
 
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
-    def checksum
+    def __nanoc_checksum
       Nanoc::Int::Checksummer.calc(self)
     end
 

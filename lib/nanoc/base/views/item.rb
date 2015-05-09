@@ -57,8 +57,8 @@ module Nanoc
     end
 
     # @api private
-    def checksum
-      @item.checksum
+    def __nanoc_checksum
+      @item.__nanoc_checksum
     end
   end
 end

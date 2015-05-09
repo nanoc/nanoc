@@ -11,7 +11,7 @@ describe 'Pathname#checksum' do
 
       # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal 'oU+0fYgGm4EDTl+uErBv8rB9YhU='
+      pathname.__nanoc_checksum.must_equal 'oU+0fYgGm4EDTl+uErBv8rB9YhU='
     ensure
       FileUtils.rm_rf('tmp')
     end
@@ -27,7 +27,7 @@ describe 'Pathname#checksum' do
 
       # Create checksum
       pathname = Pathname.new('tmp/myfile')
-      pathname.checksum.must_equal 'IAoqYXvcDheQjaYmZ8waPtEO8zU='
+      pathname.__nanoc_checksum.must_equal 'IAoqYXvcDheQjaYmZ8waPtEO8zU='
     ensure
       FileUtils.rm_rf('tmp')
     end

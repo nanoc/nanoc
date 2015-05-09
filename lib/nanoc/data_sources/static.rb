@@ -42,7 +42,7 @@ module Nanoc::DataSources
         attributes[:is_hidden] = true unless config[:hide_items] == false
         identifier = filename[(prefix.length + 1)..-1] + '/'
         mtime      = File.mtime(filename)
-        checksum   = Pathname.new(filename).checksum
+        checksum   = Pathname.new(filename).__nanoc_checksum
 
         Nanoc::Int::Item.new(
           filename,

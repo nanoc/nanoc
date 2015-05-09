@@ -69,7 +69,7 @@ module Nanoc::Int
       end
 
       # Get rest of params
-      @attributes   = attributes.symbolize_keys_recursively
+      @attributes   = attributes.__nanoc_symbolize_keys_recursively
       @identifier   = Nanoc::Identifier.new(identifier)
 
       # Set mtime
@@ -193,7 +193,7 @@ module Nanoc::Int
     #
     # @return [void]
     def freeze
-      attributes.freeze_recursively
+      attributes.__nanoc_freeze_recursively
       children.freeze
       identifier.freeze
       raw_filename.freeze if raw_filename
@@ -206,10 +206,10 @@ module Nanoc::Int
 
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
-    def checksum
+    def __nanoc_checksum
       Nanoc::Int::Checksummer.calc(self)
     end
-    memoize :checksum
+    memoize :__nanoc_checksum
 
     def hash
       self.class.hash ^ identifier.hash

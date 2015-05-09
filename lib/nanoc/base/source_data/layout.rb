@@ -28,7 +28,7 @@ module Nanoc::Int
     # @param [Hash] params Extra parameters. Unused.
     def initialize(raw_content, attributes, identifier, params = {})
       @raw_content  = raw_content
-      @attributes   = attributes.symbolize_keys_recursively
+      @attributes   = attributes.__nanoc_symbolize_keys_recursively
       @identifier   = Nanoc::Identifier.new(identifier)
     end
 
@@ -55,7 +55,7 @@ module Nanoc::Int
     #
     # @return [void]
     def freeze
-      attributes.freeze_recursively
+      attributes.__nanoc_freeze_recursively
       identifier.freeze
       raw_content.freeze
     end
@@ -75,10 +75,10 @@ module Nanoc::Int
 
     # @return [String] The checksum for this object. If its contents change,
     #   the checksum will change as well.
-    def checksum
+    def __nanoc_checksum
       Nanoc::Int::Checksummer.calc(self)
     end
-    memoize :checksum
+    memoize :__nanoc_checksum
 
     def hash
       self.class.hash ^ identifier.hash

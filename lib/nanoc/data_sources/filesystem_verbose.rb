@@ -62,7 +62,7 @@ module Nanoc::DataSources
 
       # Create files
       FileUtils.mkdir_p(dir_path)
-      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.stringify_keys_recursively)) }
+      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.__nanoc_stringify_keys_recursively)) }
       File.open(content_filename, 'w') { |io| io.write(content) }
     end
 
