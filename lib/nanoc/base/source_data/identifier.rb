@@ -2,6 +2,8 @@
 
 module Nanoc
   class Identifier
+    include Comparable
+
     def initialize(string)
       @string = "/#{string}/".gsub(/^\/+|\/+$/, '/').freeze
     end

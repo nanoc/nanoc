@@ -35,6 +35,12 @@ describe Nanoc::Identifier do
     end
   end
 
+  describe 'Comparable' do
+    it 'can be compared' do
+      expect(described_class.new('foo/bar/') <= '/qux/').to eql(true)
+    end
+  end
+
   describe '#inspect' do
     let(:identifier) { described_class.new('foo/bar/') }
 
