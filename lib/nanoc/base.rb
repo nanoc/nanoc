@@ -3,6 +3,8 @@
 module Nanoc
   require 'nanoc/base/core_ext'
 
+  autoload 'Error',                'nanoc/base/error'
+
   autoload 'DataSource',           'nanoc/base/source_data/data_source'
   autoload 'Identifier',           'nanoc/base/source_data/identifier'
 

@@ -5,9 +5,7 @@ module Nanoc::Int
   #
   # @api private
   module Errors
-    # Generic error. Superclass for all nanoc-specific errors.
-    class Generic < ::StandardError
-    end
+    Generic = ::Nanoc::Error
 
     # Generic trivial error. Superclass for all nanoc-specific errors that are
     # considered "trivial", i.e. errors that do not require a full crash report.
