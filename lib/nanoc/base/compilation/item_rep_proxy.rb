@@ -8,6 +8,8 @@ module Nanoc::Int
   #
   # The API provided by item representation proxies allows layout identifiers
   # to be given as literals instead of as references to {Nanoc::Int::Layout}.
+  #
+  # @api private
   class ItemRepProxy
     extend Forwardable
 
