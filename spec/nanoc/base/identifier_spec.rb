@@ -29,17 +29,19 @@ describe Nanoc::Identifier do
     end
   end
 
-  describe '#==' do
+  describe '#== and #eql?' do
     context 'equal identifiers' do
       let(:identifier_a) { described_class.new('//foo/bar/') }
       let(:identifier_b) { described_class.new('/foo/bar//') }
 
       it 'is equal to identifier' do
         expect(identifier_a).to eq(identifier_b)
+        expect(identifier_a).to eql(identifier_b)
       end
 
       it 'is equal to string' do
         expect(identifier_a).to eq(identifier_b.to_s)
+        expect(identifier_a).to eql(identifier_b.to_s)
       end
     end
 
@@ -49,10 +51,32 @@ describe Nanoc::Identifier do
 
       it 'differs from identifier' do
         expect(identifier_a).not_to eq(identifier_b)
+        expect(identifier_a).not_to eql(identifier_b)
       end
 
       it 'differs from string' do
         expect(identifier_a).not_to eq(identifier_b.to_s)
+        expect(identifier_a).not_to eql(identifier_b.to_s)
+      end
+    end
+  end
+
+  describe '#hash' do
+    context 'equal identifiers' do
+      let(:identifier_a) { described_class.new('//foo/bar/') }
+      let(:identifier_b) { described_class.new('/foo/bar//') }
+
+      it 'is the same' do
+        expect(identifier_a.hash == identifier_b.hash).to eql(true)
+      end
+    end
+
+    context 'different identifiers' do
+      let(:identifier_a) { described_class.new('//foo/bar/') }
+      let(:identifier_b) { described_class.new('/monkey/') }
+
+      it 'is different' do
+        expect(identifier_a.hash == identifier_b.hash).to eql(false)
       end
     end
   end

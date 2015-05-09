@@ -176,14 +176,14 @@ module Nanoc::Int
 
       item_map = {}
       @items.each do |item|
-        item_map[item.identifier] = item
+        item_map[item.identifier.to_s] = item
       end
 
       @items.each do |item|
-        parent_id_end = item.identifier.rindex('/', -2)
+        parent_id_end = item.identifier.to_s.rindex('/', -2)
         next unless parent_id_end
 
-        parent_id = item.identifier[0..parent_id_end]
+        parent_id = item.identifier.to_s[0..parent_id_end]
         parent = item_map[parent_id]
         next unless parent
 
@@ -328,7 +328,7 @@ module Nanoc::Int
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|
-          i.identifier = File.join(ds.items_root, i.identifier.to_s)
+          i.identifier = Nanoc::Identifier.new(File.join(ds.items_root, i.identifier.to_s))
           i.site = self
         end
         @items.concat(items_in_ds)
@@ -345,7 +345,9 @@ module Nanoc::Int
       @layouts = []
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
-        layouts_in_ds.each { |i| i.identifier = File.join(ds.layouts_root, i.identifier.to_s) }
+        layouts_in_ds.each do |l|
+          l.identifier = Nanoc::Identifier.new(File.join(ds.layouts_root, l.identifier.to_s))
+        end
         @layouts.concat(layouts_in_ds)
       end
     end

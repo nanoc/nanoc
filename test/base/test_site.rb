@@ -154,7 +154,28 @@ EOF
 
       # Check
       assert_equal 1,       site.data_sources.size
-      assert_equal '/foo/', site.items[0].identifier
+      assert_equal Nanoc::Identifier.new('/foo/'), site.items[0].identifier
+    end
+  end
+
+  def test_identifier_classes
+    Nanoc::CLI.run %w( create_site bar)
+    FileUtils.cd('bar') do
+      FileUtils.mkdir_p('content')
+      FileUtils.mkdir_p('layouts')
+
+      File.open('content/foo_bar.md', 'w') { |io| io << 'asdf' }
+      File.open('layouts/detail.erb', 'w') { |io| io << 'asdf' }
+
+      site = Nanoc::Int::Site.new('.')
+
+      site.items.each do |item|
+        assert_equal Nanoc::Identifier, item.identifier.class
+      end
+
+      site.layouts.each do |layout|
+        assert_equal Nanoc::Identifier, layout.identifier.class
+      end
     end
   end
 
