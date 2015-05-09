@@ -58,6 +58,7 @@ module Nanoc::ArrayExtensions
   end
 end
 
+# @api private
 class Array
   include Nanoc::ArrayExtensions
 end

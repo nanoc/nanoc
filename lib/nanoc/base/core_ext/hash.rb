@@ -60,6 +60,7 @@ module Nanoc::HashExtensions
   end
 end
 
+# @api private
 class Hash
   include Nanoc::HashExtensions
 end

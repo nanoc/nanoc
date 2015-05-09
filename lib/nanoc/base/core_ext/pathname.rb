@@ -13,6 +13,7 @@ module Nanoc::PathnameExtensions
   end
 end
 
+# @api private
 class Pathname
   include Nanoc::PathnameExtensions
 end

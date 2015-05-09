@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::Filters
   autoload 'AsciiDoc',        'nanoc/filters/asciidoc'
   autoload 'BlueCloth',       'nanoc/filters/bluecloth'

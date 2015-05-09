@@ -13,6 +13,7 @@ module Nanoc::Extra::TimeExtensions
   end
 end
 
+# @api private
 class Time
   include Nanoc::Extra::TimeExtensions
 end

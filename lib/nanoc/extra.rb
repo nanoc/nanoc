@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# @api private
 module Nanoc::Extra
   autoload 'Checking',            'nanoc/extra/checking'
   autoload 'FilesystemTools',     'nanoc/extra/filesystem_tools'

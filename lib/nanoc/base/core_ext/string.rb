@@ -20,6 +20,7 @@ module Nanoc::StringExtensions
   end
 end
 
+# @api private
 class String
   include Nanoc::StringExtensions
 end
