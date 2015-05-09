@@ -1,12 +1,16 @@
 # nanoc news
 
-## 4.0.0 (???)
+## 4.0.0 (2099-12-31)
 
-* Removed deprecated components
-* Tightened public API
-* Removed Bundler integration
-* Added view classes
-* Moved internal classes to Nanoc::Int
+Removed:
+
+* Deprecated components
+* Many parts of the public API
+* Bundler integration
+
+Added:
+
+* View classes (`Nanoc::ItemView` etc)
 
 ## 3.8.0 (2015-05-04)
 
