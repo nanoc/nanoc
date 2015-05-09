@@ -29,6 +29,14 @@ describe Nanoc::Identifier do
     end
   end
 
+  describe '#inspect' do
+    let(:identifier) { described_class.new('foo/bar/') }
+
+    subject { identifier.inspect }
+
+    it { should == '<Nanoc::Identifier "/foo/bar/">' }
+  end
+
   describe '#== and #eql?' do
     context 'equal identifiers' do
       let(:identifier_a) { described_class.new('//foo/bar/') }
