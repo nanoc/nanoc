@@ -114,8 +114,8 @@ module Nanoc
     def down
     end
 
-    # Returns the list of items (represented by {Nanoc::Int::Item}) in this site.
-    # The default implementation simply returns an empty array.
+    # Returns the collection of items (represented by {Nanoc::Int::Item}) in
+    # this site. The default implementation simply returns an empty array.
     #
     # Subclasses should not prepend `items_root` to the item's identifiers, as
     # this will be done automatically.
@@ -123,13 +123,13 @@ module Nanoc
     # Subclasses may override this method, but are not required to do so; the
     # default implementation simply does nothing.
     #
-    # @return [Array<Nanoc::Int::Item>] A list of items
+    # @return [Enumerable] The collection of items
     def items
       []
     end
 
-    # Returns the list of layouts (represented by {Nanoc::Int::Layout}) in this
-    # site. The default implementation simply returns an empty array.
+    # Returns the collection of layouts (represented by {Nanoc::Int::Layout}) in
+    # this site. The default implementation simply returns an empty array.
     #
     # Subclasses should prepend `layout_root` to the layout's identifiers,
     # since this is not done automatically.
@@ -137,17 +137,40 @@ module Nanoc
     # Subclasses may override this method, but are not required to do so; the
     # default implementation simply does nothing.
     #
-    # @return [Array<Nanoc::Int::Layout>] A list of layouts
+    # @return [Enumerable] The collection of layouts
     def layouts
       []
     end
 
-    def new_item(content, attributes, identifier, params = {})
-      Nanoc::Int::Item.new(content, attributes, identifier, params)
+    # Creates a new in-memory item instance. This is intended for use within
+    # the {#items} method.
+    #
+    # @param [String] raw_content_or_raw_filename The uncompiled item content
+    #   (if it is a textual item) or the path to the filename containing the
+    #   content (if it is a binary item).
+    #
+    # @param [Hash] attributes A hash containing this item's attributes.
+    #
+    # @param [String] identifier This item's identifier.
+    #
+    # @param [Hash] params Extra parameters.
+    #
+    # @option params [Symbol, nil] :binary (true) Whether or not this item is
+    #   binary
+    def new_item(raw_content_or_raw_filename, attributes, identifier, params = {})
+      Nanoc::Int::Item.new(raw_content_or_raw_filename, attributes, identifier, params)
     end
 
-    def new_layout(content, attributes, identifier)
-      Nanoc::Int::Layout.new(content, attributes, identifier)
+    # Creates a new in-memory layout instance. This is intended for use within
+    # the {#layouts} method.
+    #
+    # @param [String] raw_content The raw content of this layout.
+    #
+    # @param [Hash] attributes A hash containing this layout's attributes.
+    #
+    # @param [String] identifier This layout's identifier.
+    def new_layout(raw_content, attributes, identifier)
+      Nanoc::Int::Layout.new(raw_content, attributes, identifier)
     end
 
     private
