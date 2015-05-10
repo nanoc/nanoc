@@ -22,3 +22,30 @@ describe Nanoc::Int::Pattern do
     end
   end
 end
+
+describe Nanoc::Int::StringPattern do
+  describe '#match?' do
+    it 'matches simple strings' do
+      pattern = described_class.new('d*key')
+
+      expect(pattern.match?('donkey')).to eql(true)
+      expect(pattern.match?('giraffe')).to eql(false)
+    end
+
+    it 'matches with pathname option' do
+      pattern = described_class.new('/foo/*/bar/**/*.animal')
+
+      expect(pattern.match?('/foo/x/bar/a/b/donkey.animal')).to eql(true)
+      expect(pattern.match?('/foo/x/bar/donkey.animal')).to eql(true)
+      expect(pattern.match?('/foo/x/railroad/donkey.animal')).to eql(false)
+    end
+
+    it 'matches with extglob option' do
+      pattern = described_class.new('{b,gl}oat')
+
+      expect(pattern.match?('boat')).to eql(true)
+      expect(pattern.match?('gloat')).to eql(true)
+      expect(pattern.match?('stoat')).to eql(false)
+    end
+  end
+end

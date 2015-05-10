@@ -36,8 +36,8 @@ module Nanoc::Int
     end
 
     def match?(identifier)
-      # TODO: allow matching /foo.{md,txt} using File::FNM_EXTGLOB
-      File.fnmatch(@string, identifier.to_s, File::FNM_PATHNAME)
+      opts = File::FNM_PATHNAME | File::FNM_EXTGLOB
+      File.fnmatch(@string, identifier.to_s, opts)
     end
 
     def captures(_identifier)
