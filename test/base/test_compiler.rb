@@ -53,7 +53,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Int::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [:erb, { foo: 'bar' }]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(/.*/)] = [:erb, { foo: 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
@@ -69,7 +69,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Int::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[/.*/] = [:some_unknown_filter, { foo: 'bar' }]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(/.*/)] = [:some_unknown_filter, { foo: 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
@@ -85,7 +85,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Int::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/foo/$}] = [:erb, { foo: 'bar' }]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/foo/$})] = [:erb, { foo: 'bar' }]
 
     # Mock layout
     layout = MiniTest::Mock.new
@@ -101,10 +101,10 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = Nanoc::Int::Compiler.new(site)
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/c/.*/$}] = [:erb, { char: 'd' }]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/.*/$}]     = [:erb, { char: 'b' }]
-    compiler.rules_collection.layout_filter_mapping[%r{^/a/b/.*/$}]   = [:erb, { char: 'c' }] # never used!
-    compiler.rules_collection.layout_filter_mapping[%r{^/.*/$}]       = [:erb, { char: 'a' }]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/b/c/.*/$})] = [:erb, { char: 'd' }]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/.*/$})]     = [:erb, { char: 'b' }]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/b/.*/$})]   = [:erb, { char: 'c' }] # never used!
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/.*/$})]       = [:erb, { char: 'a' }]
 
     # Mock layout
     layouts = [mock, mock, mock, mock]
@@ -149,7 +149,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layout '/blah/'
       filter :erb
     end
-    rule = Nanoc::Int::Rule.new(/blah/, :meh, rule_block)
+    rule = Nanoc::Int::Rule.new(Nanoc::Int::Pattern.from(/blah/), :meh, rule_block)
 
     # Create layout
     layout = Nanoc::Int::Layout.new('head <%= yield %> foot', {}, '/blah/')
@@ -163,7 +163,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     # Create compiler
     compiler = Nanoc::Int::Compiler.new(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[%r{^/blah/$}] = [:erb, {}]
+    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/blah/$})] = [:erb, {}]
     site.stubs(:compiler).returns(compiler)
 
     # Compile

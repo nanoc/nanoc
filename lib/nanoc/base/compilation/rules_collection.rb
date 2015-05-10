@@ -153,8 +153,8 @@ module Nanoc::Int
     # @return [Array, nil] A tuple containing the filter name and the filter
     #   arguments for the given layout.
     def filter_for_layout(layout)
-      @layout_filter_mapping.each_pair do |layout_identifier, filter_name_and_args|
-        return filter_name_and_args if layout.identifier =~ layout_identifier
+      @layout_filter_mapping.each_pair do |pattern, filter_name_and_args|
+        return filter_name_and_args if pattern.match?(layout.identifier)
       end
       nil
     end

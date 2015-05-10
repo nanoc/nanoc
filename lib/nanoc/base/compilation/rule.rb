@@ -5,11 +5,6 @@ module Nanoc::Int
   #
   # @api private
   class Rule
-    # @return [Regexp] The regex that determines which items this rule can be
-    #   applied to. This rule can be applied to items with a identifier
-    #   matching this regex.
-    attr_reader :identifier_regex
-
     # @return [Symbol] The name of the representation that will be compiled
     #   using this rule
     attr_reader :rep_name
@@ -24,8 +19,7 @@ module Nanoc::Int
     # compiler and block. The block will be called during compilation with the
     # item rep as its argument.
     #
-    # @param [Regexp] identifier_regex A regular expression that will be used
-    #   to determine whether this rule is applicable to certain items.
+    # @param [Nanoc::Int::Pattern] pattern
     #
     # @param [String, Symbol] rep_name The name of the item representation
     #   where this rule can be applied to
@@ -36,8 +30,13 @@ module Nanoc::Int
     # @option params [Symbol, nil] :snapshot (nil) The name of the snapshot
     #   this rule will apply to. Ignored for compilation rules, but used for
     #   routing rules.
-    def initialize(identifier_regex, rep_name, block, params = {})
-      @identifier_regex = identifier_regex
+    def initialize(pattern, rep_name, block, params = {})
+      # TODO: remove me
+      unless pattern.is_a?(Nanoc::Int::StringPattern) || pattern.is_a?(Nanoc::Int::RegexpPattern)
+        raise "Can only create rules with patterns"
+      end
+
+      @pattern          = pattern
       @rep_name         = rep_name.to_sym
       @snapshot_name    = params[:snapshot_name]
 
@@ -49,7 +48,7 @@ module Nanoc::Int
     # @return [Boolean] true if this rule can be applied to the given item
     #   rep, false otherwise
     def applicable_to?(item)
-      item.identifier =~ @identifier_regex
+      @pattern.match?(item.identifier)
     end
 
     # Applies this rule to the given item rep.
@@ -80,8 +79,7 @@ module Nanoc::Int
     #
     # @return [nil, Array] Captured groups, if any
     def matches(identifier)
-      matches = @identifier_regex.match(identifier.to_s)
-      matches && matches.captures
+      @pattern.captures(identifier)
     end
   end
 end
