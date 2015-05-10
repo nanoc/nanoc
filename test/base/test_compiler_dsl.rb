@@ -267,6 +267,38 @@ EOS
     end
   end
 
+  def test_create_pattern_with_string
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
+
+    pattern = compiler_dsl.create_pattern('/foo/*')
+    assert pattern.match?('/foo/a/a/a/a')
+  end
+
+  def test_create_pattern_with_string_with_glob_pattern_syntax
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_syntax: 'glob' })
+
+    pattern = compiler_dsl.create_pattern('/foo/*')
+    assert pattern.match?('/foo/aaaa')
+    refute pattern.match?('/foo/aaaa/')
+    refute pattern.match?('/foo/a/a/a/a')
+  end
+
+  def test_create_pattern_with_regex
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
+
+    pattern = compiler_dsl.create_pattern(%r<\A/foo/a*/>)
+    assert pattern.match?('/foo/aaaa/')
+  end
+
+  def test_create_pattern_with_string_with_unknown_pattern_syntax
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_syntax: 'donkey' })
+
+    err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+      compiler_dsl.create_pattern('/foo/*')
+    end
+    assert_equal 'Invalid pattern_syntax: donkey', err.message
+  end
+
   def test_identifier_to_regex_without_wildcards
     # Create compiler DSL
     compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})

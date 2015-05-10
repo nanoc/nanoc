@@ -254,11 +254,20 @@ module Nanoc::Int
       @rules_collection.parse(filename)
     end
 
-    private
-
+    # @api private
     def create_pattern(arg)
-      Nanoc::Int::Pattern.from(identifier_to_regex(arg))
+      case @config[:pattern_syntax]
+      when 'glob'
+        Nanoc::Int::Pattern.from(arg)
+      when nil
+        Nanoc::Int::Pattern.from(identifier_to_regex(arg))
+      else
+        raise Nanoc::Int::Errors::GenericTrivial,
+          "Invalid pattern_syntax: #{@config[:pattern_syntax]}"
+      end
     end
+
+    private
 
     # Converts the given identifier, which can contain the '*' or '+'
     # wildcard characters, matching zero or more resp. one or more
