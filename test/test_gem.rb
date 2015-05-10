@@ -25,7 +25,6 @@ class Nanoc::GemTest < Nanoc::TestCase
 
     # Check output
     assert_match(/Successfully built RubyGem\s+Name: nanoc\s+Version: .*\s+File: nanoc-.*\.gem\s+/, stdout.string)
-    assert_equal '', stderr.string
   ensure
     Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
   end
