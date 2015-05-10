@@ -23,6 +23,29 @@ describe Nanoc::Int::Pattern do
   end
 end
 
+describe Nanoc::Int::RegexpPattern do
+  describe '#match?' do
+    it 'matches' do
+      pattern = described_class.new(/the answer is (\d+)/)
+
+      expect(pattern.match?('the answer is 42')).to eql(true)
+      expect(pattern.match?('the answer is donkey')).to eql(false)
+    end
+  end
+
+  describe '#captures' do
+    it 'returns nil if it does not match' do
+      pattern = described_class.new(/the answer is (\d+)/)
+      expect(pattern.captures('the answer is donkey')).to be_nil
+    end
+
+    it 'returns array if it matches' do
+      pattern = described_class.new(/the answer is (\d+)/)
+      expect(pattern.captures('the answer is 42')).to eql(['42'])
+    end
+  end
+end
+
 describe Nanoc::Int::StringPattern do
   describe '#match?' do
     it 'matches simple strings' do
@@ -46,6 +69,13 @@ describe Nanoc::Int::StringPattern do
       expect(pattern.match?('boat')).to eql(true)
       expect(pattern.match?('gloat')).to eql(true)
       expect(pattern.match?('stoat')).to eql(false)
+    end
+  end
+
+  describe '#captures' do
+    it 'returns nil' do
+      pattern = described_class.new('d*key')
+      expect(pattern.captures('donkey')).to be_nil
     end
   end
 end
