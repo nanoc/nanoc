@@ -27,6 +27,8 @@ end
 
 # @api private
 module Nanoc::Int
+  require_relative 'base/pattern'
+
   # Load helper classes
   autoload 'Context',              'nanoc/base/context'
   autoload 'Checksummer',          'nanoc/base/checksummer'

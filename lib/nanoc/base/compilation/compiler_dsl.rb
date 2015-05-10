@@ -77,7 +77,7 @@ module Nanoc::Int
       rep_name = params[:rep] || :default
 
       # Create rule
-      rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, block)
+      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
@@ -122,7 +122,7 @@ module Nanoc::Int
       snapshot_name = params[:snapshot] || :last
 
       # Create rule
-      rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, block, snapshot_name: snapshot_name)
+      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, block, snapshot_name: snapshot_name)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -151,7 +151,8 @@ module Nanoc::Int
     #
     #     layout '/custom/',  :haml, :format => :html5
     def layout(identifier, filter_name, params = {})
-      @rules_collection.layout_filter_mapping[identifier_to_regex(identifier)] = [filter_name, params]
+      pattern = Nanoc::Int::Pattern.from(create_pattern(identifier))
+      @rules_collection.layout_filter_mapping[pattern] = [filter_name, params]
     end
 
     # Creates a pair of compilation and routing rules that indicate that the
@@ -188,7 +189,7 @@ module Nanoc::Int
 
       # Create compilation rule
       compilation_block = proc {}
-      compilation_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, compilation_block)
+      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
@@ -199,7 +200,7 @@ module Nanoc::Int
         # data source.
         item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
       end
-      routing_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, routing_block, snapshot_name: :last)
+      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -227,10 +228,10 @@ module Nanoc::Int
 
       rep_name = params[:rep] || :default
 
-      compilation_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, proc {})
+      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Nanoc::Int::Rule.new(identifier_to_regex(identifier), rep_name, proc {}, snapshot_name: :last)
+      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, proc {}, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -251,6 +252,19 @@ module Nanoc::Int
       raise Nanoc::Int::Errors::NoRulesFileFound.new if filename.nil?
 
       @rules_collection.parse(filename)
+    end
+
+    # @api private
+    def create_pattern(arg)
+      case @config[:pattern_syntax]
+      when 'glob'
+        Nanoc::Int::Pattern.from(arg)
+      when nil
+        Nanoc::Int::Pattern.from(identifier_to_regex(arg))
+      else
+        raise Nanoc::Int::Errors::GenericTrivial,
+          "Invalid pattern_syntax: #{@config[:pattern_syntax]}"
+      end
     end
 
     private
