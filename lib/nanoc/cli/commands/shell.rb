@@ -20,11 +20,14 @@ module Nanoc::CLI::Commands
     protected
 
     def env
+      self.class.env_for_site(site)
+    end
+
+    def self.env_for(site)
       {
-        site: site,
-        items: site.items,
-        layouts: site.layouts,
-        config: site.config
+        items: Nanoc::ItemCollectionView.new(site.items),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        config: Nanoc::ConfigView.new(site.config),
       }
     end
   end
