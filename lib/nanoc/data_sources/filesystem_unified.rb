@@ -73,33 +73,6 @@ module Nanoc::DataSources
 
     private
 
-    # See {Nanoc::DataSources::Filesystem#create_object}.
-    def create_object(dir_name, content, attributes, identifier, params = {})
-      # Check for periods
-      if (@config.nil? || !@config[:allow_periods_in_identifiers]) && identifier.include?('.')
-        raise "Attempted to create an object in #{dir_name} with identifier #{identifier} containing a period, but allow_periods_in_identifiers is not enabled in the site configuration. (Enabling allow_periods_in_identifiers may cause the site to break, though.)"
-      end
-
-      # Determine path
-      ext = params[:extension] || '.html'
-      path = dir_name + (identifier == '/' ? '/index.html' : identifier[0..-2] + ext)
-      parent_path = File.dirname(path)
-
-      # Notify
-      Nanoc::Int::NotificationCenter.post(:file_created, path)
-
-      # Write item
-      FileUtils.mkdir_p(parent_path)
-      File.open(path, 'w') do |io|
-        meta = attributes.__nanoc_stringify_keys_recursively
-        unless meta == {}
-          io.write(YAML.dump(meta).strip + "\n")
-          io.write("---\n")
-        end
-        io.write(content)
-      end
-    end
-
     # See {Nanoc::DataSources::Filesystem#filename_for}.
     def filename_for(base_filename, ext)
       if ext.nil?

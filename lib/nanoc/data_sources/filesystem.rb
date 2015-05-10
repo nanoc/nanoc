@@ -33,15 +33,6 @@ module Nanoc::DataSources
 
     protected
 
-    # Creates a new object (item or layout) on disk in dir_name according to
-    # the given identifier. The file will have its attributes taken from the
-    # attributes hash argument and its content from the content argument.
-    def create_object(_dir_name, _content, _attributes, _identifier, _params = {})
-      raise NotImplementedError.new(
-        "#{self.class} does not implement ##{name}"
-      )
-    end
-
     # Creates instances of klass corresponding to the files in dir_name. The
     # kind attribute indicates the kind of object that is being loaded and is
     # used solely for debugging purposes.

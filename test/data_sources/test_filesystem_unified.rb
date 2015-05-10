@@ -12,38 +12,6 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     data_source
   end
 
-  def test_create_object_not_at_root
-    # Create item
-    data_source = new_data_source
-    data_source.send(:create_object, 'foobar', 'content here', { foo: 'bar' }, '/asdf/')
-
-    # Check file existance
-    assert File.directory?('foobar')
-    assert !File.directory?('foobar/content')
-    assert !File.directory?('foobar/asdf')
-    assert File.file?('foobar/asdf.html')
-
-    # Check file content
-    expected = /^--- ?\nfoo: bar\n---\ncontent here$/
-    assert_match expected, File.read('foobar/asdf.html')
-  end
-
-  def test_create_object_at_root
-    # Create item
-    data_source = new_data_source
-    data_source.send(:create_object, 'foobar', 'content here', { foo: 'bar' }, '/')
-
-    # Check file existance
-    assert File.directory?('foobar')
-    assert !File.directory?('foobar/index')
-    assert !File.directory?('foobar/foobar')
-    assert File.file?('foobar/index.html')
-
-    # Check file content
-    expected = /^--- ?\nfoo: bar\n---\ncontent here$/
-    assert_match expected, File.read('foobar/index.html')
-  end
-
   def test_load_objects
     # Create data source
     data_source = new_data_source
@@ -436,42 +404,6 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       ['num', :content_filename, :meta_filename, :extension].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
-    end
-  end
-
-  def test_create_object_allowing_periods_in_identifiers
-    # Create data source
-    data_source = new_data_source(allow_periods_in_identifiers: true)
-
-    # Create object without period
-    data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/asdf/')
-    assert File.file?('foo/asdf.html')
-    data = data_source.send(:parse, 'foo/asdf.html', nil, 'moo')
-    assert_equal({ 'some' => 'attributes' }, data[0])
-    assert_equal('some content',             data[1])
-
-    # Create object with period
-    data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/as.df/')
-    assert File.file?('foo/as.df.html')
-    data = data_source.send(:parse, 'foo/as.df.html', nil, 'moo')
-    assert_equal({ 'some' => 'attributes' }, data[0])
-    assert_equal('some content',             data[1])
-  end
-
-  def test_create_object_disallowing_periods_in_identifiers
-    # Create data source
-    data_source = new_data_source
-
-    # Create object without period
-    data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/asdf/')
-    assert File.file?('foo/asdf.html')
-    data = data_source.send(:parse, 'foo/asdf.html', nil, 'moo')
-    assert_equal({ 'some' => 'attributes' }, data[0])
-    assert_equal('some content',             data[1])
-
-    # Create object with period
-    assert_raises(RuntimeError) do
-      data_source.send(:create_object, 'foo', 'some content', { some: 'attributes' }, '/as.df/')
     end
   end
 

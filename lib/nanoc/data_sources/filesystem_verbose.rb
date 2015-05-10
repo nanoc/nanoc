@@ -45,27 +45,6 @@ module Nanoc::DataSources
 
     private
 
-    # See {Nanoc::DataSources::Filesystem#create_object}.
-    def create_object(dir_name, content, attributes, identifier, params = {})
-      # Determine base path
-      last_component = identifier.split('/')[-1] || dir_name
-
-      # Get filenames
-      ext = params[:extension] || '.html'
-      dir_path         = dir_name + identifier
-      meta_filename    = dir_name + identifier + last_component + '.yaml'
-      content_filename = dir_name + identifier + last_component + ext
-
-      # Notify
-      Nanoc::Int::NotificationCenter.post(:file_created, meta_filename)
-      Nanoc::Int::NotificationCenter.post(:file_created, content_filename)
-
-      # Create files
-      FileUtils.mkdir_p(dir_path)
-      File.open(meta_filename,    'w') { |io| io.write(YAML.dump(attributes.__nanoc_stringify_keys_recursively)) }
-      File.open(content_filename, 'w') { |io| io.write(content) }
-    end
-
     # See {Nanoc::DataSources::Filesystem#filename_for}.
     def filename_for(base_filename, ext)
       return nil if ext.nil?
