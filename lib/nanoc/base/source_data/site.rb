@@ -176,6 +176,7 @@ module Nanoc::Int
 
       item_map = {}
       @items.each do |item|
+        next if item.identifier !~ /\/\z/
         item_map[item.identifier.to_s] = item
       end
 
@@ -324,11 +325,11 @@ module Nanoc::Int
       @items_loaded = true
 
       # Get items
-      @items = Nanoc::Int::ItemArray.new
+      @items = Nanoc::Int::ItemArray.new(@config)
       data_sources.each do |ds|
         items_in_ds = ds.items
         items_in_ds.each do |i|
-          i.identifier = Nanoc::Identifier.new(File.join(ds.items_root, i.identifier.to_s))
+          i.identifier = i.identifier.prefix(ds.items_root)
           i.site = self
         end
         @items.concat(items_in_ds)
@@ -346,7 +347,7 @@ module Nanoc::Int
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
         layouts_in_ds.each do |l|
-          l.identifier = Nanoc::Identifier.new(File.join(ds.layouts_root, l.identifier.to_s))
+          l.identifier = l.identifier.prefix(ds.layouts_root)
         end
         @layouts.concat(layouts_in_ds)
       end

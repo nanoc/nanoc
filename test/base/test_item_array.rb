@@ -7,7 +7,7 @@ class Nanoc::Int::ItemArrayTest < Nanoc::TestCase
     @one = Nanoc::Int::Item.new('Item One', {}, '/one/')
     @two = Nanoc::Int::Item.new('Item Two', {}, '/two/')
 
-    @items = Nanoc::Int::ItemArray.new
+    @items = Nanoc::Int::ItemArray.new({})
     @items << @one
     @items << @two
   end
@@ -42,6 +42,15 @@ class Nanoc::Int::ItemArrayTest < Nanoc::TestCase
     assert_equal @two, @items[-1]
     assert_equal @two, @items.slice(-1)
     assert_equal @two, @items.at(-1)
+  end
+
+  def test_brackets_with_glob
+    @items = Nanoc::Int::ItemArray.new({ pattern_syntax: 'glob' })
+    @items << @one
+    @items << @two
+
+    assert_equal @one, @items['/on*/']
+    assert_equal @two, @items['/*wo/']
   end
 
   def test_brackets_and_slice_with_range

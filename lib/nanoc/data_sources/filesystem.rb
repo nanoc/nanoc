@@ -45,96 +45,104 @@ module Nanoc::DataSources
     #
     # @see Nanoc::DataSources::Filesystem#load_objects
     def load_objects(dir_name, kind, klass)
-      all_split_files_in(dir_name).map do |base_filename, (meta_ext, content_ext)|
-        # Get filenames
-        meta_filename    = filename_for(base_filename, meta_ext)
-        content_filename = filename_for(base_filename, content_ext)
+      res = []
 
-        # Read content and metadata
-        is_binary = content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1])
-        if is_binary && klass == Nanoc::Int::Item
-          meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
-          content_or_filename = content_filename
-        elsif is_binary && klass == Nanoc::Int::Layout
-          raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
-        else
-          meta, content_or_filename = parse(content_filename, meta_filename, kind)
+      all_split_files_in(dir_name).each do |base_filename, (meta_ext, content_exts)|
+        content_exts.each do |content_ext|
+          # Get filenames
+          meta_filename    = filename_for(base_filename, meta_ext)
+          content_filename = filename_for(base_filename, content_ext)
+
+          # Read content and metadata
+          is_binary = content_filename && !@site.config[:text_extensions].include?(File.extname(content_filename)[1..-1])
+          if is_binary && klass == Nanoc::Int::Item
+            meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
+            content_or_filename = content_filename
+          elsif is_binary && klass == Nanoc::Int::Layout
+            raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
+          else
+            meta, content_or_filename = parse(content_filename, meta_filename, kind)
+          end
+
+          # Get attributes
+          attributes = {
+            filename: content_filename,
+            content_filename: content_filename,
+            meta_filename: meta_filename,
+            extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
+          }.merge(meta)
+
+          # Get identifier
+          if meta_filename
+            identifier = identifier_for_filename(meta_filename[dir_name.length..-1])
+          elsif content_filename
+            identifier = identifier_for_filename(content_filename[dir_name.length..-1])
+          else
+            raise 'meta_filename and content_filename are both nil'
+          end
+
+          # Get modification times
+          meta_mtime = meta_filename ? File.stat(meta_filename).mtime : nil
+          content_mtime = content_filename ? File.stat(content_filename).mtime : nil
+          if meta_mtime && content_mtime
+            mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
+          elsif meta_mtime
+            mtime = meta_mtime
+          elsif content_mtime
+            mtime = content_mtime
+          else
+            raise 'meta_mtime and content_mtime are both nil'
+          end
+
+          # Create layout object
+          res << klass.new(
+            content_or_filename, attributes, identifier,
+            binary: is_binary, mtime: mtime
+          )
         end
-
-        # Get attributes
-        attributes = {
-          filename: content_filename,
-          content_filename: content_filename,
-          meta_filename: meta_filename,
-          extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
-        }.merge(meta)
-
-        # Get identifier
-        if meta_filename
-          identifier = identifier_for_filename(meta_filename[(dir_name.length + 1)..-1])
-        elsif content_filename
-          identifier = identifier_for_filename(content_filename[(dir_name.length + 1)..-1])
-        else
-          raise 'meta_filename and content_filename are both nil'
-        end
-
-        # Get modification times
-        meta_mtime = meta_filename ? File.stat(meta_filename).mtime : nil
-        content_mtime = content_filename ? File.stat(content_filename).mtime : nil
-        if meta_mtime && content_mtime
-          mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
-        elsif meta_mtime
-          mtime = meta_mtime
-        elsif content_mtime
-          mtime = content_mtime
-        else
-          raise 'meta_mtime and content_mtime are both nil'
-        end
-
-        # Create layout object
-        klass.new(
-          content_or_filename, attributes, identifier,
-          binary: is_binary, mtime: mtime
-        )
       end
+
+      res
     end
 
-    # Finds all items/layouts/... in the given base directory. Returns a hash
-    # in which the keys are the file's dirname + basenames, and the values a
-    # pair consisting of the metafile extension and the content file
-    # extension. The meta file extension or the content file extension can be
-    # nil, but not both. Backup files are ignored. For example:
+    # e.g.
     #
     #   {
-    #     'content/foo' => [ 'yaml', 'html' ],
-    #     'content/bar' => [ 'yaml', nil    ],
-    #     'content/qux' => [ nil,    'html' ]
+    #     'content/foo' => [ 'yaml', ['html', 'md'] ],
+    #     'content/bar' => [ 'yaml', [nil]          ],
+    #     'content/qux' => [ nil,    ['html']       ]
     #   }
     def all_split_files_in(dir_name)
-      grouped_filenames =
+      by_basename =
         all_files_in(dir_name)
         .reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
         .group_by { |fn| basename_of(fn) }
 
-      grouped_filenames.each_pair do |key, filenames|
+      all = {}
+
+      by_basename.each_pair do |basename, filenames|
         # Divide
         meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
         content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
 
         # Check number of files per type
         unless [0, 1].include?(meta_filenames.size)
-          raise "Found #{meta_filenames.size} meta files for #{key}; expected 0 or 1"
+          raise "Found #{meta_filenames.size} meta files for #{basename}; expected 0 or 1"
         end
-        unless [0, 1].include?(content_filenames.size)
-          raise "Found #{content_filenames.size} content files for #{key}; expected 0 or 1"
+        unless config[:identifier_style] == 'full'
+          unless [0, 1].include?(content_filenames.size)
+            raise "Found #{content_filenames.size} content files for #{basename}; expected 0 or 1"
+          end
         end
 
-        # Reorder elements and convert to extnames
-        filenames[0] = meta_filenames[0] ? 'yaml' : nil
-        filenames[1] = content_filenames[0] ? ext_of(content_filenames[0])[1..-1] || '' : nil
+        all[basename] = []
+        all[basename][0] =
+          meta_filenames[0] ? 'yaml' : nil
+        all[basename][1] =
+          content_filenames.any? ? content_filenames.map { |fn| ext_of(fn)[1..-1] || '' } : [nil]
       end
 
-      grouped_filenames
+      all
     end
 
     # Returns all files in the given directory and directories below it.

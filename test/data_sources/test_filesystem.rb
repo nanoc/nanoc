@@ -40,9 +40,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => %w(yaml html),
-      './bar.entry' => [nil,    'html'],
-      './foo/qux'   => ['yaml', nil]
+      './foo'       => ['yaml', ['html']],
+      './bar.entry' => [nil,    ['html']],
+      './foo/qux'   => ['yaml', [nil]]
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -67,9 +67,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => %w(yaml html),
-      './bar'       => [nil,    'html.erb'],
-      './foo/qux'   => ['yaml', nil]
+      './foo'       => ['yaml', ['html']],
+      './bar'       => [nil,    ['html.erb']],
+      './foo/qux'   => ['yaml', [nil]]
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -89,9 +89,27 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check
     expected = {
-      './aaa/foo' => [nil, 'html'],
-      './bbb/foo' => [nil, 'html'],
-      './ccc/foo' => [nil, 'html']
+      './aaa/foo' => [nil, ['html']],
+      './bbb/foo' => [nil, ['html']],
+      './ccc/foo' => [nil, ['html']]
+    }
+    assert_equal expected, data_source.send(:all_split_files_in, '.')
+  end
+
+  def test_all_split_files_in_with_same_extensions
+    # Create data source
+    config = { identifier_style: 'full' }
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, config)
+
+    # Write sample files
+    %w( stuff/foo.html stuff/foo.md stuff/foo.yaml ).each do |filename|
+      FileUtils.mkdir_p(File.dirname(filename))
+      File.open(filename, 'w') { |io| io.write('test') }
+    end
+
+    # Check
+    expected = {
+      './stuff/foo' => ['yaml', ['html', 'md']],
     }
     assert_equal expected, data_source.send(:all_split_files_in, '.')
   end

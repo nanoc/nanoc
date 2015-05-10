@@ -70,7 +70,7 @@ module Nanoc::Int
 
       # Get rest of params
       @attributes   = attributes.__nanoc_symbolize_keys_recursively
-      @identifier   = Nanoc::Identifier.new(identifier)
+      @identifier   = Nanoc::Identifier.from(identifier)
 
       # Set mtime
       @attributes.merge!(mtime: params[:mtime]) if params[:mtime]

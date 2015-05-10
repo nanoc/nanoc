@@ -185,6 +185,9 @@ EOF
       FileUtils.mkdir_p('content/parent')
       FileUtils.mkdir_p('content/parent/bar')
 
+      data = File.read('nanoc.yaml').sub('identifier_style: full', 'identifier_style: stripped')
+      File.open('nanoc.yaml', 'w') { |io| io << data }
+
       File.open('content/parent.md', 'w') { |io| io << 'asdf' }
       File.open('content/parent/foo.md', 'w') { |io| io << 'asdf' }
       File.open('content/parent/bar.md', 'w') { |io| io << 'asdf' }
@@ -208,6 +211,35 @@ EOF
       assert_equal parent, foo.parent
       assert_equal parent, bar.parent
       assert_equal bar,    qux.parent
+    end
+  end
+
+  def test_setup_child_parent_links_for_full_style_identifiers
+    Nanoc::CLI.run %w( create_site bar)
+    FileUtils.cd('bar') do
+      FileUtils.mkdir_p('content/parent')
+      FileUtils.mkdir_p('content/parent/bar')
+
+      File.open('content/parent.md', 'w') { |io| io << 'asdf' }
+      File.open('content/parent/foo.md', 'w') { |io| io << 'asdf' }
+      File.open('content/parent/bar/qux.md', 'w') { |io| io << 'asdf' }
+
+      site = Nanoc::Int::Site.new('.')
+
+      root   = site.items.find { |i| i.identifier == '/index.html' }
+      parent = site.items.find { |i| i.identifier == '/parent.md' }
+      foo    = site.items.find { |i| i.identifier == '/parent/foo.md' }
+      qux    = site.items.find { |i| i.identifier == '/parent/bar/qux.md' }
+
+      assert_equal Set.new([]), Set.new(root.children)
+      assert_equal Set.new([]), Set.new(parent.children)
+      assert_equal Set.new([]), Set.new(foo.children)
+      assert_equal Set.new([]), Set.new(qux.children)
+
+      assert_equal nil, root.parent
+      assert_equal nil, parent.parent
+      assert_equal nil, foo.parent
+      assert_equal nil, qux.parent
     end
   end
 

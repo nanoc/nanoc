@@ -21,7 +21,9 @@ module Nanoc::Int
     DELEGATED_METHODS = (Array.instance_methods + Enumerable.instance_methods).map(&:to_sym) - EXCLUDED_METHODS
     def_delegators :@items, *DELEGATED_METHODS
 
-    def initialize
+    def initialize(config)
+      @config = config
+
       @items = []
     end
 
@@ -33,7 +35,7 @@ module Nanoc::Int
 
     def [](*args)
       if 1 == args.size && args.first.is_a?(String)
-        item_with_identifier(args.first)
+        item_with_identifier(args.first) || item_matching_glob(args.first)
       elsif 1 == args.size && args.first.is_a?(Regexp)
         @items.select { |i| i.identifier.to_s =~ args.first }
       else
@@ -60,12 +62,25 @@ module Nanoc::Int
       end
     end
 
+    def item_matching_glob(glob)
+      if use_globs?
+        pat = Nanoc::Int::Pattern.from(glob)
+        @items.find { |i| pat.match?(i.identifier) }
+      else
+        nil
+      end
+    end
+
     def build_mapping
       @mapping = {}
       @items.each do |item|
         @mapping[item.identifier.to_s] = item
       end
       @mapping.freeze
+    end
+
+    def use_globs?
+      @config[:pattern_syntax] == 'glob'
     end
   end
 end

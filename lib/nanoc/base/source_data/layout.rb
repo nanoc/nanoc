@@ -29,7 +29,7 @@ module Nanoc::Int
     def initialize(raw_content, attributes, identifier, params = {})
       @raw_content  = raw_content
       @attributes   = attributes.__nanoc_symbolize_keys_recursively
-      @identifier   = Nanoc::Identifier.new(identifier)
+      @identifier   = Nanoc::Identifier.from(identifier)
     end
 
     # Requests the attribute with the given key.
