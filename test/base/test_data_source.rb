@@ -28,8 +28,8 @@ class Nanoc::DataSourceTest < Nanoc::TestCase
     data_source.down
 
     # Test methods - loading data
-    assert_equal [],  data_source.items
-    assert_equal [],  data_source.layouts
+    assert_equal [], data_source.items
+    assert_equal [], data_source.layouts
   end
 
   def test_new_item

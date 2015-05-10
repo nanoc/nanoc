@@ -172,13 +172,5 @@ module Nanoc
     def new_layout(raw_content, attributes, identifier)
       Nanoc::Int::Layout.new(raw_content, attributes, identifier)
     end
-
-    private
-
-    def not_implemented(name)
-      raise NotImplementedError.new(
-        "#{self.class} does not implement ##{name}"
-      )
-    end
   end
 end
