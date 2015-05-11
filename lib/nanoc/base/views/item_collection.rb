@@ -23,6 +23,11 @@ module Nanoc
       @items.each { |i| yield view_class.new(i) }
     end
 
+    # @return [Integer]
+    def size
+      @items.size
+    end
+
     def at(arg)
       item = @items.at(arg)
       item && view_class.new(item)

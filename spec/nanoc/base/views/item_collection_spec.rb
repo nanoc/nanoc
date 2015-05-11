@@ -13,6 +13,20 @@ describe Nanoc::ItemCollectionView do
     # …
   end
 
+  describe '#size' do
+    let(:wrapped) do
+      [
+        Nanoc::Int::Item.new('foo', {}, '/foo/'),
+        Nanoc::Int::Item.new('bar', {}, '/bar/'),
+        Nanoc::Int::Item.new('baz', {}, '/baz/'),
+      ]
+    end
+
+    subject { view.size }
+
+    it { should == 3 }
+  end
+
   describe '#at' do
     subject { view.at(arg) }
 

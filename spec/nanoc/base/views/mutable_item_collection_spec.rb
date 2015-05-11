@@ -46,4 +46,23 @@ describe Nanoc::MutableItemCollectionView do
       expect(mutable_item_collection).not_to be_empty
     end
   end
+
+  describe '#concat' do
+    let(:mutable_item_collection) do
+      [Nanoc::Int::Item.new('content', {}, '/asdf/')]
+    end
+
+    let(:items_array_to_concat) do
+      [Nanoc::Int::Item.new('shiny', {}, '/new/')]
+    end
+
+    let(:view) { described_class.new(mutable_item_collection) }
+
+    subject { view.concat(items_array_to_concat) }
+
+    it 'concats' do
+      expect { subject }.to change { view.size }.from(1).to(2)
+      expect(view[1].unwrap).to eql(items_array_to_concat[0])
+    end
+  end
 end
