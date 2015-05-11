@@ -4,7 +4,7 @@ usage 'create-site [options] path'
 aliases :create_site, :cs
 summary 'create a site'
 description "
-Create a new site at the given path (defaults to current working directory). The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` command-line option.
+Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` command-line option.
 "
 
 module Nanoc::CLI::Commands
@@ -280,7 +280,7 @@ EOS
       data_source = options[:datasource] || 'filesystem_unified'
 
       # Check whether site exists
-      if File.exist?(File.join(path, 'nanoc.yaml'))
+      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w{ . .. }).empty?)
         raise Nanoc::Int::Errors::GenericTrivial, "A site at '#{path}' already exists."
       end
 

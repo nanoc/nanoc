@@ -21,9 +21,8 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.mkdir('foo')
 
     FileUtils.cd('foo') do
-      Nanoc::CLI.run %w( create_site )
-      site = Nanoc::Site.new('.')
-      site.load_data
+      Nanoc::CLI.run %w( create_site ./ )
+      site = Nanoc::Int::Site.new('.')
       site.compile
     end
   end
