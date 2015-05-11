@@ -73,6 +73,32 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     end
   end
 
+  def test_load_objects_with_same_extensions
+    # Create data source
+    data_source = new_data_source({ identifier_style: 'full' })
+
+    # Create a fake class
+    klass = Class.new do
+      attr_reader :stuff
+      def initialize(*stuff)
+        @stuff = stuff
+      end
+
+      def ==(other)
+        @stuff == other.stuff
+      end
+    end
+
+    # Create sample files
+    FileUtils.mkdir_p('foo')
+    File.open('foo/bar.html', 'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
+    File.open('foo/bar.md',   'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
+
+    # Check
+    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass)
+    assert_equal 2, actual_out.size
+  end
+
   def test_load_binary_objects
     # Create data source
     data_source = new_data_source
@@ -102,6 +128,28 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     # Load
     assert_raises(RuntimeError) do
       data_source.send(:load_objects, 'foo', 'item', Nanoc::Int::Layout)
+    end
+  end
+
+  def test_identifier_for_filename_with_full_style_identifier
+    # Create data source
+    data_source = new_data_source({ identifier_style: 'full' })
+
+    # Get input and expected output
+    expected = {
+      '/foo'            => Nanoc::Identifier.new('/foo',            style: :full),
+      '/foo.html'       => Nanoc::Identifier.new('/foo.html',       style: :full),
+      '/foo/index.html' => Nanoc::Identifier.new('/foo/index.html', style: :full),
+      '/foo.html.erb'   => Nanoc::Identifier.new('/foo.html.erb',   style: :full),
+    }
+
+    # Check
+    expected.each_pair do |input, expected_output|
+      actual_output = data_source.send(:identifier_for_filename, input)
+      assert_equal(
+        expected_output, actual_output,
+        "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
+      )
     end
   end
 

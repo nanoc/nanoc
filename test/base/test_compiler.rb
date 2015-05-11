@@ -256,15 +256,15 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  layout 'default'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  'index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Create site
@@ -317,16 +317,16 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       # Create routes
       File.open('Rules', 'w') do |io|
-        io.write "compile '*' do\n"
+        io.write "compile '/**/*' do\n"
         io.write "  snapshot :aaa\n"
         io.write "  snapshot :aaa\n"
         io.write "end\n"
         io.write "\n"
-        io.write "route '*' do\n"
+        io.write "route '/**/*' do\n"
         io.write "  '/index.html'\n"
         io.write "end\n"
         io.write "\n"
-        io.write "layout '*', :erb\n"
+        io.write "layout '/**/*', :erb\n"
       end
 
       # Compile
@@ -586,6 +586,26 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       stack = dt.instance_eval { @stack }
       assert_empty stack
+    end
+  end
+
+  def test_find_layouts_by_glob
+    Nanoc::CLI.run %w( create_site bar )
+    FileUtils.cd('bar') do
+      File.open('Rules', 'w') do |io|
+        io.write "compile '/**/*' do\n"
+        io.write "  layout '/default.*'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '/**/*' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '/**/*', :erb\n"
+      end
+
+      site = Nanoc::Int::Site.new('.')
+      site.compile
     end
   end
 end

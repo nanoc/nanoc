@@ -19,6 +19,11 @@ module Nanoc::CLI::Commands
     end
 
     DEFAULT_CONFIG = <<EOS unless defined? DEFAULT_CONFIG
+# The syntax to use for patterns in the Rules file. Can be either `"glob"`
+# (default) or `null`. The former will enable glob patterns, which behave like
+# Ruby’s File.fnmatch. The latter will enable nanoc 3.x-style patterns.
+pattern_syntax: glob
+
 # A list of file extensions that nanoc will consider to be textual rather than
 # binary. If an item with an extension not in this list is found,  the file
 # will be considered as binary.
@@ -83,6 +88,8 @@ data_sources:
     # UTF-8 (which they should be!), change this.
     encoding: utf-8
 
+    identifier_style: full
+
 # Configuration for the “check” command, which run unit tests on the site.
 checks:
   # Configuration for the “internal_links” checker, which checks whether all
@@ -98,44 +105,19 @@ EOS
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
 #!/usr/bin/env ruby
 
-# A few helpful tips about the Rules file:
-#
-# * The string given to #compile and #route are matching patterns for
-#   identifiers--not for paths. Therefore, you can’t match on extension.
-#
-# * The order of rules is important: for each item, only the first matching
-#   rule is applied.
-#
-# * Item identifiers start and end with a slash (e.g. “/about/” for the file
-#   “content/about.html”). To select all children, grandchildren, … of an
-#   item, use the pattern “/about/*/”; “/about/*” will also select the parent,
-#   because “*” matches zero or more characters.
-
-compile '*' do
-  if item[:extension] == 'css'
-    # don’t filter stylesheets
-  elsif item.binary?
-    # don’t filter binary items
-  else
-    filter :erb
-    layout 'default'
-  end
+compile '/**/*.html' do
+  filter :erb
+  layout '/default.*'
 end
 
-route '*' do
-  if item[:extension] == 'css'
-    # Write item with identifier /foo/ to /foo.css
-    item.identifier.chop + '.css'
-  elsif item.binary?
-    # Write item with identifier /foo/ to /foo.ext
-    item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
-  else
-    # Write item with identifier /foo/ to /foo/index.html
-    item.identifier + 'index.html'
-  end
+compile '/**/*' do
 end
 
-layout '*', :erb
+route '/**/*' do
+  item.identifier.to_s
+end
+
+layout '/**/*', :erb
 EOS
 
     DEFAULT_ITEM = <<EOS unless defined? DEFAULT_ITEM
@@ -261,7 +243,7 @@ EOS
   <head>
     <meta charset="utf-8">
     <title>A Brand New nanoc Site - <%= @item[:title] %></title>
-    <link rel="stylesheet" href="<%= @items['/stylesheet/'].path %>">
+    <link rel="stylesheet" href="<%= @items['/stylesheet.*'].path %>">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
     <meta name="generator" content="nanoc <%= Nanoc::VERSION %>">

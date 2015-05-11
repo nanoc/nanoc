@@ -94,9 +94,18 @@ module Nanoc::Int
     end
 
     def layout_with_identifier(layout_identifier)
-      layout ||= layouts.find { |l| l.identifier == layout_identifier.__nanoc_cleaned_identifier }
+      req_id = layout_identifier.__nanoc_cleaned_identifier
+      layout = layouts.find { |l| l.identifier == req_id }
+      if layout.nil? && use_globs?
+        pat = Nanoc::Int::Pattern.from(layout_identifier)
+        layout = layouts.find { |l| pat.match?(l.identifier) }
+      end
       raise Nanoc::Int::Errors::UnknownLayout.new(layout_identifier) if layout.nil?
       layout
+    end
+
+    def use_globs?
+      @compiler.site.config[:pattern_syntax] == 'glob'
     end
   end
 end

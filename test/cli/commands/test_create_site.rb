@@ -50,7 +50,13 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       assert_equal 'Could not read content/index.html because the file is not valid UTF-8.', exception.message
 
       # Try with encoding = specific
-      File.open('nanoc.yaml', 'w') { |io| io.write("meh: true\n") }
+      File.open('nanoc.yaml', 'w') do |io|
+        io.write("pattern_syntax: glob\n")
+        io.write("data_sources:\n")
+        io.write("  -\n")
+        io.write("    type: filesystem_unified\n")
+        io.write("    identifier_style: full\n")
+      end
       site = Nanoc::Int::Site.new('.')
       site.compile
     end
