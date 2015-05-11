@@ -22,5 +22,9 @@ describe Nanoc::MutableItemView do
     it 'sets attributes' do
       expect { subject }.to change { view[:friend] }.from(nil).to('Giraffe')
     end
+
+    it 'returns self' do
+      expect(subject).to equal(view)
+    end
   end
 end

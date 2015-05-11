@@ -12,19 +12,23 @@ module Nanoc
       @layout
     end
 
+    # @see Object#==
     def ==(other)
       identifier == other.identifier
     end
     alias_method :eql?, :==
 
+    # @see Object#hash
     def hash
       self.class.hash ^ identifier.hash
     end
 
+    # @return [Nanoc::Identifier]
     def identifier
       @layout.identifier
     end
 
+    # @see Hash#[]
     def [](key)
       @layout[key]
     end

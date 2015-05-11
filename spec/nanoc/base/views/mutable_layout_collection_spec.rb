@@ -12,6 +12,11 @@ describe Nanoc::MutableLayoutCollectionView do
       view.each { |l| l[:seen] = true }
       expect(mutable_layout_collection.first[:seen]).to eql(true)
     end
+
+    it 'returns self' do
+      ret = view.each { |l| l[:seen] = true }
+      expect(ret).to equal(view)
+    end
   end
 
   describe '#create' do
@@ -26,6 +31,11 @@ describe Nanoc::MutableLayoutCollectionView do
 
       expect(mutable_layout_collection.size).to eq(2)
       expect(mutable_layout_collection.last.raw_content).to eq('new content')
+    end
+
+    it 'returns self' do
+      ret = view.create('new content', { title: 'New Page' }, '/new/')
+      expect(ret).to equal(view)
     end
   end
 
@@ -44,6 +54,11 @@ describe Nanoc::MutableLayoutCollectionView do
     it 'deletes no non-matching' do
       view.delete_if { |l| l.raw_content == 'blah' }
       expect(mutable_layout_collection).not_to be_empty
+    end
+
+    it 'returns self' do
+      ret = view.delete_if { |l| false }
+      expect(ret).to equal(view)
     end
   end
 end

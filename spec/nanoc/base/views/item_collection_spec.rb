@@ -10,7 +10,17 @@ describe Nanoc::ItemCollectionView do
   end
 
   describe '#each' do
-    # …
+    let(:wrapped) do
+      [
+        Nanoc::Int::Item.new('foo', {}, '/foo/'),
+        Nanoc::Int::Item.new('bar', {}, '/bar/'),
+        Nanoc::Int::Item.new('baz', {}, '/baz/'),
+      ]
+    end
+
+    it 'returns self' do
+      expect(view.each { |i| }).to equal(view)
+    end
   end
 
   describe '#size' do
@@ -58,20 +68,6 @@ describe Nanoc::ItemCollectionView do
     subject { view[arg] }
 
     let(:arg) { 'some argument' }
-
-    context 'wrapped returns array' do
-      let(:item) { double(:item) }
-
-      before do
-        expect(wrapped).to receive(:[]).with(arg) { [item] }
-      end
-
-      it 'returns wrapped items' do
-        expect(subject.size).to equal(1)
-        expect(subject[0].class).to equal(Nanoc::ItemView)
-        expect(subject[0].unwrap).to equal(item)
-      end
-    end
 
     context 'wrapped returns nil' do
       before do
