@@ -11,7 +11,7 @@ module Nanoc
 
     # @api private
     def unwrap
-      @item
+      @layouts
     end
 
     # @api private
@@ -19,8 +19,14 @@ module Nanoc
       Nanoc::LayoutView
     end
 
+    # Calls the given block once for each layout, passing that layout as a parameter.
+    #
+    # @yieldparam [Nanoc::LayoutView] layout
+    #
+    # @yieldreturn [void]
     def each
       @layouts.each { |l| yield view_class.new(l) }
+      self
     end
   end
 end

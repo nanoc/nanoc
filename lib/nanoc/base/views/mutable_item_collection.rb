@@ -7,16 +7,37 @@ module Nanoc
       Nanoc::MutableItemView
     end
 
+    # Creates a new item and adds it to the site’s collection of items.
+    #
+    # @param [String] content The uncompiled item content (if it is a textual
+    #   item) or the path to the filename containing the content (if it is a
+    #   binary item).
+    #
+    # @param [Hash] attributes A hash containing this item's attributes.
+    #
+    # @param [Nanoc::Identifier, String] identifier This item's identifier.
+    #
+    # @param [Hash] params Extra parameters.
+    #
+    # @option params [Symbol, nil] :binary (true) Whether or not this item is
+    #   binary
+    #
+    # @return [self]
     def create(content, attributes, identifier, params = {})
       @items << Nanoc::Int::Item.new(content, attributes, identifier, params)
+      self
     end
 
+    # Deletes every item for which the block evaluates to true.
+    #
+    # @yieldparam [Nanoc::ItemView] item
+    #
+    # @yieldreturn [Boolean]
+    #
+    # @return [self]
     def delete_if(&block)
       @items.delete_if(&block)
-    end
-
-    def concat(other)
-      @items.concat(other)
+      self
     end
   end
 end

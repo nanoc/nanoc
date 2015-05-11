@@ -19,8 +19,16 @@ module Nanoc
       Nanoc::ItemView
     end
 
+    # Calls the given block once for each item, passing that item as a parameter.
+    #
+    # @yieldparam [Nanoc::ItemView] item
+    #
+    # @yieldreturn [void]
+    #
+    # @return [self]
     def each
       @items.each { |i| yield view_class.new(i) }
+      self
     end
 
     # @return [Integer]
@@ -28,16 +36,45 @@ module Nanoc
       @items.size
     end
 
+    # @overload at(string)
+    #
+    #   Finds the item whose identifier matches the given string.
+    #
+    #   @param [String] string
+    #
+    #   @return [nil] if no item matches the string
+    #
+    #   @return [Nanoc::ItemView] if an item was found
     def at(arg)
       item = @items.at(arg)
       item && view_class.new(item)
     end
 
-    def [](*args)
-      res = @items[*args]
+    # @overload [](string)
+    #
+    #   Finds the item whose identifier matches the given string.
+    #
+    #   If the glob syntax is enabled, the string can be a glob, in which case
+    #   this method finds the first item that matches the given glob.
+    #
+    #   @param [String] string
+    #
+    #   @return [nil] if no item matches the string
+    #
+    #   @return [Nanoc::ItemView] if an item was found
+    #
+    # @overload [](regex)
+    #
+    #   Finds the item whose identifier matches the given regular expression.
+    #
+    #   @param [Regex] regex
+    #
+    #   @return [nil] if no item matches the regex
+    #
+    #   @return [Nanoc::ItemView] if an item was found
+    def [](arg)
+      res = @items[arg]
       case res
-      when Array
-        res.map { |r| view_class.new(r) }
       when nil
         nil
       else

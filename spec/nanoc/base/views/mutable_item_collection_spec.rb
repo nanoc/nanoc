@@ -12,6 +12,11 @@ describe Nanoc::MutableItemCollectionView do
       view.each { |i| i[:seen] = true }
       expect(mutable_item_collection.first[:seen]).to eql(true)
     end
+
+    it 'returns self' do
+      ret = view.each { |i| i[:seen] = true }
+      expect(ret).to equal(view)
+    end
   end
 
   describe '#create' do
@@ -26,6 +31,11 @@ describe Nanoc::MutableItemCollectionView do
 
       expect(mutable_item_collection.size).to eq(2)
       expect(mutable_item_collection.last.raw_content).to eq('new content')
+    end
+
+    it 'returns self' do
+      ret = view.create('new content', { title: 'New Page' }, '/new/')
+      expect(ret).to equal(view)
     end
   end
 
@@ -45,24 +55,10 @@ describe Nanoc::MutableItemCollectionView do
       view.delete_if { |i| i.raw_content == 'blah' }
       expect(mutable_item_collection).not_to be_empty
     end
-  end
 
-  describe '#concat' do
-    let(:mutable_item_collection) do
-      [Nanoc::Int::Item.new('content', {}, '/asdf/')]
-    end
-
-    let(:items_array_to_concat) do
-      [Nanoc::Int::Item.new('shiny', {}, '/new/')]
-    end
-
-    let(:view) { described_class.new(mutable_item_collection) }
-
-    subject { view.concat(items_array_to_concat) }
-
-    it 'concats' do
-      expect { subject }.to change { view.size }.from(1).to(2)
-      expect(view[1].unwrap).to eql(items_array_to_concat[0])
+    it 'returns self' do
+      ret = view.delete_if { |i| false }
+      expect(ret).to equal(view)
     end
   end
 end
