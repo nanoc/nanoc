@@ -14,5 +14,9 @@ module Nanoc
     def delete_if(&block)
       @items.delete_if(&block)
     end
+
+    def concat(other)
+      @items.concat(other)
+    end
   end
 end

@@ -59,4 +59,100 @@ describe Nanoc::ItemView do
 
     it { should == described_class.hash ^ '/foo/'.hash }
   end
+
+  describe '#parent' do
+    let(:parent_item) do
+      Nanoc::Int::Item.new('parent', {}, '/parent/')
+    end
+
+    let(:item) do
+      Nanoc::Int::Item.new('me', {}, '/me/').tap { |i| i.parent = parent_item }
+    end
+
+    let(:view) { described_class.new(item) }
+
+    subject { view.parent }
+
+    it 'returns a view for the parent' do
+      expect(subject.class).to eql(Nanoc::ItemView)
+      expect(subject.unwrap).to eql(parent_item)
+    end
+  end
+
+  describe '#[]' do
+    let(:item) { Nanoc::Int::Item.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:view) { described_class.new(item) }
+
+    subject { view[key] }
+
+    context 'with existant key' do
+      let(:key) { :animal }
+      it { should eql?('donkey') }
+    end
+
+    context 'with non-existant key' do
+      let(:key) { :weapon }
+      it { should eql?(nil) }
+    end
+  end
+
+  describe '#fetch' do
+    let(:item) { Nanoc::Int::Item.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:view) { described_class.new(item) }
+
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).twice
+    end
+
+    context 'with existant key' do
+      let(:key) { :animal }
+
+      subject { view.fetch(key) }
+
+      it { should eql?('donkey') }
+    end
+
+    context 'with non-existant key' do
+      let(:key) { :weapon }
+
+      context 'with fallback' do
+        subject { view.fetch(key, 'nothing sorry') }
+        it { should eql?('nothing sorry') }
+      end
+
+      context 'with block' do
+        subject { view.fetch(key) { 'nothing sorry' } }
+        it { should eql?('nothing sorry') }
+      end
+
+      context 'with no fallback and no block' do
+        subject { view.fetch(key) }
+
+        it 'raises' do
+          expect { subject }.to raise_error(KeyError)
+        end
+      end
+    end
+  end
+
+  describe '#key?' do
+    let(:item) { Nanoc::Int::Item.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:view) { described_class.new(item) }
+
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).twice
+    end
+
+    subject { view.key?(key) }
+
+    context 'with existant key' do
+      let(:key) { :animal }
+      it { should eql?(true) }
+    end
+
+    context 'with non-existant key' do
+      let(:key) { :weapon }
+      it { should eql?(false) }
+    end
+  end
 end

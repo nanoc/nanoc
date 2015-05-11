@@ -3,6 +3,9 @@
 module Nanoc
   class ItemView
     # @api private
+    NONE = Object.new
+
+    # @api private
     def initialize(item)
       @item = item
     end
@@ -25,6 +28,30 @@ module Nanoc
       @item.identifier
     end
 
+    # @see Hash#fetch
+    def fetch(key, fallback=NONE, &block)
+      res = @item[key] # necessary for dependency tracking
+
+      if @item.attributes.key?(key)
+        res
+      else
+        if !fallback.equal?(NONE)
+          fallback
+        elsif block_given?
+          yield(key)
+        else
+          raise KeyError, "key not found: #{key.inspect}"
+        end
+      end
+    end
+
+    # @see Hash#key?
+    def key?(key)
+      _res = @item[key] # necessary for dependency tracking
+      @item.attributes.key?(key)
+    end
+
+    # @see Hash#[]
     def [](key)
       @item[key]
     end
@@ -39,6 +66,10 @@ module Nanoc
 
     def children
       @item.children.map { |i| Nanoc::ItemView.new(i) }
+    end
+
+    def parent
+      Nanoc::ItemView.new(@item.parent)
     end
 
     def binary?
