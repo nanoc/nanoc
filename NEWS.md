@@ -1,5 +1,18 @@
 # nanoc news
 
+## 4.0.0a2 (2015-05-??)
+
+Features:
+
+* Glob patterns (opt-in by setting `pattern_syntax` to `"glob"` in the site configuration)
+* Identifiers with extensions (opt-in by setting `identifier_style` to `"full"` in the data source configuration)
+
+Enhancements:
+
+* Added several convenience methods to view classes (#570, #572)
+
+See the [nanoc 4 upgrade guide](http://nanoc.ws/docs/nanoc-4-upgrade-guide/) for details.
+
 ## 4.0.0a1 (2015-05-09)
 
 This is a major upgrade. For details on upgrading, see the [nanoc 4 upgrade guide](http://nanoc.ws/docs/nanoc-4-upgrade-guide/).
