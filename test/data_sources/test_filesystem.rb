@@ -107,13 +107,13 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
-    # Check - { './stuff/foo' => ['yaml', ['html', 'md']] }
+  # Check - { './stuff/foo' => ['yaml', ['html', 'md']] }
     res = data_source.send(:all_split_files_in, '.')
     assert_equal ['./stuff/foo'], res.keys
     assert_equal 2, res.values[0].size
-    assert_equal 'yaml', res.values[0]
-    assert_equal Array, res.values[1].class
-    assert_equal ['html', 'md'], res.values[1].sort
+    assert_equal 'yaml', res.values[0][0]
+    assert_equal Array, res.values[0][1].class
+    assert_equal ['html', 'md'], res.values[0][1].sort
   end
 
   def test_all_split_files_in_with_multiple_content_files
