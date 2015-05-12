@@ -194,11 +194,15 @@ module Nanoc::Int
 
       # Create routing rule
       routing_block = proc do
-        # This is a temporary solution until an item can map back to its data
-        # source.
-        # ATM item[:content_filename] is nil for items coming from the static
-        # data source.
-        item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
+        if item.identifier.full?
+          item.identifier.to_s
+        else
+          # This is a temporary solution until an item can map back to its data
+          # source.
+          # ATM item[:content_filename] is nil for items coming from the static
+          # data source.
+          item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
+        end
       end
       routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
