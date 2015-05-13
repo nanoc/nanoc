@@ -1,5 +1,19 @@
 # nanoc news
 
+## 4.0.0b1 (2015-05-??)
+
+Changes:
+
+* Removed tasks
+
+Enhancements:
+
+* Removed unused options from CLI
+
+Fixes:
+
+* `#passthrough` now works for identifiers with extensions
+
 ## 4.0.0a2 (2015-05-??)
 
 Features:
