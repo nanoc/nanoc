@@ -90,7 +90,7 @@ module Nanoc::Helpers
 
         # Capture and store
         content = capture(&block)
-        @site.captures_store[@item, name.to_sym] = content
+        @site.unwrap.captures_store[@item, name.to_sym] = content
       else # Get content
         # Get args
         if args.size != 2
@@ -102,7 +102,7 @@ module Nanoc::Helpers
         name = args[1]
 
         # Create dependency
-        current_item = @site.compiler.dependency_tracker.top
+        current_item = @site.unwrap.compiler.dependency_tracker.top
         if item != current_item
           Nanoc::Int::NotificationCenter.post(:visit_started, item)
           Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
@@ -111,8 +111,8 @@ module Nanoc::Helpers
           # item from which we use content. For this, we need to manually edit
           # the content attribute to reset it. :(
           # FIXME: clean this up
-          unless @site.captures_store_compiled_items.include? item
-            @site.captures_store_compiled_items << item
+          unless @site.unwrap.captures_store_compiled_items.include? item
+            @site.unwrap.captures_store_compiled_items << item
             item.forced_outdated = true
             item.reps.each do |r|
               raw_content = item.raw_content
@@ -123,7 +123,7 @@ module Nanoc::Helpers
         end
 
         # Get content
-        @site.captures_store[item, name.to_sym]
+        @site.unwrap.captures_store[item, name.to_sym]
       end
     end
 

@@ -185,6 +185,8 @@ module Nanoc
     #
     # @return [void]
     def depend_on(items)
+      items = items.map { |i| i.unwrap rescue i }
+
       # Notify
       items.each do |item|
         Nanoc::Int::NotificationCenter.post(:visit_started, item)
