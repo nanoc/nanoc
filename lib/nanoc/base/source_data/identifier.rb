@@ -50,6 +50,12 @@ module Nanoc
       to_s <=> other.to_s
     end
 
+    # @return [Boolean] True if this is a full-style identifier (i.e. includes
+    #   the extension), false otherwise
+    def full?
+      @style == :full
+    end
+
     # @return [String]
     def chop
       to_s.chop

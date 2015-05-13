@@ -174,6 +174,35 @@ EOS
     end
   end
 
+  def test_passthrough_with_full_identifiers
+    with_site do
+      File.open('nanoc.yaml', 'w') do |io|
+        io << 'data_sources:' << "\n"
+        io << '  -' << "\n"
+        io << '    type: filesystem_unified' << "\n"
+        io << '    identifier_style: full' << "\n"
+      end
+
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io << 'passthrough \'*\''
+      end
+
+      # Create items
+      assert Dir['content/*'].empty?
+      File.open('content/robots.txt', 'w') do |io|
+        io.write 'Hello I am robots'
+      end
+
+      # Compile
+      site = Nanoc::Int::Site.new('.')
+      site.compile
+
+      # Check paths
+      assert_equal ['output/robots.txt'], Dir['output/*']
+    end
+  end
+
   def test_ignore
     with_site do
       # Create rules
