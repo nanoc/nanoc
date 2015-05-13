@@ -43,7 +43,7 @@ module Nanoc
     end
 
     def =~(pat)
-      to_s =~ pat
+      Nanoc::Int::Pattern.from(pat).match?(to_s) ? 0 : nil
     end
 
     def <=>(other)
