@@ -20,6 +20,23 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
     end
   end
 
+  def test_render_with_non_cleaned_identifier
+    with_site do |site|
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :erb\n")
+      end
+
+      File.open('layouts/foo.erb', 'w') do |io|
+        io.write 'This is the <%= @layout.identifier %> layout.'
+      end
+
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+
+      assert_equal('This is the /foo/ layout.', render('/foo'))
+    end
+  end
+
   def test_render_class
     with_site do |site|
       File.open('Rules', 'w') do |io|

@@ -78,6 +78,7 @@ module Nanoc::Helpers
     def render(identifier, other_assigns = {}, &block)
       # Find layout
       layout = @layouts[identifier]
+      layout ||= @layouts[identifier.__nanoc_cleaned_identifier]
       raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout.nil?
 
       # Visit
