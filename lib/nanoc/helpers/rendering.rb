@@ -93,7 +93,7 @@ module Nanoc::Helpers
         item: @item,
         item_rep: @item_rep,
         items: @items,
-        layout: layout,
+        layout: Nanoc::LayoutView.new(layout),
         layouts: @layouts,
         config: @config,
         site: @site

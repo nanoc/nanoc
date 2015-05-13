@@ -19,6 +19,22 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
     end
   end
 
+  def test_render_class
+    with_site do |site|
+      @site = site
+
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :erb\n")
+      end
+
+      File.open('layouts/foo.erb', 'w') do |io|
+        io.write 'I am the <%= @layout.class %> class.'
+      end
+
+      assert_equal('I am the Nanoc::LayoutView class.', render('/foo/'))
+    end
+  end
+
   def test_render_with_unknown_layout
     with_site do |site|
       @site = site
