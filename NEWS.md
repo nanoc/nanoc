@@ -14,7 +14,7 @@ Fixes:
 
 * `#passthrough` now works for identifiers with extensions
 
-## 4.0.0a2 (2015-05-??)
+## 4.0.0a2 (2015-05-12)
 
 Features:
 
