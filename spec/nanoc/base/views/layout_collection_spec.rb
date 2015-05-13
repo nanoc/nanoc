@@ -22,4 +22,38 @@ describe Nanoc::LayoutCollectionView do
       expect(view.each { |l| }).to equal(view)
     end
   end
+
+  describe '#[]' do
+    let(:wrapped) do
+      [
+        Nanoc::Int::Layout.new('foo', {}, Nanoc::Identifier.new('/page.erb', style: :full)),
+        Nanoc::Int::Layout.new('bar', {}, Nanoc::Identifier.new('/home.erb', style: :full)),
+      ]
+    end
+
+    subject { view[arg] }
+
+    context 'no layouts found' do
+      let(:arg) { '/donkey.*' }
+      it { is_expected.to equal(nil) }
+    end
+
+    context 'direct identifier' do
+      let(:arg) { '/home.erb' }
+
+      it 'returns wrapped layout' do
+        expect(subject.class).to equal(Nanoc::LayoutView)
+        expect(subject.unwrap).to equal(wrapped[1])
+      end
+    end
+
+    context 'glob' do
+      let(:arg) { '/home.*' }
+
+      it 'returns wrapped layout' do
+        expect(subject.class).to equal(Nanoc::LayoutView)
+        expect(subject.unwrap).to equal(wrapped[1])
+      end
+    end
+  end
 end

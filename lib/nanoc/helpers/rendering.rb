@@ -77,8 +77,9 @@ module Nanoc::Helpers
     #   invoked with a block
     def render(identifier, other_assigns = {}, &block)
       # Find layout
-      layout = @site.layouts.find { |l| l.identifier == identifier.__nanoc_cleaned_identifier }
-      raise Nanoc::Int::Errors::UnknownLayout.new(identifier.__nanoc_cleaned_identifier) if layout.nil?
+      layout = @layouts[identifier]
+      layout ||= @layouts[identifier.__nanoc_cleaned_identifier]
+      raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout.nil?
 
       # Visit
       Nanoc::Int::NotificationCenter.post(:visit_started, layout)

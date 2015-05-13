@@ -61,4 +61,40 @@ describe Nanoc::MutableLayoutCollectionView do
       expect(ret).to equal(view)
     end
   end
+
+  describe '#[]' do
+    let(:mutable_layout_collection) do
+      [
+        Nanoc::Int::Layout.new('foo', {}, Nanoc::Identifier.new('/page.erb', style: :full)),
+        Nanoc::Int::Layout.new('bar', {}, Nanoc::Identifier.new('/home.erb', style: :full)),
+      ]
+    end
+
+    let(:view) { described_class.new(mutable_layout_collection) }
+
+    subject { view[arg] }
+
+    context 'no layouts found' do
+      let(:arg) { '/donkey.*' }
+      it { is_expected.to equal(nil) }
+    end
+
+    context 'direct identifier' do
+      let(:arg) { '/home.erb' }
+
+      it 'returns wrapped layout' do
+        expect(subject.class).to equal(Nanoc::MutableLayoutView)
+        expect(subject.unwrap).to equal(mutable_layout_collection[1])
+      end
+    end
+
+    context 'glob' do
+      let(:arg) { '/home.*' }
+
+      it 'returns wrapped layout' do
+        expect(subject.class).to equal(Nanoc::MutableLayoutView)
+        expect(subject.unwrap).to equal(mutable_layout_collection[1])
+      end
+    end
+  end
 end

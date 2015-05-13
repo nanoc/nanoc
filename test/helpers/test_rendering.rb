@@ -5,8 +5,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render
     with_site do |site|
-      @site = site
-
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo/', :erb\n")
       end
@@ -15,14 +13,32 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+
       assert_equal('This is the /foo/ layout.', render('/foo/'))
+    end
+  end
+
+  def test_render_with_non_cleaned_identifier
+    with_site do |site|
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :erb\n")
+      end
+
+      File.open('layouts/foo.erb', 'w') do |io|
+        io.write 'This is the <%= @layout.identifier %> layout.'
+      end
+
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+
+      assert_equal('This is the /foo/ layout.', render('/foo'))
     end
   end
 
   def test_render_class
     with_site do |site|
-      @site = site
-
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo/', :erb\n")
       end
@@ -31,6 +47,9 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'I am the <%= @layout.class %> class.'
       end
 
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+
       assert_equal('I am the Nanoc::LayoutView class.', render('/foo/'))
     end
   end
@@ -38,6 +57,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
   def test_render_with_unknown_layout
     with_site do |site|
       @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
 
       assert_raises(Nanoc::Int::Errors::UnknownLayout) do
         render '/dsfghjkl/'
@@ -47,13 +67,14 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render_without_filter
     with_site do |site|
-      @site = site
-
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo/', nil\n")
       end
 
       File.open('layouts/foo.erb', 'w').close
+
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
 
       assert_raises(Nanoc::Int::Errors::CannotDetermineFilter) do
         render '/foo/'
@@ -63,13 +84,14 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render_with_unknown_filter
     with_site do |site|
-      @site = site
-
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo/', :asdf\n")
       end
 
       File.open('layouts/foo.erb', 'w').close
+
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
 
       assert_raises(Nanoc::Int::Errors::UnknownFilter) do
         render '/foo/'
@@ -79,8 +101,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render_with_block
     with_site do |site|
-      @site = site
-
       File.open('Rules', 'w') do |io|
         io.write("layout '/foo/', :erb\n")
       end
@@ -88,6 +108,9 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
       File.open('layouts/foo.erb', 'w') do |io|
         io.write '[partial-before]<%= yield %>[partial-after]'
       end
+
+      @site = site
+      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
 
       _erbout = '[erbout-before]'
       result = render '/foo/' do
