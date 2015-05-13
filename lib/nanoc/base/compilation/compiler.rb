@@ -336,9 +336,10 @@ module Nanoc::Int
           compile_rep(rep)
           content_dependency_graph.delete_vertex(rep)
         rescue Nanoc::Int::Errors::UnmetDependency => e
-          content_dependency_graph.add_edge(e.rep, rep)
-          unless content_dependency_graph.vertices.include?(e.rep)
-            content_dependency_graph.add_vertex(e.rep)
+          other_rep = e.rep.unwrap rescue e.rep
+          content_dependency_graph.add_edge(other_rep, rep)
+          unless content_dependency_graph.vertices.include?(other_rep)
+            content_dependency_graph.add_vertex(other_rep)
           end
         end
       end

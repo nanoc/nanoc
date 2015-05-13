@@ -126,11 +126,6 @@ module Nanoc
     end
 
     # @api private
-    def reference
-      @item.reference
-    end
-
-    # @api private
     def reps
       @item.reps.map { |r| Nanoc::ItemRepView.new(r) }
     end
@@ -138,16 +133,6 @@ module Nanoc
     # @api private
     def raw_filename
       @item.raw_filename
-    end
-
-    # @api private
-    def forced_outdated?
-      @item.forced_outdated?
-    end
-
-    # @api private
-    def __nanoc_checksum
-      @item.__nanoc_checksum
     end
   end
 end

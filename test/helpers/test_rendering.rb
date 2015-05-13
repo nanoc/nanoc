@@ -13,8 +13,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       assert_equal('This is the /foo/ layout.', render('/foo/'))
     end
@@ -30,8 +30,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       assert_equal('This is the /foo/ layout.', render('/foo'))
     end
@@ -47,8 +47,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'I am the <%= @layout.class %> class.'
       end
 
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       assert_equal('I am the Nanoc::LayoutView class.', render('/foo/'))
     end
@@ -56,8 +56,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render_with_unknown_layout
     with_site do |site|
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       assert_raises(Nanoc::Int::Errors::UnknownLayout) do
         render '/dsfghjkl/'
@@ -73,8 +73,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       File.open('layouts/foo.erb', 'w').close
 
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       assert_raises(Nanoc::Int::Errors::CannotDetermineFilter) do
         render '/foo/'
@@ -90,8 +90,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       File.open('layouts/foo.erb', 'w').close
 
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       assert_raises(Nanoc::Int::Errors::UnknownFilter) do
         render '/foo/'
@@ -109,8 +109,8 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write '[partial-before]<%= yield %>[partial-after]'
       end
 
-      @site = site
-      @layouts = Nanoc::LayoutCollectionView.new(@site.layouts)
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
       _erbout = '[erbout-before]'
       result = render '/foo/' do
