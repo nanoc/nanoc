@@ -18,7 +18,6 @@ Coveralls.wear!
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'nanoc'
 require 'nanoc/cli'
-require 'nanoc/tasks'
 Nanoc::CLI.setup
 
 # Load miscellaneous requirements

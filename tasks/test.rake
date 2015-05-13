@@ -26,7 +26,7 @@ namespace :test do
   end
 
   # test:...
-  %w( base cli data_sources extra filters helpers tasks ).each do |dir|
+  %w( base cli data_sources extra filters helpers ).each do |dir|
     desc "Run all #{dir} tests"
     task dir.to_sym do |_task|
       run_tests "test/#{dir}/**/"
