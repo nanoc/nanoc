@@ -241,4 +241,32 @@ describe Nanoc::Identifier do
       end
     end
   end
+
+  describe '#without_ext' do
+    subject { identifier.without_ext }
+
+    context 'stripped style' do
+      let(:identifier) { described_class.new('/foo/') }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error
+      end
+    end
+
+    context 'identifier with no extension' do
+      let(:identifier) { described_class.new('/foo', style: :full) }
+
+      it 'does nothing' do
+        expect(subject).to eql('/foo')
+      end
+    end
+
+    context 'identifier with extension' do
+      let(:identifier) { described_class.new('/foo.md', style: :full) }
+
+      it 'removes the extension' do
+        expect(subject).to eql('/foo')
+      end
+    end
+  end
 end

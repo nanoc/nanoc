@@ -9,6 +9,7 @@ Changes:
 Enhancements:
 
 * Removed unused options from CLI
+* Added Nanoc::Identifier#without_ext
 
 Fixes:
 

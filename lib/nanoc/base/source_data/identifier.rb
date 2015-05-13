@@ -103,6 +103,11 @@ module Nanoc
       end
     end
 
+    # @return [String]
+    def without_ext
+      with_ext('')
+    end
+
     def to_s
       @string
     end
