@@ -50,6 +50,16 @@ module Nanoc
       item && view_class.new(item)
     end
 
+    # Finds all items whose identifier matches the given argument.
+    #
+    # @param [String, Regex] arg
+    #
+    # @return [Enumerable<Nanoc::ItemView>]
+    def find_all(arg)
+      pat = Nanoc::Int::Pattern.from(arg)
+      @items.select { |i| pat.match?(i.identifier) }
+    end
+
     # @overload [](string)
     #
     #   Finds the item whose identifier matches the given string.

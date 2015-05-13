@@ -90,4 +90,26 @@ describe Nanoc::ItemCollectionView do
       end
     end
   end
+
+  describe '#find_all' do
+    let(:wrapped) do
+      [
+        Nanoc::Int::Item.new('foo', {}, Nanoc::Identifier.new('/about.css', style: :full)),
+        Nanoc::Int::Item.new('bar', {}, Nanoc::Identifier.new('/about.md', style: :full)),
+        Nanoc::Int::Item.new('baz', {}, Nanoc::Identifier.new('/style.css', style: :full)),
+      ]
+    end
+
+    subject { view.find_all(arg) }
+
+    context 'with string' do
+      let(:arg) { '/*.css' }
+      it { is_expected.to contain_exactly(wrapped[0], wrapped[2]) }
+    end
+
+    context 'with regex' do
+      let(:arg) { %r{\.css\z} }
+      it { is_expected.to contain_exactly(wrapped[0], wrapped[2]) }
+    end
+  end
 end
