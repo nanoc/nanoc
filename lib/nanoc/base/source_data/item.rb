@@ -69,7 +69,7 @@ module Nanoc::Int
       end
 
       # Get rest of params
-      @attributes   = attributes.__nanoc_symbolize_keys_recursively
+      @attributes   = Nanoc::Int::Attributes.new(attributes)
       @identifier   = Nanoc::Identifier.from(identifier)
 
       # Set mtime

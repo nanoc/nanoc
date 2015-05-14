@@ -30,6 +30,7 @@ module Nanoc::Int
   require_relative 'base/pattern'
 
   # Load helper classes
+  autoload 'Attributes',           'nanoc/base/attributes'
   autoload 'Context',              'nanoc/base/context'
   autoload 'Checksummer',          'nanoc/base/checksummer'
   autoload 'DirectedGraph',        'nanoc/base/directed_graph'
