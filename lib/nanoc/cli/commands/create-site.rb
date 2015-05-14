@@ -280,7 +280,7 @@ EOS
       data_source = options[:datasource] || 'filesystem_unified'
 
       # Check whether site exists
-      if File.exist?(path)
+      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w{ . .. }).empty?)
         raise Nanoc::Int::Errors::GenericTrivial, "A site at '#{path}' already exists."
       end
 

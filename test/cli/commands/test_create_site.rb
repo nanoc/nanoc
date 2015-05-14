@@ -17,6 +17,16 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     end
   end
 
+  def test_can_compile_new_site_in_current_directory
+    FileUtils.mkdir('foo')
+
+    FileUtils.cd('foo') do
+      Nanoc::CLI.run %w( create_site ./ )
+      site = Nanoc::Int::Site.new('.')
+      site.compile
+    end
+  end
+
   def test_can_compile_new_site_with_binary_items
     Nanoc::CLI.run %w( create_site foo )
 
