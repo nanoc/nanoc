@@ -17,9 +17,8 @@ module Nanoc::Helpers
     # tags will be linked using the {#link_for_tag} function; the
     # HTML-escaping rules for {#link_for_tag} apply here as well.
     #
-    # @option params [String] base_url ("http://technorati.com/tag/") The URL
-    #   to which the tag will be appended to construct the link URL. This URL
-    #   must have a trailing slash.
+    # @option params [String] base_url The URL to which the tag will be appended
+    #   to construct the link URL. This URL must have a trailing slash.
     #
     # @option params [String] none_text ("(none)") The text to display when
     #   the item has no tags
@@ -29,7 +28,7 @@ module Nanoc::Helpers
     #
     # @return [String] A hyperlinked list of tags for the given item
     def tags_for(item, params = {})
-      base_url  = params[:base_url] || 'http://technorati.com/tag/'
+      base_url  = params.fetch(:base_url)
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 

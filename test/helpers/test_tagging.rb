@@ -10,7 +10,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
     # Check
     assert_equal(
       '(none)',
-      tags_for(item)
+      tags_for(item, base_url: 'http://example.com/tag/')
     )
   end
 
@@ -33,7 +33,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
     # Check
     assert_equal(
       'no tags for you, fool',
-      tags_for(item, none_text: 'no tags for you, fool')
+      tags_for(item, none_text: 'no tags for you, fool', base_url: 'http://example.com/tag/')
     )
   end
 
@@ -43,9 +43,9 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
     # Check
     assert_equal(
-      "#{link_for_tag('foo', 'http://technorati.com/tag/')} ++ " \
-      "#{link_for_tag('bar', 'http://technorati.com/tag/')}",
-      tags_for(item, separator: ' ++ ')
+      "#{link_for_tag('foo', 'http://example.com/tag/')} ++ " \
+      "#{link_for_tag('bar', 'http://example.com/tag/')}",
+      tags_for(item, separator: ' ++ ', base_url: 'http://example.com/tag/')
     )
   end
 
