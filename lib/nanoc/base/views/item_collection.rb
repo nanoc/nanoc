@@ -36,15 +36,13 @@ module Nanoc
       @items.size
     end
 
-    # @overload at(string)
+    # Finds the item whose identifier matches the given string.
     #
-    #   Finds the item whose identifier matches the given string.
+    # @param [String] arg
     #
-    #   @param [String] string
+    # @return [nil] if no item matches the string
     #
-    #   @return [nil] if no item matches the string
-    #
-    #   @return [Nanoc::ItemView] if an item was found
+    # @return [Nanoc::ItemView] if an item was found
     def at(arg)
       item = @items.at(arg)
       item && view_class.new(item)
