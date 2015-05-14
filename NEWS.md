@@ -5,16 +5,20 @@
 Changes:
 
 * Removed tasks
+* Removed several private methods in the view API
 
 Enhancements:
 
 * Removed unused options from CLI
-* Added Nanoc::Identifier#without_ext
-* Made Nanoc::Identifier#=~ work with string
+* Added `Nanoc::Identifier#without_ext`
+* Made `Nanoc::Identifier#=~` work with a glob
+* Added `Nanoc::LayoutCollectionView#[]`
+* Added `--force` to `create-site` command (#549) [David Alexander]
 
 Fixes:
 
-* `#passthrough` now works for identifiers with extensions
+* Fixed `#passthrough` for identifiers with extensions
+* Fixed rendering helper for identifiers with extensions
 
 ## 4.0.0a2 (2015-05-12)
 
