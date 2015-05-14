@@ -6,6 +6,7 @@ Changes:
 
 * Removed tasks
 * Removed several private methods in the view API
+* Removed default `base_url` in tagging helper
 
 Enhancements:
 
