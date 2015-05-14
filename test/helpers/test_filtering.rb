@@ -14,6 +14,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       # Mock item and rep
       @item_rep = mock
       @item_rep.expects(:assigns).returns({})
+      @item_rep = Nanoc::ItemRepView.new(@item_rep)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -36,12 +37,14 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       @item = mock
       @item.expects(:[]).with(:title).returns('Bar...')
       @item.expects(:identifier).returns('/blah/')
+      @item = Nanoc::ItemView.new(@item)
       @item_rep = mock
       @item_rep.expects(:name).returns('default')
       @item_rep.expects(:assigns).returns({
         item: @item,
         item_rep: @item_rep
       })
+      @item_rep = Nanoc::ItemRepView.new(@item_rep)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -75,6 +78,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       # Mock item and rep
       @item_rep = mock
       @item_rep.expects(:assigns).returns({})
+      @item_rep = Nanoc::ItemRepView.new(@item_rep)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -93,6 +97,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       # Mock item and rep
       @item_rep = mock
       @item_rep.expects(:assigns).returns({})
+      @item_rep = Nanoc::ItemRepView.new(@item_rep)
 
       # Evaluate content
       result = ::Haml::Engine.new(content).render(binding)
@@ -113,6 +118,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
     # Mock item and rep
     @item_rep = mock
     @item_rep.expects(:assigns).returns({})
+    @item_rep = Nanoc::ItemRepView.new(@item_rep)
 
     ::ERB.new(content).result(binding)
 

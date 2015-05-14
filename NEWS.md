@@ -20,6 +20,7 @@ Fixes:
 
 * Fixed `#passthrough` for identifiers with extensions
 * Fixed rendering helper for identifiers with extensions
+* Fixed filtering helper
 
 ## 4.0.0a2 (2015-05-12)
 
