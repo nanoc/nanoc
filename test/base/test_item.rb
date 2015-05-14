@@ -159,17 +159,4 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
       item[:a][:b] = '456'
     end
   end
-
-  def test_dump_and_load
-    item = Nanoc::Int::Item.new(
-      'foobar',
-      { a: { b: 123 } },
-      '/foo/')
-
-    item = Marshal.load(Marshal.dump(item))
-
-    assert_equal Nanoc::Identifier.new('/foo/'), item.identifier
-    assert_equal 'foobar', item.raw_content
-    assert_equal({ a: { b: 123 } }, item.attributes)
-  end
 end

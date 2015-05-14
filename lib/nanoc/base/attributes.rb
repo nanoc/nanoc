@@ -10,15 +10,16 @@ module Nanoc::Int
 
     def [](key)
       res = @hash[key.to_s]
+      res
       # FIXME: following is not tested
-      if res.is_a?(Hash)
-        res = Nanoc::Int::Attributes.new(res)
-        # FIXME: following is not tested
-        res.__nanoc_freeze_recursively if frozen?
-        res
-      else
-        res
-      end
+      # if res.is_a?(Hash)
+      #   res = Nanoc::Int::Attributes.new(res)
+      #   # FIXME: following is not tested
+      #   res.__nanoc_freeze_recursively if frozen?
+      #   res
+      # else
+      #   res
+      # end
     end
 
     def []=(key, value)

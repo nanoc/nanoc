@@ -95,19 +95,5 @@ module Nanoc::Int
     def ==(other)
       self.eql?(other)
     end
-
-    def marshal_dump
-      [
-        @raw_content,
-        @attributes,
-        @identifier
-      ]
-    end
-
-    def marshal_load(source)
-      @raw_content,
-      @attributes,
-      @identifier = *source
-    end
   end
 end

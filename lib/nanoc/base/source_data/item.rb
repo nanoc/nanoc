@@ -73,6 +73,7 @@ module Nanoc::Int
       @identifier   = Nanoc::Identifier.from(identifier)
 
       # Set mtime
+      # FIXME: do not merge :mtime
       @attributes.merge!(mtime: params[:mtime]) if params[:mtime]
 
       @parent       = nil
@@ -221,24 +222,6 @@ module Nanoc::Int
 
     def ==(other)
       self.eql?(other)
-    end
-
-    def marshal_dump
-      [
-        @is_binary,
-        @raw_filename,
-        @raw_content,
-        @attributes,
-        @identifier
-      ]
-    end
-
-    def marshal_load(source)
-      @is_binary,
-      @raw_filename,
-      @raw_content,
-      @attributes,
-      @identifier = *source
     end
 
     # @api private
