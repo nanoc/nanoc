@@ -2,6 +2,9 @@
 
 module Nanoc::Int
   class Attributes
+    # @api private
+    NONE = Object.new
+
     def initialize(hash)
       @hash = hash.each_with_object({}) do |(k, v), memo|
         memo[k.to_s] = v
@@ -26,6 +29,20 @@ module Nanoc::Int
       @hash[key.to_s] = value
     end
 
+    def fetch(key, fallback=NONE, &block)
+      if key?(key)
+        self[key]
+      else
+        if !fallback.equal?(NONE)
+          fallback
+        elsif block_given?
+          yield(key)
+        else
+          raise KeyError, "key not found: #{key.inspect}"
+        end
+      end
+    end
+
     def key?(key)
       @hash.key?(key.to_s)
     end
@@ -39,6 +56,10 @@ module Nanoc::Int
         @hash[k.to_s] = v
       end
       self
+    end
+
+    def update(other)
+      merge!(other)
     end
 
     def merge(other)
