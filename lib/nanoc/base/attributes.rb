@@ -12,7 +12,10 @@ module Nanoc::Int
       res = @hash[key.to_s]
       # FIXME: following is not tested
       if res.is_a?(Hash)
-        Nanoc::Int::Attributes.new(res)
+        res = Nanoc::Int::Attributes.new(res)
+        # FIXME: following is not tested
+        res.__nanoc_freeze_recursively if frozen?
+        res
       else
         res
       end
@@ -24,6 +27,10 @@ module Nanoc::Int
 
     def key?(key)
       @hash.key?(key.to_s)
+    end
+
+    def has_key?(key)
+      key?(key)
     end
 
     def merge!(other)
@@ -43,7 +50,7 @@ module Nanoc::Int
 
     # Required for Mustache :(
     def to_hash
-      @hash
+      self
     end
 
     def __nanoc_freeze_recursively

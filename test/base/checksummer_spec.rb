@@ -207,7 +207,7 @@ describe Nanoc::Int::Checksummer do
     let(:attributes)      { { a: 1, b: 2 } }
     let(:identifier)      { '/foo/' }
     let(:item)            { Nanoc::Int::Item.new(content, attributes, identifier) }
-    let(:normal_checksum) { '6VtlVLx1JE69erzfDczZW7HSWeY=' }
+    let(:normal_checksum) { '6eNdrrKiqPtsZKWDqGcmzsyzecU=' }
 
     it 'should checksum item' do
       subject.calc(item).must_equal(normal_checksum)
