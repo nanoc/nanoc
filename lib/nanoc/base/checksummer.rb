@@ -64,9 +64,7 @@ module Nanoc::Int
           end
 
           digest.update('attributes')
-          attributes = obj.attributes.dup
-          attributes.delete(:file)
-          update(attributes, digest, visited + [obj])
+          update(obj.attributes, digest, visited + [obj])
         else
           data = begin
             Marshal.dump(obj)
