@@ -4,7 +4,8 @@ class Nanoc::Int::LayoutTest < Nanoc::TestCase
   def test_initialize
     # Make sure attributes are cleaned
     layout = Nanoc::Int::Layout.new('content', { 'foo' => 'bar' }, '/foo/')
-    assert_equal({ foo: 'bar' }, layout.attributes)
+    assert_equal('bar', layout.attributes[:foo])
+    assert_equal('bar', layout.attributes['foo'])
 
     # Make sure identifier is cleaned
     layout = Nanoc::Int::Layout.new('content', { 'foo' => 'bar' }, 'foo')

@@ -28,7 +28,7 @@ module Nanoc::Int
     # @param [Hash] params Extra parameters. Unused.
     def initialize(raw_content, attributes, identifier, params = {})
       @raw_content  = raw_content
-      @attributes   = attributes.__nanoc_symbolize_keys_recursively
+      @attributes   = Nanoc::Int::Attributes.new(attributes)
       @identifier   = Nanoc::Identifier.from(identifier)
     end
 
