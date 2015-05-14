@@ -125,7 +125,9 @@ module Nanoc
       @item.raw_content
     end
 
-    # @api private
+    # Returns the representations of this item.
+    #
+    # @return [Enumerable<Nanoc::ItemRepView>]
     def reps
       @item.reps.map { |r| Nanoc::ItemRepView.new(r) }
     end
