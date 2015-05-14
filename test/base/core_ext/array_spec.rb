@@ -8,14 +8,6 @@ describe 'Array#__nanoc_symbolize_keys_recursively' do
   end
 end
 
-describe 'Array#__nanoc_stringify_keys_recursively' do
-  it 'should convert keys to strings' do
-    array_old = [:abc, 'xyz', { :foo  => 'bar', 'baz' => :qux }]
-    array_new = [:abc, 'xyz', { 'foo' => 'bar', 'baz' => :qux }]
-    array_old.__nanoc_stringify_keys_recursively.must_equal array_new
-  end
-end
-
 describe 'Array#__nanoc_freeze_recursively' do
   include Nanoc::TestHelpers
 

@@ -15,17 +15,6 @@ module Nanoc::ArrayExtensions
     array
   end
 
-  # Returns a new array where all items' keys are recursively converted to
-  # strings by calling {Nanoc::ArrayExtensions#__nanoc_stringify_keys_recursively} or
-  # {Nanoc::HashExtensions#__nanoc_stringify_keys_recursively}.
-  #
-  # @return [Array] The converted array
-  def __nanoc_stringify_keys_recursively
-    reduce([]) do |array, element|
-      array + [element.respond_to?(:__nanoc_stringify_keys_recursively) ? element.__nanoc_stringify_keys_recursively : element]
-    end
-  end
-
   # Freezes the contents of the array, as well as all array elements. The
   # array elements will be frozen using {#__nanoc_freeze_recursively} if they respond
   # to that message, or #freeze if they do not.
