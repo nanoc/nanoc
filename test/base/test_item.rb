@@ -4,7 +4,14 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
   def test_initialize_with_attributes_with_string_keys
     item = Nanoc::Int::Item.new('foo', { 'abc' => 'xyz' }, '/foo/')
 
-    assert_equal nil,   item.attributes['abc']
+    assert_equal 'xyz', item.attributes['abc']
+    assert_equal 'xyz', item.attributes[:abc]
+  end
+
+  def test_initialize_with_attributes_with_symbol_keys
+    item = Nanoc::Int::Item.new('foo', { abc: 'xyz' }, '/foo/')
+
+    assert_equal 'xyz', item.attributes['abc']
     assert_equal 'xyz', item.attributes[:abc]
   end
 

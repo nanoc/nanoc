@@ -9,7 +9,13 @@ module Nanoc::Int
     end
 
     def [](key)
-      @hash[key.to_s]
+      res = @hash[key.to_s]
+      # FIXME: following is not tested
+      if res.is_a?(Hash)
+        Nanoc::Int::Attributes.new(res)
+      else
+        res
+      end
     end
 
     def []=(key, value)
@@ -24,10 +30,20 @@ module Nanoc::Int
       other.each do |k, v|
         @hash[k.to_s] = v
       end
+      self
+    end
+
+    def merge(other)
+      self.dup.merge!(other)
     end
 
     def delete(key)
       @hash.delete(key.to_s)
+    end
+
+    # Required for Mustache :(
+    def to_hash
+      @hash
     end
 
     def __nanoc_freeze_recursively
