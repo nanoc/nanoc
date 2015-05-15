@@ -52,13 +52,13 @@ module Nanoc
     #
     #   @return [Nanoc::ItemView] if an item was found
     def [](arg)
-      layout = @layouts.find { |l| l.identifier == arg }
-      return view_class.new(layout) if layout
+      layout = find { |l| l.identifier == arg }
+      return layout if layout
 
       # FIXME: this should only work if globs are enabled
       pat = Nanoc::Int::Pattern.from(arg)
-      layout = @layouts.find { |l| pat.match?(l.identifier) }
-      return view_class.new(layout) if layout
+      layout = find { |l| pat.match?(l.identifier) }
+      return layout if layout
 
       nil
     end
