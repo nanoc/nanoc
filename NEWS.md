@@ -12,7 +12,7 @@ Fixes:
 * Fixed `LayoutCollectionView#[]` documentation (it mentioned items)
 * Fixed `ItemCollection#[]` returning an array when passed a regex
 
-## 4.0.0b1 (2015-05-??)
+## 4.0.0b1 (2015-05-14)
 
 Changes:
 
