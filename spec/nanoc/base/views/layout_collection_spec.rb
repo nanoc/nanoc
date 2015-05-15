@@ -55,5 +55,14 @@ describe Nanoc::LayoutCollectionView do
         expect(subject.unwrap).to equal(wrapped[1])
       end
     end
+
+    context 'regex' do
+      let(:arg) { %r{\A/home} }
+
+      it 'returns wrapped layout' do
+        expect(subject.class).to equal(Nanoc::LayoutView)
+        expect(subject.unwrap).to equal(wrapped[1])
+      end
+    end
   end
 end

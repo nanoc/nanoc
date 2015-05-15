@@ -153,8 +153,8 @@ EOF
       site.load
 
       # Check
-      assert_equal 1,       site.data_sources.size
-      assert_equal Nanoc::Identifier.new('/foo/'), site.items[0].identifier
+      assert_equal 1, site.data_sources.size
+      refute_nil site.items['/foo/']
     end
   end
 

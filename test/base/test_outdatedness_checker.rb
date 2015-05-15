@@ -13,7 +13,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
     # Check
     with_site(name: 'foo') do |site|
       outdatedness_checker = site.compiler.send :outdatedness_checker
-      rep = site.items[0].reps[0]
+      rep = site.items['/'].reps[0]
       assert_nil outdatedness_checker.outdatedness_reason_for(rep)
     end
   end

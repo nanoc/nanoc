@@ -36,18 +36,6 @@ module Nanoc
       @items.size
     end
 
-    # Finds the item whose identifier matches the given string.
-    #
-    # @param [String] arg
-    #
-    # @return [nil] if no item matches the string
-    #
-    # @return [Nanoc::ItemView] if an item was found
-    def at(arg)
-      item = @items.at(arg)
-      item && view_class.new(item)
-    end
-
     # Finds all items whose identifier matches the given argument.
     #
     # @param [String, Regex] arg
@@ -82,12 +70,7 @@ module Nanoc
     #   @return [Nanoc::ItemView] if an item was found
     def [](arg)
       res = @items[arg]
-      case res
-      when nil
-        nil
-      else
-        view_class.new(res)
-      end
+      res && view_class.new(res)
     end
   end
 end

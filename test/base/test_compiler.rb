@@ -306,7 +306,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       # At this point, even the already compiled items in the previous pass
       # should have their compiled content assigned, so this should work:
-      site.items[0].reps[0].compiled_content
+      site.items['/index.*'].reps[0].compiled_content
     end
   end
 
