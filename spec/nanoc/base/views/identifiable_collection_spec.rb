@@ -1,8 +1,7 @@
 # encoding: utf-8
 
+# Needs :view_class
 shared_examples 'an identifiable collection' do
-  # Needs view_class
-
   let(:view) { described_class.new(wrapped) }
 
   let(:config) do
@@ -12,9 +11,9 @@ shared_examples 'an identifiable collection' do
   describe '#unwrap' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/foo/'))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/bar/'))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/baz/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz/'))
       end
     end
 
@@ -26,9 +25,9 @@ shared_examples 'an identifiable collection' do
   describe '#each' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/foo/'))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/bar/'))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/baz/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz/'))
       end
     end
 
@@ -40,9 +39,9 @@ shared_examples 'an identifiable collection' do
   describe '#size' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/foo/'))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/bar/'))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/baz/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz/'))
       end
     end
 
@@ -53,11 +52,11 @@ shared_examples 'an identifiable collection' do
 
   describe '#[]' do
     let(:page_object) do
-      double(:iden, identifier: Nanoc::Identifier.new('/page.erb', style: :full))
+      double(:identifiable, identifier: Nanoc::Identifier.new('/page.erb', style: :full))
     end
 
     let(:home_object) do
-      double(:iden, identifier: Nanoc::Identifier.new('/home.erb', style: :full))
+      double(:identifiable, identifier: Nanoc::Identifier.new('/home.erb', style: :full))
     end
 
     let(:wrapped) do
@@ -115,9 +114,9 @@ shared_examples 'an identifiable collection' do
   describe '#find_all' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/about.css', style: :full))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/about.md', style: :full))
-        arr << double(:iden, identifier: Nanoc::Identifier.new('/style.css', style: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.css', style: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.md', style: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/style.css', style: :full))
       end
     end
 
