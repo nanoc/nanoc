@@ -11,7 +11,7 @@ Fixes:
 
 * Fixed `LayoutCollectionView#[]` documentation (it mentioned items)
 * Fixed `ItemCollection#[]` returning an array when passed a regex
-* Fixed `MutableLayoutCollectionView#delete_if` not yielding LayoutViews
+* Fixed an issue with mutable collection views’ `#delete_if` not yielding mutable views
 
 ## 4.0.0b1 (2015-05-14)
 
