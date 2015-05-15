@@ -4,7 +4,7 @@ module Nanoc
   class MutableIdentifiableCollectionView < Nanoc::IdentifiableCollectionView
     # Deletes every object for which the block evaluates to true.
     #
-    # @yieldparam object
+    # @yieldparam [#identifier] object
     #
     # @yieldreturn [Boolean]
     #

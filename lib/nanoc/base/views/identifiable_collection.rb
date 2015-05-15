@@ -21,9 +21,9 @@ module Nanoc
       raise NotImplementedError
     end
 
-    # Calls the given block once for each item, passing that item as a parameter.
+    # Calls the given block once for each object, passing that object as a parameter.
     #
-    # @yieldparam [Nanoc::ItemView] item
+    # @yieldparam [#identifier] object
     #
     # @yieldreturn [void]
     #
@@ -42,7 +42,7 @@ module Nanoc
     #
     # @param [String, Regex] arg
     #
-    # @return [Enumerable<Nanoc::ItemView>]
+    # @return [Enumerable]
     def find_all(arg)
       pat = Nanoc::Int::Pattern.from(arg)
       select { |i| pat.match?(i.identifier) }
@@ -50,26 +50,26 @@ module Nanoc
 
     # @overload [](string)
     #
-    #   Finds the item whose identifier matches the given string.
+    #   Finds the object whose identifier matches the given string.
     #
     #   If the glob syntax is enabled, the string can be a glob, in which case
-    #   this method finds the first item that matches the given glob.
+    #   this method finds the first object that matches the given glob.
     #
     #   @param [String] string
     #
-    #   @return [nil] if no item matches the string
+    #   @return [nil] if no object matches the string
     #
-    #   @return [Nanoc::ItemView] if an item was found
+    #   @return [#identifier] if an object was found
     #
     # @overload [](regex)
     #
-    #   Finds the item whose identifier matches the given regular expression.
+    #   Finds the object whose identifier matches the given regular expression.
     #
     #   @param [Regex] regex
     #
-    #   @return [nil] if no item matches the regex
+    #   @return [nil] if no object matches the regex
     #
-    #   @return [Nanoc::ItemView] if an item was found
+    #   @return [#identifier] if an object was found
     def [](arg)
       res = @objects[arg]
       res && view_class.new(res)
