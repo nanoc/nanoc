@@ -177,7 +177,7 @@ module Nanoc::Int
     #
     # @return [Nanoc::Int::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
-      dt = Nanoc::Int::DependencyTracker.new(@site.items + @site.layouts)
+      dt = Nanoc::Int::DependencyTracker.new(@site.items.to_a + @site.layouts)
       dt.compiler = self
       dt
     end
@@ -197,7 +197,7 @@ module Nanoc::Int
     #
     # @api private
     def objects
-      site.items + site.layouts + site.code_snippets +
+      site.items.to_a + site.layouts + site.code_snippets +
         [site.config, rules_collection]
     end
 

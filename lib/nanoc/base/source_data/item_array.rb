@@ -9,17 +9,10 @@ module Nanoc::Int
 
     extend Forwardable
 
-    EXCLUDED_METHODS  = [
-      :[], :at, :slice, :class, :singleton_class, :clone, :dup, :initialize_dup, :initialize_clone,
-      :freeze, :methods, :singleton_methods, :protected_methods, :private_methods, :public_methods,
-      :instance_variables, :instance_variable_get, :instance_variable_set, :instance_variable_defined?,
-      :instance_of?, :kind_of?, :is_a?, :tap, :send, :public_send, :respond_to?, :respond_to_missing?,
-      :extend, :display, :method, :public_method, :define_singleton_method, :object_id, :equal?,
-      :instance_eval, :instance_exec, :__send__, :__id__
-    ]
-
-    DELEGATED_METHODS = (Array.instance_methods + Enumerable.instance_methods).map(&:to_sym) - EXCLUDED_METHODS
-    def_delegators :@items, *DELEGATED_METHODS
+    def_delegator :@items, :each
+    def_delegator :@items, :size
+    def_delegator :@items, :<<
+    def_delegator :@items, :concat
 
     def initialize(config)
       @config = config
@@ -33,23 +26,19 @@ module Nanoc::Int
       super
     end
 
-    def [](*args)
-      if 1 == args.size && args.first.is_a?(String)
-        item_with_identifier(args.first) || item_matching_glob(args.first)
-      elsif 1 == args.size && args.first.is_a?(Regexp)
-        @items.select { |i| i.identifier.to_s =~ args.first }
+    def [](arg)
+      case arg
+      when String
+        item_with_identifier(arg) || item_matching_glob(arg)
+      when Regexp
+        @items.find { |i| i.identifier.to_s =~ arg }
       else
-        @items[*args]
+        raise ArgumentError, "don’t know how to fetch items by #{arg.inspect}"
       end
     end
-    alias_method :slice, :[]
 
-    def at(arg)
-      if arg.is_a?(String)
-        item_with_identifier(arg)
-      else
-        @items[arg]
-      end
+    def to_a
+      @items
     end
 
     protected
