@@ -44,7 +44,7 @@ module Nanoc::Int
   autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
   autoload 'Configuration',        'nanoc/base/source_data/configuration'
   autoload 'Item',                 'nanoc/base/source_data/item'
-  autoload 'ItemArray',            'nanoc/base/source_data/item_array'
+  autoload 'IdentifiableCollection', 'nanoc/base/source_data/item_array' # FIXME: wrong filename
   autoload 'Layout',               'nanoc/base/source_data/layout'
   autoload 'Site',                 'nanoc/base/source_data/site'
 

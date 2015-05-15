@@ -9,7 +9,7 @@ describe Nanoc::ItemCollectionView do
 
   describe '#unwrap' do
     let(:wrapped) do
-      Nanoc::Int::ItemArray.new(config).tap do |arr|
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
         arr << Nanoc::Int::Item.new('foo', {}, '/foo/')
         arr << Nanoc::Int::Item.new('bar', {}, '/bar/')
         arr << Nanoc::Int::Item.new('baz', {}, '/baz/')
@@ -23,7 +23,7 @@ describe Nanoc::ItemCollectionView do
 
   describe '#each' do
     let(:wrapped) do
-      Nanoc::Int::ItemArray.new(config).tap do |arr|
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
         arr << Nanoc::Int::Item.new('foo', {}, '/foo/')
         arr << Nanoc::Int::Item.new('bar', {}, '/bar/')
         arr << Nanoc::Int::Item.new('baz', {}, '/baz/')
@@ -37,7 +37,7 @@ describe Nanoc::ItemCollectionView do
 
   describe '#size' do
     let(:wrapped) do
-      Nanoc::Int::ItemArray.new(config).tap do |arr|
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
         arr << Nanoc::Int::Item.new('foo', {}, '/foo/')
         arr << Nanoc::Int::Item.new('bar', {}, '/bar/')
         arr << Nanoc::Int::Item.new('baz', {}, '/baz/')
@@ -54,7 +54,7 @@ describe Nanoc::ItemCollectionView do
     let(:home_item) { Nanoc::Int::Item.new('bar', {}, Nanoc::Identifier.new('/home.erb', style: :full)) }
 
     let(:wrapped) do
-      Nanoc::Int::ItemArray.new(config).tap do |arr|
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
         arr << page_item
         arr << home_item
       end
@@ -107,7 +107,7 @@ describe Nanoc::ItemCollectionView do
 
   describe '#find_all' do
     let(:wrapped) do
-      Nanoc::Int::ItemArray.new(config).tap do |arr|
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
         arr << Nanoc::Int::Item.new('foo', {}, Nanoc::Identifier.new('/about.css', style: :full))
         arr << Nanoc::Int::Item.new('bar', {}, Nanoc::Identifier.new('/about.md', style: :full))
         arr << Nanoc::Int::Item.new('baz', {}, Nanoc::Identifier.new('/style.css', style: :full))

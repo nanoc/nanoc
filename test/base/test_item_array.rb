@@ -1,13 +1,13 @@
 # encoding: utf-8
 
-class Nanoc::Int::ItemArrayTest < Nanoc::TestCase
+class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
   def setup
     super
 
     @one = Nanoc::Int::Item.new('Item One', {}, '/one/')
     @two = Nanoc::Int::Item.new('Item Two', {}, '/two/')
 
-    @items = Nanoc::Int::ItemArray.new({})
+    @items = Nanoc::Int::IdentifiableCollection.new({})
     @items << @one
     @items << @two
   end
@@ -27,7 +27,7 @@ class Nanoc::Int::ItemArrayTest < Nanoc::TestCase
   end
 
   def test_brackets_with_glob
-    @items = Nanoc::Int::ItemArray.new({ pattern_syntax: 'glob' })
+    @items = Nanoc::Int::IdentifiableCollection.new({ pattern_syntax: 'glob' })
     @items << @one
     @items << @two
 

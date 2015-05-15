@@ -1,27 +1,25 @@
 # encoding: utf-8
 
 module Nanoc::Int
-  # Acts as an array, but allows fetching items using identifiers, e.g. `@items['/blah/']`.
-  #
   # @api private
-  class ItemArray
+  class IdentifiableCollection
     include Enumerable
 
     extend Forwardable
 
-    def_delegator :@items, :each
-    def_delegator :@items, :size
-    def_delegator :@items, :<<
-    def_delegator :@items, :concat
+    def_delegator :@objects, :each
+    def_delegator :@objects, :size
+    def_delegator :@objects, :<<
+    def_delegator :@objects, :concat
 
     def initialize(config)
       @config = config
 
-      @items = []
+      @objects = []
     end
 
     def freeze
-      @items.freeze
+      @objects.freeze
       build_mapping
       super
     end
@@ -29,32 +27,32 @@ module Nanoc::Int
     def [](arg)
       case arg
       when String
-        item_with_identifier(arg) || item_matching_glob(arg)
+        object_with_identifier(arg) || object_matching_glob(arg)
       when Regexp
-        @items.find { |i| i.identifier.to_s =~ arg }
+        @objects.find { |i| i.identifier.to_s =~ arg }
       else
-        raise ArgumentError, "don’t know how to fetch items by #{arg.inspect}"
+        raise ArgumentError, "don’t know how to fetch objects by #{arg.inspect}"
       end
     end
 
     def to_a
-      @items
+      @objects
     end
 
     protected
 
-    def item_with_identifier(identifier)
+    def object_with_identifier(identifier)
       if self.frozen?
         @mapping[identifier.to_s]
       else
-        @items.find { |i| i.identifier == identifier }
+        @objects.find { |i| i.identifier == identifier }
       end
     end
 
-    def item_matching_glob(glob)
+    def object_matching_glob(glob)
       if use_globs?
         pat = Nanoc::Int::Pattern.from(glob)
-        @items.find { |i| pat.match?(i.identifier) }
+        @objects.find { |i| pat.match?(i.identifier) }
       else
         nil
       end
@@ -62,8 +60,8 @@ module Nanoc::Int
 
     def build_mapping
       @mapping = {}
-      @items.each do |item|
-        @mapping[item.identifier.to_s] = item
+      @objects.each do |object|
+        @mapping[object.identifier.to_s] = object
       end
       @mapping.freeze
     end
