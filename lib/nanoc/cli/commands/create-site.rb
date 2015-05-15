@@ -6,6 +6,7 @@ summary 'create a site'
 description "
 Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` command-line option.
 "
+flag nil, :force, "Force creation of new site. Disregards previous existence of site in destination"
 
 module Nanoc::CLI::Commands
   class CreateSite < ::Nanoc::CLI::CommandRunner
@@ -280,8 +281,10 @@ EOS
       data_source = options[:datasource] || 'filesystem_unified'
 
       # Check whether site exists
-      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w{ . .. }).empty?)
-        raise Nanoc::Int::Errors::GenericTrivial, "A site at '#{path}' already exists."
+      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w{ . .. }).empty?) && !options[:force]
+        raise Nanoc::Int::Errors::GenericTrivial,
+          "The site was not created because '#{path}' already exists. " +
+          "Re-run the command using --force to create the site anyway."
       end
 
       # Check whether data source exists
