@@ -7,6 +7,10 @@ Changes:
 * Removed `ItemCollectionView#at`
 * Removed support for calling `ItemCollectionView#[]` with an integer
 
+Enhancements:
+
+* Added `--force` to `create-site` command (#580) [David Alexander]
+
 Fixes:
 
 * Fixed `LayoutCollectionView#[]` documentation (it mentioned items)
@@ -27,7 +31,7 @@ Enhancements:
 * Added `Nanoc::Identifier#without_ext`
 * Made `Nanoc::Identifier#=~` work with a glob
 * Added `Nanoc::LayoutCollectionView#[]`
-* Added `--force` to `create-site` command (#549) [David Alexander]
+* Allowed creation of site in current directory (#549) [David Alexander]
 
 Fixes:
 
