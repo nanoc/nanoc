@@ -185,7 +185,7 @@ describe Nanoc::Int::Checksummer do
   describe 'for Nanoc::Int::Configuration' do
     let(:wrapped)         { { a: 1, b: 2 } }
     let(:configuration)   { Nanoc::Int::Configuration.new(wrapped) }
-    let(:normal_checksum) { 'xwbPeftLbSXYx0OJbKCqrPHctPU=' }
+    let(:normal_checksum) { 'S00TDYQNxxeva06T8Iyl8Q9iu3Q=' }
 
     it 'should checksum the hash' do
       subject.calc(configuration).must_equal(normal_checksum)
