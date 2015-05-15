@@ -31,26 +31,26 @@ module Nanoc
 
     # @overload [](string)
     #
-    #   Finds the item whose identifier matches the given string.
+    #   Finds the layout whose identifier matches the given string.
     #
     #   If the glob syntax is enabled, the string can be a glob, in which case
-    #   this method finds the first item that matches the given glob.
+    #   this method finds the first layout that matches the given glob.
     #
     #   @param [String] string
     #
-    #   @return [nil] if no item matches the string
+    #   @return [nil] if no layout matches the string
     #
-    #   @return [Nanoc::ItemView] if an item was found
+    #   @return [Nanoc::LayoutView] if an layout was found
     #
     # @overload [](regex)
     #
-    #   Finds the item whose identifier matches the given regular expression.
+    #   Finds the layout whose identifier matches the given regular expression.
     #
     #   @param [Regex] regex
     #
-    #   @return [nil] if no item matches the regex
+    #   @return [nil] if no layout matches the regex
     #
-    #   @return [Nanoc::ItemView] if an item was found
+    #   @return [Nanoc::LayoutView] if an layout was found
     def [](arg)
       layout = find { |l| l.identifier == arg }
       return layout if layout
