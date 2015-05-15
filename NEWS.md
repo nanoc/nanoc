@@ -1,5 +1,17 @@
 # nanoc news
 
+## 4.0.0b2 (???)
+
+Changes:
+
+* Removed `ItemCollectionView#at`
+* Removed support for calling `ItemCollectionView#[]` with an integer
+
+Fixes:
+
+* Fixed `LayoutCollectionView#[]` documentation (it mentioned items)
+* Fixed `ItemCollection#[]` returning an array when passed a regex
+
 ## 4.0.0b1 (2015-05-??)
 
 Changes:
