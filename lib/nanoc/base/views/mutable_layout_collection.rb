@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module Nanoc
-  class MutableLayoutCollectionView < Nanoc::LayoutCollectionView
+  class MutableLayoutCollectionView < Nanoc::MutableIdentifiableCollectionView
     # @api private
     def view_class
       Nanoc::MutableLayoutView
@@ -17,19 +17,7 @@ module Nanoc
     #
     # @return [self]
     def create(content, attributes, identifier)
-      @layouts << Nanoc::Int::Layout.new(content, attributes, identifier)
-      self
-    end
-
-    # Deletes every layout for which the block evaluates to true.
-    #
-    # @yieldparam [Nanoc::LayoutView] layout
-    #
-    # @yieldreturn [Boolean]
-    #
-    # @return [self]
-    def delete_if(&block)
-      @layouts.delete_if { |o| yield(view_class.new(o)) }
+      @objects << Nanoc::Int::Layout.new(content, attributes, identifier)
       self
     end
   end
