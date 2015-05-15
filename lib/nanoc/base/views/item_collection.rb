@@ -55,7 +55,7 @@ module Nanoc
     # @return [Enumerable<Nanoc::ItemView>]
     def find_all(arg)
       pat = Nanoc::Int::Pattern.from(arg)
-      @items.select { |i| pat.match?(i.identifier) }
+      select { |i| pat.match?(i.identifier) }
     end
 
     # @overload [](string)

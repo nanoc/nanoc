@@ -104,12 +104,26 @@ describe Nanoc::ItemCollectionView do
 
     context 'with string' do
       let(:arg) { '/*.css' }
-      it { is_expected.to contain_exactly(wrapped[0], wrapped[2]) }
+
+      it 'contains item views' do
+        expect(subject.size).to eql(2)
+        about_css = subject.find { |iv| iv.identifier == '/about.css' }
+        style_css = subject.find { |iv| iv.identifier == '/style.css' }
+        expect(about_css.class).to equal(Nanoc::ItemView)
+        expect(style_css.class).to equal(Nanoc::ItemView)
+      end
     end
 
     context 'with regex' do
       let(:arg) { %r{\.css\z} }
-      it { is_expected.to contain_exactly(wrapped[0], wrapped[2]) }
+
+      it 'contains item views' do
+        expect(subject.size).to eql(2)
+        about_css = subject.find { |iv| iv.identifier == '/about.css' }
+        style_css = subject.find { |iv| iv.identifier == '/style.css' }
+        expect(about_css.class).to equal(Nanoc::ItemView)
+        expect(style_css.class).to equal(Nanoc::ItemView)
+      end
     end
   end
 end
