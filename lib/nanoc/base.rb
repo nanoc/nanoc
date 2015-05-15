@@ -9,6 +9,7 @@ module Nanoc
   autoload 'Identifier',           'nanoc/base/source_data/identifier'
 
   autoload 'ConfigView',           'nanoc/base/views/config'
+  autoload 'IdentifiableCollectionView', 'nanoc/base/views/identifiable_collection'
   autoload 'ItemView',             'nanoc/base/views/item'
   autoload 'ItemRepView',          'nanoc/base/views/item_rep'
   autoload 'ItemCollectionView',   'nanoc/base/views/item_collection'
@@ -16,6 +17,7 @@ module Nanoc
   autoload 'LayoutCollectionView', 'nanoc/base/views/layout_collection'
   autoload 'SiteView',             'nanoc/base/views/site'
 
+  autoload 'MutableIdentifiableCollectionView', 'nanoc/base/views/mutable_identifiable_collection'
   autoload 'MutableConfigView',           'nanoc/base/views/mutable_config'
   autoload 'MutableItemView',             'nanoc/base/views/mutable_item'
   autoload 'MutableItemCollectionView',   'nanoc/base/views/mutable_item_collection'

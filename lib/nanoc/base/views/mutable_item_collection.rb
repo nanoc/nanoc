@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module Nanoc
-  class MutableItemCollectionView < Nanoc::ItemCollectionView
+  class MutableItemCollectionView < Nanoc::MutableIdentifiableCollectionView
     # @api private
     def view_class
       Nanoc::MutableItemView
@@ -24,19 +24,7 @@ module Nanoc
     #
     # @return [self]
     def create(content, attributes, identifier, params = {})
-      @items << Nanoc::Int::Item.new(content, attributes, identifier, params)
-      self
-    end
-
-    # Deletes every item for which the block evaluates to true.
-    #
-    # @yieldparam [Nanoc::ItemView] item
-    #
-    # @yieldreturn [Boolean]
-    #
-    # @return [self]
-    def delete_if(&block)
-      @items.delete_if(&block)
+      @objects << Nanoc::Int::Item.new(content, attributes, identifier, params)
       self
     end
   end
