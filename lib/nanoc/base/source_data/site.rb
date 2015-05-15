@@ -343,7 +343,7 @@ module Nanoc::Int
       @layouts_loaded = true
 
       # Get layouts
-      @layouts = []
+      @layouts = Nanoc::Int::IdentifiableCollection.new(@config)
       data_sources.each do |ds|
         layouts_in_ds = ds.layouts
         layouts_in_ds.each do |l|

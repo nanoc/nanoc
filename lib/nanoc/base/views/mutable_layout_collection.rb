@@ -29,7 +29,7 @@ module Nanoc
     #
     # @return [self]
     def delete_if(&block)
-      @layouts.delete_if(&block)
+      @layouts.delete_if { |o| yield(view_class.new(o)) }
       self
     end
   end

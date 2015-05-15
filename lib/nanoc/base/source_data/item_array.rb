@@ -39,6 +39,14 @@ module Nanoc::Int
       @objects
     end
 
+    def empty?
+      @objects.empty?
+    end
+
+    def delete_if(&block)
+      @objects.delete_if(&block)
+    end
+
     protected
 
     def object_with_identifier(identifier)

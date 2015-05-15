@@ -159,7 +159,7 @@ module Nanoc::Int
     # @return [void]
     def store
       # Calculate rule memory
-      (reps + layouts).each do |obj|
+      (reps + layouts.to_a).each do |obj|
         rule_memory_store[obj] = rule_memory_calculator[obj]
       end
 
@@ -177,7 +177,7 @@ module Nanoc::Int
     #
     # @return [Nanoc::Int::DependencyTracker] The dependency tracker for this site
     def dependency_tracker
-      dt = Nanoc::Int::DependencyTracker.new(@site.items.to_a + @site.layouts)
+      dt = Nanoc::Int::DependencyTracker.new(@site.items.to_a + @site.layouts.to_a)
       dt.compiler = self
       dt
     end
@@ -197,7 +197,7 @@ module Nanoc::Int
     #
     # @api private
     def objects
-      site.items.to_a + site.layouts + site.code_snippets +
+      site.items.to_a + site.layouts.to_a + site.code_snippets +
         [site.config, rules_collection]
     end
 
