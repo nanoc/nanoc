@@ -52,15 +52,8 @@ module Nanoc
     #
     #   @return [Nanoc::LayoutView] if an layout was found
     def [](arg)
-      layout = find { |l| l.identifier == arg }
-      return layout if layout
-
-      # FIXME: this should only work if globs are enabled
-      pat = Nanoc::Int::Pattern.from(arg)
-      layout = find { |l| pat.match?(l.identifier) }
-      return layout if layout
-
-      nil
+      res = @layouts[arg]
+      res && view_class.new(res)
     end
   end
 end

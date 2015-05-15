@@ -1,21 +1,35 @@
 # encoding: utf-8
 
 describe Nanoc::LayoutCollectionView do
-  let(:wrapped) { double(:wrapped) }
   let(:view) { described_class.new(wrapped) }
 
+  let(:config) do
+    { pattern_syntax: 'glob' }
+  end
+
   describe '#unwrap' do
+    let(:wrapped) do
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
+        coll << Nanoc::Int::Layout.new('foo', {}, '/foo/')
+        coll << Nanoc::Int::Layout.new('bar', {}, '/bar/')
+        coll << Nanoc::Int::Layout.new('baz', {}, '/baz/')
+      end
+    end
+
     subject { view.unwrap }
-    it { should equal(wrapped) }
+
+    it 'returns self' do
+      expect(subject).to equal(wrapped)
+    end
   end
 
   describe '#each' do
     let(:wrapped) do
-      [
-        Nanoc::Int::Layout.new('foo', {}, '/foo/'),
-        Nanoc::Int::Layout.new('bar', {}, '/bar/'),
-        Nanoc::Int::Layout.new('baz', {}, '/baz/'),
-      ]
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
+        coll << Nanoc::Int::Layout.new('foo', {}, '/foo/')
+        coll << Nanoc::Int::Layout.new('bar', {}, '/bar/')
+        coll << Nanoc::Int::Layout.new('baz', {}, '/baz/')
+      end
     end
 
     it 'returns self' do
@@ -24,11 +38,19 @@ describe Nanoc::LayoutCollectionView do
   end
 
   describe '#[]' do
+    let(:layout_page) do
+      Nanoc::Int::Layout.new('foo', {}, Nanoc::Identifier.new('/page.erb', style: :full))
+    end
+
+    let(:layout_home) do
+      Nanoc::Int::Layout.new('bar', {}, Nanoc::Identifier.new('/home.erb', style: :full))
+    end
+
     let(:wrapped) do
-      [
-        Nanoc::Int::Layout.new('foo', {}, Nanoc::Identifier.new('/page.erb', style: :full)),
-        Nanoc::Int::Layout.new('bar', {}, Nanoc::Identifier.new('/home.erb', style: :full)),
-      ]
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
+        coll << layout_page
+        coll << layout_home
+      end
     end
 
     subject { view[arg] }
@@ -43,7 +65,7 @@ describe Nanoc::LayoutCollectionView do
 
       it 'returns wrapped layout' do
         expect(subject.class).to equal(Nanoc::LayoutView)
-        expect(subject.unwrap).to equal(wrapped[1])
+        expect(subject.unwrap).to equal(layout_home)
       end
     end
 
@@ -52,7 +74,7 @@ describe Nanoc::LayoutCollectionView do
 
       it 'returns wrapped layout' do
         expect(subject.class).to equal(Nanoc::LayoutView)
-        expect(subject.unwrap).to equal(wrapped[1])
+        expect(subject.unwrap).to equal(layout_home)
       end
     end
 
@@ -61,7 +83,7 @@ describe Nanoc::LayoutCollectionView do
 
       it 'returns wrapped layout' do
         expect(subject.class).to equal(Nanoc::LayoutView)
-        expect(subject.unwrap).to equal(wrapped[1])
+        expect(subject.unwrap).to equal(layout_home)
       end
     end
   end

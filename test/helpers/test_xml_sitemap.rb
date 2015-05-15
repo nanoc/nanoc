@@ -14,7 +14,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_xml_sitemap
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::ItemArray.new({})
+      @items = Nanoc::Int::IdentifiableCollection.new({})
 
       # Create item 1
       item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'))
@@ -75,7 +75,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_sitemap_with_items_as_param
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::ItemArray.new({})
+      @items = Nanoc::Int::IdentifiableCollection.new({})
       @items << nil
       item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'))
       @items << item
@@ -112,7 +112,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_filter
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::ItemArray.new({})
+      @items = Nanoc::Int::IdentifiableCollection.new({})
       item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'))
       @items << item
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
@@ -143,7 +143,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_sorted
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::ItemArray.new({})
+      @items = Nanoc::Int::IdentifiableCollection.new({})
       item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'))
       @items << item
       create_item_rep(item.unwrap, :a_alice,   '/george/alice/')

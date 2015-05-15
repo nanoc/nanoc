@@ -39,7 +39,7 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:assigns) do
-      items = Nanoc::Int::ItemArray.new({})
+      items = Nanoc::Int::IdentifiableCollection.new({})
       items << item_a
       items << item_b
       items << item_c
@@ -83,7 +83,7 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:assigns) do
-      items = Nanoc::Int::ItemArray.new({})
+      items = Nanoc::Int::IdentifiableCollection.new({})
       items << item_a
       items << item_b
       items << item_c

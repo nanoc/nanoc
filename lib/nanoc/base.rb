@@ -39,12 +39,12 @@ module Nanoc::Int
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
   autoload 'Store',                'nanoc/base/store'
   autoload 'TempFilenameFactory',  'nanoc/base/temp_filename_factory'
+  autoload 'IdentifiableCollection', 'nanoc/base/identifiable_collection'
 
   # Load source data classes
   autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
   autoload 'Configuration',        'nanoc/base/source_data/configuration'
   autoload 'Item',                 'nanoc/base/source_data/item'
-  autoload 'ItemArray',            'nanoc/base/source_data/item_array'
   autoload 'Layout',               'nanoc/base/source_data/layout'
   autoload 'Site',                 'nanoc/base/source_data/site'
 
