@@ -9,10 +9,10 @@ module Nanoc::Filters
     #
     # @param [String] content The content to filter
     #
-    # @option params [Integer] safe_level (nil) The safe level (`$SAFE`) to
+    # @option params [Integer] :safe_level (nil) The safe level (`$SAFE`) to
     #   use while running this filter
     #
-    # @option params [String] trim_mode (nil) The trim mode to use
+    # @option params [String] :trim_mode (nil) The trim mode to use
     #
     # @return [String] The filtered content
     def run(content, params = {})

@@ -40,7 +40,7 @@ module Nanoc::Filters
     #
     #   @option params [Boolean] :with_toc (false) A boolean to request a table
     #     of contents
-
+    #
     #   @return [String] The filtered content
     def run(content, params = {})
       if ::Redcarpet::VERSION > '2'
