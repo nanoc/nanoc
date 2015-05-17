@@ -48,8 +48,8 @@ enable_output_diff: false
 
 prune:
   # Whether to automatically remove files not managed by nanoc from the output
-  # directory. For safety reasons, this is turned off by default.
-  auto_prune: false
+  # directory.
+  auto_prune: true
 
   # Which files and directories you want to exclude from pruning. If you version
   # your output directory, you should probably exclude VCS directories such as

@@ -95,4 +95,18 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       assert_match(/\/stylesheet.css/, File.read('output/index.html'))
     end
   end
+
+  def test_new_site_prunes_by_default
+    FileUtils.mkdir('foo')
+    FileUtils.touch(File.join('foo', 'SomeFile.txt'))
+    Nanoc::CLI.run %w( create_site foo --force )
+
+    FileUtils.cd('foo') do
+      File.write('output/blah.txt', 'stuff')
+
+      Nanoc::CLI.run %w( compile )
+
+      refute File.file?('output/blah.txt')
+    end
+  end
 end
