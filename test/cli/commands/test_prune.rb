@@ -4,7 +4,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_without_yes
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
+      File.open('nanoc.yaml', 'w') { |io| io.write "output_dir: output2\npattern_syntax: null\n" }
       FileUtils.mkdir_p('output2')
 
       # Create source files
@@ -26,7 +26,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_with_yes
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
+      File.open('nanoc.yaml', 'w') { |io| io.write "pattern_syntax: null\noutput_dir: output2" }
       FileUtils.mkdir_p('output2')
 
       # Create source files
@@ -46,7 +46,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_with_dry_run
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output2' }
+      File.open('nanoc.yaml', 'w') { |io| io.write "pattern_syntax: null\noutput_dir: output2" }
       FileUtils.mkdir_p('output2')
 
       # Create source files
@@ -66,7 +66,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_with_exclude
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write "prune:\n  exclude: [ 'good-dir', 'good-file.html' ]" }
+      File.open('nanoc.yaml', 'w') { |io| io.write "pattern_syntax: null\nprune:\n  exclude: [ 'good-dir', 'good-file.html' ]" }
       FileUtils.mkdir_p('output')
 
       # Create source files

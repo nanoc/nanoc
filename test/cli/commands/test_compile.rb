@@ -49,6 +49,12 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "layout '*', :erb\n"
       end
 
+      File.open('nanoc.yaml', 'w') do |io|
+        io.write "pattern_syntax: null\n"
+        io.write "prune:\n"
+        io.write "  auto_prune: false\n"
+      end
+
       File.open('output/stray.html', 'w') do |io|
         io.write 'I am a stray file and I am about to be deleted!'
       end
@@ -58,6 +64,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       assert File.file?('output/stray.html')
 
       File.open('nanoc.yaml', 'w') do |io|
+        io.write "pattern_syntax: null\n"
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
       end
@@ -92,6 +99,12 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
       Dir.mkdir('output/excluded_dir')
 
+      File.open('nanoc.yaml', 'w') do |io|
+        io.write "pattern_syntax: null\n"
+        io.write "prune:\n"
+        io.write "  auto_prune: false\n"
+      end
+
       File.open('output/stray.html', 'w') do |io|
         io.write 'I am a stray file and I am about to be deleted!'
       end
@@ -101,6 +114,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       assert File.file?('output/stray.html')
 
       File.open('nanoc.yaml', 'w') do |io|
+        io.write "pattern_syntax: null\n"
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
         io.write "  exclude: [ 'excluded_dir' ]\n"
