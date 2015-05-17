@@ -28,7 +28,7 @@ module Nanoc::Int
     # @param [Hash] params Extra parameters. Unused.
     def initialize(raw_content, attributes, identifier, params = {})
       @raw_content  = raw_content
-      @attributes   = attributes.__nanoc_symbolize_keys_recursively
+      @attributes   = Nanoc::Int::Attributes.new(attributes)
       @identifier   = Nanoc::Identifier.from(identifier)
     end
 
@@ -94,20 +94,6 @@ module Nanoc::Int
 
     def ==(other)
       self.eql?(other)
-    end
-
-    def marshal_dump
-      [
-        @raw_content,
-        @attributes,
-        @identifier
-      ]
-    end
-
-    def marshal_load(source)
-      @raw_content,
-      @attributes,
-      @identifier = *source
     end
   end
 end

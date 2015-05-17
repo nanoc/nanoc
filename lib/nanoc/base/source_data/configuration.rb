@@ -4,19 +4,16 @@ module Nanoc::Int
   # Represents the site configuration.
   #
   # @api private
-  class Configuration < ::Hash
-    # Creates a new configuration with the given hash.
-    #
-    # @param [Hash] hash The actual configuration hash
-    def initialize(hash)
-      replace(hash)
-    end
-
+  class Configuration < ::Nanoc::Int::Attributes
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @return [Object] An unique reference to this object
     def reference
       :config
+    end
+
+    def __nanoc_checksum
+      @hash.__nanoc_checksum
     end
   end
 end

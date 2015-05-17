@@ -4,7 +4,14 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
   def test_initialize_with_attributes_with_string_keys
     item = Nanoc::Int::Item.new('foo', { 'abc' => 'xyz' }, '/foo/')
 
-    assert_equal nil,   item.attributes['abc']
+    assert_equal 'xyz', item.attributes['abc']
+    assert_equal 'xyz', item.attributes[:abc]
+  end
+
+  def test_initialize_with_attributes_with_symbol_keys
+    item = Nanoc::Int::Item.new('foo', { abc: 'xyz' }, '/foo/')
+
+    assert_equal 'xyz', item.attributes['abc']
     assert_equal 'xyz', item.attributes[:abc]
   end
 
@@ -151,18 +158,5 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
     assert_raises_frozen_error do
       item[:a][:b] = '456'
     end
-  end
-
-  def test_dump_and_load
-    item = Nanoc::Int::Item.new(
-      'foobar',
-      { a: { b: 123 } },
-      '/foo/')
-
-    item = Marshal.load(Marshal.dump(item))
-
-    assert_equal Nanoc::Identifier.new('/foo/'), item.identifier
-    assert_equal 'foobar', item.raw_content
-    assert_equal({ a: { b: 123 } }, item.attributes)
   end
 end
