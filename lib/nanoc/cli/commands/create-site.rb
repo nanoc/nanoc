@@ -107,11 +107,27 @@ EOS
 #!/usr/bin/env ruby
 
 compile '/**/*.html' do
-  filter :erb
   layout '/default.*'
 end
 
+# This is an example rule that matches Markdown (.md) files, and filters them
+# using the :kramdown filter. It is commented out by default, because kramdown
+# is not bundled with nanoc or Ruby.
+#
+#compile '/**/*.md' do
+#  filter :kramdown
+#  layout '/default.*'
+#end
+
 compile '/**/*' do
+end
+
+route '/**/*.{html,md}' do
+  if item.identifier =~ '/index.*'
+    '/index.html'
+  else
+    item.identifier.without_ext + '/index.html'
+  end
 end
 
 route '/**/*' do
@@ -122,6 +138,10 @@ layout '/**/*', :erb
 EOS
 
     DEFAULT_ITEM = <<EOS unless defined? DEFAULT_ITEM
+---
+title: Home
+---
+
 <h1>A Brand New nanoc Site</h1>
 
 <p>You’ve just created a new nanoc site. The page you are looking at right now is the home page for your site. To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
@@ -305,40 +325,21 @@ EOS
         FileUtils.mkdir_p('lib')
         FileUtils.mkdir_p('output')
 
-        # Config
-        File.open('nanoc.yaml', 'w') { |io| io.write(DEFAULT_CONFIG) }
-        Nanoc::Int::NotificationCenter.post(:file_created, 'nanoc.yaml')
-
-        # Rules
-        File.open('Rules', 'w') do |io|
-          io.write DEFAULT_RULES
-        end
-        Nanoc::Int::NotificationCenter.post(:file_created, 'Rules')
-
-        # Home page
-        File.open('content/index.html', 'w') do |io|
-          io << '---' << "\n"
-          io << 'title: Home' << "\n"
-          io << '---' << "\n"
-          io << "\n"
-          io << DEFAULT_ITEM
-        end
-        Nanoc::Int::NotificationCenter.post(:file_created, 'content/index.html')
-
-        # Style sheet
-        File.open('content/stylesheet.css', 'w') do |io|
-          io << DEFAULT_STYLESHEET
-        end
-        Nanoc::Int::NotificationCenter.post(:file_created, 'content/stylesheet.css')
-
-        # Layout
-        File.open('layouts/default.html', 'w') do |io|
-          io << DEFAULT_LAYOUT
-        end
-        Nanoc::Int::NotificationCenter.post(:file_created, 'layouts/default.html')
+        write('nanoc.yaml', DEFAULT_CONFIG)
+        write('Rules', DEFAULT_RULES)
+        write('content/index.html', DEFAULT_ITEM)
+        write('content/stylesheet.css', DEFAULT_STYLESHEET)
+        write('layouts/default.html', DEFAULT_LAYOUT)
       end
 
       puts "Created a blank nanoc site at '#{path}'. Enjoy!"
+    end
+
+    private
+
+    def write(filename, content)
+      File.write(filename, content)
+      Nanoc::Int::NotificationCenter.post(:file_created, filename)
     end
   end
 end
