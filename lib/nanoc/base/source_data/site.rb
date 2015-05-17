@@ -24,7 +24,8 @@ module Nanoc::Int
       type: 'filesystem_unified',
       items_root: '/',
       layouts_root: '/',
-      config: {}
+      config: {},
+      identifier_style: 'full',
     }
 
     # The default configuration for a site. A site's configuration overrides

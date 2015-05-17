@@ -103,7 +103,14 @@ EOS
           end
         end
 
-        File.open('nanoc.yaml', 'w') { |io| io.write('pattern_syntax: null') }
+        File.open('nanoc.yaml', 'w') do |io|
+          io << 'pattern_syntax: null' << "\n"
+          io << 'data_sources:' << "\n"
+          io << '  -' << "\n"
+          io << '    type: filesystem_unified' << "\n"
+          io << '    identifier_style: stripped' << "\n"
+        end
+
         File.open('Rules', 'w') { |io| io.write(rules_content) }
       end
     end
