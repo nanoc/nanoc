@@ -177,7 +177,7 @@ EOS
   def test_passthrough_with_full_identifiers
     with_site do
       File.open('nanoc.yaml', 'w') do |io|
-        io << 'pattern_syntax: null' << "\n"
+        io << 'pattern_type: legacy' << "\n"
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
@@ -267,15 +267,17 @@ EOS
     end
   end
 
-  def test_create_pattern_with_string
+  def test_create_pattern_with_string_with_no_config
     compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
 
-    pattern = compiler_dsl.create_pattern('/foo/*')
-    assert pattern.match?('/foo/a/a/a/a')
+    err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+      compiler_dsl.create_pattern('/foo/*')
+    end
+    assert_equal 'Invalid pattern_type: ', err.message
   end
 
-  def test_create_pattern_with_string_with_glob_pattern_syntax
-    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_syntax: 'glob' })
+  def test_create_pattern_with_string_with_glob_pattern_type
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_type: 'glob' })
 
     pattern = compiler_dsl.create_pattern('/foo/*')
     assert pattern.match?('/foo/aaaa')
@@ -284,19 +286,19 @@ EOS
   end
 
   def test_create_pattern_with_regex
-    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, {})
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_type: 'glob' })
 
     pattern = compiler_dsl.create_pattern(%r<\A/foo/a*/>)
     assert pattern.match?('/foo/aaaa/')
   end
 
-  def test_create_pattern_with_string_with_unknown_pattern_syntax
-    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_syntax: 'donkey' })
+  def test_create_pattern_with_string_with_unknown_pattern_type
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_type: 'donkey' })
 
     err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
       compiler_dsl.create_pattern('/foo/*')
     end
-    assert_equal 'Invalid pattern_syntax: donkey', err.message
+    assert_equal 'Invalid pattern_type: donkey', err.message
   end
 
   def test_identifier_to_regex_without_wildcards

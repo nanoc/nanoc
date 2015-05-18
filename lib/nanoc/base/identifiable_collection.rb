@@ -75,7 +75,7 @@ module Nanoc::Int
     end
 
     def use_globs?
-      @config[:pattern_syntax] == 'glob'
+      @config[:pattern_type] == 'glob'
     end
   end
 end

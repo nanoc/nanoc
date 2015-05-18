@@ -104,7 +104,7 @@ EOS
         end
 
         File.open('nanoc.yaml', 'w') do |io|
-          io << 'pattern_syntax: null' << "\n"
+          io << 'pattern_type: legacy' << "\n"
           io << 'data_sources:' << "\n"
           io << '  -' << "\n"
           io << '    type: filesystem_unified' << "\n"

@@ -72,7 +72,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
       # Try with encoding = specific
       File.open('nanoc.yaml', 'w') do |io|
-        io.write("pattern_syntax: glob\n")
+        io.write("pattern_type: glob\n")
         io.write("data_sources:\n")
         io.write("  -\n")
         io.write("    type: filesystem_unified\n")

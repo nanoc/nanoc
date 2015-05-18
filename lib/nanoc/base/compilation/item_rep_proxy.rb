@@ -105,7 +105,7 @@ module Nanoc::Int
     end
 
     def use_globs?
-      @compiler.site.config[:pattern_syntax] == 'glob'
+      @compiler.site.config[:pattern_type] == 'glob'
     end
   end
 end
