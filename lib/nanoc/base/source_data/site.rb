@@ -24,7 +24,8 @@ module Nanoc::Int
       type: 'filesystem_unified',
       items_root: '/',
       layouts_root: '/',
-      config: {}
+      config: {},
+      identifier_style: 'full',
     }
 
     # The default configuration for a site. A site's configuration overrides
@@ -39,7 +40,8 @@ module Nanoc::Int
       data_sources: [{}],
       index_filenames: ['index.html'],
       enable_output_diff: false,
-      prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] }
+      prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
+      pattern_syntax: 'glob',
     }
 
     # Creates a site object for the site specified by the given

@@ -281,7 +281,14 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Change code
     FileUtils.cd('foo') do
-      File.open('nanoc.yaml', 'w') { |io| io.write('awesome: true') }
+      File.open('nanoc.yaml', 'w') do |io|
+        io << 'awesome: true' << "\n"
+        io << 'pattern_syntax: null' << "\n"
+        io << 'data_sources:' << "\n"
+        io << '  -' << "\n"
+        io << '    type: filesystem_unified' << "\n"
+        io << '    identifier_style: stripped' << "\n"
+      end
     end
 
     # Check

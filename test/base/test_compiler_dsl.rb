@@ -177,6 +177,7 @@ EOS
   def test_passthrough_with_full_identifiers
     with_site do
       File.open('nanoc.yaml', 'w') do |io|
+        io << 'pattern_syntax: null' << "\n"
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
