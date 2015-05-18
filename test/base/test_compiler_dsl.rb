@@ -177,7 +177,7 @@ EOS
   def test_passthrough_with_full_identifiers
     with_site do
       File.open('nanoc.yaml', 'w') do |io|
-        io << 'pattern_type: legacy' << "\n"
+        io << 'string_pattern_type: legacy' << "\n"
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
@@ -273,11 +273,11 @@ EOS
     err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
       compiler_dsl.create_pattern('/foo/*')
     end
-    assert_equal 'Invalid pattern_type: ', err.message
+    assert_equal 'Invalid string_pattern_type: ', err.message
   end
 
-  def test_create_pattern_with_string_with_glob_pattern_type
-    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_type: 'glob' })
+  def test_create_pattern_with_string_with_glob_string_pattern_type
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { string_pattern_type: 'glob' })
 
     pattern = compiler_dsl.create_pattern('/foo/*')
     assert pattern.match?('/foo/aaaa')
@@ -286,19 +286,19 @@ EOS
   end
 
   def test_create_pattern_with_regex
-    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_type: 'glob' })
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { string_pattern_type: 'glob' })
 
     pattern = compiler_dsl.create_pattern(%r<\A/foo/a*/>)
     assert pattern.match?('/foo/aaaa/')
   end
 
-  def test_create_pattern_with_string_with_unknown_pattern_type
-    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { pattern_type: 'donkey' })
+  def test_create_pattern_with_string_with_unknown_string_pattern_type
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { string_pattern_type: 'donkey' })
 
     err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
       compiler_dsl.create_pattern('/foo/*')
     end
-    assert_equal 'Invalid pattern_type: donkey', err.message
+    assert_equal 'Invalid string_pattern_type: donkey', err.message
   end
 
   def test_identifier_to_regex_without_wildcards

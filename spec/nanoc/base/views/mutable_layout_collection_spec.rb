@@ -6,7 +6,7 @@ describe Nanoc::MutableLayoutCollectionView do
   it_behaves_like 'a mutable identifiable collection'
 
   let(:config) do
-    { pattern_type: 'glob' }
+    { string_pattern_type: 'glob' }
   end
 
   describe '#create' do

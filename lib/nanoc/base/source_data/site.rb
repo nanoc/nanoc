@@ -41,7 +41,7 @@ module Nanoc::Int
       index_filenames: ['index.html'],
       enable_output_diff: false,
       prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
-      pattern_type: 'glob',
+      string_pattern_type: 'glob',
     }
 
     # Creates a site object for the site specified by the given

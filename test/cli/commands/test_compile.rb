@@ -50,7 +50,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       end
 
       File.open('nanoc.yaml', 'w') do |io|
-        io.write "pattern_type: legacy\n"
+        io.write "string_pattern_type: legacy\n"
         io.write "prune:\n"
         io.write "  auto_prune: false\n"
       end
@@ -64,7 +64,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       assert File.file?('output/stray.html')
 
       File.open('nanoc.yaml', 'w') do |io|
-        io.write "pattern_type: legacy\n"
+        io.write "string_pattern_type: legacy\n"
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
       end
@@ -100,7 +100,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       Dir.mkdir('output/excluded_dir')
 
       File.open('nanoc.yaml', 'w') do |io|
-        io.write "pattern_type: legacy\n"
+        io.write "string_pattern_type: legacy\n"
         io.write "prune:\n"
         io.write "  auto_prune: false\n"
       end
@@ -114,7 +114,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       assert File.file?('output/stray.html')
 
       File.open('nanoc.yaml', 'w') do |io|
-        io.write "pattern_type: legacy\n"
+        io.write "string_pattern_type: legacy\n"
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
         io.write "  exclude: [ 'excluded_dir' ]\n"

@@ -5,7 +5,7 @@ shared_examples 'an identifiable collection' do
   let(:view) { described_class.new(wrapped) }
 
   let(:config) do
-    { pattern_type: 'glob' }
+    { string_pattern_type: 'glob' }
   end
 
   describe '#unwrap' do
@@ -86,7 +86,7 @@ shared_examples 'an identifiable collection' do
       let(:arg) { '/home.*' }
 
       context 'globs not enabled' do
-        let(:config) { { pattern_type: 'legacy' } }
+        let(:config) { { string_pattern_type: 'legacy' } }
 
         it 'returns nil' do
           expect(subject).to be_nil

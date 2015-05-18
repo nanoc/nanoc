@@ -23,7 +23,7 @@ module Nanoc::CLI::Commands
 # The syntax to use for patterns in the Rules file. Can be either `"glob"`
 # (default) or `null`. The former will enable glob patterns, which behave like
 # Ruby’s File.fnmatch. The latter will enable nanoc 3.x-style patterns.
-pattern_type: glob
+string_pattern_type: glob
 
 # A list of file extensions that nanoc will consider to be textual rather than
 # binary. If an item with an extension not in this list is found,  the file

@@ -47,7 +47,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
-      File.open('nanoc.yaml', 'w') { |io| io.write "pattern_type: legacy\nprune:\n  exclude: [ 'excluded.html' ]" }
+      File.open('nanoc.yaml', 'w') { |io| io.write "string_pattern_type: legacy\nprune:\n  exclude: [ 'excluded.html' ]" }
       File.open('content/index.html', 'w') { |io| io.write('stuff') }
       File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
       assert calc_issues.empty?
@@ -59,7 +59,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
       assert Dir['content/*'].empty?
       assert Dir['output/*'].empty?
 
-      File.open('nanoc.yaml', 'w') { |io| io.write "pattern_type: legacy\nprune:\n  blah: meh" }
+      File.open('nanoc.yaml', 'w') { |io| io.write "string_pattern_type: legacy\nprune:\n  blah: meh" }
       File.open('content/index.html', 'w') { |io| io.write('stuff') }
       File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
       refute calc_issues.empty?
