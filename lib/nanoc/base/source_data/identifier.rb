@@ -16,10 +16,10 @@ module Nanoc
     end
 
     def initialize(string, params = {})
-      @style = params.fetch(:style, :stripped)
+      @style = params.fetch(:style, :legacy)
 
       case @style
-      when :stripped
+      when :legacy
         @string = "/#{string}/".gsub(/^\/+|\/+$/, '/').freeze
       when :full
         if string !~ /\A\//
@@ -77,7 +77,7 @@ module Nanoc
 
     # @return [String]
     def with_ext(ext)
-      if @style == :stripped
+      unless full?
         raise Nanoc::Int::Errors::Generic,
           'Cannot use #with_ext on identifier that does not include the file extension'
       end

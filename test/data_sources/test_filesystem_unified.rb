@@ -75,7 +75,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_load_objects_with_same_extensions
     # Create data source
-    data_source = new_data_source({ identifier_style: 'full' })
+    data_source = new_data_source({ identifier_type: 'full' })
 
     # Create a fake class
     klass = Class.new do
@@ -133,7 +133,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_full_style_identifier
     # Create data source
-    data_source = new_data_source({ identifier_style: 'full' })
+    data_source = new_data_source({ identifier_type: 'full' })
 
     # Get input and expected output
     expected = {

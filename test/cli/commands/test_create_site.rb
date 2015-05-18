@@ -76,7 +76,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
         io.write("data_sources:\n")
         io.write("  -\n")
         io.write("    type: filesystem_unified\n")
-        io.write("    identifier_style: full\n")
+        io.write("    identifier_type: full\n")
       end
       site = Nanoc::Int::Site.new('.')
       site.compile

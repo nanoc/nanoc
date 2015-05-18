@@ -2,7 +2,7 @@
 
 describe Nanoc::Identifier do
   describe '#initialize' do
-    context 'stripped style' do
+    context 'legacy style' do
       it 'does not convert already clean paths' do
         expect(described_class.new('/foo/bar/').to_s).to eql('/foo/bar/')
       end
@@ -59,7 +59,7 @@ describe Nanoc::Identifier do
 
     subject { identifier.inspect }
 
-    it { should == '<Nanoc::Identifier style=stripped "/foo/bar/">' }
+    it { should == '<Nanoc::Identifier style=legacy "/foo/bar/">' }
   end
 
   describe '#== and #eql?' do
@@ -197,7 +197,7 @@ describe Nanoc::Identifier do
   describe '#with_ext' do
     subject { identifier.with_ext(ext) }
 
-    context 'stripped style' do
+    context 'legacy style' do
       let(:identifier) { described_class.new('/foo/') }
       let(:ext) { 'html' }
 
@@ -266,7 +266,7 @@ describe Nanoc::Identifier do
   describe '#without_ext' do
     subject { identifier.without_ext }
 
-    context 'stripped style' do
+    context 'legacy style' do
       let(:identifier) { described_class.new('/foo/') }
 
       it 'raises an error' do

@@ -32,7 +32,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
-        io << '    identifier_style: stripped' << "\n"
+        io << '    identifier_type: legacy' << "\n"
       end
       FileUtils.mkdir_p('output2')
 
@@ -80,7 +80,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
-        io << '    identifier_style: stripped' << "\n"
+        io << '    identifier_type: legacy' << "\n"
       end
       FileUtils.mkdir_p('output')
 

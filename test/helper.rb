@@ -108,7 +108,7 @@ EOS
           io << 'data_sources:' << "\n"
           io << '  -' << "\n"
           io << '    type: filesystem_unified' << "\n"
-          io << '    identifier_style: stripped' << "\n"
+          io << '    identifier_type: legacy' << "\n"
         end
 
         File.open('Rules', 'w') { |io| io.write(rules_content) }

@@ -181,7 +181,7 @@ EOS
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
-        io << '    identifier_style: full' << "\n"
+        io << '    identifier_type: full' << "\n"
       end
 
       # Create rules

@@ -6,6 +6,7 @@ Changes:
 
 * Removed `ItemCollectionView#at`
 * Removed support for calling `ItemCollectionView#[]` with an integer
+* Renamed `identifier_type` to `identifier_type`, and made its values be `"full"` or `"legacy"`.
 
 Enhancements:
 
@@ -44,7 +45,7 @@ Fixes:
 Features:
 
 * Glob patterns (opt-in by setting `pattern_syntax` to `"glob"` in the site configuration)
-* Identifiers with extensions (opt-in by setting `identifier_style` to `"full"` in the data source configuration)
+* Identifiers with extensions (opt-in by setting `identifier_type` to `"full"` in the data source configuration)
 
 Enhancements:
 

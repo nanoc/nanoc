@@ -185,7 +185,7 @@ EOF
       FileUtils.mkdir_p('content/parent')
       FileUtils.mkdir_p('content/parent/bar')
 
-      data = File.read('nanoc.yaml').sub('identifier_style: full', 'identifier_style: stripped')
+      data = File.read('nanoc.yaml').sub('identifier_type: full', 'identifier_type: legacy')
       File.open('nanoc.yaml', 'w') { |io| io << data }
 
       File.open('content/parent.md', 'w') { |io| io << 'asdf' }

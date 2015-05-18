@@ -25,7 +25,7 @@ module Nanoc::Int
       items_root: '/',
       layouts_root: '/',
       config: {},
-      identifier_style: 'full',
+      identifier_type: 'full',
     }
 
     # The default configuration for a site. A site's configuration overrides
