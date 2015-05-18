@@ -4,68 +4,68 @@ describe Nanoc::Identifier do
   describe '#initialize' do
     context 'legacy type' do
       it 'does not convert already clean paths' do
-        expect(described_class.new('/foo/bar/').to_s).to eql('/foo/bar/')
+        expect(described_class.new('/foo/bar/', type: :legacy).to_s).to eql('/foo/bar/')
       end
 
       it 'prepends slash if necessary' do
-        expect(described_class.new('foo/bar/').to_s).to eql('/foo/bar/')
+        expect(described_class.new('foo/bar/', type: :legacy).to_s).to eql('/foo/bar/')
       end
 
       it 'appends slash if necessary' do
-        expect(described_class.new('/foo/bar').to_s).to eql('/foo/bar/')
+        expect(described_class.new('/foo/bar', type: :legacy).to_s).to eql('/foo/bar/')
       end
 
       it 'removes double slashes at start' do
-        expect(described_class.new('//foo/bar/').to_s).to eql('/foo/bar/')
+        expect(described_class.new('//foo/bar/', type: :legacy).to_s).to eql('/foo/bar/')
       end
 
       it 'removes double slashes at end' do
-        expect(described_class.new('/foo/bar//').to_s).to eql('/foo/bar/')
+        expect(described_class.new('/foo/bar//', type: :legacy).to_s).to eql('/foo/bar/')
       end
     end
 
     context 'full type' do
       it 'refuses string not starting with a slash' do
-        expect { described_class.new('foo', type: :full) }.to raise_error('Invalid identifier (does not start with a slash): "foo"')
+        expect { described_class.new('foo') }.to raise_error('Invalid identifier (does not start with a slash): "foo"')
       end
 
       it 'has proper string representation' do
-        expect(described_class.new('/foo', type: :full).to_s).to eql('/foo')
+        expect(described_class.new('/foo').to_s).to eql('/foo')
       end
     end
   end
 
   describe '#to_s' do
     it 'returns immutable string' do
-      expect { described_class.new('foo/').to_s << 'lols' }.to raise_error
-      expect { described_class.new('/foo', type: :full).to_s << 'lols' }.to raise_error
+      expect { described_class.new('foo/', type: :legacy).to_s << 'lols' }.to raise_error
+      expect { described_class.new('/foo').to_s << 'lols' }.to raise_error
     end
   end
 
   describe '#to_str' do
     it 'returns immutable string' do
-      expect { described_class.new('foo/bar/').to_str << 'lols' }.to raise_error
+      expect { described_class.new('/foo/bar').to_str << 'lols' }.to raise_error
     end
   end
 
   describe 'Comparable' do
     it 'can be compared' do
-      expect(described_class.new('foo/bar/') <= '/qux/').to eql(true)
+      expect(described_class.new('/foo/bar') <= '/qux').to eql(true)
     end
   end
 
   describe '#inspect' do
-    let(:identifier) { described_class.new('foo/bar/') }
+    let(:identifier) { described_class.new('/foo/bar') }
 
     subject { identifier.inspect }
 
-    it { should == '<Nanoc::Identifier type=legacy "/foo/bar/">' }
+    it { should == '<Nanoc::Identifier type=full "/foo/bar">' }
   end
 
   describe '#== and #eql?' do
     context 'equal identifiers' do
-      let(:identifier_a) { described_class.new('//foo/bar/') }
-      let(:identifier_b) { described_class.new('/foo/bar//') }
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { described_class.new('/foo/bar//', type: :legacy) }
 
       it 'is equal to identifier' do
         expect(identifier_a).to eq(identifier_b)
@@ -79,8 +79,8 @@ describe Nanoc::Identifier do
     end
 
     context 'different identifiers' do
-      let(:identifier_a) { described_class.new('//foo/bar/') }
-      let(:identifier_b) { described_class.new('/baz/qux//') }
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { described_class.new('/baz/qux//', type: :legacy) }
 
       it 'differs from identifier' do
         expect(identifier_a).not_to eq(identifier_b)
@@ -96,8 +96,8 @@ describe Nanoc::Identifier do
 
   describe '#hash' do
     context 'equal identifiers' do
-      let(:identifier_a) { described_class.new('//foo/bar/') }
-      let(:identifier_b) { described_class.new('/foo/bar//') }
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { described_class.new('/foo/bar//', type: :legacy) }
 
       it 'is the same' do
         expect(identifier_a.hash == identifier_b.hash).to eql(true)
@@ -105,8 +105,8 @@ describe Nanoc::Identifier do
     end
 
     context 'different identifiers' do
-      let(:identifier_a) { described_class.new('//foo/bar/') }
-      let(:identifier_b) { described_class.new('/monkey/') }
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { described_class.new('/monkey/', type: :legacy) }
 
       it 'is different' do
         expect(identifier_a.hash == identifier_b.hash).to eql(false)
@@ -115,7 +115,7 @@ describe Nanoc::Identifier do
   end
 
   describe '#=~' do
-    let(:identifier) { described_class.new('/foo/bar/') }
+    let(:identifier) { described_class.new('/foo/bar') }
 
     subject { identifier =~ pat }
 
@@ -133,29 +133,29 @@ describe Nanoc::Identifier do
 
     context 'given a string' do
       context 'matching string' do
-        let(:pat) { '/foo/*/' }
+        let(:pat) { '/foo/*' }
         it { is_expected.to eql(0) }
       end
 
       context 'non-matching string' do
-        let(:pat) { '/qux/*/' }
+        let(:pat) { '/qux/*' }
         it { is_expected.to eql(nil) }
       end
     end
   end
 
   describe '#<=>' do
-    let(:identifier) { described_class.new('/foo/bar/') }
+    let(:identifier) { described_class.new('/foo/bar') }
 
     it 'compares by string' do
-      expect(identifier <=> '/foo/aarghh/').to eql(1)
-      expect(identifier <=> '/foo/bar/').to eql(0)
-      expect(identifier <=> '/foo/qux/').to eql(-1)
+      expect(identifier <=> '/foo/aarghh').to eql(1)
+      expect(identifier <=> '/foo/bar').to eql(0)
+      expect(identifier <=> '/foo/qux').to eql(-1)
     end
   end
 
   describe '#prefix' do
-    let(:identifier) { described_class.new('/foo', type: :full) }
+    let(:identifier) { described_class.new('/foo') }
 
     subject { identifier.prefix(prefix) }
 
@@ -198,7 +198,7 @@ describe Nanoc::Identifier do
     subject { identifier.with_ext(ext) }
 
     context 'legacy type' do
-      let(:identifier) { described_class.new('/foo/') }
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
       let(:ext) { 'html' }
 
       it 'raises an error' do
@@ -207,7 +207,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with no extension' do
-      let(:identifier) { described_class.new('/foo', type: :full) }
+      let(:identifier) { described_class.new('/foo') }
 
       context 'extension without dot given' do
         let(:ext) { 'html' }
@@ -235,7 +235,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with extension' do
-      let(:identifier) { described_class.new('/foo.md', type: :full) }
+      let(:identifier) { described_class.new('/foo.md') }
 
       context 'extension without dot given' do
         let(:ext) { 'html' }
@@ -267,7 +267,7 @@ describe Nanoc::Identifier do
     subject { identifier.without_ext }
 
     context 'legacy type' do
-      let(:identifier) { described_class.new('/foo/') }
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
         expect { subject }.to raise_error
@@ -275,7 +275,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with no extension' do
-      let(:identifier) { described_class.new('/foo', type: :full) }
+      let(:identifier) { described_class.new('/foo') }
 
       it 'does nothing' do
         expect(subject).to eql('/foo')
@@ -283,7 +283,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with extension' do
-      let(:identifier) { described_class.new('/foo.md', type: :full) }
+      let(:identifier) { described_class.new('/foo.md') }
 
       it 'removes the extension' do
         expect(subject).to eql('/foo')

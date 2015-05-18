@@ -16,7 +16,7 @@ module Nanoc
     end
 
     def initialize(string, params = {})
-      @type = params.fetch(:type, :legacy)
+      @type = params.fetch(:type, :full)
 
       case @type
       when :legacy

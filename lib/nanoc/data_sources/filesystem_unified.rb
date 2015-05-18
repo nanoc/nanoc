@@ -88,7 +88,7 @@ module Nanoc::DataSources
     # the given directory name off the filename.
     def identifier_for_filename(filename)
       if config[:identifier_type] == 'full'
-        return Nanoc::Identifier.new(filename, type: :full)
+        return Nanoc::Identifier.new(filename)
       end
 
       if filename =~ /(^|\/)index(\.[^\/]+)?$/
@@ -96,7 +96,7 @@ module Nanoc::DataSources
       else
         regex = @config && @config[:allow_periods_in_identifiers] ? /\.[^\/\.]+$/ : /\.[^\/]+$/
       end
-      filename.sub(regex, '').__nanoc_cleaned_identifier
+      Nanoc::Identifier.new(filename.sub(regex, ''), type: :legacy)
     end
   end
 end

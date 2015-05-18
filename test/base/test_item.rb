@@ -8,12 +8,6 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
     assert_equal 'xyz', item.attributes[:abc]
   end
 
-  def test_initialize_with_unclean_identifier
-    item = Nanoc::Int::Item.new('foo', {}, '/foo')
-
-    assert_equal '/foo/', item.identifier.to_s
-  end
-
   def test_reference
     item = Nanoc::Int::Item.new(
       'content',
