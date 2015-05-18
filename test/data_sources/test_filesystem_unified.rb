@@ -137,10 +137,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/foo'            => Nanoc::Identifier.new('/foo',            style: :full),
-      '/foo.html'       => Nanoc::Identifier.new('/foo.html',       style: :full),
-      '/foo/index.html' => Nanoc::Identifier.new('/foo/index.html', style: :full),
-      '/foo.html.erb'   => Nanoc::Identifier.new('/foo.html.erb',   style: :full),
+      '/foo'            => Nanoc::Identifier.new('/foo',            type: :full),
+      '/foo.html'       => Nanoc::Identifier.new('/foo.html',       type: :full),
+      '/foo/index.html' => Nanoc::Identifier.new('/foo/index.html', type: :full),
+      '/foo.html.erb'   => Nanoc::Identifier.new('/foo.html.erb',   type: :full),
     }
 
     # Check

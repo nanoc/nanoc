@@ -16,9 +16,9 @@ module Nanoc
     end
 
     def initialize(string, params = {})
-      @style = params.fetch(:style, :legacy)
+      @type = params.fetch(:type, :legacy)
 
-      case @style
+      case @type
       when :legacy
         @string = "/#{string}/".gsub(/^\/+|\/+$/, '/').freeze
       when :full
@@ -29,7 +29,7 @@ module Nanoc
         @string = string.dup.freeze
       else
         raise Nanoc::Int::Errors::Generic,
-          "Invalid :style param for identifier: #{@style.inspect}"
+          "Invalid :type param for identifier: #{@type.inspect}"
       end
     end
 
@@ -50,10 +50,10 @@ module Nanoc
       to_s <=> other.to_s
     end
 
-    # @return [Boolean] True if this is a full-style identifier (i.e. includes
+    # @return [Boolean] True if this is a full-type identifier (i.e. includes
     #   the extension), false otherwise
     def full?
-      @style == :full
+      @type == :full
     end
 
     # @return [String]
@@ -72,7 +72,7 @@ module Nanoc
         raise Nanoc::Int::Errors::Generic,
           "Invalid prefix (does not start with a slash): #{@string.inspect}"
       end
-      Nanoc::Identifier.new(string.sub(/\/+\z/, '') + @string, style: @style)
+      Nanoc::Identifier.new(string.sub(/\/+\z/, '') + @string, type: @type)
     end
 
     # @return [String]
@@ -117,7 +117,7 @@ module Nanoc
     end
 
     def inspect
-      "<Nanoc::Identifier style=#{@style} #{to_s.inspect}>"
+      "<Nanoc::Identifier type=#{@type} #{to_s.inspect}>"
     end
   end
 end

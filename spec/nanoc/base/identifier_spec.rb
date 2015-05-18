@@ -2,7 +2,7 @@
 
 describe Nanoc::Identifier do
   describe '#initialize' do
-    context 'legacy style' do
+    context 'legacy type' do
       it 'does not convert already clean paths' do
         expect(described_class.new('/foo/bar/').to_s).to eql('/foo/bar/')
       end
@@ -24,13 +24,13 @@ describe Nanoc::Identifier do
       end
     end
 
-    context 'full style' do
+    context 'full type' do
       it 'refuses string not starting with a slash' do
-        expect { described_class.new('foo', style: :full) }.to raise_error('Invalid identifier (does not start with a slash): "foo"')
+        expect { described_class.new('foo', type: :full) }.to raise_error('Invalid identifier (does not start with a slash): "foo"')
       end
 
       it 'has proper string representation' do
-        expect(described_class.new('/foo', style: :full).to_s).to eql('/foo')
+        expect(described_class.new('/foo', type: :full).to_s).to eql('/foo')
       end
     end
   end
@@ -38,7 +38,7 @@ describe Nanoc::Identifier do
   describe '#to_s' do
     it 'returns immutable string' do
       expect { described_class.new('foo/').to_s << 'lols' }.to raise_error
-      expect { described_class.new('/foo', style: :full).to_s << 'lols' }.to raise_error
+      expect { described_class.new('/foo', type: :full).to_s << 'lols' }.to raise_error
     end
   end
 
@@ -59,7 +59,7 @@ describe Nanoc::Identifier do
 
     subject { identifier.inspect }
 
-    it { should == '<Nanoc::Identifier style=legacy "/foo/bar/">' }
+    it { should == '<Nanoc::Identifier type=legacy "/foo/bar/">' }
   end
 
   describe '#== and #eql?' do
@@ -155,7 +155,7 @@ describe Nanoc::Identifier do
   end
 
   describe '#prefix' do
-    let(:identifier) { described_class.new('/foo', style: :full) }
+    let(:identifier) { described_class.new('/foo', type: :full) }
 
     subject { identifier.prefix(prefix) }
 
@@ -197,7 +197,7 @@ describe Nanoc::Identifier do
   describe '#with_ext' do
     subject { identifier.with_ext(ext) }
 
-    context 'legacy style' do
+    context 'legacy type' do
       let(:identifier) { described_class.new('/foo/') }
       let(:ext) { 'html' }
 
@@ -207,7 +207,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with no extension' do
-      let(:identifier) { described_class.new('/foo', style: :full) }
+      let(:identifier) { described_class.new('/foo', type: :full) }
 
       context 'extension without dot given' do
         let(:ext) { 'html' }
@@ -235,7 +235,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with extension' do
-      let(:identifier) { described_class.new('/foo.md', style: :full) }
+      let(:identifier) { described_class.new('/foo.md', type: :full) }
 
       context 'extension without dot given' do
         let(:ext) { 'html' }
@@ -266,7 +266,7 @@ describe Nanoc::Identifier do
   describe '#without_ext' do
     subject { identifier.without_ext }
 
-    context 'legacy style' do
+    context 'legacy type' do
       let(:identifier) { described_class.new('/foo/') }
 
       it 'raises an error' do
@@ -275,7 +275,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with no extension' do
-      let(:identifier) { described_class.new('/foo', style: :full) }
+      let(:identifier) { described_class.new('/foo', type: :full) }
 
       it 'does nothing' do
         expect(subject).to eql('/foo')
@@ -283,7 +283,7 @@ describe Nanoc::Identifier do
     end
 
     context 'identifier with extension' do
-      let(:identifier) { described_class.new('/foo.md', style: :full) }
+      let(:identifier) { described_class.new('/foo.md', type: :full) }
 
       it 'removes the extension' do
         expect(subject).to eql('/foo')
