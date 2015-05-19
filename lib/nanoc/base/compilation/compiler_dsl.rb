@@ -260,14 +260,14 @@ module Nanoc::Int
 
     # @api private
     def create_pattern(arg)
-      case @config[:pattern_syntax]
+      case @config[:string_pattern_type]
       when 'glob'
         Nanoc::Int::Pattern.from(arg)
-      when nil
+      when 'legacy'
         Nanoc::Int::Pattern.from(identifier_to_regex(arg))
       else
         raise Nanoc::Int::Errors::GenericTrivial,
-          "Invalid pattern_syntax: #{@config[:pattern_syntax]}"
+          "Invalid string_pattern_type: #{@config[:string_pattern_type]}"
       end
     end
 

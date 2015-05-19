@@ -4,7 +4,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_without_yes
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write "output_dir: output2\npattern_syntax: null\n" }
+      File.open('nanoc.yaml', 'w') { |io| io.write "output_dir: output2\nstring_pattern_type: legacy\n" }
       FileUtils.mkdir_p('output2')
 
       # Create source files
@@ -28,11 +28,11 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       # Set output dir
       File.open('nanoc.yaml', 'w') do |io|
         io << 'output_dir: output2' << "\n"
-        io << 'pattern_syntax: null' << "\n"
+        io << 'string_pattern_type: legacy' << "\n"
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
-        io << '    identifier_style: stripped' << "\n"
+        io << '    identifier_type: legacy' << "\n"
       end
       FileUtils.mkdir_p('output2')
 
@@ -53,7 +53,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_with_dry_run
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write "pattern_syntax: null\noutput_dir: output2" }
+      File.open('nanoc.yaml', 'w') { |io| io.write "string_pattern_type: legacy\noutput_dir: output2" }
       FileUtils.mkdir_p('output2')
 
       # Create source files
@@ -76,11 +76,11 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.open('nanoc.yaml', 'w') do |io|
         io << 'prune:' << "\n"
         io << '  exclude: [ "good-dir", "good-file.html" ]' << "\n"
-        io << 'pattern_syntax: null' << "\n"
+        io << 'string_pattern_type: legacy' << "\n"
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
         io << '    type: filesystem_unified' << "\n"
-        io << '    identifier_style: stripped' << "\n"
+        io << '    identifier_type: legacy' << "\n"
       end
       FileUtils.mkdir_p('output')
 

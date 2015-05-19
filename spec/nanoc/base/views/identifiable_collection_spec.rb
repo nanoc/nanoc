@@ -5,7 +5,7 @@ shared_examples 'an identifiable collection' do
   let(:view) { described_class.new(wrapped) }
 
   let(:config) do
-    { pattern_syntax: 'glob' }
+    { string_pattern_type: 'glob' }
   end
 
   describe '#unwrap' do
@@ -52,11 +52,11 @@ shared_examples 'an identifiable collection' do
 
   describe '#[]' do
     let(:page_object) do
-      double(:identifiable, identifier: Nanoc::Identifier.new('/page.erb', style: :full))
+      double(:identifiable, identifier: Nanoc::Identifier.new('/page.erb', type: :full))
     end
 
     let(:home_object) do
-      double(:identifiable, identifier: Nanoc::Identifier.new('/home.erb', style: :full))
+      double(:identifiable, identifier: Nanoc::Identifier.new('/home.erb', type: :full))
     end
 
     let(:wrapped) do
@@ -86,7 +86,7 @@ shared_examples 'an identifiable collection' do
       let(:arg) { '/home.*' }
 
       context 'globs not enabled' do
-        let(:config) { { pattern_syntax: nil } }
+        let(:config) { { string_pattern_type: 'legacy' } }
 
         it 'returns nil' do
           expect(subject).to be_nil
@@ -114,9 +114,9 @@ shared_examples 'an identifiable collection' do
   describe '#find_all' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.css', style: :full))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.md', style: :full))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/style.css', style: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.css', type: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.md', type: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/style.css', type: :full))
       end
     end
 

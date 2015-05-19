@@ -129,7 +129,7 @@ module Nanoc::DataSources
         unless [0, 1].include?(meta_filenames.size)
           raise "Found #{meta_filenames.size} meta files for #{basename}; expected 0 or 1"
         end
-        unless config[:identifier_style] == 'full'
+        unless config[:identifier_type] == 'full'
           unless [0, 1].include?(content_filenames.size)
             raise "Found #{content_filenames.size} content files for #{basename}; expected 0 or 1"
           end

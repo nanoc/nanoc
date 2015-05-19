@@ -98,7 +98,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_with_same_extensions
     # Create data source
-    config = { identifier_style: 'full' }
+    config = { identifier_type: 'full' }
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, config)
 
     # Write sample files

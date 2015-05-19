@@ -25,7 +25,7 @@ module Nanoc::Int
       items_root: '/',
       layouts_root: '/',
       config: {},
-      identifier_style: 'full',
+      identifier_type: 'full',
     }
 
     # The default configuration for a site. A site's configuration overrides
@@ -41,7 +41,7 @@ module Nanoc::Int
       index_filenames: ['index.html'],
       enable_output_diff: false,
       prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
-      pattern_syntax: 'glob',
+      string_pattern_type: 'glob',
     }
 
     # Creates a site object for the site specified by the given

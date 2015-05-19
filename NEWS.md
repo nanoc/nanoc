@@ -6,6 +6,8 @@ Changes:
 
 * Removed `ItemCollectionView#at`
 * Removed support for calling `ItemCollectionView#[]` with an integer
+* Renamed `identifier_style` to `identifier_type`, and made its values be `"full"` or `"legacy"`.
+* Renamed `pattern_syntax` to `string_pattern_type`, and made its values be `"glob"` or `"legacy"`.
 
 Enhancements:
 

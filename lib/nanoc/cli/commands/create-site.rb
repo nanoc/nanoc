@@ -21,9 +21,9 @@ module Nanoc::CLI::Commands
 
     DEFAULT_CONFIG = <<EOS unless defined? DEFAULT_CONFIG
 # The syntax to use for patterns in the Rules file. Can be either `"glob"`
-# (default) or `null`. The former will enable glob patterns, which behave like
-# Ruby’s File.fnmatch. The latter will enable nanoc 3.x-style patterns.
-pattern_syntax: glob
+# (default) or `"legacy"`. The former will enable glob patterns, which behave
+# like Ruby’s File.fnmatch. The latter will enable nanoc 3.x-style patterns.
+string_pattern_type: glob
 
 # A list of file extensions that nanoc will consider to be textual rather than
 # binary. If an item with an extension not in this list is found,  the file
@@ -89,7 +89,7 @@ data_sources:
     # UTF-8 (which they should be!), change this.
     encoding: utf-8
 
-    identifier_style: full
+    identifier_type: full
 
 # Configuration for the “check” command, which run unit tests on the site.
 checks:

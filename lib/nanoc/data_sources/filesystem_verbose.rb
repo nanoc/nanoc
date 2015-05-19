@@ -61,8 +61,8 @@ module Nanoc::DataSources
 
     # See {Nanoc::DataSources::Filesystem#identifier_for_filename}.
     def identifier_for_filename(filename)
-      if config[:identifier_style] == 'full'
-        return Nanoc::Identifier.new(filename, style: :full)
+      if config[:identifier_type] == 'full'
+        return Nanoc::Identifier.new(filename, type: :full)
       end
 
       filename.sub(/[^\/]+\.yaml$/, '')
