@@ -11,9 +11,9 @@ shared_examples 'an identifiable collection' do
   describe '#unwrap' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo/'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar/'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz'))
       end
     end
 
@@ -25,9 +25,9 @@ shared_examples 'an identifiable collection' do
   describe '#each' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo/'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar/'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz'))
       end
     end
 
@@ -39,9 +39,9 @@ shared_examples 'an identifiable collection' do
   describe '#size' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo/'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar/'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz/'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz'))
       end
     end
 
@@ -52,11 +52,11 @@ shared_examples 'an identifiable collection' do
 
   describe '#[]' do
     let(:page_object) do
-      double(:identifiable, identifier: Nanoc::Identifier.new('/page.erb', type: :full))
+      double(:identifiable, identifier: Nanoc::Identifier.new('/page.erb'))
     end
 
     let(:home_object) do
-      double(:identifiable, identifier: Nanoc::Identifier.new('/home.erb', type: :full))
+      double(:identifiable, identifier: Nanoc::Identifier.new('/home.erb'))
     end
 
     let(:wrapped) do
@@ -114,9 +114,9 @@ shared_examples 'an identifiable collection' do
   describe '#find_all' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.css', type: :full))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.md', type: :full))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/style.css', type: :full))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.css'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.md'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/style.css'))
       end
     end
 
