@@ -8,6 +8,9 @@ Changes:
 * Removed support for calling `ItemCollectionView#[]` with an integer
 * Renamed `identifier_style` to `identifier_type`, and made its values be `"full"` or `"legacy"`.
 * Renamed `pattern_syntax` to `string_pattern_type`, and made its values be `"glob"` or `"legacy"`.
+* Made `"full"` the default for `identifier_type`
+* Made `"glob"` the default for `string_pattern_type`
+* Enabled auto-pruning by default for new sites
 
 Enhancements:
 
@@ -16,8 +19,9 @@ Enhancements:
 Fixes:
 
 * Fixed `LayoutCollectionView#[]` documentation (it mentioned items)
-* Fixed `ItemCollection#[]` returning an array when passed a regex
+* Fixed `ItemCollectionView#[]` returning an array when passed a regex
 * Fixed an issue with mutable collection views’ `#delete_if` not yielding mutable views
+* Fixed an issue with collection views’ `#find_all` returning entities instead of views
 
 ## 4.0.0b1 (2015-05-14)
 
