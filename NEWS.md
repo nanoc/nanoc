@@ -4,17 +4,18 @@
 
 Changes:
 
-* Removed `ItemCollectionView#at`
-* Removed support for calling `ItemCollectionView#[]` with an integer
-* Renamed `identifier_style` to `identifier_type`, and made its values be `"full"` or `"legacy"`.
-* Renamed `pattern_syntax` to `string_pattern_type`, and made its values be `"glob"` or `"legacy"`.
-* Made `"full"` the default for `identifier_type`
-* Made `"glob"` the default for `string_pattern_type`
-* Enabled auto-pruning by default for new sites
+* Removed `ItemCollectionView#at` (#582)
+* Removed support for calling `ItemCollectionView#[]` with an integer (#582)
+* Renamed `identifier_style` to `identifier_type`, and made its values be `"full"` or `"legacy"` (#593)
+* Renamed `pattern_syntax` to `string_pattern_type`, and made its values be `"glob"` or `"legacy"` (#593)
+* Made `"full"` the default for `identifier_type` (#592, #594)
+* Made `"glob"` the default for `string_pattern_type` (#592)
+* Enabled auto-pruning by default for new sites (#590)
 
 Enhancements:
 
 * Added `--force` to `create-site` command (#580) [David Alexander]
+* Made default Rules file more future-proof (#591)
 
 Fixes:
 
