@@ -7,7 +7,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
 
   def calc_issues
     site = Nanoc::Int::Site.new('.')
-    check = check_class.new(site)
+    check = check_class.create(site)
     check.run
     check.issues
   end

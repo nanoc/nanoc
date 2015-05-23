@@ -10,7 +10,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
         File.open('output/style.css', 'w') { |io| io.write('h1 { color: red; }') }
 
         # Run check
-        check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check = Nanoc::Extra::Checking::Checks::CSS.create(site)
         check.run
 
         # Check
@@ -28,7 +28,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
         File.open('output/style.css', 'w') { |io| io.write('h1 { coxlor: rxed; }') }
 
         # Run check
-        check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check = Nanoc::Extra::Checking::Checks::CSS.create(site)
         check.run
 
         # Check
@@ -49,7 +49,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
         File.open('output/style.css', 'w') { |io| io.write('h1 { ; {') }
 
         # Run check
-        check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check = Nanoc::Extra::Checking::Checks::CSS.create(site)
         check.run
 
         # Check

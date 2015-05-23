@@ -24,7 +24,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="https://nanoc.ws/theme-song.flac"></audio>',
         '<video src="https://nanoc.ws/screen-cast.mkv"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
@@ -42,7 +42,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="/theme-song.flac"></audio>',
         '<video src="/screen-cast.mkv"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
@@ -60,7 +60,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="//nanoc.ws/theme-song.flac"></audio>',
         '<video src="//nanoc.ws/screen-cast.mkv"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
@@ -78,7 +78,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="theme-song.flac"></audio>',
         '<video src="screen-cast.mkv"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
@@ -96,7 +96,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="?query-string"></audio>',
         '<video src="?query-string"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
@@ -114,7 +114,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="#fragment"></audio>',
         '<video src="#fragment"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
@@ -133,7 +133,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<audio src="http://nanoc.ws/theme-song.flac"></audio>',
         '<video src="http://nanoc.ws/screencast.mkv"></video>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       issues = check.issues.to_a
@@ -179,7 +179,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video target="http://nanoc.ws/screen-cast.mkv"></video>',
         '<p>http://nanoc.ws/harmless-text</p>'
       ])
-      check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
       assert check.issues.empty?
