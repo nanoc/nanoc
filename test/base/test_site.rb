@@ -203,8 +203,8 @@ EOF
       qux    = site.items.find { |i| i.identifier == '/parent/bar/qux/' }
 
       assert_equal Set.new([parent, style]), Set.new(root.children)
-      assert_equal Set.new([foo, bar]),      Set.new(parent.children)
-      assert_equal Set.new([qux]),           Set.new(bar.children)
+      assert_equal Set.new([foo, bar]), Set.new(parent.children)
+      assert_equal Set.new([qux]), Set.new(bar.children)
 
       assert_equal nil,    root.parent
       assert_equal root,   parent.parent
