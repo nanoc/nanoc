@@ -9,18 +9,30 @@ module Nanoc::Extra::Checking
   end
 
   # @api private
-  class Check
+  class Check < Nanoc::Int::Context
     extend Nanoc::Int::PluginRegistry::PluginMethods
 
-    attr_reader :site
     attr_reader :issues
-    attr_reader :output_filenames
 
-    def initialize(site)
-      @site = site
+    def self.create(site)
+      output_dir = site.config[:output_dir]
+      unless File.exist?(output_dir)
+        raise Nanoc::Extra::Checking::OutputDirNotFoundError.new(output_dir)
+      end
+      output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
+
+      context = {
+        site: site,
+        output_filenames: output_filenames,
+      }
+
+      new(context)
+    end
+
+    def initialize(context)
+      super(context)
 
       @issues = Set.new
-      @output_filenames = []
     end
 
     def run
@@ -28,17 +40,9 @@ module Nanoc::Extra::Checking
     end
 
     def add_issue(desc, params = {})
-      subject  = params.fetch(:subject, nil)
+      subject = params.fetch(:subject, nil)
 
       @issues << Issue.new(desc, subject, self.class)
-    end
-
-    def setup
-      output_dir = @site.config[:output_dir]
-      unless File.exist?(output_dir)
-        raise Nanoc::Extra::Checking::OutputDirNotFoundError.new(output_dir)
-      end
-      @output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
     end
   end
 end

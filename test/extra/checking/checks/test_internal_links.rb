@@ -10,7 +10,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       File.open('output/bar.html', 'w') { |io| io.write('<a href="/foo.txt">not broken</a>') }
 
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
       check.run
 
       # Test
@@ -28,7 +28,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       File.open('output/stuff/blah', 'w') { |io| io.write('hi') }
 
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
 
       # Test
       assert check.send(:valid?, 'foo',         'output/origin')
@@ -45,7 +45,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       FileUtils.mkdir_p('output/stuff')
       File.open('output/stuff/right', 'w') { |io| io.write('hi') }
 
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
 
       assert check.send(:valid?, 'stuff/right?foo=123', 'output/origin')
       refute check.send(:valid?, 'stuff/wrong?foo=123', 'output/origin')
@@ -55,7 +55,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   def test_exclude
     with_site do |site|
       # Create check
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
       site.config.update({ checks: { internal_links: { exclude: ['^/excluded\d+'] } } })
 
       # Test
@@ -70,7 +70,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       FileUtils.mkdir_p('output/stuff')
       File.open('output/stuff/right foo', 'w') { |io| io.write('hi') }
 
-      check = Nanoc::Extra::Checking::Checks::InternalLinks.new(site)
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
 
       assert check.send(:valid?, 'stuff/right%20foo', 'output/origin')
       refute check.send(:valid?, 'stuff/wrong%20foo', 'output/origin')
