@@ -117,6 +117,7 @@ module Nanoc::Extra::Checking
         print format("  %-#{length}s", "Running check #{klass.identifier}… ")
 
         check = klass.new(@site)
+        check.setup
         check.run
 
         checks << check

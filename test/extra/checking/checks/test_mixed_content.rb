@@ -25,6 +25,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="https://nanoc.ws/screen-cast.mkv"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?
@@ -43,6 +44,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="/screen-cast.mkv"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?
@@ -61,6 +63,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="//nanoc.ws/screen-cast.mkv"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?
@@ -79,6 +82,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="screen-cast.mkv"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?
@@ -97,6 +101,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="?query-string"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?
@@ -115,6 +120,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="#fragment"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?
@@ -134,6 +140,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<video src="http://nanoc.ws/screencast.mkv"></video>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       issues = check.issues.to_a
@@ -180,6 +187,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<p>http://nanoc.ws/harmless-text</p>'
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.new(site)
+      check.setup
       check.run
 
       assert check.issues.empty?

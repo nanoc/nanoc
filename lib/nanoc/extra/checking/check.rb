@@ -14,10 +14,13 @@ module Nanoc::Extra::Checking
 
     attr_reader :site
     attr_reader :issues
+    attr_reader :output_filenames
 
     def initialize(site)
-      @site   = site
+      @site = site
+
       @issues = Set.new
+      @output_filenames = []
     end
 
     def run
@@ -30,12 +33,12 @@ module Nanoc::Extra::Checking
       @issues << Issue.new(desc, subject, self.class)
     end
 
-    def output_filenames
+    def setup
       output_dir = @site.config[:output_dir]
       unless File.exist?(output_dir)
         raise Nanoc::Extra::Checking::OutputDirNotFoundError.new(output_dir)
       end
-      Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
+      @output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
     end
   end
 end

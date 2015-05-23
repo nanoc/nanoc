@@ -11,6 +11,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
 
         # Run check
         check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check.setup
         check.run
 
         # Check
@@ -29,6 +30,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
 
         # Run check
         check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check.setup
         check.run
 
         # Check
@@ -50,6 +52,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
 
         # Run check
         check = Nanoc::Extra::Checking::Checks::CSS.new(site)
+        check.setup
         check.run
 
         # Check
