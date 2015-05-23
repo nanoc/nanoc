@@ -1,5 +1,11 @@
 # nanoc news
 
+## 4.0.0b3 (???)
+
+Enhancements:
+
+* Made @config, @items and @layouts available in checks (#598)
+
 ## 4.0.0b2 (2015-05-23)
 
 Changes:
