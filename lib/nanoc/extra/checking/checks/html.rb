@@ -8,7 +8,7 @@ module ::Nanoc::Extra::Checking::Checks
     def run
       require 'w3c_validators'
 
-      Dir[site.config[:output_dir] + '/**/*.{htm,html}'].each do |filename|
+      Dir[@config[:output_dir] + '/**/*.{htm,html}'].each do |filename|
         results = ::W3CValidators::MarkupValidator.new.validate_file(filename)
         lines = File.readlines(filename)
         results.errors.each do |e|

@@ -51,7 +51,7 @@ module Nanoc::Extra::Checking::Checks
 
       # Make absolute
       if path[0, 1] == '/'
-        path = @site.config[:output_dir] + path
+        path = @config[:output_dir] + path
       else
         path = ::File.expand_path(path, ::File.dirname(origin))
       end
@@ -60,14 +60,14 @@ module Nanoc::Extra::Checking::Checks
       return true if File.file?(path)
 
       # Check whether directory with index file exists
-      return true if File.directory?(path) && @site.config[:index_filenames].any? { |fn| File.file?(File.join(path, fn)) }
+      return true if File.directory?(path) && @config[:index_filenames].any? { |fn| File.file?(File.join(path, fn)) }
 
       # Nope :(
       false
     end
 
     def excluded?(href)
-      excludes =  @site.config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
+      excludes =  @config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(href) }
     end
   end
