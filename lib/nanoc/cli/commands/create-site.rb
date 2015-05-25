@@ -3,9 +3,7 @@
 usage 'create-site [options] path'
 aliases :create_site, :cs
 summary 'create a site'
-description "
-Create a new site at the given path. The site will use the `filesystem_unified` data source by default, but this can be changed using the `--datasource` command-line option.
-"
+description "Create a new site at the given path. The site will use the `filesystem` data source."
 flag nil, :force, "Force creation of new site. Disregards previous existence of site in destination"
 
 module Nanoc::CLI::Commands
@@ -62,8 +60,7 @@ prune:
 # “layout/” directories in the site directory.
 data_sources:
   -
-    # The type is the identifier of the data source. By default, this will be
-    # `filesystem_unified`.
+    # The type is the identifier of the data source.
     type: #{Nanoc::Int::Site::DEFAULT_DATA_SOURCE_CONFIG[:type]}
 
     # The path where items should be mounted (comparable to mount points in
@@ -291,25 +288,17 @@ EOS
 EOS
 
     def run
-      # Check arguments
+      # Extract arguments
       if arguments.length != 1
         raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
       end
-
-      # Extract arguments and options
-      path        = arguments[0]
-      data_source = options[:datasource] || 'filesystem_unified'
+      path = arguments[0]
 
       # Check whether site exists
       if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w{ . .. }).empty?) && !options[:force]
         raise Nanoc::Int::Errors::GenericTrivial,
           "The site was not created because '#{path}' already exists. " +
           "Re-run the command using --force to create the site anyway."
-      end
-
-      # Check whether data source exists
-      if Nanoc::DataSource.named(data_source).nil?
-        raise Nanoc::Int::Errors::GenericTrivial, "Unrecognised data source: #{data_source}"
       end
 
       # Setup notifications
