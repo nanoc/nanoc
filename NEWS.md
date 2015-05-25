@@ -2,9 +2,14 @@
 
 ## 4.0.0b3 (???)
 
+Changes:
+
+* Removed `filesystem_verbose` data source (#599)
+
 Enhancements:
 
 * Made @config, @items and @layouts available in checks (#598)
+* Made `filesystem` an alias for `filesystem_unified` (#599)
 
 ## 4.0.0b2 (2015-05-23)
 
