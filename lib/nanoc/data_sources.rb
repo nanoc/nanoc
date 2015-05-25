@@ -8,5 +8,4 @@ module Nanoc::DataSources
 
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemVerbose',  :filesystem_verbose
   Nanoc::DataSource.register '::Nanoc::DataSources::FilesystemUnified',  :filesystem_unified
-  Nanoc::DataSource.register '::Nanoc::DataSources::Static',             :static
 end
