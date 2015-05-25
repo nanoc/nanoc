@@ -327,7 +327,7 @@ describe 'Nanoc::Int::Site#data_sources' do
       File.open('nanoc.yaml', 'w') do |io|
         io.write "data_sources:\n"
         io.write "  -\n"
-        io.write "    type: filesystem_unified\n"
+        io.write "    type: filesystem\n"
         io.write "    aaa: one\n"
         io.write "    config:\n"
         io.write "      bbb: two\n"

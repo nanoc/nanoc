@@ -180,7 +180,7 @@ EOS
         io << 'string_pattern_type: legacy' << "\n"
         io << 'data_sources:' << "\n"
         io << '  -' << "\n"
-        io << '    type: filesystem_unified' << "\n"
+        io << '    type: filesystem' << "\n"
         io << '    identifier_type: full' << "\n"
       end
 
