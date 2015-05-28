@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::KramdownTest < Nanoc::TestCase
   def test_filter
     if_have 'kramdown' do

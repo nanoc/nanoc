@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_created_modified_compiled
     # TODO: implement

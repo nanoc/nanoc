@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Extra
   # Responsible for finding and deleting files in the site’s output directory
   # that are not managed by nanoc.

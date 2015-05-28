@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Contains the processing information for a item.
   #

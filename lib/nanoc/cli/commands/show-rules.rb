@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'show-rules [thing]'
 aliases :explain
 summary 'describe the rules for each item'

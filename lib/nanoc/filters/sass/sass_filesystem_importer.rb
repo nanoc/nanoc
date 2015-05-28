@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # @api private
 class ::Sass::Importers::Filesystem
   alias_method :_orig_find, :_find

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_all
     # Create dummy data

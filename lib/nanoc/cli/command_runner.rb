@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI
   # A command runner subclass for nanoc commands that adds nanoc-specific
   # convenience methods and error handling.

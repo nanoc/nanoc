@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::RuleContextTest < Nanoc::TestCase
   def test_objects
     # Mock everything

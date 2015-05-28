@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Provides functionality for filtering parts of an item or a layout.
   module Filtering

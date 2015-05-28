@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
   def test_compile
     # TODO: implement

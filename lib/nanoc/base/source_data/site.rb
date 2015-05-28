@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # The in-memory representation of a nanoc site. It holds references to the
   # following site data:

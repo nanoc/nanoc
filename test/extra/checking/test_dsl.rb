@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
   def test_from_file
     with_site do |_site|

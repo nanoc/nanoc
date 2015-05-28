@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'tmpdir'
 
 module Nanoc::Int

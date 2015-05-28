@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::MutableConfigView do
   describe '#[]=' do
     let(:config) { {} }

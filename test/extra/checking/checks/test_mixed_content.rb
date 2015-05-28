@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
   def create_output_file(name, lines)
     FileUtils.mkdir_p('output')

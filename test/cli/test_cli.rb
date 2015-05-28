@@ -1,9 +1,5 @@
-# encoding: utf-8
-
 class Nanoc::CLITest < Nanoc::TestCase
   COMMAND_CODE = <<EOS
-# encoding: utf-8
-
 usage       '_test [options]'
 summary     'meh'
 description 'longer meh'
@@ -14,8 +10,6 @@ end
 EOS
 
   SUBCOMMAND_CODE = <<EOS
-# encoding: utf-8
-
 usage       '_sub [options]'
 summary     'meh sub'
 description 'longer meh sub'

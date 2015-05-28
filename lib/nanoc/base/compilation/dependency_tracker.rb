@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Responsible for remembering dependencies between items and layouts. It is
   # used to speed up compilation by only letting an item be recompiled when it

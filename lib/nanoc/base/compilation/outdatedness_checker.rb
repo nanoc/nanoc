@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Responsible for determining whether an item or a layout is outdated.
   #

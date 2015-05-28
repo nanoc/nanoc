@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::PiperTest < Nanoc::TestCase
   def test_basic
     stdout = StringIO.new

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   class MutableItemView < Nanoc::ItemView
     # Sets the value for the given attribute.

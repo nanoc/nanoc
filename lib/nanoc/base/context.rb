@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Provides a context and a binding for use in filters such as the ERB and
   # Haml ones.

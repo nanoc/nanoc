@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   class MutableLayoutCollectionView < Nanoc::MutableIdentifiableCollectionView
     # @api private

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::CoffeeScriptTest < Nanoc::TestCase
   def test_filter
     if_have 'coffee-script' do

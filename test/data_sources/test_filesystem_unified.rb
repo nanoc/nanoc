@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
   def new_data_source(params = nil)
     # Mock site

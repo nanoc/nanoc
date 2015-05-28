@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Extra
   # Contains useful functions for managing the filesystem.
   #

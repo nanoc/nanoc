@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Contains functions for linking to items and item representations.
   module LinkTo

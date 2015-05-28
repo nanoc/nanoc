@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   include Nanoc::Helpers::Filtering
 

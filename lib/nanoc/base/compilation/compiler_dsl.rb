@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Contains methods that will be executed by the site’s `Rules` file.
   class CompilerDSL

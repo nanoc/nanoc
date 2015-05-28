@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::ItemView do
   describe '#== and #eql?' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }

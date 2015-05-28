@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Represents a layout in a nanoc site. It has content, attributes, an
   # identifier and a modification time (to speed up compilation).

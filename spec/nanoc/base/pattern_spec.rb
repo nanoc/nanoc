@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::Int::Pattern do
   describe '.from' do
     it 'converts from string' do

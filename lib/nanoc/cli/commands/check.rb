@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'check [options] [names]'
 summary 'run issue checks'
 description "

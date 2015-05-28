@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::DataSources
   # Provides functionality common across all filesystem data sources.
   #

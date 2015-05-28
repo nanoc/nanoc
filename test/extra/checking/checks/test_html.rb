@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::Checking::Checks::HTMLTest < Nanoc::TestCase
   def test_run_ok
     VCR.use_cassette('html_run_ok') do

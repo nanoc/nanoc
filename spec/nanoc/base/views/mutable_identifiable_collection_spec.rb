@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 shared_examples 'a mutable identifiable collection' do
   let(:view) { described_class.new(wrapped) }
 

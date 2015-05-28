@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
   def test_find
     if_have 'redcarpet' do

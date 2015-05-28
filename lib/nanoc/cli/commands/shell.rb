@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'shell'
 summary 'open a shell on the nanoc environment'
 aliases 'console'

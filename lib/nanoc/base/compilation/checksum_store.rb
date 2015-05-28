@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Stores checksums for objects in order to be able to detect whether a file
   # has changed since the last site compilation.

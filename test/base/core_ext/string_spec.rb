@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe 'String#__nanoc_cleaned_identifier' do
   it 'should not convert already clean paths' do
     '/foo/bar/'.__nanoc_cleaned_identifier.must_equal '/foo/bar/'

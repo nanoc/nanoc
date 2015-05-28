@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Helpers::BreadcrumbsTest < Nanoc::TestCase
   include Nanoc::Helpers::Breadcrumbs
 

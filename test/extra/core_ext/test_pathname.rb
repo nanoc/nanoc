@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::CoreExtPathnameTest < Nanoc::TestCase
   def test_components
     assert_equal %w( / a bb ccc dd e ), Pathname.new('/a/bb/ccc/dd/e').__nanoc_components

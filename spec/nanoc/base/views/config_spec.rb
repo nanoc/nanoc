@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::ConfigView do
   let(:config) do
     { amount: 9000, animal: 'donkey' }

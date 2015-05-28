@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_run
     if_have 'fog' do

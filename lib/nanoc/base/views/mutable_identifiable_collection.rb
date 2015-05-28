@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   class MutableIdentifiableCollectionView < Nanoc::IdentifiableCollectionView
     # Deletes every object for which the block evaluates to true.

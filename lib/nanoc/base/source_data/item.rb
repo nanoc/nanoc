@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Represents a compileable item in a site. It has content and attributes, as
   # well as an identifier (which starts and ends with a slash). It can also

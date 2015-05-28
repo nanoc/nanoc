@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::CLI::Commands::CheckTest < Nanoc::TestCase
   def test_check_stale
     with_site do |_site|

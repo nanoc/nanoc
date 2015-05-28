@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::Helpers::Blogging do
   let(:mod) do
     Class.new(Nanoc::Int::Context) do

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Provides a way to send notifications between objects. It allows blocks
   # associated with a certain notification name to be registered; these blocks

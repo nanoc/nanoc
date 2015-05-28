@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'prune'
 summary 'remove files not managed by nanoc from the output directory'
 description <<-EOS

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # @api private
 module Nanoc::HashExtensions
   # Returns a new hash where all keys are recursively converted to symbols by

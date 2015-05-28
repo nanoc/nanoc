@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'uri'
 
 module Nanoc::Extra::Checking::Checks

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Provides support for breadcrumbs, which allow the user to go up in the
   # page hierarchy.

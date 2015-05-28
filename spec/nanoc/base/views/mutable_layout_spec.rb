@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::MutableLayoutView do
   describe '#[]=' do
     let(:layout) { Nanoc::Int::Layout.new('content', {}, '/asdf/') }

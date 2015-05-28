@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI
   # A simple ANSI colorizer for strings. When given a string and a list of
   # attributes, it returns a colorized string.

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::CompilerTest < Nanoc::TestCase
   def test_compilation_rule_for
     # Mock rules

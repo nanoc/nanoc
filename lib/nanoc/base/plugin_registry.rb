@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # The class responsible for keeping track of all loaded plugins, such as
   # filters ({Nanoc::Filter}) and data sources ({Nanoc::DataSource}).

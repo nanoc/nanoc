@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
   def test_run_without_dst
     # Create deployer

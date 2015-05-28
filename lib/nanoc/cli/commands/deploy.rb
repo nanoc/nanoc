@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'deploy [options]'
 summary 'deploy the compiled site'
 description "

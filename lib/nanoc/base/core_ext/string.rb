@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # @api private
 module Nanoc::StringExtensions
   # Transforms string into an actual identifier

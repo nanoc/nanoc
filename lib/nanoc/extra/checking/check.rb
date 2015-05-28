@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Extra::Checking
   # @api private
   class OutputDirNotFoundError < Nanoc::Int::Errors::Generic

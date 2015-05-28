@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::GemTest < Nanoc::TestCase
   def setup
     super

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   autoload 'Blogging',    'nanoc/helpers/blogging'
   autoload 'Breadcrumbs', 'nanoc/helpers/breadcrumbs'

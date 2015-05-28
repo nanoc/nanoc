@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'set'
 
 module ::Nanoc::Extra

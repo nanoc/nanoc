@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'nanoc command [options] [arguments]'
 summary 'nanoc, a static site compiler written in Ruby'
 

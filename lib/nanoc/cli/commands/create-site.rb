@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'create-site [options] path'
 aliases :create_site, :cs
 summary 'create a site'

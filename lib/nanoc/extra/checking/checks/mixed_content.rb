@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Extra::Checking::Checks
   # A check that verifies HTML files do not reference external resources with
   # URLs that would trigger "mixed content" warnings.

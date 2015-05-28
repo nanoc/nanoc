@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe 'Hash#__nanoc_symbolize_keys_recursively' do
   it 'should convert keys to symbols' do
     hash_old = { 'foo' => 'bar' }

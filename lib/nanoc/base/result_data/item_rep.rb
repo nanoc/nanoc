@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # A single representation (rep) of an item ({Nanoc::Int::Item}). An item can
   # have multiple representations. A representation has its own output file.

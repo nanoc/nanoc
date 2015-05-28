@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::DataSources
   # The filesystem_unified data source stores its items and layouts in nested
   # directories. Items and layouts are represented by one or two files; if it

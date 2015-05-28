@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Provides functionality for “capturing” content in one place and reusing
   # this content elsewhere.
