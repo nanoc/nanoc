@@ -107,7 +107,7 @@ module Nanoc
     #
     # @return [nil] if the item has no parent
     def parent
-      Nanoc::ItemView.new(@item.parent)
+      @item.parent && Nanoc::ItemView.new(@item.parent)
     end
 
     # @return [Boolean] True if the item is binary, false otherwise
