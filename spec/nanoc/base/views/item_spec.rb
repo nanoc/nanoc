@@ -61,10 +61,6 @@ describe Nanoc::ItemView do
   end
 
   describe '#parent' do
-    let(:parent_item) do
-      Nanoc::Int::Item.new('parent', {}, '/parent/')
-    end
-
     let(:item) do
       Nanoc::Int::Item.new('me', {}, '/me/').tap { |i| i.parent = parent_item }
     end
@@ -73,9 +69,25 @@ describe Nanoc::ItemView do
 
     subject { view.parent }
 
-    it 'returns a view for the parent' do
-      expect(subject.class).to eql(Nanoc::ItemView)
-      expect(subject.unwrap).to eql(parent_item)
+    context 'with parent' do
+      let(:parent_item) do
+        Nanoc::Int::Item.new('parent', {}, '/parent/')
+      end
+
+      it 'returns a view for the parent' do
+        expect(subject.class).to eql(Nanoc::ItemView)
+        expect(subject.unwrap).to eql(parent_item)
+      end
+    end
+
+    context 'without parent' do
+      let(:parent_item) do
+        nil
+      end
+
+      it 'returns nil' do
+        expect(subject).to be_nil
+      end
     end
   end
 
