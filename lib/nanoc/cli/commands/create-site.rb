@@ -86,6 +86,9 @@ data_sources:
     # UTF-8 (which they should be!), change this.
     encoding: utf-8
 
+    # The kind of identifier to use for items and layouts. The default is
+    # “full”, meaning that identifiers include file extensions. This can also
+    # be “legacy”, primarily used by older nanoc sites.
     identifier_type: full
 
 # Configuration for the “check” command, which run unit tests on the site.
