@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'net/http'
 require 'net/https'
 require 'nokogiri'

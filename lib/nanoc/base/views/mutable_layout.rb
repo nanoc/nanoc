@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   class MutableLayoutView < Nanoc::LayoutView
     # Sets the value for the given attribute.

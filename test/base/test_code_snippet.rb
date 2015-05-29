@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::CodeSnippetTest < Nanoc::TestCase
   def test_load
     # Initialize

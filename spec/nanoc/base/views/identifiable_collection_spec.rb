@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Needs :view_class
 shared_examples 'an identifiable collection' do
   let(:view) { described_class.new(wrapped) }

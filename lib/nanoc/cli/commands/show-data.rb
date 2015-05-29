@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'show-data'
 aliases :debug
 summary 'show data in this site'

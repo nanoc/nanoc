@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI::StreamCleaners
   # Simplifies output by replacing UTF-8 characters with their ASCII decompositions.
   #

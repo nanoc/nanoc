@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Represents a cache than can be used to store already compiled content,
   # to prevent it from being needlessly recompiled.

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI
   # Catches errors and prints nice diagnostic messages, then exits.
   #

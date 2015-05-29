@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::ItemRepView do
   describe '#== and #eql?' do
     let(:item_rep) { double(:item_rep, item: item, name: :jacques) }

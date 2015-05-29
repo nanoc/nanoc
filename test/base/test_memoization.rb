@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::MemoizationTest < Nanoc::TestCase
   class Sample1
     extend Nanoc::Int::Memoization

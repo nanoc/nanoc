@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::LayoutTest < Nanoc::TestCase
   def test_initialize
     # Make sure attributes are cleaned

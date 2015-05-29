@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI::StreamCleaners
   # Superclass for all stream cleaners. Stream cleaners have a single method,
   # {#clean}, that takes a string and returns a cleaned string. Stream cleaners

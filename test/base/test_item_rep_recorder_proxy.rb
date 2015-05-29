@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::ItemRepRecorderProxyTest < Nanoc::TestCase
   def test_double_names
     proxy = Nanoc::Int::ItemRepRecorderProxy.new(mock)

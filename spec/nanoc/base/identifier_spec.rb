@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::Identifier do
   describe '#initialize' do
     context 'legacy type' do

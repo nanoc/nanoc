@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::RubyPantsTest < Nanoc::TestCase
   def test_filter
     if_have 'rubypants' do

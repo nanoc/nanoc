@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Provides functionality for building blogs, such as finding articles and
   # constructing feeds.

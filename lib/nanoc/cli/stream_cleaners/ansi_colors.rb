@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI::StreamCleaners
   # Removes ANSI color escape sequences.
   #

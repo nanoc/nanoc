@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::NotificationCenterTest < Nanoc::TestCase
   def test_post
     # Set up notification

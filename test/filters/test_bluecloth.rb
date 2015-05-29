@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::BlueClothTest < Nanoc::TestCase
   def test_filter
     if_have 'bluecloth' do

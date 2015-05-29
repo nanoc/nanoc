@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   # Responsible for loading site data. It is the (abstract) superclass for all
   # data sources. Subclasses must at least implement the data reading methods

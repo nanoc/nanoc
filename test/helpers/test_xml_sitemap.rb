@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   include Nanoc::Helpers::XMLSitemap
 

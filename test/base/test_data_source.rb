@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::DataSourceTest < Nanoc::TestCase
   def test_loading
     # Create data source

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::CLI::Commands::Shell do
   describe '#env_for' do
     subject { described_class.env_for(site) }

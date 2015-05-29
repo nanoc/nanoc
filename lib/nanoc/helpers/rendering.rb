@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Provides functionality for rendering layouts as partials.
   module Rendering

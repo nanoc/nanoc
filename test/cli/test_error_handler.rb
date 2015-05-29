@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
   def setup
     super

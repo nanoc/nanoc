@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::RDocTest < Nanoc::TestCase
   def test_filter
     # Get filter

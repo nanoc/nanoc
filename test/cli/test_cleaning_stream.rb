@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
   class Stream
     attr_accessor :called_methods

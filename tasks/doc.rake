@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 require 'yard'
 
 YARD::Rake::YardocTask.new(:doc) do |yard|

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::Checking::RunnerTest < Nanoc::TestCase
   def test_run_specific
     with_site do |site|

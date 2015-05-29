@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::LayoutView do
   describe '#== and #eql?' do
     let(:layout) { Nanoc::Int::Layout.new('content', {}, '/asdf/') }

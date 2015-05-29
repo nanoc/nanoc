@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::FilterTest < Nanoc::TestCase
   def test_initialize
     # Create filter

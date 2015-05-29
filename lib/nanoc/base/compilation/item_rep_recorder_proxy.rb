@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Represents a fake iem representation that does not actually perform any
   # actual filtering, layouting or snapshotting, but instead keeps track of

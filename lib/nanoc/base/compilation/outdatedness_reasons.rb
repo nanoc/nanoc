@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Module that contains all outdatedness reasons.
   #

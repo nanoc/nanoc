@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
   def test_not_outdated
     # Compile once

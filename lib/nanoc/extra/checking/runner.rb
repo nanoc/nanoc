@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Extra::Checking
   # Runner is reponsible for running issue checks.
   #

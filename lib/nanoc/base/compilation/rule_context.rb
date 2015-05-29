@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Provides a context in which compilation and routing rules can be executed.
   # It provides access to the item representation that is being compiled or

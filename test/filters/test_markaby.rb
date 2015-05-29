@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::MarkabyTest < Nanoc::TestCase
   def test_filter
     if_have 'markaby' do

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
   def setup
     super

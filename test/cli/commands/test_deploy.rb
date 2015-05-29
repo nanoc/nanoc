@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
   def test_deploy
     skip_unless_have_command 'rsync'

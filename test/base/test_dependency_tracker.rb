@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_initialize
     # Mock items

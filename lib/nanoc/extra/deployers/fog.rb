@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Extra::Deployers
   # A deployer that deploys a site using [fog](https://github.com/geemus/fog).
   #

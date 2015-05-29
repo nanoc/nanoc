@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::ChecksumStoreTest < Nanoc::TestCase
   def test_get_with_existing_object
     require 'pstore'

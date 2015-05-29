@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Filters
   # @since 3.2.0
   #

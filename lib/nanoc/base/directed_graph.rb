@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Represents a directed graph. It is used by the dependency tracker for
   # storing and querying dependencies between items.

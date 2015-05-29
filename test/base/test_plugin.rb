@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::PluginTest < Nanoc::TestCase
   class SampleFilter < Nanoc::Filter
     identifier :_plugin_test_sample_filter

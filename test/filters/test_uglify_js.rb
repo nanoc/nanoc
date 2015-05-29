@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
   def test_filter
     if_have 'uglifier' do

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   class MutableConfigView < Nanoc::ConfigView
     # Sets the value for the given attribute.

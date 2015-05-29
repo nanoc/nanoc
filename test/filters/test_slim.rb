@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Filters::SlimTest < Nanoc::TestCase
   def test_filter
     if_have 'slim' do

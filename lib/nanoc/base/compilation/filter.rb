@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc
   # Nanoc::Filter is responsible for filtering items. It is the superclass
   # for all textual filters.

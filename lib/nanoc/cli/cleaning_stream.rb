@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::CLI
   # An output stream that passes output through stream cleaners. This can be
   # used to strip ANSI color sequences, for instance.

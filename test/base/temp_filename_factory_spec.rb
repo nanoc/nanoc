@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::Int::TempFilenameFactory do
   subject do
     Nanoc::Int::TempFilenameFactory.new

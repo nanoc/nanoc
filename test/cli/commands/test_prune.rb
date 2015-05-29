@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_without_yes
     with_site do |_site|

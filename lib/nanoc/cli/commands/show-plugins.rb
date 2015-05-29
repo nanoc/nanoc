@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 summary 'show all available plugins'
 aliases :info
 usage 'show-plugins [options]'

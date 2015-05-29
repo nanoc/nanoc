@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Contains functionality for building XML sitemaps that will be crawled by
   # search engines. See the [Sitemaps protocol site](http://www.sitemaps.org)

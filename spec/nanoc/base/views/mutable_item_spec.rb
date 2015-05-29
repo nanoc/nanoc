@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::MutableItemView do
   describe '#[]=' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }

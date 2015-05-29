@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Responsible for compiling a site’s item representations.
   #

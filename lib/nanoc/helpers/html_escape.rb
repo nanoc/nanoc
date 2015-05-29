@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Helpers
   # Contains functionality for HTML-escaping strings.
   module HTMLEscape

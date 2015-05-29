@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Stores rule memories for objects that can be run through a rule (item
   # representations and layouts).

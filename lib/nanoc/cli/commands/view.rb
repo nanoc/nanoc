@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 usage 'view [options]'
 summary 'start the web server that serves static files'
 description <<-EOS

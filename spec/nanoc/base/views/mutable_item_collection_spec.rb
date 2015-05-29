@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Nanoc::MutableItemCollectionView do
   let(:view_class) { Nanoc::MutableItemView }
   it_behaves_like 'an identifiable collection'

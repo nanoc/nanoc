@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Nanoc::Int
   # Represents an item representation, but provides an interface that is
   # easier to use when writing compilation and routing rules. It is also

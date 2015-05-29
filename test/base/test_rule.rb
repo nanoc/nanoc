@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::RuleTest < Nanoc::TestCase
   def test_initialize
     # TODO: implement

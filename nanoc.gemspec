@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 $LOAD_PATH.unshift(File.expand_path('../lib/', __FILE__))
 require 'nanoc/version'
 
@@ -25,7 +23,7 @@ Gem::Specification.new do |s|
   s.rdoc_options     = ['--main', 'README.md']
   s.extra_rdoc_files = ['ChangeLog', 'LICENSE', 'README.md', 'NEWS.md']
 
-  s.required_ruby_version = '>= 2.0.0'
+  s.required_ruby_version = '>= 2.2.0'
 
   s.add_runtime_dependency('cri', '~> 2.3')
 

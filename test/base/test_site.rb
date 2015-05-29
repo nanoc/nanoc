@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Int::Errors::GenericTrivial) do
