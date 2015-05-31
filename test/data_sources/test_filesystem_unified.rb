@@ -115,6 +115,21 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     assert_nil items[0].raw_content
   end
 
+  def test_load_layouts_with_nil_dir_name
+    # Create data source
+    data_source = new_data_source(layouts_dir: nil)
+
+    # Create sample files
+    FileUtils.mkdir_p('layouts')
+    File.write('layouts/stuff.txt', 'blah blah')
+
+    # Load
+    layouts = data_source.layouts
+
+    # Check
+    assert_empty(layouts)
+  end
+
   def test_load_binary_layouts
     # Create data source
     data_source = new_data_source
