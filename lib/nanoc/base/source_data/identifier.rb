@@ -106,6 +106,17 @@ module Nanoc
       with_ext('')
     end
 
+    # @return [String] The extension, without a leading dot.
+    def ext
+      unless full?
+        raise Nanoc::Int::Errors::Generic,
+          'Cannot use #ext on identifier that does not include the file extension'
+      end
+
+      s = File.extname(@string)
+      s && s[1..-1]
+    end
+
     def to_s
       @string
     end
