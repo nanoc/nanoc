@@ -20,9 +20,6 @@ class Nanoc::GemTest < Nanoc::TestCase
     diff = files_after - files_before
     assert_equal 1, diff.size
     assert_match(/^nanoc-.*\.gem$/, diff.to_a[0])
-
-    # Check output
-    assert_match(/Successfully built RubyGem\s+Name: nanoc\s+Version: .*\s+File: nanoc-.*\.gem\s+/, stdout.string)
   ensure
     Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
   end
