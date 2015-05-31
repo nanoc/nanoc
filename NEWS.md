@@ -5,11 +5,19 @@
 Changes:
 
 * Removed `filesystem_verbose` data source (#599)
+* Set minimum required Ruby version to 2.2
 
 Enhancements:
 
-* Made @config, @items and @layouts available in checks (#598)
+* Made `@config`, `@items` and `@layouts` available in checks (#598)
 * Made `filesystem` an alias for `filesystem_unified` (#599)
+* Made specific reps for an item accessible using `@item.reps[:name]` (#586, #607)
+* Removed `allow_periods_in_identifiers` documentation (#605)
+
+Fixes:
+
+* Made `ItemView#parent` return nil if parent is nil (#600, #602)
+* Added missing `identifier_type` documentation (#604)
 
 ## 4.0.0b2 (2015-05-23)
 
