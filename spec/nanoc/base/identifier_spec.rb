@@ -288,4 +288,28 @@ describe Nanoc::Identifier do
       end
     end
   end
+
+  describe '#ext' do
+    subject { identifier.ext }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error
+      end
+    end
+
+    context 'identifier with no extension' do
+      let(:identifier) { described_class.new('/foo') }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'identifier with extension' do
+      let(:identifier) { described_class.new('/foo.md') }
+
+      it { is_expected.to eql('md') }
+    end
+  end
 end
