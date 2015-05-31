@@ -73,10 +73,10 @@ module Nanoc::DataSources
           }.merge(meta)
 
           # Get identifier
-          if meta_filename
-            identifier = identifier_for_filename(meta_filename[dir_name.length..-1])
-          elsif content_filename
+          if content_filename
             identifier = identifier_for_filename(content_filename[dir_name.length..-1])
+          elsif meta_filename
+            identifier = identifier_for_filename(meta_filename[dir_name.length..-1])
           else
             raise 'meta_filename and content_filename are both nil'
           end
