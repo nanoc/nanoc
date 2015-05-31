@@ -468,6 +468,18 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     end
   end
 
+  def test_load_objects_correct_identifier_with_separate_yaml_file
+    data_source = new_data_source({ identifier_type: 'full' })
+
+    FileUtils.mkdir_p('foo')
+    File.write('foo/donkey.jpeg', 'data')
+    File.write('foo/donkey.yaml', "---\nalt: Donkey\n")
+
+    objects = data_source.send(:load_objects, 'foo', 'The Foo', Nanoc::Int::Item)
+    assert_equal 1, objects.size
+    assert_equal '/donkey.jpeg', objects.first.identifier.to_s
+  end
+
   def test_filename_for
     data_source = new_data_source
 
