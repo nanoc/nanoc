@@ -17,6 +17,9 @@ Style/GlobalVars:
 ClassAndModuleChildren:
   Enabled: false
 
+Style/AlignHash:
+  Enabled: false
+
 
 
 # ----- DISABLED (hard) -----
@@ -54,19 +57,40 @@ Lint/UnderscorePrefixedVariableName:
 
 
 
-# ----- DISABLED (opinionated) -----
+# ----- DISABLED (metrics) -----
 
-# This can lead to massive indentation.
-Style/AlignHash:
-  Enabled: false
+# Cops for metrics are disabled because they should not cause tests to fail.
 
-# It’s difficult to rework existing code to handle this well.
 Metrics/AbcSize:
   Enabled: false
 
-# Possibly enable later.
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
 Metrics/ModuleLength:
   Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+
+
+# ----- DISABLED (opinionated) -----
 
 # Parameters are indented one soft tab instead.
 AlignParameters:
@@ -75,33 +99,6 @@ AlignParameters:
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
 # there’s no point in enforcing ASCII comments.
 AsciiComments:
-  Enabled: false
-
-# Mostly long hardcoded strings which I’d rather not break up (yet).
-#
-# Re-enable in nanoc 4.x.
-LineLength:
-  Enabled: false
-
-# Other tools exist for checking code quality. This cop is probably good to
-# have, but nanoc 3.x will not get any major refactorings anymore anyway.
-#
-# Possibly re-enable in nanoc 4.x.
-ClassLength:
-  Enabled: false
-
-# Other tools exist for checking code quality. This cop is probably good to
-# have, but nanoc 3.x will not get any major refactorings anymore anyway.
-#
-# Possibly re-enable in nanoc 4.x.
-PerceivedComplexity:
-  Enabled: false
-
-# Other tools exist for checking code quality. This cop is probably good to
-# have, but nanoc 3.x will not get any major refactorings anymore anyway.
-#
-# Possibly re-enable in nanoc 4.x.
-CyclomaticComplexity:
   Enabled: false
 
 # It does not make sense to enforce everything to have documentation.
@@ -118,13 +115,6 @@ IfUnlessModifier:
 
 # This causes the hashes to be ridiculously indented.
 IndentHash:
-  Enabled: false
-
-# Other tools exist for checking code quality. This cop is probably good to
-# have, but nanoc 3.x will not get any major refactorings anymore anyway.
-#
-# Possibly re-enable in nanoc 4.x.
-MethodLength:
   Enabled: false
 
 # Personal preference is to have decent constructors for exceptions rather than
