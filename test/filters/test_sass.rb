@@ -274,7 +274,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         io.write("p\n  color: blue")
       end
 
-      options = { :filename => File.join(Dir.getwd, 'test.sass') }
+      options = { filename: File.join(Dir.getwd, 'test.sass') }
       ::Sass::Engine.new('@import "morestuff"', options).render
     end
   end

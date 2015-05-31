@@ -350,8 +350,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = create_binary_item
     site = mock_and_stub(items: [item],
       layouts: [],
-      config: []
-    )
+      config: [])
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, :foo)
     create_textual_filter
@@ -407,8 +406,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = create_binary_item
     site = mock_and_stub(items: [item],
       layouts: [],
-      config: []
-    )
+      config: [])
     item.stubs(:site).returns(site)
     rep = create_rep_for(item, :foo)
     rep.assigns = {}

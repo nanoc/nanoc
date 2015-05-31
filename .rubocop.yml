@@ -64,6 +64,10 @@ Style/AlignHash:
 Metrics/AbcSize:
   Enabled: false
 
+# Possibly enable later.
+Metrics/ModuleLength:
+  Enabled: false
+
 # Parameters are indented one soft tab instead.
 AlignParameters:
   Enabled: false

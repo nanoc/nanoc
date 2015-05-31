@@ -84,7 +84,7 @@ module Nanoc
       extname = File.extname(@string)
       string =
         if extname.size > 0
-          @string[0..-extname.size-1]
+          @string[0..-extname.size - 1]
         else
           @string
         end

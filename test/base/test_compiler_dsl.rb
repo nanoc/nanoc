@@ -286,7 +286,7 @@ EOS
   def test_create_pattern_with_regex
     compiler_dsl = Nanoc::Int::CompilerDSL.new(nil, { string_pattern_type: 'glob' })
 
-    pattern = compiler_dsl.create_pattern(%r<\A/foo/a*/>)
+    pattern = compiler_dsl.create_pattern(%r{\A/foo/a*/})
     assert pattern.match?('/foo/aaaa/')
   end
 
@@ -396,7 +396,7 @@ EOS
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
     assert('/foo/bar/' =~ actual)
-    refute('/foo/'     =~ actual)
+    refute('/foo/' =~ actual)
   end
 
   def test_dsl_has_no_access_to_compiler

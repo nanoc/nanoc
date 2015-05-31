@@ -1,9 +1,9 @@
 class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
   def create_output_file(name, lines)
     FileUtils.mkdir_p('output')
-    File.open('output/' + name, 'w') { |io|
+    File.open('output/' + name, 'w') do |io|
       io.write(lines.join('\n'))
-    }
+    end
   end
 
   def assert_include(haystack, needle)
@@ -137,7 +137,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       issues = check.issues.to_a
       assert_equal 8, issues.count
 
-      descriptions = issues.map { |issue| issue.description }
+      descriptions = issues.map(&:description)
       issues.each do |issue|
         assert_equal 'output/foo.html', issue.subject
       end

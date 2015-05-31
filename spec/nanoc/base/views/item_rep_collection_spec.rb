@@ -22,7 +22,7 @@ describe Nanoc::ItemRepCollectionView do
     end
 
     it 'returns self' do
-      expect(view.each { |i| }).to equal(view)
+      expect(view.each { |_i| }).to equal(view)
     end
   end
 

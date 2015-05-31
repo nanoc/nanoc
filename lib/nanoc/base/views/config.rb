@@ -14,7 +14,7 @@ module Nanoc
     end
 
     # @see Hash#fetch
-    def fetch(key, fallback=NONE, &block)
+    def fetch(key, fallback = NONE, &_block)
       @config.fetch(key) do
         if !fallback.equal?(NONE)
           fallback

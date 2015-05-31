@@ -31,7 +31,7 @@ module Nanoc::Int
     def initialize(pattern, rep_name, block, params = {})
       # TODO: remove me
       unless pattern.is_a?(Nanoc::Int::StringPattern) || pattern.is_a?(Nanoc::Int::RegexpPattern)
-        raise "Can only create rules with patterns"
+        raise 'Can only create rules with patterns'
       end
 
       @pattern          = pattern

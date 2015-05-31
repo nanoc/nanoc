@@ -30,7 +30,7 @@ module Nanoc
     end
 
     # @see Hash#fetch
-    def fetch(key, fallback=NONE, &block)
+    def fetch(key, fallback = NONE, &_block)
       res = @item[key] # necessary for dependency tracking
 
       if @item.attributes.key?(key)

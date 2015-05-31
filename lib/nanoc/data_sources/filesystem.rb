@@ -45,7 +45,7 @@ module Nanoc::DataSources
     def load_objects(dir_name, kind, klass)
       res = []
 
-     return [] if dir_name.nil?
+      return [] if dir_name.nil?
 
       all_split_files_in(dir_name).each do |base_filename, (meta_ext, content_exts)|
         content_exts.each do |content_ext|

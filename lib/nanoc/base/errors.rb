@@ -153,7 +153,8 @@ module Nanoc::Int
       #
       # @param [Symbol] snapshot The requested snapshot
       def initialize(item_rep, snapshot)
-        @item_rep, @snapshot = item_rep, snapshot
+        @item_rep = item_rep
+        @snapshot = snapshot
         super("The “#{item_rep.inspect}” item rep does not have a snapshot “#{snapshot.inspect}”")
       end
     end

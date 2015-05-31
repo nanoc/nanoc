@@ -24,7 +24,7 @@ module Nanoc::Int
     # @param [String] identifier This layout's identifier.
     #
     # @param [Hash] params Extra parameters. Unused.
-    def initialize(raw_content, attributes, identifier, params = {})
+    def initialize(raw_content, attributes, identifier, _params = {})
       @raw_content  = raw_content
       @attributes   = attributes.__nanoc_symbolize_keys_recursively
       @identifier   = Nanoc::Identifier.from(identifier)

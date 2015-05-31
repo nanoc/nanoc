@@ -56,9 +56,11 @@ module Nanoc
       # @return [void]
       def type(arg)
         if arg.is_a?(Hash)
-          @from, @to = arg.keys[0], arg.values[0]
+          @from = arg.keys[0]
+          @to = arg.values[0]
         else
-          @from, @to = arg, arg
+          @from = arg
+          @to = arg
         end
       end
 

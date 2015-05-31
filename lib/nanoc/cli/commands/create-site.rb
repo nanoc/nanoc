@@ -1,8 +1,8 @@
 usage 'create-site [options] path'
 aliases :create_site, :cs
 summary 'create a site'
-description "Create a new site at the given path. The site will use the `filesystem` data source."
-flag nil, :force, "Force creation of new site. Disregards previous existence of site in destination"
+description 'Create a new site at the given path. The site will use the `filesystem` data source.'
+flag nil, :force, 'Force creation of new site. Disregards previous existence of site in destination'
 
 module Nanoc::CLI::Commands
   class CreateSite < ::Nanoc::CLI::CommandRunner
@@ -288,10 +288,10 @@ EOS
       path = arguments[0]
 
       # Check whether site exists
-      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w{ . .. }).empty?) && !options[:force]
+      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w(. ..)).empty?) && !options[:force]
         raise Nanoc::Int::Errors::GenericTrivial,
-          "The site was not created because '#{path}' already exists. " +
-          "Re-run the command using --force to create the site anyway."
+          "The site was not created because '#{path}' already exists. " \
+          'Re-run the command using --force to create the site anyway.'
       end
 
       # Setup notifications

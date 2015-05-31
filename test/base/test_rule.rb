@@ -12,11 +12,11 @@ class Nanoc::Int::RuleTest < Nanoc::TestCase
   end
 
   def test_matches
-    pattern    = Nanoc::Int::Pattern.from(%r</(.*)/(.*)/>)
+    pattern    = Nanoc::Int::Pattern.from(%r{/(.*)/(.*)/})
     identifier = '/anything/else/'
-    expected   = ['anything', 'else']
+    expected   = %w(anything else)
 
-    rule = Nanoc::Int::Rule.new(pattern, :string, Proc.new {})
+    rule = Nanoc::Int::Rule.new(pattern, :string, proc {})
 
     assert_equal expected, rule.send(:matches, identifier)
   end

@@ -23,7 +23,7 @@ shared_examples 'a mutable identifiable collection' do
     end
 
     it 'returns self' do
-      ret = view.delete_if { |i| false }
+      ret = view.delete_if { |_i| false }
       expect(ret).to equal(view)
     end
   end
