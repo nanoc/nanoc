@@ -9,6 +9,7 @@ module Nanoc
   autoload 'ConfigView',           'nanoc/base/views/config'
   autoload 'IdentifiableCollectionView', 'nanoc/base/views/identifiable_collection'
   autoload 'ItemView',             'nanoc/base/views/item'
+  autoload 'ItemRepCollectionView', 'nanoc/base/views/item_rep_collection'
   autoload 'ItemRepView',          'nanoc/base/views/item_rep'
   autoload 'ItemCollectionView',   'nanoc/base/views/item_collection'
   autoload 'LayoutView',           'nanoc/base/views/layout'

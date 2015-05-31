@@ -125,9 +125,9 @@ module Nanoc
 
     # Returns the representations of this item.
     #
-    # @return [Enumerable<Nanoc::ItemRepView>]
+    # @return [Nanoc::ItemRepCollectionView]
     def reps
-      @item.reps.map { |r| Nanoc::ItemRepView.new(r) }
+      Nanoc::ItemRepCollectionView.new(@item.reps)
     end
 
     # @api private
