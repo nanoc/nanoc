@@ -165,4 +165,19 @@ describe Nanoc::ItemView do
       it { should eql?(false) }
     end
   end
+
+  describe '#reps' do
+    let(:item) { double(:item, reps: [rep_a, rep_b]) }
+    let(:rep_a) { double(:rep_a) }
+    let(:rep_b) { double(:rep_b) }
+
+    let(:view) { described_class.new(item) }
+
+    subject { view.reps }
+
+    it 'returns a proper item rep collection' do
+      expect(subject.size).to eq(2)
+      expect(subject.class).to eql(Nanoc::ItemRepCollectionView)
+    end
+  end
 end
