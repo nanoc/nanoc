@@ -13,6 +13,7 @@ Enhancements:
 * Made `filesystem` an alias for `filesystem_unified` (#599)
 * Made specific reps for an item accessible using `@item.reps[:name]` (#586, #607)
 * Removed `allow_periods_in_identifiers` documentation (#605)
+* Made fog deployer not upload files with identical ETags to AWS (#480, #536, #552) [Paul Boone]
 
 Fixes:
 
