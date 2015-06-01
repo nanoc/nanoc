@@ -91,7 +91,7 @@ module Nanoc::Int
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
-        Nanoc::Int::ItemRep::TMP_TEXT_ITEMS_DIR)
+        Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
     end
 
     # @group Private instance methods

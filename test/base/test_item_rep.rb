@@ -257,13 +257,13 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item_rep.raw_paths[:last] = 'foo/bar/baz/quux.txt'
 
     # Write once
-    item_rep.write
+    Nanoc::Int::ItemRepWriter.new.write(item_rep, item_rep.raw_paths[:last])
     a_long_time_ago = Time.now - 1_000_000
     File.utime(a_long_time_ago, a_long_time_ago, item_rep.raw_path)
 
     # Write again
     assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
-    item_rep.write
+    Nanoc::Int::ItemRepWriter.new.write(item_rep, item_rep.raw_paths[:last])
     assert_equal a_long_time_ago.to_s, File.mtime(item_rep.raw_path).to_s
   end
 
@@ -280,7 +280,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item_rep.raw_paths[:last] = 'foo/bar/baz/quux.txt'
 
     # Write
-    item_rep.write
+    Nanoc::Int::ItemRepWriter.new.write(item_rep, item_rep.raw_paths[:last])
 
     # Check
     assert(File.file?('foo/bar/baz/quux.txt'))
@@ -372,7 +372,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     rep.temporary_filenames[:last] = in_filename
     rep.raw_paths[:last]           = out_filename
 
-    rep.write
+    Nanoc::Int::ItemRepWriter.new.write(rep, out_filename)
 
     assert(File.exist?(out_filename))
     assert_equal(file_content, File.read(out_filename))
@@ -575,7 +575,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
       assert is_created
       assert is_modified
     end
-    item_rep.write
+    Nanoc::Int::ItemRepWriter.new.write(item_rep, item_rep.raw_paths[:last])
     assert notified
     Nanoc::Int::NotificationCenter.remove(:rep_written, self)
   end
@@ -605,7 +605,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
       refute is_created
       assert is_modified
     end
-    item_rep.write
+    Nanoc::Int::ItemRepWriter.new.write(item_rep, item_rep.raw_paths[:last])
     assert notified
     Nanoc::Int::NotificationCenter.remove(:rep_written, self)
   end
