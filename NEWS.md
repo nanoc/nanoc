@@ -1,5 +1,12 @@
 # nanoc news
 
+## 4.0.0b4 (???)
+
+Fixes:
+
+* Added missing `#ext` method to identifiers (#612)
+* Fixed issue where identifiers would have the wrong extension (#611)
+
 ## 4.0.0b3 (2015-05-31)
 
 Changes:
