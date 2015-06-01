@@ -1,6 +1,8 @@
 module Nanoc::Int
   # Provides a context and a binding for use in filters such as the ERB and
   # Haml ones.
+  #
+  # @api private
   class Context
     # Creates a new context based off the contents of the hash.
     #

@@ -1,5 +1,7 @@
 module Nanoc::Int
   # Contains methods that will be executed by the site’s `Rules` file.
+  #
+  # @api private
   class CompilerDSL
     # The current rules filename.
     #
