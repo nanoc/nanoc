@@ -3,7 +3,11 @@ require 'nanoc'
 require 'nanoc/cli'
 Nanoc::CLI.setup
 
+require 'fakefs/spec_helpers'
+
 RSpec.configure do |c|
+  c.include FakeFS::SpecHelpers
+
   c.around(:each) do |example|
     Nanoc::CLI::ErrorHandler.disable
     example.run

@@ -56,54 +56,6 @@ module Nanoc::Int
       # @api private
       attr_accessor :content
 
-      # Writes the item rep's compiled content to the rep's output file.
-      #
-      # This method will send two notifications: one before writing the item
-      # representation, and one after. These notifications can be used for
-      # generating diffs, for example.
-      #
-      # @api private
-      #
-      # @param [Symbol, nil] snapshot The name of the snapshot to write.
-      #
-      # @return [void]
-      def write(snapshot = :last)
-        # Get raw path
-        raw_path = self.raw_path(snapshot: snapshot)
-        return if raw_path.nil?
-
-        # Create parent directory
-        FileUtils.mkdir_p(File.dirname(raw_path))
-
-        # Check if file will be created
-        is_created = !File.file?(raw_path)
-
-        # Notify
-        Nanoc::Int::NotificationCenter.post(:will_write_rep, self, snapshot)
-
-        if self.binary?
-          temp_path = temporary_filenames[:last]
-        else
-          temp_path = temp_filename
-          File.open(temp_path, 'w') { |io| io.write(@content[:last]) }
-        end
-
-        # Check whether content was modified
-        is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
-
-        # Write
-        FileUtils.cp(temp_path, raw_path) if is_modified
-
-        # Notify
-        Nanoc::Int::NotificationCenter.post(:rep_written, self, raw_path, is_created, is_modified)
-      end
-
-      TMP_TEXT_ITEMS_DIR = 'text_items'
-
-      def temp_filename
-        Nanoc::Int::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
-      end
-
       # Resets the compilation progress for this item representation. This is
       # necessary when an unmet dependency is detected during compilation.
       #
@@ -388,7 +340,12 @@ module Nanoc::Int
         snapshots << [:pre, true]
       end
 
-      write(snapshot_name) if is_final
+      if is_final
+        raw_path = raw_path(snapshot: snapshot_name)
+        if raw_path
+          ItemRepWriter.new.write(self, raw_path)
+        end
+      end
     end
 
     # Returns a recording proxy that is used for determining whether the

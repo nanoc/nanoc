@@ -28,6 +28,7 @@ end
 
 # @api private
 module Nanoc::Int
+  require_relative 'base/item_rep_writer'
   require_relative 'base/pattern'
 
   # Load helper classes
