@@ -49,9 +49,6 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     # Mock rep
     rep = mock
     rep.stubs(:item).returns(item)
-    rep.expects(:filter).with(:foo, { bar: 'baz' })
-    rep.expects(:layout).with('foo')
-    rep.expects(:snapshot).with('awesome')
 
     # Mock compiler
     compiler = Nanoc::Int::Compiler.new(site)
@@ -60,8 +57,20 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     @rule_context = Nanoc::Int::RuleContext.new(rep: rep, compiler: compiler)
 
     # Check
-    rep.filter :foo, bar: 'baz'
-    rep.layout 'foo'
-    rep.snapshot 'awesome'
+    assert_raises(NoMethodError) do
+      @rule_context.instance_eval do
+        item_rep.filter :foo, bar: 'baz'
+      end
+    end
+    assert_raises(NoMethodError) do
+      @rule_context.instance_eval do
+        item_rep.layout 'foo'
+      end
+    end
+    assert_raises(NoMethodError) do
+      @rule_context.instance_eval do
+        item_rep.snapshot 'awesome'
+      end
+    end
   end
 end
