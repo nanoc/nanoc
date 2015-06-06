@@ -8,6 +8,7 @@ Fixes:
 * Fixed issue where identifiers would have the wrong extension (#611)
 * Fixed rule context exposing entities rather than views (#614, #615)
 * Fixed `#key?` and `#fetch` not being available on layout views (#618)
+* Fixed `#update_attributes` not being available on mutable layout views (#619)
 
 ## 4.0.0b3 (2015-05-31)
 
