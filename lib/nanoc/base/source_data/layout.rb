@@ -28,19 +28,6 @@ module Nanoc::Int
       @identifier   = Nanoc::Identifier.from(identifier)
     end
 
-    # Requests the attribute with the given key.
-    #
-    # @param [Symbol] key The name of the attribute to fetch.
-    #
-    # @return [Object] The value of the requested attribute.
-    def [](key)
-      @attributes[key]
-    end
-
-    def []=(key, value)
-      @attributes[key] = value
-    end
-
     # Returns the type of this object. Will always return `:layout`, because
     # this is a layout. For items, this method returns `:item`.
     #

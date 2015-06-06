@@ -95,6 +95,11 @@ describe Nanoc::ItemView do
 
     subject { view[key] }
 
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
+    end
+
     context 'with existant key' do
       let(:key) { :animal }
       it { should eql?('donkey') }
@@ -111,7 +116,8 @@ describe Nanoc::ItemView do
     let(:view) { described_class.new(item) }
 
     before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).twice
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
     end
 
     context 'with existant key' do
@@ -150,7 +156,8 @@ describe Nanoc::ItemView do
     let(:view) { described_class.new(item) }
 
     before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).twice
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
     end
 
     subject { view.key?(key) }

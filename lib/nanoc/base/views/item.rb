@@ -31,10 +31,11 @@ module Nanoc
 
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
-      res = @item[key] # necessary for dependency tracking
+      Nanoc::Int::NotificationCenter.post(:visit_started, @item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   @item)
 
       if @item.attributes.key?(key)
-        res
+        @item.attributes[key]
       else
         if !fallback.equal?(NONE)
           fallback
@@ -48,13 +49,18 @@ module Nanoc
 
     # @see Hash#key?
     def key?(key)
-      _res = @item[key] # necessary for dependency tracking
+      Nanoc::Int::NotificationCenter.post(:visit_started, @item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   @item)
+
       @item.attributes.key?(key)
     end
 
     # @see Hash#[]
     def [](key)
-      @item[key]
+      Nanoc::Int::NotificationCenter.post(:visit_started, @item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   @item)
+
+      @item.attributes[key]
     end
 
     # Returns the compiled content.

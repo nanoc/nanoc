@@ -16,27 +16,9 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
     assert_equal([:item, '/path/'], item.reference)
   end
 
-  def test_lookup
-    # Create item
-    item = Nanoc::Int::Item.new(
-      'content',
-      { one: 'one in item' },
-      '/path/'
-    )
-
-    # Test finding one
-    assert_equal('one in item', item[:one])
-
-    # Test finding two
-    assert_equal(nil, item[:two])
-  end
-
-  def test_set_attribute
-    item = Nanoc::Int::Item.new('foo', {}, '/foo')
-    assert_equal nil, item[:motto]
-
-    item[:motto] = 'More human than human'
-    assert_equal 'More human than human', item[:motto]
+  def test_attributes
+    item = Nanoc::Int::Item.new('content', { 'one' => 'one in item' }, '/path/')
+    assert_equal({ one: 'one in item' }, item.attributes)
   end
 
   def test_compiled_content_with_default_rep_and_default_snapshot
@@ -137,11 +119,11 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
     item.freeze
 
     assert_raises_frozen_error do
-      item[:abc] = '123'
+      item.attributes[:abc] = '123'
     end
 
     assert_raises_frozen_error do
-      item[:a][:b] = '456'
+      item.attributes[:a][:b] = '456'
     end
   end
 
