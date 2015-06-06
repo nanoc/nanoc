@@ -99,6 +99,13 @@ module Nanoc::Int
 
           digest.update(',attributes=')
           update(obj.attributes, digest, visited + [obj])
+        when Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
+          update(obj.unwrap, digest)
+        when Nanoc::Int::IdentifiableCollection
+          obj.each do |el|
+            update(el, digest, visited + [obj])
+            digest.update(',')
+          end
         else
           data = begin
             Marshal.dump(obj)

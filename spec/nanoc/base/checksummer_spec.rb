@@ -199,6 +199,42 @@ describe Nanoc::Int::Checksummer do
     end
   end
 
+  context 'Nanoc::ItemView' do
+    let(:obj) { Nanoc::ItemView.new(item) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+
+    it { is_expected.to eql('Nanoc::ItemView<Nanoc::Int::Item<content=String<asdf>,attributes=Hash<>>>') }
+  end
+
+  context 'Nanoc::LayoutView' do
+    let(:obj) { Nanoc::LayoutView.new(layout) }
+    let(:layout) { Nanoc::Int::Layout.new('asdf', {}, '/foo.md') }
+
+    it { is_expected.to eql('Nanoc::LayoutView<Nanoc::Int::Layout<content=String<asdf>,attributes=Hash<>>>') }
+  end
+
+  context 'Nanoc::ConfigView' do
+    let(:obj) { Nanoc::ConfigView.new(config) }
+    let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+
+    it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Int::Configuration<String<foo>=String<bar>,>>') }
+  end
+
+  context 'Nanoc::ItemCollectionView' do
+    let(:obj) { Nanoc::ItemCollectionView.new(wrapped) }
+
+    let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+
+    let(:wrapped) do
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
+        arr << Nanoc::Int::Item.new('foo', {}, '/foo.md')
+        arr << Nanoc::Int::Item.new('bar', {}, '/foo.md')
+      end
+    end
+
+    it { is_expected.to eql('Nanoc::ItemCollectionView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=String<foo>,attributes=Hash<>>,Nanoc::Int::Item<content=String<bar>,attributes=Hash<>>,>>') }
+  end
+
   context 'other marshal-able classes' do
     let(:obj) { klass.new('hello') }
 
