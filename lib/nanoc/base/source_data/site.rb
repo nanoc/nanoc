@@ -330,7 +330,6 @@ module Nanoc::Int
         items_in_ds = ds.items
         items_in_ds.each do |i|
           i.identifier = i.identifier.prefix(ds.items_root)
-          i.site = self
         end
         @items.concat(items_in_ds)
       end

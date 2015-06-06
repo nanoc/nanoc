@@ -8,9 +8,6 @@ module Nanoc::Int
     #   item’s content
     attr_reader :raw_filename
 
-    # @return [Nanoc::Int::Site] The site this item belongs to
-    attr_accessor :site
-
     # @return [Nanoc::Int::Item, nil] The parent item of this item. This can be
     #   nil even for non-root items.
     attr_accessor :parent

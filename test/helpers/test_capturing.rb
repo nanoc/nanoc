@@ -17,7 +17,6 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     # Build site
     site = Nanoc::Int::Site.new({})
     item = Nanoc::Int::Item.new('moo', {}, '/blah/')
-    item.site = site
     @site = Nanoc::SiteView.new(Nanoc::Int::Site.new({}))
     @item = Nanoc::ItemView.new(item)
 
