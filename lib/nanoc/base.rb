@@ -2,26 +2,7 @@ module Nanoc
   require 'nanoc/base/core_ext'
 
   autoload 'Error',                'nanoc/base/error'
-
   autoload 'DataSource',           'nanoc/base/source_data/data_source'
-
-  autoload 'ConfigView',           'nanoc/base/views/config'
-  autoload 'IdentifiableCollectionView', 'nanoc/base/views/identifiable_collection'
-  autoload 'ItemView',             'nanoc/base/views/item'
-  autoload 'ItemRepCollectionView', 'nanoc/base/views/item_rep_collection'
-  autoload 'ItemRepView',          'nanoc/base/views/item_rep'
-  autoload 'ItemCollectionView',   'nanoc/base/views/item_collection'
-  autoload 'LayoutView',           'nanoc/base/views/layout'
-  autoload 'LayoutCollectionView', 'nanoc/base/views/layout_collection'
-  autoload 'SiteView',             'nanoc/base/views/site'
-
-  autoload 'MutableIdentifiableCollectionView', 'nanoc/base/views/mutable_identifiable_collection'
-  autoload 'MutableConfigView',           'nanoc/base/views/mutable_config'
-  autoload 'MutableItemView',             'nanoc/base/views/mutable_item'
-  autoload 'MutableItemCollectionView',   'nanoc/base/views/mutable_item_collection'
-  autoload 'MutableLayoutView',           'nanoc/base/views/mutable_layout'
-  autoload 'MutableLayoutCollectionView', 'nanoc/base/views/mutable_layout_collection'
-
   autoload 'Filter',               'nanoc/base/compilation/filter'
 end
 
@@ -69,3 +50,4 @@ module Nanoc::Int
 end
 
 require_relative 'base/entities'
+require_relative 'base/views'
