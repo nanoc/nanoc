@@ -143,7 +143,7 @@ module Nanoc
     # Creates a new in-memory item instance. This is intended for use within
     # the {#items} method.
     #
-    # @param [String] raw_content_or_raw_filename The uncompiled item content
+    # @param [String] content The uncompiled item content
     #   (if it is a textual item) or the path to the filename containing the
     #   content (if it is a binary item).
     #
@@ -155,8 +155,9 @@ module Nanoc
     #
     # @option params [Symbol, nil] :binary (true) Whether or not this item is
     #   binary
-    def new_item(raw_content_or_raw_filename, attributes, identifier, params = {})
-      Nanoc::Int::Item.new(raw_content_or_raw_filename, attributes, identifier, params)
+    def new_item(content, attributes, identifier, params = {})
+      content = Nanoc::Int::Content.create(content, params)
+      Nanoc::Int::Item.new(content, attributes, identifier)
     end
 
     # Creates a new in-memory layout instance. This is intended for use within

@@ -2,8 +2,8 @@ module Nanoc
   module Int
     # @api private
     class Document
-      # @return [String]
-      attr_reader :raw_content
+      # @return [Nanoc::Int::Content]
+      attr_reader :content
 
       # @return [Hash]
       attr_reader :attributes
@@ -11,24 +11,22 @@ module Nanoc
       # @return [Nanoc::Identifier]
       attr_accessor :identifier
 
-      # @param [String] raw_content
+      # @param [String, Nanoc::Int::Content] content
       #
       # @param [Hash] attributes
       #
       # @param [String, Nanoc::Identifier] identifier
-      #
-      # @param [Hash] params Extra parameters. Unused.
-      def initialize(raw_content, attributes, identifier, _params = {})
-        @raw_content  = raw_content
-        @attributes   = attributes.__nanoc_symbolize_keys_recursively
-        @identifier   = Nanoc::Identifier.from(identifier)
+      def initialize(content, attributes, identifier)
+        @content = Nanoc::Int::Content.create(content)
+        @attributes = attributes.__nanoc_symbolize_keys_recursively
+        @identifier = Nanoc::Identifier.from(identifier)
       end
 
       # @return [void]
       def freeze
+        super
         attributes.__nanoc_freeze_recursively
-        identifier.freeze
-        raw_content.freeze
+        content.freeze
       end
 
       # @abstract

@@ -285,10 +285,15 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green') }
 
-    items = [Nanoc::Int::Item.new(
-      'blah',
-      { content_filename: 'content/xyzzy.sass' },
-      '/blah/')]
+    items = [
+      Nanoc::ItemView.new(
+        Nanoc::Int::Item.new(
+          'blah',
+          { content_filename: 'content/xyzzy.sass' },
+          '/blah/',
+        ),
+      ),
+    ]
     params = { item: items[0], items: items }.merge(params)
     ::Nanoc::Filters::Sass.new(params)
   end

@@ -96,7 +96,7 @@ module Nanoc::Int
       @name   = name
 
       # Set binary
-      @binary = @item.binary?
+      @binary = @item.content.binary?
 
       # Set default attributes
       @raw_paths  = {}
@@ -120,7 +120,7 @@ module Nanoc::Int
     #   default snapshot if no snapshot is specified)
     def compiled_content(params = {})
       # Make sure we're not binary
-      if item.binary?
+      if item.content.binary?
         raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
@@ -298,7 +298,9 @@ module Nanoc::Int
         Nanoc::Int::NotificationCenter.post(:filtering_started,  self, filter_name)
 
         # Layout
-        @content[:last] = filter.setup_and_run(layout.raw_content, filter_args)
+        content = layout.content
+        arg = content.binary? ? content.filename : content.string
+        @content[:last] = filter.setup_and_run(arg, filter_args)
 
         # Create "post" snapshot
         snapshot(:post, final: false)
@@ -380,10 +382,10 @@ module Nanoc::Int
     def initialize_content
       # Initialize content and filenames
       if self.binary?
-        @temporary_filenames = { last: @item.raw_filename }
+        @temporary_filenames = { last: @item.content.filename }
         @content             = {}
       else
-        @content             = { last: @item.raw_content }
+        @content             = { last: @item.content.string }
         @content[:last].freeze
         @temporary_filenames = {}
       end

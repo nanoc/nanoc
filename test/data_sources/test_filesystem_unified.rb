@@ -41,31 +41,27 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     expected_out = [
       klass.new(
         'test 1',
-        { 'num' => 1, :filename => 'foo/bar.html',   :extension => 'html' },
+        { 'num' => 1, :filename => 'foo/bar.html',   :extension => 'html', mtime: File.mtime('foo/bar.html') },
         '/bar/',
-        binary: false, mtime: File.mtime('foo/bar.html')
       ),
       klass.new(
         'test 2',
-        { 'num' => 2, :filename => 'foo/b.c.html',   :extension => 'c.html' },
+        { 'num' => 2, :filename => 'foo/b.c.html',   :extension => 'c.html', mtime: File.mtime('foo/b.c.html') },
         '/b/',
-        binary: false, mtime: File.mtime('foo/b.c.html')
       ),
       klass.new(
         'test 3',
-        { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html' },
+        { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html', mtime: File.mtime('foo/a/b/c.html') },
         '/a/b/c/',
-        binary: false, mtime: File.mtime('foo/a/b/c.html')
       )
     ]
-    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0] }
+    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0].string }
 
     # Check
     (0..expected_out.size - 1).each do |i|
-      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
+      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0].string, 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
-      ['num', :filename, :extension].each do |key|
+      ['num', :filename, :extension, :mtime].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -110,9 +106,9 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Check
     assert_equal 1, items.size
-    assert items[0].binary?
-    assert_equal 'foo/stuff.dat', items[0].raw_filename
-    assert_nil items[0].raw_content
+    assert items[0].content.binary?
+    assert_equal 'foo/stuff.dat', items[0].content.filename
+    assert_equal Nanoc::Int::BinaryContent, items[0].content.class
   end
 
   def test_load_layouts_with_nil_dir_name
@@ -340,10 +336,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :content_filename => nil,
           :meta_filename    => 'foo/a/b/c.yaml',
           :extension        => nil,
-          :file             => nil
+          :file             => nil,
+          mtime: File.mtime('foo/a/b/c.yaml')
         },
         '/a/b/c/',
-        binary: false, mtime: File.mtime('foo/a/b/c.yaml')
       ),
       klass.new(
         'test 2',
@@ -352,10 +348,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :content_filename => 'foo/b.c.html',
           :meta_filename    => 'foo/b.c.yaml',
           :extension        => 'html',
-          :file             => File.open('foo/b.c.html')
+          :file             => File.open('foo/b.c.html'),
+          mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
         },
         '/b.c/',
-        binary: false, mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
       ),
       klass.new(
         'test 3',
@@ -363,10 +359,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           content_filename: 'foo/car.html',
           meta_filename: nil,
           extension: 'html',
-          file: File.open('foo/car.html')
+          file: File.open('foo/car.html'),
+          mtime: File.mtime('foo/car.html')
         },
         '/car/',
-        binary: false, mtime: File.mtime('foo/car.html')
       )
     ]
 
@@ -375,11 +371,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Check
     (0..expected_out.size - 1).each do |i|
-      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
+      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0].string, 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
 
-      ['num', :content_filename, :meta_filename, :extension].each do |key|
+      ['num', :content_filename, :meta_filename, :extension, :mtime].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -423,10 +418,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :content_filename => nil,
           :meta_filename    => 'foo/a/b/c.yaml',
           :extension        => nil,
-          :file             => nil
+          :file             => nil,
+          mtime: File.mtime('foo/a/b/c.yaml')
         },
         '/a/b/c/',
-        binary: false, mtime: File.mtime('foo/a/b/c.yaml')
       ),
       klass.new(
         'test 2',
@@ -435,10 +430,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :content_filename => 'foo/b.html.erb',
           :meta_filename    => 'foo/b.yaml',
           :extension        => 'html.erb',
-          :file             => File.open('foo/b.html.erb')
+          :file             => File.open('foo/b.html.erb'),
+          mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
         },
         '/b/',
-        binary: false, mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
       ),
       klass.new(
         'test 3',
@@ -446,10 +441,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           content_filename: 'foo/car.html',
           meta_filename: nil,
           extension: 'html',
-          file: File.open('foo/car.html')
+          file: File.open('foo/car.html'),
+          mtime: File.mtime('foo/car.html')
         },
         '/car/',
-        binary: false, mtime: File.mtime('foo/car.html')
       )
     ]
 
@@ -458,11 +453,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Check
     (0..expected_out.size - 1).each do |i|
-      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0], 'content must match'
+      assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0].string, 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
-      assert_equal expected_out[i].stuff[3][:mtime], actual_out[i].stuff[3][:mtime], 'mtime must match'
 
-      ['num', :content_filename, :meta_filename, :extension].each do |key|
+      ['num', :content_filename, :meta_filename, :extension, :mtime].each do |key|
         assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
       end
     end
@@ -529,7 +523,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       items = data_source.items
 
       assert_equal 1, items.size
-      assert_equal Encoding.find('UTF-8'), items[0].raw_content.encoding
+      assert_equal Encoding.find('UTF-8'), items[0].content.string.encoding
     ensure
       Encoding.default_external = original_default_external_encoding
     end
@@ -560,6 +554,6 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     # Parse
     items = data_source.items
     assert_equal 1, items.size
-    assert_equal Encoding.find('UTF-8'), items[0].raw_content.encoding
+    assert_equal Encoding.find('UTF-8'), items[0].content.string.encoding
   end
 end

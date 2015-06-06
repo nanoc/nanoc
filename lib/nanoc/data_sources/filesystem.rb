@@ -93,12 +93,18 @@ module Nanoc::DataSources
           else
             raise 'meta_mtime and content_mtime are both nil'
           end
+          attributes[:mtime] = mtime
 
-          # Create layout object
-          res << klass.new(
-            content_or_filename, attributes, identifier,
-            binary: is_binary, mtime: mtime
-          )
+          # Create content
+          content =
+            if is_binary
+              Nanoc::Int::BinaryContent.new(content_or_filename)
+            else
+              Nanoc::Int::TextualContent.new(content_or_filename, filename: content_filename)
+            end
+
+          # Create object
+          res << klass.new(content, attributes, identifier)
         end
       end
 

@@ -91,13 +91,13 @@ module Nanoc::Int
           update(obj.data, digest)
         when Nanoc::Int::CodeSnippet
           update(obj.data, digest)
+        when Nanoc::Int::TextualContent
+          update(obj.string, digest)
+        when Nanoc::Int::BinaryContent
+          update(Pathname.new(obj.filename), digest)
         when Nanoc::Int::Item, Nanoc::Int::Layout
           digest.update('content=')
-          if obj.respond_to?(:binary?) && obj.binary?
-            update(Pathname.new(obj.raw_filename), digest)
-          else
-            update(obj.raw_content, digest)
-          end
+          update(obj.content, digest)
 
           digest.update(',attributes=')
           update(obj.attributes, digest, visited + [obj])

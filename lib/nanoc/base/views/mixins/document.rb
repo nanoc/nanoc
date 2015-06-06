@@ -70,7 +70,7 @@ module Nanoc
 
     # @api private
     def raw_content
-      unwrap.raw_content
+      unwrap.content.string
     end
   end
 end

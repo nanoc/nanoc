@@ -24,7 +24,7 @@ describe Nanoc::MutableLayoutCollectionView do
       view.create('new content', { title: 'New Page' }, '/new/')
 
       expect(wrapped.size).to eq(2)
-      expect(wrapped['/new/'].raw_content).to eq('new content')
+      expect(wrapped['/new/'].content.string).to eq('new content')
     end
 
     it 'returns self' do

@@ -7,7 +7,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/',
-      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.instance_eval { @content = { last: 'last content' } }
@@ -21,7 +20,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/',
-      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.instance_eval { @content = { pre: 'pre content', last: 'last content' } }
@@ -35,7 +33,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/',
-      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.instance_eval { @content = { pre: 'pre content', last: 'last content' } }
@@ -49,7 +46,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/',
-      binary: false, mtime: Time.now - 500
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.instance_eval { @content = { pre: 'pre content', last: 'last content' } }
@@ -64,7 +60,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -79,7 +74,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -95,7 +89,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create rep
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -116,7 +109,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Create item and item rep
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
     rep = create_rep_for(item, :foo)
     rep.assigns = { item_rep: rep }
@@ -136,13 +128,12 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       %(<%= '<%= "blah" %' + '>' %>), {}, '/',
-      binary: false
     )
 
     # Create item rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
     item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
+      @content[:raw]  = item.content.string
       @content[:last] = @content[:raw]
     end
 
@@ -164,13 +155,12 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
 
     # Create item rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
     item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
+      @content[:raw]  = item.content.string
       @content[:last] = @content[:raw]
     end
 
@@ -190,13 +180,12 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       %(<%= '<%= "blah" %' + '>' %>), {}, '/foobar/',
-      binary: false
     )
 
     # Create item rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
     item_rep.instance_eval do
-      @content[:raw]  = item.raw_content
+      @content[:raw]  = item.content.string
       @content[:last] = @content[:raw]
     end
 
@@ -218,7 +207,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
 
     # Create rep
@@ -247,7 +235,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
 
     # Create rep
@@ -271,7 +258,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
 
     # Create rep
@@ -291,7 +277,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
 
     # Create rep
@@ -321,7 +306,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     # Mock item
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/',
-      binary: false
     )
 
     # Create rep
@@ -545,7 +529,8 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   end
 
   def test_access_compiled_content_of_binary_item
-    item = Nanoc::Int::Item.new('content/somefile.dat', {}, '/somefile/', binary: true)
+    content = Nanoc::Int::BinaryContent.new('content/somefile.dat')
+    item = Nanoc::Int::Item.new(content, {}, '/somefile/')
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
     assert_raises(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
@@ -557,9 +542,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Int::Item.new(
-      'content/meow.dat', {}, '/',
-      binary: true
-    )
+      Nanoc::Int::BinaryContent.new('content/meow.dat'), {}, '/')
 
     # Create rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
@@ -585,9 +568,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Int::Item.new(
-      'content/meow.dat', {}, '/',
-      binary: true
-    )
+      Nanoc::Int::BinaryContent.new('content/meow.dat'), {}, '/')
 
     # Create rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
@@ -614,9 +595,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
 
   def create_binary_item
     Nanoc::Int::Item.new(
-      '/a/file/name.dat', {}, '/',
-      binary: true
-    )
+      Nanoc::Int::BinaryContent.new('/a/file/name.dat'), {}, '/')
   end
 
   def mock_and_stub(params)

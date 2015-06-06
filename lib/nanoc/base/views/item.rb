@@ -55,7 +55,7 @@ module Nanoc
 
     # @return [Boolean] True if the item is binary, false otherwise
     def binary?
-      unwrap.binary?
+      unwrap.content.binary?
     end
 
     # Returns the representations of this item.
@@ -67,7 +67,7 @@ module Nanoc
 
     # @api private
     def raw_filename
-      unwrap.raw_filename
+      unwrap.content.filename
     end
   end
 end
