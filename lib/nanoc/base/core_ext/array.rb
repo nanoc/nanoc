@@ -33,16 +33,6 @@ module Nanoc::ArrayExtensions
       end
     end
   end
-
-  # Calculates the checksum for this array. Any change to this array will
-  # result in a different checksum.
-  #
-  # @return [String] The checksum for this array
-  #
-  # @api private
-  def __nanoc_checksum
-    Nanoc::Int::Checksummer.calc(self)
-  end
 end
 
 # @api private

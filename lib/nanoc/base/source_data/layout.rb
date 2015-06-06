@@ -4,8 +4,6 @@ module Nanoc::Int
   #
   # @api private
   class Layout
-    extend Nanoc::Int::Memoization
-
     # @return [String] The raw content of this layout
     attr_reader :raw_content
 
@@ -74,13 +72,6 @@ module Nanoc::Int
     def inspect
       "<#{self.class} identifier=\"#{identifier}\">"
     end
-
-    # @return [String] The checksum for this object. If its contents change,
-    #   the checksum will change as well.
-    def __nanoc_checksum
-      Nanoc::Int::Checksummer.calc(self)
-    end
-    memoize :__nanoc_checksum
 
     def hash
       self.class.hash ^ identifier.hash

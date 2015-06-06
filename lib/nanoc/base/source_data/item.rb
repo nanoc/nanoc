@@ -5,8 +5,6 @@ module Nanoc::Int
   #
   # @api private
   class Item
-    extend Nanoc::Int::Memoization
-
     # @return [Hash] This item's attributes
     attr_accessor :attributes
 
@@ -201,13 +199,6 @@ module Nanoc::Int
     def inspect
       "<#{self.class} identifier=\"#{identifier}\" binary?=#{self.binary?}>"
     end
-
-    # @return [String] The checksum for this object. If its contents change,
-    #   the checksum will change as well.
-    def __nanoc_checksum
-      Nanoc::Int::Checksummer.calc(self)
-    end
-    memoize :__nanoc_checksum
 
     def hash
       self.class.hash ^ identifier.hash

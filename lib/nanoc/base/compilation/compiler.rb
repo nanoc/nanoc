@@ -163,7 +163,7 @@ module Nanoc::Int
 
       # Calculate checksums
       objects.each do |obj|
-        checksum_store[obj] = obj.__nanoc_checksum
+        checksum_store[obj] = Nanoc::Int::Checksummer.calc(obj)
       end
 
       # Store

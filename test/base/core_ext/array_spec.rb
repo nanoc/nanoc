@@ -38,10 +38,3 @@ describe 'Array#__nanoc_freeze_recursively' do
     assert_equal a, a[0]
   end
 end
-
-describe 'Array#__nanoc_checksum' do
-  it 'should work' do
-    expectation = 'CEUlNvu/3DUmlbtpFRiLHU8oHA0='
-    [[:foo, 123]].__nanoc_checksum.must_equal expectation
-  end
-end

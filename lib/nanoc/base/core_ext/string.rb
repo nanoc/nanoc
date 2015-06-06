@@ -6,16 +6,6 @@ module Nanoc::StringExtensions
   def __nanoc_cleaned_identifier
     "/#{self}/".gsub(/^\/+|\/+$/, '/')
   end
-
-  # Calculates the checksum for this string. Any change to this string will
-  # result in a different checksum.
-  #
-  # @return [String] The checksum for this string
-  #
-  # @api private
-  def __nanoc_checksum
-    Nanoc::Int::Checksummer.calc(self)
-  end
 end
 
 # @api private

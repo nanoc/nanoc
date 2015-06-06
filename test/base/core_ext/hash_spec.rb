@@ -44,16 +44,3 @@ describe 'Hash#__nanoc_freeze_recursively' do
     assert_equal a, a[:x]
   end
 end
-
-describe 'Hash#__nanoc_checksum' do
-  it 'should work' do
-    expectation = 'wy7gHokc700tqJ/BmJ+EK6/F0bc='
-    { foo: 123 }.__nanoc_checksum.must_equal expectation
-  end
-
-  it 'should not sort keys' do
-    a = { a: 1, c: 2, b: 3 }.__nanoc_checksum
-    b = { a: 1, b: 3, c: 2 }.__nanoc_checksum
-    a.wont_equal b
-  end
-end

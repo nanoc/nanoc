@@ -175,7 +175,7 @@ module Nanoc::Int
     # @return [Boolean] false if either the new or the old checksum for the
     #   given object is not available, true if both checksums are available
     def checksums_available?(obj)
-      checksum_store[obj] && obj.__nanoc_checksum
+      checksum_store[obj] && Nanoc::Int::Checksummer.calc(obj)
     end
     memoize :checksums_available?
 
@@ -184,7 +184,7 @@ module Nanoc::Int
     # @return [Boolean] false if the old and new checksums for the given
     #   object differ, true if they are identical
     def checksums_identical?(obj)
-      checksum_store[obj] == obj.__nanoc_checksum
+      checksum_store[obj] == Nanoc::Int::Checksummer.calc(obj)
     end
     memoize :checksums_identical?
 

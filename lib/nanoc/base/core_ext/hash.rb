@@ -35,16 +35,6 @@ module Nanoc::HashExtensions
       end
     end
   end
-
-  # Calculates the checksum for this hash. Any change to this hash will result
-  # in a different checksum.
-  #
-  # @return [String] The checksum for this hash
-  #
-  # @api private
-  def __nanoc_checksum
-    Nanoc::Int::Checksummer.calc(self)
-  end
 end
 
 # @api private

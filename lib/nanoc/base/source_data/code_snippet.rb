@@ -44,11 +44,5 @@ module Nanoc::Int
     def inspect
       "<#{self.class} filename=\"#{filename}\">"
     end
-
-    # @return [String] The checksum for this object. If its contents change,
-    #   the checksum will change as well.
-    def __nanoc_checksum
-      Nanoc::Int::Checksummer.calc(self)
-    end
   end
 end

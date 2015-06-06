@@ -170,12 +170,6 @@ module Nanoc::Int
       :rules
     end
 
-    # @return [String] The checksum for this object. If its contents change,
-    #   the checksum will change as well.
-    def __nanoc_checksum
-      Nanoc::Int::Checksummer.calc(self)
-    end
-
     def inspect
       "<#{self.class}>"
     end
