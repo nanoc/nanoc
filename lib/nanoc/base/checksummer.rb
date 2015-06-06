@@ -85,6 +85,8 @@ module Nanoc::Int
           digest.update(obj.to_i.to_s)
         when Numeric
           digest.update(obj.to_s)
+        when Nanoc::Identifier
+          update(obj.to_s, digest)
         when Nanoc::Int::RulesCollection
           update(obj.data, digest)
         when Nanoc::Int::CodeSnippet
@@ -99,6 +101,9 @@ module Nanoc::Int
 
           digest.update(',attributes=')
           update(obj.attributes, digest, visited + [obj])
+
+          digest.update(',identifier=')
+          update(obj.identifier, digest)
         when Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
           update(obj.unwrap, digest)
         when Nanoc::Int::IdentifiableCollection
