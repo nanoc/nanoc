@@ -6,14 +6,42 @@ module Nanoc::Int
   #
   # @api private
   class Checksummer
+    class VerboseDigest
+      def initialize
+        @str = ''
+      end
+
+      def update(str)
+        @str << str
+      end
+
+      def to_s
+        @str
+      end
+    end
+
+    class CompactDigest
+      def initialize
+        @digest = Digest::SHA1.new
+      end
+
+      def update(str)
+        @digest.update(str)
+      end
+
+      def to_s
+        @digest.base64digest
+      end
+    end
+
     class << self
       # @param obj The object to create a checksum for
       #
       # @return [String] The digest
-      def calc(obj)
-        digest = Digest::SHA1.new
+      def calc(obj, digest_class = CompactDigest)
+        digest = digest_class.new
         update(obj, digest)
-        digest.base64digest
+        digest.to_s
       end
 
       private
@@ -27,25 +55,25 @@ module Nanoc::Int
         end
 
         case obj
-        when String
+        when ::String
           digest.update(obj)
-        when Array
+        when ::Array
           obj.each do |el|
             digest.update('elem')
             update(el, digest, visited + [obj])
           end
-        when Hash
+        when ::Hash
           obj.each do |key, value|
             digest.update('key')
             update(key, digest, visited + [obj])
             digest.update('value')
             update(value, digest, visited + [obj])
           end
-        when Pathname
+        when ::Pathname
           filename = obj.to_s
           if File.exist?(filename)
             stat = File.stat(filename)
-            digest.update(stat.size.to_s + '-' + stat.mtime.utc.to_s)
+            digest.update(stat.size.to_s + '-' + stat.mtime.to_i.to_s)
           else
             digest.update('???')
           end
