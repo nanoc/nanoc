@@ -162,6 +162,20 @@ describe Nanoc::Int::Checksummer do
 
     it { is_expected.to eql('Nanoc::Int::Item<content=String<asdf>,attributes=Hash<Symbol<foo>=String<bar>,>>') }
 
+    context 'binary' do
+      let(:obj) { Nanoc::Int::Item.new('/foo.md', { 'foo' => 'bar' }, '/foo.md', binary: true) }
+
+      let(:mtime) { 200 }
+      let(:data) { 'stuffs' }
+
+      before do
+        File.write(obj.raw_filename, data)
+        File.utime(mtime, mtime, obj.raw_filename)
+      end
+
+      it { is_expected.to eql('Nanoc::Int::Item<content=FakeFS::Pathname<6-200>,attributes=Hash<Symbol<foo>=String<bar>,>>') }
+    end
+
     context 'recursive attributes' do
       before do
         obj.attributes[:foo] = obj
@@ -171,7 +185,19 @@ describe Nanoc::Int::Checksummer do
     end
   end
 
-  # TODO: Nanoc::Int::Layout
+  context 'Nanoc::Int::Layout' do
+    let(:obj) { Nanoc::Int::Layout.new('asdf', { 'foo' => 'bar' }, '/foo.md') }
+
+    it { is_expected.to eql('Nanoc::Int::Layout<content=String<asdf>,attributes=Hash<Symbol<foo>=String<bar>,>>') }
+
+    context 'recursive attributes' do
+      before do
+        obj.attributes[:foo] = obj
+      end
+
+      it { is_expected.to eql('Nanoc::Int::Layout<content=String<asdf>,attributes=Hash<Symbol<foo>=Nanoc::Int::Layout<recur>,>>') }
+    end
+  end
 
   context 'other marshal-able classes' do
     let(:obj) { klass.new('hello') }
