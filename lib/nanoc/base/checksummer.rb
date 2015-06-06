@@ -57,6 +57,9 @@ module Nanoc::Int
         case obj
         when ::String
           digest.update(obj)
+        when ::Symbol
+          digest.update(obj.to_s)
+        when nil, true, false
         when ::Array
           obj.each do |el|
             digest.update('elem')
@@ -77,6 +80,10 @@ module Nanoc::Int
           else
             digest.update('???')
           end
+        when Time
+          digest.update(obj.to_i.to_s)
+        when Numeric
+          digest.update(obj.to_s)
         when Nanoc::Int::RulesCollection
           update(obj.data, digest)
         when Nanoc::Int::CodeSnippet

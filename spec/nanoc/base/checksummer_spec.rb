@@ -28,6 +28,26 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Stringhello') }
   end
 
+  context 'Symbol' do
+    let(:obj) { :hello }
+    it { is_expected.to eql('Symbolhello') }
+  end
+
+  context 'nil' do
+    let(:obj) { nil }
+    it { is_expected.to eql('NilClass') }
+  end
+
+  context 'true' do
+    let(:obj) { true }
+    it { is_expected.to eql('TrueClass') }
+  end
+
+  context 'false' do
+    let(:obj) { false }
+    it { is_expected.to eql('FalseClass') }
+  end
+
   context 'Array' do
     let(:obj) { %w( hello goodbye ) }
     it { is_expected.to eql('ArrayelemStringhelloelemStringgoodbye') }
@@ -103,6 +123,21 @@ describe Nanoc::Int::Checksummer do
     end
   end
 
+  context 'Time' do
+    let(:obj) { Time.at(111223) }
+    it { is_expected.to eql('Time<111223>') }
+  end
+
+  context 'Float' do
+    let(:obj) { 3.14 }
+    it { is_expected.to eql('Float<3.14>') }
+  end
+
+  context 'Fixnum' do
+    let(:obj) { 3 }
+    it { is_expected.to eql('Fixnum<3>') }
+  end
+
   context 'Nanoc::Int::RulesCollection' do
     let(:obj) do
       Nanoc::Int::RulesCollection.new(nil).tap { |rc| rc.data = data }
@@ -124,18 +159,16 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Nanoc::Int::Item' do
-    # TODO: checksum Symbols without marshaling
-
     let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md') }
 
-    it { is_expected.to eql("Nanoc::Int::ItemcontentStringasdfattributesHashkeySymbol\u0004\b:\bfoovalueStringbar") }
+    it { is_expected.to eql('Nanoc::Int::ItemcontentStringasdfattributesHashkeySymbolfoovalueStringbar') }
 
     context 'recursive attributes' do
       before do
         obj.attributes[:foo] = obj
       end
 
-      it { is_expected.to eql("Nanoc::Int::ItemcontentStringasdfattributesHashkeySymbol\u0004\b:\bfoovalueNanoc::Int::Itemrecur") }
+      it { is_expected.to eql('Nanoc::Int::ItemcontentStringasdfattributesHashkeySymbolfoovalueNanoc::Int::Itemrecur') }
     end
   end
 
