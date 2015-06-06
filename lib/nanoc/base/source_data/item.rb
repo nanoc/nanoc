@@ -212,24 +212,6 @@ module Nanoc::Int
       self.eql?(other)
     end
 
-    def marshal_dump
-      [
-        @is_binary,
-        @raw_filename,
-        @raw_content,
-        @attributes,
-        @identifier
-      ]
-    end
-
-    def marshal_load(source)
-      @is_binary,
-      @raw_filename,
-      @raw_content,
-      @attributes,
-      @identifier = *source
-    end
-
     # @api private
     def forced_outdated=(bool)
       @forced_outdated = bool
