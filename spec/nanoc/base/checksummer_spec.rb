@@ -25,71 +25,71 @@ describe Nanoc::Int::Checksummer do
 
   context 'String' do
     let(:obj) { 'hello' }
-    it { is_expected.to eql('Stringhello') }
+    it { is_expected.to eql('String<hello>') }
   end
 
   context 'Symbol' do
     let(:obj) { :hello }
-    it { is_expected.to eql('Symbolhello') }
+    it { is_expected.to eql('Symbol<hello>') }
   end
 
   context 'nil' do
     let(:obj) { nil }
-    it { is_expected.to eql('NilClass') }
+    it { is_expected.to eql('NilClass<>') }
   end
 
   context 'true' do
     let(:obj) { true }
-    it { is_expected.to eql('TrueClass') }
+    it { is_expected.to eql('TrueClass<>') }
   end
 
   context 'false' do
     let(:obj) { false }
-    it { is_expected.to eql('FalseClass') }
+    it { is_expected.to eql('FalseClass<>') }
   end
 
   context 'Array' do
     let(:obj) { %w( hello goodbye ) }
-    it { is_expected.to eql('ArrayelemStringhelloelemStringgoodbye') }
+    it { is_expected.to eql('Array<String<hello>,String<goodbye>,>') }
 
     context 'different order' do
       let(:obj) { %w( goodbye hello ) }
-      it { is_expected.to eql('ArrayelemStringgoodbyeelemStringhello') }
+      it { is_expected.to eql('Array<String<goodbye>,String<hello>,>') }
     end
 
     context 'recursive' do
       let(:obj) { [].tap { |arr| arr << ['hello', arr] } }
-      it { is_expected.to eql('ArrayelemArrayelemStringhelloelemArrayrecur') }
+      it { is_expected.to eql('Array<Array<String<hello>,Array<recur>,>,>') }
     end
 
     context 'non-serializable' do
       let(:obj) { [-> {}] }
-      it { is_expected.to match(/\AArrayelemProc#<Proc:0x.*@.*:\d+.*>\z/) }
+      it { is_expected.to match(/\AArray<Proc<#<Proc:0x.*@.*:\d+.*>>,>\z/) }
     end
   end
 
   context 'Hash' do
     let(:obj) { { 'a' => 'foo', 'b' => 'bar' } }
-    it { is_expected.to eql('HashkeyStringavalueStringfookeyStringbvalueStringbar') }
+    it { is_expected.to eql('Hash<String<a>=String<foo>,String<b>=String<bar>,>') }
 
     context 'different order' do
       let(:obj) { { 'b' => 'bar', 'a' => 'foo' } }
-      it { is_expected.to eql('HashkeyStringbvalueStringbarkeyStringavalueStringfoo') }
+      it { is_expected.to eql('Hash<String<b>=String<bar>,String<a>=String<foo>,>') }
     end
 
     context 'non-serializable' do
       let(:obj) { { 'a' => -> {} } }
-      it { is_expected.to match(/\AHashkeyStringavalueProc#<Proc:0x.*@.*:\d+.*>\z/) }
+      it { is_expected.to match(/\AHash<String<a>=Proc<#<Proc:0x.*@.*:\d+.*>>,>\z/) }
     end
 
     context 'recursive values' do
       let(:obj) { {}.tap { |hash| hash['a'] = hash } }
-      it { is_expected.to eql('HashkeyStringavalueHashrecur') }
+      it { is_expected.to eql('Hash<String<a>=Hash<recur>,>') }
     end
 
     context 'recursive keys' do
       let(:obj) { {}.tap { |hash| hash[hash] = 'hello' } }
-      it { is_expected.to eql('HashkeyHashrecurvalueStringhello') }
+      it { is_expected.to eql('Hash<Hash<recur>=String<hello>,>') }
     end
   end
 
@@ -99,7 +99,6 @@ describe Nanoc::Int::Checksummer do
     let(:filename) { '/tmp/whatever' }
     let(:mtime) { 200 }
     let(:data) { 'stuffs' }
-    let(:normal_checksum) { 'THy7Y28oroov/KvPxT6wcMnXr/s=' }
 
     before do
       FileUtils.mkdir_p(File.dirname(filename))
@@ -107,19 +106,19 @@ describe Nanoc::Int::Checksummer do
       File.utime(mtime, mtime, filename)
     end
 
-    it { is_expected.to eql('FakeFS::Pathname6-200') }
+    it { is_expected.to eql('FakeFS::Pathname<6-200>') }
 
     context 'does not exist' do
       before do
         FileUtils.rm_rf(filename)
       end
 
-      it { is_expected.to eql('FakeFS::Pathname???') }
+      it { is_expected.to eql('FakeFS::Pathname<???>') }
     end
 
     context 'different data' do
       let(:data) { 'other stuffs :o' }
-      it { is_expected.to eql('FakeFS::Pathname15-200') }
+      it { is_expected.to eql('FakeFS::Pathname<15-200>') }
     end
   end
 
@@ -145,30 +144,30 @@ describe Nanoc::Int::Checksummer do
 
     let(:data) { 'STUFF!' }
 
-    it { is_expected.to eql('Nanoc::Int::RulesCollectionStringSTUFF!') }
+    it { is_expected.to eql('Nanoc::Int::RulesCollection<String<STUFF!>>') }
   end
 
   context 'Nanoc::Int::CodeSnippet' do
     let(:obj) { Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb') }
-    it { is_expected.to eql('Nanoc::Int::CodeSnippetStringasdf') }
+    it { is_expected.to eql('Nanoc::Int::CodeSnippet<String<asdf>>') }
   end
 
   context 'Nanoc::Int::Configuration' do
     let(:obj) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
-    it { is_expected.to eql('Nanoc::Int::ConfigurationkeyStringfoovalueStringbar') }
+    it { is_expected.to eql('Nanoc::Int::Configuration<String<foo>=String<bar>,>') }
   end
 
   context 'Nanoc::Int::Item' do
     let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Int::ItemcontentStringasdfattributesHashkeySymbolfoovalueStringbar') }
+    it { is_expected.to eql('Nanoc::Int::Item<content=String<asdf>,attributes=Hash<Symbol<foo>=String<bar>,>>') }
 
     context 'recursive attributes' do
       before do
         obj.attributes[:foo] = obj
       end
 
-      it { is_expected.to eql('Nanoc::Int::ItemcontentStringasdfattributesHashkeySymbolfoovalueNanoc::Int::Itemrecur') }
+      it { is_expected.to eql('Nanoc::Int::Item<content=String<asdf>,attributes=Hash<Symbol<foo>=Nanoc::Int::Item<recur>,>>') }
     end
   end
 
@@ -185,11 +184,11 @@ describe Nanoc::Int::Checksummer do
       end
     end
 
-    it { is_expected.to match(/\A#<Class:.*>#<#<Class:.*>:.* @a=\"hello\">\z/) }
+    it { is_expected.to match(/\A#<Class:0x[0-9a-f]+><.*>\z/) }
   end
 
   context 'other non-marshal-able classes' do
     let(:obj) { proc {} }
-    it { is_expected.to match(/\AProc#<Proc:0x.*@.*:\d+.*>\z/) }
+    it { is_expected.to match(/\AProc<#<Proc:0x.*@.*:\d+.*>>\z/) }
   end
 end

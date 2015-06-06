@@ -48,9 +48,10 @@ module Nanoc::Int
 
       def update(obj, digest, visited = Set.new)
         digest.update(obj.class.to_s)
+        digest.update('<')
 
         if visited.include?(obj)
-          digest.update('recur')
+          digest.update('recur>')
           return
         end
 
@@ -62,15 +63,15 @@ module Nanoc::Int
         when nil, true, false
         when ::Array
           obj.each do |el|
-            digest.update('elem')
             update(el, digest, visited + [obj])
+            digest.update(',')
           end
         when ::Hash
           obj.each do |key, value|
-            digest.update('key')
             update(key, digest, visited + [obj])
-            digest.update('value')
+            digest.update('=')
             update(value, digest, visited + [obj])
+            digest.update(',')
           end
         when ::Pathname
           filename = obj.to_s
@@ -89,14 +90,14 @@ module Nanoc::Int
         when Nanoc::Int::CodeSnippet
           update(obj.data, digest)
         when Nanoc::Int::Item, Nanoc::Int::Layout
-          digest.update('content')
+          digest.update('content=')
           if obj.respond_to?(:binary?) && obj.binary?
             update(Pathname.new(obj.raw_filename), digest)
           else
             update(obj.raw_content, digest)
           end
 
-          digest.update('attributes')
+          digest.update(',attributes=')
           update(obj.attributes, digest, visited + [obj])
         else
           data = begin
@@ -107,6 +108,8 @@ module Nanoc::Int
 
           digest.update(data)
         end
+
+        digest.update('>')
       end
     end
   end
