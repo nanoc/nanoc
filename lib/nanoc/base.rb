@@ -4,7 +4,6 @@ module Nanoc
   autoload 'Error',                'nanoc/base/error'
 
   autoload 'DataSource',           'nanoc/base/source_data/data_source'
-  autoload 'Identifier',           'nanoc/base/source_data/identifier'
 
   autoload 'ConfigView',           'nanoc/base/views/config'
   autoload 'IdentifiableCollectionView', 'nanoc/base/views/identifiable_collection'
@@ -29,7 +28,6 @@ end
 # @api private
 module Nanoc::Int
   require_relative 'base/item_rep_writer'
-  require_relative 'base/pattern'
 
   # Load helper classes
   autoload 'Context',              'nanoc/base/context'
@@ -69,3 +67,5 @@ module Nanoc::Int
   autoload 'RuleMemoryStore',      'nanoc/base/compilation/rule_memory_store'
   autoload 'RulesCollection',      'nanoc/base/compilation/rules_collection'
 end
+
+require_relative 'base/entities'
