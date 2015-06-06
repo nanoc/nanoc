@@ -19,10 +19,10 @@ module Nanoc::Int
     # @return [Array] The caluclated rule memory for the given object
     def [](obj)
       result =
-        case obj.type
-        when :item_rep
+        case obj
+        when Nanoc::Int::ItemRep
           @rules_collection.new_rule_memory_for_rep(obj)
-        when :layout
+        when Nanoc::Int::Layout
           @rules_collection.new_rule_memory_for_layout(obj)
         else
           raise "Do not know how to calculate the rule memory for #{obj.inspect}"

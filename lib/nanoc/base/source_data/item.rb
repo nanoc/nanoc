@@ -145,23 +145,13 @@ module Nanoc::Int
       @is_binary
     end
 
-    # Returns the type of this object. Will always return `:item`, because
-    # this is an item. For layouts, this method returns `:layout`.
-    #
-    # @api private
-    #
-    # @return [Symbol] :item
-    def type
-      :item
-    end
-
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @api private
     #
     # @return [Object] An unique reference to this object
     def reference
-      [type, identifier.to_s]
+      [:item, identifier.to_s]
     end
 
     # Prevents all further modifications to its attributes.

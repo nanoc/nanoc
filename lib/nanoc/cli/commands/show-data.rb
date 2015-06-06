@@ -64,8 +64,18 @@ module Nanoc::CLI::Commands
         puts "item #{item.identifier} depends on:"
         predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
         predecessors.each do |pred|
+          type =
+            case pred
+            when Nanoc::Int::Layout
+              'layout'
+            when Nanoc::Int::ItemRep
+              'item rep'
+            when Nanoc::Int::Item
+              'item'
+            end
+
           if pred
-            puts "  [ #{format '%6s', pred.type} ] #{pred.identifier}"
+            puts "  [ #{format '%6s', type} ] #{pred.identifier}"
           else
             puts '  ( removed item )'
           end

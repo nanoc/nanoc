@@ -65,17 +65,6 @@ module Nanoc::Int
       def forget_progress
         initialize_content
       end
-
-      # Returns the type of this object. Will always return `:item_rep`,
-      # because this is an item rep. For layouts, this method returns
-      # `:layout`.
-      #
-      # @api private
-      #
-      # @return [Symbol] :item_rep
-      def type
-        :item_rep
-      end
     end
 
     include Private
@@ -379,7 +368,7 @@ module Nanoc::Int
     #
     # @return [Object] An unique reference to this object
     def reference
-      [type, item.identifier, name]
+      [:item_rep, item.identifier, name]
     end
 
     def inspect

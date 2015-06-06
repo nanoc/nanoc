@@ -28,16 +28,6 @@ module Nanoc::Int
       @identifier   = Nanoc::Identifier.from(identifier)
     end
 
-    # Returns the type of this object. Will always return `:layout`, because
-    # this is a layout. For items, this method returns `:item`.
-    #
-    # @api private
-    #
-    # @return [Symbol] :layout
-    def type
-      :layout
-    end
-
     # Prevents all further modifications to the layout.
     #
     # @return [void]
@@ -53,7 +43,7 @@ module Nanoc::Int
     #
     # @return [Object] An unique reference to this object
     def reference
-      [type, identifier]
+      [:layout, identifier]
     end
 
     def inspect

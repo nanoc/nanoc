@@ -81,8 +81,8 @@ module Nanoc::Int
     # @return [Nanoc::Int::OutdatednessReasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
-      case obj.type
-      when :item_rep
+      case obj
+      when Nanoc::Int::ItemRep
         # Outdated if rules outdated
         return Nanoc::Int::OutdatednessReasons::RulesModified if
           rule_memory_differs_for(obj)
@@ -104,9 +104,9 @@ module Nanoc::Int
 
         # Not outdated
         return nil
-      when :item
+      when Nanoc::Int::Item
         obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
-      when :layout
+      when Nanoc::Int::Layout
         # Outdated if rules outdated
         return Nanoc::Int::OutdatednessReasons::RulesModified if
           rule_memory_differs_for(obj)
@@ -136,7 +136,7 @@ module Nanoc::Int
     # @return [Boolean] true if the object is outdated, false otherwise
     def outdated_due_to_dependencies?(obj, processed = Set.new)
       # Convert from rep to item if necessary
-      obj = obj.item if obj.type == :item_rep
+      obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
 
       # Get from cache
       if @objects_outdated_due_to_dependencies.key?(obj)
