@@ -1,5 +1,7 @@
 module Nanoc
-  class ItemView < ::Nanoc::DocumentView
+  class ItemView
+    include Nanoc::DocumentViewMixin
+
     # Returns the compiled content.
     #
     # @option params [String] :rep (:default) The name of the representation

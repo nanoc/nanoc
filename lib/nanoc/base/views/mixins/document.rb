@@ -1,5 +1,5 @@
 module Nanoc
-  class DocumentView
+  module DocumentViewMixin
     # @api private
     NONE = Object.new
 

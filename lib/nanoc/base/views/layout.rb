@@ -1,4 +1,5 @@
 module Nanoc
-  class LayoutView < ::Nanoc::DocumentView
+  class LayoutView
+    include Nanoc::DocumentViewMixin
   end
 end
