@@ -6,7 +6,7 @@ module Nanoc
     #
     # @see Hash#[]=
     def []=(key, value)
-      unwrap[key] = value
+      unwrap.attributes[key] = value
     end
   end
 end

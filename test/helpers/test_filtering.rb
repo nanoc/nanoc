@@ -25,29 +25,23 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
   def test_filter_with_assigns
     if_have 'rubypants' do
-      # Build content to be evaluated
       content = "<p>Foo...</p>\n" \
                 "<% filter :erb do %>\n" \
                 " <p><%%= @item[:title] %></p>\n" \
                 "<% end %>\n"
 
-      # Mock item and rep
-      @item = mock
-      @item.expects(:[]).with(:title).returns('Bar...')
-      @item.expects(:identifier).returns('/blah/')
-      @item = Nanoc::ItemView.new(@item)
-      @item_rep = mock
-      @item_rep.expects(:name).returns('default')
-      @item_rep.expects(:assigns).returns({
-        item: @item,
-        item_rep: @item_rep
-      })
-      @item_rep = Nanoc::ItemRepView.new(@item_rep)
+      item = Nanoc::Int::Item.new('stuff', { title: 'Bar...' }, '/foo.md')
+      item_rep = Nanoc::Int::ItemRep.new(item, :default)
+      item_rep.assigns = {
+        item: Nanoc::ItemView.new(item),
+        item_rep: Nanoc::ItemRepView.new(item_rep),
+      }
 
-      # Evaluate content
+      @item = Nanoc::ItemView.new(item)
+      @item_rep = Nanoc::ItemRepView.new(item_rep)
+
       result = ::ERB.new(content).result(binding)
 
-      # Check
       assert_match('<p>Foo...</p>', result)
       assert_match('<p>Bar...</p>', result)
     end

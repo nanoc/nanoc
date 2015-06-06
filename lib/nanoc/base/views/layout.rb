@@ -28,8 +28,14 @@ module Nanoc
 
     # @see Hash#[]
     def [](key)
-      @layout[key]
+      Nanoc::Int::NotificationCenter.post(:visit_started, @layout)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   @layout)
+
+      @layout.attributes[key]
     end
+
+    # TODO: Add #fetch
+    # TODO: Add #key?
 
     # @api private
     def reference

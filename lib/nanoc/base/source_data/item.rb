@@ -140,27 +140,6 @@ module Nanoc::Int
       rep.path
     end
 
-    # Requests the attribute with the given key.
-    #
-    # @param [Symbol] key The name of the attribute to fetch
-    #
-    # @return [Object] The value of the requested attribute
-    def [](key)
-      Nanoc::Int::NotificationCenter.post(:visit_started, self)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   self)
-
-      @attributes[key]
-    end
-
-    # Sets the attribute with the given key to the given value.
-    #
-    # @param [Symbol] key The name of the attribute to set
-    #
-    # @param [Object] value The value of the attribute to set
-    def []=(key, value)
-      @attributes[key] = value
-    end
-
     # @return [Boolean] True if the item is binary; false if it is not
     def binary?
       @is_binary

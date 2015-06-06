@@ -60,7 +60,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
 
       # Apply preprocess blocks
       site.compiler.preprocess
-      assert item[:preprocessed]
+      assert item.attributes[:preprocessed]
     end
   end
 

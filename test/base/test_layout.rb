@@ -5,20 +5,9 @@ class Nanoc::Int::LayoutTest < Nanoc::TestCase
     assert_equal({ foo: 'bar' }, layout.attributes)
   end
 
-  def test_lookup_with_known_attribute
-    # Create layout
+  def test_attributes
     layout = Nanoc::Int::Layout.new('content', { 'foo' => 'bar' }, '/foo/')
-
-    # Check attributes
-    assert_equal('bar', layout[:foo])
-  end
-
-  def test_lookup_with_unknown_attribute
-    # Create layout
-    layout = Nanoc::Int::Layout.new('content', { 'foo' => 'bar' }, '/foo/')
-
-    # Check attributes
-    assert_equal(nil, layout[:filter])
+    assert_equal({ foo: 'bar' }, layout.attributes)
   end
 
   def test_dump_and_load
