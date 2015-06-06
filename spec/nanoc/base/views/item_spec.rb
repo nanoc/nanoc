@@ -1,44 +1,6 @@
 describe Nanoc::ItemView do
-  describe '#== and #eql?' do
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item) }
-
-    context 'comparing with item with same identifier' do
-      let(:other) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
-
-      it 'is equal' do
-        expect(view).to eq(other)
-        expect(view).to eql(other)
-      end
-    end
-
-    context 'comparing with item with different identifier' do
-      let(:other) { Nanoc::Int::Item.new('content', {}, '/fdsa/') }
-
-      it 'is not equal' do
-        expect(view).not_to eq(other)
-        expect(view).not_to eql(other)
-      end
-    end
-
-    context 'comparing with item view with same identifier' do
-      let(:other) { Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/asdf/')) }
-
-      it 'is equal' do
-        expect(view).to eq(other)
-        expect(view).to eql(other)
-      end
-    end
-
-    context 'comparing with item view with different identifier' do
-      let(:other) { Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/fdsa/')) }
-
-      it 'is not equal' do
-        expect(view).not_to eq(other)
-        expect(view).not_to eql(other)
-      end
-    end
-  end
+  let(:entity_class) { Nanoc::Int::Item }
+  it_behaves_like 'a document view'
 
   describe '#raw_content' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
@@ -47,15 +9,6 @@ describe Nanoc::ItemView do
     subject { view.raw_content }
 
     it { should eq('content') }
-  end
-
-  describe '#hash' do
-    let(:item) { double(:item, identifier: '/foo/') }
-    let(:view) { described_class.new(item) }
-
-    subject { view.hash }
-
-    it { should == described_class.hash ^ '/foo/'.hash }
   end
 
   describe '#parent' do
@@ -86,90 +39,6 @@ describe Nanoc::ItemView do
       it 'returns nil' do
         expect(subject).to be_nil
       end
-    end
-  end
-
-  describe '#[]' do
-    let(:item) { Nanoc::Int::Item.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item) }
-
-    subject { view[key] }
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
-    end
-
-    context 'with existant key' do
-      let(:key) { :animal }
-      it { should eql?('donkey') }
-    end
-
-    context 'with non-existant key' do
-      let(:key) { :weapon }
-      it { should eql?(nil) }
-    end
-  end
-
-  describe '#fetch' do
-    let(:item) { Nanoc::Int::Item.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item) }
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
-    end
-
-    context 'with existant key' do
-      let(:key) { :animal }
-
-      subject { view.fetch(key) }
-
-      it { should eql?('donkey') }
-    end
-
-    context 'with non-existant key' do
-      let(:key) { :weapon }
-
-      context 'with fallback' do
-        subject { view.fetch(key, 'nothing sorry') }
-        it { should eql?('nothing sorry') }
-      end
-
-      context 'with block' do
-        subject { view.fetch(key) { 'nothing sorry' } }
-        it { should eql?('nothing sorry') }
-      end
-
-      context 'with no fallback and no block' do
-        subject { view.fetch(key) }
-
-        it 'raises' do
-          expect { subject }.to raise_error(KeyError)
-        end
-      end
-    end
-  end
-
-  describe '#key?' do
-    let(:item) { Nanoc::Int::Item.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item) }
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
-    end
-
-    subject { view.key?(key) }
-
-    context 'with existant key' do
-      let(:key) { :animal }
-      it { should eql?(true) }
-    end
-
-    context 'with non-existant key' do
-      let(:key) { :weapon }
-      it { should eql?(false) }
     end
   end
 

@@ -1,68 +1,5 @@
 module Nanoc
-  class ItemView
-    # @api private
-    NONE = Object.new
-
-    # @api private
-    def initialize(item)
-      @item = item
-    end
-
-    # @api private
-    def unwrap
-      @item
-    end
-
-    # @see Object#==
-    def ==(other)
-      identifier == other.identifier
-    end
-    alias_method :eql?, :==
-
-    # @see Object#hash
-    def hash
-      self.class.hash ^ identifier.hash
-    end
-
-    # @return [Nanoc::Identifier]
-    def identifier
-      @item.identifier
-    end
-
-    # @see Hash#fetch
-    def fetch(key, fallback = NONE, &_block)
-      Nanoc::Int::NotificationCenter.post(:visit_started, @item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   @item)
-
-      if @item.attributes.key?(key)
-        @item.attributes[key]
-      else
-        if !fallback.equal?(NONE)
-          fallback
-        elsif block_given?
-          yield(key)
-        else
-          raise KeyError, "key not found: #{key.inspect}"
-        end
-      end
-    end
-
-    # @see Hash#key?
-    def key?(key)
-      Nanoc::Int::NotificationCenter.post(:visit_started, @item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   @item)
-
-      @item.attributes.key?(key)
-    end
-
-    # @see Hash#[]
-    def [](key)
-      Nanoc::Int::NotificationCenter.post(:visit_started, @item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   @item)
-
-      @item.attributes[key]
-    end
-
+  class ItemView < ::Nanoc::DocumentView
     # Returns the compiled content.
     #
     # @option params [String] :rep (:default) The name of the representation
@@ -76,7 +13,7 @@ module Nanoc
     #
     # @return [String] The content of the given rep at the given snapshot.
     def compiled_content(params = {})
-      @item.compiled_content(params)
+      unwrap.compiled_content(params)
     end
 
     # Returns the item path, as used when being linked to. It starts
@@ -93,7 +30,7 @@ module Nanoc
     #
     # @return [String] The item’s path.
     def path(params = {})
-      @item.path(params)
+      unwrap.path(params)
     end
 
     # Returns the children of this item. For items with identifiers that have
@@ -101,7 +38,7 @@ module Nanoc
     #
     # @return [Enumerable<Nanoc::ItemView>]
     def children
-      @item.children.map { |i| Nanoc::ItemView.new(i) }
+      unwrap.children.map { |i| Nanoc::ItemView.new(i) }
     end
 
     # Returns the parent of this item, if one exists. For items with identifiers
@@ -111,34 +48,24 @@ module Nanoc
     #
     # @return [nil] if the item has no parent
     def parent
-      @item.parent && Nanoc::ItemView.new(@item.parent)
+      unwrap.parent && Nanoc::ItemView.new(unwrap.parent)
     end
 
     # @return [Boolean] True if the item is binary, false otherwise
     def binary?
-      @item.binary?
-    end
-
-    # For textual items, returns the raw (source) content of this item; for
-    # binary items, returns `nil`.
-    #
-    # @return [String] if the item is textual
-    #
-    # @return [nil] if the item is binary
-    def raw_content
-      @item.raw_content
+      unwrap.binary?
     end
 
     # Returns the representations of this item.
     #
     # @return [Nanoc::ItemRepCollectionView]
     def reps
-      Nanoc::ItemRepCollectionView.new(@item.reps)
+      Nanoc::ItemRepCollectionView.new(unwrap.reps)
     end
 
     # @api private
     def raw_filename
-      @item.raw_filename
+      unwrap.raw_filename
     end
   end
 end

@@ -1,22 +1,8 @@
 module Nanoc::Int
-  # Represents a compileable item in a site. It has content and attributes, as
-  # well as an identifier (which starts and ends with a slash). It can also
-  # store the modification time to speed up compilation.
-  #
   # @api private
-  class Item
-    # @return [Hash] This item's attributes
-    attr_accessor :attributes
-
-    # @return [Nanoc::Identifier] This item's identifier
-    attr_accessor :identifier
-
+  class Item < ::Nanoc::Int::Document
     # @return [Array<Nanoc::Int::ItemRep>] This item’s list of item reps
     attr_reader :reps
-
-    # @return [String] This item's raw, uncompiled content of this item (only
-    #   available for textual items)
-    attr_reader :raw_content
 
     # @return [String] The filename pointing to the file containing this
     #   item’s content
@@ -163,22 +149,6 @@ module Nanoc::Int
       identifier.freeze
       raw_filename.freeze if raw_filename
       raw_content.freeze  if raw_content
-    end
-
-    def inspect
-      "<#{self.class} identifier=\"#{identifier}\" binary?=#{self.binary?}>"
-    end
-
-    def hash
-      self.class.hash ^ identifier.hash
-    end
-
-    def eql?(other)
-      self.class == other.class && identifier == other.identifier
-    end
-
-    def ==(other)
-      self.eql?(other)
     end
 
     # @api private
