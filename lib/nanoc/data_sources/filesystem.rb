@@ -96,11 +96,12 @@ module Nanoc::DataSources
           attributes[:mtime] = mtime
 
           # Create content
+          full_content_filename = content_filename && File.expand_path(content_filename)
           content =
             if is_binary
-              Nanoc::Int::BinaryContent.new(content_or_filename)
+              Nanoc::Int::BinaryContent.new(full_content_filename)
             else
-              Nanoc::Int::TextualContent.new(content_or_filename, filename: content_filename)
+              Nanoc::Int::TextualContent.new(content_or_filename, filename: full_content_filename)
             end
 
           # Create object
