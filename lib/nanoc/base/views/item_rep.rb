@@ -35,6 +35,9 @@ module Nanoc
     #
     # @return [String] The content at the given snapshot.
     def compiled_content(params = {})
+      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap.item)
+
       @item_rep.compiled_content(params)
     end
 
@@ -48,6 +51,9 @@ module Nanoc
     #
     # @return [String] The item rep’s path.
     def path(params = {})
+      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap.item)
+
       @item_rep.path(params)
     end
 
@@ -60,6 +66,9 @@ module Nanoc
 
     # @api private
     def raw_path(params = {})
+      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap.item)
+
       @item_rep.raw_path(params)
     end
 

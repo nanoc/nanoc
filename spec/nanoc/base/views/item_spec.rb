@@ -42,6 +42,10 @@ describe Nanoc::ItemView do
     end
   end
 
+  describe '#children' do
+    # TODO: implement
+  end
+
   describe '#reps' do
     let(:item) { double(:item, reps: [rep_a, rep_b]) }
     let(:rep_a) { double(:rep_a) }
@@ -55,5 +59,72 @@ describe Nanoc::ItemView do
       expect(subject.size).to eq(2)
       expect(subject.class).to eql(Nanoc::ItemRepCollectionView)
     end
+  end
+
+  describe '#compiled_content' do
+    subject { view.compiled_content }
+
+    let(:view) { described_class.new(item) }
+
+    let(:item) do
+      Nanoc::Int::Item.new('content', {}, '/asdf/')
+    end
+
+    let(:rep) do
+      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+        ir.compiled = true,
+        ir.content_snapshots = {
+          last: Nanoc::Int::TextualContent.new('Hallo'),
+        }
+      end
+    end
+
+    before do
+      item.reps << rep
+
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_ended, item).ordered
+    end
+
+    it { should eq('Hallo') }
+  end
+
+  describe '#path' do
+    subject { view.path }
+
+    let(:view) { described_class.new(item) }
+
+    let(:item) do
+      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    let(:rep) do
+      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+        ir.paths = {
+          last: '/about/',
+        }
+      end
+    end
+
+    before do
+      item.reps << rep
+
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_ended, item).ordered
+    end
+
+    it { should eq('/about/') }
+  end
+
+  describe '#binary?' do
+    # TODO: implement
+  end
+
+  describe '#raw_filename' do
+    # TODO: implement
   end
 end
