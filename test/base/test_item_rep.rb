@@ -451,46 +451,6 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     end
   end
 
-  def test_raw_path_should_generate_dependency
-    items = [
-      Nanoc::Int::Item.new('foo', {}, '/foo/'),
-      Nanoc::Int::Item.new('bar', {}, '/bar/')
-    ]
-    item_reps = [
-      Nanoc::Int::ItemRep.new(items[0], :default),
-      Nanoc::Int::ItemRep.new(items[1], :default)
-    ]
-
-    dt = Nanoc::Int::DependencyTracker.new(items)
-    dt.start
-    Nanoc::Int::NotificationCenter.post(:visit_started, items[0])
-    item_reps[1].raw_path
-    Nanoc::Int::NotificationCenter.post(:visit_ended,   items[0])
-    dt.stop
-
-    assert_equal [items[1]], dt.objects_causing_outdatedness_of(items[0])
-  end
-
-  def test_path_should_generate_dependency
-    items = [
-      Nanoc::Int::Item.new('foo', {}, '/foo/'),
-      Nanoc::Int::Item.new('bar', {}, '/bar/')
-    ]
-    item_reps = [
-      Nanoc::Int::ItemRep.new(items[0], :default),
-      Nanoc::Int::ItemRep.new(items[1], :default)
-    ]
-
-    dt = Nanoc::Int::DependencyTracker.new(items)
-    dt.start
-    Nanoc::Int::NotificationCenter.post(:visit_started, items[0])
-    item_reps[1].path
-    Nanoc::Int::NotificationCenter.post(:visit_ended,   items[0])
-    dt.stop
-
-    assert_equal [items[1]], dt.objects_causing_outdatedness_of(items[0])
-  end
-
   def test_access_compiled_content_of_binary_item
     content = Nanoc::Int::BinaryContent.new(File.expand_path('content/somefile.dat'))
     item = Nanoc::Int::Item.new(content, {}, '/somefile/')

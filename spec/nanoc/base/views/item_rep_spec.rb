@@ -74,4 +74,86 @@ describe Nanoc::ItemRepView do
 
     it { should == described_class.hash ^ '/foo/'.hash ^ :jacques.hash }
   end
+
+  describe '#compiled_content' do
+    subject { view.compiled_content }
+
+    let(:view) { described_class.new(rep) }
+
+    let(:rep) do
+      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+        ir.compiled = true,
+        ir.content_snapshots = {
+          last: Nanoc::Int::TextualContent.new('Hallo'),
+        }
+      end
+    end
+
+    let(:item) do
+      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_ended, item).ordered
+    end
+
+    it { should eq('Hallo') }
+  end
+
+  describe '#path' do
+    subject { view.path }
+
+    let(:view) { described_class.new(rep) }
+
+    let(:rep) do
+      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+        ir.paths = {
+          last: '/about/',
+        }
+      end
+    end
+
+    let(:item) do
+      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_ended, item).ordered
+    end
+
+    it { should eq('/about/') }
+  end
+
+  describe '#raw_path' do
+    subject { view.raw_path }
+
+    let(:view) { described_class.new(rep) }
+
+    let(:rep) do
+      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+        ir.raw_paths = {
+          last: 'output/about/index.html',
+        }
+      end
+    end
+
+    let(:item) do
+      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        .with(:visit_ended, item).ordered
+    end
+
+    it { should eq('output/about/index.html') }
+  end
 end

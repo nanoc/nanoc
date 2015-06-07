@@ -105,10 +105,6 @@ module Nanoc::Int
         raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
-      # Notify
-      Nanoc::Int::NotificationCenter.post(:visit_started, item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
-
       # Get name of last pre-layout snapshot
       snapshot_name = params.fetch(:snapshot) { @content_snapshots[:pre] ? :pre : :last }
       is_moving = [:pre, :post, :last].include?(snapshot_name)
@@ -154,9 +150,6 @@ module Nanoc::Int
     #
     # @return [String] The item rep’s path
     def raw_path(params = {})
-      Nanoc::Int::NotificationCenter.post(:visit_started, item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
-
       snapshot_name = params[:snapshot] || :last
       @raw_paths[snapshot_name]
     end
@@ -171,9 +164,6 @@ module Nanoc::Int
     #
     # @return [String] The item rep’s path
     def path(params = {})
-      Nanoc::Int::NotificationCenter.post(:visit_started, item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
-
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]
     end
