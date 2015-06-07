@@ -8,18 +8,14 @@ end
 
 # @api private
 module Nanoc::Int
-  require_relative 'base/item_rep_writer'
-
   # Load helper classes
   autoload 'Context',              'nanoc/base/context'
   autoload 'Checksummer',          'nanoc/base/checksummer'
   autoload 'DirectedGraph',        'nanoc/base/directed_graph'
   autoload 'Errors',               'nanoc/base/errors'
   autoload 'Memoization',          'nanoc/base/memoization'
-  autoload 'NotificationCenter',   'nanoc/base/notification_center'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
   autoload 'Store',                'nanoc/base/store'
-  autoload 'TempFilenameFactory',  'nanoc/base/temp_filename_factory'
   autoload 'IdentifiableCollection', 'nanoc/base/identifiable_collection'
 
   # Load source data classes
@@ -49,4 +45,5 @@ module Nanoc::Int
 end
 
 require_relative 'base/entities'
+require_relative 'base/services'
 require_relative 'base/views'
