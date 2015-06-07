@@ -21,6 +21,11 @@ module Nanoc::Int
       @forced_outdated_status = ForcedOutdatedStatus.new
     end
 
+    def freeze
+      super
+      @children.freeze
+    end
+
     # Returns the rep with the given name.
     #
     # @param [Symbol] rep_name The name of the representation to return

@@ -22,6 +22,11 @@ module Nanoc
         @filename = filename
       end
 
+      def freeze
+        super
+        @filename.freeze
+      end
+
       # @param [String] content The uncompiled item content (if it is textual
       #   content) or the path to the filename containing the content (if this
       #   is binary content).
@@ -59,6 +64,11 @@ module Nanoc
       def initialize(string, params = {})
         super(params[:filename])
         @string = string
+      end
+
+      def freeze
+        super
+        @string.freeze
       end
 
       def binary?
