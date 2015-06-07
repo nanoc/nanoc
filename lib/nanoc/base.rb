@@ -26,7 +26,6 @@ module Nanoc::Int
   autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
   autoload 'Configuration',        'nanoc/base/source_data/configuration'
   autoload 'Item',                 'nanoc/base/source_data/item'
-  autoload 'Layout',               'nanoc/base/source_data/layout'
   autoload 'Site',                 'nanoc/base/source_data/site'
 
   # Load result data classes
