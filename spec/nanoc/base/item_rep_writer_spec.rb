@@ -6,17 +6,14 @@ describe Nanoc::Int::ItemRepWriter do
 
     let(:item_rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
-        ir.content = content
-        ir.temporary_filenames.replace(temporary_filenames)
+        ir.content_snapshots = content_snapshots
       end
     end
 
-    let(:content) do
-      { last: 'last content' }
-    end
-
-    let(:temporary_filenames) do
-      {}
+    let(:content_snapshots) do
+      {
+        last: Nanoc::Int::TextualContent.new('last content'),
+      }
     end
 
     subject { described_class.new.write(item_rep, raw_path) }
@@ -28,10 +25,14 @@ describe Nanoc::Int::ItemRepWriter do
     context 'binary item rep' do
       let(:orig_content) { Nanoc::Int::BinaryContent.new('/foo.dat') }
 
-      let(:temporary_filenames) { { last: 'input.dat' } }
+      let(:content_snapshots) do
+        {
+          last: Nanoc::Int::BinaryContent.new('/input.dat'),
+        }
+      end
 
       it 'copies' do
-        File.write(temporary_filenames[:last], 'binary stuff')
+        File.write(content_snapshots[:last].filename, 'binary stuff')
 
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
           .with(:will_write_rep, item_rep, 'output/blah.dat')
@@ -47,7 +48,7 @@ describe Nanoc::Int::ItemRepWriter do
         let(:old_mtime) { (Time.now - 600).to_i }
 
         before do
-          File.write(temporary_filenames[:last], 'binary stuff')
+          File.write(content_snapshots[:last].filename, 'binary stuff')
 
           FileUtils.mkdir_p('output')
           File.write('output/blah.dat', old_content)

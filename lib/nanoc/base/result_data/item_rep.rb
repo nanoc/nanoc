@@ -15,6 +15,8 @@ module Nanoc::Int
       #   available during the next operation.
       attr_accessor :assigns
 
+      attr_accessor :content_snapshots
+
       # @return [Boolean] true if this representation has already been
       #   compiled during the current or last compilation session; false
       #   otherwise
@@ -38,24 +40,6 @@ module Nanoc::Int
       # @api private
       attr_accessor :paths
 
-      # @return [Hash<Symbol,String>] A hash containing the paths to the
-      #   temporary _files_ that filters write binary content to. This is only
-      #   used when the item representation is binary. The keys correspond
-      #   with the snapshot names, and the values with the filename. When
-      #   writing the item representation, the file corresponding with the
-      #   requested snapshot (usually `:last`) will be copied from
-      #   `filenames[snapshot]` to `raw_paths[snapshot]`.
-      #
-      # @api private
-      attr_reader :temporary_filenames
-
-      # @return [Hash<Symbol,String>] A hash containing the content at all
-      #   snapshots. The keys correspond with the snapshot names, and the
-      #   values with the content.
-      #
-      # @api private
-      attr_accessor :content
-
       # Resets the compilation progress for this item representation. This is
       # necessary when an unmet dependency is detected during compilation.
       #
@@ -75,10 +59,6 @@ module Nanoc::Int
     # @return [Symbol] The representation's unique name
     attr_reader :name
 
-    # @return [Boolean] true if this rep is currently binary; false otherwise
-    attr_reader :binary
-    alias_method :binary?, :binary
-
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
@@ -95,9 +75,6 @@ module Nanoc::Int
       @item   = item
       @name   = name
 
-      # Set binary
-      @binary = @item.content.binary?
-
       # Set default attributes
       @raw_paths  = {}
       @paths      = {}
@@ -107,6 +84,10 @@ module Nanoc::Int
 
       # Reset flags
       @compiled = false
+    end
+
+    def binary?
+      @content_snapshots[:last].binary?
     end
 
     # Returns the compiled content from a given snapshot.
@@ -120,7 +101,7 @@ module Nanoc::Int
     #   default snapshot if no snapshot is specified)
     def compiled_content(params = {})
       # Make sure we're not binary
-      if item.content.binary?
+      if binary?
         raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
@@ -129,7 +110,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
 
       # Get name of last pre-layout snapshot
-      snapshot_name = params.fetch(:snapshot) { @content[:pre] ? :pre : :last }
+      snapshot_name = params.fetch(:snapshot) { @content_snapshots[:pre] ? :pre : :last }
       is_moving = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
@@ -146,12 +127,12 @@ module Nanoc::Int
         when :pre
           snapshot.nil? || !snapshot[-1]
         end
-      is_usable_snapshot = @content[snapshot_name] && (self.compiled? || !is_still_moving)
+      is_usable_snapshot = @content_snapshots[snapshot_name] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot
         raise Nanoc::Int::Errors::UnmetDependency.new(self)
       end
 
-      @content[snapshot_name]
+      @content_snapshots[snapshot_name].string
     end
 
     # Checks whether content exists at a given snapshot.
@@ -161,7 +142,7 @@ module Nanoc::Int
     #
     # @since 3.2.0
     def snapshot?(snapshot_name)
-      !@content[snapshot_name].nil?
+      !@content_snapshots[snapshot_name].nil?
     end
     alias_method :has_snapshot?, :snapshot?
 
@@ -219,9 +200,9 @@ module Nanoc::Int
       raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
 
       # Check whether filter can be applied
-      if klass.from_binary? && !self.binary?
+      if klass.from_binary? && !binary?
         raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(self, klass)
-      elsif !klass.from_binary? && self.binary?
+      elsif !klass.from_binary? && binary?
         raise Nanoc::Int::Errors::CannotUseTextualFilter.new(self, klass)
       end
 
@@ -233,23 +214,22 @@ module Nanoc::Int
         filter = klass.new(assigns)
 
         # Run filter
-        source = self.binary? ? temporary_filenames[:last] : @content[:last]
+        last = @content_snapshots[:last]
+        source = binary? ? last.filename : last.string
         result = filter.setup_and_run(source, filter_args)
         if klass.to_binary?
-          temporary_filenames[:last] = filter.output_filename
+          @content_snapshots[:last] = Nanoc::Int::BinaryContent.new(filter.output_filename)
         else
-          @content[:last] = result
-          @content[:last].freeze
+          @content_snapshots[:last] = Nanoc::Int::TextualContent.new(result)
         end
-        @binary = klass.to_binary?
 
         # Check whether file was written
-        if self.binary? && !File.file?(filter.output_filename)
+        if klass.to_binary? && !File.file?(filter.output_filename)
           raise "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
         end
 
         # Create snapshot
-        snapshot(@content[:post] ? :post : :pre, final: false) unless self.binary?
+        snapshot(@content_snapshots[:post] ? :post : :pre, final: false) unless binary?
       ensure
         # Notify end
         Nanoc::Int::NotificationCenter.post(:filtering_ended, self, filter_name)
@@ -276,10 +256,10 @@ module Nanoc::Int
     # @return [void]
     def layout(layout, filter_name, filter_args)
       # Check whether item can be laid out
-      raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(self) if self.binary?
+      raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(self) if binary?
 
       # Create "pre" snapshot
-      if @content[:post].nil?
+      if @content_snapshots[:post].nil?
         snapshot(:pre, final: true)
       end
 
@@ -300,7 +280,8 @@ module Nanoc::Int
         # Layout
         content = layout.content
         arg = content.binary? ? content.filename : content.string
-        @content[:last] = filter.setup_and_run(arg, filter_args)
+        res = filter.setup_and_run(arg, filter_args)
+        @content_snapshots[:last] = Nanoc::Int::TextualContent.new(res)
 
         # Create "post" snapshot
         snapshot(:post, final: false)
@@ -324,7 +305,7 @@ module Nanoc::Int
       is_final = params.fetch(:final, true)
 
       unless self.binary?
-        @content[snapshot_name] = @content[:last]
+        @content_snapshots[snapshot_name] = @content_snapshots[:last]
       end
 
       if snapshot_name == :pre && is_final
@@ -380,15 +361,8 @@ module Nanoc::Int
     private
 
     def initialize_content
-      # Initialize content and filenames
-      if self.binary?
-        @temporary_filenames = { last: @item.content.filename }
-        @content             = {}
-      else
-        @content             = { last: @item.content.string }
-        @content[:last].freeze
-        @temporary_filenames = {}
-      end
+      # FIXME: Where is :raw?
+      @content_snapshots = { last: @item.content }
     end
 
     def filter_named(name)
