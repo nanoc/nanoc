@@ -2,15 +2,7 @@ describe Nanoc::Int::ItemRepWriter do
   describe '#write' do
     let(:raw_path) { 'output/blah.dat' }
 
-    let(:item) do
-      Nanoc::Int::Item.new(
-        'blah blah blah', {}, '/',
-        binary: is_binary,
-        mtime: Time.now - 500,
-      )
-    end
-
-    let(:is_binary) { false }
+    let(:item) { Nanoc::Int::Item.new(orig_content, {}, '/') }
 
     let(:item_rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
@@ -34,7 +26,7 @@ describe Nanoc::Int::ItemRepWriter do
     end
 
     context 'binary item rep' do
-      let(:is_binary) { true }
+      let(:orig_content) { Nanoc::Int::BinaryContent.new('/foo.dat') }
 
       let(:temporary_filenames) { { last: 'input.dat' } }
 
@@ -83,7 +75,7 @@ describe Nanoc::Int::ItemRepWriter do
     end
 
     context 'textual item rep' do
-      let(:is_binary) { false }
+      let(:orig_content) { Nanoc::Int::TextualContent.new('Hallo Welt') }
 
       it 'writes' do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)

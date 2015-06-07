@@ -165,20 +165,21 @@ describe Nanoc::Int::Checksummer do
   context 'Nanoc::Int::Item' do
     let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Int::Item<content=String<asdf>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+    it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
 
     context 'binary' do
-      let(:obj) { Nanoc::Int::Item.new('/foo.md', { 'foo' => 'bar' }, '/foo.md', binary: true) }
+      let(:content) { Nanoc::Int::BinaryContent.new('/foo.md') }
+      let(:obj) { Nanoc::Int::Item.new(content, { 'foo' => 'bar' }, '/foo.md') }
 
       let(:mtime) { 200 }
       let(:data) { 'stuffs' }
 
       before do
-        File.write(obj.raw_filename, data)
-        File.utime(mtime, mtime, obj.raw_filename)
+        File.write(content.filename, data)
+        File.utime(mtime, mtime, content.filename)
       end
 
-      it { is_expected.to eql('Nanoc::Int::Item<content=FakeFS::Pathname<6-200>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+      it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::BinaryContent<FakeFS::Pathname<6-200>>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
     end
 
     context 'recursive attributes' do
@@ -186,21 +187,21 @@ describe Nanoc::Int::Checksummer do
         obj.attributes[:foo] = obj
       end
 
-      it { is_expected.to eql('Nanoc::Int::Item<content=String<asdf>,attributes=Hash<Symbol<foo>=Nanoc::Int::Item<recur>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+      it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=Nanoc::Int::Item<recur>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
     end
   end
 
   context 'Nanoc::Int::Layout' do
     let(:obj) { Nanoc::Int::Layout.new('asdf', { 'foo' => 'bar' }, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Int::Layout<content=String<asdf>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+    it { is_expected.to eql('Nanoc::Int::Layout<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
 
     context 'recursive attributes' do
       before do
         obj.attributes[:foo] = obj
       end
 
-      it { is_expected.to eql('Nanoc::Int::Layout<content=String<asdf>,attributes=Hash<Symbol<foo>=Nanoc::Int::Layout<recur>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+      it { is_expected.to eql('Nanoc::Int::Layout<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=Nanoc::Int::Layout<recur>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
     end
   end
 
@@ -208,14 +209,14 @@ describe Nanoc::Int::Checksummer do
     let(:obj) { Nanoc::ItemView.new(item) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::ItemView<Nanoc::Int::Item<content=String<asdf>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
+    it { is_expected.to eql('Nanoc::ItemView<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
   end
 
   context 'Nanoc::LayoutView' do
     let(:obj) { Nanoc::LayoutView.new(layout) }
     let(:layout) { Nanoc::Int::Layout.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::LayoutView<Nanoc::Int::Layout<content=String<asdf>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
+    it { is_expected.to eql('Nanoc::LayoutView<Nanoc::Int::Layout<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
   end
 
   context 'Nanoc::ConfigView' do
@@ -237,7 +238,7 @@ describe Nanoc::Int::Checksummer do
       end
     end
 
-    it { is_expected.to eql('Nanoc::ItemCollectionView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=String<foo>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=String<bar>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::ItemCollectionView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'other marshal-able classes' do

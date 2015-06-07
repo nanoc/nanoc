@@ -4,10 +4,6 @@ module Nanoc::Int
     # @return [Array<Nanoc::Int::ItemRep>] This item’s list of item reps
     attr_reader :reps
 
-    # @return [String] The filename pointing to the file containing this
-    #   item’s content
-    attr_reader :raw_filename
-
     # @return [Nanoc::Int::Item, nil] The parent item of this item. This can be
     #   nil even for non-root items.
     attr_accessor :parent
@@ -15,49 +11,14 @@ module Nanoc::Int
     # @return [Array<Nanoc::Int::Item>] The child items of this item
     attr_accessor :children
 
-    # Creates a new item with the given content or filename, attributes and
-    # identifier.
-    #
-    # @param [String] raw_content_or_raw_filename The uncompiled item content
-    #   (if it is a textual item) or the path to the filename containing the
-    #   content (if it is a binary item).
-    #
-    # @param [Hash] attributes A hash containing this item's attributes.
-    #
-    # @param [String] identifier This item's identifier.
-    #
-    # @param [Hash] params Extra parameters.
-    #
-    # @option params [Symbol, nil] :binary (true) Whether or not this item is
-    #   binary
-    def initialize(raw_content_or_raw_filename, attributes, identifier, params = {})
-      # Parse params
-      params = params.merge(binary: false) unless params.key?(:binary)
+    # @see Document#initialize
+    def initialize(content, attributes, identifier)
+      super
 
-      if raw_content_or_raw_filename.nil?
-        raise "attempted to create an item with no content/filename (identifier #{identifier})"
-      end
-
-      # Get type and raw content or raw filename
-      @is_binary = params[:binary]
-      if @is_binary
-        @raw_filename = raw_content_or_raw_filename
-      else
-        @raw_filename = attributes[:content_filename]
-        @raw_content  = raw_content_or_raw_filename
-      end
-
-      # Get rest of params
-      @attributes   = attributes.__nanoc_symbolize_keys_recursively
-      @identifier   = Nanoc::Identifier.from(identifier)
-
-      # Set mtime
-      @attributes.merge!(mtime: params[:mtime]) if params[:mtime]
-
-      @parent       = nil
-      @children     = []
-
-      @reps         = []
+      @parent = nil
+      @children = []
+      @reps = []
+      @forced_outdated_status = ForcedOutdatedStatus.new
     end
 
     # Returns the rep with the given name.
@@ -123,11 +84,6 @@ module Nanoc::Int
       rep.path
     end
 
-    # @return [Boolean] True if the item is binary; false if it is not
-    def binary?
-      @is_binary
-    end
-
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @api private
@@ -137,25 +93,28 @@ module Nanoc::Int
       [:item, identifier.to_s]
     end
 
-    # Prevents all further modifications to its attributes.
+    # Hack to allow a frozen item to still have modifiable frozen status.
     #
-    # @return [void]
-    def freeze
-      attributes.__nanoc_freeze_recursively
-      children.freeze
-      identifier.freeze
-      raw_filename.freeze if raw_filename
-      raw_content.freeze  if raw_content
+    # FIXME: Remove this.
+    class ForcedOutdatedStatus
+      attr_accessor :bool
+
+      def initialize
+        @bool = false
+      end
+
+      def freeze
+      end
     end
 
     # @api private
     def forced_outdated=(bool)
-      @forced_outdated = bool
+      @forced_outdated_status.bool = bool
     end
 
     # @api private
     def forced_outdated?
-      @forced_outdated || false
+      @forced_outdated_status.bool
     end
   end
 end

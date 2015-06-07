@@ -22,3 +22,27 @@ RSpec.configure do |c|
     end
   end
 end
+
+RSpec::Matchers.define :raise_frozen_error do |expected|
+  match do |actual|
+    begin
+      actual.call
+    rescue => e
+      unless e.is_a?(RuntimeError) || e.is_a?(TypeError)
+        false
+      else
+        e.message =~ /(^can't modify frozen |^unable to modify frozen object$)/
+      end
+    end
+  end
+
+  supports_block_expectations
+
+  failure_message do |actual|
+    'expected that proc would raise a frozen error'
+  end
+
+  failure_message_when_negated do |actual|
+    'expected that proc would not raise a frozen error'
+  end
+end

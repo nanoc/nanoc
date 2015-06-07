@@ -20,6 +20,11 @@ describe Nanoc::Identifier do
       it 'removes double slashes at end' do
         expect(described_class.new('/foo/bar//', type: :legacy).to_s).to eql('/foo/bar/')
       end
+
+      it 'freezes' do
+        identifier = described_class.new('/foo/bar/', type: :legacy)
+        expect { identifier.to_s << 'bbq' }.to raise_frozen_error
+      end
     end
 
     context 'full type' do
@@ -29,6 +34,11 @@ describe Nanoc::Identifier do
 
       it 'has proper string representation' do
         expect(described_class.new('/foo').to_s).to eql('/foo')
+      end
+
+      it 'freezes' do
+        identifier = described_class.new('/foo/bar')
+        expect { identifier.to_s << 'bbq' }.to raise_frozen_error
       end
     end
   end

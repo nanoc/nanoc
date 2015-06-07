@@ -92,7 +92,7 @@ module Nanoc::Helpers
         item: @item,
         item_rep: @item_rep,
         items: @items,
-        layout: Nanoc::LayoutView.new(layout),
+        layout: Nanoc::LayoutView.new(layout), # FIXME: this does not need to be rewrapped
         layouts: @layouts,
         config: @config,
         site: @site
@@ -114,7 +114,9 @@ module Nanoc::Helpers
         Nanoc::Int::NotificationCenter.post(:processing_started, layout)
 
         # Layout
-        result = filter.setup_and_run(layout.raw_content, filter_args)
+        content = layout.unwrap.content
+        arg = content.binary? ? content.filename : content.string
+        result = filter.setup_and_run(arg, filter_args)
 
         # Append to erbout if we have a block
         if block_given?
