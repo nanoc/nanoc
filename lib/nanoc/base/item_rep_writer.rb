@@ -11,13 +11,15 @@ module Nanoc::Int
       is_created = !File.file?(raw_path)
 
       # Notify
-      Nanoc::Int::NotificationCenter.post(:will_write_rep, item_rep, raw_path)
+      Nanoc::Int::NotificationCenter.post(
+        :will_write_rep, item_rep, raw_path)
 
-      if item_rep.binary?
-        temp_path = item_rep.temporary_filenames[:last]
+      content = item_rep.content_snapshots[:last]
+      if content.binary?
+        temp_path = content.filename
       else
         temp_path = temp_filename
-        File.write(temp_path, item_rep.content[:last])
+        File.write(temp_path, content.string)
       end
 
       # Check whether content was modified
@@ -27,7 +29,8 @@ module Nanoc::Int
       FileUtils.cp(temp_path, raw_path) if is_modified
 
       # Notify
-      Nanoc::Int::NotificationCenter.post(:rep_written, item_rep, raw_path, is_created, is_modified)
+      Nanoc::Int::NotificationCenter.post(
+        :rep_written, item_rep, raw_path, is_created, is_modified)
     end
 
     def temp_filename

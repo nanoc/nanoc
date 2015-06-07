@@ -97,10 +97,12 @@ describe Nanoc::Int::TextualContent do
     end
 
     it 'prevents changes to string' do
+      expect(content.string).to be_frozen
       expect { content.string << 'asdf' }.to raise_frozen_error
     end
 
     it 'prevents changes to filename' do
+      expect(content.filename).to be_frozen
       expect { content.filename << 'asdf' }.to raise_frozen_error
     end
   end
@@ -137,6 +139,7 @@ describe Nanoc::Int::BinaryContent do
     end
 
     it 'prevents changes' do
+      expect(content.filename).to be_frozen
       expect { content.filename << 'asdf' }.to raise_frozen_error
     end
   end
