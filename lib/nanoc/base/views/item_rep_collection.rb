@@ -44,5 +44,22 @@ module Nanoc
       res = @item_reps.find { |ir| ir.name == rep_name }
       res && Nanoc::ItemRepView.new(res)
     end
+
+    # Return the item rep with the given name, or raises an exception if there
+    # is no rep with the given name.
+    #
+    # @param [Symbol] rep_name
+    #
+    # @return [Nanoc::ItemRepView]
+    #
+    # @raise if no rep was found
+    def fetch(rep_name)
+      res = @item_reps.find { |ir| ir.name == rep_name }
+      if res
+        Nanoc::ItemRepView.new(res)
+      else
+        raise Nanoc::Int::Errors::Generic, "No rep named #{rep_name.inspect} was found."
+      end
+    end
   end
 end

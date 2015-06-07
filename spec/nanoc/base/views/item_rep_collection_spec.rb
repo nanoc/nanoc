@@ -61,4 +61,25 @@ describe Nanoc::ItemRepCollectionView do
       end
     end
   end
+
+  describe '#fetch' do
+    subject { view.fetch(name) }
+
+    context 'when not found' do
+      let(:name) { :donkey }
+
+      it 'raises' do
+        expect { subject }.to raise_error
+      end
+    end
+
+    context 'when found' do
+      let(:name) { :foo }
+
+      it 'returns a view' do
+        expect(subject.class).to eq(Nanoc::ItemRepView)
+        expect(subject.name).to eq(:foo)
+      end
+    end
+  end
 end
