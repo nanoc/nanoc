@@ -27,6 +27,7 @@ RSpec::Matchers.define :raise_frozen_error do |expected|
   match do |actual|
     begin
       actual.call
+      false
     rescue => e
       unless e.is_a?(RuntimeError) || e.is_a?(TypeError)
         false
