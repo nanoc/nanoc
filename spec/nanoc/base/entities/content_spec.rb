@@ -65,12 +65,20 @@ describe Nanoc::Int::TextualContent do
       end
     end
 
-    context 'with filename' do
+    context 'with absolute filename' do
       let(:content) { described_class.new('foo', filename: '/foo.md') }
 
       it 'sets string and filename' do
         expect(content.string).to eq('foo')
         expect(content.filename).to eq('/foo.md')
+      end
+    end
+
+    context 'with relative filename' do
+      let(:content) { described_class.new('foo', filename: 'foo.md') }
+
+      it 'errors' do
+        expect { content }.to raise_error
       end
     end
   end
@@ -105,11 +113,19 @@ describe Nanoc::Int::BinaryContent do
     it 'sets filename' do
       expect(content.filename).to eql('/foo.dat')
     end
+
+    context 'with relative filename' do
+      let(:content) { described_class.new('foo.dat') }
+
+      it 'errors' do
+        expect { content }.to raise_error
+      end
+    end
   end
 
   describe '#binary?' do
     subject { content.binary? }
-    let(:content) { described_class.new('foo') }
+    let(:content) { described_class.new('/foo.dat') }
     it { is_expected.to eql(true) }
   end
 

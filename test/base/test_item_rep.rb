@@ -529,7 +529,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   end
 
   def test_access_compiled_content_of_binary_item
-    content = Nanoc::Int::BinaryContent.new('content/somefile.dat')
+    content = Nanoc::Int::BinaryContent.new(File.expand_path('content/somefile.dat'))
     item = Nanoc::Int::Item.new(content, {}, '/somefile/')
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
     assert_raises(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem) do
@@ -542,7 +542,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Int::Item.new(
-      Nanoc::Int::BinaryContent.new('content/meow.dat'), {}, '/')
+      Nanoc::Int::BinaryContent.new(File.expand_path('content/meow.dat')), {}, '/')
 
     # Create rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
@@ -568,7 +568,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/meow.dat', 'w') { |io| io.write('asdf') }
     item = Nanoc::Int::Item.new(
-      Nanoc::Int::BinaryContent.new('content/meow.dat'), {}, '/')
+      Nanoc::Int::BinaryContent.new(File.expand_path('content/meow.dat')), {}, '/')
 
     # Create rep
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
