@@ -60,11 +60,10 @@ module Nanoc::Int
     #
     # @return [void]
     def apply_to(rep, params = {})
-      compiler = params.fetch(:compiler) do
-        raise ArgumentError, 'Required :compiler option is missing'
-      end
-      rep = Nanoc::Int::ItemRepProxy.new(rep, compiler) unless rep.proxy?
-      context = Nanoc::Int::RuleContext.new(rep: rep, compiler: compiler)
+      compiler = params.fetch(:compiler)
+      executor = params.fetch(:executor)
+
+      context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, compiler: compiler)
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 

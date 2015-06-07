@@ -10,6 +10,7 @@ module Nanoc::Int
     def initialize(params = {})
       rep = params.fetch(:rep)
       compiler = params.fetch(:compiler)
+      @_executor = params.fetch(:executor)
 
       super({
         item: Nanoc::ItemView.new(rep.item),
@@ -35,7 +36,7 @@ module Nanoc::Int
     #
     # @return [void]
     def filter(filter_name, filter_args = {})
-      rep.unwrap.filter(filter_name, filter_args)
+      @_executor.filter(rep.unwrap, filter_name, filter_args)
     end
 
     # Layouts the current representation (calls {Nanoc::Int::ItemRep#layout} with
@@ -47,8 +48,8 @@ module Nanoc::Int
     #   should be laid out with
     #
     # @return [void]
-    def layout(layout_identifier)
-      rep.unwrap.layout(layout_identifier)
+    def layout(layout_identifier, extra_filter_args = nil)
+      @_executor.layout(rep.unwrap, layout_identifier, extra_filter_args)
     end
 
     # Creates a snapshot of the current compiled item content. Calls
@@ -60,7 +61,7 @@ module Nanoc::Int
     #
     # @return [void]
     def snapshot(snapshot_name)
-      rep.unwrap.snapshot(snapshot_name)
+      @_executor.snapshot(rep.unwrap, snapshot_name)
     end
   end
 end

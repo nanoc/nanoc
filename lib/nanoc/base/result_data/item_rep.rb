@@ -10,11 +10,6 @@ module Nanoc::Int
     #
     # @api private
     module Private
-      # @return [Hash] A hash containing the assigns that will be used in the
-      #   next filter or layout operation. The keys (symbols) will be made
-      #   available during the next operation.
-      attr_accessor :assigns
-
       attr_accessor :content_snapshots
 
       # @return [Boolean] true if this representation has already been
@@ -78,7 +73,6 @@ module Nanoc::Int
       # Set default attributes
       @raw_paths  = {}
       @paths      = {}
-      @assigns    = {}
       @snapshots  = []
       initialize_content
 
@@ -168,173 +162,6 @@ module Nanoc::Int
       @paths[snapshot_name]
     end
 
-    # Runs the item content through the given filter with the given arguments.
-    # This method will replace the content of the `:last` snapshot with the
-    # filtered content of the last snapshot.
-    #
-    # This method is supposed to be called only in a compilation rule block
-    # (see {Nanoc::Int::CompilerDSL#compile}).
-    #
-    # @see Nanoc::Int::ItemRepProxy#filter
-    #
-    # @param [Symbol] filter_name The name of the filter to run the item
-    #   representations' content through
-    #
-    # @param [Hash] filter_args The filter arguments that should be passed to
-    #   the filter's #run method
-    #
-    # @return [void]
-    def filter(filter_name, filter_args = {})
-      # Get filter class
-      klass = filter_named(filter_name)
-      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-
-      # Check whether filter can be applied
-      if klass.from_binary? && !binary?
-        raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(self, klass)
-      elsif !klass.from_binary? && binary?
-        raise Nanoc::Int::Errors::CannotUseTextualFilter.new(self, klass)
-      end
-
-      begin
-        # Notify start
-        Nanoc::Int::NotificationCenter.post(:filtering_started, self, filter_name)
-
-        # Create filter
-        filter = klass.new(assigns)
-
-        # Run filter
-        last = @content_snapshots[:last]
-        source = binary? ? last.filename : last.string
-        result = filter.setup_and_run(source, filter_args)
-        if klass.to_binary?
-          @content_snapshots[:last] = Nanoc::Int::BinaryContent.new(filter.output_filename)
-        else
-          @content_snapshots[:last] = Nanoc::Int::TextualContent.new(result)
-        end
-
-        # Check whether file was written
-        if klass.to_binary? && !File.file?(filter.output_filename)
-          raise "The #{filter_name.inspect} filter did not write anything to the required output file, #{filter.output_filename}."
-        end
-
-        # Create snapshot
-        snapshot(@content_snapshots[:post] ? :post : :pre, final: false) unless binary?
-      ensure
-        # Notify end
-        Nanoc::Int::NotificationCenter.post(:filtering_ended, self, filter_name)
-      end
-    end
-
-    # Lays out the item using the given layout. This method will replace the
-    # content of the `:last` snapshot with the laid out content of the last
-    # snapshot.
-    #
-    # This method is supposed to be called only in a compilation rule block
-    # (see {Nanoc::Int::CompilerDSL#compile}).
-    #
-    # @see Nanoc::Int::ItemRepProxy#layout
-    #
-    # @param [Nanoc::Int::Layout] layout The layout to use
-    #
-    # @param [Symbol] filter_name The name of the filter to layout the item
-    #   representations' content with
-    #
-    # @param [Hash] filter_args The filter arguments that should be passed to
-    #   the filter's #run method
-    #
-    # @return [void]
-    def layout(layout, filter_name, filter_args)
-      # Check whether item can be laid out
-      raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(self) if binary?
-
-      # Create "pre" snapshot
-      if @content_snapshots[:post].nil?
-        snapshot(:pre, final: true)
-      end
-
-      # Create filter
-      klass = filter_named(filter_name)
-      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-      filter = klass.new(assigns.merge({ layout: layout }))
-
-      # Visit
-      Nanoc::Int::NotificationCenter.post(:visit_started, layout)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   layout)
-
-      begin
-        # Notify start
-        Nanoc::Int::NotificationCenter.post(:processing_started, layout)
-        Nanoc::Int::NotificationCenter.post(:filtering_started,  self, filter_name)
-
-        # Layout
-        content = layout.content
-        arg = content.binary? ? content.filename : content.string
-        res = filter.setup_and_run(arg, filter_args)
-        @content_snapshots[:last] = Nanoc::Int::TextualContent.new(res)
-
-        # Create "post" snapshot
-        snapshot(:post, final: false)
-      ensure
-        # Notify end
-        Nanoc::Int::NotificationCenter.post(:filtering_ended,  self, filter_name)
-        Nanoc::Int::NotificationCenter.post(:processing_ended, layout)
-      end
-    end
-
-    # Creates a snapshot of the current compiled item content.
-    #
-    # @param [Symbol] snapshot_name The name of the snapshot to create
-    #
-    # @option params [Boolean] :final (true) True if this is the final time
-    #   the snapshot will be updated; false if it is a non-final moving
-    #   snapshot (such as `:pre`, `:post` or `:last`)
-    #
-    # @return [void]
-    def snapshot(snapshot_name, params = {})
-      is_final = params.fetch(:final, true)
-
-      unless self.binary?
-        @content_snapshots[snapshot_name] = @content_snapshots[:last]
-      end
-
-      if snapshot_name == :pre && is_final
-        snapshots << [:pre, true]
-      end
-
-      if is_final
-        raw_path = raw_path(snapshot: snapshot_name)
-        if raw_path
-          ItemRepWriter.new.write(self, raw_path)
-        end
-      end
-    end
-
-    # Returns a recording proxy that is used for determining whether the
-    # compilation has changed, and thus whether the item rep needs to be
-    # recompiled.
-    #
-    # @api private
-    #
-    # @return [Nanoc::Int::ItemRepRecorderProxy] The recording proxy
-    def to_recording_proxy
-      Nanoc::Int::ItemRepRecorderProxy.new(self)
-    end
-
-    # Returns false because this item is not yet a proxy, and therefore does
-    # need to be wrapped in a proxy during compilation.
-    #
-    # @api private
-    #
-    # @return [false]
-    #
-    # @see Nanoc::Int::ItemRepRecorderProxy#proxy?
-    # @see Nanoc::Int::ItemRepProxy#proxy?
-    def proxy?
-      false
-    end
-    alias_method :is_proxy?, :proxy?
-
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @api private
@@ -353,10 +180,6 @@ module Nanoc::Int
     def initialize_content
       # FIXME: Where is :raw?
       @content_snapshots = { last: @item.content }
-    end
-
-    def filter_named(name)
-      Nanoc::Filter.named(name)
     end
   end
 end

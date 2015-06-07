@@ -33,8 +33,6 @@ module Nanoc::Int
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
   autoload 'CompilerDSL',          'nanoc/base/compilation/compiler_dsl'
   autoload 'DependencyTracker',    'nanoc/base/compilation/dependency_tracker'
-  autoload 'ItemRepProxy',         'nanoc/base/compilation/item_rep_proxy'
-  autoload 'ItemRepRecorderProxy', 'nanoc/base/compilation/item_rep_recorder_proxy'
   autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'
   autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
   autoload 'Rule',                 'nanoc/base/compilation/rule'

@@ -179,10 +179,10 @@ module Nanoc::Int
     #
     # @return [Array] The rule memory for the given item representation
     def new_rule_memory_for_rep(rep)
-      recording_proxy = rep.to_recording_proxy
-      compilation_rule_for(rep).apply_to(recording_proxy, compiler: @compiler)
-      recording_proxy.rule_memory << [:write, rep.path]
-      make_rule_memory_serializable(recording_proxy.rule_memory)
+      executor = Nanoc::Int::RecordingExecutor.new
+      compilation_rule_for(rep).apply_to(rep, executor: executor, compiler: @compiler)
+      executor.record_write(rep, rep.path)
+      make_rule_memory_serializable(executor.rule_memory)
     end
     memoize :new_rule_memory_for_rep
 
