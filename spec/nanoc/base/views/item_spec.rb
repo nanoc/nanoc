@@ -62,7 +62,7 @@ describe Nanoc::ItemView do
   end
 
   describe '#compiled_content' do
-    subject { view.compiled_content }
+    subject { view.compiled_content(params) }
 
     let(:view) { described_class.new(item) }
 
@@ -73,26 +73,67 @@ describe Nanoc::ItemView do
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true,
+        ir.snapshots = [[:last, false], [:specific, true]]
         ir.content_snapshots = {
-          last: Nanoc::Int::TextualContent.new('Hallo'),
+          last: Nanoc::Int::TextualContent.new('Default Hallo'),
+          specific: Nanoc::Int::TextualContent.new('Specific Hallo'),
         }
       end
     end
 
     before do
       item.reps << rep
-
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_ended, item).ordered
     end
 
-    it { should eq('Hallo') }
+    context 'requesting implicit default rep' do
+      let(:params) { {} }
+
+      before do
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_started, item).ordered
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_ended, item).ordered
+      end
+
+      it { is_expected.to eq('Default Hallo') }
+
+      context 'requesting explicit snapshot' do
+        let(:params) { { snapshot: :specific } }
+
+        it { is_expected.to eq('Specific Hallo') }
+      end
+    end
+
+    context 'requesting explicit default rep' do
+      let(:params) { { rep: :default } }
+
+      before do
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_started, item).ordered
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_ended, item).ordered
+      end
+
+      it { is_expected.to eq('Default Hallo') }
+
+      context 'requesting explicit snapshot' do
+        let(:params) { { snapshot: :specific } }
+
+        it { is_expected.to eq('Specific Hallo') }
+      end
+    end
+
+    context 'requesting other rep' do
+      let(:params) { { rep: :other } }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error
+      end
+    end
   end
 
   describe '#path' do
-    subject { view.path }
+    subject { view.path(params) }
 
     let(:view) { described_class.new(item) }
 
@@ -104,20 +145,60 @@ describe Nanoc::ItemView do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.paths = {
           last: '/about/',
+          specific: '/about.txt',
         }
       end
     end
 
     before do
       item.reps << rep
-
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_ended, item).ordered
     end
 
-    it { should eq('/about/') }
+    context 'requesting implicit default rep' do
+      let(:params) { {} }
+
+      before do
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_started, item).ordered
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_ended, item).ordered
+      end
+
+      it { is_expected.to eq('/about/') }
+
+      context 'requesting explicit snapshot' do
+        let(:params) { { snapshot: :specific } }
+
+        it { is_expected.to eq('/about.txt') }
+      end
+    end
+
+    context 'requesting explicit default rep' do
+      let(:params) { { rep: :default } }
+
+      before do
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_started, item).ordered
+        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+          .with(:visit_ended, item).ordered
+      end
+
+      it { is_expected.to eq('/about/') }
+
+      context 'requesting explicit snapshot' do
+        let(:params) { { snapshot: :specific } }
+
+        it { is_expected.to eq('/about.txt') }
+      end
+    end
+
+    context 'requesting other rep' do
+      let(:params) { { rep: :other } }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error
+      end
+    end
   end
 
   describe '#binary?' do

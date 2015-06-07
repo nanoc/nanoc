@@ -15,10 +15,7 @@ module Nanoc
     #
     # @return [String] The content of the given rep at the given snapshot.
     def compiled_content(params = {})
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
-
-      unwrap.compiled_content(params)
+      reps.fetch(params.fetch(:rep, :default)).compiled_content(params)
     end
 
     # Returns the item path, as used when being linked to. It starts
@@ -35,10 +32,7 @@ module Nanoc
     #
     # @return [String] The item’s path.
     def path(params = {})
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
-
-      unwrap.path(params)
+      reps.fetch(params.fetch(:rep, :default)).path(params)
     end
 
     # Returns the children of this item. For items with identifiers that have
