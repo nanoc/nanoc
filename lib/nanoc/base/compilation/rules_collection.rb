@@ -219,7 +219,7 @@ module Nanoc::Int
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_for(rep)
       new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
-        [e[1], e[2].fetch(:final) { true }]
+        Nanoc::Int::SnapshotDef.new(e[1], e[2].fetch(:final, true))
       end
     end
 

@@ -104,8 +104,8 @@ module Nanoc::Int
       is_moving = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
-      snapshot = snapshots.find { |s| s.first == snapshot_name }
-      if !is_moving && (snapshot.nil? || snapshot[-1] == false)
+      snapshot = snapshots.find { |s| s.name == snapshot_name }
+      if !is_moving && (snapshot.nil? || !snapshot.final?)
         raise Nanoc::Int::Errors::NoSuchSnapshot.new(self, snapshot_name)
       end
 
@@ -115,7 +115,7 @@ module Nanoc::Int
         when :post, :last
           true
         when :pre
-          snapshot.nil? || !snapshot[-1]
+          snapshot.nil? || !snapshot.final?
         end
       is_usable_snapshot = @content_snapshots[snapshot_name] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot

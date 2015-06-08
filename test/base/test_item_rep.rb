@@ -102,7 +102,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
-    rep.snapshots = [[:pre, true]]
+    rep.snapshots = [Nanoc::Int::SnapshotDef.new(:pre, true)]
     rep.content_snapshots = {
       pre: Nanoc::Int::TextualContent.new('pre!'),
       post: Nanoc::Int::TextualContent.new('post!'),

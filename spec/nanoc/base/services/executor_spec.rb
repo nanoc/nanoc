@@ -373,7 +373,9 @@ describe Nanoc::Int::Executor do
         it 'create a new snapshot' do
           executor.snapshot(rep, :pre)
 
-          expect(rep.snapshots).to include([:pre, true])
+          expect(rep.snapshots.size).to eq(1)
+          expect(rep.snapshots[0].name).to eq(:pre)
+          expect(rep.snapshots[0]).to be_final
         end
       end
 
