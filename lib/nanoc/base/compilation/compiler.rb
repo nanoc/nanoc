@@ -228,7 +228,7 @@ module Nanoc::Int
 
         rules.each_pair do |snapshot, rule|
           # Get basic path by applying matching rule
-          basic_path = rule.apply_to(rep, compiler: self)
+          basic_path = rule.apply_to(rep, executor: nil, compiler: self)
           next if basic_path.nil?
           if basic_path !~ %r{^/}
             raise "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
@@ -361,6 +361,8 @@ module Nanoc::Int
     #
     # @return [void]
     def compile_rep(rep)
+      executor = Nanoc::Int::Executor.new(self)
+
       Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
       Nanoc::Int::NotificationCenter.post(:processing_started,  rep)
       Nanoc::Int::NotificationCenter.post(:visit_started,       rep.item)
@@ -374,11 +376,11 @@ module Nanoc::Int
         rep.content_snapshots = compiled_content_cache[rep]
       else
         # Recalculate content
-        rep.snapshot(:raw)
-        rep.snapshot(:pre, final: false)
-        rules_collection.compilation_rule_for(rep).apply_to(rep, compiler: self)
-        rep.snapshot(:post) if rep.has_snapshot?(:post)
-        rep.snapshot(:last)
+        executor.snapshot(rep, :raw)
+        executor.snapshot(rep, :pre, final: false)
+        rules_collection.compilation_rule_for(rep).apply_to(rep, executor: executor, compiler: self)
+        executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
+        executor.snapshot(rep, :last)
       end
 
       rep.compiled = true

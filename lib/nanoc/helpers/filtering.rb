@@ -31,7 +31,19 @@ module Nanoc::Helpers
       # Find filter
       klass = Nanoc::Filter.named(filter_name)
       raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-      filter = klass.new(@item_rep.unwrap.assigns)
+
+      # Create filter
+      assigns = {
+        item: @item,
+        rep: @rep,
+        item_rep: @item_rep,
+        items: @items,
+        layouts: @layouts,
+        config: @config,
+        site: @site,
+        content: @content,
+      }
+      filter = klass.new(assigns)
 
       # Filter captured data
       Nanoc::Int::NotificationCenter.post(:filtering_started, @item_rep.unwrap, filter_name)
