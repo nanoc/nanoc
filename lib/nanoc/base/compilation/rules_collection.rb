@@ -217,7 +217,7 @@ module Nanoc::Int
     # @return [Array] A list of snapshots, represented as arrays where the
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
-    def snapshots_for(rep)
+    def snapshots_defs_for(rep)
       new_rule_memory_for_rep(rep).select { |e| e[0] == :snapshot }.map do |e|
         Nanoc::Int::SnapshotDef.new(e[1], e[2].fetch(:final, true))
       end

@@ -370,12 +370,12 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Int::TextualContent.new('Donkey Power') }
 
       context 'snapshot is :pre' do
-        it 'create a new snapshot' do
+        it 'create a new snapshot def' do
           executor.snapshot(rep, :pre)
 
-          expect(rep.snapshots.size).to eq(1)
-          expect(rep.snapshots[0].name).to eq(:pre)
-          expect(rep.snapshots[0]).to be_final
+          expect(rep.snapshot_defs.size).to eq(1)
+          expect(rep.snapshot_defs[0].name).to eq(:pre)
+          expect(rep.snapshot_defs[0]).to be_final
         end
       end
 

@@ -100,7 +100,7 @@ module Nanoc
         end
 
         if snapshot_name == :pre && is_final
-          rep.snapshots << Nanoc::Int::SnapshotDef.new(:pre, true)
+          rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:pre, true)
         end
 
         if is_final

@@ -320,7 +320,7 @@ module Nanoc::Int
 
       # Assign snapshots
       reps.each do |rep|
-        rep.snapshots = rules_collection.snapshots_for(rep)
+        rep.snapshot_defs = rules_collection.snapshots_defs_for(rep)
       end
 
       # Attempt to compile all active reps

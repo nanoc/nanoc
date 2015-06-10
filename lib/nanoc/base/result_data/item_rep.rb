@@ -54,10 +54,7 @@ module Nanoc::Int
     # @return [Symbol] The representation's unique name
     attr_reader :name
 
-    # @return [Array] A list of snapshots, represented as arrays where the
-    #   first element is the snapshot name (a Symbol) and the last element is
-    #   a Boolean indicating whether the snapshot is final or not
-    attr_accessor :snapshots
+    attr_accessor :snapshot_defs
 
     # Creates a new item representation for the given item.
     #
@@ -73,7 +70,7 @@ module Nanoc::Int
       # Set default attributes
       @raw_paths  = {}
       @paths      = {}
-      @snapshots  = []
+      @snapshot_defs = []
       initialize_content
 
       # Reset flags
@@ -104,8 +101,8 @@ module Nanoc::Int
       is_moving = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
-      snapshot = snapshots.find { |s| s.name == snapshot_name }
-      if !is_moving && (snapshot.nil? || !snapshot.final?)
+      snapshot_def = snapshot_defs.find { |sd| sd.name == snapshot_name }
+      if !is_moving && (snapshot_def.nil? || !snapshot_def.final?)
         raise Nanoc::Int::Errors::NoSuchSnapshot.new(self, snapshot_name)
       end
 
@@ -115,7 +112,7 @@ module Nanoc::Int
         when :post, :last
           true
         when :pre
-          snapshot.nil? || !snapshot.final?
+          snapshot_def.nil? || !snapshot_def.final?
         end
       is_usable_snapshot = @content_snapshots[snapshot_name] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot
