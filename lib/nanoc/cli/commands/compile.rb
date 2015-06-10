@@ -396,7 +396,7 @@ module Nanoc::CLI::Commands
         Nanoc::CLI::Commands::Compile::DebugPrinter,
         Nanoc::CLI::Commands::Compile::TimingRecorder,
         Nanoc::CLI::Commands::Compile::GCController,
-        Nanoc::CLI::Commands::Compile::FileActionPrinter
+        Nanoc::CLI::Commands::Compile::FileActionPrinter,
       ]
     end
 

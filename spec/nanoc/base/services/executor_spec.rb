@@ -90,7 +90,7 @@ describe Nanoc::Int::Executor do
         File.write('/foo.dat', 'Foo Data')
 
         filter_class = Class.new(::Nanoc::Filter) do
-          type :binary => :text
+          type binary: :text
 
           def run(filename, _params = {})
             "Compiled data for #{filename}"
@@ -117,7 +117,7 @@ describe Nanoc::Int::Executor do
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
         filter_class = Class.new(::Nanoc::Filter) do
-          type :text => :binary
+          type text: :binary
 
           def run(content, _params = {})
             File.write(output_filename, "Binary #{content}")
@@ -149,7 +149,7 @@ describe Nanoc::Int::Executor do
         filter_class = Class.new(::Nanoc::Filter) do
           type :binary
 
-          def run(content, _params = {})
+          def run(_content, _params = {})
           end
         end
 
@@ -185,7 +185,7 @@ describe Nanoc::Int::Executor do
         filter_class = Class.new(::Nanoc::Filter) do
           type :binary
 
-          def run(filename, _params = {})
+          def run(_filename, _params = {})
           end
         end
 
@@ -381,7 +381,7 @@ describe Nanoc::Int::Executor do
 
       context 'raw path' do
         before do
-          rep.raw_paths = { :something => 'output/donkey.md' }
+          rep.raw_paths = { something: 'output/donkey.md' }
         end
 
         it 'writes' do

@@ -565,7 +565,7 @@ XML
       actual_content = filter.setup_and_run(raw_content, {
         type: :xml,
         namespaces: { ex: 'http://example.org' },
-        select: ['ex:a/@href']
+        select: ['ex:a/@href'],
       })
 
       assert_match(/<foo xmlns="http:\/\/example.org">/,    actual_content)

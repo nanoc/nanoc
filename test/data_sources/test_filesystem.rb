@@ -40,7 +40,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     output_expected = {
       './foo'       => ['yaml', ['html']],
       './bar.entry' => [nil,    ['html']],
-      './foo/qux'   => ['yaml', [nil]]
+      './foo/qux'   => ['yaml', [nil]],
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -67,7 +67,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     output_expected = {
       './foo'       => ['yaml', ['html']],
       './bar'       => [nil,    ['html.erb']],
-      './foo/qux'   => ['yaml', [nil]]
+      './foo/qux'   => ['yaml', [nil]],
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -89,7 +89,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     expected = {
       './aaa/foo' => [nil, ['html']],
       './bbb/foo' => [nil, ['html']],
-      './ccc/foo' => [nil, ['html']]
+      './ccc/foo' => [nil, ['html']],
     }
     assert_equal expected, data_source.send(:all_split_files_in, '.')
   end
@@ -146,7 +146,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       '/foo/bar.xyz.html' => '/foo/bar.xyz',
       '/foo/bar/'         => '/foo/bar/',
       '/foo/bar.xyz/'     => '/foo/bar.xyz/',
-      '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/'
+      '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/',
     }
 
     # Check
@@ -176,7 +176,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       '/foo/bar.xyz.html' => '/foo/bar',
       '/foo/bar/'         => '/foo/bar/',
       '/foo/bar.xyz/'     => '/foo/bar.xyz/',
-      '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/'
+      '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/',
     }
 
     # Check
@@ -206,7 +206,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       '/foo/bar.xyz.html' => '.html',
       '/foo/bar/'         => '',
       '/foo/bar.xyz/'     => '',
-      '/foo.xyz/bar.xyz/' => ''
+      '/foo.xyz/bar.xyz/' => '',
     }
 
     # Check
@@ -236,7 +236,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       '/foo/bar.xyz.html' => '.xyz.html',
       '/foo/bar/'         => '',
       '/foo/bar.xyz/'     => '',
-      '/foo.xyz/bar.xyz/' => ''
+      '/foo.xyz/bar.xyz/' => '',
     }
 
     # Check

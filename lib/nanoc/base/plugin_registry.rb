@@ -183,7 +183,7 @@ module Nanoc::Int
             plugins << {
               class: klass,
               superclass: superclass,
-              identifiers: [identifier]
+              identifiers: [identifier],
             }
           end
         end

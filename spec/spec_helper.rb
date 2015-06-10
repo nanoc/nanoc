@@ -23,7 +23,7 @@ RSpec.configure do |c|
   end
 end
 
-RSpec::Matchers.define :raise_frozen_error do |expected|
+RSpec::Matchers.define :raise_frozen_error do |_expected|
   match do |actual|
     begin
       actual.call
@@ -39,11 +39,11 @@ RSpec::Matchers.define :raise_frozen_error do |expected|
 
   supports_block_expectations
 
-  failure_message do |actual|
+  failure_message do |_actual|
     'expected that proc would raise a frozen error'
   end
 
-  failure_message_when_negated do |actual|
+  failure_message_when_negated do |_actual|
     'expected that proc would not raise a frozen error'
   end
 end

@@ -53,7 +53,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
         'test 3',
         { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html', mtime: File.mtime('foo/a/b/c.html') },
         '/a/b/c/',
-      )
+      ),
     ]
     actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0].string }
 
@@ -171,7 +171,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       '/foo'            => '/foo/',
       '/foo.html'       => '/foo/',
       '/foo/index.html' => '/foo/',
-      '/foo.entry.html' => '/foo.entry/'
+      '/foo.entry.html' => '/foo.entry/',
     }
 
     # Check
@@ -193,7 +193,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       '/foo'            => '/foo/',
       '/foo.html'       => '/foo/',
       '/foo/index.html' => '/foo/',
-      '/foo.html.erb'   => '/foo/'
+      '/foo.html.erb'   => '/foo/',
     }
 
     # Check
@@ -217,7 +217,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       'foo/qux.bar.qux.yaml' => '/foo/qux.bar.qux/',
       'foo/index.yaml'       => '/foo/',
       'index.yaml'           => '/',
-      'foo/blah_index.yaml'  => '/foo/blah_index/'
+      'foo/blah_index.yaml'  => '/foo/blah_index/',
     }
 
     data_source = new_data_source(allow_periods_in_identifiers: true)
@@ -226,7 +226,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
-          data_source.instance_eval { identifier_for_filename(filename) }
+          data_source.instance_eval { identifier_for_filename(filename) },
         )
       end
     end
@@ -243,7 +243,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       'foo/qux.bar.qux.yaml' => '/foo/qux/',
       'foo/index.yaml'       => '/foo/',
       'index.yaml'           => '/',
-      'foo/blah_index.yaml'  => '/foo/blah_index/'
+      'foo/blah_index.yaml'  => '/foo/blah_index/',
     }
 
     data_source = new_data_source
@@ -252,7 +252,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
       [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
-          data_source.instance_eval { identifier_for_filename(filename) }
+          data_source.instance_eval { identifier_for_filename(filename) },
         )
       end
     end
@@ -337,7 +337,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :meta_filename    => 'foo/a/b/c.yaml',
           :extension        => nil,
           :file             => nil,
-          mtime: File.mtime('foo/a/b/c.yaml')
+          mtime: File.mtime('foo/a/b/c.yaml'),
         },
         '/a/b/c/',
       ),
@@ -349,7 +349,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :meta_filename    => 'foo/b.c.yaml',
           :extension        => 'html',
           :file             => File.open('foo/b.c.html'),
-          mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml')
+          mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml'),
         },
         '/b.c/',
       ),
@@ -360,10 +360,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           meta_filename: nil,
           extension: 'html',
           file: File.open('foo/car.html'),
-          mtime: File.mtime('foo/car.html')
+          mtime: File.mtime('foo/car.html'),
         },
         '/car/',
-      )
+      ),
     ]
 
     # Get actual output ordered by identifier
@@ -419,7 +419,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :meta_filename    => 'foo/a/b/c.yaml',
           :extension        => nil,
           :file             => nil,
-          mtime: File.mtime('foo/a/b/c.yaml')
+          mtime: File.mtime('foo/a/b/c.yaml'),
         },
         '/a/b/c/',
       ),
@@ -431,7 +431,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           :meta_filename    => 'foo/b.yaml',
           :extension        => 'html.erb',
           :file             => File.open('foo/b.html.erb'),
-          mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml')
+          mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml'),
         },
         '/b/',
       ),
@@ -442,10 +442,10 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
           meta_filename: nil,
           extension: 'html',
           file: File.open('foo/car.html'),
-          mtime: File.mtime('foo/car.html')
+          mtime: File.mtime('foo/car.html'),
         },
         '/car/',
-      )
+      ),
     ]
 
     # Get actual output ordered by identifier

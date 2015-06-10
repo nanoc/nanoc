@@ -219,7 +219,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         level: level,
         action: action,
         path: path,
-        duration: duration
+        duration: duration,
       }
     end
 

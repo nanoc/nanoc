@@ -72,7 +72,7 @@ describe Nanoc::ItemView do
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
-        ir.compiled = true,
+        ir.compiled = true
         ir.snapshot_defs = [
           Nanoc::Int::SnapshotDef.new(:last, false),
           Nanoc::Int::SnapshotDef.new(:specific, true),

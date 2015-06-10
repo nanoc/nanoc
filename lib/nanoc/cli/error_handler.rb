@@ -207,7 +207,7 @@ module Nanoc::CLI
       'redcloth'       => 'RedCloth',
       'rubypants'      => 'rubypants',
       'sass'           => 'sass',
-      'w3c_validators' => 'w3c_validators'
+      'w3c_validators' => 'w3c_validators',
     }
 
     # Attempts to find a resolution for the given error, or nil if no

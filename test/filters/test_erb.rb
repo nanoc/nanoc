@@ -28,7 +28,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
     filter = ::Nanoc::Filters::ERB.new({
       item: item,
       item_rep: item_rep,
-      location: 'a cheap motel'
+      location: 'a cheap motel',
     })
 
     # Run filter

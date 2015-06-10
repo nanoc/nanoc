@@ -85,7 +85,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
         # Run
         fog.run
       ensure
-        # HACK :(
+        # HACK: (
         ::Fog.instance_eval { @mocking = false }
       end
     end

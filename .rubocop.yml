@@ -1,3 +1,10 @@
+# ----- CONFIGURED -----
+
+TrailingComma:
+  EnforcedStyleForMultiline: comma
+
+
+
 # ----- TO ENABLE LATER -----
 # To make merges easier, I’ve decided to enable these at a later point in time.
 
@@ -131,11 +138,6 @@ SignalException:
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
 TrivialAccessors:
-  Enabled: false
-
-# Trailing commas improve diffs. One could argue that diff algorithms should be
-# able to handle this, but they cannot, so this is disabled.
-TrailingComma:
   Enabled: false
 
 # This does not always semantically make sense.

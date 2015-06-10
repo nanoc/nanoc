@@ -32,7 +32,7 @@ module Nanoc::CLI::Commands
       PLUGIN_CLASS_ORDER.each do |superclass|
         plugins_with_this_superclass = {
           builtin: plugins_builtin.select { |p| p[:superclass] == superclass },
-          custom: plugins_custom.select  { |p| p[:superclass] == superclass }
+          custom: plugins_custom.select  { |p| p[:superclass] == superclass },
         }
 
         # Print kind
@@ -58,7 +58,7 @@ module Nanoc::CLI::Commands
             puts format(
               "    %-#{max_identifiers_length}s (%s)",
               plugin[:identifiers].join(', '),
-              plugin[:class].to_s.sub(/^::/, '')
+              plugin[:class].to_s.sub(/^::/, ''),
             )
           end
         end
@@ -72,13 +72,13 @@ module Nanoc::CLI::Commands
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,
       Nanoc::DataSource,
-      Nanoc::Extra::Deployer
+      Nanoc::Extra::Deployer,
     ] unless defined? PLUGIN_CLASS_ORDER
 
     PLUGIN_CLASSES = {
       Nanoc::Filter          => 'Filters',
       Nanoc::DataSource      => 'Data Sources',
-      Nanoc::Extra::Deployer => 'Deployers'
+      Nanoc::Extra::Deployer => 'Deployers',
     } unless defined? PLUGIN_CLASSES
 
     def name_for_plugin_class(klass)

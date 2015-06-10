@@ -11,7 +11,7 @@ module ::Nanoc::Extra
       'img' => :src,
       'link' => :href,
       'script' => :src,
-      'video' => :src
+      'video' => :src,
     }
 
     def initialize(filenames, mode = nil)

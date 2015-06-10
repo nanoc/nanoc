@@ -32,7 +32,7 @@ module Nanoc::Extra::Deployers
       '--compress',
       '--exclude=".hg"',
       '--exclude=".svn"',
-      '--exclude=".git"'
+      '--exclude=".git"',
     ]
 
     # @see Nanoc::Extra::Deployer#run

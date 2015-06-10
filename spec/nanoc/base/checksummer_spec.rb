@@ -123,7 +123,7 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Time' do
-    let(:obj) { Time.at(111223) }
+    let(:obj) { Time.at(111_223) }
     it { is_expected.to eql('Time<111223>') }
   end
 

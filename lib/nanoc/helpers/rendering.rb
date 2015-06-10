@@ -95,7 +95,7 @@ module Nanoc::Helpers
         layout: layout,
         layouts: @layouts,
         config: @config,
-        site: @site
+        site: @site,
       }.merge(other_assigns)
 
       # Get filter name

@@ -5,7 +5,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a href="/foo/">Foo</a>',
-      link_to('Foo', '/foo/')
+      link_to('Foo', '/foo/'),
     )
   end
 
@@ -17,7 +17,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to('Bar', rep)
+      link_to('Bar', rep),
     )
   end
 
@@ -29,7 +29,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to('Bar', item)
+      link_to('Bar', item),
     )
   end
 
@@ -37,7 +37,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a title="Dis mai foo!" href="/foo/">Foo</a>',
-      link_to('Foo', '/foo/', title: 'Dis mai foo!')
+      link_to('Foo', '/foo/', title: 'Dis mai foo!'),
     )
   end
 
@@ -45,7 +45,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a title="Foo &amp; Bar" href="/foo&amp;bar/">Foo &amp; Bar</a>',
-      link_to('Foo &amp; Bar', '/foo&bar/', title: 'Foo & Bar')
+      link_to('Foo &amp; Bar', '/foo&bar/', title: 'Foo & Bar'),
     )
   end
 
@@ -68,7 +68,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<span class="active" title="You\'re here.">Bar</span>',
-      link_to_unless_current('Bar', @item_rep)
+      link_to_unless_current('Bar', @item_rep),
     )
   ensure
     @item = nil
@@ -82,7 +82,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Check
     assert_equal(
       '<a href="/abc/xyz/">Bar</a>',
-      link_to_unless_current('Bar', '/abc/xyz/')
+      link_to_unless_current('Bar', '/abc/xyz/'),
     )
   end
 
@@ -94,7 +94,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Test
     assert_equal(
       './',
-      relative_path_to('/foo/bar/baz/')
+      relative_path_to('/foo/bar/baz/'),
     )
   end
 
@@ -106,7 +106,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Test
     assert_equal(
       '../../../',
-      relative_path_to('/')
+      relative_path_to('/'),
     )
   end
 
@@ -118,7 +118,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Test
     assert_equal(
       '../../quux',
-      relative_path_to('/foo/quux')
+      relative_path_to('/foo/quux'),
     )
   end
 
@@ -130,7 +130,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Test
     assert_equal(
       '../../quux/',
-      relative_path_to('/foo/quux/')
+      relative_path_to('/foo/quux/'),
     )
   end
 
@@ -146,7 +146,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Test
     assert_equal(
       '../../quux/',
-      relative_path_to(other_item_rep)
+      relative_path_to(other_item_rep),
     )
   end
 
@@ -162,7 +162,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     # Test
     assert_equal(
       '../../quux/',
-      relative_path_to(other_item)
+      relative_path_to(other_item),
     )
   end
 

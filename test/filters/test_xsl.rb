@@ -97,7 +97,7 @@ EOS
       assigns = {
         item: item,
         layout: layout,
-        content: item.raw_content
+        content: item.raw_content,
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 
@@ -123,7 +123,7 @@ EOS
       assigns = {
         item: item,
         layout: layout,
-        content: item.raw_content
+        content: item.raw_content,
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 
@@ -150,7 +150,7 @@ EOS
       assigns = {
         item: item,
         layout: layout,
-        content: item.raw_content
+        content: item.raw_content,
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
 

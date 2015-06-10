@@ -159,7 +159,7 @@ module Nanoc::Int
     def data
       {
         edges: @graph.edges,
-        vertices: @graph.vertices.map { |obj| obj && obj.reference }
+        vertices: @graph.vertices.map { |obj| obj && obj.reference },
       }
     end
 

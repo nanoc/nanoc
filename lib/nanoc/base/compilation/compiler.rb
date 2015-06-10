@@ -451,7 +451,7 @@ module Nanoc::Int
         checksum_store,
         compiled_content_cache,
         dependency_tracker,
-        rule_memory_store
+        rule_memory_store,
       ]
     end
   end
