@@ -92,7 +92,7 @@ module Nanoc::Helpers
         item: @item,
         item_rep: @item_rep,
         items: @items,
-        layout: Nanoc::LayoutView.new(layout), # FIXME: this does not need to be rewrapped
+        layout: layout,
         layouts: @layouts,
         config: @config,
         site: @site
