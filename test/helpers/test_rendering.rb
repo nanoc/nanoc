@@ -52,6 +52,23 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
     end
   end
 
+  def test_render_wrapped_class
+    with_site do |site|
+      File.open('Rules', 'w') do |io|
+        io.write("layout '/foo/', :erb\n")
+      end
+
+      File.open('layouts/foo.erb', 'w') do |io|
+        io.write 'I am the <%= @layout.unwrap.class %> class.'
+      end
+
+      @site = Nanoc::SiteView.new(site)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+
+      assert_equal('I am the Nanoc::Int::Layout class.', render('/foo/'))
+    end
+  end
+
   def test_render_with_unknown_layout
     with_site do |site|
       @site = Nanoc::SiteView.new(site)
