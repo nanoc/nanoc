@@ -75,7 +75,7 @@ EOF
     end
     assert_equal(
       "Could not find parent configuration file 'foo/foo.yaml'",
-      error.message
+      error.message,
     )
   end
 
@@ -99,7 +99,7 @@ EOF
     end
     assert_equal(
       "Cycle detected. Could not use parent configuration file '../nanoc.yaml'",
-      error.message
+      error.message,
     )
   end
 
@@ -313,8 +313,8 @@ describe 'Nanoc::Int::Site#data_sources' do
     proc do
       site = Nanoc::Int::Site.new(
         data_sources: [
-          { type: 'fklsdhailfdjalghlkasdflhagjskajdf' }
-        ]
+          { type: 'fklsdhailfdjalghlkasdflhagjskajdf' },
+        ],
       )
       site.data_sources
     end.must_raise Nanoc::Int::Errors::UnknownDataSource

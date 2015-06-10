@@ -10,7 +10,7 @@ module Nanoc::CLI
       red: "\e[31m",
       green: "\e[32m",
       yellow: "\e[33m",
-      blue: "\e[34m"
+      blue: "\e[34m",
     }
 
     # @param [String] s The string to colorize

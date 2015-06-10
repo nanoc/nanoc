@@ -10,7 +10,7 @@ class Nanoc::Int::ItemTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'content',
       { one: 'one in item' },
-      '/path/'
+      '/path/',
     )
 
     assert_equal([:item, '/path/'], item.reference)

@@ -113,7 +113,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
       assert_equal(
         'Cannot build Atom feed: no articles',
-        error.message
+        error.message,
       )
     end
   end
@@ -138,7 +138,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
       assert_equal(
         'Cannot build Atom feed: site configuration has no base_url',
-        error.message
+        error.message,
       )
     end
   end
@@ -163,7 +163,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
       assert_equal(
         'Cannot build Atom feed: no title in params, item or site config',
-        error.message
+        error.message,
       )
     end
   end
@@ -188,7 +188,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
       assert_equal(
         'Cannot build Atom feed: no author_name in params, item or site config',
-        error.message
+        error.message,
       )
     end
   end
@@ -221,21 +221,21 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Still should keep feed level author
       assert_match(
         /#{Regexp.escape('<name>Denis Defreyne</name>')}/, #'
-        result
+        result,
       )
       assert_match(
         /#{Regexp.escape('<uri>http://stoneship.org/</uri>')}/, #'
-        result
+        result,
       )
 
       # Overrides on specific items
       assert_match(
         /#{Regexp.escape('<name>Don Alias</name>')}/, #'
-        result
+        result,
       )
       assert_match(
         /#{Regexp.escape('<uri>http://don.example.com/</uri>')}/, #'
-        result
+        result,
       )
     end
   end
@@ -260,7 +260,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
       assert_equal(
         'Cannot build Atom feed: no author_uri in params, item or site config',
-        error.message
+        error.message,
       )
     end
   end
@@ -287,7 +287,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
       assert_equal(
         'Cannot build Atom feed: one or more articles lack created_at',
-        error.message
+        error.message,
       )
     end
   end
@@ -312,7 +312,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       atom_feed(
         author_name: 'Bob',
         author_uri: 'http://example.com/~bob/',
-        title: 'My Blog Or Something'
+        title: 'My Blog Or Something',
       )
     end
   end
@@ -328,7 +328,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
         author_name: 'Bob',
         author_uri: 'http://example.com/~bob/',
         title: 'My Blog Or Something',
-        base_url: 'http://example.com'
+        base_url: 'http://example.com',
       })
 
       # Create feed item
@@ -390,11 +390,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       result = atom_feed limit: 1, articles: @items
       assert_match(
         Regexp.new('Article 0', Regexp::MULTILINE),
-        result
+        result,
       )
       refute_match(
         Regexp.new('Article 1', Regexp::MULTILINE),
-        result
+        result,
       )
     end
   end
@@ -423,7 +423,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       result = atom_feed
       assert_match(
         Regexp.new('Article 1.*Article 0', Regexp::MULTILINE),
-        result
+        result,
       )
     end
   end
@@ -452,7 +452,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       result = atom_feed(preserve_order: true)
       assert_match(
         Regexp.new('Article 1.*Article 0', Regexp::MULTILINE),
-        result
+        result,
       )
     end
   end

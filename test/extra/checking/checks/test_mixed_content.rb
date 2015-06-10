@@ -20,7 +20,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="https://nanoc.ws/process.cgi"></form>',
         '<iframe src="https://nanoc.ws/preview.html"></iframe>',
         '<audio src="https://nanoc.ws/theme-song.flac"></audio>',
-        '<video src="https://nanoc.ws/screen-cast.mkv"></video>'
+        '<video src="https://nanoc.ws/screen-cast.mkv"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -38,7 +38,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="/process.cgi"></form>',
         '<iframe src="/preview.html"></iframe>',
         '<audio src="/theme-song.flac"></audio>',
-        '<video src="/screen-cast.mkv"></video>'
+        '<video src="/screen-cast.mkv"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -56,7 +56,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="//nanoc.ws/process.cgi"></form>',
         '<iframe src="//nanoc.ws/preview.html"></iframe>',
         '<audio src="//nanoc.ws/theme-song.flac"></audio>',
-        '<video src="//nanoc.ws/screen-cast.mkv"></video>'
+        '<video src="//nanoc.ws/screen-cast.mkv"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -74,7 +74,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="process.cgi"></form>',
         '<iframe src="preview.html"></iframe>',
         '<audio src="theme-song.flac"></audio>',
-        '<video src="screen-cast.mkv"></video>'
+        '<video src="screen-cast.mkv"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -92,7 +92,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="?query-string"></form>',
         '<iframe src="?query-string"></iframe>',
         '<audio src="?query-string"></audio>',
-        '<video src="?query-string"></video>'
+        '<video src="?query-string"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -110,7 +110,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="#fragment"></form>',
         '<iframe src="#fragment"></iframe>',
         '<audio src="#fragment"></audio>',
-        '<video src="#fragment"></video>'
+        '<video src="#fragment"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -129,7 +129,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<form action="http://nanoc.ws/process.cgi"></form>',
         '<iframe src="http://nanoc.ws/preview.html"></iframe>',
         '<audio src="http://nanoc.ws/theme-song.flac"></audio>',
-        '<video src="http://nanoc.ws/screencast.mkv"></video>'
+        '<video src="http://nanoc.ws/screencast.mkv"></video>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
@@ -175,7 +175,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
         '<iframe href="http://nanoc.ws/preview.html"></iframe>',
         '<audio href="http://nanoc.ws/theme-song.flac"></audio>',
         '<video target="http://nanoc.ws/screen-cast.mkv"></video>',
-        '<p>http://nanoc.ws/harmless-text</p>'
+        '<p>http://nanoc.ws/harmless-text</p>',
       ])
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run

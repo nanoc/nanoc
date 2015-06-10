@@ -90,7 +90,7 @@ module Nanoc::Int
             self,
             data_source_hash[:items_root],
             data_source_hash[:layouts_root],
-            data_source_hash.merge(data_source_hash[:config] || {})
+            data_source_hash.merge(data_source_hash[:config] || {}),
           )
         end
       end
@@ -307,7 +307,7 @@ module Nanoc::Int
         code_snippets = Dir["#{lib}/**/*.rb"].sort.map do |filename|
           Nanoc::Int::CodeSnippet.new(
             File.read(filename),
-            filename
+            filename,
           )
         end
         @code_snippets.concat(code_snippets)

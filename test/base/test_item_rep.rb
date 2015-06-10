@@ -2,7 +2,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_only_last_available
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah blah', {}, '/',
+      'blah blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.snapshot_contents = {
@@ -17,7 +17,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_pre_and_last_available
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah blah', {}, '/',
+      'blah blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.snapshot_contents = {
@@ -33,7 +33,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_custom_snapshot
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah blah', {}, '/',
+      'blah blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.snapshot_contents = {
@@ -49,7 +49,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_invalid_snapshot
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah blah', {}, '/',
+      'blah blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.snapshot_contents = {
@@ -66,7 +66,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_uncompiled_content
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah', {}, '/',
+      'blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -80,7 +80,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_moving_pre_snapshot
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah', {}, '/',
+      'blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
@@ -98,7 +98,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_compiled_content_with_non_moving_pre_snapshot
     # Create rep
     item = Nanoc::Int::Item.new(
-      'blah blah', {}, '/',
+      'blah blah', {}, '/'
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)

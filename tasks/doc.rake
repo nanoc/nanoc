@@ -11,6 +11,6 @@ YARD::Rake::YardocTask.new(:doc) do |yard|
     '--output-dir',      'doc/yardoc',
     '--template-path',   'doc/yardoc_templates',
     '--load',            'doc/yardoc_handlers/identifier.rb',
-    '--query',           '@api.text != "private"',
+    '--query',           '@api.text != "private"'
   ]
 end

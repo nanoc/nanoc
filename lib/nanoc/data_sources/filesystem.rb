@@ -169,7 +169,7 @@ module Nanoc::DataSources
     # basename before concatenating it with a period and the extension).
     def filename_for(_base_filename, _ext)
       raise NotImplementedError.new(
-        "#{self.class} does not implement #filename_for"
+        "#{self.class} does not implement #filename_for",
       )
     end
 
@@ -177,7 +177,7 @@ module Nanoc::DataSources
     # can be the content filename or the meta filename.
     def identifier_for_filename(_filename)
       raise NotImplementedError.new(
-        "#{self.class} does not implement #identifier_for_filename"
+        "#{self.class} does not implement #identifier_for_filename",
       )
     end
 
@@ -234,7 +234,7 @@ module Nanoc::DataSources
       pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
       if pieces.size < 4
         raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format."
+          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
         )
       end
 

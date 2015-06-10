@@ -116,7 +116,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       0 => 'd',
       1 => 'b', # never used! not c, because b takes priority
       2 => 'b',
-      3 => 'a'
+      3 => 'a',
     }
 
     # Check
@@ -137,7 +137,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       raw: 'raw.txt',
       pre: 'pre.txt',
       post: 'post.txt',
-      last: 'last.txt'
+      last: 'last.txt',
     }
 
     # Create rule

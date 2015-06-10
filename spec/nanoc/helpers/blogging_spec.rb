@@ -16,7 +16,7 @@ describe Nanoc::Helpers::Blogging do
       Nanoc::Int::Item.new(
         'blah',
         { kind: 'item' },
-        '/0/'
+        '/0/',
       )
     end
 
@@ -24,7 +24,7 @@ describe Nanoc::Helpers::Blogging do
       Nanoc::Int::Item.new(
         'blah blah',
         { kind: 'article' },
-        '/1/'
+        '/1/',
       )
     end
 
@@ -32,7 +32,7 @@ describe Nanoc::Helpers::Blogging do
       Nanoc::Int::Item.new(
         'blah blah blah',
         { kind: 'article' },
-        '/2/'
+        '/2/',
       )
     end
 
@@ -60,7 +60,7 @@ describe Nanoc::Helpers::Blogging do
       Nanoc::Int::Item.new(
         'blah',
         { kind: 'item' },
-        '/0/'
+        '/0/',
       )
     end
 
@@ -68,7 +68,7 @@ describe Nanoc::Helpers::Blogging do
       Nanoc::Int::Item.new(
         'blah blah',
         { kind: 'article', created_at: (Date.today - 1).to_s },
-        '/1/'
+        '/1/',
       )
     end
 
@@ -76,7 +76,7 @@ describe Nanoc::Helpers::Blogging do
       Nanoc::Int::Item.new(
         'blah blah blah',
         { kind: 'article', created_at: (Time.now - 500).to_s },
-        '/2/'
+        '/2/',
       )
     end
 

@@ -24,7 +24,7 @@ module Nanoc::CLI::Commands
       # Set options
       options_for_rack = {
         Port: (options[:port] || 3000).to_i,
-        Host: (options[:host] || '0.0.0.0')
+        Host: (options[:host] || '0.0.0.0'),
       }
 
       # Get handler

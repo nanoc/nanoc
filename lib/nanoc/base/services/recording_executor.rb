@@ -7,11 +7,11 @@ module Nanoc
         @rule_memory = []
       end
 
-      def filter(rep, filter_name, filter_args = {})
+      def filter(_rep, filter_name, filter_args = {})
         @rule_memory << [:filter, filter_name, filter_args]
       end
 
-      def layout(rep, layout_identifier, extra_filter_args = nil)
+      def layout(_rep, layout_identifier, extra_filter_args = nil)
         if extra_filter_args
           @rule_memory << [:layout, layout_identifier, extra_filter_args]
         else
@@ -19,7 +19,7 @@ module Nanoc
         end
       end
 
-      def snapshot(rep, snapshot_name, params = {})
+      def snapshot(_rep, snapshot_name, params = {})
         @rule_memory << [:snapshot, snapshot_name, params]
 
         # Count
@@ -33,7 +33,7 @@ module Nanoc
         end
       end
 
-      def record_write(rep, path)
+      def record_write(_rep, path)
         @rule_memory << [:write, path]
       end
     end

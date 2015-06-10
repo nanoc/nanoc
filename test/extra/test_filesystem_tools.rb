@@ -28,7 +28,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       'dir0/sub/sub/sub/sub/sub/sub/sub/foo.md',
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
-      'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md'
+      'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
     ]
     actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir0', nil).sort
     assert_equal expected_files, actual_files
