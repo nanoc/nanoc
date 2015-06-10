@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name        = 'nanoc'
   s.version     = Nanoc::VERSION
   s.homepage    = 'http://nanoc.ws/'
-  s.summary     = 'a web publishing system written in Ruby for building small to medium-sized websites.'
-  s.description = 'nanoc is a simple but very flexible static site generator written in Ruby. It operates on local files, and therefore does not run on the server. nanoc “compiles” the local source files into HTML (usually), by evaluating eRuby, Markdown, etc.'
+  s.summary     = 'a static site generator, fit for building anything from a personal blog to a corporate web site.'
+  s.description = 'nanoc is a flexible static site generator. It transforms content from formats such as Markdown or AsciiDoc into another format, usually HTML, and lays out pages so that the site’s look and feel is consistent across all pages. Static sites built with nanoc can be deployed to any web server.'
 
   s.author  = 'Denis Defreyne'
   s.email   = 'denis.defreyne@stoneship.org'
