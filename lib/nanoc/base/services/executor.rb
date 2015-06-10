@@ -25,13 +25,13 @@ module Nanoc
           filter = klass.new(assigns_for(rep))
 
           # Run filter
-          last = rep.content_snapshots[:last]
+          last = rep.snapshot_contents[:last]
           source = rep.binary? ? last.filename : last.string
           result = filter.setup_and_run(source, filter_args)
           if klass.to_binary?
-            rep.content_snapshots[:last] = Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
+            rep.snapshot_contents[:last] = Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
           else
-            rep.content_snapshots[:last] = Nanoc::Int::TextualContent.new(result).tap(&:freeze)
+            rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(result).tap(&:freeze)
           end
 
           # Check whether file was written
@@ -40,7 +40,7 @@ module Nanoc
           end
 
           # Create snapshot
-          snapshot(rep, rep.content_snapshots[:post] ? :post : :pre, final: false) unless rep.binary?
+          snapshot(rep, rep.snapshot_contents[:post] ? :post : :pre, final: false) unless rep.binary?
         ensure
           # Notify end
           Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, filter_name)
@@ -59,7 +59,7 @@ module Nanoc
         raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(rep) if rep.binary?
 
         # Create "pre" snapshot
-        if rep.content_snapshots[:post].nil?
+        if rep.snapshot_contents[:post].nil?
           snapshot(rep, :pre, final: true)
         end
 
@@ -81,7 +81,7 @@ module Nanoc
           content = layout.content
           arg = content.binary? ? content.filename : content.string
           res = filter.setup_and_run(arg, filter_args)
-          rep.content_snapshots[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
+          rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
 
           # Create "post" snapshot
           snapshot(rep, :post, final: false)
@@ -96,11 +96,11 @@ module Nanoc
         is_final = params.fetch(:final, true)
 
         unless rep.binary?
-          rep.content_snapshots[snapshot_name] = rep.content_snapshots[:last]
+          rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
         end
 
         if snapshot_name == :pre && is_final
-          rep.snapshots << [:pre, true]
+          rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:pre, true)
         end
 
         if is_final

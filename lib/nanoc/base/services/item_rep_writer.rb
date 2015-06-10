@@ -14,7 +14,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(
         :will_write_rep, item_rep, raw_path)
 
-      content = item_rep.content_snapshots[:last]
+      content = item_rep.snapshot_contents[:last]
       if content.binary?
         temp_path = content.filename
       else

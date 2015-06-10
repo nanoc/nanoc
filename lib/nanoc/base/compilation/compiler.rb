@@ -260,9 +260,9 @@ module Nanoc::Int
     # @api private
     def assigns_for(rep)
       if rep.binary?
-        content_or_filename_assigns = { filename: rep.content_snapshots[:last].filename }
+        content_or_filename_assigns = { filename: rep.snapshot_contents[:last].filename }
       else
-        content_or_filename_assigns = { content: rep.content_snapshots[:last].string }
+        content_or_filename_assigns = { content: rep.snapshot_contents[:last].string }
       end
 
       # TODO: Do not expose @site (necessary for captures store though…)
@@ -320,7 +320,7 @@ module Nanoc::Int
 
       # Assign snapshots
       reps.each do |rep|
-        rep.snapshots = rules_collection.snapshots_for(rep)
+        rep.snapshot_defs = rules_collection.snapshots_defs_for(rep)
       end
 
       # Attempt to compile all active reps
@@ -373,7 +373,7 @@ module Nanoc::Int
       if !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
         # Reuse content
         Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-        rep.content_snapshots = compiled_content_cache[rep]
+        rep.snapshot_contents = compiled_content_cache[rep]
       else
         # Recalculate content
         executor.snapshot(rep, :raw)
@@ -384,7 +384,7 @@ module Nanoc::Int
       end
 
       rep.compiled = true
-      compiled_content_cache[rep] = rep.content_snapshots
+      compiled_content_cache[rep] = rep.snapshot_contents
 
       Nanoc::Int::NotificationCenter.post(:processing_ended,  rep)
       Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)

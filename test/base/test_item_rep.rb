@@ -5,7 +5,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
       'blah blah blah', {}, '/',
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
-    rep.content_snapshots = {
+    rep.snapshot_contents = {
       last: Nanoc::Int::TextualContent.new('last content'),
     }
     rep.expects(:compiled?).returns(true)
@@ -20,7 +20,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
       'blah blah blah', {}, '/',
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
-    rep.content_snapshots = {
+    rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre content'),
       last: Nanoc::Int::TextualContent.new('last content'),
     }
@@ -36,7 +36,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
       'blah blah blah', {}, '/',
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
-    rep.content_snapshots = {
+    rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre content'),
       last: Nanoc::Int::TextualContent.new('last content'),
     }
@@ -52,7 +52,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
       'blah blah blah', {}, '/',
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
-    rep.content_snapshots = {
+    rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre content'),
       last: Nanoc::Int::TextualContent.new('last content'),
     }
@@ -84,7 +84,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
-    rep.content_snapshots = {
+    rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre!'),
       last: Nanoc::Int::TextualContent.new('last!'),
     }
@@ -102,8 +102,10 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     )
     rep = Nanoc::Int::ItemRep.new(item, nil)
     rep.expects(:compiled?).returns(false)
-    rep.snapshots = [[:pre, true]]
-    rep.content_snapshots = {
+    rep.snapshot_defs = [
+      Nanoc::Int::SnapshotDef.new(:pre, true),
+    ]
+    rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre!'),
       post: Nanoc::Int::TextualContent.new('post!'),
       last: Nanoc::Int::TextualContent.new('last!'),
