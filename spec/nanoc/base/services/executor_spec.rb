@@ -27,16 +27,16 @@ describe Nanoc::Int::Executor do
       example do
         executor.filter(rep, :erb)
 
-        expect(rep.content_snapshots[:last].string).to eq('Donkey Power')
-        expect(rep.content_snapshots[:pre].string).to eq('Donkey Power')
-        expect(rep.content_snapshots[:post]).to be_nil
+        expect(rep.snapshot_contents[:last].string).to eq('Donkey Power')
+        expect(rep.snapshot_contents[:pre].string).to eq('Donkey Power')
+        expect(rep.snapshot_contents[:post]).to be_nil
       end
 
       it 'returns frozen data' do
         executor.filter(rep, :erb)
 
-        expect(rep.content_snapshots[:last]).to be_frozen
-        expect(rep.content_snapshots[:pre]).to be_frozen
+        expect(rep.snapshot_contents[:last]).to be_frozen
+        expect(rep.snapshot_contents[:pre]).to be_frozen
       end
     end
 
@@ -65,16 +65,16 @@ describe Nanoc::Int::Executor do
       example do
         executor.filter(rep, :whatever)
 
-        expect(File.read(rep.content_snapshots[:last].filename))
+        expect(File.read(rep.snapshot_contents[:last].filename))
           .to eq('Compiled data for /foo.dat')
-        expect(rep.content_snapshots[:pre]).to be_nil
-        expect(rep.content_snapshots[:post]).to be_nil
+        expect(rep.snapshot_contents[:pre]).to be_nil
+        expect(rep.snapshot_contents[:post]).to be_nil
       end
 
       it 'returns frozen data' do
         executor.filter(rep, :whatever)
 
-        expect(rep.content_snapshots[:last]).to be_frozen
+        expect(rep.snapshot_contents[:last]).to be_frozen
       end
     end
 
@@ -103,9 +103,9 @@ describe Nanoc::Int::Executor do
       example do
         executor.filter(rep, :whatever)
 
-        expect(rep.content_snapshots[:last].string).to eq('Compiled data for /foo.dat')
-        expect(rep.content_snapshots[:pre].string).to eq('Compiled data for /foo.dat')
-        expect(rep.content_snapshots[:post]).to be_nil
+        expect(rep.snapshot_contents[:last].string).to eq('Compiled data for /foo.dat')
+        expect(rep.snapshot_contents[:pre].string).to eq('Compiled data for /foo.dat')
+        expect(rep.snapshot_contents[:post]).to be_nil
       end
     end
 
@@ -130,10 +130,10 @@ describe Nanoc::Int::Executor do
       example do
         executor.filter(rep, :whatever)
 
-        expect(File.read(rep.content_snapshots[:last].filename))
+        expect(File.read(rep.snapshot_contents[:last].filename))
           .to eq('Binary <%= "Donkey" %> Power')
-        expect(rep.content_snapshots[:pre]).to be_nil
-        expect(rep.content_snapshots[:post]).to be_nil
+        expect(rep.snapshot_contents[:pre]).to be_nil
+        expect(rep.snapshot_contents[:post]).to be_nil
       end
     end
 
@@ -261,19 +261,19 @@ describe Nanoc::Int::Executor do
     context 'normal flow' do
       it 'updates last content' do
         subject
-        expect(rep.content_snapshots[:last].string).to eq('head hallo foot')
+        expect(rep.snapshot_contents[:last].string).to eq('head hallo foot')
       end
 
       it 'sets frozen content' do
         subject
-        expect(rep.content_snapshots[:last]).to be_frozen
-        expect(rep.content_snapshots[:pre]).to be_frozen
+        expect(rep.snapshot_contents[:last]).to be_frozen
+        expect(rep.snapshot_contents[:pre]).to be_frozen
       end
 
       it 'creates pre snapshot' do
-        expect(rep.content_snapshots[:pre]).to be_nil
+        expect(rep.snapshot_contents[:pre]).to be_nil
         subject
-        expect(rep.content_snapshots[:pre].string).to eq('Donkey Power')
+        expect(rep.snapshot_contents[:pre].string).to eq('Donkey Power')
       end
 
       it 'sends notifications' do
@@ -296,7 +296,7 @@ describe Nanoc::Int::Executor do
 
         it 'can contain compiled_content reference' do
           subject
-          expect(rep.content_snapshots[:last].string).to eq('head Donkey Power foot')
+          expect(rep.snapshot_contents[:last].string).to eq('head Donkey Power foot')
         end
       end
 
@@ -305,7 +305,7 @@ describe Nanoc::Int::Executor do
 
         it 'includes layout in assigns' do
           subject
-          expect(rep.content_snapshots[:last].string).to eq('head /default.erb foot')
+          expect(rep.snapshot_contents[:last].string).to eq('head /default.erb foot')
         end
       end
     end
@@ -352,7 +352,7 @@ describe Nanoc::Int::Executor do
       it 'does not create snapshots' do
         executor.snapshot(rep, :something)
 
-        expect(rep.content_snapshots[:something]).to be_nil
+        expect(rep.snapshot_contents[:something]).to be_nil
       end
     end
 
@@ -362,7 +362,7 @@ describe Nanoc::Int::Executor do
       it 'creates a snapshot' do
         executor.snapshot(rep, :something)
 
-        expect(rep.content_snapshots[:something].string).to eq('Donkey Power')
+        expect(rep.snapshot_contents[:something].string).to eq('Donkey Power')
       end
     end
 

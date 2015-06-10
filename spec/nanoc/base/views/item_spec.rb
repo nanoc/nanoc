@@ -77,7 +77,7 @@ describe Nanoc::ItemView do
           Nanoc::Int::SnapshotDef.new(:last, false),
           Nanoc::Int::SnapshotDef.new(:specific, true),
         ]
-        ir.content_snapshots = {
+        ir.snapshot_contents = {
           last: Nanoc::Int::TextualContent.new('Default Hallo'),
           specific: Nanoc::Int::TextualContent.new('Specific Hallo'),
         }

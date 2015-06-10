@@ -10,7 +10,7 @@ module Nanoc::Int
     #
     # @api private
     module Private
-      attr_accessor :content_snapshots
+      attr_accessor :snapshot_contents
 
       # @return [Boolean] true if this representation has already been
       #   compiled during the current or last compilation session; false
@@ -78,7 +78,7 @@ module Nanoc::Int
     end
 
     def binary?
-      @content_snapshots[:last].binary?
+      @snapshot_contents[:last].binary?
     end
 
     # Returns the compiled content from a given snapshot.
@@ -97,7 +97,7 @@ module Nanoc::Int
       end
 
       # Get name of last pre-layout snapshot
-      snapshot_name = params.fetch(:snapshot) { @content_snapshots[:pre] ? :pre : :last }
+      snapshot_name = params.fetch(:snapshot) { @snapshot_contents[:pre] ? :pre : :last }
       is_moving = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
@@ -114,12 +114,12 @@ module Nanoc::Int
         when :pre
           snapshot_def.nil? || !snapshot_def.final?
         end
-      is_usable_snapshot = @content_snapshots[snapshot_name] && (self.compiled? || !is_still_moving)
+      is_usable_snapshot = @snapshot_contents[snapshot_name] && (self.compiled? || !is_still_moving)
       unless is_usable_snapshot
         raise Nanoc::Int::Errors::UnmetDependency.new(self)
       end
 
-      @content_snapshots[snapshot_name].string
+      @snapshot_contents[snapshot_name].string
     end
 
     # Checks whether content exists at a given snapshot.
@@ -129,7 +129,7 @@ module Nanoc::Int
     #
     # @since 3.2.0
     def snapshot?(snapshot_name)
-      !@content_snapshots[snapshot_name].nil?
+      !@snapshot_contents[snapshot_name].nil?
     end
     alias_method :has_snapshot?, :snapshot?
 
@@ -176,7 +176,7 @@ module Nanoc::Int
 
     def initialize_content
       # FIXME: Where is :raw?
-      @content_snapshots = { last: @item.content }
+      @snapshot_contents = { last: @item.content }
     end
   end
 end

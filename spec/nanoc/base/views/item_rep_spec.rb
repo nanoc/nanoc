@@ -83,7 +83,7 @@ describe Nanoc::ItemRepView do
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true,
-        ir.content_snapshots = {
+        ir.snapshot_contents = {
           last: Nanoc::Int::TextualContent.new('Hallo'),
         }
       end
