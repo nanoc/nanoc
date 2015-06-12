@@ -13,6 +13,8 @@ module Nanoc::Int
     # @since 3.2.0
     attr_reader :snapshot_name
 
+    attr_reader :pattern
+
     # Creates a new item compilation rule with the given identifier regex,
     # compiler and block. The block will be called during compilation with the
     # item rep as its argument.

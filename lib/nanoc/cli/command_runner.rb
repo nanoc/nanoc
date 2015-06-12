@@ -27,6 +27,13 @@ module Nanoc::CLI
       @site
     end
 
+    # For debugging purposes.
+    #
+    # @api private
+    def site=(new_site)
+      @site = new_site
+    end
+
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def in_site_dir?
