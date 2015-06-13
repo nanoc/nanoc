@@ -1,5 +1,11 @@
 # nanoc news
 
+## ??? (???)
+
+Fixes:
+
+* Fixed double-wrapping of `@layout` in rendering helper (#631)
+
 ## 4.0.0b4 (2015-06-10)
 
 Fixes:
