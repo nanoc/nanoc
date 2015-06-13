@@ -193,7 +193,8 @@ describe Nanoc::Int::Executor do
       end
 
       example do
-        expect { executor.filter(rep, :whatever) }.to raise_error
+        expect { executor.filter(rep, :whatever) }
+          .to raise_error(Nanoc::Int::Executor::OutputNotWrittenError)
       end
     end
 

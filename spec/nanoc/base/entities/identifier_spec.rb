@@ -1,4 +1,36 @@
 describe Nanoc::Identifier do
+  describe '.from' do
+    subject { described_class.from(arg) }
+
+    context 'given an identifier' do
+      let(:arg) { Nanoc::Identifier.new('/foo.md') }
+
+      it 'returns an identifier' do
+        expect(subject).to be_a(Nanoc::Identifier)
+        expect(subject.to_s).to eq('/foo.md')
+        expect(subject).to be_full
+      end
+    end
+
+    context 'given a string' do
+      let(:arg) { '/foo.md' }
+
+      it 'returns an identifier' do
+        expect(subject).to be_a(Nanoc::Identifier)
+        expect(subject.to_s).to eq('/foo.md')
+        expect(subject).to be_full
+      end
+    end
+
+    context 'given something else' do
+      let(:arg) { 12345 }
+
+      it 'raises' do
+        expect { subject }.to raise_error(Nanoc::Identifier::NonCoercibleObjectError)
+      end
+    end
+  end
+
   describe '#initialize' do
     context 'legacy type' do
       it 'does not convert already clean paths' do
@@ -29,7 +61,8 @@ describe Nanoc::Identifier do
 
     context 'full type' do
       it 'refuses string not starting with a slash' do
-        expect { described_class.new('foo') }.to raise_error('Invalid identifier (does not start with a slash): "foo"')
+        expect { described_class.new('foo') }
+          .to raise_error(Nanoc::Identifier::InvalidIdentifierError)
       end
 
       it 'has proper string representation' do
@@ -41,18 +74,25 @@ describe Nanoc::Identifier do
         expect { identifier.to_s << 'bbq' }.to raise_frozen_error
       end
     end
+
+    context 'other type' do
+      it 'errors' do
+        expect { described_class.new('foo', type: :donkey) }
+          .to raise_error(Nanoc::Identifier::InvalidTypeError)
+      end
+    end
   end
 
   describe '#to_s' do
     it 'returns immutable string' do
-      expect { described_class.new('foo/', type: :legacy).to_s << 'lols' }.to raise_error
-      expect { described_class.new('/foo').to_s << 'lols' }.to raise_error
+      expect { described_class.new('foo/', type: :legacy).to_s << 'lols' }.to raise_frozen_error
+      expect { described_class.new('/foo').to_s << 'lols' }.to raise_frozen_error
     end
   end
 
   describe '#to_str' do
     it 'returns immutable string' do
-      expect { described_class.new('/foo/bar').to_str << 'lols' }.to raise_error
+      expect { described_class.new('/foo/bar').to_str << 'lols' }.to raise_frozen_error
     end
   end
 
@@ -171,7 +211,7 @@ describe Nanoc::Identifier do
       let(:prefix) { 'asdf' }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::Identifier::InvalidPrefixError)
       end
     end
 
@@ -179,7 +219,7 @@ describe Nanoc::Identifier do
       let(:prefix) { 'asdf/' }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::Identifier::InvalidPrefixError)
       end
     end
 
@@ -210,7 +250,7 @@ describe Nanoc::Identifier do
       let(:ext) { 'html' }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
       end
     end
 
@@ -278,7 +318,7 @@ describe Nanoc::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
       end
     end
 
@@ -306,7 +346,7 @@ describe Nanoc::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
       end
     end
 
