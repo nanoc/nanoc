@@ -2,6 +2,12 @@ module Nanoc
   class ItemRepCollectionView
     include Enumerable
 
+    class NoSuchItemRepError < ::Nanoc::Error
+      def initialize(rep_name)
+        super("No rep named #{rep_name.inspect} was found.")
+      end
+    end
+
     # @api private
     def initialize(item_reps)
       @item_reps = item_reps
@@ -58,7 +64,7 @@ module Nanoc
       if res
         Nanoc::ItemRepView.new(res)
       else
-        raise Nanoc::Int::Errors::Generic, "No rep named #{rep_name.inspect} was found."
+        raise NoSuchItemRepError.new(rep_name)
       end
     end
   end

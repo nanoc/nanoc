@@ -2,6 +2,41 @@ module Nanoc
   class Identifier
     include Comparable
 
+    # @api private
+    class InvalidIdentifierError < ::Nanoc::Error
+      def initialize(string)
+        super("Invalid identifier (does not start with a slash): #{string.inspect}")
+      end
+    end
+
+    # @api private
+    class InvalidTypeError < ::Nanoc::Error
+      def initialize(type)
+        super("Invalid type for identifier: #{type.inspect} (can be :full or :legacy)")
+      end
+    end
+
+    # @api private
+    class InvalidPrefixError < ::Nanoc::Error
+      def initialize(string)
+        super("Invalid prefix (does not start with a slash): #{string.inspect}")
+      end
+    end
+
+    # @api private
+    class UnsupportedLegacyOperationError < ::Nanoc::Error
+      def initialize
+        super('Cannot use this method on legacy identifiers')
+      end
+    end
+
+    # @api private
+    class NonCoercibleObjectError < ::Nanoc::Error
+      def initialize(obj)
+        super("#{obj.inspect} cannot be converted into a Nanoc::Identifier")
+      end
+    end
+
     def self.from(obj)
       case obj
       when Nanoc::Identifier
@@ -9,7 +44,7 @@ module Nanoc
       when String
         Nanoc::Identifier.new(obj)
       else
-        raise ArgumentError, "Do not know how to convert #{obj} into a Nanoc::Identifier"
+        raise NonCoercibleObjectError.new(obj)
       end
     end
 
@@ -21,13 +56,11 @@ module Nanoc
         @string = "/#{string}/".gsub(/^\/+|\/+$/, '/').freeze
       when :full
         if string !~ /\A\//
-          raise Nanoc::Int::Errors::Generic,
-            "Invalid identifier (does not start with a slash): #{string.inspect}"
+          raise InvalidIdentifierError.new(string)
         end
         @string = string.dup.freeze
       else
-        raise Nanoc::Int::Errors::Generic,
-          "Invalid :type param for identifier: #{@type.inspect}"
+        raise InvalidTypeError.new(@type)
       end
     end
 
@@ -67,8 +100,7 @@ module Nanoc
     # @return [Nanoc::Identifier]
     def prefix(string)
       if string !~ /\A\//
-        raise Nanoc::Int::Errors::Generic,
-          "Invalid prefix (does not start with a slash): #{@string.inspect}"
+        raise InvalidPrefixError.new(@string)
       end
       Nanoc::Identifier.new(string.sub(/\/+\z/, '') + @string, type: @type)
     end
@@ -76,8 +108,7 @@ module Nanoc
     # @return [String]
     def with_ext(ext)
       unless full?
-        raise Nanoc::Int::Errors::Generic,
-          'Cannot use #with_ext on identifier that does not include the file extension'
+        raise UnsupportedLegacyOperationError
       end
 
       # Strip extension, if any
@@ -109,8 +140,7 @@ module Nanoc
     # @return [String] The extension, without a leading dot.
     def ext
       unless full?
-        raise Nanoc::Int::Errors::Generic,
-          'Cannot use #ext on identifier that does not include the file extension'
+        raise UnsupportedLegacyOperationError
       end
 
       s = File.extname(@string)

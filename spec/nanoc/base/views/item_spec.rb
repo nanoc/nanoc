@@ -130,7 +130,7 @@ describe Nanoc::ItemView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end
@@ -199,7 +199,7 @@ describe Nanoc::ItemView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end

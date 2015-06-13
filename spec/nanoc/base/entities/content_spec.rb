@@ -78,7 +78,7 @@ describe Nanoc::Int::TextualContent do
       let(:content) { described_class.new('foo', filename: 'foo.md') }
 
       it 'errors' do
-        expect { content }.to raise_error
+        expect { content }.to raise_error(ArgumentError)
       end
     end
   end
@@ -120,7 +120,7 @@ describe Nanoc::Int::BinaryContent do
       let(:content) { described_class.new('foo.dat') }
 
       it 'errors' do
-        expect { content }.to raise_error
+        expect { content }.to raise_error(ArgumentError)
       end
     end
   end

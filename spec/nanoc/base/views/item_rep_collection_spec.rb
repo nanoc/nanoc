@@ -69,7 +69,7 @@ describe Nanoc::ItemRepCollectionView do
       let(:name) { :donkey }
 
       it 'raises' do
-        expect { subject }.to raise_error
+        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
       end
     end
 
