@@ -41,7 +41,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'normal flow with binary rep' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -66,7 +66,7 @@ describe Nanoc::Int::Executor do
         executor.filter(rep, :whatever)
 
         expect(File.read(rep.snapshot_contents[:last].filename))
-          .to eq('Compiled data for /foo.dat')
+          .to match(/\ACompiled data for \/.*\/foo.dat\z/)
         expect(rep.snapshot_contents[:pre]).to be_nil
         expect(rep.snapshot_contents[:post]).to be_nil
       end
@@ -79,7 +79,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'normal flow with binary rep and binary-to-text filter' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -103,8 +103,8 @@ describe Nanoc::Int::Executor do
       example do
         executor.filter(rep, :whatever)
 
-        expect(rep.snapshot_contents[:last].string).to eq('Compiled data for /foo.dat')
-        expect(rep.snapshot_contents[:pre].string).to eq('Compiled data for /foo.dat')
+        expect(rep.snapshot_contents[:last].string).to match(/\ACompiled data for \/.*\/foo.dat\z/)
+        expect(rep.snapshot_contents[:pre].string).to match(/\ACompiled data for \/.*\/foo.dat\z/)
         expect(rep.snapshot_contents[:post]).to be_nil
       end
     end
@@ -163,7 +163,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary rep, text-to-something filter' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.md')) }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.md')) }
 
       it 'raises' do
         expect { executor.filter(rep, :erb) }
@@ -172,7 +172,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary filter that does not write anything' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -334,7 +334,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary item' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/donkey.md')) }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.md')) }
 
       it 'raises' do
         expect { subject }.to raise_error(Nanoc::Int::Errors::CannotLayoutBinaryItem)
@@ -348,7 +348,7 @@ describe Nanoc::Int::Executor do
     let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
 
     context 'binary content' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/donkey.dat')) }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
 
       it 'does not create snapshots' do
         executor.snapshot(rep, :something)

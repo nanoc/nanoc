@@ -72,7 +72,7 @@ shared_examples 'a document' do
     end
 
     context 'binary content' do
-      let(:content_arg) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
+      let(:content_arg) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
 
       it 'refuses changes to content' do
         expect { document.instance_variable_set(:@content, 'hah') }.to raise_frozen_error
