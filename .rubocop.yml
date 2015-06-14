@@ -40,12 +40,6 @@ BracesAroundHashParameters:
 Eval:
   Enabled: false
 
-# Only used for deprecated code that is gone in nanoc 4.x anyway.
-#
-# Re-enable in nanoc 4.x.
-ClassVars:
-  Enabled: false
-
 # We use filenames such as “create-site.rb” that translate to method names.
 FileName:
   Enabled: false
