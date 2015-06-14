@@ -110,10 +110,13 @@ module Nanoc::Int
       return if @loaded || @loading
       @loading = true
 
+      # Load site if necessary
+      site.load
+
       # Preprocess
       rules_collection.load
       preprocess
-      Nanoc::Int::SiteLoader.new.setup_child_parent_links(site.items)
+      site.setup_child_parent_links
       build_reps
       route_reps
 
@@ -140,7 +143,10 @@ module Nanoc::Int
       @stack = []
 
       items.each { |item| item.reps.clear }
+      site.teardown_child_parent_links
       rules_collection.unload
+
+      site.unload
 
       @loaded = false
       @unloading = false

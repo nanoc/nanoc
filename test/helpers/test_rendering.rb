@@ -11,8 +11,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -30,8 +28,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'This is the <%= @layout.identifier %> layout.'
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -49,8 +45,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'I am the <%= @layout.class %> class.'
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -68,8 +62,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write 'I am the <%= @layout.unwrap.class %> class.'
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -79,8 +71,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
   def test_render_with_unknown_layout
     with_site do |site|
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -98,8 +88,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       File.open('layouts/foo.erb', 'w').close
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -117,8 +105,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       File.open('layouts/foo.erb', 'w').close
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 
@@ -138,8 +124,6 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
         io.write '[partial-before]<%= yield %>[partial-after]'
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       @site = Nanoc::SiteView.new(site)
       @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
 

@@ -29,8 +29,21 @@ module Nanoc
 
     extend Nanoc::Int::PluginRegistry::PluginMethods
 
-    def initialize(site_config, items_root, layouts_root, config)
-      @site_config  = site_config
+    # Creates a new data source for the given site.
+    #
+    # @param [Nanoc::Int::Site] site The site this data source belongs to.
+    #
+    # @param [String] items_root The prefix that should be given to all items
+    #   returned by the #items method (comparable to mount points for
+    #   filesystems in Unix-ish OSes).
+    #
+    # @param [String] layouts_root The prefix that should be given to all
+    #   layouts returned by the #layouts method (comparable to mount points
+    #   for filesystems in Unix-ish OSes).
+    #
+    # @param [Hash] config The configuration for this data source.
+    def initialize(site, items_root, layouts_root, config)
+      @site         = site
       @items_root   = items_root
       @layouts_root = layouts_root
       @config       = config || {}
