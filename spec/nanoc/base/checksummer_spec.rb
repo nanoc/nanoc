@@ -106,19 +106,19 @@ describe Nanoc::Int::Checksummer do
       File.utime(mtime, mtime, filename)
     end
 
-    it { is_expected.to eql('FakeFS::Pathname<6-200>') }
+    it { is_expected.to eql('Pathname<6-200>') }
 
     context 'does not exist' do
       before do
         FileUtils.rm_rf(filename)
       end
 
-      it { is_expected.to eql('FakeFS::Pathname<???>') }
+      it { is_expected.to eql('Pathname<???>') }
     end
 
     context 'different data' do
       let(:data) { 'other stuffs :o' }
-      it { is_expected.to eql('FakeFS::Pathname<15-200>') }
+      it { is_expected.to eql('Pathname<15-200>') }
     end
   end
 
@@ -179,7 +179,7 @@ describe Nanoc::Int::Checksummer do
         File.utime(mtime, mtime, content.filename)
       end
 
-      it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::BinaryContent<FakeFS::Pathname<6-200>>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+      it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::BinaryContent<Pathname<6-200>>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
     end
 
     context 'recursive attributes' do

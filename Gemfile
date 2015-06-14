@@ -12,7 +12,6 @@ gem 'compass'
 gem 'coffee-script'
 gem 'coveralls', require: false
 gem 'erubis'
-gem 'fakefs'
 gem 'fog'
 gem 'haml'
 gem 'handlebars', platforms: :ruby

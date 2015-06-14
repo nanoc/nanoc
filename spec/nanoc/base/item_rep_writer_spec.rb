@@ -45,7 +45,7 @@ describe Nanoc::Int::ItemRepWriter do
       end
 
       context 'output file already exists' do
-        let(:old_mtime) { (Time.now - 600).to_i }
+        let(:old_mtime) { Time.at((Time.now - 600).to_i) }
 
         before do
           File.write(snapshot_contents[:last].filename, 'binary stuff')
@@ -90,7 +90,7 @@ describe Nanoc::Int::ItemRepWriter do
       end
 
       context 'output file already exists' do
-        let(:old_mtime) { (Time.now - 600).to_i }
+        let(:old_mtime) { Time.at((Time.now - 600).to_i) }
 
         before do
           FileUtils.mkdir_p('output')
