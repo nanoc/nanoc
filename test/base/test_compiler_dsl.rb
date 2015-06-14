@@ -41,7 +41,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       File.open('more_rules.rb', 'w') { |io| io.write "preprocess { @items['/foo/'][:preprocessed] = true }" }
 
       # Create other necessary stuff
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.items << item
       dsl = site.compiler.rules_collection.dsl
       io = capturing_stdio do
@@ -76,7 +76,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       File.open('more_rules.rb', 'w') { |io| io.write "passthrough '/foo/'" }
 
       # Create other necessary stuff
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.items << item
       dsl = site.compiler.rules_collection.dsl
 
@@ -107,7 +107,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check paths
@@ -131,7 +131,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check paths
@@ -163,7 +163,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check paths
@@ -194,7 +194,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check paths
@@ -224,7 +224,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check paths
@@ -256,7 +256,7 @@ EOS
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check paths

@@ -66,7 +66,7 @@ module Nanoc::Int
             update(el, digest, visited + [obj])
             digest.update(',')
           end
-        when ::Hash
+        when ::Hash, ::Nanoc::Int::Configuration
           obj.each do |key, value|
             update(key, digest, visited + [obj])
             digest.update('=')

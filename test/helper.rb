@@ -115,7 +115,7 @@ EOS
 
     # Yield site
     FileUtils.cd(site_name) do
-      yield Nanoc::Int::Site.new('.')
+      yield Nanoc::Int::SiteLoader.new.new_from_cwd
     end
   end
 

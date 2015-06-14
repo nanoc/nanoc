@@ -1,54 +1,9 @@
 module Nanoc::Int
-  # The in-memory representation of a nanoc site. It holds references to the
-  # following site data:
-  #
-  # * {#items}         — the list of items         ({Nanoc::Int::Item})
-  # * {#layouts}       — the list of layouts       ({Nanoc::Int::Layout})
-  # * {#code_snippets} — the list of code snippets ({Nanoc::Int::CodeSnippet})
-  # * {#data_sources}  — the list of data sources  ({Nanoc::DataSource})
-  #
-  # In addition, each site has a {#config} hash which stores the site
-  # configuration.
-  #
-  # The physical representation of a {Nanoc::Int::Site} is usually a directory
-  # that contains a configuration file, site data, a rakefile, a rules file,
-  # etc. The way site data is stored depends on the data source.
-  #
   # @api private
   class Site
-    # The default configuration for a data source. A data source's
-    # configuration overrides these options.
-    DEFAULT_DATA_SOURCE_CONFIG = {
-      type: 'filesystem',
-      items_root: '/',
-      layouts_root: '/',
-      config: {},
-      identifier_type: 'full',
-    }
-
-    # The default configuration for a site. A site's configuration overrides
-    # these options: when a {Nanoc::Int::Site} is created with a configuration
-    # that lacks some options, the default value will be taken from
-    # `DEFAULT_CONFIG`.
-    DEFAULT_CONFIG = {
-      text_extensions: %w( css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim rdoc ).sort,
-      lib_dirs: %w( lib ),
-      commands_dirs: %w( commands ),
-      output_dir: 'output',
-      data_sources: [{}],
-      index_filenames: ['index.html'],
-      enable_output_diff: false,
-      prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
-      string_pattern_type: 'glob',
-    }
-
-    # Creates a site object for the site specified by the given
-    # `dir_or_config_hash` argument.
-    #
-    # @param [Hash, String] dir_or_config_hash If a string, contains the path
-    #   to the site directory; if a hash, contains the site configuration.
-    def initialize(dir_or_config_hash)
-      build_config(dir_or_config_hash)
+    # @param [Nanoc::Int::Configuration] config
+    def initialize(config)
+      @config = config
     end
 
     # Compiles the site.
@@ -121,47 +76,7 @@ module Nanoc::Int
       @layouts
     end
 
-    # Returns the site configuration. It has the following keys:
-    #
-    # * `text_extensions` (`Array<String>`) - A list of file extensions that
-    #   will cause nanoc to threat the file as textual instead of binary. When
-    #   the data source finds a content file with an extension that is
-    #   included in this list, it will be marked as textual.
-    #
-    # * `output_dir` (`String`) - The directory to which compiled items will
-    #   be written. This path is relative to the current working directory,
-    #   but can also be an absolute path.
-    #
-    # * `data_sources` (`Array<Hash>`) - A list of data sources for this site.
-    #   See below for documentation on the structure of this list. By default,
-    #   there is only one data source of the filesystem  type mounted at `/`.
-    #
-    # * `index_filenames` (`Array<String>`) - A list of filenames that will be
-    #   stripped off full item paths to create cleaner URLs. For example,
-    #   `/about/` will be used instead of `/about/index.html`). The default
-    #   value should be okay in most cases.
-    #
-    # * `enable_output_diff` (`Boolean`) - True when diffs should be generated
-    #   for the compiled content of this site; false otherwise.
-    #
-    # The list of data sources consists of hashes with the following keys:
-    #
-    # * `:type` (`String`) - The type of data source, i.e. its identifier.
-    #
-    # * `:items_root` (`String`) - The prefix that should be given to all
-    #   items returned by the {#items} method (comparable to mount points
-    #   for filesystems in Unix-ish OSes).
-    #
-    # * `:layouts_root` (`String`) - The prefix that should be given to all
-    #   layouts returned by the {#layouts} method (comparable to mount
-    #   points for filesystems in Unix-ish OSes).
-    #
-    # * `:config` (`Hash`) - A hash containing the configuration for this data
-    #   source. nanoc itself does not use this hash. This is especially
-    #   useful for online data sources; for example, a Twitter data source
-    #   would need the username of the account from which to fetch tweets.
-    #
-    # @return [Hash] The site configuration
+    # @return [Nanoc::Int::Configuration]
     def config
       @config
     end
@@ -269,21 +184,6 @@ module Nanoc::Int
       @unloading = false
     end
 
-    # @return [Boolean] true if the current working directory is a nanoc site, false otherwise
-    #
-    # @api private
-    def self.cwd_is_nanoc_site?
-      !config_filename_for_cwd.nil?
-    end
-
-    # @return [String] filename of the nanoc config file in the current working directory, or nil if there is none
-    #
-    # @api private
-    def self.config_filename_for_cwd
-      filenames = %w( nanoc.yaml config.yaml )
-      filenames.find { |f| File.file?(f) }
-    end
-
     private
 
     # Executes the given block, making sure that the datasources are
@@ -352,29 +252,6 @@ module Nanoc::Int
       end
     end
 
-    # Loads a configuration file.
-    def load_config(config_path)
-      YAML.load_file(config_path).__nanoc_symbolize_keys_recursively
-    end
-
-    def apply_parent_config(config, config_paths = [])
-      parent_config_file = config[:parent_config_file]
-      if parent_config_file
-        config.delete(:parent_config_file)
-        config_path = File.absolute_path(parent_config_file, File.dirname(config_paths.last))
-        unless File.file?(config_path)
-          raise Nanoc::Int::Errors::GenericTrivial, "Could not find parent configuration file '#{parent_config_file}'"
-        end
-        if config_paths.include?(config_path)
-          raise Nanoc::Int::Errors::GenericTrivial, "Cycle detected. Could not use parent configuration file '#{parent_config_file}'"
-        end
-        parent_config = load_config(config_path)
-        apply_parent_config(parent_config, config_paths + [config_path]).merge(config)
-      else
-        config
-      end
-    end
-
     def ensure_identifier_uniqueness(objects, type)
       seen = Set.new
       objects.each do |obj|
@@ -383,40 +260,6 @@ module Nanoc::Int
         end
         seen << obj.identifier
       end
-    end
-
-    # Builds the configuration hash based on the given argument. Also see
-    # {#initialize} for details.
-    def build_config(dir_or_config_hash)
-      if dir_or_config_hash.is_a? String
-        # Check whether it is supported
-        if dir_or_config_hash != '.'
-          warn 'WARNING: Calling Nanoc::Int::Site.new with a directory that is not the current working directory is not supported. It is recommended to change the directory before calling Nanoc::Int::Site.new. For example, instead of Nanoc::Int::Site.new(\'abc\'), use Dir.chdir(\'abc\') { Nanoc::Int::Site.new(\'.\') }.'
-        end
-
-        # Read config from nanoc.yaml/config.yaml in given dir
-        config_path = Dir.chdir(dir_or_config_hash) do
-          filename = self.class.config_filename_for_cwd
-          if filename.nil?
-            raise Nanoc::Int::Errors::GenericTrivial, 'Could not find nanoc.yaml or config.yaml in the current working directory'
-          end
-          File.absolute_path(filename, dir_or_config_hash)
-        end
-
-        @config = apply_parent_config(load_config(config_path), [config_path])
-      else
-        # Use passed config hash
-        @config = apply_parent_config(dir_or_config_hash.__nanoc_symbolize_keys_recursively)
-      end
-
-      # Merge config with default config
-      @config = DEFAULT_CONFIG.merge(@config)
-
-      # Merge data sources with default data source config
-      @config[:data_sources] = @config[:data_sources].map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) }
-
-      # Convert to proper configuration
-      @config = Nanoc::Int::Configuration.new(@config)
     end
   end
 end

@@ -10,7 +10,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site foo )
 
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
   end
@@ -20,7 +20,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       Nanoc::CLI.run %w( create_site ./ )
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
   end
@@ -30,7 +30,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       File.open('content/blah', 'w') { |io| io << 'asdf' }
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       assert File.file?('output/blah')
@@ -43,7 +43,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site foo --force )
 
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
   end
@@ -54,7 +54,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site foo --force )
 
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       assert File.file?('output/index.html')
@@ -75,7 +75,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       # Try with encoding = default encoding = utf-8
       File.open('content/index.html', 'w') { |io| io.write("Hello <\xD6>!\n") }
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       exception = assert_raises(RuntimeError) do
         site.compile
       end
@@ -89,7 +89,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
         io.write("    type: filesystem\n")
         io.write("    identifier_type: full\n")
       end
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
     FileUtils

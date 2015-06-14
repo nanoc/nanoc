@@ -21,7 +21,7 @@ module Nanoc::CLI
       # Load site if possible
       @site ||= nil
       if self.is_in_site_dir? && @site.nil?
-        @site = Nanoc::Int::Site.new('.')
+        @site = Nanoc::Int::SiteLoader.new.new_from_cwd
       end
 
       @site
@@ -37,7 +37,7 @@ module Nanoc::CLI
     # @return [Boolean] true if the current working directory is a nanoc site
     #   directory, false otherwise
     def in_site_dir?
-      Nanoc::Int::Site.cwd_is_nanoc_site?
+      Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
     end
     alias_method :is_in_site_dir?, :in_site_dir?
 
