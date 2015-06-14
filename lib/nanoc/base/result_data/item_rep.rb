@@ -1,67 +1,31 @@
 module Nanoc::Int
-  # A single representation (rep) of an item ({Nanoc::Int::Item}). An item can
-  # have multiple representations. A representation has its own output file.
-  # A single item can therefore have multiple output files, each run through
-  # a different set of filters with a different layout.
-  #
   # @api private
   class ItemRep
-    # Contains all private methods. Mixed into {Nanoc::Int::ItemRep}.
-    #
-    # @api private
-    module Private
-      attr_accessor :snapshot_contents
+    # @return [Hash<Symbol,Nanoc::Int::Content]
+    attr_accessor :snapshot_contents
 
-      # @return [Boolean] true if this representation has already been
-      #   compiled during the current or last compilation session; false
-      #   otherwise
-      #
-      # @api private
-      attr_accessor :compiled
-      alias_method :compiled?, :compiled
+    # @return [Boolean]
+    attr_accessor :compiled
+    alias_method :compiled?, :compiled
 
-      # @return [Hash<Symbol,String>] A hash containing the raw paths (paths
-      #   including the path to the output directory and the filename) for all
-      #   snapshots. The keys correspond with the snapshot names, and the
-      #   values with the path.
-      #
-      # @api private
-      attr_accessor :raw_paths
+    # @return [Hash<Symbol,String>]
+    attr_accessor :raw_paths
 
-      # @return [Hash<Symbol,String>] A hash containing the paths for all
-      #   snapshots. The keys correspond with the snapshot names, and the
-      #   values with the path.
-      #
-      # @api private
-      attr_accessor :paths
+    # @return [Hash<Symbol,String>]
+    attr_accessor :paths
 
-      # Resets the compilation progress for this item representation. This is
-      # necessary when an unmet dependency is detected during compilation.
-      #
-      # @api private
-      #
-      # @return [void]
-      def forget_progress
-        initialize_content
-      end
-    end
-
-    include Private
-
-    # @return [Nanoc::Int::Item] The item to which this rep belongs
+    # @return [Nanoc::Int::Item]
     attr_reader :item
 
-    # @return [Symbol] The representation's unique name
+    # @return [Symbol]
     attr_reader :name
 
+    # @return [Enumerable<Nanoc::Int:SnapshotDef]
     attr_accessor :snapshot_defs
 
-    # Creates a new item representation for the given item.
+    # @param [Nanoc::Int::Item] item
     #
-    # @param [Nanoc::Int::Item] item The item to which the new representation will
-    #   belong.
-    #
-    # @param [Symbol] name The unique name for the new item representation.
+    # @param [Symbol] name
     def initialize(item, name)
       # Set primary attributes
       @item   = item
@@ -157,6 +121,16 @@ module Nanoc::Int
     def path(params = {})
       snapshot_name = params[:snapshot] || :last
       @paths[snapshot_name]
+    end
+
+    # Resets the compilation progress for this item representation. This is
+    # necessary when an unmet dependency is detected during compilation.
+    #
+    # @api private
+    #
+    # @return [void]
+    def forget_progress
+      initialize_content
     end
 
     # Returns an object that can be used for uniquely identifying objects.
