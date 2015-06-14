@@ -266,7 +266,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Create site
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       error = assert_raises(RuntimeError) do
         site.compile
       end
@@ -279,7 +279,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     Nanoc::CLI.run %w( create_site bar)
 
     FileUtils.cd('bar') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       compiler = Nanoc::Int::Compiler.new(site)
       def compiler.route_reps
@@ -299,7 +299,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       Nanoc::CLI.run %w( compile )
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # At this point, even the already compiled items in the previous pass
@@ -328,7 +328,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       assert_raises Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName do
         site.compile
       end
@@ -358,7 +358,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -391,7 +391,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -421,7 +421,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -454,7 +454,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -475,7 +475,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -506,7 +506,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -529,7 +529,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       assert_equal Set.new(%w( content/blah.dat )), Set.new(Dir['content/*'])
@@ -545,7 +545,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       # Check
@@ -573,7 +573,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       rep = site.items['/a/'].reps[0]
       dt = site.compiler.dependency_tracker
       dt.start
@@ -602,7 +602,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write "layout '/**/*', :erb\n"
       end
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
   end

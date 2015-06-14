@@ -15,9 +15,9 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
               '<% end %> foot'
 
     # Build site
-    site = Nanoc::Int::Site.new({})
+    site = Nanoc::Int::SiteLoader.new.new_empty
     item = Nanoc::Int::Item.new('moo', {}, '/blah/')
-    @site = Nanoc::SiteView.new(Nanoc::Int::Site.new({}))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
     @item = Nanoc::ItemView.new(item)
 
     # Evaluate content
@@ -32,7 +32,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     require 'erb'
 
     # Build site
-    @site = Nanoc::SiteView.new(Nanoc::Int::Site.new({}))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
     @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('moo', {}, '/blah/'))
 
     # Capture
@@ -66,7 +66,7 @@ head
 foot
 EOS
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::Site.new({}))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
     @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
 
     result = ::ERB.new(content).result(binding)
@@ -84,7 +84,7 @@ EOS
       io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
     end
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::Site.new({}))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
     @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
     content = '<% content_for :a do %>Content One<% end %>'
     ::ERB.new(content).result(binding)
@@ -92,7 +92,7 @@ EOS
     assert_equal 'Content One', content_for(@item, :a)
     assert_equal nil,           content_for(@item, :b)
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::Site.new({}))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
     @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
     content = '<% content_for :b do %>Content Two<% end %>'
     ::ERB.new(content).result(binding)

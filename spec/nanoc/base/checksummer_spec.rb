@@ -159,7 +159,7 @@ describe Nanoc::Int::Checksummer do
 
   context 'Nanoc::Int::Configuration' do
     let(:obj) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
-    it { is_expected.to eql('Nanoc::Int::Configuration<String<foo>=String<bar>,>') }
+    it { is_expected.to eql('Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>') }
   end
 
   context 'Nanoc::Int::Item' do
@@ -224,7 +224,7 @@ describe Nanoc::Int::Checksummer do
     let(:obj) { Nanoc::ConfigView.new(config) }
     let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
 
-    it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Int::Configuration<String<foo>=String<bar>,>>') }
+    it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>>') }
   end
 
   context 'Nanoc::ItemCollectionView' do

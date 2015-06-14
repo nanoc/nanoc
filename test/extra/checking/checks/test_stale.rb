@@ -4,7 +4,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   end
 
   def calc_issues
-    site = Nanoc::Int::Site.new('.')
+    site = Nanoc::Int::SiteLoader.new.new_from_cwd
     check = check_class.create(site)
     check.run
     check.issues

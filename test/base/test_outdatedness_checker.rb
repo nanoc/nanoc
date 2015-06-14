@@ -336,7 +336,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile once
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
 
@@ -354,7 +354,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Check
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.items.find { |i| i.identifier == '/' }.reps[0]
       assert_equal ::Nanoc::Int::OutdatednessReasons::RulesModified,
@@ -379,13 +379,13 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         refute outdatedness_checker.outdated?(item), 'item should not be outdated'
@@ -412,13 +412,13 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Compile
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
 
     # Assert not outdated
     FileUtils.cd('foo') do
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       outdatedness_checker = site.compiler.outdatedness_checker
       site.items.each do |item|
         refute outdatedness_checker.outdated?(item), 'item should not be outdated'

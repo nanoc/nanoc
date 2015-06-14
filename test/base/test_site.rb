@@ -1,29 +1,29 @@
 class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
-    assert_raises(Nanoc::Int::Errors::GenericTrivial) do
-      Nanoc::Int::Site.new('.')
+    assert_raises(Nanoc::Int::SiteLoader::NoConfigFileFoundError) do
+      Nanoc::Int::SiteLoader.new.new_from_cwd
     end
   end
 
   def test_initialize_with_dir_with_config_yaml
     File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
-    site = Nanoc::Int::Site.new('.')
+    site = Nanoc::Int::SiteLoader.new.new_from_cwd
     assert_equal 'public_html', site.config[:output_dir]
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
     File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
-    site = Nanoc::Int::Site.new('.')
+    site = Nanoc::Int::SiteLoader.new.new_from_cwd
     assert_equal 'public_html', site.config[:output_dir]
   end
 
   def test_initialize_with_config_hash
-    site = Nanoc::Int::Site.new(foo: 'bar')
+    site = Nanoc::Int::SiteLoader.new.new_with_config(foo: 'bar')
     assert_equal 'bar', site.config[:foo]
   end
 
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Int::Site.new(data_sources: [{ type: 'foo', items_root: '/bar/' }])
+    site = Nanoc::Int::SiteLoader.new.new_with_config(data_sources: [{ type: 'foo', items_root: '/bar/' }])
     assert_equal('foo',   site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
@@ -56,7 +56,7 @@ EOF
       end
     end
 
-    site = Nanoc::Int::Site.new('.')
+    site = Nanoc::Int::SiteLoader.new.new_from_cwd
     assert_nil site.config[:parent_config_file]
     assert site.config[:enable_output_diff]
     assert_equal 'bar', site.config[:foo]
@@ -70,13 +70,9 @@ parent_config_file: foo/foo.yaml
 EOF
     end
 
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
-      Nanoc::Int::Site.new('.')
+    assert_raises(Nanoc::Int::SiteLoader::NoParentConfigFileFoundError) do
+      Nanoc::Int::SiteLoader.new.new_from_cwd
     end
-    assert_equal(
-      "Could not find parent configuration file 'foo/foo.yaml'",
-      error.message,
-    )
   end
 
   def test_initialize_with_parent_config_file_cycle
@@ -94,13 +90,9 @@ EOF
       end
     end
 
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
-      Nanoc::Int::Site.new('.')
+    assert_raises(Nanoc::Int::SiteLoader::CyclicalConfigFileError) do
+      Nanoc::Int::SiteLoader.new.new_from_cwd
     end
-    assert_equal(
-      "Cycle detected. Could not use parent configuration file '../nanoc.yaml'",
-      error.message,
-    )
   end
 
   def test_load_rules_with_existing_rules_file
@@ -111,7 +103,7 @@ EOF
     dsl.expects(:compile).with('*')
 
     # Create site
-    site = Nanoc::Int::Site.new({})
+    site = Nanoc::Int::SiteLoader.new.new_empty
     site.compiler.rules_collection.stubs(:dsl).returns(dsl)
 
     # Create rules file
@@ -147,7 +139,7 @@ EOF
       end
 
       # Create site
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.load
 
       # Check
@@ -165,7 +157,7 @@ EOF
       File.open('content/foo_bar.md', 'w') { |io| io << 'asdf' }
       File.open('layouts/detail.erb', 'w') { |io| io << 'asdf' }
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       site.items.each do |item|
         assert_equal Nanoc::Identifier, item.identifier.class
@@ -191,7 +183,7 @@ EOF
       File.open('content/parent/bar.md', 'w') { |io| io << 'asdf' }
       File.open('content/parent/bar/qux.md', 'w') { |io| io << 'asdf' }
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       root   = site.items.find { |i| i.identifier == '/' }
       style  = site.items.find { |i| i.identifier == '/stylesheet/' }
@@ -222,7 +214,7 @@ EOF
       File.open('content/parent/foo.md', 'w') { |io| io << 'asdf' }
       File.open('content/parent/bar/qux.md', 'w') { |io| io << 'asdf' }
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       root   = site.items.find { |i| i.identifier == '/index.html' }
       parent = site.items.find { |i| i.identifier == '/parent.md' }
@@ -248,7 +240,7 @@ EOF
       File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
       assert_raises(Nanoc::Int::Errors::DuplicateIdentifier) do
-        site = Nanoc::Int::Site.new('.')
+        site = Nanoc::Int::SiteLoader.new.new_from_cwd
         site.load
       end
     end
@@ -261,7 +253,7 @@ EOF
       File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
       assert_raises(Nanoc::Int::Errors::DuplicateIdentifier) do
-        site = Nanoc::Int::Site.new('.')
+        site = Nanoc::Int::SiteLoader.new.new_from_cwd
         site.load
       end
     end
@@ -272,22 +264,22 @@ describe 'Nanoc::Int::Site#initialize' do
   include Nanoc::TestHelpers
 
   it 'should merge default config' do
-    site = Nanoc::Int::Site.new(foo: 'bar')
+    site = Nanoc::Int::SiteLoader.new.new_with_config(foo: 'bar')
     site.config[:foo].must_equal 'bar'
     site.config[:output_dir].must_equal 'output'
   end
 
   it 'should not raise under normal circumstances' do
-    Nanoc::Int::Site.new({})
+    Nanoc::Int::SiteLoader.new.new_empty
   end
 
   it 'should not raise for non-existant output directory' do
-    Nanoc::Int::Site.new(output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf')
+    Nanoc::Int::SiteLoader.new.new_with_config(output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf')
   end
 
   it 'should not raise for unknown data sources' do
     proc do
-      Nanoc::Int::Site.new(data_source: 'fklsdhailfdjalghlkasdflhagjskajdf')
+      Nanoc::Int::SiteLoader.new.new_with_config(data_source: 'fklsdhailfdjalghlkasdflhagjskajdf')
     end
   end
 end
@@ -296,7 +288,7 @@ describe 'Nanoc::Int::Site#compiler' do
   include Nanoc::TestHelpers
 
   it 'should not raise under normal circumstances' do
-    site = Nanoc::Int::Site.new({})
+    site = Nanoc::Int::SiteLoader.new.new_empty
     site.compiler
   end
 end
@@ -305,13 +297,13 @@ describe 'Nanoc::Int::Site#data_sources' do
   include Nanoc::TestHelpers
 
   it 'should not raise for known data sources' do
-    site = Nanoc::Int::Site.new({})
+    site = Nanoc::Int::SiteLoader.new.new_empty
     site.data_sources
   end
 
   it 'should raise for unknown data sources' do
     proc do
-      site = Nanoc::Int::Site.new(
+      site = Nanoc::Int::SiteLoader.new.new_with_config(
         data_sources: [
           { type: 'fklsdhailfdjalghlkasdflhagjskajdf' },
         ],
@@ -331,7 +323,7 @@ describe 'Nanoc::Int::Site#data_sources' do
         io.write "      bbb: two\n"
       end
 
-      site = Nanoc::Int::Site.new('.')
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       data_sources = site.data_sources
 
       assert data_sources.first.config[:aaa] = 'one'
