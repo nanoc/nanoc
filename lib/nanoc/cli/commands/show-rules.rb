@@ -32,7 +32,7 @@ module Nanoc::CLI::Commands
       puts "#{@c.c('Layout ' + layout.identifier, :bold, :yellow)}:"
 
       found = false
-      @rules.layout_filter_mapping.find do |pattern, _|
+      @rules.layout_filter_mapping.each do |pattern, _|
         if pattern.match?(layout.identifier)
           puts "  #{pattern}"
           found = true

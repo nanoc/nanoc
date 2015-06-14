@@ -27,6 +27,18 @@ ClassAndModuleChildren:
 Style/AlignHash:
   Enabled: false
 
+Style/RescueModifier:
+  Enabled: false
+
+Style/EmptyElse:
+  Enabled: false
+
+Style/Next:
+  Enabled: false
+
+Lint/NonLocalExitFromIterator:
+  Enabled: false
+
 
 
 # ----- DISABLED (hard) -----

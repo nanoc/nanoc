@@ -73,8 +73,8 @@ module Nanoc
       self.class.hash ^ to_s.hash
     end
 
-    def =~(pat)
-      Nanoc::Int::Pattern.from(pat).match?(to_s) ? 0 : nil
+    def =~(other)
+      Nanoc::Int::Pattern.from(other).match?(to_s) ? 0 : nil
     end
 
     def <=>(other)
@@ -93,8 +93,8 @@ module Nanoc
     end
 
     # @return [String]
-    def +(string)
-      to_s + string
+    def +(other)
+      to_s + other
     end
 
     # @return [Nanoc::Identifier]

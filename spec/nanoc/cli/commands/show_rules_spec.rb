@@ -87,7 +87,7 @@ describe Nanoc::CLI::Commands::ShowRules do
           (none)
 
       EOS
-      .gsub(/^ {8}/, '')
+        .gsub(/^ {8}/, '')
     end
 
     it 'outputs item and layout rules' do

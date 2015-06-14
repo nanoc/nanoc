@@ -25,10 +25,10 @@ RSpec::Matchers.define :raise_frozen_error do |_expected|
       actual.call
       false
     rescue => e
-      unless e.is_a?(RuntimeError) || e.is_a?(TypeError)
-        false
-      else
+      if e.is_a?(RuntimeError) || e.is_a?(TypeError)
         e.message =~ /(^can't modify frozen |^unable to modify frozen object$)/
+      else
+        false
       end
     end
   end

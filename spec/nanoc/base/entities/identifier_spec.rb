@@ -23,7 +23,7 @@ describe Nanoc::Identifier do
     end
 
     context 'given something else' do
-      let(:arg) { 12345 }
+      let(:arg) { 12_345 }
 
       it 'raises' do
         expect { subject }.to raise_error(Nanoc::Identifier::NonCoercibleObjectError)
