@@ -41,6 +41,10 @@ module Nanoc::Int
     def captures(_identifier)
       nil
     end
+
+    def to_s
+      @string
+    end
   end
 
   # @api private
@@ -56,6 +60,10 @@ module Nanoc::Int
     def captures(identifier)
       matches = @regexp.match(identifier.to_s)
       matches && matches.captures
+    end
+
+    def to_s
+      @regexp.to_s
     end
   end
 end
