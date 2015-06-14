@@ -75,9 +75,8 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       # Try with encoding = default encoding = utf-8
       File.open('content/index.html', 'w') { |io| io.write("Hello <\xD6>!\n") }
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       exception = assert_raises(RuntimeError) do
-        site.compile
+        Nanoc::Int::SiteLoader.new.new_from_cwd
       end
       assert_equal 'Could not read content/index.html because the file is not valid UTF-8.', exception.message
 
