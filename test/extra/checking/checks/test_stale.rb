@@ -5,6 +5,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
 
   def calc_issues
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site.compiler.load # TODO: remove me
     check = check_class.create(site)
     check.run
     check.issues
