@@ -15,7 +15,6 @@ module Nanoc::Int
   autoload 'Errors',               'nanoc/base/errors'
   autoload 'Memoization',          'nanoc/base/memoization'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
-  autoload 'Store',                'nanoc/base/store'
   autoload 'IdentifiableCollection', 'nanoc/base/identifiable_collection'
 
   # Load source data classes
@@ -28,8 +27,6 @@ module Nanoc::Int
   autoload 'ItemRep',              'nanoc/base/result_data/item_rep'
 
   # Load compilation classes
-  autoload 'ChecksumStore',        'nanoc/base/compilation/checksum_store'
-  autoload 'CompiledContentCache', 'nanoc/base/compilation/compiled_content_cache'
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
   autoload 'CompilerDSL',          'nanoc/base/compilation/compiler_dsl'
   autoload 'DependencyTracker',    'nanoc/base/compilation/dependency_tracker'
@@ -38,10 +35,10 @@ module Nanoc::Int
   autoload 'Rule',                 'nanoc/base/compilation/rule'
   autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
   autoload 'RuleMemoryCalculator', 'nanoc/base/compilation/rule_memory_calculator'
-  autoload 'RuleMemoryStore',      'nanoc/base/compilation/rule_memory_store'
   autoload 'RulesCollection',      'nanoc/base/compilation/rules_collection'
 end
 
 require_relative 'base/entities'
+require_relative 'base/repos'
 require_relative 'base/services'
 require_relative 'base/views'
