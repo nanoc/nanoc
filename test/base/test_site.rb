@@ -23,8 +23,8 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Int::SiteLoader.new.new_with_config(data_sources: [{ type: 'foo', items_root: '/bar/' }])
-    assert_equal('foo',   site.config[:data_sources][0][:type])
+    site = Nanoc::Int::SiteLoader.new.new_with_config(data_sources: [{ items_root: '/bar/' }])
+    assert_equal('filesystem', site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
     assert_equal({},      site.config[:data_sources][0][:config])
@@ -119,35 +119,6 @@ EOF
     site.compiler.rules_collection.load
   end
 
-  def test_load_data_sources_first
-    # Create site
-    Nanoc::CLI.run %w( create_site bar)
-
-    FileUtils.cd('bar') do
-      # Create data source code
-      File.open('lib/some_data_source.rb', 'w') do |io|
-        io.write "class FooDataSource < Nanoc::DataSource\n"
-        io.write "  identifier :site_test_foo\n"
-        io.write "  def items ; [ Nanoc::Int::Item.new('content', {}, '/foo/') ] ; end\n"
-        io.write "end\n"
-      end
-
-      # Update configuration
-      File.open('nanoc.yaml', 'w') do |io|
-        io.write "data_sources:\n"
-        io.write '  - type: site_test_foo'
-      end
-
-      # Create site
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.load
-
-      # Check
-      assert_equal 1, site.data_sources.size
-      refute_nil site.items['/foo/']
-    end
-  end
-
   def test_identifier_classes
     Nanoc::CLI.run %w( create_site bar)
     FileUtils.cd('bar') do
@@ -240,8 +211,7 @@ EOF
       File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
       assert_raises(Nanoc::Int::Errors::DuplicateIdentifier) do
-        site = Nanoc::Int::SiteLoader.new.new_from_cwd
-        site.load
+        Nanoc::Int::SiteLoader.new.new_from_cwd
       end
     end
   end
@@ -253,33 +223,8 @@ EOF
       File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
       assert_raises(Nanoc::Int::Errors::DuplicateIdentifier) do
-        site = Nanoc::Int::SiteLoader.new.new_from_cwd
-        site.load
+        Nanoc::Int::SiteLoader.new.new_from_cwd
       end
-    end
-  end
-end
-
-describe 'Nanoc::Int::Site#initialize' do
-  include Nanoc::TestHelpers
-
-  it 'should merge default config' do
-    site = Nanoc::Int::SiteLoader.new.new_with_config(foo: 'bar')
-    site.config[:foo].must_equal 'bar'
-    site.config[:output_dir].must_equal 'output'
-  end
-
-  it 'should not raise under normal circumstances' do
-    Nanoc::Int::SiteLoader.new.new_empty
-  end
-
-  it 'should not raise for non-existant output directory' do
-    Nanoc::Int::SiteLoader.new.new_with_config(output_dir: 'fklsdhailfdjalghlkasdflhagjskajdf')
-  end
-
-  it 'should not raise for unknown data sources' do
-    proc do
-      Nanoc::Int::SiteLoader.new.new_with_config(data_source: 'fklsdhailfdjalghlkasdflhagjskajdf')
     end
   end
 end
@@ -290,44 +235,5 @@ describe 'Nanoc::Int::Site#compiler' do
   it 'should not raise under normal circumstances' do
     site = Nanoc::Int::SiteLoader.new.new_empty
     site.compiler
-  end
-end
-
-describe 'Nanoc::Int::Site#data_sources' do
-  include Nanoc::TestHelpers
-
-  it 'should not raise for known data sources' do
-    site = Nanoc::Int::SiteLoader.new.new_empty
-    site.data_sources
-  end
-
-  it 'should raise for unknown data sources' do
-    proc do
-      site = Nanoc::Int::SiteLoader.new.new_with_config(
-        data_sources: [
-          { type: 'fklsdhailfdjalghlkasdflhagjskajdf' },
-        ],
-      )
-      site.data_sources
-    end.must_raise Nanoc::Int::Errors::UnknownDataSource
-  end
-
-  it 'should also use the toplevel config for data sources' do
-    with_site do
-      File.open('nanoc.yaml', 'w') do |io|
-        io.write "data_sources:\n"
-        io.write "  -\n"
-        io.write "    type: filesystem\n"
-        io.write "    aaa: one\n"
-        io.write "    config:\n"
-        io.write "      bbb: two\n"
-      end
-
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      data_sources = site.data_sources
-
-      assert data_sources.first.config[:aaa] = 'one'
-      assert data_sources.first.config[:bbb] = 'two'
-    end
   end
 end
