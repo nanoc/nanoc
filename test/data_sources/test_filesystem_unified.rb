@@ -4,7 +4,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     site = Nanoc::Int::SiteLoader.new.new_empty
 
     # Create data source
-    data_source = Nanoc::DataSources::FilesystemUnified.new(site, nil, nil, params)
+    data_source = Nanoc::DataSources::FilesystemUnified.new(site.config, nil, nil, params)
 
     # Done
     data_source
