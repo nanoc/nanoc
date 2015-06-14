@@ -190,7 +190,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     with_site do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       assert Dir['output/*'].size == 1
@@ -204,7 +203,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       File.open('content/foo.html', 'w') { |io| io.write('o hai') }
       File.open('content/bar.html', 'w') { |io| io.write('o bai') }
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       assert Dir['output/*'].size == 2
@@ -224,7 +222,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write('manatee')
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
       assert Dir['output/*'].size == 2
@@ -244,7 +241,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
       end
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
       assert_raises Nanoc::Int::Errors::RecursiveCompilation do
         site.compile
       end
@@ -578,7 +574,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
       rep = site.items['/a/'].reps[0]
       dt = site.compiler.dependency_tracker
       dt.start

@@ -57,8 +57,9 @@ module Nanoc::CLI
     #
     # @return [void]
     def load_site
-      print 'Loading site… '
       require_site
+      print 'Loading site data… '
+      site.load
       puts 'done'
     end
 
