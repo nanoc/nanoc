@@ -41,7 +41,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'normal flow with binary rep' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/foo.dat') }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -49,7 +49,7 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Int::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
-        File.write('/foo.dat', 'Foo Data')
+        File.write(content.filename, 'Foo Data')
 
         filter_class = Class.new(::Nanoc::Filter) do
           type :binary
@@ -79,7 +79,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'normal flow with binary rep and binary-to-text filter' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/foo.dat') }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -87,7 +87,7 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Int::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
-        File.write('/foo.dat', 'Foo Data')
+        File.write(content.filename, 'Foo Data')
 
         filter_class = Class.new(::Nanoc::Filter) do
           type binary: :text
@@ -163,7 +163,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary rep, text-to-something filter' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/foo.md') }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.md')) }
 
       it 'raises' do
         expect { executor.filter(rep, :erb) }
@@ -172,7 +172,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary filter that does not write anything' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/foo.dat') }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -180,7 +180,7 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Int::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
-        File.write('/foo.dat', 'Foo Data')
+        File.write(content.filename, 'Foo Data')
 
         filter_class = Class.new(::Nanoc::Filter) do
           type :binary
@@ -334,7 +334,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary item' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/donkey.md') }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/donkey.md')) }
 
       it 'raises' do
         expect { subject }.to raise_error(Nanoc::Int::Errors::CannotLayoutBinaryItem)
@@ -348,7 +348,7 @@ describe Nanoc::Int::Executor do
     let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
 
     context 'binary content' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/donkey.dat') }
+      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('/donkey.dat')) }
 
       it 'does not create snapshots' do
         executor.snapshot(rep, :something)

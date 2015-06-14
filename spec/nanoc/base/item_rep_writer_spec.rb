@@ -23,11 +23,11 @@ describe Nanoc::Int::ItemRepWriter do
     end
 
     context 'binary item rep' do
-      let(:orig_content) { Nanoc::Int::BinaryContent.new('/foo.dat') }
+      let(:orig_content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
 
       let(:snapshot_contents) do
         {
-          last: Nanoc::Int::BinaryContent.new('/input.dat'),
+          last: Nanoc::Int::BinaryContent.new(File.expand_path('input.dat')),
         }
       end
 

@@ -168,7 +168,8 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
 
     context 'binary' do
-      let(:content) { Nanoc::Int::BinaryContent.new('/foo.md') }
+      let(:filename) { File.expand_path('foo.dat') }
+      let(:content) { Nanoc::Int::BinaryContent.new(filename) }
       let(:obj) { Nanoc::Int::Item.new(content, { 'foo' => 'bar' }, '/foo.md') }
 
       let(:mtime) { 200 }
