@@ -62,8 +62,6 @@ module Nanoc::Extra::Checking
       run_check_classes(check_classes_named(check_class_names))
     end
 
-    protected
-
     def load_dsl_if_available
       @dsl_loaded ||= false
       unless @dsl_loaded
@@ -107,6 +105,9 @@ module Nanoc::Extra::Checking
 
     def run_checks(classes)
       return [] if classes.empty?
+
+      # TODO: remove me
+      @site.compiler.load
 
       checks = []
       issues = Set.new
