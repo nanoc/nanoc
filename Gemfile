@@ -44,6 +44,7 @@ gem 'rspec'
 gem 'rubocop', '~> 0.31.0'
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
+gem 'simplecov', require: false
 gem 'slim'
 gem 'typogruby'
 gem 'uglifier'

@@ -76,7 +76,7 @@ module Nanoc::Int
     end
 
     def without(key)
-      self.class.new(@wrapped.reject { |k, v| k == key })
+      self.class.new(@wrapped.reject { |k, _v| k == key })
     end
 
     def update(hash)

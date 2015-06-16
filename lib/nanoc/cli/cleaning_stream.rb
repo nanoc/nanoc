@@ -132,6 +132,11 @@ module Nanoc::CLI
       @stream.external_encoding
     end
 
+    # @see ARGF.set_encoding
+    def set_encoding(*args)
+      @stream.set_encoding(*args)
+    end
+
     protected
 
     def _nanoc_clean(s)
