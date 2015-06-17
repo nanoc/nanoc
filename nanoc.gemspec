@@ -1,5 +1,4 @@
-$LOAD_PATH.unshift(File.expand_path('../lib/', __FILE__))
-require 'nanoc/version'
+require_relative 'lib/nanoc/version'
 
 Gem::Specification.new do |s|
   s.name        = 'nanoc'

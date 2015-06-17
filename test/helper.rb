@@ -1,31 +1,26 @@
-# Set up gem loading (necessary for cri dependency)
-require File.dirname(__FILE__) + '/gem_loader.rb'
+require 'simplecov'
+SimpleCov.start
 
-# Load unit testing stuff
 require 'minitest/test'
 require 'minitest/spec'
 require 'minitest/mock'
+require 'minitest/autorun'
 require 'mocha/setup'
 require 'vcr'
 
-# Setup coverage
-require 'coveralls'
-Coveralls.wear!
-
-# Load nanoc
-$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
-require 'nanoc'
-require 'nanoc/cli'
-Nanoc::CLI.setup
-
-# Load miscellaneous requirements
 require 'tmpdir'
 require 'stringio'
+require 'yard'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'test/fixtures/vcr_cassettes'
   c.hook_into :webmock
 end
+
+require 'nanoc'
+require 'nanoc/cli'
+
+Nanoc::CLI.setup
 
 module Nanoc::TestHelpers
   LIB_DIR = File.expand_path(File.dirname(__FILE__) + '/../lib')

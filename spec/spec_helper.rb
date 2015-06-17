@@ -1,6 +1,15 @@
-$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
+require 'simplecov'
+SimpleCov.start
+
 require 'nanoc'
 require 'nanoc/cli'
+
+# FIXME: This should not be necessary (breaks SimpleCov)
+module Nanoc::CLI
+  def self.setup_cleaning_streams
+  end
+end
+
 Nanoc::CLI.setup
 
 RSpec.configure do |c|
