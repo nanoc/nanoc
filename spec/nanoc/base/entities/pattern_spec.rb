@@ -18,6 +18,31 @@ describe Nanoc::Int::Pattern do
       expect(pattern.match?('/foo/xaz/bar.html')).to eql(true)
       expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
     end
+
+    it 'errors on other inputs' do
+      expect { described_class.from(123) }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe '#initialize' do
+    it 'errors' do
+      expect { described_class.new('/stuff') }
+        .to raise_error(NotImplementedError)
+    end
+  end
+
+  describe '#match?' do
+    it 'errors' do
+      expect { described_class.allocate.match?('/foo.md') }
+        .to raise_error(NotImplementedError)
+    end
+  end
+
+  describe '#captures' do
+    it 'errors' do
+      expect { described_class.allocate.captures('/foo.md') }
+        .to raise_error(NotImplementedError)
+    end
   end
 end
 

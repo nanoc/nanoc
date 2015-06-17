@@ -25,32 +25,7 @@ class Nanoc::Int::MemoizationTest < Nanoc::TestCase
     memoize :run
   end
 
-  class EqualSample
-    extend Nanoc::Int::Memoization
-
-    def initialize(value)
-      @value = value
-    end
-
-    def hash
-      4
-    end
-
-    def eql?(_other)
-      true
-    end
-
-    def ==(_other)
-      true
-    end
-
-    def run(n)
-      @value * 10 + n
-    end
-    memoize :run
-  end
-
-  def test
+  def test_normal
     sample1a = Sample1.new(10)
     sample1b = Sample1.new(15)
     sample2a = Sample2.new(20)
@@ -61,18 +36,6 @@ class Nanoc::Int::MemoizationTest < Nanoc::TestCase
       assert_equal 10 * 15 + 7,  sample1b.run(7)
       assert_equal 100 * 20 + 5, sample2a.run(5)
       assert_equal 100 * 25 + 7, sample2b.run(7)
-    end
-  end
-
-  def test_equal
-    sample1 = EqualSample.new(2)
-    sample2 = EqualSample.new(3)
-
-    3.times do
-      assert_equal 2 * 10 + 5, sample1.run(5)
-      assert_equal 2 * 10 + 3, sample1.run(3)
-      assert_equal 3 * 10 + 5, sample2.run(5)
-      assert_equal 3 * 10 + 3, sample2.run(3)
     end
   end
 end
