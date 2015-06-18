@@ -47,48 +47,33 @@ module Nanoc::Int
         end
       end
 
-      refine NilClass do
-        def update_digest(digest, checksummer, visited = Set.new)
-        end
-      end
-
-      refine TrueClass do
-        def update_digest(digest, checksummer, visited = Set.new)
-        end
-      end
-
-      refine FalseClass do
-        def update_digest(digest, checksummer, visited = Set.new)
-        end
-      end
-
-      refine Array do
-        def update_digest(digest, checksummer, visited = Set.new)
-          each do |el|
-            checksummer.update(el, digest, visited + [self])
-            digest.update(',')
+      [NilClass, TrueClass, FalseClass].each do |k|
+        refine k do
+          def update_digest(digest, checksummer, visited = Set.new)
           end
         end
       end
 
-      refine Hash do
-        def update_digest(digest, checksummer, visited = Set.new)
-          each do |key, value|
-            checksummer.update(key, digest, visited + [self])
-            digest.update('=')
-            checksummer.update(value, digest, visited + [self])
-            digest.update(',')
+      [Array, Nanoc::Int::IdentifiableCollection].each do |k|
+        refine k do
+          def update_digest(digest, checksummer, visited = Set.new)
+            each do |el|
+              checksummer.update(el, digest, visited + [self])
+              digest.update(',')
+            end
           end
         end
       end
 
-      refine Nanoc::Int::Configuration do
-        def update_digest(digest, checksummer, visited = Set.new)
-          each do |key, value|
-            checksummer.update(key, digest, visited + [self])
-            digest.update('=')
-            checksummer.update(value, digest, visited + [self])
-            digest.update(',')
+      [Hash, Nanoc::Int::Configuration].each do |k|
+        refine k do
+          def update_digest(digest, checksummer, visited = Set.new)
+            each do |key, value|
+              checksummer.update(key, digest, visited + [self])
+              digest.update('=')
+              checksummer.update(value, digest, visited + [self])
+              digest.update(',')
+            end
           end
         end
       end
@@ -160,17 +145,8 @@ module Nanoc::Int
         end
       end
 
-      refine Nanoc::Int::IdentifiableCollection do
-        def update_digest(digest, checksummer, visited = Set.new)
-          each do |el|
-            checksummer.update(el, digest, visited + [self])
-            digest.update(',')
-          end
-        end
-      end
-
-      [Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView].each do |view_class|
-        refine view_class do
+      [Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView].each do |k|
+        refine k do
           def update_digest(digest, checksummer, visited = Set.new)
             checksummer.update(unwrap, digest)
           end
