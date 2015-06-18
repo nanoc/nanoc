@@ -65,7 +65,7 @@ module Nanoc::Int
       refine Array do
         def update_digest(digest, checksummer, visited = Set.new)
           each do |el|
-            checksummer.send(:update, el, digest, visited + [self])
+            checksummer.update(el, digest, visited + [self])
             digest.update(',')
           end
         end
@@ -74,9 +74,9 @@ module Nanoc::Int
       refine Hash do
         def update_digest(digest, checksummer, visited = Set.new)
           each do |key, value|
-            checksummer.send(:update, key, digest, visited + [self])
+            checksummer.update(key, digest, visited + [self])
             digest.update('=')
-            checksummer.send(:update, value, digest, visited + [self])
+            checksummer.update(value, digest, visited + [self])
             digest.update(',')
           end
         end
@@ -85,9 +85,9 @@ module Nanoc::Int
       refine Nanoc::Int::Configuration do
         def update_digest(digest, checksummer, visited = Set.new)
           each do |key, value|
-            checksummer.send(:update, key, digest, visited + [self])
+            checksummer.update(key, digest, visited + [self])
             digest.update('=')
-            checksummer.send(:update, value, digest, visited + [self])
+            checksummer.update(value, digest, visited + [self])
             digest.update(',')
           end
         end
@@ -119,51 +119,51 @@ module Nanoc::Int
 
       refine Nanoc::Identifier do
         def update_digest(digest, checksummer, visited = Set.new)
-          checksummer.send(:update, to_s, digest)
+          checksummer.update(to_s, digest)
         end
       end
 
       refine Nanoc::Int::RulesCollection do
         def update_digest(digest, checksummer, visited = Set.new)
-          checksummer.send(:update, data, digest)
+          checksummer.update(data, digest)
         end
       end
 
       refine Nanoc::Int::CodeSnippet do
         def update_digest(digest, checksummer, visited = Set.new)
-          checksummer.send(:update, data, digest)
+          checksummer.update(data, digest)
         end
       end
 
       refine Nanoc::Int::TextualContent do
         def update_digest(digest, checksummer, visited = Set.new)
-          checksummer.send(:update, string, digest)
+          checksummer.update(string, digest)
         end
       end
 
       refine Nanoc::Int::BinaryContent do
         def update_digest(digest, checksummer, visited = Set.new)
-          checksummer.send(:update, Pathname.new(filename), digest)
+          checksummer.update(Pathname.new(filename), digest)
         end
       end
 
       refine Nanoc::Int::Document do
         def update_digest(digest, checksummer, visited = Set.new)
           digest.update('content=')
-          checksummer.send(:update, content, digest)
+          checksummer.update(content, digest)
 
           digest.update(',attributes=')
-          checksummer.send(:update, attributes, digest, visited + [self])
+          checksummer.update(attributes, digest, visited + [self])
 
           digest.update(',identifier=')
-          checksummer.send(:update, identifier, digest)
+          checksummer.update(identifier, digest)
         end
       end
 
       refine Nanoc::Int::IdentifiableCollection do
         def update_digest(digest, checksummer, visited = Set.new)
           each do |el|
-            checksummer.send(:update, el, digest, visited + [self])
+            checksummer.update(el, digest, visited + [self])
             digest.update(',')
           end
         end
@@ -172,7 +172,7 @@ module Nanoc::Int
       [Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView].each do |view_class|
         refine view_class do
           def update_digest(digest, checksummer, visited = Set.new)
-            checksummer.send(:update, unwrap, digest)
+            checksummer.update(unwrap, digest)
           end
         end
       end
@@ -202,8 +202,7 @@ module Nanoc::Int
         digest.to_s
       end
 
-      private
-
+      # @api private
       def update(obj, digest, visited = Set.new)
         digest.update(obj.class.to_s)
         digest.update('<')
