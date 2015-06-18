@@ -30,7 +30,7 @@ module Nanoc::Int
       candidate && File.expand_path(candidate)
     end
 
-    def config_from_cwd
+    def new_from_cwd
       # Determine path
       filename = self.class.config_filename_for_cwd
       raise NoConfigFileFoundError if filename.nil?

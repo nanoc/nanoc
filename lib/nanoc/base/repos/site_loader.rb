@@ -9,7 +9,7 @@ module Nanoc::Int
     end
 
     def new_from_cwd
-      site_from_config(Nanoc::Int::ConfigLoader.new.config_from_cwd)
+      site_from_config(Nanoc::Int::ConfigLoader.new.new_from_cwd)
     end
 
     # @api private
