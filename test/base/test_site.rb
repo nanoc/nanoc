@@ -1,6 +1,6 @@
 class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
-    assert_raises(Nanoc::Int::SiteLoader::NoConfigFileFoundError) do
+    assert_raises(Nanoc::Int::ConfigLoader::NoConfigFileFoundError) do
       Nanoc::Int::SiteLoader.new.new_from_cwd
     end
   end
@@ -70,7 +70,7 @@ parent_config_file: foo/foo.yaml
 EOF
     end
 
-    assert_raises(Nanoc::Int::SiteLoader::NoParentConfigFileFoundError) do
+    assert_raises(Nanoc::Int::ConfigLoader::NoParentConfigFileFoundError) do
       Nanoc::Int::SiteLoader.new.new_from_cwd
     end
   end
@@ -90,7 +90,7 @@ EOF
       end
     end
 
-    assert_raises(Nanoc::Int::SiteLoader::CyclicalConfigFileError) do
+    assert_raises(Nanoc::Int::ConfigLoader::CyclicalConfigFileError) do
       Nanoc::Int::SiteLoader.new.new_from_cwd
     end
   end
