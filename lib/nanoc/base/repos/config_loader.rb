@@ -1,4 +1,5 @@
 module Nanoc::Int
+  # @api private
   class ConfigLoader
     class NoConfigFileFoundError < ::Nanoc::Error
       def initialize
@@ -41,7 +42,8 @@ module Nanoc::Int
         [filename]).with_defaults
     end
 
-    def apply_parent_config(config, processed_paths = Set.new)
+    # @api private
+    def apply_parent_config(config, processed_paths = [])
       parent_path = config[:parent_config_file]
       return config if parent_path.nil?
 
