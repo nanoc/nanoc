@@ -12,7 +12,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
   end
 
   def test_preprocess_twice
-    rules_collection = Nanoc::Int::RulesCollection.new(nil)
+    rules_collection = Nanoc::Int::RulesCollection.new
     compiler_dsl = Nanoc::Int::CompilerDSL.new(rules_collection, {})
 
     # first time
@@ -32,59 +32,62 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
 
   def test_per_rules_file_preprocessor
     # Create site
-    Nanoc::CLI.run %w( create_site per-rules-file-preprocessor )
-    FileUtils.cd('per-rules-file-preprocessor') do
-      # Create rep
-      item = Nanoc::Int::Item.new('foo', { extension: 'bar' }, '/foo/')
-
+    Nanoc::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
       # Create a bonus rules file
-      File.open('more_rules.rb', 'w') { |io| io.write "preprocess { @items['/foo/'][:preprocessed] = true }" }
+      File.write(
+        'more_rules.rb',
+        "preprocess { @items['/index.*'][:preprocessed] = true }")
 
-      # Create other necessary stuff
+      # Adjust normal rules file
+      File.write(
+        'Rules',
+        "include_rules 'more_rules'\n\npreprocess {}\n\n" + File.read('Rules'))
+
+      # Create site and compiler
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.items << item
-      dsl = site.compiler.rules_collection.dsl
-      io = capturing_stdio do
-        dsl.preprocess {}
-      end
-      assert_empty io[:stdout]
-      assert_empty io[:stderr]
-
-      # Include rules
-      dsl.include_rules 'more_rules'
+      compiler = Nanoc::Int::CompilerLoader.new.load(site)
+      compiler.load
 
       # Check that the two preprocess blocks have been added
-      assert_equal 2, site.compiler.rules_collection.preprocessors.size
-      refute_nil site.compiler.rules_collection.preprocessors.first
-      refute_nil site.compiler.rules_collection.preprocessors.to_a.last
+      assert_equal 2, compiler.rules_collection.preprocessors.size
+      refute_nil compiler.rules_collection.preprocessors.first
+      refute_nil compiler.rules_collection.preprocessors.to_a.last
 
       # Apply preprocess blocks
-      site.compiler.preprocess
-      assert item.attributes[:preprocessed]
+      compiler.preprocess
+      assert site.items['/index.*'].attributes[:preprocessed]
     end
   end
 
   def test_include_rules
     # Create site
-    Nanoc::CLI.run %w( create_site with_bonus_rules )
-    FileUtils.cd('with_bonus_rules') do
-      # Create rep
-      item = Nanoc::Int::Item.new('foo', { extension: 'bar' }, '/foo/')
-      rep  = Nanoc::Int::ItemRep.new(item, :default)
-
+    Nanoc::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
       # Create a bonus rules file
-      File.open('more_rules.rb', 'w') { |io| io.write "passthrough '/foo/'" }
+      File.write(
+        'more_rules.rb',
+        "passthrough '/index.*'")
 
-      # Create other necessary stuff
+      # Adjust normal rules file
+      File.write(
+        'Rules',
+        "include_rules 'more_rules'\n\n" \
+          "route '/**/*' do ; nil ; end\n\n" \
+          "compile '/**/*' do ; end\n")
+
+      # Create site and compiler
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.items << item
-      dsl = site.compiler.rules_collection.dsl
+      compiler = Nanoc::Int::CompilerLoader.new.load(site)
+      compiler.load
 
-      # Include rules
-      dsl.include_rules 'more_rules'
-
-      # Check that the rule made it into the collection
-      refute_nil site.compiler.rules_collection.routing_rule_for(rep)
+      # Check
+      rep = site.items['/index.*'].reps[0]
+      routing_rules = site.compiler.rules_collection.routing_rules_for(rep)
+      routing_rule = routing_rules[:last]
+      refute_nil routing_rule
+      assert_equal Nanoc::Int::StringPattern, routing_rule.pattern.class
+      assert_equal '/index.*', routing_rule.pattern.to_s
     end
   end
 
@@ -92,7 +95,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
     with_site do
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<EOS
+        io.write <<-EOS
 passthrough "/robots/"
 
 compile '*' do ; end

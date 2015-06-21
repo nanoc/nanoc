@@ -144,7 +144,7 @@ describe Nanoc::Int::Checksummer do
 
   context 'Nanoc::Int::RulesCollection' do
     let(:obj) do
-      Nanoc::Int::RulesCollection.new(nil).tap { |rc| rc.data = data }
+      Nanoc::Int::RulesCollection.new.tap { |rc| rc.data = data }
     end
 
     let(:data) { 'STUFF!' }

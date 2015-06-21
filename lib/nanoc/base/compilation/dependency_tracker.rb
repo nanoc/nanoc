@@ -21,10 +21,6 @@ module Nanoc::Int
     #   layouts that are being tracked by the dependency tracker
     attr_reader :objects
 
-    # @return [Nanoc::Int::Compiler] The compiler that corresponds to this
-    #   dependency tracker
-    attr_accessor :compiler
-
     # Creates a new dependency tracker for the given items and layouts.
     #
     # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects The list of items
@@ -147,11 +143,6 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_for(object)
       @graph.delete_edges_to(object)
-    end
-
-    # @see Nanoc::Int::Store#unload
-    def unload
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
     protected

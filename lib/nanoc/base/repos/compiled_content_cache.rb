@@ -38,11 +38,6 @@ module Nanoc::Int
       @cache[rep.item.identifier][rep.name] = content
     end
 
-    # @see Nanoc::Int::Store#unload
-    def unload
-      @cache = {}
-    end
-
     protected
 
     def data

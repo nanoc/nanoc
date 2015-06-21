@@ -5,24 +5,25 @@ module Nanoc::Int
   class OutdatednessChecker
     extend Nanoc::Int::Memoization
 
-    # @option params [Nanoc::Int::Site] :site (nil) The site this outdatedness
-    #   checker belongs to.
+    attr_reader :checksum_store
+    attr_reader :dependency_tracker
+    attr_reader :rule_memory_calculator
+    attr_reader :rule_memory_store
+    attr_reader :rules_collection
+    attr_reader :site
+
+    # @option params [Nanoc::Int::Site] :site
     #
-    # @option params [Nanoc::Int::ChecksumStore] :checksum_store (nil) The
-    #   checksum store where checksums of items, layouts, … are stored.
+    # @option params [Nanoc::Int::ChecksumStore] :checksum_store
     #
-    # @option params [Nanoc::Int::DependencyTracker] :dependency_tracker (nil) The
-    #   dependency tracker for the given site.
+    # @option params [Nanoc::Int::DependencyTracker] :dependency_tracker
     def initialize(params = {})
-      @site = params.fetch(:site) do
-        raise ArgumentError, 'Nanoc::Int::OutdatednessChecker#initialize needs a :site parameter'
-      end
-      @checksum_store = params.fetch(:checksum_store) do
-        raise ArgumentError, 'Nanoc::Int::OutdatednessChecker#initialize needs a :checksum_store parameter'
-      end
-      @dependency_tracker = params.fetch(:dependency_tracker) do
-        raise ArgumentError, 'Nanoc::Int::OutdatednessChecker#initialize needs a :dependency_tracker parameter'
-      end
+      @site = params.fetch(:site)
+      @checksum_store = params.fetch(:checksum_store)
+      @dependency_tracker = params.fetch(:dependency_tracker)
+      @rules_collection = params.fetch(:rules_collection)
+      @rule_memory_store = params.fetch(:rule_memory_store)
+      @rule_memory_calculator = params.fetch(:rule_memory_calculator)
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}
@@ -166,7 +167,7 @@ module Nanoc::Int
     # @return [Boolean] true if the rule memory for the given item
     #   represenation has changed, false otherwise
     def rule_memory_differs_for(obj)
-      rules_collection.rule_memory_differs_for(obj)
+      !rule_memory_store[obj].eql?(rule_memory_calculator[obj])
     end
     memoize :rule_memory_differs_for
 
@@ -196,25 +197,5 @@ module Nanoc::Int
       !checksums_available?(obj) || !checksums_identical?(obj)
     end
     memoize :object_modified?
-
-    # @return [Nanoc::Int::ChecksumStore] The checksum store
-    def checksum_store
-      @checksum_store
-    end
-
-    # @return [Nanoc::Int::RulesCollection] The rules collection
-    def rules_collection
-      site.compiler.rules_collection
-    end
-
-    # @return [Nanoc::Int::DependencyTracker] The dependency tracker
-    def dependency_tracker
-      @dependency_tracker
-    end
-
-    # @return [Nanoc::Int::Site] The site
-    def site
-      @site
-    end
   end
 end

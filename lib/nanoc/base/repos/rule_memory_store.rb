@@ -4,12 +4,8 @@ module Nanoc::Int
   #
   # @api private
   class RuleMemoryStore < ::Nanoc::Int::Store
-    # @option params [Nanoc::Int::Site] site The site where this rule memory store
-    #   belongs to
-    def initialize(params = {})
+    def initialize
       super('tmp/rule_memory', 1)
-
-      @site = params[:site] if params.key?(:site)
 
       @rule_memories = {}
     end

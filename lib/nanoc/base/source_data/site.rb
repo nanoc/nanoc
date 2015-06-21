@@ -28,7 +28,7 @@ module Nanoc::Int
     #
     # @return [Nanoc::Int::Compiler] The compiler for this site
     def compiler
-      @compiler ||= Nanoc::Int::Compiler.new(self)
+      @compiler ||= Nanoc::Int::CompilerLoader.new.load(self)
     end
 
     attr_reader :code_snippets
