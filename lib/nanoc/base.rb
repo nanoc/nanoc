@@ -34,6 +34,7 @@ module Nanoc::Int
   autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
   autoload 'Rule',                 'nanoc/base/compilation/rule'
   autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
+  autoload 'ItemRepRepo',          'nanoc/base/compilation/item_rep_repo'
 end
 
 require_relative 'base/entities'

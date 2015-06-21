@@ -7,7 +7,7 @@ module Nanoc::Int
       @site = site
       @rules_collection = rules_collection
 
-      @reps = []
+      @reps = Nanoc::Int::ItemRepRepo.new
     end
 
     def run
