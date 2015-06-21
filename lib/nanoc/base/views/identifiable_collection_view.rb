@@ -28,7 +28,7 @@ module Nanoc
     #
     # @return [self]
     def each
-      @objects.each { |i| yield view_class.new(i, nil) }
+      @objects.each { |i| yield view_class.new(i, @reps) }
       self
     end
 
@@ -71,7 +71,7 @@ module Nanoc
     #   @return [#identifier] if an object was found
     def [](arg)
       res = @objects[arg]
-      res && view_class.new(res, nil)
+      res && view_class.new(res, @reps)
     end
   end
 end

@@ -87,7 +87,6 @@ describe Nanoc::Helpers::Blogging do
       items << item_b
       items << item_c
 
-      # FIXME: pass real reps
       { items: Nanoc::ItemCollectionView.new(items, nil) }
     end
 
@@ -102,15 +101,11 @@ describe Nanoc::Helpers::Blogging do
     subject { mod.url_for(item_view) }
 
     let(:item) do
-      Nanoc::Int::Item.new('Stuff', item_attributes, '/stuff/').tap do |item|
-        item.reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-          rep.paths[:last] = '/rep/path/stuff.html'
-        end
-      end
+      Nanoc::Int::Item.new('Stuff', item_attributes, '/stuff/')
     end
 
     let(:item_view) do
-      Nanoc::ItemView.new(item, nil)
+      Nanoc::ItemView.new(item, reps)
     end
 
     let(:item_attributes) do
@@ -121,6 +116,15 @@ describe Nanoc::Helpers::Blogging do
       {
         config: { base_url: base_url },
       }
+    end
+
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
+    before do
+      rep = Nanoc::Int::ItemRep.new(item, :default)
+      rep.paths[:last] = '/rep/path/stuff.html'
+      item.reps << rep
+      reps << rep
     end
 
     context 'without base_url' do
@@ -168,15 +172,11 @@ describe Nanoc::Helpers::Blogging do
     subject { mod.feed_url }
 
     let(:item) do
-      Nanoc::Int::Item.new('Feed', item_attributes, '/feed/').tap do |item|
-        item.reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-          rep.paths[:last] = '/feed.xml'
-        end
-      end
+      Nanoc::Int::Item.new('Feed', item_attributes, '/feed/')
     end
 
     let(:item_view) do
-      Nanoc::ItemView.new(item, nil)
+      Nanoc::ItemView.new(item, reps)
     end
 
     let(:item_attributes) do
@@ -188,6 +188,15 @@ describe Nanoc::Helpers::Blogging do
         config: { base_url: base_url },
         item: item_view,
       }
+    end
+
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
+    before do
+      rep = Nanoc::Int::ItemRep.new(item, :default)
+      rep.paths[:last] = '/feed.xml'
+      item.reps << rep
+      reps << rep
     end
 
     context 'without base_url' do
@@ -223,17 +232,13 @@ describe Nanoc::Helpers::Blogging do
     subject { mod.atom_tag_for(item_view) }
 
     let(:item) do
-      Nanoc::Int::Item.new('Stuff', item_attributes, '/stuff/').tap do |item|
-        item.reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-          rep.paths[:last] = item_rep_path
-        end
-      end
+      Nanoc::Int::Item.new('Stuff', item_attributes, '/stuff/')
     end
 
     let(:item_rep_path) { '/stuff.xml' }
 
     let(:item_view) do
-      Nanoc::ItemView.new(item, nil)
+      Nanoc::ItemView.new(item, reps)
     end
 
     let(:item_attributes) do
@@ -248,6 +253,15 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:base_url) { 'http://url.base' }
+
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
+    before do
+      rep = Nanoc::Int::ItemRep.new(item, :default)
+      rep.paths[:last] = item_rep_path
+      item.reps << rep
+      reps << rep
+    end
 
     context 'item with path' do
       let(:item_rep_path) { '/stuff.xml' }

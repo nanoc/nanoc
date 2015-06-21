@@ -49,13 +49,20 @@ describe Nanoc::ItemView do
   end
 
   describe '#reps' do
-    let(:item) { double(:item, reps: [rep_a, rep_b]) }
-    let(:rep_a) { double(:rep_a) }
-    let(:rep_b) { double(:rep_b) }
+    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
+    let(:rep_a) { Nanoc::Int::ItemRep.new(item, :a) }
+    let(:rep_b) { Nanoc::Int::ItemRep.new(item, :b) }
 
     let(:view) { described_class.new(item, reps) }
 
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
     subject { view.reps }
+
+    before do
+      reps << rep_a
+      reps << rep_b
+    end
 
     it 'returns a proper item rep collection' do
       expect(subject.size).to eq(2)
@@ -86,8 +93,10 @@ describe Nanoc::ItemView do
       end
     end
 
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
     before do
-      item.reps << rep
+      reps << rep
     end
 
     context 'requesting implicit default rep' do
@@ -155,8 +164,10 @@ describe Nanoc::ItemView do
       end
     end
 
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
     before do
-      item.reps << rep
+      reps << rep
     end
 
     context 'requesting implicit default rep' do
