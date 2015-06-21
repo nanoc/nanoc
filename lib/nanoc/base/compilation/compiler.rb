@@ -102,11 +102,10 @@ module Nanoc::Int
       Nanoc::Int::Preprocessor.new(site: @site, rules_collection: @rules_collection).run
 
       # Build reps
-      reps = build_reps
-      @reps = reps
+      build_reps
 
       # Compile
-      run(reps)
+      run(@reps)
     end
 
     def run(reps)
@@ -164,7 +163,7 @@ module Nanoc::Int
     def build_reps
       builder = Nanoc::Int::ItemRepBuilder.new(site, rules_collection)
       builder.run
-      builder.reps
+      @reps = builder.reps
     end
 
     # @param [Nanoc::Int::ItemRep] rep The item representation for which the
