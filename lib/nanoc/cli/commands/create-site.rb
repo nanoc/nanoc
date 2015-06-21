@@ -18,10 +18,10 @@ module Nanoc::CLI::Commands
     DEFAULT_CONFIG = <<EOS unless defined? DEFAULT_CONFIG
 # The syntax to use for patterns in the Rules file. Can be either `"glob"`
 # (default) or `"legacy"`. The former will enable glob patterns, which behave
-# like Ruby’s File.fnmatch. The latter will enable nanoc 3.x-style patterns.
+# like Ruby’s File.fnmatch. The latter will enable Nanoc 3.x-style patterns.
 string_pattern_type: glob
 
-# A list of file extensions that nanoc will consider to be textual rather than
+# A list of file extensions that Nanoc will consider to be textual rather than
 # binary. If an item with an extension not in this list is found,  the file
 # will be considered as binary.
 text_extensions: #{array_to_yaml(Nanoc::Int::Configuration::DEFAULT_CONFIG[:text_extensions])}
@@ -34,7 +34,7 @@ output_dir: #{Nanoc::Int::Configuration::DEFAULT_CONFIG[:output_dir]}
 # A list of index filenames, i.e. names of files that will be served by a web
 # server when a directory is requested. Usually, index files are named
 # “index.html”, but depending on the web server, this may be something else,
-# such as “default.htm”. This list is used by nanoc to generate pretty URLs.
+# such as “default.htm”. This list is used by Nanoc to generate pretty URLs.
 index_filenames: #{array_to_yaml(Nanoc::Int::Configuration::DEFAULT_CONFIG[:index_filenames])}
 
 # Whether or not to generate a diff of the compiled content when compiling a
@@ -43,7 +43,7 @@ index_filenames: #{array_to_yaml(Nanoc::Int::Configuration::DEFAULT_CONFIG[:inde
 enable_output_diff: false
 
 prune:
-  # Whether to automatically remove files not managed by nanoc from the output
+  # Whether to automatically remove files not managed by Nanoc from the output
   # directory.
   auto_prune: true
 
@@ -52,7 +52,7 @@ prune:
   # .git, .svn etc.
   exclude: [ '.git', '.hg', '.svn', 'CVS' ]
 
-# The data sources where nanoc loads its data from. This is an array of
+# The data sources where Nanoc loads its data from. This is an array of
 # hashes; each array element represents a single data source. By default,
 # there is only a single data source that reads data from the “content/” and
 # “layout/” directories in the site directory.
@@ -78,7 +78,7 @@ data_sources:
 
     # The kind of identifier to use for items and layouts. The default is
     # “full”, meaning that identifiers include file extensions. This can also
-    # be “legacy”, primarily used by older nanoc sites.
+    # be “legacy”, primarily used by older Nanoc sites.
     identifier_type: full
 
 # Configuration for the “check” command, which run unit tests on the site.
@@ -102,7 +102,7 @@ end
 
 # This is an example rule that matches Markdown (.md) files, and filters them
 # using the :kramdown filter. It is commented out by default, because kramdown
-# is not bundled with nanoc or Ruby.
+# is not bundled with Nanoc or Ruby.
 #
 #compile '/**/*.md' do
 #  filter :kramdown
@@ -132,16 +132,16 @@ EOS
 title: Home
 ---
 
-<h1>A Brand New nanoc Site</h1>
+<h1>A Brand New Nanoc Site</h1>
 
-<p>You’ve just created a new nanoc site. The page you are looking at right now is the home page for your site. To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
+<p>You’ve just created a new Nanoc site. The page you are looking at right now is the home page for your site. To get started, consider replacing this default homepage with your own customized homepage. Some pointers on how to do so:</p>
 
 <ul>
   <li><p><strong>Change this page’s content</strong> by editing the “index.html” file in the “content” directory. This is the actual page content, and therefore doesn’t include the header, sidebar or style information (those are part of the layout).</p></li>
   <li><p><strong>Change the layout</strong>, which is the “default.html” file in the “layouts” directory, and create something unique (and hopefully less bland).</p></li>
 </ul>
 
-<p>If you need any help with customizing your nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
+<p>If you need any help with customizing your Nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
 EOS
 
     DEFAULT_STYLESHEET = <<EOS unless defined? DEFAULT_STYLESHEET
@@ -253,11 +253,11 @@ EOS
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>A Brand New nanoc Site - <%= @item[:title] %></title>
+    <title>A Brand New Nanoc Site - <%= @item[:title] %></title>
     <link rel="stylesheet" href="<%= @items['/stylesheet.*'].path %>">
 
     <!-- you don't need to keep this, but it's cool for stats! -->
-    <meta name="generator" content="nanoc <%= Nanoc::VERSION %>">
+    <meta name="generator" content="Nanoc <%= Nanoc::VERSION %>">
   </head>
   <body>
     <div id="main">

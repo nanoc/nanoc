@@ -1,4 +1,10 @@
-# nanoc news
+# Nanoc news
+
+## 4.0.0rc2 (???)
+
+Changes:
+
+* nanoc is now called Nanoc
 
 ## 4.0.0rc1 (2015-06-21)
 

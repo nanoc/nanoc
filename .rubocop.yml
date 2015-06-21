@@ -48,7 +48,7 @@ Lint/NonLocalExitFromIterator:
 BracesAroundHashParameters:
   Enabled: false
 
-# nanoc relies on eval in several cases (code snippets and some helpers).
+# Nanoc relies on eval in several cases (code snippets and some helpers).
 Eval:
   Enabled: false
 
@@ -118,7 +118,7 @@ AsciiComments:
 Documentation:
   Enabled: false
 
-# nanoc suppresses exceptions for valid reasons in a few cases.
+# Nanoc suppresses exceptions for valid reasons in a few cases.
 HandleExceptions:
   Enabled: false
 

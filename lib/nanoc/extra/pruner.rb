@@ -1,6 +1,6 @@
 module Nanoc::Extra
   # Responsible for finding and deleting files in the site’s output directory
-  # that are not managed by nanoc.
+  # that are not managed by Nanoc.
   #
   # @api private
   class Pruner
@@ -18,7 +18,7 @@ module Nanoc::Extra
       @exclude = params.fetch(:exclude) { [] }
     end
 
-    # Prunes all output files not managed by nanoc.
+    # Prunes all output files not managed by Nanoc.
     #
     # @return [void]
     def run

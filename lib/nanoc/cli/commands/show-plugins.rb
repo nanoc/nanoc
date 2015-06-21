@@ -3,7 +3,7 @@ aliases :info
 usage 'show-plugins [options]'
 description <<-EOS
 Show a list of available plugins, including filters and data sources.
-If the current directory contains a nanoc web site, the plugins defined in this site will be shown as well.
+If the current directory contains a Nanoc web site, the plugins defined in this site will be shown as well.
 EOS
 
 module Nanoc::CLI::Commands

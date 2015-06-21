@@ -15,7 +15,7 @@ module Nanoc::Helpers
   # @example Capturing content for a summary
   #
   #   <% content_for :summary do %>
-  #     <p>On this item, nanoc is introduced, blah blah.</p>
+  #     <p>On this item, Nanoc is introduced, blah blah.</p>
   #   <% end %>
   #
   # @example Showing captured content in a sidebar

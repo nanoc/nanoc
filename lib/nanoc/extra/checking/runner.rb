@@ -5,7 +5,7 @@ module Nanoc::Extra::Checking
   class Runner
     CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb']
 
-    # @param [Nanoc::Int::Site] site The nanoc site this runner is for
+    # @param [Nanoc::Int::Site] site The Nanoc site this runner is for
     def initialize(site)
       @site = site
     end

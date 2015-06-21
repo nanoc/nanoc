@@ -2,7 +2,7 @@ begin
   require 'cri'
 rescue LoadError => e
   $stderr.puts e
-  $stderr.puts "If you are using a Gemfile, make sure that the Gemfile contains nanoc ('gem \"nanoc\"')."
+  $stderr.puts "If you are using a Gemfile, make sure that the Gemfile contains Nanoc ('gem \"nanoc\"')."
   exit 1
 end
 
@@ -42,7 +42,7 @@ module Nanoc::CLI
     @debug = boolean
   end
 
-  # Invokes the nanoc command-line tool with the given arguments.
+  # Invokes the Nanoc command-line tool with the given arguments.
   #
   # @param [Array<String>] args An array of command-line arguments
   #
