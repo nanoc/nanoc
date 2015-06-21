@@ -59,8 +59,7 @@ module Nanoc::Int
     # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
     #
     # @return [void]
-    def apply_to(rep, site:, executor:, reps: nil)
-      # TODO: make reps mandatory
+    def apply_to(rep, site:, executor:, reps:)
       context = Nanoc::Int::RuleContext.new(
         reps: reps, rep: rep, executor: executor, site: site)
       context.instance_exec(matches(rep.item.identifier), &@block)

@@ -5,13 +5,11 @@ module Nanoc::Int
   #
   # @api private
   class RuleContext < Nanoc::Int::Context
-<<<<<<< HEAD
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
     # @param reps
-    def initialize(rep:, site:, executor:, reps: nil)
-      #  TODO: make reps mandatory
+    def initialize(rep:, site:, executor:, reps:)
       @_executor = executor
 
       super({

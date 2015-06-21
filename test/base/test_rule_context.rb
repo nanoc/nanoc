@@ -12,10 +12,12 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     item.stubs(:site).returns(site)
     rep = mock
     rep.stubs(:item).returns(item)
+    reps = mock
 
     # Create context
     executor = nil
-    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
+    rule_context = Nanoc::Int::RuleContext.new(
+      reps: reps, rep: rep, executor: executor, site: site)
 
     # Check classes
     assert_equal Nanoc::ItemRepView,          rule_context.rep.class
@@ -32,6 +34,11 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     assert_equal config,  rule_context.config.unwrap
     assert_equal layouts, rule_context.layouts.unwrap
     assert_equal items,   rule_context.items.unwrap
+
+    # Check reps
+    assert_equal reps, rule_context.item.unwrap_reps
+    assert_equal reps, rule_context.layouts.unwrap_reps
+    assert_equal reps, rule_context.items.unwrap_reps
   end
 
   def test_actions
@@ -45,6 +52,7 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     site.stubs(:layouts).returns(layouts)
     item = mock
     item.stubs(:site).returns(site)
+    reps = mock
 
     # Mock rep
     rep = mock
@@ -52,7 +60,8 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
 
     # Create context
     executor = nil
-    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
+    rule_context = Nanoc::Int::RuleContext.new(
+      reps: reps, rep: rep, executor: executor, site: site)
 
     # Check
     assert_raises(NoMethodError) do
