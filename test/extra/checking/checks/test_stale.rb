@@ -5,6 +5,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
 
   def calc_issues
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site.compiler.build_reps
     runner = Nanoc::Extra::Checking::Runner.new(site)
     issues = runner.run_checks([check_class])
   end

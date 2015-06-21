@@ -24,7 +24,7 @@ module Nanoc::Int
       self
     end
 
-    def reps_for(item)
+    def [](item)
       @reps_by_item.fetch(item, [])
     end
   end

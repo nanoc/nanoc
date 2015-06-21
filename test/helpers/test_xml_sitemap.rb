@@ -11,33 +11,35 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   def test_xml_sitemap
     if_have 'builder', 'nokogiri' do
+      reps = Nanoc::Int::ItemRepRepo.new
+
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
 
       # Create item 1
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :one_a, '/item-one/a/')
-      create_item_rep(item.unwrap, :one_b, '/item-one/b/')
+      reps << create_item_rep(item.unwrap, :one_a, '/item-one/a/')
+      reps << create_item_rep(item.unwrap, :one_b, '/item-one/b/')
 
       # Create item 2
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 2', { is_hidden: true }, '/item-two/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 2', { is_hidden: true }, '/item-two/'), reps)
       @items << item
 
       # Create item 3
       attrs = { mtime: Time.parse('2004-07-12'), changefreq: 'daily', priority: 0.5 }
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :three_a, '/item-three/a/')
-      create_item_rep(item.unwrap, :three_b, '/item-three/b/')
+      reps << create_item_rep(item.unwrap, :three_a, '/item-three/a/')
+      reps << create_item_rep(item.unwrap, :three_b, '/item-three/b/')
 
       # Create item 4
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 4', {}, '/item-four/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 4', {}, '/item-four/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :four_a, nil)
+      reps << create_item_rep(item.unwrap, :four_a, nil)
 
       # Create sitemap item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), nil)
+      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), reps)
 
       # Create site
       @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })
@@ -72,13 +74,15 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   def test_sitemap_with_items_as_param
     if_have 'builder', 'nokogiri' do
+      reps = Nanoc::Int::ItemRepRepo.new
+
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
       @items << nil
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :one_a, '/item-one/a/')
-      create_item_rep(item.unwrap, :one_b, '/item-one/b/')
+      reps << create_item_rep(item.unwrap, :one_a, '/item-one/a/')
+      reps << create_item_rep(item.unwrap, :one_b, '/item-one/b/')
       @items << nil
 
       # Create sitemap item
@@ -109,15 +113,17 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   def test_filter
     if_have 'builder', 'nokogiri' do
+      reps = Nanoc::Int::ItemRepRepo.new
+
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :one_a, '/item-one/a/')
-      create_item_rep(item.unwrap, :one_b, '/item-one/b/')
+      reps << create_item_rep(item.unwrap, :one_a, '/item-one/a/')
+      reps << create_item_rep(item.unwrap, :one_b, '/item-one/b/')
 
       # Create sitemap item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), nil)
+      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), reps)
 
       # Create site
       @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })
@@ -140,23 +146,25 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   def test_sorted
     if_have 'builder', 'nokogiri' do
+      reps = Nanoc::Int::ItemRepRepo.new
+
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'), nil)
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :a_alice,   '/george/alice/')
-      create_item_rep(item.unwrap, :b_zoey,    '/george/zoey/')
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/walton/'), nil)
+      reps << create_item_rep(item.unwrap, :a_alice,   '/george/alice/')
+      reps << create_item_rep(item.unwrap, :b_zoey,    '/george/zoey/')
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/walton/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :a_eve,     '/walton/eve/')
-      create_item_rep(item.unwrap, :b_bob,     '/walton/bob/')
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/lucas/'), nil)
+      reps << create_item_rep(item.unwrap, :a_eve,     '/walton/eve/')
+      reps << create_item_rep(item.unwrap, :b_bob,     '/walton/bob/')
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/lucas/'), reps)
       @items << item
-      create_item_rep(item.unwrap, :a_trudy,   '/lucas/trudy/')
-      create_item_rep(item.unwrap, :b_mallory, '/lucas/mallory/')
+      reps << create_item_rep(item.unwrap, :a_trudy,   '/lucas/trudy/')
+      reps << create_item_rep(item.unwrap, :b_mallory, '/lucas/mallory/')
 
       # Create sitemap item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), nil)
+      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), reps)
 
       # Create site
       @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })

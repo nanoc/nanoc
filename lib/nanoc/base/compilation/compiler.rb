@@ -70,6 +70,9 @@ module Nanoc::Int
     # @api private
     attr_reader :dependency_tracker
 
+    # @api private
+    attr_reader :reps
+
     # @group Public instance methods
 
     def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:)

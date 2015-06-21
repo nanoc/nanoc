@@ -62,7 +62,7 @@ module Nanoc
     #
     # @return [Nanoc::ItemRepCollectionView]
     def reps
-      Nanoc::ItemRepCollectionView.new(unwrap_reps.reps_for(unwrap))
+      Nanoc::ItemRepCollectionView.new(unwrap_reps[unwrap])
     end
 
     # @api private
