@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name        = 'nanoc'
   s.version     = Nanoc::VERSION
   s.homepage    = 'http://nanoc.ws/'
-  s.summary     = 'a static site generator, fit for building anything from a personal blog to a corporate web site.'
-  s.description = 'nanoc is a flexible static site generator. It transforms content from formats such as Markdown or AsciiDoc into another format, usually HTML, and lays out pages so that the site’s look and feel is consistent across all pages. Static sites built with nanoc can be deployed to any web server.'
+  s.summary     = 'A static-site generator with a focus on flexibility.'
+  s.description = 'nanoc is a static-site generator focused on flexibility. It transforms content from a format such as Markdown or AsciiDoc into another format, usually HTML, and lays out pages consistently to retain the site’s look and feel throughout. Static sites built with nanoc can be deployed to any web server.'
 
   s.author  = 'Denis Defreyne'
   s.email   = 'denis.defreyne@stoneship.org'
