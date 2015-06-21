@@ -14,6 +14,11 @@ module Nanoc
       @document
     end
 
+    # @api private
+    def unwrap_reps
+      @reps
+    end
+
     # @see Object#==
     def ==(other)
       identifier == other.identifier

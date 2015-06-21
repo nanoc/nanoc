@@ -5,18 +5,21 @@ module Nanoc::Int
   #
   # @api private
   class RuleContext < Nanoc::Int::Context
+<<<<<<< HEAD
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
-    def initialize(rep:, site:, executor:)
+    # @param reps
+    def initialize(rep:, site:, executor:, reps: nil)
+      #  TODO: make reps mandatory
       @_executor = executor
 
       super({
-        item: Nanoc::ItemView.new(rep.item, nil),
+        item: Nanoc::ItemView.new(rep.item, reps),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items, nil),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
+        items: Nanoc::ItemCollectionView.new(site.items, reps),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, reps),
         config: Nanoc::ConfigView.new(site.config),
         site: Nanoc::SiteView.new(site),
       })

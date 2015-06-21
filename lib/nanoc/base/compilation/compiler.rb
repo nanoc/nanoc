@@ -100,6 +100,7 @@ module Nanoc::Int
 
       # Build reps
       reps = build_reps
+      @reps = reps
 
       # Compile
       run(reps)
@@ -276,7 +277,7 @@ module Nanoc::Int
       executor.snapshot(rep, :raw)
       executor.snapshot(rep, :pre, final: false)
       rules_collection.compilation_rule_for(rep)
-        .apply_to(rep, executor: executor, site: @site)
+        .apply_to(rep, reps: @reps, executor: executor, site: @site)
       executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
       executor.snapshot(rep, :last)
     end

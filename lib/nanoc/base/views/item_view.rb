@@ -40,7 +40,7 @@ module Nanoc
     #
     # @return [Enumerable<Nanoc::ItemView>]
     def children
-      unwrap.children.map { |i| Nanoc::ItemView.new(i, @reps) }
+      unwrap.children.map { |i| Nanoc::ItemView.new(i, unwrap_reps) }
     end
 
     # Returns the parent of this item, if one exists. For items with identifiers
@@ -50,7 +50,7 @@ module Nanoc
     #
     # @return [nil] if the item has no parent
     def parent
-      unwrap.parent && Nanoc::ItemView.new(unwrap.parent, @reps)
+      unwrap.parent && Nanoc::ItemView.new(unwrap.parent, unwrap_reps)
     end
 
     # @return [Boolean] True if the item is binary, false otherwise
@@ -62,7 +62,7 @@ module Nanoc
     #
     # @return [Nanoc::ItemRepCollectionView]
     def reps
-      Nanoc::ItemRepCollectionView.new(@reps.reps_for(unwrap))
+      Nanoc::ItemRepCollectionView.new(unwrap_reps.reps_for(unwrap))
     end
 
     # @api private

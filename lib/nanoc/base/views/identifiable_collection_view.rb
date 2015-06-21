@@ -13,6 +13,11 @@ module Nanoc
       @objects
     end
 
+    # @api private
+    def unwrap_reps
+      @reps
+    end
+
     # @abstract
     #
     # @api private
@@ -28,7 +33,7 @@ module Nanoc
     #
     # @return [self]
     def each
-      @objects.each { |i| yield view_class.new(i, @reps) }
+      @objects.each { |i| yield view_class.new(i, unwrap_reps) }
       self
     end
 
@@ -71,7 +76,7 @@ module Nanoc
     #   @return [#identifier] if an object was found
     def [](arg)
       res = @objects[arg]
-      res && view_class.new(res, @reps)
+      res && view_class.new(res, unwrap_reps)
     end
   end
 end
