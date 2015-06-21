@@ -53,19 +53,18 @@ module Nanoc::Int
 
     # Applies this rule to the given item rep.
     #
-    # @param [Nanoc::Int::ItemRep] rep The item representation where this rule
-    #   should be applied to
+    # @param [Nanoc::Int::ItemRep] rep
     #
-    # @option params [Nanoc::Int::Compiler] :compiler The compiler
+    # @option params [Nanoc::Int::Site] :site
     #
-    # @raise [ArgumentError] if no compiler is passed
+    # @option params [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] :executor
     #
     # @return [void]
     def apply_to(rep, params = {})
-      compiler = params.fetch(:compiler)
+      site = params.fetch(:site)
       executor = params.fetch(:executor)
 
-      context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, compiler: compiler)
+      context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 

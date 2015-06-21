@@ -33,11 +33,6 @@ module Nanoc::Int
       @checksums[obj.reference] = checksum
     end
 
-    # @see Nanoc::Int::Store#unload
-    def unload
-      @checksums = {}
-    end
-
     protected
 
     def data

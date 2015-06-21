@@ -1,4 +1,27 @@
 class Nanoc::Int::CompilerTest < Nanoc::TestCase
+  def new_compiler(site = nil)
+    site ||= Nanoc::Int::Site.new(
+      config: nil,
+      code_snippets: [],
+      items: [],
+      layouts: [],
+    )
+
+    rules_collection = Nanoc::Int::RulesCollection.new
+
+    params = {
+      compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
+      checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
+      rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
+      rule_memory_calculator: Nanoc::Int::RuleMemoryCalculator.new(
+        rules_collection: rules_collection,
+        site: site,
+      ),
+    }
+
+    Nanoc::Int::Compiler.new(site, rules_collection, params)
+  end
+
   def test_compilation_rule_for
     # Mock rules
     rules = [mock, mock, mock]
@@ -9,7 +32,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     rules[2].expects(:rep_name).returns('right')
 
     # Create compiler
-    compiler = Nanoc::Int::Compiler.new(nil)
+    compiler = new_compiler
     compiler.rules_collection.instance_eval { @item_compilation_rules = rules }
 
     # Mock rep
@@ -22,35 +45,9 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     assert_equal rules[2], compiler.rules_collection.compilation_rule_for(rep)
   end
 
-  def test_routing_rule_for
-    # Mock rules
-    rules = [mock, mock, mock]
-    rules[0].expects(:applicable_to?).returns(false)
-    rules[1].expects(:applicable_to?).returns(true)
-    rules[1].expects(:rep_name).returns('wrong')
-    rules[2].expects(:applicable_to?).returns(true)
-    rules[2].expects(:rep_name).returns('right')
-
-    # Create compiler
-    compiler = Nanoc::Int::Compiler.new(nil)
-    compiler.rules_collection.instance_eval { @item_routing_rules = rules }
-
-    # Mock rep
-    rep = mock
-    rep.stubs(:name).returns('right')
-    item = mock
-    rep.stubs(:item).returns(item)
-
-    # Test
-    assert_equal rules[2], compiler.rules_collection.routing_rule_for(rep)
-  end
-
   def test_filter_for_layout_with_existant_layout
-    # Mock site
-    site = mock
-
     # Create compiler
-    compiler = Nanoc::Int::Compiler.new(site)
+    compiler = new_compiler
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(/.*/)] = [:erb, { foo: 'bar' }]
 
     # Mock layout
@@ -62,11 +59,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_filter_for_layout_with_existant_layout_and_unknown_filter
-    # Mock site
-    site = mock
-
     # Create compiler
-    compiler = Nanoc::Int::Compiler.new(site)
+    compiler = new_compiler
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(/.*/)] = [:some_unknown_filter, { foo: 'bar' }]
 
     # Mock layout
@@ -78,11 +72,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_filter_for_layout_with_nonexistant_layout
-    # Mock site
-    site = mock
-
     # Create compiler
-    compiler = Nanoc::Int::Compiler.new(site)
+    compiler = new_compiler
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/foo/$})] = [:erb, { foo: 'bar' }]
 
     # Mock layout
@@ -94,11 +85,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_filter_for_layout_with_many_layouts
-    # Mock site
-    site = mock
-
     # Create compiler
-    compiler = Nanoc::Int::Compiler.new(site)
+    compiler = new_compiler
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/b/c/.*/$})] = [:erb, { char: 'd' }]
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/.*/$})]     = [:erb, { char: 'b' }]
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/b/.*/$})]   = [:erb, { char: 'c' }] # never used!
@@ -159,7 +147,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     site.stubs(:layouts).returns([layout])
 
     # Create compiler
-    compiler = Nanoc::Int::Compiler.new(site)
+    compiler = new_compiler(site)
     compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/blah/$})] = [:erb, {}]
     site.stubs(:compiler).returns(compiler)
@@ -285,7 +273,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     FileUtils.cd('bar') do
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
-      compiler = Nanoc::Int::Compiler.new(site)
+      compiler = Nanoc::Int::CompilerLoader.new.load(site)
       def compiler.route_reps
         raise 'oh my gosh it is borken'
       end

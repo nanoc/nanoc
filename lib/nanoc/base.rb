@@ -35,7 +35,8 @@ module Nanoc::Int
   autoload 'Rule',                 'nanoc/base/compilation/rule'
   autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
   autoload 'RuleMemoryCalculator', 'nanoc/base/compilation/rule_memory_calculator'
-  autoload 'RulesCollection',      'nanoc/base/compilation/rules_collection'
+  autoload 'ItemRepSelector',      'nanoc/base/compilation/item_rep_selector'
+  autoload 'ItemRepRouter',        'nanoc/base/compilation/item_rep_router'
 end
 
 require_relative 'base/entities'

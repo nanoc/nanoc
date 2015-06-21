@@ -57,15 +57,9 @@ module Nanoc::Int
     #
     # @return [void]
     def load
-      # Don’t load twice
-      if @loaded
-        return
-      end
-
       # Check file existance
       unless File.file?(filename)
         no_data_found
-        @loaded = true
         return
       end
 
@@ -74,22 +68,16 @@ module Nanoc::Int
           # Check version
           if pstore[:version] != version
             version_mismatch_detected
-            @loaded = true
             return
           end
 
           # Load
           self.data = pstore[:data]
-          @loaded = true
         end
       rescue
         FileUtils.rm_f(filename)
         load
       end
-    end
-
-    # Undoes the effects of {#load}. Used when {#load} raises an exception.
-    def unload
     end
 
     # Stores the data contained in memory to the filesystem. This method will

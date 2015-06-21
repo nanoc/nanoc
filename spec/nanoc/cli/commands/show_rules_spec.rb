@@ -51,7 +51,7 @@ describe Nanoc::CLI::Commands::ShowRules do
     let(:compiler) { double(:compiler, rules_collection: rules_collection) }
 
     let(:rules_collection) do
-      Nanoc::Int::RulesCollection.new(nil).tap do |rc|
+      Nanoc::Int::RulesCollection.new.tap do |rc|
         rc.add_item_compilation_rule(
           Nanoc::Int::Rule.new(Nanoc::Int::Pattern.from('/dog.*'), :default, proc {}))
         rc.add_item_compilation_rule(

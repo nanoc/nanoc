@@ -95,30 +95,6 @@ EOF
     end
   end
 
-  def test_load_rules_with_existing_rules_file
-    # Mock DSL
-    dsl = mock
-    dsl.stubs(:rules_filename)
-    dsl.stubs(:rules_filename=)
-    dsl.expects(:compile).with('*')
-
-    # Create site
-    site = Nanoc::Int::SiteLoader.new.new_empty
-    site.compiler.rules_collection.stubs(:dsl).returns(dsl)
-
-    # Create rules file
-    File.open('Rules', 'w') do |io|
-      io.write <<-EOF
-compile '*' do
-  # ... do nothing ...
-end
-EOF
-    end
-
-    # Load rules
-    site.compiler.rules_collection.load
-  end
-
   def test_identifier_classes
     Nanoc::CLI.run %w( create_site bar)
     FileUtils.cd('bar') do
@@ -226,14 +202,5 @@ EOF
         Nanoc::Int::SiteLoader.new.new_from_cwd
       end
     end
-  end
-end
-
-describe 'Nanoc::Int::Site#compiler' do
-  include Nanoc::TestHelpers
-
-  it 'should not raise under normal circumstances' do
-    site = Nanoc::Int::SiteLoader.new.new_empty
-    site.compiler
   end
 end

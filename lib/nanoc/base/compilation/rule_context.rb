@@ -6,20 +6,20 @@ module Nanoc::Int
   # @api private
   class RuleContext < Nanoc::Int::Context
     # @option params [Nanoc::Int::ItemRep] :rep
-    # @option params [Nanoc::Int::Compiler] :compiler
+    # @option params [Nanoc::Int::Site] :site
     def initialize(params = {})
       rep = params.fetch(:rep)
-      compiler = params.fetch(:compiler)
+      site = params.fetch(:site)
       @_executor = params.fetch(:executor)
 
       super({
         item: Nanoc::ItemView.new(rep.item),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(compiler.site.items),
-        layouts: Nanoc::LayoutCollectionView.new(compiler.site.layouts),
-        config: Nanoc::ConfigView.new(compiler.site.config),
-        site: Nanoc::SiteView.new(compiler.site),
+        items: Nanoc::ItemCollectionView.new(site.items),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        config: Nanoc::ConfigView.new(site.config),
+        site: Nanoc::SiteView.new(site),
       })
     end
 

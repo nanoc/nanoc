@@ -12,11 +12,10 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     item.stubs(:site).returns(site)
     rep = mock
     rep.stubs(:item).returns(item)
-    compiler = Nanoc::Int::Compiler.new(site)
 
     # Create context
     executor = nil
-    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, compiler: compiler)
+    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
 
     # Check classes
     assert_equal Nanoc::ItemRepView,          rule_context.rep.class
@@ -51,12 +50,9 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
     rep = mock
     rep.stubs(:item).returns(item)
 
-    # Mock compiler
-    compiler = Nanoc::Int::Compiler.new(site)
-
     # Create context
     executor = nil
-    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, compiler: compiler)
+    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
 
     # Check
     assert_raises(NoMethodError) do

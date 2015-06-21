@@ -255,7 +255,7 @@ module Nanoc::Int
       filename = ["#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
       raise Nanoc::Int::Errors::NoRulesFileFound.new if filename.nil?
 
-      @rules_collection.parse(filename)
+      Nanoc::Int::RulesLoader.new(@config, @rules_collection).parse(filename)
     end
 
     # @api private
