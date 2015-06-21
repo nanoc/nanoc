@@ -87,12 +87,26 @@ module Nanoc::Int
       @stack = []
     end
 
-    def run
-      # Create output directory if necessary
-      FileUtils.mkdir_p(@site.config[:output_dir])
+    # 1. Load site
+    # 2. Load rules
+    # 3. Preprocess
+    # 4. Build item reps
+    # 5. Compile
 
-      # Compile reps
-      load
+    # TODO: move elsewhere
+    def run_all
+      # Preprocess
+      Nanoc::Int::Preprocessor.new(site: @site, rules_collection: @rules_collection).run
+
+      # Build reps
+      reps = build_reps
+
+      # Compile
+      run(reps)
+    end
+
+    def run(reps)
+      load_stores
       @site.freeze
 
       # Determine which reps need to be recompiled
@@ -102,7 +116,7 @@ module Nanoc::Int
       @dependency_tracker.start
       compile_reps(reps)
       @dependency_tracker.stop
-      store
+      store(reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
@@ -112,28 +126,14 @@ module Nanoc::Int
 
     # @group Private instance methods
 
-    # Load the helper data that is used for compiling the site.
-    #
-    # @return [void]
-    def load
-      return if @loaded
-
-      # Preprocess
-      preprocess
-      Nanoc::Int::SiteLoader.new.setup_child_parent_links(site.items)
-      build_reps
-      route_reps
-
-      # Load auxiliary stores
+    def load_stores
       stores.each(&:load)
-
-      @loaded = true
     end
 
     # Store the modified helper data used for compiling the site.
     #
     # @return [void]
-    def store
+    def store(reps)
       # Calculate rule memory
       (reps + @site.layouts.to_a).each do |obj|
         rule_memory_store[obj] = rule_memory_calculator[obj]
@@ -148,15 +148,6 @@ module Nanoc::Int
       stores.each(&:store)
     end
 
-    # Runs the preprocessors.
-    #
-    # @api private
-    def preprocess
-      rules_collection.preprocessors.each_value do |preprocessor|
-        preprocessor_context.instance_eval(&preprocessor)
-      end
-    end
-
     # Returns all objects managed by the site (items, layouts, code snippets,
     # site configuration and the rules).
     #
@@ -166,29 +157,10 @@ module Nanoc::Int
         [site.config, rules_collection]
     end
 
-    # Creates the representations of all items as defined by the compilation
-    # rules.
-    #
-    # @api private
     def build_reps
-      site.items.each do |item|
-        # Find matching rules
-        matching_rules = rules_collection.item_compilation_rules_for(item)
-        raise Nanoc::Int::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
-
-        # Create reps
-        rep_names = matching_rules.map(&:rep_name).uniq
-        rep_names.each do |rep_name|
-          item.reps << Nanoc::Int::ItemRep.new(item, rep_name)
-        end
-      end
-    end
-
-    # Determines the paths of all item representations.
-    #
-    # @api private
-    def route_reps
-      Nanoc::Int::ItemRepRouter.new(reps, rules_collection, site).run
+      builder = Nanoc::Int::ItemRepBuilder.new(site, rules_collection)
+      builder.run
+      builder.reps
     end
 
     # @param [Nanoc::Int::ItemRep] rep The item representation for which the
@@ -231,12 +203,6 @@ module Nanoc::Int
     memoize :outdatedness_checker
 
     private
-
-    # @return [Array<Nanoc::Int::ItemRep>] The site’s item representations
-    def reps
-      site.items.map(&:reps).flatten
-    end
-    memoize :reps
 
     # Compiles the given representations.
     #
@@ -328,16 +294,6 @@ module Nanoc::Int
         end
       end
     end
-
-    # Returns a preprocessor context, creating one if none exists yet.
-    def preprocessor_context
-      Nanoc::Int::Context.new({
-        config: Nanoc::MutableConfigView.new(@site.config),
-        items: Nanoc::MutableItemCollectionView.new(@site.items),
-        layouts: Nanoc::MutableLayoutCollectionView.new(@site.layouts),
-      })
-    end
-    memoize :preprocessor_context
 
     # Returns all stores that can load/store data that can be used for
     # compilation.

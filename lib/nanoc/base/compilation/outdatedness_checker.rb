@@ -12,6 +12,8 @@ module Nanoc::Int
     attr_reader :rules_collection
     attr_reader :site
 
+    Reasons = Nanoc::Int::OutdatednessReasons
+
     # @option params [Nanoc::Int::Site] :site
     #
     # @option params [Nanoc::Int::ChecksumStore] :checksum_store
@@ -46,12 +48,12 @@ module Nanoc::Int
     # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness reason should be calculated.
     #
-    # @return [Nanoc::Int::OutdatednessReasons::Generic, nil] The reason why the
+    # @return [Reasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def outdatedness_reason_for(obj)
       reason = basic_outdatedness_reason_for(obj)
       if reason.nil? && outdated_due_to_dependencies?(obj)
-        reason = Nanoc::Int::OutdatednessReasons::DependenciesOutdated
+        reason = Reasons::DependenciesOutdated
       end
       reason
     end
@@ -79,29 +81,29 @@ module Nanoc::Int
     # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
     #   whose outdatedness reason should be calculated.
     #
-    # @return [Nanoc::Int::OutdatednessReasons::Generic, nil] The reason why the
+    # @return [Reasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
       case obj
       when Nanoc::Int::ItemRep
         # Outdated if rules outdated
-        return Nanoc::Int::OutdatednessReasons::RulesModified if
+        return Reasons::RulesModified if
           rule_memory_differs_for(obj)
 
         # Outdated if checksums are missing or different
-        return Nanoc::Int::OutdatednessReasons::NotEnoughData unless checksums_available?(obj.item)
-        return Nanoc::Int::OutdatednessReasons::SourceModified unless checksums_identical?(obj.item)
+        return Reasons::NotEnoughData unless checksums_available?(obj.item)
+        return Reasons::SourceModified unless checksums_identical?(obj.item)
 
         # Outdated if compiled file doesn't exist (yet)
-        return Nanoc::Int::OutdatednessReasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
+        return Reasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
 
         # Outdated if code snippets outdated
-        return Nanoc::Int::OutdatednessReasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
+        return Reasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
           object_modified?(cs)
         end
 
         # Outdated if configuration outdated
-        return Nanoc::Int::OutdatednessReasons::ConfigurationModified if object_modified?(site.config)
+        return Reasons::ConfigurationModified if object_modified?(site.config)
 
         # Not outdated
         return nil
@@ -109,12 +111,12 @@ module Nanoc::Int
         obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
       when Nanoc::Int::Layout
         # Outdated if rules outdated
-        return Nanoc::Int::OutdatednessReasons::RulesModified if
+        return Reasons::RulesModified if
           rule_memory_differs_for(obj)
 
         # Outdated if checksums are missing or different
-        return Nanoc::Int::OutdatednessReasons::NotEnoughData unless checksums_available?(obj)
-        return Nanoc::Int::OutdatednessReasons::SourceModified unless checksums_identical?(obj)
+        return Reasons::NotEnoughData unless checksums_available?(obj)
+        return Reasons::SourceModified unless checksums_identical?(obj)
 
         # Not outdated
         return nil

@@ -25,6 +25,7 @@ module Nanoc::Extra
       require 'find'
 
       # Get compiled files
+      # FIXME: requires #build_reps to have been called
       all_raw_paths = site.items.map do |item|
         item.reps.map(&:raw_path)
       end

@@ -20,7 +20,7 @@ module Nanoc::Int
     #
     # @since 3.2.0
     def compile
-      compiler.run
+      compiler.run_all
     end
 
     # Returns the compiler for this site. Will create a new compiler if none

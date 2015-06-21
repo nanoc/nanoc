@@ -47,7 +47,6 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       # Create site and compiler
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       compiler = Nanoc::Int::CompilerLoader.new.load(site)
-      compiler.load
 
       # Check that the two preprocess blocks have been added
       assert_equal 2, compiler.rules_collection.preprocessors.size
@@ -55,7 +54,9 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       refute_nil compiler.rules_collection.preprocessors.to_a.last
 
       # Apply preprocess blocks
-      compiler.preprocess
+      Nanoc::Int::Preprocessor
+        .new(site: site, rules_collection: compiler.rules_collection)
+        .run
       assert site.items['/index.*'].attributes[:preprocessed]
     end
   end
@@ -79,7 +80,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       # Create site and compiler
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       compiler = Nanoc::Int::CompilerLoader.new.load(site)
-      compiler.load
+      compiler.build_reps
 
       # Check
       rep = site.items['/index.*'].reps[0]

@@ -17,7 +17,7 @@ module Nanoc::CLI::Commands
 
       # Get dependency tracker
       compiler = site.compiler
-      compiler.load
+      compiler.load_stores
       dependency_tracker = compiler.dependency_tracker
 
       # Print data

@@ -266,25 +266,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     end
   end
 
-  def test_load_should_be_idempotent
-    # Create site
-    Nanoc::CLI.run %w( create_site bar)
-
-    FileUtils.cd('bar') do
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-
-      compiler = Nanoc::Int::CompilerLoader.new.load(site)
-      def compiler.route_reps
-        raise 'oh my gosh it is borken'
-      end
-
-      assert site.instance_eval { !@loaded }
-      assert_raises(RuntimeError) { compiler.load }
-      assert site.instance_eval { !@loaded }
-      assert_raises(RuntimeError) { compiler.load }
-    end
-  end
-
   def test_compile_should_recompile_all_reps
     Nanoc::CLI.run %w( create_site bar )
 
@@ -566,7 +547,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compiler.load
+      site.compiler.build_reps
+      site.compiler.load_stores
       rep = site.items['/a/'].reps[0]
       dt = site.compiler.dependency_tracker
       dt.start

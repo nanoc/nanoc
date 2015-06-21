@@ -107,7 +107,7 @@ module Nanoc::Extra::Checking
       return [] if classes.empty?
 
       # TODO: remove me
-      @site.compiler.load
+      @site.compiler.build_reps
 
       checks = []
       issues = Set.new
