@@ -123,7 +123,6 @@ describe Nanoc::Helpers::Blogging do
     before do
       rep = Nanoc::Int::ItemRep.new(item, :default)
       rep.paths[:last] = '/rep/path/stuff.html'
-      item.reps << rep
       reps << rep
     end
 
@@ -195,7 +194,6 @@ describe Nanoc::Helpers::Blogging do
     before do
       rep = Nanoc::Int::ItemRep.new(item, :default)
       rep.paths[:last] = '/feed.xml'
-      item.reps << rep
       reps << rep
     end
 
@@ -259,7 +257,6 @@ describe Nanoc::Helpers::Blogging do
     before do
       rep = Nanoc::Int::ItemRep.new(item, :default)
       rep.paths[:last] = item_rep_path
-      item.reps << rep
       reps << rep
     end
 

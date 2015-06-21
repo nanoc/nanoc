@@ -15,7 +15,7 @@ module Nanoc::Int
         rep_names_for(item).each do |rep_name|
           rep = Nanoc::Int::ItemRep.new(item, rep_name)
 
-          item.reps << rep
+          #item.reps << rep
           @reps << rep
         end
       end

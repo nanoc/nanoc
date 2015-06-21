@@ -24,17 +24,9 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:items) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |ic|
-        ic << Nanoc::Int::Item.new('About Me', {}, '/about.md').tap do |i|
-          i.reps << Nanoc::Int::ItemRep.new(i, :default)
-          i.reps << Nanoc::Int::ItemRep.new(i, :text)
-        end
-        ic << Nanoc::Int::Item.new('About My Dog', {}, '/dog.md').tap do |i|
-          i.reps << Nanoc::Int::ItemRep.new(i, :default)
-          i.reps << Nanoc::Int::ItemRep.new(i, :text)
-        end
-        ic << Nanoc::Int::Item.new('Raw Data', {}, '/other.dat').tap do |i|
-          i.reps << Nanoc::Int::ItemRep.new(i, :default)
-        end
+        ic << Nanoc::Int::Item.new('About Me', {}, '/about.md')
+        ic << Nanoc::Int::Item.new('About My Dog', {}, '/dog.md')
+        ic << Nanoc::Int::Item.new('Raw Data', {}, '/other.dat')
       end
     end
 
@@ -48,7 +40,17 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:config) { double(:config) }
 
-    let(:compiler) { double(:compiler, rules_collection: rules_collection) }
+    let(:compiler) { double(:compiler, reps: reps, rules_collection: rules_collection) }
+
+    let(:reps) do
+      Nanoc::Int::ItemRepRepo.new.tap do |r|
+        r << Nanoc::Int::ItemRep.new(items['/about.md'], :default)
+        r << Nanoc::Int::ItemRep.new(items['/about.md'], :text)
+        r << Nanoc::Int::ItemRep.new(items['/dog.md'], :default)
+        r << Nanoc::Int::ItemRep.new(items['/dog.md'], :text)
+        r << Nanoc::Int::ItemRep.new(items['/other.dat'], :default)
+      end
+    end
 
     let(:rules_collection) do
       Nanoc::Int::RulesCollection.new.tap do |rc|
@@ -88,6 +90,10 @@ describe Nanoc::CLI::Commands::ShowRules do
 
       EOS
         .gsub(/^ {8}/, '')
+    end
+
+    before do
+      expect(compiler).to receive(:build_reps)
     end
 
     it 'outputs item and layout rules' do

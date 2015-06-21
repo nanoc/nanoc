@@ -292,7 +292,7 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_if_outdated
       @site.items.each do |i|
-        if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
+        if @reps[i].any? { |r| outdatedness_checker.outdated?(r) }
           @dependency_tracker.forget_dependencies_for(i)
         end
       end
