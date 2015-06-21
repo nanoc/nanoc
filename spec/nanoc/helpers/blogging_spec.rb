@@ -108,7 +108,7 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:item_view) do
-      Nanoc::ItemView.new(item)
+      Nanoc::ItemView.new(item, nil)
     end
 
     let(:item_attributes) do
@@ -174,7 +174,7 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:item_view) do
-      Nanoc::ItemView.new(item)
+      Nanoc::ItemView.new(item, nil)
     end
 
     let(:item_attributes) do
@@ -231,7 +231,7 @@ describe Nanoc::Helpers::Blogging do
     let(:item_rep_path) { '/stuff.xml' }
 
     let(:item_view) do
-      Nanoc::ItemView.new(item)
+      Nanoc::ItemView.new(item, nil)
     end
 
     let(:item_attributes) do

@@ -292,6 +292,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
           { content_filename: 'content/xyzzy.sass' },
           '/blah/',
         ),
+        nil,
       ),
     ]
     params = { item: items[0], items: items }.merge(params)

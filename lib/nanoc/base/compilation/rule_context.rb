@@ -12,7 +12,7 @@ module Nanoc::Int
       @_executor = executor
 
       super({
-        item: Nanoc::ItemView.new(rep.item),
+        item: Nanoc::ItemView.new(rep.item, nil),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
         items: Nanoc::ItemCollectionView.new(site.items),

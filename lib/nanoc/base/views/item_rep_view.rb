@@ -61,7 +61,8 @@ module Nanoc
     #
     # @return [Nanoc::ItemView]
     def item
-      Nanoc::ItemView.new(@item_rep.item)
+      # FIXME: pass reps
+      Nanoc::ItemView.new(@item_rep.item, nil)
     end
 
     # @api private

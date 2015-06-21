@@ -8,7 +8,7 @@ module Nanoc
     #
     # @return [self]
     def delete_if(&_block)
-      @objects.delete_if { |o| yield(view_class.new(o)) }
+      @objects.delete_if { |o| yield(view_class.new(o, nil)) }
       self
     end
   end

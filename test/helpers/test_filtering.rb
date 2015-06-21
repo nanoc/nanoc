@@ -32,7 +32,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new('stuff', { title: 'Bar...' }, '/foo.md')
       item_rep = Nanoc::Int::ItemRep.new(item, :default)
 
-      @item = Nanoc::ItemView.new(item)
+      @item = Nanoc::ItemView.new(item, nil)
       @item_rep = Nanoc::ItemRepView.new(item_rep)
 
       result = ::ERB.new(content).result(binding)

@@ -179,7 +179,7 @@ module Nanoc::Int
 
       # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge({
-        item: Nanoc::ItemView.new(rep.item),
+        item: Nanoc::ItemView.new(rep.item, @reps),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
         items: Nanoc::ItemCollectionView.new(site.items),

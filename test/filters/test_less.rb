@@ -2,7 +2,9 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_filter
     if_have 'less' do
       # Create item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'))
+      @item = Nanoc::ItemView.new(
+        Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'),
+        nil)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])
@@ -20,7 +22,9 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       File.open('content/foo/bar/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
 
       # Create item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'))
+      @item = Nanoc::ItemView.new(
+        Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'),
+        nil)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])
@@ -39,7 +43,9 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
       # Create item
       File.open('content/foo/bar.txt', 'w') { |io| io.write('meh') }
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'))
+      @item = Nanoc::ItemView.new(
+        Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'),
+        nil)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])
@@ -108,7 +114,9 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_compression
     if_have 'less' do
       # Create item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'))
+      @item = Nanoc::ItemView.new(
+        Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'),
+        nil)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])

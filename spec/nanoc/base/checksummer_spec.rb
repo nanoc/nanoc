@@ -207,14 +207,14 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Nanoc::ItemView' do
-    let(:obj) { Nanoc::ItemView.new(item) }
+    let(:obj) { Nanoc::ItemView.new(item, nil) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
 
     it { is_expected.to eql('Nanoc::ItemView<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
   end
 
   context 'Nanoc::LayoutView' do
-    let(:obj) { Nanoc::LayoutView.new(layout) }
+    let(:obj) { Nanoc::LayoutView.new(layout, nil) }
     let(:layout) { Nanoc::Int::Layout.new('asdf', {}, '/foo.md') }
 
     it { is_expected.to eql('Nanoc::LayoutView<Nanoc::Int::Layout<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
