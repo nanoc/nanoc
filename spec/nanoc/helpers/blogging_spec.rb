@@ -42,7 +42,8 @@ describe Nanoc::Helpers::Blogging do
       items << item_b
       items << item_c
 
-      { items: Nanoc::ItemCollectionView.new(items) }
+      # FIXME: pass real reps
+      { items: Nanoc::ItemCollectionView.new(items, nil) }
     end
 
     it 'returns the two articles' do
@@ -86,7 +87,8 @@ describe Nanoc::Helpers::Blogging do
       items << item_b
       items << item_c
 
-      { items: Nanoc::ItemCollectionView.new(items) }
+      # FIXME: pass real reps
+      { items: Nanoc::ItemCollectionView.new(items, nil) }
     end
 
     it 'returns the two articles' do

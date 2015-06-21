@@ -23,8 +23,8 @@ module Nanoc::CLI::Commands
 
     def self.env_for(site)
       {
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        items: Nanoc::ItemCollectionView.new(site.items, nil),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
         config: Nanoc::ConfigView.new(site.config),
       }
     end

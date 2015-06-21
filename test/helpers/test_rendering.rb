@@ -13,7 +13,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_equal('This is the /foo/ layout.', render('/foo/'))
     end
@@ -31,7 +31,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_equal('This is the /foo/ layout.', render('/foo'))
     end
@@ -49,7 +49,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_equal('I am the Nanoc::LayoutView class.', render('/foo/'))
     end
@@ -67,7 +67,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_equal('I am the Nanoc::Int::Layout class.', render('/foo/'))
     end
@@ -77,7 +77,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
     with_site do |site|
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_raises(Nanoc::Int::Errors::UnknownLayout) do
         render '/dsfghjkl/'
@@ -95,7 +95,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_raises(Nanoc::Int::Errors::CannotDetermineFilter) do
         render '/foo/'
@@ -113,7 +113,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       assert_raises(Nanoc::Int::Errors::UnknownFilter) do
         render '/foo/'
@@ -133,7 +133,7 @@ class Nanoc::Helpers::RenderingTest < Nanoc::TestCase
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       @site = Nanoc::SiteView.new(site)
-      @layouts = Nanoc::LayoutCollectionView.new(site.layouts)
+      @layouts = Nanoc::LayoutCollectionView.new(site.layouts, nil)
 
       _erbout = '[erbout-before]'
       result = render '/foo/' do

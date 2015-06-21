@@ -3,8 +3,9 @@ module Nanoc
     include Enumerable
 
     # @api private
-    def initialize(objects)
+    def initialize(objects, reps)
       @objects = objects
+      @reps = reps
     end
 
     # @api private

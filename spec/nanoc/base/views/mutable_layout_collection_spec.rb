@@ -18,7 +18,9 @@ describe Nanoc::MutableLayoutCollectionView do
       end
     end
 
-    let(:view) { described_class.new(wrapped) }
+    let(:view) { described_class.new(wrapped, reps) }
+
+    let(:reps) { double(:reps) }
 
     it 'creates an object' do
       view.create('new content', { title: 'New Page' }, '/new/')

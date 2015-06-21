@@ -228,7 +228,7 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Nanoc::ItemCollectionView' do
-    let(:obj) { Nanoc::ItemCollectionView.new(wrapped) }
+    let(:obj) { Nanoc::ItemCollectionView.new(wrapped, nil) }
 
     let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
 

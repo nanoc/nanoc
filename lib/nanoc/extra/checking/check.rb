@@ -20,8 +20,9 @@ module Nanoc::Extra::Checking
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
       context = {
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        # FIXME: pass real reps
+        items: Nanoc::ItemCollectionView.new(site.items, nil),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
         config: Nanoc::ConfigView.new(site.config),
         site: Nanoc::SiteView.new(site), # TODO: remove me
         output_filenames: output_filenames,

@@ -57,7 +57,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
       Nanoc::Int::Item.new('item 1', { tags: [:foo]       }, '/item1/'),
       Nanoc::Int::Item.new('item 2', { tags: [:bar]       }, '/item2/'),
       Nanoc::Int::Item.new('item 3', { tags: [:foo, :bar] }, '/item3/'),
-    ])
+    ], nil)
 
     # Find items
     items_with_foo_tag = items_with_tag(:foo)

@@ -182,8 +182,8 @@ module Nanoc::Int
         item: Nanoc::ItemView.new(rep.item, @reps),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        items: Nanoc::ItemCollectionView.new(site.items, @reps),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, @reps),
         config: Nanoc::ConfigView.new(site.config),
         site: Nanoc::SiteView.new(site),
       })

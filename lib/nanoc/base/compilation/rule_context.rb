@@ -15,8 +15,8 @@ module Nanoc::Int
         item: Nanoc::ItemView.new(rep.item, nil),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        items: Nanoc::ItemCollectionView.new(site.items, nil),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
         config: Nanoc::ConfigView.new(site.config),
         site: Nanoc::SiteView.new(site),
       })
