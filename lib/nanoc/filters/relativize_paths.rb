@@ -35,32 +35,9 @@ module Nanoc::Filters
       # Filter
       case params[:type]
       when :css
-        # FIXME: parse CSS the proper way using csspool or something
-        content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
-          quote = Regexp.last_match[1]
-          path = Regexp.last_match[2]
-          'url(' + quote + relative_path_to(path) + quote + ')'
-        end
+        relativize_css(content)
       when :html, :xml, :xhtml
-        selectors  = params.fetch(:select) { SELECTORS }
-        namespaces = params[:namespaces] || {}
-
-        require 'nokogiri'
-        case params[:type]
-        when :html
-          klass = ::Nokogiri::HTML
-        when :xml
-          klass = ::Nokogiri::XML
-        when :xhtml
-          klass = ::Nokogiri::XML
-          # FIXME: cleanup because it is ugly
-          # this cleans the XHTML namespace to process fragments and full
-          # documents in the same way. At least, Nokogiri adds this namespace
-          # if detects the `html` element.
-          content = content.sub(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
-        end
-
-        nokogiri_process(content, selectors, namespaces, klass, params[:type])
+        relativize_html_like(content, params)
       else
         raise RuntimeError.new(
           'The relativize_paths needs to know the type of content to ' \
@@ -71,6 +48,38 @@ module Nanoc::Filters
 
     protected
 
+    def relativize_css(content)
+      # FIXME: parse CSS the proper way using csspool or something
+      content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
+        quote = Regexp.last_match[1]
+        path = Regexp.last_match[2]
+        'url(' + quote + relative_path_to(path) + quote + ')'
+      end
+    end
+
+    def relativize_html_like(content, params)
+      selectors  = params.fetch(:select, SELECTORS)
+      namespaces = params.fetch(:namespaces, {})
+      type       = params.fetch(:type)
+
+      require 'nokogiri'
+      case type
+      when :html
+        klass = ::Nokogiri::HTML
+      when :xml
+        klass = ::Nokogiri::XML
+      when :xhtml
+        klass = ::Nokogiri::XML
+        # FIXME: cleanup because it is ugly
+        # this cleans the XHTML namespace to process fragments and full
+        # documents in the same way. At least, Nokogiri adds this namespace
+        # if detects the `html` element.
+        content = content.sub(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
+      end
+
+      nokogiri_process(content, selectors, namespaces, klass, type)
+    end
+
     def nokogiri_process(content, selectors, namespaces, klass, type)
       # Ensure that all prefixes are strings
       namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
@@ -79,17 +88,7 @@ module Nanoc::Filters
       selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
         doc.xpath(selector, namespaces).each do |node|
           if node.name == 'comment'
-            content = node.content.dup
-            content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
-              beginning = Regexp.last_match[1]
-              body = Regexp.last_match[2]
-              ending = Regexp.last_match[3]
-              fragment = nokogiri_process(body, selectors, namespaces, klass, type)
-              beginning + fragment + ending
-            end
-            comment = Nokogiri::XML::Comment.new(doc, content)
-            # Works w/ Nokogiri 1.5.5 but fails w/ Nokogiri 1.5.2
-            node.replace(comment)
+            nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
           elsif self.path_is_relativizable?(node.content)
             node.content = relative_path_to(node.content)
           end
@@ -98,8 +97,20 @@ module Nanoc::Filters
       doc.send("to_#{type}")
     end
 
+    def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
+      content = node.content.dup.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
+        beginning = Regexp.last_match[1]
+        body = Regexp.last_match[2]
+        ending = Regexp.last_match[3]
+
+        beginning + nokogiri_process(body, selectors, namespaces, klass, type) + ending
+      end
+
+      node.replace(Nokogiri::XML::Comment.new(doc, content))
+    end
+
     def path_is_relativizable?(s)
-      s[0, 1] == '/'
+      s.start_with?('/')
     end
   end
 end
