@@ -9,13 +9,15 @@ module Nanoc::Extra
 
     # @param [Nanoc::Int::Site] site The site for which a pruner is created
     #
-    # @option params [Boolean] :dry_run (false) true if the files to be deleted
+    # @param [Boolean] dry_run true if the files to be deleted
     #   should only be printed instead of actually deleted, false if the files
     #   should actually be deleted.
-    def initialize(site, params = {})
+    #
+    # @param [Enumerable<String>] exclude
+    def initialize(site, dry_run: false, exclude: [])
       @site    = site
-      @dry_run = params.fetch(:dry_run) { false }
-      @exclude = params.fetch(:exclude) { [] }
+      @dry_run = dry_run
+      @exclude = exclude
     end
 
     # Prunes all output files not managed by nanoc.

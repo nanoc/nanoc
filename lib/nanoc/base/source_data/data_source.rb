@@ -138,12 +138,9 @@ module Nanoc
     #
     # @param [String] identifier This item's identifier.
     #
-    # @param [Hash] params Extra parameters.
-    #
-    # @option params [Symbol, nil] :binary (true) Whether or not this item is
-    #   binary
-    def new_item(content, attributes, identifier, params = {})
-      content = Nanoc::Int::Content.create(content, params)
+    # @param [Boolean] :binary Whether or not this item is binary
+    def new_item(content, attributes, identifier, binary: false)
+      content = Nanoc::Int::Content.create(content, binary: binary)
       Nanoc::Int::Item.new(content, attributes, identifier)
     end
 

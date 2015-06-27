@@ -25,7 +25,7 @@ module Nanoc::CLI::Commands
     #
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
-      def initialize(_params = {})
+      def initialize(*)
       end
 
       # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
@@ -147,11 +147,11 @@ module Nanoc::CLI::Commands
         command_runner.options.fetch(:verbose, false)
       end
 
-      # @option params [Array<Nanoc::Int::ItemRep>] :reps The list of item representations in the site
-      def initialize(params = {})
+      # @param [Enumerable<Nanoc::Int::ItemRep>] reps
+      def initialize(reps:)
         @times = {}
 
-        @reps = params.fetch(:reps)
+        @reps = reps
       end
 
       # @see Listener#start
@@ -249,7 +249,7 @@ module Nanoc::CLI::Commands
         !ENV.key?('TRAVIS')
       end
 
-      def initialize(_params = {})
+      def initialize(*)
         @gc_count = 0
       end
 
@@ -314,11 +314,10 @@ module Nanoc::CLI::Commands
 
     # Prints file actions (created, updated, deleted, identical, skipped)
     class FileActionPrinter < Listener
-      # @option params [Array<Nanoc::Int::ItemRep>] :reps The list of item representations in the site
-      def initialize(params = {})
+      def initialize(reps:)
         @start_times = {}
 
-        @reps = params.fetch(:reps)
+        @reps = reps
       end
 
       # @see Listener#start
@@ -361,9 +360,11 @@ module Nanoc::CLI::Commands
       end
     end
 
-    def initialize(options, arguments, command, params = {})
-      super(options, arguments, command)
-      @listener_classes = params.fetch(:listener_classes, default_listener_classes)
+    attr_accessor :listener_classes
+
+    def initialize(options, arguments, command)
+      super
+      @listener_classes = default_listener_classes
     end
 
     def run
@@ -416,6 +417,9 @@ module Nanoc::CLI::Commands
     def run_listeners_while
       setup_listeners
       yield
+    rescue => e
+      STDOUT.puts e
+      STDOUT.puts e.backtrace.join("\n")
     ensure
       teardown_listeners
     end

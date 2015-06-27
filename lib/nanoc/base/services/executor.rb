@@ -98,18 +98,16 @@ module Nanoc
         end
       end
 
-      def snapshot(rep, snapshot_name, params = {})
-        is_final = params.fetch(:final, true)
-
+      def snapshot(rep, snapshot_name, final: true)
         unless rep.binary?
           rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
         end
 
-        if snapshot_name == :pre && is_final
+        if snapshot_name == :pre && final
           rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:pre, true)
         end
 
-        if is_final
+        if final
           raw_path = rep.raw_path(snapshot: snapshot_name)
           if raw_path
             ItemRepWriter.new.write(rep, raw_path)

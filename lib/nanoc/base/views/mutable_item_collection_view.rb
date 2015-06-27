@@ -15,17 +15,14 @@ module Nanoc
     #
     # @param [Nanoc::Identifier, String] identifier This item's identifier.
     #
-    # @param [Hash] params Extra parameters.
+    # @param [Boolean] binary Whether or not this item is binary
     #
-    # @option params [Boolean] :binary (false) Whether or not this item is
-    #   binary
-    #
-    # @option params [String] :filename (nil) Absolute path to the file
+    # @param [String] filename Absolute path to the file
     #   containing this content (if any)
     #
     # @return [self]
-    def create(content, attributes, identifier, params = {})
-      content = Nanoc::Int::Content.create(content, params)
+    def create(content, attributes, identifier, binary: false, filename: nil)
+      content = Nanoc::Int::Content.create(content, binary: binary, filename: filename)
       @objects << Nanoc::Int::Item.new(content, attributes, identifier)
       self
     end

@@ -25,12 +25,12 @@ module Nanoc::Extra
     #
     # @return [Hash] config The deployer configuration
     #
-    # @option params [Boolean] :dry_run (false) true if the deployer should
+    # @param [Boolean] dry_run true if the deployer should
     #   only show what would be deployed instead actually deploying
-    def initialize(source_path, config, params = {})
+    def initialize(source_path, config, dry_run: false)
       @source_path  = source_path
       @config       = config
-      @dry_run      = params.fetch(:dry_run) { false }
+      @dry_run      = dry_run
     end
 
     # Performs the actual deployment.

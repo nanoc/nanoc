@@ -19,8 +19,8 @@ module Nanoc
         end
       end
 
-      def snapshot(_rep, snapshot_name, params = {})
-        @rule_memory << [:snapshot, snapshot_name, params]
+      def snapshot(_rep, snapshot_name, final: true)
+        @rule_memory << [:snapshot, snapshot_name, final: final]
 
         # Count
         existing = Set.new

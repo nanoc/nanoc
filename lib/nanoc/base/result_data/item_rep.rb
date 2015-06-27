@@ -47,21 +47,21 @@ module Nanoc::Int
 
     # Returns the compiled content from a given snapshot.
     #
-    # @option params [String] :snapshot The name of the snapshot from which to
+    # @param [Symbol] snapshot The name of the snapshot from which to
     #   fetch the compiled content. By default, the returned compiled content
     #   will be the content compiled right before the first layout call (if
     #   any).
     #
     # @return [String] The compiled content at the given snapshot (or the
     #   default snapshot if no snapshot is specified)
-    def compiled_content(params = {})
+    def compiled_content(snapshot: nil)
       # Make sure we're not binary
       if binary?
         raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
       end
 
       # Get name of last pre-layout snapshot
-      snapshot_name = params.fetch(:snapshot) { @snapshot_contents[:pre] ? :pre : :last }
+      snapshot_name = snapshot || (@snapshot_contents[:pre] ? :pre : :last)
       is_moving = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
@@ -100,13 +100,12 @@ module Nanoc::Int
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
     #
-    # @option params [Symbol] :snapshot (:last) The snapshot for which the
-    #   path should be returned
+    # @param [Symbol] snapshot The snapshot for which the path should be
+    #   returned
     #
     # @return [String] The item rep’s path
-    def raw_path(params = {})
-      snapshot_name = params[:snapshot] || :last
-      @raw_paths[snapshot_name]
+    def raw_path(snapshot: :last)
+      @raw_paths[snapshot]
     end
 
     # Returns the item rep’s path, as used when being linked to. It starts
@@ -114,13 +113,12 @@ module Nanoc::Int
     # include the path to the output directory. It will not include the
     # filename if the filename is an index filename.
     #
-    # @option params [Symbol] :snapshot (:last) The snapshot for which the
-    #   path should be returned
+    # @param [Symbol] snapshot The snapshot for which the path should be
+    #   returned
     #
     # @return [String] The item rep’s path
-    def path(params = {})
-      snapshot_name = params[:snapshot] || :last
-      @paths[snapshot_name]
+    def path(snapshot: :last)
+      @paths[snapshot]
     end
 
     # Resets the compilation progress for this item representation. This is

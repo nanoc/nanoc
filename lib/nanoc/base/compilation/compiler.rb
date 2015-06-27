@@ -72,14 +72,14 @@ module Nanoc::Int
 
     # @group Public instance methods
 
-    def initialize(site, rules_collection, params = {})
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:)
       @site = site
       @rules_collection = rules_collection
 
-      @compiled_content_cache = params.fetch(:compiled_content_cache)
-      @checksum_store         = params.fetch(:checksum_store)
-      @rule_memory_store      = params.fetch(:rule_memory_store)
-      @rule_memory_calculator = params.fetch(:rule_memory_calculator)
+      @compiled_content_cache = compiled_content_cache
+      @checksum_store         = checksum_store
+      @rule_memory_store      = rule_memory_store
+      @rule_memory_calculator = rule_memory_calculator
 
       @dependency_tracker =
         Nanoc::Int::DependencyTracker.new(@site.items.to_a + @site.layouts.to_a)

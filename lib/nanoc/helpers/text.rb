@@ -7,22 +7,20 @@ module Nanoc::Helpers
     #
     # @param [String] string The string for which to build an excerpt
     #
-    # @option params [Number] length (25) The maximum number of characters
+    # @param [Number] length The maximum number of characters
     #   this excerpt can contain, including the omission.
     #
-    # @option params [String] omission ("...") The string to append to the
+    # @param [String] omission The string to append to the
     #   excerpt when the excerpt is shorter than the original string
     #
     # @return [String] The excerpt of the given string
-    def excerptize(string, params = {})
-      # Initialize params
-      params[:length] ||= 25
-      params[:omission] ||= '...'
-
-      # Get excerpt
-      length = params[:length] - params[:omission].length
-      length = 0 if length < 0
-      (string.length > params[:length] ? string[0...length] + params[:omission] : string)
+    def excerptize(string, length: 25, omission: '...')
+      if string.length > length
+        excerpt_length = [0, length - omission.length].max
+        string[0...excerpt_length] + omission
+      else
+        string
+      end
     end
 
     # Strips all HTML tags out of the given string.

@@ -27,10 +27,9 @@ module Nanoc::Int
     # @param [Proc] block A block that will be called when matching items are
     #   compiled
     #
-    # @option params [Symbol, nil] :snapshot (nil) The name of the snapshot
-    #   this rule will apply to. Ignored for compilation rules, but used for
-    #   routing rules.
-    def initialize(pattern, rep_name, block, params = {})
+    # @param [Symbol, nil] :snapshot The name of the snapshot this rule will
+    #   apply to. Ignored for compilation rules, but used for routing rules.
+    def initialize(pattern, rep_name, block, snapshot_name: nil)
       # TODO: remove me
       unless pattern.is_a?(Nanoc::Int::StringPattern) || pattern.is_a?(Nanoc::Int::RegexpPattern)
         raise 'Can only create rules with patterns'
@@ -38,7 +37,7 @@ module Nanoc::Int
 
       @pattern          = pattern
       @rep_name         = rep_name.to_sym
-      @snapshot_name    = params[:snapshot_name]
+      @snapshot_name    = snapshot_name
 
       @block = block
     end
@@ -55,15 +54,12 @@ module Nanoc::Int
     #
     # @param [Nanoc::Int::ItemRep] rep
     #
-    # @option params [Nanoc::Int::Site] :site
+    # @param [Nanoc::Int::Site] site
     #
-    # @option params [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] :executor
+    # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
     #
     # @return [void]
-    def apply_to(rep, params = {})
-      site = params.fetch(:site)
-      executor = params.fetch(:executor)
-
+    def apply_to(rep, site:, executor:)
       context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
       context.instance_exec(matches(rep.item.identifier), &@block)
     end

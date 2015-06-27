@@ -23,6 +23,8 @@ module Nanoc::Int
     # @param [Time, Hash] _params Extra parameters. Ignored by nanoc; it is
     #   only included for backwards compatibility.
     def initialize(data, filename, _params = nil)
+      # TODO: remove _params
+
       @data     = data
       @filename = filename
     end

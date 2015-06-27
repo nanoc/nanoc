@@ -14,18 +14,19 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
-    # @option params [Nanoc::Int::Site] :site
-    #
-    # @option params [Nanoc::Int::ChecksumStore] :checksum_store
-    #
-    # @option params [Nanoc::Int::DependencyTracker] :dependency_tracker
-    def initialize(params = {})
-      @site = params.fetch(:site)
-      @checksum_store = params.fetch(:checksum_store)
-      @dependency_tracker = params.fetch(:dependency_tracker)
-      @rules_collection = params.fetch(:rules_collection)
-      @rule_memory_store = params.fetch(:rule_memory_store)
-      @rule_memory_calculator = params.fetch(:rule_memory_calculator)
+    # @param [Nanoc::Int::Site] site
+    # @param [Nanoc::Int::ChecksumStore] checksum_store
+    # @param [Nanoc::Int::DependencyTracker] dependency_tracker
+    # @param [Nanoc::Int::RulesCollection] rules_collection
+    # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
+    # @param [Nanoc::Int::RuleMemoryCalculator] rule_memory_calculator
+    def initialize(site:, checksum_store:, dependency_tracker:, rules_collection:, rule_memory_store:, rule_memory_calculator:)
+      @site = site
+      @checksum_store = checksum_store
+      @dependency_tracker = dependency_tracker
+      @rules_collection = rules_collection
+      @rule_memory_store = rule_memory_store
+      @rule_memory_calculator = rule_memory_calculator
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}
