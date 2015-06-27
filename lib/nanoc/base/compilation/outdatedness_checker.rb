@@ -20,13 +20,15 @@ module Nanoc::Int
     # @param [Nanoc::Int::RulesCollection] rules_collection
     # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
     # @param [Nanoc::Int::RuleMemoryCalculator] rule_memory_calculator
-    def initialize(site:, checksum_store:, dependency_tracker:, rules_collection:, rule_memory_store:, rule_memory_calculator:)
+    # @param [Nanoc::Int::ItemRepRepo] reps
+    def initialize(site:, checksum_store:, dependency_tracker:, rules_collection:, rule_memory_store:, rule_memory_calculator:, reps:)
       @site = site
       @checksum_store = checksum_store
       @dependency_tracker = dependency_tracker
       @rules_collection = rules_collection
       @rule_memory_store = rule_memory_store
       @rule_memory_calculator = rule_memory_calculator
+      @reps = reps
 
       @basic_outdatedness_reasons = {}
       @outdatedness_reasons = {}
@@ -109,7 +111,7 @@ module Nanoc::Int
         # Not outdated
         return nil
       when Nanoc::Int::Item
-        obj.reps.find { |rep| basic_outdatedness_reason_for(rep) }
+        @reps[obj].find { |rep| basic_outdatedness_reason_for(rep) }
       when Nanoc::Int::Layout
         # Outdated if rules outdated
         return Reasons::RulesModified if

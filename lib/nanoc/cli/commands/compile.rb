@@ -429,7 +429,8 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      site.items.map(&:reps).flatten
+      site.compiler.reps.to_a
+      # site.items.map(&:reps).flatten
     end
     memoize :reps
 

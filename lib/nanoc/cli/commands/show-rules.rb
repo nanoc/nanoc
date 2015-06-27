@@ -9,18 +9,21 @@ module Nanoc::CLI::Commands
   class ShowRules < ::Nanoc::CLI::CommandRunner
     def run
       require_site
+      site.compiler.build_reps
 
       @c = Nanoc::CLI::ANSIStringColorizer
       @rules = site.compiler.rules_collection
 
-      site.items.sort_by(&:identifier).each   { |e| explain_item(e) }
+      reps = site.compiler.reps
+
+      site.items.sort_by(&:identifier).each   { |e| explain_item(e, reps) }
       site.layouts.sort_by(&:identifier).each { |e| explain_layout(e) }
     end
 
-    def explain_item(item)
+    def explain_item(item, reps)
       puts "#{@c.c('Item ' + item.identifier, :bold, :yellow)}:"
 
-      item.reps.each do |rep|
+      reps[item].each do |rep|
         rule = @rules.compilation_rule_for(rep)
         puts "  Rep #{rep.name}: #{rule ? rule.pattern : '(none)'}"
       end

@@ -18,7 +18,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     site = Nanoc::Int::SiteLoader.new.new_empty
     item = Nanoc::Int::Item.new('moo', {}, '/blah/')
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(item)
+    @item = Nanoc::ItemView.new(item, nil)
 
     # Evaluate content
     result = ::ERB.new(content).result(binding)
@@ -33,7 +33,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
     # Build site
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('moo', {}, '/blah/'))
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('moo', {}, '/blah/'), nil)
 
     # Capture
     _erbout = 'foo'
@@ -67,7 +67,7 @@ foot
 EOS
 
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
 
     result = ::ERB.new(content).result(binding)
 
@@ -85,7 +85,7 @@ EOS
     end
 
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
     content = '<% content_for :a do %>Content One<% end %>'
     ::ERB.new(content).result(binding)
 
@@ -93,7 +93,7 @@ EOS
     assert_equal nil,           content_for(@item, :b)
 
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
     content = '<% content_for :b do %>Content Two<% end %>'
     ::ERB.new(content).result(binding)
 

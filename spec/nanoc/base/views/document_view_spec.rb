@@ -1,7 +1,10 @@
 shared_examples 'a document view' do
+  let(:reps) { double(:reps) }
+
+  let(:view) { described_class.new(document, reps) }
+
   describe '#== and #eql?' do
     let(:document) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(document) }
 
     context 'comparing with document with same identifier' do
       let(:other) { entity_class.new('content', {}, '/asdf/') }
@@ -22,7 +25,7 @@ shared_examples 'a document view' do
     end
 
     context 'comparing with document view with same identifier' do
-      let(:other) { Nanoc::LayoutView.new(entity_class.new('content', {}, '/asdf/')) }
+      let(:other) { described_class.new(entity_class.new('content', {}, '/asdf/'), reps) }
 
       it 'is equal' do
         expect(view).to eq(other)
@@ -31,7 +34,7 @@ shared_examples 'a document view' do
     end
 
     context 'comparing with document view with different identifier' do
-      let(:other) { Nanoc::LayoutView.new(entity_class.new('content', {}, '/fdsa/')) }
+      let(:other) { described_class.new(entity_class.new('content', {}, '/fdsa/'), reps) }
 
       it 'is not equal' do
         expect(view).not_to eq(other)
@@ -42,7 +45,6 @@ shared_examples 'a document view' do
 
   describe '#[]' do
     let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(document) }
 
     subject { view[key] }
 
@@ -63,12 +65,11 @@ shared_examples 'a document view' do
   end
 
   describe '#fetch' do
-    let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item) }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
 
     before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, document).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, document).ordered
     end
 
     context 'with existant key' do
@@ -104,7 +105,6 @@ shared_examples 'a document view' do
 
   describe '#key?' do
     let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(document) }
 
     before do
       expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, document).ordered
@@ -126,7 +126,6 @@ shared_examples 'a document view' do
 
   describe '#hash' do
     let(:document) { double(:document, identifier: '/foo/') }
-    let(:view) { described_class.new(document) }
 
     subject { view.hash }
 

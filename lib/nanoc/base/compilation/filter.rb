@@ -195,7 +195,8 @@ module Nanoc
 
       # Raise unmet dependency error if necessary
       items.each do |item|
-        rep = item.reps.find { |r| !r.compiled? }
+        reps = assigns[:site].unwrap.compiler.reps[item]
+        rep = reps.find { |r| !r.compiled? }
         raise Nanoc::Int::Errors::UnmetDependency.new(rep) if rep
       end
     end

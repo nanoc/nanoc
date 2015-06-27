@@ -1,6 +1,8 @@
 # Needs :view_class
 shared_examples 'an identifiable collection' do
-  let(:view) { described_class.new(wrapped) }
+  let(:view) { described_class.new(wrapped, reps) }
+
+  let(:reps) { double(:reps) }
 
   let(:config) do
     { string_pattern_type: 'glob' }

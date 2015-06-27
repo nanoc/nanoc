@@ -1,5 +1,7 @@
 shared_examples 'a mutable identifiable collection' do
-  let(:view) { described_class.new(wrapped) }
+  let(:view) { described_class.new(wrapped, reps) }
+
+  let(:reps) { double(:reps) }
 
   let(:config) do
     {}

@@ -1,7 +1,10 @@
 shared_examples 'a mutable document view' do
+  let(:view) { described_class.new(document, reps) }
+
+  let(:reps) { double(:reps) }
+
   describe '#[]=' do
-    let(:item) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item) }
+    let(:document) { entity_class.new('content', {}, '/asdf/') }
 
     it 'sets attributes' do
       view[:title] = 'Donkey'
@@ -10,8 +13,7 @@ shared_examples 'a mutable document view' do
   end
 
   describe '#update_attributes' do
-    let(:item) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item) }
+    let(:document) { entity_class.new('content', {}, '/asdf/') }
 
     let(:update) { { friend: 'Giraffe' } }
 

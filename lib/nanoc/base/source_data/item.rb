@@ -2,7 +2,7 @@ module Nanoc::Int
   # @api private
   class Item < ::Nanoc::Int::Document
     # @return [Array<Nanoc::Int::ItemRep>] This item’s list of item reps
-    attr_reader :reps
+    #attr_reader :reps
 
     # @return [Nanoc::Int::Item, nil] The parent item of this item. This can be
     #   nil even for non-root items.

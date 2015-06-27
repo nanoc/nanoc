@@ -70,6 +70,9 @@ module Nanoc::Int
     # @api private
     attr_reader :dependency_tracker
 
+    # @api private
+    attr_reader :reps
+
     # @group Public instance methods
 
     def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:)
@@ -99,10 +102,10 @@ module Nanoc::Int
       Nanoc::Int::Preprocessor.new(site: @site, rules_collection: @rules_collection).run
 
       # Build reps
-      reps = build_reps
+      build_reps
 
       # Compile
-      run(reps)
+      run(@reps)
     end
 
     def run(reps)
@@ -135,7 +138,7 @@ module Nanoc::Int
     # @return [void]
     def store(reps)
       # Calculate rule memory
-      (reps + @site.layouts.to_a).each do |obj|
+      (reps.to_a + @site.layouts.to_a).each do |obj|
         rule_memory_store[obj] = rule_memory_calculator[obj]
       end
 
@@ -160,7 +163,7 @@ module Nanoc::Int
     def build_reps
       builder = Nanoc::Int::ItemRepBuilder.new(site, rules_collection)
       builder.run
-      builder.reps
+      @reps = builder.reps
     end
 
     # @param [Nanoc::Int::ItemRep] rep The item representation for which the
@@ -179,11 +182,11 @@ module Nanoc::Int
 
       # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge({
-        item: Nanoc::ItemView.new(rep.item),
+        item: Nanoc::ItemView.new(rep.item, @reps),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
+        items: Nanoc::ItemCollectionView.new(site.items, @reps),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, @reps),
         config: Nanoc::ConfigView.new(site.config),
         site: Nanoc::SiteView.new(site),
       })
@@ -198,6 +201,7 @@ module Nanoc::Int
         rules_collection: @rules_collection,
         rule_memory_store: @rule_memory_store,
         rule_memory_calculator: @rule_memory_calculator,
+        reps: @reps,
       )
     end
     memoize :outdatedness_checker
@@ -220,7 +224,7 @@ module Nanoc::Int
       end
 
       # Find item reps to compile and compile them
-      selector = Nanoc::Int::ItemRepSelector.new(reps)
+      selector = Nanoc::Int::ItemRepSelector.new(reps.to_a)
       selector.each do |rep|
         @stack = []
         compile_rep(rep)
@@ -276,7 +280,7 @@ module Nanoc::Int
       executor.snapshot(rep, :raw)
       executor.snapshot(rep, :pre, final: false)
       rules_collection.compilation_rule_for(rep)
-        .apply_to(rep, executor: executor, site: @site)
+        .apply_to(rep, reps: @reps, executor: executor, site: @site)
       executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
       executor.snapshot(rep, :last)
     end
@@ -289,7 +293,7 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_if_outdated
       @site.items.each do |i|
-        if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
+        if @reps[i].any? { |r| outdatedness_checker.outdated?(r) }
           @dependency_tracker.forget_dependencies_for(i)
         end
       end

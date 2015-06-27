@@ -4,13 +4,19 @@ module Nanoc
     NONE = Object.new
 
     # @api private
-    def initialize(document)
+    def initialize(document, reps)
       @document = document
+      @reps = reps
     end
 
     # @api private
     def unwrap
       @document
+    end
+
+    # @api private
+    def unwrap_reps
+      @reps
     end
 
     # @see Object#==
