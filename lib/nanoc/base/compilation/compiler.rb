@@ -201,6 +201,7 @@ module Nanoc::Int
         rules_collection: @rules_collection,
         rule_memory_store: @rule_memory_store,
         rule_memory_calculator: @rule_memory_calculator,
+        reps: @reps,
       )
     end
     memoize :outdatedness_checker

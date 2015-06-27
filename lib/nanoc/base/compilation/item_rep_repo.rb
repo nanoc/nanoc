@@ -3,6 +3,8 @@ module Nanoc::Int
   #
   # @api private
   class ItemRepRepo
+    include Enumerable
+
     def initialize
       @reps = []
       @reps_by_item = {}
