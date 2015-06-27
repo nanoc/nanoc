@@ -1,5 +1,5 @@
 module Nanoc::Int
-  # Nanoc::Int::CodeSnippet represent a piece of custom code of a nanoc site.
+  # Nanoc::Int::CodeSnippet represent a piece of custom code of a Nanoc site.
   #
   # @api private
   class CodeSnippet
@@ -20,7 +20,7 @@ module Nanoc::Int
     #
     # @param [String] filename The filename corresponding to this code snippet
     #
-    # @param [Time, Hash] _params Extra parameters. Ignored by nanoc; it is
+    # @param [Time, Hash] _params Extra parameters. Ignored by Nanoc; it is
     #   only included for backwards compatibility.
     def initialize(data, filename, _params = nil)
       @data     = data

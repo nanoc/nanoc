@@ -18,7 +18,6 @@ module Nanoc::CLI::Commands
       load_adsf
       require 'rack'
 
-      # Make sure we are in a nanoc site directory
       require_site
 
       # Set options

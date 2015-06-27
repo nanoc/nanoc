@@ -4,7 +4,7 @@ module Nanoc::Filters
     requires 'erubis'
 
     # The same as `::Erubis::Eruby` but adds `_erbout` as an alias for the
-    # `_buf` variable, making it compatible with nanoc’s helpers that rely
+    # `_buf` variable, making it compatible with Nanoc’s helpers that rely
     # on `_erbout`, such as {Nanoc::Helpers::Capturing}.
     class ErubisWithErbout < ::Erubis::Eruby
       include ::Erubis::ErboutEnhancer

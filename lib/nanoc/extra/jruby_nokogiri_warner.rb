@@ -12,12 +12,12 @@ Note:
 The behavior of Pure Java Nokogiri differs from the Nokogiri used on the
 standard Ruby interpreter (MRI) due to differences in underlying libraries.
 
-These sometimes problematic behavioral differences can cause nanoc filters not
+These sometimes problematic behavioral differences can cause Nanoc filters not
 to function properly, if at all. If you need reliable (X)HTML and XML handling
 functionality, consider not using Nokogiri on JRuby for the time being.
 
-These issues are being worked on both from the Nokogiri and the nanoc side. Keep
-your Nokogiri and nanoc versions up to date!
+These issues are being worked on both from the Nokogiri and the Nanoc side. Keep
+your Nokogiri and Nanoc versions up to date!
 
 For details, see https://github.com/nanoc/nanoc/pull/422.
 --------------------------------------------------------------------------------

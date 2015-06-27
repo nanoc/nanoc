@@ -4,7 +4,7 @@ Contributing
 Reporting bugs
 --------------
 
-If you find a bug in nanoc, you should report it! Some information that you should include in your bug report is the nanoc version (`nanoc --version`) and, if relevant, the crash log (`crash.log`).
+If you find a bug in Nanoc, you should report it! Some information that you should include in your bug report is the Nanoc version (`nanoc --version`) and, if relevant, the crash log (`crash.log`).
 
 For details, check the [*bug reporting* section of the development guide](http://nanoc.ws/development/#reporting-bugs).
 

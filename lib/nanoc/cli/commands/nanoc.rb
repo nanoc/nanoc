@@ -1,5 +1,5 @@
 usage 'nanoc command [options] [arguments]'
-summary 'nanoc, a static site compiler written in Ruby'
+summary 'Nanoc, a static site compiler written in Ruby'
 
 opt :l, :color, 'enable color' do
   $stdout.remove_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
@@ -20,7 +20,7 @@ opt :C, :'no-color', 'disable color' do
   $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
 end
 
-opt :V, :verbose, 'make nanoc output more detailed' do
+opt :V, :verbose, 'make output more detailed' do
   Nanoc::CLI::Logger.instance.level = :low
 end
 
