@@ -29,7 +29,7 @@ module Nanoc::Int
     end
 
     def handle_dependency_error(e, rep, graph)
-      other_rep = e.rep.unwrap rescue e.rep
+      other_rep = e.rep
       graph.add_edge(other_rep, rep)
       unless graph.vertices.include?(other_rep)
         graph.add_vertex(other_rep)
