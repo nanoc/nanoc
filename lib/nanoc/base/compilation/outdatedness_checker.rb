@@ -6,7 +6,7 @@ module Nanoc::Int
     extend Nanoc::Int::Memoization
 
     attr_reader :checksum_store
-    attr_reader :dependency_tracker
+    attr_reader :dependency_store
     attr_reader :rule_memory_calculator
     attr_reader :rule_memory_store
     attr_reader :rules_collection
@@ -16,14 +16,14 @@ module Nanoc::Int
 
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::ChecksumStore] checksum_store
-    # @param [Nanoc::Int::DependencyTracker] dependency_tracker
+    # @param [Nanoc::Int::DependencyStore] dependency_store
     # @param [Nanoc::Int::RulesCollection] rules_collection
     # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
     # @param [Nanoc::Int::RuleMemoryCalculator] rule_memory_calculator
-    def initialize(site:, checksum_store:, dependency_tracker:, rules_collection:, rule_memory_store:, rule_memory_calculator:)
+    def initialize(site:, checksum_store:, dependency_store:, rules_collection:, rule_memory_store:, rule_memory_calculator:)
       @site = site
       @checksum_store = checksum_store
-      @dependency_tracker = dependency_tracker
+      @dependency_store = dependency_store
       @rules_collection = rules_collection
       @rule_memory_store = rule_memory_store
       @rule_memory_calculator = rule_memory_calculator
@@ -153,7 +153,7 @@ module Nanoc::Int
       return false if processed.include?(obj)
 
       # Calculate
-      is_outdated = dependency_tracker.objects_causing_outdatedness_of(obj).any? do |other|
+      is_outdated = dependency_store.objects_causing_outdatedness_of(obj).any? do |other|
         other.nil? || basic_outdated?(other) || outdated_due_to_dependencies?(other, processed.merge([obj]))
       end
 

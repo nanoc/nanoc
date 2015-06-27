@@ -68,11 +68,11 @@ module Nanoc::Int
     attr_reader :rule_memory_calculator
 
     # @api private
-    attr_reader :dependency_tracker
+    attr_reader :dependency_store
 
     # @group Public instance methods
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:)
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:)
       @site = site
       @rules_collection = rules_collection
 
@@ -80,9 +80,7 @@ module Nanoc::Int
       @checksum_store         = checksum_store
       @rule_memory_store      = rule_memory_store
       @rule_memory_calculator = rule_memory_calculator
-
-      @dependency_tracker =
-        Nanoc::Int::DependencyTracker.new(@site.items.to_a + @site.layouts.to_a)
+      @dependency_store       = dependency_store
 
       @stack = []
     end
@@ -113,9 +111,10 @@ module Nanoc::Int
       forget_dependencies_if_outdated
 
       @stack = []
-      @dependency_tracker.start
-      compile_reps(reps)
-      @dependency_tracker.stop
+      dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+      dependency_tracker.run do
+        compile_reps(reps)
+      end
       store(reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
@@ -194,7 +193,7 @@ module Nanoc::Int
       Nanoc::Int::OutdatednessChecker.new(
         site: @site,
         checksum_store: checksum_store,
-        dependency_tracker: @dependency_tracker,
+        dependency_store: @dependency_store,
         rules_collection: @rules_collection,
         rule_memory_store: @rule_memory_store,
         rule_memory_calculator: @rule_memory_calculator,
@@ -211,8 +210,8 @@ module Nanoc::Int
     # @return [void]
     def compile_reps(reps)
       # Listen to processing start/stop
-      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
+      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |o| @stack.push(o) }
+      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_| @stack.pop }
 
       # Assign snapshots
       reps.each do |rep|
@@ -290,7 +289,7 @@ module Nanoc::Int
     def forget_dependencies_if_outdated
       @site.items.each do |i|
         if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
-          @dependency_tracker.forget_dependencies_for(i)
+          @dependency_store.forget_dependencies_for(i)
         end
       end
     end
@@ -301,7 +300,7 @@ module Nanoc::Int
       [
         checksum_store,
         compiled_content_cache,
-        @dependency_tracker,
+        @dependency_store,
         rule_memory_store,
       ]
     end
