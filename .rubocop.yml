@@ -8,9 +8,6 @@ TrailingComma:
 # ----- TO ENABLE LATER -----
 # To make merges easier, I’ve decided to enable these at a later point in time.
 
-PerlBackrefs:
-  Enabled: false
-
 RegexpLiteral:
   Enabled: false
 

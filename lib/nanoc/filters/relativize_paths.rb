@@ -37,7 +37,9 @@ module Nanoc::Filters
       when :css
         # FIXME: parse CSS the proper way using csspool or something
         content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
-          'url(' + $1 + relative_path_to($2) + $1 + ')'
+          quote = Regexp.last_match[1]
+          path = Regexp.last_match[2]
+          'url(' + quote + relative_path_to(path) + quote + ')'
         end
       when :html, :xml, :xhtml
         selectors  = params.fetch(:select) { SELECTORS }
@@ -79,8 +81,11 @@ module Nanoc::Filters
           if node.name == 'comment'
             content = node.content.dup
             content = content.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
-              fragment = nokogiri_process($2, selectors, namespaces, klass, type)
-              $1 + fragment + $3
+              beginning = Regexp.last_match[1]
+              body = Regexp.last_match[2]
+              ending = Regexp.last_match[3]
+              fragment = nokogiri_process(body, selectors, namespaces, klass, type)
+              beginning + fragment + ending
             end
             comment = Nokogiri::XML::Comment.new(doc, content)
             # Works w/ Nokogiri 1.5.5 but fails w/ Nokogiri 1.5.2
