@@ -99,8 +99,7 @@ module Nanoc::Helpers
         name = args[1]
 
         # Create dependency
-        current_item = @site.unwrap.compiler.dependency_tracker.top
-        if item != current_item
+        if @item.nil? || item != @item.unwrap
           Nanoc::Int::NotificationCenter.post(:visit_started, item)
           Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
 

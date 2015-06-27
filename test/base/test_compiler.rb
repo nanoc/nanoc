@@ -550,7 +550,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       site.compiler.build_reps
       site.compiler.load_stores
       rep = site.items['/a/'].reps[0]
-      dt = site.compiler.dependency_tracker
+      dt = Nanoc::Int::DependencyTracker.new(site.compiler.dependency_store)
       dt.start
       assert_raises Nanoc::Int::Errors::UnmetDependency do
         site.compiler.send :compile_rep, rep

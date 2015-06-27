@@ -68,7 +68,7 @@ module Nanoc::Int
     attr_reader :rule_memory_calculator
 
     # @api private
-    attr_reader :dependency_tracker
+    attr_reader :dependency_store
 
     # @group Public instance methods
 
@@ -81,10 +81,15 @@ module Nanoc::Int
       @rule_memory_store      = rule_memory_store
       @rule_memory_calculator = rule_memory_calculator
 
-      @dependency_tracker =
-        Nanoc::Int::DependencyTracker.new(@site.items.to_a + @site.layouts.to_a)
+      @dependency_store =
+        Nanoc::Int::DependencyStore.new(@site.items.to_a + @site.layouts.to_a)
 
       @stack = []
+    end
+
+    # TODO: remove me
+    def dependency_tracker
+      @dependency_store
     end
 
     # 1. Load site
@@ -113,9 +118,10 @@ module Nanoc::Int
       forget_dependencies_if_outdated
 
       @stack = []
-      @dependency_tracker.start
+      dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+      dependency_tracker.start
       compile_reps(reps)
-      @dependency_tracker.stop
+      dependency_tracker.stop
       store(reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
@@ -194,7 +200,7 @@ module Nanoc::Int
       Nanoc::Int::OutdatednessChecker.new(
         site: @site,
         checksum_store: checksum_store,
-        dependency_tracker: @dependency_tracker,
+        dependency_store: @dependency_store,
         rules_collection: @rules_collection,
         rule_memory_store: @rule_memory_store,
         rule_memory_calculator: @rule_memory_calculator,
@@ -290,7 +296,7 @@ module Nanoc::Int
     def forget_dependencies_if_outdated
       @site.items.each do |i|
         if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
-          @dependency_tracker.forget_dependencies_for(i)
+          @dependency_store.forget_dependencies_for(i)
         end
       end
     end
@@ -301,7 +307,7 @@ module Nanoc::Int
       [
         checksum_store,
         compiled_content_cache,
-        @dependency_tracker,
+        @dependency_store,
         rule_memory_store,
       ]
     end
