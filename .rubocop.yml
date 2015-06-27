@@ -21,9 +21,6 @@ Style/GlobalVars:
 ClassAndModuleChildren:
   Enabled: false
 
-Style/AlignHash:
-  Enabled: false
-
 Style/EmptyElse:
   Enabled: false
 
