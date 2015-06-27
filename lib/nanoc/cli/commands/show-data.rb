@@ -18,10 +18,10 @@ module Nanoc::CLI::Commands
       # Get dependency tracker
       compiler = site.compiler
       compiler.load_stores
-      dependency_tracker = compiler.dependency_tracker
+      dependency_store = compiler.dependency_store
 
       # Print data
-      print_item_dependencies(items, dependency_tracker)
+      print_item_dependencies(items, dependency_store)
       print_item_rep_paths(items)
       print_item_rep_outdatedness(items, compiler)
       print_layouts(layouts, compiler)
@@ -56,13 +56,13 @@ module Nanoc::CLI::Commands
       puts
     end
 
-    def print_item_dependencies(items, dependency_tracker)
+    def print_item_dependencies(items, dependency_store)
       print_header('Item dependencies')
 
       sorted_with_prev(items) do |item, prev|
         puts if prev
         puts "item #{item.identifier} depends on:"
-        predecessors = dependency_tracker.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
+        predecessors = dependency_store.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
         predecessors.each do |pred|
           type =
             case pred

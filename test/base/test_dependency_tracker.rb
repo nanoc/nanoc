@@ -101,12 +101,12 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Start, do something and stop
-    tracker.start
-    Nanoc::Int::NotificationCenter.post(:visit_started, items[0])
-    Nanoc::Int::NotificationCenter.post(:visit_started, items[1])
-    Nanoc::Int::NotificationCenter.post(:visit_ended,   items[1])
-    Nanoc::Int::NotificationCenter.post(:visit_ended,   items[0])
-    tracker.stop
+    tracker.run do
+      Nanoc::Int::NotificationCenter.post(:visit_started, items[0])
+      Nanoc::Int::NotificationCenter.post(:visit_started, items[1])
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   items[1])
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   items[0])
+    end
 
     # Verify dependencies
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])

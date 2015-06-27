@@ -72,7 +72,7 @@ module Nanoc::Int
 
     # @group Public instance methods
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:)
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:)
       @site = site
       @rules_collection = rules_collection
 
@@ -80,16 +80,9 @@ module Nanoc::Int
       @checksum_store         = checksum_store
       @rule_memory_store      = rule_memory_store
       @rule_memory_calculator = rule_memory_calculator
-
-      @dependency_store =
-        Nanoc::Int::DependencyStore.new(@site.items.to_a + @site.layouts.to_a)
+      @dependency_store       = dependency_store
 
       @stack = []
-    end
-
-    # TODO: remove me
-    def dependency_tracker
-      @dependency_store
     end
 
     # 1. Load site
@@ -119,9 +112,9 @@ module Nanoc::Int
 
       @stack = []
       dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
-      dependency_tracker.start
-      compile_reps(reps)
-      dependency_tracker.stop
+      dependency_tracker.run do
+        compile_reps(reps)
+      end
       store(reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
@@ -217,8 +210,8 @@ module Nanoc::Int
     # @return [void]
     def compile_reps(reps)
       # Listen to processing start/stop
-      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
+      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |o| @stack.push(o) }
+      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_| @stack.pop }
 
       # Assign snapshots
       reps.each do |rep|
