@@ -38,11 +38,7 @@ module Nanoc::Int
   #
   # @api private
   class Compiler
-    extend Nanoc::Int::Memoization
-
-    # @group Accessors
-
-    # @return [Nanoc::Int::Site] The site this compiler belongs to
+    # @api private
     attr_reader :site
 
     # The compilation stack. When the compiler begins compiling a rep or a
@@ -70,9 +66,10 @@ module Nanoc::Int
     # @api private
     attr_reader :dependency_store
 
-    # @group Public instance methods
+    # @api private
+    attr_reader :outdatedness_checker
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:)
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:, outdatedness_checker:)
       @site = site
       @rules_collection = rules_collection
 
@@ -81,6 +78,7 @@ module Nanoc::Int
       @rule_memory_store      = rule_memory_store
       @rule_memory_calculator = rule_memory_calculator
       @dependency_store       = dependency_store
+      @outdatedness_checker   = outdatedness_checker
 
       @stack = []
     end
@@ -122,8 +120,6 @@ module Nanoc::Int
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
     end
-
-    # @group Private instance methods
 
     def load_stores
       stores.each(&:load)
@@ -187,19 +183,6 @@ module Nanoc::Int
         site: Nanoc::SiteView.new(site),
       })
     end
-
-    # @return [Nanoc::Int::OutdatednessChecker] The outdatedness checker
-    def outdatedness_checker
-      Nanoc::Int::OutdatednessChecker.new(
-        site: @site,
-        checksum_store: checksum_store,
-        dependency_store: @dependency_store,
-        rules_collection: @rules_collection,
-        rule_memory_store: @rule_memory_store,
-        rule_memory_calculator: @rule_memory_calculator,
-      )
-    end
-    memoize :outdatedness_checker
 
     private
 
@@ -281,9 +264,6 @@ module Nanoc::Int
     end
 
     # Clears the list of dependencies for items that will be recompiled.
-    #
-    # @param [Array<Nanoc::Int::Item>] items The list of items for which to forget
-    #   the dependencies
     #
     # @return [void]
     def forget_dependencies_if_outdated
