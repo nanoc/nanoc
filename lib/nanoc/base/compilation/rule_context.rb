@@ -5,12 +5,11 @@ module Nanoc::Int
   #
   # @api private
   class RuleContext < Nanoc::Int::Context
-    # @option params [Nanoc::Int::ItemRep] :rep
-    # @option params [Nanoc::Int::Site] :site
-    def initialize(params = {})
-      rep = params.fetch(:rep)
-      site = params.fetch(:site)
-      @_executor = params.fetch(:executor)
+    # @param [Nanoc::Int::ItemRep] rep
+    # @param [Nanoc::Int::Site] site
+    # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
+    def initialize(rep:, site:, executor:)
+      @_executor = executor
 
       super({
         item: Nanoc::ItemView.new(rep.item),

@@ -15,21 +15,16 @@ module Nanoc::Helpers
     # tags will be linked using the {#link_for_tag} function; the
     # HTML-escaping rules for {#link_for_tag} apply here as well.
     #
-    # @option params [String] base_url The URL to which the tag will be appended
+    # @param [String] base_url The URL to which the tag will be appended
     #   to construct the link URL. This URL must have a trailing slash.
     #
-    # @option params [String] none_text ("(none)") The text to display when
+    # @param [String] none_text The text to display when
     #   the item has no tags
     #
-    # @option params [String] separator (", ") The separator to put between
-    #   tags
+    # @param [String] separator The separator to put between tags
     #
     # @return [String] A hyperlinked list of tags for the given item
-    def tags_for(item, params = {})
-      base_url  = params.fetch(:base_url)
-      none_text = params[:none_text] || '(none)'
-      separator = params[:separator] || ', '
-
+    def tags_for(item, base_url:, none_text: '(none)', separator: ', ')
       if item[:tags].nil? || item[:tags].empty?
         none_text
       else

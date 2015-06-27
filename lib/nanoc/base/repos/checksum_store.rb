@@ -4,12 +4,11 @@ module Nanoc::Int
   #
   # @api private
   class ChecksumStore < ::Nanoc::Int::Store
-    # @option params [Nanoc::Int::Site] site The site where this checksum store
-    #   belongs to
-    def initialize(params = {})
+    # @param [Nanoc::Int::Site] site
+    def initialize(site: nil)
       super('tmp/checksums', 1)
 
-      @site = params[:site] if params.key?(:site)
+      @site = site
 
       @checksums = {}
     end

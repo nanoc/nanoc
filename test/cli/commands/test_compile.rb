@@ -149,9 +149,8 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       options = {}
       arguments = []
       cmd = nil
-      listener_classes = [test_listener_class]
-      cmd_runner = Nanoc::CLI::Commands::Compile.new(
-        options, arguments, cmd, listener_classes: listener_classes)
+      cmd_runner = Nanoc::CLI::Commands::Compile.new(options, arguments, cmd)
+      cmd_runner.listener_classes = [test_listener_class]
 
       cmd_runner.run
 

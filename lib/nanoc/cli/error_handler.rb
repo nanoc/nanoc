@@ -3,23 +3,23 @@ module Nanoc::CLI
   #
   # @api private
   class ErrorHandler
-    # @option params [Nanoc::CLI::Command, nil] command The command that is
+    # @param [Nanoc::CLI::Command, nil] command The command that is
     #   currently being executed, or nil if there is none
-    def initialize(params = {})
-      @command = params[:command]
+    def initialize(command: nil)
+      @command = command
     end
 
     # Enables error handling in the given block.
     #
-    # @option params [Nanoc::CLI::Command, nil] command The command that is
+    # @param [Nanoc::CLI::Command, nil] command The command that is
     #   currently being executed, or nil if there is none
     #
     # @return [void]
-    def self.handle_while(params = {}, &block)
+    def self.handle_while(command: nil, &block)
       if @disabled
         yield
       else
-        new(params).handle_while(&block)
+        new(command: command).handle_while(&block)
       end
     end
 
@@ -247,9 +247,9 @@ module Nanoc::CLI
       defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
     end
 
-    def write_section_header(stream, title, params = {})
+    def write_section_header(stream, title, verbose: false)
       stream.puts
-      if params[:verbose]
+      if verbose
         stream.puts '===== ' + title.upcase + ':'
       else
         stream.puts "\e[1m\e[31m" + title + ':' + "\e[0m"
@@ -257,16 +257,16 @@ module Nanoc::CLI
       stream.puts
     end
 
-    def write_error_message(stream, error, params = {})
-      write_section_header(stream, 'Message', params)
+    def write_error_message(stream, error, verbose: false)
+      write_section_header(stream, 'Message', verbose: verbose)
 
       stream.puts "#{error.class}: #{error.message}"
       resolution = resolution_for(error)
       stream.puts "#{resolution}" if resolution
     end
 
-    def write_compilation_stack(stream, _error, params = {})
-      write_section_header(stream, 'Compilation stack', params)
+    def write_compilation_stack(stream, _error, verbose: false)
+      write_section_header(stream, 'Compilation stack', verbose: verbose)
 
       if stack.empty?
         stream.puts '  (empty)'
@@ -281,16 +281,14 @@ module Nanoc::CLI
       end
     end
 
-    def write_stack_trace(stream, error, params = {})
-      is_verbose = params.fetch(:verbose, false)
+    def write_stack_trace(stream, error, verbose: false)
+      write_section_header(stream, 'Stack trace', verbose: verbose)
 
-      write_section_header(stream, 'Stack trace', params)
-
-      count = is_verbose ? -1 : 10
+      count = verbose ? -1 : 10
       error.backtrace[0...count].each_with_index do |item, index|
         stream.puts "  #{index}. #{item}"
       end
-      if !is_verbose && error.backtrace.size > count
+      if !verbose && error.backtrace.size > count
         stream.puts "  ... #{error.backtrace.size - count} more lines omitted. See full crash log for details."
       end
     end
@@ -303,41 +301,41 @@ module Nanoc::CLI
       stream.puts 'A detailed crash log has been written to ./crash.log.'
     end
 
-    def write_version_information(stream, params = {})
-      write_section_header(stream, 'Version information', params)
+    def write_version_information(stream, verbose: false)
+      write_section_header(stream, 'Version information', verbose: verbose)
       stream.puts Nanoc.version_information
     end
 
-    def write_system_information(stream, params = {})
+    def write_system_information(stream, verbose: false)
       uname = `uname -a`
-      write_section_header(stream, 'System information', params)
+      write_section_header(stream, 'System information', verbose: verbose)
       stream.puts uname
     rescue Errno::ENOENT
     end
 
-    def write_installed_gems(stream, params = {})
-      write_section_header(stream, 'Installed gems', params)
+    def write_installed_gems(stream, verbose: false)
+      write_section_header(stream, 'Installed gems', verbose: verbose)
       gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
       end
     end
 
-    def write_environment(stream, params = {})
-      write_section_header(stream, 'Environment', params)
+    def write_environment(stream, verbose: false)
+      write_section_header(stream, 'Environment', verbose: verbose)
       ENV.sort.each do |e|
         stream.puts "#{e.first} => #{e.last.inspect}"
       end
     end
 
-    def write_gemfile_lock(stream, params = {})
+    def write_gemfile_lock(stream, verbose: false)
       if File.exist?('Gemfile.lock')
-        write_section_header(stream, 'Gemfile.lock', params)
+        write_section_header(stream, 'Gemfile.lock', verbose: verbose)
         stream.puts File.read('Gemfile.lock')
       end
     end
 
-    def write_load_paths(stream, params = {})
-      write_section_header(stream, 'Load paths', params)
+    def write_load_paths(stream, verbose: false)
+      write_section_header(stream, 'Load paths', verbose: verbose)
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"
       end

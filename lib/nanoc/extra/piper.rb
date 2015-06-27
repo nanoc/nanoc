@@ -14,11 +14,11 @@ module Nanoc::Extra
       end
     end
 
-    # @option [IO] :stdout ($stdout)
-    # @option [IO] :stderr ($stderr)
-    def initialize(params = {})
-      @stdout = params.fetch(:stdout, $stdout)
-      @stderr = params.fetch(:stderr, $stderr)
+    # @param [IO] stdout
+    # @param [IO] stderr
+    def initialize(stdout: $stdout, stderr: $stderr)
+      @stdout = stdout
+      @stderr = stderr
     end
 
     # @param [Array<String>] cmd

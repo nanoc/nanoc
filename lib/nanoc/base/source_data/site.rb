@@ -1,14 +1,15 @@
 module Nanoc::Int
   # @api private
   class Site
-    # @option params [Nanoc::Int::Configuration] :config
-    #
-    # @option params [Enumerable<Nanoc::Int::CodeSnippet>] :code_snippets
-    def initialize(params = {})
-      @config = params.fetch(:config)
-      @code_snippets = params.fetch(:code_snippets)
-      @items = params.fetch(:items)
-      @layouts = params.fetch(:layouts)
+    # @param [Nanoc::Int::Configuration] config
+    # @param [Enumerable<Nanoc::Int::CodeSnippet>] code_snippets
+    # @param [Enumerable<Nanoc::Int::Item>] items
+    # @param [Enumerable<Nanoc::Int::Layout>] layouts
+    def initialize(config:, code_snippets:, items:, layouts:)
+      @config = config
+      @code_snippets = code_snippets
+      @items = items
+      @layouts = layouts
 
       ensure_identifier_uniqueness(@items, 'item')
       ensure_identifier_uniqueness(@layouts, 'layout')

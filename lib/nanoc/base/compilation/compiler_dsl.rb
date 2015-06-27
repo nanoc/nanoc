@@ -50,8 +50,7 @@ module Nanoc::Int
     # @param [String] identifier A pattern matching identifiers of items that
     #   should be compiled using this rule
     #
-    # @option params [Symbol] :rep (:default) The name of the representation
-    #   that should be compiled using this rule
+    # @param [Symbol] rep The name of the representation
     #
     # @yield The block that will be executed when an item matching this
     #   compilation rule needs to be compiled
@@ -69,15 +68,10 @@ module Nanoc::Int
     #     compile '/bar/', :rep => :raw do
     #       # do nothing
     #     end
-    def compile(identifier, params = {}, &block)
-      # Require block
+    def compile(identifier, rep: :default, &block)
       raise ArgumentError.new('#compile requires a block') unless block_given?
 
-      # Get rep name
-      rep_name = params[:rep] || :default
-
-      # Create rule
-      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, block)
+      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
@@ -94,8 +88,7 @@ module Nanoc::Int
     # @param [String] identifier A pattern matching identifiers of items that
     #   should be routed using this rule
     #
-    # @option params [Symbol] :rep (:default) The name of the representation
-    #   that should be routed using this rule
+    # @param [Symbol] :rep The name of the representation
     #
     # @yield The block that will be executed when an item matching this
     #   compilation rule needs to be routed
@@ -113,16 +106,10 @@ module Nanoc::Int
     #     route '/bar/', :rep => :raw do
     #       '/raw' + item.identifier + 'index.txt'
     #     end
-    def route(identifier, params = {}, &block)
-      # Require block
+    def route(identifier, rep: :default, snapshot: :last, &block)
       raise ArgumentError.new('#route requires a block') unless block_given?
 
-      # Get rep name
-      rep_name      = params[:rep] || :default
-      snapshot_name = params[:snapshot] || :last
-
-      # Create rule
-      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, block, snapshot_name: snapshot_name)
+      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, block, snapshot_name: snapshot)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -166,8 +153,7 @@ module Nanoc::Int
     # @param [String] identifier A pattern matching identifiers of items that
     #   should be processed using this meta-rule
     #
-    # @option params [Symbol] :rep (:default) The name of the representation
-    #   that should be routed using this rule
+    # @param [Symbol] rep The name of the representation
     #
     # @return [void]
     #
@@ -180,16 +166,11 @@ module Nanoc::Int
     # @example Copying the `:raw` rep of the `/bar/` item as-is
     #
     #     passthrough '/bar/', :rep => :raw
-    def passthrough(identifier, params = {})
-      # Require no block
+    def passthrough(identifier, rep: :default)
       raise ArgumentError.new('#passthrough does not require a block') if block_given?
 
-      # Get rep name
-      rep_name = params[:rep] || :default
-
-      # Create compilation rule
       compilation_block = proc {}
-      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, compilation_block)
+      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
@@ -204,7 +185,7 @@ module Nanoc::Int
           item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
         end
       end
-      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, routing_block, snapshot_name: :last)
+      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -219,23 +200,20 @@ module Nanoc::Int
     # @param [String] identifier A pattern matching identifiers of items that
     #   should be processed using this meta-rule
     #
-    # @option params [Symbol] :rep (:default) The name of the representation
-    #   that should be routed using this rule
+    # @param [Symbol] rep The name of the representation
     #
     # @return [void]
     #
     # @example Suppressing compilation and output for all all `/foo/*` items.
     #
     #     ignore '/foo/*'
-    def ignore(identifier, params = {})
+    def ignore(identifier, rep: :default)
       raise ArgumentError.new('#ignore does not require a block') if block_given?
 
-      rep_name = params[:rep] || :default
-
-      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, proc {})
+      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep_name, proc {}, snapshot_name: :last)
+      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, proc {}, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 

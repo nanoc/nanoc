@@ -31,20 +31,19 @@ module Nanoc
       #   content) or the path to the filename containing the content (if this
       #   is binary content).
       #
-      # @option params [Boolean] :binary (false) Whether or not this item is
-      #   binary
+      # @param [Boolean] binary Whether or not this item is binary
       #
-      # @option params [String] :filename (nil) Absolute path to the file
-      #   containing this content (if any)
-      def self.create(content, params = {})
+      # @param [String] filename Absolute path to the file containing this
+      #   content (if any)
+      def self.create(content, binary: false, filename: nil)
         if content.nil?
           raise ArgumentError, 'Cannot create nil content'
         elsif content.is_a?(Nanoc::Int::Content)
           content
-        elsif params.fetch(:binary, false)
+        elsif binary
           Nanoc::Int::BinaryContent.new(content)
         else
-          Nanoc::Int::TextualContent.new(content, filename: params[:filename])
+          Nanoc::Int::TextualContent.new(content, filename: filename)
         end
       end
 
@@ -61,8 +60,8 @@ module Nanoc
       # @return [String]
       attr_reader :string
 
-      def initialize(string, params = {})
-        super(params[:filename])
+      def initialize(string, filename: nil)
+        super(filename)
         @string = string
       end
 

@@ -1,9 +1,9 @@
 module Nanoc::Int
   # @api private
   class Preprocessor
-    def initialize(params = {})
-      @site = params.fetch(:site)
-      @rules_collection = params.fetch(:rules_collection)
+    def initialize(site:, rules_collection:)
+      @site = site
+      @rules_collection = rules_collection
     end
 
     def run

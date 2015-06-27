@@ -9,10 +9,11 @@ module Nanoc::Int
     # @api private
     attr_accessor :rules_collection
 
-    # @option params [Nanoc::Int::RulesCollection] rules_collection
-    def initialize(params = {})
-      @rules_collection = params.fetch(:rules_collection)
-      @site = params.fetch(:site)
+    # @param [Nanoc::Int::Site] site
+    # @param [Nanoc::Int::RulesCollection] rules_collection
+    def initialize(site:, rules_collection:)
+      @site = site
+      @rules_collection = rules_collection
     end
 
     # @param [#reference] obj The object to calculate the rule memory for

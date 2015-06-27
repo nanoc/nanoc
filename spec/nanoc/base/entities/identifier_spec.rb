@@ -81,6 +81,19 @@ describe Nanoc::Identifier do
           .to raise_error(Nanoc::Identifier::InvalidTypeError)
       end
     end
+
+    context 'default type' do
+      it 'is full' do
+        expect(described_class.new('/foo')).to be_full
+      end
+    end
+
+    context 'other args specified' do
+      it 'errors' do
+        expect { described_class.new('?', animal: :donkey) }
+          .to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe '#to_s' do
