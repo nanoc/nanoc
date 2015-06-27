@@ -60,10 +60,6 @@ FileName:
 AccessorMethodName:
   Enabled: false
 
-# This trips up on a piece of code that handles URI fragments.
-LeadingCommentSpace:
-  Enabled: false
-
 # We use _erbout.
 Lint/UnderscorePrefixedVariableName:
   Enabled: false
