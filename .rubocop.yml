@@ -24,9 +24,6 @@ ClassAndModuleChildren:
 Style/AlignHash:
   Enabled: false
 
-Style/RescueModifier:
-  Enabled: false
-
 Style/EmptyElse:
   Enabled: false
 

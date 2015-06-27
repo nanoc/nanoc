@@ -185,7 +185,7 @@ module Nanoc
     #
     # @return [void]
     def depend_on(items)
-      items = items.map { |i| i.unwrap rescue i }
+      items = items.map { |i| i.is_a?(Nanoc::ItemView) ? i.unwrap : i }
 
       # Notify
       items.each do |item|
