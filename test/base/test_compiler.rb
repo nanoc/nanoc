@@ -18,8 +18,18 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         site: site,
       ),
       dependency_store: Nanoc::Int::DependencyStore.new(
-        site.items.to_a + site.layouts.to_a)
+        site.items.to_a + site.layouts.to_a),
     }
+
+    params[:outdatedness_checker] =
+      Nanoc::Int::OutdatednessChecker.new(
+        site: site,
+        checksum_store: params[:checksum_store],
+        dependency_store: params[:dependency_store],
+        rules_collection: params[:rules_collection],
+        rule_memory_store: params[:rule_memory_store],
+        rule_memory_calculator: params[:rule_memory_calculator],
+      )
 
     Nanoc::Int::Compiler.new(site, rules_collection, params)
   end
