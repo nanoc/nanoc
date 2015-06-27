@@ -417,9 +417,6 @@ module Nanoc::CLI::Commands
     def run_listeners_while
       setup_listeners
       yield
-    rescue => e
-      STDOUT.puts e
-      STDOUT.puts e.backtrace.join("\n")
     ensure
       teardown_listeners
     end
