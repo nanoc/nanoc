@@ -44,7 +44,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
         filter.setup_and_run('%p= this isn\'t really ruby so it\'ll break, muahaha')
       rescue SyntaxError, Haml::SyntaxError => e
         e.message =~ /(.+?):\d+: /
-        assert_match '?', $1
+        assert_match '?', Regexp.last_match[1]
         raised = true
       end
       assert raised

@@ -192,7 +192,7 @@ module Nanoc::DataSources
     # Returns the extension(s) of filename. Supports multiple extensions.
     # Includes the leading period.
     def ext_of(filename)
-      filename =~ extension_regex ? $1 : ''
+      filename =~ extension_regex ? Regexp.last_match[1] : ''
     end
 
     # Returns a regex that is used for determining the extension of a file
