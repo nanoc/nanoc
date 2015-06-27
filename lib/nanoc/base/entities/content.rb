@@ -15,7 +15,7 @@ module Nanoc
 
       # @param [String, nil] filename
       def initialize(filename)
-        if filename && !filename.start_with?('/')
+        if filename && Pathname.new(filename).relative?
           raise ArgumentError, 'Content filename is not absolute'
         end
 
