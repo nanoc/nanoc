@@ -56,12 +56,10 @@ module Nanoc::Int
         end
 
         case obj
-        when ::String
-          digest.update(obj)
-        when ::Symbol
+        when ::String, ::Symbol, ::Numeric
           digest.update(obj.to_s)
         when nil, true, false
-        when ::Array
+        when ::Array, ::Nanoc::Int::IdentifiableCollection
           obj.each do |el|
             update(el, digest, visited + [obj])
             digest.update(',')
@@ -83,13 +81,9 @@ module Nanoc::Int
           end
         when Time
           digest.update(obj.to_i.to_s)
-        when Numeric
-          digest.update(obj.to_s)
         when Nanoc::Identifier
           update(obj.to_s, digest)
-        when Nanoc::Int::RulesCollection
-          update(obj.data, digest)
-        when Nanoc::Int::CodeSnippet
+        when Nanoc::Int::RulesCollection, Nanoc::Int::CodeSnippet
           update(obj.data, digest)
         when Nanoc::Int::TextualContent
           update(obj.string, digest)
@@ -106,11 +100,6 @@ module Nanoc::Int
           update(obj.identifier, digest)
         when Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
           update(obj.unwrap, digest)
-        when Nanoc::Int::IdentifiableCollection
-          obj.each do |el|
-            update(el, digest, visited + [obj])
-            digest.update(',')
-          end
         else
           data = begin
             Marshal.dump(obj)
