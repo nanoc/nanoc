@@ -1,8 +1,5 @@
 module Nanoc
-  require 'nanoc/base/core_ext'
-
   autoload 'Error',                'nanoc/base/error'
-  autoload 'DataSource',           'nanoc/base/source_data/data_source'
   autoload 'Filter',               'nanoc/base/compilation/filter'
 end
 
@@ -15,16 +12,6 @@ module Nanoc::Int
   autoload 'Errors',               'nanoc/base/errors'
   autoload 'Memoization',          'nanoc/base/memoization'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
-  autoload 'IdentifiableCollection', 'nanoc/base/identifiable_collection'
-
-  # Load source data classes
-  autoload 'CodeSnippet',          'nanoc/base/source_data/code_snippet'
-  autoload 'Configuration',        'nanoc/base/source_data/configuration'
-  autoload 'Item',                 'nanoc/base/source_data/item'
-  autoload 'Site',                 'nanoc/base/source_data/site'
-
-  # Load result data classes
-  autoload 'ItemRep',              'nanoc/base/result_data/item_rep'
 
   # Load compilation classes
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
@@ -35,6 +22,8 @@ module Nanoc::Int
   autoload 'Rule',                 'nanoc/base/compilation/rule'
   autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
 end
+
+require_relative 'base/core_ext'
 
 require_relative 'base/entities'
 require_relative 'base/repos'
