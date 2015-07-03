@@ -40,6 +40,12 @@ module Nanoc::Int
   class Compiler
     extend Nanoc::Int::Memoization
 
+    class IdenticalRoutesError < ::Nanoc::Error
+      def initialize(output_path, rep_a, rep_b)
+        super("The item representations #{rep_a.inspect} and #{rep_b.inspect} are both routed to #{output_path}.")
+      end
+    end
+
     # @group Accessors
 
     # @return [Nanoc::Int::Site] The site this compiler belongs to
@@ -215,6 +221,8 @@ module Nanoc::Int
     #
     # @api private
     def route_reps
+      paths_to_reps = {}
+
       reps.each do |rep|
         # Find matching rules
         rules = rules_collection.routing_rules_for(rep)
@@ -226,6 +234,13 @@ module Nanoc::Int
           next if basic_path.nil?
           if basic_path !~ %r{^/}
             raise "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
+          end
+
+          # Check for duplicate paths
+          if paths_to_reps.key?(basic_path)
+            raise IdenticalRoutesError.new(basic_path, paths_to_reps[basic_path], rep)
+          else
+            paths_to_reps[basic_path] = rep
           end
 
           # Get raw path by prepending output directory
