@@ -8,17 +8,18 @@ module Nanoc::Int
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
-    def initialize(rep:, site:, executor:)
+    # @param [Nanoc::ViewContext] view_context
+    def initialize(rep:, site:, executor:, view_context:)
       @_executor = executor
 
       super({
-        item: Nanoc::ItemView.new(rep.item),
-        rep: Nanoc::ItemRepView.new(rep),
-        item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
-        config: Nanoc::ConfigView.new(site.config),
-        site: Nanoc::SiteView.new(site),
+        item: Nanoc::ItemView.new(rep.item, view_context),
+        rep: Nanoc::ItemRepView.new(rep, view_context),
+        item_rep: Nanoc::ItemRepView.new(rep, view_context),
+        items: Nanoc::ItemCollectionView.new(site.items, view_context),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::ConfigView.new(site.config, view_context),
+        site: Nanoc::SiteView.new(site, view_context),
       })
     end
 

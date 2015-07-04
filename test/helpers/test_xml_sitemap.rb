@@ -1,12 +1,16 @@
 class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   include Nanoc::Helpers::XMLSitemap
 
-  def teardown
+  def setup
     super
+
+    @reps = Nanoc::Int::ItemRepRepo.new
+    @view_context = Nanoc::ViewContext.new(reps: @reps)
+
     @items = nil
-    @item  = nil
-    @site  = nil
-    super
+    @item = nil
+    @site = nil
+    @config = nil
   end
 
   def test_xml_sitemap
@@ -15,32 +19,32 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = Nanoc::Int::IdentifiableCollection.new({})
 
       # Create item 1
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
       create_item_rep(item.unwrap, :one_b, '/item-one/b/')
 
       # Create item 2
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 2', { is_hidden: true }, '/item-two/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 2', { is_hidden: true }, '/item-two/'), @view_context)
       @items << item
 
       # Create item 3
       attrs = { mtime: Time.parse('2004-07-12'), changefreq: 'daily', priority: 0.5 }
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :three_a, '/item-three/a/')
       create_item_rep(item.unwrap, :three_b, '/item-three/b/')
 
       # Create item 4
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 4', {}, '/item-four/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 4', {}, '/item-four/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :four_a, nil)
 
       # Create sitemap item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'))
+      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
 
       # Build sitemap
       res = xml_sitemap
@@ -75,7 +79,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
       @items << nil
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
       create_item_rep(item.unwrap, :one_b, '/item-one/b/')
@@ -85,7 +89,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/')
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
 
       # Build sitemap
       res = xml_sitemap(items: [item])
@@ -111,16 +115,16 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     if_have 'builder', 'nokogiri' do
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
       create_item_rep(item.unwrap, :one_b, '/item-one/b/')
 
       # Create sitemap item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'))
+      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
 
       # Build sitemap
       res = xml_sitemap(rep_select: ->(rep) { rep.name == :one_a })
@@ -142,24 +146,24 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     if_have 'builder', 'nokogiri' do
       # Create items
       @items = Nanoc::Int::IdentifiableCollection.new({})
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :a_alice,   '/george/alice/')
       create_item_rep(item.unwrap, :b_zoey,    '/george/zoey/')
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/walton/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/walton/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :a_eve,     '/walton/eve/')
       create_item_rep(item.unwrap, :b_bob,     '/walton/bob/')
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/lucas/'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/lucas/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :a_trudy,   '/lucas/trudy/')
       create_item_rep(item.unwrap, :b_mallory, '/lucas/mallory/')
 
       # Create sitemap item
-      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'))
+      @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
 
       # Build sitemap
       res = xml_sitemap(items: @items)
@@ -185,7 +189,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     rep = Nanoc::Int::ItemRep.new(item, name)
     rep.paths     = { last: path }
     rep.raw_paths = { last: path }
-    item.reps << rep
+    @reps << rep
     rep
   end
 end

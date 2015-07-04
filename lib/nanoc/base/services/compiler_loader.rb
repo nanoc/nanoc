@@ -16,6 +16,8 @@ module Nanoc::Int
       checksum_store =
         Nanoc::Int::ChecksumStore.new(site: site)
 
+      item_rep_repo = Nanoc::Int::ItemRepRepo.new
+
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(
           site: site,
@@ -24,6 +26,7 @@ module Nanoc::Int
           rules_collection: rules_collection,
           rule_memory_store: rule_memory_store,
           rule_memory_calculator: rule_memory_calculator,
+          reps: item_rep_repo,
         )
 
       params = {
@@ -33,6 +36,7 @@ module Nanoc::Int
         rule_memory_calculator: rule_memory_calculator,
         dependency_store: dependency_store,
         outdatedness_checker: outdatedness_checker,
+        reps: item_rep_repo,
       }
 
       compiler = Nanoc::Int::Compiler.new(site, rules_collection, params)

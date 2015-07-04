@@ -292,7 +292,7 @@ describe Nanoc::Int::Executor do
         let(:layout_content) { 'head <%= @item_rep.compiled_content(snapshot: :pre) %> foot' }
 
         let(:assigns) do
-          { item_rep: Nanoc::ItemRepView.new(rep) }
+          { item_rep: Nanoc::ItemRepView.new(rep, nil) }
         end
 
         it 'can contain compiled_content reference' do

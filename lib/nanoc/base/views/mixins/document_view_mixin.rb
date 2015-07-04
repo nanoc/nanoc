@@ -4,7 +4,8 @@ module Nanoc
     NONE = Object.new
 
     # @api private
-    def initialize(document)
+    def initialize(document, context)
+      super(context)
       @document = document
     end
 

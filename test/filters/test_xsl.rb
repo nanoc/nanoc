@@ -87,11 +87,11 @@ EOS
       item = Nanoc::Int::Item.new(SAMPLE_XML_IN,
                              {},
                              '/content/')
-      item = Nanoc::ItemView.new(item)
+      item = Nanoc::ItemView.new(item, nil)
       layout = Nanoc::Int::Layout.new(SAMPLE_XSL,
                                  {},
                                  '/layout/')
-      layout = Nanoc::LayoutView.new(layout)
+      layout = Nanoc::LayoutView.new(layout, nil)
 
       # Create an instance of the filter
       assigns = {
@@ -113,11 +113,11 @@ EOS
       item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_PARAMS,
                              {},
                              '/content/')
-      item = Nanoc::ItemView.new(item)
+      item = Nanoc::ItemView.new(item, nil)
       layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_PARAMS,
                                  {},
                                  '/layout/')
-      layout = Nanoc::LayoutView.new(layout)
+      layout = Nanoc::LayoutView.new(layout, nil)
 
       # Create an instance of the filter
       assigns = {
@@ -140,11 +140,11 @@ EOS
       item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL,
                              {},
                              '/content/')
-      item = Nanoc::ItemView.new(item)
+      item = Nanoc::ItemView.new(item, nil)
       layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL,
                                  {},
                                  '/layout/')
-      layout = Nanoc::LayoutView.new(layout)
+      layout = Nanoc::LayoutView.new(layout, nil)
 
       # Create an instance of the filter
       assigns = {

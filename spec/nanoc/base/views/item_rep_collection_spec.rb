@@ -1,5 +1,7 @@
 describe Nanoc::ItemRepCollectionView do
-  let(:view) { described_class.new(wrapped) }
+  let(:view) { described_class.new(wrapped, view_context) }
+
+  let(:view_context) { double(:view_context) }
 
   let(:wrapped) do
     [
@@ -24,6 +26,10 @@ describe Nanoc::ItemRepCollectionView do
     it 'returns self' do
       expect(view.each { |_i| }).to equal(view)
     end
+
+    it 'yields elements with the right context' do
+      view.each { |v| expect(v._context).to equal(view_context) }
+    end
   end
 
   describe '#size' do
@@ -40,6 +46,10 @@ describe Nanoc::ItemRepCollectionView do
       expect(subject.size).to eq(3)
       expect(subject[0].class).to eql(Nanoc::ItemRepView)
       expect(subject[0].name).to eql(:foo)
+    end
+
+    it 'returns an array with correct contexts' do
+      expect(subject[0]._context).to equal(view_context)
     end
   end
 
@@ -58,6 +68,10 @@ describe Nanoc::ItemRepCollectionView do
       it 'returns a view' do
         expect(subject.class).to eq(Nanoc::ItemRepView)
         expect(subject.name).to eq(:foo)
+      end
+
+      it 'returns a view with the correct context' do
+        expect(subject._context).to equal(view_context)
       end
     end
   end
@@ -79,6 +93,10 @@ describe Nanoc::ItemRepCollectionView do
       it 'returns a view' do
         expect(subject.class).to eq(Nanoc::ItemRepView)
         expect(subject.name).to eq(:foo)
+      end
+
+      it 'returns a view with the correct context' do
+        expect(subject._context).to equal(view_context)
       end
     end
   end

@@ -83,7 +83,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       compiler.build_reps
 
       # Check
-      rep = site.items['/index.*'].reps[0]
+      rep = compiler.reps[site.items['/index.*']][0]
       routing_rules = site.compiler.rules_collection.routing_rules_for(rep)
       routing_rule = routing_rules[:last]
       refute_nil routing_rule

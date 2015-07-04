@@ -1,5 +1,7 @@
 shared_examples 'a mutable identifiable collection' do
-  let(:view) { described_class.new(wrapped) }
+  let(:view) { described_class.new(wrapped, view_context) }
+
+  let(:view_context) { double(:view_context) }
 
   let(:config) do
     {}
@@ -25,6 +27,10 @@ shared_examples 'a mutable identifiable collection' do
     it 'returns self' do
       ret = view.delete_if { |_i| false }
       expect(ret).to equal(view)
+    end
+
+    it 'yields items with the proper context' do
+      view.delete_if { |i| expect(i._context).to equal(view_context) }
     end
   end
 end

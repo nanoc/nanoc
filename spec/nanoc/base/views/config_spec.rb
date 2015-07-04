@@ -3,7 +3,7 @@ describe Nanoc::ConfigView do
     { amount: 9000, animal: 'donkey' }
   end
 
-  let(:view) { described_class.new(config) }
+  let(:view) { described_class.new(config, nil) }
 
   describe '#[]' do
     subject { view[key] }

@@ -1,7 +1,7 @@
 shared_examples 'a mutable document view' do
   describe '#[]=' do
     let(:item) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     it 'sets attributes' do
       view[:title] = 'Donkey'
@@ -11,7 +11,7 @@ shared_examples 'a mutable document view' do
 
   describe '#update_attributes' do
     let(:item) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     let(:update) { { friend: 'Giraffe' } }
 

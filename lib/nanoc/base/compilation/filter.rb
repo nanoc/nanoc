@@ -181,10 +181,9 @@ module Nanoc
     # the given collection of items. In other words, require the given items
     # to be compiled first before this items is processed.
     #
-    # @param [Array<Nanoc::Int::Item>] items The items that are depended on.
-    #
     # @return [void]
     def depend_on(items)
+      orig_items = items
       items = items.map { |i| i.is_a?(Nanoc::ItemView) ? i.unwrap : i }
 
       # Notify
@@ -195,7 +194,7 @@ module Nanoc
 
       # Raise unmet dependency error if necessary
       items.each do |item|
-        rep = item.reps.find { |r| !r.compiled? }
+        rep = orig_items.sample._context.reps[item].find { |r| !r.compiled? }
         raise Nanoc::Int::Errors::UnmetDependency.new(rep) if rep
       end
     end

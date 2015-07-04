@@ -1,6 +1,8 @@
 # Needs :view_class
 shared_examples 'an identifiable collection' do
-  let(:view) { described_class.new(wrapped) }
+  let(:view) { described_class.new(wrapped, view_context) }
+
+  let(:view_context) { double(:view_context) }
 
   let(:config) do
     { string_pattern_type: 'glob' }
@@ -31,6 +33,10 @@ shared_examples 'an identifiable collection' do
 
     it 'returns self' do
       expect(view.each { |_i| }).to equal(view)
+    end
+
+    it 'yields elements with the right context' do
+      view.each { |v| expect(v._context).to equal(view_context) }
     end
   end
 
@@ -77,6 +83,10 @@ shared_examples 'an identifiable collection' do
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
         expect(subject.unwrap).to equal(home_object)
+      end
+
+      it 'returns objects with right context' do
+        expect(subject._context).to equal(view_context)
       end
     end
 

@@ -17,8 +17,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     # Build site
     site = Nanoc::Int::SiteLoader.new.new_empty
     item = Nanoc::Int::Item.new('moo', {}, '/blah/')
-    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(item)
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
+    @item = Nanoc::ItemView.new(item, nil)
 
     # Evaluate content
     result = ::ERB.new(content).result(binding)
@@ -32,8 +32,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     require 'erb'
 
     # Build site
-    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('moo', {}, '/blah/'))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('moo', {}, '/blah/'), nil)
 
     # Capture
     _erbout = 'foo'
@@ -66,8 +66,8 @@ head
 foot
 EOS
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
 
     result = ::ERB.new(content).result(binding)
 
@@ -84,16 +84,16 @@ EOS
       io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
     end
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
     content = '<% content_for :a do %>Content One<% end %>'
     ::ERB.new(content).result(binding)
 
     assert_equal 'Content One', content_for(@item, :a)
     assert_equal nil,           content_for(@item, :b)
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty)
-    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'))
+    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
+    @item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
     content = '<% content_for :b do %>Content Two<% end %>'
     ::ERB.new(content).result(binding)
 
