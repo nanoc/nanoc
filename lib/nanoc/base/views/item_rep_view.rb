@@ -1,7 +1,8 @@
 module Nanoc
-  class ItemRepView
+  class ItemRepView < ::Nanoc::View
     # @api private
-    def initialize(item_rep)
+    def initialize(item_rep, context)
+      super(context)
       @item_rep = item_rep
     end
 
@@ -61,7 +62,7 @@ module Nanoc
     #
     # @return [Nanoc::ItemView]
     def item
-      Nanoc::ItemView.new(@item_rep.item)
+      Nanoc::ItemView.new(@item_rep.item, @context)
     end
 
     # @api private

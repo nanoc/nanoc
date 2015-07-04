@@ -1,6 +1,9 @@
 require_relative 'views/mixins/document_view_mixin'
 require_relative 'views/mixins/mutable_document_view_mixin'
 
+require_relative 'views/view'
+require_relative 'views/view_context'
+
 require_relative 'views/config_view'
 require_relative 'views/identifiable_collection_view'
 require_relative 'views/item_view'

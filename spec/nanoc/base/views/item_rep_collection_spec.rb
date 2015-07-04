@@ -1,5 +1,5 @@
 describe Nanoc::ItemRepCollectionView do
-  let(:view) { described_class.new(wrapped) }
+  let(:view) { described_class.new(wrapped, nil) }
 
   let(:wrapped) do
     [

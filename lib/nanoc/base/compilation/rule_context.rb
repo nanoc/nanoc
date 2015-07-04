@@ -12,13 +12,13 @@ module Nanoc::Int
       @_executor = executor
 
       super({
-        item: Nanoc::ItemView.new(rep.item),
-        rep: Nanoc::ItemRepView.new(rep),
-        item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
-        config: Nanoc::ConfigView.new(site.config),
-        site: Nanoc::SiteView.new(site),
+        item: Nanoc::ItemView.new(rep.item, nil),
+        rep: Nanoc::ItemRepView.new(rep, nil),
+        item_rep: Nanoc::ItemRepView.new(rep, nil),
+        items: Nanoc::ItemCollectionView.new(site.items, nil),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
+        config: Nanoc::ConfigView.new(site.config, nil),
+        site: Nanoc::SiteView.new(site, nil),
       })
     end
 

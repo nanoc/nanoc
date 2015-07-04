@@ -11,7 +11,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Mock item and rep
       @item_rep = mock
-      @item_rep = Nanoc::ItemRepView.new(@item_rep)
+      @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -32,8 +32,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new('stuff', { title: 'Bar...' }, '/foo.md')
       item_rep = Nanoc::Int::ItemRep.new(item, :default)
 
-      @item = Nanoc::ItemView.new(item)
-      @item_rep = Nanoc::ItemRepView.new(item_rep)
+      @item = Nanoc::ItemView.new(item, nil)
+      @item_rep = Nanoc::ItemRepView.new(item_rep, nil)
 
       result = ::ERB.new(content).result(binding)
 
@@ -64,7 +64,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Mock item and rep
       @item_rep = mock
-      @item_rep = Nanoc::ItemRepView.new(@item_rep)
+      @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -82,7 +82,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Mock item and rep
       @item_rep = mock
-      @item_rep = Nanoc::ItemRepView.new(@item_rep)
+      @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
 
       # Evaluate content
       result = ::Haml::Engine.new(content).render(binding)
@@ -102,7 +102,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
     # Mock item and rep
     @item_rep = mock
-    @item_rep = Nanoc::ItemRepView.new(@item_rep)
+    @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
 
     ::ERB.new(content).result(binding)
 

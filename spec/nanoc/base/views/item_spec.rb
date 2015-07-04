@@ -4,7 +4,7 @@ describe Nanoc::ItemView do
 
   describe '#raw_content' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     subject { view.raw_content }
 
@@ -16,7 +16,7 @@ describe Nanoc::ItemView do
       Nanoc::Int::Item.new('me', {}, '/me/').tap { |i| i.parent = parent_item }
     end
 
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     subject { view.parent }
 
@@ -51,7 +51,7 @@ describe Nanoc::ItemView do
     let(:rep_a) { double(:rep_a) }
     let(:rep_b) { double(:rep_b) }
 
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     subject { view.reps }
 
@@ -64,7 +64,7 @@ describe Nanoc::ItemView do
   describe '#compiled_content' do
     subject { view.compiled_content(params) }
 
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf/')
@@ -138,7 +138,7 @@ describe Nanoc::ItemView do
   describe '#path' do
     subject { view.path(params) }
 
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')

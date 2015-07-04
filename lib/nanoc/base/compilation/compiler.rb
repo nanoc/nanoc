@@ -172,16 +172,22 @@ module Nanoc::Int
         content_or_filename_assigns = { content: rep.snapshot_contents[:last].string }
       end
 
+      context = context_for(rep)
+
       # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge({
-        item: Nanoc::ItemView.new(rep.item),
-        rep: Nanoc::ItemRepView.new(rep),
-        item_rep: Nanoc::ItemRepView.new(rep),
-        items: Nanoc::ItemCollectionView.new(site.items),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts),
-        config: Nanoc::ConfigView.new(site.config),
-        site: Nanoc::SiteView.new(site),
+        item: Nanoc::ItemView.new(rep.item, context),
+        rep: Nanoc::ItemRepView.new(rep, context),
+        item_rep: Nanoc::ItemRepView.new(rep, context),
+        items: Nanoc::ItemCollectionView.new(site.items, context),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, context),
+        config: Nanoc::ConfigView.new(site.config, context),
+        site: Nanoc::SiteView.new(site, context),
       })
+    end
+
+    def context_for(_rep)
+      Nanoc::ViewContext.new
     end
 
     private

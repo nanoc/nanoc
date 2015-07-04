@@ -18,7 +18,7 @@ describe Nanoc::MutableItemCollectionView do
       end
     end
 
-    let(:view) { described_class.new(wrapped) }
+    let(:view) { described_class.new(wrapped, nil) }
 
     it 'creates an object' do
       view.create('new content', { title: 'New Page' }, '/new/')

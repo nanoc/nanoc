@@ -1,7 +1,8 @@
 module Nanoc
-  class SiteView
+  class SiteView < ::Nanoc::View
     # @api private
-    def initialize(site)
+    def initialize(site, context)
+      super(context)
       @site = site
     end
 

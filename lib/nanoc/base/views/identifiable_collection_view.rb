@@ -1,9 +1,10 @@
 module Nanoc
-  class IdentifiableCollectionView
+  class IdentifiableCollectionView < ::Nanoc::View
     include Enumerable
 
     # @api private
-    def initialize(objects)
+    def initialize(objects, context)
+      super(context)
       @objects = objects
     end
 
@@ -27,7 +28,7 @@ module Nanoc
     #
     # @return [self]
     def each
-      @objects.each { |i| yield view_class.new(i) }
+      @objects.each { |i| yield view_class.new(i, @context) }
       self
     end
 
@@ -70,7 +71,7 @@ module Nanoc
     #   @return [#identifier] if an object was found
     def [](arg)
       res = @objects[arg]
-      res && view_class.new(res)
+      res && view_class.new(res, @context)
     end
   end
 end

@@ -2,7 +2,7 @@ describe Nanoc::ItemRepView do
   describe '#== and #eql?' do
     let(:item_rep) { double(:item_rep, item: item, name: :jacques) }
     let(:item) { double(:item, identifier: '/foo/') }
-    let(:view) { described_class.new(item_rep) }
+    let(:view) { described_class.new(item_rep, nil) }
 
     context 'comparing with item rep with same identifier' do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
@@ -36,7 +36,7 @@ describe Nanoc::ItemRepView do
 
     context 'comparing with item rep with same identifier' do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques)) }
+      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), nil) }
 
       it 'is equal' do
         expect(view).to eq(other)
@@ -46,7 +46,7 @@ describe Nanoc::ItemRepView do
 
     context 'comparing with item rep with different identifier' do
       let(:other_item) { double(:other_item, identifier: '/bar/') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques)) }
+      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), nil) }
 
       it 'is not equal' do
         expect(view).not_to eq(other)
@@ -56,7 +56,7 @@ describe Nanoc::ItemRepView do
 
     context 'comparing with item rep with different name' do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :marvin)) }
+      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :marvin), nil) }
 
       it 'is not equal' do
         expect(view).not_to eq(other)
@@ -68,7 +68,7 @@ describe Nanoc::ItemRepView do
   describe '#hash' do
     let(:item_rep) { double(:item_rep, item: item, name: :jacques) }
     let(:item) { double(:item, identifier: '/foo/') }
-    let(:view) { described_class.new(item_rep) }
+    let(:view) { described_class.new(item_rep, nil) }
 
     subject { view.hash }
 
@@ -78,7 +78,7 @@ describe Nanoc::ItemRepView do
   describe '#compiled_content' do
     subject { view.compiled_content }
 
-    let(:view) { described_class.new(rep) }
+    let(:view) { described_class.new(rep, nil) }
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
@@ -106,7 +106,7 @@ describe Nanoc::ItemRepView do
   describe '#path' do
     subject { view.path }
 
-    let(:view) { described_class.new(rep) }
+    let(:view) { described_class.new(rep, nil) }
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
@@ -133,7 +133,7 @@ describe Nanoc::ItemRepView do
   describe '#raw_path' do
     subject { view.raw_path }
 
-    let(:view) { described_class.new(rep) }
+    let(:view) { described_class.new(rep, nil) }
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|

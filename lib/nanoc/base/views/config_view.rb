@@ -1,10 +1,11 @@
 module Nanoc
-  class ConfigView
+  class ConfigView < ::Nanoc::View
     # @api private
     NONE = Object.new
 
     # @api private
-    def initialize(config)
+    def initialize(config, context)
+      super(context)
       @config = config
     end
 
