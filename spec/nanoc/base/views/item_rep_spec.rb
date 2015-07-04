@@ -1,8 +1,10 @@
 describe Nanoc::ItemRepView do
+  let(:view_context) { double(:view_context) }
+
   describe '#== and #eql?' do
-    let(:item_rep) { double(:item_rep, item: item, name: :jacques) }
-    let(:item) { double(:item, identifier: '/foo/') }
-    let(:view) { described_class.new(item_rep, nil) }
+    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:view) { described_class.new(item_rep, view_context) }
 
     context 'comparing with item rep with same identifier' do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
@@ -66,13 +68,13 @@ describe Nanoc::ItemRepView do
   end
 
   describe '#hash' do
-    let(:item_rep) { double(:item_rep, item: item, name: :jacques) }
-    let(:item) { double(:item, identifier: '/foo/') }
-    let(:view) { described_class.new(item_rep, nil) }
+    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:view) { described_class.new(item_rep, view_context) }
 
     subject { view.hash }
 
-    it { should == described_class.hash ^ '/foo/'.hash ^ :jacques.hash }
+    it { should == described_class.hash ^ Nanoc::Identifier.new('/foo/').hash ^ :jacques.hash }
   end
 
   describe '#compiled_content' do
@@ -155,5 +157,21 @@ describe Nanoc::ItemRepView do
     end
 
     it { should eq('output/about/index.html') }
+  end
+
+  describe '#item' do
+    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:view) { described_class.new(item_rep, view_context) }
+
+    subject { view.item }
+
+    it 'returns an item view' do
+      expect(subject).to be_a(Nanoc::ItemView)
+    end
+
+    it 'returns an item view with the right context' do
+      expect(subject._context).to equal(view_context)
+    end
   end
 end

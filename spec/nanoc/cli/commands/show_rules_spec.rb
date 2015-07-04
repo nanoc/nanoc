@@ -24,17 +24,19 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:items) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |ic|
-        ic << Nanoc::Int::Item.new('About Me', {}, '/about.md').tap do |i|
-          i.reps << Nanoc::Int::ItemRep.new(i, :default)
-          i.reps << Nanoc::Int::ItemRep.new(i, :text)
-        end
-        ic << Nanoc::Int::Item.new('About My Dog', {}, '/dog.md').tap do |i|
-          i.reps << Nanoc::Int::ItemRep.new(i, :default)
-          i.reps << Nanoc::Int::ItemRep.new(i, :text)
-        end
-        ic << Nanoc::Int::Item.new('Raw Data', {}, '/other.dat').tap do |i|
-          i.reps << Nanoc::Int::ItemRep.new(i, :default)
-        end
+        ic << Nanoc::Int::Item.new('About Me', {}, '/about.md')
+        ic << Nanoc::Int::Item.new('About My Dog', {}, '/dog.md')
+        ic << Nanoc::Int::Item.new('Raw Data', {}, '/other.dat')
+      end
+    end
+
+    let(:reps) do
+      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+        reps << Nanoc::Int::ItemRep.new(items['/about.md'], :default)
+        reps << Nanoc::Int::ItemRep.new(items['/about.md'], :text)
+        reps << Nanoc::Int::ItemRep.new(items['/dog.md'], :default)
+        reps << Nanoc::Int::ItemRep.new(items['/dog.md'], :text)
+        reps << Nanoc::Int::ItemRep.new(items['/other.dat'], :default)
       end
     end
 
@@ -48,7 +50,7 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:config) { double(:config) }
 
-    let(:compiler) { double(:compiler, rules_collection: rules_collection) }
+    let(:compiler) { double(:compiler, rules_collection: rules_collection, reps: reps) }
 
     let(:rules_collection) do
       Nanoc::Int::RulesCollection.new.tap do |rc|

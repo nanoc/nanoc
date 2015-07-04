@@ -3,20 +3,16 @@ module Nanoc::Int
   class ItemRepBuilder
     attr_reader :reps
 
-    def initialize(site, rules_collection)
+    def initialize(site, rules_collection, reps)
       @site = site
       @rules_collection = rules_collection
-
-      @reps = []
+      @reps = reps
     end
 
     def run
       @site.items.each do |item|
         rep_names_for(item).each do |rep_name|
-          rep = Nanoc::Int::ItemRep.new(item, rep_name)
-
-          item.reps << rep
-          @reps << rep
+          @reps << Nanoc::Int::ItemRep.new(item, rep_name)
         end
       end
 

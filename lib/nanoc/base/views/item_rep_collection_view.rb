@@ -20,7 +20,7 @@ module Nanoc
     end
 
     def to_ary
-      @item_reps.map { |ir| Nanoc::ItemRepView.new(ir, nil) }
+      @item_reps.map { |ir| Nanoc::ItemRepView.new(ir, @context) }
     end
 
     # Calls the given block once for each item rep, passing that item rep as a parameter.
@@ -31,7 +31,7 @@ module Nanoc
     #
     # @return [self]
     def each
-      @item_reps.each { |ir| yield Nanoc::ItemRepView.new(ir, nil) }
+      @item_reps.each { |ir| yield Nanoc::ItemRepView.new(ir, @context) }
       self
     end
 
@@ -49,7 +49,7 @@ module Nanoc
     # @return [Nanoc::ItemRepView] if an item rep with the given name was found
     def [](rep_name)
       res = @item_reps.find { |ir| ir.name == rep_name }
-      res && Nanoc::ItemRepView.new(res, nil)
+      res && Nanoc::ItemRepView.new(res, @context)
     end
 
     # Return the item rep with the given name, or raises an exception if there
@@ -63,7 +63,7 @@ module Nanoc
     def fetch(rep_name)
       res = @item_reps.find { |ir| ir.name == rep_name }
       if res
-        Nanoc::ItemRepView.new(res, nil)
+        Nanoc::ItemRepView.new(res, @context)
       else
         raise NoSuchItemRepError.new(rep_name)
       end

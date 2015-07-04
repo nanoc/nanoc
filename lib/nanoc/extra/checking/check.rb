@@ -19,11 +19,14 @@ module Nanoc::Extra::Checking
       end
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
+      # FIXME: ugly
+      view_context = site.compiler.create_view_context
+
       context = {
-        items: Nanoc::ItemCollectionView.new(site.items, nil),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
-        config: Nanoc::ConfigView.new(site.config, nil),
-        site: Nanoc::SiteView.new(site, nil), # TODO: remove me
+        items: Nanoc::ItemCollectionView.new(site.items, view_context),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::ConfigView.new(site.config, view_context),
+        site: Nanoc::SiteView.new(site, view_context), # TODO: remove me
         output_filenames: output_filenames,
       }
 

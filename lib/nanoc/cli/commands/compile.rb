@@ -17,8 +17,6 @@ EOS
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
-    extend Nanoc::Int::Memoization
-
     # Listens to compilation events and reacts to them. This abstract class
     # does not have a real implementation; subclasses should override {#start}
     # and set up notifications to listen to.
@@ -426,9 +424,8 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      site.items.map(&:reps).flatten
+      site.compiler.reps
     end
-    memoize :reps
 
     def prune_config
       site.config[:prune] || {}

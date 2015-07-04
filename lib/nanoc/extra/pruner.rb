@@ -28,9 +28,7 @@ module Nanoc::Extra
 
       # Get compiled files
       # FIXME: requires #build_reps to have been called
-      all_raw_paths = site.items.map do |item|
-        item.reps.map(&:raw_path)
-      end
+      all_raw_paths = site.compiler.reps.map(&:raw_path)
       compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs

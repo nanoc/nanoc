@@ -16,7 +16,9 @@ describe Nanoc::ItemView do
       Nanoc::Int::Item.new('me', {}, '/me/').tap { |i| i.parent = parent_item }
     end
 
-    let(:view) { described_class.new(item, nil) }
+    let(:view) { described_class.new(item, view_context) }
+
+    let(:view_context) { double(:view_context) }
 
     subject { view.parent }
 
@@ -28,6 +30,10 @@ describe Nanoc::ItemView do
       it 'returns a view for the parent' do
         expect(subject.class).to eql(Nanoc::ItemView)
         expect(subject.unwrap).to eql(parent_item)
+      end
+
+      it 'returns a view with the right context' do
+        expect(subject._context).to equal(view_context)
       end
     end
 
@@ -47,11 +53,19 @@ describe Nanoc::ItemView do
   end
 
   describe '#reps' do
-    let(:item) { double(:item, reps: [rep_a, rep_b]) }
-    let(:rep_a) { double(:rep_a) }
-    let(:rep_b) { double(:rep_b) }
+    let(:item) { Nanoc::Int::Item.new('blah', {}, '/foo.md') }
+    let(:rep_a) { Nanoc::Int::ItemRep.new(item, :a) }
+    let(:rep_b) { Nanoc::Int::ItemRep.new(item, :b) }
 
-    let(:view) { described_class.new(item, nil) }
+    let(:reps) do
+      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+        reps << rep_a
+        reps << rep_b
+      end
+    end
+
+    let(:view) { described_class.new(item, view_context) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
 
     subject { view.reps }
 
@@ -59,15 +73,26 @@ describe Nanoc::ItemView do
       expect(subject.size).to eq(2)
       expect(subject.class).to eql(Nanoc::ItemRepCollectionView)
     end
+
+    it 'returns a view with the right context' do
+      expect(subject._context).to eq(view_context)
+    end
   end
 
   describe '#compiled_content' do
     subject { view.compiled_content(params) }
 
-    let(:view) { described_class.new(item, nil) }
+    let(:view) { described_class.new(item, view_context) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf/')
+    end
+
+    let(:reps) do
+      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+        reps << rep
+      end
     end
 
     let(:rep) do
@@ -82,10 +107,6 @@ describe Nanoc::ItemView do
           specific: Nanoc::Int::TextualContent.new('Specific Hallo'),
         }
       end
-    end
-
-    before do
-      item.reps << rep
     end
 
     context 'requesting implicit default rep' do
@@ -138,10 +159,17 @@ describe Nanoc::ItemView do
   describe '#path' do
     subject { view.path(params) }
 
-    let(:view) { described_class.new(item, nil) }
+    let(:view) { described_class.new(item, view_context) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    let(:reps) do
+      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+        reps << rep
+      end
     end
 
     let(:rep) do
@@ -151,10 +179,6 @@ describe Nanoc::ItemView do
           specific: '/about.txt',
         }
       end
-    end
-
-    before do
-      item.reps << rep
     end
 
     context 'requesting implicit default rep' do

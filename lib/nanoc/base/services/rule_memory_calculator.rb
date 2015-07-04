@@ -56,7 +56,7 @@ module Nanoc::Int
       executor = Nanoc::Int::RecordingExecutor.new
       @rules_collection
         .compilation_rule_for(rep)
-        .apply_to(rep, executor: executor, site: @site)
+        .apply_to(rep, executor: executor, site: @site, view_context: nil)
       executor.record_write(rep, rep.path)
       make_rule_memory_serializable(executor.rule_memory)
     end

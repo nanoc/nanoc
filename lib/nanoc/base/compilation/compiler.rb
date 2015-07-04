@@ -69,7 +69,10 @@ module Nanoc::Int
     # @api private
     attr_reader :outdatedness_checker
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:, outdatedness_checker:)
+    # @api private
+    attr_reader :reps
+
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:, outdatedness_checker:, reps:)
       @site = site
       @rules_collection = rules_collection
 
@@ -79,6 +82,7 @@ module Nanoc::Int
       @rule_memory_calculator = rule_memory_calculator
       @dependency_store       = dependency_store
       @outdatedness_checker   = outdatedness_checker
+      @reps                   = reps
 
       @stack = []
     end
@@ -95,13 +99,13 @@ module Nanoc::Int
       Nanoc::Int::Preprocessor.new(site: @site, rules_collection: @rules_collection).run
 
       # Build reps
-      reps = build_reps
+      build_reps
 
       # Compile
-      run(reps)
+      run
     end
 
-    def run(reps)
+    def run
       load_stores
       @site.freeze
 
@@ -111,9 +115,9 @@ module Nanoc::Int
       @stack = []
       dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
       dependency_tracker.run do
-        compile_reps(reps)
+        compile_reps
       end
-      store(reps)
+      store
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
@@ -128,9 +132,9 @@ module Nanoc::Int
     # Store the modified helper data used for compiling the site.
     #
     # @return [void]
-    def store(reps)
+    def store
       # Calculate rule memory
-      (reps + @site.layouts.to_a).each do |obj|
+      (@reps.to_a + @site.layouts.to_a).each do |obj|
         rule_memory_store[obj] = rule_memory_calculator[obj]
       end
 
@@ -153,9 +157,8 @@ module Nanoc::Int
     end
 
     def build_reps
-      builder = Nanoc::Int::ItemRepBuilder.new(site, rules_collection)
+      builder = Nanoc::Int::ItemRepBuilder.new(site, rules_collection, @reps)
       builder.run
-      builder.reps
     end
 
     # @param [Nanoc::Int::ItemRep] rep The item representation for which the
@@ -172,43 +175,38 @@ module Nanoc::Int
         content_or_filename_assigns = { content: rep.snapshot_contents[:last].string }
       end
 
-      context = context_for(rep)
+      view_context = create_view_context
 
       # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge({
-        item: Nanoc::ItemView.new(rep.item, context),
-        rep: Nanoc::ItemRepView.new(rep, context),
-        item_rep: Nanoc::ItemRepView.new(rep, context),
-        items: Nanoc::ItemCollectionView.new(site.items, context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, context),
-        config: Nanoc::ConfigView.new(site.config, context),
-        site: Nanoc::SiteView.new(site, context),
+        item: Nanoc::ItemView.new(rep.item, view_context),
+        rep: Nanoc::ItemRepView.new(rep, view_context),
+        item_rep: Nanoc::ItemRepView.new(rep, view_context),
+        items: Nanoc::ItemCollectionView.new(site.items, view_context),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::ConfigView.new(site.config, view_context),
+        site: Nanoc::SiteView.new(site, view_context),
       })
     end
 
-    def context_for(_rep)
-      Nanoc::ViewContext.new
+    def create_view_context
+      Nanoc::ViewContext.new(reps: @reps)
     end
 
     private
 
-    # Compiles the given representations.
-    #
-    # @param [Array] reps The item representations to compile.
-    #
-    # @return [void]
-    def compile_reps(reps)
+    def compile_reps
       # Listen to processing start/stop
       Nanoc::Int::NotificationCenter.on(:processing_started, self) { |o| @stack.push(o) }
       Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_| @stack.pop }
 
       # Assign snapshots
-      reps.each do |rep|
+      @reps.each do |rep|
         rep.snapshot_defs = rule_memory_calculator.snapshots_defs_for(rep)
       end
 
       # Find item reps to compile and compile them
-      selector = Nanoc::Int::ItemRepSelector.new(reps)
+      selector = Nanoc::Int::ItemRepSelector.new(@reps)
       selector.each do |rep|
         @stack = []
         compile_rep(rep)
@@ -264,7 +262,7 @@ module Nanoc::Int
       executor.snapshot(rep, :raw)
       executor.snapshot(rep, :pre, final: false)
       rules_collection.compilation_rule_for(rep)
-        .apply_to(rep, executor: executor, site: @site)
+        .apply_to(rep, executor: executor, site: @site, view_context: create_view_context)
       executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
       executor.snapshot(rep, :last)
     end
@@ -274,7 +272,7 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_if_outdated
       @site.items.each do |i|
-        if i.reps.any? { |r| outdatedness_checker.outdated?(r) }
+        if @reps[i].any? { |r| outdatedness_checker.outdated?(r) }
           @dependency_store.forget_dependencies_for(i)
         end
       end

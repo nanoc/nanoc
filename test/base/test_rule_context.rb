@@ -15,7 +15,8 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
 
     # Create context
     executor = nil
-    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
+    view_context = nil
+    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site, view_context: nil)
 
     # Check classes
     assert_equal Nanoc::ItemRepView,          rule_context.rep.class
@@ -52,7 +53,8 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
 
     # Create context
     executor = nil
-    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site)
+    view_context = nil
+    rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site, view_context: nil)
 
     # Check
     assert_raises(NoMethodError) do

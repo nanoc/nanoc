@@ -9,6 +9,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     rules_collection = Nanoc::Int::RulesCollection.new
 
+    reps = Nanoc::Int::ItemRepRepo.new
+
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
@@ -19,6 +21,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       ),
       dependency_store: Nanoc::Int::DependencyStore.new(
         site.items.to_a + site.layouts.to_a),
+      reps: reps,
     }
 
     params[:outdatedness_checker] =
@@ -29,6 +32,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         rules_collection: params[:rules_collection],
         rule_memory_store: params[:rule_memory_store],
         rule_memory_calculator: params[:rule_memory_calculator],
+        reps: reps,
       )
 
     Nanoc::Int::Compiler.new(site, rules_collection, params)
@@ -289,7 +293,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       # At this point, even the already compiled items in the previous pass
       # should have their compiled content assigned, so this should work:
-      site.items['/index.*'].reps[0].compiled_content
+      site.compiler.reps[site.items['/index.*']][0].compiled_content
     end
   end
 

@@ -4,5 +4,9 @@ module Nanoc
     def initialize(context)
       @context = context
     end
+
+    def _context
+      @context
+    end
   end
 end

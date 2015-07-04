@@ -110,7 +110,7 @@ module Nanoc::Helpers
           unless @site.unwrap.captures_store_compiled_items.include? item
             @site.unwrap.captures_store_compiled_items << item
             item.forced_outdated = true
-            item.reps.each do |r|
+            @site.unwrap.compiler.reps[item].each do |r|
               r.snapshot_contents = { last: item.content }
               raise Nanoc::Int::Errors::UnmetDependency.new(r)
             end
