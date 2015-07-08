@@ -21,7 +21,7 @@ module Nanoc::CLI::Commands
       self.class.env_for_site(site)
     end
 
-    def self.env_for(site)
+    def self.env_for_site(site)
       {
         items: Nanoc::ItemCollectionView.new(site.items),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts),
