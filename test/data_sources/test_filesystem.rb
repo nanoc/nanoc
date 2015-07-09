@@ -451,4 +451,31 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('blah blah',       result[1])
   end
+
+  def test_parse_internal_bad_metadata
+    content = \
+      "---\n" \
+      "Hello world!\n" \
+      "---\n" \
+      "blah blah\n"
+
+    File.open('test.html', 'w') { |io| io.write(content) }
+
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+
+    assert_raises(Nanoc::DataSources::Filesystem::InvalidMetadataError) do
+      data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    end
+  end
+
+  def test_parse_external_bad_metadata
+    File.open('test.html', 'w') { |io| io.write('blah blah') }
+    File.open('test.yaml', 'w') { |io| io.write('Hello world!') }
+
+    data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
+
+    assert_raises(Nanoc::DataSources::Filesystem::InvalidMetadataError) do
+      data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
+    end
+  end
 end

@@ -219,6 +219,7 @@ module Nanoc::DataSources
         rescue Exception => e
           raise "Could not parse YAML for #{meta_filename}: #{e.message}"
         end
+        verify_meta(meta, meta_filename)
         return [meta, content]
       end
 
@@ -244,10 +245,23 @@ module Nanoc::DataSources
       rescue Exception => e
         raise "Could not parse YAML for #{content_filename}: #{e.message}"
       end
+      verify_meta(meta, content_filename)
       content = pieces[4]
 
       # Done
       [meta, content]
+    end
+
+    class InvalidMetadataError < Nanoc::Error
+      def initialize(filename, klass)
+        super("The file #{filename} has invalid metadata (expected key-value pairs, found #{klass} instead)")
+      end
+    end
+
+    def verify_meta(meta, filename)
+      return if meta.is_a?(Hash)
+
+      raise InvalidMetadataError.new(filename, meta.class)
     end
 
     # Reads the content of the file with the given name and returns a string
