@@ -26,6 +26,17 @@ RSpec.configure do |c|
       end
     end
   end
+
+  c.before(:each, site: true) do
+    FileUtils.mkdir_p('content')
+    FileUtils.mkdir_p('layouts')
+    FileUtils.mkdir_p('lib')
+    FileUtils.mkdir_p('output')
+
+    File.write('nanoc.yaml', '{}')
+
+    File.write('Rules', 'passthrough "/**/*"')
+  end
 end
 
 RSpec::Matchers.define :raise_frozen_error do |_expected|
