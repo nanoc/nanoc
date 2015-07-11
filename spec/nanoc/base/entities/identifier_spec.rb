@@ -400,4 +400,23 @@ describe Nanoc::Identifier do
       it { is_expected.to eql(true) }
     end
   end
+
+  describe '#components' do
+    subject { identifier.components }
+
+    context 'no components' do
+      let(:identifier) { described_class.new('/') }
+      it { is_expected.to eql([]) }
+    end
+
+    context 'one component' do
+      let(:identifier) { described_class.new('/foo.md') }
+      it { is_expected.to eql(['foo.md']) }
+    end
+
+    context 'two components' do
+      let(:identifier) { described_class.new('/foo/bar.md') }
+      it { is_expected.to eql(['foo', 'bar.md']) }
+    end
+  end
 end
