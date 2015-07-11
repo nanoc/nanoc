@@ -2,6 +2,16 @@
 
 ## 4.0.0rc2 (???)
 
+Fixes:
+
+* Fixed broken `shell` command (#672) [Jim Mendenhall]
+* Fixed absolute path check on Windows (#656)
+
+Enhancements:
+
+* Made Nanoc error when multiple items have the same output path (#665, #669)
+* Improved error message for non-hash frontmatter (#670, #673)
+
 Changes:
 
 * nanoc is now called Nanoc
