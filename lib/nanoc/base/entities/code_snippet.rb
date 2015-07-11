@@ -1,5 +1,5 @@
 module Nanoc::Int
-  # Nanoc::Int::CodeSnippet represent a piece of custom code of a nanoc site.
+  # Nanoc::Int::CodeSnippet represent a piece of custom code of a Nanoc site.
   #
   # @api private
   class CodeSnippet

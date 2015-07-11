@@ -295,7 +295,7 @@ module Nanoc::CLI
 
     def write_issue_link(stream, _params = {})
       stream.puts
-      stream.puts 'If you believe this is a bug in nanoc, please do report it at'
+      stream.puts 'If you believe this is a bug in Nanoc, please do report it at'
       stream.puts '-> https://github.com/nanoc/nanoc/issues/new <-'
       stream.puts
       stream.puts 'A detailed crash log has been written to ./crash.log.'

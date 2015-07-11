@@ -44,7 +44,7 @@ module Nanoc::DataSources
   #     (`allow_periods_in_identifiers` set to false)
   #     foo.html.erb → /foo/
   #
-  # Note that each item must have an unique identifier. nanoc will display an
+  # Note that each item must have an unique identifier. Nanoc will display an
   # error if two items with the same identifier are found.
   #
   # Some more examples:

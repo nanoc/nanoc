@@ -1,11 +1,11 @@
 module Nanoc::Int
-  # Module that contains all nanoc-specific errors.
+  # Module that contains all Nanoc-specific errors.
   #
   # @api private
   module Errors
     Generic = ::Nanoc::Error
 
-    # Generic trivial error. Superclass for all nanoc-specific errors that are
+    # Generic trivial error. Superclass for all Nanoc-specific errors that are
     # considered "trivial", i.e. errors that do not require a full crash report.
     class GenericTrivial < Generic
     end
@@ -66,7 +66,7 @@ module Nanoc::Int
     # working directory.
     class NoRulesFileFound < Generic
       def initialize
-        super('This site does not have a rules file, which is required for nanoc sites.')
+        super('This site does not have a rules file, which is required for Nanoc sites.')
       end
     end
 

@@ -1,5 +1,5 @@
 usage 'shell'
-summary 'open a shell on the nanoc environment'
+summary 'open a shell on the Nanoc environment'
 aliases 'console'
 description "
 Open an IRB shell on a context that contains @items, @layouts, and @config.
@@ -21,7 +21,7 @@ module Nanoc::CLI::Commands
       self.class.env_for_site(site)
     end
 
-    def self.env_for(site)
+    def self.env_for_site(site)
       {
         items: Nanoc::ItemCollectionView.new(site.items, nil),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),

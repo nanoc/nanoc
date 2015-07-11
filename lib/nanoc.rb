@@ -1,5 +1,5 @@
 module Nanoc
-  # @return [String] A string containing information about this nanoc version
+  # @return [String] A string containing information about this Nanoc version
   #   and its environment (Ruby engine and version, Rubygems version if any).
   #
   # @api private
@@ -7,7 +7,7 @@ module Nanoc
     gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : 'without RubyGems'
     engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
     res = ''
-    res << "nanoc #{Nanoc::VERSION} © 2007-2015 Denis Defreyne.\n"
+    res << "Nanoc #{Nanoc::VERSION} © 2007-2015 Denis Defreyne.\n"
     res << "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}.\n"
     res
   end
@@ -34,7 +34,7 @@ require 'time'
 require 'yaml'
 require 'English'
 
-# Load nanoc
+# Load Nanoc
 require 'nanoc/version'
 require 'nanoc/base'
 require 'nanoc/extra'

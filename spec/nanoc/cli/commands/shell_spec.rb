@@ -1,6 +1,21 @@
-describe Nanoc::CLI::Commands::Shell do
-  describe '#env_for' do
-    subject { described_class.env_for(site) }
+describe Nanoc::CLI::Commands::Shell, site: true do
+  describe '#run' do
+    before do
+      # Prevent double-loading
+      expect(Nanoc::CLI).to receive(:setup)
+    end
+
+    it 'can be invoked' do
+      context = Object.new
+      expect(Nanoc::Int::Context).to receive(:new).with(anything) { context }
+      expect(context).to receive(:pry)
+
+      Nanoc::CLI.run(['shell'])
+    end
+  end
+
+  describe '#env_for_site' do
+    subject { described_class.env_for_site(site) }
 
     let(:site) do
       double(

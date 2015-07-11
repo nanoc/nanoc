@@ -282,6 +282,33 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     end
   end
 
+  def test_disallow_duplicate_routes
+    # Create site
+    Nanoc::CLI.run %w( create_site bar)
+
+    FileUtils.cd('bar') do
+      # Create routes
+      File.open('Rules', 'w') do |io|
+        io.write "compile '/**/*' do\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '/**/*' do\n"
+        io.write "  '/index.html'\n"
+        io.write "end\n"
+      end
+
+      # Create files
+      File.write('content/foo.html', 'asdf')
+      File.write('content/bar.html', 'asdf')
+
+      # Create site
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      assert_raises(Nanoc::Int::ItemRepRouter::IdenticalRoutesError) do
+        site.compile
+      end
+    end
+  end
+
   def test_compile_should_recompile_all_reps
     Nanoc::CLI.run %w( create_site bar )
 
@@ -310,7 +337,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write "end\n"
         io.write "\n"
         io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
+        io.write "  item.identifier.to_s\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"
@@ -551,7 +578,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write "end\n"
         io.write "\n"
         io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
+        io.write "  item.identifier.to_s\n"
         io.write "end\n"
         io.write "\n"
         io.write "layout '/**/*', :erb\n"

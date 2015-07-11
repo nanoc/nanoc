@@ -1,5 +1,5 @@
 module Nanoc::CLI
-  # A command runner subclass for nanoc commands that adds nanoc-specific
+  # A command runner subclass for Nanoc commands that adds Nanoc-specific
   # convenience methods and error handling.
   #
   # @api private
@@ -34,7 +34,7 @@ module Nanoc::CLI
       @site = new_site
     end
 
-    # @return [Boolean] true if the current working directory is a nanoc site
+    # @return [Boolean] true if the current working directory is a Nanoc site
     #   directory, false otherwise
     def in_site_dir?
       Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
@@ -48,7 +48,7 @@ module Nanoc::CLI
     # @return [void]
     def require_site
       if site.nil?
-        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a nanoc site.'
+        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a Nanoc site.'
       end
     end
 

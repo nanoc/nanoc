@@ -3,7 +3,7 @@ require 'nanoc'
 require 'nanoc/cli'
 
 if File.file?('Gemfile') && !defined?(Bundler)
-  warn 'A Gemfile was detected, but Bundler is not loaded. This is probably not what you want. To run nanoc with Bundler, use `bundle exec nanoc`.'
+  warn 'A Gemfile was detected, but Bundler is not loaded. This is probably not what you want. To run Nanoc with Bundler, use `bundle exec nanoc`.'
 end
 
 Nanoc::CLI.run(ARGV)
