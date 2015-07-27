@@ -77,10 +77,12 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Extra::Checking::Checks::ExternalLinks.create(site)
-      site.config.update({ checks: { external_links: { exclude: ['^http://example.com$'] } } })
+      site.config.update({ checks: { external_links: { exclude: ['^http://excluded.com$'] } } })
 
       # Test
-      assert check.send(:excluded?, 'http://example.com')
+      assert check.send(:excluded?, 'http://excluded.com')
+      refute check.send(:excluded?, 'http://excluded.com/notexcluded')
+      refute check.send(:excluded?, 'http://notexcluded.com')
     end
   end
 end
