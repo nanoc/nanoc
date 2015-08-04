@@ -26,7 +26,7 @@ module Nanoc::Helpers
     #
     # @return [String] A hyperlinked list of tags for the given item
     def tags_for(item, params = {})
-      base_url  = params.fetch(:base_url)
+      base_url  = params[:base_url] || '/tags/'
       none_text = params[:none_text] || '(none)'
       separator = params[:separator] || ', '
 
