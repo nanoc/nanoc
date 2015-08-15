@@ -24,6 +24,8 @@ module Nanoc::Int
 
     def [](arg)
       case arg
+      when Nanoc::Identifier
+        object_with_identifier(arg)
       when String
         object_with_identifier(arg) || object_matching_glob(arg)
       when Regexp
