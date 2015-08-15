@@ -10,7 +10,7 @@ module Nanoc::Int
       when Regexp
         Nanoc::Int::RegexpPattern.new(obj)
       else
-        raise ArgumentError, "Do not know how to convert #{obj} into a Nanoc::Pattern"
+        raise ArgumentError, "Do not know how to convert `#{obj.inspect}` into a Nanoc::Pattern"
       end
     end
 

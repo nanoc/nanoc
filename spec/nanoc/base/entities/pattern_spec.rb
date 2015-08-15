@@ -22,6 +22,11 @@ describe Nanoc::Int::Pattern do
     it 'errors on other inputs' do
       expect { described_class.from(123) }.to raise_error(ArgumentError)
     end
+
+    it 'errors with a proper error message on other inputs' do
+      expect { described_class.from(nil) }
+        .to raise_error(ArgumentError, "Do not know how to convert `nil` into a Nanoc::Pattern")
+    end
   end
 
   describe '#initialize' do
