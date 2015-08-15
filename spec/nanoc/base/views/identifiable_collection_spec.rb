@@ -77,7 +77,7 @@ shared_examples 'an identifiable collection' do
       it { is_expected.to equal(nil) }
     end
 
-    context 'direct identifier' do
+    context 'string' do
       let(:arg) { '/home.erb' }
 
       it 'returns wrapped object' do
@@ -87,6 +87,15 @@ shared_examples 'an identifiable collection' do
 
       it 'returns objects with right context' do
         expect(subject._context).to equal(view_context)
+      end
+    end
+
+    context 'identifier' do
+      let(:arg) { Nanoc::Identifier.new('/home.erb') }
+
+      it 'returns wrapped object' do
+        expect(subject.class).to equal(view_class)
+        expect(subject.unwrap).to equal(home_object)
       end
     end
 
