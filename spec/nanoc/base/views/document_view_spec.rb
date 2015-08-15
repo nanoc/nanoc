@@ -38,6 +38,15 @@ shared_examples 'a document view' do
         expect(view).not_to eql(other)
       end
     end
+
+    context 'comparing with other object' do
+      let(:other) { nil }
+
+      it 'is not equal' do
+        expect(view).not_to eq(other)
+        expect(view).not_to eql(other)
+      end
+    end
   end
 
   describe '#[]' do
