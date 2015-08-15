@@ -16,7 +16,7 @@ module Nanoc
 
     # @see Object#==
     def ==(other)
-      identifier == other.identifier
+      other.respond_to?(:identifier) && identifier == other.identifier
     end
     alias_method :eql?, :==
 

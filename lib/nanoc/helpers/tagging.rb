@@ -16,7 +16,9 @@ module Nanoc::Helpers
     # HTML-escaping rules for {#link_for_tag} apply here as well.
     #
     # @param [String] base_url The URL to which the tag will be appended
-    #   to construct the link URL. This URL must have a trailing slash.
+    #   to construct the link URL. This URL must have a trailing slash. The
+    #   function will return a tags string without tag page link if the param
+    #   is not provided.
     #
     # @param [String] none_text The text to display when
     #   the item has no tags
@@ -24,11 +26,11 @@ module Nanoc::Helpers
     # @param [String] separator The separator to put between tags
     #
     # @return [String] A hyperlinked list of tags for the given item
-    def tags_for(item, base_url:, none_text: '(none)', separator: ', ')
+    def tags_for(item, base_url: nil, none_text: '(none)', separator: ', ')
       if item[:tags].nil? || item[:tags].empty?
         none_text
       else
-        item[:tags].map { |tag| link_for_tag(tag, base_url) }.join(separator)
+        item[:tags].map { |tag| base_url ? link_for_tag(tag, base_url) : tag }.join(separator)
       end
     end
 
