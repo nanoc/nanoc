@@ -375,4 +375,70 @@ describe Nanoc::Identifier do
       it { is_expected.to eql('md') }
     end
   end
+
+  describe '#without_exts' do
+    subject { identifier.without_exts }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
+      end
+    end
+
+    context 'identifier with no extension' do
+      let(:identifier) { described_class.new('/foo') }
+
+      it 'does nothing' do
+        expect(subject).to eql('/foo')
+      end
+    end
+
+    context 'identifier with one extension' do
+      let(:identifier) { described_class.new('/foo.md') }
+
+      it 'removes the extension' do
+        expect(subject).to eql('/foo')
+      end
+    end
+
+    context 'identifier with multiple extensions' do
+      let(:identifier) { described_class.new('/foo.html.md') }
+
+      it 'removes the extension' do
+        expect(subject).to eql('/foo')
+      end
+    end
+  end
+
+  describe '#exts' do
+    subject { identifier.exts }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
+      end
+    end
+
+    context 'identifier with no extension' do
+      let(:identifier) { described_class.new('/foo') }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'identifier with one extension' do
+      let(:identifier) { described_class.new('/foo.md') }
+
+      it { is_expected.to eql(['md']) }
+    end
+
+    context 'identifier with multiple extensions' do
+      let(:identifier) { described_class.new('/foo.html.md') }
+
+      it { is_expected.to eql(['html', 'md']) }
+    end
+  end
 end

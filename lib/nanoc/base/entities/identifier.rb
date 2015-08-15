@@ -147,6 +147,26 @@ module Nanoc
       s && s[1..-1]
     end
 
+    # @return [String]
+    def without_exts
+      extname = exts.join('.')
+      if extname.size > 0
+        @string[0..-extname.size - 2]
+      else
+        @string
+      end
+    end
+
+    # @return [Array] List of extensions, without a leading dot.
+    def exts
+      unless full?
+        raise UnsupportedLegacyOperationError
+      end
+
+      s = File.basename(@string)
+      s ? s.split('.', -1).drop(1) : []
+    end
+
     def to_s
       @string
     end
