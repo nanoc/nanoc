@@ -117,5 +117,15 @@ shared_examples 'a document' do
         expect(document_a.hash).not_to eql(document_b.hash)
       end
     end
+
+    context 'comparing with non-document' do
+      let(:document_b) { nil }
+
+      it { is_expected.to eql(false) }
+
+      it 'has different hashes' do
+        expect(document_a.hash).not_to eql(document_b.hash)
+      end
+    end
   end
 end
