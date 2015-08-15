@@ -91,6 +91,15 @@ checks:
     # E.g.:
     #   exclude: ['^/server_status']
     exclude: []
+
+    # Configuration for the “external_links” checker, which checks whether all
+    # external links are valid.
+    external_links:
+      # A list of patterns, specified as regular expressions, to exclude from the check.
+      # If an external link matches this pattern, the validity check will be skipped.
+      # E.g.:
+      #   exclude: ['^http://example.com$']
+      exclude: []
 EOS
 
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES

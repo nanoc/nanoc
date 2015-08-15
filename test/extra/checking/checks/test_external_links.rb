@@ -72,4 +72,17 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
       assert_equal '/meow?foo=bar', check.send(:path_for_url, URI.parse('http://example.com/meow?foo=bar'))
     end
   end
+
+  def test_excluded
+    with_site do |site|
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.create(site)
+      site.config.update({ checks: { external_links: { exclude: ['^http://excluded.com$'] } } })
+
+      # Test
+      assert check.send(:excluded?, 'http://excluded.com')
+      refute check.send(:excluded?, 'http://excluded.com/notexcluded')
+      refute check.send(:excluded?, 'http://notexcluded.com')
+    end
+  end
 end

@@ -89,6 +89,9 @@ module ::Nanoc::Extra::Checking::Checks
         return Result.new(href, 'invalid URI')
       end
 
+      # Skip excluded URLs
+      return nil if self.excluded?(href)
+
       # Skip non-HTTP URLs
       return nil if url.scheme !~ /^https?$/
 
@@ -160,6 +163,11 @@ module ::Nanoc::Extra::Checking::Checks
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
       http.request(req)
+    end
+
+    def excluded?(href)
+      excludes =  @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude, [])
+      excludes.any? { |pattern| Regexp.new(pattern).match(href) }
     end
   end
 end
