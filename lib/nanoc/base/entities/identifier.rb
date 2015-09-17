@@ -106,35 +106,18 @@ module Nanoc
     end
 
     # @return [String]
-    def with_ext(ext)
+    def without_ext
       unless full?
         raise UnsupportedLegacyOperationError
       end
 
-      # Strip extension, if any
       extname = File.extname(@string)
-      string =
-        if extname.size > 0
-          @string[0..-extname.size - 1]
-        else
-          @string
-        end
 
-      # Add extension
-      if ext.size > 0
-        if ext.start_with?('.')
-          string + ext
-        else
-          string + '.' + ext
-        end
+      if extname.size > 0
+        @string[0..-extname.size - 1]
       else
-        string
+        @string
       end
-    end
-
-    # @return [String]
-    def without_ext
-      with_ext('')
     end
 
     # @return [String] The extension, without a leading dot.
