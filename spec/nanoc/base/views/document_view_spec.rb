@@ -71,6 +71,22 @@ shared_examples 'a document view' do
     end
   end
 
+  describe '#attributes' do
+    let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:view) { described_class.new(item) }
+
+    before do
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
+      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
+    end
+
+    subject { view.attributes }
+
+    it 'returns attributes' do
+      expect(subject).to eql(animal: 'donkey')
+    end
+  end
+
   describe '#fetch' do
     let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
     let(:view) { described_class.new(item) }
