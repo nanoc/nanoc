@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.1.0 (???)
+
+Enhancements:
+
+* Allowed excluding URLs from external links check (#686) [Yannick Ihmels]
+
 ## 4.0.0rc3 (???)
 
 Features:
