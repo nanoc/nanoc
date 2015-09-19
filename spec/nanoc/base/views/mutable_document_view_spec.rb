@@ -19,12 +19,12 @@ shared_examples 'a mutable document view' do
     end
 
     it 'disallows item views' do
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/foo.md'))
+      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/foo.md'), nil)
       expect { view[:item] = item }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows layout views' do
-      layout = Nanoc::LayoutView.new(Nanoc::Int::Layout.new('content', {}, '/foo.md'))
+      layout = Nanoc::LayoutView.new(Nanoc::Int::Layout.new('content', {}, '/foo.md'), nil)
       expect { view[:layout] = layout }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
   end

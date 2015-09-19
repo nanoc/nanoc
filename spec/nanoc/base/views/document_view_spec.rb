@@ -73,7 +73,7 @@ shared_examples 'a document view' do
 
   describe '#attributes' do
     let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item) }
+    let(:view) { described_class.new(item, nil) }
 
     before do
       expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
