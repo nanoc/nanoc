@@ -1,5 +1,22 @@
 # Nanoc news
 
+## 4.0.0rc3 (???)
+
+Fixes:
+
+* Fixed issue when comparing document views (#680, #693)
+
+Enhancements:
+
+* Added `Identifier#without_exts` and `Identifier#exts` (#644, #696) [Rémi Barraquand]
+* Made `#base_url` argument in `#tags_for` optional (#687) [Croath Liu]
+* Allowed `IdentifiableCollection#[]` to be passed an identifier (#681, #695)
+* Improved `Pattern.from` error message (#683, #692)
+
+Changes:
+
+* Removed `Identifier#with_ext` because its behavior was confusing (#697, #700)
+
 ## 4.0.0rc2 (2015-07-11)
 
 Fixes:
