@@ -38,6 +38,14 @@ module Nanoc
       unwrap.attributes[key]
     end
 
+    # @return [Hash]
+    def attributes
+      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
+      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
+
+      unwrap.attributes
+    end
+
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
       Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
