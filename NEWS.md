@@ -6,7 +6,7 @@ Enhancements:
 
 * Allowed excluding URLs from external links check (#686) [Yannick Ihmels]
 
-## 4.0.0rc3 (???)
+## 4.0.0rc3 (2015-09-20)
 
 Features:
 
