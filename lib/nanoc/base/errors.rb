@@ -185,5 +185,12 @@ module Nanoc::Int
         super("There are multiple #{type}s with the #{identifier} identifier.")
       end
     end
+
+    # Error that is raised when attempting to call #parent or #children on an item with a legacy identifier.
+    class CannotGetParentOrChildrenOfNonLegacyItem < Generic
+      def initialize(identifier)
+        super("You cannot get the parent or children of an item that has a “full” identifier (#{identifier}). Getting the parent or children of an item is only possible for items that have a legacy identifier.")
+      end
+    end
   end
 end

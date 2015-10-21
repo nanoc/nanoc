@@ -40,6 +40,10 @@ module Nanoc
     #
     # @return [Enumerable<Nanoc::ItemView>]
     def children
+      unless unwrap.identifier.legacy?
+        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
+      end
+
       unwrap.children.map { |i| Nanoc::ItemView.new(i) }
     end
 
@@ -50,6 +54,10 @@ module Nanoc
     #
     # @return [nil] if the item has no parent
     def parent
+      unless unwrap.identifier.legacy?
+        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
+      end
+
       unwrap.parent && Nanoc::ItemView.new(unwrap.parent)
     end
 

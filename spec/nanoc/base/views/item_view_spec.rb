@@ -13,7 +13,7 @@ describe Nanoc::ItemView do
 
   describe '#parent' do
     let(:item) do
-      Nanoc::Int::Item.new('me', {}, '/me/').tap { |i| i.parent = parent_item }
+      Nanoc::Int::Item.new('me', {}, identifier).tap { |i| i.parent = parent_item }
     end
 
     let(:view) { described_class.new(item) }
@@ -25,9 +25,25 @@ describe Nanoc::ItemView do
         Nanoc::Int::Item.new('parent', {}, '/parent/')
       end
 
-      it 'returns a view for the parent' do
-        expect(subject.class).to eql(Nanoc::ItemView)
-        expect(subject.unwrap).to eql(parent_item)
+      context 'full identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/me.md')
+        end
+
+        it 'raises' do
+          expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
+        end
+      end
+
+      context 'legacy identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/me/', type: :legacy)
+        end
+
+        it 'returns a view for the parent' do
+          expect(subject.class).to eql(Nanoc::ItemView)
+          expect(subject.unwrap).to eql(parent_item)
+        end
       end
     end
 
@@ -36,14 +52,62 @@ describe Nanoc::ItemView do
         nil
       end
 
-      it 'returns nil' do
-        expect(subject).to be_nil
+      context 'full identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/me.md')
+        end
+
+        it 'raises' do
+          expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
+        end
+      end
+
+      context 'legacy identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/me/', type: :legacy)
+        end
+
+        it 'returns nil' do
+          expect(subject).to be_nil
+        end
       end
     end
   end
 
   describe '#children' do
-    # TODO: implement
+    let(:item) do
+      Nanoc::Int::Item.new('me', {}, identifier).tap { |i| i.children = children }
+    end
+
+    let(:children) do
+      [Nanoc::Int::Item.new('child', {}, '/child/')]
+    end
+
+    let(:view) { described_class.new(item) }
+
+    subject { view.children }
+
+    context 'full identifier' do
+      let(:identifier) do
+        Nanoc::Identifier.new('/me.md')
+      end
+
+      it 'raises' do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
+      end
+    end
+
+    context 'legacy identifier' do
+      let(:identifier) do
+        Nanoc::Identifier.new('/me/', type: :legacy)
+      end
+
+      it 'returns views for the children' do
+        expect(subject.size).to eql(1)
+        expect(subject[0].class).to eql(Nanoc::ItemView)
+        expect(subject[0].unwrap).to eql(children[0])
+      end
+    end
   end
 
   describe '#reps' do
