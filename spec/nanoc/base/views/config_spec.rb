@@ -64,4 +64,13 @@ describe Nanoc::ConfigView do
       it { should eql?(false) }
     end
   end
+
+  describe '#each' do
+    example do
+      res = []
+      view.each { |k, v| res << [k, v] }
+
+      expect(res).to eql([[:amount, 9000], [:animal, 'donkey']])
+    end
+  end
 end
