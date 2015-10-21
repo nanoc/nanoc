@@ -14,7 +14,7 @@ module Nanoc
     #   any).
     #
     # @return [String] The content of the given rep at the given snapshot.
-    def compiled_content(rep: :default, snapshot: :last)
+    def compiled_content(rep: :default, snapshot: :pre)
       reps.fetch(rep).compiled_content(snapshot: snapshot)
     end
 
