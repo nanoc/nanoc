@@ -87,6 +87,12 @@ module Nanoc
       @type == :full
     end
 
+    # @return [Boolean] True if this is a legacy identifier (i.e. does not
+    #   include the extension), false otherwise
+    def legacy?
+      @type == :legacy
+    end
+
     # @return [String]
     def chop
       to_s.chop
