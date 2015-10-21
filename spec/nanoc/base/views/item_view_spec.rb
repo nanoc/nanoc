@@ -100,10 +100,14 @@ describe Nanoc::ItemView do
         ir.compiled = true
         ir.snapshot_defs = [
           Nanoc::Int::SnapshotDef.new(:last, false),
+          Nanoc::Int::SnapshotDef.new(:pre, true),
+          Nanoc::Int::SnapshotDef.new(:post, false),
           Nanoc::Int::SnapshotDef.new(:specific, true),
         ]
         ir.snapshot_contents = {
-          last: Nanoc::Int::TextualContent.new('Default Hallo'),
+          last: Nanoc::Int::TextualContent.new('Last Hallo'),
+          pre: Nanoc::Int::TextualContent.new('Pre Hallo'),
+          post: Nanoc::Int::TextualContent.new('Post Hallo'),
           specific: Nanoc::Int::TextualContent.new('Specific Hallo'),
         }
       end
@@ -119,7 +123,7 @@ describe Nanoc::ItemView do
           .with(:visit_ended, item).ordered
       end
 
-      it { is_expected.to eq('Default Hallo') }
+      it { is_expected.to eq('Pre Hallo') }
 
       context 'requesting explicit snapshot' do
         let(:params) { { snapshot: :specific } }
@@ -138,7 +142,7 @@ describe Nanoc::ItemView do
           .with(:visit_ended, item).ordered
       end
 
-      it { is_expected.to eq('Default Hallo') }
+      it { is_expected.to eq('Pre Hallo') }
 
       context 'requesting explicit snapshot' do
         let(:params) { { snapshot: :specific } }
