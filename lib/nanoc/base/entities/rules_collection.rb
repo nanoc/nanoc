@@ -19,11 +19,19 @@ module Nanoc::Int
     #   be executed after all data is loaded but before the site is compiled
     attr_accessor :preprocessors
 
+    # The hash containing postprocessor code blocks that will be executed after
+    #   all data is loaded and the site is compiled.
+    #
+    # @return [Hash] The hash containing the postprocessor code blocks that will
+    #   be executed after all data is loaded and the site is compiled
+    attr_accessor :postprocessors
+
     def initialize
       @item_compilation_rules = []
       @item_routing_rules     = []
       @layout_filter_mapping  = {}
       @preprocessors          = {}
+      @postprocessors         = {}
     end
 
     # Add the given rule to the list of item compilation rules.

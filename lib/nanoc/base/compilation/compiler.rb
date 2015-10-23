@@ -103,6 +103,8 @@ module Nanoc::Int
 
       # Compile
       run
+
+      Nanoc::Int::Postprocessor.new(site: @site, rules_collection: @rules_collection).run
     end
 
     def run
