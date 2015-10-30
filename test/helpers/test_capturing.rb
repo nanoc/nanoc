@@ -59,10 +59,10 @@ head
 <% content_for :box do %>
   basic
 <% end %>
-<% content_for :box do %>
+<% content_for :outerbox do %>
   before <%= content_for @item, :box %> after
 <% end %>
-<%= content_for @item, :box %>
+<%= content_for @item, :outerbox %>
 foot
 EOS
 
