@@ -35,7 +35,7 @@ module Nanoc::Helpers
         @store[item.identifier] ||= {}
         if @store[item.identifier][name]
           return if @store[item.identifier][name] == content
-          raise KeyError, "Content_for was called twice with the same key: #{name}, this would overwrite content for the first call"
+          raise "Content_for was called twice with the same key: #{name}, this would overwrite content for the first call"
         else
           @store[item.identifier][name] = content
         end

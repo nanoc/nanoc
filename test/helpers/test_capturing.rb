@@ -108,7 +108,7 @@ EOS
         io.write 'include Nanoc::Helpers::Capturing'
       end
       File.open('content/includer.erb', 'w') do |io|
-        io.write '[<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]'
+        io.write '[<%= content_for(@items["/includee/"], :blah) %>]'
       end
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do ; filter :erb ; end\n"
@@ -120,7 +120,7 @@ EOS
       end
 
       # Using the same symbols twice now raises an error, to be changed to concatenating in a future version
-      assert_raises KeyError do
+      assert_raises do
         Nanoc::CLI.run(%w(compile))
       end
 
