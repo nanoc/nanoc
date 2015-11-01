@@ -33,7 +33,6 @@ module Nanoc::Helpers
 
       def []=(item, name, content)
         @store[item.identifier] ||= {}
-        # @store[item.identifier][name] = content
         if @store[item.identifier][name]
           return if @store[item.identifier][name] == content
           raise KeyError, "Content_for was called twice with the same key: #{name}, this would overwrite content for the first call"
