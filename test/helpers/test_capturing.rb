@@ -101,6 +101,32 @@ EOS
     assert_equal 'Content Two', content_for(@item, :b)
   end
 
+  def test_content_for_duplicate_symbols
+    with_site do |_site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '[<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>First content<% end %><% content_for :blah do %>Second content<% end %>}'
+      end
+
+      # Using the same symbols twice now raises an error, to be changed to concatenating in a future version
+      assert_raises KeyError do
+        Nanoc::CLI.run(%w(compile))
+      end
+
+    end
+  end
+
   def test_dependencies
     with_site do |_site|
       # Prepare
