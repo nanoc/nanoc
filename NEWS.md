@@ -6,6 +6,12 @@ Enhancements:
 
 * Allowed excluding URLs from external links check (#686) [Yannick Ihmels]
 
+## 4.0.0 (2015-11-07)
+
+Enhancements:
+
+* `#parent` and `#children` now raise an exception when used on items with a non-legacy identifier (#710)
+
 ## 4.0.0rc3 (2015-09-20)
 
 Features:

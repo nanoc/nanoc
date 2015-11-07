@@ -372,4 +372,32 @@ describe Nanoc::Identifier do
       it { is_expected.to eql(['html', 'md']) }
     end
   end
+
+  describe '#legacy?' do
+    subject { identifier.legacy? }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+      it { is_expected.to eql(true) }
+    end
+
+    context 'full type' do
+      let(:identifier) { described_class.new('/foo/', type: :full) }
+      it { is_expected.to eql(false) }
+    end
+  end
+
+  describe '#full?' do
+    subject { identifier.full? }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+      it { is_expected.to eql(false) }
+    end
+
+    context 'full type' do
+      let(:identifier) { described_class.new('/foo/', type: :full) }
+      it { is_expected.to eql(true) }
+    end
+  end
 end
