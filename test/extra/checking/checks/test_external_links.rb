@@ -85,4 +85,16 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
       refute check.send(:excluded?, 'http://notexcluded.com')
     end
   end
+
+  def test_excluded_file
+    with_site do |site|
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::ExternalLinks.create(site)
+      site.config.update({ checks: { external_links: { exclude_files: ['blog/page'] } } })
+
+      # Test
+      assert check.send(:excluded_file?, 'output/blog/page1/index.html')
+      refute check.send(:excluded_file?, 'output/blog/pag1/index.html')
+    end
+  end
 end

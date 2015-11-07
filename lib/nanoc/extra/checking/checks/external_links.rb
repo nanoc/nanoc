@@ -14,7 +14,7 @@ module ::Nanoc::Extra::Checking::Checks
     def run
       # Find all broken external hrefs
       # TODO: de-duplicate this (duplicated in internal links check)
-      filenames = output_filenames.select { |f| File.extname(f) == '.html' }
+      filenames = output_filenames.select { |f| File.extname(f) == '.html' && !excluded_file?(f) }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :external).filenames_per_href
       results = select_invalid(hrefs_with_filenames.keys)
 
@@ -168,6 +168,11 @@ module ::Nanoc::Extra::Checking::Checks
     def excluded?(href)
       excludes =  @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(href) }
+    end
+
+    def excluded_file?(file)
+      excludes =  @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude_files, [])
+      excludes.any? { |pattern| Regexp.new(pattern).match(file) }
     end
   end
 end
