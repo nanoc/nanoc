@@ -100,6 +100,12 @@ checks:
     # E.g.:
     #   exclude: ['^http://example.com$']
     exclude: []
+
+    # A list of file patterns, specified as regular expressions, to exclude from the check.
+    # If a file matches this pattern, the links from this file will not be checked.
+    # E.g.:
+    #   exclude_files: ['blog/page']
+    exclude_files: []
 EOS
 
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
