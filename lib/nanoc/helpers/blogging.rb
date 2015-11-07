@@ -377,14 +377,15 @@ module Nanoc::Helpers
       'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier.to_s)
     end
 
-    # Converts the given attribute (which can be a string, a Time or a Date)
-    # into a Time.
+    # Converts the given attribute (which can be a string, a Time, a Date or a
+    # DateTime) into a Time.
     #
-    # @param [String, Time, Date] time Something that contains time
+    # @param [String, Time, Date, DateTime] time Something that contains time
     #   information but is not necessarily a Time instance yet
     #
     # @return [Time] The Time instance corresponding to the given input
     def attribute_to_time(time)
+      time = time.to_time if time.is_a?(DateTime)
       time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
       time = Time.parse(time) if time.is_a?(String)
       time
