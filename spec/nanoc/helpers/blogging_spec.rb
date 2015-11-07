@@ -235,6 +235,30 @@ describe Nanoc::Helpers::Blogging do
     end
   end
 
+  describe '#attribute_to_time' do
+    subject { mod.attribute_to_time(arg) }
+
+    context 'with Time instance' do
+      let(:arg) { Time.at(1446899476) }
+      it { is_expected.to eql(Time.at(1446899476)) }
+    end
+
+    context 'with Date instance' do
+      let(:arg) { Date.new(2015, 11, 7) }
+      it { is_expected.to eql(Time.at(1446850800)) }
+    end
+
+    context 'with DateTime instance' do
+      let(:arg) { DateTime.new(2015, 11, 7, 12, 31, 16) }
+      it { is_expected.to eql(Time.at(1446899476)) }
+    end
+
+    context 'with string' do
+      let(:arg) { '2015-11-7 13:31:16' }
+      it { is_expected.to eql(Time.at(1446899476)) }
+    end
+  end
+
   describe '#atom_tag_for' do
     subject { mod.atom_tag_for(item_view) }
 
