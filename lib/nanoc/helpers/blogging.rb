@@ -378,7 +378,8 @@ module Nanoc::Helpers
     end
 
     # Converts the given attribute (which can be a string, a Time, a Date or a
-    # DateTime) into a Time.
+    # DateTime) into a Time. When given a Date instance or a string, the
+    # argument is assumed to be in the local timezone.
     #
     # @param [String, Time, Date, DateTime] time Something that contains time
     #   information but is not necessarily a Time instance yet
