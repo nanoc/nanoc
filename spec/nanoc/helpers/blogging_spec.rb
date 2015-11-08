@@ -245,7 +245,7 @@ describe Nanoc::Helpers::Blogging do
 
     context 'with Date instance' do
       let(:arg) { Date.new(2015, 11, 7) }
-      it { is_expected.to eql(Time.at(1446850800)) }
+      it { is_expected.to eql(Time.at(1446854400 - Time.now.utc_offset)) }
     end
 
     context 'with DateTime instance' do
@@ -255,7 +255,7 @@ describe Nanoc::Helpers::Blogging do
 
     context 'with string' do
       let(:arg) { '2015-11-7 13:31:16' }
-      it { is_expected.to eql(Time.at(1446899476)) }
+      it { is_expected.to eql(Time.at(1446903076 - Time.now.utc_offset)) }
     end
   end
 
