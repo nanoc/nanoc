@@ -385,11 +385,17 @@ module Nanoc::Helpers
     #   information but is not necessarily a Time instance yet
     #
     # @return [Time] The Time instance corresponding to the given input
-    def attribute_to_time(time)
-      time = time.to_time if time.is_a?(DateTime)
-      time = Time.local(time.year, time.month, time.day) if time.is_a?(Date)
-      time = Time.parse(time) if time.is_a?(String)
-      time
+    def attribute_to_time(arg)
+      case arg
+      when DateTime
+        arg.to_time
+      when Date
+        Time.local(arg.year, arg.month, arg.day)
+      when String
+        Time.parse(arg)
+      else
+        arg
+      end
     end
   end
 end
