@@ -238,24 +238,28 @@ describe Nanoc::Helpers::Blogging do
   describe '#attribute_to_time' do
     subject { mod.attribute_to_time(arg) }
 
+    let(:around_noon_local) { Time.at(1446903076 - Time.now.utc_offset) }
+    let(:around_noon_utc) { Time.at(1446903076) }
+    let(:beginning_of_day_local) { Time.at(1446854400 - Time.now.utc_offset) }
+
     context 'with Time instance' do
-      let(:arg) { Time.at(1446899476) }
-      it { is_expected.to eql(Time.at(1446899476)) }
+      let(:arg) { around_noon_utc }
+      it { is_expected.to eql(around_noon_utc) }
     end
 
     context 'with Date instance' do
       let(:arg) { Date.new(2015, 11, 7) }
-      it { is_expected.to eql(Time.at(1446854400 - Time.now.utc_offset)) }
+      it { is_expected.to eql(beginning_of_day_local) }
     end
 
     context 'with DateTime instance' do
-      let(:arg) { DateTime.new(2015, 11, 7, 12, 31, 16) }
-      it { is_expected.to eql(Time.at(1446899476)) }
+      let(:arg) { DateTime.new(2015, 11, 7, 13, 31, 16) }
+      it { is_expected.to eql(around_noon_utc) }
     end
 
     context 'with string' do
       let(:arg) { '2015-11-7 13:31:16' }
-      it { is_expected.to eql(Time.at(1446903076 - Time.now.utc_offset)) }
+      it { is_expected.to eql(around_noon_local) }
     end
   end
 
