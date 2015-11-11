@@ -12,8 +12,6 @@ module Nanoc::Int
       @rules_collection.postprocessors.each_value do |postprocessor|
         ctx.instance_eval(&postprocessor)
       end
-
-      # Nanoc::Int::SiteLoader.new.setup_child_parent_links(@site.items)
     end
 
     # @api private

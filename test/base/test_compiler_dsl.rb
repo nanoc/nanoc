@@ -30,6 +30,25 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
     assert_match(/WARNING: A preprocess block is already defined./, io[:stderr])
   end
 
+  def test_postprocess_twice
+    rules_collection = Nanoc::Int::RulesCollection.new
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(rules_collection, {})
+
+    # first time
+    io = capturing_stdio do
+      compiler_dsl.postprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_empty io[:stderr]
+
+    # second time
+    io = capturing_stdio do
+      compiler_dsl.postprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_match(/WARNING: A postprocess block is already defined./, io[:stderr])
+  end
+
   def test_per_rules_file_preprocessor
     # Create site
     Nanoc::CLI.run %w( create_site foo )
@@ -58,6 +77,31 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
         .new(site: site, rules_collection: compiler.rules_collection)
         .run
       assert site.items['/index.*'].attributes[:preprocessed]
+    end
+  end
+
+  def test_per_rules_file_postprocessor
+    # Create site
+    Nanoc::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
+      # Create a bonus rules file
+      File.write(
+        'more_rules.rb',
+        "postprocess {}")
+
+      # Adjust normal rules file
+      File.write(
+        'Rules',
+        "include_rules 'more_rules'\n\npostprocess {}\n\n" + File.read('Rules'))
+
+      # Create site and compiler
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      compiler = Nanoc::Int::CompilerLoader.new.load(site)
+
+      # Check that the two postprocess blocks have been added
+      assert_equal 2, compiler.rules_collection.postprocessors.size
+      refute_nil compiler.rules_collection.postprocessors.first
+      refute_nil compiler.rules_collection.postprocessors.to_a.last
     end
   end
 
