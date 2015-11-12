@@ -18,7 +18,7 @@ module Nanoc::Int
     def new_postprocessor_context
       Nanoc::Int::Context.new({
         config: Nanoc::ConfigView.new(@site.config, nil),
-        items: Nanoc::ItemCollectionView.new(@site.items, nil),
+        items: Nanoc::AttributedItemCollectionView.new(@site.items, nil),
         layouts: Nanoc::LayoutCollectionView.new(@site.layouts, nil),
       })
     end

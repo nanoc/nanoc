@@ -105,6 +105,32 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
     end
   end
 
+  def test_postprocessor_updated_method
+    with_site do |site|
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write <<EOS
+compile '*' do
+end
+route '*' do
+end
+postprocess do
+  puts @items.select(&:updated?).length
+end
+EOS
+      end
+
+      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+
+      io = capturing_stdio do
+        site = Nanoc::Int::SiteLoader.new.new_from_cwd
+        site.compile
+      end
+
+      assert_match(/TODO/, io[:stdout])
+    end
+  end
+
   def test_include_rules
     # Create site
     Nanoc::CLI.run %w( create_site foo )
