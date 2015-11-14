@@ -2,9 +2,18 @@
 
 ## 4.1.0 (???)
 
+Fixes:
+
+* Fixed crash when printing non-string object (#712) [Garen Torikian]
+
 Enhancements:
 
 * Allowed excluding URLs from external links check (#686) [Yannick Ihmels]
+* Added `atom` to list of text extensions (#657) [Yannick Ihmels]
+* Added `#each` to `Nanoc::ConfigView` (#705) [Garen Torikian]
+* Made `#content_for` raise an exception on duplicate content (#713) [Jan M. Faber]
+* Made `#attribute_to_time` handle `DateTime` (#717) [Micha Rosenbaum]
+* Added `Identifier#components` (#677)
 
 ## 4.0.0 (2015-11-07)
 
