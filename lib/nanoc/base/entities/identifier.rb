@@ -156,6 +156,15 @@ module Nanoc
       s ? s.split('.', -1).drop(1) : []
     end
 
+    def components
+      res = to_s.split('/')
+      if res.empty?
+        []
+      else
+        res[1..-1]
+      end
+    end
+
     def to_s
       @string
     end
