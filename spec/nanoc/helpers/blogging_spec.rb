@@ -9,7 +9,7 @@ describe Nanoc::Helpers::Blogging do
     { items: [] }
   end
 
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new

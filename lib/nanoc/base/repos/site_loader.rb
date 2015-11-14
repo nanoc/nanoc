@@ -12,32 +12,6 @@ module Nanoc::Int
       site_from_config(Nanoc::Int::ConfigLoader.new.new_from_cwd)
     end
 
-    # @api private
-    def setup_child_parent_links(items)
-      items.each do |item|
-        item.parent = nil
-        item.children = []
-      end
-
-      item_map = {}
-      items.each do |item|
-        next if item.identifier !~ /\/\z/
-        item_map[item.identifier.to_s] = item
-      end
-
-      items.each do |item|
-        parent_id_end = item.identifier.to_s.rindex('/', -2)
-        next unless parent_id_end
-
-        parent_id = item.identifier.to_s[0..parent_id_end]
-        parent = item_map[parent_id]
-        next unless parent
-
-        item.parent = parent
-        parent.children << item
-      end
-    end
-
     private
 
     def site_from_config(config)
@@ -59,8 +33,6 @@ module Nanoc::Int
           layouts.concat(layouts_in_ds)
         end
       end
-
-      setup_child_parent_links(items)
 
       Nanoc::Int::Site.new(
         config: config,

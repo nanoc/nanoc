@@ -13,12 +13,19 @@ describe Nanoc::ItemView do
 
   describe '#parent' do
     let(:item) do
-      Nanoc::Int::Item.new('me', {}, identifier).tap { |i| i.parent = parent_item }
+      Nanoc::Int::Item.new('me', {}, identifier)
     end
 
     let(:view) { described_class.new(item, view_context) }
 
-    let(:view_context) { double(:view_context) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: [], items: items) }
+
+    let(:items) do
+      Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
+        arr << item
+        arr << parent_item if parent_item
+      end
+    end
 
     subject { view.parent }
 
@@ -29,7 +36,7 @@ describe Nanoc::ItemView do
 
       context 'full identifier' do
         let(:identifier) do
-          Nanoc::Identifier.new('/me.md')
+          Nanoc::Identifier.new('/parent/me.md')
         end
 
         it 'raises' do
@@ -39,7 +46,7 @@ describe Nanoc::ItemView do
 
       context 'legacy identifier' do
         let(:identifier) do
-          Nanoc::Identifier.new('/me/', type: :legacy)
+          Nanoc::Identifier.new('/parent/me/', type: :legacy)
         end
 
         it 'returns a view for the parent' do
@@ -50,6 +57,8 @@ describe Nanoc::ItemView do
         it 'returns a view with the right context' do
           expect(subject._context).to equal(view_context)
         end
+
+        it { is_expected.to be_frozen }
       end
     end
 
@@ -73,25 +82,31 @@ describe Nanoc::ItemView do
           Nanoc::Identifier.new('/me/', type: :legacy)
         end
 
-        it 'returns nil' do
-          expect(subject).to be_nil
-        end
+        it { is_expected.to be_nil }
+        it { is_expected.to be_frozen }
       end
     end
   end
 
   describe '#children' do
     let(:item) do
-      Nanoc::Int::Item.new('me', {}, identifier).tap { |i| i.children = children }
+      Nanoc::Int::Item.new('me', {}, identifier)
     end
 
     let(:children) do
-      [Nanoc::Int::Item.new('child', {}, '/child/')]
+      [Nanoc::Int::Item.new('child', {}, '/me/child/')]
     end
 
     let(:view) { described_class.new(item, view_context) }
 
-    let(:view_context) { double(:view_context) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: [], items: items) }
+
+    let(:items) do
+      Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
+        arr << item
+        children.each { |child| arr << child }
+      end
+    end
 
     subject { view.children }
 
@@ -115,6 +130,8 @@ describe Nanoc::ItemView do
         expect(subject[0].class).to eql(Nanoc::ItemView)
         expect(subject[0].unwrap).to eql(children[0])
       end
+
+      it { is_expected.to be_frozen }
     end
   end
 
@@ -131,7 +148,7 @@ describe Nanoc::ItemView do
     end
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     subject { view.reps }
 
@@ -149,7 +166,7 @@ describe Nanoc::ItemView do
     subject { view.compiled_content(params) }
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf/')
@@ -230,7 +247,7 @@ describe Nanoc::ItemView do
     subject { view.path(params) }
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')

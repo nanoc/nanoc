@@ -44,7 +44,10 @@ module Nanoc
         raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
       end
 
-      unwrap.children.map { |i| Nanoc::ItemView.new(i, @context) }
+      children_pattern = Nanoc::Int::Pattern.from(unwrap.identifier.to_s + '*/')
+      children = @context.items.select { |i| children_pattern.match?(i.identifier) }
+
+      children.map { |i| Nanoc::ItemView.new(i, @context) }.freeze
     end
 
     # Returns the parent of this item, if one exists. For items with identifiers
@@ -58,7 +61,10 @@ module Nanoc
         raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
       end
 
-      unwrap.parent && Nanoc::ItemView.new(unwrap.parent, @context)
+      parent_identifier = '/' + unwrap.identifier.components[0..-2].join('/') + '/'
+      parent = @context.items[parent_identifier]
+
+      parent && Nanoc::ItemView.new(parent, @context).freeze
     end
 
     # @return [Boolean] True if the item is binary, false otherwise

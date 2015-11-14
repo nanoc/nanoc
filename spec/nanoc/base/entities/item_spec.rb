@@ -8,8 +8,6 @@ describe Nanoc::Int::Item do
       item.freeze
     end
 
-    it 'prevents changes to children' do
-      expect { item.children << :lol }.to raise_frozen_error
-    end
+    # FIXME: Where are the tests?
   end
 end
