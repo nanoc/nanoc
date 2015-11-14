@@ -10,8 +10,9 @@ module Nanoc::Int
     def_delegator :@objects, :<<
     def_delegator :@objects, :concat
 
-    def initialize(config)
+    def initialize(config, data_sources = nil)
       @config = config
+      @data_sources = data_sources
 
       @objects = []
     end
@@ -60,6 +61,16 @@ module Nanoc::Int
     def object_matching_glob(glob)
       if use_globs?
         pat = Nanoc::Int::Pattern.from(glob)
+        if @objects.first.is_a?(Nanoc::Int::Item)
+          @data_sources.each do |ds|
+            if ds.respond_to?(:glob_item)
+              paths = ds.glob_item(glob)
+              unless paths.empty?
+                return object_with_identifier(paths[0])
+              end
+            end
+          end
+        end
         @objects.find { |i| pat.match?(i.identifier) }
       else
         nil

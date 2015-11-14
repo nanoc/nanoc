@@ -18,10 +18,10 @@ module Nanoc::Int
       code_snippets = code_snippets_from_config(config)
       code_snippets.each(&:load)
 
-      items = Nanoc::Int::IdentifiableCollection.new(config)
-      layouts = Nanoc::Int::IdentifiableCollection.new(config)
-
       with_data_sources(config) do |data_sources|
+        items = Nanoc::Int::IdentifiableCollection.new(config, data_sources)
+        layouts = Nanoc::Int::IdentifiableCollection.new(config, data_sources)
+
         data_sources.each do |ds|
           items_in_ds = ds.items
           layouts_in_ds = ds.layouts
@@ -32,14 +32,14 @@ module Nanoc::Int
           items.concat(items_in_ds)
           layouts.concat(layouts_in_ds)
         end
-      end
 
-      Nanoc::Int::Site.new(
-        config: config,
-        code_snippets: code_snippets,
-        items: items,
-        layouts: layouts,
-      )
+        Nanoc::Int::Site.new(
+          config: config,
+          code_snippets: code_snippets,
+          items: items,
+          layouts: layouts,
+        )
+      end
     end
 
     # @return [Boolean]
