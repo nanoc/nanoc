@@ -29,12 +29,13 @@ module Nanoc::Int
         raise NotImplementedError
       end
 
-      def object_matching_pattern(pattern)
-        objects.find { |o| o.identifier =~ pattern }
-      end
-
       def objects_matching_pattern(pattern)
         objects.select { |o| o.identifier =~ pattern }
+      end
+
+      def paths_matching_pattern(pattern)
+        # FIXME: assumes path identifiers
+        objects.lazy.map { |o| o.identifier }.select { |o| o.identifier =~ pattern }
       end
     end
 
@@ -43,7 +44,14 @@ module Nanoc::Int
         data_source.items
       end
 
-      # TODO: override #objects_matching_pattern
+      def paths_matching_pattern(pattern)
+        if data_source.respond_to?(:glob_item) && pattern.is_a?(Nanoc::Int::StringPattern)
+          # FIXME: match paths, not objects
+          data_source.glob_item(pattern.to_s)
+        else
+          super
+        end
+      end
     end
 
     class LayoutSource < DocumentSource
@@ -51,7 +59,14 @@ module Nanoc::Int
         data_source.layouts
       end
 
-      # TODO: override #objects_matching_pattern
+      def paths_matching_pattern(pattern)
+        if data_source.respond_to?(:glob_layout) && pattern.is_a?(Nanoc::Int::StringPattern)
+          # FIXME: match paths, not objects
+          data_source.glob_layout(pattern.to_s)
+        else
+          super
+        end
+      end
     end
 
     def site_from_config(config)

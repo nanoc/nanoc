@@ -54,7 +54,8 @@ module Nanoc::Int
         if use_globs?
           # FIXME: fails when adding documents with preprocessor
           # (maybe turn preprocessor into data source?)
-          @document_sources.flat_map { |ds| ds.objects_matching_pattern(pattern) }
+          paths = @document_sources.flat_map { |ds| ds.paths_matching_pattern(pattern) }
+          paths.map { |path| self[path] }
         else
           []
         end
