@@ -50,8 +50,8 @@ module Nanoc::Int
 
     def objects_matching_pattern(pattern)
       # TODO: verify type of pattern
-      if pattern.is_a?(Nanoc::Int::StringPattern)
-        if use_globs? && @document_sources
+      if pattern.is_a?(Nanoc::Int::StringPattern) && @document_sources
+        if use_globs?
           # FIXME: fails when adding documents with preprocessor
           # (maybe turn preprocessor into data source?)
           @document_sources.flat_map { |ds| ds.objects_matching_pattern(pattern) }
