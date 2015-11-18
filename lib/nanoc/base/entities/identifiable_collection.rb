@@ -48,27 +48,31 @@ module Nanoc::Int
       @objects.delete_if(&block)
     end
 
-    # TODO: Unify with #object_matching_glob
     def objects_matching_pattern(pattern)
-      if use_globs? && pattern.is_a?(Nanoc::Int::StringPattern)
-        method =
-          case @objects.first
-          when Nanoc::Int::Layout
-            :glob_layout
-          when Nanoc::Int::Item
-            :glob_item
-          else
-            raise "Unknown type: #{@objects.first.class}"
-          end
+      if pattern.is_a?(Nanoc::Int::StringPattern)
+        if use_globs?
+          method =
+            case @objects.first
+            when Nanoc::Int::Layout
+              :glob_layout
+            when Nanoc::Int::Item
+              :glob_item
+            else
+              raise "Unknown type: #{@objects.first.class}"
+            end
 
-        @data_sources.flat_map do |ds|
-          if ds.respond_to?(method)
-            paths = ds.send(method, pattern.to_s)
-            paths.map { |path| object_with_identifier(path) }
+          @data_sources.lazy.flat_map do |ds|
+            if ds.respond_to?(method)
+              paths = ds.send(method, pattern.to_s)
+              paths.lazy.map { |path| object_with_identifier(path) }
+            end
           end
+        else
+          # FIXME: support legacy pattern
+          []
         end
       else
-        @objects.select { |i| pattern.match?(i.identifier) }
+        @objects.lazy.select { |i| pattern.match?(i.identifier) }
       end
     end
 
@@ -83,29 +87,8 @@ module Nanoc::Int
     end
 
     def object_matching_glob(glob)
-      if use_globs?
-        method =
-          case @objects.first
-          when Nanoc::Int::Layout
-            :glob_layout
-          when Nanoc::Int::Item
-            :glob_item
-          else
-            raise "Unknown type: #{@objects.first.class}"
-          end
-
-        pat = Nanoc::Int::Pattern.from(glob)
-        @data_sources.each do |ds|
-          if ds.respond_to?(method)
-            paths = ds.send(method, glob)
-            unless paths.empty?
-              return object_with_identifier(paths[0])
-            end
-          end
-        end
-      else
-        nil
-      end
+      pattern = Nanoc::Int::Pattern.from(glob)
+      objects_matching_pattern(pattern).first
     end
 
     def build_mapping
