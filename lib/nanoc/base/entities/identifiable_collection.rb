@@ -84,23 +84,22 @@ module Nanoc::Int
 
     def object_matching_glob(glob)
       if use_globs?
-        pat = Nanoc::Int::Pattern.from(glob)
-        if @objects.first.is_a?(Nanoc::Int::Layout)
-          @data_sources.each do |ds|
-            if ds.respond_to?(:glob_layout)
-              paths = ds.glob_layout(glob)
-              unless paths.empty?
-                return object_with_identifier(paths[0])
-              end
-            end
+        method =
+          case @objects.first
+          when Nanoc::Int::Layout
+            :glob_layout
+          when Nanoc::Int::Item
+            :glob_item
+          else
+            raise "Unknown type: #{@objects.first.class}"
           end
-        elsif @objects.first.is_a?(Nanoc::Int::Item)
-          @data_sources.each do |ds|
-            if ds.respond_to?(:glob_item)
-              paths = ds.glob_item(glob)
-              unless paths.empty?
-                return object_with_identifier(paths[0])
-              end
+
+        pat = Nanoc::Int::Pattern.from(glob)
+        @data_sources.each do |ds|
+          if ds.respond_to?(method)
+            paths = ds.send(method, glob)
+            unless paths.empty?
+              return object_with_identifier(paths[0])
             end
           end
         end
