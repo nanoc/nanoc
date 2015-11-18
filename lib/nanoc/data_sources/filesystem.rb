@@ -28,6 +28,10 @@ module Nanoc::DataSources
       Dir['content' + pattern.to_s].map { |s| s.sub(/^content/, '') }
     end
 
+    def glob_layout(pattern)
+      Dir['layouts' + pattern.to_s].map { |s| s.sub(/^layouts/, '') }
+    end
+
     # See {Nanoc::DataSource#layouts}.
     def layouts
       load_objects(layouts_dir_name, 'layout', Nanoc::Int::Layout)

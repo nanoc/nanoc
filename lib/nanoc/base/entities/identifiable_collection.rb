@@ -48,6 +48,30 @@ module Nanoc::Int
       @objects.delete_if(&block)
     end
 
+    # TODO: Unify with #object_matching_glob
+    def objects_matching_pattern(pattern)
+      if use_globs? && pattern.is_a?(Nanoc::Int::StringPattern)
+        method =
+          case @objects.first
+          when Nanoc::Int::Layout
+            :glob_layout
+          when Nanoc::Int::Item
+            :glob_item
+          else
+            raise "Unknown type: #{@objects.first.class}"
+          end
+
+        @data_sources.flat_map do |ds|
+          if ds.respond_to?(method)
+            paths = ds.send(method, pattern.to_s)
+            paths.map { |path| object_with_identifier(path) }
+          end
+        end
+      else
+        @objects.select { |i| pattern.match?(i.identifier) }
+      end
+    end
+
     protected
 
     def object_with_identifier(identifier)
@@ -61,7 +85,16 @@ module Nanoc::Int
     def object_matching_glob(glob)
       if use_globs?
         pat = Nanoc::Int::Pattern.from(glob)
-        if @objects.first.is_a?(Nanoc::Int::Item)
+        if @objects.first.is_a?(Nanoc::Int::Layout)
+          @data_sources.each do |ds|
+            if ds.respond_to?(:glob_layout)
+              paths = ds.glob_layout(glob)
+              unless paths.empty?
+                return object_with_identifier(paths[0])
+              end
+            end
+          end
+        elsif @objects.first.is_a?(Nanoc::Int::Item)
           @data_sources.each do |ds|
             if ds.respond_to?(:glob_item)
               paths = ds.glob_item(glob)
@@ -71,7 +104,6 @@ module Nanoc::Int
             end
           end
         end
-        @objects.find { |i| pat.match?(i.identifier) }
       else
         nil
       end
