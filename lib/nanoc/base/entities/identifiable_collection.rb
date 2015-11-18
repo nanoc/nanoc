@@ -10,9 +10,9 @@ module Nanoc::Int
     def_delegator :@objects, :<<
     def_delegator :@objects, :concat
 
-    def initialize(config, data_sources = nil)
+    def initialize(config, document_sources = nil)
       @config = config
-      @data_sources = data_sources
+      @document_sources = document_sources
 
       @objects = []
     end
@@ -50,25 +50,9 @@ module Nanoc::Int
 
     def objects_matching_pattern(pattern)
       if pattern.is_a?(Nanoc::Int::StringPattern)
-        if use_globs?
-          method =
-            case @objects.first
-            when Nanoc::Int::Layout
-              :glob_layout
-            when Nanoc::Int::Item
-              :glob_item
-            else
-              raise "Unknown type: #{@objects.first.class}"
-            end
-
-          @data_sources.lazy.flat_map do |ds|
-            if ds.respond_to?(method)
-              paths = ds.send(method, pattern.to_s)
-              paths.lazy.map { |path| object_with_identifier(path) }
-            end
-          end
+        if use_globs? && @document_sources
+          @document_sources.flat_map { |ds| ds.objects_matching_pattern(pattern) }
         else
-          # FIXME: support legacy pattern
           []
         end
       else

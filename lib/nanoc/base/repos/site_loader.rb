@@ -14,13 +14,54 @@ module Nanoc::Int
 
     private
 
+    class DocumentSource
+      def initialize(data_source)
+        @data_source = data_source
+      end
+
+      def objects_cached
+        @objects ||= objects
+      end
+
+      def objects
+        raise NotImplementedError
+      end
+
+      def object_matching_pattern(pattern)
+        objects.find { |o| o.identifier =~ pattern }
+      end
+
+      def objects_matching_pattern(pattern)
+        objects.select { |o| o.identifier =~ pattern }
+      end
+    end
+
+    class ItemSource < DocumentSource
+      def objects
+        data_source.items
+      end
+
+      # TODO: override #objects_matching_pattern
+    end
+
+    class LayoutSource < DocumentSource
+      def objects
+        data_source.layouts
+      end
+
+      # TODO: override #objects_matching_pattern
+    end
+
     def site_from_config(config)
       code_snippets = code_snippets_from_config(config)
       code_snippets.each(&:load)
 
       with_data_sources(config) do |data_sources|
-        items = Nanoc::Int::IdentifiableCollection.new(config, data_sources)
-        layouts = Nanoc::Int::IdentifiableCollection.new(config, data_sources)
+        item_sources = data_sources.map { |ds| ItemSource.new(ds) }
+        layout_sources = data_sources.map { |ds| LayoutSource.new(ds) }
+
+        items = Nanoc::Int::IdentifiableCollection.new(config, item_sources)
+        layouts = Nanoc::Int::IdentifiableCollection.new(config, layout_sources)
 
         data_sources.each do |ds|
           items_in_ds = ds.items
