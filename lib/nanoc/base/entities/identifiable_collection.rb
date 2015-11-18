@@ -75,8 +75,8 @@ module Nanoc::Int
 
     def object_matching_glob(glob)
       if use_globs?
-        pattern = Nanoc::Int::Pattern.from(glob)
-        objects_matching_pattern(pattern).first
+        pat = Nanoc::Int::Pattern.from(glob)
+        objects_matching_pattern(pat).first
       else
         nil
       end
