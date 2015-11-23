@@ -22,3 +22,10 @@ notifications:
       - "%{repository}/%{branch} %{commit} %{author}: %{message}"
     use_notice: true
     skip_join: true
+
+cache: bundler
+
+sudo: false
+
+git:
+  depth: 10
