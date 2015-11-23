@@ -27,3 +27,5 @@ cache: bundler
 
 sudo: false
 
+git:
+  depth: 10
