@@ -1,9 +1,11 @@
 language: ruby
 rvm:
+  - 2.1.2
   - 2.2.2
 branches:
   only:
-    - master
+    - "master"
+    - "release-4.0.x"
 before_install: gem install bundler
 matrix:
   include:
