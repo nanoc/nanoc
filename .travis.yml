@@ -24,3 +24,6 @@ notifications:
     skip_join: true
 
 cache: bundler
+
+sudo: false
+
