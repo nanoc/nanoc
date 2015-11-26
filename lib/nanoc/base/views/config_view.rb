@@ -36,5 +36,10 @@ module Nanoc
     def [](key)
       @config[key]
     end
+
+    # @see Hash#each
+    def each(&block)
+      @config.each(&block)
+    end
   end
 end

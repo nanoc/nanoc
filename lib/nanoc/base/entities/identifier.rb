@@ -87,6 +87,12 @@ module Nanoc
       @type == :full
     end
 
+    # @return [Boolean] True if this is a legacy identifier (i.e. does not
+    #   include the extension), false otherwise
+    def legacy?
+      @type == :legacy
+    end
+
     # @return [String]
     def chop
       to_s.chop
@@ -148,6 +154,15 @@ module Nanoc
 
       s = File.basename(@string)
       s ? s.split('.', -1).drop(1) : []
+    end
+
+    def components
+      res = to_s.split('/')
+      if res.empty?
+        []
+      else
+        res[1..-1]
+      end
     end
 
     def to_s

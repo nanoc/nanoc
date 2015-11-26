@@ -14,7 +14,7 @@ module Nanoc
     #   any).
     #
     # @return [String] The content of the given rep at the given snapshot.
-    def compiled_content(rep: :default, snapshot: :last)
+    def compiled_content(rep: :default, snapshot: :pre)
       reps.fetch(rep).compiled_content(snapshot: snapshot)
     end
 
@@ -40,7 +40,14 @@ module Nanoc
     #
     # @return [Enumerable<Nanoc::ItemView>]
     def children
-      unwrap.children.map { |i| Nanoc::ItemView.new(i, @context) }
+      unless unwrap.identifier.legacy?
+        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
+      end
+
+      children_pattern = Nanoc::Int::Pattern.from(unwrap.identifier.to_s + '*/')
+      children = @context.items.select { |i| children_pattern.match?(i.identifier) }
+
+      children.map { |i| Nanoc::ItemView.new(i, @context) }.freeze
     end
 
     # Returns the parent of this item, if one exists. For items with identifiers
@@ -50,7 +57,14 @@ module Nanoc
     #
     # @return [nil] if the item has no parent
     def parent
-      unwrap.parent && Nanoc::ItemView.new(unwrap.parent, @context)
+      unless unwrap.identifier.legacy?
+        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
+      end
+
+      parent_identifier = '/' + unwrap.identifier.components[0..-2].join('/') + '/'
+      parent = @context.items[parent_identifier]
+
+      parent && Nanoc::ItemView.new(parent, @context).freeze
     end
 
     # @return [Boolean] True if the item is binary, false otherwise

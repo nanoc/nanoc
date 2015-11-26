@@ -193,7 +193,7 @@ module Nanoc::Int
     end
 
     def create_view_context
-      Nanoc::ViewContext.new(reps: @reps)
+      Nanoc::ViewContext.new(reps: @reps, items: @site.items)
     end
 
     private

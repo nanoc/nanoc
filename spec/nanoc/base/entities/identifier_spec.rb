@@ -372,4 +372,51 @@ describe Nanoc::Identifier do
       it { is_expected.to eql(['html', 'md']) }
     end
   end
+
+  describe '#legacy?' do
+    subject { identifier.legacy? }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+      it { is_expected.to eql(true) }
+    end
+
+    context 'full type' do
+      let(:identifier) { described_class.new('/foo/', type: :full) }
+      it { is_expected.to eql(false) }
+    end
+  end
+
+  describe '#full?' do
+    subject { identifier.full? }
+
+    context 'legacy type' do
+      let(:identifier) { described_class.new('/foo/', type: :legacy) }
+      it { is_expected.to eql(false) }
+    end
+
+    context 'full type' do
+      let(:identifier) { described_class.new('/foo/', type: :full) }
+      it { is_expected.to eql(true) }
+    end
+  end
+
+  describe '#components' do
+    subject { identifier.components }
+
+    context 'no components' do
+      let(:identifier) { described_class.new('/') }
+      it { is_expected.to eql([]) }
+    end
+
+    context 'one component' do
+      let(:identifier) { described_class.new('/foo.md') }
+      it { is_expected.to eql(['foo.md']) }
+    end
+
+    context 'two components' do
+      let(:identifier) { described_class.new('/foo/bar.md') }
+      it { is_expected.to eql(['foo', 'bar.md']) }
+    end
+  end
 end

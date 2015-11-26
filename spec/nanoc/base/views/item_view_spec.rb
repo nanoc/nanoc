@@ -13,12 +13,19 @@ describe Nanoc::ItemView do
 
   describe '#parent' do
     let(:item) do
-      Nanoc::Int::Item.new('me', {}, '/me/').tap { |i| i.parent = parent_item }
+      Nanoc::Int::Item.new('me', {}, identifier)
     end
 
     let(:view) { described_class.new(item, view_context) }
 
-    let(:view_context) { double(:view_context) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: [], items: items) }
+
+    let(:items) do
+      Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
+        arr << item
+        arr << parent_item if parent_item
+      end
+    end
 
     subject { view.parent }
 
@@ -27,13 +34,31 @@ describe Nanoc::ItemView do
         Nanoc::Int::Item.new('parent', {}, '/parent/')
       end
 
-      it 'returns a view for the parent' do
-        expect(subject.class).to eql(Nanoc::ItemView)
-        expect(subject.unwrap).to eql(parent_item)
+      context 'full identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/parent/me.md')
+        end
+
+        it 'raises' do
+          expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
+        end
       end
 
-      it 'returns a view with the right context' do
-        expect(subject._context).to equal(view_context)
+      context 'legacy identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/parent/me/', type: :legacy)
+        end
+
+        it 'returns a view for the parent' do
+          expect(subject.class).to eql(Nanoc::ItemView)
+          expect(subject.unwrap).to eql(parent_item)
+        end
+
+        it 'returns a view with the right context' do
+          expect(subject._context).to equal(view_context)
+        end
+
+        it { is_expected.to be_frozen }
       end
     end
 
@@ -42,14 +67,72 @@ describe Nanoc::ItemView do
         nil
       end
 
-      it 'returns nil' do
-        expect(subject).to be_nil
+      context 'full identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/me.md')
+        end
+
+        it 'raises' do
+          expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
+        end
+      end
+
+      context 'legacy identifier' do
+        let(:identifier) do
+          Nanoc::Identifier.new('/me/', type: :legacy)
+        end
+
+        it { is_expected.to be_nil }
+        it { is_expected.to be_frozen }
       end
     end
   end
 
   describe '#children' do
-    # TODO: implement
+    let(:item) do
+      Nanoc::Int::Item.new('me', {}, identifier)
+    end
+
+    let(:children) do
+      [Nanoc::Int::Item.new('child', {}, '/me/child/')]
+    end
+
+    let(:view) { described_class.new(item, view_context) }
+
+    let(:view_context) { Nanoc::ViewContext.new(reps: [], items: items) }
+
+    let(:items) do
+      Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
+        arr << item
+        children.each { |child| arr << child }
+      end
+    end
+
+    subject { view.children }
+
+    context 'full identifier' do
+      let(:identifier) do
+        Nanoc::Identifier.new('/me.md')
+      end
+
+      it 'raises' do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
+      end
+    end
+
+    context 'legacy identifier' do
+      let(:identifier) do
+        Nanoc::Identifier.new('/me/', type: :legacy)
+      end
+
+      it 'returns views for the children' do
+        expect(subject.size).to eql(1)
+        expect(subject[0].class).to eql(Nanoc::ItemView)
+        expect(subject[0].unwrap).to eql(children[0])
+      end
+
+      it { is_expected.to be_frozen }
+    end
   end
 
   describe '#reps' do
@@ -65,7 +148,7 @@ describe Nanoc::ItemView do
     end
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     subject { view.reps }
 
@@ -83,7 +166,7 @@ describe Nanoc::ItemView do
     subject { view.compiled_content(params) }
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf/')
@@ -100,10 +183,14 @@ describe Nanoc::ItemView do
         ir.compiled = true
         ir.snapshot_defs = [
           Nanoc::Int::SnapshotDef.new(:last, false),
+          Nanoc::Int::SnapshotDef.new(:pre, true),
+          Nanoc::Int::SnapshotDef.new(:post, false),
           Nanoc::Int::SnapshotDef.new(:specific, true),
         ]
         ir.snapshot_contents = {
-          last: Nanoc::Int::TextualContent.new('Default Hallo'),
+          last: Nanoc::Int::TextualContent.new('Last Hallo'),
+          pre: Nanoc::Int::TextualContent.new('Pre Hallo'),
+          post: Nanoc::Int::TextualContent.new('Post Hallo'),
           specific: Nanoc::Int::TextualContent.new('Specific Hallo'),
         }
       end
@@ -119,7 +206,7 @@ describe Nanoc::ItemView do
           .with(:visit_ended, item).ordered
       end
 
-      it { is_expected.to eq('Default Hallo') }
+      it { is_expected.to eq('Pre Hallo') }
 
       context 'requesting explicit snapshot' do
         let(:params) { { snapshot: :specific } }
@@ -138,7 +225,7 @@ describe Nanoc::ItemView do
           .with(:visit_ended, item).ordered
       end
 
-      it { is_expected.to eq('Default Hallo') }
+      it { is_expected.to eq('Pre Hallo') }
 
       context 'requesting explicit snapshot' do
         let(:params) { { snapshot: :specific } }
@@ -160,7 +247,7 @@ describe Nanoc::ItemView do
     subject { view.path(params) }
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')

@@ -9,7 +9,7 @@ describe Nanoc::Helpers::Blogging do
     { items: [] }
   end
 
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new
@@ -232,6 +232,34 @@ describe Nanoc::Helpers::Blogging do
           expect(subject).to eql('http://url.base/feed.xml')
         end
       end
+    end
+  end
+
+  describe '#attribute_to_time' do
+    subject { mod.attribute_to_time(arg) }
+
+    let(:around_noon_local) { Time.at(1446903076 - Time.now.utc_offset) }
+    let(:around_noon_utc) { Time.at(1446903076) }
+    let(:beginning_of_day_local) { Time.at(1446854400 - Time.now.utc_offset) }
+
+    context 'with Time instance' do
+      let(:arg) { around_noon_utc }
+      it { is_expected.to eql(around_noon_utc) }
+    end
+
+    context 'with Date instance' do
+      let(:arg) { Date.new(2015, 11, 7) }
+      it { is_expected.to eql(beginning_of_day_local) }
+    end
+
+    context 'with DateTime instance' do
+      let(:arg) { DateTime.new(2015, 11, 7, 13, 31, 16) }
+      it { is_expected.to eql(around_noon_utc) }
+    end
+
+    context 'with string' do
+      let(:arg) { '2015-11-7 13:31:16' }
+      it { is_expected.to eql(around_noon_local) }
     end
   end
 

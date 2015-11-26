@@ -27,9 +27,6 @@ Style/EmptyElse:
 Style/Next:
   Enabled: false
 
-Lint/NonLocalExitFromIterator:
-  Enabled: false
-
 
 
 # ----- DISABLED (hard) -----

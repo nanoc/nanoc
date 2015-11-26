@@ -92,14 +92,20 @@ checks:
     #   exclude: ['^/server_status']
     exclude: []
 
-    # Configuration for the “external_links” checker, which checks whether all
-    # external links are valid.
-    external_links:
-      # A list of patterns, specified as regular expressions, to exclude from the check.
-      # If an external link matches this pattern, the validity check will be skipped.
-      # E.g.:
-      #   exclude: ['^http://example.com$']
-      exclude: []
+  # Configuration for the “external_links” checker, which checks whether all
+  # external links are valid.
+  external_links:
+    # A list of patterns, specified as regular expressions, to exclude from the check.
+    # If an external link matches this pattern, the validity check will be skipped.
+    # E.g.:
+    #   exclude: ['^http://example.com$']
+    exclude: []
+
+    # A list of file patterns, specified as regular expressions, to exclude from the check.
+    # If a file matches this pattern, the links from this file will not be checked.
+    # E.g.:
+    #   exclude_files: ['blog/page']
+    exclude_files: []
 EOS
 
     DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
@@ -275,15 +281,15 @@ EOS
     <div id="sidebar">
       <h2>Documentation</h2>
       <ul>
-        <li><a href="http://v4.nanoc.ws/about/">About</a></li>
-        <li><a href="http://v4.nanoc.ws/doc/">Documentation</a></li>
-        <li><a href="http://v4.nanoc.ws/doc/tutorial/">Tutorial</a></li>
+        <li><a href="http://nanoc.ws/about/">About</a></li>
+        <li><a href="http://nanoc.ws/doc/">Documentation</a></li>
+        <li><a href="http://nanoc.ws/doc/tutorial/">Tutorial</a></li>
       </ul>
       <h2>Community</h2>
       <ul>
         <li><a href="http://groups.google.com/group/nanoc/">Discussion group</a></li>
         <li><a href="irc://chat.freenode.net/#nanoc">IRC channel</a></li>
-        <li><a href="http://v4.nanoc.ws/contributing/">Contributing</a></li>
+        <li><a href="http://nanoc.ws/contributing/">Contributing</a></li>
       </ul>
     </div>
   </body>
