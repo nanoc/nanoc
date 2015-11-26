@@ -1,7 +1,8 @@
 module Nanoc::Int
   # @api private
   class Postprocessor
-    def initialize(site:, rules_collection:)
+    def initialize(context, site:, rules_collection:)
+      @context = context
       @site = site
       @rules_collection = rules_collection
     end
@@ -17,9 +18,8 @@ module Nanoc::Int
     # @api private
     def new_postprocessor_context
       Nanoc::Int::Context.new({
-        config: Nanoc::ConfigView.new(@site.config, nil),
-        items: Nanoc::AttributedItemCollectionView.new(@site.items, nil),
-        layouts: Nanoc::LayoutCollectionView.new(@site.layouts, nil),
+        config: Nanoc::ConfigView.new(@site.config, @context),
+        items: Nanoc::AttributedItemCollectionView.new(@site.items, @context),
       })
     end
   end
