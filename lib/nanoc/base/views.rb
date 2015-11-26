@@ -1,4 +1,3 @@
-require_relative 'views/mixins/attributed_document_view_mixin'
 require_relative 'views/mixins/document_view_mixin'
 require_relative 'views/mixins/mutable_document_view_mixin'
 
