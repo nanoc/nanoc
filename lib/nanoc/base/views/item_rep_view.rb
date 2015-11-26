@@ -27,6 +27,11 @@ module Nanoc
       @item_rep.name
     end
 
+    # @return [Symbol]
+    def status
+      @item_rep.status
+    end
+
     # Returns the compiled content.
     #
     # @param [String] snapshot The name of the snapshot from which to

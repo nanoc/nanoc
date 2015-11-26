@@ -236,8 +236,10 @@ module Nanoc::Int
       if can_reuse_content_for_rep?(rep)
         Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
         rep.snapshot_contents = compiled_content_cache[rep]
+        rep.status = :created
       else
         recalculate_content_for_rep(rep)
+        rep.status = :modified
       end
 
       rep.compiled = true
