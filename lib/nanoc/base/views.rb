@@ -20,5 +20,5 @@ require_relative 'views/mutable_layout_view'
 require_relative 'views/mutable_layout_collection_view'
 require_relative 'views/site_view'
 
-require_relative 'views/attributed_item_view'
-require_relative 'views/attributed_item_collection_view'
+require_relative 'views/post_compile_item_view'
+require_relative 'views/post_compile_item_collection_view'

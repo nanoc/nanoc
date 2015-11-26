@@ -19,7 +19,7 @@ module Nanoc::Int
     def new_postprocessor_context
       Nanoc::Int::Context.new({
         config: Nanoc::ConfigView.new(@site.config, @context),
-        items: Nanoc::AttributedItemCollectionView.new(@site.items, @context),
+        items: Nanoc::PostCompileItemCollectionView.new(@site.items, @context),
       })
     end
   end

@@ -1,5 +1,5 @@
 module Nanoc
-  class AttributedItemView < Nanoc::ItemView
+  class PostCompileItemView < Nanoc::ItemView
     def created?
       reps.select { |rep| rep.status == :created }
     end
