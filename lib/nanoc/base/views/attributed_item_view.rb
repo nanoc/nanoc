@@ -1,9 +1,13 @@
 module Nanoc
   class AttributedItemView < Nanoc::ItemView
-    include Nanoc::DocumentViewMixin
+    include Nanoc::AttributedDocumentViewMixin
+
+    def created?
+      reps.select { |rep| rep.status == :created }
+    end
 
     def updated?
-      false
+      reps.select { |rep| rep.status == :modified }
     end
   end
 end
