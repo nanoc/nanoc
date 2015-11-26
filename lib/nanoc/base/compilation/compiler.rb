@@ -105,6 +105,7 @@ module Nanoc::Int
       # Compile
       run
 
+      # Postprocess
       Nanoc::Int::Postprocessor.new(create_view_context, site: @site, rules_collection: @rules_collection).run
     end
 
