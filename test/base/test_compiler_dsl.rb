@@ -127,7 +127,7 @@ EOS
         site.compile
       end
 
-      assert_match(/TODO/, io[:stdout])
+      assert_match(/1/, io[:stdout])
     end
   end
 
