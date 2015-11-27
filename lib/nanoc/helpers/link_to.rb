@@ -89,7 +89,7 @@ module Nanoc::Helpers
 
       if @item_rep && @item_rep.path == path
         # Create message
-        "<span class=\"active\" title=\"You're here.\">#{text}</span>"
+        "<span class=\"active\">#{text}</span>"
       else
         link_to(text, target, attributes)
       end
