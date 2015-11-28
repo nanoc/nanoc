@@ -266,8 +266,10 @@ module Nanoc::Int
       when 'legacy'
         Nanoc::Int::Pattern.from(identifier_to_regex(arg))
       else
-        raise Nanoc::Int::Errors::GenericTrivial,
-          "Invalid string_pattern_type: #{@config[:string_pattern_type]}"
+        raise(
+          Nanoc::Int::Errors::GenericTrivial,
+          "Invalid string_pattern_type: #{@config[:string_pattern_type]}",
+        )
       end
     end
 

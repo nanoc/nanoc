@@ -115,10 +115,6 @@ Metrics/PerceivedComplexity:
 TrailingComma:
   Enabled: false
 
-# Parameters are indented one soft tab instead.
-AlignParameters:
-  Enabled: false
-
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
 # there’s no point in enforcing ASCII comments.
 AsciiComments:

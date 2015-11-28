@@ -100,8 +100,10 @@ module Nanoc::Extra
       when Array
         patterns.concat(extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" })
       else
-        raise Nanoc::Int::Errors::GenericTrivial,
-          "Do not know how to handle extra_files: #{extra_files.inspect}"
+        raise(
+          Nanoc::Int::Errors::GenericTrivial,
+          "Do not know how to handle extra_files: #{extra_files.inspect}",
+        )
       end
       Dir.glob(patterns)
     end
