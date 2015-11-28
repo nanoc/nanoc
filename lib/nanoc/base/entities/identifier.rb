@@ -65,7 +65,12 @@ module Nanoc
     end
 
     def ==(other)
-      to_s == other.to_s
+      case other
+      when Nanoc::Identifier, String
+        to_s == other.to_s
+      else
+        false
+      end
     end
     alias_method :eql?, :==
 

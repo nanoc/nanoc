@@ -111,33 +111,53 @@ describe Nanoc::Identifier do
   end
 
   describe '#== and #eql?' do
-    context 'equal identifiers' do
+    context 'comparing with equal identifier' do
       let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
       let(:identifier_b) { described_class.new('/foo/bar//', type: :legacy) }
 
-      it 'is equal to identifier' do
+      it 'is equal' do
         expect(identifier_a).to eq(identifier_b)
         expect(identifier_a).to eql(identifier_b)
       end
+    end
 
-      it 'is equal to string' do
+    context 'comparing with equal string' do
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { '/foo/bar/' }
+
+      it 'is equal' do
         expect(identifier_a).to eq(identifier_b.to_s)
         expect(identifier_a).to eql(identifier_b.to_s)
       end
     end
 
-    context 'different identifiers' do
+    context 'comparing with different identifier' do
       let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
       let(:identifier_b) { described_class.new('/baz/qux//', type: :legacy) }
 
-      it 'differs from identifier' do
+      it 'is not equal' do
         expect(identifier_a).not_to eq(identifier_b)
         expect(identifier_a).not_to eql(identifier_b)
       end
+    end
 
-      it 'differs from string' do
-        expect(identifier_a).not_to eq(identifier_b.to_s)
-        expect(identifier_a).not_to eql(identifier_b.to_s)
+    context 'comparing with different string' do
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { '/baz/qux/' }
+
+      it 'is not equal' do
+        expect(identifier_a).not_to eq(identifier_b)
+        expect(identifier_a).not_to eql(identifier_b)
+      end
+    end
+
+    context 'comparing with something that is not an identifier' do
+      let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
+      let(:identifier_b) { :donkey }
+
+      it 'is not equal' do
+        expect(identifier_a).not_to eq(identifier_b)
+        expect(identifier_a).not_to eql(identifier_b)
       end
     end
   end
