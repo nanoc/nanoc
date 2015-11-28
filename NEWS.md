@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.0.1 (???)
+
+Fixes:
+
+* Fixed params documentation for :rdiscount filter (#722)
+* Fixed crash when comparing item rep views (#735, #738)
+
+Enhancements:
+
+* Lowered minimum required Ruby version from 2.2 to 2.1 (#732)
+
 ## 4.0.0 (2015-11-07)
 
 Enhancements:
