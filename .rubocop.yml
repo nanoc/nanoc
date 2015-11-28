@@ -132,10 +132,6 @@ HandleExceptions:
 IfUnlessModifier:
   Enabled: false
 
-# This causes the hashes to be ridiculously indented.
-IndentHash:
-  Enabled: false
-
 # Personal preference is to have decent constructors for exceptions rather than
 # just a class and a message.
 RaiseArgs:
