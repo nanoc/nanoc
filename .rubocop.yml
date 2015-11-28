@@ -61,6 +61,12 @@ LeadingCommentSpace:
 Lint/UnderscorePrefixedVariableName:
   Enabled: false
 
+# A common patter in tests is to define anonymous classes in which methods are defined, which trips
+# up Rubocop’s nested method definition cop.
+Lint/NestedMethodDefinition:
+  Exclude:
+    - 'test/**/*.rb'
+
 
 
 # ----- DISABLED (metrics) -----

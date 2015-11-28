@@ -41,12 +41,12 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     expected_out = [
       klass.new(
         'test 1',
-        { 'num' => 1, :filename => 'foo/bar.html',   :extension => 'html', mtime: File.mtime('foo/bar.html') },
+        { 'num' => 1, :filename => 'foo/bar.html', :extension => 'html', mtime: File.mtime('foo/bar.html') },
         '/bar/',
       ),
       klass.new(
         'test 2',
-        { 'num' => 2, :filename => 'foo/b.c.html',   :extension => 'c.html', mtime: File.mtime('foo/b.c.html') },
+        { 'num' => 2, :filename => 'foo/b.c.html', :extension => 'c.html', mtime: File.mtime('foo/b.c.html') },
         '/b/',
       ),
       klass.new(
