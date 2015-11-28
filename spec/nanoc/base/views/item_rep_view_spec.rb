@@ -65,6 +65,16 @@ describe Nanoc::ItemRepView do
         expect(view).not_to eql(other)
       end
     end
+
+    context 'comparing with something that is not an item rep' do
+      let(:other_item) { double(:other_item, identifier: '/foo/') }
+      let(:other) { :donkey }
+
+      it 'is not equal' do
+        expect(view).not_to eq(other)
+        expect(view).not_to eql(other)
+      end
+    end
   end
 
   describe '#hash' do

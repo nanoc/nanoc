@@ -69,7 +69,7 @@ module Nanoc::Extra::Deployers
         truncated = set.is_truncated
         files += set
       end
-      keys_to_destroy = files.all.map(&:key)
+      keys_to_destroy = files.map(&:key)
       keys_to_invalidate = []
       etags = read_etags(files)
 
