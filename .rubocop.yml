@@ -1,3 +1,23 @@
+# ----- CONFIGURED -----
+
+# We use filenames such as “create-site.rb” that translate to method names.
+FileName:
+  Exclude:
+    - 'lib/nanoc/cli/commands/*.rb'
+
+# A common pattern in tests is to define anonymous classes in which methods are defined, which trips
+# up Rubocop’s nested method definition cop.
+Lint/NestedMethodDefinition:
+  Exclude:
+    - 'test/**/*.rb'
+
+# This is used in tests, to verify the effect of state-changing functions.
+Style/GlobalVars:
+  Exclude:
+    - 'test/**/*.rb'
+
+
+
 # ----- TO ENABLE LATER -----
 # To make merges easier, I’ve decided to enable these at a later point in time.
 
@@ -8,10 +28,6 @@ RegexpLiteral:
   Enabled: false
 
 RescueException:
-  Enabled: false
-
-# This is used in tests, to verify the effect of state-changing functions.
-Style/GlobalVars:
   Enabled: false
 
 ClassAndModuleChildren:
@@ -45,10 +61,6 @@ BracesAroundHashParameters:
 Eval:
   Enabled: false
 
-# We use filenames such as “create-site.rb” that translate to method names.
-FileName:
-  Enabled: false
-
 # We use get_binding to extract the binding
 AccessorMethodName:
   Enabled: false
@@ -60,12 +72,6 @@ LeadingCommentSpace:
 # We use _erbout.
 Lint/UnderscorePrefixedVariableName:
   Enabled: false
-
-# A common patter in tests is to define anonymous classes in which methods are defined, which trips
-# up Rubocop’s nested method definition cop.
-Lint/NestedMethodDefinition:
-  Exclude:
-    - 'test/**/*.rb'
 
 
 
