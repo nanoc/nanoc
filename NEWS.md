@@ -15,7 +15,7 @@ Enhancements:
 * Made `#attribute_to_time` handle `DateTime` (#717) [Micha Rosenbaum]
 * Added `Identifier#components` (#677)
 
-## 4.0.1 (???)
+## 4.0.1 (2015-11-28)
 
 Fixes:
 
