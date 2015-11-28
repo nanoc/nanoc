@@ -243,9 +243,9 @@ module Nanoc::Filters
     end
 
     SIMON_HIGHLIGHT_OPT_MAP = {
-        wrap: '-W',
-        include_style: '-I',
-        line_numbers: '-l',
+      wrap: '-W',
+      include_style: '-I',
+      line_numbers: '-l',
     }
 
     # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).

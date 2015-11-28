@@ -32,8 +32,10 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
         # Check
         refute check.issues.empty?
         assert_equal 1, check.issues.size
-        assert_equal 'line 1: Property coxlor doesn\'t exist: h1 { coxlor: rxed; }',
-          check.issues.to_a[0].description
+        assert_equal(
+          'line 1: Property coxlor doesn\'t exist: h1 { coxlor: rxed; }',
+          check.issues.to_a[0].description,
+        )
       end
     end
   end
@@ -53,8 +55,7 @@ class Nanoc::Extra::Checking::Checks::CSSTest < Nanoc::TestCase
         # Check
         refute check.issues.empty?
         assert_equal 1, check.issues.size
-        assert_equal 'line 1: Parse Error: h1 { ; {',
-          check.issues.to_a[0].description
+        assert_equal 'line 1: Parse Error: h1 { ; {', check.issues.to_a[0].description
       end
     end
   end

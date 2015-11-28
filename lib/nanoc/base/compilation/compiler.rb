@@ -275,7 +275,7 @@ module Nanoc::Int
       end
 
       # TODO: Do not expose @site (necessary for captures store though…)
-      content_or_filename_assigns.merge({
+      content_or_filename_assigns.merge(
         item: Nanoc::ItemView.new(rep.item),
         rep: Nanoc::ItemRepView.new(rep),
         item_rep: Nanoc::ItemRepView.new(rep),
@@ -283,7 +283,7 @@ module Nanoc::Int
         layouts: Nanoc::LayoutCollectionView.new(site.layouts),
         config: Nanoc::ConfigView.new(site.config),
         site: Nanoc::SiteView.new(site),
-      })
+      )
     end
 
     # @return [Nanoc::Int::OutdatednessChecker] The outdatedness checker
@@ -291,7 +291,8 @@ module Nanoc::Int
       Nanoc::Int::OutdatednessChecker.new(
         site: @site,
         checksum_store: checksum_store,
-        dependency_tracker: dependency_tracker)
+        dependency_tracker: dependency_tracker,
+      )
     end
     memoize :outdatedness_checker
 
@@ -325,7 +326,7 @@ module Nanoc::Int
 
       # Listen to processing start/stop
       Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
+      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop }
 
       # Assign snapshots
       reps.each do |rep|
@@ -402,7 +403,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
     ensure
-      Nanoc::Int::NotificationCenter.post(:visit_ended,       rep.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended, rep.item)
     end
 
     # Clears the list of dependencies for items that will be recompiled.
@@ -421,11 +422,11 @@ module Nanoc::Int
 
     # Returns a preprocessor context, creating one if none exists yet.
     def preprocessor_context
-      Nanoc::Int::Context.new({
+      Nanoc::Int::Context.new(
         config: Nanoc::MutableConfigView.new(@site.config),
         items: Nanoc::MutableItemCollectionView.new(@site.items),
         layouts: Nanoc::MutableLayoutCollectionView.new(@site.layouts),
-      })
+      )
     end
     memoize :preprocessor_context
 

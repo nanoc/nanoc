@@ -121,8 +121,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       assert File.file?('output/stray.html')
       Nanoc::CLI.run %w( compile )
       refute File.file?('output/stray.html')
-      assert File.directory?('output/excluded_dir'),
-        'excluded_dir should still be there'
+      assert File.directory?('output/excluded_dir'), 'excluded_dir should still be there'
     end
   end
 

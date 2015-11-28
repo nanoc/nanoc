@@ -1,7 +1,20 @@
 # ----- CONFIGURED -----
 
-TrailingComma:
-  EnforcedStyleForMultiline: comma
+# We use filenames such as “create-site.rb” that translate to method names.
+FileName:
+  Exclude:
+    - 'lib/nanoc/cli/commands/*.rb'
+
+# A common pattern in tests is to define anonymous classes in which methods are defined, which trips
+# up Rubocop’s nested method definition cop.
+Lint/NestedMethodDefinition:
+  Exclude:
+    - 'test/**/*.rb'
+
+# This is used in tests, to verify the effect of state-changing functions.
+Style/GlobalVars:
+  Exclude:
+    - 'test/**/*.rb'
 
 
 
@@ -15,10 +28,6 @@ RegexpLiteral:
   Enabled: false
 
 RescueException:
-  Enabled: false
-
-# This is used in tests, to verify the effect of state-changing functions.
-Style/GlobalVars:
   Enabled: false
 
 ClassAndModuleChildren:
@@ -50,10 +59,6 @@ BracesAroundHashParameters:
 
 # Nanoc relies on eval in several cases (code snippets and some helpers).
 Eval:
-  Enabled: false
-
-# We use filenames such as “create-site.rb” that translate to method names.
-FileName:
   Enabled: false
 
 # We use get_binding to extract the binding
@@ -105,8 +110,9 @@ Metrics/PerceivedComplexity:
 
 # ----- DISABLED (opinionated) -----
 
-# Parameters are indented one soft tab instead.
-AlignParameters:
+# Having trailing commas for multiline method calls is useful. Rubocop’s enforced multi-line comma
+# style is unfortunately a little buggy, so it is disabled.
+TrailingComma:
   Enabled: false
 
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
@@ -124,10 +130,6 @@ HandleExceptions:
 
 # if/unless at the end of the line makes it too easy to oversee.
 IfUnlessModifier:
-  Enabled: false
-
-# This causes the hashes to be ridiculously indented.
-IndentHash:
   Enabled: false
 
 # Personal preference is to have decent constructors for exceptions rather than

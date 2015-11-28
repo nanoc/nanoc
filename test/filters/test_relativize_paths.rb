@@ -562,11 +562,12 @@ XML
 </foo>
 XML
 
-      actual_content = filter.setup_and_run(raw_content, {
+      options = {
         type: :xml,
         namespaces: { ex: 'http://example.org' },
         select: ['ex:a/@href'],
-      })
+      }
+      actual_content = filter.setup_and_run(raw_content, options)
 
       assert_match(/<foo xmlns="http:\/\/example.org">/,    actual_content)
       assert_match(/<bar><a href="..\/..">baz<\/a><\/bar>/, actual_content)

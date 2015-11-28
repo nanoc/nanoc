@@ -324,12 +324,12 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].expects(:compiled_content).with(snapshot: :pre).returns('asdf')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({
+      @config = Nanoc::ConfigView.new(
         author_name: 'Bob',
         author_uri: 'http://example.com/~bob/',
         title: 'My Blog Or Something',
         base_url: 'http://example.com',
-      })
+      )
 
       # Create feed item
       @item = mock

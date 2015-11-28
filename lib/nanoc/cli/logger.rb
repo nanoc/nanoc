@@ -41,12 +41,15 @@ module Nanoc::CLI
     def file(level, action, name, duration = nil)
       log(
         level,
-        format('%s%12s%s  %s%s',
+        format(
+          '%s%12s%s  %s%s',
           ACTION_COLORS[action.to_sym],
           action,
           "\e[0m",
           duration.nil? ? '' : format('[%2.2fs]  ', duration),
-          name))
+          name,
+        )
+      )
     end
 
     # Logs a message.

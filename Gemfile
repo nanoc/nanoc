@@ -41,7 +41,7 @@ gem 'redcarpet', platforms: [:ruby, :mswin]
 gem 'RedCloth'
 gem 'rouge'
 gem 'rspec'
-gem 'rubocop', '~> 0.31.0'
+gem 'rubocop'
 gem 'rubypants'
 gem 'sass', '~> 3.2.2'
 gem 'simplecov', require: false

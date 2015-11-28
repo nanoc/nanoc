@@ -13,7 +13,7 @@ module Nanoc::Filters
     # @return [String] The filtered content
     def run(content, params = {})
       params = {
-        disable_capture: true,      # Capture managed by Nanoc
+        disable_capture: true, # Capture managed by Nanoc
         buffer: '_erbout', # Force slim to output to the buffer used by Nanoc
       }.merge params
 

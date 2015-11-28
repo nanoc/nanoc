@@ -449,7 +449,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
     assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal('blah blah',       result[1])
+    assert_equal('blah blah', result[1])
   end
 
   def test_parse_internal_bad_metadata
