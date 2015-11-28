@@ -25,7 +25,7 @@ describe Nanoc::Int::Pattern do
 
     it 'errors with a proper error message on other inputs' do
       expect { described_class.from(nil) }
-        .to raise_error(ArgumentError, "Do not know how to convert `nil` into a Nanoc::Pattern")
+        .to raise_error(ArgumentError, 'Do not know how to convert `nil` into a Nanoc::Pattern')
     end
   end
 
