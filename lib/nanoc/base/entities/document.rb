@@ -44,13 +44,10 @@ module Nanoc
         self.class.hash ^ identifier.hash
       end
 
-      def eql?(other)
-        self.class == other.class && identifier == other.identifier
-      end
-
       def ==(other)
-        self.eql?(other)
+        other.respond_to?(:identifier) && identifier == other.identifier
       end
+      alias_method :eql?, :==
     end
   end
 end
