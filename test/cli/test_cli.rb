@@ -125,6 +125,13 @@ EOS
     end
   end
 
+  def test_load_command_at_with_non_utf8_encoding
+    Encoding.default_external = Encoding::US_ASCII
+    Nanoc::CLI.load_command_at(root_dir + '/lib/nanoc/cli/commands/create-site.rb')
+  ensure
+    Encoding.default_external = Encoding::UTF_8
+  end
+
   def test_after_setup
     $after_setup_success = false
     Nanoc::CLI.after_setup do
