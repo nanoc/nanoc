@@ -166,12 +166,12 @@ module ::Nanoc::Extra::Checking::Checks
     end
 
     def excluded?(href)
-      excludes =  @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude, [])
+      excludes = @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(href) }
     end
 
     def excluded_file?(file)
-      excludes =  @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude_files, [])
+      excludes = @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude_files, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(file) }
     end
   end

@@ -5,7 +5,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Verify no dependencies yet
     assert_empty store.objects_causing_outdatedness_of(items[0])
@@ -18,7 +17,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -33,7 +31,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[0])
@@ -49,7 +46,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -66,7 +62,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -82,7 +77,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -124,7 +118,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -137,7 +130,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Re-create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Load
     store.load
@@ -164,7 +156,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(old_items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(old_items[0], old_items[1])
@@ -177,7 +168,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Re-create
     store = Nanoc::Int::DependencyStore.new(new_items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Load
     store.load
@@ -198,7 +188,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -210,7 +199,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Re-create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Load
     store.load
@@ -230,7 +218,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])
@@ -242,7 +229,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Re-create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Load
     store.load
@@ -258,7 +244,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
-    tracker = Nanoc::Int::DependencyTracker.new(store)
 
     # Record some dependencies
     store.record_dependency(items[0], items[1])

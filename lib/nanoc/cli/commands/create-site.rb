@@ -305,9 +305,11 @@ EOS
 
       # Check whether site exists
       if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w(. ..)).empty?) && !options[:force]
-        raise Nanoc::Int::Errors::GenericTrivial,
+        raise(
+          Nanoc::Int::Errors::GenericTrivial,
           "The site was not created because '#{path}' already exists. " \
-          'Re-run the command using --force to create the site anyway.'
+          'Re-run the command using --force to create the site anyway.',
+        )
       end
 
       # Setup notifications

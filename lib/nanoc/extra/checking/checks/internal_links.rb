@@ -65,7 +65,7 @@ module Nanoc::Extra::Checking::Checks
     end
 
     def excluded?(href)
-      excludes =  @config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
+      excludes = @config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(href) }
     end
   end

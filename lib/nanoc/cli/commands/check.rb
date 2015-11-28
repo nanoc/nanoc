@@ -39,8 +39,10 @@ module Nanoc::CLI::Commands
 
     def validate_options_and_arguments
       if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
-        raise Nanoc::Int::Errors::GenericTrivial,
-          'nothing to do (pass either --all, --deploy or --list or a list of checks)'
+        raise(
+          Nanoc::Int::Errors::GenericTrivial,
+          'nothing to do (pass either --all, --deploy or --list or a list of checks)',
+        )
       end
     end
   end

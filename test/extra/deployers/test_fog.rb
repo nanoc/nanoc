@@ -39,8 +39,10 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
             # FIXME: bucket is necessary for deployer but fog doesn't like it
             bucket_name: 'doesntmatter',
             aws_access_key_id: 'meh',
-            aws_secret_access_key: 'dontcare' },
-          dry_run: true)
+            aws_secret_access_key: 'dontcare',
+          },
+          dry_run: true,
+        )
 
         # Create site
         FileUtils.mkdir_p('output')
@@ -67,12 +69,14 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
           'output/',
           {
             provider: 'aws',
-                  cdn_id: 'id-cdn',
+            cdn_id: 'id-cdn',
             # FIXME: bucket is necessary for deployer but fog doesn't like it
             bucket_name: 'doesntmatter',
             aws_access_key_id: 'meh',
-            aws_secret_access_key: 'dontcare' },
-          dry_run: true)
+            aws_secret_access_key: 'dontcare',
+          },
+          dry_run: true,
+        )
 
         # Create site
         FileUtils.mkdir_p('output')
@@ -99,7 +103,9 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
         {
           bucket: 'mybucket',
           provider: 'local',
-          local_root: 'mylocalcloud' })
+          local_root: 'mylocalcloud',
+        },
+      )
 
       # Setup fake local cloud
       FileUtils.mkdir_p('mylocalcloud/mybucket')

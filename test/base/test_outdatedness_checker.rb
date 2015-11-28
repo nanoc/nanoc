@@ -42,8 +42,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::NotEnoughData,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::NotEnoughData, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -69,8 +68,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::NotWritten,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::NotWritten, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -97,8 +95,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/new/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::SourceModified,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::SourceModified, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -126,8 +123,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -161,8 +157,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/a/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -199,8 +194,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/a/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -234,8 +228,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/a/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -271,8 +264,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/a/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::DependenciesOutdated, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -299,8 +291,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::CodeSnippetsModified,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::CodeSnippetsModified, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -332,8 +323,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::ConfigurationModified,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::ConfigurationModified, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 
@@ -402,8 +392,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::RulesModified,
-        outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::RulesModified, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 

@@ -123,7 +123,6 @@ EOS
       assert_raises do
         Nanoc::CLI.run(%w(compile))
       end
-
     end
   end
 

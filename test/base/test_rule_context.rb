@@ -15,7 +15,6 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
 
     # Create context
     executor = nil
-    view_context = nil
     rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site, view_context: nil)
 
     # Check classes
@@ -53,7 +52,6 @@ class Nanoc::Int::RuleContextTest < Nanoc::TestCase
 
     # Create context
     executor = nil
-    view_context = nil
     rule_context = Nanoc::Int::RuleContext.new(rep: rep, executor: executor, site: site, view_context: nil)
 
     # Check

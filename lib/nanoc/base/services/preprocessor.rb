@@ -16,11 +16,11 @@ module Nanoc::Int
 
     # @api private
     def new_preprocessor_context
-      Nanoc::Int::Context.new({
+      Nanoc::Int::Context.new(
         config: Nanoc::MutableConfigView.new(@site.config, nil),
         items: Nanoc::MutableItemCollectionView.new(@site.items, nil),
         layouts: Nanoc::MutableLayoutCollectionView.new(@site.layouts, nil),
-      })
+      )
     end
   end
 end

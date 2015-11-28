@@ -25,11 +25,11 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
     item_rep.expect(:name, :quux)
 
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({
+    filter = ::Nanoc::Filters::ERB.new(
       item: item,
       item_rep: item_rep,
       location: 'a cheap motel',
-    })
+    )
 
     # Run filter
     raised = false

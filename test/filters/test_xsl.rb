@@ -84,13 +84,9 @@ EOS
   def test_filter_as_layout
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Int::Item.new(SAMPLE_XML_IN,
-                             {},
-                             '/content/')
+      item = Nanoc::Int::Item.new(SAMPLE_XML_IN, {}, '/content/')
       item = Nanoc::ItemView.new(item, nil)
-      layout = Nanoc::Int::Layout.new(SAMPLE_XSL,
-                                 {},
-                                 '/layout/')
+      layout = Nanoc::Int::Layout.new(SAMPLE_XSL, {}, '/layout/')
       layout = Nanoc::LayoutView.new(layout, nil)
 
       # Create an instance of the filter
@@ -110,13 +106,9 @@ EOS
   def test_filter_with_params
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_PARAMS,
-                             {},
-                             '/content/')
+      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_PARAMS, {}, '/content/')
       item = Nanoc::ItemView.new(item, nil)
-      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_PARAMS,
-                                 {},
-                                 '/layout/')
+      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout/')
       layout = Nanoc::LayoutView.new(layout, nil)
 
       # Create an instance of the filter
@@ -128,8 +120,7 @@ EOS
       filter = ::Nanoc::Filters::XSL.new(assigns)
 
       # Run the filter and validate the results
-      result = filter.setup_and_run(layout.raw_content,
-                                    foo: 'bar')
+      result = filter.setup_and_run(layout.raw_content, foo: 'bar')
       assert_match SAMPLE_XML_OUT_WITH_PARAMS, result
     end
   end
@@ -137,13 +128,9 @@ EOS
   def test_filter_with_omit_xml_decl
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL,
-                             {},
-                             '/content/')
+      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL, {}, '/content/')
       item = Nanoc::ItemView.new(item, nil)
-      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL,
-                                 {},
-                                 '/layout/')
+      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL, {}, '/layout/')
       layout = Nanoc::LayoutView.new(layout, nil)
 
       # Create an instance of the filter

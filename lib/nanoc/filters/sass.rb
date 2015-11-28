@@ -10,10 +10,10 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
-      options = params.merge({
+      options = params.merge(
         nanoc_current_filter: self,
         filename: @item && @item.raw_filename,
-      })
+      )
       engine = ::Sass::Engine.new(content, options)
       engine.render
     end

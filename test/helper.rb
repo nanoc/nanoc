@@ -33,14 +33,12 @@ module Nanoc::TestHelpers
     libs.each do |lib|
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?
         skip 'Pure Java Nokogiri has issues that cause problems with nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests'
-        return
       end
 
       begin
         require lib
       rescue LoadError
         skip "requiring #{lib} failed"
-        return
       end
     end
 
@@ -199,22 +197,30 @@ EOS
         actual_out   = eval(pair.first, b)
         expected_out = eval(pair.last.match(/# ?=>(.*)/)[1], b)
 
-        assert_equal expected_out, actual_out,
-          "Incorrect example:\n#{pair.first}"
+        assert_equal(
+          expected_out,
+          actual_out,
+          "Incorrect example:\n#{pair.first}",
+        )
       end
     end
   end
 
   def assert_contains_exactly(expected, actual)
-    assert_equal expected.size, actual.size,
-      format('Expected %s to be of same size as %s', actual.inspect, expected.inspect)
+    assert_equal(
+      expected.size,
+      actual.size,
+      format('Expected %s to be of same size as %s', actual.inspect, expected.inspect),
+    )
     remaining = actual.dup.to_a
     expected.each do |e|
       index = remaining.index(e)
       remaining.delete_at(index) if index
     end
-    assert remaining.empty?,
-      format('Expected %s to contain all the elements of %s', actual.inspect, expected.inspect)
+    assert(
+      remaining.empty?,
+      format('Expected %s to contain all the elements of %s', actual.inspect, expected.inspect),
+    )
   end
 
   def assert_raises_frozen_error

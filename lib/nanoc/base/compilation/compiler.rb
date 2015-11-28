@@ -178,7 +178,7 @@ module Nanoc::Int
       view_context = create_view_context
 
       # TODO: Do not expose @site (necessary for captures store though…)
-      content_or_filename_assigns.merge({
+      content_or_filename_assigns.merge(
         item: Nanoc::ItemView.new(rep.item, view_context),
         rep: Nanoc::ItemRepView.new(rep, view_context),
         item_rep: Nanoc::ItemRepView.new(rep, view_context),
@@ -186,7 +186,7 @@ module Nanoc::Int
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
         config: Nanoc::ConfigView.new(site.config, view_context),
         site: Nanoc::SiteView.new(site, view_context),
-      })
+      )
     end
 
     def create_view_context
@@ -197,8 +197,8 @@ module Nanoc::Int
 
     def compile_reps
       # Listen to processing start/stop
-      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |o| @stack.push(o) }
-      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_| @stack.pop }
+      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
+      Nanoc::Int::NotificationCenter.on(:processing_ended, self) { |_obj| @stack.pop }
 
       # Assign snapshots
       @reps.each do |rep|
@@ -247,7 +247,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
     ensure
-      Nanoc::Int::NotificationCenter.post(:visit_ended,       rep.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended, rep.item)
     end
 
     # @return [Boolean]

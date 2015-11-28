@@ -6,7 +6,7 @@ class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
   def calc_issues
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
     runner = Nanoc::Extra::Checking::Runner.new(site)
-    issues = runner.run_checks([check_class])
+    runner.run_checks([check_class])
   end
 
   def test_run_ok
