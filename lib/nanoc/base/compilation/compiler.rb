@@ -325,7 +325,7 @@ module Nanoc::Int
 
       # Listen to processing start/stop
       Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop       }
+      Nanoc::Int::NotificationCenter.on(:processing_ended,   self) { |_obj| @stack.pop }
 
       # Assign snapshots
       reps.each do |rep|
@@ -402,7 +402,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
     ensure
-      Nanoc::Int::NotificationCenter.post(:visit_ended,       rep.item)
+      Nanoc::Int::NotificationCenter.post(:visit_ended, rep.item)
     end
 
     # Clears the list of dependencies for items that will be recompiled.

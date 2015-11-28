@@ -297,7 +297,7 @@ module Nanoc::DataSources
       end
 
       # Remove UTF-8 BOM (ugly)
-      data.gsub!("\xEF\xBB\xBF", '')
+      data.delete!("\xEF\xBB\xBF")
 
       data
     end

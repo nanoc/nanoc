@@ -1,10 +1,3 @@
-# ----- CONFIGURED -----
-
-TrailingComma:
-  EnforcedStyleForMultiline: comma
-
-
-
 # ----- TO ENABLE LATER -----
 # To make merges easier, I’ve decided to enable these at a later point in time.
 
@@ -104,6 +97,11 @@ Metrics/PerceivedComplexity:
 
 
 # ----- DISABLED (opinionated) -----
+
+# Having trailing commas for multiline method calls is useful. Rubocop’s enforced multi-line comma
+# style is unfortunately a little buggy, so it is disabled.
+TrailingComma:
+  Enabled: false
 
 # Parameters are indented one soft tab instead.
 AlignParameters:

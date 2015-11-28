@@ -17,7 +17,7 @@ module Nanoc::CLI::Commands
       # Get list of plugins (before and after)
       plugins_before = Nanoc::Int::PluginRegistry.instance.all
       site.code_snippets if site
-      plugins_after  = Nanoc::Int::PluginRegistry.instance.all
+      plugins_after = Nanoc::Int::PluginRegistry.instance.all
 
       # Divide list of plugins into builtin and custom
       plugins_builtin = plugins_before
@@ -32,7 +32,7 @@ module Nanoc::CLI::Commands
       PLUGIN_CLASS_ORDER.each do |superclass|
         plugins_with_this_superclass = {
           builtin: plugins_builtin.select { |p| p[:superclass] == superclass },
-          custom: plugins_custom.select  { |p| p[:superclass] == superclass },
+          custom: plugins_custom.select { |p| p[:superclass] == superclass },
         }
 
         # Print kind
