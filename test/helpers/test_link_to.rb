@@ -67,7 +67,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
     # Check
     assert_equal(
-      '<span class="active" title="You\'re here.">Bar</span>',
+      '<span class="active">Bar</span>',
       link_to_unless_current('Bar', @item_rep),
     )
   ensure

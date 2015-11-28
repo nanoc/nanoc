@@ -82,14 +82,14 @@ module Nanoc::Helpers
     # @example Linking to the same page
     #
     #   link_to_unless_current('This Item', @item)
-    #   # => '<span class="active" title="You\'re here.">This Item</span>'
+    #   # => '<span class="active">This Item</span>'
     def link_to_unless_current(text, target, attributes = {})
       # Find path
       path = target.is_a?(String) ? target : target.path
 
       if @item_rep && @item_rep.path == path
         # Create message
-        "<span class=\"active\" title=\"You're here.\">#{text}</span>"
+        "<span class=\"active\">#{text}</span>"
       else
         link_to(text, target, attributes)
       end
