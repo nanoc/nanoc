@@ -152,7 +152,7 @@ module Nanoc::CLI
   # @return [Cri::Command] The loaded command
   def self.load_command_at(filename, command_name = nil)
     # Load
-    code = File.read(filename)
+    code = File.read(filename, encoding: 'UTF-8')
     cmd = Cri::Command.define(code, filename)
 
     # Set name

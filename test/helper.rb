@@ -260,6 +260,10 @@ EOS
   def skip_unless_symlinks_supported
     skip 'Symlinks are not supported by Ruby on Windows' unless symlinks_supported?
   end
+
+  def root_dir
+    File.absolute_path(File.dirname(__FILE__) + '/..')
+  end
 end
 
 class Nanoc::TestCase < Minitest::Test
