@@ -1,11 +1,7 @@
 module Nanoc
   class PostCompileItemView < Nanoc::ItemView
-    def created?
-      reps.select { |rep| rep.status == :created }
-    end
-
-    def updated?
-      reps.select { |rep| rep.status == :modified }
+    def modified
+      reps.select { |rep| rep.modified }
     end
   end
 end

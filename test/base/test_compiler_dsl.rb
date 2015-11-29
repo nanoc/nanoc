@@ -115,7 +115,7 @@ end
 route '*' do
 end
 postprocess do
-  puts @items.select(&:updated?).length
+  puts @items.select(&:modified).length
 end
 EOS
       end
