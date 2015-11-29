@@ -17,10 +17,10 @@ module Nanoc::Int
 
     # @api private
     def new_postprocessor_context
-      Nanoc::Int::Context.new({
+      Nanoc::Int::Context.new(
         config: Nanoc::ConfigView.new(@site.config, @context),
         items: Nanoc::PostCompileItemCollectionView.new(@site.items, @context),
-      })
+      )
     end
   end
 end
