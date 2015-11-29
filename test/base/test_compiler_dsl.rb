@@ -87,7 +87,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
       # Create a bonus rules file
       File.write(
         'more_rules.rb',
-        "postprocess {}")
+        'postprocess {}')
 
       # Adjust normal rules file
       File.write(

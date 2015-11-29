@@ -1,7 +1,7 @@
 module Nanoc
   class PostCompileItemView < Nanoc::ItemView
     def modified
-      reps.select { |rep| rep.modified }
+      reps.select(&:modified)
     end
   end
 end
