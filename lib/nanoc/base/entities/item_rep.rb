@@ -23,6 +23,10 @@ module Nanoc::Int
     # @return [Enumerable<Nanoc::Int:SnapshotDef]
     attr_accessor :snapshot_defs
 
+    # @return [Boolean]
+    attr_accessor :modified
+    alias_method :modified?, :modified
+
     # @param [Nanoc::Int::Item] item
     #
     # @param [Symbol] name

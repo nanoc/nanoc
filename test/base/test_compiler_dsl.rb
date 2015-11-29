@@ -30,6 +30,25 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
     assert_match(/WARNING: A preprocess block is already defined./, io[:stderr])
   end
 
+  def test_postprocess_twice
+    rules_collection = Nanoc::Int::RulesCollection.new
+    compiler_dsl = Nanoc::Int::CompilerDSL.new(rules_collection, {})
+
+    # first time
+    io = capturing_stdio do
+      compiler_dsl.postprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_empty io[:stderr]
+
+    # second time
+    io = capturing_stdio do
+      compiler_dsl.postprocess {}
+    end
+    assert_empty io[:stdout]
+    assert_match(/WARNING: A postprocess block is already defined./, io[:stderr])
+  end
+
   def test_per_rules_file_preprocessor
     # Create site
     Nanoc::CLI.run %w( create_site foo )
@@ -58,6 +77,57 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
         .new(site: site, rules_collection: compiler.rules_collection)
         .run
       assert site.items['/index.*'].attributes[:preprocessed]
+    end
+  end
+
+  def test_per_rules_file_postprocessor
+    # Create site
+    Nanoc::CLI.run %w( create_site foo )
+    FileUtils.cd('foo') do
+      # Create a bonus rules file
+      File.write(
+        'more_rules.rb',
+        'postprocess {}')
+
+      # Adjust normal rules file
+      File.write(
+        'Rules',
+        "include_rules 'more_rules'\n\npostprocess {}\n\n" + File.read('Rules'))
+
+      # Create site and compiler
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      compiler = Nanoc::Int::CompilerLoader.new.load(site)
+
+      # Check that the two postprocess blocks have been added
+      assert_equal 2, compiler.rules_collection.postprocessors.size
+      refute_nil compiler.rules_collection.postprocessors.first
+      refute_nil compiler.rules_collection.postprocessors.to_a.last
+    end
+  end
+
+  def test_postprocessor_modified_method
+    with_site do |site|
+      # Create rules
+      File.open('Rules', 'w') do |io|
+        io.write <<EOS
+compile '*' do
+end
+route '*' do
+end
+postprocess do
+  puts @items.select(&:modified).length
+end
+EOS
+      end
+
+      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+
+      io = capturing_stdio do
+        site = Nanoc::Int::SiteLoader.new.new_from_cwd
+        site.compile
+      end
+
+      assert_match(/1/, io[:stdout])
     end
   end
 

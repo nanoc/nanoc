@@ -28,6 +28,8 @@ module Nanoc::Int
       # Write
       FileUtils.cp(temp_path, raw_path) if is_modified
 
+      item_rep.modified = is_modified
+
       # Notify
       Nanoc::Int::NotificationCenter.post(
         :rep_written, item_rep, raw_path, is_created, is_modified)

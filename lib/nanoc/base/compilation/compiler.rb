@@ -92,6 +92,7 @@ module Nanoc::Int
     # 3. Preprocess
     # 4. Build item reps
     # 5. Compile
+    # 6. Postprocess
 
     # TODO: move elsewhere
     def run_all
@@ -103,6 +104,9 @@ module Nanoc::Int
 
       # Compile
       run
+
+      # Postprocess
+      Nanoc::Int::Postprocessor.new(create_view_context, site: @site, rules_collection: @rules_collection).run
     end
 
     def run

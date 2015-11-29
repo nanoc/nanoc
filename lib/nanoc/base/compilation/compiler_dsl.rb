@@ -236,6 +236,20 @@ module Nanoc::Int
       Nanoc::Int::RulesLoader.new(@config, @rules_collection).parse(filename)
     end
 
+    # Creates a postprocessor block that will be executed after all data is
+    # loaded and the site is compiled.
+    #
+    # @yield The block that will be executed after site compilation completes
+    #
+    # @return [void]
+    def postprocess(&block)
+      if @rules_collection.postprocessors[rules_filename]
+        warn 'WARNING: A postprocess block is already defined. Defining ' \
+          'another postprocess block overrides the previously one.'
+      end
+      @rules_collection.postprocessors[rules_filename] = block
+    end
+
     # @api private
     def create_pattern(arg)
       case @config[:string_pattern_type]
