@@ -23,8 +23,8 @@ module Nanoc::Int
     # @return [Enumerable<Nanoc::Int:SnapshotDef]
     attr_accessor :snapshot_defs
 
-    # @return [Symbol]
-    attr_accessor :status
+    # @return [Boolean]
+    attr_accessor :modified
 
     # @param [Nanoc::Int::Item] item
     #

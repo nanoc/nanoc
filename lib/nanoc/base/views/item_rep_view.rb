@@ -27,9 +27,9 @@ module Nanoc
       @item_rep.name
     end
 
-    # @return [Symbol]
-    def status
-      @item_rep.status
+    # @return [Boolean]
+    def modified
+      @item_rep.modified
     end
 
     # Returns the compiled content.
