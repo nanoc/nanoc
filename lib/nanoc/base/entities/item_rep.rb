@@ -25,6 +25,7 @@ module Nanoc::Int
 
     # @return [Boolean]
     attr_accessor :modified
+    alias_method :modified?, :modified
 
     # @param [Nanoc::Int::Item] item
     #
