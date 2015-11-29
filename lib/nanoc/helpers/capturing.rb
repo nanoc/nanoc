@@ -33,17 +33,16 @@ module Nanoc::Helpers
 
       def []=(item, name, content)
         @store[item.identifier] ||= {}
-        if @store[item.identifier][name]
-          return if @store[item.identifier][name] == content
-          raise "Content_for was called twice with the same key: #{name}, this would overwrite content for the first call"
-        else
-          @store[item.identifier][name] = content
-        end
+        @store[item.identifier][name] = content
       end
 
       def [](item, name)
         @store[item.identifier] ||= {}
         @store[item.identifier][name]
+      end
+
+      def reset_for(item)
+        @store[item.identifier] = {}
       end
     end
 
@@ -60,15 +59,27 @@ module Nanoc::Helpers
       end
     end
 
-    # @overload content_for(name, &block)
+    # @overload content_for(name, params = {}, &block)
     #
     #   Captures the content inside the block and stores it so that it can be
     #   referenced later on. The same method, {#content_for}, is used for
     #   getting the captured content as well as setting it. When capturing,
     #   the content of the block itself will not be outputted.
     #
+    #   By default, capturing content with the same name will raise an error if the newly captured
+    #   content differs from the previously captured content. This behavior can be changed by
+    #   providing a different `:existing` option to this method:
+    #
+    #   * `:error`: When content already exists and is not identical, raise an error.
+    #
+    #   * `:overwrite`: Overwrite the previously captured content with the newly captured content.
+    #
+    #   * `:append`: Append the newly captured content to the previously captured content.
+    #
     #   @param [Symbol, String] name The base name of the attribute into which
     #     the content should be stored
+    #
+    #   @option params [Symbol] existing Can be either `:error`, `:overwrite`, or `:append`
     #
     #   @return [void]
     #
@@ -85,15 +96,44 @@ module Nanoc::Helpers
     def content_for(*args, &block)
       if block_given? # Set content
         # Get args
-        if args.size != 1
-          raise ArgumentError, 'expected 1 argument (the name ' \
-            "of the capture) but got #{args.size} instead"
+        case args.size
+        when 1
+          name = args[0]
+          params = {}
+        when 2
+          name = args[0]
+          params = args[1]
+        else
+          raise ArgumentError, 'expected 1 or 2 argument (the name ' \
+            "of the capture, and optionally params) but got #{args.size} instead"
         end
         name = args[0]
+        existing_behavior = params.fetch(:existing, :error)
 
-        # Capture and store
+        # Capture
         content = capture(&block)
-        @site.unwrap.captures_store[@item, name.to_sym] = content
+
+        # Prepare for store
+        store = @site.unwrap.captures_store
+        case existing_behavior
+        when :overwrite
+          store[@item, name.to_sym] = ''
+        when :append
+          store[@item, name.to_sym] ||= ''
+        when :error
+          if store[@item, name.to_sym] && store[@item, name.to_sym] != content
+            raise "a capture named #{name.inspect} for #{@item.identifier} already exists"
+          else
+            store[@item, name.to_sym] = ''
+          end
+        else
+          raise ArgumentError, 'expected :existing_behavior param to #content_for to be one of ' \
+            ":overwrite, :append, or :error, but #{existing_behavior.inspect} was given"
+        end
+
+        # Store
+        @site.unwrap.captures_store_compiled_items << @item.unwrap
+        store[@item, name.to_sym] << content
       else # Get content
         # Get args
         if args.size != 2
@@ -112,8 +152,8 @@ module Nanoc::Helpers
           # item from which we use content. For this, we need to manually edit
           # the content attribute to reset it. :(
           # FIXME: clean this up
-          unless @site.unwrap.captures_store_compiled_items.include? item
-            @site.unwrap.captures_store_compiled_items << item
+          unless @site.unwrap.captures_store_compiled_items.include?(item)
+            @site.unwrap.captures_store.reset_for(item)
             item.forced_outdated = true
             @site.unwrap.compiler.reps[item].each do |r|
               r.snapshot_contents = { last: item.content }

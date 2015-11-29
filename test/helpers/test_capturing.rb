@@ -101,7 +101,7 @@ EOS
     assert_equal 'Content Two', content_for(@item, :b)
   end
 
-  def test_content_for_duplicate_symbols
+  def test_content_for_with_existing_symbol
     with_site do |_site|
       # Prepare
       File.open('lib/helpers.rb', 'w') do |io|
@@ -121,6 +121,100 @@ EOS
 
       # Using the same symbols twice now raises an error, to be changed to concatenating in a future version
       assert_raises do
+        Nanoc::CLI.run(%w(compile))
+      end
+    end
+  end
+
+  def test_content_for_with_existing_symbol_with_error_option
+    with_site do |_site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '[<%= content_for(@items["/includee/"], :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>First content<% end %><% content_for :blah, existing: :error do %>Second content<% end %>}'
+      end
+
+      assert_raises do
+        Nanoc::CLI.run(%w(compile))
+      end
+    end
+  end
+
+  def test_content_for_with_existing_symbol_with_overwrite_option
+    with_site do |_site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '[<%= content_for(@items["/includee/"], :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>First content<% end %><% content_for :blah, existing: :overwrite do %>Second content<% end %>}'
+      end
+
+      Nanoc::CLI.run(%w(compile))
+      assert_equal '[Second content]', File.read('output/includer/index.html')
+    end
+  end
+
+  def test_content_for_with_existing_symbol_with_append_option
+    with_site do |_site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '[<%= content_for(@items["/includee/"], :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah do %>First content<% end %><% content_for :blah, existing: :append do %>Second content<% end %>}'
+      end
+
+      Nanoc::CLI.run(%w(compile))
+      assert_equal '[First contentSecond content]', File.read('output/includer/index.html')
+    end
+  end
+
+  def test_content_for_with_existing_symbol_with_unrecognised_option
+    with_site do |_site|
+      # Prepare
+      File.open('lib/helpers.rb', 'w') do |io|
+        io.write 'include Nanoc::Helpers::Capturing'
+      end
+      File.open('content/includer.erb', 'w') do |io|
+        io.write '[<%= content_for(@items["/includee/"], :blah) %>]'
+      end
+      File.open('Rules', 'w') do |io|
+        io.write "compile '*' do ; filter :erb ; end\n"
+        io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
+      end
+
+      File.open('content/includee.erb', 'w') do |io|
+        io.write '{<% content_for :blah, existing: :donkey do %>First content<% end %>}'
+      end
+
+      assert_raises(ArgumentError) do
         Nanoc::CLI.run(%w(compile))
       end
     end
