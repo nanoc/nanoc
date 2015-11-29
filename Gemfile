@@ -39,7 +39,7 @@ gem 'rouge'
 gem 'rspec'
 gem 'rubocop'
 gem 'rubypants'
-gem 'sass', '~> 3.2.2'
+gem 'sass'
 gem 'simplecov', require: false
 gem 'slim'
 gem 'typogruby'
