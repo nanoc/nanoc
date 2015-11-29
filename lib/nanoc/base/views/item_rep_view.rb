@@ -27,11 +27,6 @@ module Nanoc
       @item_rep.name
     end
 
-    # @return [Boolean]
-    def modified
-      @item_rep.modified
-    end
-
     # Returns the compiled content.
     #
     # @param [String] snapshot The name of the snapshot from which to

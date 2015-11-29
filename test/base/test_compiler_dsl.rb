@@ -105,7 +105,7 @@ class Nanoc::Int::CompilerDSLTest < Nanoc::TestCase
     end
   end
 
-  def test_postprocessor_updated_method
+  def test_postprocessor_modified_method
     with_site do |site|
       # Create rules
       File.open('Rules', 'w') do |io|
