@@ -15,6 +15,18 @@ Enhancements:
 * Made `#attribute_to_time` handle `DateTime` (#717) [Micha Rosenbaum]
 * Added `Identifier#components` (#677)
 
+## 4.0.2 (2015-11-30)
+
+Fixes:
+
+* Properly set required Ruby version to 2.1 in the gem specification (#747)
+* Fixed issue with CLI commands not being loaded as UTF-8 (#742)
+* Added missing `#identifier=` method to items and layouts during preprocessing (#750)
+
+Enhancements:
+
+* Let attempts to fetch an item rep by number, rather than symbol, fail with a meaningful error (#749)
+
 ## 4.0.1 (2015-11-28)
 
 Fixes:
