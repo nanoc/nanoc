@@ -1,4 +1,14 @@
 class Nanoc::Filters::SassTest < Nanoc::TestCase
+  def setup
+    super
+
+    if_have 'sass' do
+      unless ::Sass.load_paths.include?('.')
+        ::Sass.load_paths << '.'
+      end
+    end
+  end
+
   def test_filter
     if_have 'sass' do
       # Get filter
