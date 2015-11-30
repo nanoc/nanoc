@@ -47,8 +47,15 @@ module Nanoc
     #
     # @return [Nanoc::ItemRepView] if an item rep with the given name was found
     def [](rep_name)
-      res = @item_reps.find { |ir| ir.name == rep_name }
-      res && Nanoc::ItemRepView.new(res)
+      case rep_name
+      when Symbol
+        res = @item_reps.find { |ir| ir.name == rep_name }
+        res && Nanoc::ItemRepView.new(res)
+      when Fixnum
+        raise ArgumentError, "expected ItemRepCollectionView#[] to be called with a symbol (you likely want `.reps[:default]` rather than `.reps[#{rep_name}]`)"
+      else
+        raise ArgumentError, 'expected ItemRepCollectionView#[] to be called with a symbol'
+      end
     end
 
     # Return the item rep with the given name, or raises an exception if there
