@@ -74,6 +74,22 @@ describe Nanoc::ItemRepCollectionView do
         expect(subject._context).to equal(view_context)
       end
     end
+
+    context 'when given a string' do
+      let(:name) { 'foo' }
+
+      it 'raises' do
+        expect { subject }.to raise_error(ArgumentError, 'expected ItemRepCollectionView#[] to be called with a symbol')
+      end
+    end
+
+    context 'when given a number' do
+      let(:name) { 0 }
+
+      it 'raises' do
+        expect { subject }.to raise_error(ArgumentError, 'expected ItemRepCollectionView#[] to be called with a symbol (you likely want `.reps[:default]` rather than `.reps[0]`)')
+      end
+    end
   end
 
   describe '#fetch' do

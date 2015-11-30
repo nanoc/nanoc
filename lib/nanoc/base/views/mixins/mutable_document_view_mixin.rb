@@ -32,6 +32,13 @@ module Nanoc
       unwrap.attributes[key] = value
     end
 
+    # Sets the identifier to the given argument.
+    #
+    # @param [String, Nanoc::Identifier] arg
+    def identifier=(arg)
+      unwrap.identifier = Nanoc::Identifier.from(arg)
+    end
+
     # Updates the attributes based on the given hash.
     #
     # @param [Hash] hash
