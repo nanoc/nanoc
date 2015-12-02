@@ -14,14 +14,72 @@ module Nanoc::Int
 
     private
 
+    class DocumentSource
+      attr_reader :data_source
+
+      def initialize(data_source)
+        @data_source = data_source
+      end
+
+      def objects_cached
+        @objects ||= objects
+      end
+
+      def objects
+        raise NotImplementedError
+      end
+
+      def objects_matching_pattern(pattern)
+        objects.select { |o| o.identifier =~ pattern }
+      end
+
+      def paths_matching_pattern(pattern)
+        # FIXME: assumes path identifiers
+        objects.lazy.map { |o| o.identifier }.select { |o| o.identifier =~ pattern }
+      end
+    end
+
+    class ItemSource < DocumentSource
+      def objects
+        data_source.items
+      end
+
+      def paths_matching_pattern(pattern)
+        if data_source.respond_to?(:glob_item) && pattern.is_a?(Nanoc::Int::StringPattern)
+          # FIXME: match paths, not objects
+          data_source.glob_item(pattern.to_s)
+        else
+          super
+        end
+      end
+    end
+
+    class LayoutSource < DocumentSource
+      def objects
+        data_source.layouts
+      end
+
+      def paths_matching_pattern(pattern)
+        if data_source.respond_to?(:glob_layout) && pattern.is_a?(Nanoc::Int::StringPattern)
+          # FIXME: match paths, not objects
+          data_source.glob_layout(pattern.to_s)
+        else
+          super
+        end
+      end
+    end
+
     def site_from_config(config)
       code_snippets = code_snippets_from_config(config)
       code_snippets.each(&:load)
 
-      items = Nanoc::Int::IdentifiableCollection.new(config)
-      layouts = Nanoc::Int::IdentifiableCollection.new(config)
-
       with_data_sources(config) do |data_sources|
+        item_sources = data_sources.map { |ds| ItemSource.new(ds) }
+        layout_sources = data_sources.map { |ds| LayoutSource.new(ds) }
+
+        items = Nanoc::Int::IdentifiableCollection.new(config, item_sources)
+        layouts = Nanoc::Int::IdentifiableCollection.new(config, layout_sources)
+
         data_sources.each do |ds|
           items_in_ds = ds.items
           layouts_in_ds = ds.layouts
@@ -32,14 +90,14 @@ module Nanoc::Int
           items.concat(items_in_ds)
           layouts.concat(layouts_in_ds)
         end
-      end
 
-      Nanoc::Int::Site.new(
-        config: config,
-        code_snippets: code_snippets,
-        items: items,
-        layouts: layouts,
-      )
+        Nanoc::Int::Site.new(
+          config: config,
+          code_snippets: code_snippets,
+          items: items,
+          layouts: layouts,
+        )
+      end
     end
 
     # @return [Boolean]

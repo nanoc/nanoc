@@ -10,8 +10,9 @@ module Nanoc::Int
     def_delegator :@objects, :<<
     def_delegator :@objects, :concat
 
-    def initialize(config)
+    def initialize(config, document_sources = nil)
       @config = config
+      @document_sources = document_sources
 
       @objects = []
     end
@@ -47,6 +48,22 @@ module Nanoc::Int
       @objects.delete_if(&block)
     end
 
+    def objects_matching_pattern(pattern)
+      # TODO: verify type of pattern
+      if pattern.is_a?(Nanoc::Int::StringPattern) && @document_sources
+        if use_globs?
+          # FIXME: fails when adding documents with preprocessor
+          # (maybe turn preprocessor into data source?)
+          paths = @document_sources.flat_map { |ds| ds.paths_matching_pattern(pattern) }
+          paths.map { |path| self[path] }
+        else
+          []
+        end
+      else
+        @objects.lazy.select { |i| pattern.match?(i.identifier) }
+      end
+    end
+
     protected
 
     def object_with_identifier(identifier)
@@ -60,7 +77,7 @@ module Nanoc::Int
     def object_matching_glob(glob)
       if use_globs?
         pat = Nanoc::Int::Pattern.from(glob)
-        @objects.find { |i| pat.match?(i.identifier) }
+        objects_matching_pattern(pat).first
       else
         nil
       end

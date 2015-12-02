@@ -43,8 +43,8 @@ module Nanoc
     #
     # @return [Enumerable]
     def find_all(arg)
-      pat = Nanoc::Int::Pattern.from(arg)
-      select { |i| pat.match?(i.identifier) }
+      pattern = Nanoc::Int::Pattern.from(arg)
+      @objects.objects_matching_pattern(pattern).map { |o| view_class.new(o, @context) }
     end
 
     # @overload [](string)
