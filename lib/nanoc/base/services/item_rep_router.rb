@@ -9,26 +9,25 @@ module Nanoc::Int
       end
     end
 
-    def initialize(reps, rules_collection, site)
+    # TODO: Replace rule_memory_calculator with { rep => rule_memory }
+    def initialize(reps, rule_memory_calculator, site)
       @reps = reps
-      @rules_collection = rules_collection
+      @rule_memory_calculator = rule_memory_calculator
       @site = site
     end
 
     def run
       paths_to_reps = {}
       @reps.each do |rep|
-        rules = @rules_collection.routing_rules_for(rep)
-        raise Nanoc::Int::Errors::NoMatchingRoutingRuleFound.new(rep) if rules[:last].nil?
-
-        rules.each_pair do |snapshot, rule|
-          route_rep(rep, snapshot, rule, paths_to_reps)
+        mem = @rule_memory_calculator[rep]
+        mem.snapshot_actions.each do |snapshot_action|
+          route_rep(rep, snapshot_action, paths_to_reps)
         end
       end
     end
 
-    def route_rep(rep, snapshot, rule, paths_to_reps)
-      basic_path = basic_path_for(rep, rule)
+    def route_rep(rep, snapshot_action, paths_to_reps)
+      basic_path = snapshot_action.path
       return if basic_path.nil?
 
       # Check for duplicate paths
@@ -38,18 +37,8 @@ module Nanoc::Int
         paths_to_reps[basic_path] = rep
       end
 
-      rep.raw_paths[snapshot] = @site.config[:output_dir] + basic_path
-      rep.paths[snapshot] = strip_index_filename(basic_path)
-    end
-
-    def basic_path_for(rep, rule)
-      basic_path = rule.apply_to(rep, executor: nil, site: @site, view_context: nil)
-
-      if basic_path && basic_path !~ %r{^/}
-        raise "The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash."
-      end
-
-      basic_path
+      rep.raw_paths[snapshot_action.snapshot_name] = @site.config[:output_dir] + basic_path
+      rep.paths[snapshot_action.snapshot_name] = strip_index_filename(basic_path)
     end
 
     def strip_index_filename(basic_path)

@@ -59,9 +59,23 @@ module Nanoc::Int
     #
     # @param [Symbol] snapshot_name The name of the snapshot to create
     #
+    # @param [String, nil] path
+    #
     # @return [void]
-    def snapshot(snapshot_name)
-      @_executor.snapshot(rep.unwrap, snapshot_name)
+    def snapshot(snapshot_name, path: nil)
+      @_executor.snapshot(rep.unwrap, snapshot_name, path: path)
+    end
+
+    # Creates a snapshot named :last the current compiled item content, with
+    # the given path. This is a convenience method for {#snapshot}.
+    #
+    # @see #snapshot
+    #
+    # @param [String] path
+    #
+    # @return [void]
+    def write(path)
+      snapshot(:last, path: path)
     end
   end
 end

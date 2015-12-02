@@ -30,15 +30,9 @@ module Nanoc::Int
     # @param [Symbol, nil] :snapshot The name of the snapshot this rule will
     #   apply to. Ignored for compilation rules, but used for routing rules.
     def initialize(pattern, rep_name, block, snapshot_name: nil)
-      # TODO: remove me
-      unless pattern.is_a?(Nanoc::Int::StringPattern) || pattern.is_a?(Nanoc::Int::RegexpPattern)
-        raise 'Can only create rules with patterns'
-      end
-
-      @pattern          = pattern
-      @rep_name         = rep_name.to_sym
-      @snapshot_name    = snapshot_name
-
+      @pattern = pattern
+      @rep_name = rep_name.to_sym
+      @snapshot_name = snapshot_name
       @block = block
     end
 

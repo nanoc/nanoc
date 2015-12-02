@@ -6,6 +6,12 @@ module Nanoc::Int
   class RuleMemoryCalculator
     extend Nanoc::Int::Memoization
 
+    class UnsupportedObjectTypeException < ::Nanoc::Error
+      def initialize(obj)
+        super("Do not know how to calculate the rule memory for #{obj.inspect}")
+      end
+    end
+
     # @api private
     attr_accessor :rules_collection
 
@@ -26,7 +32,7 @@ module Nanoc::Int
       when Nanoc::Int::Layout
         new_rule_memory_for_layout(obj)
       else
-        raise "Do not know how to calculate the rule memory for #{obj.inspect}"
+        raise UnsupportedObjectTypeException.new(obj)
       end
     end
     memoize :[]
@@ -48,11 +54,19 @@ module Nanoc::Int
     #
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_rep(rep)
-      executor = Nanoc::Int::RecordingExecutor.new(rep)
+      # FIXME: This is more-or-less duplicated from Compiler#recalculate_content_for_rep.
+      # Letting the compiler use the rule memory would fix this.
+
+      # FIXME: What if #compilation_rule_for returns nil?
+
+      executor = Nanoc::Int::RecordingExecutor.new(rep, @rules_collection, @site)
+      executor.snapshot(rep, :raw)
+      executor.snapshot(rep, :pre, final: false)
       @rules_collection
         .compilation_rule_for(rep)
         .apply_to(rep, executor: executor, site: @site, view_context: nil)
-      executor.record_write(rep, rep.path)
+      executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
+      executor.snapshot(rep, :last) unless executor.rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
       executor.rule_memory
     end
 

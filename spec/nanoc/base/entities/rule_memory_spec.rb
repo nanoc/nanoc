@@ -60,34 +60,25 @@ describe Nanoc::Int::RuleMemory do
   describe '#add_snapshot' do
     context 'snapshot does not yet exist' do
       example do
-        rule_memory.add_snapshot(:before_layout, false)
+        rule_memory.add_snapshot(:before_layout, false, '/foo.md')
 
         expect(rule_memory.size).to eql(1)
         expect(rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
         expect(rule_memory[0].snapshot_name).to eql(:before_layout)
+        expect(rule_memory[0].path).to eql('/foo.md')
         expect(rule_memory[0]).not_to be_final
       end
     end
 
     context 'snapshot already exist' do
       before do
-        rule_memory.add_snapshot(:before_layout, false)
+        rule_memory.add_snapshot(:before_layout, false, '/bar.md')
       end
 
       example do
-        expect { rule_memory.add_snapshot(:before_layout, false) }
+        expect { rule_memory.add_snapshot(:before_layout, false, '/foo.md') }
           .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
       end
-    end
-  end
-
-  describe '#add_write' do
-    example do
-      rule_memory.add_write('/foo.*')
-
-      expect(rule_memory.size).to eql(1)
-      expect(rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Write)
-      expect(rule_memory[0].path).to eql('/foo.*')
     end
   end
 
@@ -96,18 +87,16 @@ describe Nanoc::Int::RuleMemory do
 
     before do
       rule_memory.add_filter(:erb, { awesomeness: 123 })
-      rule_memory.add_snapshot(:bar, true)
+      rule_memory.add_snapshot(:bar, true, '/foo.md')
       rule_memory.add_layout('/default.erb', { somelayoutparam: 444 })
-      rule_memory.add_write('/foo.html')
     end
 
     example do
       expect(subject).to eql(
         [
           [:filter, :erb, 'y9yyZGXu0J04TcDR9oFI3EJM4Vk='],
-          [:snapshot, :bar, true],
+          [:snapshot, :bar, true, '/foo.md'],
           [:layout, '/default.erb', 'PGQes7wXm3+K06vSBPYUJft57sM='],
-          [:write, '/foo.html'],
         ],
       )
     end
