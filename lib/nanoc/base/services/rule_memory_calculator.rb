@@ -41,8 +41,9 @@ module Nanoc::Int
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_defs_for(rep)
+      # TODO: Don’t use the serialized form here
       self[rep].select { |e| e[0] == :snapshot }.map do |e|
-        Nanoc::Int::SnapshotDef.new(e[1], e[2].fetch(:final, true))
+        Nanoc::Int::SnapshotDef.new(e[1], e[2])
       end
     end
 
@@ -53,31 +54,12 @@ module Nanoc::Int
     #
     # @api private
     def new_rule_memory_for_rep(rep)
-      executor = Nanoc::Int::RecordingExecutor.new
+      executor = Nanoc::Int::RecordingExecutor.new(rep)
       @rules_collection
         .compilation_rule_for(rep)
         .apply_to(rep, executor: executor, site: @site, view_context: nil)
       executor.record_write(rep, rep.path)
-      make_rule_memory_serializable(executor.rule_memory)
-    end
-
-    # Makes the given rule memory serializable by calling
-    # `Nanoc::Int::Checksummer#calc` on the filter arguments, so that objects such as
-    # classes and filenames can be serialized.
-    #
-    # @param [Array] rs The rule memory for a certain item rep
-    #
-    # @return [Array] The serializable rule memory
-    #
-    # @api private
-    def make_rule_memory_serializable(rs)
-      rs.map do |r|
-        if r[0] == :filter
-          [r[0], r[1], r[2].to_a.map { |a| Nanoc::Int::Checksummer.calc(a) }]
-        else
-          r
-        end
-      end
+      executor.rule_memory.serialize
     end
   end
 end

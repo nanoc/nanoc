@@ -1,0 +1,9 @@
+describe Nanoc::Int::RuleMemoryAction do
+  let(:action) { described_class.new }
+
+  it 'is abstract' do
+    expect { action.serialize }.to raise_error(NotImplementedError)
+    expect { action.to_s }.to raise_error(NotImplementedError)
+    expect { action.inspect }.to raise_error(NotImplementedError)
+  end
+end
