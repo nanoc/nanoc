@@ -16,21 +16,18 @@ module Nanoc::Int
       @rules_collection = rules_collection
     end
 
-    # @param [#reference] obj The object to calculate the rule memory for
+    # @param [#reference] obj
     #
-    # @return [Array] The caluclated rule memory for the given object
+    # @return [Nanoc::Int::RuleMemory]
     def [](obj)
-      result =
-        case obj
-        when Nanoc::Int::ItemRep
-          new_rule_memory_for_rep(obj)
-        when Nanoc::Int::Layout
-          @rules_collection.filter_for_layout(obj)
-        else
-          raise "Do not know how to calculate the rule memory for #{obj.inspect}"
-        end
-
-      result
+      case obj
+      when Nanoc::Int::ItemRep
+        new_rule_memory_for_rep(obj)
+      when Nanoc::Int::Layout
+        new_rule_memory_for_layout(obj)
+      else
+        raise "Do not know how to calculate the rule memory for #{obj.inspect}"
+      end
     end
     memoize :[]
 
@@ -41,42 +38,32 @@ module Nanoc::Int
     #   first element is the snapshot name (a Symbol) and the last element is
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_defs_for(rep)
-      self[rep].select { |e| e[0] == :snapshot }.map do |e|
-        Nanoc::Int::SnapshotDef.new(e[1], e[2].fetch(:final, true))
+      self[rep].snapshot_actions.map do |a|
+        Nanoc::Int::SnapshotDef.new(a.snapshot_name, a.final?)
       end
     end
 
     # @param [Nanoc::Int::ItemRep] rep The item representation to get the rule
     #   memory for
     #
-    # @return [Array] The rule memory for the given item representation
-    #
-    # @api private
+    # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_rep(rep)
-      executor = Nanoc::Int::RecordingExecutor.new
+      executor = Nanoc::Int::RecordingExecutor.new(rep)
       @rules_collection
         .compilation_rule_for(rep)
         .apply_to(rep, executor: executor, site: @site, view_context: nil)
       executor.record_write(rep, rep.path)
-      make_rule_memory_serializable(executor.rule_memory)
+      executor.rule_memory
     end
 
-    # Makes the given rule memory serializable by calling
-    # `Nanoc::Int::Checksummer#calc` on the filter arguments, so that objects such as
-    # classes and filenames can be serialized.
+    # @param [Nanoc::Int::Layout]
     #
-    # @param [Array] rs The rule memory for a certain item rep
-    #
-    # @return [Array] The serializable rule memory
-    #
-    # @api private
-    def make_rule_memory_serializable(rs)
-      rs.map do |r|
-        if r[0] == :filter
-          [r[0], r[1], r[2].to_a.map { |a| Nanoc::Int::Checksummer.calc(a) }]
-        else
-          r
-        end
+    # @return [Nanoc::Int::RuleMemory]
+    def new_rule_memory_for_layout(layout)
+      res = @rules_collection.filter_for_layout(layout)
+      # FIXME: what if res is nil?
+      Nanoc::Int::RuleMemory.new(layout).tap do |rm|
+        rm.add_filter(res[0], res[1])
       end
     end
   end

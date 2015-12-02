@@ -139,7 +139,7 @@ module Nanoc::Int
     def store
       # Calculate rule memory
       (@reps.to_a + @site.layouts.to_a).each do |obj|
-        rule_memory_store[obj] = rule_memory_calculator[obj]
+        rule_memory_store[obj] = rule_memory_calculator[obj].serialize
       end
 
       # Calculate checksums
