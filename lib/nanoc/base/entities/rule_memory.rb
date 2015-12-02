@@ -32,6 +32,10 @@ module Nanoc::Int
       @actions << Nanoc::Int::RuleMemoryActions::Write.new(path)
     end
 
+    def snapshot_actions
+      @actions.select { |a| a.is_a?(Nanoc::Int::RuleMemoryActions::Snapshot) }
+    end
+
     def serialize
       map(&:serialize)
     end
