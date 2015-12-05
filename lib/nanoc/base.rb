@@ -1,20 +1,6 @@
 module Nanoc
   autoload 'Error',                'nanoc/base/error'
   autoload 'Filter',               'nanoc/base/compilation/filter'
-
-  # TODO: move this elsewhere
-  #
-  # @api private
-  module RuleDSL
-    autoload 'CompilerDSL',           'nanoc/base/rule_dsl/compiler_dsl'
-    autoload 'RuleDSLActionProvider', 'nanoc/base/rule_dsl/provider'
-    autoload 'RecordingExecutor',     'nanoc/base/rule_dsl/recording_executor'
-    autoload 'RuleContext',           'nanoc/base/rule_dsl/rule_context'
-    autoload 'RuleMemoryCalculator',  'nanoc/base/rule_dsl/rule_memory_calculator'
-    autoload 'Rule',                  'nanoc/base/rule_dsl/rule'
-    autoload 'RulesCollection',       'nanoc/base/rule_dsl/rules_collection'
-    autoload 'RulesLoader',           'nanoc/base/rule_dsl/rules_loader'
-  end
 end
 
 # @api private
