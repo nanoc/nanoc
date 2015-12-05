@@ -124,9 +124,6 @@ end
 #  layout '/default.*'
 #end
 
-compile '/**/*' do
-end
-
 route '/**/*.{html,md}' do
   if item.identifier =~ '/index.*'
     '/index.html'
@@ -135,8 +132,8 @@ route '/**/*.{html,md}' do
   end
 end
 
-route '/**/*' do
-  item.identifier.to_s
+compile '/**/*' do
+  write item.identifier.to_s
 end
 
 layout '/**/*', :erb
