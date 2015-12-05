@@ -29,6 +29,9 @@ module Nanoc::Int
           reps: item_rep_repo,
         )
 
+      action_provider = Nanoc::RuleDSL::ActionProvider.new(
+        rules_collection, rule_memory_calculator)
+
       params = {
         compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
         checksum_store: checksum_store,
@@ -37,6 +40,7 @@ module Nanoc::Int
         dependency_store: dependency_store,
         outdatedness_checker: outdatedness_checker,
         reps: item_rep_repo,
+        action_provider: action_provider,
       }
 
       compiler = Nanoc::Int::Compiler.new(site, rules_collection, params)

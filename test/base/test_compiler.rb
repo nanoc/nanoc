@@ -11,16 +11,20 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     reps = Nanoc::Int::ItemRepRepo.new
 
+    rule_memory_calculator = Nanoc::RuleDSL::RuleMemoryCalculator.new(
+      rules_collection: rules_collection,
+      site: site,
+    )
+
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
-      rule_memory_calculator: Nanoc::RuleDSL::RuleMemoryCalculator.new(
-        rules_collection: rules_collection,
-        site: site,
-      ),
+      rule_memory_calculator: rule_memory_calculator,
       dependency_store: Nanoc::Int::DependencyStore.new(
         site.items.to_a + site.layouts.to_a),
+      action_provider: Nanoc::RuleDSL::ActionProvider.new(
+        rules_collection, rule_memory_calculator),
       reps: reps,
     }
 

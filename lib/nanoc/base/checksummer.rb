@@ -83,6 +83,7 @@ module Nanoc::Int
           digest.update(obj.to_i.to_s)
         when Nanoc::Identifier
           update(obj.to_s, digest)
+        # TODO: Use RuleMemory rather than RulesCollection
         when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
           update(obj.data, digest)
         when Nanoc::Int::TextualContent

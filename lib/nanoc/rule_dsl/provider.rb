@@ -7,11 +7,15 @@ module Nanoc::Int
     def rep_names_for(_item)
       raise NotImplementedError
     end
+
+    def memory_for(_rep)
+      raise NotImplementedError
+    end
   end
 end
 
 module Nanoc::RuleDSL
-  class RuleDSLActionProvider < Nanoc::Int::ActionProvider
+  class ActionProvider < Nanoc::Int::ActionProvider
     def initialize(rules_collection, rule_memory_calculator)
       @rules_collection = rules_collection
       @rule_memory_calculator = rule_memory_calculator

@@ -64,6 +64,9 @@ module Nanoc::Int
     attr_reader :rule_memory_calculator
 
     # @api private
+    attr_reader :action_provider
+
+    # @api private
     attr_reader :dependency_store
 
     # @api private
@@ -72,7 +75,7 @@ module Nanoc::Int
     # @api private
     attr_reader :reps
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:, outdatedness_checker:, reps:)
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
       @site = site
       @rules_collection = rules_collection
 
@@ -83,6 +86,7 @@ module Nanoc::Int
       @dependency_store       = dependency_store
       @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
+      @action_provider        = action_provider
 
       @stack = []
     end
@@ -161,9 +165,6 @@ module Nanoc::Int
     end
 
     def build_reps
-      # TODO: Extract construction of this to elsewhere
-      action_provider = Nanoc::RuleDSL::RuleDSLActionProvider.new(
-        rules_collection, rule_memory_calculator)
       builder = Nanoc::Int::ItemRepBuilder.new(
         site, action_provider, @reps)
       builder.run
