@@ -12,7 +12,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   end
 
   def test_preprocess_twice
-    rules_collection = Nanoc::Int::RulesCollection.new
+    rules_collection = Nanoc::RuleDSL::RulesCollection.new
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(rules_collection, {})
 
     # first time
@@ -31,7 +31,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   end
 
   def test_postprocess_twice
-    rules_collection = Nanoc::Int::RulesCollection.new
+    rules_collection = Nanoc::RuleDSL::RulesCollection.new
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(rules_collection, {})
 
     # first time

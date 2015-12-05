@@ -3,7 +3,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
     described_class.new(site: site, rules_collection: rules_collection)
   end
 
-  let(:rules_collection) { Nanoc::Int::RulesCollection.new }
+  let(:rules_collection) { Nanoc::RuleDSL::RulesCollection.new }
   let(:site) { double(:site) }
 
   describe '#[]' do

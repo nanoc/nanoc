@@ -83,7 +83,7 @@ module Nanoc::Int
           digest.update(obj.to_i.to_s)
         when Nanoc::Identifier
           update(obj.to_s, digest)
-        when Nanoc::Int::RulesCollection, Nanoc::Int::CodeSnippet
+        when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
           update(obj.data, digest)
         when Nanoc::Int::TextualContent
           update(obj.string, digest)

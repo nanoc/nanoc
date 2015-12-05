@@ -17,7 +17,7 @@ module Nanoc::Int
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::ChecksumStore] checksum_store
     # @param [Nanoc::Int::DependencyStore] dependency_store
-    # @param [Nanoc::Int::RulesCollection] rules_collection
+    # @param [Nanoc::RuleDSL::RulesCollection] rules_collection
     # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
     # @param [Nanoc::RuleDSL::RuleMemoryCalculator] rule_memory_calculator
     # @param [Nanoc::Int::ItemRepRepo] reps

@@ -47,7 +47,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
   describe '#snapshot' do
     let(:rules_collection) do
-      Nanoc::Int::RulesCollection.new
+      Nanoc::RuleDSL::RulesCollection.new
     end
 
     context 'snapshot already exists' do

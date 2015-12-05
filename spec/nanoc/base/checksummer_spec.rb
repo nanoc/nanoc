@@ -142,14 +142,14 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::Identifier<String</foo.md>>') }
   end
 
-  context 'Nanoc::Int::RulesCollection' do
+  context 'Nanoc::RuleDSL::RulesCollection' do
     let(:obj) do
-      Nanoc::Int::RulesCollection.new.tap { |rc| rc.data = data }
+      Nanoc::RuleDSL::RulesCollection.new.tap { |rc| rc.data = data }
     end
 
     let(:data) { 'STUFF!' }
 
-    it { is_expected.to eql('Nanoc::Int::RulesCollection<String<STUFF!>>') }
+    it { is_expected.to eql('Nanoc::RuleDSL::RulesCollection<String<STUFF!>>') }
   end
 
   context 'Nanoc::Int::CodeSnippet' do

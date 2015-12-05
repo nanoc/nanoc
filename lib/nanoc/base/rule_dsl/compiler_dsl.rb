@@ -14,7 +14,7 @@ module Nanoc::RuleDSL
     #
     # @api private
     #
-    # @param [Nanoc::Int::RulesCollection] rules_collection The collection of
+    # @param [Nanoc::RuleDSL::RulesCollection] rules_collection The collection of
     #   rules to modify when loading this DSL
     #
     # @param [Hash] config The site configuration

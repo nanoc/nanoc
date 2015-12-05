@@ -1,4 +1,4 @@
-describe Nanoc::Int::RulesCollection do
+describe Nanoc::RuleDSL::RulesCollection do
   let(:rules_collection) { described_class.new }
 
   describe '#data' do

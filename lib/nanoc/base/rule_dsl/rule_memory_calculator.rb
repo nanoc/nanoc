@@ -16,7 +16,7 @@ module Nanoc::RuleDSL
     attr_accessor :rules_collection
 
     # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::RulesCollection] rules_collection
+    # @param [Nanoc::RuleDSL::RulesCollection] rules_collection
     def initialize(site:, rules_collection:)
       @site = site
       @rules_collection = rules_collection

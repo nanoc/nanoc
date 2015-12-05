@@ -2,7 +2,7 @@ module Nanoc::Int
   # @api private
   class CompilerLoader
     def load(site)
-      rules_collection = Nanoc::Int::RulesCollection.new
+      rules_collection = Nanoc::RuleDSL::RulesCollection.new
 
       rule_memory_store = Nanoc::Int::RuleMemoryStore.new
 

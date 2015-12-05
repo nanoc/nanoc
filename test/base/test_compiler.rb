@@ -7,7 +7,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layouts: [],
     )
 
-    rules_collection = Nanoc::Int::RulesCollection.new
+    rules_collection = Nanoc::RuleDSL::RulesCollection.new
 
     reps = Nanoc::Int::ItemRepRepo.new
 
