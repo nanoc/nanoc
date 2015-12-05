@@ -242,7 +242,7 @@ describe Nanoc::Int::Executor do
     let(:layout_content) { 'head <%= @foo %> foot' }
 
     let(:rules_collection) do
-      Nanoc::Int::RulesCollection.new.tap do |rc|
+      Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
         rc.layout_filter_mapping[Nanoc::Int::Pattern.from('/default.*')] = [:erb, {}]
       end
     end
@@ -323,7 +323,7 @@ describe Nanoc::Int::Executor do
 
     context 'no filter specified' do
       let(:rules_collection) do
-        Nanoc::Int::RulesCollection.new.tap do |rc|
+        Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
           rc.layout_filter_mapping[Nanoc::Int::Pattern.from('/other.*')] = [:erb, {}]
         end
       end

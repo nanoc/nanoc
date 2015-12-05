@@ -9,17 +9,16 @@ module Nanoc::Int
       end
     end
 
-    # TODO: Replace rule_memory_calculator with { rep => rule_memory }
-    def initialize(reps, rule_memory_calculator, site)
+    def initialize(reps, action_provider, site)
       @reps = reps
-      @rule_memory_calculator = rule_memory_calculator
+      @action_provider = action_provider
       @site = site
     end
 
     def run
       paths_to_reps = {}
       @reps.each do |rep|
-        mem = @rule_memory_calculator[rep]
+        mem = @action_provider.memory_for(rep)
         mem.snapshot_actions.each do |snapshot_action|
           route_rep(rep, snapshot_action, paths_to_reps)
         end

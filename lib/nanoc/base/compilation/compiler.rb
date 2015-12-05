@@ -61,7 +61,7 @@ module Nanoc::Int
     attr_reader :rule_memory_store
 
     # @api private
-    attr_reader :rule_memory_calculator
+    attr_reader :action_provider
 
     # @api private
     attr_reader :dependency_store
@@ -72,17 +72,17 @@ module Nanoc::Int
     # @api private
     attr_reader :reps
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, rule_memory_calculator:, dependency_store:, outdatedness_checker:, reps:)
+    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
       @site = site
       @rules_collection = rules_collection
 
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
       @rule_memory_store      = rule_memory_store
-      @rule_memory_calculator = rule_memory_calculator
       @dependency_store       = dependency_store
       @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
+      @action_provider        = action_provider
 
       @stack = []
     end
@@ -139,7 +139,7 @@ module Nanoc::Int
     def store
       # Calculate rule memory
       (@reps.to_a + @site.layouts.to_a).each do |obj|
-        rule_memory_store[obj] = rule_memory_calculator[obj].serialize
+        rule_memory_store[obj] = action_provider.memory_for(obj).serialize
       end
 
       # Calculate checksums
@@ -162,7 +162,7 @@ module Nanoc::Int
 
     def build_reps
       builder = Nanoc::Int::ItemRepBuilder.new(
-        site, rules_collection, rule_memory_calculator, @reps)
+        site, action_provider, @reps)
       builder.run
     end
 
@@ -207,7 +207,7 @@ module Nanoc::Int
 
       # Assign snapshots
       @reps.each do |rep|
-        rep.snapshot_defs = rule_memory_calculator.snapshots_defs_for(rep)
+        rep.snapshot_defs = action_provider.snapshots_defs_for(rep)
       end
 
       # Find item reps to compile and compile them
@@ -264,7 +264,7 @@ module Nanoc::Int
     def recalculate_content_for_rep(rep)
       executor = Nanoc::Int::Executor.new(self)
 
-      rule_memory_calculator[rep].each do |action|
+      action_provider.memory_for(rep).each do |action|
         case action
         when Nanoc::Int::RuleMemoryActions::Filter
           executor.filter(rep, action.filter_name, action.params)

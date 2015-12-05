@@ -15,13 +15,10 @@ module Nanoc::Int
 
   # Load compilation classes
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
-  autoload 'CompilerDSL',          'nanoc/base/compilation/compiler_dsl'
   autoload 'DependencyTracker',    'nanoc/base/compilation/dependency_tracker'
   autoload 'ItemRepRepo',          'nanoc/base/compilation/item_rep_repo'
   autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'
   autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
-  autoload 'Rule',                 'nanoc/base/compilation/rule'
-  autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
 end
 
 require_relative 'base/core_ext'

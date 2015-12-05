@@ -1,8 +1,8 @@
 describe(Nanoc::Int::ItemRepRouter) do
-  subject(:item_rep_router) { described_class.new(reps, rule_memory_calculator, site) }
+  subject(:item_rep_router) { described_class.new(reps, action_provider, site) }
 
   let(:reps) { double(:reps) }
-  let(:rule_memory_calculator) { double(:rule_memory_calculator) }
+  let(:action_provider) { double(:action_provider) }
   let(:site) { double(:site, config: config) }
   let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
@@ -35,8 +35,8 @@ describe(Nanoc::Int::ItemRepRouter) do
     end
 
     example do
-      expect(rule_memory_calculator).to receive(:[]).with(reps[0]).and_return(rule_memory_0)
-      expect(rule_memory_calculator).to receive(:[]).with(reps[1]).and_return(rule_memory_1)
+      expect(action_provider).to receive(:memory_for).with(reps[0]).and_return(rule_memory_0)
+      expect(action_provider).to receive(:memory_for).with(reps[1]).and_return(rule_memory_1)
 
       subject
 

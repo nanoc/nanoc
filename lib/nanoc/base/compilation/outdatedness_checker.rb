@@ -17,9 +17,9 @@ module Nanoc::Int
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::ChecksumStore] checksum_store
     # @param [Nanoc::Int::DependencyStore] dependency_store
-    # @param [Nanoc::Int::RulesCollection] rules_collection
+    # @param [Nanoc::RuleDSL::RulesCollection] rules_collection
     # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
-    # @param [Nanoc::Int::RuleMemoryCalculator] rule_memory_calculator
+    # @param [Nanoc::RuleDSL::RuleMemoryCalculator] rule_memory_calculator
     # @param [Nanoc::Int::ItemRepRepo] reps
     def initialize(site:, checksum_store:, dependency_store:, rules_collection:, rule_memory_store:, rule_memory_calculator:, reps:)
       @site = site

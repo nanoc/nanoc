@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Contains methods that will be executed by the site’s `Rules` file.
   #
   # @api private
@@ -14,7 +14,7 @@ module Nanoc::Int
     #
     # @api private
     #
-    # @param [Nanoc::Int::RulesCollection] rules_collection The collection of
+    # @param [Nanoc::RuleDSL::RulesCollection] rules_collection The collection of
     #   rules to modify when loading this DSL
     #
     # @param [Hash] config The site configuration
@@ -71,7 +71,7 @@ module Nanoc::Int
     def compile(identifier, rep: :default, &block)
       raise ArgumentError.new('#compile requires a block') unless block_given?
 
-      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, block)
+      rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
@@ -109,7 +109,7 @@ module Nanoc::Int
     def route(identifier, rep: :default, snapshot: :last, &block)
       raise ArgumentError.new('#route requires a block') unless block_given?
 
-      rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, block, snapshot_name: snapshot)
+      rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, block, snapshot_name: snapshot)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -170,7 +170,7 @@ module Nanoc::Int
       raise ArgumentError.new('#passthrough does not require a block') if block_given?
 
       compilation_block = proc {}
-      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, compilation_block)
+      compilation_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
@@ -185,7 +185,7 @@ module Nanoc::Int
           item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
         end
       end
-      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, routing_block, snapshot_name: :last)
+      routing_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -210,10 +210,10 @@ module Nanoc::Int
     def ignore(identifier, rep: :default)
       raise ArgumentError.new('#ignore does not require a block') if block_given?
 
-      compilation_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, proc {})
+      compilation_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Nanoc::Int::Rule.new(create_pattern(identifier), rep, proc {}, snapshot_name: :last)
+      routing_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, proc {}, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -233,7 +233,7 @@ module Nanoc::Int
       filename = ["#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
       raise Nanoc::Int::Errors::NoRulesFileFound.new if filename.nil?
 
-      Nanoc::Int::RulesLoader.new(@config, @rules_collection).parse(filename)
+      Nanoc::RuleDSL::RulesLoader.new(@config, @rules_collection).parse(filename)
     end
 
     # Creates a postprocessor block that will be executed after all data is

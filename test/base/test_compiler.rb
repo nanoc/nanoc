@@ -7,20 +7,23 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layouts: [],
     )
 
-    rules_collection = Nanoc::Int::RulesCollection.new
+    rules_collection = Nanoc::RuleDSL::RulesCollection.new
 
     reps = Nanoc::Int::ItemRepRepo.new
+
+    rule_memory_calculator = Nanoc::RuleDSL::RuleMemoryCalculator.new(
+      rules_collection: rules_collection,
+      site: site,
+    )
 
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
-      rule_memory_calculator: Nanoc::Int::RuleMemoryCalculator.new(
-        rules_collection: rules_collection,
-        site: site,
-      ),
       dependency_store: Nanoc::Int::DependencyStore.new(
         site.items.to_a + site.layouts.to_a),
+      action_provider: Nanoc::RuleDSL::ActionProvider.new(
+        rules_collection, rule_memory_calculator),
       reps: reps,
     }
 
@@ -31,7 +34,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         dependency_store: params[:dependency_store],
         rules_collection: params[:rules_collection],
         rule_memory_store: params[:rule_memory_store],
-        rule_memory_calculator: params[:rule_memory_calculator],
+        rule_memory_calculator: rule_memory_calculator,
         reps: reps,
       )
 
@@ -151,7 +154,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layout '/blah/'
       filter :erb
     end
-    rule = Nanoc::Int::Rule.new(Nanoc::Int::Pattern.from(/blah/), :meh, rule_block)
+    rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from(/blah/), :meh, rule_block)
 
     # Create layout
     layout = Nanoc::Int::Layout.new('head <%= yield %> foot', {}, '/blah/')

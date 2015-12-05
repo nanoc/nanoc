@@ -1,8 +1,8 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # @api private
   class RulesLoader
     def initialize(config, rules_collection)
-      @dsl = Nanoc::Int::CompilerDSL.new(rules_collection, config)
+      @dsl = Nanoc::RuleDSL::CompilerDSL.new(rules_collection, config)
     end
 
     def load

@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Calculates rule memories for objects that can be run through a rule (item
   # representations and layouts).
   #
@@ -16,7 +16,7 @@ module Nanoc::Int
     attr_accessor :rules_collection
 
     # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::RulesCollection] rules_collection
+    # @param [Nanoc::RuleDSL::RulesCollection] rules_collection
     def initialize(site:, rules_collection:)
       @site = site
       @rules_collection = rules_collection
@@ -56,7 +56,7 @@ module Nanoc::Int
     def new_rule_memory_for_rep(rep)
       # FIXME: What if #compilation_rule_for returns nil?
 
-      executor = Nanoc::Int::RecordingExecutor.new(rep, @rules_collection, @site)
+      executor = Nanoc::RuleDSL::RecordingExecutor.new(rep, @rules_collection, @site)
       rule = @rules_collection.compilation_rule_for(rep)
 
       executor.snapshot(rep, :raw)

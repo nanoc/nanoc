@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Provides a context in which compilation and routing rules can be executed.
   # It provides access to the item representation that is being compiled or
   # routed.
@@ -7,7 +7,7 @@ module Nanoc::Int
   class RuleContext < Nanoc::Int::Context
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
+    # @param [Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor] executor
     # @param [Nanoc::ViewContext] view_context
     def initialize(rep:, site:, executor:, view_context:)
       @_executor = executor

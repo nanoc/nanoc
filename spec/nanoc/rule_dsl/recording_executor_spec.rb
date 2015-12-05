@@ -1,4 +1,4 @@
-describe Nanoc::Int::RecordingExecutor do
+describe Nanoc::RuleDSL::RecordingExecutor do
   let(:executor) { described_class.new(rep, rules_collection, site) }
 
   let(:rep) { double(:rep) }
@@ -47,7 +47,7 @@ describe Nanoc::Int::RecordingExecutor do
 
   describe '#snapshot' do
     let(:rules_collection) do
-      Nanoc::Int::RulesCollection.new
+      Nanoc::RuleDSL::RulesCollection.new
     end
 
     context 'snapshot already exists' do
@@ -113,7 +113,7 @@ describe Nanoc::Int::RecordingExecutor do
 
           before do
             rules_collection.add_item_routing_rule(
-              Nanoc::Int::Rule.new(
+              Nanoc::RuleDSL::Rule.new(
                 Nanoc::Int::Pattern.from('/foo.*'),
                 :default,
                 route_proc,
@@ -133,7 +133,7 @@ describe Nanoc::Int::RecordingExecutor do
               let(:route_proc) { proc { 'routed-foo.html' } }
 
               it 'errors' do
-                expect { subject }.to raise_error(Nanoc::Int::RecordingExecutor::PathWithoutInitialSlashError)
+                expect { subject }.to raise_error(Nanoc::RuleDSL::RecordingExecutor::PathWithoutInitialSlashError)
               end
             end
 
@@ -178,7 +178,7 @@ describe Nanoc::Int::RecordingExecutor do
           let(:path) { '/routed-foo.html' }
 
           it 'errors' do
-            expect { subject }.to raise_error(Nanoc::Int::RecordingExecutor::NonFinalSnapshotWithPathError)
+            expect { subject }.to raise_error(Nanoc::RuleDSL::RecordingExecutor::NonFinalSnapshotWithPathError)
           end
         end
 
@@ -187,7 +187,7 @@ describe Nanoc::Int::RecordingExecutor do
 
           before do
             rules_collection.add_item_routing_rule(
-              Nanoc::Int::Rule.new(
+              Nanoc::RuleDSL::Rule.new(
                 Nanoc::Int::Pattern.from('/foo.*'),
                 :default,
                 proc { '/routed-foo.html' },
@@ -203,7 +203,7 @@ describe Nanoc::Int::RecordingExecutor do
           end
 
           it 'errors' do
-            expect { subject }.to raise_error(Nanoc::Int::RecordingExecutor::NonFinalSnapshotWithPathError)
+            expect { subject }.to raise_error(Nanoc::RuleDSL::RecordingExecutor::NonFinalSnapshotWithPathError)
           end
         end
       end

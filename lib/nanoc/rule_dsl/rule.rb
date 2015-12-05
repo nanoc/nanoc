@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Contains the processing information for a item.
   #
   # @api private
@@ -48,12 +48,12 @@ module Nanoc::Int
     #
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
+    # @param [Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor] executor
     # @param [Nanoc::ViewContext] view_context
     #
     # @return [void]
     def apply_to(rep, site:, executor:, view_context:)
-      context = Nanoc::Int::RuleContext.new(
+      context = Nanoc::RuleDSL::RuleContext.new(
         rep: rep, executor: executor, site: site, view_context: view_context)
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
