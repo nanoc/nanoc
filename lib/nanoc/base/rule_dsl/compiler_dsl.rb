@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Contains methods that will be executed by the site’s `Rules` file.
   #
   # @api private

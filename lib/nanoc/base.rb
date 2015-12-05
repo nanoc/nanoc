@@ -1,6 +1,11 @@
 module Nanoc
   autoload 'Error',                'nanoc/base/error'
   autoload 'Filter',               'nanoc/base/compilation/filter'
+
+  # TODO: move this elsewhere
+  module RuleDSL
+    autoload 'CompilerDSL',          'nanoc/base/rule_dsl/compiler_dsl'
+  end
 end
 
 # @api private
@@ -15,7 +20,6 @@ module Nanoc::Int
 
   # Load rule DSL classes
   autoload 'RuleDSLActionProvider', 'nanoc/base/rule_dsl/provider'
-  autoload 'CompilerDSL',          'nanoc/base/rule_dsl/compiler_dsl'
   autoload 'RecordingExecutor',    'nanoc/base/rule_dsl/recording_executor'
   autoload 'RuleContext',          'nanoc/base/rule_dsl/rule_context'
   autoload 'RuleMemoryCalculator', 'nanoc/base/rule_dsl/rule_memory_calculator'
