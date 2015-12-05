@@ -10,7 +10,7 @@ module Nanoc::Int
   end
 end
 
-module Nanoc::Int
+module Nanoc::RuleDSL
   class RuleDSLActionProvider < Nanoc::Int::ActionProvider
     def initialize(rules_collection, rule_memory_calculator)
       @rules_collection = rules_collection

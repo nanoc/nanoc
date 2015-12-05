@@ -4,7 +4,8 @@ module Nanoc
 
   # TODO: move this elsewhere
   module RuleDSL
-    autoload 'CompilerDSL',          'nanoc/base/rule_dsl/compiler_dsl'
+    autoload 'CompilerDSL',           'nanoc/base/rule_dsl/compiler_dsl'
+    autoload 'RuleDSLActionProvider', 'nanoc/base/rule_dsl/provider'
   end
 end
 
@@ -19,7 +20,6 @@ module Nanoc::Int
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
 
   # Load rule DSL classes
-  autoload 'RuleDSLActionProvider', 'nanoc/base/rule_dsl/provider'
   autoload 'RecordingExecutor',    'nanoc/base/rule_dsl/recording_executor'
   autoload 'RuleContext',          'nanoc/base/rule_dsl/rule_context'
   autoload 'RuleMemoryCalculator', 'nanoc/base/rule_dsl/rule_memory_calculator'
