@@ -113,7 +113,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
           before do
             rules_collection.add_item_routing_rule(
-              Nanoc::Int::Rule.new(
+              Nanoc::RuleDSL::Rule.new(
                 Nanoc::Int::Pattern.from('/foo.*'),
                 :default,
                 route_proc,
@@ -187,7 +187,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
           before do
             rules_collection.add_item_routing_rule(
-              Nanoc::Int::Rule.new(
+              Nanoc::RuleDSL::Rule.new(
                 Nanoc::Int::Pattern.from('/foo.*'),
                 :default,
                 proc { '/routed-foo.html' },

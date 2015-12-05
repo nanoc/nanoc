@@ -16,7 +16,7 @@ class Nanoc::Int::RuleTest < Nanoc::TestCase
     identifier = '/anything/else/'
     expected   = %w(anything else)
 
-    rule = Nanoc::Int::Rule.new(pattern, :string, proc {})
+    rule = Nanoc::RuleDSL::Rule.new(pattern, :string, proc {})
 
     assert_equal expected, rule.send(:matches, identifier)
   end

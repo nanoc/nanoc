@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Contains the processing information for a item.
   #
   # @api private

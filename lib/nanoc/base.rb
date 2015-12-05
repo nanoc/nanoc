@@ -11,6 +11,7 @@ module Nanoc
     autoload 'RecordingExecutor',     'nanoc/base/rule_dsl/recording_executor'
     autoload 'RuleContext',           'nanoc/base/rule_dsl/rule_context'
     autoload 'RuleMemoryCalculator',  'nanoc/base/rule_dsl/rule_memory_calculator'
+    autoload 'Rule',                  'nanoc/base/rule_dsl/rule'
     autoload 'RulesCollection',       'nanoc/base/rule_dsl/rules_collection'
     autoload 'RulesLoader',           'nanoc/base/rule_dsl/rules_loader'
   end
@@ -25,9 +26,6 @@ module Nanoc::Int
   autoload 'Errors',               'nanoc/base/errors'
   autoload 'Memoization',          'nanoc/base/memoization'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
-
-  # Load rule DSL classes
-  autoload 'Rule',                 'nanoc/base/rule_dsl/rule'
 
   # Load compilation classes
   autoload 'Compiler',             'nanoc/base/compilation/compiler'

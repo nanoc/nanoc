@@ -24,7 +24,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           layout '/default.*'
           filter :typohero
         end
-        rule = Nanoc::Int::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
+        rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
         rules_collection.add_item_compilation_rule(rule)
       end
 
@@ -115,7 +115,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
         layout '/default.*'
         filter :typohero
       end
-      rule = Nanoc::Int::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
+      rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
       rules_collection.add_item_compilation_rule(rule)
     end
 

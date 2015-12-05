@@ -151,7 +151,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layout '/blah/'
       filter :erb
     end
-    rule = Nanoc::Int::Rule.new(Nanoc::Int::Pattern.from(/blah/), :meh, rule_block)
+    rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from(/blah/), :meh, rule_block)
 
     # Create layout
     layout = Nanoc::Int::Layout.new('head <%= yield %> foot', {}, '/blah/')
