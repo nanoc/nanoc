@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Provides a context in which compilation and routing rules can be executed.
   # It provides access to the item representation that is being compiled or
   # routed.
