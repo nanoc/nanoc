@@ -36,7 +36,6 @@ module Nanoc::Int
         compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
         checksum_store: checksum_store,
         rule_memory_store: rule_memory_store,
-        rule_memory_calculator: rule_memory_calculator,
         dependency_store: dependency_store,
         outdatedness_checker: outdatedness_checker,
         reps: item_rep_repo,

@@ -11,6 +11,10 @@ module Nanoc::Int
     def memory_for(_rep)
       raise NotImplementedError
     end
+
+    def snapshots_defs_for(_rep)
+      raise NotImplementedError
+    end
   end
 end
 
@@ -30,6 +34,10 @@ module Nanoc::RuleDSL
 
     def memory_for(rep)
       @rule_memory_calculator[rep]
+    end
+
+    def snapshots_defs_for(rep)
+      @rule_memory_calculator.snapshots_defs_for(rep)
     end
   end
 end

@@ -20,7 +20,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
-      rule_memory_calculator: rule_memory_calculator,
       dependency_store: Nanoc::Int::DependencyStore.new(
         site.items.to_a + site.layouts.to_a),
       action_provider: Nanoc::RuleDSL::ActionProvider.new(
@@ -35,7 +34,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         dependency_store: params[:dependency_store],
         rules_collection: params[:rules_collection],
         rule_memory_store: params[:rule_memory_store],
-        rule_memory_calculator: params[:rule_memory_calculator],
+        rule_memory_calculator: rule_memory_calculator,
         reps: reps,
       )
 
