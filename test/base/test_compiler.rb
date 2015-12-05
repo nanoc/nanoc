@@ -15,7 +15,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
-      rule_memory_calculator: Nanoc::Int::RuleMemoryCalculator.new(
+      rule_memory_calculator: Nanoc::RuleDSL::RuleMemoryCalculator.new(
         rules_collection: rules_collection,
         site: site,
       ),

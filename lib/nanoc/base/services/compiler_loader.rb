@@ -7,7 +7,7 @@ module Nanoc::Int
       rule_memory_store = Nanoc::Int::RuleMemoryStore.new
 
       rule_memory_calculator =
-        Nanoc::Int::RuleMemoryCalculator.new(
+        Nanoc::RuleDSL::RuleMemoryCalculator.new(
           rules_collection: rules_collection, site: site)
 
       dependency_store =

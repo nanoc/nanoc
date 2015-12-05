@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # Calculates rule memories for objects that can be run through a rule (item
   # representations and layouts).
   #

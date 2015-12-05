@@ -1,4 +1,4 @@
-describe(Nanoc::Int::RuleMemoryCalculator) do
+describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
   subject(:rule_memory_calculator) do
     described_class.new(site: site, rules_collection: rules_collection)
   end
@@ -93,7 +93,7 @@ describe(Nanoc::Int::RuleMemoryCalculator) do
       let(:obj) { :donkey }
 
       it 'errors' do
-        expect { subject }.to raise_error(Nanoc::Int::RuleMemoryCalculator::UnsupportedObjectTypeException)
+        expect { subject }.to raise_error(Nanoc::RuleDSL::RuleMemoryCalculator::UnsupportedObjectTypeException)
       end
     end
   end
