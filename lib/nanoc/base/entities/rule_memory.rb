@@ -32,6 +32,10 @@ module Nanoc::Int
       @actions.select { |a| a.is_a?(Nanoc::Int::RuleMemoryActions::Snapshot) }
     end
 
+    def any_layouts?
+      @actions.any? { |a| a.is_a?(Nanoc::Int::RuleMemoryActions::Layout) }
+    end
+
     def serialize
       map(&:serialize)
     end

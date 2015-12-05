@@ -164,7 +164,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     # Create compiler
     compiler = new_compiler(site)
-    compiler.rules_collection.expects(:compilation_rule_for).times(2).with(rep).returns(rule)
+    compiler.rules_collection.stubs(:compilation_rule_for).with(rep).returns(rule)
     compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/blah/$})] = [:erb, {}]
     site.stubs(:compiler).returns(compiler)
 

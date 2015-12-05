@@ -264,12 +264,18 @@ module Nanoc::Int
     def recalculate_content_for_rep(rep)
       executor = Nanoc::Int::Executor.new(self)
 
-      executor.snapshot(rep, :raw)
-      executor.snapshot(rep, :pre, final: false)
-      rules_collection.compilation_rule_for(rep)
-        .apply_to(rep, executor: executor, site: @site, view_context: create_view_context)
-      executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
-      executor.snapshot(rep, :last)
+      rule_memory_calculator[rep].each do |action|
+        case action
+        when Nanoc::Int::RuleMemoryActions::Filter
+          executor.filter(rep, action.filter_name, action.params)
+        when Nanoc::Int::RuleMemoryActions::Layout
+          executor.layout(rep, action.layout_identifier, action.params)
+        when Nanoc::Int::RuleMemoryActions::Snapshot
+          executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
+        else
+          raise "Internal inconsistency: unknown action #{action.inspect}"
+        end
+      end
     end
 
     # Clears the list of dependencies for items that will be recompiled.

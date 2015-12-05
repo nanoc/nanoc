@@ -54,19 +54,21 @@ module Nanoc::Int
     #
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_rep(rep)
-      # FIXME: This is more-or-less duplicated from Compiler#recalculate_content_for_rep.
-      # Letting the compiler use the rule memory would fix this.
-
       # FIXME: What if #compilation_rule_for returns nil?
 
       executor = Nanoc::Int::RecordingExecutor.new(rep, @rules_collection, @site)
+      rule = @rules_collection.compilation_rule_for(rep)
+
       executor.snapshot(rep, :raw)
       executor.snapshot(rep, :pre, final: false)
-      @rules_collection
-        .compilation_rule_for(rep)
-        .apply_to(rep, executor: executor, site: @site, view_context: nil)
-      executor.snapshot(rep, :post) if rep.has_snapshot?(:post)
-      executor.snapshot(rep, :last) unless executor.rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
+      rule.apply_to(rep, executor: executor, site: @site, view_context: nil)
+      if executor.rule_memory.any_layouts?
+        executor.snapshot(rep, :post)
+      end
+      unless executor.rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
+        executor.snapshot(rep, :last)
+      end
+
       executor.rule_memory
     end
 

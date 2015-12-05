@@ -31,7 +31,7 @@ describe(Nanoc::Int::RuleMemoryCalculator) do
       example do
         subject
 
-        expect(subject.size).to eql(6)
+        expect(subject.size).to eql(7)
 
         expect(subject[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
         expect(subject[0].snapshot_name).to eql(:raw)
@@ -56,9 +56,14 @@ describe(Nanoc::Int::RuleMemoryCalculator) do
         expect(subject[4].params).to eql({})
 
         expect(subject[5]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
-        expect(subject[5].snapshot_name).to eql(:last)
+        expect(subject[5].snapshot_name).to eql(:post)
         expect(subject[5]).to be_final
         expect(subject[5].path).to be_nil
+
+        expect(subject[6]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+        expect(subject[6].snapshot_name).to eql(:last)
+        expect(subject[6]).to be_final
+        expect(subject[6].path).to be_nil
       end
     end
 
@@ -115,7 +120,7 @@ describe(Nanoc::Int::RuleMemoryCalculator) do
     end
 
     example do
-      expect(subject.size).to eql(3)
+      expect(subject.size).to eql(4)
 
       expect(subject[0]).to be_a(Nanoc::Int::SnapshotDef)
       expect(subject[0].name).to eql(:raw)
@@ -126,8 +131,12 @@ describe(Nanoc::Int::RuleMemoryCalculator) do
       expect(subject[1]).not_to be_final
 
       expect(subject[2]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[2].name).to eql(:last)
+      expect(subject[2].name).to eql(:post)
       expect(subject[2]).to be_final
+
+      expect(subject[3]).to be_a(Nanoc::Int::SnapshotDef)
+      expect(subject[3].name).to eql(:last)
+      expect(subject[3]).to be_final
     end
   end
 end
