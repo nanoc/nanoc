@@ -13,15 +13,21 @@ module Nanoc::Int
   autoload 'Memoization',          'nanoc/base/memoization'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
 
+  # Load rule DSL classes
+  autoload 'CompilerDSL',          'nanoc/base/rule_dsl/compiler_dsl'
+  autoload 'RecordingExecutor',    'nanoc/base/rule_dsl/recording_executor'
+  autoload 'RuleContext',          'nanoc/base/rule_dsl/rule_context'
+  autoload 'RuleMemoryCalculator', 'nanoc/base/rule_dsl/rule_memory_calculator'
+  autoload 'Rule',                 'nanoc/base/rule_dsl/rule'
+  autoload 'RulesCollection',      'nanoc/base/rule_dsl/rules_collection'
+  autoload 'RulesLoader',          'nanoc/base/rule_dsl/rules_loader'
+
   # Load compilation classes
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
-  autoload 'CompilerDSL',          'nanoc/base/compilation/compiler_dsl'
   autoload 'DependencyTracker',    'nanoc/base/compilation/dependency_tracker'
   autoload 'ItemRepRepo',          'nanoc/base/compilation/item_rep_repo'
   autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'
   autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
-  autoload 'Rule',                 'nanoc/base/compilation/rule'
-  autoload 'RuleContext',          'nanoc/base/compilation/rule_context'
 end
 
 require_relative 'base/core_ext'
