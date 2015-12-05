@@ -1,23 +1,3 @@
-module Nanoc::Int
-  # TODO: Get a better name for this
-  #
-  # InstructionProvider?
-  # InstructionSetProvider?
-  class ActionProvider
-    def rep_names_for(_item)
-      raise NotImplementedError
-    end
-
-    def memory_for(_rep)
-      raise NotImplementedError
-    end
-
-    def snapshots_defs_for(_rep)
-      raise NotImplementedError
-    end
-  end
-end
-
 module Nanoc::RuleDSL
   class ActionProvider < Nanoc::Int::ActionProvider
     def initialize(rules_collection, rule_memory_calculator)

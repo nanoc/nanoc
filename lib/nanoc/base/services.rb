@@ -1,3 +1,4 @@
+require_relative 'services/action_provider'
 require_relative 'services/compiler_loader'
 require_relative 'services/executor'
 require_relative 'services/item_rep_builder'
