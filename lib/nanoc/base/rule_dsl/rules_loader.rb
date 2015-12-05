@@ -1,4 +1,4 @@
-module Nanoc::Int
+module Nanoc::RuleDSL
   # @api private
   class RulesLoader
     def initialize(config, rules_collection)

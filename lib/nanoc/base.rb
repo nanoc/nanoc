@@ -12,6 +12,7 @@ module Nanoc
     autoload 'RuleContext',           'nanoc/base/rule_dsl/rule_context'
     autoload 'RuleMemoryCalculator',  'nanoc/base/rule_dsl/rule_memory_calculator'
     autoload 'RulesCollection',       'nanoc/base/rule_dsl/rules_collection'
+    autoload 'RulesLoader',           'nanoc/base/rule_dsl/rules_loader'
   end
 end
 
@@ -27,7 +28,6 @@ module Nanoc::Int
 
   # Load rule DSL classes
   autoload 'Rule',                 'nanoc/base/rule_dsl/rule'
-  autoload 'RulesLoader',          'nanoc/base/rule_dsl/rules_loader'
 
   # Load compilation classes
   autoload 'Compiler',             'nanoc/base/compilation/compiler'

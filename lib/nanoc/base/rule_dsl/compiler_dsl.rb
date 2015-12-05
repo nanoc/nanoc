@@ -233,7 +233,7 @@ module Nanoc::RuleDSL
       filename = ["#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
       raise Nanoc::Int::Errors::NoRulesFileFound.new if filename.nil?
 
-      Nanoc::Int::RulesLoader.new(@config, @rules_collection).parse(filename)
+      Nanoc::RuleDSL::RulesLoader.new(@config, @rules_collection).parse(filename)
     end
 
     # Creates a postprocessor block that will be executed after all data is

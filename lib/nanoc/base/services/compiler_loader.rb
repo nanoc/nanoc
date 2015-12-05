@@ -41,7 +41,7 @@ module Nanoc::Int
 
       compiler = Nanoc::Int::Compiler.new(site, rules_collection, params)
 
-      Nanoc::Int::RulesLoader.new(site.config, rules_collection).load
+      Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
 
       compiler
     end
