@@ -161,8 +161,11 @@ module Nanoc::Int
     end
 
     def build_reps
+      # TODO: Extract construction of this to elsewhere
+      action_provider = Nanoc::Int::RuleDSLActionProvider.new(
+        rules_collection, rule_memory_calculator)
       builder = Nanoc::Int::ItemRepBuilder.new(
-        site, Nanoc::Int::RuleDSLActionProvider.new(rules_collection), rule_memory_calculator, @reps)
+        site, action_provider, @reps)
       builder.run
     end
 

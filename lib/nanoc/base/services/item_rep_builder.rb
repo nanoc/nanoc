@@ -3,10 +3,9 @@ module Nanoc::Int
   class ItemRepBuilder
     attr_reader :reps
 
-    def initialize(site, action_provider, rule_memory_calculator, reps)
+    def initialize(site, action_provider, reps)
       @site = site
       @action_provider = action_provider
-      @rule_memory_calculator = rule_memory_calculator
       @reps = reps
     end
 
@@ -17,7 +16,7 @@ module Nanoc::Int
         end
       end
 
-      Nanoc::Int::ItemRepRouter.new(@reps, @rule_memory_calculator, @site).run
+      Nanoc::Int::ItemRepRouter.new(@reps, @action_provider, @site).run
     end
   end
 end
