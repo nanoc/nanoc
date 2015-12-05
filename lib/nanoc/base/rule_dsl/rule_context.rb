@@ -7,7 +7,7 @@ module Nanoc::Int
   class RuleContext < Nanoc::Int::Context
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::Executor, Nanoc::Int::RecordingExecutor] executor
+    # @param [Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor] executor
     # @param [Nanoc::ViewContext] view_context
     def initialize(rep:, site:, executor:, view_context:)
       @_executor = executor

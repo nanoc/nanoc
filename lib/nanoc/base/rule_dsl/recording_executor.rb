@@ -1,5 +1,5 @@
 module Nanoc
-  module Int
+  module RuleDSL
     class RecordingExecutor
       class NonFinalSnapshotWithPathError < ::Nanoc::Error
         def initialize

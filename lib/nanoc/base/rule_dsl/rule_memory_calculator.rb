@@ -56,7 +56,7 @@ module Nanoc::Int
     def new_rule_memory_for_rep(rep)
       # FIXME: What if #compilation_rule_for returns nil?
 
-      executor = Nanoc::Int::RecordingExecutor.new(rep, @rules_collection, @site)
+      executor = Nanoc::RuleDSL::RecordingExecutor.new(rep, @rules_collection, @site)
       rule = @rules_collection.compilation_rule_for(rep)
 
       executor.snapshot(rep, :raw)
