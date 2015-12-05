@@ -3,28 +3,21 @@ module Nanoc::Int
   class ItemRepBuilder
     attr_reader :reps
 
-    def initialize(site, rules_collection, rule_memory_calculator, reps)
+    def initialize(site, action_provider, rule_memory_calculator, reps)
       @site = site
-      @rules_collection = rules_collection
+      @action_provider = action_provider
       @rule_memory_calculator = rule_memory_calculator
       @reps = reps
     end
 
     def run
       @site.items.each do |item|
-        rep_names_for(item).each do |rep_name|
+        @action_provider.rep_names_for(item).each do |rep_name|
           @reps << Nanoc::Int::ItemRep.new(item, rep_name)
         end
       end
 
       Nanoc::Int::ItemRepRouter.new(@reps, @rule_memory_calculator, @site).run
-    end
-
-    def rep_names_for(item)
-      matching_rules = @rules_collection.item_compilation_rules_for(item)
-      raise Nanoc::Int::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
-
-      matching_rules.map(&:rep_name).uniq
     end
   end
 end

@@ -14,6 +14,7 @@ module Nanoc::Int
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'
 
   # Load rule DSL classes
+  autoload 'RuleDSLActionProvider', 'nanoc/base/rule_dsl/provider'
   autoload 'CompilerDSL',          'nanoc/base/rule_dsl/compiler_dsl'
   autoload 'RecordingExecutor',    'nanoc/base/rule_dsl/recording_executor'
   autoload 'RuleContext',          'nanoc/base/rule_dsl/rule_context'
