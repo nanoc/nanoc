@@ -17,7 +17,6 @@ Enhancements:
 * Allowed excluding URLs from external links check (#686) [Yannick Ihmels]
 * Added `atom` to list of text extensions (#657) [Yannick Ihmels]
 * Added `#each` to `Nanoc::ConfigView` (#705) [Garen Torikian]
-* Made `#content_for` raise an exception on duplicate content (#713) [Jan M. Faber]
 * Made `#attribute_to_time` handle `DateTime` (#717) [Micha Rosenbaum]
 * Added `Identifier#components` (#677)
 * Added `:existing` option to `#content_for` (can be `:error`, `:overwrite` and `:append`) (#744)
