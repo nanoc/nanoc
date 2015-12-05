@@ -161,7 +161,8 @@ module Nanoc::Int
     end
 
     def build_reps
-      builder = Nanoc::Int::ItemRepBuilder.new(site, rules_collection, @reps)
+      builder = Nanoc::Int::ItemRepBuilder.new(
+        site, rules_collection, rule_memory_calculator, @reps)
       builder.run
     end
 

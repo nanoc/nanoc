@@ -23,13 +23,9 @@ module Nanoc::Int
       @actions << Nanoc::Int::RuleMemoryActions::Layout.new(layout_identifier, params)
     end
 
-    def add_snapshot(snapshot_name, final)
+    def add_snapshot(snapshot_name, final, path)
       will_add_snapshot(snapshot_name)
-      @actions << Nanoc::Int::RuleMemoryActions::Snapshot.new(snapshot_name, final)
-    end
-
-    def add_write(path)
-      @actions << Nanoc::Int::RuleMemoryActions::Write.new(path)
+      @actions << Nanoc::Int::RuleMemoryActions::Snapshot.new(snapshot_name, final, path)
     end
 
     def snapshot_actions

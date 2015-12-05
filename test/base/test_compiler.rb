@@ -275,7 +275,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       # Create site
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      error = assert_raises(RuntimeError) do
+      error = assert_raises(Nanoc::Error) do
         site.compile
       end
       assert_match(/^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message)
