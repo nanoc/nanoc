@@ -2,9 +2,15 @@
 
 ## 4.1.0 (???)
 
+Features:
+
+* Added `postprocess` block (#726) [Garen Torikian]
+* Added `#write` compilation instruction and `path` option to `#snapshot` (#753)
+
 Fixes:
 
 * Fixed crash when printing non-string object (#712) [Garen Torikian]
+* Removed English text from `#link_to` helper (#736) [Lucas Vuotto]
 
 Enhancements:
 
@@ -14,6 +20,7 @@ Enhancements:
 * Made `#content_for` raise an exception on duplicate content (#713) [Jan M. Faber]
 * Made `#attribute_to_time` handle `DateTime` (#717) [Micha Rosenbaum]
 * Added `Identifier#components` (#677)
+* Added `:existing` option to `#content_for` (can be `:error`, `:overwrite` and `:append`) (#744)
 
 ## 4.0.2 (2015-11-30)
 
