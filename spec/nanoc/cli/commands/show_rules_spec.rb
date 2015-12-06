@@ -50,7 +50,8 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:config) { double(:config) }
 
-    let(:compiler) { double(:compiler, rules_collection: rules_collection, reps: reps) }
+    let(:action_provider) { double(:action_provider, rules_collection: rules_collection) }
+    let(:compiler) { double(:compiler, action_provider: action_provider, reps: reps) }
 
     let(:rules_collection) do
       Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
