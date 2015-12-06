@@ -97,7 +97,7 @@ module Nanoc::Int
     # TODO: move elsewhere
     def run_all
       # Preprocess
-      Nanoc::Int::Preprocessor.new(site: @site, rules_collection: @rules_collection).run
+      @action_provider.preprocess(@site)
 
       # Build reps
       build_reps
@@ -106,7 +106,7 @@ module Nanoc::Int
       run
 
       # Postprocess
-      Nanoc::Int::Postprocessor.new(create_view_context, site: @site, rules_collection: @rules_collection).run
+      @action_provider.postprocess(@site, @reps)
     end
 
     def run
