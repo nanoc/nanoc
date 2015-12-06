@@ -32,7 +32,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         site: site,
         checksum_store: params[:checksum_store],
         dependency_store: params[:dependency_store],
-        rules_collection: params[:rules_collection],
         rule_memory_store: params[:rule_memory_store],
         rule_memory_calculator: rule_memory_calculator,
         reps: reps,

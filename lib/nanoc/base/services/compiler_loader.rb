@@ -23,7 +23,6 @@ module Nanoc::Int
           site: site,
           checksum_store: checksum_store,
           dependency_store: dependency_store,
-          rules_collection: rules_collection,
           rule_memory_store: rule_memory_store,
           rule_memory_calculator: rule_memory_calculator,
           reps: item_rep_repo,
