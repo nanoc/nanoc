@@ -7,7 +7,6 @@ module Nanoc::Int
 
     attr_reader :checksum_store
     attr_reader :dependency_store
-    attr_reader :rule_memory_calculator
     attr_reader :rule_memory_store
     attr_reader :site
 
@@ -17,14 +16,14 @@ module Nanoc::Int
     # @param [Nanoc::Int::ChecksumStore] checksum_store
     # @param [Nanoc::Int::DependencyStore] dependency_store
     # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
-    # @param [Nanoc::RuleDSL::RuleMemoryCalculator] rule_memory_calculator
+    # @param [Nanoc::Int::ActionProvider] action_provider
     # @param [Nanoc::Int::ItemRepRepo] reps
-    def initialize(site:, checksum_store:, dependency_store:, rule_memory_store:, rule_memory_calculator:, reps:)
+    def initialize(site:, checksum_store:, dependency_store:, rule_memory_store:, action_provider:, reps:)
       @site = site
       @checksum_store = checksum_store
       @dependency_store = dependency_store
       @rule_memory_store = rule_memory_store
-      @rule_memory_calculator = rule_memory_calculator
+      @action_provider = action_provider
       @reps = reps
 
       @basic_outdatedness_reasons = {}
@@ -169,7 +168,7 @@ module Nanoc::Int
     # @return [Boolean] true if the rule memory for the given item
     #   represenation has changed, false otherwise
     def rule_memory_differs_for(obj)
-      !rule_memory_store[obj].eql?(rule_memory_calculator[obj].serialize)
+      !rule_memory_store[obj].eql?(@action_provider.memory_for(obj).serialize)
     end
     memoize :rule_memory_differs_for
 

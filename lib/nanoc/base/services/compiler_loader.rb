@@ -18,18 +18,18 @@ module Nanoc::Int
 
       item_rep_repo = Nanoc::Int::ItemRepRepo.new
 
+      action_provider = Nanoc::RuleDSL::ActionProvider.new(
+        rules_collection, rule_memory_calculator)
+
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(
           site: site,
           checksum_store: checksum_store,
           dependency_store: dependency_store,
           rule_memory_store: rule_memory_store,
-          rule_memory_calculator: rule_memory_calculator,
+          action_provider: action_provider,
           reps: item_rep_repo,
         )
-
-      action_provider = Nanoc::RuleDSL::ActionProvider.new(
-        rules_collection, rule_memory_calculator)
 
       params = {
         compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
