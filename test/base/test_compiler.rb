@@ -39,7 +39,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         reps: reps,
       )
 
-    Nanoc::Int::Compiler.new(site, rules_collection, params)
+    Nanoc::Int::Compiler.new(site, params)
   end
 
   def test_compilation_rule_for

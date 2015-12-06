@@ -2,6 +2,9 @@ module Nanoc::RuleDSL
   class ActionProvider < Nanoc::Int::ActionProvider
     # TODO: Convert this into a plugin
 
+    # @api private
+    attr_reader :rules_collection
+
     def initialize(rules_collection, rule_memory_calculator)
       @rules_collection = rules_collection
       @rule_memory_calculator = rule_memory_calculator

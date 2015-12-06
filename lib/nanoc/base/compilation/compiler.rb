@@ -49,9 +49,6 @@ module Nanoc::Int
     attr_reader :stack
 
     # @api private
-    attr_reader :rules_collection
-
-    # @api private
     attr_reader :compiled_content_cache
 
     # @api private
@@ -72,9 +69,8 @@ module Nanoc::Int
     # @api private
     attr_reader :reps
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
+    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
       @site = site
-      @rules_collection = rules_collection
 
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
@@ -107,6 +103,11 @@ module Nanoc::Int
 
       # Postprocess
       @action_provider.postprocess(@site, @reps)
+    end
+
+    # TODO: Remove me
+    def rules_collection
+      @action_provider.rules_collection
     end
 
     def run
