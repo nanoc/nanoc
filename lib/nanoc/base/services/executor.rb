@@ -55,7 +55,7 @@ module Nanoc
 
       def layout(rep, layout_identifier, extra_filter_args = nil)
         layout = find_layout(layout_identifier)
-        filter_name, filter_args = @compiler.rules_collection.filter_for_layout(layout)
+        filter_name, filter_args = *@compiler.filter_name_and_args_for_layout(layout)
         if filter_name.nil?
           raise Nanoc::Int::Errors::Generic, "Cannot find rule for layout matching #{layout_identifier}"
         end

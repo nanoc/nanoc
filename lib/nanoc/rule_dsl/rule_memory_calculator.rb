@@ -26,6 +26,9 @@ module Nanoc::RuleDSL
     #
     # @return [Nanoc::Int::RuleMemory]
     def [](obj)
+      # FIXME: Remove this
+      obj = obj.unwrap if obj.respond_to?(:unwrap)
+
       case obj
       when Nanoc::Int::ItemRep
         new_rule_memory_for_rep(obj)

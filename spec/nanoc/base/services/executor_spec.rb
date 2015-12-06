@@ -1,7 +1,7 @@
 describe Nanoc::Int::Executor do
   let(:executor) { described_class.new(compiler) }
 
-  let(:compiler) { double(:compiler) }
+  let(:compiler) { Nanoc::Int::Compiler.allocate }
 
   describe '#filter' do
     let(:assigns) { {} }
@@ -241,20 +241,23 @@ describe Nanoc::Int::Executor do
 
     let(:layout_content) { 'head <%= @foo %> foot' }
 
-    let(:rules_collection) do
-      Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
-        rc.layout_filter_mapping[Nanoc::Int::Pattern.from('/default.*')] = [:erb, {}]
-      end
-    end
-
     let(:assigns) do
       { foo: 'hallo' }
     end
 
+    let(:rule_memory) do
+      Nanoc::Int::RuleMemory.new(rep).tap do |mem|
+        mem.add_filter(:erb, {})
+      end
+    end
+
+    let(:action_provider) { double(:action_provider) }
+
     before do
       allow(compiler).to receive(:site) { site }
-      allow(compiler).to receive(:rules_collection) { rules_collection }
+      allow(compiler).to receive(:action_provider) { action_provider }
       allow(compiler).to receive(:assigns_for).with(rep) { assigns }
+      allow(action_provider).to receive(:memory_for).with(layout).and_return(rule_memory)
     end
 
     subject { executor.layout(rep, '/default.*') }
@@ -322,10 +325,8 @@ describe Nanoc::Int::Executor do
     end
 
     context 'no filter specified' do
-      let(:rules_collection) do
-        Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
-          rc.layout_filter_mapping[Nanoc::Int::Pattern.from('/other.*')] = [:erb, {}]
-        end
+      let(:rule_memory) do
+        Nanoc::Int::RuleMemory.new(rep)
       end
 
       it 'raises' do

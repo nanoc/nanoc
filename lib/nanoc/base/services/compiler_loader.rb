@@ -2,13 +2,7 @@ module Nanoc::Int
   # @api private
   class CompilerLoader
     def load(site)
-      rules_collection = Nanoc::RuleDSL::RulesCollection.new
-
       rule_memory_store = Nanoc::Int::RuleMemoryStore.new
-
-      rule_memory_calculator =
-        Nanoc::RuleDSL::RuleMemoryCalculator.new(
-          rules_collection: rules_collection, site: site)
 
       dependency_store =
         Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a)
@@ -18,19 +12,17 @@ module Nanoc::Int
 
       item_rep_repo = Nanoc::Int::ItemRepRepo.new
 
+      action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
+
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(
           site: site,
           checksum_store: checksum_store,
           dependency_store: dependency_store,
-          rules_collection: rules_collection,
           rule_memory_store: rule_memory_store,
-          rule_memory_calculator: rule_memory_calculator,
+          action_provider: action_provider,
           reps: item_rep_repo,
         )
-
-      action_provider = Nanoc::RuleDSL::ActionProvider.new(
-        rules_collection, rule_memory_calculator)
 
       params = {
         compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
@@ -42,11 +34,7 @@ module Nanoc::Int
         action_provider: action_provider,
       }
 
-      compiler = Nanoc::Int::Compiler.new(site, rules_collection, params)
-
-      Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
-
-      compiler
+      Nanoc::Int::Compiler.new(site, params)
     end
   end
 end

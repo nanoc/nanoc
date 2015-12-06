@@ -49,9 +49,6 @@ module Nanoc::Int
     attr_reader :stack
 
     # @api private
-    attr_reader :rules_collection
-
-    # @api private
     attr_reader :compiled_content_cache
 
     # @api private
@@ -72,9 +69,8 @@ module Nanoc::Int
     # @api private
     attr_reader :reps
 
-    def initialize(site, rules_collection, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
+    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
       @site = site
-      @rules_collection = rules_collection
 
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
@@ -87,26 +83,11 @@ module Nanoc::Int
       @stack = []
     end
 
-    # 1. Load site
-    # 2. Load rules
-    # 3. Preprocess
-    # 4. Build item reps
-    # 5. Compile
-    # 6. Postprocess
-
-    # TODO: move elsewhere
     def run_all
-      # Preprocess
-      Nanoc::Int::Preprocessor.new(site: @site, rules_collection: @rules_collection).run
-
-      # Build reps
+      @action_provider.preprocess(@site)
       build_reps
-
-      # Compile
       run
-
-      # Postprocess
-      Nanoc::Int::Postprocessor.new(create_view_context, site: @site, rules_collection: @rules_collection).run
+      @action_provider.postprocess(@site, @reps)
     end
 
     def run
@@ -143,21 +124,14 @@ module Nanoc::Int
       end
 
       # Calculate checksums
-      objects.each do |obj|
+      objects_to_checksum =
+        site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
+      objects_to_checksum.each do |obj|
         checksum_store[obj] = Nanoc::Int::Checksummer.calc(obj)
       end
 
       # Store
       stores.each(&:store)
-    end
-
-    # Returns all objects managed by the site (items, layouts, code snippets,
-    # site configuration and the rules).
-    #
-    # @api private
-    def objects
-      site.items.to_a + site.layouts.to_a + site.code_snippets +
-        [site.config, rules_collection]
     end
 
     def build_reps
@@ -196,6 +170,16 @@ module Nanoc::Int
 
     def create_view_context
       Nanoc::ViewContext.new(reps: @reps, items: @site.items)
+    end
+
+    # @api private
+    def filter_name_and_args_for_layout(layout)
+      mem = action_provider.memory_for(layout)
+      if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::RuleMemoryActions::Filter)
+        # FIXME: Provide a nicer error message
+        raise Nanoc::Int::Errors::Generic, "No rule memory found for #{layout.identifier}"
+      end
+      [mem[0].filter_name, mem[0].params]
     end
 
     private

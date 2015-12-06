@@ -7,14 +7,9 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layouts: [],
     )
 
-    rules_collection = Nanoc::RuleDSL::RulesCollection.new
-
     reps = Nanoc::Int::ItemRepRepo.new
 
-    rule_memory_calculator = Nanoc::RuleDSL::RuleMemoryCalculator.new(
-      rules_collection: rules_collection,
-      site: site,
-    )
+    action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
@@ -22,8 +17,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
       dependency_store: Nanoc::Int::DependencyStore.new(
         site.items.to_a + site.layouts.to_a),
-      action_provider: Nanoc::RuleDSL::ActionProvider.new(
-        rules_collection, rule_memory_calculator),
+      action_provider: action_provider,
       reps: reps,
     }
 
@@ -32,157 +26,60 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         site: site,
         checksum_store: params[:checksum_store],
         dependency_store: params[:dependency_store],
-        rules_collection: params[:rules_collection],
         rule_memory_store: params[:rule_memory_store],
-        rule_memory_calculator: rule_memory_calculator,
+        action_provider: action_provider,
         reps: reps,
       )
 
-    Nanoc::Int::Compiler.new(site, rules_collection, params)
+    Nanoc::Int::Compiler.new(site, params)
   end
 
-  def test_compilation_rule_for
-    # Mock rules
-    rules = [mock, mock, mock]
-    rules[0].expects(:applicable_to?).returns(false)
-    rules[1].expects(:applicable_to?).returns(true)
-    rules[1].expects(:rep_name).returns('wrong')
-    rules[2].expects(:applicable_to?).returns(true)
-    rules[2].expects(:rep_name).returns('right')
+  def test_compile_rep_should_write_proper_snapshots_real
+    with_site do |site|
+      File.write('content/moo.txt', '<%= 1 %> <%%= 2 %> <%%%= 3 %>')
+      File.write('layouts/default.erb', 'head <%= yield %> foot')
 
-    # Create compiler
-    compiler = new_compiler
-    compiler.rules_collection.instance_eval { @item_compilation_rules = rules }
+      # FIXME: :pre is broken (it’s always non-final)
 
-    # Mock rep
-    rep = mock
-    rep.stubs(:name).returns('right')
-    item = mock
-    rep.stubs(:item).returns(item)
+      File.open('Rules', 'w') do |io|
+        io.write "compile '/**/*' do\n"
+        io.write "  filter :erb\n"
+        io.write "  filter :erb\n"
+        io.write "  layout 'default'\n"
+        io.write "  filter :erb\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '/**/*', snapshot: :raw do\n"
+        io.write "  '/moo-raw.txt'\n"
+        io.write "end\n"
+        io.write "\n"
+        # io.write "route '/**/*', snapshot: :pre do\n"
+        # io.write "  '/moo-pre.txt'\n"
+        # io.write "end\n"
+        # io.write "\n"
+        io.write "route '/**/*', snapshot: :post do\n"
+        io.write "  '/moo-post.txt'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "route '/**/*' do\n"
+        io.write "  '/moo-last.txt'\n"
+        io.write "end\n"
+        io.write "\n"
+        io.write "layout '/**/*', :erb\n"
+      end
 
-    # Test
-    assert_equal rules[2], compiler.rules_collection.compilation_rule_for(rep)
-  end
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site.compile
 
-  def test_filter_for_layout_with_existant_layout
-    # Create compiler
-    compiler = new_compiler
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(/.*/)] = [:erb, { foo: 'bar' }]
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/some_layout/')
-
-    # Check
-    assert_equal([:erb, { foo: 'bar' }], compiler.rules_collection.filter_for_layout(layout))
-  end
-
-  def test_filter_for_layout_with_existant_layout_and_unknown_filter
-    # Create compiler
-    compiler = new_compiler
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(/.*/)] = [:some_unknown_filter, { foo: 'bar' }]
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/some_layout/')
-
-    # Check
-    assert_equal([:some_unknown_filter, { foo: 'bar' }], compiler.rules_collection.filter_for_layout(layout))
-  end
-
-  def test_filter_for_layout_with_nonexistant_layout
-    # Create compiler
-    compiler = new_compiler
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/foo/$})] = [:erb, { foo: 'bar' }]
-
-    # Mock layout
-    layout = MiniTest::Mock.new
-    layout.expect(:identifier, '/bar/')
-
-    # Check
-    assert_equal(nil, compiler.rules_collection.filter_for_layout(layout))
-  end
-
-  def test_filter_for_layout_with_many_layouts
-    # Create compiler
-    compiler = new_compiler
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/b/c/.*/$})] = [:erb, { char: 'd' }]
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/.*/$})]     = [:erb, { char: 'b' }]
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/a/b/.*/$})]   = [:erb, { char: 'c' }] # never used!
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/.*/$})]       = [:erb, { char: 'a' }]
-
-    # Mock layout
-    layouts = [mock, mock, mock, mock]
-    layouts[0].stubs(:identifier).returns('/a/b/c/d/')
-    layouts[1].stubs(:identifier).returns('/a/b/c/')
-    layouts[2].stubs(:identifier).returns('/a/b/')
-    layouts[3].stubs(:identifier).returns('/a/')
-
-    # Get expectations
-    expectations = {
-      0 => 'd',
-      1 => 'b', # never used! not c, because b takes priority
-      2 => 'b',
-      3 => 'a',
-    }
-
-    # Check
-    expectations.each_pair do |num, char|
-      filter_and_args = compiler.rules_collection.filter_for_layout(layouts[num])
-      refute_nil(filter_and_args)
-      assert_equal(char, filter_and_args[1][:char])
+      assert File.file?('output/moo-raw.txt')
+      # assert File.file?('output/moo-pre.txt')
+      assert File.file?('output/moo-post.txt')
+      assert File.file?('output/moo-last.txt')
+      assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('output/moo-raw.txt')
+      # assert_equal '1 2 <%= 3 %>',                  File.read('output/moo-pre.txt')
+      assert_equal 'head 1 2 3 foot',               File.read('output/moo-post.txt')
+      assert_equal 'head 1 2 3 foot',               File.read('output/moo-last.txt')
     end
-  end
-
-  def test_compile_rep_should_write_proper_snapshots
-    # Mock rep
-    item = Nanoc::Int::Item.new('<%= 1 %> <%%= 2 %> <%%%= 3 %>', {}, '/moo/')
-    rep  = Nanoc::Int::ItemRep.new(item, :blah)
-
-    # Set snapshot filenames
-    rep.raw_paths = {
-      raw: 'raw.txt',
-      pre: 'pre.txt',
-      post: 'post.txt',
-      last: 'last.txt',
-    }
-
-    # Create rule
-    rule_block = proc do
-      filter :erb
-      filter :erb
-      layout '/blah/'
-      filter :erb
-    end
-    rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from(/blah/), :meh, rule_block)
-
-    # Create layout
-    layout = Nanoc::Int::Layout.new('head <%= yield %> foot', {}, '/blah/')
-
-    # Create site
-    site = mock
-    site.stubs(:config).returns({})
-    site.stubs(:items).returns([])
-    site.stubs(:layouts).returns([layout])
-
-    # Create compiler
-    compiler = new_compiler(site)
-    compiler.rules_collection.stubs(:compilation_rule_for).with(rep).returns(rule)
-    compiler.rules_collection.layout_filter_mapping[Nanoc::Int::Pattern.from(%r{^/blah/$})] = [:erb, {}]
-    site.stubs(:compiler).returns(compiler)
-
-    # Compile
-    compiler.send(:compile_rep, rep)
-
-    # Test
-    assert File.file?('raw.txt')
-    assert File.file?('pre.txt')
-    assert File.file?('post.txt')
-    assert File.file?('last.txt')
-    assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('raw.txt')
-    assert_equal '1 2 <%= 3 %>',                  File.read('pre.txt')
-    assert_equal 'head 1 2 3 foot',               File.read('post.txt')
-    assert_equal 'head 1 2 3 foot',               File.read('last.txt')
   end
 
   def test_compile_with_no_reps

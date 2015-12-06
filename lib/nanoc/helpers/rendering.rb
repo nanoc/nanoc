@@ -99,7 +99,7 @@ module Nanoc::Helpers
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name, filter_args = @site.unwrap.compiler.rules_collection.filter_for_layout(layout)
+      filter_name, filter_args = *@site.unwrap.compiler.filter_name_and_args_for_layout(layout)
       raise Nanoc::Int::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class

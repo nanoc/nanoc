@@ -49,62 +49,6 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
     assert_match(/WARNING: A postprocess block is already defined./, io[:stderr])
   end
 
-  def test_per_rules_file_preprocessor
-    # Create site
-    Nanoc::CLI.run %w( create_site foo )
-    FileUtils.cd('foo') do
-      # Create a bonus rules file
-      File.write(
-        'more_rules.rb',
-        "preprocess { @items['/index.*'][:preprocessed] = true }")
-
-      # Adjust normal rules file
-      File.write(
-        'Rules',
-        "include_rules 'more_rules'\n\npreprocess {}\n\n" + File.read('Rules'))
-
-      # Create site and compiler
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      compiler = Nanoc::Int::CompilerLoader.new.load(site)
-
-      # Check that the two preprocess blocks have been added
-      assert_equal 2, compiler.rules_collection.preprocessors.size
-      refute_nil compiler.rules_collection.preprocessors.first
-      refute_nil compiler.rules_collection.preprocessors.to_a.last
-
-      # Apply preprocess blocks
-      Nanoc::Int::Preprocessor
-        .new(site: site, rules_collection: compiler.rules_collection)
-        .run
-      assert site.items['/index.*'].attributes[:preprocessed]
-    end
-  end
-
-  def test_per_rules_file_postprocessor
-    # Create site
-    Nanoc::CLI.run %w( create_site foo )
-    FileUtils.cd('foo') do
-      # Create a bonus rules file
-      File.write(
-        'more_rules.rb',
-        'postprocess {}')
-
-      # Adjust normal rules file
-      File.write(
-        'Rules',
-        "include_rules 'more_rules'\n\npostprocess {}\n\n" + File.read('Rules'))
-
-      # Create site and compiler
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      compiler = Nanoc::Int::CompilerLoader.new.load(site)
-
-      # Check that the two postprocess blocks have been added
-      assert_equal 2, compiler.rules_collection.postprocessors.size
-      refute_nil compiler.rules_collection.postprocessors.first
-      refute_nil compiler.rules_collection.postprocessors.to_a.last
-    end
-  end
-
   def test_postprocessor_modified_method
     with_site do |site|
       # Create rules
@@ -132,9 +76,7 @@ EOS
   end
 
   def test_include_rules
-    # Create site
-    Nanoc::CLI.run %w( create_site foo )
-    FileUtils.cd('foo') do
+    with_site(legacy: false) do |site|
       # Create a bonus rules file
       File.write(
         'more_rules.rb',
@@ -147,18 +89,15 @@ EOS
           "route '/**/*' do ; nil ; end\n\n" \
           "compile '/**/*' do ; end\n")
 
-      # Create site and compiler
+      # Create items
+      File.write('content/index.html', 'hello!')
+
+      # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      compiler = Nanoc::Int::CompilerLoader.new.load(site)
-      compiler.build_reps
+      site.compile
 
       # Check
-      rep = compiler.reps[site.items['/index.*']][0]
-      routing_rules = site.compiler.rules_collection.routing_rules_for(rep)
-      routing_rule = routing_rules[:last]
-      refute_nil routing_rule
-      assert_equal Nanoc::Int::StringPattern, routing_rule.pattern.class
-      assert_equal '/index.*', routing_rule.pattern.to_s
+      assert File.file?('output/index.html')
     end
   end
 

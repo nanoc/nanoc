@@ -11,8 +11,16 @@ module Nanoc::CLI::Commands
       require_site
 
       @c = Nanoc::CLI::ANSIStringColorizer
-      @rules = site.compiler.rules_collection
       @reps = site.compiler.reps
+
+      action_provider = site.compiler.action_provider
+      unless action_provider.respond_to?(:rules_collection)
+        raise(
+          ::Nanoc::Int::Errors::GenericTrivial,
+          'The show-rules command can only be used for sites with the Rule DSL action provider.',
+        )
+      end
+      @rules = action_provider.rules_collection
 
       site.items.sort_by(&:identifier).each   { |e| explain_item(e) }
       site.layouts.sort_by(&:identifier).each { |e| explain_layout(e) }

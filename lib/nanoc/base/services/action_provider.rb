@@ -1,6 +1,12 @@
 module Nanoc::Int
   # @private
   class ActionProvider
+    extend Nanoc::Int::PluginRegistry::PluginMethods
+
+    def self.for(_site)
+      raise NotImplementedError
+    end
+
     def rep_names_for(_item)
       raise NotImplementedError
     end
