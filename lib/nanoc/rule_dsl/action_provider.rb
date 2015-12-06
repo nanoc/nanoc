@@ -5,6 +5,21 @@ module Nanoc::RuleDSL
     # @api private
     attr_reader :rules_collection
 
+    def self.for(site)
+      rules_collection = Nanoc::RuleDSL::RulesCollection.new
+
+      rule_memory_calculator =
+        Nanoc::RuleDSL::RuleMemoryCalculator.new(
+          rules_collection: rules_collection, site: site)
+
+      action_provider = Nanoc::RuleDSL::ActionProvider.new(
+        rules_collection, rule_memory_calculator)
+
+      Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
+
+      action_provider
+    end
+
     def initialize(rules_collection, rule_memory_calculator)
       @rules_collection = rules_collection
       @rule_memory_calculator = rule_memory_calculator

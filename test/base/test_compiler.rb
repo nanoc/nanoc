@@ -7,17 +7,9 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       layouts: [],
     )
 
-    rules_collection = Nanoc::RuleDSL::RulesCollection.new
-
     reps = Nanoc::Int::ItemRepRepo.new
 
-    rule_memory_calculator = Nanoc::RuleDSL::RuleMemoryCalculator.new(
-      rules_collection: rules_collection,
-      site: site,
-    )
-
-    action_provider = Nanoc::RuleDSL::ActionProvider.new(
-      rules_collection, rule_memory_calculator)
+    action_provider = Nanoc::RuleDSL::ActionProvider.for(site)
 
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
