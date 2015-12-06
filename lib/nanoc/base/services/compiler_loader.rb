@@ -12,7 +12,7 @@ module Nanoc::Int
 
       item_rep_repo = Nanoc::Int::ItemRepRepo.new
 
-      action_provider = Nanoc::RuleDSL::ActionProvider.for(site)
+      action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(

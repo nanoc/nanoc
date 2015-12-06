@@ -1,6 +1,6 @@
 module Nanoc::RuleDSL
   class ActionProvider < Nanoc::Int::ActionProvider
-    # TODO: Convert this into a plugin
+    identifier :rule_dsl
 
     # @api private
     attr_reader :rules_collection
@@ -12,8 +12,7 @@ module Nanoc::RuleDSL
         Nanoc::RuleDSL::RuleMemoryCalculator.new(
           rules_collection: rules_collection, site: site)
 
-      action_provider = Nanoc::RuleDSL::ActionProvider.new(
-        rules_collection, rule_memory_calculator)
+      action_provider = new(rules_collection, rule_memory_calculator)
 
       Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
 

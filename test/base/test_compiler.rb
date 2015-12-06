@@ -9,7 +9,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     reps = Nanoc::Int::ItemRepRepo.new
 
-    action_provider = Nanoc::RuleDSL::ActionProvider.for(site)
+    action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
