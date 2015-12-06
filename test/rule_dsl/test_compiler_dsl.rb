@@ -73,9 +73,9 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       refute_nil compiler.rules_collection.preprocessors.to_a.last
 
       # Apply preprocess blocks
-      Nanoc::Int::Preprocessor
-        .new(site: site, rules_collection: compiler.rules_collection)
-        .run
+      Nanoc::RuleDSL::ActionProvider
+        .new(compiler.rules_collection, nil)
+        .preprocess(site)
       assert site.items['/index.*'].attributes[:preprocessed]
     end
   end
