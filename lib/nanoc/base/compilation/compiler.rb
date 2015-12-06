@@ -105,11 +105,6 @@ module Nanoc::Int
       @action_provider.postprocess(@site, @reps)
     end
 
-    # TODO: Remove me
-    def rules_collection
-      @action_provider.rules_collection
-    end
-
     def run
       load_stores
       @site.freeze
