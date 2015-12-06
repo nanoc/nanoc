@@ -83,25 +83,10 @@ module Nanoc::Int
       @stack = []
     end
 
-    # 1. Load site
-    # 2. Load rules
-    # 3. Preprocess
-    # 4. Build item reps
-    # 5. Compile
-    # 6. Postprocess
-
-    # TODO: move elsewhere
     def run_all
-      # Preprocess
       @action_provider.preprocess(@site)
-
-      # Build reps
       build_reps
-
-      # Compile
       run
-
-      # Postprocess
       @action_provider.postprocess(@site, @reps)
     end
 
