@@ -143,21 +143,14 @@ module Nanoc::Int
       end
 
       # Calculate checksums
-      objects.each do |obj|
+      objects_to_checksum =
+        site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
+      objects_to_checksum.each do |obj|
         checksum_store[obj] = Nanoc::Int::Checksummer.calc(obj)
       end
 
       # Store
       stores.each(&:store)
-    end
-
-    # Returns all objects managed by the site (items, layouts, code snippets,
-    # site configuration and the rules).
-    #
-    # @api private
-    def objects
-      site.items.to_a + site.layouts.to_a + site.code_snippets +
-        [site.config, rules_collection]
     end
 
     def build_reps
