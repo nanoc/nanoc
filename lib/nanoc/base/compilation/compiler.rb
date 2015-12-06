@@ -192,6 +192,16 @@ module Nanoc::Int
       Nanoc::ViewContext.new(reps: @reps, items: @site.items)
     end
 
+    # @api private
+    def filter_name_and_args_for_layout(layout)
+      mem = action_provider.memory_for(layout)
+      if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::RuleMemoryActions::Filter)
+        # FIXME: Provide a nicer error message
+        raise Nanoc::Int::Errors::Generic, "No rule memory found for #{layout.identifier}"
+      end
+      [mem[0].filter_name, mem[0].params]
+    end
+
     private
 
     def compile_reps

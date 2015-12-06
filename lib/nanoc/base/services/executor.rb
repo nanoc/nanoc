@@ -55,13 +55,7 @@ module Nanoc
 
       def layout(rep, layout_identifier, extra_filter_args = nil)
         layout = find_layout(layout_identifier)
-        mem = @compiler.action_provider.memory_for(layout)
-        if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::RuleMemoryActions::Filter)
-          # FIXME: Provide a nicer error message
-          raise Nanoc::Int::Errors::Generic, "No rule memory found for #{layout_identifier}"
-        end
-        filter_name = mem[0].filter_name
-        filter_args = mem[0].params
+        filter_name, filter_args = *@compiler.filter_name_and_args_for_layout(layout)
         if filter_name.nil?
           raise Nanoc::Int::Errors::Generic, "Cannot find rule for layout matching #{layout_identifier}"
         end

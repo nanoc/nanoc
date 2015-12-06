@@ -1,7 +1,7 @@
 describe Nanoc::Int::Executor do
   let(:executor) { described_class.new(compiler) }
 
-  let(:compiler) { double(:compiler) }
+  let(:compiler) { Nanoc::Int::Compiler.allocate }
 
   describe '#filter' do
     let(:assigns) { {} }
