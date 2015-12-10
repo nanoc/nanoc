@@ -1,12 +1,6 @@
 module Nanoc
   module RuleDSL
     class RecordingExecutor
-      class NonFinalSnapshotWithPathError < ::Nanoc::Error
-        def initialize
-          super('This call to #snapshot specifies `final: false`, but it also specifies a path, which is an impossible combination.')
-        end
-      end
-
       class PathWithoutInitialSlashError < ::Nanoc::Error
         def initialize(rep, basic_path)
           super("The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash.")
@@ -28,14 +22,15 @@ module Nanoc
       end
 
       def layout(_rep, layout_identifier, extra_filter_args = {})
+        unless @rule_memory.any_layouts?
+          @rule_memory.add_snapshot(:pre, true, nil)
+        end
+
         @rule_memory.add_layout(layout_identifier, extra_filter_args)
       end
 
       def snapshot(rep, snapshot_name, final: true, path: nil)
-        actual_path = path || basic_path_from_rules_for(rep, snapshot_name)
-        if !final && actual_path
-          raise NonFinalSnapshotWithPathError
-        end
+        actual_path = final ? (path || basic_path_from_rules_for(rep, snapshot_name)) : nil
         @rule_memory.add_snapshot(snapshot_name, final, actual_path)
       end
 

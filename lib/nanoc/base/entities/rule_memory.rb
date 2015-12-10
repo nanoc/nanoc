@@ -24,7 +24,7 @@ module Nanoc::Int
     end
 
     def add_snapshot(snapshot_name, final, path)
-      will_add_snapshot(snapshot_name)
+      will_add_snapshot(snapshot_name) if final
       @actions << Nanoc::Int::RuleMemoryActions::Snapshot.new(snapshot_name, final, path)
     end
 
