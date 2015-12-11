@@ -2,6 +2,7 @@ language: ruby
 rvm:
   - 2.1.2
   - 2.2.2
+  - ruby-head
 branches:
   only:
     - "master"
@@ -16,6 +17,7 @@ matrix:
     - rvm: jruby-head
       jdk: openjdk7
       env: DISABLE_NOKOGIRI=1
+    - rvm: ruby-head
 notifications:
   irc:
     channels:
