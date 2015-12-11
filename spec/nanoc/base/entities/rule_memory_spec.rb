@@ -70,13 +70,23 @@ describe Nanoc::Int::RuleMemory do
       end
     end
 
-    context 'snapshot already exist' do
+    context 'non-final snapshot already exist' do
       before do
         rule_memory.add_snapshot(:before_layout, false, '/bar.md')
       end
 
-      example do
-        expect { rule_memory.add_snapshot(:before_layout, false, '/foo.md') }
+      it 'does not raise' do
+        rule_memory.add_snapshot(:before_layout, true, '/foo.md')
+      end
+    end
+
+    context 'final snapshot already exist' do
+      before do
+        rule_memory.add_snapshot(:before_layout, true, '/bar.md')
+      end
+
+      it 'raises' do
+        expect { rule_memory.add_snapshot(:before_layout, true, '/foo.md') }
           .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
       end
     end

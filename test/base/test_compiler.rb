@@ -39,8 +39,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       File.write('content/moo.txt', '<%= 1 %> <%%= 2 %> <%%%= 3 %>')
       File.write('layouts/default.erb', 'head <%= yield %> foot')
 
-      # FIXME: :pre is broken (it’s always non-final)
-
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"
         io.write "  filter :erb\n"
@@ -53,10 +51,10 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
         io.write "  '/moo-raw.txt'\n"
         io.write "end\n"
         io.write "\n"
-        # io.write "route '/**/*', snapshot: :pre do\n"
-        # io.write "  '/moo-pre.txt'\n"
-        # io.write "end\n"
-        # io.write "\n"
+        io.write "route '/**/*', snapshot: :pre do\n"
+        io.write "  '/moo-pre.txt'\n"
+        io.write "end\n"
+        io.write "\n"
         io.write "route '/**/*', snapshot: :post do\n"
         io.write "  '/moo-post.txt'\n"
         io.write "end\n"
