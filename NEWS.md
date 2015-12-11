@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.1.0b1 (2015-12-11)
+
+Fixes:
+
+* Fixed issue with `:pre` snapshot not being generated properly (#764)
+
+Enhancements:
+
+* Updated default site to use `#write` (#759)
+
 ## 4.1.0a1 (2015-12-05)
 
 Features:
