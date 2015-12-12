@@ -115,6 +115,27 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     assert_equal 'pre!', rep.compiled_content(snapshot: :pre)
   end
 
+  def test_compiled_content_with_multiple_pre_snapshots
+    # Create rep
+    item = Nanoc::Int::Item.new(
+      'blah blah', {}, '/'
+    )
+    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep.expects(:compiled?).returns(false)
+    rep.snapshot_defs = [
+      Nanoc::Int::SnapshotDef.new(:pre, false),
+      Nanoc::Int::SnapshotDef.new(:pre, true),
+    ]
+    rep.snapshot_contents = {
+      pre: Nanoc::Int::TextualContent.new('pre!'),
+      post: Nanoc::Int::TextualContent.new('post!'),
+      last: Nanoc::Int::TextualContent.new('last!'),
+    }
+
+    # Check
+    assert_equal 'pre!', rep.compiled_content(snapshot: :pre)
+  end
+
   def test_access_compiled_content_of_binary_item
     content = Nanoc::Int::BinaryContent.new(File.expand_path('content/somefile.dat'))
     item = Nanoc::Int::Item.new(content, {}, '/somefile/')
