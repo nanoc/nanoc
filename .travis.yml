@@ -6,7 +6,7 @@ rvm:
 branches:
   only:
     - "master"
-    - "release-4.0.x"
+    - "/^release-/"
 before_install: gem install bundler
 matrix:
   include:
