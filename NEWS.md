@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.1.0rc1 (2015-12-12)
+
+Fixes:
+
+* Fixed `@item.compiled_content` in a layout raising an exception (#761, #766)
+
 ## 4.1.0b1 (2015-12-11)
 
 Fixes:
