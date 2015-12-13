@@ -11,4 +11,13 @@ class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
       assert_equal [:bar], dsl.deploy_checks
     end
   end
+
+  def test_has_base_path
+    with_site do |_site|
+      File.write('stuff.rb', '$greeting = "hello"')
+      File.write('Checks', 'require "./stuff"')
+      Nanoc::Extra::Checking::DSL.from_file('Checks')
+      assert_equal 'hello', $greeting
+    end
+  end
 end
