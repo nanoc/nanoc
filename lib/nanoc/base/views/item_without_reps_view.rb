@@ -29,9 +29,7 @@ module Nanoc
       end
 
       parent_identifier = '/' + unwrap.identifier.components[0..-2].join('/') + '/'
-
-      # FIXME: Fix this elsewhere
-      parent_identifier.sub!(/\/\/$/, '/')
+      parent_identifier = '/' if parent_identifier == '//'
 
       parent = @context.items[parent_identifier]
 

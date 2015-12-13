@@ -59,6 +59,16 @@ describe Nanoc::ItemWithRepsView do
         end
 
         it { is_expected.to be_frozen }
+
+        context 'with root parent' do
+          let(:parent_item) { Nanoc::Int::Item.new('parent', {}, '/') }
+          let(:identifier) { Nanoc::Identifier.new('/me/', type: :legacy) }
+
+          it 'returns a view for the parent' do
+            expect(subject.class).to eql(Nanoc::ItemWithRepsView)
+            expect(subject.unwrap).to eql(parent_item)
+          end
+        end
       end
     end
 
