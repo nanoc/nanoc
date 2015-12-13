@@ -177,7 +177,7 @@ describe Nanoc::ItemRepView do
     subject { view.item }
 
     it 'returns an item view' do
-      expect(subject).to be_a(Nanoc::ItemView)
+      expect(subject).to be_a(Nanoc::ItemWithRepsView)
     end
 
     it 'returns an item view with the right context' do

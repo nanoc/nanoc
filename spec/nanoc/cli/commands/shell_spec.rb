@@ -27,7 +27,7 @@ describe Nanoc::CLI::Commands::Shell, site: true do
     end
 
     it 'returns views' do
-      expect(subject[:items]).to be_a(Nanoc::ItemCollectionView)
+      expect(subject[:items]).to be_a(Nanoc::ItemCollectionWithRepsView)
       expect(subject[:layouts]).to be_a(Nanoc::LayoutCollectionView)
       expect(subject[:config]).to be_a(Nanoc::ConfigView)
     end

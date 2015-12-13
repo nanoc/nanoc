@@ -3,7 +3,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_without_tags
     # Create item
-    item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/path/'), nil)
 
     # Check
     assert_equal(
@@ -14,7 +14,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
 
     # Check
     assert_equal(
@@ -26,7 +26,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', { tags: [] }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: [] }, '/path/'), nil)
 
     # Check
     assert_equal(
@@ -37,7 +37,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
 
     # Check
     assert_equal(
@@ -49,7 +49,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_without_base_url
     # Create item
-    item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
 
     # Check
     assert_equal('foo, bar', tags_for(item))
@@ -57,7 +57,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_items_with_tag
     # Create items
-    @items = Nanoc::ItemCollectionView.new(
+    @items = Nanoc::ItemCollectionWithRepsView.new(
       [
         Nanoc::Int::Item.new('item 1', { tags: [:foo]       }, '/item1/'),
         Nanoc::Int::Item.new('item 2', { tags: [:bar]       }, '/item2/'),

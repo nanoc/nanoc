@@ -60,9 +60,9 @@ module Nanoc
 
     # Returns the item that this item rep belongs to.
     #
-    # @return [Nanoc::ItemView]
+    # @return [Nanoc::ItemWithRepsView]
     def item
-      Nanoc::ItemView.new(@item_rep.item, @context)
+      Nanoc::ItemWithRepsView.new(@item_rep.item, @context)
     end
 
     # @api private

@@ -22,7 +22,7 @@ module Nanoc
       disallowed_value_classes = Set.new([
         Nanoc::Int::Item,
         Nanoc::Int::Layout,
-        Nanoc::ItemView,
+        Nanoc::ItemWithRepsView,
         Nanoc::LayoutView,
       ])
       if disallowed_value_classes.include?(value.class)

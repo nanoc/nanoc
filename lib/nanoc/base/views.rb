@@ -1,13 +1,16 @@
 require_relative 'views/mixins/document_view_mixin'
 require_relative 'views/mixins/mutable_document_view_mixin'
+require_relative 'views/mixins/with_reps_view_mixin'
 
 require_relative 'views/view'
 require_relative 'views/view_context'
 
 require_relative 'views/config_view'
 require_relative 'views/identifiable_collection_view'
-require_relative 'views/item_view'
-require_relative 'views/item_collection_view'
+require_relative 'views/item_without_reps_view'
+require_relative 'views/item_with_reps_view'
+require_relative 'views/item_collection_with_reps_view'
+require_relative 'views/item_collection_without_reps_view'
 require_relative 'views/item_rep_view'
 require_relative 'views/item_rep_collection_view'
 require_relative 'views/layout_view'

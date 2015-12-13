@@ -1,5 +1,5 @@
 module Nanoc
-  class MutableItemView < Nanoc::ItemView
+  class MutableItemView < Nanoc::ItemWithoutRepsView
     include Nanoc::MutableDocumentViewMixin
   end
 end

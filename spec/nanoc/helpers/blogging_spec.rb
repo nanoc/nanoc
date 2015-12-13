@@ -48,7 +48,7 @@ describe Nanoc::Helpers::Blogging do
       items << item_b
       items << item_c
 
-      { items: Nanoc::ItemCollectionView.new(items, view_context) }
+      { items: Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
     end
 
     it 'returns the two articles' do
@@ -92,7 +92,7 @@ describe Nanoc::Helpers::Blogging do
       items << item_b
       items << item_c
 
-      { items: Nanoc::ItemCollectionView.new(items, view_context) }
+      { items: Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
     end
 
     it 'returns the two articles' do
@@ -110,7 +110,7 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:item_view) do
-      Nanoc::ItemView.new(item, view_context)
+      Nanoc::ItemWithRepsView.new(item, view_context)
     end
 
     let(:rep) do
@@ -188,7 +188,7 @@ describe Nanoc::Helpers::Blogging do
     end
 
     let(:item_view) do
-      Nanoc::ItemView.new(item, view_context)
+      Nanoc::ItemWithRepsView.new(item, view_context)
     end
 
     let(:item_attributes) do
@@ -279,7 +279,7 @@ describe Nanoc::Helpers::Blogging do
     let(:item_rep_path) { '/stuff.xml' }
 
     let(:item_view) do
-      Nanoc::ItemView.new(item, view_context)
+      Nanoc::ItemWithRepsView.new(item, view_context)
     end
 
     let(:item_attributes) do

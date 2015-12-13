@@ -1,5 +1,5 @@
 module Nanoc
-  class PostCompileItemView < Nanoc::ItemView
+  class PostCompileItemView < Nanoc::ItemWithRepsView
     def modified
       reps.select { |rep| rep.unwrap.modified }
     end
