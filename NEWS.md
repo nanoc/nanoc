@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.1.0rc2 (2015-12-???)
+
+Fixes:
+
+* Fixed children of the root item not having a parent (#769, #770)
+
+Enhancements:
+
+* Made `#path`, `#compiled_content` and `#reps` unavailable during pre-processing, compilation and routing, because they do not make sense in these contexts (#571, #767, #768)
+
 ## 4.1.0rc1 (2015-12-12)
 
 Fixes:
