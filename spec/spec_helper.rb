@@ -12,6 +12,53 @@ end
 
 Nanoc::CLI.setup
 
+class HelperContext
+  def initialize(mod)
+    @config = Nanoc::Int::Configuration.new
+    @reps = Nanoc::Int::ItemRepRepo.new
+    @items = Nanoc::Int::IdentifiableCollection.new(@config)
+    @mod = mod
+  end
+
+  def create_item(content, attributes, identifier, main: false)
+    item = Nanoc::Int::Item.new(content, attributes, identifier)
+    @items << item
+    @item = item if main
+    Nanoc::ItemWithRepsView.new(item, view_context)
+  end
+
+  def create_rep(item, path)
+    rep = Nanoc::Int::ItemRep.new(item.unwrap, :default)
+    rep.paths[:last] = path
+    @reps << rep
+    Nanoc::ItemRepView.new(rep, view_context)
+  end
+
+  def helper
+    mod = @mod
+    klass = Class.new(Nanoc::Int::Context) { include mod }
+    klass.new(assigns)
+  end
+
+  def config
+    assigns[:config]
+  end
+
+  private
+
+  def view_context
+    Nanoc::ViewContext.new(reps: @reps, items: @items)
+  end
+
+  def assigns
+    {
+      config: Nanoc::MutableConfigView.new(@config, view_context),
+      item: @item ? Nanoc::ItemWithRepsView.new(@item, view_context) : nil,
+      items: Nanoc::ItemCollectionWithRepsView.new(@items, view_context)
+    }
+  end
+end
+
 RSpec.configure do |c|
   c.around(:each) do |example|
     Nanoc::CLI::ErrorHandler.disable
