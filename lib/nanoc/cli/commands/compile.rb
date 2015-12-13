@@ -410,9 +410,45 @@ module Nanoc::CLI::Commands
       time_after = Time.now
       puts
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
+
+      record_metrics(compilation_duration: time_after - time_before)
     end
 
     protected
+
+    def record_metrics(compilation_duration:)
+      return unless $stdout.tty?
+
+      # TODO: Only ask once per version or so
+
+      data = {
+        nanoc_version: Nanoc::VERSION,
+        string_pattern_type: site.config[:string_pattern_type],
+        enable_output_diff: site.config[:enable_output_diff],
+        identifier_types: site.config[:data_sources].map { |dsc| dsc[:identifier_type] }.uniq,
+        auto_prune: site.config[:prune][:auto_prune],
+        num_items: site.items.size,
+        num_layouts: site.layouts.size,
+        num_outdated_items: site.items.count { |i| site.compiler.outdatedness_checker.outdated?(i) },
+        compilation_duration: compilation_duration,
+      }
+
+      puts
+      puts '* * *'
+      puts
+      puts 'Nanoc needs your help!'
+      puts
+      puts 'In order to improve Nanoc, we’d like to record anonymous usage metrics. This is what we’d like to record:'
+      puts
+      key_size = data.keys.max_by(&:size).size
+      data.each_pair do |key, value|
+        puts "#{format "%#{key_size}s: %s", key, value}"
+      end
+      puts
+      print 'Do you want to send this data? [y/N] '
+      $stdout.flush
+      answer = gets
+    end
 
     def prune
       if site.config[:prune][:auto_prune]
