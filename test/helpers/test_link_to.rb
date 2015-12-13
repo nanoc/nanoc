@@ -74,6 +74,48 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     @item = nil
   end
 
+  def test_link_to_unless_current_current_with_attributes
+    # Create item
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/foo/')
+
+    # Check
+    assert_equal(
+      '<span class="quux active" title="Foo &amp; Bar">Bar</span>',
+      link_to_unless_current('Bar', @item_rep, class: 'quux', title: 'Foo & Bar'),
+    )
+  ensure
+    @item = nil
+  end
+
+  def test_link_to_unless_current_current_with_active_class
+    # Create item
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/foo/')
+
+    # Check
+    assert_equal(
+      '<span class="foo-bar-active">Bar</span>',
+      link_to_unless_current('Bar', @item_rep, active_class: 'foo-bar-active'),
+    )
+  ensure
+    @item = nil
+  end
+
+  def test_link_to_unless_current_current_with_active_class_and_class
+    # Create item
+    @item_rep = mock
+    @item_rep.stubs(:path).returns('/foo/')
+
+    # Check
+    assert_equal(
+      '<span class="quux foo-bar-active">Bar</span>',
+      link_to_unless_current('Bar', @item_rep, class: 'quux', active_class: 'foo-bar-active'),
+    )
+  ensure
+    @item = nil
+  end
+
   def test_link_to_unless_current_not_current
     # Create item
     @item_rep = mock

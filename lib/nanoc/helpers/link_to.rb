@@ -88,8 +88,23 @@ module Nanoc::Helpers
       path = target.is_a?(String) ? target : target.path
 
       if @item_rep && @item_rep.path == path
+        active_class = attributes[:active_class] || 'active'
+        attributes.delete :active_class
+
+        # merge active_class with attributes' class
+        if attributes.has_key? :class then
+          attributes[:class] += " #{active_class}"
+        else
+          attributes[:class] = active_class
+        end
+
+        # Join attributes, prefixed by a space
+        attributes = attributes.reduce('') do |memo, (key, value)|
+          memo + ' ' + key.to_s + '="' + h(value) + '"'
+        end
+
         # Create message
-        "<span class=\"active\">#{text}</span>"
+        "<span#{attributes}>#{text}</span>"
       else
         link_to(text, target, attributes)
       end
