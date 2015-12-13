@@ -5,7 +5,7 @@ module Nanoc::Extra::Checking
 
     def self.from_file(filename)
       dsl = new
-      dsl.instance_eval File.read(filename)
+      dsl.instance_eval(File.read(filename), filename)
       dsl
     end
 
