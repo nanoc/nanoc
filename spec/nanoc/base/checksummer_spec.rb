@@ -206,11 +206,18 @@ describe Nanoc::Int::Checksummer do
     end
   end
 
-  context 'Nanoc::ItemView' do
-    let(:obj) { Nanoc::ItemView.new(item, nil) }
+  context 'Nanoc::ItemWithRepsView' do
+    let(:obj) { Nanoc::ItemWithRepsView.new(item, nil) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::ItemView<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
+    it { is_expected.to eql('Nanoc::ItemWithRepsView<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
+  end
+
+  context 'Nanoc::ItemWithoutRepsView' do
+    let(:obj) { Nanoc::ItemWithoutRepsView.new(item, nil) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+
+    it { is_expected.to eql('Nanoc::ItemWithoutRepsView<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
   end
 
   context 'Nanoc::LayoutView' do
@@ -227,8 +234,8 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>>') }
   end
 
-  context 'Nanoc::ItemCollectionView' do
-    let(:obj) { Nanoc::ItemCollectionView.new(wrapped, nil) }
+  context 'Nanoc::ItemCollectionWithRepsView' do
+    let(:obj) { Nanoc::ItemCollectionWithRepsView.new(wrapped, nil) }
 
     let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
 
@@ -239,7 +246,22 @@ describe Nanoc::Int::Checksummer do
       end
     end
 
-    it { is_expected.to eql('Nanoc::ItemCollectionView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::ItemCollectionWithRepsView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
+  end
+
+  context 'Nanoc::ItemCollectionWithoutRepsView' do
+    let(:obj) { Nanoc::ItemCollectionWithoutRepsView.new(wrapped, nil) }
+
+    let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+
+    let(:wrapped) do
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
+        arr << Nanoc::Int::Item.new('foo', {}, '/foo.md')
+        arr << Nanoc::Int::Item.new('bar', {}, '/foo.md')
+      end
+    end
+
+    it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'other marshal-able classes' do

@@ -1,4 +1,4 @@
-describe Nanoc::ItemView do
+describe Nanoc::ItemWithRepsView do
   let(:entity_class) { Nanoc::Int::Item }
   it_behaves_like 'a document view'
 
@@ -50,7 +50,7 @@ describe Nanoc::ItemView do
         end
 
         it 'returns a view for the parent' do
-          expect(subject.class).to eql(Nanoc::ItemView)
+          expect(subject.class).to eql(Nanoc::ItemWithRepsView)
           expect(subject.unwrap).to eql(parent_item)
         end
 
@@ -127,7 +127,7 @@ describe Nanoc::ItemView do
 
       it 'returns views for the children' do
         expect(subject.size).to eql(1)
-        expect(subject[0].class).to eql(Nanoc::ItemView)
+        expect(subject[0].class).to eql(Nanoc::ItemWithRepsView)
         expect(subject[0].unwrap).to eql(children[0])
       end
 

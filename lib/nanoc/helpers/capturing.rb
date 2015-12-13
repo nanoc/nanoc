@@ -140,7 +140,7 @@ module Nanoc::Helpers
           raise ArgumentError, 'expected 2 arguments (the item ' \
             "and the name of the capture) but got #{args.size} instead"
         end
-        item = args[0].is_a?(Nanoc::ItemView) ? args[0].unwrap : args[0]
+        item = args[0].is_a?(Nanoc::ItemWithRepsView) ? args[0].unwrap : args[0]
         name = args[1]
 
         # Create dependency

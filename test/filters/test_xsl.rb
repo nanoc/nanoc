@@ -85,7 +85,7 @@ EOS
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Int::Item.new(SAMPLE_XML_IN, {}, '/content/')
-      item = Nanoc::ItemView.new(item, nil)
+      item = Nanoc::ItemWithRepsView.new(item, nil)
       layout = Nanoc::Int::Layout.new(SAMPLE_XSL, {}, '/layout/')
       layout = Nanoc::LayoutView.new(layout, nil)
 
@@ -107,7 +107,7 @@ EOS
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_PARAMS, {}, '/content/')
-      item = Nanoc::ItemView.new(item, nil)
+      item = Nanoc::ItemWithRepsView.new(item, nil)
       layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout/')
       layout = Nanoc::LayoutView.new(layout, nil)
 
@@ -129,7 +129,7 @@ EOS
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL, {}, '/content/')
-      item = Nanoc::ItemView.new(item, nil)
+      item = Nanoc::ItemWithRepsView.new(item, nil)
       layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL, {}, '/layout/')
       layout = Nanoc::LayoutView.new(layout, nil)
 

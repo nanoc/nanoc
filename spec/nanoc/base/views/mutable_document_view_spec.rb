@@ -19,7 +19,7 @@ shared_examples 'a mutable document view' do
     end
 
     it 'disallows item views' do
-      item = Nanoc::ItemView.new(Nanoc::Int::Item.new('content', {}, '/foo.md'), nil)
+      item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/foo.md'), nil)
       expect { view[:item] = item }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 

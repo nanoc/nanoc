@@ -99,7 +99,7 @@ module Nanoc::Int
 
           digest.update(',identifier=')
           update(obj.identifier, digest)
-        when Nanoc::ItemView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
+        when Nanoc::ItemWithRepsView, Nanoc::ItemWithoutRepsView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
           update(obj.unwrap, digest)
         else
           data = begin
