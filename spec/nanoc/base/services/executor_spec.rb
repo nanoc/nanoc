@@ -234,7 +234,7 @@ describe Nanoc::Int::Executor do
     end
 
     let(:layout) do
-      Nanoc::Int::Layout.new(layout_content, {}, '/default.erb')
+      Nanoc::Int::Layout.new(layout_content, { bug: 'Gum Emperor' }, '/default.erb')
     end
 
     let(:layouts) { [layout] }
@@ -261,6 +261,15 @@ describe Nanoc::Int::Executor do
     end
 
     subject { executor.layout(rep, '/default.*') }
+
+    context 'accessing layout attributes' do
+      let(:layout_content) { 'head <%= @layout[:bug] %> foot' }
+
+      it 'exposes @layout as view' do
+        subject
+        expect(rep.snapshot_contents[:last].string).to eq('head Gum Emperor foot')
+      end
+    end
 
     context 'normal flow' do
       it 'updates last content' do
