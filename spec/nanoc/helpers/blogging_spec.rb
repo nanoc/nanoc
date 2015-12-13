@@ -1,136 +1,50 @@
 describe Nanoc::Helpers::Blogging do
-  let(:mod) do
-    Class.new(Nanoc::Int::Context) do
-      include Nanoc::Helpers::Blogging
-    end.new(assigns)
-  end
-
-  let(:assigns) do
-    { items: [] }
-  end
-
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
-
-  let(:reps) do
-    Nanoc::Int::ItemRepRepo.new
-  end
+  let(:ctx) { HelperContext.new(described_class) }
+  let(:helper) { ctx.helper }
 
   describe '#articles' do
-    subject { mod.articles }
+    subject { helper.articles }
 
-    let(:item_a) do
-      Nanoc::Int::Item.new(
-        'blah',
-        { kind: 'item' },
-        '/0/',
-      )
-    end
-
-    let(:item_b) do
-      Nanoc::Int::Item.new(
-        'blah blah',
-        { kind: 'article' },
-        '/1/',
-      )
-    end
-
-    let(:item_c) do
-      Nanoc::Int::Item.new(
-        'blah blah blah',
-        { kind: 'article' },
-        '/2/',
-      )
-    end
-
-    let(:assigns) do
-      items = Nanoc::Int::IdentifiableCollection.new({})
-      items << item_a
-      items << item_b
-      items << item_c
-
-      { items: Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
+    before do
+      ctx.create_item('blah', { kind: 'item' }, '/0/')
+      ctx.create_item('blah blah', { kind: 'article' }, '/1/')
+      ctx.create_item('blah blah blah', { kind: 'article' }, '/2/')
     end
 
     it 'returns the two articles' do
-      expect(subject.size).to eql(2)
-      expect(subject.any? { |a| a.unwrap.equal?(item_a) }).to eql(false)
-      expect(subject.any? { |a| a.unwrap.equal?(item_b) }).to eql(true)
-      expect(subject.any? { |a| a.unwrap.equal?(item_c) }).to eql(true)
+      expect(subject.map(&:identifier)).to match_array(['/1/', '/2/'])
     end
   end
 
   describe '#sorted_articles' do
-    subject { mod.sorted_articles }
+    subject { helper.sorted_articles }
 
-    let(:item_a) do
-      Nanoc::Int::Item.new(
-        'blah',
-        { kind: 'item' },
-        '/0/',
-      )
+    before do
+      attrs = { kind: 'item' }
+      ctx.create_item('blah', attrs, '/0/')
+
+      attrs = { kind: 'article', created_at: (Date.today - 1).to_s }
+      ctx.create_item('blah blah', attrs, '/1/')
+
+      attrs = { kind: 'article', created_at: (Time.now - 500).to_s }
+      ctx.create_item('blah blah blah', attrs, '/2/')
     end
 
-    let(:item_b) do
-      Nanoc::Int::Item.new(
-        'blah blah',
-        { kind: 'article', created_at: (Date.today - 1).to_s },
-        '/1/',
-      )
-    end
-
-    let(:item_c) do
-      Nanoc::Int::Item.new(
-        'blah blah blah',
-        { kind: 'article', created_at: (Time.now - 500).to_s },
-        '/2/',
-      )
-    end
-
-    let(:assigns) do
-      items = Nanoc::Int::IdentifiableCollection.new({})
-      items << item_a
-      items << item_b
-      items << item_c
-
-      { items: Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
-    end
-
-    it 'returns the two articles' do
-      expect(subject.size).to eql(2)
-      expect(subject[0].unwrap).to equal(item_c)
-      expect(subject[1].unwrap).to equal(item_b)
+    it 'returns the two articles in descending order' do
+      expect(subject.map(&:identifier)).to eql(['/2/', '/1/'])
     end
   end
 
   describe '#url_for' do
-    subject { mod.url_for(item_view) }
+    subject { helper.url_for(item) }
 
-    let(:item) do
-      Nanoc::Int::Item.new('Stuff', item_attributes, '/stuff/')
-    end
+    let!(:item) { ctx.create_item('Stuff', item_attributes, '/stuff/') }
+    let(:item_attributes) { {} }
 
-    let(:item_view) do
-      Nanoc::ItemWithRepsView.new(item, view_context)
-    end
-
-    let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-        rep.paths[:last] = '/rep/path/stuff.html'
-      end
-    end
-
-    let(:item_attributes) do
-      {}
-    end
-
-    let(:assigns) do
-      {
-        config: { base_url: base_url },
-      }
-    end
+    let!(:rep) { ctx.create_rep(item, '/rep/path/stuff.html') }
 
     before do
-      reps << rep
+      ctx.config[:base_url] = base_url
     end
 
     context 'without base_url' do
@@ -175,35 +89,15 @@ describe Nanoc::Helpers::Blogging do
   end
 
   describe '#feed_url' do
-    subject { mod.feed_url }
+    subject { helper.feed_url }
 
-    let(:item) do
-      Nanoc::Int::Item.new('Feed', item_attributes, '/feed/')
-    end
+    let!(:item) { ctx.create_item('Feed', item_attributes, '/feed/', main: true) }
+    let(:item_attributes) { {} }
 
-    let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-        rep.paths[:last] = '/feed.xml'
-      end
-    end
-
-    let(:item_view) do
-      Nanoc::ItemWithRepsView.new(item, view_context)
-    end
-
-    let(:item_attributes) do
-      {}
-    end
-
-    let(:assigns) do
-      {
-        config: { base_url: base_url },
-        item: item_view,
-      }
-    end
+    let!(:rep) { ctx.create_rep(item, '/feed.xml') }
 
     before do
-      reps << rep
+      ctx.config[:base_url] = base_url
     end
 
     context 'without base_url' do
@@ -236,7 +130,7 @@ describe Nanoc::Helpers::Blogging do
   end
 
   describe '#attribute_to_time' do
-    subject { mod.attribute_to_time(arg) }
+    subject { helper.attribute_to_time(arg) }
 
     let(:around_noon_local) { Time.at(1_446_903_076 - Time.now.utc_offset) }
     let(:around_noon_utc) { Time.at(1_446_903_076) }
@@ -264,39 +158,18 @@ describe Nanoc::Helpers::Blogging do
   end
 
   describe '#atom_tag_for' do
-    subject { mod.atom_tag_for(item_view) }
+    subject { helper.atom_tag_for(item) }
 
-    let(:item) do
-      Nanoc::Int::Item.new('Stuff', item_attributes, '/stuff/')
-    end
+    let!(:item) { ctx.create_item('Stuff', item_attributes, '/stuff/') }
+    let(:item_attributes) { { created_at: '2015-05-19 12:34:56' } }
 
-    let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-        rep.paths[:last] = item_rep_path
-      end
-    end
-
+    let!(:rep) { ctx.create_rep(item, item_rep_path) }
     let(:item_rep_path) { '/stuff.xml' }
-
-    let(:item_view) do
-      Nanoc::ItemWithRepsView.new(item, view_context)
-    end
-
-    let(:item_attributes) do
-      { created_at: '2015-05-19 12:34:56' }
-    end
-
-    let(:assigns) do
-      {
-        config: { base_url: base_url },
-        item: item_view,
-      }
-    end
 
     let(:base_url) { 'http://url.base' }
 
     before do
-      reps << rep
+      ctx.config[:base_url] = base_url
     end
 
     context 'item with path' do
