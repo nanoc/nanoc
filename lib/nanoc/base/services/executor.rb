@@ -72,7 +72,8 @@ module Nanoc
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-        filter = klass.new(assigns_for(rep).merge({ layout: layout }))
+        layout_view = Nanoc::LayoutView.new(layout, nil)
+        filter = klass.new(assigns_for(rep).merge({ layout: layout_view }))
 
         # Visit
         Nanoc::Int::NotificationCenter.post(:visit_started, layout)
