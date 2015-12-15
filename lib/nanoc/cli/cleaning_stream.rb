@@ -140,7 +140,7 @@ module Nanoc::CLI
     protected
 
     def _nanoc_clean(s)
-      @stream_cleaners.reduce(s) { |a, e| e.clean(a) }
+      @stream_cleaners.reduce(s.to_s) { |a, e| e.clean(a) }
     end
 
     def _nanoc_swallow_broken_pipe_errors_while

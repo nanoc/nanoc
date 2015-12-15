@@ -53,4 +53,16 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     cleaning_stream.write('lol')
   end
+
+  def test_non_string
+    obj = Object.new
+    def obj.to_s
+      'Hello… world!'
+    end
+
+    stream = StringIO.new
+    cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
+    cleaning_stream << obj
+    assert_equal 'Hello… world!', stream.string
+  end
 end
