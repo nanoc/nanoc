@@ -29,13 +29,14 @@ module Nanoc::Int
 
   # @api private
   class StringPattern
+    MATCH_OPTS = File::FNM_PATHNAME | File::FNM_EXTGLOB
+
     def initialize(string)
       @string = string
     end
 
     def match?(identifier)
-      opts = File::FNM_PATHNAME | File::FNM_EXTGLOB
-      File.fnmatch(@string, identifier.to_s, opts)
+      File.fnmatch(@string, identifier.to_s, MATCH_OPTS)
     end
 
     def captures(_identifier)
