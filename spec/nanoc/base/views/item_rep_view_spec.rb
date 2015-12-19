@@ -109,6 +109,11 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
+    before do
+      expect(dependency_tracker).to receive(:enter).with(item)
+      expect(dependency_tracker).to receive(:exit).with(item)
+    end
+
     it { should eq('Hallo') }
   end
 
@@ -129,6 +134,11 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
+    before do
+      expect(dependency_tracker).to receive(:enter).with(item)
+      expect(dependency_tracker).to receive(:exit).with(item)
+    end
+
     it { should eq('/about/') }
   end
 
@@ -147,6 +157,11 @@ describe Nanoc::ItemRepView do
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    before do
+      expect(dependency_tracker).to receive(:enter).with(item)
+      expect(dependency_tracker).to receive(:exit).with(item)
     end
 
     it { should eq('output/about/index.html') }

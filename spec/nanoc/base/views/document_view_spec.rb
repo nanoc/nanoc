@@ -88,6 +88,11 @@ shared_examples 'a document view' do
 
     subject { view.attributes }
 
+    before do
+      expect(dependency_tracker).to receive(:enter).with(item)
+      expect(dependency_tracker).to receive(:exit).with(item)
+    end
+
     it 'returns attributes' do
       expect(subject).to eql(animal: 'donkey')
     end
@@ -97,6 +102,11 @@ shared_examples 'a document view' do
     # FIXME: rename :item to :document (and remove duplicate :view)
     let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
     let(:view) { described_class.new(item, view_context) }
+
+    before do
+      expect(dependency_tracker).to receive(:enter).with(item)
+      expect(dependency_tracker).to receive(:exit).with(item)
+    end
 
     context 'with existant key' do
       let(:key) { :animal }
@@ -133,6 +143,11 @@ shared_examples 'a document view' do
     let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
 
     subject { view.key?(key) }
+
+    before do
+      expect(dependency_tracker).to receive(:enter).with(document)
+      expect(dependency_tracker).to receive(:exit).with(document)
+    end
 
     context 'with existant key' do
       let(:key) { :animal }

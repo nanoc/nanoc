@@ -208,6 +208,11 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting implicit default rep' do
       let(:params) { {} }
 
+      before do
+        expect(dependency_tracker).to receive(:enter).with(item)
+        expect(dependency_tracker).to receive(:exit).with(item)
+      end
+
       it { is_expected.to eq('Pre Hallo') }
 
       context 'requesting explicit snapshot' do
@@ -219,6 +224,11 @@ describe Nanoc::ItemWithRepsView do
 
     context 'requesting explicit default rep' do
       let(:params) { { rep: :default } }
+
+      before do
+        expect(dependency_tracker).to receive(:enter).with(item)
+        expect(dependency_tracker).to receive(:exit).with(item)
+      end
 
       it { is_expected.to eq('Pre Hallo') }
 
@@ -265,6 +275,11 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting implicit default rep' do
       let(:params) { {} }
 
+      before do
+        expect(dependency_tracker).to receive(:enter).with(item)
+        expect(dependency_tracker).to receive(:exit).with(item)
+      end
+
       it { is_expected.to eq('/about/') }
 
       context 'requesting explicit snapshot' do
@@ -276,6 +291,11 @@ describe Nanoc::ItemWithRepsView do
 
     context 'requesting explicit default rep' do
       let(:params) { { rep: :default } }
+
+      before do
+        expect(dependency_tracker).to receive(:enter).with(item)
+        expect(dependency_tracker).to receive(:exit).with(item)
+      end
 
       it { is_expected.to eq('/about/') }
 
