@@ -2,6 +2,11 @@ describe Nanoc::ItemWithRepsView do
   let(:entity_class) { Nanoc::Int::Item }
   it_behaves_like 'a document view'
 
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker) }
+  let(:reps) { [] }
+  let(:items) { [] }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+
   describe '#raw_content' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
     let(:view) { described_class.new(item, nil) }
@@ -17,8 +22,6 @@ describe Nanoc::ItemWithRepsView do
     end
 
     let(:view) { described_class.new(item, view_context) }
-
-    let(:view_context) { Nanoc::ViewContext.new(reps: [], items: items) }
 
     let(:items) do
       Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
@@ -109,8 +112,6 @@ describe Nanoc::ItemWithRepsView do
 
     let(:view) { described_class.new(item, view_context) }
 
-    let(:view_context) { Nanoc::ViewContext.new(reps: [], items: items) }
-
     let(:items) do
       Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
         arr << item
@@ -158,7 +159,6 @@ describe Nanoc::ItemWithRepsView do
     end
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     subject { view.reps }
 
@@ -176,7 +176,6 @@ describe Nanoc::ItemWithRepsView do
     subject { view.compiled_content(params) }
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf/')
@@ -209,13 +208,6 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting implicit default rep' do
       let(:params) { {} }
 
-      before do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_started, item).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_ended, item).ordered
-      end
-
       it { is_expected.to eq('Pre Hallo') }
 
       context 'requesting explicit snapshot' do
@@ -227,13 +219,6 @@ describe Nanoc::ItemWithRepsView do
 
     context 'requesting explicit default rep' do
       let(:params) { { rep: :default } }
-
-      before do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_started, item).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_ended, item).ordered
-      end
 
       it { is_expected.to eq('Pre Hallo') }
 
@@ -257,7 +242,6 @@ describe Nanoc::ItemWithRepsView do
     subject { view.path(params) }
 
     let(:view) { described_class.new(item, view_context) }
-    let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: []) }
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
@@ -281,13 +265,6 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting implicit default rep' do
       let(:params) { {} }
 
-      before do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_started, item).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_ended, item).ordered
-      end
-
       it { is_expected.to eq('/about/') }
 
       context 'requesting explicit snapshot' do
@@ -299,13 +276,6 @@ describe Nanoc::ItemWithRepsView do
 
     context 'requesting explicit default rep' do
       let(:params) { { rep: :default } }
-
-      before do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_started, item).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:visit_ended, item).ordered
-      end
 
       it { is_expected.to eq('/about/') }
 

@@ -1,7 +1,18 @@
 shared_examples 'a document view' do
+  let(:view) { described_class.new(document, view_context) }
+
+  let(:view_context) do
+    Nanoc::ViewContext.new(
+      reps: double(:reps),
+      items: double(:items),
+      dependency_tracker: dependency_tracker,
+    )
+  end
+
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+
   describe '#== and #eql?' do
     let(:document) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(document, nil) }
 
     context 'comparing with document with same identifier' do
       let(:other) { entity_class.new('content', {}, '/asdf/') }
@@ -51,13 +62,12 @@ shared_examples 'a document view' do
 
   describe '#[]' do
     let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(document, nil) }
 
     subject { view[key] }
 
     before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, document).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, document).ordered
+      expect(dependency_tracker).to receive(:enter).with(document)
+      expect(dependency_tracker).to receive(:exit).with(document)
     end
 
     context 'with existant key' do
@@ -72,13 +82,9 @@ shared_examples 'a document view' do
   end
 
   describe '#attributes' do
+    # FIXME: rename :item to :document (and remove duplicate :view)
     let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item, nil) }
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
-    end
+    let(:view) { described_class.new(item, view_context) }
 
     subject { view.attributes }
 
@@ -88,13 +94,9 @@ shared_examples 'a document view' do
   end
 
   describe '#fetch' do
+    # FIXME: rename :item to :document (and remove duplicate :view)
     let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item, nil) }
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, item).ordered
-    end
+    let(:view) { described_class.new(item, view_context) }
 
     context 'with existant key' do
       let(:key) { :animal }
@@ -129,12 +131,6 @@ shared_examples 'a document view' do
 
   describe '#key?' do
     let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(document, nil) }
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, document).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, document).ordered
-    end
 
     subject { view.key?(key) }
 
@@ -151,7 +147,6 @@ shared_examples 'a document view' do
 
   describe '#hash' do
     let(:document) { double(:document, identifier: '/foo/') }
-    let(:view) { described_class.new(document, nil) }
 
     subject { view.hash }
 

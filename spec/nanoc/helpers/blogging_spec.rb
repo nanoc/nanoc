@@ -2,6 +2,11 @@ describe Nanoc::Helpers::Blogging do
   let(:ctx) { HelperContext.new(described_class) }
   let(:helper) { ctx.helper }
 
+  before do
+    allow(ctx.dependency_tracker).to receive(:enter)
+    allow(ctx.dependency_tracker).to receive(:exit)
+  end
+
   describe '#articles' do
     subject { helper.articles }
 

@@ -1,7 +1,8 @@
 describe Nanoc::Int::Executor do
-  let(:executor) { described_class.new(compiler) }
+  let(:executor) { described_class.new(compiler, dependency_tracker) }
 
   let(:compiler) { Nanoc::Int::Compiler.allocate }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
 
   describe '#filter' do
     let(:assigns) { {} }
@@ -245,6 +246,14 @@ describe Nanoc::Int::Executor do
       { foo: 'hallo' }
     end
 
+    let(:view_context) do
+      Nanoc::ViewContext.new(
+        reps: double(:reps),
+        items: double(:items),
+        dependency_tracker: dependency_tracker,
+      )
+    end
+
     let(:rule_memory) do
       Nanoc::Int::RuleMemory.new(rep).tap do |mem|
         mem.add_filter(:erb, {})
@@ -256,7 +265,8 @@ describe Nanoc::Int::Executor do
     before do
       allow(compiler).to receive(:site) { site }
       allow(compiler).to receive(:action_provider) { action_provider }
-      allow(compiler).to receive(:assigns_for).with(rep) { assigns }
+      allow(compiler).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
+      allow(compiler).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
       allow(action_provider).to receive(:memory_for).with(layout).and_return(rule_memory)
     end
 
@@ -266,6 +276,8 @@ describe Nanoc::Int::Executor do
       let(:layout_content) { 'head <%= @layout[:bug] %> foot' }
 
       it 'exposes @layout as view' do
+        allow(dependency_tracker).to receive(:enter).with(layout)
+        allow(dependency_tracker).to receive(:exit).with(layout)
         subject
         expect(rep.snapshot_contents[:last].string).to eq('head Gum Emperor foot')
       end
@@ -290,8 +302,6 @@ describe Nanoc::Int::Executor do
       end
 
       it 'sends notifications' do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_started, layout).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:visit_ended, layout).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_started, layout).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
@@ -304,7 +314,7 @@ describe Nanoc::Int::Executor do
         let(:layout_content) { 'head <%= @item_rep.compiled_content(snapshot: :pre) %> foot' }
 
         let(:assigns) do
-          { item_rep: Nanoc::ItemRepView.new(rep, nil) }
+          { item_rep: Nanoc::ItemRepView.new(rep, view_context) }
         end
 
         it 'can contain compiled_content reference' do

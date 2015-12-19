@@ -1,6 +1,11 @@
 class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
   include Nanoc::Helpers::Filtering
 
+  def view_context
+    dependency_tracker = Nanoc::Int::DependencyTracker.new(nil)
+    Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker)
+  end
+
   def test_filter_simple
     if_have 'rubypants' do
       # Build content to be evaluated
@@ -11,7 +16,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Mock item and rep
       @item_rep = mock
-      @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
+      @item_rep = Nanoc::ItemRepView.new(@item_rep, view_context)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -32,8 +37,8 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new('stuff', { title: 'Bar...' }, '/foo.md')
       item_rep = Nanoc::Int::ItemRep.new(item, :default)
 
-      @item = Nanoc::ItemWithRepsView.new(item, nil)
-      @item_rep = Nanoc::ItemRepView.new(item_rep, nil)
+      @item = Nanoc::ItemWithRepsView.new(item, view_context)
+      @item_rep = Nanoc::ItemRepView.new(item_rep, view_context)
 
       result = ::ERB.new(content).result(binding)
 
@@ -64,7 +69,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Mock item and rep
       @item_rep = mock
-      @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
+      @item_rep = Nanoc::ItemRepView.new(@item_rep, view_context)
 
       # Evaluate content
       result = ::ERB.new(content).result(binding)
@@ -82,7 +87,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
       # Mock item and rep
       @item_rep = mock
-      @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
+      @item_rep = Nanoc::ItemRepView.new(@item_rep, view_context)
 
       # Evaluate content
       result = ::Haml::Engine.new(content).render(binding)
@@ -102,7 +107,7 @@ class Nanoc::Helpers::FilteringTest < Nanoc::TestCase
 
     # Mock item and rep
     @item_rep = mock
-    @item_rep = Nanoc::ItemRepView.new(@item_rep, nil)
+    @item_rep = Nanoc::ItemRepView.new(@item_rep, view_context)
 
     ::ERB.new(content).result(binding)
 

@@ -1,7 +1,19 @@
 shared_examples 'a mutable document view' do
+  let(:view) { described_class.new(item, view_context) }
+
+  let(:view_context) do
+    Nanoc::ViewContext.new(
+      reps: double(:reps),
+      items: double(:items),
+      dependency_tracker: dependency_tracker,
+    )
+  end
+
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+
   describe '#[]=' do
+    # FIXME: rename :item to :document
     let(:item) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item, nil) }
 
     it 'sets attributes' do
       view[:title] = 'Donkey'
@@ -31,7 +43,6 @@ shared_examples 'a mutable document view' do
 
   describe '#identifier=' do
     let(:item) { entity_class.new('content', {}, '/about.md') }
-    let(:view) { described_class.new(item, nil) }
 
     subject { view.identifier = arg }
 
@@ -64,7 +75,6 @@ shared_examples 'a mutable document view' do
 
   describe '#update_attributes' do
     let(:item) { entity_class.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item, nil) }
 
     let(:update) { { friend: 'Giraffe' } }
 

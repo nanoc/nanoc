@@ -1,9 +1,14 @@
 class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
   include Nanoc::Helpers::Tagging
 
+  def view_context
+    dependency_tracker = Nanoc::Int::DependencyTracker.new(nil)
+    Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker)
+  end
+
   def test_tags_for_without_tags
     # Create item
-    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/path/'), view_context)
 
     # Check
     assert_equal(
@@ -14,7 +19,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_base_url
     # Create item
-    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), view_context)
 
     # Check
     assert_equal(
@@ -26,7 +31,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_none_text
     # Create item
-    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: [] }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: [] }, '/path/'), view_context)
 
     # Check
     assert_equal(
@@ -37,7 +42,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_with_custom_separator
     # Create item
-    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), view_context)
 
     # Check
     assert_equal(
@@ -49,7 +54,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
 
   def test_tags_for_without_base_url
     # Create item
-    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), nil)
+    item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', { tags: %w(foo bar) }, '/path/'), view_context)
 
     # Check
     assert_equal('foo, bar', tags_for(item))
@@ -63,7 +68,7 @@ class Nanoc::Helpers::TaggingTest < Nanoc::TestCase
         Nanoc::Int::Item.new('item 2', { tags: [:bar]       }, '/item2/'),
         Nanoc::Int::Item.new('item 3', { tags: [:foo, :bar] }, '/item3/'),
       ],
-      nil,
+      view_context,
     )
 
     # Find items

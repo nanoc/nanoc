@@ -1,5 +1,9 @@
 describe Nanoc::ItemRepView do
-  let(:view_context) { double(:view_context) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker) }
+
+  let(:reps) { double(:reps) }
+  let(:items) { double(:items) }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
 
   describe '#== and #eql?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
@@ -38,7 +42,7 @@ describe Nanoc::ItemRepView do
 
     context 'comparing with item rep with same identifier' do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), nil) }
+      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
 
       it 'is equal' do
         expect(view).to eq(other)
@@ -48,7 +52,7 @@ describe Nanoc::ItemRepView do
 
     context 'comparing with item rep with different identifier' do
       let(:other_item) { double(:other_item, identifier: '/bar/') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), nil) }
+      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
 
       it 'is not equal' do
         expect(view).not_to eq(other)
@@ -58,7 +62,7 @@ describe Nanoc::ItemRepView do
 
     context 'comparing with item rep with different name' do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :marvin), nil) }
+      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :marvin), view_context) }
 
       it 'is not equal' do
         expect(view).not_to eq(other)
@@ -90,7 +94,7 @@ describe Nanoc::ItemRepView do
   describe '#compiled_content' do
     subject { view.compiled_content }
 
-    let(:view) { described_class.new(rep, nil) }
+    let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
@@ -105,20 +109,13 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_ended, item).ordered
-    end
-
     it { should eq('Hallo') }
   end
 
   describe '#path' do
     subject { view.path }
 
-    let(:view) { described_class.new(rep, nil) }
+    let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
@@ -132,20 +129,13 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_ended, item).ordered
-    end
-
     it { should eq('/about/') }
   end
 
   describe '#raw_path' do
     subject { view.raw_path }
 
-    let(:view) { described_class.new(rep, nil) }
+    let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
@@ -157,13 +147,6 @@ describe Nanoc::ItemRepView do
 
     let(:item) do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
-    end
-
-    before do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_started, item).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post)
-        .with(:visit_ended, item).ordered
     end
 
     it { should eq('output/about/index.html') }

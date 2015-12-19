@@ -16,18 +16,6 @@ module Nanoc::Int
   #   this item representation (either successfully or with failure). Has one
   #   argument: the item representation itself.
   #
-  # * `visit_started` — indicates that the compiler requires content or
-  #   attributes from the item representation that will be visited. Has one
-  #   argument: the visited item identifier. This notification is used to
-  #   track dependencies of items on other items; a `visit_started` event
-  #   followed by another `visit_started` event indicates that the item
-  #   corresponding to the former event will depend on the item from the
-  #   latter event.
-  #
-  # * `visit_ended` — indicates that the compiler has finished visiting the
-  #   item representation and that the requested attributes or content have
-  #   been fetched (either successfully or with failure)
-  #
   # * `processing_started` — indicates that the compiler has started
   #   processing the specified object, which can be an item representation
   #   (when it is compiled) or a layout (when it is used to lay out an item
@@ -98,10 +86,7 @@ module Nanoc::Int
       forget_dependencies_if_outdated
 
       @stack = []
-      dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
-      dependency_tracker.run do
-        compile_reps
-      end
+      compile_reps
       store
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
@@ -147,14 +132,14 @@ module Nanoc::Int
     #   operation
     #
     # @api private
-    def assigns_for(rep)
+    def assigns_for(rep, dependency_tracker)
       if rep.binary?
         content_or_filename_assigns = { filename: rep.snapshot_contents[:last].filename }
       else
         content_or_filename_assigns = { content: rep.snapshot_contents[:last].string }
       end
 
-      view_context = create_view_context
+      view_context = create_view_context(dependency_tracker)
 
       # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge(
@@ -168,8 +153,12 @@ module Nanoc::Int
       )
     end
 
-    def create_view_context
-      Nanoc::ViewContext.new(reps: @reps, items: @site.items)
+    def create_view_context(dependency_tracker)
+      Nanoc::ViewContext.new(
+        reps: @reps,
+        items: @site.items,
+        dependency_tracker: dependency_tracker,
+      )
     end
 
     # @api private
@@ -215,15 +204,17 @@ module Nanoc::Int
     #
     # @return [void]
     def compile_rep(rep)
+      dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+
       Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
       Nanoc::Int::NotificationCenter.post(:processing_started,  rep)
-      Nanoc::Int::NotificationCenter.post(:visit_started,       rep.item)
+      dependency_tracker.enter(rep.item)
 
       if can_reuse_content_for_rep?(rep)
         Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
         rep.snapshot_contents = compiled_content_cache[rep]
       else
-        recalculate_content_for_rep(rep)
+        recalculate_content_for_rep(rep, dependency_tracker)
       end
 
       rep.compiled = true
@@ -236,7 +227,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(:compilation_failed, rep, e)
       raise e
     ensure
-      Nanoc::Int::NotificationCenter.post(:visit_ended, rep.item)
+      dependency_tracker.exit(rep.item)
     end
 
     # @return [Boolean]
@@ -245,8 +236,8 @@ module Nanoc::Int
     end
 
     # @return [void]
-    def recalculate_content_for_rep(rep)
-      executor = Nanoc::Int::Executor.new(self)
+    def recalculate_content_for_rep(rep, dependency_tracker)
+      executor = Nanoc::Int::Executor.new(self, dependency_tracker)
 
       action_provider.memory_for(rep).each do |action|
         case action

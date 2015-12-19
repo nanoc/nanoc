@@ -187,10 +187,8 @@ module Nanoc
       items = items.map { |i| i.is_a?(Nanoc::ItemWithRepsView) ? i.unwrap : i }
 
       # Notify
-      items.each do |item|
-        Nanoc::Int::NotificationCenter.post(:visit_started, item)
-        Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
-      end
+      dependency_tracker = @assigns[:item]._context.dependency_tracker
+      items.each { |item| dependency_tracker.bounce(item) }
 
       # Raise unmet dependency error if necessary
       items.each do |item|

@@ -7,8 +7,9 @@ module Nanoc
         end
       end
 
-      def initialize(compiler)
+      def initialize(compiler, dependency_tracker)
         @compiler = compiler
+        @dependency_tracker = dependency_tracker
       end
 
       def filter(rep, filter_name, filter_args = {})
@@ -72,12 +73,12 @@ module Nanoc
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-        layout_view = Nanoc::LayoutView.new(layout, nil)
+        view_context = @compiler.create_view_context(@dependency_tracker)
+        layout_view = Nanoc::LayoutView.new(layout, view_context)
         filter = klass.new(assigns_for(rep).merge({ layout: layout_view }))
 
         # Visit
-        Nanoc::Int::NotificationCenter.post(:visit_started, layout)
-        Nanoc::Int::NotificationCenter.post(:visit_ended,   layout)
+        @dependency_tracker.bounce(layout)
 
         begin
           # Notify start
@@ -119,7 +120,7 @@ module Nanoc
       end
 
       def assigns_for(rep)
-        @compiler.assigns_for(rep)
+        @compiler.assigns_for(rep, @dependency_tracker)
       end
 
       def layouts

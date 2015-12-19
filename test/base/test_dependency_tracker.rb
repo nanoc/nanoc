@@ -86,23 +86,17 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     assert_contains_exactly [items[0]], store.objects_outdated_due_to(items[1])
   end
 
-  def test_start_and_stop
-    # Mock items
+  def test_enter_and_exit
     items = [mock, mock]
 
-    # Create
     store = Nanoc::Int::DependencyStore.new(items)
     tracker = Nanoc::Int::DependencyTracker.new(store)
 
-    # Start, do something and stop
-    tracker.run do
-      Nanoc::Int::NotificationCenter.post(:visit_started, items[0])
-      Nanoc::Int::NotificationCenter.post(:visit_started, items[1])
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   items[1])
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   items[0])
-    end
+    tracker.enter(items[0])
+    tracker.enter(items[1])
+    tracker.exit(items[1])
+    tracker.exit(items[0])
 
-    # Verify dependencies
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
     assert_empty store.objects_causing_outdatedness_of(items[1])
   end
