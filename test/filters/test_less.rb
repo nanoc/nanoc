@@ -1,8 +1,13 @@
 class Nanoc::Filters::LessTest < Nanoc::TestCase
+  def view_context
+    dependency_tracker = Nanoc::Int::DependencyTracker.new(nil)
+    Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker)
+  end
+
   def test_filter
     if_have 'less' do
       # Create item
-      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), nil)
+      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), view_context)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])
@@ -20,7 +25,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
       File.open('content/foo/bar/imported_file.less', 'w') { |io| io.write('p { color: red; }') }
 
       # Create item
-      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), nil)
+      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), view_context)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])
@@ -39,7 +44,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
 
       # Create item
       File.open('content/foo/bar.txt', 'w') { |io| io.write('meh') }
-      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), nil)
+      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), view_context)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])
@@ -108,7 +113,7 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
   def test_compression
     if_have 'less' do
       # Create item
-      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), nil)
+      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('blah', { content_filename: 'content/foo/bar.txt' }, '/foo/bar/'), view_context)
 
       # Create filter
       filter = ::Nanoc::Filters::Less.new(item: @item, items: [@item])

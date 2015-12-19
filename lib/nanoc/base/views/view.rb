@@ -5,6 +5,7 @@ module Nanoc
       @context = context
     end
 
+    # @api private
     def _context
       @context
     end

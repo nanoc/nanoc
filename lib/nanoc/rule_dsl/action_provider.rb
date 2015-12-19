@@ -48,7 +48,8 @@ module Nanoc::RuleDSL
     end
 
     def postprocess(site, reps)
-      view_context = Nanoc::ViewContext.new(reps: reps, items: site.items)
+      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      view_context = Nanoc::ViewContext.new(reps: reps, items: site.items, dependency_tracker: dependency_tracker)
       ctx = new_postprocessor_context(site, view_context)
 
       @rules_collection.postprocessors.each_value do |postprocessor|

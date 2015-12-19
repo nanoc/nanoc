@@ -13,11 +13,15 @@ end
 Nanoc::CLI.setup
 
 class HelperContext
+  attr_reader :dependency_tracker
+
   def initialize(mod)
+    @mod = mod
+
     @config = Nanoc::Int::Configuration.new
     @reps = Nanoc::Int::ItemRepRepo.new
     @items = Nanoc::Int::IdentifiableCollection.new(@config)
-    @mod = mod
+    @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)
   end
 
   def create_item(content, attributes, identifier, main: false)
@@ -47,7 +51,11 @@ class HelperContext
   private
 
   def view_context
-    Nanoc::ViewContext.new(reps: @reps, items: @items)
+    Nanoc::ViewContext.new(
+      reps: @reps,
+      items: @items,
+      dependency_tracker: @dependency_tracker,
+    )
   end
 
   def assigns

@@ -36,9 +36,7 @@ module Nanoc
     #
     # @return [String] The content at the given snapshot.
     def compiled_content(snapshot: nil)
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap.item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap.item)
-
+      @context.dependency_tracker.bounce(unwrap.item)
       @item_rep.compiled_content(snapshot: snapshot)
     end
 
@@ -52,9 +50,7 @@ module Nanoc
     #
     # @return [String] The item rep’s path.
     def path(snapshot: :last)
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap.item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap.item)
-
+      @context.dependency_tracker.bounce(unwrap.item)
       @item_rep.path(snapshot: snapshot)
     end
 
@@ -67,9 +63,7 @@ module Nanoc
 
     # @api private
     def raw_path(snapshot: :last)
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap.item)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap.item)
-
+      @context.dependency_tracker.bounce(unwrap.item)
       @item_rep.raw_path(snapshot: snapshot)
     end
 

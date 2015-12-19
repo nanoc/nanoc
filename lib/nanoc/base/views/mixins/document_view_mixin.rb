@@ -32,24 +32,19 @@ module Nanoc
 
     # @see Hash#[]
     def [](key)
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
-
+      @context.dependency_tracker.bounce(unwrap)
       unwrap.attributes[key]
     end
 
     # @return [Hash]
     def attributes
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
-
+      @context.dependency_tracker.bounce(unwrap)
       unwrap.attributes
     end
 
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
+      @context.dependency_tracker.bounce(unwrap)
 
       if unwrap.attributes.key?(key)
         unwrap.attributes[key]
@@ -66,9 +61,7 @@ module Nanoc
 
     # @see Hash#key?
     def key?(key)
-      Nanoc::Int::NotificationCenter.post(:visit_started, unwrap)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   unwrap)
-
+      @context.dependency_tracker.bounce(unwrap)
       unwrap.attributes.key?(key)
     end
 

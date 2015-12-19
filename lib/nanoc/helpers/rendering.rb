@@ -80,8 +80,8 @@ module Nanoc::Helpers
       raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout.nil?
 
       # Visit
-      Nanoc::Int::NotificationCenter.post(:visit_started, layout)
-      Nanoc::Int::NotificationCenter.post(:visit_ended,   layout)
+      dependency_tracker = @site._context.dependency_tracker
+      dependency_tracker.bounce(layout)
 
       # Capture content, if any
       captured_content = block_given? ? capture(&block) : nil

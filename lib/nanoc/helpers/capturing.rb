@@ -145,8 +145,8 @@ module Nanoc::Helpers
 
         # Create dependency
         if @item.nil? || item != @item.unwrap
-          Nanoc::Int::NotificationCenter.post(:visit_started, item)
-          Nanoc::Int::NotificationCenter.post(:visit_ended,   item)
+          dependency_tracker = @site._context.dependency_tracker
+          dependency_tracker.bounce(item)
 
           # This is an extremely ugly hack to get the compiler to recompile the
           # item from which we use content. For this, we need to manually edit
