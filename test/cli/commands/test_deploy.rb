@@ -163,4 +163,29 @@ class Nanoc::CLI::Commands::DeployTest < Nanoc::TestCase
       assert File.file?('mydestination/blah.html')
     end
   end
+
+  def test_deploy_with_preprocessor
+    skip_unless_have_command 'rsync'
+    with_site do |_site|
+      File.open('nanoc.yaml', 'w') do |io|
+        io.write "deploy:\n"
+        io.write "  default:\n"
+        io.write '    dst: mydestination'
+      end
+
+      FileUtils.mkdir_p('output')
+      File.open('output/blah.html', 'w') { |io| io.write 'moo' }
+
+      File.write('Rules', "preprocess do ; @config[:deploy][:default][:dst] = 'otherdestination' ; end\n\n" + File.read('Rules'))
+
+      capturing_stdio do
+        Nanoc::CLI.run %w( deploy )
+      end
+
+      refute File.directory?('mydestination')
+      refute File.file?('mydestination/blah.html')
+      assert File.directory?('otherdestination')
+      assert File.file?('otherdestination/blah.html')
+    end
+  end
 end
