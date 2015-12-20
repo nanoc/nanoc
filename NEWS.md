@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.1.0 (2015-12-18)
+
+Fixes:
+
+* Fixed crash when attempting to `#puts` an object that’s not a string (#778)
+* Made pruner not prune away files from routes defined for custom snapshots (#779)
+* Wrapped `@layout` in a layout view (#773)
+
+Enhancements:
+
+* Added a base path to the Checks file, so that it supports `#require_relative` (#774)
+
 ## 4.1.0rc2 (2015-12-13)
 
 Fixes:
