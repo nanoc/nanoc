@@ -381,7 +381,7 @@ module Nanoc::Helpers
     # DateTime) into a Time. When given a Date instance or a string, the
     # argument is assumed to be in the local timezone.
     #
-    # @param [String, Time, Date, DateTime] time Something that contains time
+    # @param [String, Time, Date, DateTime] arg Something that contains time
     #   information but is not necessarily a Time instance yet
     #
     # @return [Time] The Time instance corresponding to the given input

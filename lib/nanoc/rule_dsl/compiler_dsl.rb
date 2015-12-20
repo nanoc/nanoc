@@ -88,7 +88,9 @@ module Nanoc::RuleDSL
     # @param [String] identifier A pattern matching identifiers of items that
     #   should be routed using this rule
     #
-    # @param [Symbol] :rep The name of the representation
+    # @param [Symbol] rep The name of the representation
+    #
+    # @param [Symbol] snapshot The name of the snapshot
     #
     # @yield The block that will be executed when an item matching this
     #   compilation rule needs to be routed
