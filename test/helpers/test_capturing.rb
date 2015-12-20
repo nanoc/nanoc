@@ -1,6 +1,20 @@
 class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   include Nanoc::Helpers::Capturing
 
+  def item_rep_repo_for(item)
+    Nanoc::Int::ItemRepRepo.new.tap do |repo|
+      repo << Nanoc::Int::ItemRep.new(item, :default)
+    end
+  end
+
+  def view_context_for(item)
+    Nanoc::ViewContext.new(
+      reps: item_rep_repo_for(item),
+      items: :__irrelevant__,
+      dependency_tracker: :__irrelevant__,
+    )
+  end
+
   def test_content_for
     require 'erb'
 
@@ -18,7 +32,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     site = Nanoc::Int::SiteLoader.new.new_empty
     item = Nanoc::Int::Item.new('moo', {}, '/blah/')
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
-    @item = Nanoc::ItemWithRepsView.new(item, nil)
+    @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
 
     # Evaluate content
     result = ::ERB.new(content).result(binding)
@@ -33,7 +47,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
     # Build site
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
-    @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('moo', {}, '/blah/'), nil)
+    item = Nanoc::Int::Item.new('moo', {}, '/blah/')
+    @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
 
     # Capture
     _erbout = 'foo'
@@ -67,7 +82,8 @@ foot
 EOS
 
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
-    @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
+    item = Nanoc::Int::Item.new('content', {}, '/')
+    @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
 
     result = ::ERB.new(content).result(binding)
 
@@ -85,7 +101,8 @@ EOS
     end
 
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
-    @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
+    item = Nanoc::Int::Item.new('content', {}, '/')
+    @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
     content = '<% content_for :a do %>Content One<% end %>'
     ::ERB.new(content).result(binding)
 
@@ -93,7 +110,8 @@ EOS
     assert_equal nil,           content_for(@item, :b)
 
     @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
-    @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('content', {}, '/'), nil)
+    item = Nanoc::Int::Item.new('content', {}, '/')
+    @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
     content = '<% content_for :b do %>Content Two<% end %>'
     ::ERB.new(content).result(binding)
 

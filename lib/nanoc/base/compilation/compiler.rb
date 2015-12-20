@@ -232,7 +232,7 @@ module Nanoc::Int
 
     # @return [Boolean]
     def can_reuse_content_for_rep?(rep)
-      !rep.item.forced_outdated? && !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
+      !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
     end
 
     # @return [void]

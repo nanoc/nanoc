@@ -1,7 +1,7 @@
 module Nanoc::Int
   # @api private
   class ItemRep
-    # @return [Hash<Symbol,Nanoc::Int::Content]
+    # @return [Hash<Symbol,Nanoc::Int::Content>]
     attr_accessor :snapshot_contents
 
     # @return [Boolean]
