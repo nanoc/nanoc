@@ -1,3 +1,5 @@
+require_relative 'checks/w3c_validator'
+
 # @api private
 module Nanoc::Extra::Checking::Checks
   autoload 'CSS',           'nanoc/extra/checking/checks/css'
