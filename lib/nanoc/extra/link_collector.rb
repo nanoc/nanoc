@@ -32,27 +32,11 @@ module ::Nanoc::Extra
     end
 
     def filenames_per_href
-      require 'nokogiri'
-      filenames_per_href = {}
-      @filenames.each do |filename|
-        hrefs_in_file(filename).each do |href|
-          filenames_per_href[href] ||= Set.new
-          filenames_per_href[href] << filename
-        end
-      end
-      filenames_per_href
+      grouped_filenames { |filename| hrefs_in_file(filename) }
     end
 
     def filenames_per_resource_uri
-      require 'nokogiri'
-      filenames_per_resource_uri = {}
-      @filenames.each do |filename|
-        resource_uris_in_file(filename).each do |resouce_uri|
-          filenames_per_resource_uri[resouce_uri] ||= Set.new
-          filenames_per_resource_uri[resouce_uri] << filename
-        end
-      end
-      filenames_per_resource_uri
+      grouped_filenames { |filename| resource_uris_in_file(filename) }
     end
 
     def external_href?(href)
@@ -68,6 +52,18 @@ module ::Nanoc::Extra
     end
 
     private
+
+    def grouped_filenames
+      require 'nokogiri'
+      grouped_filenames = {}
+      @filenames.each do |filename|
+        yield(filename).each do |resouce_uri|
+          grouped_filenames[resouce_uri] ||= Set.new
+          grouped_filenames[resouce_uri] << filename
+        end
+      end
+      grouped_filenames
+    end
 
     def uris_in_file(filename, tag_names)
       uris = Set.new
