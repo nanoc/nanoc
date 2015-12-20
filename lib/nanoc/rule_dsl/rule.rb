@@ -27,7 +27,7 @@ module Nanoc::RuleDSL
     # @param [Proc] block A block that will be called when matching items are
     #   compiled
     #
-    # @param [Symbol, nil] :snapshot The name of the snapshot this rule will
+    # @param [Symbol, nil] snapshot_name The name of the snapshot this rule will
     #   apply to. Ignored for compilation rules, but used for routing rules.
     def initialize(pattern, rep_name, block, snapshot_name: nil)
       @pattern = pattern

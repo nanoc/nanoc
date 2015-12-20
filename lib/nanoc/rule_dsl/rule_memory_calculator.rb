@@ -75,7 +75,7 @@ module Nanoc::RuleDSL
       executor.rule_memory
     end
 
-    # @param [Nanoc::Int::Layout]
+    # @param [Nanoc::Int::Layout] layout
     #
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_layout(layout)
