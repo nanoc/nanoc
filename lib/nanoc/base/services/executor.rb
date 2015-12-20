@@ -13,43 +13,30 @@ module Nanoc
       end
 
       def filter(rep, filter_name, filter_args = {})
-        # Get filter class
-        klass = Nanoc::Filter.named(filter_name)
-        raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-
-        # Check whether filter can be applied
-        if klass.from_binary? && !rep.binary?
-          raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(rep, klass)
-        elsif !klass.from_binary? && rep.binary?
-          raise Nanoc::Int::Errors::CannotUseTextualFilter.new(rep, klass)
-        end
+        filter = filter_for_filtering(rep, filter_name)
 
         begin
-          # Notify start
           Nanoc::Int::NotificationCenter.post(:filtering_started, rep, filter_name)
-
-          # Create filter
-          filter = klass.new(assigns_for(rep))
 
           # Run filter
           last = rep.snapshot_contents[:last]
           source = rep.binary? ? last.filename : last.string
           result = filter.setup_and_run(source, filter_args)
-          if klass.to_binary?
-            rep.snapshot_contents[:last] = Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
-          else
-            rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(result).tap(&:freeze)
-          end
+          rep.snapshot_contents[:last] =
+            if filter.class.to_binary?
+              Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
+            else
+              Nanoc::Int::TextualContent.new(result).tap(&:freeze)
+            end
 
           # Check whether file was written
-          if klass.to_binary? && !File.file?(filter.output_filename)
+          if filter.class.to_binary? && !File.file?(filter.output_filename)
             raise OutputNotWrittenError.new(filter_name, filter.output_filename)
           end
 
           # Create snapshot
           snapshot(rep, rep.snapshot_contents[:post] ? :post : :pre, final: false) unless rep.binary?
         ensure
-          # Notify end
           Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, filter_name)
         end
       end
@@ -139,6 +126,19 @@ module Nanoc
         end
 
         raise Nanoc::Int::Errors::UnknownLayout.new(arg)
+      end
+
+      def filter_for_filtering(rep, filter_name)
+        klass = Nanoc::Filter.named(filter_name)
+        raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
+
+        if klass.from_binary? && !rep.binary?
+          raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(rep, klass)
+        elsif !klass.from_binary? && rep.binary?
+          raise Nanoc::Int::Errors::CannotUseTextualFilter.new(rep, klass)
+        end
+
+        klass.new(assigns_for(rep))
       end
 
       def use_globs?
