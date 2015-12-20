@@ -25,40 +25,6 @@ module Nanoc::Helpers
   #     <%= content_for(@item, :summary) || '(no summary)' %>
   #   </div>
   module Capturing
-    # @api private
-    class CapturesStore
-      def initialize
-        @store = {}
-      end
-
-      def []=(item, name, content)
-        @store[item.identifier] ||= {}
-        @store[item.identifier][name] = content
-      end
-
-      def [](item, name)
-        @store[item.identifier] ||= {}
-        @store[item.identifier][name]
-      end
-
-      def reset_for(item)
-        @store[item.identifier] = {}
-      end
-    end
-
-    class ::Nanoc::Int::Site
-      # @api private
-      def captures_store
-        @captures_store ||= CapturesStore.new
-      end
-
-      # @api private
-      def captures_store_compiled_items
-        require 'set'
-        @captures_store_compiled_items ||= Set.new
-      end
-    end
-
     # @overload content_for(name, params = {}, &block)
     #
     #   Captures the content inside the block and stores it so that it can be
