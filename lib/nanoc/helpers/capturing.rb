@@ -114,17 +114,18 @@ module Nanoc::Helpers
         content = capture(&block)
 
         # Prepare for store
-        store = @site.unwrap.captures_store
+        snapshot_contents = @item.reps[:default].unwrap.snapshot_contents
+        capture_name = "__capture_#{name}".to_sym
         case existing_behavior
         when :overwrite
-          store[@item, name.to_sym] = ''
+          snapshot_contents[capture_name] = ''
         when :append
-          store[@item, name.to_sym] ||= ''
+          snapshot_contents[capture_name] ||= ''
         when :error
-          if store[@item, name.to_sym] && store[@item, name.to_sym] != content
+          if snapshot_contents[capture_name] && snapshot_contents[capture_name] != content
             raise "a capture named #{name.inspect} for #{@item.identifier} already exists"
           else
-            store[@item, name.to_sym] = ''
+            snapshot_contents[capture_name] = ''
           end
         else
           raise ArgumentError, 'expected :existing_behavior param to #content_for to be one of ' \
@@ -132,38 +133,28 @@ module Nanoc::Helpers
         end
 
         # Store
-        @site.unwrap.captures_store_compiled_items << @item.unwrap
-        store[@item, name.to_sym] << content
+        snapshot_contents[capture_name] << content
       else # Get content
-        # Get args
         if args.size != 2
           raise ArgumentError, 'expected 2 arguments (the item ' \
             "and the name of the capture) but got #{args.size} instead"
         end
-        item = args[0].is_a?(Nanoc::ItemWithRepsView) ? args[0].unwrap : args[0]
+        item = args[0]
         name = args[1]
+
+        rep = item.reps[:default].unwrap
 
         # Create dependency
         if @item.nil? || item != @item.unwrap
           dependency_tracker = @site._context.dependency_tracker
-          dependency_tracker.bounce(item)
+          dependency_tracker.bounce(item.unwrap)
 
-          # This is an extremely ugly hack to get the compiler to recompile the
-          # item from which we use content. For this, we need to manually edit
-          # the content attribute to reset it. :(
-          # FIXME: clean this up
-          unless @site.unwrap.captures_store_compiled_items.include?(item)
-            @site.unwrap.captures_store.reset_for(item)
-            item.forced_outdated = true
-            @site.unwrap.compiler.reps[item].each do |r|
-              r.snapshot_contents = { last: item.content }
-              raise Nanoc::Int::Errors::UnmetDependency.new(r)
-            end
+          unless rep.compiled?
+            raise Nanoc::Int::Errors::UnmetDependency.new(rep)
           end
         end
 
-        # Get content
-        @site.unwrap.captures_store[item, name.to_sym]
+        rep.snapshot_contents["__capture_#{name}".to_sym]
       end
     end
 
