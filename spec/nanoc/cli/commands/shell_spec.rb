@@ -7,7 +7,7 @@ describe Nanoc::CLI::Commands::Shell, site: true do
 
     it 'can be invoked' do
       context = Object.new
-      expect(Nanoc::Int::Context).to receive(:new).with(anything) { context }
+      allow(Nanoc::Int::Context).to receive(:new).with(anything).and_return(context)
       expect(context).to receive(:pry)
 
       Nanoc::CLI.run(['shell'])
