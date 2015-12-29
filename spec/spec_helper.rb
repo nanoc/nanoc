@@ -27,6 +27,21 @@ RSpec.configure do |c|
     end
   end
 
+  c.around(:each, stdio: true) do |example|
+    orig_stdout = $stdout
+    orig_stderr = $stderr
+
+    unless ENV['QUIET'] == 'false'
+      $stdout = StringIO.new
+      $stderr = StringIO.new
+    end
+
+    example.run
+
+    $stdout = orig_stdout
+    $stderr = orig_stderr
+  end
+
   c.before(:each, site: true) do
     FileUtils.mkdir_p('content')
     FileUtils.mkdir_p('layouts')
