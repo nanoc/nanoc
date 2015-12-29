@@ -22,7 +22,6 @@ module Nanoc::CLI
       @site ||= nil
       if self.is_in_site_dir? && @site.nil?
         @site = Nanoc::Int::SiteLoader.new.new_from_cwd
-        @site.compiler.action_provider.preprocess(@site)
       end
 
       @site

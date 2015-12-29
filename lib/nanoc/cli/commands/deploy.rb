@@ -14,6 +14,8 @@ module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
     def run
       load_site
+      # FIXME: ugly to preprocess here
+      site.compiler.action_provider.preprocess(site)
 
       # List deployers
       if options[:'list-deployers']
