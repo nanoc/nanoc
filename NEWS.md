@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.1.1 (2015-12-30)
+
+Fixes:
+
+* Fixed preprocessor not being run before check/deploy/prune commands (#763, #784, #787, #788)
+
+Enhancements:
+
+* Made `#breadcrumbs_trail` explicitly fail when using full identifiers (#781, #783)
+
 ## 4.1.0 (2015-12-18)
 
 Fixes:
