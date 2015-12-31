@@ -172,12 +172,20 @@ module Nanoc::Int
     end
     memoize :rule_memory_differs_for
 
+    # @param obj The object to create a checksum for
+    #
+    # @return [String] The digest
+    def calc_checksum(obj)
+      Nanoc::Int::Checksummer.calc(obj)
+    end
+    memoize :calc_checksum
+
     # @param obj
     #
     # @return [Boolean] false if either the new or the old checksum for the
     #   given object is not available, true if both checksums are available
     def checksums_available?(obj)
-      checksum_store[obj] && Nanoc::Int::Checksummer.calc(obj)
+      checksum_store[obj] && calc_checksum(obj)
     end
     memoize :checksums_available?
 
@@ -186,7 +194,7 @@ module Nanoc::Int
     # @return [Boolean] false if the old and new checksums for the given
     #   object differ, true if they are identical
     def checksums_identical?(obj)
-      checksum_store[obj] == Nanoc::Int::Checksummer.calc(obj)
+      checksum_store[obj] == calc_checksum(obj)
     end
     memoize :checksums_identical?
 
