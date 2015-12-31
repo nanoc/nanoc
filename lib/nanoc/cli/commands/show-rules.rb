@@ -8,7 +8,7 @@ Prints the rules used for all items and layouts in the current site.
 module Nanoc::CLI::Commands
   class ShowRules < ::Nanoc::CLI::CommandRunner
     def run
-      require_site
+      load_site
 
       @c = Nanoc::CLI::ANSIStringColorizer
       @reps = site.compiler.reps
