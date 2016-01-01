@@ -3,8 +3,9 @@ shared_examples 'a document' do
     let(:content_arg) { 'Hello world' }
     let(:attributes_arg) { { 'title' => 'Home' } }
     let(:identifier_arg) { '/home.md' }
+    let(:checksum_data_arg) { 'abcdef' }
 
-    subject { described_class.new(content_arg, attributes_arg, identifier_arg) }
+    subject { described_class.new(content_arg, attributes_arg, identifier_arg, checksum_data: checksum_data_arg) }
 
     describe 'content arg' do
       context 'string' do
@@ -43,6 +44,12 @@ shared_examples 'a document' do
         it 'retains identifier' do
           expect(subject.identifier).to equal(identifier_arg)
         end
+      end
+    end
+
+    describe 'checksum_data arg' do
+      it 'reuses checksum_data' do
+        expect(subject.checksum_data).to eql(checksum_data_arg)
       end
     end
   end
