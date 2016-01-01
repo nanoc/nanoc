@@ -1,7 +1,4 @@
-describe Nanoc::Helpers::Blogging do
-  let(:ctx) { HelperContext.new(described_class) }
-  let(:helper) { ctx.helper }
-
+describe Nanoc::Helpers::Blogging, helper: true do
   before do
     allow(ctx.dependency_tracker).to receive(:enter)
     allow(ctx.dependency_tracker).to receive(:exit)
@@ -41,14 +38,14 @@ describe Nanoc::Helpers::Blogging do
   end
 
   describe '#url_for' do
-    subject { helper.url_for(item) }
+    subject { helper.url_for(ctx.items['/stuff/']) }
 
-    let!(:item) { ctx.create_item('Stuff', item_attributes, '/stuff/') }
     let(:item_attributes) { {} }
 
-    let!(:rep) { ctx.create_rep(item, '/rep/path/stuff.html') }
-
     before do
+      item = ctx.create_item('Stuff', item_attributes, '/stuff/')
+      ctx.create_rep(item, '/rep/path/stuff.html')
+
       ctx.config[:base_url] = base_url
     end
 
@@ -96,12 +93,12 @@ describe Nanoc::Helpers::Blogging do
   describe '#feed_url' do
     subject { helper.feed_url }
 
-    let!(:item) { ctx.create_item('Feed', item_attributes, '/feed/', main: true) }
     let(:item_attributes) { {} }
 
-    let!(:rep) { ctx.create_rep(item, '/feed.xml') }
-
     before do
+      ctx.item = ctx.create_item('Feed', item_attributes, '/feed/')
+      ctx.create_rep(ctx.item, '/feed.xml')
+
       ctx.config[:base_url] = base_url
     end
 
@@ -163,17 +160,16 @@ describe Nanoc::Helpers::Blogging do
   end
 
   describe '#atom_tag_for' do
-    subject { helper.atom_tag_for(item) }
+    subject { helper.atom_tag_for(ctx.items['/stuff/']) }
 
-    let!(:item) { ctx.create_item('Stuff', item_attributes, '/stuff/') }
     let(:item_attributes) { { created_at: '2015-05-19 12:34:56' } }
-
-    let!(:rep) { ctx.create_rep(item, item_rep_path) }
     let(:item_rep_path) { '/stuff.xml' }
-
     let(:base_url) { 'http://url.base' }
 
     before do
+      item = ctx.create_item('Stuff', item_attributes, '/stuff/')
+      ctx.create_rep(item, item_rep_path)
+
       ctx.config[:base_url] = base_url
     end
 

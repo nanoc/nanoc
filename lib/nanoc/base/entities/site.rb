@@ -1,6 +1,8 @@
 module Nanoc::Int
   # @api private
   class Site
+    attr_accessor :compiler
+
     # @param [Nanoc::Int::Configuration] config
     # @param [Enumerable<Nanoc::Int::CodeSnippet>] code_snippets
     # @param [Enumerable<Nanoc::Int::Item>] items
