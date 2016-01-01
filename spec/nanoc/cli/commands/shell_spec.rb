@@ -1,4 +1,4 @@
-describe Nanoc::CLI::Commands::Shell, site: true do
+describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
   describe '#run' do
     before do
       # Prevent double-loading
