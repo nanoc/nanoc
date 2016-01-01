@@ -91,14 +91,18 @@ module Nanoc::Int
         when Nanoc::Int::BinaryContent
           update(Pathname.new(obj.filename), digest)
         when Nanoc::Int::Item, Nanoc::Int::Layout
-          digest.update('content=')
-          update(obj.content, digest)
+          if obj.checksum_data
+            digest.update('checksum_data=' + obj.checksum_data)
+          else
+            digest.update('content=')
+            update(obj.content, digest)
 
-          digest.update(',attributes=')
-          update(obj.attributes, digest, visited + [obj])
+            digest.update(',attributes=')
+            update(obj.attributes, digest, visited + [obj])
 
-          digest.update(',identifier=')
-          update(obj.identifier, digest)
+            digest.update(',identifier=')
+            update(obj.identifier, digest)
+          end
         when Nanoc::ItemWithRepsView, Nanoc::ItemWithoutRepsView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
           update(obj.unwrap, digest)
         else
