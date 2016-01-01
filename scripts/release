@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+require 'fileutils'
+require 'octokit'
+
+def run(*args)
+  puts "I will execute the following:"
+  puts '    ' + args.map { |a| a =~ /\s/ ? a.inspect : a }.join(' ')
+  print "Is this correct? [y/N] "
+  res = gets
+  unless res.strip.downcase == 'y'
+    $stderr.puts "Answer was not Y; release aborted."
+    exit 1
+  end
+
+  system('echo', *args)
+  system(*args)
+
+  print "Continue? [y/N] "
+  res = gets
+  unless res.strip.downcase == 'y'
+    $stderr.puts "Answer was not Y; release aborted."
+    exit 1
+  end
+end
+
+
+
+puts "=== Logging in to GitHub’s API…"
+client = Octokit::Client.new(netrc: true)
+puts
+
+puts "=== Deleting old *.gem files…"
+Dir['*.gem'].each do |fn|
+  puts "  #{fn}…"
+  FileUtils.rm_f(fn)
+end
+puts
+
+puts "=== Building new gem…"
+run('gem', 'build', 'nanoc.gemspec')
+puts
+
+puts "=== Reading version…"
+require_relative 'lib/nanoc/version'
+puts "Version = #{Nanoc::VERSION}"
+puts
+
+puts "=== Verifying that release does not yet exist…"
+releases = client.releases('nanoc/nanoc')
+release = releases.find { |r| r.tag_name == Nanoc::VERSION }
+if release
+  $stderr.puts "Release already exists!"
+  $stderr.puts "ABORTED!"
+  exit 1
+end
+puts
+
+puts "=== Creating Git tag…"
+run('git', 'tag', '--sign', '--annotate', Nanoc::VERSION, '--message', "Version #{Nanoc::VERSION}")
+puts
+
+puts "=== Pushing Git data…"
+run('git', 'push', 'origin')
+run('git', 'push', 'origin', '--tags')
+puts
+
+puts "=== Pushing gem…"
+run('gem', 'push', "nanoc-#{Nanoc::VERSION}.gem")
+puts
+
+puts "=== Reading release notes…"
+release_notes = File.readlines('NEWS.md')
+  .drop(4)
+  .take_while { |l| l !~ /^## / }
+  .join
+puts
+
+puts "=== Creating release on GitHub…"
+sleep 3 # Give GitHub some time to detect the new tag
+is_prerelease = Nanoc::VERSION =~ /a|b|rc/ || Nanoc::VERSION =~ /^0/
+client.create_release(
+  'nanoc/nanoc', Nanoc::VERSION,
+  prerelease: !!is_prerelease,
+  body: release_notes,
+)
+puts
+
+puts "DONE!"

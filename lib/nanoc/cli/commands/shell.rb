@@ -10,7 +10,7 @@ module Nanoc::CLI::Commands
     def run
       require 'pry'
 
-      require_site
+      load_site
 
       Nanoc::Int::Context.new(env).pry
     end

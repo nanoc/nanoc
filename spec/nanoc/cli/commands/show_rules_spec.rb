@@ -69,6 +69,7 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:expected_out) do
       <<-EOS
+        Loading site… done
         \e[1m\e[33mItem /about.md\e[0m:
           Rep default: /*.md
           Rep text: /**/*

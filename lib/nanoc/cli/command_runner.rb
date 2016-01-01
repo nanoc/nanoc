@@ -41,24 +41,17 @@ module Nanoc::CLI
     end
     alias_method :is_in_site_dir?, :in_site_dir?
 
-    # Asserts that the current working directory contains a site
-    # ({Nanoc::Int::Site} instance). If no site is present, prints an error
-    # message and exits.
-    #
-    # @return [void]
-    def require_site
-      if site.nil?
-        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a Nanoc site.'
-      end
-    end
-
-    # Asserts that the current working directory contains a site (just like
-    # {#require_site}) and loads the site into memory.
+    # Asserts that the current working directory contains a site and loads the site into memory.
     #
     # @return [void]
     def load_site
       print 'Loading site… '
-      require_site
+      $stdout.flush
+
+      if site.nil?
+        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a Nanoc site.'
+      end
+
       puts 'done'
     end
 

@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
       load_adsf
       require 'rack'
 
-      require_site
+      load_site
 
       # Set options
       options_for_rack = {
