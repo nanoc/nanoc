@@ -27,7 +27,7 @@ module Nanoc
         @filename.freeze
       end
 
-      # @param [String] content The uncompiled item content (if it is textual
+      # @param [String, Proc] content The uncompiled item content (if it is textual
       #   content) or the path to the filename containing the content (if this
       #   is binary content).
       #
@@ -58,11 +58,13 @@ module Nanoc
     # @api private
     class TextualContent < Content
       # @return [String]
-      attr_reader :string
+      def string
+        @string.value
+      end
 
       def initialize(string, filename: nil)
         super(filename)
-        @string = string
+        @string = Nanoc::Int::LazyValue.new(string)
       end
 
       def freeze
