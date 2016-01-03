@@ -139,9 +139,11 @@ module Nanoc
     # @param [String] identifier This item's identifier.
     #
     # @param [Boolean] binary Whether or not this item is binary
-    def new_item(content, attributes, identifier, binary: false)
+    #
+    # @param [String, nil] checksum_data Used to determine whether the item has changed
+    def new_item(content, attributes, identifier, binary: false, checksum_data: nil)
       content = Nanoc::Int::Content.create(content, binary: binary)
-      Nanoc::Int::Item.new(content, attributes, identifier)
+      Nanoc::Int::Item.new(content, attributes, identifier, checksum_data: checksum_data)
     end
 
     # Creates a new in-memory layout instance. This is intended for use within
@@ -152,8 +154,10 @@ module Nanoc
     # @param [Hash] attributes A hash containing this layout's attributes.
     #
     # @param [String] identifier This layout's identifier.
-    def new_layout(raw_content, attributes, identifier)
-      Nanoc::Int::Layout.new(raw_content, attributes, identifier)
+    #
+    # @param [String, nil] checksum_data Used to determine whether the layout has changed
+    def new_layout(raw_content, attributes, identifier, checksum_data: nil)
+      Nanoc::Int::Layout.new(raw_content, attributes, identifier, checksum_data: checksum_data)
     end
   end
 end

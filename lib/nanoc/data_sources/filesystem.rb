@@ -61,7 +61,8 @@ module Nanoc::DataSources
           elsif is_binary && klass == Nanoc::Int::Layout
             raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
           else
-            meta, content_or_filename = parse(content_filename, meta_filename, kind)
+            meta, content_or_filename, meta_raw = parse(content_filename, meta_filename, kind)
+            checksum_data = "content=#{content_or_filename},meta=#{meta_raw}"
           end
 
           # Get attributes
@@ -105,7 +106,7 @@ module Nanoc::DataSources
             end
 
           # Create object
-          res << klass.new(content, attributes, identifier)
+          res << klass.new(content, attributes, identifier, checksum_data: checksum_data)
         end
       end
 
@@ -207,8 +208,8 @@ module Nanoc::DataSources
     end
 
     # Parses the file named `filename` and returns an array with its first
-    # element a hash with the file's metadata, and with its second element the
-    # file content itself.
+    # element a hash with the file's metadata, its second element the
+    # file content itself, and its third element the metadata content.
     def parse(content_filename, meta_filename, _kind)
       # Read content and metadata from separate files
       if meta_filename
@@ -249,7 +250,7 @@ module Nanoc::DataSources
       content = pieces[4]
 
       # Done
-      [meta, content]
+      [meta, content, meta_raw]
     end
 
     class InvalidMetadataError < Nanoc::Error

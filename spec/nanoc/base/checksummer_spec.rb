@@ -190,6 +190,12 @@ describe Nanoc::Int::Checksummer do
 
       it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=Nanoc::Int::Item<recur>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
     end
+
+    context 'with checksum' do
+      let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md', checksum_data: 'abcdef') }
+
+      it { is_expected.to eql('Nanoc::Int::Item<checksum_data=abcdef>') }
+    end
   end
 
   context 'Nanoc::Int::Layout' do
@@ -203,6 +209,12 @@ describe Nanoc::Int::Checksummer do
       end
 
       it { is_expected.to eql('Nanoc::Int::Layout<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<Symbol<foo>=Nanoc::Int::Layout<recur>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+    end
+
+    context 'with checksum' do
+      let(:obj) { Nanoc::Int::Layout.new('asdf', { 'foo' => 'bar' }, '/foo.md', checksum_data: 'abcdef') }
+
+      it { is_expected.to eql('Nanoc::Int::Layout<checksum_data=abcdef>') }
     end
   end
 

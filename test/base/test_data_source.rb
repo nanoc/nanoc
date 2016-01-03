@@ -33,18 +33,20 @@ class Nanoc::DataSourceTest < Nanoc::TestCase
   def test_new_item
     data_source = Nanoc::DataSource.new(nil, nil, nil, nil)
 
-    item = data_source.new_item('stuff', { title: 'Stuff!' }, '/asdf/')
+    item = data_source.new_item('stuff', { title: 'Stuff!' }, '/asdf/', checksum_data: 'abcdef')
     assert_equal 'stuff', item.content.string
     assert_equal 'Stuff!', item.attributes[:title]
     assert_equal Nanoc::Identifier.new('/asdf/'), item.identifier
+    assert_equal 'abcdef', item.checksum_data
   end
 
   def test_new_layout
     data_source = Nanoc::DataSource.new(nil, nil, nil, nil)
 
-    layout = data_source.new_layout('stuff', { title: 'Stuff!' }, '/asdf/')
+    layout = data_source.new_layout('stuff', { title: 'Stuff!' }, '/asdf/', checksum_data: 'abcdef')
     assert_equal 'stuff', layout.content.string
     assert_equal 'Stuff!', layout.attributes[:title]
     assert_equal Nanoc::Identifier.new('/asdf/'), layout.identifier
+    assert_equal 'abcdef', layout.checksum_data
   end
 end

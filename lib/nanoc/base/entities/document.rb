@@ -11,15 +11,21 @@ module Nanoc
       # @return [Nanoc::Identifier]
       attr_accessor :identifier
 
+      # @return [String, nil]
+      attr_accessor :checksum_data
+
       # @param [String, Nanoc::Int::Content] content
       #
       # @param [Hash] attributes
       #
       # @param [String, Nanoc::Identifier] identifier
-      def initialize(content, attributes, identifier)
+      #
+      # @param [String, nil] checksum_data Used to determine whether the document has changed
+      def initialize(content, attributes, identifier, checksum_data: nil)
         @content = Nanoc::Int::Content.create(content)
         @attributes = attributes.__nanoc_symbolize_keys_recursively
         @identifier = Nanoc::Identifier.from(identifier)
+        @checksum_data = checksum_data
       end
 
       # @return [void]
