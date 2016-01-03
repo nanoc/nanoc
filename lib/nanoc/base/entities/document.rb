@@ -6,7 +6,9 @@ module Nanoc
       attr_reader :content
 
       # @return [Hash]
-      attr_reader :attributes
+      def attributes
+        @attributes.value
+      end
 
       # @return [Nanoc::Identifier]
       attr_accessor :identifier
@@ -16,14 +18,14 @@ module Nanoc
 
       # @param [String, Nanoc::Int::Content] content
       #
-      # @param [Hash] attributes
+      # @param [Hash, Proc] attributes
       #
       # @param [String, Nanoc::Identifier] identifier
       #
       # @param [String, nil] checksum_data Used to determine whether the document has changed
       def initialize(content, attributes, identifier, checksum_data: nil)
         @content = Nanoc::Int::Content.create(content)
-        @attributes = attributes.__nanoc_symbolize_keys_recursively
+        @attributes = LazyAttributesValue.new(attributes)
         @identifier = Nanoc::Identifier.from(identifier)
         @checksum_data = checksum_data
       end
@@ -31,8 +33,8 @@ module Nanoc
       # @return [void]
       def freeze
         super
-        attributes.__nanoc_freeze_recursively
-        content.freeze
+        @content.freeze
+        @attributes.freeze
       end
 
       # @abstract
@@ -54,6 +56,12 @@ module Nanoc
         other.respond_to?(:identifier) && identifier == other.identifier
       end
       alias_method :eql?, :==
+    end
+
+    class LazyAttributesValue < ::Nanoc::Int::LazyValue
+      def transform(value)
+        value.__nanoc_symbolize_keys_recursively
+      end
     end
   end
 end

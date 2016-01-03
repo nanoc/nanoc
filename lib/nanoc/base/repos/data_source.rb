@@ -134,7 +134,7 @@ module Nanoc
     #   (if it is a textual item) or the path to the filename containing the
     #   content (if it is a binary item).
     #
-    # @param [Hash] attributes A hash containing this item's attributes.
+    # @param [Hash, Proc] attributes A hash containing this item's attributes.
     #
     # @param [String] identifier This item's identifier.
     #
