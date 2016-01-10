@@ -208,7 +208,7 @@ module Nanoc::CLI
       'rubypants'      => 'rubypants',
       'sass'           => 'sass',
       'w3c_validators' => 'w3c_validators',
-    }
+    }.freeze
 
     # Attempts to find a resolution for the given error, or nil if no
     # resolution can be automatically obtained.

@@ -11,7 +11,7 @@ module Nanoc::CLI
       green: "\e[32m",
       yellow: "\e[33m",
       blue: "\e[34m",
-    }
+    }.freeze
 
     # @param [String] s The string to colorize
     #

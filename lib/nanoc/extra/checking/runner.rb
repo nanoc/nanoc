@@ -3,7 +3,7 @@ module Nanoc::Extra::Checking
   #
   # @api private
   class Runner
-    CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb']
+    CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb'].freeze
 
     # @param [Nanoc::Int::Site] site The Nanoc site this runner is for
     def initialize(site)

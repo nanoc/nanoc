@@ -5,7 +5,7 @@ module Nanoc::Extra
   class JRubyNokogiriWarner
     include Singleton
 
-    TEXT = <<EOS
+    TEXT = <<EOS.freeze
 --------------------------------------------------------------------------------
 Note:
 

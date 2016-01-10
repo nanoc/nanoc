@@ -12,7 +12,7 @@ module ::Nanoc::Extra
       'link' => :href,
       'script' => :src,
       'video' => :src,
-    }
+    }.freeze
 
     def initialize(filenames, mode = nil)
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn

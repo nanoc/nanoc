@@ -33,7 +33,7 @@ module Nanoc::Extra::Deployers
       '--exclude=".hg"',
       '--exclude=".svn"',
       '--exclude=".git"',
-    ]
+    ].freeze
 
     # @see Nanoc::Extra::Deployer#run
     def run
