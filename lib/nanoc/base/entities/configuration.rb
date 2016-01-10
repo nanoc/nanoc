@@ -3,7 +3,7 @@ module Nanoc::Int
   #
   # @api private
   class Configuration
-    NONE = Object.new
+    NONE = Object.new.freeze
 
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
@@ -13,7 +13,7 @@ module Nanoc::Int
       layouts_root: '/',
       config: {},
       identifier_type: 'full',
-    }
+    }.freeze
 
     # The default configuration for a site. A site's configuration overrides
     # these options: when a {Nanoc::Int::Site} is created with a configuration
@@ -29,7 +29,7 @@ module Nanoc::Int
       enable_output_diff: false,
       prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
       string_pattern_type: 'glob',
-    }
+    }.freeze
 
     # Creates a new configuration with the given hash.
     #
@@ -88,7 +88,8 @@ module Nanoc::Int
       self
     end
 
-    def __nanoc_freeze_recursively
+    def freeze
+      super
       @wrapped.__nanoc_freeze_recursively
     end
 

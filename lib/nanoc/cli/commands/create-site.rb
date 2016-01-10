@@ -15,7 +15,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-    DEFAULT_CONFIG = <<EOS unless defined? DEFAULT_CONFIG
+    DEFAULT_CONFIG = <<EOS.freeze unless defined? DEFAULT_CONFIG
 # The syntax to use for patterns in the Rules file. Can be either `"glob"`
 # (default) or `"legacy"`. The former will enable glob patterns, which behave
 # like Ruby’s File.fnmatch. The latter will enable Nanoc 3.x-style patterns.
@@ -108,7 +108,7 @@ checks:
     exclude_files: []
 EOS
 
-    DEFAULT_RULES = <<EOS unless defined? DEFAULT_RULES
+    DEFAULT_RULES = <<EOS.freeze unless defined? DEFAULT_RULES
 #!/usr/bin/env ruby
 
 compile '/**/*.html' do
@@ -139,7 +139,7 @@ end
 layout '/**/*', :erb
 EOS
 
-    DEFAULT_ITEM = <<EOS unless defined? DEFAULT_ITEM
+    DEFAULT_ITEM = <<EOS.freeze unless defined? DEFAULT_ITEM
 ---
 title: Home
 ---
@@ -156,7 +156,7 @@ title: Home
 <p>If you need any help with customizing your Nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
 EOS
 
-    DEFAULT_STYLESHEET = <<EOS unless defined? DEFAULT_STYLESHEET
+    DEFAULT_STYLESHEET = <<EOS.freeze unless defined? DEFAULT_STYLESHEET
 * {
   margin: 0;
   padding: 0;
@@ -260,7 +260,7 @@ a:hover {
 }
 EOS
 
-    DEFAULT_LAYOUT = <<EOS unless defined? DEFAULT_LAYOUT
+    DEFAULT_LAYOUT = <<EOS.freeze unless defined? DEFAULT_LAYOUT
 <!DOCTYPE HTML>
 <html lang="en">
   <head>

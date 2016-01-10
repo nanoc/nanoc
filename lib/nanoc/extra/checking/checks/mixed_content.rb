@@ -4,7 +4,7 @@ module Nanoc::Extra::Checking::Checks
   #
   # @api private
   class MixedContent < ::Nanoc::Extra::Checking::Check
-    PROTOCOL_PATTERN = /^(\w+):\/\//
+    PROTOCOL_PATTERN = /^(\w+):\/\//.freeze
 
     def run
       filenames = output_filenames.select { |f| File.extname(f) == '.html' }

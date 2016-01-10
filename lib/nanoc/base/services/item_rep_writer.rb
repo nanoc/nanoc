@@ -1,7 +1,7 @@
 module Nanoc::Int
   # @api private
   class ItemRepWriter
-    TMP_TEXT_ITEMS_DIR = 'text_items'
+    TMP_TEXT_ITEMS_DIR = 'text_items'.freeze
 
     def write(item_rep, raw_path)
       # Create parent directory

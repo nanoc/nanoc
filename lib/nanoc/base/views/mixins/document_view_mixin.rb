@@ -1,7 +1,7 @@
 module Nanoc
   module DocumentViewMixin
     # @api private
-    NONE = Object.new
+    NONE = Object.new.freeze
 
     # @api private
     def initialize(document, context)

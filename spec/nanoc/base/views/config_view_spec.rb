@@ -5,6 +5,19 @@ describe Nanoc::ConfigView do
 
   let(:view) { described_class.new(config, nil) }
 
+  describe '#frozen?' do
+    subject { view.frozen? }
+
+    context 'non-frozen config' do
+      it { is_expected.to be(false) }
+    end
+
+    context 'frozen config' do
+      before { config.freeze }
+      it { is_expected.to be(true) }
+    end
+  end
+
   describe '#[]' do
     subject { view[key] }
 

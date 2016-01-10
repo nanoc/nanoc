@@ -1,7 +1,7 @@
 module Nanoc
   class ConfigView < ::Nanoc::View
     # @api private
-    NONE = Object.new
+    NONE = Object.new.freeze
 
     # @api private
     def initialize(config, context)

@@ -33,7 +33,7 @@ module Nanoc
 
       parent = @context.items[parent_identifier]
 
-      parent && self.class.new(parent, @context).freeze
+      parent && self.class.new(parent, @context)
     end
 
     # @return [Boolean] True if the item is binary, false otherwise

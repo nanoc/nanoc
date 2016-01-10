@@ -61,7 +61,14 @@ describe Nanoc::ItemWithRepsView do
           expect(subject._context).to equal(view_context)
         end
 
-        it { is_expected.to be_frozen }
+        context 'frozen parent' do
+          before { parent_item.freeze }
+          it { is_expected.to be_frozen }
+        end
+
+        context 'non-frozen parent' do
+          it { is_expected.not_to be_frozen }
+        end
 
         context 'with root parent' do
           let(:parent_item) { Nanoc::Int::Item.new('parent', {}, '/') }
