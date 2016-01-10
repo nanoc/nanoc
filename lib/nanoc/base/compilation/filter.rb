@@ -25,7 +25,7 @@ module Nanoc
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Nanoc::Int::Context
     # @api private
-    TMP_BINARY_ITEMS_DIR = 'binary_items'
+    TMP_BINARY_ITEMS_DIR = 'binary_items'.freeze
 
     # A hash containing variables that will be made available during
     # filtering.

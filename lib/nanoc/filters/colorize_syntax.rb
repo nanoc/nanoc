@@ -246,7 +246,7 @@ module Nanoc::Filters
       wrap: '-W',
       include_style: '-I',
       line_numbers: '-l',
-    }
+    }.freeze
 
     # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).
     #
@@ -347,7 +347,7 @@ module Nanoc::Filters
 
     protected
 
-    KNOWN_COLORIZERS = [:coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge]
+    KNOWN_COLORIZERS = [:coderay, :dummy, :pygmentize, :pygmentsrb, :simon_highlight, :rouge].freeze
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)

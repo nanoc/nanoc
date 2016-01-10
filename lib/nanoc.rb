@@ -16,7 +16,7 @@ module Nanoc
   #
   # @api private
   def self.on_windows?
-    RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
+    RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i.freeze
   end
 end
 
