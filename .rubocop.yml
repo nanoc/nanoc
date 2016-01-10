@@ -10,6 +10,7 @@ FileName:
 Lint/NestedMethodDefinition:
   Exclude:
     - 'test/**/*.rb'
+    - 'spec/**/*.rb'
 
 # This is used in tests, to verify the effect of state-changing functions.
 Style/GlobalVars:

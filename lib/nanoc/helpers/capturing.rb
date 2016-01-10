@@ -89,6 +89,7 @@ module Nanoc::Helpers
           snapshot_contents[capture_name] ||= ''
         when :error
           if snapshot_contents[capture_name] && snapshot_contents[capture_name] != content
+            # FIXME: get proper exception
             raise "a capture named #{name.inspect} for #{@item.identifier} already exists"
           else
             snapshot_contents[capture_name] = ''
