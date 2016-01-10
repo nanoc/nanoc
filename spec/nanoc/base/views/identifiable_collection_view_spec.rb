@@ -8,6 +8,30 @@ shared_examples 'an identifiable collection' do
     { string_pattern_type: 'glob' }
   end
 
+  describe '#frozen?' do
+    let(:wrapped) do
+      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
+        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
+      end
+    end
+
+    subject { view.frozen? }
+
+    context 'non-frozen collection' do
+      it { is_expected.to be(false) }
+    end
+
+    context 'frozen collection' do
+      before do
+        wrapped.each { |o| expect(o).to receive(:freeze) }
+        wrapped.freeze
+      end
+
+      it { is_expected.to be(true) }
+    end
+  end
+
   describe '#unwrap' do
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|

@@ -88,7 +88,8 @@ module Nanoc::Int
       self
     end
 
-    def __nanoc_freeze_recursively
+    def freeze
+      super
       @wrapped.__nanoc_freeze_recursively
     end
 

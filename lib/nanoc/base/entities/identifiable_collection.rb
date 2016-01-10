@@ -18,6 +18,7 @@ module Nanoc::Int
 
     def freeze
       @objects.freeze
+      @objects.each(&:freeze)
       build_mapping
       super
     end

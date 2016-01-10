@@ -41,9 +41,10 @@ module Nanoc::Int
     #
     # @return [void]
     def freeze
-      config.__nanoc_freeze_recursively
-      items.each(&:freeze)
-      layouts.each(&:freeze)
+      config.freeze
+      items.freeze
+      layouts.freeze
+      code_snippets.__nanoc_freeze_recursively
     end
 
     def ensure_identifier_uniqueness(objects, type)

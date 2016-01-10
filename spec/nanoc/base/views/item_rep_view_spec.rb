@@ -1,6 +1,23 @@
 describe Nanoc::ItemRepView do
   let(:view_context) { double(:view_context) }
 
+  describe '#frozen?' do
+    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:view) { described_class.new(item_rep, view_context) }
+
+    subject { view.frozen? }
+
+    context 'non-frozen item rep' do
+      it { is_expected.to be(false) }
+    end
+
+    context 'frozen item rep' do
+      before { item_rep.freeze }
+      it { is_expected.to be(true) }
+    end
+  end
+
   describe '#== and #eql?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
