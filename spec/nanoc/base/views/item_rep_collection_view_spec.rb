@@ -17,6 +17,19 @@ describe Nanoc::ItemRepCollectionView do
     it { should equal(wrapped) }
   end
 
+  describe '#frozen?' do
+    subject { view.frozen? }
+
+    context 'non-frozen collection' do
+      it { is_expected.to be(false) }
+    end
+
+    context 'frozen collection' do
+      before { wrapped.freeze }
+      it { is_expected.to be(true) }
+    end
+  end
+
   describe '#each' do
     it 'yields' do
       actual = [].tap { |res| view.each { |v| res << v } }

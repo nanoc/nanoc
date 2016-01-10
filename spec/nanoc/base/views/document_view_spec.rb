@@ -1,4 +1,20 @@
 shared_examples 'a document view' do
+  describe '#frozen?' do
+    let(:document) { entity_class.new('content', {}, '/asdf/') }
+    let(:view) { described_class.new(document, nil) }
+
+    subject { view.frozen? }
+
+    context 'non-frozen document' do
+      it { is_expected.to be(false) }
+    end
+
+    context 'frozen document' do
+      before { document.freeze }
+      it { is_expected.to be(true) }
+    end
+  end
+
   describe '#== and #eql?' do
     let(:document) { entity_class.new('content', {}, '/asdf/') }
     let(:view) { described_class.new(document, nil) }
