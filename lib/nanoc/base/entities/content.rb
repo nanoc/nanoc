@@ -75,6 +75,15 @@ module Nanoc
       def binary?
         false
       end
+
+      def marshal_dump
+        [filename, string]
+      end
+
+      def marshal_load(array)
+        @filename = array[0]
+        @string = Nanoc::Int::LazyValue.new(array[1])
+      end
     end
 
     # @api private

@@ -143,6 +143,20 @@ describe Nanoc::Int::TextualContent do
       end
     end
   end
+
+  describe 'marshalling' do
+    let(:content) { described_class.new('foo', filename: '/foo.md') }
+
+    it 'dumps as an array' do
+      expect(content.marshal_dump).to eq(['/foo.md', 'foo'])
+    end
+
+    it 'restores a dumped object' do
+      restored = Marshal.load(Marshal.dump(content))
+      expect(restored.string).to eq('foo')
+      expect(restored.filename).to eq('/foo.md')
+    end
+  end
 end
 
 describe Nanoc::Int::BinaryContent do
