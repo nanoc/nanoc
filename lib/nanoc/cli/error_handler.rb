@@ -138,7 +138,6 @@ module Nanoc::CLI
       write_version_information(stream, verbose: true)
       write_system_information(stream, verbose: true)
       write_installed_gems(stream, verbose: true)
-      write_environment(stream, verbose: true)
       write_gemfile_lock(stream, verbose: true)
       write_load_paths(stream, verbose: true)
     end
@@ -317,13 +316,6 @@ module Nanoc::CLI
       write_section_header(stream, 'Installed gems', verbose: verbose)
       gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
-      end
-    end
-
-    def write_environment(stream, verbose: false)
-      write_section_header(stream, 'Environment', verbose: verbose)
-      ENV.sort.each do |e|
-        stream.puts "#{e.first} => #{e.last.inspect}"
       end
     end
 
