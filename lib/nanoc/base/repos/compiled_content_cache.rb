@@ -5,7 +5,7 @@ module Nanoc::Int
   # @api private
   class CompiledContentCache < ::Nanoc::Int::Store
     def initialize
-      super('tmp/compiled_content', 1)
+      super('tmp/compiled_content', 2)
 
       @cache = {}
     end

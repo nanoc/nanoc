@@ -81,6 +81,34 @@ describe Nanoc::Int::TextualContent do
         expect { content }.to raise_error(ArgumentError)
       end
     end
+
+    context 'with proc' do
+      call_count = 0
+      let(:content) do
+        described_class.new(proc do
+          call_count += 1
+          'foo'
+        end)
+      end
+
+      before do
+        call_count = 0
+      end
+
+      it 'does not call the proc immediately' do
+        expect(call_count).to eql(0)
+      end
+
+      it 'sets string' do
+        expect(content.string).to eq('foo')
+      end
+
+      it 'only calls the proc once' do
+        content.string
+        content.string
+        expect(call_count).to eql(1)
+      end
+    end
   end
 
   describe '#binary?' do
@@ -104,6 +132,29 @@ describe Nanoc::Int::TextualContent do
     it 'prevents changes to filename' do
       expect(content.filename).to be_frozen
       expect { content.filename << 'asdf' }.to raise_frozen_error
+    end
+
+    context 'with proc' do
+      let(:content) { described_class.new(proc { 'foo' }) }
+
+      it 'prevents changes to string' do
+        expect(content.string).to be_frozen
+        expect { content.string << 'asdf' }.to raise_frozen_error
+      end
+    end
+  end
+
+  describe 'marshalling' do
+    let(:content) { described_class.new('foo', filename: '/foo.md') }
+
+    it 'dumps as an array' do
+      expect(content.marshal_dump).to eq(['/foo.md', 'foo'])
+    end
+
+    it 'restores a dumped object' do
+      restored = Marshal.load(Marshal.dump(content))
+      expect(restored.string).to eq('foo')
+      expect(restored.filename).to eq('/foo.md')
     end
   end
 end

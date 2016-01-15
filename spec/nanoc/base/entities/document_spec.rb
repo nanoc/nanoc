@@ -25,8 +25,38 @@ shared_examples 'a document' do
     end
 
     describe 'attributes arg' do
-      it 'symbolizes attributes' do
-        expect(subject.attributes).to eq({ title: 'Home' })
+      context 'hash' do
+        it 'symbolizes attributes' do
+          expect(subject.attributes).to eq({ title: 'Home' })
+        end
+      end
+
+      context 'proc' do
+        call_count = 0
+        let(:attributes_arg) do
+          proc do
+            call_count += 1
+            { 'title' => 'Home' }
+          end
+        end
+
+        before do
+          call_count = 0
+        end
+
+        it 'does not call the proc immediately' do
+          expect(call_count).to eql(0)
+        end
+
+        it 'symbolizes attributes' do
+          expect(subject.attributes).to eq({ title: 'Home' })
+        end
+
+        it 'only calls the proc once' do
+          subject.attributes
+          subject.attributes
+          expect(call_count).to eql(1)
+        end
       end
     end
 
@@ -56,7 +86,8 @@ shared_examples 'a document' do
 
   describe '#freeze' do
     let(:content_arg) { 'Hallo' }
-    let(:document) { described_class.new(content_arg, { foo: { bar: 'asdf' } }, '/foo.md') }
+    let(:attributes_arg) { { foo: { bar: 'asdf' } } }
+    let(:document) { described_class.new(content_arg, attributes_arg, '/foo.md') }
 
     before do
       document.freeze
@@ -84,6 +115,20 @@ shared_examples 'a document' do
       it 'refuses changes to content' do
         expect { document.instance_variable_set(:@content, 'hah') }.to raise_frozen_error
         expect { document.content.filename << 'hah' }.to raise_frozen_error
+      end
+    end
+
+    context 'attributes block' do
+      let(:attributes_arg) { proc { { foo: { bar: 'asdf' } } } }
+
+      it 'gives access to the attributes' do
+        expect(document.attributes).to eql({ foo: { bar: 'asdf' } })
+      end
+
+      it 'refuses to change attributes' do
+        expect { document.instance_variable_set(:@attributes, { a: 'Hi' }) }.to raise_frozen_error
+        expect { document.attributes[:title] = 'Bye' }.to raise_frozen_error
+        expect { document.attributes[:foo][:bar] = 'fdsa' }.to raise_frozen_error
       end
     end
   end
