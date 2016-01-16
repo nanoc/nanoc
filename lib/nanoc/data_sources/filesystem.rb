@@ -110,38 +110,47 @@ module Nanoc::DataSources
 
           proto_doc = read_proto_document(content_filename, meta_filename, klass)
 
-          attributes = {
-            filename: content_filename,
-            content_filename: content_filename,
-            meta_filename: meta_filename,
-            extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
-            mtime: mtime_of(content_filename, meta_filename),
-          }.merge(proto_doc.attributes)
+          content = content_for(proto_doc, content_filename, meta_filename)
+          attributes = attributes_for(proto_doc, content_filename, meta_filename)
+          identifier = identifier_for(content_filename, meta_filename, dir_name)
 
-          # Get identifier
-          if content_filename
-            identifier = identifier_for_filename(content_filename[dir_name.length..-1])
-          elsif meta_filename
-            identifier = identifier_for_filename(meta_filename[dir_name.length..-1])
-          else
-            raise 'meta_filename and content_filename are both nil'
-          end
-
-          # Create content
-          full_content_filename = content_filename && File.expand_path(content_filename)
-          content =
-            if proto_doc.binary?
-              Nanoc::Int::BinaryContent.new(full_content_filename)
-            else
-              Nanoc::Int::TextualContent.new(proto_doc.content, filename: full_content_filename)
-            end
-
-          # Create object
           res << klass.new(content, attributes, identifier, checksum_data: proto_doc.checksum_data)
         end
       end
 
       res
+    end
+
+    def attributes_for(proto_doc, content_filename, meta_filename)
+      extra_attributes = {
+        filename: content_filename,
+        content_filename: content_filename,
+        meta_filename: meta_filename,
+        extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
+        mtime: mtime_of(content_filename, meta_filename),
+      }
+
+      extra_attributes.merge(proto_doc.attributes)
+    end
+
+    def identifier_for(content_filename, meta_filename, dir_name)
+      if content_filename
+        identifier_for_filename(content_filename[dir_name.length..-1])
+      elsif meta_filename
+        identifier_for_filename(meta_filename[dir_name.length..-1])
+      else
+        raise 'meta_filename and content_filename are both nil'
+      end
+    end
+
+    def content_for(proto_doc, content_filename, meta_filename)
+      full_content_filename = content_filename && File.expand_path(content_filename)
+
+      if proto_doc.binary?
+        Nanoc::Int::BinaryContent.new(full_content_filename)
+      else
+        Nanoc::Int::TextualContent.new(proto_doc.content, filename: full_content_filename)
+      end
     end
 
     def mtime_of(content_filename, meta_filename)
