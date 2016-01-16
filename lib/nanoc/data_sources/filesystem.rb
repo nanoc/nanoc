@@ -105,19 +105,17 @@ module Nanoc::DataSources
 
       all_split_files_in(dir_name).each do |base_filename, (meta_ext, content_exts)|
         content_exts.each do |content_ext|
-          # Get filenames
           meta_filename    = filename_for(base_filename, meta_ext)
           content_filename = filename_for(base_filename, content_ext)
 
-          # Read content and metadata
           proto_doc = read_proto_document(content_filename, meta_filename, klass)
 
-          # Get attributes
           attributes = {
             filename: content_filename,
             content_filename: content_filename,
             meta_filename: meta_filename,
             extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
+            mtime: mtime_of(content_filename, meta_filename),
           }.merge(proto_doc.attributes)
 
           # Get identifier
@@ -128,20 +126,6 @@ module Nanoc::DataSources
           else
             raise 'meta_filename and content_filename are both nil'
           end
-
-          # Get modification times
-          meta_mtime = meta_filename ? File.stat(meta_filename).mtime : nil
-          content_mtime = content_filename ? File.stat(content_filename).mtime : nil
-          if meta_mtime && content_mtime
-            mtime = meta_mtime > content_mtime ? meta_mtime : content_mtime
-          elsif meta_mtime
-            mtime = meta_mtime
-          elsif content_mtime
-            mtime = content_mtime
-          else
-            raise 'meta_mtime and content_mtime are both nil'
-          end
-          attributes[:mtime] = mtime
 
           # Create content
           full_content_filename = content_filename && File.expand_path(content_filename)
@@ -158,6 +142,20 @@ module Nanoc::DataSources
       end
 
       res
+    end
+
+    def mtime_of(content_filename, meta_filename)
+      meta_mtime = meta_filename ? File.stat(meta_filename).mtime : nil
+      content_mtime = content_filename ? File.stat(content_filename).mtime : nil
+      if meta_mtime && content_mtime
+        meta_mtime > content_mtime ? meta_mtime : content_mtime
+      elsif meta_mtime
+        meta_mtime
+      elsif content_mtime
+        content_mtime
+      else
+        raise 'meta_mtime and content_mtime are both nil'
+      end
     end
 
     # e.g.
