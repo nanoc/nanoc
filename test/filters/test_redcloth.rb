@@ -17,7 +17,7 @@ class Nanoc::Filters::RedClothTest < Nanoc::TestCase
 
       # Run filter without options
       result = filter.setup_and_run('I am a member of SPECTRE.')
-      assert_equal("<p>I am a member of <span class=\"caps\">SPECTRE</span>.</p>", result)
+      assert_equal('<p>I am a member of <span class="caps">SPECTRE</span>.</p>', result)
 
       # Run filter with options
       result = filter.setup_and_run('I am a member of SPECTRE.', no_span_caps: true)

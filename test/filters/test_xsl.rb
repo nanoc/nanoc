@@ -1,7 +1,7 @@
 require 'tempfile'
 
 class Nanoc::Filters::XSLTest < Nanoc::TestCase
-  SAMPLE_XSL = <<-EOS
+  SAMPLE_XSL = <<-EOS.freeze
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
@@ -18,7 +18,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN = <<-EOS
+  SAMPLE_XML_IN = <<-EOS.freeze
 <?xml version="1.0" encoding="utf-8"?>
 <report>
   <title>My Report</title>
@@ -27,7 +27,7 @@ EOS
 
   SAMPLE_XML_OUT = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
-  SAMPLE_XSL_WITH_PARAMS = <<-EOS
+  SAMPLE_XSL_WITH_PARAMS = <<-EOS.freeze
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
@@ -45,7 +45,7 @@ EOS
 </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN_WITH_PARAMS = <<-EOS
+  SAMPLE_XML_IN_WITH_PARAMS = <<-EOS.freeze
 <?xml version="1.0" encoding="utf-8"?>
 <report>
   <title>My Report</title>
@@ -54,7 +54,7 @@ EOS
 
   SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
 
-  SAMPLE_XSL_WITH_OMIT_XML_DECL = <<-EOS
+  SAMPLE_XSL_WITH_OMIT_XML_DECL = <<-EOS.freeze
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"
@@ -72,7 +72,7 @@ EOS
 </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN_WITH_OMIT_XML_DECL = <<-EOS
+  SAMPLE_XML_IN_WITH_OMIT_XML_DECL = <<-EOS.freeze
 <?xml version="1.0" encoding="utf-8"?>
 <report>
   <title>My Report</title>

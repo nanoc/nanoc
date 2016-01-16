@@ -133,11 +133,12 @@ module Nanoc::Int
     #
     # @api private
     def assigns_for(rep, dependency_tracker)
-      if rep.binary?
-        content_or_filename_assigns = { filename: rep.snapshot_contents[:last].filename }
-      else
-        content_or_filename_assigns = { content: rep.snapshot_contents[:last].string }
-      end
+      content_or_filename_assigns =
+        if rep.binary?
+          { filename: rep.snapshot_contents[:last].filename }
+        else
+          { content: rep.snapshot_contents[:last].string }
+        end
 
       view_context = create_view_context(dependency_tracker)
 

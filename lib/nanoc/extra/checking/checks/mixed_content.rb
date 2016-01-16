@@ -4,7 +4,7 @@ module Nanoc::Extra::Checking::Checks
   #
   # @api private
   class MixedContent < ::Nanoc::Extra::Checking::Check
-    PROTOCOL_PATTERN = /^(\w+):\/\//.freeze
+    PROTOCOL_PATTERN = /^(\w+):\/\//
 
     def run
       filenames = output_filenames.select { |f| File.extname(f) == '.html' }
@@ -25,7 +25,7 @@ module Nanoc::Extra::Checking::Checks
     def guaranteed_insecure?(href)
       protocol = PROTOCOL_PATTERN.match(href)
 
-      protocol && protocol[1].downcase == 'http'
+      protocol && protocol[1].casecmp('http').zero?
     end
   end
 end

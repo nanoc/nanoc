@@ -4,7 +4,7 @@ require 'coveralls/rake/task'
 
 Coveralls::RakeTask.new
 
-SUBDIRS = %w( * base cli data_sources extra filters helpers )
+SUBDIRS = %w( * base cli data_sources extra filters helpers ).freeze
 
 namespace :test do
   SUBDIRS.each do |dir|

@@ -25,7 +25,7 @@ module Nanoc::HashExtensions
   #
   # @since 3.2.0
   def __nanoc_freeze_recursively
-    return if self.frozen?
+    return if frozen?
     freeze
     each_pair do |_key, value|
       if value.respond_to?(:__nanoc_freeze_recursively)

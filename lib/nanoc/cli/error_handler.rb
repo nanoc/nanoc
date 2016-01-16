@@ -138,7 +138,6 @@ module Nanoc::CLI
       write_version_information(stream, verbose: true)
       write_system_information(stream, verbose: true)
       write_installed_gems(stream, verbose: true)
-      write_environment(stream, verbose: true)
       write_gemfile_lock(stream, verbose: true)
       write_load_paths(stream, verbose: true)
     end
@@ -226,7 +225,7 @@ module Nanoc::CLI
 
         # Build message
         if gem_name
-          if self.using_bundler?
+          if using_bundler?
             'Make sure the gem is added to Gemfile and run `bundle install`.'
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
@@ -262,7 +261,7 @@ module Nanoc::CLI
 
       stream.puts "#{error.class}: #{error.message}"
       resolution = resolution_for(error)
-      stream.puts "#{resolution}" if resolution
+      stream.puts resolution.to_s if resolution
     end
 
     def write_compilation_stack(stream, _error, verbose: false)
@@ -317,13 +316,6 @@ module Nanoc::CLI
       write_section_header(stream, 'Installed gems', verbose: verbose)
       gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
-      end
-    end
-
-    def write_environment(stream, verbose: false)
-      write_section_header(stream, 'Environment', verbose: verbose)
-      ENV.sort.each do |e|
-        stream.puts "#{e.first} => #{e.last.inspect}"
       end
     end
 

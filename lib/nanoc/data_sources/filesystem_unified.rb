@@ -89,11 +89,12 @@ module Nanoc::DataSources
         return Nanoc::Identifier.new(filename)
       end
 
-      if filename =~ /(^|\/)index(\.[^\/]+)?$/
-        regex = @config && @config[:allow_periods_in_identifiers] ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/
-      else
-        regex = @config && @config[:allow_periods_in_identifiers] ? /\.[^\/\.]+$/ : /\.[^\/]+$/
-      end
+      regex =
+        if filename =~ /(^|\/)index(\.[^\/]+)?$/
+          @config && @config[:allow_periods_in_identifiers] ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/
+        else
+          @config && @config[:allow_periods_in_identifiers] ? /\.[^\/\.]+$/ : /\.[^\/]+$/
+        end
       Nanoc::Identifier.new(filename.sub(regex, ''), type: :legacy)
     end
   end

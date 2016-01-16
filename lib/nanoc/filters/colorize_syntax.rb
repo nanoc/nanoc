@@ -367,7 +367,7 @@ module Nanoc::Filters
       colorizer = @colorizers[language.to_sym]
       if KNOWN_COLORIZERS.include?(colorizer)
         sym = (colorizer.to_s + '_postprocess').to_sym
-        if self.respond_to?(sym)
+        if respond_to?(sym)
           send(sym, language, element)
         end
       else

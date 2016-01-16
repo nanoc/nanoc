@@ -1,5 +1,8 @@
 # ----- CONFIGURED -----
 
+AllCops:
+  TargetRubyVersion: 2.1
+
 # We use filenames such as “create-site.rb” that translate to method names.
 FileName:
   Exclude:
@@ -17,10 +20,24 @@ Style/GlobalVars:
   Exclude:
     - 'test/**/*.rb'
 
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+Lint/DuplicateMethods:
+  Exclude:
+    - 'test/data_sources/test_filesystem_unified.rb'
+
 
 
 # ----- TO ENABLE LATER -----
-# To make merges easier, I’ve decided to enable these at a later point in time.
+
+# Valid cops, but fixing the offenses they report is non-trivial.
 
 RegexpLiteral:
   Enabled: false
@@ -37,6 +54,14 @@ Style/EmptyElse:
 Style/Next:
   Enabled: false
 
+Lint/IneffectiveAccessModifier:
+  Enabled: false
+
+Lint/UselessAccessModifier:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
 
 
 # ----- DISABLED (hard) -----
@@ -61,6 +86,7 @@ Lint/UnderscorePrefixedVariableName:
 # Rubocop trips up on this.
 Style/LeadingCommentSpace:
   Enabled: false
+
 
 
 # ----- DISABLED (metrics) -----
@@ -97,11 +123,6 @@ Metrics/PerceivedComplexity:
 
 
 # ----- DISABLED (opinionated) -----
-
-# Having trailing commas for multiline method calls is useful. Rubocop’s enforced multi-line comma
-# style is unfortunately a little buggy, so it is disabled.
-TrailingComma:
-  Enabled: false
 
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
 # there’s no point in enforcing ASCII comments.

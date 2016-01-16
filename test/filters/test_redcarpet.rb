@@ -56,11 +56,12 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
       # Run filter
       input           = "![Alt](/path/to/img 'Title')"
       output_expected = %r{<img src="/path/to/img" alt="Alt" title="Title"/>}
-      if ::Redcarpet::VERSION > '2'
-        output_actual   = filter.setup_and_run(input, renderer_options: { xhtml: true })
-      else
-        output_actual   = filter.setup_and_run(input, options: [:xhtml])
-      end
+      output_actual =
+        if ::Redcarpet::VERSION > '2'
+          filter.setup_and_run(input, renderer_options: { xhtml: true })
+        else
+          filter.setup_and_run(input, options: [:xhtml])
+        end
       assert_match(output_expected, output_actual)
     end
   end

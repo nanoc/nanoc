@@ -124,7 +124,7 @@ module Nanoc::Helpers
       end
 
       # Handle Windows network (UNC) paths
-      if path.start_with?('//') || path.start_with?('\\\\')
+      if path.start_with?('//', '\\\\')
         return path
       end
 
@@ -138,11 +138,12 @@ module Nanoc::Helpers
 
       # Calculate the relative path (method depends on whether destination is
       # a directory or not).
-      if src_path.to_s[-1, 1] != '/'
-        relative_path = dst_path.relative_path_from(src_path.dirname).to_s
-      else
-        relative_path = dst_path.relative_path_from(src_path).to_s
-      end
+      relative_path =
+        if src_path.to_s[-1, 1] != '/'
+          dst_path.relative_path_from(src_path.dirname).to_s
+        else
+          dst_path.relative_path_from(src_path).to_s
+        end
 
       # Add trailing slash if necessary
       if dst_path.to_s[-1, 1] == '/'
