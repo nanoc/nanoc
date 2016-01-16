@@ -61,8 +61,10 @@ module Nanoc::DataSources
           elsif is_binary && klass == Nanoc::Int::Layout
             raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
           else
-            meta, content_or_filename, meta_raw = parse(content_filename, meta_filename, kind)
-            checksum_data = "content=#{content_or_filename},meta=#{meta_raw}"
+            parse_result = parse(content_filename, meta_filename, kind)
+            meta = parse_result.attributes
+            content_or_filename = parse_result.content
+            checksum_data = "content=#{content_or_filename},meta=#{parse_result.attributes_data}"
           end
 
           # Get attributes
@@ -222,14 +224,14 @@ module Nanoc::DataSources
       content = content_filename ? read(content_filename) : ''
       meta_raw = read(meta_filename)
       meta = parse_metadata(meta_raw, meta_filename)
-      [meta, content, meta_raw]
+      ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
     end
 
     def parse_with_frontmatter(content_filename)
       data = read(content_filename)
 
       if data !~ /\A-{3,5}\s*$/
-        return [{}, data, '']
+        return ParseResult.new(content: data, attributes: {}, attributes_data: '')
       end
 
       pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
@@ -242,7 +244,7 @@ module Nanoc::DataSources
       meta = parse_metadata(pieces[2], content_filename)
       content = pieces[4]
 
-      [meta, content, pieces[2]]
+      ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
     end
 
     def parse_metadata(data, filename)
@@ -255,6 +257,36 @@ module Nanoc::DataSources
       verify_meta(meta, filename)
 
       meta
+    end
+
+    class ParseResult
+      attr_reader :content
+      attr_reader :attributes
+      attr_reader :attributes_data
+
+      def initialize(content:, attributes:, attributes_data:)
+        unless content.is_a?(String)
+          raise ArgumentError, 'content argument must be a string'
+        end
+
+        @content = content
+        @attributes = attributes
+        @attributes_data = attributes_data
+      end
+
+      # TODO: remove me
+      def [](key)
+        case key
+        when 0
+          attributes
+        when 1
+          content
+        when 2
+          attributes_data
+        else
+          raise ArgumentError
+        end
+      end
     end
 
     class InvalidMetadataError < Nanoc::Error
