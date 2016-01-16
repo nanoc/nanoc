@@ -110,7 +110,7 @@ module Nanoc::DataSources
 
           proto_doc = read_proto_document(content_filename, meta_filename, klass)
 
-          content = content_for(proto_doc, content_filename, meta_filename)
+          content = content_for(proto_doc, content_filename)
           attributes = attributes_for(proto_doc, content_filename, meta_filename)
           identifier = identifier_for(content_filename, meta_filename, dir_name)
 
@@ -143,7 +143,7 @@ module Nanoc::DataSources
       end
     end
 
-    def content_for(proto_doc, content_filename, meta_filename)
+    def content_for(proto_doc, content_filename)
       full_content_filename = content_filename && File.expand_path(content_filename)
 
       if proto_doc.binary?
