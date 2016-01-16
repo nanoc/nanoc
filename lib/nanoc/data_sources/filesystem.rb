@@ -211,28 +211,27 @@ module Nanoc::DataSources
     # element a hash with the file's metadata, its second element the
     # file content itself, and its third element the metadata content.
     def parse(content_filename, meta_filename, _kind)
-      # Read content and metadata from separate files
       if meta_filename
-        content = content_filename ? read(content_filename) : ''
-        meta_raw = read(meta_filename)
-        begin
-          meta = YAML.load(meta_raw) || {}
-        rescue Exception => e
-          raise "Could not parse YAML for #{meta_filename}: #{e.message}"
-        end
-        verify_meta(meta, meta_filename)
-        return [meta, content]
+        parse_with_separate_meta_filename(content_filename, meta_filename)
+      else
+        parse_with_frontmatter(content_filename)
       end
+    end
 
-      # Read data
+    def parse_with_separate_meta_filename(content_filename, meta_filename)
+      content = content_filename ? read(content_filename) : ''
+      meta_raw = read(meta_filename)
+      meta = parse_metadata(meta_raw, meta_filename)
+      [meta, content, meta_raw]
+    end
+
+    def parse_with_frontmatter(content_filename)
       data = read(content_filename)
 
-      # Check presence of metadata section
       if data !~ /\A-{3,5}\s*$/
-        return [{}, data]
+        return [{}, data, '']
       end
 
-      # Split data
       pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
       if pieces.size < 4
         raise RuntimeError.new(
@@ -240,17 +239,22 @@ module Nanoc::DataSources
         )
       end
 
-      # Parse
-      begin
-        meta = YAML.load(pieces[2]) || {}
-      rescue Exception => e
-        raise "Could not parse YAML for #{content_filename}: #{e.message}"
-      end
-      verify_meta(meta, content_filename)
+      meta = parse_metadata(pieces[2], content_filename)
       content = pieces[4]
 
-      # Done
-      [meta, content, meta_raw]
+      [meta, content, pieces[2]]
+    end
+
+    def parse_metadata(data, filename)
+      begin
+        meta = YAML.load(data) || {}
+      rescue Exception => e
+        raise "Could not parse YAML for #{filename}: #{e.message}"
+      end
+
+      verify_meta(meta, filename)
+
+      meta
     end
 
     class InvalidMetadataError < Nanoc::Error
