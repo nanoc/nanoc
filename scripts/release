@@ -41,7 +41,7 @@ run('gem', 'build', 'nanoc.gemspec')
 puts
 
 puts "=== Reading version…"
-require_relative 'lib/nanoc/version'
+require './lib/nanoc/version'
 puts "Version = #{Nanoc::VERSION}"
 puts
 
