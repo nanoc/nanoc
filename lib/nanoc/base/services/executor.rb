@@ -34,11 +34,12 @@ module Nanoc
           last = rep.snapshot_contents[:last]
           source = rep.binary? ? last.filename : last.string
           result = filter.setup_and_run(source, filter_args)
-          if klass.to_binary?
-            rep.snapshot_contents[:last] = Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
-          else
-            rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(result).tap(&:freeze)
-          end
+          rep.snapshot_contents[:last] =
+            if klass.to_binary?
+              Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
+            else
+              Nanoc::Int::TextualContent.new(result).tap(&:freeze)
+            end
 
           # Check whether file was written
           if klass.to_binary? && !File.file?(filter.output_filename)

@@ -7,7 +7,7 @@ module Nanoc::Int::RuleMemoryActions
     attr_reader :snapshot_name
     attr_reader :final
     attr_reader :path
-    alias_method :final?, :final
+    alias final? final
 
     def initialize(snapshot_name, final, path)
       @snapshot_name = snapshot_name

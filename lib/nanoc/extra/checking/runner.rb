@@ -19,7 +19,7 @@ module Nanoc::Extra::Checking
     def dsl_present?
       checks_filename && File.file?(checks_filename)
     end
-    alias_method :has_dsl?, :dsl_present?
+    alias has_dsl? dsl_present?
 
     # Lists all available checks on stdout.
     #
@@ -65,11 +65,12 @@ module Nanoc::Extra::Checking
     def load_dsl_if_available
       @dsl_loaded ||= false
       unless @dsl_loaded
-        if self.dsl_present?
-          @dsl = Nanoc::Extra::Checking::DSL.from_file(checks_filename)
-        else
-          @dsl = nil
-        end
+        @dsl =
+          if dsl_present?
+            Nanoc::Extra::Checking::DSL.from_file(checks_filename)
+          else
+            nil
+          end
         @dsl_loaded = true
       end
     end

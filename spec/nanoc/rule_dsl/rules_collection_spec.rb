@@ -231,7 +231,7 @@ describe Nanoc::RuleDSL::RulesCollection do
         {
           a: rules[0],
           b: rules[1],
-        }
+        },
       )
     end
   end

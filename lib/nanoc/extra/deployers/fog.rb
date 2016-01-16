@@ -37,7 +37,7 @@ module Nanoc::Extra::Deployers
       error 'The path requires no trailing slash' if path && path[-1, 1] == '/'
 
       # Mock if necessary
-      if self.dry_run?
+      if dry_run?
         puts 'Dry run - simulation'
         ::Fog.mock!
       end
@@ -95,7 +95,7 @@ module Nanoc::Extra::Deployers
         keys_to_invalidate.concat(keys_to_destroy)
         cdn = ::Fog::CDN.new(config)
         # fog cannot mock CDN requests
-        unless self.dry_run?
+        unless dry_run?
           distribution = cdn.get_distribution(cdn_id)
           # usual limit per invalidation: 1000 objects
           keys_to_invalidate.each_slice(1000) do |paths|

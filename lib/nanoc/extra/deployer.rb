@@ -18,7 +18,7 @@ module Nanoc::Extra
     # @return [Boolean] true if the deployer should only show what would be
     #   deployed instead of doing the actual deployment
     attr_reader :dry_run
-    alias_method :dry_run?, :dry_run
+    alias dry_run? dry_run
 
     # @param [String] source_path The path to the directory that contains the
     #   files to upload. It should not have a trailing slash.

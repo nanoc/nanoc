@@ -232,7 +232,7 @@ module Nanoc::RuleDSL
     #     include_rules 'rules/assets'
     #     include_rules 'rules/content'
     def include_rules(name)
-      filename = ["#{name}", "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
+      filename = [name.to_s, "#{name}.rb", "./#{name}", "./#{name}.rb"].find { |f| File.file?(f) }
       raise Nanoc::Int::Errors::NoRulesFileFound.new if filename.nil?
 
       Nanoc::RuleDSL::RulesLoader.new(@config, @rules_collection).parse(filename)

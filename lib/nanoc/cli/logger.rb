@@ -48,7 +48,7 @@ module Nanoc::CLI
           "\e[0m",
           duration.nil? ? '' : format('[%2.2fs]  ', duration),
           name,
-        )
+        ),
       )
     end
 

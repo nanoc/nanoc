@@ -90,7 +90,7 @@ module ::Nanoc::Extra::Checking::Checks
       end
 
       # Skip excluded URLs
-      return nil if self.excluded?(href)
+      return nil if excluded?(href)
 
       # Skip non-HTTP URLs
       return nil if url.scheme !~ /^https?$/
@@ -142,11 +142,12 @@ module ::Nanoc::Extra::Checking::Checks
     end
 
     def path_for_url(url)
-      if url.path.nil? || url.path.empty?
-        path = '/'
-      else
-        path = url.path
-      end
+      path =
+        if url.path.nil? || url.path.empty?
+          '/'
+        else
+          url.path
+        end
 
       if url.query
         path << '?' << url.query

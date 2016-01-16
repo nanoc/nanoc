@@ -1,6 +1,6 @@
 # @api private
 class ::Sass::Importers::Filesystem
-  alias_method :_orig_find, :_find
+  alias _orig_find _find
 
   def _find(dir, name, options)
     # Find filename

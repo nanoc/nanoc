@@ -34,7 +34,8 @@ module Nanoc::Helpers
         buffer = eval('_erbout', block.binding)
         buffer << escaped_data
       elsif string
-        string.gsub('&', '&amp;')
+        string
+          .gsub('&', '&amp;')
           .gsub('<', '&lt;')
           .gsub('>', '&gt;')
           .gsub('"', '&quot;')
@@ -44,6 +45,6 @@ module Nanoc::Helpers
       end
     end
 
-    alias_method :h, :html_escape
+    alias h html_escape
   end
 end

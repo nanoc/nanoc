@@ -177,7 +177,7 @@ module Nanoc::Helpers
       erbout_length = erbout.length
 
       # Execute block
-      block.call
+      yield
 
       # Get new piece of erbout
       erbout_addition = erbout[erbout_length..-1]

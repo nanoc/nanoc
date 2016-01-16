@@ -51,7 +51,7 @@ module Nanoc::Int
     protected
 
     def object_with_identifier(identifier)
-      if self.frozen?
+      if frozen?
         @mapping[identifier.to_s]
       else
         @objects.find { |i| i.identifier == identifier }
