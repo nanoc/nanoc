@@ -62,11 +62,12 @@ module Nanoc::Filters
         end
 
         # Create renderer
-        if renderer_class == ::Redcarpet::Render::HTML_TOC
-          renderer = renderer_class.new
-        else
-          renderer = renderer_class.new(renderer_options)
-        end
+        renderer =
+          if renderer_class == ::Redcarpet::Render::HTML_TOC
+            renderer_class.new
+          else
+            renderer_class.new(renderer_options)
+          end
 
         # Render
         if with_toc

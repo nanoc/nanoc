@@ -225,7 +225,7 @@ module Nanoc::CLI
 
         # Build message
         if gem_name
-          if self.using_bundler?
+          if using_bundler?
             'Make sure the gem is added to Gemfile and run `bundle install`.'
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
@@ -261,7 +261,7 @@ module Nanoc::CLI
 
       stream.puts "#{error.class}: #{error.message}"
       resolution = resolution_for(error)
-      stream.puts "#{resolution}" if resolution
+      stream.puts resolution.to_s if resolution
     end
 
     def write_compilation_stack(stream, _error, verbose: false)

@@ -18,7 +18,7 @@ module Nanoc
     def ==(other)
       other.respond_to?(:identifier) && identifier == other.identifier
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     # @see Object#hash
     def hash
@@ -53,14 +53,12 @@ module Nanoc
 
       if unwrap.attributes.key?(key)
         unwrap.attributes[key]
+      elsif !fallback.equal?(NONE)
+        fallback
+      elsif block_given?
+        yield(key)
       else
-        if !fallback.equal?(NONE)
-          fallback
-        elsif block_given?
-          yield(key)
-        else
-          raise KeyError, "key not found: #{key.inspect}"
-        end
+        raise KeyError, "key not found: #{key.inspect}"
       end
     end
 

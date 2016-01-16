@@ -1,5 +1,5 @@
 class Nanoc::CLITest < Nanoc::TestCase
-  COMMAND_CODE = <<EOS
+  COMMAND_CODE = <<EOS.freeze
 usage       '_test [options]'
 summary     'meh'
 description 'longer meh'
@@ -9,7 +9,7 @@ run do |opts, args, cmd|
 end
 EOS
 
-  SUBCOMMAND_CODE = <<EOS
+  SUBCOMMAND_CODE = <<EOS.freeze
 usage       '_sub [options]'
 summary     'meh sub'
 description 'longer meh sub'

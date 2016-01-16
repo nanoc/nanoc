@@ -6,7 +6,7 @@ module Nanoc::Int
 
     # @return [Boolean]
     attr_accessor :compiled
-    alias_method :compiled?, :compiled
+    alias compiled? compiled
 
     # @return [Hash<Symbol,String>]
     attr_accessor :raw_paths
@@ -25,7 +25,7 @@ module Nanoc::Int
 
     # @return [Boolean]
     attr_accessor :modified
-    alias_method :modified?, :modified
+    alias modified? modified
 
     # @param [Nanoc::Int::Item] item
     #
@@ -82,7 +82,7 @@ module Nanoc::Int
         when :pre
           snapshot_def.nil? || !snapshot_def.final?
         end
-      is_usable_snapshot = @snapshot_contents[snapshot_name] && (self.compiled? || !is_still_moving)
+      is_usable_snapshot = @snapshot_contents[snapshot_name] && (compiled? || !is_still_moving)
       unless is_usable_snapshot
         raise Nanoc::Int::Errors::UnmetDependency.new(self)
       end
@@ -99,7 +99,7 @@ module Nanoc::Int
     def snapshot?(snapshot_name)
       !@snapshot_contents[snapshot_name].nil?
     end
-    alias_method :has_snapshot?, :snapshot?
+    alias has_snapshot? snapshot?
 
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
@@ -145,7 +145,7 @@ module Nanoc::Int
     end
 
     def inspect
-      "<#{self.class} name=\"#{name}\" binary=#{self.binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
+      "<#{self.class} name=\"#{name}\" binary=#{binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end
 
     private

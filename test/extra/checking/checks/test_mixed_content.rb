@@ -25,7 +25,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 
@@ -43,7 +43,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 
@@ -61,7 +61,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 
@@ -79,7 +79,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 
@@ -97,7 +97,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 
@@ -115,7 +115,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 
@@ -180,7 +180,7 @@ class Nanoc::Extra::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check = Nanoc::Extra::Checking::Checks::MixedContent.create(site)
       check.run
 
-      assert check.issues.empty?
+      assert_empty check.issues
     end
   end
 end

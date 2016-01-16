@@ -89,7 +89,7 @@ module Nanoc::Filters
         doc.xpath(selector, namespaces).each do |node|
           if node.name == 'comment'
             nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
-          elsif self.path_is_relativizable?(node.content)
+          elsif path_is_relativizable?(node.content)
             node.content = relative_path_to(node.content)
           end
         end

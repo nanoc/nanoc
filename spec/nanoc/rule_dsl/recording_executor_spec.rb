@@ -130,7 +130,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
                 :default,
                 route_proc,
                 snapshot_name: :foo,
-              )
+              ),
             )
 
             allow(rep).to receive(:item).and_return(item)
@@ -211,7 +211,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
                 :default,
                 proc { '/routed-foo.html' },
                 snapshot_name: :foo,
-              )
+              ),
             )
 
             allow(rep).to receive(:item).and_return(item)

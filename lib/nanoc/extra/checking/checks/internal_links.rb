@@ -34,7 +34,7 @@ module Nanoc::Extra::Checking::Checks
       return true if href == '.'
 
       # Skip hrefs that are specified in the exclude configuration
-      return true if self.excluded?(href)
+      return true if excluded?(href)
 
       # Remove target
       path = href.sub(/#.*$/, '')
@@ -48,11 +48,12 @@ module Nanoc::Extra::Checking::Checks
       path = URI.unescape(path)
 
       # Make absolute
-      if path[0, 1] == '/'
-        path = @config[:output_dir] + path
-      else
-        path = ::File.expand_path(path, ::File.dirname(origin))
-      end
+      path =
+        if path[0, 1] == '/'
+          @config[:output_dir] + path
+        else
+          ::File.expand_path(path, ::File.dirname(origin))
+        end
 
       # Check whether file exists
       return true if File.file?(path)

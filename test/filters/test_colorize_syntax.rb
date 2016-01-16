@@ -1,6 +1,6 @@
 class Nanoc::Filters::ColorizeSyntaxTest < Nanoc::TestCase
-  CODERAY_PRE  = '<div class="CodeRay"><div class="code">'
-  CODERAY_POST = '</div></div>'
+  CODERAY_PRE  = '<div class="CodeRay"><div class="code">'.freeze
+  CODERAY_POST = '</div></div>'.freeze
 
   def test_coderay_simple
     if_have 'coderay', 'nokogiri' do

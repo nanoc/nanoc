@@ -12,6 +12,11 @@ module Nanoc::Int
       site_from_config(Nanoc::Int::ConfigLoader.new.new_from_cwd)
     end
 
+    # @return [Boolean]
+    def self.cwd_is_nanoc_site?
+      Nanoc::Int::ConfigLoader.cwd_is_nanoc_site?
+    end
+
     private
 
     def site_from_config(config)
@@ -40,11 +45,6 @@ module Nanoc::Int
         items: items,
         layouts: layouts,
       )
-    end
-
-    # @return [Boolean]
-    def self.cwd_is_nanoc_site?
-      Nanoc::Int::ConfigLoader.cwd_is_nanoc_site?
     end
 
     def with_data_sources(config, &_block)

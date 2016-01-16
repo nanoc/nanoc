@@ -14,7 +14,7 @@ describe(Nanoc::Int::ItemRepRouter) do
     let(:reps) do
       [
         Nanoc::Int::ItemRep.new(item, :default),
-        Nanoc::Int::ItemRep.new(item, :csv)
+        Nanoc::Int::ItemRep.new(item, :csv),
       ]
     end
 

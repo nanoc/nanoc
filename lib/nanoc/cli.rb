@@ -180,11 +180,11 @@ module Nanoc::CLI
   def self.wrap_in_cleaning_stream(io)
     cio = ::Nanoc::CLI::CleaningStream.new(io)
 
-    unless self.enable_utf8?(io)
+    unless enable_utf8?(io)
       cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
     end
 
-    unless self.enable_ansi_colors?(io)
+    unless enable_ansi_colors?(io)
       cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
     end
 

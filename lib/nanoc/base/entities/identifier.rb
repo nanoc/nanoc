@@ -72,7 +72,7 @@ module Nanoc
         false
       end
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     def hash
       self.class.hash ^ to_s.hash
