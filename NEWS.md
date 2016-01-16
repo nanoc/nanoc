@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.1.2 (2016-01-16)
+
+Fixes:
+
+* Made @-variables (e.g. `@items`) report their frozenness properly, so that optimisations based on frozenness work once again (#795, #797)
+* Removed environment from `crash.log` to prevent leaking sensitive information (#798, #800)
+
+Enhancements:
+
+* Removed redundant checksum calculation (#789) [Ruben Verborgh]
+
 ## 4.1.1 (2015-12-30)
 
 Fixes:
