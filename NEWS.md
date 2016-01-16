@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.2.0 (???)
+
+Features:
+
+* Allow creating items and layouts with a pre-calculated checksum (#793) [Ruben Verborgh]
+* Allow lazy-loading item/layout content and attributes (#794) [Ruben Verborgh]
+
 ## 4.1.2 (2016-01-16)
 
 Fixes:
