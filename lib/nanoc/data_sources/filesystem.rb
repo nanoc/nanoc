@@ -21,12 +21,12 @@ module Nanoc::DataSources
 
     # See {Nanoc::DataSource#items}.
     def items
-      load_objects(content_dir_name, 'item', Nanoc::Int::Item)
+      load_objects(content_dir_name, Nanoc::Int::Item)
     end
 
     # See {Nanoc::DataSource#layouts}.
     def layouts
-      load_objects(layouts_dir_name, 'layout', Nanoc::Int::Layout)
+      load_objects(layouts_dir_name, Nanoc::Int::Layout)
     end
 
     protected
@@ -76,7 +76,7 @@ module Nanoc::DataSources
       elsif is_binary && klass == Nanoc::Int::Layout
         raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
       else
-        parse_result = parse(content_filename, meta_filename, :__unused__)
+        parse_result = parse(content_filename, meta_filename)
 
         ProtoDocument.new(
           is_binary: false,
@@ -98,7 +98,7 @@ module Nanoc::DataSources
     # metadata section.
     #
     # @see Nanoc::DataSources::Filesystem#load_objects
-    def load_objects(dir_name, kind, klass)
+    def load_objects(dir_name, klass)
       res = []
 
       return [] if dir_name.nil?
@@ -255,7 +255,7 @@ module Nanoc::DataSources
     # Parses the file named `filename` and returns an array with its first
     # element a hash with the file's metadata, its second element the
     # file content itself, and its third element the metadata content.
-    def parse(content_filename, meta_filename, _kind)
+    def parse(content_filename, meta_filename)
       if meta_filename
         parse_with_separate_meta_filename(content_filename, meta_filename)
       else

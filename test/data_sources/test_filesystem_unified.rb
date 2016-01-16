@@ -55,7 +55,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
         '/a/b/c/',
       ),
     ]
-    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[0].string }
+    actual_out = data_source.send(:load_objects, 'foo', klass).sort_by { |i| i.stuff[0].string }
 
     # Check
     (0..expected_out.size - 1).each do |i|
@@ -89,7 +89,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     File.open('foo/bar.md',   'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
 
     # Check
-    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass)
+    actual_out = data_source.send(:load_objects, 'foo', klass)
     assert_equal 2, actual_out.size
   end
 
@@ -102,7 +102,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
-    items = data_source.send(:load_objects, 'foo', 'item', Nanoc::Int::Item)
+    items = data_source.send(:load_objects, 'foo', Nanoc::Int::Item)
 
     # Check
     assert_equal 1, items.size
@@ -136,7 +136,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
 
     # Load
     assert_raises(RuntimeError) do
-      data_source.send(:load_objects, 'foo', 'item', Nanoc::Int::Layout)
+      data_source.send(:load_objects, 'foo', Nanoc::Int::Layout)
     end
   end
 
@@ -367,7 +367,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     ]
 
     # Get actual output ordered by identifier
-    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[2] }
+    actual_out = data_source.send(:load_objects, 'foo', klass).sort_by { |i| i.stuff[2] }
 
     # Check
     (0..expected_out.size - 1).each do |i|
@@ -449,7 +449,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     ]
 
     # Get actual output ordered by identifier
-    actual_out = data_source.send(:load_objects, 'foo', 'The Foo', klass).sort_by { |i| i.stuff[2] }
+    actual_out = data_source.send(:load_objects, 'foo', klass).sort_by { |i| i.stuff[2] }
 
     # Check
     (0..expected_out.size - 1).each do |i|
@@ -469,7 +469,7 @@ class Nanoc::DataSources::FilesystemUnifiedTest < Nanoc::TestCase
     File.write('foo/donkey.jpeg', 'data')
     File.write('foo/donkey.yaml', "---\nalt: Donkey\n")
 
-    objects = data_source.send(:load_objects, 'foo', 'The Foo', Nanoc::Int::Item)
+    objects = data_source.send(:load_objects, 'foo', Nanoc::Int::Item)
     assert_equal 1, objects.size
     assert_equal '/donkey.jpeg', objects.first.identifier.to_s
   end
