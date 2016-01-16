@@ -31,6 +31,62 @@ module Nanoc::DataSources
 
     protected
 
+    class ProtoDocument
+      attr_reader :attributes
+      attr_reader :checksum_data
+      attr_reader :is_binary
+      alias binary? is_binary
+
+      def initialize(is_binary:, content: nil, filename: nil, attributes:, checksum_data: nil)
+        if content.nil? && filename.nil?
+          raise ArgumentError, '#initialize needs at least content or filename'
+        end
+
+        @is_binary = is_binary
+        @content = content
+        @filename = filename
+        @attributes = attributes
+        @checksum_data = checksum_data
+      end
+
+      def content
+        if binary?
+          raise ArgumentError, 'cannot fetch content of binary item'
+        else
+          @content
+        end
+      end
+
+      def filename
+        if binary?
+          @filename
+        else
+          raise ArgumentError, 'cannot fetch filename of non-binary item'
+        end
+      end
+    end
+
+    def read_proto_document(content_filename, meta_filename, klass)
+      is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..-1])
+
+      if is_binary && klass == Nanoc::Int::Item
+        meta = (meta_filename && YAML.load_file(meta_filename)) || {}
+
+        ProtoDocument.new(is_binary: true, filename: content_filename, attributes: meta)
+      elsif is_binary && klass == Nanoc::Int::Layout
+        raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
+      else
+        parse_result = parse(content_filename, meta_filename, :__unused__)
+
+        ProtoDocument.new(
+          is_binary: false,
+          content: parse_result.content,
+          attributes: parse_result.attributes,
+          checksum_data: "content=#{parse_result.content},meta=#{parse_result.attributes_data}",
+        )
+      end
+    end
+
     # Creates instances of klass corresponding to the files in dir_name. The
     # kind attribute indicates the kind of object that is being loaded and is
     # used solely for debugging purposes.
@@ -54,18 +110,7 @@ module Nanoc::DataSources
           content_filename = filename_for(base_filename, content_ext)
 
           # Read content and metadata
-          is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..-1])
-          if is_binary && klass == Nanoc::Int::Item
-            meta                = (meta_filename && YAML.load_file(meta_filename)) || {}
-            content_or_filename = content_filename
-          elsif is_binary && klass == Nanoc::Int::Layout
-            raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
-          else
-            parse_result = parse(content_filename, meta_filename, kind)
-            meta = parse_result.attributes
-            content_or_filename = parse_result.content
-            checksum_data = "content=#{content_or_filename},meta=#{parse_result.attributes_data}"
-          end
+          proto_doc = read_proto_document(content_filename, meta_filename, klass)
 
           # Get attributes
           attributes = {
@@ -73,7 +118,7 @@ module Nanoc::DataSources
             content_filename: content_filename,
             meta_filename: meta_filename,
             extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
-          }.merge(meta)
+          }.merge(proto_doc.attributes)
 
           # Get identifier
           if content_filename
@@ -101,14 +146,14 @@ module Nanoc::DataSources
           # Create content
           full_content_filename = content_filename && File.expand_path(content_filename)
           content =
-            if is_binary
+            if proto_doc.binary?
               Nanoc::Int::BinaryContent.new(full_content_filename)
             else
-              Nanoc::Int::TextualContent.new(content_or_filename, filename: full_content_filename)
+              Nanoc::Int::TextualContent.new(proto_doc.content, filename: full_content_filename)
             end
 
           # Create object
-          res << klass.new(content, attributes, identifier, checksum_data: checksum_data)
+          res << klass.new(content, attributes, identifier, checksum_data: proto_doc.checksum_data)
         end
       end
 
@@ -265,10 +310,6 @@ module Nanoc::DataSources
       attr_reader :attributes_data
 
       def initialize(content:, attributes:, attributes_data:)
-        unless content.is_a?(String)
-          raise ArgumentError, 'content argument must be a string'
-        end
-
         @content = content
         @attributes = attributes
         @attributes_data = attributes_data
