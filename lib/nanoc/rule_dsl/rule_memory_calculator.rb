@@ -59,12 +59,15 @@ module Nanoc::RuleDSL
     def new_rule_memory_for_rep(rep)
       # FIXME: What if #compilation_rule_for returns nil?
 
+      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      view_context = @site.compiler.create_view_context(dependency_tracker)
+
       executor = Nanoc::RuleDSL::RecordingExecutor.new(rep, @rules_collection, @site)
       rule = @rules_collection.compilation_rule_for(rep)
 
       executor.snapshot(rep, :raw)
       executor.snapshot(rep, :pre, final: false)
-      rule.apply_to(rep, executor: executor, site: @site, view_context: nil)
+      rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
       if executor.rule_memory.any_layouts?
         executor.snapshot(rep, :post)
       end
