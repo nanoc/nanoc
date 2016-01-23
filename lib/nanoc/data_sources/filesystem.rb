@@ -253,6 +253,8 @@ module Nanoc::DataSources
     # Returns a regex that is used for determining the extension of a file
     # name. The first match group will be the entire extension, including the
     # leading period.
+    #
+    # @return [Regex]
     def extension_regex
       if @config && @config[:allow_periods_in_identifiers]
         /(\.[^\/\.]+$)/
@@ -261,9 +263,7 @@ module Nanoc::DataSources
       end
     end
 
-    # Parses the file named `filename` and returns an array with its first
-    # element a hash with the file's metadata, its second element the
-    # file content itself, and its third element the metadata content.
+    # @return [ParseResult]
     def parse(content_filename, meta_filename)
       if meta_filename
         parse_with_separate_meta_filename(content_filename, meta_filename)
@@ -272,6 +272,7 @@ module Nanoc::DataSources
       end
     end
 
+    # @return [ParseResult]
     def parse_with_separate_meta_filename(content_filename, meta_filename)
       content = content_filename ? read(content_filename) : ''
       meta_raw = read(meta_filename)
@@ -279,6 +280,7 @@ module Nanoc::DataSources
       ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
     end
 
+    # @return [ParseResult]
     def parse_with_frontmatter(content_filename)
       data = read(content_filename)
 
@@ -299,6 +301,7 @@ module Nanoc::DataSources
       ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
     end
 
+    # @return [Hash]
     def parse_metadata(data, filename)
       begin
         meta = YAML.load(data) || {}
